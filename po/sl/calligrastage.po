@@ -1,7 +1,7 @@
 # translation of kpresenter.po to Slovenian
 # Translation of kpresenter.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrastage.po 1671884 2024-02-02 02:17:29Z scripty $
+# $Id: calligrastage.po 1678866 2024-04-29 01:11:38Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 1999.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-02-01 09:24+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -78,7 +78,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Ustvari animacijo oblike"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr "Uredi prožilnik animacije"
@@ -107,12 +107,12 @@ msgstr[1] "Izbriši %1 prosojnici"
 msgstr[2] "Izbriši %1 prosojnice"
 msgstr[3] "Izbriši %1 prosojnic"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "Uredi zakasnitev/trajanje animacije"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
 msgstr "Uredi projekcijo po meri"
@@ -122,12 +122,12 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "Ustvari učinek prosojnice"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "Spremeni učinek prosojnice"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
 msgstr "Izbriši učinek prosojnice"
@@ -137,150 +137,143 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "Spremeni prehod med prosojnicami"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "Preimenuj projekcijo po meri"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "Prerazporedi animacije"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr "Calligra Stage"
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, kde-format
 msgid "Presentation Tool"
 msgstr "Predstavitveno orodje"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "(c) 1998-%1, Ekipa Stage"
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
 msgid "Former maintainer"
 msgstr "Prejšnji vzdrževalec"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Original author"
 msgstr "Prvotni avtor"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr "Reginald Stadlbauer"
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr "Toshitaka Fujioka"
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr "Percy Leonhardt"
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr "Boudewijn Rempt "
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
 msgstr "Carlos Licea "
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
 msgstr "C. Boemann "
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr "Fredy Yanardi "
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr "Jan Hambrecht "
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr "Marijn Kruisselbrink "
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr "Martin Pfeiffer "
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr "Sven Langkamp "
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr "Timothée Lacroix "
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Marko Samastur,Gregor Rakar,Roman Maurer,Andrej Vernekar,Jure Repinc"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -288,14 +281,21 @@ msgstr ""
 "markos@elite.org,gregor.rakar@kiss.si,roman.maurer@amis.net,andrej."
 "vernekar@moj.net,jlp@holodeck1.com"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Marko Samastur,Gregor Rakar,Roman Maurer,Andrej Vernekar,Jure Repinc"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr "Neznano"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "Prosojnica %1"
@@ -305,7 +305,7 @@ msgstr "Prosojnica %1"
 msgid "End of presentation. Click to exit."
 msgstr "Konec predstavitve. Kliknite za izhod."
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
 msgid "Layout"
 msgstr "Razpored"
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr "Napaka pri namestitvi"
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
 msgstr "Vstavi slike"
@@ -338,81 +338,74 @@ msgid "Placeholder shape"
 msgstr "Oblika rezervacije prostora"
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, kde-format
 msgid "Double click to add a title"
 msgstr "Kliknite dvojno da dodate naslov"
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, kde-format
 msgid "Double click to add an outline"
 msgstr "Kliknite dvojno da dodate oris"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, kde-format
 msgid "Double click to add a text"
 msgstr "Kliknite dvojno da dodate besedilo"
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, kde-format
 msgid "Double click to add notes"
 msgstr "Kliknite dvojno da dodate notice"
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
 msgstr "Kliknite dvojno da dodate sliko"
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
 msgstr "Kliknite dvojno da dodate grafikon"
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
 msgstr "Kliknite dvojno da dodate predmet"
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
 msgid "Pen Color"
 msgstr "Barva pisala"
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
 msgstr "Velikost pisala"
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, kde-format
 msgid "Black"
 msgstr "Črna"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
 msgstr "Bela"
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr "Zelena"
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr "Rdeča"
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr "Modra"
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, kde-format
 msgid "Yellow"
 msgstr "Rumena"
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, kde-format
 msgid "Next Slide"
 msgstr "Naslednja prosojnica"
@@ -422,234 +415,234 @@ msgstr "Naslednja prosojnica"
 msgid "Speaker Notes"
 msgstr "Notice za predavatelja"
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "Current Slide %1 of %2"
 msgstr "Trenutna prosojnica %1 izmed %2"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "End of Slide Show"
 msgstr "Konec projekcije"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
 msgstr "začni ob miškinem kliku"
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, kde-format
 msgid "start after previous animation"
 msgstr "začni po predhodni animaciji"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, kde-format
 msgid "start with previous animation"
 msgstr "začni s predhodno animacijo"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "Začni po %1 sekundah. Trajanje %2 sekund."
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "Animacija"
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
 msgstr "Oblika"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, kde-format
 msgid "&Move Here"
 msgstr "Pre&makni sem"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, kde-format
 msgid "&Copy Here"
 msgstr "Kopiraj sem"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
 msgstr "Prekliči"
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, kde-format
 msgid "Normal"
 msgstr "Običajno"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, kde-format
 msgid "Show Master Slides"
 msgstr "Prikaži glavne prosojnice"
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
 msgstr "Uvozi predstavitev ..."
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, kde-format
 msgid "Insert Slide"
 msgstr "Vstavi prosojnico"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr "Vstavi prosojnico po trenutni"
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, kde-format
 msgid "Copy Slide"
 msgstr "Kopiraj prosojnico"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, kde-format
 msgid "Copy the current slide"
 msgstr "Kopiraj trenutno prosojnico"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
 msgid "Delete Slide"
 msgstr "Izbriši prosojnico"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, kde-format
 msgid "Delete the current slide"
 msgstr "Izbriši trenutno prosojnico"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
 msgstr "Glavna prosojnica ..."
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, kde-format
 msgid "Previous Slide"
 msgstr "Prejšnja prosojnica"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, kde-format
 msgid "Go to previous slide"
 msgstr "Pojdi na prejšnjo prosojnico"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, kde-format
 msgid "Go to next slide"
 msgstr "Pojdi na naslednjo prosojnico"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, kde-format
 msgid "First Slide"
 msgstr "Prva prosojnica"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, kde-format
 msgid "Go to first slide"
 msgstr "Pojdi na prvo prosojnico"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, kde-format
 msgid "Last Slide"
 msgstr "Zadnja prosojnica"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, kde-format
 msgid "Go to last slide"
 msgstr "Pojdi na zadnjo prosojnico"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
 msgstr "Nastavi Stage ..."
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Izvozi kot HTML ..."
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Vstavi slike kot prosojnice..."
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Tvori začetno animacijo"
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Uredi projekcije po meri ..."
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, kde-format
 msgid "Start Presentation"
 msgstr "Zaženi predstavitev"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, kde-format
 msgid "From Current Slide"
 msgstr "S trenutne prosojnice"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, kde-format
 msgid "From First Slide"
 msgstr "S prve prosojnice"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, kde-format
 msgid "Stop presentation"
 msgstr "Ustavi predstavitev"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Prikaži vrstico stanja"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Skrij vrstico stanja"
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Prikaže ali skrije vrstico stanja"
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Nastavi projekcijo ..."
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Nastavi pogled predstavitve ..."
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Riši na predstavitvi ..."
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Poudari predstavitev ..."
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Črn zaslon na predstavitvi..."
@@ -729,56 +722,56 @@ msgstr "Kopiraj"
 msgid "Paste"
 msgstr "Prilepi"
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, kde-format
 msgid "Slide Show %1"
 msgstr "Projekcija %1"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, kde-format
 msgid "All slides"
 msgstr "Vse prosojnice"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, kde-format
 msgid "Error"
 msgstr "Napaka"
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr "Ne more biti dveh projekcij z enakim imenom."
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Nastavi razpored"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
 msgstr "Samodejni predogled animacije"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, kde-format
 msgid "Preview animation"
 msgstr "Predogled animacije"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, kde-format
 msgid "Slide Transitions"
 msgstr "Prehodi med prosojnicami"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
 msgstr "Dejanja ob kliku na obliko"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
 msgid "Shape Animations"
 msgstr "Animacije oblike"
@@ -819,7 +812,7 @@ msgid "Duration: "
 msgstr "Trajanje: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, kde-format
 msgid "Preview Shape Animation"
 msgstr "Ustvari predstavitev v HTML"
@@ -829,74 +822,74 @@ msgstr "Ustvari predstavitev v HTML"
 msgid "No Effect"
 msgstr "Brez učinka"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
 msgstr " sek."
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr "Ročno"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr "Avtomatsko"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
 msgstr "Prehodi med prosojnicami:"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
 msgid "Apply To All Slides"
 msgstr "Uporabi za vse prosojnice"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Uporabi učinke prosojnic za vse prosojnice"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr "Vhod"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
 msgstr "Izhod"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
 msgstr "Poudarek"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
 msgstr "Po meri"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr "Pot gibanja"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
 msgstr "Dejavnost ole"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr "Klic medija"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Edit animation"
 msgstr "Uredi animacijo"
@@ -906,32 +899,32 @@ msgstr "Uredi animacijo"
 msgid "Add new animation"
 msgstr "Dodaj novo animacijo"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, kde-format
 msgid "Remove animation"
 msgstr "Odstrani animacijo"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
 msgstr "Vrstni red: "
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, kde-format
 msgid "Move animation up"
 msgstr "Premakni animacijo navzgor"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, kde-format
 msgid "Move animation down"
 msgstr "Premakni animacijo navzdol"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, kde-format
 msgid "Add a new animation"
 msgstr "Dodaj novo animacijo"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Delete current animation"
 msgstr "Izbriši trenutno animacijo"
@@ -1159,197 +1152,185 @@ msgstr "Izvoz v HTML"
 msgid "Export"
 msgstr "Izvoz"
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr "Priljubljena s tem imenom že obstaja"
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr "Neveljavna datoteka, samo .zip ali pa pokvarjen zip"
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr "Datoteka Zip mora vsebovati »style.css«"
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
 msgid "Delete Template"
 msgstr "Zbriši predlogo"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr "Predlog ki pridejo s programom ne morete odstraniti"
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
 msgid "Add Template"
 msgstr "Dodaj predlogo"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr "Ste prepričani da želite odstraniti »%1«?"
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
 msgstr "Potrdi odstranitev"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Ste prepričani da želite odstraniti »%1«?"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Spremeni dejavnost ob zvoku"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "No sound"
 msgstr "Brez zvoka"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "Import..."
 msgstr "Uvozi ..."
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
 msgstr "Stolpec"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, kde-format
-msgid "From Left"
-msgstr "Z leve"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, kde-format
-msgid "From Top"
-msgstr "Od zgoraj"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, kde-format
-msgid "From Right"
-msgstr "Z desne"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Bottom"
 msgstr "Od spodaj"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Left"
+msgstr "Z leve"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Right"
+msgstr "Z desne"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Top"
+msgstr "Od zgoraj"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
 msgstr "Neznana podvrsta"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Clock"
 msgstr "Ura"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, kde-format
 msgid "From Twelve Clockwise"
 msgstr "Od dvanajst v smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, kde-format
 msgid "From Three Clockwise"
 msgstr "Od tri v smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, kde-format
 msgid "From Six Clockwise"
 msgstr "Od šest v smeri urinega kazalce"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, kde-format
 msgid "From Nine Clockwise"
 msgstr "Od devet v smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, kde-format
 msgid "From Twelve Counterclockwise"
 msgstr "Od dvanajst v nasprotni smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, kde-format
 msgid "From Three Counterclockwise"
 msgstr "Od tri v nasprotni smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, kde-format
 msgid "From Six Counterclockwise"
 msgstr "Od šest v nasprotni smeri urinega kazalca"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, kde-format
 msgid "From Nine Counterclockwise"
 msgstr "Od devet v nasprotni smeri urinega kazalca"
 
@@ -1358,33 +1339,27 @@ msgstr "Od devet v nasprotni smeri urinega kazalca"
 msgid "Double Fan"
 msgstr "Dvojna pahljača"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan Out Vertical"
 msgstr "Razširi navpično"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
 msgstr "Razširi vodoravno"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical"
 msgstr "Razširi navpično"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
 msgstr "Razširi vodoravno"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
 msgid "Fan In Vertical Reverse"
 msgstr "Navpično razširi v obratno smer"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
 msgid "Fan In Horizontal Reverse"
 msgstr "Vodoravno razširi v obratno smer"
 
@@ -1393,132 +1368,108 @@ msgstr "Vodoravno razširi v obratno smer"
 msgid "Double Sweep"
 msgstr "Dvakratno pometi"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 msgid "Parallel Vertical"
 msgstr "Vzporedno navpično"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 msgid "Parallel Diagonal"
 msgstr "Vzporedno diagonalno"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Opposite Vertical"
 msgstr "Nasproti navpično"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Opposite Horizontal"
 msgstr "Nasproti vodoravno"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 msgid "Parallel Diagonal Top Left"
 msgstr "Vzporedno diagonalno v smer zgoraj levo"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 msgid "Parallel Diagonal Bottom Left"
 msgstr "Vzporedno diagonalno v smer spodaj levo"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 msgid "Parallel Vertical Reverse"
 msgstr "V obratni smeri vzporedno navpično"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 msgid "Parallel Diagonal Reverse"
 msgstr "V obratni smeri vzporedno diagonalno"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 msgid "Opposite Vertical Reverse"
 msgstr "Nasproti navpično v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Opposite Horizontal Reverse"
 msgstr "Nasproti vodoravno v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "Vzporedno diagonalno z vrha levo v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "Vzporedno diagonalno spodaj levo v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
 msgstr "Pahljača"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Right"
 msgstr "Na sredi desno"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Top"
 msgstr "Na sredi na vrhu"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
 msgid "Center Left"
 msgstr "Na sredi levo"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
 msgid "Center Bottom"
 msgstr "Na sredi na dnu"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, kde-format
 msgid "Fan Out Top"
 msgstr "Pahljačasto razširi na vrhu"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, kde-format
 msgid "Fan Out Right"
 msgstr "Pahljačasto razširi na desnem robu"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, kde-format
 msgid "Fan Out Bottom"
 msgstr "Pahljačasto razširi na dnu"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, kde-format
 msgid "Fan Out Left"
 msgstr "Pahljačasto razširi na levo"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, kde-format
 msgid "Fan In Top"
 msgstr "Pahljačasto združi iz vrha"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, kde-format
 msgid "Fan In Right"
 msgstr "Pahljačasto združi z desne"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, kde-format
 msgid "Fan In Bottom"
 msgstr "Pahljačasto združi od spodaj"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, kde-format
 msgid "Fan In Left"
 msgstr "Pahljačasto združi z leve"
 
@@ -1527,33 +1478,27 @@ msgstr "Pahljačasto združi z leve"
 msgid "Pin Wheel"
 msgstr "Kolo sreče"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Two Blades Vertical Clockwise"
 msgstr "Dve navpični rezili v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Horizontal Clockwise"
 msgstr "Dve rezili vodoravno v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Four Blades Horizontal Clockwise"
 msgstr "Štiri rezila vodoravno v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "Dve rezili navpično v nasprotni strani urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "Dve rezili vodoravno v nasprotni strani urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "Štiri rezila vodoravno v nasprotni strani urinega kazalca"
 
@@ -1562,112 +1507,92 @@ msgstr "Štiri rezila vodoravno v nasprotni strani urinega kazalca"
 msgid "Saloon Door"
 msgstr "Sallonska vrata"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
 msgid "To Top"
 msgstr "Na vrh"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
 msgid "To Left"
 msgstr "Na levo"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
 msgid "To Bottom"
 msgstr "Na dno"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
 msgid "To Right"
 msgstr "Na desno"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Single Sweep"
 msgstr "Enojni poteg"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 msgid "Clockwise Top"
 msgstr "Na vrh v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 msgid "Clockwise Right"
 msgstr "Desno v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 msgid "Clockwise Bottom"
 msgstr "Na dno v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Clockwise Left"
 msgstr "Na levo v smeri urinega kazalca"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Top Left"
 msgstr "V smeri urinega kazalca od vrha levo"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Bottom Left"
 msgstr "V obratni smeri urinega kazalca od spodaj levo"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right"
 msgstr "V smeri urinega kazalca od spodaj desno"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Right"
 msgstr "V obratni smeri urinega kazalca iz vrha desno"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top"
 msgstr "V obratni smeri urinega kazalca iz vrha"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Right"
 msgstr "V obratni smeri urinega kazalca z desne"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Bottom"
 msgstr "V obratni smeri urinega kazalca z dna"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Counterclockwise Left"
 msgstr "V obratni smeri urinega kazalca z leve"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Top Left"
 msgstr "V obratni smeri urinega kazalca z vrha levo"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Bottom Left"
 msgstr "V smeri urinega kazalca od spodaj levo"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right"
 msgstr "V obratni smeri urinega kazalca od desno spodaj"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
 msgid "Clockwise Top Right"
 msgstr "V smeri urinega kazalca z vrha desno"
 
@@ -1676,76 +1601,68 @@ msgstr "V smeri urinega kazalca z vrha desno"
 msgid "Windshield"
 msgstr "Vetrobransko steklo"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
 msgid "Right"
 msgstr "Desno"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
 msgstr "Gor"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical"
 msgstr "Navpično"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
 msgid "Horizontal"
 msgstr "Vodoravno"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 msgid "Right Reverse"
 msgstr "Z desne v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Up Reverse"
 msgstr "Navzgor v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical Reverse"
 msgstr "Navpično v obratni smeri"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Horizontal Reverse"
 msgstr "Vodoravno v obratni smeri"
 
@@ -1754,23 +1671,19 @@ msgstr "Vodoravno v obratni smeri"
 msgid "Barn Door"
 msgstr "Vrata skednja"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 msgid "Diagonal Bottom Left"
 msgstr "Diagonalno od levo spodaj"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 msgid "Diagonal Bottom Left Reverse"
 msgstr "Diagonalno od levo spodaj v obratni smeri"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
 msgid "Diagonal Top Left"
 msgstr "Diagonalno z vrha levo"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
 msgid "Diagonal Top Left Reverse"
 msgstr "Diagonalno z vrha levo v obratni smeri"
 
@@ -1784,46 +1697,40 @@ msgstr "Skedenj xxx"
 msgid "Barn Zig Zag"
 msgstr "Skedenj v cik caku"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, kde-format
-msgid "Vertical Reversed"
-msgstr "Navpično v obratni smeri"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Horizontal Reversed"
 msgstr "Vodoravno v obratni smeri"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+msgid "Vertical Reversed"
+msgstr "Navpično v obratni smeri"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
 msgstr "Okvir"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 msgid "From Top Left"
 msgstr "Od levo zgoraj"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 msgid "From Top Right"
 msgstr "Od desno zgoraj"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
 msgid "From Bottom Left"
 msgstr "Od levo spodaj"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
 msgid "From Bottom Right"
 msgstr "Od desno spodaj"
 
@@ -1837,23 +1744,19 @@ msgstr "Diagonalno"
 msgid "Four Box"
 msgstr "Štiri škatle"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In"
 msgstr "Vogali na noter"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In Reverse"
 msgstr "Vogali v obratno smer"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out"
 msgstr "Vogali navzven"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out Reverse"
 msgstr "Vogali navzven obratno"
 
@@ -1863,12 +1766,10 @@ msgid "Misc Diagonal"
 msgstr "Razne diagonale"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, kde-format
 msgid "Double Barn Door"
 msgstr "Dvojna vrata skednja"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, kde-format
 msgid "Double Diamond"
 msgstr "Dvojni diamant"
 
@@ -1887,13 +1788,11 @@ msgstr "Cik cak"
 msgid "Fade"
 msgstr "Pojemanje"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr "Križno pojemanje"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
 msgstr "Pojemanje barv"
 
@@ -1902,48 +1801,42 @@ msgstr "Pojemanje barv"
 msgid "ArrowHead"
 msgstr "Glava puščice"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
 msgid "Down"
 msgstr "Dol"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 msgid "Down Reverse"
 msgstr "Dol v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
 msgid "Left"
 msgstr "Levo"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
 msgid "Left Reverse"
 msgstr "Levo v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsa"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr "Krog"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle Reverse"
 msgstr "Krog v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr "Oko"
@@ -1958,48 +1851,40 @@ msgstr "Šesterokotnik"
 msgid "Iris"
 msgstr "Zenica"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, kde-format
-msgid "Rectangular"
-msgstr "Pravokotnik"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, kde-format
-msgid "Rectangular Reverse"
-msgstr "Pravokotnik v obratni smeri"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond"
 msgstr "Diamant"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond Reverse"
 msgstr "Diamant v obratni smeri"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular"
+msgstr "Pravokotnik"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular Reverse"
+msgstr "Pravokotnik v obratni smeri"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr "Razno"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
 msgstr "Srce"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart Reverse"
 msgstr "Srce v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole"
 msgstr "Ključavnica"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole Reverse"
 msgstr "Ključavnica v obratni smeri"
 
@@ -2008,7 +1893,7 @@ msgstr "Ključavnica v obratni smeri"
 msgid "Pentagon"
 msgstr "Peterokotnik"
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, kde-format
 msgid "RoundRect"
 msgstr "Zaobljen pravokotnik"
@@ -2018,33 +1903,27 @@ msgstr "Zaobljen pravokotnik"
 msgid "Star"
 msgstr "Zvezda"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Four Point Star"
 msgstr "Štirikraka zvezda"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Four Point Star Reverse"
 msgstr "Štirikraka zvezda v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
 msgstr "Petkraka zvezda"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
 msgstr "Petkraka zvezda v obratni smeri"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
 msgstr "Šestkraka zvezda"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
 msgid "Six Point Star Reverse"
 msgstr "Šestkraka zvezda v obratni smeri"
 
@@ -2058,63 +1937,51 @@ msgstr "Trikotnik"
 msgid "Box Snakes"
 msgstr "Kače v škatli xxx"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Top In"
 msgstr "Dve škatli na vrhu"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 msgid "Two Box Bottom In"
 msgstr "Dve škatli na dnu"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 msgid "Two Box Left In"
 msgstr "Dve škatli na levi"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 msgid "Two Box Right In"
 msgstr "Dve škatli na desni"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 msgid "Four Box Vertical In"
 msgstr "Štiri škatle navpično"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 msgid "Four Box Horizontal In"
 msgstr "Štiri škatle vodoravno"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Top Out"
 msgstr "Dve škatli na vrhu xxx"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Bottom Out"
 msgstr "Dve škatli na dnu xxx"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Two Box Left Out"
 msgstr "Dve škatli na levi xxx"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Two Box Right Out"
 msgstr "Dve škatli na desni xxx"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
 msgid "Four Box Vertical Out"
 msgstr "Štiri škatle navpično ven"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
 msgid "Four Box Horizontal Out"
 msgstr "Štiri škatle vodoravno ven"
 
@@ -2123,103 +1990,83 @@ msgstr "Štiri škatle vodoravno ven"
 msgid "Parallel Snakes"
 msgstr "Vzporedne kače"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
 msgid "Vertical Top Same In"
 msgstr "Navpično na vrhu"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
 msgid "Vertical Top Same Out"
 msgstr "Navpično na vrhu ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
 msgid "Vertical Bottom Same In"
 msgstr "Navpično na dnu"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
 msgid "Vertical Bottom Same Out"
 msgstr "Navpično na dnu ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 msgid "Vertical Top Left Opposite In"
 msgstr "Navpično na vrhu levo nasproti notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
 msgid "Vertical Top Left Opposite Out"
 msgstr "Navpično na vrhu levo nasproti ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
 msgid "Vertical Bottom Left Opposite In"
 msgstr "Navpično spodaj levo nasproti noter"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "Navpično na dnu levo nasproti ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
 msgid "Horizontal Left Same In"
 msgstr "Vodoravno levo notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
 msgid "Horizontal Left Same Out"
 msgstr "Vodoravno levo ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
 msgid "Horizontal Right Same In"
 msgstr "Vodoravno desno notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
 msgid "Horizontal Right Same Out"
 msgstr "Vodoravno desno ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
 msgid "Horizontal Top Left Opposite In"
 msgstr "Vodoravno na vrhu levo nasproti notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
 msgid "Horizontal Top Left Opposite Out"
 msgstr "Vodoravno na vrhu levo nasproti ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
 msgid "Horizontal Top Right Opposite In"
 msgstr "Vodoravno na vrhu desno nasproti notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 msgid "Horizontal Top Right Opposite Out"
 msgstr "Vodoravno na vrhu desno nasproti ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "Diagonalno spodaj levo nasproti notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "Diagonalno spodaj levo nasproti ven"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
 msgid "Diagonal Top Left Opposite In"
 msgstr "Diagonalno na vrhu levo nasproti notri"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
 msgid "Diagonal Top Left Opposite Out"
 msgstr "Diagonalno na vrhu levo nasproti ven"
 
@@ -2233,83 +2080,67 @@ msgstr "Kača"
 msgid "Spiral"
 msgstr "Spiralno"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
 msgid "Clockwise Top Left In"
 msgstr "V smeri urinega kazalca zgoraj levo noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
 msgid "Clockwise Top Left Out"
 msgstr "V smeri urinega kazalca zgoraj levo ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 msgid "Clockwise Top Right In"
 msgstr "V smeri urinega kazalca zgoraj desno noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
 msgid "Clockwise Top Right Out"
 msgstr "V smeri urinega kazalca zgoraj desno ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
 msgid "Clockwise Bottom Left In"
 msgstr "V smeri urinega kazalca spodaj desno noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Left Out"
 msgstr "V smeri urinega kazalca spodaj levo ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 msgid "Clockwise Bottom Right In"
 msgstr "V smeri urinega kazalca spodaj desno noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right Out"
 msgstr "V smeri urinega kazalca spodaj desno ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Left In"
 msgstr "V obratni smeri urinega kazalca na vrhu levo noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top Left Out"
 msgstr "V obratni smeri urinega kazalca na vrhu levo ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
 msgid "Counterclockwise Top Right In"
 msgstr "V obratni smeri urinega kazalca na vrhu desno noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Right Out"
 msgstr "V obratni smeri urinega kazalca na vrhu desno ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
 msgid "Counterclockwise Bottom Left In"
 msgstr "V obratni smeri urinega kazalca spodaj levo noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Left Out"
 msgstr "V obratni smeri urinega kazalca spodaj levo ven"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
 msgid "Counterclockwise Bottom Right In"
 msgstr "V obratni smeri urinega kazalca spodaj desno noter"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right Out"
 msgstr "V obratni smeri urinega kazalca spodaj desno ven"
 
@@ -2318,43 +2149,35 @@ msgstr "V obratni smeri urinega kazalca spodaj desno ven"
 msgid "Waterfall"
 msgstr "Slap"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 msgid "Top Left Vertical"
 msgstr "Na vrhu levo navpično"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 msgid "Top Left Horizontal"
 msgstr "Na vrhu levo vodoravno"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
 msgid "Top Right Vertical"
 msgstr "NA vrhu desno navpično"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 msgid "Top Right Horizontal"
 msgstr "Na vrhu desno vodoravno"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
 msgid "Bottom Left Vertical"
 msgstr "Spodaj levo navpično"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 msgid "Bottom Left Horizontal"
 msgstr "Spodaj levo vodoravno"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
 msgid "Bottom Right Vertical"
 msgstr "Spodaj desno navpično"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
 msgid "Bottom Right Horizontal"
 msgstr "Spodaj desno vodoravno"
 

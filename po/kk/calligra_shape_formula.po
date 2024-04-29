@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-05-26 05:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -34,37 +34,37 @@ msgctxt "(qtundo-format)"
 msgid "Add text to formula"
 msgstr "Формулаға мәтінді қосу"
 
-#: FormulaCommand.cpp:215
+#: FormulaCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Жолдарды өзгерту"
 
-#: FormulaEditor.cpp:74
+#: FormulaEditor.cpp:71
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Мәтінді қосу"
 
-#: FormulaEditor.cpp:107
+#: FormulaEditor.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Жолды ендіру"
 
-#: FormulaEditor.cpp:112
+#: FormulaEditor.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Жолды өшіру"
 
-#: FormulaEditor.cpp:120
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Бағанды ендіру"
 
-#: FormulaEditor.cpp:125
+#: FormulaEditor.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Бағанды өшіру"
 
-#: FormulaEditor.cpp:151
+#: FormulaEditor.cpp:148
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Формула элементтерін ендіру"
@@ -74,27 +74,27 @@ msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Формула элементтерін өшіру"
 
-#: FormulaToolWidget.cpp:72
+#: FormulaToolWidget.cpp:69
 #, kde-format
 msgid "Arrows"
 msgstr "Жебелер"
 
-#: FormulaToolWidget.cpp:74
+#: FormulaToolWidget.cpp:71
 #, kde-format
 msgid "Greek"
 msgstr "Грек әріпі"
 
-#: FormulaToolWidget.cpp:78
+#: FormulaToolWidget.cpp:73
 #, kde-format
 msgid "Relations"
 msgstr "Ара-қатынасы"
 
-#: FormulaToolWidget.cpp:81
+#: FormulaToolWidget.cpp:77
 #, kde-format
 msgid "Operators"
 msgstr "Амлдар"
 
-#: FormulaToolWidget.cpp:85
+#: FormulaToolWidget.cpp:80
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Түрлі басқа"
@@ -184,7 +184,7 @@ msgstr "Бағандар:"
 msgid "View MathML"
 msgstr "MathML көрінісі"
 
-#: KoFormulaShape.cpp:210
+#: KoFormulaShape.cpp:200
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -193,52 +193,52 @@ msgstr ""
 "Құжатта қашықтағы құжатқа сыртқы сілтемесі бар\n"
 "%1"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:201
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Құптау керек"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:202
 #, kde-format
 msgid "Download"
 msgstr "Жүктеп алу"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:203
 #, kde-format
 msgid "Skip"
 msgstr "Аттап кету"
 
-#: KoFormulaShapeFactory.cpp:21
+#: KoFormulaShapeFactory.cpp:20
 #, kde-format
 msgid "Formula"
 msgstr "Формула"
 
-#: KoFormulaShapeFactory.cpp:23
+#: KoFormulaShapeFactory.cpp:22
 #, kde-format
 msgid "A formula"
 msgstr "Формула"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:409
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Қоршау элементін ендіру"
 
-#: KoFormulaTool.cpp:408
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Енгізбе элементін ендіру"
 
-#: KoFormulaTool.cpp:411
+#: KoFormulaTool.cpp:412
 #, kde-format
 msgid "Insert root"
 msgstr "Түбірді ендіру"
 
-#: KoFormulaTool.cpp:412
+#: KoFormulaTool.cpp:413
 #, kde-format
 msgid "Insert square root"
 msgstr "Квадрат түбірді ендіру"
 
-#: KoFormulaTool.cpp:414
+#: KoFormulaTool.cpp:415
 #, kde-format
 msgid "Insert fraction"
 msgstr "Бөлшекті ендіру"
@@ -248,62 +248,62 @@ msgstr "Бөлшекті ендіру"
 msgid "Insert bevelled fraction"
 msgstr "Қиғаш бөлшекті ендіру"
 
-#: KoFormulaTool.cpp:419
+#: KoFormulaTool.cpp:421
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "3x3 кестені ендіру"
 
-#: KoFormulaTool.cpp:423
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "2 өлшемді векторды ендіру"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:432
 #, kde-format
 msgid "Insert subscript"
 msgstr "Жол астылықты ендіру"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert superscript"
 msgstr "Жол үстілікті ендіру"
 
-#: KoFormulaTool.cpp:430
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Жол үстілік/астылықты ендіру"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:438
 #, kde-format
 msgid "Insert overscript"
 msgstr "Жол үстілікті ендіру"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:439
 #, kde-format
 msgid "Insert underscript"
 msgstr "Жол астылықты ендіру"
 
-#: KoFormulaTool.cpp:436
+#: KoFormulaTool.cpp:440
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Жол үстілік/астылықты ендіру"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:451
 #, kde-format
 msgid "Insert row"
 msgstr "Жолды ендіру"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:458
 #, kde-format
 msgid "Insert column"
 msgstr "Бағанды ендіру"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:465
 #, kde-format
 msgid "Remove row"
 msgstr "Жолды өшіру"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:472
 #, kde-format
 msgid "Remove column"
 msgstr "Бағанды өшіру"
@@ -314,32 +314,32 @@ msgstr "Бағанды өшіру"
 msgid "Formula editing"
 msgstr "Формула жазу құралы"
 
-#: KoM2MMLForumulaTool.cpp:97
+#: KoM2MMLForumulaTool.cpp:98
 #, kde-format
 msgid "Mode: "
 msgstr "Режімі: "
 
-#: KoM2MMLForumulaTool.cpp:100
+#: KoM2MMLForumulaTool.cpp:101
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: KoM2MMLForumulaTool.cpp:102
+#: KoM2MMLForumulaTool.cpp:103
 #, kde-format
 msgid "Matlab"
 msgstr "Matlab"
 
-#: KoM2MMLForumulaTool.cpp:171
+#: KoM2MMLForumulaTool.cpp:175
 #, kde-format
 msgid "Parse error."
 msgstr "Талдау қатесі."
 
-#: KoM2MMLForumulaTool.cpp:201
+#: KoM2MMLForumulaTool.cpp:204
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
 msgstr "Синтаксисі LaTeX/Matlab формуласын өңдеу"
 
-#: KoM2MMLForumulaTool.cpp:203
+#: KoM2MMLForumulaTool.cpp:206
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Синтаксисі LaTeX формуласын өңдеу"

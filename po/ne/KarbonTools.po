@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-07-18 14:39+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n !=1\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
 msgid "A calligraphic shape"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
 #, kde-format
 msgid "Calligraphic Shape"
 msgstr ""
@@ -93,7 +93,7 @@ msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
 #, fuzzy, kde-format
 #| msgctxt "Horizontal alignment"
 #| msgid "Center"
@@ -111,88 +111,88 @@ msgstr "प्रभाव"
 msgid "Please insert the name by which you want to save this profile:"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
-msgstr ""
-
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
 msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
 #, kde-format
 msgid "Mouse"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
 #, fuzzy, kde-format
 #| msgid "Gradient"
 msgid "Graphics Pen"
 msgstr "ग्रेडियन्ट"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
 #, kde-format
 msgid "Fill"
 msgstr "भर्नुहोस्"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr ""
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
 msgstr ""
 
-#: filterEffectTool/FilterAddCommand.cpp:18
+#: filterEffectTool/FilterAddCommand.cpp:21
 #, fuzzy
 #| msgid "&Add to Predefined Gradients"
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "Set miter limit"
 msgid "Add effect to current filter stack"
 msgstr "मिटर दायरा सेट गर्नुहोस्"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, fuzzy, kde-format
 #| msgid "&Add to Predefined Gradients"
 msgid "Add to filter presets"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, fuzzy, kde-format
 #| msgid "&Add to Predefined Gradients"
 msgid "Remove filter preset"
@@ -204,14 +204,14 @@ msgstr "पूर्वपरिभाषित ग्रेडियन्ट�
 msgid "Effect name"
 msgstr "प्रभाव"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:320
 #, fuzzy, kde-format
 #| msgid "&Add to Predefined Gradients"
 msgid "Filter Effect Editor"
@@ -249,70 +249,70 @@ msgstr "पूर्वपरिभाषित ग्रेडियन्ट�
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:474
 #, fuzzy, kde-format
 #| msgid "Object Properties"
 msgid "Effect Properties"
 msgstr "वस्तु गुण"
 
-#: filterEffectTool/FilterRemoveCommand.cpp:19
+#: filterEffectTool/FilterRemoveCommand.cpp:23
 #, fuzzy
 #| msgid "&Add to Predefined Gradients"
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: filterEffectTool/FilterStackSetCommand.cpp:23
+#: filterEffectTool/FilterStackSetCommand.cpp:25
 #, fuzzy
 #| msgid "Set miter limit"
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
 msgstr "मिटर दायरा सेट गर्नुहोस्"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, fuzzy, kde-format
 #| msgid "Effe&cts"
 msgid "Effects"
 msgstr "प्रभाव"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
 msgstr ""
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, fuzzy, kde-format
 #| msgid "&Add to Predefined Gradients"
 msgid "Remove filter from object"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, fuzzy, kde-format
 #| msgid "&Add to Predefined Gradients"
 msgid "Add Filter"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:486
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:492
 #, kde-format
 msgid "Y:"
 msgstr "Y:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:498
 #, kde-format
 msgid "W:"
 msgstr "W:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:504
 #, kde-format
 msgid "H:"
 msgstr "H:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:509
 #, fuzzy, kde-format
 #| msgid "Effects"
 msgid "Effect Region"
@@ -324,32 +324,32 @@ msgstr "प्रभाव"
 msgid "Filter effects editing"
 msgstr "पूर्वपरिभाषित ग्रेडियन्टमा थप्नुहोस्"
 
-#: KarbonGradientTool.cpp:198
+#: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
 msgstr ""
 
-#: KarbonGradientTool.cpp:207
+#: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
 
-#: KarbonGradientTool.cpp:209
+#: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
 msgstr ""
 
-#: KarbonGradientTool.cpp:216
+#: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
 
-#: KarbonGradientTool.cpp:494
+#: KarbonGradientTool.cpp:493
 #, kde-format
 msgid "Edit Gradient"
 msgstr "ग्रेडियन्ट सम्पादन गर्नुहोस्"
 
-#: KarbonGradientTool.cpp:496
+#: KarbonGradientTool.cpp:495
 #, kde-format
 msgid "Predefined Gradients"
 msgstr "पूर्वपरिभाषित ग्रेडियन्ट"
@@ -360,85 +360,85 @@ msgstr "पूर्वपरिभाषित ग्रेडियन्ट"
 msgid "Gradient editing"
 msgstr "ग्रेडियन्ट"
 
-#: KarbonPatternOptionsWidget.cpp:21
+#: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
 msgid "Original"
 msgstr ""
 
-#: KarbonPatternOptionsWidget.cpp:22
+#: KarbonPatternOptionsWidget.cpp:23
 #, fuzzy, kde-format
 #| msgid "&File"
 msgid "Tiled"
 msgstr "फाइल"
 
-#: KarbonPatternOptionsWidget.cpp:23
+#: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
 msgid "Stretched"
 msgstr ""
 
-#: KarbonPatternOptionsWidget.cpp:25
+#: KarbonPatternOptionsWidget.cpp:26
 #, fuzzy, kde-format
 #| msgctxt "Horizontal alignment"
 #| msgid "Left"
 msgid "Top Left"
 msgstr "बायाँ"
 
-#: KarbonPatternOptionsWidget.cpp:26
+#: KarbonPatternOptionsWidget.cpp:27
 #, kde-format
 msgid "Top"
 msgstr ""
 
-#: KarbonPatternOptionsWidget.cpp:27
+#: KarbonPatternOptionsWidget.cpp:28
 #, fuzzy, kde-format
 #| msgid "Align Right"
 msgid "Top Right"
 msgstr "दायाँ पङ्क्तिबद्व गर्नुहोस्"
 
-#: KarbonPatternOptionsWidget.cpp:28
+#: KarbonPatternOptionsWidget.cpp:29
 #, fuzzy, kde-format
 #| msgctxt "Horizontal alignment"
 #| msgid "Left"
 msgid "Left"
 msgstr "बायाँ"
 
-#: KarbonPatternOptionsWidget.cpp:29
+#: KarbonPatternOptionsWidget.cpp:30
 #, fuzzy, kde-format
 #| msgctxt "Horizontal alignment"
 #| msgid "Center"
 msgid "Center"
 msgstr "केन्द्र"
 
-#: KarbonPatternOptionsWidget.cpp:30
+#: KarbonPatternOptionsWidget.cpp:31
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgid "Right"
 msgstr "उचाइ:"
 
-#: KarbonPatternOptionsWidget.cpp:31
+#: KarbonPatternOptionsWidget.cpp:32
 #, fuzzy, kde-format
 #| msgid "Align Bottom"
 msgid "Bottom Left"
 msgstr "तल पङ्क्तिबद्व गर्नुहोस्"
 
-#: KarbonPatternOptionsWidget.cpp:32
+#: KarbonPatternOptionsWidget.cpp:33
 #, fuzzy, kde-format
 #| msgid "Align Bottom"
 msgid "Bottom"
 msgstr "तल पङ्क्तिबद्व गर्नुहोस्"
 
-#: KarbonPatternOptionsWidget.cpp:33
+#: KarbonPatternOptionsWidget.cpp:34
 #, fuzzy, kde-format
 #| msgid "Align Right"
 msgid "Bottom Right"
 msgstr "दायाँ पङ्क्तिबद्व गर्नुहोस्"
 
-#: KarbonPatternTool.cpp:273
+#: KarbonPatternTool.cpp:272
 #, fuzzy, kde-format
 #| msgid "Pattern"
 msgid "Pattern Options"
 msgstr "बाँन्की"
 
-#: KarbonPatternTool.cpp:275
+#: KarbonPatternTool.cpp:274
 #, kde-format
 msgid "Patterns"
 msgstr "बाँन्की"

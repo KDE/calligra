@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-07-04 11:45+0200\n"
 "Last-Translator: G.Sora <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-l10n-ia@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: PluginShape.cpp:36
+#: PluginShape.cpp:35
 #, kde-format
 msgid "Unknown"
 msgstr "Incognite"
 
-#: PluginShape.cpp:40
+#: PluginShape.cpp:39
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Plugin de mymetype: %1"

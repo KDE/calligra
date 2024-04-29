@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-08-11 12:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -31,7 +31,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "emir_sari@icloud.com"
 
-#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
 msgid "Rename"
 msgstr "Yeniden Adlandır"
@@ -46,12 +46,12 @@ msgstr "Ekle"
 msgid "Remove"
 msgstr "Kaldır"
 
-#: SheetsEditor.cpp:121
+#: SheetsEditor.cpp:124
 #, kde-format
 msgid "Enter Name:"
 msgstr "Ad Girin:"
 
-#: TableShape.cpp:288
+#: TableShape.cpp:300
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -60,67 +60,67 @@ msgstr ""
 "Bu belge, uzak bir belgeye bir dış bağlantı içeriyor\n"
 "%1"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Onay Gerekiyor"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:302
 #, kde-format
 msgid "Download"
 msgstr "İndir"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
 msgstr "Atla"
 
-#: TableShapeFactory.cpp:37
+#: TableShapeFactory.cpp:35
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Hesap Tablosu"
 
-#: TableShapeFactory.cpp:39
+#: TableShapeFactory.cpp:37
 #, kde-format
 msgid "Spreadsheet Shape"
 msgstr "Hesap Tablosu Şekli"
 
-#: TableTool.cpp:213
+#: TableTool.cpp:211
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "OpenDocument Hesap Tablosu Dosyası İçe Aktar"
 
-#: TableTool.cpp:214
+#: TableTool.cpp:212
 #, kde-format
 msgid "Import"
 msgstr "İçe Aktar"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:216
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "OpenDocument Hesap Tablosu Dosyası Dışa Aktar"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:217
 #, kde-format
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: TableTool.cpp:699
+#: TableTool.cpp:696
 #, kde-format
 msgid "Sheets"
 msgstr "Sayfalar"
 
-#: TableTool.cpp:741
+#: TableTool.cpp:738
 #, kde-format
 msgid "Sheet:"
 msgstr "Sayfa:"
 
-#: TableTool.cpp:743
+#: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Seçili Sayfa"
 
-#: TableTool.cpp:758
+#: TableTool.cpp:754
 #, kde-format
 msgid "View Options"
 msgstr "Görünüm Seçenekleri"
@@ -130,27 +130,27 @@ msgstr "Görünüm Seçenekleri"
 msgid "Table editing"
 msgstr "Tablo düzenleme"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
 msgstr "Alan pek büyük."
 
-#: ToolHeaders.cpp:425
+#: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
 msgstr "Satırı Gizle"
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Yükseklik: %1 %2"
 
-#: ToolHeaders.cpp:1049
+#: ToolHeaders.cpp:1031
 #, kde-format
 msgid "Hide Column"
 msgstr "Sütunu Gizle"
 
-#: ToolHeaders.cpp:1051
+#: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Genişlik: %1 %2"

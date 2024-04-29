@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-07-23 01:36+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@ludost.net>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
 msgid "A calligraphic shape"
 msgstr "Калиграфси обект"
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
 #, kde-format
 msgid "Calligraphic Shape"
 msgstr "Калиграфски обект"
@@ -90,7 +90,7 @@ msgstr "Завлачване:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
 #, kde-format
 msgid "Current"
 msgstr "Текущ"
@@ -105,18 +105,18 @@ msgstr "Име на профила"
 msgid "Please insert the name by which you want to save this profile:"
 msgstr "Въведете името, под което искате да запазите този профил:"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
-msgstr "Името, което сте въвели е неправилно."
-
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr "Неправилно име"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Името, което сте въвели е неправилно."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
 msgid ""
 "A profile with that name already exists.\n"
@@ -125,65 +125,65 @@ msgstr ""
 "Вече съществува профил с такова име.\n"
 "Искате ли да го презапишете?"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
 #, kde-format
 msgid "Mouse"
 msgstr "Мишка"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
 #, kde-format
 msgid "Graphics Pen"
 msgstr "Графична писалка"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
 #, kde-format
 msgid "Fill"
 msgstr "Запълване"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr "Калиграфия: увеличаване на широчината"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr "Калиграфия: намаляване на широчината"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr "Калиграфия: увеличаване на ъгъла"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr "Калиграфия: намаляване на ъгъла"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
 msgstr "Калиграфия"
 
-#: filterEffectTool/FilterAddCommand.cpp:18
+#: filterEffectTool/FilterAddCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
 msgstr "Добавяне на ефект"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
 msgstr "Добавяне към текущия пакет ефекти"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
 msgid "Add to filter presets"
 msgstr "Добавяне към предварително дефинирани филтри"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, kde-format
 msgid "Remove filter preset"
 msgstr "Премахване на предварително дефиниран филтър"
@@ -193,14 +193,14 @@ msgstr "Премахване на предварително дефиниран 
 msgid "Effect name"
 msgstr "Име на ефекта"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
 msgstr "Въведете име за ефекта"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:320
 #, kde-format
 msgid "Filter Effect Editor"
 msgstr "Редактор на ефекти"
@@ -235,62 +235,62 @@ msgstr "Предварително дефинирани филтри"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:474
 #, kde-format
 msgid "Effect Properties"
 msgstr "Настройки на ефект"
 
-#: filterEffectTool/FilterRemoveCommand.cpp:19
+#: filterEffectTool/FilterRemoveCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
 msgstr "Премахване на ефект"
 
-#: filterEffectTool/FilterStackSetCommand.cpp:23
+#: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
 msgstr "Указване на пакет с ефекти"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
 msgid "Effects"
 msgstr "Ефекти"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
 msgstr "Преглед и редактиране на филтъра"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, kde-format
 msgid "Remove filter from object"
 msgstr "Премахване на филтър от обекта"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
 msgid "Add Filter"
 msgstr "Добавяне на филтър"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:486
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:492
 #, kde-format
 msgid "Y:"
 msgstr "Y:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:498
 #, kde-format
 msgid "W:"
 msgstr "Ш:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:504
 #, kde-format
 msgid "H:"
 msgstr "В:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:509
 #, kde-format
 msgid "Effect Region"
 msgstr "Област на ефекта"
@@ -300,36 +300,36 @@ msgstr "Област на ефекта"
 msgid "Filter effects editing"
 msgstr "Инструмент за редактиране на ефекти"
 
-#: KarbonGradientTool.cpp:198
+#: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
 msgstr "Завлачете за преместване мястото на преливката."
 
-#: KarbonGradientTool.cpp:207
+#: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
 "Завлачете за преместване на крайния цвят. Натиснете два пъти за премахване "
 "на крайния цвят."
 
-#: KarbonGradientTool.cpp:209
+#: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
 msgstr "Завлачете за преместване на крайния цвят."
 
-#: KarbonGradientTool.cpp:216
+#: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
 "Завлачете за преместване мястото на преливката. Натиснете два пъти за "
 "вмъкване на краен цвят."
 
-#: KarbonGradientTool.cpp:494
+#: KarbonGradientTool.cpp:493
 #, kde-format
 msgid "Edit Gradient"
 msgstr "Редактиране на градиент"
 
-#: KarbonGradientTool.cpp:496
+#: KarbonGradientTool.cpp:495
 #, kde-format
 msgid "Predefined Gradients"
 msgstr "Предварително дефинирани градиенти"
@@ -339,72 +339,72 @@ msgstr "Предварително дефинирани градиенти"
 msgid "Gradient editing"
 msgstr "Инструмент за редактиране на преливкиГрадиент"
 
-#: KarbonPatternOptionsWidget.cpp:21
+#: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
 msgid "Original"
 msgstr "Оригинал"
 
-#: KarbonPatternOptionsWidget.cpp:22
+#: KarbonPatternOptionsWidget.cpp:23
 #, kde-format
 msgid "Tiled"
 msgstr "На плочки"
 
-#: KarbonPatternOptionsWidget.cpp:23
+#: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
 msgid "Stretched"
 msgstr "Разтеглено"
 
-#: KarbonPatternOptionsWidget.cpp:25
+#: KarbonPatternOptionsWidget.cpp:26
 #, kde-format
 msgid "Top Left"
 msgstr "Горе вляво"
 
-#: KarbonPatternOptionsWidget.cpp:26
+#: KarbonPatternOptionsWidget.cpp:27
 #, kde-format
 msgid "Top"
 msgstr "Горе"
 
-#: KarbonPatternOptionsWidget.cpp:27
+#: KarbonPatternOptionsWidget.cpp:28
 #, kde-format
 msgid "Top Right"
 msgstr "Горе вдясно"
 
-#: KarbonPatternOptionsWidget.cpp:28
+#: KarbonPatternOptionsWidget.cpp:29
 #, kde-format
 msgid "Left"
 msgstr "Вляво"
 
-#: KarbonPatternOptionsWidget.cpp:29
+#: KarbonPatternOptionsWidget.cpp:30
 #, kde-format
 msgid "Center"
 msgstr "В средата"
 
-#: KarbonPatternOptionsWidget.cpp:30
+#: KarbonPatternOptionsWidget.cpp:31
 #, kde-format
 msgid "Right"
 msgstr "Вдясно"
 
-#: KarbonPatternOptionsWidget.cpp:31
+#: KarbonPatternOptionsWidget.cpp:32
 #, kde-format
 msgid "Bottom Left"
 msgstr "Долу вляво"
 
-#: KarbonPatternOptionsWidget.cpp:32
+#: KarbonPatternOptionsWidget.cpp:33
 #, kde-format
 msgid "Bottom"
 msgstr "Долу"
 
-#: KarbonPatternOptionsWidget.cpp:33
+#: KarbonPatternOptionsWidget.cpp:34
 #, kde-format
 msgid "Bottom Right"
 msgstr "Долу вдясно"
 
-#: KarbonPatternTool.cpp:273
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Pattern Options"
 msgstr "Настройки на шаблон"
 
-#: KarbonPatternTool.cpp:275
+#: KarbonPatternTool.cpp:274
 #, kde-format
 msgid "Patterns"
 msgstr "Шаблони"

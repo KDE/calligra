@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2021-04-04 07:53+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 20.12.1\n"
 
-#: KoContactSemanticItemFactory.cpp:46
+#: KoContactSemanticItemFactory.cpp:44
 #, kde-format
 msgctxt "displayname of the semantic item type Contact"
 msgid "Contact"
 msgstr "Kontakt"
 
-#: KoRdfFoaF.cpp:179
+#: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
 msgstr "Wybierz książkę adresową do zapisywania:"
@@ -53,22 +53,22 @@ msgstr "Numer &telefonu:"
 msgid "&Home Page:"
 msgstr "&Strona domowa:"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:30
+#: KoRdfFoaFTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Contact Information"
 msgstr "Informacje o kontakcie"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:48
+#: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
 msgstr "Edytuj..."
 
-#: KoRdfFoaFTreeWidgetItem.cpp:51
+#: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
 msgid "Import contact"
 msgstr "Zaimportuj kontakt"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:54
+#: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
 msgstr "Wyeksportuj jako wizytówkę..."

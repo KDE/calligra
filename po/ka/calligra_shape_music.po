@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-12-04 06:45+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgia <kde-i18n-doc@kde.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: actions/AccidentalAction.cpp:54
+#: actions/AccidentalAction.cpp:52
 #, kde-format
 msgid "Double flat"
 msgstr "ორმაგი-ბემოლი"
 
-#: actions/AccidentalAction.cpp:55
+#: actions/AccidentalAction.cpp:54
 #, kde-format
 msgctxt "lowered half a step"
 msgid "Flat"
@@ -34,23 +34,23 @@ msgstr "ბრტყელი"
 msgid "Natural"
 msgstr "ნატურალური"
 
-#: actions/AccidentalAction.cpp:57
+#: actions/AccidentalAction.cpp:58
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
 msgstr "დიეზი"
 
-#: actions/AccidentalAction.cpp:58
+#: actions/AccidentalAction.cpp:60
 #, kde-format
 msgid "Double sharp"
 msgstr "ორმაგი დიეზი"
 
-#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:48
 #, kde-format
 msgid "%1 flats"
 msgstr "%1 ბემოლი"
 
-#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#: actions/AccidentalAction.cpp:65 actions/KeySignatureAction.cpp:50
 #, kde-format
 msgid "%1 sharps"
 msgstr "%1 დიეზი"
@@ -65,63 +65,63 @@ msgstr "წერტილები"
 msgid "Eraser"
 msgstr "საშლელი"
 
-#: actions/KeySignatureAction.cpp:28
+#: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
 msgstr "Ab მაჟორი"
 
-#: actions/KeySignatureAction.cpp:29
+#: actions/KeySignatureAction.cpp:31
 #, kde-format
 msgid "Eb Major"
 msgstr "Eb მაჟორი"
 
-#: actions/KeySignatureAction.cpp:30
+#: actions/KeySignatureAction.cpp:33
 #, kde-format
 msgid "Bb Major"
 msgstr "Bb მაჟორი"
 
-#: actions/KeySignatureAction.cpp:31
+#: actions/KeySignatureAction.cpp:35
 #, kde-format
 msgid "F Major"
 msgstr "F მაჟორი"
 
-#: actions/KeySignatureAction.cpp:32
+#: actions/KeySignatureAction.cpp:37
 #, kde-format
 msgid "C Major"
 msgstr "C მაჟორი"
 
-#: actions/KeySignatureAction.cpp:33
+#: actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "G Major"
 msgstr "G მაჟორი"
 
-#: actions/KeySignatureAction.cpp:34
+#: actions/KeySignatureAction.cpp:41
 #, kde-format
 msgid "D Major"
 msgstr "D მაჟორი"
 
-#: actions/KeySignatureAction.cpp:35
+#: actions/KeySignatureAction.cpp:43
 #, kde-format
 msgid "A Major"
 msgstr "A მაჟორი"
 
-#: actions/KeySignatureAction.cpp:36
+#: actions/KeySignatureAction.cpp:45
 #, kde-format
 msgid "E Major"
 msgstr "E მაჟორი"
 
-#: actions/KeySignatureAction.cpp:49
+#: actions/KeySignatureAction.cpp:62
 #, kde-format
 msgctxt "Other key signature"
 msgid "Other"
 msgstr "სხვა"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "note"
 msgstr "ნოტი"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "rest"
 msgstr "პაუზა"
@@ -131,52 +131,52 @@ msgstr "პაუზა"
 msgid "Double whole "
 msgstr "ორმაგი სრული "
 
-#: actions/NoteEntryAction.cpp:58
+#: actions/NoteEntryAction.cpp:59
 #, kde-format
 msgid "Whole "
 msgstr "სრული "
 
-#: actions/NoteEntryAction.cpp:59
+#: actions/NoteEntryAction.cpp:61
 #, kde-format
 msgid "Half "
 msgstr "ნახევარი "
 
-#: actions/NoteEntryAction.cpp:60
+#: actions/NoteEntryAction.cpp:63
 #, kde-format
 msgid "Quarter "
 msgstr "მეოთხედი "
 
-#: actions/NoteEntryAction.cpp:61
+#: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "Eighth "
 msgstr "მერვედი "
 
-#: actions/NoteEntryAction.cpp:62
+#: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "16th "
 msgstr "მეთექვსმეტედი "
 
-#: actions/NoteEntryAction.cpp:63
+#: actions/NoteEntryAction.cpp:69
 #, kde-format
 msgid "32nd "
 msgstr "ოცდამეთორმეტედი "
 
-#: actions/NoteEntryAction.cpp:64
+#: actions/NoteEntryAction.cpp:71
 #, kde-format
 msgid "64th "
 msgstr "სამოცდამეოთხედი "
 
-#: actions/NoteEntryAction.cpp:65
+#: actions/NoteEntryAction.cpp:73
 #, kde-format
 msgid "128th "
 msgstr "ასოცდამერვედი "
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown note"
 msgstr "უცნობი ნოტა"
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown rest"
 msgstr "უცნობი პაუზა"
@@ -191,42 +191,42 @@ msgstr "ტაქტის წაშლა"
 msgid "Select"
 msgstr "აირჩიეთ"
 
-#: actions/SetClefAction.cpp:39
+#: actions/SetClefAction.cpp:40
 #, kde-format
 msgctxt "Treble clef"
 msgid "Treble"
 msgstr "მაღალი სიხშირე"
 
-#: actions/SetClefAction.cpp:40
+#: actions/SetClefAction.cpp:42
 #, kde-format
 msgctxt "Bass clef"
 msgid "Bass"
 msgstr "ბასი"
 
-#: actions/SetClefAction.cpp:43
+#: actions/SetClefAction.cpp:46
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
 msgstr "სოპრანო"
 
-#: actions/SetClefAction.cpp:44
+#: actions/SetClefAction.cpp:48
 #, kde-format
 msgctxt "Alto clef"
 msgid "Alto"
 msgstr "ალტო"
 
-#: actions/SetClefAction.cpp:45
+#: actions/SetClefAction.cpp:50
 #, kde-format
 msgctxt "Tenor clef"
 msgid "Tenor"
 msgstr "ტენორი"
 
-#: actions/SetClefAction.cpp:46
+#: actions/SetClefAction.cpp:52
 #, kde-format
 msgid "C clef on line %1"
 msgstr "C გასაღები ხაზზე %1"
 
-#: actions/SetClefAction.cpp:49
+#: actions/SetClefAction.cpp:55
 #, kde-format
 msgid "Unknown clef"
 msgstr "უცნობი გასაღები"
@@ -236,22 +236,22 @@ msgstr "უცნობი გასაღები"
 msgid "Tied notes"
 msgstr "ლიგა"
 
-#: commands/AddBarsCommand.cpp:17
+#: commands/AddBarsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add measures"
 msgstr "ტაქტების დამატება"
 
-#: commands/AddDotCommand.cpp:17
+#: commands/AddDotCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Add dot"
 msgstr "წერტილის დამატება"
 
-#: commands/AddNoteCommand.cpp:29
+#: commands/AddNoteCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
 msgstr "აკორდის ხანგრძლივობის დაყენება"
 
-#: commands/AddNoteCommand.cpp:31
+#: commands/AddNoteCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Add note"
 msgstr "ნოტის დამატება"
@@ -266,42 +266,42 @@ msgstr "ნაწილის დამატება"
 msgid "Part %1"
 msgstr "ნაწილი %1"
 
-#: commands/ChangePartDetailsCommand.cpp:30
+#: commands/ChangePartDetailsCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change part details"
 msgstr "პარტიის დეტალების შეცვლა"
 
-#: commands/CreateChordCommand.cpp:20
+#: commands/CreateChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add chord"
 msgstr "აკორდის დამაება"
 
-#: commands/CreateChordCommand.cpp:28
+#: commands/CreateChordCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Add rest"
 msgstr "პაუზის დამატება"
 
-#: commands/MakeRestCommand.cpp:19
+#: commands/MakeRestCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
 msgstr "აკორდის პაუზად გადაკეთება"
 
-#: commands/RemoveBarCommand.cpp:18
+#: commands/RemoveBarCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
 msgstr "ტაქტის წაშლა"
 
-#: commands/RemoveChordCommand.cpp:19
+#: commands/RemoveChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
 msgstr "პაუზის წაშლა"
 
-#: commands/RemoveChordCommand.cpp:21
+#: commands/RemoveChordCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
 msgstr "აკორდის წაშლა"
 
-#: commands/RemoveNoteCommand.cpp:19
+#: commands/RemoveNoteCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove note"
 msgstr "ნოტის წაშლა"
@@ -311,38 +311,38 @@ msgctxt "(qtundo-format)"
 msgid "Remove part"
 msgstr "პარტიის წაშლა"
 
-#: commands/RemoveStaffElementCommand.cpp:22
+#: commands/RemoveStaffElementCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
 msgstr "გასაღების წაშლა"
 
-#: commands/RemoveStaffElementCommand.cpp:24
+#: commands/RemoveStaffElementCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
 msgstr "სტანის ელემენტის წაშლა"
 
-#: commands/SetAccidentalsCommand.cpp:19
+#: commands/SetAccidentalsCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
 msgstr "ალტერაციის ნიშნების დაყენება"
 
-#: commands/SetClefCommand.cpp:19
+#: commands/SetClefCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change clef"
 msgstr "გასაღების შეცვლა"
 
-#: commands/SetKeySignatureCommand.cpp:25
-#: commands/SetKeySignatureCommand.cpp:72
+#: commands/SetKeySignatureCommand.cpp:26
+#: commands/SetKeySignatureCommand.cpp:76
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
 msgstr "ტონალობის შეცვლა"
 
-#: commands/SetTimeSignatureCommand.cpp:21
+#: commands/SetTimeSignatureCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
 msgstr "ტაქტის ზომის შეცვლა"
 
-#: commands/ToggleTiedNoteCommand.cpp:19
+#: commands/ToggleTiedNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
 msgstr "ნოტის ლიგის გადართვა"
@@ -460,20 +460,20 @@ msgid "Voice 4"
 msgstr "ხმა 4"
 
 #. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
-#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
-#: SimpleEntryTool.cpp:678
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add measures"
 msgstr "ტაქტების დამატება"
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
-#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
 #, kde-format
 msgid "Import"
 msgstr "შემოტანა"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportButton)
-#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
 #, kde-format
 msgid "Export"
 msgstr "გატანა"
@@ -483,42 +483,42 @@ msgstr "გატანა"
 msgid "Part 1"
 msgstr "ნაწილი 1"
 
-#: MusicShapeFactory.cpp:36
+#: MusicShapeFactory.cpp:34
 #, kde-format
 msgid "Music Shape"
 msgstr "Music Shape"
 
-#: MusicShapeFactory.cpp:38
+#: MusicShapeFactory.cpp:36
 #, kde-format
 msgid "A shape which provides a music editor"
 msgstr "ნოტური პარტიტურის ობიექტი"
 
-#: MusicTool.cpp:85
+#: MusicTool.cpp:83
 #, kde-format
 msgid "Parts"
 msgstr "ნაწილებ"
 
-#: MusicToolFactory.cpp:19
+#: MusicToolFactory.cpp:18
 #, kde-format
 msgid "Music editing, parts"
 msgstr "ნოტური პარტიტურის რედაქტორი"
 
-#: SimpleEntryTool.cpp:226
+#: SimpleEntryTool.cpp:227
 #, kde-format
 msgid "Clef"
 msgstr "გასაღები"
 
-#: SimpleEntryTool.cpp:255
+#: SimpleEntryTool.cpp:256
 #, kde-format
 msgid "Time signature"
 msgstr "დროის ხელმოწერა"
 
-#: SimpleEntryTool.cpp:285
+#: SimpleEntryTool.cpp:286
 #, kde-format
 msgid "Key signature"
 msgstr "გასაღების ხელმოწერა"
 
-#: SimpleEntryTool.cpp:679
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add how many measures?"
 msgstr "რამდენი ტაქტი დავამატო?"
@@ -529,18 +529,18 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "შემოტანა"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr "MusicXML ფაილები (*.xml)"
 
-#: SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:761
 #, kde-format
 msgctxt "@title:window"
 msgid "Export"
 msgstr "გატანა"
 
-#: SimpleEntryToolFactory.cpp:18
+#: SimpleEntryToolFactory.cpp:17
 #, kde-format
 msgid "Music editing"
 msgstr "მუსიკის ჩასწორება"

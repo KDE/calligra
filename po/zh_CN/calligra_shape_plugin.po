@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/calligra/calligra_shape_plugin.pot\n"
 "X-Crowdin-File-ID: 5506\n"
 
-#: PluginShape.cpp:36
+#: PluginShape.cpp:35
 #, kde-format
 msgid "Unknown"
 msgstr "未知"
 
-#: PluginShape.cpp:40
+#: PluginShape.cpp:39
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Mime 类型插件：%1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-03-12 07:48+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: KoLocationSemanticItemFactory.cpp:34
+#: KoLocationSemanticItemFactory.cpp:33
 #, kde-format
 msgctxt "displayname of the semantic item type Location"
 msgid "Location"
@@ -75,7 +75,7 @@ msgstr "Широта"
 msgid "Longitude"
 msgstr "Долгота"
 
-#: KoRdfLocationTreeWidgetItem.cpp:42
+#: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
 msgstr "Сведения о местоположении"

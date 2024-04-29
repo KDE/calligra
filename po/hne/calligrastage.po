@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2009-03-03 10:38+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -75,7 +75,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "आकार एनिमेसन बनाव"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 #, fuzzy
 #| msgid "Animation tool"
 msgctxt "(qtundo-format)"
@@ -112,14 +112,14 @@ msgid_plural "Delete slides"
 msgstr[0] "स्लाइड मेटाव"
 msgstr[1] "स्लाइड मेटाव"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 #, fuzzy
 #| msgid "Animation tool"
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "एनिमेसन औजार"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 #, fuzzy
 #| msgid "Edit Custom Slide Shows..."
 msgctxt "(qtundo-format)"
@@ -133,14 +133,14 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "पेज प्रभाव बनाव"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 #, fuzzy
 #| msgid "Modify page effect"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "पेज प्रभाव सुधारव"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 #, fuzzy
 #| msgid "Delete Slide"
 msgctxt "(qtundo-format)"
@@ -154,171 +154,171 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "स्लाइड सो"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 #, fuzzy
 #| msgid "Customs Slideshows"
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "मनमाफिक स्लाइडसो"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 #, fuzzy
 #| msgid "Slide Show"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "स्लाइड सो"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, fuzzy, kde-format
 #| msgid "Configure Slide Show..."
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr "स्लाइड-सो कान्फिगर करव..."
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Presentation Tool"
 msgstr "प्रस्तुतीकरन"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "(c) 1998-2008, The KPresenter Team"
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "(c) 1998-2008, के-प्रेजेंटर टोली"
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
 msgid "Former maintainer"
 msgstr "पहिली के मेंटेनर"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "थार्स्टन जाकमैन"
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr "लारेंट मोंटेल"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Original author"
 msgstr "मूल लेखक"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr "रेजऊनाल्ड स्टाडबाउर"
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Werner Trobin"
 msgstr "वेर्नर ट्रोबिन"
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr "डेविड फाउरे"
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr "तोसित्का फुजिओका"
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "लुकास टिंकल"
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "अरिया हिदायत"
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr "पर्सी लियोन्हार्द्त"
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr "थामस जेंडर"
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "पीटर साइमन्सन"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr "बाउदेविन रेम्प्त"
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
 msgstr ""
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, fuzzy, kde-format
 #| msgid "Casper Boemann "
 msgid "C. Boemann "
 msgstr "केस्पर बोएमेन"
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr ""
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr "जेन हेमब्रेच्ट"
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr ""
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr "मार्टिन फेइफर"
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr ""
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr ""
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "raviratlami@aol.in,"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr ""
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "स्लाइड %1"
@@ -328,7 +328,7 @@ msgstr "स्लाइड %1"
 msgid "End of presentation. Click to exit."
 msgstr ""
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, fuzzy, kde-format
 #| msgid "Slide Layouts"
 msgid "Layout"
@@ -349,7 +349,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr ""
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 #, fuzzy
 #| msgid "Insert Slide"
 msgctxt "(qtundo-format)"
@@ -362,82 +362,75 @@ msgid "Placeholder shape"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, kde-format
 msgid "Double click to add a title"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, kde-format
 msgid "Double click to add an outline"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, kde-format
 msgid "Double click to add a text"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, kde-format
 msgid "Double click to add notes"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
 msgid "Pen Color"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, fuzzy, kde-format
 #| msgid "Clock"
 msgid "Black"
 msgstr "घड़ी"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, kde-format
 msgid "Yellow"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, kde-format
 msgid "Next Slide"
 msgstr "अगला स्लाइड"
@@ -447,251 +440,251 @@ msgstr "अगला स्लाइड"
 msgid "Speaker Notes"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "Current Slide %1 of %2"
 msgstr "अभी हाल के स्लाइड  %1 एमां से- %2"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "End of Slide Show"
 msgstr "स्लाइड सो के आखरी"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, fuzzy, kde-format
 #| msgid "Create shape animation"
 msgid "start after previous animation"
 msgstr "आकार एनिमेसन बनाव"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, fuzzy, kde-format
 #| msgid "Create shape animation"
 msgid "start with previous animation"
 msgstr "आकार एनिमेसन बनाव"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Animation"
 msgstr "एनिमेसन औजार"
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
 msgstr "रूप"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, fuzzy, kde-format
 #| msgid "Copy Slide"
 msgid "&Move Here"
 msgstr "स्लाइड नकल करव"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, fuzzy, kde-format
 #| msgid "Copy Slide"
 msgid "&Copy Here"
 msgstr "स्लाइड नकल करव"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Cancel"
 msgid "C&ancel"
 msgstr "खारिज करव (&C)"
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, fuzzy, kde-format
 #| msgid "Master Slide..."
 msgid "Show Master Slides"
 msgstr "मास्टर स्लाइड..."
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, fuzzy, kde-format
 #| msgid "Configure Slide Show..."
 msgid "Import Slideshow..."
 msgstr "स्लाइड-सो कान्फिगर करव..."
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, kde-format
 msgid "Insert Slide"
 msgstr "स्लाइड भरव"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr ""
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, kde-format
 msgid "Copy Slide"
 msgstr "स्लाइड नकल करव"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, kde-format
 msgid "Copy the current slide"
 msgstr "अभी हाल के स्लाइड नकल करव"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
 msgid "Delete Slide"
 msgstr "स्लाइड मेटाव"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, kde-format
 msgid "Delete the current slide"
 msgstr "अभी हाल के स्लाइड मेटाव"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
 msgstr "मास्टर स्लाइड..."
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, kde-format
 msgid "Previous Slide"
 msgstr "पिछला स्लाइड"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, fuzzy, kde-format
 #| msgid "Previous Slide"
 msgid "Go to previous slide"
 msgstr "पिछला स्लाइड"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, fuzzy, kde-format
 #| msgid "Add new slideshow"
 msgid "Go to next slide"
 msgstr "नवा स्लाइडसो जोड़व"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, kde-format
 msgid "First Slide"
 msgstr "पहिली स्लाइड"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, fuzzy, kde-format
 #| msgid "From First Slide"
 msgid "Go to first slide"
 msgstr "पहिली स्लाइड से"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, kde-format
 msgid "Last Slide"
 msgstr "आखरी स्लाइड"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, fuzzy, kde-format
 #| msgid "Last Slide"
 msgid "Go to last slide"
 msgstr "आखरी स्लाइड"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, fuzzy, kde-format
 #| msgid "Configure Slide Show..."
 msgid "Configure Stage..."
 msgstr "स्लाइड-सो कान्फिगर करव..."
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, fuzzy, kde-format
 #| msgid "Insert Slide"
 msgid "Insert Pictures as Slides..."
 msgstr "स्लाइड भरव"
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "प्रकट एनिमेसन बनाव"
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "मनमाफिक स्लाइडसो संपादित करव..."
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, kde-format
 msgid "Start Presentation"
 msgstr "प्रस्तुतीकरन चालू करव"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, kde-format
 msgid "From Current Slide"
 msgstr "अभी हाल के स्लाइड से"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, kde-format
 msgid "From First Slide"
 msgstr "पहिली स्लाइड से"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Stop presentation"
 msgstr "प्रस्तुतीकरन चालू करव"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Hide Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr ""
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "स्लाइड-सो कान्फिगर करव..."
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "प्रजेन्टर दृस्य कान्फिगर करव..."
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Draw on the presentation..."
 msgstr "प्रस्तुतीकरन चालू करव"
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Highlight the presentation..."
 msgstr "प्रस्तुतीकरन चालू करव"
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Blackscreen on the presentation..."
@@ -784,62 +777,62 @@ msgstr "कांट-छांट"
 msgid "Paste"
 msgstr "पेज (&P)"
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Slide Show %1"
 msgstr "स्लाइड सो"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, kde-format
 msgid "All slides"
 msgstr "सब्बो स्लाइड"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, kde-format
 msgid "Error"
 msgstr "गलती"
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, fuzzy, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr "इहां एके नाम से २ स्लाइडसो नइ हो सके"
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 #, fuzzy
 #| msgid "Slide Layouts"
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "स्लाइड खाका"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
 msgstr ""
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview animation"
 msgstr "प्रस्तुतीकरन"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Slide Transitions"
 msgstr "स्लाइड सो"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, fuzzy, kde-format
 #| msgid "Shape Animation"
 msgid "Shape Click Actions"
 msgstr "आकार एनिमेसन"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Shape Animations"
@@ -885,7 +878,7 @@ msgid "Duration: "
 msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, fuzzy, kde-format
 #| msgid "Create shape animation"
 msgid "Preview Shape Animation"
@@ -896,78 +889,78 @@ msgstr "आकार एनिमेसन बनाव"
 msgid "No Effect"
 msgstr "कोई प्रभाव नइ"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
 msgstr "सेक."
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Slide Transition:"
 msgstr "स्लाइड सो"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "All slides"
 msgid "Apply To All Slides"
 msgstr "सब्बो स्लाइड"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 #, fuzzy
 #| msgid "All slides"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "सब्बो स्लाइड"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Edit animation"
@@ -979,36 +972,36 @@ msgstr "एनिमेसन औजार"
 msgid "Add new animation"
 msgstr "एनिमेसन औजार"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Remove animation"
 msgstr "एनिमेसन औजार"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
 msgstr ""
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Move animation up"
 msgstr "एनिमेसन औजार"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, fuzzy, kde-format
 #| msgid "Animation Tool"
 msgid "Move animation down"
 msgstr "एनिमेसन औजार"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, fuzzy, kde-format
 #| msgid "Add new slideshow"
 msgid "Add a new animation"
 msgstr "नवा स्लाइडसो जोड़व"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 #| msgid "Delete the current slide"
 msgid "Delete current animation"
@@ -1243,199 +1236,187 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Delete Template"
 msgstr "स्लाइड मेटाव"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Add Template"
 msgstr "स्लाइड मेटाव"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr ""
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "No sound"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "Import..."
 msgstr "आयात..."
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
 msgstr "पट्टी"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, kde-format
-msgid "From Left"
-msgstr "बायेँ से"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, kde-format
-msgid "From Top"
-msgstr "ऊपर से"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, kde-format
-msgid "From Right"
-msgstr "दायें से"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Bottom"
 msgstr "नीचे से"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Left"
+msgstr "बायेँ से"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Right"
+msgstr "दायें से"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Top"
+msgstr "ऊपर से"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Clock"
 msgstr "घड़ी"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, kde-format
 msgid "From Twelve Clockwise"
 msgstr "बारह से घड़ी के दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, kde-format
 msgid "From Three Clockwise"
 msgstr "तीन से घड़ी के दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, kde-format
 msgid "From Six Clockwise"
 msgstr "छः से घड़ी के दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, kde-format
 msgid "From Nine Clockwise"
 msgstr "नौ से घड़ी के दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, kde-format
 msgid "From Twelve Counterclockwise"
 msgstr "बारह से घड़ी के उलटा दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, kde-format
 msgid "From Three Counterclockwise"
 msgstr "तीन से घड़ी के उलटा दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, kde-format
 msgid "From Six Counterclockwise"
 msgstr "छः से घड़ी के उलटा दिसा में"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, kde-format
 msgid "From Nine Counterclockwise"
 msgstr "नौ से घड़ी के उलटा दिसा में"
 
@@ -1445,33 +1426,27 @@ msgstr "नौ से घड़ी के उलटा दिसा में"
 msgid "Double Fan"
 msgstr "दोहरा हीरा"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan Out Vertical"
 msgstr "खड़े मं फेनआउट हों"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
 msgstr "आड़े मं फेनआउट हों"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical"
 msgstr "खड़े मं फेनइन हों"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
 msgstr "आड़े मं फेनइन हों"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
 msgid "Fan In Vertical Reverse"
 msgstr "खड़ा उलटा मं फेनइन हों"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
 msgid "Fan In Horizontal Reverse"
 msgstr "आड़ा उलटा मं फेनइन हों"
 
@@ -1481,147 +1456,138 @@ msgstr "आड़ा उलटा मं फेनइन हों"
 msgid "Double Sweep"
 msgstr "एकल स्वीप"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Vertical"
 msgid "Parallel Vertical"
 msgstr "खड़ा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Parallel Snakes"
 msgid "Parallel Diagonal"
 msgstr "समानांतर सर्प"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Vertical Reverse"
 msgid "Opposite Vertical"
 msgstr "खड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Horizontal Reverse"
 msgid "Opposite Horizontal"
 msgstr "आड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Diagonal Top Left"
 msgid "Parallel Diagonal Top Left"
 msgstr "तिर्यक ऊपर डेरी"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Diagonal Bottom Left"
 msgid "Parallel Diagonal Bottom Left"
 msgstr "तिर्यक नीचे डेरी"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Vertical Reverse"
 msgid "Parallel Vertical Reverse"
 msgstr "खड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Horizontal Reverse"
 msgid "Parallel Diagonal Reverse"
 msgstr "आड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Vertical Reverse"
 msgid "Opposite Vertical Reverse"
 msgstr "खड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Horizontal Reverse"
 msgid "Opposite Horizontal Reverse"
 msgstr "आड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Diagonal Top Left Reverse"
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "तिर्यक ऊपर डेरी उलटा"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Diagonal Bottom Left Reverse"
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "तिर्यक नीचे डेरी उलटा"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Right"
 msgstr "मध्य मं जेवनी"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Top"
 msgstr "मध्य केंद्र"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
 msgid "Center Left"
 msgstr "मध्य डेरी"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
 msgid "Center Bottom"
 msgstr "मध्य नीचे"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, kde-format
 msgid "Fan Out Top"
 msgstr "ऊपर फेनआउट हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, kde-format
 msgid "Fan Out Right"
 msgstr "जेवनी मं फेनआउट हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Fan Out Top"
 msgid "Fan Out Bottom"
 msgstr "ऊपर फेनआउट हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, kde-format
 msgid "Fan Out Left"
 msgstr "डेरी मं फेनआउट हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Fan Out Top"
 msgid "Fan In Top"
 msgstr "ऊपर फेनआउट हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, kde-format
 msgid "Fan In Right"
 msgstr "जेवनी मं फेनइन हों"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "From Bottom"
 msgid "Fan In Bottom"
 msgstr "नीचे से"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, kde-format
 msgid "Fan In Left"
 msgstr "डेरी मं फेनइन हों"
 
@@ -1630,33 +1596,27 @@ msgstr "डेरी मं फेनइन हों"
 msgid "Pin Wheel"
 msgstr "पिन चकरी"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Two Blades Vertical Clockwise"
 msgstr "दो तलवारें खड़े मं घड़ी के दिसा में"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Horizontal Clockwise"
 msgstr "दो तलवारें आड़े मं घड़ी के दिसा में"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Four Blades Horizontal Clockwise"
 msgstr "चार तलवारें आड़े मं घड़ी के दिसा में"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "दो तलवारें खड़े मं घड़ी के उलटी दिसा में"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "दो तलवारें आड़े मं घड़ी के उलटी दिसा में"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "चार तलवारें खड़े मं घड़ी के उलटी दिसा में"
 
@@ -1665,112 +1625,92 @@ msgstr "चार तलवारें खड़े मं घड़ी के 
 msgid "Saloon Door"
 msgstr "सेलून दरवाजा"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
 msgid "To Top"
 msgstr "ऊपर से"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
 msgid "To Left"
 msgstr "डेरी के तरफ"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
 msgid "To Bottom"
 msgstr "तल में"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
 msgid "To Right"
 msgstr "जेवनी के तरफ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Single Sweep"
 msgstr "एकल स्वीप"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 msgid "Clockwise Top"
 msgstr "घड़ी के दिसा मं ऊपर"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 msgid "Clockwise Right"
 msgstr "घड़ी के दिसा मं जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 msgid "Clockwise Bottom"
 msgstr "घड़ी के दिसा मं नीचे"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Clockwise Left"
 msgstr "घड़ी के दिसा मं डेरी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Top Left"
 msgstr "घड़ी के दिसा मं ऊपरी डेरी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Bottom Left"
 msgstr "घड़ी के उलटा दिसा मं नीचे जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right"
 msgstr "घड़ी के उलटा दिसा मं नीचे जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Right"
 msgstr "घड़ी के उलटा दिसा मं ऊपर जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top"
 msgstr "घड़ी के उलटा दिसा मं ऊपर"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Right"
 msgstr "घड़ी के उलटा दिसा मं जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Bottom"
 msgstr "घड़ी के उलटा दिसा मं नीचे"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Counterclockwise Left"
 msgstr "घड़ी के उलटा दिसा मं डेरी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Top Left"
 msgstr "घड़ी के उलटा दिसा मं ऊपर डेरी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Bottom Left"
 msgstr "घड़ी के दिसा मं नीचे डेरी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right"
 msgstr "घड़ी के उलटा दिसा मं नीचे जेवनी"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
 msgid "Clockwise Top Right"
 msgstr "घड़ी के दिसा मं ऊपर जेवनी"
 
@@ -1779,76 +1719,68 @@ msgstr "घड़ी के दिसा मं ऊपर जेवनी"
 msgid "Windshield"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
 msgid "Right"
 msgstr "जेवनी"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
 msgstr "ऊपर"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical"
 msgstr "खड़ा"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
 msgid "Horizontal"
 msgstr "आड़ा"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 msgid "Right Reverse"
 msgstr "जेवनी उलटा"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Up Reverse"
 msgstr "ऊपर उलटा"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical Reverse"
 msgstr "खड़ा उलटा"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Horizontal Reverse"
 msgstr "आड़ा उलटा"
 
@@ -1857,23 +1789,19 @@ msgstr "आड़ा उलटा"
 msgid "Barn Door"
 msgstr "बार्न दरवाजा"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 msgid "Diagonal Bottom Left"
 msgstr "तिर्यक नीचे डेरी"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 msgid "Diagonal Bottom Left Reverse"
 msgstr "तिर्यक नीचे डेरी उलटा"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
 msgid "Diagonal Top Left"
 msgstr "तिर्यक ऊपर डेरी"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
 msgid "Diagonal Top Left Reverse"
 msgstr "तिर्यक ऊपर डेरी उलटा"
 
@@ -1887,46 +1815,40 @@ msgstr "बार्न वी"
 msgid "Barn Zig Zag"
 msgstr "बार्न जिग जैग"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, kde-format
-msgid "Vertical Reversed"
-msgstr "खड़ा उलटा"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Horizontal Reversed"
 msgstr "आड़ा उलटा"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+msgid "Vertical Reversed"
+msgstr "खड़ा उलटा"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
 msgstr "डब्बा"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 msgid "From Top Left"
 msgstr "ऊपर डेरी से"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 msgid "From Top Right"
 msgstr "ऊपर जेवनी से"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
 msgid "From Bottom Left"
 msgstr "नीचे डेरी से"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
 msgid "From Bottom Right"
 msgstr "नीचे जेवनी से"
 
@@ -1940,23 +1862,19 @@ msgstr "हीरा"
 msgid "Four Box"
 msgstr "चार डब्बा"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In"
 msgstr "किनारे से अंदर"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In Reverse"
 msgstr "किनारा उलटे में"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out"
 msgstr "किनारे से बाहिर"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out Reverse"
 msgstr "किनारे से बाहिर उलटा"
 
@@ -1966,12 +1884,10 @@ msgid "Misc Diagonal"
 msgstr "विविध तिर्यक"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, kde-format
 msgid "Double Barn Door"
 msgstr "दोहरा बार्न दरवाजा"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, kde-format
 msgid "Double Diamond"
 msgstr "दोहरा हीरा"
 
@@ -1991,13 +1907,11 @@ msgstr "जिग जैग"
 msgid "Fade"
 msgstr "दिल"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
 msgstr ""
 
@@ -2006,49 +1920,44 @@ msgstr ""
 msgid "ArrowHead"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
 msgid "Down"
 msgstr "नीचे"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 msgid "Down Reverse"
 msgstr "नीचे उलटा"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
 msgid "Left"
 msgstr "डेरी"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
 msgid "Left Reverse"
 msgstr "डेरी उलटा"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr "दीर्घवक्र"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr "वृत्त"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Vertical Reverse"
 msgid "Circle Reverse"
 msgstr "खड़ा उलटा"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr "आँख"
@@ -2063,49 +1972,42 @@ msgstr "सस्ठभुज"
 msgid "Iris"
 msgstr "आइरिस"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, kde-format
-msgid "Rectangular"
-msgstr "आयत"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, kde-format
-msgid "Rectangular Reverse"
-msgstr "आयत उलटा"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond"
 msgstr "हीरा"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond Reverse"
 msgstr "हीरा उलटा"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular"
+msgstr "आयत"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular Reverse"
+msgstr "आयत उलटा"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr "विविध"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
 msgstr "दिल"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Left Reverse"
 msgid "Heart Reverse"
 msgstr "डेरी उलटा"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole"
 msgstr "कीहोल"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole Reverse"
 msgstr "कीहोल उलटा"
 
@@ -2114,7 +2016,7 @@ msgstr "कीहोल उलटा"
 msgid "Pentagon"
 msgstr "पंचभुज"
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, kde-format
 msgid "RoundRect"
 msgstr ""
@@ -2124,33 +2026,28 @@ msgstr ""
 msgid "Star"
 msgstr "तारा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Four Point Star"
 msgstr "चार बिन्दु तारा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Four Point Star Reverse"
 msgstr "चार बिन्दु तारा उलटा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
 msgstr "पांच बिन्दु तारा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
 msgstr "पांच बिन्दु तारा उलटा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
 msgstr "छः बिन्दु तारा"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy
 #| msgid "Five Point Star Reverse"
 msgid "Six Point Star Reverse"
 msgstr "पांच बिन्दु तारा उलटा"
@@ -2166,74 +2063,74 @@ msgstr "त्रिभुज"
 msgid "Box Snakes"
 msgstr "सांप"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "To Top"
 msgid "Two Box Top In"
 msgstr "ऊपर से"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "To Bottom"
 msgid "Two Box Bottom In"
 msgstr "तल में"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "To Left"
 msgid "Two Box Left In"
 msgstr "डेरी के तरफ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "To Right"
 msgid "Two Box Right In"
 msgstr "जेवनी के तरफ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Fan In Vertical"
 msgid "Four Box Vertical In"
 msgstr "खड़े मं फेनइन हों"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Four Blades Horizontal Clockwise"
 msgid "Four Box Horizontal In"
 msgstr "चार तलवारें आड़े मं घड़ी के दिसा में"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "To Top"
 msgid "Two Box Top Out"
 msgstr "ऊपर से"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "To Bottom"
 msgid "Two Box Bottom Out"
 msgstr "तल में"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Clockwise Bottom Left Out"
 msgid "Two Box Left Out"
 msgstr "घड़ी के दिसा मं नीचे डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Clockwise Bottom Right Out"
 msgid "Two Box Right Out"
 msgstr "घड़ी के दिसा मं नीचे जेवनी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Fan In Vertical"
 msgid "Four Box Vertical Out"
 msgstr "खड़े मं फेनइन हों"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Four Blades Horizontal Clockwise"
 msgid "Four Box Horizontal Out"
 msgstr "चार तलवारें आड़े मं घड़ी के दिसा में"
@@ -2243,104 +2140,85 @@ msgstr "चार तलवारें आड़े मं घड़ी के 
 msgid "Parallel Snakes"
 msgstr "समानांतर सर्प"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
 msgid "Vertical Top Same In"
 msgstr "खड़ा ऊपर से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
 msgid "Vertical Top Same Out"
 msgstr "खड़ा ऊपर से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
 msgid "Vertical Bottom Same In"
 msgstr "खड़ा नीचे से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
 msgid "Vertical Bottom Same Out"
 msgstr "खड़ा नीचे से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 msgid "Vertical Top Left Opposite In"
 msgstr "खड़ा ऊपर डेरी उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
 msgid "Vertical Top Left Opposite Out"
 msgstr "खड़ा ऊपर डेरी उलटा दिसा से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
 msgid "Vertical Bottom Left Opposite In"
 msgstr "खड़ा नीचे डेरी उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "खड़ा नीचे डेरी उलटा दिसा से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
 msgid "Horizontal Left Same In"
 msgstr "आड़ा डेरी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
 msgid "Horizontal Left Same Out"
 msgstr "आड़ा डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
 msgid "Horizontal Right Same In"
 msgstr "आड़ा जेवनी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
 msgid "Horizontal Right Same Out"
 msgstr "आड़ा जेवनी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
 msgid "Horizontal Top Left Opposite In"
 msgstr "आड़ा ऊपर डेरी से उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
 msgid "Horizontal Top Left Opposite Out"
 msgstr "आड़ा ऊपर डेरी उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
 msgid "Horizontal Top Right Opposite In"
 msgstr "आड़ा ऊपर जेवनी उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 msgid "Horizontal Top Right Opposite Out"
 msgstr "आड़ा ऊपर जेवनी उलटा दिसा से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "तिर्यक नीचे जेवनी से उलटा दिसा से अंदर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "तिर्यक नीचे जेवनी से उलटा दिसा से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy
 #| msgid "Diagonal Top Left Opposite Out"
 msgid "Diagonal Top Left Opposite In"
 msgstr "तिर्यक ऊपर डेरी उलटा दिसा से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
 msgid "Diagonal Top Left Opposite Out"
 msgstr "तिर्यक ऊपर डेरी उलटा दिसा से बाहिर"
 
@@ -2354,83 +2232,67 @@ msgstr "सांप"
 msgid "Spiral"
 msgstr ""
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
 msgid "Clockwise Top Left In"
 msgstr "घड़ी के दिसा मं ऊपर डेरी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
 msgid "Clockwise Top Left Out"
 msgstr "घड़ी के दिसा मं ऊपर डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 msgid "Clockwise Top Right In"
 msgstr "घड़ी के दिसा मं ऊपर जेवनी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
 msgid "Clockwise Top Right Out"
 msgstr "घड़ी के दिसा मं ऊपर जेवनी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
 msgid "Clockwise Bottom Left In"
 msgstr "घड़ी के दिसा मं नीचे डेरी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Left Out"
 msgstr "घड़ी के दिसा मं नीचे डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 msgid "Clockwise Bottom Right In"
 msgstr "घड़ी के दिसा मं नीचे जेवनी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right Out"
 msgstr "घड़ी के दिसा मं नीचे जेवनी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Left In"
 msgstr "घड़ी के उलटी दिसा मं ऊपर डेरी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top Left Out"
 msgstr "घड़ी के उलटी दिसा मं ऊपर डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
 msgid "Counterclockwise Top Right In"
 msgstr "घड़ी के उलटी दिसा मं ऊपर जेवनी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Right Out"
 msgstr "घड़ी के उलटी दिसा मं ऊपर जेवनी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
 msgid "Counterclockwise Bottom Left In"
 msgstr "घड़ी के उलटी दिसा मं नीचे डेरी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Left Out"
 msgstr "घड़ी के उलटी दिसा मं नीचे डेरी से बाहिर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
 msgid "Counterclockwise Bottom Right In"
 msgstr "घड़ी के उलटी दिसा मं नीचे जेवनी से अंदर"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right Out"
 msgstr "घड़ी के उलटी दिसा मं नीचे जेवनी से बाहिर"
 
@@ -2439,43 +2301,35 @@ msgstr "घड़ी के उलटी दिसा मं नीचे जे
 msgid "Waterfall"
 msgstr "झरना"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 msgid "Top Left Vertical"
 msgstr "ऊपर डेरी खड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 msgid "Top Left Horizontal"
 msgstr "ऊपर बाायाँ आड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
 msgid "Top Right Vertical"
 msgstr "ऊपर जेवनी खड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 msgid "Top Right Horizontal"
 msgstr "ऊपर जेवनी आड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
 msgid "Bottom Left Vertical"
 msgstr "नीचे डेरी खड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 msgid "Bottom Left Horizontal"
 msgstr "नीचे डेरी आड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
 msgid "Bottom Right Vertical"
 msgstr "नीचे जेवनी खड़ा"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
 msgid "Bottom Right Horizontal"
 msgstr "नीचे जेवनी आड़ा"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2021-05-02 17:11+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -27,7 +27,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "wantoyek@gmail.com"
 
-#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
 msgid "Rename"
 msgstr "Ubah nama"
@@ -42,12 +42,12 @@ msgstr "Tambah"
 msgid "Remove"
 msgstr "Hapus"
 
-#: SheetsEditor.cpp:121
+#: SheetsEditor.cpp:124
 #, kde-format
 msgid "Enter Name:"
 msgstr "Masukkan Nama:"
 
-#: TableShape.cpp:288
+#: TableShape.cpp:300
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -56,67 +56,67 @@ msgstr ""
 "Dokumen ini berisi sebuah tautan eksternal ke sebuah dokumen jarak jauh\n"
 "%1"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Diperlukan Konfirmasi"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:302
 #, kde-format
 msgid "Download"
 msgstr "Unduh"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
 msgstr "Lewati"
 
-#: TableShapeFactory.cpp:37
+#: TableShapeFactory.cpp:35
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Lembar-sebar"
 
-#: TableShapeFactory.cpp:39
+#: TableShapeFactory.cpp:37
 #, kde-format
 msgid "Spreadsheet Shape"
 msgstr "Bentuk Lembar-sebar"
 
-#: TableTool.cpp:213
+#: TableTool.cpp:211
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "Impor File Lembar-sebar OpenDocument"
 
-#: TableTool.cpp:214
+#: TableTool.cpp:212
 #, kde-format
 msgid "Import"
 msgstr "Impor"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:216
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "Ekspor File Lembar-sebar OpenDocument"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:217
 #, kde-format
 msgid "Export"
 msgstr "Ekspor"
 
-#: TableTool.cpp:699
+#: TableTool.cpp:696
 #, kde-format
 msgid "Sheets"
 msgstr "Lembar"
 
-#: TableTool.cpp:741
+#: TableTool.cpp:738
 #, kde-format
 msgid "Sheet:"
 msgstr "Lembar:"
 
-#: TableTool.cpp:743
+#: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Lembar Yang Dipilih"
 
-#: TableTool.cpp:758
+#: TableTool.cpp:754
 #, kde-format
 msgid "View Options"
 msgstr "Opsi Tampilan"
@@ -126,27 +126,27 @@ msgstr "Opsi Tampilan"
 msgid "Table editing"
 msgstr "Pengeditan tabel"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
 msgstr "Area terlalu besar."
 
-#: ToolHeaders.cpp:425
+#: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
 msgstr "Sembunyikan Baris"
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Tinggi: %1 %2"
 
-#: ToolHeaders.cpp:1049
+#: ToolHeaders.cpp:1031
 #, kde-format
 msgid "Hide Column"
 msgstr "Sembunyikan Kolom"
 
-#: ToolHeaders.cpp:1051
+#: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Lebar: %1 %2"

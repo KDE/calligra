@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ArtisticTextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-08-08 02:37+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
 msgstr "Lisa tekstivahemik"
@@ -38,92 +38,92 @@ msgstr "Ühtainsat tekstirida näitav kujund"
 msgid "Artistic Text"
 msgstr "Kunstiline tekst"
 
-#: ArtisticTextTool.cpp:64
+#: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
 msgstr "Haagi kompleksjoon lahti"
 
-#: ArtisticTextTool.cpp:69
+#: ArtisticTextTool.cpp:77
 #, kde-format
 msgid "Convert to Path"
 msgstr "Teisenda kompleksjooneks"
 
-#: ArtisticTextTool.cpp:74
+#: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
 msgstr "Rasvane tekst"
 
-#: ArtisticTextTool.cpp:79
+#: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
 msgstr "Kaldkirjas tekst"
 
-#: ArtisticTextTool.cpp:84
+#: ArtisticTextTool.cpp:92
 #, kde-format
 msgid "Superscript"
 msgstr "Ülakiri"
 
-#: ArtisticTextTool.cpp:89
+#: ArtisticTextTool.cpp:97
 #, kde-format
 msgid "Subscript"
 msgstr "Alakiri"
 
-#: ArtisticTextTool.cpp:94
+#: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
 msgstr "Ankur alguses"
 
-#: ArtisticTextTool.cpp:99
+#: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
 msgstr "Ankur keskel"
 
-#: ArtisticTextTool.cpp:104
+#: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
 msgstr "Ankur lõpus"
 
-#: ArtisticTextTool.cpp:295
+#: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
 msgstr "Klõpsa kursori asukoha muutmiseks."
 
-#: ArtisticTextTool.cpp:297
+#: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
 msgstr "Klõpsa tekstikujundi valimiseks."
 
-#: ArtisticTextTool.cpp:300
+#: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
 msgstr "Topeltklõps asetab teksti kompleksjoonele."
 
-#: ArtisticTextTool.cpp:303
+#: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
 msgstr "Lohista pidet nihke alguse muutmiseks."
 
-#: ArtisticTextTool.cpp:307
+#: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
 msgstr "Vajuta Escape muutmise lõpetamiseks."
 
-#: ArtisticTextTool.cpp:489
+#: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
 msgstr "Vajuta Enter muutmise lõpetamiseks."
 
-#: ArtisticTextTool.cpp:583
+#: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Teisenda kompleksjooneks"
 
-#: ArtisticTextTool.cpp:596
+#: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksti omadused"
 
-#: ArtisticTextTool.cpp:606
+#: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
 msgstr "Tekst kompleksjoonel"
@@ -133,38 +133,38 @@ msgstr "Tekst kompleksjoonel"
 msgid "Artistic text editing"
 msgstr "Kunstilise teksti muutmine"
 
-#: AttachTextToPathCommand.cpp:15
+#: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
 msgstr "Kaasa kompleksjoon"
 
-#: ChangeTextAnchorCommand.cpp:14
+#: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
 msgstr "Muuda teksti ankrut"
 
-#: ChangeTextFontCommand.cpp:16
+#: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
 msgstr "Muuda fonti"
 
-#: ChangeTextOffsetCommand.cpp:15
+#: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
 msgstr "Muuda teksti distantsi"
 
-#: DetachTextFromPathCommand.cpp:14
+#: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
 msgstr "Haagi kompleksjoon lahti"
 
-#: RemoveTextRangeCommand.cpp:16
+#: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
 msgstr "Eemalda tekstivahemik"
 
-#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
-#: ReplaceTextRangeCommand.cpp:30
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "Asenda tekstivahemik"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2008-03-05 21:01+0530\n"
 "Last-Translator: Ravishankar Shrivastava <aviratlami@aol.in>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -27,7 +27,7 @@ msgstr ""
 "अंतिम तिथि प्रारंभ तिथि से पहले सेट है! कृपया सुनिश्चित हों कि समाप्ति तिथी प्रारंभ तिथि के "
 "बाद आए."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "त्रुटि"
@@ -39,26 +39,26 @@ msgid ""
 "periods you need to split them up."
 msgstr ""
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
 msgstr ""
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
 msgstr ""
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -67,24 +67,24 @@ msgid ""
 "data would be overwritten."
 msgstr ""
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 #| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "कैलेन्डर प्रविष्ट करें"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "कैलेण्डर %1 से %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "सप्ताह"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 #| msgid "Calendar from %1 to %2"
 msgid "Calendar"

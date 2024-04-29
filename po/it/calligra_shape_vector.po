@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VectorShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-24 20:39+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -19,27 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: ChangeVectorDataCommand.cpp:26
+#: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
 msgstr "Cambia dati vettoriali"
 
-#: VectorShapeFactory.cpp:27
+#: VectorShapeFactory.cpp:26
 #, kde-format
 msgid "Vector image"
 msgstr "Immagine vettoriale"
 
-#: VectorShapeFactory.cpp:29
+#: VectorShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgstr "Una forma che mostra immagini vettoriali (EMF/WMF/SVM)"
 
-#: VectorTool.cpp:64
+#: VectorTool.cpp:63
 #, kde-format
 msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "Apri immagine vettoriale (EMF/WMF/SVM)"
 
-#: VectorToolFactory.cpp:20
+#: VectorToolFactory.cpp:19
 #, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
 msgstr "Strumento per immagini vettoriali (EMF/WMF/SVM/SVG)"

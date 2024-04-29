@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-03-12 17:25+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -114,27 +114,27 @@ msgstr "प्रतिमा"
 msgid "Image shape that can display jpg, png etc."
 msgstr "jpg, png इ. दर्शवू शकणारा प्रतिमा आकार"
 
-#: PictureTool.cpp:95
+#: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
 msgstr "प्रमाणित"
 
-#: PictureTool.cpp:96
+#: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
 msgstr "कृष्णधवल"
 
-#: PictureTool.cpp:97
+#: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
 msgstr "एकाच रंगात रंगविलेले"
 
-#: PictureTool.cpp:98
+#: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
 msgstr "वॉटरमार्क"
 
-#: PictureToolFactory.cpp:19
+#: PictureToolFactory.cpp:18
 #, fuzzy, kde-format
 #| msgid "Picture editing tool"
 msgid "Picture editing"

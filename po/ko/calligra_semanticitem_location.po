@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2019-04-19 19:00+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 18.12.3\n"
 
-#: KoLocationSemanticItemFactory.cpp:34
+#: KoLocationSemanticItemFactory.cpp:33
 #, kde-format
 msgctxt "displayname of the semantic item type Location"
 msgid "Location"
@@ -72,7 +72,7 @@ msgstr "위도"
 msgid "Longitude"
 msgstr "경도"
 
-#: KoRdfLocationTreeWidgetItem.cpp:42
+#: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
 msgstr "위치 정보"

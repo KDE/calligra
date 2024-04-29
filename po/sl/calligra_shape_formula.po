@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-01-23 15:47+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -35,37 +35,37 @@ msgctxt "(qtundo-format)"
 msgid "Add text to formula"
 msgstr "Dodaj besedilo k formuli"
 
-#: FormulaCommand.cpp:215
+#: FormulaCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Spremeni vrstice"
 
-#: FormulaEditor.cpp:74
+#: FormulaEditor.cpp:71
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Dodaj besedilo"
 
-#: FormulaEditor.cpp:107
+#: FormulaEditor.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Vstavi vrstico"
 
-#: FormulaEditor.cpp:112
+#: FormulaEditor.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Odstrani vrstico"
 
-#: FormulaEditor.cpp:120
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Vstavi stolpec"
 
-#: FormulaEditor.cpp:125
+#: FormulaEditor.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Odstrani stolpec"
 
-#: FormulaEditor.cpp:151
+#: FormulaEditor.cpp:148
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Vstavi elemente formule."
@@ -75,27 +75,27 @@ msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Odstrani elemente formule"
 
-#: FormulaToolWidget.cpp:72
+#: FormulaToolWidget.cpp:69
 #, kde-format
 msgid "Arrows"
 msgstr "Puščice"
 
-#: FormulaToolWidget.cpp:74
+#: FormulaToolWidget.cpp:71
 #, kde-format
 msgid "Greek"
 msgstr "Grško"
 
-#: FormulaToolWidget.cpp:78
+#: FormulaToolWidget.cpp:73
 #, kde-format
 msgid "Relations"
 msgstr "Relacije"
 
-#: FormulaToolWidget.cpp:81
+#: FormulaToolWidget.cpp:77
 #, kde-format
 msgid "Operators"
 msgstr "Operatorji"
 
-#: FormulaToolWidget.cpp:85
+#: FormulaToolWidget.cpp:80
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Razno"
@@ -185,7 +185,7 @@ msgstr "Stolpci:"
 msgid "View MathML"
 msgstr "Pokaži MathML"
 
-#: KoFormulaShape.cpp:210
+#: KoFormulaShape.cpp:200
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -194,52 +194,52 @@ msgstr ""
 "Ta dokument vsebuje zunanjo povezavo do oddaljenega dokumenta\n"
 "%1"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:201
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Zahtevana je potrditev"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:202
 #, kde-format
 msgid "Download"
 msgstr "Naloži"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:203
 #, kde-format
 msgid "Skip"
 msgstr "Preskoči"
 
-#: KoFormulaShapeFactory.cpp:21
+#: KoFormulaShapeFactory.cpp:20
 #, kde-format
 msgid "Formula"
 msgstr "Formula"
 
-#: KoFormulaShapeFactory.cpp:23
+#: KoFormulaShapeFactory.cpp:22
 #, kde-format
 msgid "A formula"
 msgstr "Formula"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:409
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Vstavi omejen element"
 
-#: KoFormulaTool.cpp:408
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Vstavi obkrožen element"
 
-#: KoFormulaTool.cpp:411
+#: KoFormulaTool.cpp:412
 #, kde-format
 msgid "Insert root"
 msgstr "Vstavi koren"
 
-#: KoFormulaTool.cpp:412
+#: KoFormulaTool.cpp:413
 #, kde-format
 msgid "Insert square root"
 msgstr "Vstavi kvadratni koren"
 
-#: KoFormulaTool.cpp:414
+#: KoFormulaTool.cpp:415
 #, kde-format
 msgid "Insert fraction"
 msgstr "Vstavi ulomek"
@@ -249,62 +249,62 @@ msgstr "Vstavi ulomek"
 msgid "Insert bevelled fraction"
 msgstr "Vstavi ulomek xxx"
 
-#: KoFormulaTool.cpp:419
+#: KoFormulaTool.cpp:421
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Vstavi tabelo 3x3"
 
-#: KoFormulaTool.cpp:423
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Vstavi dvo-dimenzionalni vektor"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:432
 #, kde-format
 msgid "Insert subscript"
 msgstr "Vstavi podpisano"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert superscript"
 msgstr "Vstavi nadpisano"
 
-#: KoFormulaTool.cpp:430
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Vstavi pod- in nadpisano"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:438
 #, kde-format
 msgid "Insert overscript"
 msgstr "Vstavi pisano zgoraj"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:439
 #, kde-format
 msgid "Insert underscript"
 msgstr "Vstavi pisano spodaj"
 
-#: KoFormulaTool.cpp:436
+#: KoFormulaTool.cpp:440
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Vstavi pod- in nadpisano"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:451
 #, kde-format
 msgid "Insert row"
 msgstr "Vstavi vrstico"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:458
 #, kde-format
 msgid "Insert column"
 msgstr "Vstavi stolpec"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:465
 #, kde-format
 msgid "Remove row"
 msgstr "Odstrani vrstico"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:472
 #, kde-format
 msgid "Remove column"
 msgstr "Odstrani stolpec"
@@ -314,32 +314,32 @@ msgstr "Odstrani stolpec"
 msgid "Formula editing"
 msgstr "Uredi formulo"
 
-#: KoM2MMLForumulaTool.cpp:97
+#: KoM2MMLForumulaTool.cpp:98
 #, kde-format
 msgid "Mode: "
 msgstr "Način: "
 
-#: KoM2MMLForumulaTool.cpp:100
+#: KoM2MMLForumulaTool.cpp:101
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: KoM2MMLForumulaTool.cpp:102
+#: KoM2MMLForumulaTool.cpp:103
 #, kde-format
 msgid "Matlab"
 msgstr "Matlab"
 
-#: KoM2MMLForumulaTool.cpp:171
+#: KoM2MMLForumulaTool.cpp:175
 #, kde-format
 msgid "Parse error."
 msgstr "Napaka pri razpoznavanju."
 
-#: KoM2MMLForumulaTool.cpp:201
+#: KoM2MMLForumulaTool.cpp:204
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
 msgstr "Uredi formulo v sintaksi LaTeX/Matlab"
 
-#: KoM2MMLForumulaTool.cpp:203
+#: KoM2MMLForumulaTool.cpp:206
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Uredi formulo v sintaksi LaTeX"

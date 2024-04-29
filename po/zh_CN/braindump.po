@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -95,17 +95,17 @@ msgstr "状态"
 msgid "State:"
 msgstr "状态："
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "状态形状"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "一个状态形状"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "状态工具选项"
@@ -127,12 +127,12 @@ msgstr "URL："
 msgid "Use a cache copy"
 msgstr "使用缓存副本"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "网络形状"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "一个网络形状"
@@ -142,51 +142,51 @@ msgstr "一个网络形状"
 msgid "Web shape editing"
 msgstr "网络形状编辑"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "脑图"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "脑图：将大脑思维直接输出到计算机上。"
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr "在此版本发布时未维护。 Calligra社区欢迎有兴趣的人接管维护工作"
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 
-#: src/AboutData.h:39 src/AboutData.h:40
-#, kde-format
-msgid "Former maintainer"
-msgstr "前任维护者"
-
-#: src/AboutData.h:39
+#: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
 msgstr "Somsubhra Bairi"
 
-#: src/AboutData.h:40
+#: src/AboutData.h:43 src/AboutData.h:46
+#, kde-format
+msgid "Former maintainer"
+msgstr "前任维护者"
+
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "KDE 中国"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -234,7 +234,7 @@ msgstr "上移白板"
 msgid "Delete the whiteboard"
 msgstr "删除白板"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "工具栏"
@@ -254,42 +254,42 @@ msgstr "切换标题栏显示状态"
 msgid "Toggles organising the options in tabs or not"
 msgstr "切换是否用标签页组织选项"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "列"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "空闲"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr "停靠栏"
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "无标题 %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "脑图属性"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "白板"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "最小视图"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "详情视图"
@@ -319,33 +319,33 @@ msgstr "在当前白板上面新建。"
 msgid "Add new whiteboard as child of current."
 msgstr "为当前白板添加子白板。"
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "删除(&E)"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "复制(&D)"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "组合形状"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "拆散形状"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "组合形状"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "拆散形状"

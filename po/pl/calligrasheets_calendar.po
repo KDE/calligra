@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread_plugin_tool_calendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-06-29 14:12+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -29,7 +29,7 @@ msgstr ""
 "Data zakończenia jest przed datą rozpoczęcia! Proszę się upewnić, że data "
 "zakończenia następuje po dacie rozpoczęcia."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "Błąd"
@@ -43,7 +43,7 @@ msgstr ""
 "Kalendarze nie powinny być dłuższe niż 10 lat. Jeśli rzeczywiście "
 "potrzebujesz takich długich okresów, podziel je."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -52,12 +52,12 @@ msgstr ""
 "Data rozpoczęcia pokrywa się z datą zakończenia! Zostanie wstawiony tylko "
 "jeden dzień, czy chcesz kontynuować?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -66,7 +66,7 @@ msgstr ""
 "Utworzenie kalendarza na okres dłuższy niż rok może zająć dużo miejsca, czy "
 "chcesz kontynuować?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -78,22 +78,22 @@ msgstr ""
 "nadpisując istniejące dane? Jeśli wybierzesz Nie, zostanie wybrany obszar "
 "przeznaczony na kalendarz, więc zobaczysz, które dane zostaną nadpisane."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Wstaw kalendarz"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Kalendarz od %1 do %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "tydzień"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, kde-format
 msgid "Calendar"
 msgstr "Kalendarz"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-11-09 15:26-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -30,103 +30,103 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kom@kde.gr.jp"
 
-#: calligraconverter.cpp:144
+#: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
 msgstr "CalligraConverter"
 
-#: calligraconverter.cpp:146
+#: calligraconverter.cpp:181
 #, kde-format
 msgid "Calligra Document Converter"
 msgstr "Calligra 文書コンバータ"
 
-#: calligraconverter.cpp:148
+#: calligraconverter.cpp:183
 #, fuzzy, kde-format
 #| msgid "(c) 2001-2011 Calligra developers"
 msgid "Copyright 2001-%1 Calligra developers"
 msgstr "(c) 2001-2011 Calligra 開発チーム"
 
-#: calligraconverter.cpp:149
+#: calligraconverter.cpp:184
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: calligraconverter.cpp:150
+#: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: calligraconverter.cpp:151
+#: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
 msgstr "Dan Leinir Turthra Jensen"
 
-#: calligraconverter.cpp:158
+#: calligraconverter.cpp:193
 #, kde-format
 msgid "Input file"
 msgstr "入力ファイル"
 
-#: calligraconverter.cpp:159
+#: calligraconverter.cpp:194
 #, kde-format
 msgid "Output file"
 msgstr "出力ファイル"
 
-#: calligraconverter.cpp:160
+#: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
 msgstr "変換先ファイルのバックアップを作成"
 
-#: calligraconverter.cpp:161
+#: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
 msgstr "バッチモード: ダイアログを表示しない"
 
-#: calligraconverter.cpp:162
+#: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
 msgstr "対話型モード: ダイアログを表示 (標準)"
 
-#: calligraconverter.cpp:163
+#: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
 msgstr "出力ファイルの MIME タイプ"
 
-#: calligraconverter.cpp:166
+#: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
 msgstr "印刷方向です。横向きまたは縦向きから選択します。"
 
-#: calligraconverter.cpp:167
+#: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
 msgstr "用紙サイズ(A4、リーガル、レターなど)です。"
 
-#: calligraconverter.cpp:168
+#: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
 msgstr "用紙のマージンの大きさです。デフォルトでは 0.2 です。"
 
-#: calligraconverter.cpp:175
+#: calligraconverter.cpp:215
 #, kde-format
 msgid "Two arguments required"
 msgstr "二つの引数が必要です"
 
-#: calligraconverter.cpp:203
+#: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
 msgstr "入力ファイル ‘%1’ の MIME タイプが見つかりません。"
 
-#: calligraconverter.cpp:212
+#: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
 msgstr "MIME タイプ %1 が見つかりません"
 
-#: calligraconverter.cpp:218
+#: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME タイプが見つかりません、-mimetype オプションを試してください"
 
-#: calligraconverter.cpp:242
+#: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** 変換に失敗しました ***"

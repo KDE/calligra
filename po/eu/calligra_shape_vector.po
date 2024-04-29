@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2023-08-26 11:24+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -20,27 +20,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 23.04.3\n"
 
-#: ChangeVectorDataCommand.cpp:26
+#: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
 msgstr "Aldatu bektore-datuak"
 
-#: VectorShapeFactory.cpp:27
+#: VectorShapeFactory.cpp:26
 #, kde-format
 msgid "Vector image"
 msgstr "Bektore irudia"
 
-#: VectorShapeFactory.cpp:29
+#: VectorShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgstr "Bektore-irudi bat erakusten duen forma bat (EMF/WMF/SVM)"
 
-#: VectorTool.cpp:64
+#: VectorTool.cpp:63
 #, kde-format
 msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "Ireki bektore-irudia (EMF/WMF/SVM)"
 
-#: VectorToolFactory.cpp:20
+#: VectorToolFactory.cpp:19
 #, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
 msgstr "Bektore-irudi (EMF/WMF/SVM/SVG) tresna"

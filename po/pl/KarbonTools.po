@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2017-12-09 07:42+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -24,12 +24,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
 msgid "A calligraphic shape"
 msgstr "Kształt kaligraficzny"
 
-#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
 #, kde-format
 msgid "Calligraphic Shape"
 msgstr "Kształt kalograficzny"
@@ -96,7 +96,7 @@ msgstr "Przeciągnij:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
 #, kde-format
 msgid "Current"
 msgstr "Bieżące"
@@ -111,18 +111,18 @@ msgstr "Nazwa profilu"
 msgid "Please insert the name by which you want to save this profile:"
 msgstr "Wpisz nazwę, pod którą ma być zapisany ten profil:"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
-msgstr "Przepraszamy, podana przez ciebie nazwa jest nieprawidłowa!"
-
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr "Nieprawidłowa nazwa."
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Przepraszamy, podana przez ciebie nazwa jest nieprawidłowa!"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
 msgid ""
 "A profile with that name already exists.\n"
@@ -131,65 +131,65 @@ msgstr ""
 "Profil o tej nazwie już istnieje.\n"
 "Czy chcesz go zastąpić?"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
 #, kde-format
 msgid "Mouse"
 msgstr "Mysz"
 
-#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
 #, kde-format
 msgid "Graphics Pen"
 msgstr "Pióro"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
 #, kde-format
 msgid "Fill"
 msgstr "Wypełnij"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr "Kaligrafia: zwiększ szerokość"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr "Kaligrafia: zmniejsz szerokość"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr "Kaligrafia: zwiększ kąt"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr "Kaligrafia: zmniejsz kąt"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
 msgstr "Kaligrafia"
 
-#: filterEffectTool/FilterAddCommand.cpp:18
+#: filterEffectTool/FilterAddCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
 msgstr "Dodaj efekt filtra"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
 msgstr "Dodaj efekt do obecnego stosu filtrów"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
 msgid "Add to filter presets"
 msgstr "Dodaj do nastaw filtra"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, kde-format
 msgid "Remove filter preset"
 msgstr "Usuń nastawę filtra"
@@ -199,14 +199,14 @@ msgstr "Usuń nastawę filtra"
 msgid "Effect name"
 msgstr "Nazwa efektu"
 
-#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
 msgstr "Proszę podać nazwę dla efektu filtra"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:320
 #, kde-format
 msgid "Filter Effect Editor"
 msgstr "Edytor filtra efektów"
@@ -241,62 +241,62 @@ msgstr "Nastawy filtra"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:474
 #, kde-format
 msgid "Effect Properties"
 msgstr "Właściwości efektu"
 
-#: filterEffectTool/FilterRemoveCommand.cpp:19
+#: filterEffectTool/FilterRemoveCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
 msgstr "Usuń efekt filtra"
 
-#: filterEffectTool/FilterStackSetCommand.cpp:23
+#: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
 msgstr "Ustaw stos filtrów"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
 msgid "Effects"
 msgstr "Efekty"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
 msgstr "Obejrzyj i edytuj filtr"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, kde-format
 msgid "Remove filter from object"
 msgstr "Usuń filtr z obiektu"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
 msgid "Add Filter"
 msgstr "Dodaj filtr"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:486
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:492
 #, kde-format
 msgid "Y:"
 msgstr "Y:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:498
 #, kde-format
 msgid "W:"
 msgstr "SZER.:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:504
 #, kde-format
 msgid "H:"
 msgstr "WYS.:"
 
-#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:509
 #, kde-format
 msgid "Effect Region"
 msgstr "Obszar efektu"
@@ -306,36 +306,36 @@ msgstr "Obszar efektu"
 msgid "Filter effects editing"
 msgstr "Edytowanie efektów filtra"
 
-#: KarbonGradientTool.cpp:198
+#: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
 msgstr "Przeciągnij, aby zmienić pozycję gradientu."
 
-#: KarbonGradientTool.cpp:207
+#: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
 "Przeciągnij, aby przesunąć koniec koloru. Podwójne kliknięcie usuwa koniec "
 "koloru."
 
-#: KarbonGradientTool.cpp:209
+#: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
 msgstr "Przeciągnij aby przesunąć koniec koloru."
 
-#: KarbonGradientTool.cpp:216
+#: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
 "Przeciągnij aby przesunąć pozycję gradientu. Podwójne kliknięcie wstawia "
 "koniec koloru."
 
-#: KarbonGradientTool.cpp:494
+#: KarbonGradientTool.cpp:493
 #, kde-format
 msgid "Edit Gradient"
 msgstr "Edytuj gradient"
 
-#: KarbonGradientTool.cpp:496
+#: KarbonGradientTool.cpp:495
 #, kde-format
 msgid "Predefined Gradients"
 msgstr "Zestawy gradientów"
@@ -345,72 +345,72 @@ msgstr "Zestawy gradientów"
 msgid "Gradient editing"
 msgstr "Edytowanie gradientu"
 
-#: KarbonPatternOptionsWidget.cpp:21
+#: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
 msgid "Original"
 msgstr "Pierwowzór"
 
-#: KarbonPatternOptionsWidget.cpp:22
+#: KarbonPatternOptionsWidget.cpp:23
 #, kde-format
 msgid "Tiled"
 msgstr "Kafelki"
 
-#: KarbonPatternOptionsWidget.cpp:23
+#: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
 msgid "Stretched"
 msgstr "Rozciągnięcie"
 
-#: KarbonPatternOptionsWidget.cpp:25
+#: KarbonPatternOptionsWidget.cpp:26
 #, kde-format
 msgid "Top Left"
 msgstr "Górne lewo"
 
-#: KarbonPatternOptionsWidget.cpp:26
+#: KarbonPatternOptionsWidget.cpp:27
 #, kde-format
 msgid "Top"
 msgstr "Góra"
 
-#: KarbonPatternOptionsWidget.cpp:27
+#: KarbonPatternOptionsWidget.cpp:28
 #, kde-format
 msgid "Top Right"
 msgstr "Górne prawo"
 
-#: KarbonPatternOptionsWidget.cpp:28
+#: KarbonPatternOptionsWidget.cpp:29
 #, kde-format
 msgid "Left"
 msgstr "Lewo"
 
-#: KarbonPatternOptionsWidget.cpp:29
+#: KarbonPatternOptionsWidget.cpp:30
 #, kde-format
 msgid "Center"
 msgstr "Środek"
 
-#: KarbonPatternOptionsWidget.cpp:30
+#: KarbonPatternOptionsWidget.cpp:31
 #, kde-format
 msgid "Right"
 msgstr "Prawo"
 
-#: KarbonPatternOptionsWidget.cpp:31
+#: KarbonPatternOptionsWidget.cpp:32
 #, kde-format
 msgid "Bottom Left"
 msgstr "Dolne lewo"
 
-#: KarbonPatternOptionsWidget.cpp:32
+#: KarbonPatternOptionsWidget.cpp:33
 #, kde-format
 msgid "Bottom"
 msgstr "Dół"
 
-#: KarbonPatternOptionsWidget.cpp:33
+#: KarbonPatternOptionsWidget.cpp:34
 #, kde-format
 msgid "Bottom Right"
 msgstr "Dolne prawo"
 
-#: KarbonPatternTool.cpp:273
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Pattern Options"
 msgstr "Opcje wzorca"
 
-#: KarbonPatternTool.cpp:275
+#: KarbonPatternTool.cpp:274
 #, kde-format
 msgid "Patterns"
 msgstr "Wzorce"

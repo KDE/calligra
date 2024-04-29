@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-12-08 08:52+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
@@ -28,19 +28,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "franklin@goodhorse.idv.tw, s8321414@gmail.com"
 
-#: main.cpp:61
+#: main.cpp:62
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
 msgstr "找不到 MIME 類型 <filename>%1</filename>!"
 
-#: main.cpp:119
+#: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
 msgstr "用 <application>%1</application> 開啟"
 
-#: main.cpp:124
+#: main.cpp:122
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -51,38 +51,38 @@ msgstr ""
 "找不到適合用於開啟 <filename>%1</filename> 的 Calligra 應用程式。<nl/> 您要使"
 "用預設的應用程式 <application>%2</application> 來開啟嗎？"
 
-#: main.cpp:127
+#: main.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
 msgstr "找不到 Calligra 應用程式"
 
-#: main.cpp:157
+#: main.cpp:156
 #, kde-format
 msgid "Calligra Opener"
 msgstr "Calligra 開啟器"
 
-#: main.cpp:159
+#: main.cpp:158
 #, kde-format
 msgid "Calligra Document Opener"
 msgstr "Calligra 文件開啟器"
 
-#: main.cpp:161
+#: main.cpp:160
 #, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
 msgstr "(c) 2010-%1 Calligra 開發團隊"
 
-#: main.cpp:162
+#: main.cpp:161
 #, kde-format
 msgid "Jarosław Staniek"
 msgstr "Jarosław Staniek"
 
-#: main.cpp:169
+#: main.cpp:168
 #, kde-format
 msgid "Lists names of all available Calligra applications"
 msgstr "列出所有可用的 Calligra 應用程式名稱"
 
-#: main.cpp:170
+#: main.cpp:169
 #, kde-format
 msgid "Files to open"
 msgstr "要開啟的檔案"

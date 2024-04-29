@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2019-07-24 21:22+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ellipse/EllipseShapeConfigCommand.cpp:19
+#: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
 msgstr "Ubah bulatan"
@@ -74,12 +74,12 @@ msgstr "Sudutpandang akhir:"
 msgid "Close ellipse"
 msgstr "Tutup bulatan"
 
-#: ellipse/EllipseShapeFactory.cpp:21
+#: ellipse/EllipseShapeFactory.cpp:20
 #, kde-format
 msgid "Ellipse"
 msgstr "Bulatan"
 
-#: ellipse/EllipseShapeFactory.cpp:23
+#: ellipse/EllipseShapeFactory.cpp:22
 #, kde-format
 msgid "An ellipse"
 msgstr "Sebuah bulatan"
@@ -90,22 +90,22 @@ msgstr "Sebuah bulatan"
 msgid "A callout shape"
 msgstr "Sebuah bentuk callout"
 
-#: enhancedpath/CalloutShapeFactory.cpp:149
+#: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
 msgstr "Callout Persegipanjang"
 
-#: enhancedpath/CalloutShapeFactory.cpp:151
+#: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
 msgid "A rectangular callout"
 msgstr "Sebuah callout persegipanjang"
 
-#: enhancedpath/CalloutShapeFactory.cpp:231
+#: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
 msgstr "Callout Bulat"
 
-#: enhancedpath/CalloutShapeFactory.cpp:233
+#: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "A rounded rectangular callout"
 msgstr "Sebuah callout persegipanjang bulat"
@@ -125,54 +125,54 @@ msgstr "Sebuah bentuk alur yang disempurnakan"
 msgid "An enhanced path"
 msgstr "Sebuah alur yang disempurnakan"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
 msgid "Cross"
 msgstr "Silang"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
 #, kde-format
 msgid "A cross"
 msgstr "Sebuah silangan"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:180
-#: enhancedpath/EnhancedPathShapeFactory.cpp:213
-#: enhancedpath/EnhancedPathShapeFactory.cpp:246
-#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
 #, kde-format
 msgid "Arrow"
 msgstr "Panah"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:182
-#: enhancedpath/EnhancedPathShapeFactory.cpp:215
-#: enhancedpath/EnhancedPathShapeFactory.cpp:248
-#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
 #, kde-format
 msgid "An arrow"
 msgstr "Sebuah anak panah"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:324
-#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
 #, kde-format
 msgid "Smiley"
 msgstr "Wajah"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
 msgstr "Panah Lingkar"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
 msgstr "Sebuah panah yang melingkar"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
 msgid "Gearhead"
 msgstr "Pentolan"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
 #, kde-format
 msgid "A gearhead"
 msgstr "Sebuah pentolan"
@@ -253,12 +253,12 @@ msgstr "Lesap:"
 msgid "Direction:"
 msgstr "Arah:"
 
-#: spiral/SpiralShapeFactory.cpp:18
+#: spiral/SpiralShapeFactory.cpp:17
 #, kde-format
 msgid "Spiral"
 msgstr "Spiral"
 
-#: spiral/SpiralShapeFactory.cpp:20
+#: spiral/SpiralShapeFactory.cpp:19
 #, kde-format
 msgid "A spiral shape"
 msgstr "Sebuah bentuk spiral"
@@ -303,42 +303,42 @@ msgstr "Radius luar:"
 msgid "A star shape"
 msgstr "Sebuah bentuk bintang"
 
-#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
 msgid "A star"
 msgstr "Sebuah bintang"
 
-#: star/StarShapeFactory.cpp:36
+#: star/StarShapeFactory.cpp:37
 #, kde-format
 msgid "Star"
 msgstr "Bintang"
 
-#: star/StarShapeFactory.cpp:50
+#: star/StarShapeFactory.cpp:51
 #, kde-format
 msgid "Flower"
 msgstr "Bunga"
 
-#: star/StarShapeFactory.cpp:52
+#: star/StarShapeFactory.cpp:53
 #, kde-format
 msgid "A flower"
 msgstr "Sebuah bunga"
 
-#: star/StarShapeFactory.cpp:67
+#: star/StarShapeFactory.cpp:68
 #, kde-format
 msgid "Pentagon"
 msgstr "Segilima"
 
-#: star/StarShapeFactory.cpp:69
+#: star/StarShapeFactory.cpp:70
 #, kde-format
 msgid "A pentagon"
 msgstr "Sebuah segilima"
 
-#: star/StarShapeFactory.cpp:83
+#: star/StarShapeFactory.cpp:84
 #, kde-format
 msgid "Hexagon"
 msgstr "Segienam"
 
-#: star/StarShapeFactory.cpp:85
+#: star/StarShapeFactory.cpp:86
 #, kde-format
 msgid "A hexagon"
 msgstr "Sebuah heksagonal"

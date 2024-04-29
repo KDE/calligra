@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheetscalendartool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:43+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -25,7 +25,7 @@ msgstr ""
 "Koncový dátum je pre začiatočným! Prosím, presvedčte sa, že koncový dátum "
 "ide po začiatočnom."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "Chyba"
@@ -39,7 +39,7 @@ msgstr ""
 "Kalendár nemôže byť dlhší ako 10 rokov. Ak naozaj potrebujete takú dlhú "
 "periódu, rozdeľte ju."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -48,12 +48,12 @@ msgstr ""
 "Začiatočný a koncový dátum sú rovnajú. Iba jeden deň sa vloží, chcete "
 "pokračovať?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "Varovanie"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -62,7 +62,7 @@ msgstr ""
 "Vytvorenie kalendára dlhšieho ako rok môže zabrať veľa miesta, chcete "
 "pokračovať?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -75,22 +75,22 @@ msgstr ""
 "požadovaná pre želaný kalendár bude vybratá tak aby ste videli, ktoré dáta "
 "by sa prepísali."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Vložiť kalendár"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Kalendár od %1 do %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "týždeň"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, kde-format
 msgid "Calendar"
 msgstr "Kalendár"

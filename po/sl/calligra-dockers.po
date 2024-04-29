@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-01-23 15:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20,78 +20,78 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:63
+#: shapecollection/OdfCollectionLoader.cpp:60
 #, kde-format
 msgid "Found no shapes in the collection! %1"
 msgstr "V zbirki ni bilo najdenih oblik! %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:132
+#: shapecollection/OdfCollectionLoader.cpp:120
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Ni veljavna datoteka Calligra: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:157
+#: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
 msgid "No body tag found in file: %1"
 msgstr "V datoteki ni najdena oznaka »body«: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:165
+#: shapecollection/OdfCollectionLoader.cpp:151
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
 msgstr "Značka office:drawing ni bila najdena v datoteki: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:173
-#: shapecollection/OdfCollectionLoader.cpp:181
+#: shapecollection/OdfCollectionLoader.cpp:159
+#: shapecollection/OdfCollectionLoader.cpp:167
 #, kde-format
 msgid "No shapes found in file: %1"
 msgstr "V datoteki ni bilo najdenih oblik: %1"
 
-#: shapecollection/ShapeCollectionDocker.cpp:111
+#: shapecollection/ShapeCollectionDocker.cpp:110
 #, kde-format
 msgid "Add Shape"
 msgstr "Dodaj obliko"
 
-#: shapecollection/ShapeCollectionDocker.cpp:146
+#: shapecollection/ShapeCollectionDocker.cpp:144
 #, kde-format
 msgid "More"
 msgstr "Več"
 
-#: shapecollection/ShapeCollectionDocker.cpp:176
+#: shapecollection/ShapeCollectionDocker.cpp:172
 #, kde-format
 msgid "Open Shape Collection"
 msgstr "Odpri zbirko oblik"
 
-#: shapecollection/ShapeCollectionDocker.cpp:184
+#: shapecollection/ShapeCollectionDocker.cpp:180
 #, kde-format
 msgid "Remove Shape Collection"
 msgstr "Odstrani zbirko oblik"
 
-#: shapecollection/ShapeCollectionDocker.cpp:330
+#: shapecollection/ShapeCollectionDocker.cpp:327
 #, kde-format
 msgid "Default"
 msgstr "Privzeto"
 
-#: shapecollection/ShapeCollectionDocker.cpp:334
+#: shapecollection/ShapeCollectionDocker.cpp:331
 #, kde-format
 msgid "Geometrics"
 msgstr "Geometrične"
 
-#: shapecollection/ShapeCollectionDocker.cpp:345
+#: shapecollection/ShapeCollectionDocker.cpp:342
 #, kde-format
 msgid "Arrows"
 msgstr "Puščice"
 
-#: shapecollection/ShapeCollectionDocker.cpp:349
+#: shapecollection/ShapeCollectionDocker.cpp:346
 #, kde-format
 msgid "Funny"
 msgstr "Smešno"
 
-#: shapecollection/ShapeCollectionDocker.cpp:522
+#: shapecollection/ShapeCollectionDocker.cpp:513
 #, kde-format
 msgid "Collection Error"
 msgstr "Napaka zbirke"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:35
+#: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
 msgstr "Lastnosti oblike"

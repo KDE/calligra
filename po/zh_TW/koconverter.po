@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2012-06-14 08:33+0800\n"
 "Last-Translator: Franklin Weng <franklin@goodhorse.idv.tw>\n"
 "Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
@@ -31,103 +31,103 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pesder@seed.net.tw"
 
-#: calligraconverter.cpp:144
+#: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
 msgstr "Calligra 轉換器"
 
-#: calligraconverter.cpp:146
+#: calligraconverter.cpp:181
 #, kde-format
 msgid "Calligra Document Converter"
 msgstr "Calligra 文件轉換器"
 
-#: calligraconverter.cpp:148
+#: calligraconverter.cpp:183
 #, fuzzy, kde-format
 #| msgid "(c) 2001-2011 Calligra developers"
 msgid "Copyright 2001-%1 Calligra developers"
 msgstr "(c) 2001-2011, Calligra 開發團隊"
 
-#: calligraconverter.cpp:149
+#: calligraconverter.cpp:184
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: calligraconverter.cpp:150
+#: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: calligraconverter.cpp:151
+#: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
 msgstr "Dan Leinir Turthra Jensen"
 
-#: calligraconverter.cpp:158
+#: calligraconverter.cpp:193
 #, kde-format
 msgid "Input file"
 msgstr "輸入檔案"
 
-#: calligraconverter.cpp:159
+#: calligraconverter.cpp:194
 #, kde-format
 msgid "Output file"
 msgstr "輸出檔案"
 
-#: calligraconverter.cpp:160
+#: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
 msgstr "產生目地檔的備份"
 
-#: calligraconverter.cpp:161
+#: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
 msgstr "批次模式：不要顯示對話框"
 
-#: calligraconverter.cpp:162
+#: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
 msgstr "互動模式：顯示對話框（預設）"
 
-#: calligraconverter.cpp:163
+#: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
 msgstr "輸出檔案的 MIME 類型"
 
-#: calligraconverter.cpp:166
+#: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
 msgstr "列印方向。直向或橫向。"
 
-#: calligraconverter.cpp:167
+#: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
 msgstr "紙張大小。如 A4，Legal，Letter，..."
 
-#: calligraconverter.cpp:168
+#: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
 msgstr "紙張邊界大小。預設為 0.2。"
 
-#: calligraconverter.cpp:175
+#: calligraconverter.cpp:215
 #, kde-format
 msgid "Two arguments required"
 msgstr "需要兩個參數"
 
-#: calligraconverter.cpp:203
+#: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
 msgstr "找不到用於輸入檔案 %1 的 MIME 類型！"
 
-#: calligraconverter.cpp:212
+#: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
 msgstr "找不到 MIME 類型 %1"
 
-#: calligraconverter.cpp:218
+#: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "找不到 MIME 類型，請嘗試使用 -mimetype 選項"
 
-#: calligraconverter.cpp:242
+#: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** 轉換失敗！ ***"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PathShapes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-07-24 03:42+0300\n"
 "Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: ellipse/EllipseShapeConfigCommand.cpp:19
+#: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
 msgstr "Keisti elipsę"
@@ -76,12 +76,12 @@ msgstr "Pabaigos kampas:"
 msgid "Close ellipse"
 msgstr "Uždara elipsė"
 
-#: ellipse/EllipseShapeFactory.cpp:21
+#: ellipse/EllipseShapeFactory.cpp:20
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsė"
 
-#: ellipse/EllipseShapeFactory.cpp:23
+#: ellipse/EllipseShapeFactory.cpp:22
 #, kde-format
 msgid "An ellipse"
 msgstr "Elipsė"
@@ -93,24 +93,24 @@ msgstr "Elipsė"
 msgid "A callout shape"
 msgstr "Išnaša"
 
-#: enhancedpath/CalloutShapeFactory.cpp:149
+#: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
 msgstr ""
 
-#: enhancedpath/CalloutShapeFactory.cpp:151
+#: enhancedpath/CalloutShapeFactory.cpp:150
 #, fuzzy, kde-format
 #| msgid "A rectangle"
 msgid "A rectangular callout"
 msgstr "Stačiakampis"
 
-#: enhancedpath/CalloutShapeFactory.cpp:231
+#: enhancedpath/CalloutShapeFactory.cpp:229
 #, fuzzy, kde-format
 #| msgid "Callout"
 msgid "Rounded Callout"
 msgstr "Figūrinė išnaša"
 
-#: enhancedpath/CalloutShapeFactory.cpp:233
+#: enhancedpath/CalloutShapeFactory.cpp:231
 #, fuzzy, kde-format
 #| msgid "A rectangle"
 msgid "A rounded rectangular callout"
@@ -132,54 +132,54 @@ msgstr "Patobulinto kelio forma"
 msgid "An enhanced path"
 msgstr "Patobulintas kelias"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
 msgid "Cross"
 msgstr "Kryžius"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
 #, kde-format
 msgid "A cross"
 msgstr "Kryžius"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:180
-#: enhancedpath/EnhancedPathShapeFactory.cpp:213
-#: enhancedpath/EnhancedPathShapeFactory.cpp:246
-#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
 #, kde-format
 msgid "Arrow"
 msgstr "Rodyklė"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:182
-#: enhancedpath/EnhancedPathShapeFactory.cpp:215
-#: enhancedpath/EnhancedPathShapeFactory.cpp:248
-#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
 #, kde-format
 msgid "An arrow"
 msgstr "Rodyklė"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:324
-#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
 #, kde-format
 msgid "Smiley"
 msgstr "Šypsenėlė"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
 msgstr "Lenkta rodyklė"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
 msgstr "Apvali rodyklė"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
 msgid "Gearhead"
 msgstr "Krumpliaratis"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
 #, kde-format
 msgid "A gearhead"
 msgstr "Krumpliaratis"
@@ -260,12 +260,12 @@ msgstr "Išnykimas:"
 msgid "Direction:"
 msgstr "Kryptis:"
 
-#: spiral/SpiralShapeFactory.cpp:18
+#: spiral/SpiralShapeFactory.cpp:17
 #, kde-format
 msgid "Spiral"
 msgstr "Spiralė"
 
-#: spiral/SpiralShapeFactory.cpp:20
+#: spiral/SpiralShapeFactory.cpp:19
 #, kde-format
 msgid "A spiral shape"
 msgstr "Spiralinė forma"
@@ -310,42 +310,42 @@ msgstr "Išorinis spindulys:"
 msgid "A star shape"
 msgstr "Žvaigždės forma"
 
-#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
 msgid "A star"
 msgstr "Žvaigždė"
 
-#: star/StarShapeFactory.cpp:36
+#: star/StarShapeFactory.cpp:37
 #, kde-format
 msgid "Star"
 msgstr "Žvaigždė"
 
-#: star/StarShapeFactory.cpp:50
+#: star/StarShapeFactory.cpp:51
 #, kde-format
 msgid "Flower"
 msgstr "Gėlė"
 
-#: star/StarShapeFactory.cpp:52
+#: star/StarShapeFactory.cpp:53
 #, kde-format
 msgid "A flower"
 msgstr "Gėlė"
 
-#: star/StarShapeFactory.cpp:67
+#: star/StarShapeFactory.cpp:68
 #, kde-format
 msgid "Pentagon"
 msgstr "Penkiakampis"
 
-#: star/StarShapeFactory.cpp:69
+#: star/StarShapeFactory.cpp:70
 #, kde-format
 msgid "A pentagon"
 msgstr "Penkiakampis"
 
-#: star/StarShapeFactory.cpp:83
+#: star/StarShapeFactory.cpp:84
 #, kde-format
 msgid "Hexagon"
 msgstr "Šešiakampis"
 
-#: star/StarShapeFactory.cpp:85
+#: star/StarShapeFactory.cpp:86
 #, kde-format
 msgid "A hexagon"
 msgstr "Šešiakampis"

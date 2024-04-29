@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -24,29 +24,29 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "事件"
 
-#: KoRdfCalendarEvent.cpp:158
+#: KoRdfCalendarEvent.cpp:147
 #, kde-format
 msgid "Area"
 msgstr "区域"
 
-#: KoRdfCalendarEvent.cpp:159
+#: KoRdfCalendarEvent.cpp:148
 #, kde-format
 msgid "Region"
 msgstr "地域"
 
-#: KoRdfCalendarEvent.cpp:381
+#: KoRdfCalendarEvent.cpp:359
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "选择用于保存的日历："
 
-#: KoRdfCalendarEvent.cpp:401
+#: KoRdfCalendarEvent.cpp:379
 #, kde-format
 msgid ""
 "Could not add entry\n"
 "%1"
 msgstr "不能添加条目 %1"
 
-#: KoRdfCalendarEvent.cpp:428
+#: KoRdfCalendarEvent.cpp:402
 #, kde-format
 msgid ""
 "Could not save iCal file\n"
@@ -91,22 +91,22 @@ msgstr "时间和日期"
 msgid "Timezone"
 msgstr "时区"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
 msgstr "日历事件"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
 msgstr "编辑..."
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
 msgstr "导入事件到日历"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
 msgstr "导出事件到 iCal 文件..."

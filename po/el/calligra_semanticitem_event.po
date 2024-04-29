@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-10-11 11:32+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -24,22 +24,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Γεγονός"
 
-#: KoRdfCalendarEvent.cpp:158
+#: KoRdfCalendarEvent.cpp:147
 #, kde-format
 msgid "Area"
 msgstr "Περιοχή"
 
-#: KoRdfCalendarEvent.cpp:159
+#: KoRdfCalendarEvent.cpp:148
 #, kde-format
 msgid "Region"
 msgstr "Περιφέρεια"
 
-#: KoRdfCalendarEvent.cpp:381
+#: KoRdfCalendarEvent.cpp:359
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Επιλέξτε ένα ημερολόγιο για αποθήκευση:"
 
-#: KoRdfCalendarEvent.cpp:401
+#: KoRdfCalendarEvent.cpp:379
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Αδυναμία προσθήκης εγγραφής\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:428
+#: KoRdfCalendarEvent.cpp:402
 #, kde-format
 msgid ""
 "Could not save iCal file\n"
@@ -93,22 +93,22 @@ msgstr "Ώρα και ημερομηνία"
 msgid "Timezone"
 msgstr "Ζώνη ώρας"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
 msgstr "Γεγονός ημερολογίου"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
 msgstr "Επεξεργασία..."
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
 msgstr "Εισαγωγή γεγονότος στο ημερολόγιο"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
 msgstr "Εξαγωγή γεγονότος στο iCal αρχείο..."

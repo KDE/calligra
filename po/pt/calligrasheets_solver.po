@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadsolver\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-05-23 03:03+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-doc@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Solver.cpp:66
+#: Solver.cpp:64
 #, kde-format
 msgid "Function Optimizer..."
 msgstr "Optimização de Funções..."
 
-#: Solver.cpp:103
+#: Solver.cpp:101
 msgctxt "(qtundo-format)"
 msgid "Optimize"
 msgstr "Optimização"

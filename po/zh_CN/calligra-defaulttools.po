@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -45,129 +45,129 @@ msgstr "对齐"
 msgid "%"
 msgstr "%"
 
-#: connectionTool/ConnectionTool.cpp:66
+#: connectionTool/ConnectionTool.cpp:65
 #, kde-format
 msgid "Edit connection points"
 msgstr "编辑连接点"
 
-#: connectionTool/ConnectionTool.cpp:73
+#: connectionTool/ConnectionTool.cpp:72
 #, kde-format
 msgid "Align to left edge"
 msgstr "左边缘对齐"
 
-#: connectionTool/ConnectionTool.cpp:76
+#: connectionTool/ConnectionTool.cpp:75
 #, kde-format
 msgid "Align to horizontal center"
 msgstr "水平居中"
 
-#: connectionTool/ConnectionTool.cpp:79
+#: connectionTool/ConnectionTool.cpp:78
 #, kde-format
 msgid "Align to right edge"
 msgstr "右边缘对齐"
 
-#: connectionTool/ConnectionTool.cpp:82
+#: connectionTool/ConnectionTool.cpp:81
 #, kde-format
 msgid "Align to top edge"
 msgstr "上边缘对齐"
 
-#: connectionTool/ConnectionTool.cpp:85
+#: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
 msgstr "垂直居中"
 
-#: connectionTool/ConnectionTool.cpp:88
+#: connectionTool/ConnectionTool.cpp:87
 #, kde-format
 msgid "Align to bottom edge"
 msgstr "下边缘对齐"
 
-#: connectionTool/ConnectionTool.cpp:92
+#: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
 msgstr "全方向逃离"
 
-#: connectionTool/ConnectionTool.cpp:95
+#: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
 msgstr "水平方向逃离"
 
-#: connectionTool/ConnectionTool.cpp:98
+#: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
 msgstr "竖直方向逃离"
 
-#: connectionTool/ConnectionTool.cpp:101
+#: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
 msgstr "向左逃离"
 
-#: connectionTool/ConnectionTool.cpp:104
+#: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
 msgstr "向右逃离"
 
-#: connectionTool/ConnectionTool.cpp:107
+#: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
 msgstr "向上逃离"
 
-#: connectionTool/ConnectionTool.cpp:110
+#: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
 msgstr "向下逃离"
 
-#: connectionTool/ConnectionTool.cpp:434
+#: connectionTool/ConnectionTool.cpp:429
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "创建链接"
 
-#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "拖拽以编辑连接。"
 
-#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "双击连接或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:778
+#: connectionTool/ConnectionTool.cpp:774
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "点击以编辑连接点。"
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr "拖拽以移动连接点。双击连接或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:794
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr "双击连接点或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:796
+#: connectionTool/ConnectionTool.cpp:792
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "双击以添加连接点。"
 
-#: connectionTool/ConnectionTool.cpp:799
+#: connectionTool/ConnectionTool.cpp:795
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "拖拽以创建新连接。"
 
-#: connectionTool/ConnectionTool.cpp:827
+#: connectionTool/ConnectionTool.cpp:823
 #, kde-format
 msgid "Connection"
 msgstr "连接"
 
-#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Line"
 msgstr "直线"
 
-#: connectionTool/ConnectionTool.cpp:837
+#: connectionTool/ConnectionTool.cpp:833
 #, kde-format
 msgid "Connection Point"
 msgstr "连接点"
@@ -177,124 +177,124 @@ msgstr "连接点"
 msgid "Connect shapes"
 msgstr "连接形状"
 
-#: defaulttool/DefaultTool.cpp:205
+#: defaulttool/DefaultTool.cpp:219
 #, kde-format
 msgid "Bring to &Front"
 msgstr "提到最前(&F)"
 
-#: defaulttool/DefaultTool.cpp:210
+#: defaulttool/DefaultTool.cpp:224
 #, kde-format
 msgid "&Raise"
 msgstr "升起(&R)"
 
-#: defaulttool/DefaultTool.cpp:215
+#: defaulttool/DefaultTool.cpp:229
 #, kde-format
 msgid "&Lower"
 msgstr "降低(&L)"
 
-#: defaulttool/DefaultTool.cpp:221
+#: defaulttool/DefaultTool.cpp:234
 #, kde-format
 msgid "Send to &Back"
 msgstr "推到最后(&B)"
 
-#: defaulttool/DefaultTool.cpp:227
+#: defaulttool/DefaultTool.cpp:239
 #, kde-format
 msgid "Align Left"
 msgstr "左对齐"
 
-#: defaulttool/DefaultTool.cpp:232
+#: defaulttool/DefaultTool.cpp:243
 #, kde-format
 msgid "Horizontally Center"
 msgstr "水平居中"
 
-#: defaulttool/DefaultTool.cpp:237
+#: defaulttool/DefaultTool.cpp:247
 #, kde-format
 msgid "Align Right"
 msgstr "右对齐"
 
-#: defaulttool/DefaultTool.cpp:241
+#: defaulttool/DefaultTool.cpp:251
 #, kde-format
 msgid "Align Top"
 msgstr "上对齐"
 
-#: defaulttool/DefaultTool.cpp:246
+#: defaulttool/DefaultTool.cpp:255
 #, kde-format
 msgid "Vertically Center"
 msgstr "垂直居中"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:259
 #, kde-format
 msgid "Align Bottom"
 msgstr "下对齐"
 
-#: defaulttool/DefaultTool.cpp:256
+#: defaulttool/DefaultTool.cpp:263
 #, kde-format
 msgid "Group"
 msgstr "组合"
 
-#: defaulttool/DefaultTool.cpp:261
+#: defaulttool/DefaultTool.cpp:267
 #, kde-format
 msgid "Ungroup"
 msgstr "拆散"
 
-#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "点击并拖拽以移动参考线。"
 
-#: defaulttool/DefaultTool.cpp:454
+#: defaulttool/DefaultTool.cpp:467
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "左键点击绕中心旋转，右键点击绕高亮显示的位置旋转。"
 
-#: defaulttool/DefaultTool.cpp:456
+#: defaulttool/DefaultTool.cpp:469
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "点击并拖拽以裁剪选择区。"
 
-#: defaulttool/DefaultTool.cpp:459
+#: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "点击并拖拽以调整选择区大小。"
 
-#: defaulttool/DefaultTool.cpp:511
+#: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "点击并拖拽以移动选择区。"
 
-#: defaulttool/DefaultTool.cpp:516
+#: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "点击并拖拽以调整选择区大小。中键点击设定高亮显示的位置。"
 
-#: defaulttool/DefaultTool.cpp:1039
+#: defaulttool/DefaultTool.cpp:1043
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "组合形状"
 
-#: defaulttool/DefaultTool.cpp:1071
+#: defaulttool/DefaultTool.cpp:1075
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "拆散形状"
 
-#: defaulttool/DefaultTool.cpp:1161
+#: defaulttool/DefaultTool.cpp:1163
 #, kde-format
 msgid "Arrange"
 msgstr "重排"
 
-#: defaulttool/DefaultTool.cpp:1164
+#: defaulttool/DefaultTool.cpp:1166
 #, kde-format
 msgid "Geometry"
 msgstr "几何"
 
-#: defaulttool/DefaultTool.cpp:1172
+#: defaulttool/DefaultTool.cpp:1174
 #, kde-format
 msgid "Fill"
 msgstr "填充"
 
-#: defaulttool/DefaultTool.cpp:1177
+#: defaulttool/DefaultTool.cpp:1179
 #, kde-format
 msgid "Shadow"
 msgstr "阴影"
@@ -304,29 +304,29 @@ msgstr "阴影"
 msgid "Shape handling"
 msgstr "形状控制"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:100
-#: defaulttool/ShapeRotateStrategy.cpp:137
+#: defaulttool/DefaultToolTransformWidget.cpp:97
+#: defaulttool/ShapeRotateStrategy.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "旋转"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:138
+#: defaulttool/DefaultToolTransformWidget.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Shear X"
 msgstr "裁剪 X"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:176
+#: defaulttool/DefaultToolTransformWidget.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
 msgstr "裁剪 Y"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:218
-#: defaulttool/DefaultToolTransformWidget.cpp:255
+#: defaulttool/DefaultToolTransformWidget.cpp:215
+#: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
 msgstr "缩放"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:287
+#: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
 msgstr "重置变换"
@@ -379,8 +379,8 @@ msgstr "保持纵横比"
 msgid "Reset Transformations"
 msgstr "重置变换"
 
-#: defaulttool/DefaultToolWidget.cpp:225
-#: defaulttool/ShapeResizeStrategy.cpp:304
+#: defaulttool/DefaultToolWidget.cpp:217
+#: defaulttool/ShapeResizeStrategy.cpp:332
 msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "调整大小"
@@ -402,7 +402,7 @@ msgstr "Y："
 msgid "Press ALT to hold x- or y-position."
 msgstr "按下 ALT 维持 x- 或 y- 位置。"
 
-#: defaulttool/ShapeResizeStrategy.cpp:92
+#: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "按下 CTRL 从中心调整大小。"
@@ -412,7 +412,7 @@ msgstr "按下 CTRL 从中心调整大小。"
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "按下 ALT 以每步 45 度旋转。"
 
-#: defaulttool/ShapeShearStrategy.cpp:169
+#: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "裁剪"
@@ -427,12 +427,12 @@ msgstr "双击以添加参考线。"
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr "点击并拖拽以移动参考线。双击以删除参考线。"
 
-#: guidestool/GuidesTool.cpp:374
+#: guidestool/GuidesTool.cpp:373
 #, kde-format
 msgid "Guides Editor"
 msgstr "参考线编辑器"
 
-#: guidestool/GuidesTool.cpp:382
+#: guidestool/GuidesTool.cpp:379
 #, kde-format
 msgid "Guides Insertor"
 msgstr "参考线插入器"

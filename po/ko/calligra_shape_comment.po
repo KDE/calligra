@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2019-04-17 09:45+0900\n"
 "Last-Translator: JungHee Lee (이정희 : MarongHappy) <daemul72@gmail.com>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -28,14 +28,14 @@ msgstr "주석을 표시하는 플러그인이 없습니다."
 msgid "Plugin Missing"
 msgstr "플러그인 없음"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
 "current version of the comment shape."
 msgstr "현재 버전의 주석 도형과 주석 표시 플러그인이 호환되지 않습니다."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "플러그인 호환되지 않음"

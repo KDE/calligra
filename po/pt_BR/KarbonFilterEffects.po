@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-08-31 08:11-0300\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -28,42 +28,42 @@ msgstr ""
 msgid "Blend"
 msgstr "Misturar"
 
-#: BlendEffectConfigWidget.cpp:22
+#: BlendEffectConfigWidget.cpp:23
 #, kde-format
 msgid "Blend mode"
 msgstr "Modo de mistura"
 
-#: BlendEffectConfigWidget.cpp:24
+#: BlendEffectConfigWidget.cpp:25
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
-#: BlendEffectConfigWidget.cpp:25
+#: BlendEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Multiply"
 msgstr "Multiplicar"
 
-#: BlendEffectConfigWidget.cpp:26
+#: BlendEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Screen"
 msgstr "Tela"
 
-#: BlendEffectConfigWidget.cpp:27
+#: BlendEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Darken"
 msgstr "Escurecer"
 
-#: BlendEffectConfigWidget.cpp:28
+#: BlendEffectConfigWidget.cpp:29
 #, kde-format
 msgid "Lighten"
 msgstr "Clarear"
 
-#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#: BlurEffect.cpp:257 BlurEffectFactory.cpp:14
 #, kde-format
 msgid "Gaussian blur"
 msgstr "Borrão gaussiano"
 
-#: BlurEffectConfigWidget.cpp:22
+#: BlurEffectConfigWidget.cpp:23
 #, kde-format
 msgid "Radius"
 msgstr "Raio"
@@ -73,32 +73,32 @@ msgstr "Raio"
 msgid "Color Matrix"
 msgstr "Matriz de Cores"
 
-#: ColorMatrixEffectConfigWidget.cpp:28
+#: ColorMatrixEffectConfigWidget.cpp:29
 #, kde-format
 msgid "Apply color matrix"
 msgstr "Aplicar a matriz de cores"
 
-#: ColorMatrixEffectConfigWidget.cpp:29
+#: ColorMatrixEffectConfigWidget.cpp:30
 #, kde-format
 msgid "Saturate colors"
 msgstr "Saturar as cores"
 
-#: ColorMatrixEffectConfigWidget.cpp:30
+#: ColorMatrixEffectConfigWidget.cpp:31
 #, kde-format
 msgid "Rotate hue"
 msgstr "Rodar o tom"
 
-#: ColorMatrixEffectConfigWidget.cpp:31
+#: ColorMatrixEffectConfigWidget.cpp:32
 #, kde-format
 msgid "Luminance to alpha"
 msgstr "Luminosidade para alfa"
 
-#: ColorMatrixEffectConfigWidget.cpp:50
+#: ColorMatrixEffectConfigWidget.cpp:51
 #, kde-format
 msgid "Saturate value"
 msgstr "Saturar o valor"
 
-#: ColorMatrixEffectConfigWidget.cpp:61
+#: ColorMatrixEffectConfigWidget.cpp:62
 #, kde-format
 msgid "Angle"
 msgstr "Ângulo"
@@ -113,63 +113,63 @@ msgstr "Matriz de cores"
 msgid "Component transfer"
 msgstr "Transferência de componentes"
 
-#: ComponentTransferEffectConfigWidget.cpp:45
+#: ComponentTransferEffectConfigWidget.cpp:46
 #, kde-format
 msgid "Function"
 msgstr "Função"
 
-#: ComponentTransferEffectConfigWidget.cpp:47
+#: ComponentTransferEffectConfigWidget.cpp:48
 #, kde-format
 msgid "Identity"
 msgstr "Identidade"
 
-#: ComponentTransferEffectConfigWidget.cpp:48
+#: ComponentTransferEffectConfigWidget.cpp:49
 #, kde-format
 msgid "Table"
 msgstr "Tabela"
 
-#: ComponentTransferEffectConfigWidget.cpp:49
+#: ComponentTransferEffectConfigWidget.cpp:50
 #, kde-format
 msgid "Discrete"
 msgstr "Discreto"
 
-#: ComponentTransferEffectConfigWidget.cpp:50
+#: ComponentTransferEffectConfigWidget.cpp:51
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
 
-#: ComponentTransferEffectConfigWidget.cpp:51
+#: ComponentTransferEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Gamma"
 msgstr "Gama"
 
-#: ComponentTransferEffectConfigWidget.cpp:64
-#: ComponentTransferEffectConfigWidget.cpp:74
+#: ComponentTransferEffectConfigWidget.cpp:65
+#: ComponentTransferEffectConfigWidget.cpp:75
 #, kde-format
 msgid "Values"
 msgstr "Valores"
 
-#: ComponentTransferEffectConfigWidget.cpp:84
+#: ComponentTransferEffectConfigWidget.cpp:85
 #, kde-format
 msgid "Slope"
 msgstr "Inclinação"
 
-#: ComponentTransferEffectConfigWidget.cpp:89
+#: ComponentTransferEffectConfigWidget.cpp:90
 #, kde-format
 msgid "Intercept"
 msgstr "Interceptar"
 
-#: ComponentTransferEffectConfigWidget.cpp:101
+#: ComponentTransferEffectConfigWidget.cpp:102
 #, kde-format
 msgid "Amplitude"
 msgstr "Amplitude"
 
-#: ComponentTransferEffectConfigWidget.cpp:106
+#: ComponentTransferEffectConfigWidget.cpp:107
 #, kde-format
 msgid "Exponent"
 msgstr "Expoente"
 
-#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: ComponentTransferEffectConfigWidget.cpp:112 OffsetEffect.cpp:17
 #: OffsetEffectFactory.cpp:13
 #, kde-format
 msgid "Offset"
@@ -180,7 +180,7 @@ msgstr "Deslocamento"
 msgid "Composite"
 msgstr "Composto"
 
-#: CompositeEffectConfigWidget.cpp:23
+#: CompositeEffectConfigWidget.cpp:24
 #, kde-format
 msgid "Operation"
 msgstr "Operação"
@@ -190,52 +190,52 @@ msgstr "Operação"
 msgid "Convolve Matrix"
 msgstr "Convolucionar a matriz"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:32
+#: ConvolveMatrixEffectConfigWidget.cpp:33
 #, kde-format
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:33
+#: ConvolveMatrixEffectConfigWidget.cpp:34
 #, kde-format
 msgid "Wrap"
 msgstr "Quebrar"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:34
+#: ConvolveMatrixEffectConfigWidget.cpp:35
 #, kde-format
 msgid "None"
 msgstr "Nenhum"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:35
+#: ConvolveMatrixEffectConfigWidget.cpp:36
 #, kde-format
 msgid "Edge mode:"
 msgstr "Modo de arestas:"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:42
+#: ConvolveMatrixEffectConfigWidget.cpp:43
 #, kde-format
 msgid "Kernel size:"
 msgstr "Tamanho do núcleo:"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:51
+#: ConvolveMatrixEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Target point:"
 msgstr "Ponto de destino:"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:58
+#: ConvolveMatrixEffectConfigWidget.cpp:59
 #, kde-format
 msgid "Divisor:"
 msgstr "Divisor:"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:60
+#: ConvolveMatrixEffectConfigWidget.cpp:61
 #, kde-format
 msgid "Bias:"
 msgstr "Desvio:"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:63
+#: ConvolveMatrixEffectConfigWidget.cpp:64
 #, kde-format
 msgid "Preserve alpha"
 msgstr "Preservar o 'alfa'"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:66
+#: ConvolveMatrixEffectConfigWidget.cpp:67
 #, kde-format
 msgid "Edit kernel"
 msgstr "Editar o núcleo"
@@ -245,22 +245,22 @@ msgstr "Editar o núcleo"
 msgid "Flood fill"
 msgstr "Preenchimento"
 
-#: FloodEffectConfigWidget.cpp:24
+#: FloodEffectConfigWidget.cpp:25
 #, kde-format
 msgid "Flood color"
 msgstr "Cor do preenchimento"
 
-#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#: ImageEffect.cpp:24 ImageEffectFactory.cpp:13
 #, kde-format
 msgid "Image"
 msgstr "Imagem"
 
-#: ImageEffectConfigWidget.cpp:27
+#: ImageEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Select image..."
 msgstr "Selecionar imagem..."
 
-#: ImageEffectConfigWidget.cpp:54
+#: ImageEffectConfigWidget.cpp:55
 #, kde-format
 msgid "Select image"
 msgstr "Selecionar imagem"
@@ -275,37 +275,37 @@ msgstr "Mesclar"
 msgid "Morphology"
 msgstr "Morfologia"
 
-#: MorphologyEffectConfigWidget.cpp:25
+#: MorphologyEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Erode"
 msgstr "Erosão"
 
-#: MorphologyEffectConfigWidget.cpp:26
+#: MorphologyEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Dilate"
 msgstr "Dilatar"
 
-#: MorphologyEffectConfigWidget.cpp:29
+#: MorphologyEffectConfigWidget.cpp:30
 #, kde-format
 msgid "Operator:"
 msgstr "Operador:"
 
-#: MorphologyEffectConfigWidget.cpp:33
+#: MorphologyEffectConfigWidget.cpp:34
 #, kde-format
 msgid "Radius x:"
 msgstr "Raio em X:"
 
-#: MorphologyEffectConfigWidget.cpp:39
+#: MorphologyEffectConfigWidget.cpp:40
 #, kde-format
 msgid "Radius y:"
 msgstr "Raio em Y:"
 
-#: OffsetEffectConfigWidget.cpp:22
+#: OffsetEffectConfigWidget.cpp:23
 #, kde-format
 msgid "dx"
 msgstr "dx"
 
-#: OffsetEffectConfigWidget.cpp:28
+#: OffsetEffectConfigWidget.cpp:29
 #, kde-format
 msgid "dy"
 msgstr "dy"

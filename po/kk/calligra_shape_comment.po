@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-08-02 08:45+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -27,7 +27,7 @@ msgstr "Түсініктемелерді көрсетуге керек плаг�
 msgid "Plugin Missing"
 msgstr "Плагині жоқ"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -36,7 +36,7 @@ msgstr ""
 "Түсініктемелерді көрсетуге керек плагині қолданыстағы түсініктеме қалыптың "
 "нұсқасын танымайды."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Үйлеспейтін плагині"

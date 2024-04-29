@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-09-05 17:38+0400\n"
 "Last-Translator: Yuri Efremov <yur.arh@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -31,7 +31,7 @@ msgstr "Модуль для показа комментариев отсутст
 msgid "Plugin Missing"
 msgstr "Модуль отсутствует"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -40,7 +40,7 @@ msgstr ""
 "Модуль для показа комментариев несовместим с текущей версией объекта "
 "комментариев."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Несовместимый модуль"

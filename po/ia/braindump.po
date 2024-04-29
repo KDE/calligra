@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2017-02-05 22:57+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-it@kde.org>\n"
@@ -95,17 +95,17 @@ msgstr "Statos"
 msgid "State:"
 msgstr "Stato:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "Forma de stato"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "Un forma de stato"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "Optiones de instrumento de stato"
@@ -127,12 +127,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr "Usa un copia de cache"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "Forma Web"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "Un forma de web"
@@ -142,51 +142,51 @@ msgstr "Un forma de web"
 msgid "Web shape editing"
 msgstr "Modifica de Forma Web"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "Braindump"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "Braindum[ directementeab tu cerebro al computator"
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009,2010,2011, 2012, 2013 Cyrille Berger"
 
-#: src/AboutData.h:39 src/AboutData.h:40
-#, kde-format
-msgid "Former maintainer"
-msgstr "Mantenitor previe"
-
-#: src/AboutData.h:39
+#: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
 msgstr "Somsubhra Bairi"
 
-#: src/AboutData.h:40
+#: src/AboutData.h:43 src/AboutData.h:46
+#, kde-format
+msgid "Former maintainer"
+msgstr "Mantenitor previe"
+
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Giovanni Sora"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -234,7 +234,7 @@ msgstr "Move tabula blanc in alto"
 msgid "Delete the whiteboard"
 msgstr "Dele le tabula blanc"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "Barras de instrumento"
@@ -254,42 +254,42 @@ msgstr "Commuta monstrante un barra de titulo"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Commuta organisante le optiones in scheda o no"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "Columna"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "Libere"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr "Stivatores (dockers)"
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "Sin titulo %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "Discarga proprietates"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "Tabulas blanc"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "Vista minima"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "Vista detaliate"
@@ -319,33 +319,33 @@ msgstr "Adde nove tabula blanc superle currente "
 msgid "Add new whiteboard as child of current."
 msgstr "Adde nove tabula blanc como filio del currente. "
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "D&ele"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Duplica"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "Gruppa formas"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "Leva formas de gruppo"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Gruppa formas"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Leva formas de gruppo"

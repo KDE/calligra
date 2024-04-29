@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-11-01 08:18+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -25,22 +25,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Dogodek"
 
-#: KoRdfCalendarEvent.cpp:158
+#: KoRdfCalendarEvent.cpp:147
 #, kde-format
 msgid "Area"
 msgstr "Krajevnost"
 
-#: KoRdfCalendarEvent.cpp:159
+#: KoRdfCalendarEvent.cpp:148
 #, kde-format
 msgid "Region"
 msgstr "Področje"
 
-#: KoRdfCalendarEvent.cpp:381
+#: KoRdfCalendarEvent.cpp:359
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Izberi koledar za shranjevanje:"
 
-#: KoRdfCalendarEvent.cpp:401
+#: KoRdfCalendarEvent.cpp:379
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Ni bilo mogoče dodati vnosa\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:428
+#: KoRdfCalendarEvent.cpp:402
 #, kde-format
 msgid ""
 "Could not save iCal file\n"
@@ -94,22 +94,22 @@ msgstr "Čas in datum"
 msgid "Timezone"
 msgstr "Časovni pas"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
 msgstr "Dogodek koledarja"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
 msgstr "Uredi…"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
 msgstr "Uvozi dogodek v Koledar"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
 msgstr "Izvozi dogodek v iCal datoteko…"

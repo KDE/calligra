@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VectorShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-06-27 20:26+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -19,30 +19,30 @@ msgstr ""
 "X-POT-Import-Date: 2013-01-13 22:09:30+0000\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: ChangeVectorDataCommand.cpp:26
+#: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
 msgstr ""
 "Muuta vektoridataa\n"
 "vektoridatan muuttaminen"
 
-#: VectorShapeFactory.cpp:27
+#: VectorShapeFactory.cpp:26
 #, kde-format
 msgid "Vector image"
 msgstr "Vektorikuva"
 
-#: VectorShapeFactory.cpp:29
+#: VectorShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgstr "Muoto, joka näyttää vektorikuvan (EMF/WMF/SVM)"
 
 # @info:tooltip For an open action
-#: VectorTool.cpp:64
+#: VectorTool.cpp:63
 #, kde-format
 msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "Avaa vektorikuva (EMF/WMF/SVM)"
 
-#: VectorToolFactory.cpp:20
+#: VectorToolFactory.cpp:19
 #, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
 msgstr "Vektorikuvatyökalu (EMF/WMF/SVM/SVG)"

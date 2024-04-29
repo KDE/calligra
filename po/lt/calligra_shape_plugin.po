@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PluginShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2010-06-03 14:34+0100\n"
 "Last-Translator: Andrius Štikonas <andrius@stikonas.eu>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
 
-#: PluginShape.cpp:36
+#: PluginShape.cpp:35
 #, kde-format
 msgid "Unknown"
 msgstr ""
 
-#: PluginShape.cpp:40
+#: PluginShape.cpp:39
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr ""

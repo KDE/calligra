@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ArtisticTextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-03-14 20:18-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
 msgstr "テキスト範囲を追加"
@@ -37,92 +37,92 @@ msgstr "単一行のテキスト図形"
 msgid "Artistic Text"
 msgstr "デザインテキスト"
 
-#: ArtisticTextTool.cpp:64
+#: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
 msgstr "パスの取り外し"
 
-#: ArtisticTextTool.cpp:69
+#: ArtisticTextTool.cpp:77
 #, kde-format
 msgid "Convert to Path"
 msgstr "パスに変換"
 
-#: ArtisticTextTool.cpp:74
+#: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
 msgstr "太字テキスト"
 
-#: ArtisticTextTool.cpp:79
+#: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
 msgstr "斜体テキスト"
 
-#: ArtisticTextTool.cpp:84
+#: ArtisticTextTool.cpp:92
 #, kde-format
 msgid "Superscript"
 msgstr "上付き文字"
 
-#: ArtisticTextTool.cpp:89
+#: ArtisticTextTool.cpp:97
 #, kde-format
 msgid "Subscript"
 msgstr "下付き文字"
 
-#: ArtisticTextTool.cpp:94
+#: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
 msgstr "先頭にアンカー"
 
-#: ArtisticTextTool.cpp:99
+#: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
 msgstr "中心にアンカー"
 
-#: ArtisticTextTool.cpp:104
+#: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
 msgstr "最後尾にアンカー"
 
-#: ArtisticTextTool.cpp:295
+#: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
 msgstr "カーソル位置を変更するにはクリックします。"
 
-#: ArtisticTextTool.cpp:297
+#: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
 msgstr "テキスト図形を選択するにはクリックします。"
 
-#: ArtisticTextTool.cpp:300
+#: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
 msgstr "パス上にテキストを配置するにはダブルクリックします。"
 
-#: ArtisticTextTool.cpp:303
+#: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
 msgstr "開始オフセットを変更するにはハンドルをドラッグします。"
 
-#: ArtisticTextTool.cpp:307
+#: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
 msgstr "編集を終えるには ESC を押下します。"
 
-#: ArtisticTextTool.cpp:489
+#: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
 msgstr "編集を終えるには Return を押下します。"
 
-#: ArtisticTextTool.cpp:583
+#: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "パスに変換"
 
-#: ArtisticTextTool.cpp:596
+#: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
 msgstr "テキストのプロパティ"
 
-#: ArtisticTextTool.cpp:606
+#: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
 msgstr "パス上のテキスト"
@@ -132,38 +132,38 @@ msgstr "パス上のテキスト"
 msgid "Artistic text editing"
 msgstr "デザインテキスト編集ツール"
 
-#: AttachTextToPathCommand.cpp:15
+#: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
 msgstr "パスの取り付け"
 
-#: ChangeTextAnchorCommand.cpp:14
+#: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
 msgstr "テキストアンカーを変更"
 
-#: ChangeTextFontCommand.cpp:16
+#: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
 msgstr "フォントを変更"
 
-#: ChangeTextOffsetCommand.cpp:15
+#: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
 msgstr "テキストオフセットを変更"
 
-#: DetachTextFromPathCommand.cpp:14
+#: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
 msgstr "パスの取り外し"
 
-#: RemoveTextRangeCommand.cpp:16
+#: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
 msgstr "テキスト範囲を削除"
 
-#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
-#: ReplaceTextRangeCommand.cpp:30
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "テキスト範囲を削除"

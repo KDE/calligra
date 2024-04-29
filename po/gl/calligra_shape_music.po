@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-02-25 11:52+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: actions/AccidentalAction.cpp:54
+#: actions/AccidentalAction.cpp:52
 #, kde-format
 msgid "Double flat"
 msgstr "Dobre bemol"
 
-#: actions/AccidentalAction.cpp:55
+#: actions/AccidentalAction.cpp:54
 #, kde-format
 msgctxt "lowered half a step"
 msgid "Flat"
@@ -37,23 +37,23 @@ msgstr "Bemol"
 msgid "Natural"
 msgstr "Becuadro"
 
-#: actions/AccidentalAction.cpp:57
+#: actions/AccidentalAction.cpp:58
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
 msgstr "Díese"
 
-#: actions/AccidentalAction.cpp:58
+#: actions/AccidentalAction.cpp:60
 #, kde-format
 msgid "Double sharp"
 msgstr "Dobre díese"
 
-#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:48
 #, kde-format
 msgid "%1 flats"
 msgstr "%1 bemoles"
 
-#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#: actions/AccidentalAction.cpp:65 actions/KeySignatureAction.cpp:50
 #, kde-format
 msgid "%1 sharps"
 msgstr "%1 díeses"
@@ -68,63 +68,63 @@ msgstr "Puntos"
 msgid "Eraser"
 msgstr "Borrador"
 
-#: actions/KeySignatureAction.cpp:28
+#: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
 msgstr "Ab Maior"
 
-#: actions/KeySignatureAction.cpp:29
+#: actions/KeySignatureAction.cpp:31
 #, kde-format
 msgid "Eb Major"
 msgstr "Eb Maior"
 
-#: actions/KeySignatureAction.cpp:30
+#: actions/KeySignatureAction.cpp:33
 #, kde-format
 msgid "Bb Major"
 msgstr "Bb Maior"
 
-#: actions/KeySignatureAction.cpp:31
+#: actions/KeySignatureAction.cpp:35
 #, kde-format
 msgid "F Major"
 msgstr "F Maior"
 
-#: actions/KeySignatureAction.cpp:32
+#: actions/KeySignatureAction.cpp:37
 #, kde-format
 msgid "C Major"
 msgstr "C Maior"
 
-#: actions/KeySignatureAction.cpp:33
+#: actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "G Major"
 msgstr "G Maior"
 
-#: actions/KeySignatureAction.cpp:34
+#: actions/KeySignatureAction.cpp:41
 #, kde-format
 msgid "D Major"
 msgstr "D Maior"
 
-#: actions/KeySignatureAction.cpp:35
+#: actions/KeySignatureAction.cpp:43
 #, kde-format
 msgid "A Major"
 msgstr "A Maior"
 
-#: actions/KeySignatureAction.cpp:36
+#: actions/KeySignatureAction.cpp:45
 #, kde-format
 msgid "E Major"
 msgstr "E Maior"
 
-#: actions/KeySignatureAction.cpp:49
+#: actions/KeySignatureAction.cpp:62
 #, kde-format
 msgctxt "Other key signature"
 msgid "Other"
 msgstr "Outros"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "note"
 msgstr "nota"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "rest"
 msgstr "silencio"
@@ -134,52 +134,52 @@ msgstr "silencio"
 msgid "Double whole "
 msgstr "Cadrada ou breve "
 
-#: actions/NoteEntryAction.cpp:58
+#: actions/NoteEntryAction.cpp:59
 #, kde-format
 msgid "Whole "
 msgstr "Redonda "
 
-#: actions/NoteEntryAction.cpp:59
+#: actions/NoteEntryAction.cpp:61
 #, kde-format
 msgid "Half "
 msgstr "Branca "
 
-#: actions/NoteEntryAction.cpp:60
+#: actions/NoteEntryAction.cpp:63
 #, kde-format
 msgid "Quarter "
 msgstr "Negra "
 
-#: actions/NoteEntryAction.cpp:61
+#: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "Eighth "
 msgstr "Corchea "
 
-#: actions/NoteEntryAction.cpp:62
+#: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "16th "
 msgstr "Semicorchea "
 
-#: actions/NoteEntryAction.cpp:63
+#: actions/NoteEntryAction.cpp:69
 #, kde-format
 msgid "32nd "
 msgstr "Fusa "
 
-#: actions/NoteEntryAction.cpp:64
+#: actions/NoteEntryAction.cpp:71
 #, kde-format
 msgid "64th "
 msgstr "Semifusa "
 
-#: actions/NoteEntryAction.cpp:65
+#: actions/NoteEntryAction.cpp:73
 #, kde-format
 msgid "128th "
 msgstr "Cuartifusa "
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown note"
 msgstr "Nota descoñecida"
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown rest"
 msgstr "Silencio descoñecido"
@@ -194,42 +194,42 @@ msgstr "Retirar barra"
 msgid "Select"
 msgstr "Seleccionar"
 
-#: actions/SetClefAction.cpp:39
+#: actions/SetClefAction.cpp:40
 #, kde-format
 msgctxt "Treble clef"
 msgid "Treble"
 msgstr "Clave de sol"
 
-#: actions/SetClefAction.cpp:40
+#: actions/SetClefAction.cpp:42
 #, kde-format
 msgctxt "Bass clef"
 msgid "Bass"
 msgstr "Clave de fa en cuarta"
 
-#: actions/SetClefAction.cpp:43
+#: actions/SetClefAction.cpp:46
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
 msgstr "Clave de do en primeira"
 
-#: actions/SetClefAction.cpp:44
+#: actions/SetClefAction.cpp:48
 #, kde-format
 msgctxt "Alto clef"
 msgid "Alto"
 msgstr "Clave de do en terceira"
 
-#: actions/SetClefAction.cpp:45
+#: actions/SetClefAction.cpp:50
 #, kde-format
 msgctxt "Tenor clef"
 msgid "Tenor"
 msgstr "Clave de do en cuarta"
 
-#: actions/SetClefAction.cpp:46
+#: actions/SetClefAction.cpp:52
 #, kde-format
 msgid "C clef on line %1"
 msgstr "Clave de do na liña %1"
 
-#: actions/SetClefAction.cpp:49
+#: actions/SetClefAction.cpp:55
 #, kde-format
 msgid "Unknown clef"
 msgstr "Clave descoñecida"
@@ -239,22 +239,22 @@ msgstr "Clave descoñecida"
 msgid "Tied notes"
 msgstr "Notas ligadas"
 
-#: commands/AddBarsCommand.cpp:17
+#: commands/AddBarsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add measures"
 msgstr "Engadir compases"
 
-#: commands/AddDotCommand.cpp:17
+#: commands/AddDotCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Add dot"
 msgstr "Engadir punto"
 
-#: commands/AddNoteCommand.cpp:29
+#: commands/AddNoteCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
 msgstr "Definir duración do acorde"
 
-#: commands/AddNoteCommand.cpp:31
+#: commands/AddNoteCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Add note"
 msgstr "Engadir nota"
@@ -269,42 +269,42 @@ msgstr "Engadir parte"
 msgid "Part %1"
 msgstr "Parte %1"
 
-#: commands/ChangePartDetailsCommand.cpp:30
+#: commands/ChangePartDetailsCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change part details"
 msgstr "Cambiar detalles da parte"
 
-#: commands/CreateChordCommand.cpp:20
+#: commands/CreateChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add chord"
 msgstr "Engadir acorde"
 
-#: commands/CreateChordCommand.cpp:28
+#: commands/CreateChordCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Add rest"
 msgstr "Engadir silencio"
 
-#: commands/MakeRestCommand.cpp:19
+#: commands/MakeRestCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
 msgstr "Converter acorde en silencio"
 
-#: commands/RemoveBarCommand.cpp:18
+#: commands/RemoveBarCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
 msgstr "Retirar barra"
 
-#: commands/RemoveChordCommand.cpp:19
+#: commands/RemoveChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
 msgstr "Retirar silencio"
 
-#: commands/RemoveChordCommand.cpp:21
+#: commands/RemoveChordCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
 msgstr "Retirar acorde"
 
-#: commands/RemoveNoteCommand.cpp:19
+#: commands/RemoveNoteCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove note"
 msgstr "Retirar nota"
@@ -314,38 +314,38 @@ msgctxt "(qtundo-format)"
 msgid "Remove part"
 msgstr "Retirar partitura"
 
-#: commands/RemoveStaffElementCommand.cpp:22
+#: commands/RemoveStaffElementCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
 msgstr "Retirar clave"
 
-#: commands/RemoveStaffElementCommand.cpp:24
+#: commands/RemoveStaffElementCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
 msgstr "Retirar elemento do pentagrama"
 
-#: commands/SetAccidentalsCommand.cpp:19
+#: commands/SetAccidentalsCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
 msgstr "Definir alteracións"
 
-#: commands/SetClefCommand.cpp:19
+#: commands/SetClefCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change clef"
 msgstr "Cambiar a clave"
 
-#: commands/SetKeySignatureCommand.cpp:25
-#: commands/SetKeySignatureCommand.cpp:72
+#: commands/SetKeySignatureCommand.cpp:26
+#: commands/SetKeySignatureCommand.cpp:76
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
 msgstr "Cambiar a armadura de clave"
 
-#: commands/SetTimeSignatureCommand.cpp:21
+#: commands/SetTimeSignatureCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
 msgstr "Cambiar a marca de tempo"
 
-#: commands/ToggleTiedNoteCommand.cpp:19
+#: commands/ToggleTiedNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
 msgstr "Conmutar a ligadura da nota"
@@ -463,20 +463,20 @@ msgid "Voice 4"
 msgstr "Voz 4"
 
 #. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
-#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
-#: SimpleEntryTool.cpp:678
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add measures"
 msgstr "Engadir compases"
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
-#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
 #, kde-format
 msgid "Import"
 msgstr "Importar"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportButton)
-#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
 #, kde-format
 msgid "Export"
 msgstr "Exportar"
@@ -486,42 +486,42 @@ msgstr "Exportar"
 msgid "Part 1"
 msgstr "Parte 1"
 
-#: MusicShapeFactory.cpp:36
+#: MusicShapeFactory.cpp:34
 #, kde-format
 msgid "Music Shape"
 msgstr "Moldura Musical"
 
-#: MusicShapeFactory.cpp:38
+#: MusicShapeFactory.cpp:36
 #, kde-format
 msgid "A shape which provides a music editor"
 msgstr "Unha moldura que fornece un editor de partituras musicais"
 
-#: MusicTool.cpp:85
+#: MusicTool.cpp:83
 #, kde-format
 msgid "Parts"
 msgstr "Partes"
 
-#: MusicToolFactory.cpp:19
+#: MusicToolFactory.cpp:18
 #, kde-format
 msgid "Music editing, parts"
 msgstr "Edición musical, partes"
 
-#: SimpleEntryTool.cpp:226
+#: SimpleEntryTool.cpp:227
 #, kde-format
 msgid "Clef"
 msgstr "Clave"
 
-#: SimpleEntryTool.cpp:255
+#: SimpleEntryTool.cpp:256
 #, kde-format
 msgid "Time signature"
 msgstr "Marca de tempo"
 
-#: SimpleEntryTool.cpp:285
+#: SimpleEntryTool.cpp:286
 #, kde-format
 msgid "Key signature"
 msgstr "Armadura da clave"
 
-#: SimpleEntryTool.cpp:679
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add how many measures?"
 msgstr "Engadir cantos compases?"
@@ -532,18 +532,18 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "Importar"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr "Ficheiros MusicXML (*.xml)"
 
-#: SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:761
 #, kde-format
 msgctxt "@title:window"
 msgid "Export"
 msgstr "Exportar"
 
-#: SimpleEntryToolFactory.cpp:18
+#: SimpleEntryToolFactory.cpp:17
 #, kde-format
 msgid "Music editing"
 msgstr "Edición musical"

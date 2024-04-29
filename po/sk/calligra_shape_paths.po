@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_paths\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2019-10-06 19:25+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 19.04.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ellipse/EllipseShapeConfigCommand.cpp:19
+#: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
 msgstr "Zmeniť elipsu"
@@ -74,12 +74,12 @@ msgstr "Koncový uhol:"
 msgid "Close ellipse"
 msgstr "Vybrať elipsu"
 
-#: ellipse/EllipseShapeFactory.cpp:21
+#: ellipse/EllipseShapeFactory.cpp:20
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsa"
 
-#: ellipse/EllipseShapeFactory.cpp:23
+#: ellipse/EllipseShapeFactory.cpp:22
 #, kde-format
 msgid "An ellipse"
 msgstr "Elipsa"
@@ -90,22 +90,22 @@ msgstr "Elipsa"
 msgid "A callout shape"
 msgstr "Tvar popisky"
 
-#: enhancedpath/CalloutShapeFactory.cpp:149
+#: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
 msgstr "Pravouhlý popisok"
 
-#: enhancedpath/CalloutShapeFactory.cpp:151
+#: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
 msgid "A rectangular callout"
 msgstr "Obĺžnikový popisok"
 
-#: enhancedpath/CalloutShapeFactory.cpp:231
+#: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
 msgstr "Okrúhly popisok"
 
-#: enhancedpath/CalloutShapeFactory.cpp:233
+#: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "A rounded rectangular callout"
 msgstr "Zaoblený obdĺžnikový popisok"
@@ -125,54 +125,54 @@ msgstr "Rozšírený tvar cesty"
 msgid "An enhanced path"
 msgstr "Rozšírená cesta"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
 msgid "Cross"
 msgstr "Kríž"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
 #, kde-format
 msgid "A cross"
 msgstr "Kríž"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:180
-#: enhancedpath/EnhancedPathShapeFactory.cpp:213
-#: enhancedpath/EnhancedPathShapeFactory.cpp:246
-#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
 #, kde-format
 msgid "Arrow"
 msgstr "Šípka"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:182
-#: enhancedpath/EnhancedPathShapeFactory.cpp:215
-#: enhancedpath/EnhancedPathShapeFactory.cpp:248
-#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
 #, kde-format
 msgid "An arrow"
 msgstr "Šípka"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:324
-#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
 #, kde-format
 msgid "Smiley"
 msgstr "Smajlík"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
 msgstr "Kruhová šípka"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
 msgstr "Kruhová šípka"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
 msgid "Gearhead"
 msgstr "Prevodovka"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
 #, kde-format
 msgid "A gearhead"
 msgstr "Prevodovka"
@@ -253,12 +253,12 @@ msgstr "Zoslabiť:"
 msgid "Direction:"
 msgstr "Smer:"
 
-#: spiral/SpiralShapeFactory.cpp:18
+#: spiral/SpiralShapeFactory.cpp:17
 #, kde-format
 msgid "Spiral"
 msgstr "Špirála"
 
-#: spiral/SpiralShapeFactory.cpp:20
+#: spiral/SpiralShapeFactory.cpp:19
 #, kde-format
 msgid "A spiral shape"
 msgstr "Špirálový tvar"
@@ -303,42 +303,42 @@ msgstr "Vonkajší polomer:"
 msgid "A star shape"
 msgstr "Tvar hviezdy"
 
-#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
 msgid "A star"
 msgstr "Hviezda"
 
-#: star/StarShapeFactory.cpp:36
+#: star/StarShapeFactory.cpp:37
 #, kde-format
 msgid "Star"
 msgstr "Hviezda"
 
-#: star/StarShapeFactory.cpp:50
+#: star/StarShapeFactory.cpp:51
 #, kde-format
 msgid "Flower"
 msgstr "Kvet"
 
-#: star/StarShapeFactory.cpp:52
+#: star/StarShapeFactory.cpp:53
 #, kde-format
 msgid "A flower"
 msgstr "Kvet"
 
-#: star/StarShapeFactory.cpp:67
+#: star/StarShapeFactory.cpp:68
 #, kde-format
 msgid "Pentagon"
 msgstr "Päťuholník"
 
-#: star/StarShapeFactory.cpp:69
+#: star/StarShapeFactory.cpp:70
 #, kde-format
 msgid "A pentagon"
 msgstr "Päťuholník"
 
-#: star/StarShapeFactory.cpp:83
+#: star/StarShapeFactory.cpp:84
 #, kde-format
 msgid "Hexagon"
 msgstr "Šesťuholník"
 
-#: star/StarShapeFactory.cpp:85
+#: star/StarShapeFactory.cpp:86
 #, kde-format
 msgid "A hexagon"
 msgstr "Šesťuholník"

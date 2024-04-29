@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-07-11 07:38+0400\n"
 "Last-Translator: Georgiy Syptchenko <superzhook@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -22,29 +22,29 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: ChangeVectorDataCommand.cpp:26
+#: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
 msgstr ""
 "Изменение векторного изображения\n"
 "изменение векторного изображения"
 
-#: VectorShapeFactory.cpp:27
+#: VectorShapeFactory.cpp:26
 #, kde-format
 msgid "Vector image"
 msgstr "Векторное изображение"
 
-#: VectorShapeFactory.cpp:29
+#: VectorShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgstr "Отображение векторных изображений (EMF/WMF/SVM)"
 
-#: VectorTool.cpp:64
+#: VectorTool.cpp:63
 #, kde-format
 msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "Открыть векторное изображение (EMF/WMF/SVM)"
 
-#: VectorToolFactory.cpp:20
+#: VectorToolFactory.cpp:19
 #, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
 msgstr "Работа с векторными изображениями (EMF/WMF/SVM/SVG)"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-04-18 07:38+0300\n"
 "Last-Translator: Liudas Alisauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -100,17 +100,17 @@ msgstr "Būsenos"
 msgid "State:"
 msgstr "Būsena:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "Būsenos forma"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "Būsenos forma"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "Būsenos įrankio nuostatos"
@@ -133,12 +133,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr "Naudoti podėlio kopiją"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "Žiniatinklio forma"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "Žiniatinklio forma"
@@ -149,53 +149,53 @@ msgstr "Žiniatinklio forma"
 msgid "Web shape editing"
 msgstr "Žiniatinklio forma"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "Braindump"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "Braindump: tiesiai iš Jūsų smegenų į kompiuterį."
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, fuzzy, kde-format
 #| msgid "(c) 2009, 2010, 2011, 2012 Cyrille Berger"
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009, 2010, 2011, 2012 Cyrille Berger"
 
-#: src/AboutData.h:39 src/AboutData.h:40
+#: src/AboutData.h:42
+#, kde-format
+msgid "Somsubhra Bairi"
+msgstr ""
+
+#: src/AboutData.h:43 src/AboutData.h:46
 #, fuzzy, kde-format
 #| msgid "Maintainer"
 msgid "Former maintainer"
 msgstr "Prižiūrėtojas"
 
-#: src/AboutData.h:39
-#, kde-format
-msgid "Somsubhra Bairi"
-msgstr ""
-
-#: src/AboutData.h:40
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Liudas Ališauskas"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -243,7 +243,7 @@ msgstr "Perkelti lentą aukštyn"
 msgid "Delete the whiteboard"
 msgstr "Ištrinti lentą"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "Įrankių juostos"
@@ -263,42 +263,42 @@ msgstr "Perjungia į pavadinimo juostą"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Perjungia organizuoti pasirinktis kortelėse ar ne"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "Stulpelis"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "Laisva"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr ""
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "Nepavadintas %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "Podėlio savybės"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "Lentos"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "Minimalus rodymas"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "Išsamus rodymas"
@@ -328,33 +328,33 @@ msgstr "Pridėti naują lentą aukščiau dabartinės."
 msgid "Add new whiteboard as child of current."
 msgstr "Pridėti naują lentą kaip dabartinės vaikinę."
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "&Ištrinti"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Dubliuoti"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "Sugrupuoti formas"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "Išgrupuoti formas"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Sugrupuoti formas"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Išgrupuoti formas"

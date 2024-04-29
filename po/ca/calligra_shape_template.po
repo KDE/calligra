@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-07-09 17:22+0200\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21,28 +21,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
-#: ChangeSomethingCommand.cpp:34
+#: ChangeSomethingCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Change something"
 msgstr "Canvia quelcom"
 
-#: TemplateShapeFactory.cpp:32
+#: TemplateShapeFactory.cpp:31
 #, kde-format
 msgid "Template shape"
 msgstr "Forma de plantilla"
 
-#: TemplateShapeFactory.cpp:34
+#: TemplateShapeFactory.cpp:33
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
 msgstr ""
 "Forma simple que s'utilitza com a plantilla per a desenvolupar altres formes."
 
-#: TemplateTool.cpp:77
+#: TemplateTool.cpp:76
 #, kde-format
 msgid "Open"
 msgstr "Obre"
 
-#: TemplateToolFactory.cpp:26
+#: TemplateToolFactory.cpp:24
 #, kde-format
 msgid "Template shape editing"
 msgstr "Edició de formes de plantilles"

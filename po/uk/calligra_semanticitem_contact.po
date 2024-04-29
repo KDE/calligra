@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_semanticitem_contact\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-11-04 07:19+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,13 +20,13 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: KoContactSemanticItemFactory.cpp:46
+#: KoContactSemanticItemFactory.cpp:44
 #, kde-format
 msgctxt "displayname of the semantic item type Contact"
 msgid "Contact"
 msgstr "Контакт"
 
-#: KoRdfFoaF.cpp:179
+#: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
 msgstr "Виберіть адресну книгу для збереження:"
@@ -55,22 +55,22 @@ msgstr "&Номер телефону:"
 msgid "&Home Page:"
 msgstr "&Домашня сторінка:"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:30
+#: KoRdfFoaFTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Contact Information"
 msgstr "Контактна інформація"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:48
+#: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
 msgstr "Змінити…"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:51
+#: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
 msgid "Import contact"
 msgstr "Імпортувати контакт"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:54
+#: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
 msgstr "Експортувати як vcard…"

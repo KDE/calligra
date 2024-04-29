@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-05-11 21:27+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 21.08.3\n"
 
-#: ThreedShapeFactory.cpp:35
+#: ThreedShapeFactory.cpp:34
 #, kde-format
 msgid "3D Scene"
 msgstr "Трёхмерная сцена"
 
-#: ThreedShapeFactory.cpp:37
+#: ThreedShapeFactory.cpp:36
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "Форма, отображающая простую трёхмерную сцену."

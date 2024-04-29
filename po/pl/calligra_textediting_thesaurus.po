@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-08-06 06:59+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -35,69 +35,69 @@ msgstr "&Znajdź:"
 msgid "S&earch"
 msgstr "&Znajdź"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "Poprzednie"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "Następne"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
 msgstr "Zmień język..."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "&Tezaurus"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "Synonimy"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "Słowa ogólniejsze"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "Słowa mniej ogólne"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
 msgstr "&Wordnet"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "Tekst &zastępujący"
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "&Zastąp"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
 msgstr "Zastąp słowo"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
 msgstr "Powiązane słowa - %1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
@@ -106,77 +106,77 @@ msgstr ""
 "Plik thesaurusa '%1' nie został znaleziony. Proszę użyć opcji 'Zmień "
 "język...' i wybrać istniejący plik."
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b>Błąd:</b> Nieudane uruchomienie: grep."
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "Wyrazy bliskoznaczne - według częstości występowania"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "Synonimy - uporządkowane znaczeniowo (tylko czasowniki)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "Antonimy - słowa o przeciwnych znaczeniach"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "Słowa oznaczające podkategorię określonej klasy - ...to (rodzaj) %1"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "Meronimy - %1 posiada..."
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "Holonimy - ...posiada %1"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "Atrybuty"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "Cause To (for some verbs only)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "Verb Entailment (for some verbs only)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "Potoczność i wieloznaczność"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "Przykłady użycia"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "Lista wyrazów złożonych"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
 msgstr "Ogólne znaczenie"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -191,7 +191,7 @@ msgstr ""
 "princeton.edu/\">http://wordnet.princeton.edu/</a>. Zauważ, że WordNet "
 "obsługuje jedynie język Angielski."
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "Brak trafień dla '%1'."

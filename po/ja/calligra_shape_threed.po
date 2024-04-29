@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ThreedShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-11-28 09:39+0900\n"
 "Last-Translator: Tsugumi Harabayashi <tu.hrby@gmail.com>\n"
 "Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: ThreedShapeFactory.cpp:35
+#: ThreedShapeFactory.cpp:34
 #, kde-format
 msgid "3D Scene"
 msgstr "3D シーン"
 
-#: ThreedShapeFactory.cpp:37
+#: ThreedShapeFactory.cpp:36
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "シンプルな3Dシーンを表示するシェイプです"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-05-11 21:27+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -53,99 +53,99 @@ msgstr "Выравнивание"
 msgid "%"
 msgstr "%"
 
-#: connectionTool/ConnectionTool.cpp:66
+#: connectionTool/ConnectionTool.cpp:65
 #, kde-format
 msgid "Edit connection points"
 msgstr "Изменить точки соединения"
 
-#: connectionTool/ConnectionTool.cpp:73
+#: connectionTool/ConnectionTool.cpp:72
 #, kde-format
 msgid "Align to left edge"
 msgstr "По левому краю"
 
-#: connectionTool/ConnectionTool.cpp:76
+#: connectionTool/ConnectionTool.cpp:75
 #, kde-format
 msgid "Align to horizontal center"
 msgstr "Центрировать по горизонтали"
 
-#: connectionTool/ConnectionTool.cpp:79
+#: connectionTool/ConnectionTool.cpp:78
 #, kde-format
 msgid "Align to right edge"
 msgstr "По правому краю"
 
-#: connectionTool/ConnectionTool.cpp:82
+#: connectionTool/ConnectionTool.cpp:81
 #, kde-format
 msgid "Align to top edge"
 msgstr "По верхнему краю"
 
-#: connectionTool/ConnectionTool.cpp:85
+#: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
 msgstr "Центрировать по вертикали"
 
-#: connectionTool/ConnectionTool.cpp:88
+#: connectionTool/ConnectionTool.cpp:87
 #, kde-format
 msgid "Align to bottom edge"
 msgstr "По нижнему краю"
 
-#: connectionTool/ConnectionTool.cpp:92
+#: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
 msgstr "Во всех направлениях"
 
-#: connectionTool/ConnectionTool.cpp:95
+#: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
 msgstr "В горизонтальных направлениях"
 
-#: connectionTool/ConnectionTool.cpp:98
+#: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
 msgstr "В вертикальных направлениях"
 
-#: connectionTool/ConnectionTool.cpp:101
+#: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
 msgstr "Обход влево"
 
-#: connectionTool/ConnectionTool.cpp:104
+#: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
 msgstr "Обход вправо"
 
-#: connectionTool/ConnectionTool.cpp:107
+#: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
 msgstr "Обход вверх"
 
-#: connectionTool/ConnectionTool.cpp:110
+#: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
 msgstr "Обход вниз"
 
-#: connectionTool/ConnectionTool.cpp:434
+#: connectionTool/ConnectionTool.cpp:429
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr ""
 "Создать соединение\n"
 "создание соединения"
 
-#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "Перетащите, чтобы изменить соединение."
 
-#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "Чтобы удалить соединения, щёлкните по нему дважды или нажмите Delete."
 
-#: connectionTool/ConnectionTool.cpp:778
+#: connectionTool/ConnectionTool.cpp:774
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "Нажмите, чтобы сменить точку соединения."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
@@ -154,33 +154,33 @@ msgstr ""
 "Перетащите точку соединения, чтобы переместить её. Чтобы удалить соединение, "
 "щёлкните по нему дважды или нажмите Delete."
 
-#: connectionTool/ConnectionTool.cpp:794
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
 "Чтобы удалить точку соединения, щёлкните по ней дважды или нажмите Delete."
 
-#: connectionTool/ConnectionTool.cpp:796
+#: connectionTool/ConnectionTool.cpp:792
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "Чтобы добавить новую точку соединения, щёлкните дважды."
 
-#: connectionTool/ConnectionTool.cpp:799
+#: connectionTool/ConnectionTool.cpp:795
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "Перетащите, чтобы создать новое соединение."
 
-#: connectionTool/ConnectionTool.cpp:827
+#: connectionTool/ConnectionTool.cpp:823
 #, kde-format
 msgid "Connection"
 msgstr "Соединение"
 
-#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Line"
 msgstr "Линия"
 
-#: connectionTool/ConnectionTool.cpp:837
+#: connectionTool/ConnectionTool.cpp:833
 #, kde-format
 msgid "Connection Point"
 msgstr "Точка соединения"
@@ -190,72 +190,72 @@ msgstr "Точка соединения"
 msgid "Connect shapes"
 msgstr "Соединение объектов"
 
-#: defaulttool/DefaultTool.cpp:205
+#: defaulttool/DefaultTool.cpp:219
 #, kde-format
 msgid "Bring to &Front"
 msgstr "Переместить &наверх"
 
-#: defaulttool/DefaultTool.cpp:210
+#: defaulttool/DefaultTool.cpp:224
 #, kde-format
 msgid "&Raise"
 msgstr "&Повысить"
 
-#: defaulttool/DefaultTool.cpp:215
+#: defaulttool/DefaultTool.cpp:229
 #, kde-format
 msgid "&Lower"
 msgstr "П&онизить"
 
-#: defaulttool/DefaultTool.cpp:221
+#: defaulttool/DefaultTool.cpp:234
 #, kde-format
 msgid "Send to &Back"
 msgstr "Переместить &вниз"
 
-#: defaulttool/DefaultTool.cpp:227
+#: defaulttool/DefaultTool.cpp:239
 #, kde-format
 msgid "Align Left"
 msgstr "По левому краю"
 
-#: defaulttool/DefaultTool.cpp:232
+#: defaulttool/DefaultTool.cpp:243
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Центрировать по горизонтали"
 
-#: defaulttool/DefaultTool.cpp:237
+#: defaulttool/DefaultTool.cpp:247
 #, kde-format
 msgid "Align Right"
 msgstr "По правому краю"
 
-#: defaulttool/DefaultTool.cpp:241
+#: defaulttool/DefaultTool.cpp:251
 #, kde-format
 msgid "Align Top"
 msgstr "По верхнему краю"
 
-#: defaulttool/DefaultTool.cpp:246
+#: defaulttool/DefaultTool.cpp:255
 #, kde-format
 msgid "Vertically Center"
 msgstr "Центрировать по вертикали"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:259
 #, kde-format
 msgid "Align Bottom"
 msgstr "По нижнему краю"
 
-#: defaulttool/DefaultTool.cpp:256
+#: defaulttool/DefaultTool.cpp:263
 #, kde-format
 msgid "Group"
 msgstr "Сгруппировать"
 
-#: defaulttool/DefaultTool.cpp:261
+#: defaulttool/DefaultTool.cpp:267
 #, kde-format
 msgid "Ungroup"
 msgstr "Разгруппировать"
 
-#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Перетащите направляющую линию, чтобы переместить её."
 
-#: defaulttool/DefaultTool.cpp:454
+#: defaulttool/DefaultTool.cpp:467
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -263,22 +263,22 @@ msgstr ""
 "Щелчок левой кнопкой мыши — вращение вокруг центра. Щелчок правой кнопкой "
 "мыши — вокруг выбранной позиции."
 
-#: defaulttool/DefaultTool.cpp:456
+#: defaulttool/DefaultTool.cpp:469
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Чтобы выполнить сдвиг выбранного объекта, перетащите его."
 
-#: defaulttool/DefaultTool.cpp:459
+#: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Чтобы изменить размер выбранного объекта, перетащите его."
 
-#: defaulttool/DefaultTool.cpp:511
+#: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Чтобы переместить выбранный объект, перетащите его."
 
-#: defaulttool/DefaultTool.cpp:516
+#: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -286,36 +286,36 @@ msgstr ""
 "Чтобы изменить размер выбранного объекта, перетащите его. Щелчок средней "
 "кнопкой мыши устанавливает выбранную позицию."
 
-#: defaulttool/DefaultTool.cpp:1039
+#: defaulttool/DefaultTool.cpp:1043
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr ""
 "Группировка объектов\n"
 "группировку объектов"
 
-#: defaulttool/DefaultTool.cpp:1071
+#: defaulttool/DefaultTool.cpp:1075
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr ""
 "Разгруппировка объектов\n"
 "разгруппировку объектов"
 
-#: defaulttool/DefaultTool.cpp:1161
+#: defaulttool/DefaultTool.cpp:1163
 #, kde-format
 msgid "Arrange"
 msgstr "Упорядочить"
 
-#: defaulttool/DefaultTool.cpp:1164
+#: defaulttool/DefaultTool.cpp:1166
 #, kde-format
 msgid "Geometry"
 msgstr "Положение и размеры"
 
-#: defaulttool/DefaultTool.cpp:1172
+#: defaulttool/DefaultTool.cpp:1174
 #, kde-format
 msgid "Fill"
 msgstr "Заливка"
 
-#: defaulttool/DefaultTool.cpp:1177
+#: defaulttool/DefaultTool.cpp:1179
 #, kde-format
 msgid "Shadow"
 msgstr "Тень"
@@ -325,37 +325,37 @@ msgstr "Тень"
 msgid "Shape handling"
 msgstr "Управление объектами"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:100
-#: defaulttool/ShapeRotateStrategy.cpp:137
+#: defaulttool/DefaultToolTransformWidget.cpp:97
+#: defaulttool/ShapeRotateStrategy.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr ""
 "Вращение\n"
 "вращение"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:138
+#: defaulttool/DefaultToolTransformWidget.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Shear X"
 msgstr ""
 "Сдвиг по оси X\n"
 "сдвиг по оси X"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:176
+#: defaulttool/DefaultToolTransformWidget.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
 msgstr ""
 "Сдвиг по оси Y\n"
 "сдвиг по оси Y"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:218
-#: defaulttool/DefaultToolTransformWidget.cpp:255
+#: defaulttool/DefaultToolTransformWidget.cpp:215
+#: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
 msgstr ""
 "Масштабирование\n"
 "масштабирование"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:287
+#: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
 msgstr ""
@@ -410,8 +410,8 @@ msgstr "Сохранять пропорции"
 msgid "Reset Transformations"
 msgstr "Сбросить преобразования"
 
-#: defaulttool/DefaultToolWidget.cpp:225
-#: defaulttool/ShapeResizeStrategy.cpp:304
+#: defaulttool/DefaultToolWidget.cpp:217
+#: defaulttool/ShapeResizeStrategy.cpp:332
 msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr ""
@@ -435,7 +435,7 @@ msgstr "Y:"
 msgid "Press ALT to hold x- or y-position."
 msgstr "Нажмите клавишу Alt, чтобы сохранить позицию по осям x или y."
 
-#: defaulttool/ShapeResizeStrategy.cpp:92
+#: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Нажмите клавишу Ctrl, чтобы изменять размер от центра."
@@ -445,7 +445,7 @@ msgstr "Нажмите клавишу Ctrl, чтобы изменять разм
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Нажмите клавишу Alt, чтобы вращать с шагом в 45 градусов."
 
-#: defaulttool/ShapeShearStrategy.cpp:169
+#: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr ""
@@ -464,12 +464,12 @@ msgstr ""
 "Перетащите направляющую линию, чтобы переместить её. Чтобы удалить "
 "направляющую линию, щёлкните по ней дважды."
 
-#: guidestool/GuidesTool.cpp:374
+#: guidestool/GuidesTool.cpp:373
 #, kde-format
 msgid "Guides Editor"
 msgstr "Редактор направляющих"
 
-#: guidestool/GuidesTool.cpp:382
+#: guidestool/GuidesTool.cpp:379
 #, kde-format
 msgid "Guides Insertor"
 msgstr "Добавление направляющих"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-05-11 21:24+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -44,49 +44,49 @@ msgstr ""
 "Добавление текста к формуле\n"
 "добавление текста к формуле"
 
-#: FormulaCommand.cpp:215
+#: FormulaCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr ""
 "Изменение строки\n"
 "изменение строки"
 
-#: FormulaEditor.cpp:74
+#: FormulaEditor.cpp:71
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr ""
 "Добавление текста\n"
 "добавление текста"
 
-#: FormulaEditor.cpp:107
+#: FormulaEditor.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr ""
 "Вставка строки\n"
 "вставку строки"
 
-#: FormulaEditor.cpp:112
+#: FormulaEditor.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr ""
 "Удаление строки\n"
 "удаление строки"
 
-#: FormulaEditor.cpp:120
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr ""
 "Вставка столбца\n"
 "вставку столбца"
 
-#: FormulaEditor.cpp:125
+#: FormulaEditor.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr ""
 "Удаление столбца\n"
 "удаление столбца"
 
-#: FormulaEditor.cpp:151
+#: FormulaEditor.cpp:148
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr ""
@@ -100,27 +100,27 @@ msgstr ""
 "Удаление элементов формулы\n"
 "удаление элементов формулы"
 
-#: FormulaToolWidget.cpp:72
+#: FormulaToolWidget.cpp:69
 #, kde-format
 msgid "Arrows"
 msgstr "Стрелки"
 
-#: FormulaToolWidget.cpp:74
+#: FormulaToolWidget.cpp:71
 #, kde-format
 msgid "Greek"
 msgstr "Греческие буквы"
 
-#: FormulaToolWidget.cpp:78
+#: FormulaToolWidget.cpp:73
 #, kde-format
 msgid "Relations"
 msgstr "Отношения"
 
-#: FormulaToolWidget.cpp:81
+#: FormulaToolWidget.cpp:77
 #, kde-format
 msgid "Operators"
 msgstr "Операторы"
 
-#: FormulaToolWidget.cpp:85
+#: FormulaToolWidget.cpp:80
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Разное"
@@ -210,7 +210,7 @@ msgstr "Столбцов:"
 msgid "View MathML"
 msgstr "Просмотр MathML"
 
-#: KoFormulaShape.cpp:210
+#: KoFormulaShape.cpp:200
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -219,52 +219,52 @@ msgstr ""
 "Этот документ содержит ссылку на документ в сети\n"
 "%1"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:201
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Требуется подтверждение"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:202
 #, kde-format
 msgid "Download"
 msgstr "Загрузить"
 
-#: KoFormulaShape.cpp:211
+#: KoFormulaShape.cpp:203
 #, kde-format
 msgid "Skip"
 msgstr "Пропустить"
 
-#: KoFormulaShapeFactory.cpp:21
+#: KoFormulaShapeFactory.cpp:20
 #, kde-format
 msgid "Formula"
 msgstr "Формула"
 
-#: KoFormulaShapeFactory.cpp:23
+#: KoFormulaShapeFactory.cpp:22
 #, kde-format
 msgid "A formula"
 msgstr "Формула"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:409
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Вставить изолированный элемент"
 
-#: KoFormulaTool.cpp:408
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Вставить закрытый элемент"
 
-#: KoFormulaTool.cpp:411
+#: KoFormulaTool.cpp:412
 #, kde-format
 msgid "Insert root"
 msgstr "Вставить корень"
 
-#: KoFormulaTool.cpp:412
+#: KoFormulaTool.cpp:413
 #, kde-format
 msgid "Insert square root"
 msgstr "Вставить квадратный корень"
 
-#: KoFormulaTool.cpp:414
+#: KoFormulaTool.cpp:415
 #, kde-format
 msgid "Insert fraction"
 msgstr "Вставить дробь"
@@ -274,62 +274,62 @@ msgstr "Вставить дробь"
 msgid "Insert bevelled fraction"
 msgstr "Вставить косую дробь"
 
-#: KoFormulaTool.cpp:419
+#: KoFormulaTool.cpp:421
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Вставить таблицу 3x3"
 
-#: KoFormulaTool.cpp:423
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Вставить двухкомпонентный вектор"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:432
 #, kde-format
 msgid "Insert subscript"
 msgstr "Вставить нижний индекс"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert superscript"
 msgstr "Вставить верхний индекс"
 
-#: KoFormulaTool.cpp:430
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Вставить нижний и верхний индексы"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:438
 #, kde-format
 msgid "Insert overscript"
 msgstr "Вставить надстрочный индекс"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:439
 #, kde-format
 msgid "Insert underscript"
 msgstr "Вставить подстрочный индекс"
 
-#: KoFormulaTool.cpp:436
+#: KoFormulaTool.cpp:440
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Вставить под- и надстрочный индексы"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:451
 #, kde-format
 msgid "Insert row"
 msgstr "Вставить строку"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:458
 #, kde-format
 msgid "Insert column"
 msgstr "Вставить столбец"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:465
 #, kde-format
 msgid "Remove row"
 msgstr "Удалить строку"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:472
 #, kde-format
 msgid "Remove column"
 msgstr "Удалить столбец"
@@ -339,32 +339,32 @@ msgstr "Удалить столбец"
 msgid "Formula editing"
 msgstr "Редактирование формул"
 
-#: KoM2MMLForumulaTool.cpp:97
+#: KoM2MMLForumulaTool.cpp:98
 #, kde-format
 msgid "Mode: "
 msgstr "Режим:"
 
-#: KoM2MMLForumulaTool.cpp:100
+#: KoM2MMLForumulaTool.cpp:101
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: KoM2MMLForumulaTool.cpp:102
+#: KoM2MMLForumulaTool.cpp:103
 #, kde-format
 msgid "Matlab"
 msgstr "Matlab"
 
-#: KoM2MMLForumulaTool.cpp:171
+#: KoM2MMLForumulaTool.cpp:175
 #, kde-format
 msgid "Parse error."
 msgstr "Ошибка разбора."
 
-#: KoM2MMLForumulaTool.cpp:201
+#: KoM2MMLForumulaTool.cpp:204
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
 msgstr "Редактировать формулу с синтаксисом LaTeX/Matlab"
 
-#: KoM2MMLForumulaTool.cpp:203
+#: KoM2MMLForumulaTool.cpp:206
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Редактировать формулу с синтаксисом LaTeX"

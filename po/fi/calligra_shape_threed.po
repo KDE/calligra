@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ThreedShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-11-22 22:08+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ThreedShapeFactory.cpp:35
+#: ThreedShapeFactory.cpp:34
 #, kde-format
 msgid "3D Scene"
 msgstr "3D-maisema"
 
-#: ThreedShapeFactory.cpp:37
+#: ThreedShapeFactory.cpp:36
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "Yksinkertaisia 3D-maisemia esittävä muoto."

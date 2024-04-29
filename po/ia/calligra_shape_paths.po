@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-12-14 12:23+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 21.12.3\n"
 
-#: ellipse/EllipseShapeConfigCommand.cpp:19
+#: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
 msgstr "Cambia ellipse"
@@ -75,12 +75,12 @@ msgstr "Angulo de fin:"
 msgid "Close ellipse"
 msgstr "Claude ellipse"
 
-#: ellipse/EllipseShapeFactory.cpp:21
+#: ellipse/EllipseShapeFactory.cpp:20
 #, kde-format
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: ellipse/EllipseShapeFactory.cpp:23
+#: ellipse/EllipseShapeFactory.cpp:22
 #, kde-format
 msgid "An ellipse"
 msgstr "Un ellipse"
@@ -91,22 +91,22 @@ msgstr "Un ellipse"
 msgid "A callout shape"
 msgstr "Un forma de didascalia"
 
-#: enhancedpath/CalloutShapeFactory.cpp:149
+#: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
 msgstr ""
 
-#: enhancedpath/CalloutShapeFactory.cpp:151
+#: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
 msgid "A rectangular callout"
 msgstr "Un didascalia rectangular"
 
-#: enhancedpath/CalloutShapeFactory.cpp:231
+#: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
 msgstr ""
 
-#: enhancedpath/CalloutShapeFactory.cpp:233
+#: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "A rounded rectangular callout"
 msgstr "Un didascalia rectangular tundite"
@@ -126,54 +126,54 @@ msgstr ""
 msgid "An enhanced path"
 msgstr ""
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
 msgid "Cross"
 msgstr "Cruce"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
 #, kde-format
 msgid "A cross"
 msgstr "Un cruce"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:180
-#: enhancedpath/EnhancedPathShapeFactory.cpp:213
-#: enhancedpath/EnhancedPathShapeFactory.cpp:246
-#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
 #, kde-format
 msgid "Arrow"
 msgstr "Flecha"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:182
-#: enhancedpath/EnhancedPathShapeFactory.cpp:215
-#: enhancedpath/EnhancedPathShapeFactory.cpp:248
-#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
 #, kde-format
 msgid "An arrow"
 msgstr "Un Flecha"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:324
-#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
 #, kde-format
 msgid "Smiley"
 msgstr "smiley"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
 msgstr "Flecha circular"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
 msgstr "Un flecha circular"
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
 msgid "Gearhead"
 msgstr ""
 
-#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
 #, kde-format
 msgid "A gearhead"
 msgstr ""
@@ -254,12 +254,12 @@ msgstr "Pallidi"
 msgid "Direction:"
 msgstr "Direction"
 
-#: spiral/SpiralShapeFactory.cpp:18
+#: spiral/SpiralShapeFactory.cpp:17
 #, kde-format
 msgid "Spiral"
 msgstr "Spiral"
 
-#: spiral/SpiralShapeFactory.cpp:20
+#: spiral/SpiralShapeFactory.cpp:19
 #, kde-format
 msgid "A spiral shape"
 msgstr "Un forma de Spiral"
@@ -304,42 +304,42 @@ msgstr "Radius externe"
 msgid "A star shape"
 msgstr "Un Forma de Stella"
 
-#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
 msgid "A star"
 msgstr "Un stella"
 
-#: star/StarShapeFactory.cpp:36
+#: star/StarShapeFactory.cpp:37
 #, kde-format
 msgid "Star"
 msgstr "Stella"
 
-#: star/StarShapeFactory.cpp:50
+#: star/StarShapeFactory.cpp:51
 #, kde-format
 msgid "Flower"
 msgstr "Flor"
 
-#: star/StarShapeFactory.cpp:52
+#: star/StarShapeFactory.cpp:53
 #, kde-format
 msgid "A flower"
 msgstr "Un flor"
 
-#: star/StarShapeFactory.cpp:67
+#: star/StarShapeFactory.cpp:68
 #, kde-format
 msgid "Pentagon"
 msgstr "Pentagono"
 
-#: star/StarShapeFactory.cpp:69
+#: star/StarShapeFactory.cpp:70
 #, kde-format
 msgid "A pentagon"
 msgstr "Un Pentagono"
 
-#: star/StarShapeFactory.cpp:83
+#: star/StarShapeFactory.cpp:84
 #, kde-format
 msgid "Hexagon"
 msgstr "Hexagono"
 
-#: star/StarShapeFactory.cpp:85
+#: star/StarShapeFactory.cpp:86
 #, kde-format
 msgid "A hexagon"
 msgstr "Un Hexagono"

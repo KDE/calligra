@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:45+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -94,17 +94,17 @@ msgstr "Stavy"
 msgid "State:"
 msgstr "Stav:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "Tvar stavu"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "Tvar stavu"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "Možnosti nástroja stavu"
@@ -126,12 +126,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr "Použiť načítanú kópiu"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "Webový tvar"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "Webový tvar"
@@ -141,17 +141,17 @@ msgstr "Webový tvar"
 msgid "Web shape editing"
 msgstr "Úprava webových tvarov"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "Braindump"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "Braindump: priamo z vášho mozgu do počítača."
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
@@ -160,34 +160,34 @@ msgstr ""
 "Neudržiavané v čase vydania tejto verzie. Komunita Calligra víta "
 "zainteresované osoby, ktoré prevezmú udržiavanie."
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 
-#: src/AboutData.h:39 src/AboutData.h:40
-#, kde-format
-msgid "Former maintainer"
-msgstr "Predošlý správca"
-
-#: src/AboutData.h:39
+#: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
 msgstr "Somsubhra Bairi"
 
-#: src/AboutData.h:40
+#: src/AboutData.h:43 src/AboutData.h:46
+#, kde-format
+msgid "Former maintainer"
+msgstr "Predošlý správca"
+
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Roman Paholík"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -235,7 +235,7 @@ msgstr "Presunúť tabuľu hore"
 msgid "Delete the whiteboard"
 msgstr "Odstrániť tabuľu"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "Nástrojové lišty"
@@ -255,42 +255,42 @@ msgstr "Prepnúť zobrazenie titulkového pruhu"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Prepne organizovanie volieb do kariet"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "Stĺpec"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "Voľné"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr "Dockery"
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "Bez názvu %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "Uložiť vlastnosti"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "Tabule"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "Minimálny pohľad"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "Podrobný pohľad"
@@ -320,33 +320,33 @@ msgstr "Vložiť novú tabuľu nad aktuálnu."
 msgid "Add new whiteboard as child of current."
 msgstr "Pridať novú tabuľu ako potomka aktuálnej."
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "O&dstrániť"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Duplikovať"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "Zoskupiť tvary"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "Odskupiť tvary"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Zoskupiť tvary"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Odskupiť tvary"

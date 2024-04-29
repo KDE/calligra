@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-09-15 06:27+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -40,69 +40,69 @@ msgstr "Мынаған &іздеу:"
 msgid "S&earch"
 msgstr "&Іздеу"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "Артқа"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "Алға"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
 msgstr "Тілді ауыстыру..."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "&Сөздіктер"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "Синонимдер"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "Тағы мәні кеңдеудерін"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "Тағы мәні тарлаударын"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
 msgstr "&Wordnet"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "&Мынамен алмастыру:"
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "&Алмастыру"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
 msgstr "Сөзді алмастыру"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
 msgstr "Келетін сөздер - %1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
@@ -111,77 +111,77 @@ msgstr ""
 "'%1' сөздігінің файлы жоқ. 'Тілді ауыстыру...' деген арқылы сөздік файлын "
 "таңдап алыңыз."
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b>Қате:</b> grep командасын орындау жаңылысы."
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "Синонимдер/Гипернимдер - жиілігі бойынша реттеу"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "Синонимдер - мәнінің ұқсастығы бойынша реттеу (етістіктер ғана)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "Антонимдер - мәні теріс сөздер"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "Гипонимдер - ... деген %1 дегеннің бір түрі"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "Меронимдер - ... деген %1 дегеннің бір бөлшегі"
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "Голонимдер - %1 деген ... дегеннің бір бөлшегі"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "Атрибуттары"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "Таңдап алуға (кейбір етістік үшін ғана)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "Етістіктің түрі (кейбір етістік үшін ғана)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "Жақындық пен көп мағыналығы"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "Етістік топтары (қолдану мысалдары)"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "Құрамды сөздер тізімі"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
 msgstr "Мән-мағыналарын шолу"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -196,7 +196,7 @@ msgstr ""
 "wordnet.princeton.edu/~wn/</a> деген орыннан ала аласыз. WordNet тек қана "
 "ағылшын тіліне арналған."
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "'%1' үшін ештеңе жоқ."

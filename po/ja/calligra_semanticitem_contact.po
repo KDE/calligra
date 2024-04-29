@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_semanticitem_contact\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-11-02 00:30-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: KoContactSemanticItemFactory.cpp:46
+#: KoContactSemanticItemFactory.cpp:44
 #, kde-format
 msgctxt "displayname of the semantic item type Contact"
 msgid "Contact"
 msgstr "連絡先"
 
-#: KoRdfFoaF.cpp:179
+#: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
 msgstr "選択したアドレス帳に保存する:"
@@ -52,22 +52,22 @@ msgstr "電話番号(&P):"
 msgid "&Home Page:"
 msgstr "ホームページ(&H):"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:30
+#: KoRdfFoaFTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Contact Information"
 msgstr "連絡先の情報"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:48
+#: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
 msgstr "編集..."
 
-#: KoRdfFoaFTreeWidgetItem.cpp:51
+#: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
 msgid "Import contact"
 msgstr "連絡先のインポート"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:54
+#: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
 msgstr "vCard にエクスポート..."

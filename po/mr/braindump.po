@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-03-25 17:16+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -95,17 +95,17 @@ msgstr "स्थिती"
 msgid "State:"
 msgstr "स्थिती :"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "आकार स्थिती"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "एक आकार स्थिती"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "स्थिती साधन पर्याय"
@@ -128,12 +128,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr "कॅशे प्रत वापरा"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "वेब आकार"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "एक वेब आकार"
@@ -144,53 +144,53 @@ msgstr "एक वेब आकार"
 msgid "Web shape editing"
 msgstr "वेब आकार"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "ब्रेनडम्प"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "ब्रेनडम्प : तुमच्या मेंदूतून संगणकात."
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, fuzzy, kde-format
 #| msgid "(c) 2009, 2010, 2011, 2012 Cyrille Berger"
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009, 2010, 2011, 2012 सीरिल बर्जर"
 
-#: src/AboutData.h:39 src/AboutData.h:40
+#: src/AboutData.h:42
+#, kde-format
+msgid "Somsubhra Bairi"
+msgstr ""
+
+#: src/AboutData.h:43 src/AboutData.h:46
 #, fuzzy, kde-format
 #| msgid "Maintainer"
 msgid "Former maintainer"
 msgstr "पालक"
 
-#: src/AboutData.h:39
-#, kde-format
-msgid "Somsubhra Bairi"
-msgstr ""
-
-#: src/AboutData.h:40
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "सीरिल बर्जर"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "चेतन खोना"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -238,7 +238,7 @@ msgstr "व्हाइटबोर्ड वर हलवा"
 msgid "Delete the whiteboard"
 msgstr "व्हाइटबोर्ड काढून टाका"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "साधनपट्टी"
@@ -258,42 +258,42 @@ msgstr "शिर्षक पट्टी दृश्य चालू/बं�
 msgid "Toggles organising the options in tabs or not"
 msgstr "टॅब मध्ये पर्यायांचे आयोजन चालू/बंद करतो"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "स्तंभ"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "मोकळे"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr "डॉकर्स"
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "शिर्षकहीन %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "डम्प गुणधर्म"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "व्हाइटबोर्ड"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "किमान दृश्य"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "तपशीलवार दृश्य"
@@ -323,33 +323,33 @@ msgstr "वर्तमान व्हाइटबोर्ड वर नवी
 msgid "Add new whiteboard as child of current."
 msgstr "वर्तमान व्हाइटबोर्ड चा बालक म्हणून नवीन व्हाइटबोर्ड जोडा."
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "काढून टाका (&E)"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "प्रतिकृती (&D)"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "आकारांचा समूह करा"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "आकारांचा समूह काढून टाका"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "आकारांचा समूह करा"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "आकारांचा समूह काढून टाका"

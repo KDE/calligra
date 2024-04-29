@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-10-20 19:57+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -25,104 +25,104 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "Grungy@linux.org.ba,samir.ribic@etf.unsa.ba"
 
-#: calligraconverter.cpp:144
+#: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
 msgstr "Calligra Konverter Dokumenata"
 
-#: calligraconverter.cpp:146
+#: calligraconverter.cpp:181
 #, kde-format
 msgid "Calligra Document Converter"
 msgstr "Calligra Konverter Dokumenata"
 
-#: calligraconverter.cpp:148
+#: calligraconverter.cpp:183
 #, fuzzy, kde-format
 #| msgid "(c) 2001-2011 Calligra developers"
 msgid "Copyright 2001-%1 Calligra developers"
 msgstr "© 2001-2011, razvijači Calligra"
 
-#: calligraconverter.cpp:149
+#: calligraconverter.cpp:184
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: calligraconverter.cpp:150
+#: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: calligraconverter.cpp:151
+#: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
 msgstr "Dan Lejnir Turtra Jensen"
 
-#: calligraconverter.cpp:158
+#: calligraconverter.cpp:193
 #, kde-format
 msgid "Input file"
 msgstr "Ulazna datoteka"
 
-#: calligraconverter.cpp:159
+#: calligraconverter.cpp:194
 #, kde-format
 msgid "Output file"
 msgstr "Izlazna datoteka"
 
-#: calligraconverter.cpp:160
+#: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
 msgstr "Napravi rezervnu kopiju odredišne datoteke"
 
-#: calligraconverter.cpp:161
+#: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
 msgstr "Paketni režim: ne prikazuj dijaloge"
 
-#: calligraconverter.cpp:162
+#: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
 msgstr "Interaktivni režim: prikazuj dijaloge (podrazumevano)"
 
-#: calligraconverter.cpp:163
+#: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
 msgstr "Mimevrsta izlazne datoteke"
 
-#: calligraconverter.cpp:166
+#: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
 msgstr ""
 "Orijentacija štampe. Može biti uspravno (portret) ili položeno (pejzaž)."
 
-#: calligraconverter.cpp:167
+#: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
 msgstr "Veličina papira. A4, Legal, Letter, ..."
 
-#: calligraconverter.cpp:168
+#: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
 msgstr "Veličina margine papira. Podrazumijevano to je 0.2."
 
-#: calligraconverter.cpp:175
+#: calligraconverter.cpp:215
 #, kde-format
 msgid "Two arguments required"
 msgstr "Dva argumenta se zahtijevaju"
 
-#: calligraconverter.cpp:203
+#: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
 msgstr "Mimevrsta za ulaznu datoteku %1 nije nađena!"
 
-#: calligraconverter.cpp:212
+#: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
 msgstr "Mimevrsta nije nađena %1"
 
-#: calligraconverter.cpp:218
+#: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mimevrsta nije nađena, pokušaj koristiti mimevrsta opciju"
 
-#: calligraconverter.cpp:242
+#: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** Konverzija nije uspjela! ***"

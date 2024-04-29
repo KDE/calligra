@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2021-06-07 00:57+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -28,7 +28,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde@peremen.name"
 
-#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
 msgid "Rename"
 msgstr "이름 바꾸기"
@@ -43,12 +43,12 @@ msgstr "추가"
 msgid "Remove"
 msgstr "삭제"
 
-#: SheetsEditor.cpp:121
+#: SheetsEditor.cpp:124
 #, kde-format
 msgid "Enter Name:"
 msgstr "이름 입력:"
 
-#: TableShape.cpp:288
+#: TableShape.cpp:300
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -57,67 +57,67 @@ msgstr ""
 "이 문서에는 다음 외부 문서로 향한 링크가 들어 있습니다\n"
 "%1"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
 msgstr "확인 필요"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:302
 #, kde-format
 msgid "Download"
 msgstr "다운로드"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
 msgstr "건너뛰기"
 
-#: TableShapeFactory.cpp:37
+#: TableShapeFactory.cpp:35
 #, kde-format
 msgid "Spreadsheet"
 msgstr "스프레드시트"
 
-#: TableShapeFactory.cpp:39
+#: TableShapeFactory.cpp:37
 #, kde-format
 msgid "Spreadsheet Shape"
 msgstr "스프레드시트 도형"
 
-#: TableTool.cpp:213
+#: TableTool.cpp:211
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "OpenDocument 스프레드시트 파일 가져오기"
 
-#: TableTool.cpp:214
+#: TableTool.cpp:212
 #, kde-format
 msgid "Import"
 msgstr "가져오기"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:216
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "OpenDocument 스프레드시트 파일 내보내기"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:217
 #, kde-format
 msgid "Export"
 msgstr "내보내기"
 
-#: TableTool.cpp:699
+#: TableTool.cpp:696
 #, kde-format
 msgid "Sheets"
 msgstr "시트"
 
-#: TableTool.cpp:741
+#: TableTool.cpp:738
 #, kde-format
 msgid "Sheet:"
 msgstr "시트:"
 
-#: TableTool.cpp:743
+#: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
 msgstr "선택한 시트"
 
-#: TableTool.cpp:758
+#: TableTool.cpp:754
 #, kde-format
 msgid "View Options"
 msgstr "보기 옵션"
@@ -127,27 +127,27 @@ msgstr "보기 옵션"
 msgid "Table editing"
 msgstr "표 편집"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
 msgstr "영역이 너무 큽니다."
 
-#: ToolHeaders.cpp:425
+#: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
 msgstr "행 숨기기"
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "높이: %1 %2"
 
-#: ToolHeaders.cpp:1049
+#: ToolHeaders.cpp:1031
 #, kde-format
 msgid "Hide Column"
 msgstr "열 숨기기"
 
-#: ToolHeaders.cpp:1051
+#: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "너비: %1 %2"

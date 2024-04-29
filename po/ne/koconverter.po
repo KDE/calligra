@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-07-29 12:18+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -27,105 +27,105 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "shyam@mpp.org.np"
 
-#: calligraconverter.cpp:144
+#: calligraconverter.cpp:179
 #, fuzzy, kde-format
 #| msgid "KOffice Document Converter"
 msgid "CalligraConverter"
 msgstr "केडीई कार्यालय कागजात रूपान्तरक"
 
-#: calligraconverter.cpp:146
+#: calligraconverter.cpp:181
 #, fuzzy, kde-format
 #| msgid "KOffice Document Converter"
 msgid "Calligra Document Converter"
 msgstr "केडीई कार्यालय कागजात रूपान्तरक"
 
-#: calligraconverter.cpp:148
+#: calligraconverter.cpp:183
 #, fuzzy, kde-format
 #| msgid "(c) 2001-2004 KOffice developers"
 msgid "Copyright 2001-%1 Calligra developers"
 msgstr "(c) 2001-2004 केडीई कार्यालय विकासकर्ता"
 
-#: calligraconverter.cpp:149
+#: calligraconverter.cpp:184
 #, kde-format
 msgid "David Faure"
 msgstr "डेभिड फउर"
 
-#: calligraconverter.cpp:150
+#: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "निकोलस गोटे"
 
-#: calligraconverter.cpp:151
+#: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
 msgstr ""
 
-#: calligraconverter.cpp:158
+#: calligraconverter.cpp:193
 #, kde-format
 msgid "Input file"
 msgstr "आगत फाइल"
 
-#: calligraconverter.cpp:159
+#: calligraconverter.cpp:194
 #, kde-format
 msgid "Output file"
 msgstr "निर्गत फाइल"
 
-#: calligraconverter.cpp:160
+#: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
 msgstr "गन्तब्य फाइलको जगेडा बनाउनुहोस्।"
 
-#: calligraconverter.cpp:161
+#: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
 msgstr "व्याच मोड: संवादहरू नदेखाउनुहोस्।"
 
-#: calligraconverter.cpp:162
+#: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
 msgstr "अन्तरक्रियात्मक मोड: (पूर्वनिर्धारित) संवादहरू देखाउनुहोस्।"
 
-#: calligraconverter.cpp:163
+#: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
 msgstr "निर्गत फाइलको माइमप्रकार"
 
-#: calligraconverter.cpp:166
+#: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
 msgstr ""
 
-#: calligraconverter.cpp:167
+#: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
 msgstr ""
 
-#: calligraconverter.cpp:168
+#: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
 msgstr ""
 
-#: calligraconverter.cpp:175
+#: calligraconverter.cpp:215
 #, kde-format
 msgid "Two arguments required"
 msgstr "दुई तर्कहरू आवश्यक भयो।"
 
-#: calligraconverter.cpp:203
+#: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
 msgstr "आगत फाइल %1 का लागि माइमप्रकार फेला परेन!"
 
-#: calligraconverter.cpp:212
+#: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
 msgstr "माइमप्रकारले %1 फेला पारेन"
 
-#: calligraconverter.cpp:218
+#: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "माइमप्रकार फेला परेन, माइमप्रकार विकल्प प्रयोग गरेर प्रयास गर्नुहोस्।"
 
-#: calligraconverter.cpp:242
+#: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** वार्तालाप असफल भयो! ***"

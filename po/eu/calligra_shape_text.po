@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2023-03-05 15:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -35,7 +35,7 @@ msgstr "Idatzohar forma idatzoharraren edukia erakusteko"
 msgid "Annotation Shape"
 msgstr "Idatzohar forma"
 
-#: commands/AcceptChangeCommand.cpp:30
+#: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Accept change"
 msgstr "Onartu aldaketa"
@@ -70,12 +70,12 @@ msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
 msgstr "%1 Murriztu doitzeko"
 
-#: commands/ChangeListLevelCommand.cpp:29
+#: commands/ChangeListLevelCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
 msgstr "Aldatu zerrenda-maila"
 
-#: commands/RejectChangeCommand.cpp:34
+#: commands/RejectChangeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Reject change"
 msgstr "Errefusatu aldaketak"
@@ -142,12 +142,12 @@ msgstr "Data"
 msgid "Type"
 msgstr "Mota"
 
-#: dialogs/BibliographyConfigureDialog.cpp:96
+#: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
 msgstr "Gorakorra"
 
-#: dialogs/BibliographyConfigureDialog.cpp:97
+#: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
 msgstr "Beherakorra"
@@ -235,17 +235,17 @@ msgstr "Bibliografia"
 msgid "References"
 msgstr "Erreferentziak"
 
-#: dialogs/ChangeConfigureDialog.cpp:136
+#: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Hau txertatutako testu-lerro bat."
 
-#: dialogs/ChangeConfigureDialog.cpp:142
+#: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Hau da ezabatutako testu-lerro bat."
 
-#: dialogs/ChangeConfigureDialog.cpp:148
+#: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Hau da formatua aldatu zaion testu-lerro bat."
@@ -524,37 +524,37 @@ msgstr "Guraso-estiloa:"
 msgid "Include in table of contents"
 msgstr "Barneratu eduki-taulan"
 
-#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
 #, kde-format
 msgid "Normal"
 msgstr "Arrunta"
 
-#: dialogs/CharacterHighlighting.cpp:261
+#: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
 msgstr "Larri txikiak"
 
-#: dialogs/CharacterHighlighting.cpp:262
+#: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
 msgid "Uppercase"
 msgstr "Letra larriak"
 
-#: dialogs/CharacterHighlighting.cpp:263
+#: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
 msgid "Lowercase"
 msgstr "Letra xeheak"
 
-#: dialogs/CharacterHighlighting.cpp:264
+#: dialogs/CharacterHighlighting.cpp:302
 #, kde-format
 msgid "Capitalize"
 msgstr "Hitzeko aurreneko letra letra-larriz ipintzea"
 
-#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
 #, kde-format
 msgid "Superscript"
 msgstr "Goi-indizea"
 
-#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
 msgstr "Azpi-indizea"
@@ -596,12 +596,17 @@ msgctxt "Character position"
 msgid "Position:"
 msgstr "Kokapena:"
 
-#: dialogs/CitationInsertionDialog.cpp:25
+#: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
 msgstr "Hautatu"
 
-#: dialogs/CitationInsertionDialog.cpp:40
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#, kde-format
+msgid "Warning"
+msgstr "Abisua"
+
+#: dialogs/CitationInsertionDialog.cpp:41
 #, kde-format
 msgid ""
 "The document already contains the bibliography entry with different data.\n"
@@ -610,13 +615,8 @@ msgstr ""
 "Dokumentuak dagoeneko bibliografia-sarrera datu ezberdinekin dauka.\n"
 "Dauden sarrerak doitu nahi dituzu?"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
-#, kde-format
-msgid "Warning"
-msgstr "Abisua"
-
-#: dialogs/CitationInsertionDialog.cpp:55
-#: dialogs/CitationInsertionDialog.cpp:73
+#: dialogs/CitationInsertionDialog.cpp:58
+#: dialogs/CitationInsertionDialog.cpp:75
 #, kde-format
 msgid "Short name%1"
 msgstr "Izen laburra%1"
@@ -991,12 +991,12 @@ msgstr "EDO"
 msgid "From the document:"
 msgstr "Dokumentutik:"
 
-#: dialogs/DockerStylesComboModel.cpp:61
+#: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
 msgstr "Erabilitako estiloak"
 
-#: dialogs/DockerStylesComboModel.cpp:64
+#: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
 msgid "Unused Styles"
 msgstr "Erabili gabeko estiloak"
@@ -1042,7 +1042,7 @@ msgstr "Hitzen banaketa automatikoa"
 msgid "Select Font"
 msgstr "Hautatu letra-tipoa"
 
-#: dialogs/FontDia.cpp:68
+#: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "Letra-tipoa"
@@ -1050,7 +1050,7 @@ msgstr "Letra-tipoa"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Txertatu bibliografia"
@@ -1164,7 +1164,7 @@ msgstr "Karaktere bereziak"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#: ReferencesTool.cpp:116 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Txertatu"
@@ -1181,28 +1181,28 @@ msgstr "Itxi"
 msgid "Quick search:"
 msgstr "Bilaketa bizkorra:"
 
-#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
-#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
+#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
 #, kde-format
 msgid "The URL is invalid"
 msgstr "URLa baliogabea da"
 
-#: dialogs/LinkInsertionDialog.cpp:88
+#: dialogs/LinkInsertionDialog.cpp:87
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "Liburu-marka ez da existitzen"
 
-#: dialogs/LinkInsertionDialog.cpp:190
+#: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "Titulua ekartzen: % 0 osatuta"
 
-#: dialogs/LinkInsertionDialog.cpp:213
+#: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
 msgstr "Ekartzeko denbora-muga gainditu da"
 
-#: dialogs/LinkInsertionDialog.cpp:268
+#: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "Titulua ekartzen: %%1 osatuta"
@@ -1445,32 +1445,32 @@ msgstr "Be&rrizendatu"
 msgid "&Delete"
 msgstr "E&zabatu"
 
-#: dialogs/ManageBookmarkDialog.cpp:69
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Berrizendatu laster-marka"
-
-#: dialogs/ManageBookmarkDialog.cpp:70
+#: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "Mesedez, eman laster-markarentzako izen berri bat"
 
-#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#: dialogs/ManageBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Berrizendatu laster-marka"
+
+#: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "Lehendik badago \"%1\" izena duen laster-marka bat."
 
-#: dialogs/ManageBookmarkDialog.cpp:110
+#: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
 msgid "Insert Bookmark"
 msgstr "Txertatu laster-marka"
 
-#: dialogs/ManageBookmarkDialog.cpp:111
+#: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
 msgstr "Mesedez, eman laster-markarentzako izen bat"
 
-#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Kudeatu laster-markak"
@@ -1641,7 +1641,7 @@ msgctxt "None"
 msgid "Nothing"
 msgstr "Ezer ez"
 
-#: dialogs/ParagraphBulletsNumbers.cpp:335
+#: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
 msgstr ""
@@ -1747,7 +1747,7 @@ msgid "Browse..."
 msgstr "Arakatu..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
 #, kde-format
 msgid "Background"
 msgstr "Atzeko planoa"
@@ -1967,7 +1967,7 @@ msgstr ""
 msgid "Paragraph Format"
 msgstr "Paragrafoen formatua"
 
-#: dialogs/QuickTableButton.cpp:146
+#: dialogs/QuickTableButton.cpp:147
 #, kde-format
 msgid "Insert a table"
 msgstr "Txertatu taula bat"
@@ -1977,12 +1977,12 @@ msgstr "Txertatu taula bat"
 msgid "Section name"
 msgstr "Atalaren izena"
 
-#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
 msgstr "Konfiguratu atalak"
 
-#: dialogs/SectionFormatDialog.cpp:154
+#: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
 msgid "Invalid characters or section with such name exists."
 msgstr "Karaktere baliogabeak edo halako izena duen atal bat dago."
@@ -2047,7 +2047,7 @@ msgid "Insert citation at current position"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr ""
@@ -2058,12 +2058,12 @@ msgstr ""
 msgid "Configure Bibliography"
 msgstr "Konfiguratu Bibliografia"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
 msgstr "Kurtsorearen kokalekuan oin-ohar bat txertatzen du"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
 msgstr ""
@@ -2093,7 +2093,7 @@ msgid "Hyperlinks"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
 #, fuzzy, kde-format
 msgid "Bookmarks"
 msgstr "Laster-markak"
@@ -2115,7 +2115,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Ezabatu"
@@ -2140,7 +2140,7 @@ msgstr ""
 msgid "Define New List Level Format"
 msgstr ""
 
-#: dialogs/SimpleParagraphWidget.cpp:532
+#: dialogs/SimpleParagraphWidget.cpp:549
 #, kde-format
 msgid "Edit List Level Format"
 msgstr ""
@@ -2157,13 +2157,13 @@ msgstr "Edukia"
 msgid "Set Border Color..."
 msgstr ""
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:169
 #, fuzzy, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: dialogs/SimpleTableWidget.cpp:171
+#: dialogs/SimpleTableWidget.cpp:170
 #, fuzzy, kde-format
 msgid "No Border"
 msgstr "Ertzik ez"
@@ -2173,24 +2173,24 @@ msgstr "Ertzik ez"
 msgid "Create a new style inheriting the current style"
 msgstr ""
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
 #, kde-format
 msgid "New Style"
 msgstr ""
 
-#: dialogs/StyleManager.cpp:426
+#: dialogs/StyleManager.cpp:431
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
 #, fuzzy, kde-format
 msgid "Paragraph"
 msgstr "Paragrafoa"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
 #, fuzzy, kde-format
 msgid "Character"
 msgstr "Karakterea"
@@ -2206,12 +2206,12 @@ msgstr "&Berria"
 msgid "Style Manager"
 msgstr "Estilo-kudeatzailea"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:50
 #, fuzzy, kde-format
 msgid "Save Changes"
 msgstr "Gorde aldaketak"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:51
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "
@@ -2244,13 +2244,13 @@ msgstr ""
 msgid "Create a new style with the current properties"
 msgstr ""
 
-#: dialogs/StylesComboPreview.cpp:179
+#: dialogs/StylesComboPreview.cpp:175
 #, kde-format
 msgid "New style"
 msgstr ""
 
-#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
-#: dialogs/StylesModel.cpp:197
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
+#: dialogs/StylesModel.cpp:195
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Bat ere ez"
@@ -2302,38 +2302,38 @@ msgstr ""
 msgid "Fit to available surrounding"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:62
+#: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:64
+#: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
 msgid "Table Title"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:65
+#: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Use outline"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:66
+#: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, fuzzy, kde-format
 msgid "Configure"
 msgstr "Konfiguratu"
 
-#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsConfigure.cpp:67
 #, fuzzy, kde-format
 msgid "Index"
 msgstr "Indizea"
 
-#: dialogs/TableOfContentsConfigure.cpp:69
-#: dialogs/TableOfContentsStyleModel.cpp:232
+#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsStyleModel.cpp:229
 #, fuzzy, kde-format
 msgid "Styles"
 msgstr "Estiloak"
@@ -2376,23 +2376,23 @@ msgstr "2 fitxa"
 msgid "Level %1"
 msgstr "%1. maila"
 
-#: dialogs/TableOfContentsEntryModel.cpp:137
-#: dialogs/TableOfContentsStyleModel.cpp:234
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsStyleModel.cpp:231
 #, fuzzy, kde-format
 msgid "Level"
 msgstr "Maila"
 
-#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsEntryModel.cpp:141
 #, fuzzy, kde-format
 msgid "Style"
 msgstr "Estiloa"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
 msgstr ""
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
 msgstr ""
@@ -2403,8 +2403,8 @@ msgstr ""
 msgid "TextLabel"
 msgstr "Testu-etiketa"
 
-#: dialogs/TableOfContentsStyleDelegate.cpp:43
-#: dialogs/TableOfContentsStyleModel.cpp:97
+#: dialogs/TableOfContentsStyleDelegate.cpp:40
+#: dialogs/TableOfContentsStyleModel.cpp:95
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Desgaituta"
@@ -2414,143 +2414,143 @@ msgstr "Desgaituta"
 msgid "Table Of Contents"
 msgstr "Aurkibidea"
 
-#: ReferencesTool.cpp:116
+#: ReferencesTool.cpp:118
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:118 TextTool.cpp:410
+#: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr ""
 
-#: ReferencesTool.cpp:120
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:124
 #, fuzzy, kde-format
 msgid "Configure..."
 msgstr "Konfiguratu..."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:126
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr ""
 
-#: ReferencesTool.cpp:127
+#: ReferencesTool.cpp:129
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr ""
 
-#: ReferencesTool.cpp:132
+#: ReferencesTool.cpp:134
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr ""
 
-#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
 #, kde-format
 msgid "Insert with label:"
 msgstr ""
 
-#: ReferencesTool.cpp:138
+#: ReferencesTool.cpp:140
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr ""
 
-#: ReferencesTool.cpp:143
+#: ReferencesTool.cpp:145
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr ""
 
-#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, fuzzy, kde-format
 msgid "Settings..."
 msgstr "Ezarpenak"
 
-#: ReferencesTool.cpp:159
+#: ReferencesTool.cpp:161
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:164
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:170
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:172
+#: ReferencesTool.cpp:174
 #, kde-format
 msgid "Configure the bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:175
+#: ReferencesTool.cpp:177
 #, fuzzy, kde-format
 msgid "Insert Link"
 msgstr "Txertatu esteka"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:179
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr ""
 
-#: ReferencesTool.cpp:181
+#: ReferencesTool.cpp:183
 #, fuzzy, kde-format
 msgid "Add Bookmark"
 msgstr "Gehitu laster-marka"
 
-#: ReferencesTool.cpp:182
+#: ReferencesTool.cpp:184
 #, fuzzy, kde-format
 msgid "Add Bookmark :"
 msgstr "Gehitu laster-marka"
 
-#: ReferencesTool.cpp:187
+#: ReferencesTool.cpp:189
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
 "the document"
 msgstr ""
 
-#: ReferencesTool.cpp:191
+#: ReferencesTool.cpp:193
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
 
-#: ReferencesTool.cpp:195
+#: ReferencesTool.cpp:197
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
 msgstr ""
 
-#: ReferencesTool.cpp:231
+#: ReferencesTool.cpp:232
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr ""
 
-#: ReferencesTool.cpp:234
+#: ReferencesTool.cpp:235
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr ""
 
-#: ReferencesTool.cpp:237
+#: ReferencesTool.cpp:238
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:240
+#: ReferencesTool.cpp:241
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr ""
@@ -2605,303 +2605,303 @@ msgstr ""
 msgid "Text Shape"
 msgstr "Testu-forma"
 
-#: TextTool.cpp:201
+#: TextTool.cpp:202
 #, kde-format
 msgid "Configure current section"
 msgstr ""
 
-#: TextTool.cpp:205
+#: TextTool.cpp:206
 #, kde-format
 msgid "Insert new section"
 msgstr ""
 
-#: TextTool.cpp:209
+#: TextTool.cpp:210
 #, kde-format
 msgid "Insert paragraph between sections"
 msgstr ""
 
-#: TextTool.cpp:213
+#: TextTool.cpp:214
 #, fuzzy, kde-format
 msgid "Paste As Text"
 msgstr "Itsatsi testu gisa"
 
-#: TextTool.cpp:218
+#: TextTool.cpp:219
 #, fuzzy, kde-format
 msgid "Bold"
 msgstr "Lodia"
 
-#: TextTool.cpp:224
+#: TextTool.cpp:225
 #, fuzzy, kde-format
 msgid "Italic"
 msgstr "Etzana"
 
-#: TextTool.cpp:230
+#: TextTool.cpp:231
 #, fuzzy, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Azpimarra"
 
-#: TextTool.cpp:236
+#: TextTool.cpp:237
 #, fuzzy, kde-format
 msgid "Strikethrough"
 msgstr "Marratua"
 
-#: TextTool.cpp:242
+#: TextTool.cpp:243
 #, fuzzy, kde-format
 msgid "Align Left"
 msgstr "Lerrokatu ezkerrean"
 
-#: TextTool.cpp:249
+#: TextTool.cpp:250
 #, fuzzy, kde-format
 msgid "Align Right"
 msgstr "Lerrokatu eskuinean"
 
-#: TextTool.cpp:256
+#: TextTool.cpp:257
 #, fuzzy, kde-format
 msgid "Align Center"
 msgstr "Lerrokatu erdian"
 
-#: TextTool.cpp:264
+#: TextTool.cpp:265
 #, fuzzy, kde-format
 msgid "Align Block"
 msgstr "Lerrokatu blokea"
 
-#: TextTool.cpp:271
+#: TextTool.cpp:272
 #, kde-format
 msgid "Change text direction"
 msgstr ""
 
-#: TextTool.cpp:273
+#: TextTool.cpp:274
 #, kde-format
 msgid "Change writing direction"
 msgstr ""
 
-#: TextTool.cpp:295
+#: TextTool.cpp:293
 #, fuzzy, kde-format
 msgid "Increase Indent"
 msgstr "Handiagotu koska"
 
-#: TextTool.cpp:302
+#: TextTool.cpp:299
 #, fuzzy, kde-format
 msgid "Decrease Indent"
 msgstr "Txikiagotu koska"
 
-#: TextTool.cpp:306
+#: TextTool.cpp:303
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:310
+#: TextTool.cpp:307
 #, fuzzy, kde-format
 msgid "Increase Font Size"
 msgstr "Handitu letra-tamaina"
 
-#: TextTool.cpp:315
+#: TextTool.cpp:312
 #, fuzzy, kde-format
 msgid "Decrease Font Size"
 msgstr "Txikitu letra-tamaina"
 
-#: TextTool.cpp:321
+#: TextTool.cpp:318
 #, fuzzy, kde-format
 msgid "Font Family"
 msgstr "Letra-tipoen familia"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:322
 #, fuzzy, kde-format
 msgid "Variable"
 msgstr "Aldagaia"
 
-#: TextTool.cpp:330
+#: TextTool.cpp:326
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr ""
 
-#: TextTool.cpp:335
+#: TextTool.cpp:331
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr ""
 
-#: TextTool.cpp:340
+#: TextTool.cpp:336
 #, fuzzy, kde-format
 msgid "Insert Index"
 msgstr "Txertatu indizea"
 
-#: TextTool.cpp:345
+#: TextTool.cpp:341
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr ""
 
-#: TextTool.cpp:351
+#: TextTool.cpp:347
 #, fuzzy, kde-format
 msgid "Line Break"
 msgstr "Lerro-jauzia"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:352
 #, fuzzy, kde-format
 msgid "Page Break"
 msgstr "Orri jauzia"
 
-#: TextTool.cpp:360
+#: TextTool.cpp:356
 #, kde-format
 msgid "Insert a page break"
 msgstr ""
 
-#: TextTool.cpp:361
+#: TextTool.cpp:357
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr ""
 
-#: TextTool.cpp:364
+#: TextTool.cpp:360
 #, fuzzy, kde-format
 msgid "Font..."
 msgstr "Letra-tipoa"
 
-#: TextTool.cpp:367
+#: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr ""
 
-#: TextTool.cpp:368
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr ""
 
-#: TextTool.cpp:371
+#: TextTool.cpp:367
 #, fuzzy, kde-format
 msgid "Font Size"
 msgstr "Letra-tamaina"
 
-#: TextTool.cpp:377
+#: TextTool.cpp:373
 #, fuzzy, kde-format
 msgid "Text Color..."
 msgstr "Testuaren kolorea..."
 
-#: TextTool.cpp:378
+#: TextTool.cpp:374
 #, fuzzy, kde-format
 msgid "Text Color"
 msgstr "Testu-kolorea"
 
-#: TextTool.cpp:384
+#: TextTool.cpp:380
 #, fuzzy, kde-format
 msgid "Background Color..."
 msgstr "Atzeko planoko kolorea"
 
-#: TextTool.cpp:389
+#: TextTool.cpp:385
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr ""
 
-#: TextTool.cpp:394
+#: TextTool.cpp:390
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr ""
 
-#: TextTool.cpp:399
+#: TextTool.cpp:395
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr ""
 
-#: TextTool.cpp:404
+#: TextTool.cpp:400
 #, fuzzy, kde-format
 msgid "Shrink To Fit"
 msgstr "Txikiagotu doitzeko"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:408
 #, kde-format
 msgid "Insert a table into the document."
 msgstr ""
 
-#: TextTool.cpp:415
+#: TextTool.cpp:411
 #, kde-format
 msgid "Row Above"
 msgstr ""
 
-#: TextTool.cpp:416
+#: TextTool.cpp:412
 #, fuzzy, kde-format
 msgid "Insert Row Above"
 msgstr "Txertatu errenkada goian"
 
-#: TextTool.cpp:420
+#: TextTool.cpp:416
 #, kde-format
 msgid "Row Below"
 msgstr ""
 
-#: TextTool.cpp:421
+#: TextTool.cpp:417
 #, fuzzy, kde-format
 msgid "Insert Row Below"
 msgstr "Txertatu errenkada behean"
 
-#: TextTool.cpp:425
+#: TextTool.cpp:421
 #, kde-format
 msgid "Column Left"
 msgstr ""
 
-#: TextTool.cpp:426
+#: TextTool.cpp:422
 #, fuzzy, kde-format
 msgid "Insert Column Left"
 msgstr "Txertatu zutabea ezkerrean"
 
-#: TextTool.cpp:430
+#: TextTool.cpp:426
 #, kde-format
 msgid "Column Right"
 msgstr ""
 
-#: TextTool.cpp:431
+#: TextTool.cpp:427
 #, fuzzy, kde-format
 msgid "Insert Column Right"
 msgstr "Txertatu zutabea eskuinean"
 
-#: TextTool.cpp:435
+#: TextTool.cpp:431
 #, fuzzy, kde-format
 msgid "Column"
 msgstr "Zutabea"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:432
 #, fuzzy, kde-format
 msgid "Delete Column"
 msgstr "Ezabatu zutabea"
 
-#: TextTool.cpp:440
+#: TextTool.cpp:436
 #, fuzzy, kde-format
 msgid "Row"
 msgstr "Errenkada"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:437
 #, fuzzy, kde-format
 msgid "Delete Row"
 msgstr "Ezabatu errenkada"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:441
 #, fuzzy, kde-format
 msgid "Merge Cells"
 msgstr "Batu gelaxkak"
 
-#: TextTool.cpp:449
+#: TextTool.cpp:445
 #, fuzzy, kde-format
 msgid "Split Cells"
 msgstr "Zatitu gelaxkak"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr ""
 
-#: TextTool.cpp:458
+#: TextTool.cpp:454
 #, fuzzy, kde-format
 msgid "Paragraph..."
 msgstr "Paragrafoa"
 
-#: TextTool.cpp:461
+#: TextTool.cpp:457
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
 
-#: TextTool.cpp:462
+#: TextTool.cpp:459
 #, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -2910,140 +2910,136 @@ msgid ""
 "cursor is located will be changed.</p>"
 msgstr ""
 
-#: TextTool.cpp:465
+#: TextTool.cpp:463
 #, fuzzy, kde-format
 msgid "Style Manager..."
 msgstr "Estilo-kudeatzailea..."
 
-#: TextTool.cpp:467
+#: TextTool.cpp:465
 #, kde-format
 msgid "Change attributes of styles"
 msgstr ""
 
-#: TextTool.cpp:468
+#: TextTool.cpp:466
 #, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
 
-#: TextTool.cpp:475
+#: TextTool.cpp:473
 #, fuzzy, kde-format
 msgid "Special Character..."
 msgstr "%1 karaktere berezia"
 
-#: TextTool.cpp:479
+#: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 
-#: TextTool.cpp:480
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 
-#: TextTool.cpp:483
+#: TextTool.cpp:481
 #, kde-format
 msgid "Repaint"
 msgstr ""
 
-#: TextTool.cpp:488
+#: TextTool.cpp:486
 #, kde-format
 msgid "Insert Comment"
 msgstr "Txertatu Iruzkina"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:570
 #, kde-format
 msgid "Insertion"
 msgstr "Txertatzea"
 
-#: TextTool.cpp:576
+#: TextTool.cpp:572
 #, kde-format
 msgid "Deletion"
 msgstr "Ezabatzea"
 
-#: TextTool.cpp:578
+#: TextTool.cpp:574
 #, kde-format
 msgid "Formatting"
 msgstr "Formatua ematea"
 
-#: TextTool.cpp:593
+#: TextTool.cpp:589
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Ktrl+klik estekara joateko"
 
-#: TextTool.cpp:600
+#: TextTool.cpp:596
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Ktrl+klik oharrera joateko"
 
-#: TextTool.cpp:606
+#: TextTool.cpp:602
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr ""
 
-#: TextTool.cpp:707
+#: TextTool.cpp:698
 #, kde-format
 msgid "follows along"
 msgstr ""
 
-#: TextTool.cpp:737
+#: TextTool.cpp:728
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "Sakatu Maius. honen neurria ez aldatzeko"
 
-#: TextTool.cpp:939
+#: TextTool.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Aldatu Ertz-formatua"
 
-#: TextTool.cpp:1158
+#: TextTool.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Ebaki"
 
-#: TextTool.cpp:1418
+#: TextTool.cpp:1413
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Doitu zutabe-zabalera"
 
-#: TextTool.cpp:1461
+#: TextTool.cpp:1457
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Doitu errenkada-altuera"
 
-#: TextTool.cpp:2257
+#: TextTool.cpp:2258
 #, kde-format
 msgid "Table"
 msgstr "Taula"
 
-#: TextTool.cpp:2616 TextTool.cpp:2621
+#: TextTool.cpp:2634 TextTool.cpp:2639
 #, kde-format
 msgid "Autocorrection"
 msgstr "Zuzenketa automatikoa"
 
-#: TextTool.cpp:2616
+#: TextTool.cpp:2634
 #, kde-format
 msgid "Key Press"
 msgstr "Tekla-sakatzea"
-
-#: TextTool.cpp:2930
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Esteka honek '%1' programa edo gidoira darama.\n"
-"Programa maltzurrek zure ordenagailua kaltetu dezakete. Ziur zaude programa "
-"hori exekutatu nahi duzula?"
-
-#: TextTool.cpp:2935
-#, kde-format
-msgid "Open Link?"
-msgstr "Esteka ireki?"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
 msgstr "Testua editatzea"
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Esteka honek '%1' programa edo gidoira darama.\n"
+#~ "Programa maltzurrek zure ordenagailua kaltetu dezakete. Ziur zaude "
+#~ "programa hori exekutatu nahi duzula?"
+
+#~ msgid "Open Link?"
+#~ msgstr "Esteka ireki?"

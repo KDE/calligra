@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -33,146 +33,146 @@ msgstr "搜索(&S)："
 msgid "S&earch"
 msgstr "搜索(&E)"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "后退"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "前进"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
 msgstr "更改语言..."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "辞典(&T)"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "同义词"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "更多普通单词"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "更多特殊单词"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
 msgstr "&Wordnet"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "替换为(&R)："
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "替换(&R)"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
 msgstr "替换单词"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
 msgstr "相关单词 - %1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr "辞典文件“%1”没有找到。请使用“改变语言...”来选择一个辞典文件。"
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b>错误：</b>执行 grep 失败。"
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "同义词/上义词 - 按频率排序"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "同义词 - 按意思的相似度排序(仅限动词)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "反义词 - 意思相反的单词"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "上义词 - ...是一个(种) %1"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "Meronyms - %1 有一个..."
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "Holonyms - ...有一个 %1"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "属性"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "引起 (仅限某些动词)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "派生动词 (仅限某些动词)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "相似度和多义性计数"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "动词结构 (范例)"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "合成词列表"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
 msgstr "意义概览"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -186,7 +186,7 @@ msgstr ""
 "wordnet.princeton.edu/\">http://www.cogsci.princeton.edu/~wn/</a> 找到 "
 "WordNet。注意：WordNet 只支持英语。"
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "没有跟“%1”匹配的。"

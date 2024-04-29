@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-04-12 18:40+0300\n"
 "Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -74,7 +74,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Navigacija"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 #, fuzzy
 #| msgid "Navigation"
 msgctxt "(qtundo-format)"
@@ -112,14 +112,14 @@ msgstr[1] "Šalinti lapus"
 msgstr[2] "Trinti skaidrę"
 msgstr[3] "Trinti skaidrę"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 #, fuzzy
 #| msgid "Navigation"
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "Navigacija"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
@@ -132,14 +132,14 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "Be efektų"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 #, fuzzy
 #| msgid "No Effect"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "Be efektų"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 #, fuzzy
 #| msgid "Delete Slide"
 msgctxt "(qtundo-format)"
@@ -153,169 +153,169 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "Perėjimai"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "Trinti skaidrę"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 #, fuzzy
 #| msgid "Transitions"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "Perėjimai"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, fuzzy, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Presentation Tool"
 msgstr "Pristatymas"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "(c) 1998-2008, The KPresenter Team"
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "(c) 1998-2008, KPresenter komanda"
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
 msgid "Former maintainer"
 msgstr "Ankstesnis prižiūrėtojas"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Original author"
 msgstr "Pradinis autorius"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr "Reginald Stadlbauer"
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr "Toshitaka Fujioka"
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr "Percy Leonhardt"
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr "Boudewijn Rempt "
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
 msgstr "Carlos Licea "
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, fuzzy, kde-format
 #| msgid "Casper Boemann "
 msgid "C. Boemann "
 msgstr "Casper Boemann "
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr "Fredy Yanardi "
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr "Jan Hambrecht "
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr "Marijn Kruisselbrink "
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr "Martin Pfeiffer "
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr "Sven Langkamp "
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr "Timothée Lacroix "
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Andrius Štikonas"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "andrius@stikonas.eu"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andrius Štikonas"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr "Nežinoma"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "Skaidrės %1"
@@ -325,7 +325,7 @@ msgstr "Skaidrės %1"
 msgid "End of presentation. Click to exit."
 msgstr "Pateikties pabaiga. Paspauskite norėdami uždaryti."
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, fuzzy, kde-format
 msgid "Layout"
 msgstr "Skaidrės pavadinimas"
@@ -345,7 +345,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr "Diegimo klaida"
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
@@ -357,81 +357,81 @@ msgid "Placeholder shape"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double click to add a title"
 msgstr "Dukart spustelėjus įterpti diagramą"
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double click to add an outline"
 msgstr "Dukart spustelėjus įterpti objektą"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double click to add a text"
 msgstr "Dukart spustelėjus įterpti objektą"
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double click to add notes"
 msgstr "Dukart spustelėjus įterpti objektą"
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, fuzzy, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
+#, fuzzy
 msgid "Double click to add a picture"
 msgstr "Dukart spustelėjus įterpti diagramą"
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, fuzzy, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
+#, fuzzy
 msgid "Double click to add a chart"
 msgstr "Dukart spustelėjus įterpti diagramą"
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, fuzzy, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
+#, fuzzy
 msgid "Double click to add an object"
 msgstr "Dukart spustelėjus įterpti objektą"
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, fuzzy, kde-format
 msgid "Pen Color"
 msgstr "Spalva"
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, fuzzy, kde-format
 msgid "Black"
 msgstr "Juoda"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
 msgstr "Balta"
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr "Žalia"
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr "Raudona"
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr "Mėlyna"
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, fuzzy, kde-format
 msgid "Yellow"
 msgstr "Geltona"
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, kde-format
 msgid "Next Slide"
 msgstr "Kita skaidrė"
@@ -441,246 +441,246 @@ msgstr "Kita skaidrė"
 msgid "Speaker Notes"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "Current Slide %1 of %2"
 msgstr "Pirmoji skaidrė"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 msgid "End of Slide Show"
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, fuzzy, kde-format
 msgid "start on mouse click"
 msgstr "Spustelėjus"
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "start after previous animation"
 msgstr "Pristatymas"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "start with previous animation"
 msgstr "Pristatymas"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "Animacija"
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, fuzzy, kde-format
 msgid "Shape"
 msgstr "Forma"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, kde-format
 msgid "&Move Here"
 msgstr "&Perkelti čia"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, kde-format
 msgid "&Copy Here"
 msgstr "&Kopijuoti čia"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, fuzzy, kde-format
 msgid "C&ancel"
 msgstr "A&tšaukti"
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, kde-format
 msgid "Normal"
 msgstr "Normalus"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, fuzzy, kde-format
 #| msgid "Last Slide"
 msgid "Show Master Slides"
 msgstr "Paskutinė skaidrė"
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, fuzzy, kde-format
 msgid "Import Slideshow..."
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, kde-format
 msgid "Insert Slide"
 msgstr "Lapo įterpimas"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr ""
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, fuzzy, kde-format
 msgid "Copy Slide"
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, fuzzy, kde-format
 msgid "Copy the current slide"
 msgstr "Trinti skaidrę"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
 msgid "Delete Slide"
 msgstr "Trinti skaidrę"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, fuzzy, kde-format
 msgid "Delete the current slide"
 msgstr "Trinti skaidrę"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, fuzzy, kde-format
 #| msgid "Last Slide"
 msgid "Master Slide..."
 msgstr "Paskutinė skaidrė"
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, kde-format
 msgid "Previous Slide"
 msgstr "Ankstesnė skaidrė"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, kde-format
 msgid "Go to previous slide"
 msgstr "Pereiti į ankstesnę skaidrę"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, kde-format
 msgid "Go to next slide"
 msgstr "Pereiti į kitą skaidrę"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, kde-format
 msgid "First Slide"
 msgstr "Pirmoji skaidrė"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, kde-format
 msgid "Go to first slide"
 msgstr "Pereiti į pirmą skaidrę"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, kde-format
 msgid "Last Slide"
 msgstr "Paskutinė skaidrė"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, kde-format
 msgid "Go to last slide"
 msgstr "Pereiti į paskutinę skaidrę"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, fuzzy, kde-format
 msgid "Configure Stage..."
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, fuzzy, kde-format
 msgid "Export as HTML..."
 msgstr "E&kportuoti į HTML..."
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, fuzzy, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Kita skaidrė"
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Create Appear Animation"
 msgstr "Navigacija"
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, fuzzy, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, kde-format
 msgid "Start Presentation"
 msgstr "Pradėti pristatymą"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From Current Slide"
 msgstr "Pirmoji skaidrė"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From First Slide"
 msgstr "Pirmoji skaidrė"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Stop presentation"
 msgstr "Pradėti pristatymą"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Rodyti būsenos juostą"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show Status Bar"
 msgid "Hide Status Bar"
 msgstr "Rodyti būsenos juostą"
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Parodys arba paslėps būsenos juostą."
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, fuzzy, kde-format
 msgid "Configure Slide Show..."
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, fuzzy, kde-format
 msgid "Configure Presenter View..."
 msgstr "Skaidrės pavadinimas"
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Draw on the presentation..."
 msgstr "Pradėti pristatymą"
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Highlight the presentation..."
 msgstr "Pradėti pristatymą"
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Blackscreen on the presentation..."
@@ -764,60 +764,60 @@ msgstr "Kopijuoti"
 msgid "Paste"
 msgstr "Padėti"
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, fuzzy, kde-format
 msgid "Slide Show %1"
 msgstr "Demonstravimas"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, kde-format
 msgid "All slides"
 msgstr "Visos skaidrės"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, kde-format
 msgid "Error"
 msgstr "Klaida"
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr ""
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Skaidrės pavadinimas"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
 msgstr ""
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview animation"
 msgstr "Pristatymas"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, fuzzy, kde-format
 #| msgid "Transitions"
 msgid "Slide Transitions"
 msgstr "Perėjimai"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Shape Click Actions"
 msgstr "Navigacija"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Shape Animations"
@@ -862,7 +862,7 @@ msgid "Duration: "
 msgstr "Trukmė: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview Shape Animation"
@@ -873,78 +873,78 @@ msgstr "Pristatymas"
 msgid "No Effect"
 msgstr "Be efektų"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
 msgstr " sek."
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, fuzzy, kde-format
 #| msgid "Transitions"
 msgid "Slide Transition:"
 msgstr "Perėjimai"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "All slides"
 msgid "Apply To All Slides"
 msgstr "Visos skaidrės"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 #, fuzzy
 #| msgid "All slides"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Visos skaidrės"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr "Pasirodymas"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, fuzzy, kde-format
 msgid "Exit"
 msgstr "Išeiti"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, fuzzy, kde-format
 msgid "Emphasis"
 msgstr "Akcentas"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, fuzzy, kde-format
 msgid "Custom"
 msgstr "Pasirinktas"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Edit animation"
@@ -956,36 +956,36 @@ msgstr "Navigacija"
 msgid "Add new animation"
 msgstr "Navigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Remove animation"
 msgstr "Navigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, fuzzy, kde-format
 msgid "Order: "
 msgstr "Tvarka"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Move animation up"
 msgstr "Navigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Move animation down"
 msgstr "Navigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, fuzzy, kde-format
 #| msgid "Add Slide"
 msgid "Add a new animation"
 msgstr "Pridėti skaidrę"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 msgid "Delete current animation"
 msgstr "Trinti skaidrę"
@@ -1217,198 +1217,198 @@ msgstr "HTML eksportas"
 msgid "Export"
 msgstr "Eksportavimas"
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
 msgid "Delete Template"
 msgstr "Ištrinti šabloną"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
 msgid "Add Template"
 msgstr "Pridėti šabloną"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr "Ar jūs tikrai norite pašalinti \"%1\"?"
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
 msgstr "Patvirtinti pašalinimą"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Ar jūs tikrai norite pašalinti \"%1\"?"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, fuzzy, kde-format
 msgid "No sound"
 msgstr "&Be garso"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "Import..."
 msgstr "Importuoti..."
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, fuzzy, kde-format
 msgid "Bar"
 msgstr "Juosta"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, fuzzy, kde-format
-msgid "From Left"
-msgstr "Iš kairės"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, fuzzy, kde-format
-msgid "From Top"
-msgstr "Iš viršaus"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, fuzzy, kde-format
-msgid "From Right"
-msgstr "Iš dešinės"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
 msgid "From Bottom"
 msgstr "Nuo apačios"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+msgid "From Left"
+msgstr "Iš kairės"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+msgid "From Right"
+msgstr "Iš dešinės"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+msgid "From Top"
+msgstr "Iš viršaus"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgid "Unknown subtype"
 msgstr "Nežinoma"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Clock"
 msgstr "Laikrodis"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Twelve Clockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Three Clockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Six Clockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Nine Clockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Twelve Counterclockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Three Counterclockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Six Counterclockwise"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#, fuzzy
 msgid "From Nine Counterclockwise"
 msgstr "Lygiuoti &dešinėje"
 
@@ -1417,33 +1417,33 @@ msgstr "Lygiuoti &dešinėje"
 msgid "Double Fan"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
+#, fuzzy
 msgid "Fan Out Vertical"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy
 msgid "Fan Out Horizontal"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy
 msgid "Fan In Vertical"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy
 msgid "Fan In Horizontal"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy
 msgid "Fan In Vertical Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Fan In Horizontal Reverse"
 msgstr "Horizontalus perėjimas"
 
@@ -1452,132 +1452,132 @@ msgstr "Horizontalus perėjimas"
 msgid "Double Sweep"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Parallel Vertical"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Parallel Diagonal"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Opposite Vertical"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Opposite Horizontal"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy
 msgid "Parallel Diagonal Top Left"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 msgid "Parallel Diagonal Bottom Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Parallel Vertical Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Parallel Diagonal Reverse"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "Opposite Vertical Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Opposite Horizontal Reverse"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, fuzzy, kde-format
 msgid "Fan"
 msgstr "Ventiliatorius"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Center Right"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Center Top"
 msgstr "Centre"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Center Left"
 msgstr "Centre"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Center Bottom"
 msgstr "&Apačia:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan Out Top"
 msgstr "&Apačia:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan Out Right"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan Out Bottom"
 msgstr "&Apačia:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan Out Left"
 msgstr "Centre"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan In Top"
 msgstr "&Apačia:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan In Right"
 msgstr "Lygiuoti &dešinėje"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan In Bottom"
 msgstr "&Apačia:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Fan In Left"
 msgstr "Centre"
 
@@ -1586,33 +1586,33 @@ msgstr "Centre"
 msgid "Pin Wheel"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
+#, fuzzy
 msgid "Two Blades Vertical Clockwise"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy
 msgid "Two Blades Horizontal Clockwise"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy
 msgid "Four Blades Horizontal Clockwise"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "Horizontalus perėjimas"
 
@@ -1621,112 +1621,108 @@ msgstr "Horizontalus perėjimas"
 msgid "Saloon Door"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
 msgid "To Top"
 msgstr "Į viršų"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
 msgid "To Left"
 msgstr "Į kairę"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
 msgid "To Bottom"
 msgstr "Į apačią"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
 msgid "To Right"
 msgstr "Į dešinę"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, fuzzy, kde-format
 msgid "Single Sweep"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 msgid "Clockwise Top"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Clockwise Right"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Clockwise Bottom"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "Clockwise Left"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Clockwise Top Left"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "Counterclockwise Bottom Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Clockwise Bottom Right"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
+#, fuzzy
 msgid "Counterclockwise Top Right"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
+#, fuzzy
 msgid "Counterclockwise Top"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
+#, fuzzy
 msgid "Counterclockwise Right"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
+#, fuzzy
 msgid "Counterclockwise Bottom"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
+#, fuzzy
 msgid "Counterclockwise Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
+#, fuzzy
 msgid "Counterclockwise Top Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
+#, fuzzy
 msgid "Clockwise Bottom Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
+#, fuzzy
 msgid "Counterclockwise Bottom Right"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
+#, fuzzy
 msgid "Clockwise Top Right"
 msgstr "Lygiuoti &dešinėje"
 
@@ -1735,76 +1731,76 @@ msgstr "Lygiuoti &dešinėje"
 msgid "Windshield"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, fuzzy
 msgid "Right"
 msgstr "Dešinė"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
+#, fuzzy
 msgid "Up"
 msgstr "Aukštyn"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Vertical"
 msgstr "Vertikaliai"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
+#, fuzzy
 msgid "Horizontal"
 msgstr "Horizontaliai"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy
 msgid "Right Reverse"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
+#, fuzzy
 msgid "Up Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Vertical Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Horizontal Reverse"
 msgstr "Horizontalus perėjimas"
 
@@ -1813,23 +1809,23 @@ msgstr "Horizontalus perėjimas"
 msgid "Barn Door"
 msgstr "Fono spalva:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Diagonal Bottom Left"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Diagonal Bottom Left Reverse"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Diagonal Top Left"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Diagonal Top Left Reverse"
 msgstr "Be efektų"
 
@@ -1843,46 +1839,46 @@ msgstr ""
 msgid "Barn Zig Zag"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
-msgid "Vertical Reversed"
-msgstr "Vertikalios linijos"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
 msgid "Horizontal Reversed"
 msgstr "Horizontalus perėjimas"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
+msgid "Vertical Reversed"
+msgstr "Vertikalios linijos"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, fuzzy, kde-format
 msgid "Box"
 msgstr "Dėžutė"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "From Top Left"
 msgstr "Iš viršutinio kairiojo kampo"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "From Top Right"
 msgstr "Iš viršutinio dešiniojo kampo"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "From Bottom Left"
 msgstr "Iš apatinio kairiojo kampo"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "From Bottom Right"
 msgstr "Iš apatinio dešiniojo kampo"
 
@@ -1896,23 +1892,23 @@ msgstr "Įstrižas"
 msgid "Four Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners In"
 msgstr "Kontrastas"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners In Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners Out"
 msgstr "Kontrastas"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners Out Reverse"
 msgstr "Kontrastas"
 
@@ -1922,12 +1918,12 @@ msgid "Misc Diagonal"
 msgstr "Be efektų"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double Barn Door"
 msgstr "Fono spalva:"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, fuzzy, kde-format
+#, fuzzy
 msgid "Double Diamond"
 msgstr "Be efektų"
 
@@ -1946,13 +1942,11 @@ msgstr "Be efektų"
 msgid "Fade"
 msgstr "Išnykimas"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
 msgstr ""
 
@@ -1961,48 +1955,47 @@ msgstr ""
 msgid "ArrowHead"
 msgstr "Rodyklių smaigaliai"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy
 msgid "Down"
 msgstr "Žemyn"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy
 msgid "Down Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy
 msgid "Left"
 msgstr "Kairė"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy
 msgid "Left Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsė"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr "Apskritimas"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Circle Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr ""
@@ -2017,48 +2010,46 @@ msgstr "Šešiakampis"
 msgid "Iris"
 msgstr "Vaivorykštė"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, kde-format
-msgid "Rectangular"
-msgstr "Stačiakampis"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
-msgid "Rectangular Reverse"
-msgstr "Stačiakampis"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Diamond"
 msgstr "Rombas"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Diamond Reverse"
 msgstr "Horizontalus perėjimas"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular"
+msgstr "Stačiakampis"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
+msgid "Rectangular Reverse"
+msgstr "Stačiakampis"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr "Įvairūs"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
 msgstr "Širdis"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Heart Reverse"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Keyhole"
 msgstr "Vertikalios linijos"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Keyhole Reverse"
 msgstr "Vertikalios linijos"
 
@@ -2067,7 +2058,7 @@ msgstr "Vertikalios linijos"
 msgid "Pentagon"
 msgstr "Penkiakampis"
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, fuzzy, kde-format
 msgid "RoundRect"
 msgstr "Be efektų"
@@ -2077,33 +2068,33 @@ msgstr "Be efektų"
 msgid "Star"
 msgstr "Žvaigždė"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
+#, fuzzy
 msgid "Four Point Star"
 msgstr "Keturkampė žvaigždė"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
+#, fuzzy
 msgid "Four Point Star Reverse"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy
 msgid "Five Point Star"
 msgstr "Penkiakampė žvaigždė"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy
 msgid "Five Point Star Reverse"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy
 msgid "Six Point Star"
 msgstr "Šešiakampė žvaigždė"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy
 msgid "Six Point Star Reverse"
 msgstr "Horizontalus perėjimas"
 
@@ -2117,63 +2108,63 @@ msgstr "Trikampis"
 msgid "Box Snakes"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Two Box Top In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Two Box Bottom In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Two Box Left In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Two Box Right In"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy
 msgid "Four Box Vertical In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy
 msgid "Four Box Horizontal In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Two Box Top Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Two Box Bottom Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "Two Box Left Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Two Box Right Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "Four Box Vertical Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Four Box Horizontal Out"
 msgstr "Horizontalus perėjimas"
 
@@ -2182,103 +2173,103 @@ msgstr "Horizontalus perėjimas"
 msgid "Parallel Snakes"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "Vertical Top Same In"
 msgstr "Vertikalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Vertical Top Same Out"
 msgstr "Vertikalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy
 msgid "Vertical Bottom Same In"
 msgstr "Vertikalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy
 msgid "Vertical Bottom Same Out"
 msgstr "Vertikalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy
 msgid "Vertical Top Left Opposite In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy
 msgid "Vertical Top Left Opposite Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy
 msgid "Vertical Bottom Left Opposite In"
 msgstr "Vertikalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy
 msgid "Horizontal Left Same In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy
 msgid "Horizontal Left Same Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy
 msgid "Horizontal Right Same In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy
 msgid "Horizontal Right Same Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy
 msgid "Horizontal Top Left Opposite In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy
 msgid "Horizontal Top Left Opposite Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy
 msgid "Horizontal Top Right Opposite In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy
 msgid "Horizontal Top Right Opposite Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy
 msgid "Diagonal Top Left Opposite In"
 msgstr "Horizontalus perėjimas"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy
 msgid "Diagonal Top Left Opposite Out"
 msgstr "Horizontalus perėjimas"
 
@@ -2292,83 +2283,83 @@ msgstr "Gyvatė"
 msgid "Spiral"
 msgstr "Spiralė"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
+#, fuzzy
 msgid "Clockwise Top Left In"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy
 msgid "Clockwise Top Left Out"
 msgstr "Be efektų"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Clockwise Top Right In"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Clockwise Top Right Out"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "Clockwise Bottom Left In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy
 msgid "Clockwise Bottom Left Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "Clockwise Bottom Right In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy
 msgid "Clockwise Bottom Right Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy
 msgid "Counterclockwise Top Left In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy
 msgid "Counterclockwise Top Left Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy
 msgid "Counterclockwise Top Right In"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy
 msgid "Counterclockwise Top Right Out"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy
 msgid "Counterclockwise Bottom Left In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy
 msgid "Counterclockwise Bottom Left Out"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy
 msgid "Counterclockwise Bottom Right In"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy
 msgid "Counterclockwise Bottom Right Out"
 msgstr "&Apačia:"
 
@@ -2377,43 +2368,43 @@ msgstr "&Apačia:"
 msgid "Waterfall"
 msgstr "Krioklys"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
+#, fuzzy
 msgid "Top Left Vertical"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy
 msgid "Top Left Horizontal"
 msgstr "Horizontaliai"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Top Right Vertical"
 msgstr "Lygiuoti &dešinėje"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Top Right Horizontal"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Bottom Left Vertical"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy
 msgid "Bottom Left Horizontal"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy
 msgid "Bottom Right Vertical"
 msgstr "&Apačia:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Bottom Right Horizontal"
 msgstr "&Apačia:"
 

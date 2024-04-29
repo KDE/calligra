@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-21 22:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -17,29 +17,29 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ChangeSomethingCommand.cpp:34
+#: ChangeSomethingCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Change something"
 msgstr "Iets wijzigen"
 
-#: TemplateShapeFactory.cpp:32
+#: TemplateShapeFactory.cpp:31
 #, kde-format
 msgid "Template shape"
 msgstr "Vorm van sjabloon"
 
-#: TemplateShapeFactory.cpp:34
+#: TemplateShapeFactory.cpp:33
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
 msgstr ""
 "Eenvoudige vorm die wordt gebruikt als sjabloon om andere vormen te "
 "ontwikkelen."
 
-#: TemplateTool.cpp:77
+#: TemplateTool.cpp:76
 #, kde-format
 msgid "Open"
 msgstr "Openen"
 
-#: TemplateToolFactory.cpp:26
+#: TemplateToolFactory.cpp:24
 #, kde-format
 msgid "Template shape editing"
 msgstr "Bewerking van de vorm van een sjabloon"

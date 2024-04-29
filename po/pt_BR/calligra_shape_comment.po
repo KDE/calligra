@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2010-07-26 21:45-0300\n"
 "Last-Translator: Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -27,7 +27,7 @@ msgstr "O plugin necessário para mostrar os comentários não está presente."
 msgid "Plugin Missing"
 msgstr "Plugin faltando"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -36,7 +36,7 @@ msgstr ""
 "O plugin necessário para mostrar os comentários não é compatível com a "
 "versão atual da forma de comentários."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Plugin incompatível"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadsolver\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "\n"
 "\n"
 
-#: Solver.cpp:66
+#: Solver.cpp:64
 #, kde-format
 msgid "Function Optimizer..."
 msgstr ""
 
-#: Solver.cpp:103
+#: Solver.cpp:101
 #, fuzzy
 #| msgid "Maximize"
 msgctxt "(qtundo-format)"

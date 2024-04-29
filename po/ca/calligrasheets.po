@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2023-08-08 18:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -29,57 +29,57 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "page"
 msgstr "pàgina"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "pages"
 msgstr "pàgines"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "file"
 msgstr "fitxer"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "name"
 msgstr "nom"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "time"
 msgstr "hora"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "date"
 msgstr "data"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "author"
 msgstr "autor"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "email"
 msgstr "correu electrònic"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "org"
 msgstr "organització"
 
-#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "sheet"
 msgstr "full"
 
-#: core/ksp/SheetsKspDoc.cpp:42
+#: core/ksp/SheetsKspDoc.cpp:43
 #, kde-format
 msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
@@ -88,7 +88,7 @@ msgstr ""
 "Document no vàlid. S'esperava application/x-kspread o application/vnd.kde."
 "kspread, i és %1"
 
-#: core/ksp/SheetsKspDoc.cpp:51
+#: core/ksp/SheetsKspDoc.cpp:52
 #, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
@@ -101,37 +101,37 @@ msgstr ""
 "Si l'obriu amb aquesta versió del Sheets del Calligra, es pot perdre alguna "
 "informació."
 
-#: core/ksp/SheetsKspDoc.cpp:53
+#: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
 msgid "File Format Mismatch"
 msgstr "El format del fitxer no coincideix"
 
-#: core/ksp/SheetsKspDoc.cpp:100
+#: core/ksp/SheetsKspDoc.cpp:105
 #, kde-format
 msgid "Styles cannot be loaded."
 msgstr "No s'han pogut carregar els estils."
 
-#: core/ksp/SheetsKspDoc.cpp:108
+#: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
 msgid "Invalid document. No map tag."
 msgstr "Document no vàlid. No hi ha cap etiqueta «map»."
 
-#: core/ksp/SheetsKspMap.cpp:78
+#: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
 msgid "This document has no sheets (tables)."
 msgstr "Aquest document no té cap full (taula)."
 
-#: core/ksp/SheetsKspSheet.cpp:53
+#: core/ksp/SheetsKspSheet.cpp:51
 #, kde-format
 msgid "Invalid document. Sheet name is empty."
 msgstr "Document no vàlid. El nom del full està buit."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:189
+#: core/Map.cpp:241 engine/MapBase.cpp:182
 #, kde-format
 msgid "Sheet%1"
 msgstr "Full%1"
 
-#: core/Sheet.cpp:655
+#: core/Sheet.cpp:660
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "Ha fallat la validació per a la cel·la %1"
@@ -146,40 +146,40 @@ msgstr "Capçalera"
 msgid "Header1"
 msgstr "Capçalera1"
 
-#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
+#: ui/dialogs/LayoutPage_General.cpp:143
 #, kde-format
 msgid "Default"
 msgstr "Predeterminat"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "AM"
 msgstr "AM"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "PM"
 msgstr "PM"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:557
 #, kde-format
 msgid "h"
 msgstr "h"
 
-#: core/ValueFormatter.cpp:558
+#: core/ValueFormatter.cpp:559
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: core/ValueFormatter.cpp:560
+#: core/ValueFormatter.cpp:561
 #, kde-format
 msgid "s"
 msgstr "s"
 
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:120
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -259,94 +259,94 @@ msgstr "Paràmetres"
 
 #: engine/FunctionDescription.cpp:180
 #, kde-format
-msgid "<li><b>Comment:</b> %1"
-msgstr "<li><b>Comentari:</b> %1"
-
-#: engine/FunctionDescription.cpp:181
-#, kde-format
 msgid "<br><b>Type:</b> %1"
 msgstr "<br><b>Tipus:</b> %1"
 
-#: engine/FunctionDescription.cpp:187
+#: engine/FunctionDescription.cpp:180
+#, kde-format
+msgid "<li><b>Comment:</b> %1"
+msgstr "<li><b>Comentari:</b> %1"
+
+#: engine/FunctionDescription.cpp:186
 #, kde-format
 msgid "Examples"
 msgstr "Exemples"
 
-#: engine/FunctionDescription.cpp:196
+#: engine/FunctionDescription.cpp:195
 #, kde-format
 msgid "Related Functions"
 msgstr "Funcions relacionades"
 
-#: engine/Localization.cpp:748
+#: engine/Localization.cpp:769
 #, kde-format
 msgid "true"
 msgstr "cert"
 
-#: engine/Localization.cpp:749
+#: engine/Localization.cpp:770
 #, kde-format
 msgid "false"
 msgstr "fals"
 
-#: engine/SheetBase.cpp:345
+#: engine/SheetBase.cpp:359
 #, kde-format
 msgid "Dependency"
 msgstr "Dependència"
 
-#: engine/Value.cpp:597
+#: engine/Value.cpp:662
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CERCLE!"
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:670
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPENDÈNCIA!"
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:678
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:686
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/D"
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:694
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NOM?"
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:702
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NÚM!"
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:710
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#BUIT!"
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:718
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#ANALITZA!"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:726
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:734
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -897,14 +897,14 @@ msgstr "CARY(12;0) retorna 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid "Number"
 msgstr "Número"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -1262,7 +1262,7 @@ msgstr "Data i hora"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Date"
 msgstr "Data"
@@ -1334,7 +1334,7 @@ msgstr "DAYS360(\"2/22/2002\", \"4/21/2002\", FALSE) retorna 59"
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:105
 #, kde-format
 msgid "Time"
 msgstr "Temps"
@@ -4062,7 +4062,7 @@ msgid "Fractional Dollar"
 msgstr "Dòlar fraccional"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:89
 #, kde-format
 msgid "Fraction"
 msgstr "Fracció"
@@ -5317,13 +5317,13 @@ msgstr "ZERO_COUPON(valor nominal;taxa;anys)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;0,1;20) fa 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:440
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
 #, kde-format
 msgid "Manual"
 msgstr "Manual"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutPage_Float.cpp:184
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
 msgstr "Automàtic"
@@ -8049,7 +8049,7 @@ msgstr "Número absolut (opcional)"
 msgid "A1 style (optional)"
 msgstr "Estil A1 (opcional)"
 
-#: functions/reference.xml:27 ui/MapModel.cpp:142
+#: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
 msgid "Sheet name"
 msgstr "Nom del full"
@@ -11516,7 +11516,7 @@ msgstr "FINDB(text_a_cercar;text_on_cercar;Inici de PosicióByte)"
 msgid "Source string"
 msgstr "Cadena origen"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Position"
 msgstr "Posició"
@@ -12623,202 +12623,202 @@ msgstr "SECH(decimals)"
 msgid "SECH(0) equals 1"
 msgstr "SECH(0) fa 1"
 
-#: part/AboutData.h:28
+#: part/AboutData.h:27
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "Sheets del Calligra"
 
-#: part/AboutData.h:30
+#: part/AboutData.h:29
 #, kde-format
 msgid "Spreadsheet Application"
 msgstr "Aplicació de full de càlcul"
 
-#: part/AboutData.h:32
+#: part/AboutData.h:31
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "Copyright 1998-%1, The Calligra Sheets Team"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Original Author"
 msgstr "Autor original"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Torben Weis"
 msgstr "Torben Weis"
 
 # msgid "Martinique"
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Maintainer"
 msgstr "Mantenidor"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr "Marijn Kruisselbrink"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr "ODS i Excel, funcions, creació de scripts"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/AboutData.h:43
+#: part/AboutData.h:42
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:43
 #, kde-format
 msgid "John Dailey"
 msgstr "John Dailey"
 
 # msgid "Philippines"
-#: part/AboutData.h:45
+#: part/AboutData.h:44
 #, kde-format
 msgid "Philipp Müller"
 msgstr "Philipp Müller"
 
-#: part/AboutData.h:46
+#: part/AboutData.h:45
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/AboutData.h:47
+#: part/AboutData.h:46
 #, kde-format
 msgid "Norbert Andres"
 msgstr "Norbert Andres"
 
-#: part/AboutData.h:48
-#, kde-format
-msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
-
-#: part/AboutData.h:49 part/AboutData.h:52 part/AboutData.h:55
-#: part/AboutData.h:59 part/AboutData.h:62 part/AboutData.h:65
-#: part/AboutData.h:68 part/AboutData.h:71 part/AboutData.h:74
+#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
+#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
+#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
 #, kde-format
 msgid "Import/export filter developer"
 msgstr "Desenvolupador de filtres d'importació/exportació"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:47
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/AboutData.h:48
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/AboutData.h:54
+#: part/AboutData.h:49
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr "Nikolas Zimmermann"
 
-#: part/AboutData.h:57
+#: part/AboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
 # msgid "Belize Dollar"
-#: part/AboutData.h:58
+#: part/AboutData.h:51
 #, kde-format
 msgid "Helge Deller"
 msgstr "Helge Deller"
 
 # msgid "Percent"
-#: part/AboutData.h:61
+#: part/AboutData.h:52
 #, kde-format
 msgid "Percy Leonhart"
 msgstr "Percy Leonhart"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:53
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr "Eva Brucherseifer"
 
-#: part/AboutData.h:67
+#: part/AboutData.h:54
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr "Phillip Ezolt"
 
-#: part/AboutData.h:70
+#: part/AboutData.h:55
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/AboutData.h:73
+#: part/AboutData.h:56
 #, kde-format
 msgid "Graham Short"
 msgstr "Graham Short"
 
-#: part/AboutData.h:76
+#: part/AboutData.h:57
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/AboutData.h:77
+#: part/AboutData.h:58
 #, kde-format
 msgid "Tomas Mecir"
 msgstr "Tomas Mecir"
 
-#: part/AboutData.h:78
+#: part/AboutData.h:59
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr "Raphael Langerhorst"
 
-#: part/AboutData.h:79
+#: part/AboutData.h:60
 #, kde-format
 msgid "John Tapsell"
 msgstr "John Tapsell"
 
 # msgid "Border Right"
-#: part/AboutData.h:80
+#: part/AboutData.h:61
 #, kde-format
 msgid "Robert Knight"
 msgstr "Robert Knight"
 
-#: part/AboutData.h:81
+#: part/AboutData.h:62
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr "Stefan Nikolaus"
 
 # msgid "<h2>Related Functions</h2><ul>"
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Developer (functions)"
 msgstr "Desenvolupador (funcions)"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Sascha Pfau"
 msgstr "Sascha Pfau"
 
-#: part/AboutData.h:83
+#: part/AboutData.h:64
 #, kde-format
 msgid "Brad Hards"
 msgstr "Brad Hards"
 
-#: part/AboutData.h:84
+#: part/AboutData.h:64
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr "Implementades, revisades i provades diverses funcions"
 
-#. i18n translator strings
-#: part/AboutData.h:87
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Albert Astals Cid,Sebastià Pla i Sanz,Rafael Carreras"
-
-#: part/AboutData.h:88
+#: part/AboutData.h:66
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "aacid@kde.org,sastia@retemail.es,rcarreras@caliu.cat"
+
+#. i18n translator strings
+#: part/AboutData.h:66
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Albert Astals Cid,Sebastià Pla i Sanz,Rafael Carreras"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12846,7 +12846,7 @@ msgid "Clear"
 msgstr "Neteja"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:448
+#: part/calligrasheets.rc:44 part/View.cpp:430
 #, kde-format
 msgid "Delete"
 msgstr "Elimina"
@@ -12964,7 +12964,7 @@ msgstr "Activa"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "Tipus de lletra"
@@ -12975,27 +12975,27 @@ msgstr "Tipus de lletra"
 msgid "Color/Border"
 msgstr "Color/Vores"
 
-#: part/CanvasBase.cpp:679
+#: part/CanvasBase.cpp:675
 #, kde-format
 msgid "Comment:"
 msgstr "Comentari:"
 
-#: part/CellEditorDocker.cpp:45
+#: part/CellEditorDocker.cpp:44
 #, kde-format
 msgid "Cell Editor"
 msgstr "Editor de cel·les"
 
-#: part/CellEditorDocker.cpp:56
+#: part/CellEditorDocker.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "Fórmula"
 
-#: part/CellTool.cpp:64
+#: part/CellTool.cpp:63
 #, kde-format
 msgid "Define Print Range"
 msgstr "Defineix l'interval de la impressió"
 
-#: part/CellTool.cpp:67
+#: part/CellTool.cpp:66
 #, kde-format
 msgid "Define the print range in the current sheet"
 msgstr "Defineix l'àrea a imprimir del full actual"
@@ -13037,7 +13037,7 @@ msgid "First column as label"
 msgstr "La primera columna com a etiqueta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Data Format"
 msgstr "Format de les dades"
@@ -13054,12 +13054,12 @@ msgstr "Les dades s'arrangen en files"
 msgid "Data sets in columns"
 msgstr "Les dades s'arrangen en columnes"
 
-#: part/commands/DefinePrintRangeCommand.cpp:22
+#: part/commands/DefinePrintRangeCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
 msgstr "Defineix l'interval de la impressió"
 
-#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
+#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
 msgstr "Estableix la disposició de pàgina"
@@ -13243,18 +13243,18 @@ msgstr ""
 "altre color per a les vores que no sigui el vermell que ve de manera "
 "predeterminada."
 
-#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
-#: part/dialogs/PageLayoutDialog.cpp:97
+#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
+#: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
-#: part/dialogs/PageLayoutDialog.cpp:105
+#: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
 msgid "No Limit"
 msgstr "Sense límit"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
 #, kde-format
 msgid "Sheet"
 msgstr "Full"
@@ -13411,127 +13411,127 @@ msgstr "Horitzontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: part/dialogs/PreferenceDialog.cpp:277
+#: part/dialogs/PreferenceDialog.cpp:269
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Configuració"
 
-#: part/dialogs/PreferenceDialog.cpp:294
+#: part/dialogs/PreferenceDialog.cpp:286
 #, kde-format
 msgid "Interface"
 msgstr "Interfície"
 
-#: part/dialogs/PreferenceDialog.cpp:299
+#: part/dialogs/PreferenceDialog.cpp:291
 #, kde-format
 msgid "Down"
 msgstr "Avall"
 
-#: part/dialogs/PreferenceDialog.cpp:300
+#: part/dialogs/PreferenceDialog.cpp:292
 #, kde-format
 msgid "Up"
 msgstr "Amunt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Dreta"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Esquerra"
 
-#: part/dialogs/PreferenceDialog.cpp:303
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Down, First Column"
 msgstr "Avall, primera columna"
 
-#: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
+#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
 #, kde-format
 msgid "None"
 msgstr "Cap"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
 #, kde-format
 msgid "Sum"
 msgstr "Sumatori"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
 #, kde-format
 msgid "Min"
 msgstr "Mínim"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
 #, kde-format
 msgid "Max"
 msgstr "Màxim"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
 #, kde-format
 msgid "Average"
 msgstr "Mitjana"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
 #, kde-format
 msgid "Count"
 msgstr "Recompte"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
 #, kde-format
 msgid "CountA"
 msgstr "CompteA"
 
-#: part/dialogs/PreferenceDialog.cpp:327
+#: part/dialogs/PreferenceDialog.cpp:318
 #, kde-format
 msgid "Open/Save"
 msgstr "Obre/Desa"
 
-#: part/dialogs/PreferenceDialog.cpp:339
+#: part/dialogs/PreferenceDialog.cpp:329
 #, kde-format
 msgid "Function Modules"
 msgstr "Funció de mòduls"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
 #, kde-format
 msgid "Tools"
 msgstr "Eines"
 
-#: part/dialogs/PreferenceDialog.cpp:343
+#: part/dialogs/PreferenceDialog.cpp:332
 #, kde-format
 msgid "Plugins"
 msgstr "Connectors"
 
-#: part/dialogs/PreferenceDialog.cpp:351 part/dialogs/PreferenceDialog.cpp:358
+#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spelling"
 msgstr "Ortografia"
 
-#: part/dialogs/PreferenceDialog.cpp:353
+#: part/dialogs/PreferenceDialog.cpp:342
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "Comportament del corrector ortogràfic"
 
-#: part/dialogs/PreferenceDialog.cpp:359
+#: part/dialogs/PreferenceDialog.cpp:348
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: part/dialogs/PreferenceDialog.cpp:360
+#: part/dialogs/PreferenceDialog.cpp:349
 #, kde-format
 msgid "Author"
 msgstr "Autor"
 
-#: part/dialogs/PreferenceDialog.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:421
 #, kde-format
 msgid "&Completion mode:"
 msgstr "Mode de &compleció:"
 
-#: part/dialogs/PreferenceDialog.cpp:437
+#: part/dialogs/PreferenceDialog.cpp:425
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13540,12 +13540,12 @@ msgstr ""
 "Us permet d'escollir el mode de compleció del text (automàtica) d'un "
 "interval d'opcions a la llista desplegable."
 
-#: part/dialogs/PreferenceDialog.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:429
 #, kde-format
 msgid "Popup"
 msgstr "Emergent"
 
-#: part/dialogs/PreferenceDialog.cpp:443
+#: part/dialogs/PreferenceDialog.cpp:431
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "Semiautomàtic"
@@ -13889,448 +13889,448 @@ msgstr "Neteja la selecció"
 msgid "Move selected sheet to the bottom"
 msgstr "Mou els fulls seleccionats a baix de tot"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Distingeix majúscules i minúscules"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Match cases when searching"
 msgstr "Coincidències de majúscules a les cerques"
 
-#: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Alçada: %1 %2"
 
-#: part/HeaderItems.cpp:163 part/HeaderWidgets.cpp:157
+#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
 #, kde-format
 msgid "Hide Row"
 msgstr "Oculta la fila"
 
-#: part/HeaderItems.cpp:334 part/HeaderWidgets.cpp:325
+#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Amplada: %1 %2"
 
-#: part/HeaderItems.cpp:336 part/HeaderWidgets.cpp:327
+#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
 #, kde-format
 msgid "Hide Column"
 msgstr "Oculta la columna"
 
-#: part/Headers.cpp:233 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:724
 #, kde-format
 msgid "Area is too large."
 msgstr "L'àrea és massa gran."
 
-#: part/PrintJob.cpp:87
+#: part/PrintJob.cpp:88
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
 msgstr "No s'ha pogut trobar el full %1 per a imprimir-lo"
 
-#: part/PrintJob.cpp:300
+#: part/PrintJob.cpp:286
 #, kde-format
 msgid "Nothing to print for sheet(s) %1."
 msgstr "No hi ha res a imprimir pel/s full/s %1."
 
-#: part/View.cpp:228
+#: part/View.cpp:225
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Propietats del full..."
 
-#: part/View.cpp:231
+#: part/View.cpp:228
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Modifica les propietats del full actual"
 
-#: part/View.cpp:234 part/View.cpp:2051
+#: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Insereix un full"
 
-#: part/View.cpp:235
+#: part/View.cpp:232
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Insereix un full nou"
 
 # msgid "Recalculate Sheet"
-#: part/View.cpp:239
+#: part/View.cpp:236
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Duplica el full"
 
-#: part/View.cpp:240
+#: part/View.cpp:237
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Duplica el full seleccionat"
 
-#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
+#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Elimina el full"
 
-#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
+#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Elimina el full seleccionat"
 
-#: part/View.cpp:250
+#: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Reanomena el full..."
 
-#: part/View.cpp:253
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Reanomena el full actiu"
 
-#: part/View.cpp:255
+#: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Mostra el full..."
 
-#: part/View.cpp:258
+#: part/View.cpp:255
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Mostra un full ocult"
 
-#: part/View.cpp:260
+#: part/View.cpp:257
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Oculta el full"
 
-#: part/View.cpp:263
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Oculta el full actiu"
 
-#: part/View.cpp:265
+#: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
 msgstr "Disposició de la pàgina..."
 
-#: part/View.cpp:268
+#: part/View.cpp:265
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Especifica la disposició del full de càlcul per a una impressió"
 
-#: part/View.cpp:270
+#: part/View.cpp:267
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Reinicia l'interval de la impressió"
 
-#: part/View.cpp:273
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Reinicia l'interval a imprimir del full actual"
 
 # msgid "Border Outline"
-#: part/View.cpp:275
+#: part/View.cpp:272
 #, kde-format
 msgid "Page Outline"
 msgstr "Contorn de la pàgina"
 
-#: part/View.cpp:276
+#: part/View.cpp:273
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Mostra al full de càlcul on hi haurà el contorn de la pàgina"
 
-#: part/View.cpp:280
+#: part/View.cpp:277
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Recalcula el full"
 
 # msgid "Recalculate Sheet"
-#: part/View.cpp:282 part/View.cpp:290
+#: part/View.cpp:279 part/View.cpp:287
 #, kde-format
 msgid "Recalculate"
 msgstr "Recalcula"
 
-#: part/View.cpp:286
+#: part/View.cpp:283
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Recalcula el valor de totes les cel·les del full de càlcul actual"
 
-#: part/View.cpp:288
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Recalcula el document"
 
-#: part/View.cpp:294
+#: part/View.cpp:291
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Recalcula el valor de totes les cel·les de tots els fulls de càlcul"
 
-#: part/View.cpp:296
+#: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Protegeix el &full..."
 
-#: part/View.cpp:298
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Protegeix el full contra les modificacions"
 
-#: part/View.cpp:302
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Protegeix el &document..."
 
-#: part/View.cpp:304
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Protegeix el document contra les modificacions"
 
-#: part/View.cpp:309
+#: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "Crea &una plantilla a partir d'un document..."
 
-#: part/View.cpp:313
+#: part/View.cpp:309
 #, kde-format
 msgid "Anchor"
 msgstr "Àncora"
 
-#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
+#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
 #, kde-format
 msgid "Cell"
 msgstr "Cel·la"
 
-#: part/View.cpp:315 part/View.cpp:1085
+#: part/View.cpp:311 part/View.cpp:1037
 #, kde-format
 msgid "Page"
 msgstr "Pàgina"
 
-#: part/View.cpp:317
+#: part/View.cpp:313
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Commuta l'ancoratge de la forma"
 
-#: part/View.cpp:324
+#: part/View.cpp:319
 #, kde-format
 msgid "Next Sheet"
 msgstr "Següent full"
 
 # msgid "Text"
-#: part/View.cpp:325
+#: part/View.cpp:320
 #, kde-format
 msgid "Next"
 msgstr "Següent"
 
-#: part/View.cpp:326
+#: part/View.cpp:321
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Mou al següent full"
 
-#: part/View.cpp:331
+#: part/View.cpp:326
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Full anterior"
 
 # msgid "Previous Sheet"
-#: part/View.cpp:332
+#: part/View.cpp:327
 #, kde-format
 msgid "Previous"
 msgstr "Anterior"
 
-#: part/View.cpp:333
+#: part/View.cpp:328
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Mou al full anterior"
 
-#: part/View.cpp:338
+#: part/View.cpp:333
 #, kde-format
 msgid "First Sheet"
 msgstr "Primer full"
 
 # msgid "First Key"
-#: part/View.cpp:339
+#: part/View.cpp:334
 #, kde-format
 msgid "First"
 msgstr "Primer"
 
-#: part/View.cpp:340
+#: part/View.cpp:335
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Mou al primer full"
 
-#: part/View.cpp:344
+#: part/View.cpp:339
 #, kde-format
 msgid "Last Sheet"
 msgstr "Últim full"
 
 # msgid "List"
-#: part/View.cpp:345
+#: part/View.cpp:340
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Últim"
 
-#: part/View.cpp:346
+#: part/View.cpp:341
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Mou a l'últim full"
 
 # msgid "Show column as &numbers"
-#: part/View.cpp:352
+#: part/View.cpp:347
 #, kde-format
 msgid "Column Header"
 msgstr "Capçalera de columna"
 
-#: part/View.cpp:353
+#: part/View.cpp:348
 #, kde-format
 msgid "Show the column header"
 msgstr "Mostra la capçalera de la columna"
 
-#: part/View.cpp:358
+#: part/View.cpp:352
 #, kde-format
 msgid "Row Header"
 msgstr "Capçalera de fila"
 
-#: part/View.cpp:359
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the row header"
 msgstr "Mostra la capçalera de la fila"
 
-#: part/View.cpp:364
+#: part/View.cpp:357
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Barra de desplaçament horitzontal"
 
-#: part/View.cpp:365
+#: part/View.cpp:358
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Mostra la barra de desplaçament horitzontal"
 
-#: part/View.cpp:370
+#: part/View.cpp:362
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Barra de desplaçament vertical"
 
-#: part/View.cpp:371
+#: part/View.cpp:363
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Mostra la barra de desplaçament vertical"
 
 # msgid "Show Status Bar"
-#: part/View.cpp:376
+#: part/View.cpp:367
 #, kde-format
 msgid "Status Bar"
 msgstr "Barra d'estat"
 
-#: part/View.cpp:377
+#: part/View.cpp:368
 #, kde-format
 msgid "Show the status bar"
 msgstr "Mostra la barra d'estat"
 
 # msgid "Show Tab Bar"
-#: part/View.cpp:382
+#: part/View.cpp:372
 #, kde-format
 msgid "Tab Bar"
 msgstr "Barra de pestanyes"
 
-#: part/View.cpp:383
+#: part/View.cpp:373
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Mostra la barra de pestanyes"
 
-#: part/View.cpp:389
+#: part/View.cpp:378
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Permet configurar diverses opcions del Sheets del Calligra"
 
-#: part/View.cpp:402
+#: part/View.cpp:390
 #, kde-format
 msgid "No calculation"
 msgstr "Sense càlcul"
 
-#: part/View.cpp:409
+#: part/View.cpp:396
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Calcula usant el sumatori"
 
-#: part/View.cpp:416
+#: part/View.cpp:402
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Calcula usant el mínim"
 
-#: part/View.cpp:423
+#: part/View.cpp:408
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Calcula usant el màxim"
 
-#: part/View.cpp:430
+#: part/View.cpp:414
 #, kde-format
 msgid "Calculate using average"
 msgstr "Calcula usant la mitjana"
 
-#: part/View.cpp:437
+#: part/View.cpp:420
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Calcula usant el compte"
 
-#: part/View.cpp:444
+#: part/View.cpp:426
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "Calcula usant el compteA"
 
-#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
+#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "No podeu canviar un full protegit."
 
-#: part/View.cpp:1474
+#: part/View.cpp:1428
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "No podeu ocultar l'últim full visible."
 
-#: part/View.cpp:1554
+#: part/View.cpp:1510
 #, kde-format
 msgid "Enter a password."
 msgstr "Introduïu una contrasenya."
 
-#: part/View.cpp:1566
+#: part/View.cpp:1522
 #, kde-format
 msgid "Enter the password."
 msgstr "Introduïu la contrasenya."
 
-#: part/View.cpp:1574
+#: part/View.cpp:1530
 #, kde-format
 msgid "Password is incorrect."
 msgstr "La contrasenya no és correcta."
 
-#: part/View.cpp:1592
+#: part/View.cpp:1546
 #, kde-format
 msgid "Protect Document"
 msgstr "Protegeix el document"
 
-#: part/View.cpp:1595
+#: part/View.cpp:1548
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Desprotegeix el document"
 
-#: part/View.cpp:1615
+#: part/View.cpp:1567
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Protegeix el full"
 
-#: part/View.cpp:1618
+#: part/View.cpp:1569
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Desprotegeix el full"
 
-#: part/View.cpp:1852
+#: part/View.cpp:1804
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Reinicia l'interval de la impressió"
 
-#: part/View.cpp:1861
+#: part/View.cpp:1813
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "No podeu eliminar un full si és l'únic que hi ha."
 
-#: part/View.cpp:1864
+#: part/View.cpp:1817
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14339,83 +14339,83 @@ msgstr ""
 "Esteu a punt d'eliminar el full actual.\n"
 "Voleu continuar?"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Enter name:"
 msgstr "Introdueix el nom:"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Reanomena full"
 
-#: part/View.cpp:1894 part/View.cpp:1900
+#: part/View.cpp:1847 part/View.cpp:1853
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Canvia el nom del full"
 
-#: part/View.cpp:1894
+#: part/View.cpp:1847
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "El nom del full no pot estar buit."
 
-#: part/View.cpp:1900
+#: part/View.cpp:1853
 #, kde-format
 msgid "This name is already used."
 msgstr "Aquest nom ja està en ús."
 
-#: part/View.cpp:1968
+#: part/View.cpp:1921
 #, kde-format
 msgid "Sum: "
 msgstr "Sumatori: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1925
 #, kde-format
 msgid "Average: "
 msgstr "Mitjana: "
 
-#: part/View.cpp:1976
+#: part/View.cpp:1929
 #, kde-format
 msgid "Min: "
 msgstr "Mínim: "
 
-#: part/View.cpp:1980
+#: part/View.cpp:1933
 #, kde-format
 msgid "Max: "
 msgstr "Màxim: "
 
-#: part/View.cpp:1984
+#: part/View.cpp:1937
 #, kde-format
 msgid "Count: "
 msgstr "Compte: "
 
-#: part/View.cpp:1988
+#: part/View.cpp:1941
 #, kde-format
 msgid "CountA: "
 msgstr "CompteA: "
 
-#: part/View.cpp:1995
+#: part/View.cpp:1948
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128
+#: part/ViewAdaptor.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Canvia el color del text"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
+#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Canvia el color de fons"
 
-#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
-#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
+#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Canvia les vores"
 
-#: ui/CellToolBase.cpp:807
+#: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "No s'ha pogut localitzar l'acció %1"
@@ -14444,251 +14444,237 @@ msgstr "Format de nombre"
 msgid "Merge"
 msgstr "Fusió"
 
-#: ui/commands/AbstractRegionCommand.cpp:172
-#, kde-format
-msgid ""
-"Processing is not possible, because some cells are locked as elements of a "
-"matrix."
-msgstr ""
-"No és possible processar perquè algunes cel·les estan bloquejades com a "
-"elements d'una matriu."
-
-#: ui/commands/AbstractRegionCommand.cpp:185
-#, kde-format
-msgid "Processing is not possible, because some cells are protected."
-msgstr "No és possible processar perquè algunes cel·les estan protegides."
-
 #: ui/commands/ApplyFilterCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Aplica el filtre"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "January"
 msgstr "gener"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "February"
 msgstr "febrer"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "March"
 msgstr "març"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "April"
 msgstr "abril"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "May"
 msgstr "maig"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "June"
 msgstr "juny"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "July"
 msgstr "juliol"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "August"
 msgstr "agost"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "September"
 msgstr "setembre"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "October"
 msgstr "octubre"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "November"
 msgstr "novembre"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "December"
 msgstr "desembre"
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Jan"
 msgstr "gen."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Feb"
 msgstr "febr."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Mar"
 msgstr "mar."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Apr"
 msgstr "abr."
 
 # msgid "May"
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "maig"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Jun"
 msgstr "juny"
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Jul"
 msgstr "jul."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Aug"
 msgstr "ago."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Sep"
 msgstr "set."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Oct"
 msgstr "oct."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
 msgid "Nov"
 msgstr "nov."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Dec"
 msgstr "des."
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Monday"
 msgstr "dilluns"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Tuesday"
 msgstr "dimarts"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Wednesday"
 msgstr "dimecres"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Thursday"
 msgstr "dijous"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:149
 #, kde-format
 msgid "Friday"
 msgstr "divendres"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:150
 #, kde-format
 msgid "Saturday"
 msgstr "dissabte"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:151
 #, kde-format
 msgid "Sunday"
 msgstr "diumenge"
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Mon"
 msgstr "Dl."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Tue"
 msgstr "Dt."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Wed"
 msgstr "Dc."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Thu"
 msgstr "Dj."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:160
 #, kde-format
 msgid "Fri"
 msgstr "Dv."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:161
 #, kde-format
 msgid "Sat"
 msgstr "Ds."
 
 # skip-rule: punctuation-period-no
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:162
 #, kde-format
 msgid "Sun"
 msgstr "Dg."
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:673
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Compleció automàtica"
 
 # msgid "Change Angle"
-#: ui/commands/DataManipulators.cpp:107
+#: ui/commands/DataManipulators.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "Canvia el valor"
 
-#: ui/commands/DataManipulators.cpp:180 ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "Insereix cel·les"
 
-#: ui/commands/DataManipulators.cpp:193
+#: ui/commands/DataManipulators.cpp:191
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "Elimina les cel·les"
@@ -14698,27 +14684,27 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "Elimina"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "Fusiona les cel·les horitzontalment"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "Fusiona les cel·les verticalment"
 
-#: ui/commands/MergeCommand.cpp:89
+#: ui/commands/MergeCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Fusiona les cel·les"
 
-#: ui/commands/MergeCommand.cpp:92
+#: ui/commands/MergeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "Dissocia les cel·les"
 
-#: ui/commands/MergeCommand.cpp:98
+#: ui/commands/MergeCommand.cpp:96
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "No hi ha suport de la fusió de columnes o files."
@@ -14745,124 +14731,124 @@ msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "Redimensiona la fila"
 
-#: ui/commands/RowColumnManipulators.cpp:277
+#: ui/commands/RowColumnManipulators.cpp:283
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "Oculta les files/columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:279
+#: ui/commands/RowColumnManipulators.cpp:285
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "Oculta les columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:281
+#: ui/commands/RowColumnManipulators.cpp:287
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "Oculta les files"
 
-#: ui/commands/RowColumnManipulators.cpp:284
+#: ui/commands/RowColumnManipulators.cpp:290
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "Mostra les files/columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:286
+#: ui/commands/RowColumnManipulators.cpp:292
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "Mostra les columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:288
+#: ui/commands/RowColumnManipulators.cpp:294
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Mostra les files"
 
 # msgid "Adjust Column"
-#: ui/commands/RowColumnManipulators.cpp:535
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Ajusta les columnes/files"
 
 # msgid "Adjust Column"
-#: ui/commands/RowColumnManipulators.cpp:537
+#: ui/commands/RowColumnManipulators.cpp:541
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Ajusta les columnes"
 
 # msgid "Adjust Row"
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Ajusta les files"
 
-#: ui/commands/RowColumnManipulators.cpp:552
-#: ui/commands/RowColumnManipulators.cpp:570
+#: ui/commands/RowColumnManipulators.cpp:556
+#: ui/commands/RowColumnManipulators.cpp:574
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Insereix columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:572
+#: ui/commands/RowColumnManipulators.cpp:576
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Elimina columnes"
 
-#: ui/commands/RowColumnManipulators.cpp:629
-#: ui/commands/RowColumnManipulators.cpp:647
+#: ui/commands/RowColumnManipulators.cpp:631
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Insereix files"
 
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:651
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Elimina files"
 
-#: ui/commands/SheetCommands.cpp:24
+#: ui/commands/SheetCommands.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
 msgstr "Reanomena el full"
 
 # msgid "Hide Sheet"
-#: ui/commands/SheetCommands.cpp:45
+#: ui/commands/SheetCommands.cpp:46
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "Oculta el full %1"
 
-#: ui/commands/SheetCommands.cpp:46
+#: ui/commands/SheetCommands.cpp:48
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet"
 msgstr "Oculta el full"
 
 # msgid "Show Sheet"
-#: ui/commands/SheetCommands.cpp:73
+#: ui/commands/SheetCommands.cpp:77
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "Mostra el full %1"
 
-#: ui/commands/SheetCommands.cpp:74 ui/dialogs/ShowDialog.cpp:71
+#: ui/commands/SheetCommands.cpp:79 ui/dialogs/ShowDialog.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
 msgstr "Mostra el full"
 
 # msgid "Hide Sheet"
-#: ui/commands/SheetCommands.cpp:98
+#: ui/commands/SheetCommands.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
 msgstr "Afegeix un full"
 
 # msgid "Recalculate Sheet"
-#: ui/commands/SheetCommands.cpp:125
+#: ui/commands/SheetCommands.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
 msgstr "Duplica el full"
 
-#: ui/commands/SheetCommands.cpp:163
+#: ui/commands/SheetCommands.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Remove Sheet"
 msgstr "Elimina el full"
 
 # msgid "Sheet Properties"
-#: ui/commands/SheetCommands.cpp:193
+#: ui/commands/SheetCommands.cpp:197
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "Canvia les propietats del full"
@@ -14964,8 +14950,8 @@ msgid "Bold"
 msgstr "Negreta"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
-#: ui/dialogs/LayoutPage_Pattern.cpp:119
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:308
+#: ui/dialogs/LayoutPage_Pattern.cpp:116
 #, kde-format
 msgid "Color:"
 msgstr "Color:"
@@ -15041,8 +15027,8 @@ msgstr ""
 "Cliqueu en una família per a configurar-la a la cel·la actual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
-#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
+#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "Vista prèvia"
@@ -15056,52 +15042,52 @@ msgstr ""
 "Podeu veure una vista prèvia del tipus de lletra que escolliu per a la "
 "cel·la actual."
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format
 msgid "Cell Format"
 msgstr "Format de la cel·la"
 
-#: ui/dialogs/LayoutDialog.cpp:123
+#: ui/dialogs/LayoutDialog.cpp:120
 #, kde-format
 msgid "Set Cell Format"
 msgstr "Estableix el format de la cel·la"
 
-#: ui/dialogs/LayoutDialog.cpp:132
+#: ui/dialogs/LayoutDialog.cpp:129
 #, kde-format
 msgid "General"
 msgstr "General"
 
-#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "Vores"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:147
 #, kde-format
 msgid "Background"
 msgstr "Fons"
 
-#: ui/dialogs/LayoutDialog.cpp:153
+#: ui/dialogs/LayoutDialog.cpp:150
 #, kde-format
 msgid "Cell Protection"
 msgstr "Protecció de la cel·la"
 
-#: ui/dialogs/LayoutPage_Border.cpp:273
+#: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
 msgid "Preselect"
 msgstr "Preselecciona"
 
-#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#: ui/dialogs/LayoutPage_Border.cpp:279 ui/dialogs/LayoutPage_Pattern.cpp:94
 #, kde-format
 msgid "Pattern"
 msgstr "Patró"
 
-#: ui/dialogs/LayoutPage_Border.cpp:328
+#: ui/dialogs/LayoutPage_Border.cpp:312
 #, kde-format
 msgid "Customize"
 msgstr "Personalitza"
 
-#: ui/dialogs/LayoutPage_Float.cpp:58
+#: ui/dialogs/LayoutPage_Float.cpp:57
 #, kde-format
 msgid "Generic"
 msgstr "Genèric"
@@ -15119,7 +15105,7 @@ msgstr ""
 "predeterminada, el Sheets posa els nombres a la dreta, les dates i les hores "
 "centrades i a l'esquerra tota la resta."
 
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -15131,12 +15117,12 @@ msgstr ""
 "regional -> País/regió i idioma -> pestanya Nombres». De manera "
 "predeterminada, els nombres s'alineen a la dreta."
 
-#: ui/dialogs/LayoutPage_Float.cpp:66
+#: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
 msgid "Percent"
 msgstr "Tant per cent"
 
-#: ui/dialogs/LayoutPage_Float.cpp:67
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -15155,12 +15141,12 @@ msgstr ""
 "12.\n"
 "També podeu usar la icona de tant per cent a la barra d'eines de format."
 
-#: ui/dialogs/LayoutPage_Float.cpp:70
+#: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
 msgid "Money"
 msgstr "Diners"
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -15178,12 +15164,12 @@ msgstr ""
 "També podeu usar la icona Moneda a la barra d'eines de format per a donar "
 "format a la cel·la amb la vostra moneda actual."
 
-#: ui/dialogs/LayoutPage_Float.cpp:74
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid "Scientific"
 msgstr "Científic"
 
-#: ui/dialogs/LayoutPage_Float.cpp:75
+#: ui/dialogs/LayoutPage_Float.cpp:85
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -15194,7 +15180,7 @@ msgstr ""
 "exemple, 0,0012 es canviarà per 1,2E-03. Anant-hi enrere usant el format "
 "genèric, ho tornarà a canviar a 0,0012."
 
-#: ui/dialogs/LayoutPage_Float.cpp:79
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -15215,7 +15201,7 @@ msgstr ""
 "el text que es mostrarà a la cel·la serà «1 8/16» que és una fracció exacta. "
 "Si teniu el nombre 1,4, es mostrarà «1 6/16» que és la fracció més propera."
 
-#: ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/dialogs/LayoutPage_Float.cpp:100
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -15232,7 +15218,7 @@ msgstr ""
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
 "baix i les següents cel·les també tindran dates."
 
-#: ui/dialogs/LayoutPage_Float.cpp:87
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -15253,12 +15239,12 @@ msgstr ""
 "nombre de la cel·la no sigui una hora, el Sheets el mostrarà com a 00:00 en "
 "el format global que teniu a Arranjament del sistema."
 
-#: ui/dialogs/LayoutPage_Float.cpp:90
+#: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
 msgid "Datetime"
 msgstr "Data i hora"
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:115
 #, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
@@ -15275,7 +15261,7 @@ msgstr ""
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
 "baix i les següents cel·les també tindran dates i hores."
 
-#: ui/dialogs/LayoutPage_Float.cpp:95
+#: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -15290,18 +15276,18 @@ msgstr ""
 "es formaten com a text, no es poden fer servir per a càlculs ni fórmules. "
 "També canvia la manera en què es justifiquen les cel·les."
 
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid "Custom"
 msgstr "A mida"
 
-#: ui/dialogs/LayoutPage_Float.cpp:99
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr ""
 "El format personalitzat no funciona encara. S'activarà a la pròxima versió."
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:136
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -15310,12 +15296,12 @@ msgstr ""
 "Això mostrarà una vista prèvia de la vostra elecció, de manera que sabreu "
 "què fa abans de clicar el botó «D'acord» per a validar-lo."
 
-#: ui/dialogs/LayoutPage_Float.cpp:117
+#: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "Mostra les opcions de format per als formats de fracció, data o hora."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:156
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -15324,12 +15310,12 @@ msgstr ""
 "Aquí podeu afegir-hi un Postfix com un símbol $HK al final de cada contingut "
 "de cel·la en el format marcat."
 
-#: ui/dialogs/LayoutPage_Float.cpp:130
+#: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
 msgid "variable"
 msgstr "variable"
 
-#: ui/dialogs/LayoutPage_Float.cpp:133
+#: ui/dialogs/LayoutPage_Float.cpp:163
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -15340,7 +15326,7 @@ msgstr ""
 "valors numèrics. Això també es pot canviar usant les icones de precisió "
 "d'increment o decrement a la barra d'eines de format. "
 
-#: ui/dialogs/LayoutPage_Float.cpp:137
+#: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -15349,7 +15335,7 @@ msgstr ""
 "Aquí podeu afegir un prefix com un símbol € al principi de cada contingut de "
 "cel·la en el format marcat."
 
-#: ui/dialogs/LayoutPage_Float.cpp:141
+#: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -15358,77 +15344,77 @@ msgstr ""
 "Podeu escollir si es mostren els valors positius amb un signe + al "
 "començament i si els nombres negatius es mostren en vermell."
 
-#: ui/dialogs/LayoutPage_Float.cpp:147
+#: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
 msgid "Postfix:"
 msgstr "Postfix:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:151
+#: ui/dialogs/LayoutPage_Float.cpp:182
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefix:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:155
+#: ui/dialogs/LayoutPage_Float.cpp:186
 #, kde-format
 msgid "Precision:"
 msgstr "Precisió:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:203
 #, kde-format
 msgid "Format:"
 msgstr "Format:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:176
+#: ui/dialogs/LayoutPage_Float.cpp:207
 #, kde-format
 msgid "Currency:"
 msgstr "Moneda:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:283
+#: ui/dialogs/LayoutPage_Float.cpp:313
 #, kde-format
 msgid "Halves 1/2"
 msgstr "Meitats 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:284
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "Quarts 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:285
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "Vuitens 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:286
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "Setzens 1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:287
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "Dècims 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:288
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "Centèsims 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:289
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "One digit 5/9"
 msgstr "Un dígit 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:290
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "Dos dígits 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:291
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Tres dígits 153/652"
 
-#: ui/dialogs/LayoutPage_Font.cpp:53
+#: ui/dialogs/LayoutPage_Font.cpp:45
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "Dolor Ipse"
@@ -15449,33 +15435,33 @@ msgstr "Nom:"
 msgid "Inherit style:"
 msgstr "Heretar estil:"
 
-#: ui/dialogs/LayoutPage_General.cpp:90
+#: ui/dialogs/LayoutPage_General.cpp:88
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Ja existeix un estil amb aquest nom."
 
 # msgid "The style name cannot be empty."
-#: ui/dialogs/LayoutPage_General.cpp:94
+#: ui/dialogs/LayoutPage_General.cpp:92
 #, kde-format
 msgid "The style name can not be empty."
 msgstr "El nom de l'estil no pot estar buit."
 
-#: ui/dialogs/LayoutPage_General.cpp:106
+#: ui/dialogs/LayoutPage_General.cpp:104
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "Un estil no pot heretar de si mateix."
 
-#: ui/dialogs/LayoutPage_General.cpp:110
+#: ui/dialogs/LayoutPage_General.cpp:108
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr "L'estil no pot heretar de «%1» perquè crearia referències recursives."
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:128
+#: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
 msgid "Background color:"
 msgstr "Color de fons:"
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:136
+#: ui/dialogs/LayoutPage_Pattern.cpp:132
 #, kde-format
 msgid "No Color"
 msgstr "Sense color"
@@ -15755,76 +15741,82 @@ msgstr "Mostra el full"
 msgid "Select hidden sheets to show:"
 msgstr "Escolliu els fulls ocults per a mostrar:"
 
-#: ui/ExternalEditor.cpp:56
+#: ui/ExternalEditor.cpp:55
 #, kde-format
 msgid "Apply"
 msgstr "Aplica"
 
-#: ui/ExternalEditor.cpp:57
+#: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply changes"
 msgstr "Aplica els canvis"
 
-#: ui/ExternalEditor.cpp:61
+#: ui/ExternalEditor.cpp:60
 #, kde-format
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: ui/ExternalEditor.cpp:62
+#: ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Discard changes"
 msgstr "Descarta els canvis"
 
-#: ui/FilterPopup.cpp:55
+#: ui/FilterPopup.cpp:54
 #, kde-format
 msgid "All"
 msgstr "Tot"
 
 # msgid "Egypt"
-#: ui/FilterPopup.cpp:58
+#: ui/FilterPopup.cpp:57
 #, kde-format
 msgid "Empty"
 msgstr "Buit"
 
 # msgid "None"
-#: ui/FilterPopup.cpp:62
+#: ui/FilterPopup.cpp:61
 #, kde-format
 msgid "Non-empty"
 msgstr "No buit"
 
-#: ui/MapViewModel.cpp:180
+#: ui/MapViewModel.cpp:179
 #, kde-format
 msgctxt "Activate sheet named foo"
 msgid "Activate %1"
 msgstr "Activa %1"
 
-#: ui/RegionSelector.cpp:145
+#: ui/RegionSelector.cpp:144
 #, kde-format
 msgid "Select Single Cell"
 msgstr "Selecciona una única cel·la"
 
-#: ui/RegionSelector.cpp:147
+#: ui/RegionSelector.cpp:146
 #, kde-format
 msgid "Select Multiple Cells"
 msgstr "Selecciona múltiples cel·les"
 
-#: ui/strategy/HyperlinkStrategy.cpp:66
+#: ui/strategy/HyperlinkStrategy.cpp:67
 #, kde-format
 msgid "Link %1 activated"
 msgstr "L'enllaç %1 és activat"
 
-#: ui/strategy/HyperlinkStrategy.cpp:83
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Aquest enllaç apunta al programa o script «%1».\n"
-"Els programes maliciosos poden malmetre el vostre ordinador. Esteu segur que "
-"voleu engegar aquest programa?"
+#~ msgid ""
+#~ "Processing is not possible, because some cells are locked as elements of "
+#~ "a matrix."
+#~ msgstr ""
+#~ "No és possible processar perquè algunes cel·les estan bloquejades com a "
+#~ "elements d'una matriu."
 
-#: ui/strategy/HyperlinkStrategy.cpp:89
-#, kde-format
-msgid "Open Link?"
-msgstr "Obro l'enllaç?"
+#~ msgid "Processing is not possible, because some cells are protected."
+#~ msgstr "No és possible processar perquè algunes cel·les estan protegides."
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Aquest enllaç apunta al programa o script «%1».\n"
+#~ "Els programes maliciosos poden malmetre el vostre ordinador. Esteu segur "
+#~ "que voleu engegar aquest programa?"
+
+#~ msgid "Open Link?"
+#~ msgstr "Obro l'enllaç?"

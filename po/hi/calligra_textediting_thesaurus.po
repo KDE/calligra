@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2008-03-05 20:51+0530\n"
 "Last-Translator: Ravishankar Shrivastava <aviratlami@aol.in>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -33,71 +33,71 @@ msgstr "के लिए ढूंढें: (&S)"
 msgid "S&earch"
 msgstr "ढूंढें (&e)"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, fuzzy, kde-format
 #| msgid "Back"
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "पीछे"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, fuzzy, kde-format
 #| msgid "Forward"
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "आगे"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
 msgstr "भाषा बदलें..."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "समांतर शब्दकोश (&T)"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "समानार्थी"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "अधिक सामान्य शब्द"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "अधिक विशिष्ट शब्द"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
 msgstr "वर्डनेट (&W)"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "से बदलें: (&R)"
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "बदलें (&R)"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
 msgstr "शब्द बदलें"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
 msgstr "संबंधित शब्द - %1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
@@ -105,77 +105,77 @@ msgid ""
 msgstr ""
 "समांतर कोश फ़ाइल '%1' नहीं मिला. समांतर कोश फ़ाइल चुनने के लिए कृपया 'भाषा बदलें...' चुनें."
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b>त्रुटि:</b> ग्रेप चलाने में असफल."
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "समानार्थी/हायपरनिम्स - आवृत्ति के आधार पर अनुक्रम"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "समानार्थी - एक जैसे अर्थ के आधार पर अनुक्रम (सिर्फ क्रिया)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "विरुद्धार्थी - विपरीत अर्थ वाले शब्द"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "हायपोनिम्स - ... यह है (जैसा) %1"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "मेरोनिम्स - %1 में है ..."
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "होलोनिम्स - ... में है %1"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "गुणधर्म"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "काज़ टू (सिर्फ कुछ क्रियाओं के लिए)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "क्रिया एंटेलमेंट (सिर्फ कुछ शब्दों के लिए)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "फेमिलरिटी & पॉलीसेमी गिनती"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "क्रिया फ्रेम (प्रयोग के उदाहरण)"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "मिश्रित शब्दों की सूची"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
 msgstr "सेंसेस के ओवर-व्यू"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -185,7 +185,7 @@ msgid ""
 "English language."
 msgstr ""
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "'%1' के लिए कोई जोड़ा नहीं."

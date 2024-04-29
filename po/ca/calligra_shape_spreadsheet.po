@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-10-28 10:13+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -30,7 +30,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "txemaq@gmail.com"
 
-#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
 msgid "Rename"
 msgstr "Reanomena"
@@ -45,12 +45,12 @@ msgstr "Afegeix"
 msgid "Remove"
 msgstr "Elimina"
 
-#: SheetsEditor.cpp:121
+#: SheetsEditor.cpp:124
 #, kde-format
 msgid "Enter Name:"
 msgstr "Introduïu un nom:"
 
-#: TableShape.cpp:288
+#: TableShape.cpp:300
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -59,67 +59,67 @@ msgstr ""
 "Aquest document conté un enllaç extern a un document remot\n"
 "%1"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Cal confirmació"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:302
 #, kde-format
 msgid "Download"
 msgstr "Baixa"
 
-#: TableShape.cpp:289
+#: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
 msgstr "Omet"
 
-#: TableShapeFactory.cpp:37
+#: TableShapeFactory.cpp:35
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Full de càlcul"
 
-#: TableShapeFactory.cpp:39
+#: TableShapeFactory.cpp:37
 #, kde-format
 msgid "Spreadsheet Shape"
 msgstr "Forma de full de càlcul"
 
-#: TableTool.cpp:213
+#: TableTool.cpp:211
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "Importa un fitxer de full de càlcul OpenDocument"
 
-#: TableTool.cpp:214
+#: TableTool.cpp:212
 #, kde-format
 msgid "Import"
 msgstr "Importa"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:216
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "Exporta un fitxer de full de càlcul OpenDocument"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:217
 #, kde-format
 msgid "Export"
 msgstr "Exporta"
 
-#: TableTool.cpp:699
+#: TableTool.cpp:696
 #, kde-format
 msgid "Sheets"
 msgstr "Fulls"
 
-#: TableTool.cpp:741
+#: TableTool.cpp:738
 #, kde-format
 msgid "Sheet:"
 msgstr "Full:"
 
-#: TableTool.cpp:743
+#: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Full seleccionat"
 
-#: TableTool.cpp:758
+#: TableTool.cpp:754
 #, kde-format
 msgid "View Options"
 msgstr "Opcions de visualització"
@@ -129,27 +129,27 @@ msgstr "Opcions de visualització"
 msgid "Table editing"
 msgstr "Edició de taules"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
 msgstr "L'àrea és massa gran."
 
-#: ToolHeaders.cpp:425
+#: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
 msgstr "Oculta la fila"
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Alçada: %1 %2"
 
-#: ToolHeaders.cpp:1049
+#: ToolHeaders.cpp:1031
 #, kde-format
 msgid "Hide Column"
 msgstr "Oculta la columna"
 
-#: ToolHeaders.cpp:1051
+#: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Amplada: %1 %2"

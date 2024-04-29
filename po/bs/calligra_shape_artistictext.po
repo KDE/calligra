@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-02-22 22:31+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
 msgstr "Dodaj opseg teksta"
@@ -35,92 +35,92 @@ msgstr "Oblik koji pokazuje jednu liniju teksta"
 msgid "Artistic Text"
 msgstr "Umjetnički tekst"
 
-#: ArtisticTextTool.cpp:64
+#: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
 msgstr "Ukloni stazu"
 
-#: ArtisticTextTool.cpp:69
+#: ArtisticTextTool.cpp:77
 #, kde-format
 msgid "Convert to Path"
 msgstr "Pretvori u stazu"
 
-#: ArtisticTextTool.cpp:74
+#: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
 msgstr "Bodebljani tekst"
 
-#: ArtisticTextTool.cpp:79
+#: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
 msgstr "Kurzivni tekst"
 
-#: ArtisticTextTool.cpp:84
+#: ArtisticTextTool.cpp:92
 #, kde-format
 msgid "Superscript"
 msgstr "Eksponent"
 
-#: ArtisticTextTool.cpp:89
+#: ArtisticTextTool.cpp:97
 #, kde-format
 msgid "Subscript"
 msgstr "Indeks"
 
-#: ArtisticTextTool.cpp:94
+#: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
 msgstr "Sidro na početku"
 
-#: ArtisticTextTool.cpp:99
+#: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
 msgstr "Sidro u sredini"
 
-#: ArtisticTextTool.cpp:104
+#: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
 msgstr "Sidro na kraju"
 
-#: ArtisticTextTool.cpp:295
+#: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
 msgstr "Kliknite za promjenu pozicije kursora."
 
-#: ArtisticTextTool.cpp:297
+#: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
 msgstr "Kliknite za izbor oblika teksta."
 
-#: ArtisticTextTool.cpp:300
+#: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
 msgstr "Dvostruko kliknite da smjestite tekst na stazu."
 
-#: ArtisticTextTool.cpp:303
+#: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
 msgstr "Dvostruko kliknite za promjenu pozicije početka."
 
-#: ArtisticTextTool.cpp:307
+#: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
 msgstr "Pritisnite Esc za kraj uređivanja."
 
-#: ArtisticTextTool.cpp:489
+#: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
 msgstr "Pritisni enter za kraj uređivanja."
 
-#: ArtisticTextTool.cpp:583
+#: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Pretvori u stazu"
 
-#: ArtisticTextTool.cpp:596
+#: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
 msgstr "Osobine teksta"
 
-#: ArtisticTextTool.cpp:606
+#: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
 msgstr "Tekst na stazi"
@@ -130,38 +130,38 @@ msgstr "Tekst na stazi"
 msgid "Artistic text editing"
 msgstr "Uređivanje umjetničkog teksta"
 
-#: AttachTextToPathCommand.cpp:15
+#: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
 msgstr "Priloži stazu"
 
-#: ChangeTextAnchorCommand.cpp:14
+#: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
 msgstr "Promijeni sidro teksta"
 
-#: ChangeTextFontCommand.cpp:16
+#: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
 msgstr "Promijeni font"
 
-#: ChangeTextOffsetCommand.cpp:15
+#: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
 msgstr "Promijeni poziciju teksta"
 
-#: DetachTextFromPathCommand.cpp:14
+#: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
 msgstr "Ukloni stazu"
 
-#: RemoveTextRangeCommand.cpp:16
+#: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
 msgstr "Ukloni opseg teksta"
 
-#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
-#: ReplaceTextRangeCommand.cpp:30
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "Opseg zamjenskog teksta"

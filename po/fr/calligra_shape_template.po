@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-05-03 18:36+0200\n"
 "Last-Translator: Sophie ABBAD <abbadsophie@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -21,27 +21,27 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: ChangeSomethingCommand.cpp:34
+#: ChangeSomethingCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Change something"
 msgstr "Modifier quelque chose"
 
-#: TemplateShapeFactory.cpp:32
+#: TemplateShapeFactory.cpp:31
 #, kde-format
 msgid "Template shape"
 msgstr "Modèle de forme"
 
-#: TemplateShapeFactory.cpp:34
+#: TemplateShapeFactory.cpp:33
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
 msgstr "Forme simple utilisée comme modèle pour développer d'autres formes."
 
-#: TemplateTool.cpp:77
+#: TemplateTool.cpp:76
 #, kde-format
 msgid "Open"
 msgstr "Ouvrir"
 
-#: TemplateToolFactory.cpp:26
+#: TemplateToolFactory.cpp:24
 #, kde-format
 msgid "Template shape editing"
 msgstr "Édition de modèles de formes"

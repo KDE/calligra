@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TemplateShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2012-05-14 16:25-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: ChangeSomethingCommand.cpp:34
+#: ChangeSomethingCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Change something"
 msgstr ""
 
-#: TemplateShapeFactory.cpp:32
+#: TemplateShapeFactory.cpp:31
 #, kde-format
 msgid "Template shape"
 msgstr ""
 
-#: TemplateShapeFactory.cpp:34
+#: TemplateShapeFactory.cpp:33
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
 msgstr ""
 
-#: TemplateTool.cpp:77
+#: TemplateTool.cpp:76
 #, kde-format
 msgid "Open"
 msgstr "Oscail"
 
-#: TemplateToolFactory.cpp:26
+#: TemplateToolFactory.cpp:24
 #, kde-format
 msgid "Template shape editing"
 msgstr ""

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2019-02-06 16:32-0200\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -49,98 +49,98 @@ msgstr "Alinhamento"
 msgid "%"
 msgstr "%"
 
-#: connectionTool/ConnectionTool.cpp:66
+#: connectionTool/ConnectionTool.cpp:65
 #, kde-format
 msgid "Edit connection points"
 msgstr "Editar os pontos de conexão"
 
-#: connectionTool/ConnectionTool.cpp:73
+#: connectionTool/ConnectionTool.cpp:72
 #, kde-format
 msgid "Align to left edge"
 msgstr "Alinhar ao extremo esquerdo"
 
-#: connectionTool/ConnectionTool.cpp:76
+#: connectionTool/ConnectionTool.cpp:75
 #, kde-format
 msgid "Align to horizontal center"
 msgstr "Centralizar na horizontal"
 
-#: connectionTool/ConnectionTool.cpp:79
+#: connectionTool/ConnectionTool.cpp:78
 #, kde-format
 msgid "Align to right edge"
 msgstr "Alinhar ao extremo direito"
 
-#: connectionTool/ConnectionTool.cpp:82
+#: connectionTool/ConnectionTool.cpp:81
 #, kde-format
 msgid "Align to top edge"
 msgstr "Alinhar ao extremo superior"
 
-#: connectionTool/ConnectionTool.cpp:85
+#: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
 msgstr "Centralizar na vertical"
 
-#: connectionTool/ConnectionTool.cpp:88
+#: connectionTool/ConnectionTool.cpp:87
 #, kde-format
 msgid "Align to bottom edge"
 msgstr "Alinhar ao extremo inferior"
 
-#: connectionTool/ConnectionTool.cpp:92
+#: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
 msgstr "Escapar em todas as direções"
 
-#: connectionTool/ConnectionTool.cpp:95
+#: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
 msgstr "Escapar nas direções horizontais"
 
-#: connectionTool/ConnectionTool.cpp:98
+#: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
 msgstr "Escapar nas direções verticais"
 
-#: connectionTool/ConnectionTool.cpp:101
+#: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
 msgstr "Escapar para a esquerda"
 
-#: connectionTool/ConnectionTool.cpp:104
+#: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
 msgstr "Escapar para a direita"
 
-#: connectionTool/ConnectionTool.cpp:107
+#: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
 msgstr "Escapar para cima"
 
-#: connectionTool/ConnectionTool.cpp:110
+#: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
 msgstr "Escapar para baixo"
 
-#: connectionTool/ConnectionTool.cpp:434
+#: connectionTool/ConnectionTool.cpp:429
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Criar conexão"
 
-#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "Arraste para editar a conexão."
 
-#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr ""
 "Clique duas vezes sobre a conexão ou pressione Delete para a removê-la."
 
-#: connectionTool/ConnectionTool.cpp:778
+#: connectionTool/ConnectionTool.cpp:774
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "Clique para editar os pontos de conexão."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
@@ -149,34 +149,34 @@ msgstr ""
 "Arraste para mover o ponto de conexão. Clique duas vezes sobre a conexão ou "
 "pressione Delete para removê-la."
 
-#: connectionTool/ConnectionTool.cpp:794
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
 "Clique duas vezes sobre o ponto de conexão ou pressione Delete para removê-"
 "la."
 
-#: connectionTool/ConnectionTool.cpp:796
+#: connectionTool/ConnectionTool.cpp:792
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "Clique duas vezes para adicionar um ponto de conexão."
 
-#: connectionTool/ConnectionTool.cpp:799
+#: connectionTool/ConnectionTool.cpp:795
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "Arraste para criar uma nova conexão."
 
-#: connectionTool/ConnectionTool.cpp:827
+#: connectionTool/ConnectionTool.cpp:823
 #, kde-format
 msgid "Connection"
 msgstr "Conexão"
 
-#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Line"
 msgstr "Linha"
 
-#: connectionTool/ConnectionTool.cpp:837
+#: connectionTool/ConnectionTool.cpp:833
 #, kde-format
 msgid "Connection Point"
 msgstr "Ponto de conexão"
@@ -186,72 +186,72 @@ msgstr "Ponto de conexão"
 msgid "Connect shapes"
 msgstr "Ligar as formas"
 
-#: defaulttool/DefaultTool.cpp:205
+#: defaulttool/DefaultTool.cpp:219
 #, kde-format
 msgid "Bring to &Front"
 msgstr "Trazer para &frente"
 
-#: defaulttool/DefaultTool.cpp:210
+#: defaulttool/DefaultTool.cpp:224
 #, kde-format
 msgid "&Raise"
 msgstr "&Elevar"
 
-#: defaulttool/DefaultTool.cpp:215
+#: defaulttool/DefaultTool.cpp:229
 #, kde-format
 msgid "&Lower"
 msgstr "&Baixar"
 
-#: defaulttool/DefaultTool.cpp:221
+#: defaulttool/DefaultTool.cpp:234
 #, kde-format
 msgid "Send to &Back"
 msgstr "Enviar para &trás"
 
-#: defaulttool/DefaultTool.cpp:227
+#: defaulttool/DefaultTool.cpp:239
 #, kde-format
 msgid "Align Left"
 msgstr "Alinhar à esquerda"
 
-#: defaulttool/DefaultTool.cpp:232
+#: defaulttool/DefaultTool.cpp:243
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Centralizar na horizontal"
 
-#: defaulttool/DefaultTool.cpp:237
+#: defaulttool/DefaultTool.cpp:247
 #, kde-format
 msgid "Align Right"
 msgstr "Alinhar à direita"
 
-#: defaulttool/DefaultTool.cpp:241
+#: defaulttool/DefaultTool.cpp:251
 #, kde-format
 msgid "Align Top"
 msgstr "Alinhar no topo"
 
-#: defaulttool/DefaultTool.cpp:246
+#: defaulttool/DefaultTool.cpp:255
 #, kde-format
 msgid "Vertically Center"
 msgstr "Centralizar na vertical"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:259
 #, kde-format
 msgid "Align Bottom"
 msgstr "Alinhar abaixo"
 
-#: defaulttool/DefaultTool.cpp:256
+#: defaulttool/DefaultTool.cpp:263
 #, kde-format
 msgid "Group"
 msgstr "Agrupar"
 
-#: defaulttool/DefaultTool.cpp:261
+#: defaulttool/DefaultTool.cpp:267
 #, kde-format
 msgid "Ungroup"
 msgstr "Desagrupar"
 
-#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Clique e arraste para mover a guia."
 
-#: defaulttool/DefaultTool.cpp:454
+#: defaulttool/DefaultTool.cpp:467
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -259,22 +259,22 @@ msgstr ""
 "O botão esquerdo do mouse roda em torno do centro e o botão direito em torno "
 "da posição selecionada."
 
-#: defaulttool/DefaultTool.cpp:456
+#: defaulttool/DefaultTool.cpp:469
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Clique e arraste para inclinar a seleção."
 
-#: defaulttool/DefaultTool.cpp:459
+#: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Clique e arraste para dimensionar a seleção."
 
-#: defaulttool/DefaultTool.cpp:511
+#: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Clique e arraste para mover a seleção."
 
-#: defaulttool/DefaultTool.cpp:516
+#: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -282,32 +282,32 @@ msgstr ""
 "Clique e arraste para dimensionar a seleção. Use o botão do meio para "
 "definir a posição selecionada."
 
-#: defaulttool/DefaultTool.cpp:1039
+#: defaulttool/DefaultTool.cpp:1043
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Agrupar formas"
 
-#: defaulttool/DefaultTool.cpp:1071
+#: defaulttool/DefaultTool.cpp:1075
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Desagrupar formas"
 
-#: defaulttool/DefaultTool.cpp:1161
+#: defaulttool/DefaultTool.cpp:1163
 #, kde-format
 msgid "Arrange"
 msgstr "Organizar"
 
-#: defaulttool/DefaultTool.cpp:1164
+#: defaulttool/DefaultTool.cpp:1166
 #, kde-format
 msgid "Geometry"
 msgstr "Geometria"
 
-#: defaulttool/DefaultTool.cpp:1172
+#: defaulttool/DefaultTool.cpp:1174
 #, kde-format
 msgid "Fill"
 msgstr "Preencher"
 
-#: defaulttool/DefaultTool.cpp:1177
+#: defaulttool/DefaultTool.cpp:1179
 #, kde-format
 msgid "Shadow"
 msgstr "Sombra"
@@ -317,29 +317,29 @@ msgstr "Sombra"
 msgid "Shape handling"
 msgstr "Tratamento de formas"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:100
-#: defaulttool/ShapeRotateStrategy.cpp:137
+#: defaulttool/DefaultToolTransformWidget.cpp:97
+#: defaulttool/ShapeRotateStrategy.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Rodar"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:138
+#: defaulttool/DefaultToolTransformWidget.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Shear X"
 msgstr "Inclinar em X"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:176
+#: defaulttool/DefaultToolTransformWidget.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
 msgstr "Inclinar em Y"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:218
-#: defaulttool/DefaultToolTransformWidget.cpp:255
+#: defaulttool/DefaultToolTransformWidget.cpp:215
+#: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
 msgstr "Escalonar"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:287
+#: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
 msgstr "Limpar transformações"
@@ -392,8 +392,8 @@ msgstr "Manter a taxa de proporção"
 msgid "Reset Transformations"
 msgstr "Limpar transformações"
 
-#: defaulttool/DefaultToolWidget.cpp:225
-#: defaulttool/ShapeResizeStrategy.cpp:304
+#: defaulttool/DefaultToolWidget.cpp:217
+#: defaulttool/ShapeResizeStrategy.cpp:332
 msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "Redimensionar"
@@ -415,7 +415,7 @@ msgstr "Y:"
 msgid "Press ALT to hold x- or y-position."
 msgstr "Pressione ALT para fixar a posição em X ou Y."
 
-#: defaulttool/ShapeResizeStrategy.cpp:92
+#: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Pressione CTRL para dimensionar a partir do centro."
@@ -425,7 +425,7 @@ msgstr "Pressione CTRL para dimensionar a partir do centro."
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Pressione ALT para rodar em passos de 45 graus."
 
-#: defaulttool/ShapeShearStrategy.cpp:169
+#: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Inclinar"
@@ -440,12 +440,12 @@ msgstr "Clique duas vezes para adicionar uma linha guia."
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr "Clique e arraste para mover a linha guia. Clique duplo para removê-la."
 
-#: guidestool/GuidesTool.cpp:374
+#: guidestool/GuidesTool.cpp:373
 #, kde-format
 msgid "Guides Editor"
 msgstr "Editor de guias"
 
-#: guidestool/GuidesTool.cpp:382
+#: guidestool/GuidesTool.cpp:379
 #, kde-format
 msgid "Guides Insertor"
 msgstr "Inserção de guias"

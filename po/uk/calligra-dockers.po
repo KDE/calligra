@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-06-21 14:52+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,78 +20,78 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:63
+#: shapecollection/OdfCollectionLoader.cpp:60
 #, kde-format
 msgid "Found no shapes in the collection! %1"
 msgstr "У збірці не знайдено форм! %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:132
+#: shapecollection/OdfCollectionLoader.cpp:120
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Це не файл Calligra: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:157
+#: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
 msgid "No body tag found in file: %1"
 msgstr "У файлі не знайдено теґу body: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:165
+#: shapecollection/OdfCollectionLoader.cpp:151
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
 msgstr "У файлі не знайдено теґу office:drawing: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:173
-#: shapecollection/OdfCollectionLoader.cpp:181
+#: shapecollection/OdfCollectionLoader.cpp:159
+#: shapecollection/OdfCollectionLoader.cpp:167
 #, kde-format
 msgid "No shapes found in file: %1"
 msgstr "У файлі не знайдено форм: %1"
 
-#: shapecollection/ShapeCollectionDocker.cpp:111
+#: shapecollection/ShapeCollectionDocker.cpp:110
 #, kde-format
 msgid "Add Shape"
 msgstr "Додати форму"
 
-#: shapecollection/ShapeCollectionDocker.cpp:146
+#: shapecollection/ShapeCollectionDocker.cpp:144
 #, kde-format
 msgid "More"
 msgstr "Більше"
 
-#: shapecollection/ShapeCollectionDocker.cpp:176
+#: shapecollection/ShapeCollectionDocker.cpp:172
 #, kde-format
 msgid "Open Shape Collection"
 msgstr "Відкрити збірку форм"
 
-#: shapecollection/ShapeCollectionDocker.cpp:184
+#: shapecollection/ShapeCollectionDocker.cpp:180
 #, kde-format
 msgid "Remove Shape Collection"
 msgstr "Вилучити збірку форм"
 
-#: shapecollection/ShapeCollectionDocker.cpp:330
+#: shapecollection/ShapeCollectionDocker.cpp:327
 #, kde-format
 msgid "Default"
 msgstr "Типовий"
 
-#: shapecollection/ShapeCollectionDocker.cpp:334
+#: shapecollection/ShapeCollectionDocker.cpp:331
 #, kde-format
 msgid "Geometrics"
 msgstr "Геометрія"
 
-#: shapecollection/ShapeCollectionDocker.cpp:345
+#: shapecollection/ShapeCollectionDocker.cpp:342
 #, kde-format
 msgid "Arrows"
 msgstr "Стрілки"
 
-#: shapecollection/ShapeCollectionDocker.cpp:349
+#: shapecollection/ShapeCollectionDocker.cpp:346
 #, kde-format
 msgid "Funny"
 msgstr "Смішне"
 
-#: shapecollection/ShapeCollectionDocker.cpp:522
+#: shapecollection/ShapeCollectionDocker.cpp:513
 #, kde-format
 msgid "Collection Error"
 msgstr "Помилка у збірці"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:35
+#: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
 msgstr "Властивості форми"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-06-28 21:36+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -22,22 +22,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Event"
 
-#: KoRdfCalendarEvent.cpp:158
+#: KoRdfCalendarEvent.cpp:147
 #, kde-format
 msgid "Area"
 msgstr "Area"
 
-#: KoRdfCalendarEvent.cpp:159
+#: KoRdfCalendarEvent.cpp:148
 #, kde-format
 msgid "Region"
 msgstr "Region"
 
-#: KoRdfCalendarEvent.cpp:381
+#: KoRdfCalendarEvent.cpp:359
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Select a calendar for saving:"
 
-#: KoRdfCalendarEvent.cpp:401
+#: KoRdfCalendarEvent.cpp:379
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Could not add entry\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:428
+#: KoRdfCalendarEvent.cpp:402
 #, kde-format
 msgid ""
 "Could not save iCal file\n"
@@ -91,22 +91,22 @@ msgstr "Time and Date"
 msgid "Timezone"
 msgstr "Timezone"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
 msgstr "Calendar Event"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
 msgstr "Edit..."
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
 msgstr "Import event to Calendar"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
 msgstr "Export event to iCal file..."

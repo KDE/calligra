@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-10-16 08:25+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: \n"
@@ -27,57 +27,57 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "page"
 msgstr "صفحة"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "pages"
 msgstr "صفحات"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "file"
 msgstr "ملف"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "name"
 msgstr "الاسم"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "time"
 msgstr "الوقت"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "date"
 msgstr "التاريخ"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "author"
 msgstr "المؤلف"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "email"
 msgstr "البريد الإلكتروني"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "org"
 msgstr "المنظمة"
 
-#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "sheet"
 msgstr "الورقة"
 
-#: core/ksp/SheetsKspDoc.cpp:42
+#: core/ksp/SheetsKspDoc.cpp:43
 #, kde-format
 msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
@@ -86,7 +86,7 @@ msgstr ""
 "مستند غير صحيح. نوع mime المتوقع هو application/x-kspread أو application/vnd."
 "kde.kspread، ولكن الموجود %1"
 
-#: core/ksp/SheetsKspDoc.cpp:51
+#: core/ksp/SheetsKspDoc.cpp:52
 #, fuzzy, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
@@ -97,37 +97,37 @@ msgstr ""
 "هذا المستند أنشئ بواسطة إصدار أحدث من KSpread (إصدار الصياغة: %1)\n"
 "عندما تفتحه مع هذا الإصدار من  KSpread، قد تفقد بعض المعلومات."
 
-#: core/ksp/SheetsKspDoc.cpp:53
+#: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
 msgid "File Format Mismatch"
 msgstr "تنسيق الملف غير مطابق"
 
-#: core/ksp/SheetsKspDoc.cpp:100
+#: core/ksp/SheetsKspDoc.cpp:105
 #, kde-format
 msgid "Styles cannot be loaded."
 msgstr "لا يمكن تحميل الأساليب."
 
-#: core/ksp/SheetsKspDoc.cpp:108
+#: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
 msgid "Invalid document. No map tag."
 msgstr "مستند غير صحيح. لا توجد رقعة خريطة."
 
-#: core/ksp/SheetsKspMap.cpp:78
+#: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
 msgid "This document has no sheets (tables)."
 msgstr "هذا المستند ليس به أوراق (جداول)."
 
-#: core/ksp/SheetsKspSheet.cpp:53
+#: core/ksp/SheetsKspSheet.cpp:51
 #, kde-format
 msgid "Invalid document. Sheet name is empty."
 msgstr "مستند غير صحيح. اسم الورقة فارغ."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:189
+#: core/Map.cpp:241 engine/MapBase.cpp:182
 #, kde-format
 msgid "Sheet%1"
 msgstr "الورقة%1"
 
-#: core/Sheet.cpp:655
+#: core/Sheet.cpp:660
 #, fuzzy, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "فشل تحقق الصحة للخلية <i>%1</i>"
@@ -142,40 +142,40 @@ msgstr "ترويسة"
 msgid "Header1"
 msgstr "ترويسة1"
 
-#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
+#: ui/dialogs/LayoutPage_General.cpp:143
 #, kde-format
 msgid "Default"
 msgstr "افتراضي"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "AM"
 msgstr "ق‌ظ"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "PM"
 msgstr "ب‌ظ"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:557
 #, kde-format
 msgid "h"
 msgstr "س"
 
-#: core/ValueFormatter.cpp:558
+#: core/ValueFormatter.cpp:559
 #, kde-format
 msgid "min"
 msgstr "دق"
 
-#: core/ValueFormatter.cpp:560
+#: core/ValueFormatter.cpp:561
 #, kde-format
 msgid "s"
 msgstr "ث"
 
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:120
 #, kde-format
 msgid "Text"
 msgstr "النص"
@@ -253,94 +253,94 @@ msgstr "معاملات"
 
 #: engine/FunctionDescription.cpp:180
 #, fuzzy, kde-format
-msgid "<li><b>Comment:</b> %1"
-msgstr "أرجع النوع:"
-
-#: engine/FunctionDescription.cpp:181
-#, fuzzy, kde-format
 msgid "<br><b>Type:</b> %1"
 msgstr "أرجع النوع:"
 
-#: engine/FunctionDescription.cpp:187
+#: engine/FunctionDescription.cpp:180
+#, fuzzy, kde-format
+msgid "<li><b>Comment:</b> %1"
+msgstr "أرجع النوع:"
+
+#: engine/FunctionDescription.cpp:186
 #, kde-format
 msgid "Examples"
 msgstr "أمثلة"
 
-#: engine/FunctionDescription.cpp:196
+#: engine/FunctionDescription.cpp:195
 #, kde-format
 msgid "Related Functions"
 msgstr "الدوال المتعلقة"
 
-#: engine/Localization.cpp:748
+#: engine/Localization.cpp:769
 #, kde-format
 msgid "true"
 msgstr "صحيح"
 
-#: engine/Localization.cpp:749
+#: engine/Localization.cpp:770
 #, kde-format
 msgid "false"
 msgstr "خاطئ"
 
-#: engine/SheetBase.cpp:345
+#: engine/SheetBase.cpp:359
 #, kde-format
 msgid "Dependency"
 msgstr "الاعتمادية"
 
-#: engine/Value.cpp:597
+#: engine/Value.cpp:662
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#دائرة!"
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:670
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#اعتماد!"
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:678
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#القسمة/0!"
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:686
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#غير متاح"
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:694
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#الاسم؟"
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:702
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#الرقم!"
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:710
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#انعدام!"
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:718
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#تحليل!"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:726
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#مرجع!"
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:734
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -874,14 +874,14 @@ msgstr "الدالة CARY(12;0) ترجع 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid "Number"
 msgstr "عدد"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
 msgstr "تنسيق"
@@ -1224,7 +1224,7 @@ msgstr "التاريخ و الوقت"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Date"
 msgstr "التاريخ"
@@ -1296,7 +1296,7 @@ msgstr "الدالة DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) ترجع 59"
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:105
 #, kde-format
 msgid "Time"
 msgstr "الوقت"
@@ -3963,7 +3963,7 @@ msgid "Fractional Dollar"
 msgstr "الدولار الكسري"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:89
 #, kde-format
 msgid "Fraction"
 msgstr "كسر"
@@ -5170,13 +5170,13 @@ msgstr "ZERO_COUPON(القيمة الصورية;المعدل;السنوات)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "الدالة ZERO_COUPON(1000;.1;20) تعادل 148.64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:440
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
 #, kde-format
 msgid "Manual"
 msgstr "يدوي"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutPage_Float.cpp:184
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
 msgstr "تلقائي"
@@ -7818,7 +7818,7 @@ msgstr "الرقم المطلق (اختياري)"
 msgid "A1 style (optional)"
 msgstr "أسلوب A1 (اختياري)"
 
-#: functions/reference.xml:27 ui/MapModel.cpp:142
+#: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
 msgid "Sheet name"
 msgstr "اسم الورقة"
@@ -11145,7 +11145,7 @@ msgstr "FIND(النص_المطلوب;ضمن_النص;رقم_البدء)"
 msgid "Source string"
 msgstr "النص المصدر"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Position"
 msgstr "الموضع"
@@ -12228,196 +12228,196 @@ msgstr "COSH(عدد حقيقي)"
 msgid "SECH(0) equals 1"
 msgstr "الدالة COSH(0) تعادل 1"
 
-#: part/AboutData.h:28
+#: part/AboutData.h:27
 #, fuzzy, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "قيم الخلية"
 
-#: part/AboutData.h:30
+#: part/AboutData.h:29
 #, fuzzy, kde-format
 msgid "Spreadsheet Application"
 msgstr "تطبيق KOffice للأوراق الحسابية"
 
-#: part/AboutData.h:32
+#: part/AboutData.h:31
 #, fuzzy, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "(c) 1998-2007، فريق KSpread "
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Original Author"
 msgstr "المؤلف الأصلي"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Torben Weis"
 msgstr "Torben Weis"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Maintainer"
 msgstr "المشرف"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr ""
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr ""
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/AboutData.h:43
+#: part/AboutData.h:42
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:43
 #, kde-format
 msgid "John Dailey"
 msgstr "John Dailey"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:44
 #, kde-format
 msgid "Philipp Müller"
 msgstr "Philipp Müller"
 
-#: part/AboutData.h:46
+#: part/AboutData.h:45
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/AboutData.h:47
+#: part/AboutData.h:46
 #, kde-format
 msgid "Norbert Andres"
 msgstr "Norbert Andres"
 
-#: part/AboutData.h:48
-#, kde-format
-msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
-
-#: part/AboutData.h:49 part/AboutData.h:52 part/AboutData.h:55
-#: part/AboutData.h:59 part/AboutData.h:62 part/AboutData.h:65
-#: part/AboutData.h:68 part/AboutData.h:71 part/AboutData.h:74
+#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
+#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
+#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
 #, kde-format
 msgid "Import/export filter developer"
 msgstr "مطور مرشح استورد/صدِّر"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:47
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/AboutData.h:48
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/AboutData.h:54
+#: part/AboutData.h:49
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr "Nikolas Zimmermann"
 
-#: part/AboutData.h:57
+#: part/AboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/AboutData.h:58
+#: part/AboutData.h:51
 #, kde-format
 msgid "Helge Deller"
 msgstr "Helge Deller"
 
-#: part/AboutData.h:61
+#: part/AboutData.h:52
 #, kde-format
 msgid "Percy Leonhart"
 msgstr "Percy Leonhart"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:53
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr "Eva Brucherseifer"
 
-#: part/AboutData.h:67
+#: part/AboutData.h:54
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr "Phillip Ezolt"
 
-#: part/AboutData.h:70
+#: part/AboutData.h:55
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/AboutData.h:73
+#: part/AboutData.h:56
 #, kde-format
 msgid "Graham Short"
 msgstr "Graham Short"
 
-#: part/AboutData.h:76
+#: part/AboutData.h:57
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/AboutData.h:77
+#: part/AboutData.h:58
 #, kde-format
 msgid "Tomas Mecir"
 msgstr "Tomas Mecir"
 
-#: part/AboutData.h:78
+#: part/AboutData.h:59
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr "Raphael Langerhorst"
 
-#: part/AboutData.h:79
+#: part/AboutData.h:60
 #, kde-format
 msgid "John Tapsell"
 msgstr "John Tapsell"
 
-#: part/AboutData.h:80
+#: part/AboutData.h:61
 #, kde-format
 msgid "Robert Knight"
 msgstr "Robert Knight"
 
-#: part/AboutData.h:81
+#: part/AboutData.h:62
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr "Stefan Nikolaus"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Developer (functions)"
 msgstr "المطور (الدوال)"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Sascha Pfau"
 msgstr "Sascha Pfau"
 
-#: part/AboutData.h:83
+#: part/AboutData.h:64
 #, kde-format
 msgid "Brad Hards"
 msgstr "Brad Hards"
 
-#: part/AboutData.h:84
+#: part/AboutData.h:64
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr "جَهَّزَ، وفَحصَ واختبرَ عدة دوال"
 
-#. i18n translator strings
-#: part/AboutData.h:87
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Mohamed SAAD محمد سعد,Abdelrahman Abuzaid"
-
-#: part/AboutData.h:88
+#: part/AboutData.h:66
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "metehyi@free.fr,abd_elrahman_em@yahoo.com"
+
+#. i18n translator strings
+#: part/AboutData.h:66
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mohamed SAAD محمد سعد,Abdelrahman Abuzaid"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12445,7 +12445,7 @@ msgid "Clear"
 msgstr "امسح"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:448
+#: part/calligrasheets.rc:44 part/View.cpp:430
 #, kde-format
 msgid "Delete"
 msgstr "احذف"
@@ -12562,7 +12562,7 @@ msgstr "اخف الورقة"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "الخط"
@@ -12573,27 +12573,27 @@ msgstr "الخط"
 msgid "Color/Border"
 msgstr "لون/حد"
 
-#: part/CanvasBase.cpp:679
+#: part/CanvasBase.cpp:675
 #, kde-format
 msgid "Comment:"
 msgstr "التعليق:"
 
-#: part/CellEditorDocker.cpp:45
+#: part/CellEditorDocker.cpp:44
 #, fuzzy, kde-format
 msgid "Cell Editor"
 msgstr "الخلية هي"
 
-#: part/CellEditorDocker.cpp:56
+#: part/CellEditorDocker.cpp:55
 #, fuzzy, kde-format
 msgid "Formula"
 msgstr "شريط الصيغة"
 
-#: part/CellTool.cpp:64
+#: part/CellTool.cpp:63
 #, kde-format
 msgid "Define Print Range"
 msgstr "حدد نطاق الطباعة"
 
-#: part/CellTool.cpp:67
+#: part/CellTool.cpp:66
 #, kde-format
 msgid "Define the print range in the current sheet"
 msgstr "حدد نطاق الطباعة في الورقة الحالية"
@@ -12634,7 +12634,7 @@ msgid "First column as label"
 msgstr "الـ&عمود الأول يحتوي على ترويسات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
 #, fuzzy, kde-format
 msgid "Data Format"
 msgstr "تنسيق الـ&بيانات"
@@ -12651,13 +12651,13 @@ msgstr "أدرج أعمدة"
 msgid "Data sets in columns"
 msgstr "أدرج أعمدة"
 
-#: part/commands/DefinePrintRangeCommand.cpp:22
+#: part/commands/DefinePrintRangeCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
 msgstr "حدد نطاق الطباعة"
 
-#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
+#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
@@ -12832,18 +12832,18 @@ msgstr ""
 "عند تعيين عنصر القائمة عرض ->اعرض حدود الصفحة، تظهر حدود الصفحة. انقر هنا "
 "لاختيار لون آخر للحدود بدلا من الافتراضي الأحمر."
 
-#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
-#: part/dialogs/PageLayoutDialog.cpp:97
+#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
+#: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
-#: part/dialogs/PageLayoutDialog.cpp:105
+#: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
 msgid "No Limit"
 msgstr "لا حصر"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
 #, kde-format
 msgid "Sheet"
 msgstr "ورقة"
@@ -12996,127 +12996,127 @@ msgstr "أفقي"
 msgid "Vertical"
 msgstr "رأسي"
 
-#: part/dialogs/PreferenceDialog.cpp:277
+#: part/dialogs/PreferenceDialog.cpp:269
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "إعداد KSpread"
 
-#: part/dialogs/PreferenceDialog.cpp:294
+#: part/dialogs/PreferenceDialog.cpp:286
 #, kde-format
 msgid "Interface"
 msgstr "الواجهة"
 
-#: part/dialogs/PreferenceDialog.cpp:299
+#: part/dialogs/PreferenceDialog.cpp:291
 #, kde-format
 msgid "Down"
 msgstr "أسفل"
 
-#: part/dialogs/PreferenceDialog.cpp:300
+#: part/dialogs/PreferenceDialog.cpp:292
 #, kde-format
 msgid "Up"
 msgstr "أعلى"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "يمين"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "يسار"
 
-#: part/dialogs/PreferenceDialog.cpp:303
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Down, First Column"
 msgstr "أسفل، العمود الأول"
 
-#: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
+#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
 #, kde-format
 msgid "None"
 msgstr "لا شيء"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
 #, kde-format
 msgid "Sum"
 msgstr "مجموع"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
 #, kde-format
 msgid "Min"
 msgstr "الأدنى"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
 #, kde-format
 msgid "Max"
 msgstr "الأكبر"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
 #, kde-format
 msgid "Average"
 msgstr "متوسط"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
 #, kde-format
 msgid "Count"
 msgstr "تعداد"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
 
-#: part/dialogs/PreferenceDialog.cpp:327
+#: part/dialogs/PreferenceDialog.cpp:318
 #, kde-format
 msgid "Open/Save"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:339
+#: part/dialogs/PreferenceDialog.cpp:329
 #, fuzzy, kde-format
 msgid "Function Modules"
 msgstr "الدالة"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "أ&دوات"
 
-#: part/dialogs/PreferenceDialog.cpp:343
+#: part/dialogs/PreferenceDialog.cpp:332
 #, kde-format
 msgid "Plugins"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:351 part/dialogs/PreferenceDialog.cpp:358
+#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spelling"
 msgstr "إملاء"
 
-#: part/dialogs/PreferenceDialog.cpp:353
+#: part/dialogs/PreferenceDialog.cpp:342
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "سلوك المدقق الإملائي"
 
-#: part/dialogs/PreferenceDialog.cpp:359
+#: part/dialogs/PreferenceDialog.cpp:348
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "المؤلف"
 
-#: part/dialogs/PreferenceDialog.cpp:360
+#: part/dialogs/PreferenceDialog.cpp:349
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "المؤلف"
 
-#: part/dialogs/PreferenceDialog.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:421
 #, kde-format
 msgid "&Completion mode:"
 msgstr "نمط الإكمال:"
 
-#: part/dialogs/PreferenceDialog.cpp:437
+#: part/dialogs/PreferenceDialog.cpp:425
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13125,12 +13125,12 @@ msgstr ""
 "يسمح لك باختيار نمط إكمال النص  (تلقائي) من مدى من الاختيارات في صندوق "
 "الانتقاء المنسدل."
 
-#: part/dialogs/PreferenceDialog.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:429
 #, kde-format
 msgid "Popup"
 msgstr "منبثق"
 
-#: part/dialogs/PreferenceDialog.cpp:443
+#: part/dialogs/PreferenceDialog.cpp:431
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "شبه تلقائي"
@@ -13464,439 +13464,439 @@ msgstr "امسح الانتقاء"
 msgid "Move selected sheet to the bottom"
 msgstr "انقل الورقة المنتقاة إلى الأسفل"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, fuzzy, kde-format
 msgid "Case Sensitive"
 msgstr "فرز حساس لحالة الأحرف"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Match cases when searching"
 msgstr ""
 
-#: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "الارتفاع: %1 %2"
 
-#: part/HeaderItems.cpp:163 part/HeaderWidgets.cpp:157
+#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
 #, kde-format
 msgid "Hide Row"
 msgstr "اخف الصف"
 
-#: part/HeaderItems.cpp:334 part/HeaderWidgets.cpp:325
+#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "العرض: %1 %2"
 
-#: part/HeaderItems.cpp:336 part/HeaderWidgets.cpp:327
+#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
 #, kde-format
 msgid "Hide Column"
 msgstr "اخف العمود"
 
-#: part/Headers.cpp:233 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:724
 #, kde-format
 msgid "Area is too large."
 msgstr "المنطقة كبيرة جدا."
 
-#: part/PrintJob.cpp:87
+#: part/PrintJob.cpp:88
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
 msgstr "الورقة %1 لا يمكن العثور عليها للطباعة"
 
-#: part/PrintJob.cpp:300
+#: part/PrintJob.cpp:286
 #, fuzzy, kde-format
 msgid "Nothing to print for sheet(s) %1."
 msgstr "لا شيء للطباعة للورقة %1."
 
-#: part/View.cpp:228
+#: part/View.cpp:225
 #, fuzzy, kde-format
 msgid "Sheet Properties..."
 msgstr "خصائص الورقة"
 
-#: part/View.cpp:231
+#: part/View.cpp:228
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "عدّل خصائص الورقة الحالية"
 
-#: part/View.cpp:234 part/View.cpp:2051
+#: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
 msgid "Insert Sheet"
 msgstr "أدرج ورقة"
 
-#: part/View.cpp:235
+#: part/View.cpp:232
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "أدرج ورقة جديدة"
 
-#: part/View.cpp:239
+#: part/View.cpp:236
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "كرر الورقة"
 
-#: part/View.cpp:240
+#: part/View.cpp:237
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "كرر الورقة المنتقاة"
 
-#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
+#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
 #, kde-format
 msgid "Remove Sheet"
 msgstr "أزل الورقة"
 
-#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
+#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "أزل الورقة النشطة"
 
-#: part/View.cpp:250
+#: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "أعد تسمية الورقة..."
 
-#: part/View.cpp:253
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "أعد تسمية الورقة النشطة"
 
-#: part/View.cpp:255
+#: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
 msgstr "اعرض الورقة..."
 
-#: part/View.cpp:258
+#: part/View.cpp:255
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "اعرض ورقة مخفية"
 
-#: part/View.cpp:260
+#: part/View.cpp:257
 #, kde-format
 msgid "Hide Sheet"
 msgstr "اخف الورقة"
 
-#: part/View.cpp:263
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "اخف الورقة النشطة"
 
-#: part/View.cpp:265
+#: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
 msgstr "تخطيط الصفحة..."
 
-#: part/View.cpp:268
+#: part/View.cpp:265
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "حدد تخطيط ورقة الحساب لمخرجات الطباعة"
 
-#: part/View.cpp:270
+#: part/View.cpp:267
 #, kde-format
 msgid "Reset Print Range"
 msgstr "استعادة نطاق الطباعة"
 
-#: part/View.cpp:273
+#: part/View.cpp:270
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "حدد نطاق الطباعة في الورقة الحالية"
 
-#: part/View.cpp:275
+#: part/View.cpp:272
 #, fuzzy, kde-format
 msgid "Page Outline"
 msgstr "محيط"
 
-#: part/View.cpp:276
+#: part/View.cpp:273
 #, fuzzy, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "اعرض على أوراق الحساب أين ستكون حدود الصفحة"
 
-#: part/View.cpp:280
+#: part/View.cpp:277
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "أعد حساب الورقة"
 
-#: part/View.cpp:282 part/View.cpp:290
+#: part/View.cpp:279 part/View.cpp:287
 #, kde-format
 msgid "Recalculate"
 msgstr "أعد الحساب"
 
-#: part/View.cpp:286
+#: part/View.cpp:283
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "أعد حساب قيمة كل خلية في ورقة العمل الحالية"
 
-#: part/View.cpp:288
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate Document"
 msgstr "أعد حساب المستند"
 
-#: part/View.cpp:294
+#: part/View.cpp:291
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "أعد حساب قيمة كل خلية في كل أوراق العمل"
 
-#: part/View.cpp:296
+#: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "احم الـ&ورقة..."
 
-#: part/View.cpp:298
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "احم الورقة من أن تُعدل"
 
-#: part/View.cpp:302
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
 msgstr "احم المـ&ستند..."
 
-#: part/View.cpp:304
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "احم المستند من أن يُعدل"
 
-#: part/View.cpp:309
+#: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "أنـ&شئ قالبا من مستند..."
 
-#: part/View.cpp:313
+#: part/View.cpp:309
 #, fuzzy, kde-format
 msgid "Anchor"
 msgstr "أندورا"
 
-#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
+#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
 #, kde-format
 msgid "Cell"
 msgstr "خلية"
 
-#: part/View.cpp:315 part/View.cpp:1085
+#: part/View.cpp:311 part/View.cpp:1037
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "صفحة"
 
-#: part/View.cpp:317
+#: part/View.cpp:313
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:324
+#: part/View.cpp:319
 #, kde-format
 msgid "Next Sheet"
 msgstr "الورقة التالية"
 
-#: part/View.cpp:325
+#: part/View.cpp:320
 #, kde-format
 msgid "Next"
 msgstr "التالي"
 
-#: part/View.cpp:326
+#: part/View.cpp:321
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "انقل للورقة التالية"
 
-#: part/View.cpp:331
+#: part/View.cpp:326
 #, kde-format
 msgid "Previous Sheet"
 msgstr "الورقة السابقة"
 
-#: part/View.cpp:332
+#: part/View.cpp:327
 #, kde-format
 msgid "Previous"
 msgstr "السابق"
 
-#: part/View.cpp:333
+#: part/View.cpp:328
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "انقل للورقة السابقة"
 
-#: part/View.cpp:338
+#: part/View.cpp:333
 #, kde-format
 msgid "First Sheet"
 msgstr "الورقة الأولى"
 
-#: part/View.cpp:339
+#: part/View.cpp:334
 #, kde-format
 msgid "First"
 msgstr "الأول"
 
-#: part/View.cpp:340
+#: part/View.cpp:335
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "انقل للورقة الأولى"
 
-#: part/View.cpp:344
+#: part/View.cpp:339
 #, kde-format
 msgid "Last Sheet"
 msgstr "الورقة الأخيرة"
 
-#: part/View.cpp:345
+#: part/View.cpp:340
 #, fuzzy, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "الأخير"
 
-#: part/View.cpp:346
+#: part/View.cpp:341
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "انقل للورقة الأخيرة"
 
-#: part/View.cpp:352
+#: part/View.cpp:347
 #, fuzzy, kde-format
 msgid "Column Header"
 msgstr "رقم العمود"
 
-#: part/View.cpp:353
+#: part/View.cpp:348
 #, fuzzy, kde-format
 msgid "Show the column header"
 msgstr "اعرض ترويسة العمو&د"
 
-#: part/View.cpp:358
+#: part/View.cpp:352
 #, fuzzy, kde-format
 msgid "Row Header"
 msgstr "ترويسة"
 
-#: part/View.cpp:359
+#: part/View.cpp:353
 #, fuzzy, kde-format
 msgid "Show the row header"
 msgstr "اعرض تر&ويسة الصف"
 
-#: part/View.cpp:364
+#: part/View.cpp:357
 #, fuzzy, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "اعرض شريط التمرير الأ&فقي"
 
-#: part/View.cpp:365
+#: part/View.cpp:358
 #, fuzzy, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "اعرض شريط التمرير الأ&فقي"
 
-#: part/View.cpp:370
+#: part/View.cpp:362
 #, fuzzy, kde-format
 msgid "Vertical Scrollbar"
 msgstr "اعرض شريط التمرير الرأ&سي"
 
-#: part/View.cpp:371
+#: part/View.cpp:363
 #, fuzzy, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "اعرض شريط التمرير الرأ&سي"
 
-#: part/View.cpp:376
+#: part/View.cpp:367
 #, kde-format
 msgid "Status Bar"
 msgstr "شريط الحالة"
 
-#: part/View.cpp:377
+#: part/View.cpp:368
 #, kde-format
 msgid "Show the status bar"
 msgstr "اعرض شريط الحالة"
 
-#: part/View.cpp:382
+#: part/View.cpp:372
 #, kde-format
 msgid "Tab Bar"
 msgstr "شريط اللسان"
 
-#: part/View.cpp:383
+#: part/View.cpp:373
 #, kde-format
 msgid "Show the tab bar"
 msgstr "اعرض شريط اللسان"
 
-#: part/View.cpp:389
+#: part/View.cpp:378
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "اضبط خيارات KSpread المتنوعة"
 
-#: part/View.cpp:402
+#: part/View.cpp:390
 #, kde-format
 msgid "No calculation"
 msgstr "لا حساب"
 
-#: part/View.cpp:409
+#: part/View.cpp:396
 #, kde-format
 msgid "Calculate using sum"
 msgstr "احسب باستخدام المجموع"
 
-#: part/View.cpp:416
+#: part/View.cpp:402
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "احسب باستخدام الحد الأدنى"
 
-#: part/View.cpp:423
+#: part/View.cpp:408
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "احسب باستخدام الحد الأقصى"
 
-#: part/View.cpp:430
+#: part/View.cpp:414
 #, kde-format
 msgid "Calculate using average"
 msgstr "احسب باستخدام المتوسط"
 
-#: part/View.cpp:437
+#: part/View.cpp:420
 #, kde-format
 msgid "Calculate using the count"
 msgstr "احسب باستخدام التعداد"
 
-#: part/View.cpp:444
+#: part/View.cpp:426
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "احسب باستخدام countA"
 
-#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
+#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "لا يمكنك تغيير ورقة محمية."
 
-#: part/View.cpp:1474
+#: part/View.cpp:1428
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "لا يمكنك إخفاء آخر الأوراق الظاهرة."
 
-#: part/View.cpp:1554
+#: part/View.cpp:1510
 #, kde-format
 msgid "Enter a password."
 msgstr "أدخل كلمة مرور."
 
-#: part/View.cpp:1566
+#: part/View.cpp:1522
 #, kde-format
 msgid "Enter the password."
 msgstr "أدخل كلمة المرور."
 
-#: part/View.cpp:1574
+#: part/View.cpp:1530
 #, kde-format
 msgid "Password is incorrect."
 msgstr "كلمة المرور غير صحيحة."
 
-#: part/View.cpp:1592
+#: part/View.cpp:1546
 #, kde-format
 msgid "Protect Document"
 msgstr "احم المستند"
 
-#: part/View.cpp:1595
+#: part/View.cpp:1548
 #, kde-format
 msgid "Unprotect Document"
 msgstr "الغ حماية المستند"
 
-#: part/View.cpp:1615
+#: part/View.cpp:1567
 #, kde-format
 msgid "Protect Sheet"
 msgstr "احم الورقة"
 
-#: part/View.cpp:1618
+#: part/View.cpp:1569
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "الغ حماية الورقة"
 
-#: part/View.cpp:1852
+#: part/View.cpp:1804
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "استعادة نطاق الطباعة"
 
-#: part/View.cpp:1861
+#: part/View.cpp:1813
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "لا يمكنك حذف الورقة الوحيدة."
 
-#: part/View.cpp:1864
+#: part/View.cpp:1817
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13905,86 +13905,86 @@ msgstr ""
 "أنت بصدد إزالة الورقة النشطة.\n"
 "هل تريد المتابعة؟"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Enter name:"
 msgstr "أدخل الاسم:"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Rename Sheet"
 msgstr "أعد تسمية الورقة"
 
-#: part/View.cpp:1894 part/View.cpp:1900
+#: part/View.cpp:1847 part/View.cpp:1853
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "غيِّر اسم الورقة"
 
-#: part/View.cpp:1894
+#: part/View.cpp:1847
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "اسم الورقة لا يمكن إفراغه."
 
-#: part/View.cpp:1900
+#: part/View.cpp:1853
 #, kde-format
 msgid "This name is already used."
 msgstr "هذا الاسم مستخدم من قبل."
 
-#: part/View.cpp:1968
+#: part/View.cpp:1921
 #, kde-format
 msgid "Sum: "
 msgstr "المجموع:"
 
-#: part/View.cpp:1972
+#: part/View.cpp:1925
 #, kde-format
 msgid "Average: "
 msgstr "المتوسط:"
 
-#: part/View.cpp:1976
+#: part/View.cpp:1929
 #, kde-format
 msgid "Min: "
 msgstr "الأدنى:"
 
-#: part/View.cpp:1980
+#: part/View.cpp:1933
 #, kde-format
 msgid "Max: "
 msgstr "الأقصى:"
 
-#: part/View.cpp:1984
+#: part/View.cpp:1937
 #, kde-format
 msgid "Count: "
 msgstr "تعداد: "
 
-#: part/View.cpp:1988
+#: part/View.cpp:1941
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1995
+#: part/View.cpp:1948
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128
+#: part/ViewAdaptor.cpp:127
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "غيِّر لون النص"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
+#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "غيِّر لون الخلفية"
 
-#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
-#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
+#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "غيّر الحد"
 
-#: ui/CellToolBase.cpp:807
+#: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
@@ -14013,234 +14013,222 @@ msgstr "تنسيق الأرقام"
 msgid "Merge"
 msgstr "ادمج الخلايا"
 
-#: ui/commands/AbstractRegionCommand.cpp:172
-#, kde-format
-msgid ""
-"Processing is not possible, because some cells are locked as elements of a "
-"matrix."
-msgstr "المعالجة غير ممكنة، لأن بعض الخلايا مغلقة كعناصر من مصفوفة."
-
-#: ui/commands/AbstractRegionCommand.cpp:185
-#, kde-format
-msgid "Processing is not possible, because some cells are protected."
-msgstr "المعالجة غير ممكنة، لأن بعض الخلايا محمية."
-
 #: ui/commands/ApplyFilterCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "طَبِّق المرشح"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "January"
 msgstr "يناير"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "February"
 msgstr "فبراير"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "March"
 msgstr "مارس"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "April"
 msgstr "أبريل"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "May"
 msgstr "مايو"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "June"
 msgstr "يونيو"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "July"
 msgstr "يوليو"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "August"
 msgstr "أغسطس"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "September"
 msgstr "سبتمبر"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "October"
 msgstr "أكتوبر"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "November"
 msgstr "نوفمبر"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "December"
 msgstr "ديسمبر"
 
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Jan"
 msgstr "يناير"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Feb"
 msgstr "فبراير"
 
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Mar"
 msgstr "مارس"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Apr"
 msgstr "أبريل"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "مايو"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Jun"
 msgstr "يونيو"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Jul"
 msgstr "يوليو"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Aug"
 msgstr "أغسطس"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Sep"
 msgstr "سبتمبر"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Oct"
 msgstr "أكتوبر"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
 msgid "Nov"
 msgstr "نوفمبر"
 
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Dec"
 msgstr "ديسمبر"
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Monday"
 msgstr "الإثنين"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Tuesday"
 msgstr "الثّلاثاء"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Wednesday"
 msgstr "الأربعاء"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Thursday"
 msgstr "الخميس"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:149
 #, kde-format
 msgid "Friday"
 msgstr "الجمعة"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:150
 #, kde-format
 msgid "Saturday"
 msgstr "السبت"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:151
 #, kde-format
 msgid "Sunday"
 msgstr "الأحد"
 
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Mon"
 msgstr "الإثنين"
 
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Tue"
 msgstr "الثلاثاء"
 
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Wed"
 msgstr "الأربعاء"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Thu"
 msgstr "الخميس"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:160
 #, kde-format
 msgid "Fri"
 msgstr "الجمعة"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:161
 #, kde-format
 msgid "Sat"
 msgstr "السبت"
 
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:162
 #, kde-format
 msgid "Sun"
 msgstr "الأحد"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:673
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "ملء تلقائي"
 
-#: ui/commands/DataManipulators.cpp:107
+#: ui/commands/DataManipulators.cpp:108
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "غيّر القيمة"
 
-#: ui/commands/DataManipulators.cpp:180 ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "أدرج خلايا"
 
-#: ui/commands/DataManipulators.cpp:193
+#: ui/commands/DataManipulators.cpp:191
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
@@ -14252,35 +14240,35 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "احذف"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 #, fuzzy
 #| msgid "Merge Cells Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "ادمج الخلايا أفقيا"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 #, fuzzy
 #| msgid "Merge Cells Vertically"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "ادمج الخلايا رأسيا"
 
-#: ui/commands/MergeCommand.cpp:89
+#: ui/commands/MergeCommand.cpp:87
 #, fuzzy
 #| msgid "Merge Cells"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "ادمج الخلايا"
 
-#: ui/commands/MergeCommand.cpp:92
+#: ui/commands/MergeCommand.cpp:90
 #, fuzzy
 #| msgid "Dissociate Cells"
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "افصل الخلايا"
 
-#: ui/commands/MergeCommand.cpp:98
+#: ui/commands/MergeCommand.cpp:96
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "دمج الأعمدة أو الصفوف ليس مدعوماً."
@@ -14309,147 +14297,147 @@ msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "أعد تحجيم الصف"
 
-#: ui/commands/RowColumnManipulators.cpp:277
+#: ui/commands/RowColumnManipulators.cpp:283
 #, fuzzy
 #| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "اخف الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:279
+#: ui/commands/RowColumnManipulators.cpp:285
 #, fuzzy
 #| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "اخف الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:281
+#: ui/commands/RowColumnManipulators.cpp:287
 #, fuzzy
 #| msgid "Hide Rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "اخف الصفوف"
 
-#: ui/commands/RowColumnManipulators.cpp:284
+#: ui/commands/RowColumnManipulators.cpp:290
 #, fuzzy
 #| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "اعرض الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:286
+#: ui/commands/RowColumnManipulators.cpp:292
 #, fuzzy
 #| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "اعرض الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:288
+#: ui/commands/RowColumnManipulators.cpp:294
 #, fuzzy
 #| msgid "Show Rows"
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "اعرض الصفوف"
 
-#: ui/commands/RowColumnManipulators.cpp:535
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 #| msgid "Adjust Columns/Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "عدل الأعمدة/الصفوف"
 
-#: ui/commands/RowColumnManipulators.cpp:537
+#: ui/commands/RowColumnManipulators.cpp:541
 #, fuzzy
 #| msgid "Adjust Columns"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "عدل الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:543
 #, fuzzy
 #| msgid "Adjust Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "عدل الصفوف"
 
-#: ui/commands/RowColumnManipulators.cpp:552
-#: ui/commands/RowColumnManipulators.cpp:570
+#: ui/commands/RowColumnManipulators.cpp:556
+#: ui/commands/RowColumnManipulators.cpp:574
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "أدرج أعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:572
+#: ui/commands/RowColumnManipulators.cpp:576
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "أزل الأعمدة"
 
-#: ui/commands/RowColumnManipulators.cpp:629
-#: ui/commands/RowColumnManipulators.cpp:647
+#: ui/commands/RowColumnManipulators.cpp:631
+#: ui/commands/RowColumnManipulators.cpp:649
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "أدرج صفوفا"
 
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:651
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "أزل الصفوف"
 
-#: ui/commands/SheetCommands.cpp:24
+#: ui/commands/SheetCommands.cpp:25
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
 msgstr "أعد تسمية الورقة"
 
-#: ui/commands/SheetCommands.cpp:45
+#: ui/commands/SheetCommands.cpp:46
 #, fuzzy, kde-format
 #| msgid "Hide Sheet %1"
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "اخف الورقة %1"
 
-#: ui/commands/SheetCommands.cpp:46
+#: ui/commands/SheetCommands.cpp:48
 #, fuzzy
 #| msgid "Hide Sheet"
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet"
 msgstr "اخف الورقة"
 
-#: ui/commands/SheetCommands.cpp:73
+#: ui/commands/SheetCommands.cpp:77
 #, fuzzy, kde-format
 #| msgid "Show Sheet %1"
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "اعرض الورقة %1"
 
-#: ui/commands/SheetCommands.cpp:74 ui/dialogs/ShowDialog.cpp:71
+#: ui/commands/SheetCommands.cpp:79 ui/dialogs/ShowDialog.cpp:70
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
 msgstr "اعرض الورقة"
 
-#: ui/commands/SheetCommands.cpp:98
+#: ui/commands/SheetCommands.cpp:104
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
 msgstr "أضف ورقة"
 
-#: ui/commands/SheetCommands.cpp:125
+#: ui/commands/SheetCommands.cpp:130
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
 msgstr "كرر الورقة"
 
-#: ui/commands/SheetCommands.cpp:163
+#: ui/commands/SheetCommands.cpp:167
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Sheet"
 msgstr "أزل الورقة"
 
-#: ui/commands/SheetCommands.cpp:193
+#: ui/commands/SheetCommands.cpp:197
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
@@ -14548,8 +14536,8 @@ msgid "Bold"
 msgstr "عريض"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
-#: ui/dialogs/LayoutPage_Pattern.cpp:119
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:308
+#: ui/dialogs/LayoutPage_Pattern.cpp:116
 #, kde-format
 msgid "Color:"
 msgstr "اللون:"
@@ -14624,8 +14612,8 @@ msgstr ""
 "لتعيينها في الخلية الحالية."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
-#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
+#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "معاينة"
@@ -14637,56 +14625,56 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "يمكنك رؤية معاينة للخط الذي تختاره للخلية الحالية."
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format
 msgid "Cell Format"
 msgstr "تنسيق الخلية"
 
-#: ui/dialogs/LayoutDialog.cpp:123
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "تنسيق الخلية"
 
-#: ui/dialogs/LayoutDialog.cpp:132
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&عام"
 
-#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "حد"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:147
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "&خلفية"
 
-#: ui/dialogs/LayoutDialog.cpp:153
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
 msgstr "حما&ية الخلية"
 
-#: ui/dialogs/LayoutPage_Border.cpp:273
+#: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
 msgid "Preselect"
 msgstr "اختيار مسبق"
 
-#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#: ui/dialogs/LayoutPage_Border.cpp:279 ui/dialogs/LayoutPage_Pattern.cpp:94
 #, kde-format
 msgid "Pattern"
 msgstr "نمط"
 
-#: ui/dialogs/LayoutPage_Border.cpp:328
+#: ui/dialogs/LayoutPage_Border.cpp:312
 #, kde-format
 msgid "Customize"
 msgstr "تخصيص"
 
-#: ui/dialogs/LayoutPage_Float.cpp:58
+#: ui/dialogs/LayoutPage_Float.cpp:57
 #, kde-format
 msgid "Generic"
 msgstr "شامل"
@@ -14704,7 +14692,7 @@ msgstr ""
 "بالمحاذاة إلى اليمين للأرقام، التواريخ والأوقات ضمن الخلية ويحاذي لليسار أي "
 "شيء آخر."
 
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:65
 #, fuzzy, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -14714,12 +14702,12 @@ msgstr ""
 "تأشير الأرقام يستخدم الترقيم الذي اخترته عموماً في مركز التحكم -> الإقليمية "
 "وتسهيل الوصول -> تبويب الأرقام. الأرقام تُحاذَى لليمين افتراضيا."
 
-#: ui/dialogs/LayoutPage_Float.cpp:66
+#: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
 msgid "Percent"
 msgstr "مئوية"
 
-#: ui/dialogs/LayoutPage_Float.cpp:67
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -14736,12 +14724,12 @@ msgstr ""
 "%. بإعادة التحويل إلى تنسيق الخلية الشامل سيعيده إلى 12.\n"
 "يمكنك أيضاً استخدام أيقونة المئوي من شريط الأدوات تنسيق."
 
-#: ui/dialogs/LayoutPage_Float.cpp:70
+#: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
 msgid "Money"
 msgstr "مال"
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, fuzzy, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -14757,12 +14745,12 @@ msgstr ""
 "يمكنك أيضا استخدام أيقونة العملة في شريط الأدوات تنسيق لضبط تنسيق  الخلية "
 "ليبدو مثل عملتك المحلية."
 
-#: ui/dialogs/LayoutPage_Float.cpp:74
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid "Scientific"
 msgstr "علمي"
 
-#: ui/dialogs/LayoutPage_Float.cpp:75
+#: ui/dialogs/LayoutPage_Float.cpp:85
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -14773,7 +14761,7 @@ msgstr ""
 "ستتغير إلى 1.2E-03. العودة لاستخدام تنسيق  الخلية الشامل سيعرض 0.0012 مرة "
 "أخرى."
 
-#: ui/dialogs/LayoutPage_Float.cpp:79
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -14794,7 +14782,7 @@ msgstr ""
 "لديك 1.4 كرقم في الخلية وقد اخترت الكسر وجزء من ست عشرة 1/16 فإن الخلية "
 "ستعرض \"1 6/16\" والذي هو أقرب كسر ست عشري."
 
-#: ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/dialogs/LayoutPage_Float.cpp:100
 #, fuzzy, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -14810,7 +14798,7 @@ msgstr ""
 "تماما مثلما يمكنك سحب الأرقام يمكنك أيضا سحب التواريخ وستعرض الخلايا التالية "
 "التواريخ أيضا."
 
-#: ui/dialogs/LayoutPage_Float.cpp:87
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, fuzzy, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -14829,13 +14817,13 @@ msgstr ""
 "كان الرقم في الخلية لا يصلح كوقت، سيقوم KSpread بعرض 00:00 بالتنسيق العام "
 "لديك في مركز التحكم."
 
-#: ui/dialogs/LayoutPage_Float.cpp:90
+#: ui/dialogs/LayoutPage_Float.cpp:113
 #, fuzzy, kde-format
 #| msgid "Date & Time"
 msgid "Datetime"
 msgstr "التاريخ و الوقت"
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:115
 #, fuzzy, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
@@ -14851,7 +14839,7 @@ msgstr ""
 "تماما مثلما يمكنك سحب الأرقام يمكنك أيضا سحب التواريخ وستعرض الخلايا التالية "
 "التواريخ أيضا."
 
-#: ui/dialogs/LayoutPage_Float.cpp:95
+#: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -14865,17 +14853,17 @@ msgstr ""
 "سيضبط محاذاته لليسار. عند تنسيق الأرقام كنص، لا يمكن استخدامها في الحسابات "
 "أو الصيغ الحسابية. ذلك يغير أيضا طريقة ضبط محاذاة الخلية."
 
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid "Custom"
 msgstr "مخصص"
 
-#: ui/dialogs/LayoutPage_Float.cpp:99
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "التنسيق المخصص لا يعمل بعد. ليُفعل في الإصدار القادم"
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:136
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -14884,12 +14872,12 @@ msgstr ""
 "هذا سيعرض معاينة لخيارك فيمكنك معرفة ما يفعله قبل الضغط على زر موافق للسماح "
 "به."
 
-#: ui/dialogs/LayoutPage_Float.cpp:117
+#: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "يعرض اختيارات التنسيق لتنسيقات الكسور، التاريخ أو الوقت."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:156
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -14897,12 +14885,12 @@ msgid ""
 msgstr ""
 "يمكنك هنا إضافة تابع مثل رمز $HK لنهاية محتوى كل خلية في التنسيق المعين."
 
-#: ui/dialogs/LayoutPage_Float.cpp:130
+#: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
 msgid "variable"
 msgstr "متغير"
 
-#: ui/dialogs/LayoutPage_Float.cpp:133
+#: ui/dialogs/LayoutPage_Float.cpp:163
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -14912,7 +14900,7 @@ msgstr ""
 "يمكنك التحكم في كم من الأرقام ستُعرض بعد العلامة العشرية للقيم الرقمية. ذلك "
 "يمكن تغييره أيضاً باستخدام رمزي زد الدقة و اخفض الدقة في شريط الأدوات تنسيق. "
 
-#: ui/dialogs/LayoutPage_Float.cpp:137
+#: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -14920,7 +14908,7 @@ msgid ""
 msgstr ""
 "يمكنك هنا إضافة بادئ مثل رمز $ عند بداية محتوي كل خلية في التنسيق المعين."
 
-#: ui/dialogs/LayoutPage_Float.cpp:141
+#: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -14929,77 +14917,77 @@ msgstr ""
 "يمكنك اختيار كون القيم الموجبة تعرض مع علامة + تتقدمها وكون القيم السالبة "
 "تعرض بالأحمر."
 
-#: ui/dialogs/LayoutPage_Float.cpp:147
+#: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
 msgid "Postfix:"
 msgstr "التابعة:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:151
+#: ui/dialogs/LayoutPage_Float.cpp:182
 #, kde-format
 msgid "Prefix:"
 msgstr "البادئة:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:155
+#: ui/dialogs/LayoutPage_Float.cpp:186
 #, kde-format
 msgid "Precision:"
 msgstr "الدقة:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:203
 #, kde-format
 msgid "Format:"
 msgstr "التنسيق:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:176
+#: ui/dialogs/LayoutPage_Float.cpp:207
 #, kde-format
 msgid "Currency:"
 msgstr "العملة:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:283
+#: ui/dialogs/LayoutPage_Float.cpp:313
 #, kde-format
 msgid "Halves 1/2"
 msgstr "أنصاف 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:284
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "أرباع 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:285
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "أثمان 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:286
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "أجزاء من ست عشرة 1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:287
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "أعشار 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:288
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "جزء من مائة 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:289
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "One digit 5/9"
 msgstr "رقم واحد 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:290
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "رقمان 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:291
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "ثلاث أرقام 153/652"
 
-#: ui/dialogs/LayoutPage_Font.cpp:53
+#: ui/dialogs/LayoutPage_Font.cpp:45
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "Dolor Ipse"
@@ -15020,32 +15008,32 @@ msgstr "الاسم:"
 msgid "Inherit style:"
 msgstr "توريث الأسلوب:"
 
-#: ui/dialogs/LayoutPage_General.cpp:90
+#: ui/dialogs/LayoutPage_General.cpp:88
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "يوجد مسبقا أسلوب بهذا الاسم"
 
-#: ui/dialogs/LayoutPage_General.cpp:94
+#: ui/dialogs/LayoutPage_General.cpp:92
 #, kde-format
 msgid "The style name can not be empty."
 msgstr "اسم الأسلوب لا يمكن إفراغه."
 
-#: ui/dialogs/LayoutPage_General.cpp:106
+#: ui/dialogs/LayoutPage_General.cpp:104
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "لا يمكن توريث الأسلوب من نفسه."
 
-#: ui/dialogs/LayoutPage_General.cpp:110
+#: ui/dialogs/LayoutPage_General.cpp:108
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr "لا يمكن توريث الأسلوب من '%1' بسبب مراجع حلقية."
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:128
+#: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
 msgid "Background color:"
 msgstr "لون الخلفية:"
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:136
+#: ui/dialogs/LayoutPage_Pattern.cpp:132
 #, kde-format
 msgid "No Color"
 msgstr " لا لون"
@@ -15312,76 +15300,80 @@ msgstr "اعرض الورقة"
 msgid "Select hidden sheets to show:"
 msgstr "انتق أوراق مخفية لعرضها:"
 
-#: ui/ExternalEditor.cpp:56
+#: ui/ExternalEditor.cpp:55
 #, fuzzy, kde-format
 msgid "Apply"
 msgstr "أبريل"
 
-#: ui/ExternalEditor.cpp:57
+#: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 msgid "Apply changes"
 msgstr "طبِّق الأساليب"
 
-#: ui/ExternalEditor.cpp:61
+#: ui/ExternalEditor.cpp:60
 #, kde-format
 msgid "Cancel"
 msgstr "الغ"
 
-#: ui/ExternalEditor.cpp:62
+#: ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Discard changes"
 msgstr ""
 
-#: ui/FilterPopup.cpp:55
+#: ui/FilterPopup.cpp:54
 #, kde-format
 msgid "All"
 msgstr "الكل"
 
-#: ui/FilterPopup.cpp:58
+#: ui/FilterPopup.cpp:57
 #, kde-format
 msgid "Empty"
 msgstr "فارغ"
 
-#: ui/FilterPopup.cpp:62
+#: ui/FilterPopup.cpp:61
 #, kde-format
 msgid "Non-empty"
 msgstr "ليس فارغا"
 
-#: ui/MapViewModel.cpp:180
+#: ui/MapViewModel.cpp:179
 #, fuzzy, kde-format
 msgctxt "Activate sheet named foo"
 msgid "Activate %1"
 msgstr "اخف الورقة"
 
-#: ui/RegionSelector.cpp:145
+#: ui/RegionSelector.cpp:144
 #, kde-format
 msgid "Select Single Cell"
 msgstr "انتقِ خلية مفردة"
 
-#: ui/RegionSelector.cpp:147
+#: ui/RegionSelector.cpp:146
 #, kde-format
 msgid "Select Multiple Cells"
 msgstr "انتقِ خلايا متعددة"
 
-#: ui/strategy/HyperlinkStrategy.cpp:66
+#: ui/strategy/HyperlinkStrategy.cpp:67
 #, fuzzy, kde-format
 msgid "Link %1 activated"
 msgstr "الارتباط <i>%1</i> قد نشط"
 
-#: ui/strategy/HyperlinkStrategy.cpp:83
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"هذا الارتباط يشير إلى برنامج أو سرد أوامر '%1'.\n"
-"البرامج الخبيثة قد تضر بحاسوبك. هل أنت واثق أنك تريد تشغيل هذا البرنامج؟"
+#~ msgid ""
+#~ "Processing is not possible, because some cells are locked as elements of "
+#~ "a matrix."
+#~ msgstr "المعالجة غير ممكنة، لأن بعض الخلايا مغلقة كعناصر من مصفوفة."
 
-#: ui/strategy/HyperlinkStrategy.cpp:89
-#, kde-format
-msgid "Open Link?"
-msgstr "فتح الارتباط؟"
+#~ msgid "Processing is not possible, because some cells are protected."
+#~ msgstr "المعالجة غير ممكنة، لأن بعض الخلايا محمية."
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "هذا الارتباط يشير إلى برنامج أو سرد أوامر '%1'.\n"
+#~ "البرامج الخبيثة قد تضر بحاسوبك. هل أنت واثق أنك تريد تشغيل هذا البرنامج؟"
+
+#~ msgid "Open Link?"
+#~ msgstr "فتح الارتباط؟"
 
 #, fuzzy
 #~ msgid "Date and Time"

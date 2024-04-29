@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-03-28 14:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -99,17 +99,17 @@ msgstr "Estats"
 msgid "State:"
 msgstr "Estat:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "Forma d'estat"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr "Una forma d'estat"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "Opcions de l'eina d'estat"
@@ -131,12 +131,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr "Utilitza una còpia de la memòria cau"
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "Forma de web"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "Una forma de web"
@@ -146,17 +146,17 @@ msgstr "Una forma de web"
 msgid "Web shape editing"
 msgstr "Edició de formes web"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "Braindump"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr "Braindump: directament del vostre cervell a l'ordinador."
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
@@ -165,34 +165,34 @@ msgstr ""
 "Sense manteniment en el moment del llançament d'esta versió. La comunitat de "
 "Calligra agrairà que les persones interessades assumisquen el manteniment."
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 
-#: src/AboutData.h:39 src/AboutData.h:40
-#, kde-format
-msgid "Former maintainer"
-msgstr "Mantenidor anterior"
-
-#: src/AboutData.h:39
+#: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
 msgstr "Somsubhra Bairi"
 
-#: src/AboutData.h:40
+#: src/AboutData.h:43 src/AboutData.h:46
+#, kde-format
+msgid "Former maintainer"
+msgstr "Mantenidor anterior"
+
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Rafael Carreras"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -240,7 +240,7 @@ msgstr "Mou la pissarra cap amunt"
 msgid "Delete the whiteboard"
 msgstr "Elimina la pissarra"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr "Barres d'eines"
@@ -260,42 +260,42 @@ msgstr "Canvia mostrant una barra de títol"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Canvia organitzant les opcions en pestanyes o no"
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "Columna"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "Lliure"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr "Acobladors"
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "Sense títol %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr "Propietats de bolcat"
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "Pissarres"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "Visualització mínima"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "Visualització detallada"
@@ -325,33 +325,33 @@ msgstr "Afig una pissarra nova damunt de l'actual."
 msgid "Add new whiteboard as child of current."
 msgstr "Afig una pissarra nova com a filla de l'actual."
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "&Elimina"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Duplica"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "Agrupa les formes"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "Desagrupa les formes"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Agrupa les formes"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Desagrupa les formes"

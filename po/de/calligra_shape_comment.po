@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CommentShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-06-05 00:35+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -24,7 +24,7 @@ msgstr "Das Modul zum Anzeigen von Kommentaren ist nicht verfügbar."
 msgid "Plugin Missing"
 msgstr "Fehlendes Modul"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -33,7 +33,7 @@ msgstr ""
 "Das Modul zum Anzeigen von Kommentaren ist nicht kompatibel mit der "
 "aktuellen Version des Kommentar-Objekts."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Modul inkompatibel"

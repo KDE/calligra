@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ArtisticTextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-04-05 08:06+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
 msgstr "Dodaj zakres tekstu"
@@ -40,92 +40,92 @@ msgstr "Kształt pokazujący pojedynczy wiersz tekstu"
 msgid "Artistic Text"
 msgstr "Artystyczny tekst"
 
-#: ArtisticTextTool.cpp:64
+#: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
 msgstr "Odłącz ścieżkę"
 
-#: ArtisticTextTool.cpp:69
+#: ArtisticTextTool.cpp:77
 #, kde-format
 msgid "Convert to Path"
 msgstr "Przekształć do ścieżki"
 
-#: ArtisticTextTool.cpp:74
+#: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
 msgstr "Pogrubiony tekst"
 
-#: ArtisticTextTool.cpp:79
+#: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
 msgstr "Pochylony tekst"
 
-#: ArtisticTextTool.cpp:84
+#: ArtisticTextTool.cpp:92
 #, kde-format
 msgid "Superscript"
 msgstr "Indeks górny"
 
-#: ArtisticTextTool.cpp:89
+#: ArtisticTextTool.cpp:97
 #, kde-format
 msgid "Subscript"
 msgstr "Indeks dolny"
 
-#: ArtisticTextTool.cpp:94
+#: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
 msgstr "Zakotwicz na początku"
 
-#: ArtisticTextTool.cpp:99
+#: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
 msgstr "Zakotwicz w środku"
 
-#: ArtisticTextTool.cpp:104
+#: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
 msgstr "Zakotwicz na końcu"
 
-#: ArtisticTextTool.cpp:295
+#: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
 msgstr "Kliknij, aby zmienić pozycję kursora."
 
-#: ArtisticTextTool.cpp:297
+#: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
 msgstr "Kliknij, aby wybrać kształt tekstu."
 
-#: ArtisticTextTool.cpp:300
+#: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
 msgstr "Kliknij podwójnie, aby umieścić tekst na ścieżce."
 
-#: ArtisticTextTool.cpp:303
+#: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
 msgstr "Przeciągnij uchwyt, aby zmienić przesunięcie początku."
 
-#: ArtisticTextTool.cpp:307
+#: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
 msgstr "Naciśnij escape, aby zakończyć edytowanie."
 
-#: ArtisticTextTool.cpp:489
+#: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
 msgstr "Naciśnij enter, aby zakończyć edytowanie."
 
-#: ArtisticTextTool.cpp:583
+#: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Przekształć do ścieżki"
 
-#: ArtisticTextTool.cpp:596
+#: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
 msgstr "Właściwości tekstu"
 
-#: ArtisticTextTool.cpp:606
+#: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
 msgstr "Tekst na ścieżce"
@@ -135,38 +135,38 @@ msgstr "Tekst na ścieżce"
 msgid "Artistic text editing"
 msgstr "Edytowanie artystycznego tekstu"
 
-#: AttachTextToPathCommand.cpp:15
+#: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
 msgstr "Dołącz ścieżkę"
 
-#: ChangeTextAnchorCommand.cpp:14
+#: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
 msgstr "Zmień zakotwiczenie tekstu"
 
-#: ChangeTextFontCommand.cpp:16
+#: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
 msgstr "Zmień czcionkę"
 
-#: ChangeTextOffsetCommand.cpp:15
+#: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
 msgstr "Zmień przesunięcie tekstu"
 
-#: DetachTextFromPathCommand.cpp:14
+#: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
 msgstr "Odłącz ścieżkę"
 
-#: RemoveTextRangeCommand.cpp:16
+#: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
 msgstr "Usuń zakres tekstu"
 
-#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
-#: ReplaceTextRangeCommand.cpp:30
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "Zastąp zakres tekstu"

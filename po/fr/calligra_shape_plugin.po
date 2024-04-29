@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-07-09 18:41+0200\n"
 "Last-Translator: xavier <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -21,12 +21,12 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: PluginShape.cpp:36
+#: PluginShape.cpp:35
 #, kde-format
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: PluginShape.cpp:40
+#: PluginShape.cpp:39
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Type MIME du module externe : %1"

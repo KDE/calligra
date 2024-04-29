@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-09-23 16:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -29,19 +29,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "Temuri.doghonadze@gmail.com"
 
-#: main.cpp:61
+#: main.cpp:62
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
 msgstr "Mimetype ფაილისთვის <filename>%1</filename> ვერ ვიპოვე!"
 
-#: main.cpp:119
+#: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
 msgstr "<application>%1</application>-ით გახსნა"
 
-#: main.cpp:124
+#: main.cpp:122
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -50,38 +50,38 @@ msgid ""
 "<application>%2</application>?"
 msgstr ""
 
-#: main.cpp:127
+#: main.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
 msgstr "Calligra -ის აპლიკაცია ვერ ვიპოვე"
 
-#: main.cpp:157
+#: main.cpp:156
 #, kde-format
 msgid "Calligra Opener"
 msgstr "Calligra -ის გამხსნელი"
 
-#: main.cpp:159
+#: main.cpp:158
 #, kde-format
 msgid "Calligra Document Opener"
 msgstr "Calligra -ის დოკუმენტის გამხსნელი"
 
-#: main.cpp:161
+#: main.cpp:160
 #, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
 msgstr "Copyright 2010-%1 Calligra -ის პროგრამისტები"
 
-#: main.cpp:162
+#: main.cpp:161
 #, kde-format
 msgid "Jarosław Staniek"
 msgstr "Jarosław Staniek"
 
-#: main.cpp:169
+#: main.cpp:168
 #, kde-format
 msgid "Lists names of all available Calligra applications"
 msgstr "Calligra-ის ხელმისაწვდომი აპლიკაციების სია"
 
-#: main.cpp:170
+#: main.cpp:169
 #, kde-format
 msgid "Files to open"
 msgstr "გასახსნელი ფაილები"

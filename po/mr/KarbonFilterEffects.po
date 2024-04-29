@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -22,42 +22,42 @@ msgstr ""
 msgid "Blend"
 msgstr "मिश्रण"
 
-#: BlendEffectConfigWidget.cpp:22
+#: BlendEffectConfigWidget.cpp:23
 #, kde-format
 msgid "Blend mode"
 msgstr "मिश्रण पद्धती"
 
-#: BlendEffectConfigWidget.cpp:24
+#: BlendEffectConfigWidget.cpp:25
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
 
-#: BlendEffectConfigWidget.cpp:25
+#: BlendEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Multiply"
 msgstr "बहुजिनसी"
 
-#: BlendEffectConfigWidget.cpp:26
+#: BlendEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Screen"
 msgstr "स्क्रीन"
 
-#: BlendEffectConfigWidget.cpp:27
+#: BlendEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Darken"
 msgstr "गडद करणे"
 
-#: BlendEffectConfigWidget.cpp:28
+#: BlendEffectConfigWidget.cpp:29
 #, kde-format
 msgid "Lighten"
 msgstr "फिकट करणे"
 
-#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#: BlurEffect.cpp:257 BlurEffectFactory.cpp:14
 #, kde-format
 msgid "Gaussian blur"
 msgstr "गुसियान ब्लर"
 
-#: BlurEffectConfigWidget.cpp:22
+#: BlurEffectConfigWidget.cpp:23
 #, kde-format
 msgid "Radius"
 msgstr "त्रिज्या"
@@ -67,32 +67,32 @@ msgstr "त्रिज्या"
 msgid "Color Matrix"
 msgstr "रंग मात्रीक्स"
 
-#: ColorMatrixEffectConfigWidget.cpp:28
+#: ColorMatrixEffectConfigWidget.cpp:29
 #, kde-format
 msgid "Apply color matrix"
 msgstr "रंग मात्रीक्स लागू करा"
 
-#: ColorMatrixEffectConfigWidget.cpp:29
+#: ColorMatrixEffectConfigWidget.cpp:30
 #, kde-format
 msgid "Saturate colors"
 msgstr "रंगानी पूर्ण व्यापणे"
 
-#: ColorMatrixEffectConfigWidget.cpp:30
+#: ColorMatrixEffectConfigWidget.cpp:31
 #, kde-format
 msgid "Rotate hue"
 msgstr "रंगाच्या छटा फिरविणे"
 
-#: ColorMatrixEffectConfigWidget.cpp:31
+#: ColorMatrixEffectConfigWidget.cpp:32
 #, kde-format
 msgid "Luminance to alpha"
 msgstr "अल्फाची प्रकाशमानता"
 
-#: ColorMatrixEffectConfigWidget.cpp:50
+#: ColorMatrixEffectConfigWidget.cpp:51
 #, kde-format
 msgid "Saturate value"
 msgstr "व्यापण्याचे मूल्य"
 
-#: ColorMatrixEffectConfigWidget.cpp:61
+#: ColorMatrixEffectConfigWidget.cpp:62
 #, kde-format
 msgid "Angle"
 msgstr "कोन"
@@ -107,63 +107,63 @@ msgstr "रंग मात्रीक्स"
 msgid "Component transfer"
 msgstr "घटकाचे स्थानांतरण"
 
-#: ComponentTransferEffectConfigWidget.cpp:45
+#: ComponentTransferEffectConfigWidget.cpp:46
 #, kde-format
 msgid "Function"
 msgstr "कार्य"
 
-#: ComponentTransferEffectConfigWidget.cpp:47
+#: ComponentTransferEffectConfigWidget.cpp:48
 #, kde-format
 msgid "Identity"
 msgstr "ओळख"
 
-#: ComponentTransferEffectConfigWidget.cpp:48
+#: ComponentTransferEffectConfigWidget.cpp:49
 #, kde-format
 msgid "Table"
 msgstr "कोष्टक"
 
-#: ComponentTransferEffectConfigWidget.cpp:49
+#: ComponentTransferEffectConfigWidget.cpp:50
 #, kde-format
 msgid "Discrete"
 msgstr "वेगळा"
 
-#: ComponentTransferEffectConfigWidget.cpp:50
+#: ComponentTransferEffectConfigWidget.cpp:51
 #, kde-format
 msgid "Linear"
 msgstr "एकरेषीय"
 
-#: ComponentTransferEffectConfigWidget.cpp:51
+#: ComponentTransferEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Gamma"
 msgstr "गॅमा"
 
-#: ComponentTransferEffectConfigWidget.cpp:64
-#: ComponentTransferEffectConfigWidget.cpp:74
+#: ComponentTransferEffectConfigWidget.cpp:65
+#: ComponentTransferEffectConfigWidget.cpp:75
 #, kde-format
 msgid "Values"
 msgstr "मूल्य"
 
-#: ComponentTransferEffectConfigWidget.cpp:84
+#: ComponentTransferEffectConfigWidget.cpp:85
 #, kde-format
 msgid "Slope"
 msgstr "उतार"
 
-#: ComponentTransferEffectConfigWidget.cpp:89
+#: ComponentTransferEffectConfigWidget.cpp:90
 #, kde-format
 msgid "Intercept"
 msgstr "अंतर्रोध"
 
-#: ComponentTransferEffectConfigWidget.cpp:101
+#: ComponentTransferEffectConfigWidget.cpp:102
 #, kde-format
 msgid "Amplitude"
 msgstr "विस्तार"
 
-#: ComponentTransferEffectConfigWidget.cpp:106
+#: ComponentTransferEffectConfigWidget.cpp:107
 #, kde-format
 msgid "Exponent"
 msgstr "द्योतक"
 
-#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: ComponentTransferEffectConfigWidget.cpp:112 OffsetEffect.cpp:17
 #: OffsetEffectFactory.cpp:13
 #, kde-format
 msgid "Offset"
@@ -174,7 +174,7 @@ msgstr "ऑफसेट"
 msgid "Composite"
 msgstr "संमिश्र"
 
-#: CompositeEffectConfigWidget.cpp:23
+#: CompositeEffectConfigWidget.cpp:24
 #, kde-format
 msgid "Operation"
 msgstr "क्रिया"
@@ -184,52 +184,52 @@ msgstr "क्रिया"
 msgid "Convolve Matrix"
 msgstr "कॉन्क्लोव मात्रीक्स"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:32
+#: ConvolveMatrixEffectConfigWidget.cpp:33
 #, kde-format
 msgid "Duplicate"
 msgstr "प्रतिकृती"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:33
+#: ConvolveMatrixEffectConfigWidget.cpp:34
 #, kde-format
 msgid "Wrap"
 msgstr "वेष्टण"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:34
+#: ConvolveMatrixEffectConfigWidget.cpp:35
 #, kde-format
 msgid "None"
 msgstr "काही नाही"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:35
+#: ConvolveMatrixEffectConfigWidget.cpp:36
 #, kde-format
 msgid "Edge mode:"
 msgstr "किनार पद्धत :"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:42
+#: ConvolveMatrixEffectConfigWidget.cpp:43
 #, kde-format
 msgid "Kernel size:"
 msgstr "मुख्य भागाचा आकार :"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:51
+#: ConvolveMatrixEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Target point:"
 msgstr "लक्ष्य बिंदू :"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:58
+#: ConvolveMatrixEffectConfigWidget.cpp:59
 #, kde-format
 msgid "Divisor:"
 msgstr "वाटणी करणारा :"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:60
+#: ConvolveMatrixEffectConfigWidget.cpp:61
 #, kde-format
 msgid "Bias:"
 msgstr "तिरपा छेद/कल :"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:63
+#: ConvolveMatrixEffectConfigWidget.cpp:64
 #, kde-format
 msgid "Preserve alpha"
 msgstr "अल्फाचे जतन"
 
-#: ConvolveMatrixEffectConfigWidget.cpp:66
+#: ConvolveMatrixEffectConfigWidget.cpp:67
 #, kde-format
 msgid "Edit kernel"
 msgstr "मुख्य भाग संपादित करा"
@@ -239,22 +239,22 @@ msgstr "मुख्य भाग संपादित करा"
 msgid "Flood fill"
 msgstr "पोकळी भरणे"
 
-#: FloodEffectConfigWidget.cpp:24
+#: FloodEffectConfigWidget.cpp:25
 #, kde-format
 msgid "Flood color"
 msgstr "रंग भरणे"
 
-#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#: ImageEffect.cpp:24 ImageEffectFactory.cpp:13
 #, kde-format
 msgid "Image"
 msgstr "प्रतिमा"
 
-#: ImageEffectConfigWidget.cpp:27
+#: ImageEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Select image..."
 msgstr "प्रतिमा निवडा..."
 
-#: ImageEffectConfigWidget.cpp:54
+#: ImageEffectConfigWidget.cpp:55
 #, kde-format
 msgid "Select image"
 msgstr "प्रतिमा निवडा"
@@ -269,37 +269,37 @@ msgstr "विलीन करा"
 msgid "Morphology"
 msgstr "वनस्पती व प्राणी यांच्या स्वरूपाचे शास्त्र"
 
-#: MorphologyEffectConfigWidget.cpp:25
+#: MorphologyEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Erode"
 msgstr "झिजवा"
 
-#: MorphologyEffectConfigWidget.cpp:26
+#: MorphologyEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Dilate"
 msgstr "विस्तारा"
 
-#: MorphologyEffectConfigWidget.cpp:29
+#: MorphologyEffectConfigWidget.cpp:30
 #, kde-format
 msgid "Operator:"
 msgstr "वापरणारा :"
 
-#: MorphologyEffectConfigWidget.cpp:33
+#: MorphologyEffectConfigWidget.cpp:34
 #, kde-format
 msgid "Radius x:"
 msgstr "त्रिज्या एक्स :"
 
-#: MorphologyEffectConfigWidget.cpp:39
+#: MorphologyEffectConfigWidget.cpp:40
 #, kde-format
 msgid "Radius y:"
 msgstr "त्रिज्या वाय :"
 
-#: OffsetEffectConfigWidget.cpp:22
+#: OffsetEffectConfigWidget.cpp:23
 #, kde-format
 msgid "dx"
 msgstr "dx"
 
-#: OffsetEffectConfigWidget.cpp:28
+#: OffsetEffectConfigWidget.cpp:29
 #, kde-format
 msgid "dy"
 msgstr "dy"

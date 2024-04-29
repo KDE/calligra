@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2017-11-22 20:07+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -22,12 +22,12 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: Solver.cpp:66
+#: Solver.cpp:64
 #, kde-format
 msgid "Function Optimizer..."
 msgstr "Оптимизатор функций..."
 
-#: Solver.cpp:103
+#: Solver.cpp:101
 #, fuzzy
 #| msgid "Optimization"
 msgctxt "(qtundo-format)"

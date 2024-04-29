@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/calligra/calligrasheets_solver.pot\n"
 "X-Crowdin-File-ID: 5516\n"
 
-#: Solver.cpp:66
+#: Solver.cpp:64
 #, kde-format
 msgid "Function Optimizer..."
 msgstr "函数优化器..."
 
-#: Solver.cpp:103
+#: Solver.cpp:101
 msgctxt "(qtundo-format)"
 msgid "Optimize"
 msgstr ""

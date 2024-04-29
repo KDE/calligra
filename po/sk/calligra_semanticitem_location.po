@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_semanticitem_location\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:50+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: KoLocationSemanticItemFactory.cpp:34
+#: KoLocationSemanticItemFactory.cpp:33
 #, kde-format
 msgctxt "displayname of the semantic item type Location"
 msgid "Location"
@@ -69,7 +69,7 @@ msgstr "Zemepisná šírka"
 msgid "Longitude"
 msgstr "Zemepisná dĺžka"
 
-#: KoRdfLocationTreeWidgetItem.cpp:42
+#: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
 msgstr "Informácia umiestnenia"

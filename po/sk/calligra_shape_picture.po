@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_picture\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:35+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -111,27 +111,27 @@ msgstr "Obrázok"
 msgid "Image shape that can display jpg, png etc."
 msgstr "Tvar obrázku, ktorý vie zobraziť jpg, png, atď."
 
-#: PictureTool.cpp:95
+#: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
 msgstr "Štandardné"
 
-#: PictureTool.cpp:96
+#: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
 msgstr "Odtiene šedej"
 
-#: PictureTool.cpp:97
+#: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
 msgstr "Čiernobiely"
 
-#: PictureTool.cpp:98
+#: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
 msgstr "Vodoznak"
 
-#: PictureToolFactory.cpp:19
+#: PictureToolFactory.cpp:18
 #, kde-format
 msgid "Picture editing"
 msgstr "Úprava obrázkov"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2012-10-03 13:28+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Dodatak potreban za prikaz komentara nije prisutan"
 msgid "Plugin Missing"
 msgstr "Nedostaje dodatak"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -34,7 +34,7 @@ msgstr ""
 "Dodatak potreban za prikaz komentara nije kompatibilan s trenutnom verzijom "
 "oblika komentara"
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Dodatak je nekompatibilan"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,14 +17,14 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/calligra/calligrasheets_calendar.pot\n"
 "X-Crowdin-File-ID: 5495\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
 "start date."
 msgstr "结束日期先于起始日期！请确定结束日期晚于起始日期。"
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "错误"
@@ -37,26 +37,26 @@ msgid ""
 msgstr ""
 "日历无法超过十年。如果您真的需要这么长的时间段，您必须将该时间段进行分割。"
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
 msgstr "起始日期和结束日期相等，这样将只会插入一天。您真的想要继续吗？"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
 msgstr "创建长于一年的日历将会占用很多空间。您真的想要继续吗？"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -67,22 +67,22 @@ msgstr ""
 "即将插入日历的区域非空，您确定您想要继续并覆盖已有数据吗？如果您选择[否]的"
 "话，准备插入日历的区域将被选中，以便让您可以清楚地看到那些数据要被覆盖。"
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "插入日历"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "日历从 %1 到 %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "周"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, kde-format
 msgid "Calendar"
 msgstr "日历"

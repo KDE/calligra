@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2009-03-03 11:09+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: actions/AccidentalAction.cpp:54
+#: actions/AccidentalAction.cpp:52
 #, kde-format
 msgid "Double flat"
 msgstr "दोहरा सपाट"
 
-#: actions/AccidentalAction.cpp:55
+#: actions/AccidentalAction.cpp:54
 #, kde-format
 msgctxt "lowered half a step"
 msgid "Flat"
@@ -35,23 +35,23 @@ msgstr "समतल"
 msgid "Natural"
 msgstr "प्राकृतिक"
 
-#: actions/AccidentalAction.cpp:57
+#: actions/AccidentalAction.cpp:58
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
 msgstr "पैना"
 
-#: actions/AccidentalAction.cpp:58
+#: actions/AccidentalAction.cpp:60
 #, kde-format
 msgid "Double sharp"
 msgstr "दोहरा तीक्छ्न"
 
-#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:48
 #, kde-format
 msgid "%1 flats"
 msgstr "%1 सपाट"
 
-#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#: actions/AccidentalAction.cpp:65 actions/KeySignatureAction.cpp:50
 #, kde-format
 msgid "%1 sharps"
 msgstr "%1 तीक्छ्न"
@@ -66,63 +66,63 @@ msgstr "बिन्दुव"
 msgid "Eraser"
 msgstr "मेटाव के रबर"
 
-#: actions/KeySignatureAction.cpp:28
+#: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
 msgstr "एबी मेजर"
 
-#: actions/KeySignatureAction.cpp:29
+#: actions/KeySignatureAction.cpp:31
 #, kde-format
 msgid "Eb Major"
 msgstr "ईबी मेजर"
 
-#: actions/KeySignatureAction.cpp:30
+#: actions/KeySignatureAction.cpp:33
 #, kde-format
 msgid "Bb Major"
 msgstr "बीबी मेजर"
 
-#: actions/KeySignatureAction.cpp:31
+#: actions/KeySignatureAction.cpp:35
 #, kde-format
 msgid "F Major"
 msgstr "एफ मेजर"
 
-#: actions/KeySignatureAction.cpp:32
+#: actions/KeySignatureAction.cpp:37
 #, kde-format
 msgid "C Major"
 msgstr "सी मेजर"
 
-#: actions/KeySignatureAction.cpp:33
+#: actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "G Major"
 msgstr "जी मेजर"
 
-#: actions/KeySignatureAction.cpp:34
+#: actions/KeySignatureAction.cpp:41
 #, kde-format
 msgid "D Major"
 msgstr "डी मेजर"
 
-#: actions/KeySignatureAction.cpp:35
+#: actions/KeySignatureAction.cpp:43
 #, kde-format
 msgid "A Major"
 msgstr "ए मेजर"
 
-#: actions/KeySignatureAction.cpp:36
+#: actions/KeySignatureAction.cpp:45
 #, kde-format
 msgid "E Major"
 msgstr "ई मेजर"
 
-#: actions/KeySignatureAction.cpp:49
+#: actions/KeySignatureAction.cpp:62
 #, kde-format
 msgctxt "Other key signature"
 msgid "Other"
 msgstr "अऊ दूसर"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "note"
 msgstr "टिप्पनी"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "rest"
 msgstr "रेस्ट"
@@ -132,52 +132,52 @@ msgstr "रेस्ट"
 msgid "Double whole "
 msgstr "दोहरा पूरा"
 
-#: actions/NoteEntryAction.cpp:58
+#: actions/NoteEntryAction.cpp:59
 #, kde-format
 msgid "Whole "
 msgstr "पूरा"
 
-#: actions/NoteEntryAction.cpp:59
+#: actions/NoteEntryAction.cpp:61
 #, kde-format
 msgid "Half "
 msgstr "आधा"
 
-#: actions/NoteEntryAction.cpp:60
+#: actions/NoteEntryAction.cpp:63
 #, kde-format
 msgid "Quarter "
 msgstr "क्वार्टर"
 
-#: actions/NoteEntryAction.cpp:61
+#: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "Eighth "
 msgstr "आठवां"
 
-#: actions/NoteEntryAction.cpp:62
+#: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "16th "
 msgstr "16वाँ"
 
-#: actions/NoteEntryAction.cpp:63
+#: actions/NoteEntryAction.cpp:69
 #, kde-format
 msgid "32nd "
 msgstr "३२वां"
 
-#: actions/NoteEntryAction.cpp:64
+#: actions/NoteEntryAction.cpp:71
 #, kde-format
 msgid "64th "
 msgstr "६४वां"
 
-#: actions/NoteEntryAction.cpp:65
+#: actions/NoteEntryAction.cpp:73
 #, kde-format
 msgid "128th "
 msgstr "१२८वां"
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown note"
 msgstr "अग्यात टिप्पनी"
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown rest"
 msgstr "अग्यात रेस्ट"
@@ -192,42 +192,42 @@ msgstr "पट्टी हटाव"
 msgid "Select"
 msgstr "चुनव"
 
-#: actions/SetClefAction.cpp:39
+#: actions/SetClefAction.cpp:40
 #, kde-format
 msgctxt "Treble clef"
 msgid "Treble"
 msgstr "ट्रेबल"
 
-#: actions/SetClefAction.cpp:40
+#: actions/SetClefAction.cpp:42
 #, kde-format
 msgctxt "Bass clef"
 msgid "Bass"
 msgstr "बास"
 
-#: actions/SetClefAction.cpp:43
+#: actions/SetClefAction.cpp:46
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
 msgstr "सोप्रानो"
 
-#: actions/SetClefAction.cpp:44
+#: actions/SetClefAction.cpp:48
 #, kde-format
 msgctxt "Alto clef"
 msgid "Alto"
 msgstr "आल्टो"
 
-#: actions/SetClefAction.cpp:45
+#: actions/SetClefAction.cpp:50
 #, kde-format
 msgctxt "Tenor clef"
 msgid "Tenor"
 msgstr "टेनर"
 
-#: actions/SetClefAction.cpp:46
+#: actions/SetClefAction.cpp:52
 #, kde-format
 msgid "C clef on line %1"
 msgstr "लकीर %1 मं से क्लेफ"
 
-#: actions/SetClefAction.cpp:49
+#: actions/SetClefAction.cpp:55
 #, kde-format
 msgid "Unknown clef"
 msgstr "अग्यात क्लेफ"
@@ -237,28 +237,28 @@ msgstr "अग्यात क्लेफ"
 msgid "Tied notes"
 msgstr "टाइड नोट्स"
 
-#: commands/AddBarsCommand.cpp:17
+#: commands/AddBarsCommand.cpp:19
 #, fuzzy
 #| msgid "Add measures"
 msgctxt "(qtundo-format)"
 msgid "Add measures"
 msgstr "मापक जोड़व"
 
-#: commands/AddDotCommand.cpp:17
+#: commands/AddDotCommand.cpp:18
 #, fuzzy
 #| msgid "Add dot"
 msgctxt "(qtundo-format)"
 msgid "Add dot"
 msgstr "बिंदु जोड़व"
 
-#: commands/AddNoteCommand.cpp:29
+#: commands/AddNoteCommand.cpp:34
 #, fuzzy
 #| msgid "Set chord duration"
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
 msgstr "कार्ड अवधि सेट करव"
 
-#: commands/AddNoteCommand.cpp:31
+#: commands/AddNoteCommand.cpp:36
 #, fuzzy
 #| msgid "Add note"
 msgctxt "(qtundo-format)"
@@ -278,56 +278,56 @@ msgstr "पार्ट जोड़व"
 msgid "Part %1"
 msgstr "पार्ट्स"
 
-#: commands/ChangePartDetailsCommand.cpp:30
+#: commands/ChangePartDetailsCommand.cpp:36
 #, fuzzy
 #| msgid "Change part details"
 msgctxt "(qtundo-format)"
 msgid "Change part details"
 msgstr "पार्ट विवरन बदलव"
 
-#: commands/CreateChordCommand.cpp:20
+#: commands/CreateChordCommand.cpp:21
 #, fuzzy
 #| msgid "Add chord"
 msgctxt "(qtundo-format)"
 msgid "Add chord"
 msgstr "कार्ड जोड़व"
 
-#: commands/CreateChordCommand.cpp:28
+#: commands/CreateChordCommand.cpp:31
 #, fuzzy
 #| msgid "Add rest"
 msgctxt "(qtundo-format)"
 msgid "Add rest"
 msgstr "रेस्ट जोड़व"
 
-#: commands/MakeRestCommand.cpp:19
+#: commands/MakeRestCommand.cpp:20
 #, fuzzy
 #| msgid "Convert chord to rest"
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
 msgstr "कार्ड ल रेस्ट मं बदलव"
 
-#: commands/RemoveBarCommand.cpp:18
+#: commands/RemoveBarCommand.cpp:20
 #, fuzzy
 #| msgid "Remove bar"
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
 msgstr "पट्टी हटाव"
 
-#: commands/RemoveChordCommand.cpp:19
+#: commands/RemoveChordCommand.cpp:21
 #, fuzzy
 #| msgid "Remove rest"
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
 msgstr "रेस्ट मेटाव"
 
-#: commands/RemoveChordCommand.cpp:21
+#: commands/RemoveChordCommand.cpp:23
 #, fuzzy
 #| msgid "Remove chord"
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
 msgstr "कार्ड मेटाव"
 
-#: commands/RemoveNoteCommand.cpp:19
+#: commands/RemoveNoteCommand.cpp:21
 #, fuzzy
 #| msgid "Remove note"
 msgctxt "(qtundo-format)"
@@ -341,50 +341,50 @@ msgctxt "(qtundo-format)"
 msgid "Remove part"
 msgstr "पार्ट मेटाव"
 
-#: commands/RemoveStaffElementCommand.cpp:22
+#: commands/RemoveStaffElementCommand.cpp:25
 #, fuzzy
 #| msgid "Remove clef"
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
 msgstr "क्लेफ मेटाव"
 
-#: commands/RemoveStaffElementCommand.cpp:24
+#: commands/RemoveStaffElementCommand.cpp:27
 #, fuzzy
 #| msgid "Remove staff element"
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
 msgstr "स्टाफ अवयव हटाव"
 
-#: commands/SetAccidentalsCommand.cpp:19
+#: commands/SetAccidentalsCommand.cpp:22
 #, fuzzy
 #| msgid "Set accidentals"
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
 msgstr "एक्सीडेंसियल्स सेट करव"
 
-#: commands/SetClefCommand.cpp:19
+#: commands/SetClefCommand.cpp:22
 #, fuzzy
 #| msgid "Change clef"
 msgctxt "(qtundo-format)"
 msgid "Change clef"
 msgstr "क्लेफ बदलव"
 
-#: commands/SetKeySignatureCommand.cpp:25
-#: commands/SetKeySignatureCommand.cpp:72
+#: commands/SetKeySignatureCommand.cpp:26
+#: commands/SetKeySignatureCommand.cpp:76
 #, fuzzy
 #| msgid "Change key signature"
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
 msgstr "कुंजी दसखत बदलव"
 
-#: commands/SetTimeSignatureCommand.cpp:21
+#: commands/SetTimeSignatureCommand.cpp:22
 #, fuzzy
 #| msgid "Change time signature"
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
 msgstr "समय दसखत बदलावइ करव"
 
-#: commands/ToggleTiedNoteCommand.cpp:19
+#: commands/ToggleTiedNoteCommand.cpp:20
 #, fuzzy
 #| msgid "Toggle Note Tie"
 msgctxt "(qtundo-format)"
@@ -504,20 +504,20 @@ msgid "Voice 4"
 msgstr "अवाज ४"
 
 #. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
-#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
-#: SimpleEntryTool.cpp:678
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add measures"
 msgstr "मापक जोड़व"
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
-#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
 #, kde-format
 msgid "Import"
 msgstr "आयात"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportButton)
-#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
 #, kde-format
 msgid "Export"
 msgstr "निर्यात"
@@ -528,43 +528,43 @@ msgstr "निर्यात"
 msgid "Part 1"
 msgstr "पार्ट्स"
 
-#: MusicShapeFactory.cpp:36
+#: MusicShapeFactory.cpp:34
 #, kde-format
 msgid "Music Shape"
 msgstr "संगीत आकार"
 
-#: MusicShapeFactory.cpp:38
+#: MusicShapeFactory.cpp:36
 #, kde-format
 msgid "A shape which provides a music editor"
 msgstr "एक आकार जऊन संगीत संपादक मिलत कराथे ."
 
-#: MusicTool.cpp:85
+#: MusicTool.cpp:83
 #, kde-format
 msgid "Parts"
 msgstr "पार्ट्स"
 
-#: MusicToolFactory.cpp:19
+#: MusicToolFactory.cpp:18
 #, fuzzy, kde-format
 #| msgid "Music editing tool, parts"
 msgid "Music editing, parts"
 msgstr "संगीत संपादन औजार, पार्ट्स"
 
-#: SimpleEntryTool.cpp:226
+#: SimpleEntryTool.cpp:227
 #, kde-format
 msgid "Clef"
 msgstr "क्लेफ"
 
-#: SimpleEntryTool.cpp:255
+#: SimpleEntryTool.cpp:256
 #, kde-format
 msgid "Time signature"
 msgstr "समय दसखत"
 
-#: SimpleEntryTool.cpp:285
+#: SimpleEntryTool.cpp:286
 #, kde-format
 msgid "Key signature"
 msgstr "कुंजी दसखत"
 
-#: SimpleEntryTool.cpp:679
+#: SimpleEntryTool.cpp:681
 #, fuzzy, kde-format
 #| msgid "Add measures"
 msgid "Add how many measures?"
@@ -577,19 +577,19 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "आयात"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr ""
 
-#: SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:761
 #, fuzzy, kde-format
 #| msgid "Export"
 msgctxt "@title:window"
 msgid "Export"
 msgstr "निर्यात"
 
-#: SimpleEntryToolFactory.cpp:18
+#: SimpleEntryToolFactory.cpp:17
 #, fuzzy, kde-format
 #| msgid "Music editing tool"
 msgid "Music editing"

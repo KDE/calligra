@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PictureShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-08-08 02:38+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -113,27 +113,27 @@ msgstr "Pilt"
 msgid "Image shape that can display jpg, png etc."
 msgstr "Pildikujund piltide kuvamiseks"
 
-#: PictureTool.cpp:95
+#: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
 msgstr "Standardne"
 
-#: PictureTool.cpp:96
+#: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
 msgstr "halltoonid"
 
-#: PictureTool.cpp:97
+#: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
 msgstr "Ühevärviline"
 
-#: PictureTool.cpp:98
+#: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
 msgstr "Vesimärk"
 
-#: PictureToolFactory.cpp:19
+#: PictureToolFactory.cpp:18
 #, kde-format
 msgid "Picture editing"
 msgstr "Pildi redigeerimine"

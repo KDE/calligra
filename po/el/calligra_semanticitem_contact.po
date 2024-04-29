@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-10-11 11:26+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 20.04.2\n"
 
-#: KoContactSemanticItemFactory.cpp:46
+#: KoContactSemanticItemFactory.cpp:44
 #, kde-format
 msgctxt "displayname of the semantic item type Contact"
 msgid "Contact"
 msgstr "Επαφή"
 
-#: KoRdfFoaF.cpp:179
+#: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
 msgstr "Επιλέξτε ένα βιβλίο διευθύνσεων για αποθήκευση:"
@@ -53,22 +53,22 @@ msgstr "Α&ριθμός τηλεφώνου:"
 msgid "&Home Page:"
 msgstr "Αρχική σελίδα:"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:30
+#: KoRdfFoaFTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Contact Information"
 msgstr "Πληροφορίες επαφής"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:48
+#: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
 msgstr "Επεξεργασία..."
 
-#: KoRdfFoaFTreeWidgetItem.cpp:51
+#: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
 msgid "Import contact"
 msgstr "Εισαγωγή επαφής"
 
-#: KoRdfFoaFTreeWidgetItem.cpp:54
+#: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
 msgstr "Εξαγωγή ως vcard..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-08-27 04:48+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: KoLocationSemanticItemFactory.cpp:34
+#: KoLocationSemanticItemFactory.cpp:33
 #, kde-format
 msgctxt "displayname of the semantic item type Location"
 msgid "Location"
@@ -71,7 +71,7 @@ msgstr "Laiuskraad"
 msgid "Longitude"
 msgstr "Pikkuskraad"
 
-#: KoRdfLocationTreeWidgetItem.cpp:42
+#: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
 msgstr "Asukohateave"

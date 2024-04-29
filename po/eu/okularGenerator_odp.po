@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: okularGenerator_odp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2018-08-03 20:13+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
 "Language-Team: Basque <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: OkularOdpGenerator.cpp:82
+#: OkularOdpGenerator.cpp:80
 #, kde-format
 msgid "Language"
 msgstr "Hizkuntza"

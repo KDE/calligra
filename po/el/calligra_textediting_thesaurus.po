@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-05-19 13:33+0300\n"
 "Last-Translator: Toussis Manolis <manolis@koppermind.homelinux.org>\n"
 "Language-Team: greek <kde-i18n-el@kde.org>\n"
@@ -33,69 +33,69 @@ msgstr "&Αναζήτηση για:"
 msgid "S&earch"
 msgstr "Α&ναζήτηση"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "Πίσω"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "Εμπρός"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
 msgstr "Αλλαγή γλώσσας..."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "&Θησαυρός"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "Συνώνυμα"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "Περισσότερο γενικές λέξεις"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "Περισσότερο ειδικές λέξεις"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
 msgstr "&WordNet"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "&Αντικατάσταση με:"
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "Α&ντικατάσταση"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
 msgstr "Αντικατάσταση λέξης"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
 msgstr "Συγγενικές λέξεις - %1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
@@ -104,77 +104,77 @@ msgstr ""
 "Το αρχείο θησαυρού '%1' δε βρέθηκε. Παρακαλώ χρησιμοποιήστε το 'Αλλαγή "
 "γλώσσας...' για να επιλέξετε ένα αρχείο θησαυρού."
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b>Σφάλμα:</b> Αποτυχία εκτέλεσης του grep."
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "Συνώνυμα/Hypernyms - Ταξινομημένα κατά συχνότητα"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "Συνώνυμα - Ταξινομημένα κατά ομοιότητα σημασίας (μόνο ρήματα)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "Αντώνυμα - Λέξεις με αντίθετη σημασία"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "Ειδικευμένες έννοιες - ... είναι ένα (είδος του) %1"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "Ειδικές έννοιες - το %1 περιέχει το ..."
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "Γενικευμένες έννοιες - ... περιέχει το %1"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "Ιδιότητες"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "Αίτιο (για μερικά ρήματα μόνο)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "Συνεπαγωγή ρήματος (για μερικά ρήματα μόνο)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "Πλήθος ομοιότητας & πολυσήμαντων"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "Χρήση ρημάτων (παραδείγματα χρήσης)"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "Λίστα από σύνθετες λέξεις"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
 msgstr "Περίληψη των εννοιών"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -190,7 +190,7 @@ msgstr ""
 "wordnet.princeton.edu/</a>. Σημειώστε ότι το WordNet υποστηρίζει μόνο την "
 "αγγλική γλώσσα."
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "Κανένα ταίριασμα για το '%1'."

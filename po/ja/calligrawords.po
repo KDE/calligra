@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-11-29 23:33-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -110,7 +110,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
 msgstr "ページスタイルを挿入"
 
-#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "ページのプロパティ"
@@ -120,63 +120,63 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "シェイプを作成"
 
-#: part/dialogs/KWAnchoringProperties.cpp:422
+#: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
 msgstr "ベスライン"
 
-#: part/dialogs/KWAnchoringProperties.cpp:423
-#: part/dialogs/KWAnchoringProperties.cpp:434
+#: part/dialogs/KWAnchoringProperties.cpp:413
+#: part/dialogs/KWAnchoringProperties.cpp:424
 #, kde-format
 msgid "Character"
 msgstr "文字"
 
-#: part/dialogs/KWAnchoringProperties.cpp:426
+#: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
 msgid "Row"
 msgstr "行"
 
-#: part/dialogs/KWAnchoringProperties.cpp:427
-#: part/dialogs/KWAnchoringProperties.cpp:435
+#: part/dialogs/KWAnchoringProperties.cpp:417
+#: part/dialogs/KWAnchoringProperties.cpp:425
 #, fuzzy, kde-format
 #| msgid "Page text area"
 msgid "Page (entire) area"
 msgstr "ページのテキストエリア"
 
-#: part/dialogs/KWAnchoringProperties.cpp:428
-#: part/dialogs/KWAnchoringProperties.cpp:436
+#: part/dialogs/KWAnchoringProperties.cpp:418
+#: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
 msgstr "ページのテキストエリア"
 
-#: part/dialogs/KWAnchoringProperties.cpp:429
-#: part/dialogs/KWAnchoringProperties.cpp:443
+#: part/dialogs/KWAnchoringProperties.cpp:419
+#: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
 msgstr "段落エリア"
 
-#: part/dialogs/KWAnchoringProperties.cpp:430
-#: part/dialogs/KWAnchoringProperties.cpp:444
+#: part/dialogs/KWAnchoringProperties.cpp:420
+#: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
 msgstr "段落テキストエリア"
 
-#: part/dialogs/KWAnchoringProperties.cpp:437
+#: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
 msgstr "左のページ境界"
 
-#: part/dialogs/KWAnchoringProperties.cpp:438
+#: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
 msgstr "右のページ境界"
 
-#: part/dialogs/KWAnchoringProperties.cpp:445
+#: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
 msgid "Right paragraph border"
 msgstr "右の段落境界"
 
-#: part/dialogs/KWAnchoringProperties.cpp:446
+#: part/dialogs/KWAnchoringProperties.cpp:436
 #, kde-format
 msgid "Left paragraph border"
 msgstr "左の段落境界"
@@ -342,12 +342,12 @@ msgstr "列:"
 msgid "Column spacing:"
 msgstr "列の間隔:"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:101
+#: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
 msgid "frameset"
 msgstr "フレームセット"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:126
+#: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
 msgstr "文書にフレームセットがありません"
@@ -381,7 +381,7 @@ msgstr "フレームセット名"
 msgid "Smart Positioning"
 msgstr "スマートポジショニング"
 
-#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
 msgstr "テキスト回り込み"
@@ -538,40 +538,40 @@ msgid "Distance Between Shape and Text:"
 msgstr "シェイプとテキストの距離:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
 #, kde-format
 msgid "Columns"
 msgstr "列"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:42
+#: part/dialogs/KWPageSettingsDialog.cpp:41
 #, kde-format
 msgid "Style"
 msgstr "スタイル"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:48
+#: part/dialogs/KWPageSettingsDialog.cpp:47
 #, kde-format
 msgid "Clone"
 msgstr ""
 
-#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
 #, kde-format
 msgid "Delete"
 msgstr "削除"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:137
+#: part/dialogs/KWPageSettingsDialog.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "ページスタイルを変更"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:211
-#, kde-format
-msgid "Add a new page style with the name:"
-msgstr ""
-
-#: part/dialogs/KWPageSettingsDialog.cpp:211
+#: part/dialogs/KWPageSettingsDialog.cpp:217
 #, kde-format
 msgid "Clone Page Style"
 msgstr "ページスタイルを複製"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:218
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
@@ -639,27 +639,27 @@ msgstr "名前変更(&R)"
 msgid "&Delete"
 msgstr "削除(&D)"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:68
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "ブックマーク名を変更"
-
-#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "ブックマークの新しい名前を入力してください"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "ブックマーク名を変更"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "“%1” という名前のブックマークは既に存在します。"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
 msgstr "ブックマークを選択"
 
-#: part/dialogs/KWShapeConfigFactory.cpp:44
+#: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
 msgid "Geometry"
 msgstr "配置"
@@ -671,7 +671,7 @@ msgid "Page Size && Margins"
 msgstr "ページサイズと余白"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
 #, kde-format
 msgid "Create"
 msgstr "作成"
@@ -686,17 +686,17 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Page #"
 msgstr "ページ #"
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Section"
 msgstr ""
 
-#: part/dockers/KWRdfDocker.cpp:39
+#: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
 msgstr "RDF"
@@ -706,47 +706,47 @@ msgstr "RDF"
 msgid "Statistics"
 msgstr "統計"
 
-#: part/dockers/KWStatisticsWidget.cpp:128
+#: part/dockers/KWStatisticsWidget.cpp:127
 #, kde-format
 msgid "Words:"
 msgstr "単語数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:131
+#: part/dockers/KWStatisticsWidget.cpp:130
 #, kde-format
 msgid "Sentences:"
 msgstr "文の数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:134
+#: part/dockers/KWStatisticsWidget.cpp:133
 #, kde-format
 msgid "Syllables:"
 msgstr "音節数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:137
+#: part/dockers/KWStatisticsWidget.cpp:136
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "スペースを含めた文字数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:140
+#: part/dockers/KWStatisticsWidget.cpp:139
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "スペースを除いた文字数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:143
+#: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
 msgid "Lines:"
 msgstr "行数:"
 
-#: part/dockers/KWStatisticsWidget.cpp:146
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
 msgstr ""
 
-#: part/dockers/KWStatisticsWidget.cpp:148
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "Flesch reading ease"
 msgstr "Flesch reading ease"
 
-#: part/dockers/KWStatisticsWidget.cpp:150
+#: part/dockers/KWStatisticsWidget.cpp:149
 #, kde-format
 msgid "East asian characters:"
 msgstr "東アジア文字:"
@@ -1081,327 +1081,327 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr "上と下がグレー"
 
-#: part/KWAboutData.h:20
+#: part/KWAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "Calligra Words"
 
-#: part/KWAboutData.h:22
+#: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
 msgstr "ワードプロセッサ"
 
-#: part/KWAboutData.h:24
+#: part/KWAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "© 1998-%1, The Words Team"
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "© 1998-%1, Words 開発チーム"
 
-#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
 msgstr "共同メンテナ"
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:31
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "Pierre Ducroquet"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:32
 #, kde-format
 msgid "C. Boemann"
 msgstr "C. Boemann"
 
-#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
 msgstr "すべて"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:33
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:34
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Formatting stuff"
 msgstr "フォーマット関係"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
-#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
-#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
-#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
-#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
+#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
+#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
+#: part/KWAboutData.h:66 part/KWAboutData.h:67
 #, kde-format
 msgid "Filter"
 msgstr "フィルタ"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Matus Uzak"
 msgstr "Matus Uzak"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
 msgstr ""
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Pavol Korinek"
 msgstr "Pavol Korinek"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Shreya Pandit"
 msgstr "Shreya Pandit"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Statistics docker"
 msgstr "統計ドック"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Brijesh Patel"
 msgstr "Brijesh Patel"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Foot and endnotes"
 msgstr ""
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Bibliography"
 msgstr ""
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Smit Patel"
 msgstr "Smit Patel"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Mojtaba Shahi"
 msgstr "Mojtaba Shahi"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
 msgstr ""
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr "Lassi Nieminen"
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Hanzes Matus"
 msgstr "Hanzes Matus"
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "Lukáš Tvrdý"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "Girish Ramakrishnan"
 
-#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
 msgid "ODF Support"
 msgstr "ODF のサポート"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr "Robert Mathias Marmorstein"
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "Sven Lüppken"
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "Frank Dekervel"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "Krister Wicksell Eriksson"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Dag Andersen"
 msgstr "Dag Andersen"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "Nash Hoogwater"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "KFormula"
 msgstr "KFormula"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "Ulrich Kuettler"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "Shaheed Haque"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Clarence Dang"
 msgstr "Clarence Dang"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "Robert Jacolin"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Ewald Snel"
 msgstr "Ewald Snel"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "Tomasz Grobelny"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Michael Johnson"
 msgstr "Michael Johnson"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr ""
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Page break icon"
 msgstr "改ページアイコン"
 
-#. i18n translator strings
-#: part/KWAboutData.h:71
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Taiki Komoda,Noboru Sinohara,Yukiko Bando"
-
-#: part/KWAboutData.h:72
+#: part/KWAboutData.h:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kom@kde.gr.jp,shinobo@leo.bekkoame.ne.jp,ybando@k6.dion.ne.jp"
 
-#: part/KWDocument.cpp:495
+#. i18n translator strings
+#: part/KWAboutData.h:70
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Taiki Komoda,Noboru Sinohara,Yukiko Bando"
+
+#: part/KWDocument.cpp:492
 #, kde-format
 msgid "Copy"
 msgstr "コピー"
 
-#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "標準"
 
-#: part/KWDocument.cpp:546
+#: part/KWDocument.cpp:544
 #, kde-format
 msgid "Document Title"
 msgstr "文書のタイトル"
 
-#: part/KWDocument.cpp:553
+#: part/KWDocument.cpp:551
 #, kde-format
 msgid "Head 1"
 msgstr "見出し 1"
 
-#: part/KWDocument.cpp:559
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 2"
 msgstr "見出し 2"
 
-#: part/KWDocument.cpp:565
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 3"
 msgstr "見出し 3"
 
-#: part/KWDocument.cpp:571
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Bullet List"
 msgstr "ビュレットリスト"
 
-#: part/KWGui.cpp:69
+#: part/KWGui.cpp:68
 #, kde-format
 msgid "Tools"
 msgstr "ツール"
@@ -1411,13 +1411,13 @@ msgstr "ツール"
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr "無効な OASIS OpenDocument ファイル。office:body タグが見つかりません。"
 
-#: part/KWOdfLoader.cpp:95
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr ""
 "無効な OASIS OpenDocument ファイル。office:body の中にタグが見つかりません。"
 
-#: part/KWOdfLoader.cpp:97
+#: part/KWOdfLoader.cpp:96
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1432,12 +1432,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "標準"
 
-#: part/KWPart.cpp:141
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "必要なテキストコンポーネントが見つかりません。Words を終了します。"
 
-#: part/KWPart.cpp:142
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "インストールエラー"
@@ -1467,91 +1467,91 @@ msgstr "ページ %1-%2/%3"
 msgid "Line %1"
 msgstr "行 %1"
 
-#: part/KWStatusBar.cpp:124
+#: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
 msgstr "ページ番号"
 
-#: part/KWStatusBar.cpp:137
+#: part/KWStatusBar.cpp:145
 #, kde-format
 msgid "Line Number"
 msgstr "行番号"
 
-#: part/KWStatusBar.cpp:149
+#: part/KWStatusBar.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Page Style"
 msgid "Change the page style"
 msgstr "ページスタイルを変更"
 
-#: part/KWStatusBar.cpp:155
+#: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
 msgstr "ページスタイル"
 
-#: part/KWStatusBar.cpp:169
+#: part/KWStatusBar.cpp:179
 #, kde-format
 msgid "Page Size"
 msgstr "ページサイズ"
 
-#: part/KWStatusBar.cpp:184
+#: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
 msgstr "保存された/変更された"
 
-#: part/KWStatusBar.cpp:197
+#: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
 msgstr "マウスカーソル: X:Y"
 
-#: part/KWStatusBar.cpp:211
+#: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
 msgstr ""
 
-#: part/KWView.cpp:183
+#: part/KWView.cpp:184
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:260
+#: part/KWView.cpp:276
 #, kde-format
 msgid "Shape Properties..."
 msgstr "シェイプのプロパティ..."
 
-#: part/KWView.cpp:262
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "シェイプの挙動を変更する"
 
-#: part/KWView.cpp:271
+#: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "文書からテンプレートを作成..."
 
-#: part/KWView.cpp:272
+#: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "この文書を保存して、後でテンプレートとして使用"
 
-#: part/KWView.cpp:273
+#: part/KWView.cpp:290
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
 
-#: part/KWView.cpp:292
+#: part/KWView.cpp:309
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "制御文字を表示"
 
-#: part/KWView.cpp:298
+#: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "制御文字の表示/非表示を切り替え"
 
-#: part/KWView.cpp:299
+#: part/KWView.cpp:317
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1561,34 +1561,34 @@ msgstr ""
 "<p>制御文字の表示/非表示を切り替えます。</p><p>有効にすると、タブ、スペース、"
 "改行などの印刷されない制御文字を表す記号が表示されます。</p>"
 
-#: part/KWView.cpp:301
+#: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:307
+#: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:308
+#: part/KWView.cpp:327
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:310
+#: part/KWView.cpp:329
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "テキストシェイプの境界を表示"
 
-#: part/KWView.cpp:311
+#: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "境界の表示/非表示を切り替え"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:337
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1599,17 +1599,17 @@ msgstr ""
 "ションは印刷されたページで文書がどのように見えるかを確認するのに役立ちます。"
 "</p>"
 
-#: part/KWView.cpp:319
+#: part/KWView.cpp:340
 #, kde-format
 msgid "Show Table Borders"
 msgstr "テーブルの境界を表示"
 
-#: part/KWView.cpp:325
+#: part/KWView.cpp:346
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "テーブルの境界の表示/非表示を切り替え"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:348
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1622,18 +1622,18 @@ msgstr ""
 "<p>制御文字の表示/非表示を切り替えます。</p><p>有効にすると、タブ、スペース、"
 "改行などの印刷されない制御文字を表す記号が表示されます。</p>"
 
-#: part/KWView.cpp:328
+#: part/KWView.cpp:350
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:334
+#: part/KWView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Toggle the display of table borders"
 msgid "Toggle the display of section bounds"
 msgstr "テーブルの境界の表示/非表示を切り替え"
 
-#: part/KWView.cpp:335
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1646,17 +1646,17 @@ msgstr ""
 "<p>制御文字の表示/非表示を切り替えます。</p><p>有効にすると、タブ、スペース、"
 "改行などの印刷されない制御文字を表す記号が表示されます。</p>"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:360
 #, kde-format
 msgid "Show Rulers"
 msgstr "定規を表示"
 
-#: part/KWView.cpp:339
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "定規の表示/非表示を切り替え"
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:364
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1668,64 +1668,64 @@ msgstr ""
 "の位置と幅が表示されます。表などを配置するときに役立ちます。</p><p>チェックを"
 "外すと定規は非表示になります。</p>"
 
-#: part/KWView.cpp:351
+#: part/KWView.cpp:375
 #, kde-format
 msgid "Snap to Grid"
 msgstr "グリッドに合わせる"
 
-#: part/KWView.cpp:359
+#: part/KWView.cpp:383
 #, kde-format
 msgid "Show Status Bar"
 msgstr "ステータスバーを表示"
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "ステータスバーの表示/非表示を切り替えます"
 
-#: part/KWView.cpp:366
+#: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:367
+#: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:374
+#: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr ""
 
-#: part/KWView.cpp:376
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr ""
 
-#: part/KWView.cpp:377
+#: part/KWView.cpp:401
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:392
+#: part/KWView.cpp:416
 #, kde-format
 msgid "Configure..."
 msgstr "設定..."
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:425
 #, kde-format
 msgid "Page Layout..."
 msgstr "ページのレイアウト..."
 
-#: part/KWView.cpp:403
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "ページ全体のプロパティを変更"
 
-#: part/KWView.cpp:404
+#: part/KWView.cpp:429
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1734,33 +1734,33 @@ msgstr ""
 "<p>ページ全体のプロパティを変更します。</p><p>現在変更できるのは用紙のサイズ"
 "と向き、ヘッダ/フッタのサイズ、段組設定だけです。</p>"
 
-#: part/KWView.cpp:407
+#: part/KWView.cpp:432
 #, kde-format
 msgid "Create Header"
 msgstr "ヘッダを作成"
 
-#: part/KWView.cpp:413
+#: part/KWView.cpp:438
 #, kde-format
 msgid "Create Footer"
 msgstr "フッタを作成"
 
-#: part/KWView.cpp:420
+#: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
-#: part/KWView.cpp:421
+#: part/KWView.cpp:446
 #, fuzzy, kde-format
 #| msgid "No framesets in document"
 msgid "Shows comments in the document"
 msgstr "文書にフレームセットがありません"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:428
+#: part/KWView.cpp:453
 #, fuzzy, kde-format
 #| msgid "Shows or hides the status bar"
 msgid "Shows or hides word counting in status bar"
@@ -1791,101 +1791,101 @@ msgstr "ページのレイアウト"
 msgid "..."
 msgstr "..."
 
-#: part/widgets/KoFindToolbar.cpp:55
+#: part/widgets/KoFindToolbar.cpp:64
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:68
+#: part/widgets/KoFindToolbar.cpp:81
 #, kde-format
 msgctxt "Next search result"
 msgid "Next"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:78
+#: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:87
+#: part/widgets/KoFindToolbar.cpp:104
 #, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:115
+#: part/widgets/KoFindToolbar.cpp:134
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:125
+#: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:131
+#: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:139
+#: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:200
+#: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
 msgstr[0] ""
 
-#: part/widgets/KoFindToolbar.cpp:210
+#: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:216
+#: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:218
+#: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
 msgstr ""
 
-#: part/Words.cpp:45
+#: part/Words.cpp:41
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "奇数ページのヘッダ"
 
-#: part/Words.cpp:47
+#: part/Words.cpp:43
 #, kde-format
 msgid "Even Pages Header"
 msgstr "偶数ページのヘッダ"
 
-#: part/Words.cpp:49
+#: part/Words.cpp:45
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "奇数ページのフッタ"
 
-#: part/Words.cpp:51
+#: part/Words.cpp:47
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "偶数ページのフッタ"
 
-#: part/Words.cpp:53
+#: part/Words.cpp:49
 #, kde-format
 msgid "Main text"
 msgstr "メインテキスト"
 
-#: part/Words.cpp:55
+#: part/Words.cpp:51
 #, kde-format
 msgid "Other text"
 msgstr "他のテキスト"

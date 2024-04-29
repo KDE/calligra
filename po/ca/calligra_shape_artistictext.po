@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-08-04 22:08+0200\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Generator: Lokalize 20.04.3\n"
 
-#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
 msgstr "Afegeix un interval de text"
@@ -43,92 +43,92 @@ msgstr "Una forma que mostra una única línia de text"
 msgid "Artistic Text"
 msgstr "Text artístic"
 
-#: ArtisticTextTool.cpp:64
+#: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
 msgstr "No adjuntis el camí"
 
-#: ArtisticTextTool.cpp:69
+#: ArtisticTextTool.cpp:77
 #, kde-format
 msgid "Convert to Path"
 msgstr "Converteix a traç"
 
-#: ArtisticTextTool.cpp:74
+#: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
 msgstr "Text en negreta"
 
-#: ArtisticTextTool.cpp:79
+#: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
 msgstr "Text en cursiva"
 
-#: ArtisticTextTool.cpp:84
+#: ArtisticTextTool.cpp:92
 #, kde-format
 msgid "Superscript"
 msgstr "Superíndex"
 
-#: ArtisticTextTool.cpp:89
+#: ArtisticTextTool.cpp:97
 #, kde-format
 msgid "Subscript"
 msgstr "Subíndex"
 
-#: ArtisticTextTool.cpp:94
+#: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
 msgstr "Àncora a l'inici"
 
-#: ArtisticTextTool.cpp:99
+#: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
 msgstr "Àncora al mig"
 
-#: ArtisticTextTool.cpp:104
+#: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
 msgstr "Àncora al final"
 
-#: ArtisticTextTool.cpp:295
+#: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
 msgstr "Cliqueu per a canviar la posició del cursor."
 
-#: ArtisticTextTool.cpp:297
+#: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
 msgstr "Cliqueu per a seleccionar la forma de text."
 
-#: ArtisticTextTool.cpp:300
+#: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
 msgstr "Feu doble clic per a posar text al camí."
 
-#: ArtisticTextTool.cpp:303
+#: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
 msgstr "Arrossegueu la nansa per a canviar l'inici del desplaçament."
 
-#: ArtisticTextTool.cpp:307
+#: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
 msgstr "Premeu Esc per a acabar l'edició."
 
-#: ArtisticTextTool.cpp:489
+#: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
 msgstr "Premeu Retorn per a acabar l'edició."
 
-#: ArtisticTextTool.cpp:583
+#: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Converteix a traç"
 
-#: ArtisticTextTool.cpp:596
+#: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
 msgstr "Propietats del text"
 
-#: ArtisticTextTool.cpp:606
+#: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
 msgstr "Text al camí"
@@ -138,38 +138,38 @@ msgstr "Text al camí"
 msgid "Artistic text editing"
 msgstr "Edició de text artístic"
 
-#: AttachTextToPathCommand.cpp:15
+#: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
 msgstr "Adjunta el camí"
 
-#: ChangeTextAnchorCommand.cpp:14
+#: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
 msgstr "Canvia l'ancoratge del text"
 
-#: ChangeTextFontCommand.cpp:16
+#: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
 msgstr "Canvia el tipus de lletra"
 
-#: ChangeTextOffsetCommand.cpp:15
+#: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
 msgstr "Canvia el desplaçament del text"
 
-#: DetachTextFromPathCommand.cpp:14
+#: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
 msgstr "No adjuntis el camí"
 
-#: RemoveTextRangeCommand.cpp:16
+#: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
 msgstr "Elimina l'interval de text"
 
-#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
-#: ReplaceTextRangeCommand.cpp:30
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "Substitueix l'interval de text"

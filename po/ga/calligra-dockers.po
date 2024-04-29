@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice-dockers.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-07-22 14:30-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,78 +17,78 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:63
+#: shapecollection/OdfCollectionLoader.cpp:60
 #, kde-format
 msgid "Found no shapes in the collection! %1"
 msgstr "Níor aimsíodh aon ghiuirléidí sa bhailiúchán! %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:132
+#: shapecollection/OdfCollectionLoader.cpp:120
 #, fuzzy, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:157
+#: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
 msgid "No body tag found in file: %1"
 msgstr ""
 
-#: shapecollection/OdfCollectionLoader.cpp:165
+#: shapecollection/OdfCollectionLoader.cpp:151
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
 msgstr ""
 
-#: shapecollection/OdfCollectionLoader.cpp:173
-#: shapecollection/OdfCollectionLoader.cpp:181
+#: shapecollection/OdfCollectionLoader.cpp:159
+#: shapecollection/OdfCollectionLoader.cpp:167
 #, kde-format
 msgid "No shapes found in file: %1"
 msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
 
-#: shapecollection/ShapeCollectionDocker.cpp:111
+#: shapecollection/ShapeCollectionDocker.cpp:110
 #, kde-format
 msgid "Add Shape"
 msgstr "Cuir Giuirléid Leis"
 
-#: shapecollection/ShapeCollectionDocker.cpp:146
+#: shapecollection/ShapeCollectionDocker.cpp:144
 #, kde-format
 msgid "More"
 msgstr "Tuilleadh"
 
-#: shapecollection/ShapeCollectionDocker.cpp:176
+#: shapecollection/ShapeCollectionDocker.cpp:172
 #, kde-format
 msgid "Open Shape Collection"
 msgstr "Oscail Bailiúchán Giuirléidí"
 
-#: shapecollection/ShapeCollectionDocker.cpp:184
+#: shapecollection/ShapeCollectionDocker.cpp:180
 #, kde-format
 msgid "Remove Shape Collection"
 msgstr "Bain Bailiúchán Giuirléidí"
 
-#: shapecollection/ShapeCollectionDocker.cpp:330
+#: shapecollection/ShapeCollectionDocker.cpp:327
 #, kde-format
 msgid "Default"
 msgstr "Réamhshocrú"
 
-#: shapecollection/ShapeCollectionDocker.cpp:334
+#: shapecollection/ShapeCollectionDocker.cpp:331
 #, kde-format
 msgid "Geometrics"
 msgstr ""
 
-#: shapecollection/ShapeCollectionDocker.cpp:345
+#: shapecollection/ShapeCollectionDocker.cpp:342
 #, kde-format
 msgid "Arrows"
 msgstr "Saigheada"
 
-#: shapecollection/ShapeCollectionDocker.cpp:349
+#: shapecollection/ShapeCollectionDocker.cpp:346
 #, kde-format
 msgid "Funny"
 msgstr "Greannmhar"
 
-#: shapecollection/ShapeCollectionDocker.cpp:522
+#: shapecollection/ShapeCollectionDocker.cpp:513
 #, kde-format
 msgid "Collection Error"
 msgstr "Earráid Bhailiúcháin"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:35
+#: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
 msgstr "Airíonna na Giuirléide"

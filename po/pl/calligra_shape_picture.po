@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PictureShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-05-19 20:51+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -115,27 +115,27 @@ msgstr "Obraz"
 msgid "Image shape that can display jpg, png etc."
 msgstr "Kształt obrazu, który może wyświetlać jpg, png itd."
 
-#: PictureTool.cpp:95
+#: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
 msgstr "Standard"
 
-#: PictureTool.cpp:96
+#: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
 msgstr "Odcienie szarości"
 
-#: PictureTool.cpp:97
+#: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
 msgstr "Monochromatyczny"
 
-#: PictureTool.cpp:98
+#: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
 msgstr "Znak wodny"
 
-#: PictureToolFactory.cpp:19
+#: PictureToolFactory.cpp:18
 #, kde-format
 msgid "Picture editing"
 msgstr "Edytowanie zdjęcia"

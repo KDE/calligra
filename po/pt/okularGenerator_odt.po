@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: okular_odt\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 12:38+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-POFile-SpellExtra: OTT Sven Langkamp ODT\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: OkularOdtGenerator.cpp:118
+#: OkularOdtGenerator.cpp:114
 #, kde-format
 msgid "Language"
 msgstr "Língua"

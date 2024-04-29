@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2018-05-13 11:47+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "Kommentarform för att visa kommentarinnehåll"
 msgid "Annotation Shape"
 msgstr "Kommentarform"
 
-#: commands/AcceptChangeCommand.cpp:30
+#: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Accept change"
 msgstr "Acceptera ändring"
@@ -69,12 +69,12 @@ msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
 msgstr "%1 krymp för att passa"
 
-#: commands/ChangeListLevelCommand.cpp:29
+#: commands/ChangeListLevelCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
 msgstr "Ändra listnivå"
 
-#: commands/RejectChangeCommand.cpp:34
+#: commands/RejectChangeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Reject change"
 msgstr "Avslå ändring"
@@ -141,12 +141,12 @@ msgstr "Datum"
 msgid "Type"
 msgstr "Typ"
 
-#: dialogs/BibliographyConfigureDialog.cpp:96
+#: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
 msgstr "Stigande"
 
-#: dialogs/BibliographyConfigureDialog.cpp:97
+#: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
 msgstr "Fallande"
@@ -234,17 +234,17 @@ msgstr "Bibliografi"
 msgid "References"
 msgstr "Referenser"
 
-#: dialogs/ChangeConfigureDialog.cpp:136
+#: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Det här är en rad med infogad text."
 
-#: dialogs/ChangeConfigureDialog.cpp:142
+#: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Det här är en rad med borttagen text."
 
-#: dialogs/ChangeConfigureDialog.cpp:148
+#: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Det här är en textrad vars format har ändrats."
@@ -522,37 +522,37 @@ msgstr "Överliggande stil:"
 msgid "Include in table of contents"
 msgstr "Infoga i innehållsförteckning"
 
-#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
-#: dialogs/CharacterHighlighting.cpp:261
+#: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
 msgstr "Kapitäler"
 
-#: dialogs/CharacterHighlighting.cpp:262
+#: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
 msgid "Uppercase"
 msgstr "Stora bokstäver"
 
-#: dialogs/CharacterHighlighting.cpp:263
+#: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
 msgid "Lowercase"
 msgstr "Små bokstäver"
 
-#: dialogs/CharacterHighlighting.cpp:264
+#: dialogs/CharacterHighlighting.cpp:302
 #, kde-format
 msgid "Capitalize"
 msgstr "Inledande stor bokstav"
 
-#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
 #, kde-format
 msgid "Superscript"
 msgstr "Upphöjd"
 
-#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
 msgstr "Nedsänkt"
@@ -594,12 +594,17 @@ msgctxt "Character position"
 msgid "Position:"
 msgstr "Position:"
 
-#: dialogs/CitationInsertionDialog.cpp:25
+#: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
 msgstr "Markera"
 
-#: dialogs/CitationInsertionDialog.cpp:40
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#, kde-format
+msgid "Warning"
+msgstr "Varning"
+
+#: dialogs/CitationInsertionDialog.cpp:41
 #, kde-format
 msgid ""
 "The document already contains the bibliography entry with different data.\n"
@@ -608,13 +613,8 @@ msgstr ""
 "Dokumentet innehåller redan en bibliografipost med annorlunda data.\n"
 "Vill du justera befintliga poster?"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
-#, kde-format
-msgid "Warning"
-msgstr "Varning"
-
-#: dialogs/CitationInsertionDialog.cpp:55
-#: dialogs/CitationInsertionDialog.cpp:73
+#: dialogs/CitationInsertionDialog.cpp:58
+#: dialogs/CitationInsertionDialog.cpp:75
 #, kde-format
 msgid "Short name%1"
 msgstr "Kort namn%1"
@@ -989,12 +989,12 @@ msgstr "ELLER"
 msgid "From the document:"
 msgstr "Från dokumentet:"
 
-#: dialogs/DockerStylesComboModel.cpp:61
+#: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
 msgstr "Använda stilar"
 
-#: dialogs/DockerStylesComboModel.cpp:64
+#: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
 msgid "Unused Styles"
 msgstr "Oanvända stilar"
@@ -1040,7 +1040,7 @@ msgstr "Automatiska bindestreck"
 msgid "Select Font"
 msgstr "Välj teckensnitt"
 
-#: dialogs/FontDia.cpp:68
+#: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "Teckensnitt"
@@ -1048,7 +1048,7 @@ msgstr "Teckensnitt"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Infoga bibliografi"
@@ -1162,7 +1162,7 @@ msgstr "Specialtecken"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#: ReferencesTool.cpp:116 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Infoga"
@@ -1179,28 +1179,28 @@ msgstr "Stäng"
 msgid "Quick search:"
 msgstr "Snabbsök:"
 
-#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
-#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
+#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
 #, kde-format
 msgid "The URL is invalid"
 msgstr "Webbadressen är ogiltig"
 
-#: dialogs/LinkInsertionDialog.cpp:88
+#: dialogs/LinkInsertionDialog.cpp:87
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "Bokmärket finns inte"
 
-#: dialogs/LinkInsertionDialog.cpp:190
+#: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "Hämtar rubriken:  0 % färdig"
 
-#: dialogs/LinkInsertionDialog.cpp:213
+#: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
 msgstr "Tidsgräns överskriden för hämtning"
 
-#: dialogs/LinkInsertionDialog.cpp:268
+#: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "Hämtar rubriken: %1 % färdig"
@@ -1444,32 +1444,32 @@ msgstr "&Byt namn"
 msgid "&Delete"
 msgstr "&Ta bort"
 
-#: dialogs/ManageBookmarkDialog.cpp:69
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Byt namn på bokmärke"
-
-#: dialogs/ManageBookmarkDialog.cpp:70
+#: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "Ange ett nytt namn på bokmärket"
 
-#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#: dialogs/ManageBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Byt namn på bokmärke"
+
+#: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "Det finns redan ett bokmärke med namnet \"%1\"."
 
-#: dialogs/ManageBookmarkDialog.cpp:110
+#: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
 msgid "Insert Bookmark"
 msgstr "Infoga bokmärke"
 
-#: dialogs/ManageBookmarkDialog.cpp:111
+#: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
 msgstr "Ange ett namn på bokmärket"
 
-#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Hantera bokmärken"
@@ -1640,7 +1640,7 @@ msgctxt "None"
 msgid "Nothing"
 msgstr "Ingenting"
 
-#: dialogs/ParagraphBulletsNumbers.cpp:335
+#: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
 msgstr "Välj en listbild"
@@ -1746,7 +1746,7 @@ msgid "Browse..."
 msgstr "Bläddra..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
 #, kde-format
 msgid "Background"
 msgstr "Bakgrundsfärg"
@@ -1966,7 +1966,7 @@ msgstr "Lämna åtminstone så många rader (horungar):"
 msgid "Paragraph Format"
 msgstr "Styckesformat"
 
-#: dialogs/QuickTableButton.cpp:146
+#: dialogs/QuickTableButton.cpp:147
 #, kde-format
 msgid "Insert a table"
 msgstr "Infoga en tabell"
@@ -1976,12 +1976,12 @@ msgstr "Infoga en tabell"
 msgid "Section name"
 msgstr "Avsnittsnamn"
 
-#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
 msgstr "Anpassa avsnitt"
 
-#: dialogs/SectionFormatDialog.cpp:154
+#: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
 msgid "Invalid characters or section with such name exists."
 msgstr "Ogiltiga tecken eller en sektion med detta namn finns redan"
@@ -2046,7 +2046,7 @@ msgid "Insert citation at current position"
 msgstr "Infoga en hänvisning på nuvarande position"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr "Infoga hänvisning"
@@ -2057,12 +2057,12 @@ msgstr "Infoga hänvisning"
 msgid "Configure Bibliography"
 msgstr "Anpassa bibliografi"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
 msgstr "Infogar en fotnot på markörens nuvarande position"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
 msgstr "Infogar en slutnot på markörens nuvarande position"
@@ -2093,7 +2093,7 @@ msgid "Hyperlinks"
 msgstr "Hyperlänkar"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
 #, kde-format
 msgid "Bookmarks"
 msgstr "Bokmärken"
@@ -2115,7 +2115,7 @@ msgstr "Bibliotek av nivåformat"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "Ta bort"
@@ -2140,7 +2140,7 @@ msgstr "Definiera nya punkter eller nummerformat"
 msgid "Define New List Level Format"
 msgstr "Definiera nytt listnivåformat"
 
-#: dialogs/SimpleParagraphWidget.cpp:532
+#: dialogs/SimpleParagraphWidget.cpp:549
 #, kde-format
 msgid "Edit List Level Format"
 msgstr "Redigera listnivåformat"
@@ -2157,13 +2157,13 @@ msgstr "Innehåll"
 msgid "Set Border Color..."
 msgstr "Ange kantfärg..."
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:169
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Ingen"
 
-#: dialogs/SimpleTableWidget.cpp:171
+#: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
 msgid "No Border"
 msgstr "Ingen kant"
@@ -2173,24 +2173,24 @@ msgstr "Ingen kant"
 msgid "Create a new style inheriting the current style"
 msgstr "Skapa en ny stil som ärver nuvarande stil"
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
 #, kde-format
 msgid "New Style"
 msgstr "Ny stil"
 
-#: dialogs/StyleManager.cpp:426
+#: dialogs/StyleManager.cpp:431
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr "En annan stil som heter '%1' finns redan. Välj ett annat namn."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "Stycke"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "Tecken"
@@ -2206,12 +2206,12 @@ msgstr "&Ny"
 msgid "Style Manager"
 msgstr "Stilhantering"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:50
 #, kde-format
 msgid "Save Changes"
 msgstr "Spara ändringar"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:51
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "
@@ -2260,13 +2260,13 @@ msgstr ""
 msgid "Create a new style with the current properties"
 msgstr "Skapa en ny stil med nuvarande egenskaper"
 
-#: dialogs/StylesComboPreview.cpp:179
+#: dialogs/StylesComboPreview.cpp:175
 #, kde-format
 msgid "New style"
 msgstr "Ny stil"
 
-#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
-#: dialogs/StylesModel.cpp:197
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
+#: dialogs/StylesModel.cpp:195
 #, kde-format
 msgid "None"
 msgstr "Ingen"
@@ -2318,38 +2318,38 @@ msgstr "Anpassa efter innehåll"
 msgid "Fit to available surrounding"
 msgstr "Anpassa efter tillgängligt utrymme"
 
-#: dialogs/TableOfContentsConfigure.cpp:62
+#: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
 msgstr "Innehållsförteckning - Anpassa"
 
-#: dialogs/TableOfContentsConfigure.cpp:64
+#: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
 msgid "Table Title"
 msgstr "Tabelltitel"
 
-#: dialogs/TableOfContentsConfigure.cpp:65
+#: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Use outline"
 msgstr "Använd sammanfattning"
 
-#: dialogs/TableOfContentsConfigure.cpp:66
+#: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
 msgstr "Använd stilar"
 
-#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure"
 msgstr "Anpassa"
 
-#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsConfigure.cpp:67
 #, kde-format
 msgid "Index"
 msgstr "Index"
 
-#: dialogs/TableOfContentsConfigure.cpp:69
-#: dialogs/TableOfContentsStyleModel.cpp:232
+#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsStyleModel.cpp:229
 #, kde-format
 msgid "Styles"
 msgstr "Stilar"
@@ -2392,23 +2392,23 @@ msgstr "Tabulator 2"
 msgid "Level %1"
 msgstr "Nivå %1"
 
-#: dialogs/TableOfContentsEntryModel.cpp:137
-#: dialogs/TableOfContentsStyleModel.cpp:234
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsStyleModel.cpp:231
 #, kde-format
 msgid "Level"
 msgstr "Nivå"
 
-#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsEntryModel.cpp:141
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
 msgstr "Innehållsförteckning - Anpassa stilar"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
 msgstr "Stilar tillgängliga"
@@ -2419,8 +2419,8 @@ msgstr "Stilar tillgängliga"
 msgid "TextLabel"
 msgstr "Textetikett"
 
-#: dialogs/TableOfContentsStyleDelegate.cpp:43
-#: dialogs/TableOfContentsStyleModel.cpp:97
+#: dialogs/TableOfContentsStyleDelegate.cpp:40
+#: dialogs/TableOfContentsStyleModel.cpp:95
 #, kde-format
 msgid "Disabled"
 msgstr "Inaktiverad"
@@ -2430,107 +2430,107 @@ msgstr "Inaktiverad"
 msgid "Table Of Contents"
 msgstr "Innehållsförteckning"
 
-#: ReferencesTool.cpp:116
+#: ReferencesTool.cpp:118
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr "Infoga en innehållsförteckning i dokumentet."
 
-#: ReferencesTool.cpp:118 TextTool.cpp:410
+#: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Infoga anpassad..."
 
-#: ReferencesTool.cpp:120
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr "Infoga en anpassad innehållsförteckning i dokumentet."
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure..."
 msgstr "Anpassa..."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:126
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr "Anpassa innehållsförteckning"
 
-#: ReferencesTool.cpp:127
+#: ReferencesTool.cpp:129
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr "Infoga fotnot med automatisk numrering"
 
-#: ReferencesTool.cpp:132
+#: ReferencesTool.cpp:134
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr "Infoga fotnot med etikett"
 
-#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
 #, kde-format
 msgid "Insert with label:"
 msgstr "Infoga med etikett:"
 
-#: ReferencesTool.cpp:138
+#: ReferencesTool.cpp:140
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr "Infoga slutnot med automatisk numrering"
 
-#: ReferencesTool.cpp:143
+#: ReferencesTool.cpp:145
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr "Infoga slutnot med etikett"
 
-#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, kde-format
 msgid "Settings..."
 msgstr "Inställningar..."
 
-#: ReferencesTool.cpp:159
+#: ReferencesTool.cpp:161
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr "Infoga en hänvisning i dokumentet."
 
-#: ReferencesTool.cpp:164
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr "Infoga en bibliografi i dokumentet."
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr "Infoga egen bibliografi"
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:170
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr "Infoga en egen bibliografi i dokumentet."
 
-#: ReferencesTool.cpp:172
+#: ReferencesTool.cpp:174
 #, kde-format
 msgid "Configure the bibliography"
 msgstr "Anpassa bibliografin"
 
-#: ReferencesTool.cpp:175
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert Link"
 msgstr "Infoga länk"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:179
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr "Infoga en webblänk eller länk till ett bokmärke."
 
-#: ReferencesTool.cpp:181
+#: ReferencesTool.cpp:183
 #, kde-format
 msgid "Add Bookmark"
 msgstr "Lägg till bokmärke"
 
-#: ReferencesTool.cpp:182
+#: ReferencesTool.cpp:184
 #, kde-format
 msgid "Add Bookmark :"
 msgstr "Lägg till bokmärke: "
 
-#: ReferencesTool.cpp:187
+#: ReferencesTool.cpp:189
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
@@ -2539,7 +2539,7 @@ msgstr ""
 "Infoga ett bokmärke. Det är användbart för att skapa länkar som pekar till "
 "områden inne i dokumentet."
 
-#: ReferencesTool.cpp:191
+#: ReferencesTool.cpp:193
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
@@ -2548,30 +2548,30 @@ msgstr ""
 "Visar en meddelanderuta som innehåller alternativ för att lägga till ett "
 "nytt bokmärke eller hantera befintliga bokmärken"
 
-#: ReferencesTool.cpp:195
+#: ReferencesTool.cpp:197
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
 msgstr ""
 "Hantera bokmärken. Kontrollera vad de pekar på, ta bort, eller byt namn."
 
-#: ReferencesTool.cpp:231
+#: ReferencesTool.cpp:232
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr "Tabeller, listor och index"
 
-#: ReferencesTool.cpp:234
+#: ReferencesTool.cpp:235
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr "Fotnoter och slutnoter"
 
-#: ReferencesTool.cpp:237
+#: ReferencesTool.cpp:238
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr "Hänvisningar och bibliografi"
 
-#: ReferencesTool.cpp:240
+#: ReferencesTool.cpp:241
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr "Länkar och bokmärken"
@@ -2626,303 +2626,303 @@ msgstr "En form som visar text"
 msgid "Text Shape"
 msgstr "Textform"
 
-#: TextTool.cpp:201
+#: TextTool.cpp:202
 #, kde-format
 msgid "Configure current section"
 msgstr "Anpassa aktuellt avsnitt"
 
-#: TextTool.cpp:205
+#: TextTool.cpp:206
 #, kde-format
 msgid "Insert new section"
 msgstr "Infoga nytt avsnitt"
 
-#: TextTool.cpp:209
+#: TextTool.cpp:210
 #, kde-format
 msgid "Insert paragraph between sections"
 msgstr "Infoga stycke mellan avsnitt"
 
-#: TextTool.cpp:213
+#: TextTool.cpp:214
 #, kde-format
 msgid "Paste As Text"
 msgstr "Klistra in som text"
 
-#: TextTool.cpp:218
+#: TextTool.cpp:219
 #, kde-format
 msgid "Bold"
 msgstr "Fet"
 
-#: TextTool.cpp:224
+#: TextTool.cpp:225
 #, kde-format
 msgid "Italic"
 msgstr "Kursiv"
 
-#: TextTool.cpp:230
+#: TextTool.cpp:231
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Understruken"
 
-#: TextTool.cpp:236
+#: TextTool.cpp:237
 #, kde-format
 msgid "Strikethrough"
 msgstr "Överstrykning"
 
-#: TextTool.cpp:242
+#: TextTool.cpp:243
 #, kde-format
 msgid "Align Left"
 msgstr "Vänsterjustera"
 
-#: TextTool.cpp:249
+#: TextTool.cpp:250
 #, kde-format
 msgid "Align Right"
 msgstr "Högerjustera"
 
-#: TextTool.cpp:256
+#: TextTool.cpp:257
 #, kde-format
 msgid "Align Center"
 msgstr "Centrera"
 
-#: TextTool.cpp:264
+#: TextTool.cpp:265
 #, kde-format
 msgid "Align Block"
 msgstr "Rak justering"
 
-#: TextTool.cpp:271
+#: TextTool.cpp:272
 #, kde-format
 msgid "Change text direction"
 msgstr "Ändra textriktning"
 
-#: TextTool.cpp:273
+#: TextTool.cpp:274
 #, kde-format
 msgid "Change writing direction"
 msgstr "Ändra skrivriktning"
 
-#: TextTool.cpp:295
+#: TextTool.cpp:293
 #, kde-format
 msgid "Increase Indent"
 msgstr "Öka indentering"
 
-#: TextTool.cpp:302
+#: TextTool.cpp:299
 #, kde-format
 msgid "Decrease Indent"
 msgstr "Minska indentering"
 
-#: TextTool.cpp:306
+#: TextTool.cpp:303
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr "Ändra lista eller listnivåformatering"
 
-#: TextTool.cpp:307
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr "Sätt på eller stäng av lista, eller ändra aktuellt nivåformat"
 
-#: TextTool.cpp:310
+#: TextTool.cpp:307
 #, kde-format
 msgid "Increase Font Size"
 msgstr "Öka teckenstorlek"
 
-#: TextTool.cpp:315
+#: TextTool.cpp:312
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "Minska teckenstorlek"
 
-#: TextTool.cpp:321
+#: TextTool.cpp:318
 #, kde-format
 msgid "Font Family"
 msgstr "Teckenfamilj"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:322
 #, kde-format
 msgid "Variable"
 msgstr "Variabel"
 
-#: TextTool.cpp:330
+#: TextTool.cpp:326
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "Infoga icke-radbrytande mellanslag"
 
-#: TextTool.cpp:335
+#: TextTool.cpp:331
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "Infoga icke-radbrytande bindestreck"
 
-#: TextTool.cpp:340
+#: TextTool.cpp:336
 #, kde-format
 msgid "Insert Index"
 msgstr "Infoga index"
 
-#: TextTool.cpp:345
+#: TextTool.cpp:341
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "Infoga mjukt bindestreck"
 
-#: TextTool.cpp:351
+#: TextTool.cpp:347
 #, kde-format
 msgid "Line Break"
 msgstr "Radbrytning"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:352
 #, kde-format
 msgid "Page Break"
 msgstr "Sidbrytning"
 
-#: TextTool.cpp:360
+#: TextTool.cpp:356
 #, kde-format
 msgid "Insert a page break"
 msgstr "Infoga sidbrytning"
 
-#: TextTool.cpp:361
+#: TextTool.cpp:357
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr "All text efter den här punkten kommer att flyttas till nästa sida."
 
-#: TextTool.cpp:364
+#: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
 msgstr "Teckensnitt..."
 
-#: TextTool.cpp:367
+#: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "Ändra teckenstorlek, teckensnitt, fetstil, kursivstil etc."
 
-#: TextTool.cpp:368
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "Ändra egenskaperna för de markerade tecknen."
 
-#: TextTool.cpp:371
+#: TextTool.cpp:367
 #, kde-format
 msgid "Font Size"
 msgstr "Teckenstorlek"
 
-#: TextTool.cpp:377
+#: TextTool.cpp:373
 #, kde-format
 msgid "Text Color..."
 msgstr "Textfärg..."
 
-#: TextTool.cpp:378
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color"
 msgstr "Textfärg"
 
-#: TextTool.cpp:384
+#: TextTool.cpp:380
 #, kde-format
 msgid "Background Color..."
 msgstr "Bakgrundsfärg..."
 
-#: TextTool.cpp:389
+#: TextTool.cpp:385
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr "Ändra automatiskt storlek till innehåll"
 
-#: TextTool.cpp:394
+#: TextTool.cpp:390
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr "Fyll bredd"
 
-#: TextTool.cpp:399
+#: TextTool.cpp:395
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr "Fyll höjd"
 
-#: TextTool.cpp:404
+#: TextTool.cpp:400
 #, kde-format
 msgid "Shrink To Fit"
 msgstr "Krymp för att passa"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:408
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "Infoga en tabell i dokumentet."
 
-#: TextTool.cpp:415
+#: TextTool.cpp:411
 #, kde-format
 msgid "Row Above"
 msgstr "Rad ovanför"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:412
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Infoga rad ovanför"
 
-#: TextTool.cpp:420
+#: TextTool.cpp:416
 #, kde-format
 msgid "Row Below"
 msgstr "Rad nedanför"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:417
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Infoga rad nedanför"
 
-#: TextTool.cpp:425
+#: TextTool.cpp:421
 #, kde-format
 msgid "Column Left"
 msgstr "Kolumn vänster"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:422
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Infoga kolumn till vänster"
 
-#: TextTool.cpp:430
+#: TextTool.cpp:426
 #, kde-format
 msgid "Column Right"
 msgstr "Kolumn höger"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:427
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Infoga kolumn till höger"
 
-#: TextTool.cpp:435
+#: TextTool.cpp:431
 #, kde-format
 msgid "Column"
 msgstr "Kolumn"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:432
 #, kde-format
 msgid "Delete Column"
 msgstr "Ta bort kolumn"
 
-#: TextTool.cpp:440
+#: TextTool.cpp:436
 #, kde-format
 msgid "Row"
 msgstr "Rad"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:437
 #, kde-format
 msgid "Delete Row"
 msgstr "Ta bort rad"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:441
 #, kde-format
 msgid "Merge Cells"
 msgstr "Sammanfoga celler"
 
-#: TextTool.cpp:449
+#: TextTool.cpp:445
 #, kde-format
 msgid "Split Cells"
 msgstr "Dela celler"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr "Välj en kantstil och rita stilen på en tabell"
 
-#: TextTool.cpp:458
+#: TextTool.cpp:454
 #, kde-format
 msgid "Paragraph..."
 msgstr "Stycke..."
 
-#: TextTool.cpp:461
+#: TextTool.cpp:457
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr "Ändra styckesmarginaler, textflöde, kanter, punkter, numrering, etc."
 
-#: TextTool.cpp:462
+#: TextTool.cpp:459
 #, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -2935,17 +2935,17 @@ msgstr ""
 "markerade stycken.</p><p>Om ingen text är markerad, ändras stycket där "
 "markören är placerad.</p>"
 
-#: TextTool.cpp:465
+#: TextTool.cpp:463
 #, kde-format
 msgid "Style Manager..."
 msgstr "Stilhantering..."
 
-#: TextTool.cpp:467
+#: TextTool.cpp:465
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "Ändra stilarnas egenskaper"
 
-#: TextTool.cpp:468
+#: TextTool.cpp:466
 #, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
@@ -2954,128 +2954,124 @@ msgstr ""
 "<p>Ändra teckensnitts- och styckesegenskaper för stilar.</p><p>Flera stilar "
 "kan ändras samtidigt med användning av dialogrutan.</p>"
 
-#: TextTool.cpp:475
+#: TextTool.cpp:473
 #, kde-format
 msgid "Special Character..."
 msgstr "Specialtecken..."
 
-#: TextTool.cpp:479
+#: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 "Infoga en eller flera symboler eller tecken som inte finns på tangentbordet"
 
-#: TextTool.cpp:480
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 "Infoga en eller flera symboler eller tecken som inte finns på tangentbordet."
 
-#: TextTool.cpp:483
+#: TextTool.cpp:481
 #, kde-format
 msgid "Repaint"
 msgstr "Rita om"
 
-#: TextTool.cpp:488
+#: TextTool.cpp:486
 #, kde-format
 msgid "Insert Comment"
 msgstr "Infoga kommentar"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:570
 #, kde-format
 msgid "Insertion"
 msgstr "Infogning"
 
-#: TextTool.cpp:576
+#: TextTool.cpp:572
 #, kde-format
 msgid "Deletion"
 msgstr "Borttagning"
 
-#: TextTool.cpp:578
+#: TextTool.cpp:574
 #, kde-format
 msgid "Formatting"
 msgstr "Formatering"
 
-#: TextTool.cpp:593
+#: TextTool.cpp:589
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Ctrl+klicka för att följa länken "
 
-#: TextTool.cpp:600
+#: TextTool.cpp:596
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Ctrl+klicka för att gå till noten "
 
-#: TextTool.cpp:606
+#: TextTool.cpp:602
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr "Ctrl+klicka för att gå till notens referens"
 
-#: TextTool.cpp:707
+#: TextTool.cpp:698
 #, kde-format
 msgid "follows along"
 msgstr "följer med"
 
-#: TextTool.cpp:737
+#: TextTool.cpp:728
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "Tryck på skift för att inte ändra storlek"
 
-#: TextTool.cpp:939
+#: TextTool.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Ändra kantformatering"
 
-#: TextTool.cpp:1158
+#: TextTool.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: TextTool.cpp:1418
+#: TextTool.cpp:1413
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Justera kolumnbredd"
 
-#: TextTool.cpp:1461
+#: TextTool.cpp:1457
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Justera radhöjd"
 
-#: TextTool.cpp:2257
+#: TextTool.cpp:2258
 #, kde-format
 msgid "Table"
 msgstr "Tabell"
 
-#: TextTool.cpp:2616 TextTool.cpp:2621
+#: TextTool.cpp:2634 TextTool.cpp:2639
 #, kde-format
 msgid "Autocorrection"
 msgstr "Automatisk korrigering"
 
-#: TextTool.cpp:2616
+#: TextTool.cpp:2634
 #, kde-format
 msgid "Key Press"
 msgstr "Tangentnedtryckning"
-
-#: TextTool.cpp:2930
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Länken pekar på programmet eller skriptet '%1'.\n"
-"Illasinnade program kan skada din dator. Är du säker på att du vill köra "
-"programmet?"
-
-#: TextTool.cpp:2935
-#, kde-format
-msgid "Open Link?"
-msgstr "Öppna länk?"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
 msgstr "Textredigering"
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Länken pekar på programmet eller skriptet '%1'.\n"
+#~ "Illasinnade program kan skada din dator. Är du säker på att du vill köra "
+#~ "programmet?"
+
+#~ msgid "Open Link?"
+#~ msgstr "Öppna länk?"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quick search:"

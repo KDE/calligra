@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_semanticitem_event\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2016-12-08 08:26+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
@@ -23,22 +23,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "事件"
 
-#: KoRdfCalendarEvent.cpp:158
+#: KoRdfCalendarEvent.cpp:147
 #, kde-format
 msgid "Area"
 msgstr "面積"
 
-#: KoRdfCalendarEvent.cpp:159
+#: KoRdfCalendarEvent.cpp:148
 #, kde-format
 msgid "Region"
 msgstr "區域"
 
-#: KoRdfCalendarEvent.cpp:381
+#: KoRdfCalendarEvent.cpp:359
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "選擇要儲存的行事曆："
 
-#: KoRdfCalendarEvent.cpp:401
+#: KoRdfCalendarEvent.cpp:379
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -47,7 +47,7 @@ msgstr ""
 "無法加入項目\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:428
+#: KoRdfCalendarEvent.cpp:402
 #, kde-format
 msgid ""
 "Could not save iCal file\n"
@@ -92,22 +92,22 @@ msgstr "時間與日期"
 msgid "Timezone"
 msgstr "時區"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
 msgstr "行事曆事件"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
 msgstr "編輯..."
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
 msgstr "匯入事件到行事曆"
 
-#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
 msgstr "匯出事件到 iCal 檔案..."

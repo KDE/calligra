@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PluginShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-09-13 12:55-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Poedit 1.6.9\n"
 
-#: PluginShape.cpp:36
+#: PluginShape.cpp:35
 #, kde-format
 msgid "Unknown"
 msgstr "不明"
 
-#: PluginShape.cpp:40
+#: PluginShape.cpp:39
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "MIME タイプのプラグイン: %1"

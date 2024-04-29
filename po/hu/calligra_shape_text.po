@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2017-03-01 17:46+0100\n"
 "Last-Translator: Kiszel Kristóf <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "Magyarázat alakzat a magyarázat tartalom megjelenítéséhez"
 msgid "Annotation Shape"
 msgstr "Magyarázat alakzat"
 
-#: commands/AcceptChangeCommand.cpp:30
+#: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Accept change"
 msgstr "Változás elfogadása"
@@ -69,12 +69,12 @@ msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
 msgstr "%1 kicsinyítése az igazításhoz"
 
-#: commands/ChangeListLevelCommand.cpp:29
+#: commands/ChangeListLevelCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
 msgstr "Listaszint módosítása"
 
-#: commands/RejectChangeCommand.cpp:34
+#: commands/RejectChangeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Reject change"
 msgstr "Változások visszavonása"
@@ -141,12 +141,12 @@ msgstr "Dátum"
 msgid "Type"
 msgstr "Típus"
 
-#: dialogs/BibliographyConfigureDialog.cpp:96
+#: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
 msgstr "Növekvő"
 
-#: dialogs/BibliographyConfigureDialog.cpp:97
+#: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
 msgstr "Csökkenő"
@@ -234,17 +234,17 @@ msgstr "Irodalomjegyzék"
 msgid "References"
 msgstr "Hivatkozások"
 
-#: dialogs/ChangeConfigureDialog.cpp:136
+#: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Ez a beillesztett szöveg sora."
 
-#: dialogs/ChangeConfigureDialog.cpp:142
+#: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Ez a törölt szöveg egy sora."
 
-#: dialogs/ChangeConfigureDialog.cpp:148
+#: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Ez a megváltozott formátumú szöveg egy sora."
@@ -520,37 +520,37 @@ msgstr "Szülő stílus:"
 msgid "Include in table of contents"
 msgstr "Feltüntetés a tartalomjegyzékben"
 
-#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
 #, kde-format
 msgid "Normal"
 msgstr "Normál"
 
-#: dialogs/CharacterHighlighting.cpp:261
+#: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
 msgstr "Kiskapitális"
 
-#: dialogs/CharacterHighlighting.cpp:262
+#: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
 msgid "Uppercase"
 msgstr "Nagybetű"
 
-#: dialogs/CharacterHighlighting.cpp:263
+#: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
 msgid "Lowercase"
 msgstr "Kisbetű"
 
-#: dialogs/CharacterHighlighting.cpp:264
+#: dialogs/CharacterHighlighting.cpp:302
 #, kde-format
 msgid "Capitalize"
 msgstr "Nagy kezdőbetűk"
 
-#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
 #, kde-format
 msgid "Superscript"
 msgstr "Felső index"
 
-#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
 msgstr "Alsó index"
@@ -592,12 +592,17 @@ msgctxt "Character position"
 msgid "Position:"
 msgstr "Pozíció:"
 
-#: dialogs/CitationInsertionDialog.cpp:25
+#: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
 msgstr "Kiválasztás"
 
-#: dialogs/CitationInsertionDialog.cpp:40
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#, kde-format
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: dialogs/CitationInsertionDialog.cpp:41
 #, kde-format
 msgid ""
 "The document already contains the bibliography entry with different data.\n"
@@ -606,13 +611,8 @@ msgstr ""
 "A dokumentum már tartalmaz irodalomjegyzék bejegyzést eltérő adattal.\n"
 "Szeretné a létező bejegyzéseket módosítani?"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
-#, kde-format
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-#: dialogs/CitationInsertionDialog.cpp:55
-#: dialogs/CitationInsertionDialog.cpp:73
+#: dialogs/CitationInsertionDialog.cpp:58
+#: dialogs/CitationInsertionDialog.cpp:75
 #, kde-format
 msgid "Short name%1"
 msgstr "Rövid név%1"
@@ -987,12 +987,12 @@ msgstr "VAGY"
 msgid "From the document:"
 msgstr "Dokumentumból:"
 
-#: dialogs/DockerStylesComboModel.cpp:61
+#: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
 msgstr "Használt stílusok"
 
-#: dialogs/DockerStylesComboModel.cpp:64
+#: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
 msgid "Unused Styles"
 msgstr "Nem használt stílusok"
@@ -1038,7 +1038,7 @@ msgstr "Automatikus elválasztás"
 msgid "Select Font"
 msgstr "Betűtípus kiválasztása"
 
-#: dialogs/FontDia.cpp:68
+#: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "Betűtípus"
@@ -1046,7 +1046,7 @@ msgstr "Betűtípus"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Irodalomjegyzék beszúrása"
@@ -1160,7 +1160,7 @@ msgstr "Speciális karakterek"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#: ReferencesTool.cpp:116 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Beszúrás"
@@ -1177,28 +1177,28 @@ msgstr "Bezárás"
 msgid "Quick search:"
 msgstr "Gyors keresés:"
 
-#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
-#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
+#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
 #, kde-format
 msgid "The URL is invalid"
 msgstr "Az URL érvénytelen"
 
-#: dialogs/LinkInsertionDialog.cpp:88
+#: dialogs/LinkInsertionDialog.cpp:87
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "A könyvjelző nem létezik"
 
-#: dialogs/LinkInsertionDialog.cpp:190
+#: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "A cím letöltése: 0% kész"
 
-#: dialogs/LinkInsertionDialog.cpp:213
+#: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
 msgstr "A letöltés túllépte az időkorlátot"
 
-#: dialogs/LinkInsertionDialog.cpp:268
+#: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "A cím letöltése: %1% kész"
@@ -1435,32 +1435,32 @@ msgstr "Átne&vezés"
 msgid "&Delete"
 msgstr "&Törlés"
 
-#: dialogs/ManageBookmarkDialog.cpp:69
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Könyvjelző átnevezése"
-
-#: dialogs/ManageBookmarkDialog.cpp:70
+#: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "Adjon meg egy új nevet a könyvjelzőhöz"
 
-#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#: dialogs/ManageBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Könyvjelző átnevezése"
+
+#: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "Már létezik „%1” nevű könyvjelző."
 
-#: dialogs/ManageBookmarkDialog.cpp:110
+#: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
 msgid "Insert Bookmark"
 msgstr "Könyvjelző beszúrása"
 
-#: dialogs/ManageBookmarkDialog.cpp:111
+#: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
 msgstr "Adjon meg egy nevet a könyvjelzőhöz"
 
-#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Könyvjelzők kezelése"
@@ -1632,7 +1632,7 @@ msgctxt "None"
 msgid "Nothing"
 msgstr "Semmi"
 
-#: dialogs/ParagraphBulletsNumbers.cpp:335
+#: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
 msgstr ""
@@ -1738,7 +1738,7 @@ msgid "Browse..."
 msgstr "Tallózás…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
 #, kde-format
 msgid "Background"
 msgstr "Háttér"
@@ -1959,7 +1959,7 @@ msgstr ""
 msgid "Paragraph Format"
 msgstr "Bekezdésformázás"
 
-#: dialogs/QuickTableButton.cpp:146
+#: dialogs/QuickTableButton.cpp:147
 #, kde-format
 msgid "Insert a table"
 msgstr "Táblázat beszúrása"
@@ -1969,13 +1969,13 @@ msgstr "Táblázat beszúrása"
 msgid "Section name"
 msgstr ""
 
-#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, fuzzy, kde-format
 #| msgid "Configure Settings"
 msgid "Configure sections"
 msgstr "Beállítások módosítása"
 
-#: dialogs/SectionFormatDialog.cpp:154
+#: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
 msgid "Invalid characters or section with such name exists."
 msgstr ""
@@ -2044,7 +2044,7 @@ msgid "Insert citation at current position"
 msgstr "Idézet beszúrása az aktuális pozícióra"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr "Idézet beszúrása"
@@ -2055,12 +2055,12 @@ msgstr "Idézet beszúrása"
 msgid "Configure Bibliography"
 msgstr "Az irodalomjegyzék beállítása"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
 msgstr "Lábjegyzet beszúrása a kurzor jelenlegi pozíciójára"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
 msgstr "Végjegyzet beszúrása a kurzor jelenlegi pozíciójára"
@@ -2092,7 +2092,7 @@ msgid "Hyperlinks"
 msgstr "Hiperhivatkozások"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
 #, kde-format
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
@@ -2114,7 +2114,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "Törlés"
@@ -2139,7 +2139,7 @@ msgstr ""
 msgid "Define New List Level Format"
 msgstr ""
 
-#: dialogs/SimpleParagraphWidget.cpp:532
+#: dialogs/SimpleParagraphWidget.cpp:549
 #, kde-format
 msgid "Edit List Level Format"
 msgstr ""
@@ -2156,13 +2156,13 @@ msgstr "Tartalom"
 msgid "Set Border Color..."
 msgstr "Szegélyszín beállítása…"
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:169
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Nincs"
 
-#: dialogs/SimpleTableWidget.cpp:171
+#: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
 msgid "No Border"
 msgstr "Nincs szegély"
@@ -2172,24 +2172,24 @@ msgstr "Nincs szegély"
 msgid "Create a new style inheriting the current style"
 msgstr "A jelenlegi stílusból leszármazó új stílus létrehozása"
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
 #, kde-format
 msgid "New Style"
 msgstr "Új stílus"
 
-#: dialogs/StyleManager.cpp:426
+#: dialogs/StyleManager.cpp:431
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr "Már létezik „%1” nevű stílus. Válasszon másik nevet!"
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "Bekezdés"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "Karakter"
@@ -2205,12 +2205,12 @@ msgstr "Ú&j"
 msgid "Style Manager"
 msgstr "Stíluskezelő"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:50
 #, kde-format
 msgid "Save Changes"
 msgstr "Változások mentése"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:51
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "
@@ -2259,13 +2259,13 @@ msgstr ""
 msgid "Create a new style with the current properties"
 msgstr "Új stílus létrehozása a jelenlegi tulajdonságokkal"
 
-#: dialogs/StylesComboPreview.cpp:179
+#: dialogs/StylesComboPreview.cpp:175
 #, kde-format
 msgid "New style"
 msgstr "Új stílus"
 
-#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
-#: dialogs/StylesModel.cpp:197
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
+#: dialogs/StylesModel.cpp:195
 #, kde-format
 msgid "None"
 msgstr "Nincs"
@@ -2317,38 +2317,38 @@ msgstr "Tartalomhoz igazítás"
 msgid "Fit to available surrounding"
 msgstr "A rendelkezésre álló környezethez igazítás"
 
-#: dialogs/TableOfContentsConfigure.cpp:62
+#: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
 msgstr "Tartalomjegyzék - Beállítás"
 
-#: dialogs/TableOfContentsConfigure.cpp:64
+#: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
 msgid "Table Title"
 msgstr "Táblázatcím"
 
-#: dialogs/TableOfContentsConfigure.cpp:65
+#: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Use outline"
 msgstr "Vázlat használata"
 
-#: dialogs/TableOfContentsConfigure.cpp:66
+#: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
 msgstr "Stílusok használata"
 
-#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure"
 msgstr "Beállítás"
 
-#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsConfigure.cpp:67
 #, kde-format
 msgid "Index"
 msgstr "Tárgymutató"
 
-#: dialogs/TableOfContentsConfigure.cpp:69
-#: dialogs/TableOfContentsStyleModel.cpp:232
+#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsStyleModel.cpp:229
 #, kde-format
 msgid "Styles"
 msgstr "Stílusok"
@@ -2391,23 +2391,23 @@ msgstr "Lap 2"
 msgid "Level %1"
 msgstr "%1. szint"
 
-#: dialogs/TableOfContentsEntryModel.cpp:137
-#: dialogs/TableOfContentsStyleModel.cpp:234
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsStyleModel.cpp:231
 #, kde-format
 msgid "Level"
 msgstr "Szint"
 
-#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsEntryModel.cpp:141
 #, kde-format
 msgid "Style"
 msgstr "Stílus"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
 msgstr "Tartalomjegyzék - Stílusbeállítás"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
 msgstr "Stílusok érhetők el"
@@ -2418,8 +2418,8 @@ msgstr "Stílusok érhetők el"
 msgid "TextLabel"
 msgstr "Szövegcímke"
 
-#: dialogs/TableOfContentsStyleDelegate.cpp:43
-#: dialogs/TableOfContentsStyleModel.cpp:97
+#: dialogs/TableOfContentsStyleDelegate.cpp:40
+#: dialogs/TableOfContentsStyleModel.cpp:95
 #, kde-format
 msgid "Disabled"
 msgstr "Letiltva"
@@ -2429,107 +2429,107 @@ msgstr "Letiltva"
 msgid "Table Of Contents"
 msgstr "Tartalomjegyzék"
 
-#: ReferencesTool.cpp:116
+#: ReferencesTool.cpp:118
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr "Tartalomjegyzék beszúrása a dokumentumba."
 
-#: ReferencesTool.cpp:118 TextTool.cpp:410
+#: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Egyedi beszúrása…"
 
-#: ReferencesTool.cpp:120
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr "Egyedi tartalomjegyzék beszúrása a dokumentumba."
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure..."
 msgstr "Beállítás…"
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:126
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr "Tartalomjegyzék beállítása"
 
-#: ReferencesTool.cpp:127
+#: ReferencesTool.cpp:129
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr "Lábjegyzet beszúrása automatikus számozással"
 
-#: ReferencesTool.cpp:132
+#: ReferencesTool.cpp:134
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr "Címkézett lábjegyzet beszúrása"
 
-#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
 #, kde-format
 msgid "Insert with label:"
 msgstr "Beszúrás címkével:"
 
-#: ReferencesTool.cpp:138
+#: ReferencesTool.cpp:140
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr "Végjegyzet beszúrása automatikus számozással"
 
-#: ReferencesTool.cpp:143
+#: ReferencesTool.cpp:145
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr "Címkézett végjegyzet beszúrása"
 
-#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, kde-format
 msgid "Settings..."
 msgstr "Beállítások…"
 
-#: ReferencesTool.cpp:159
+#: ReferencesTool.cpp:161
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr "Idézet beszúrása a dokumentumba."
 
-#: ReferencesTool.cpp:164
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr "Irodalomjegyzék beszúrása a dokumentumba."
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr "Egyéni irodalomjegyzék beszúrása"
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:170
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr "Egyéni irodalomjegyzék beszúrása a dokumentumba."
 
-#: ReferencesTool.cpp:172
+#: ReferencesTool.cpp:174
 #, kde-format
 msgid "Configure the bibliography"
 msgstr "Az irodalomjegyzék beállítása"
 
-#: ReferencesTool.cpp:175
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert Link"
 msgstr "Hivatkozás beszúrása"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:179
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr "Webhivatkozás vagy könyvjelzőre mutató hivatkozás beszúrása."
 
-#: ReferencesTool.cpp:181
+#: ReferencesTool.cpp:183
 #, kde-format
 msgid "Add Bookmark"
 msgstr "Könyvjelző hozzáadása"
 
-#: ReferencesTool.cpp:182
+#: ReferencesTool.cpp:184
 #, kde-format
 msgid "Add Bookmark :"
 msgstr "Könyvjelző hozzáadása:"
 
-#: ReferencesTool.cpp:187
+#: ReferencesTool.cpp:189
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
@@ -2538,14 +2538,14 @@ msgstr ""
 "Könyvjelző beszúrása. Ez hasznos olyan hivatkozások létrehozásakor, amelyek "
 "a dokumentumon belül egy területre mutatnak"
 
-#: ReferencesTool.cpp:191
+#: ReferencesTool.cpp:193
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
 
-#: ReferencesTool.cpp:195
+#: ReferencesTool.cpp:197
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
@@ -2553,23 +2553,23 @@ msgstr ""
 "A könyvjelzők kezelése. A hivatkozás helyének ellenőrzése, törlés vagy "
 "átnevezés."
 
-#: ReferencesTool.cpp:231
+#: ReferencesTool.cpp:232
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr "Táblázatok, listák és indexek"
 
-#: ReferencesTool.cpp:234
+#: ReferencesTool.cpp:235
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr "Lábjegyzetek és végjegyzetek"
 
-#: ReferencesTool.cpp:237
+#: ReferencesTool.cpp:238
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr "Idézetek és irodalomjegyzék"
 
-#: ReferencesTool.cpp:240
+#: ReferencesTool.cpp:241
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr "Hivatkozások és könyvjelzők"
@@ -2624,306 +2624,306 @@ msgstr "Egy olyan forma, ami megjeleníti a szöveget"
 msgid "Text Shape"
 msgstr "Szöveg alakzat"
 
-#: TextTool.cpp:201
+#: TextTool.cpp:202
 #, fuzzy, kde-format
 #| msgid "Configure Settings"
 msgid "Configure current section"
 msgstr "Beállítások módosítása"
 
-#: TextTool.cpp:205
+#: TextTool.cpp:206
 #, fuzzy, kde-format
 #| msgid "Insert Citation"
 msgid "Insert new section"
 msgstr "Idézet beszúrása"
 
-#: TextTool.cpp:209
+#: TextTool.cpp:210
 #, fuzzy, kde-format
 #| msgid "Insert Citation"
 msgid "Insert paragraph between sections"
 msgstr "Idézet beszúrása"
 
-#: TextTool.cpp:213
+#: TextTool.cpp:214
 #, kde-format
 msgid "Paste As Text"
 msgstr "Beillesztés szövegként"
 
-#: TextTool.cpp:218
+#: TextTool.cpp:219
 #, kde-format
 msgid "Bold"
 msgstr "Félkövér"
 
-#: TextTool.cpp:224
+#: TextTool.cpp:225
 #, kde-format
 msgid "Italic"
 msgstr "Dőlt"
 
-#: TextTool.cpp:230
+#: TextTool.cpp:231
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Aláhúzott"
 
-#: TextTool.cpp:236
+#: TextTool.cpp:237
 #, kde-format
 msgid "Strikethrough"
 msgstr "Áthúzott"
 
-#: TextTool.cpp:242
+#: TextTool.cpp:243
 #, kde-format
 msgid "Align Left"
 msgstr "Balra igazítás"
 
-#: TextTool.cpp:249
+#: TextTool.cpp:250
 #, kde-format
 msgid "Align Right"
 msgstr "Jobbra igazítás"
 
-#: TextTool.cpp:256
+#: TextTool.cpp:257
 #, kde-format
 msgid "Align Center"
 msgstr "Középre igazítás"
 
-#: TextTool.cpp:264
+#: TextTool.cpp:265
 #, kde-format
 msgid "Align Block"
 msgstr "Blokkba igazítás"
 
-#: TextTool.cpp:271
+#: TextTool.cpp:272
 #, kde-format
 msgid "Change text direction"
 msgstr "Szövegirány módosítása"
 
-#: TextTool.cpp:273
+#: TextTool.cpp:274
 #, kde-format
 msgid "Change writing direction"
 msgstr "Írási irány módosítása"
 
-#: TextTool.cpp:295
+#: TextTool.cpp:293
 #, kde-format
 msgid "Increase Indent"
 msgstr "Behúzás növelése"
 
-#: TextTool.cpp:302
+#: TextTool.cpp:299
 #, kde-format
 msgid "Decrease Indent"
 msgstr "Behúzás csökkentése"
 
-#: TextTool.cpp:306
+#: TextTool.cpp:303
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:310
+#: TextTool.cpp:307
 #, kde-format
 msgid "Increase Font Size"
 msgstr "Betűtípus méretének növelése"
 
-#: TextTool.cpp:315
+#: TextTool.cpp:312
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "Betűtípus méretének csökkentése"
 
-#: TextTool.cpp:321
+#: TextTool.cpp:318
 #, kde-format
 msgid "Font Family"
 msgstr "Betűcsalád"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:322
 #, kde-format
 msgid "Variable"
 msgstr "Változó"
 
-#: TextTool.cpp:330
+#: TextTool.cpp:326
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "Nem tördelhető szóköz beillesztése"
 
-#: TextTool.cpp:335
+#: TextTool.cpp:331
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "Nem tördelhető kötőjel beillesztése"
 
-#: TextTool.cpp:340
+#: TextTool.cpp:336
 #, kde-format
 msgid "Insert Index"
 msgstr "Index beszúrása"
 
-#: TextTool.cpp:345
+#: TextTool.cpp:341
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "Feltételes kötőjel beszúrása"
 
-#: TextTool.cpp:351
+#: TextTool.cpp:347
 #, kde-format
 msgid "Line Break"
 msgstr "Sortörés"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:352
 #, kde-format
 msgid "Page Break"
 msgstr "Oldaltörés"
 
-#: TextTool.cpp:360
+#: TextTool.cpp:356
 #, kde-format
 msgid "Insert a page break"
 msgstr "Oldaltörés beszúrása"
 
-#: TextTool.cpp:361
+#: TextTool.cpp:357
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr "A karakter utáni szövegrész átkerül a következő oldalra."
 
-#: TextTool.cpp:364
+#: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
 msgstr "Betűtípus…"
 
-#: TextTool.cpp:367
+#: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "Karakterméret, betűtípus, vastagság, stílus, stb. módosítása"
 
-#: TextTool.cpp:368
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "A kijelölt karakterek tulajdonságainak módosítása."
 
-#: TextTool.cpp:371
+#: TextTool.cpp:367
 #, kde-format
 msgid "Font Size"
 msgstr "Betűtípus mérete"
 
-#: TextTool.cpp:377
+#: TextTool.cpp:373
 #, kde-format
 msgid "Text Color..."
 msgstr "Szövegszín…"
 
-#: TextTool.cpp:378
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color"
 msgstr "Szövegszín"
 
-#: TextTool.cpp:384
+#: TextTool.cpp:380
 #, kde-format
 msgid "Background Color..."
 msgstr "Háttérszín…"
 
-#: TextTool.cpp:389
+#: TextTool.cpp:385
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr ""
 
-#: TextTool.cpp:394
+#: TextTool.cpp:390
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr "Növelés teljes szélességre"
 
-#: TextTool.cpp:399
+#: TextTool.cpp:395
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr "Növelés teljes magasságra"
 
-#: TextTool.cpp:404
+#: TextTool.cpp:400
 #, kde-format
 msgid "Shrink To Fit"
 msgstr "Kicsinyítés az igazításhoz"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:408
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "Egy táblázat beszúrása a dokumentumba."
 
-#: TextTool.cpp:415
+#: TextTool.cpp:411
 #, kde-format
 msgid "Row Above"
 msgstr "Sor fölé"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:412
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Sor beszúrása fölé"
 
-#: TextTool.cpp:420
+#: TextTool.cpp:416
 #, kde-format
 msgid "Row Below"
 msgstr "Sor alá"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:417
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Sor beszúrása alá"
 
-#: TextTool.cpp:425
+#: TextTool.cpp:421
 #, kde-format
 msgid "Column Left"
 msgstr "Oszlop balra"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:422
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Oszlop beszúrása balra"
 
-#: TextTool.cpp:430
+#: TextTool.cpp:426
 #, kde-format
 msgid "Column Right"
 msgstr "Oszlop jobbra"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:427
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Oszlop beszúrása jobbra"
 
-#: TextTool.cpp:435
+#: TextTool.cpp:431
 #, kde-format
 msgid "Column"
 msgstr "Oszlop"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:432
 #, kde-format
 msgid "Delete Column"
 msgstr "Oszlop törlése"
 
-#: TextTool.cpp:440
+#: TextTool.cpp:436
 #, kde-format
 msgid "Row"
 msgstr "Sor"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:437
 #, kde-format
 msgid "Delete Row"
 msgstr "Sor törlése"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:441
 #, kde-format
 msgid "Merge Cells"
 msgstr "Cellák egyesítése"
 
-#: TextTool.cpp:449
+#: TextTool.cpp:445
 #, kde-format
 msgid "Split Cells"
 msgstr "Cellák felosztása"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr "Szegélystílus kiválasztása és rajzolás azzal a stílussal a táblázatba"
 
-#: TextTool.cpp:458
+#: TextTool.cpp:454
 #, kde-format
 msgid "Paragraph..."
 msgstr "Bekezdés…"
 
-#: TextTool.cpp:461
+#: TextTool.cpp:457
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr "Bekezdésmargók, elrendezés, szövegirány, szegélyek, stb. módosítása"
 
-#: TextTool.cpp:462
+#: TextTool.cpp:459
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change paragraph margins, text flow, borders, bullets, numbering etc."
@@ -2941,17 +2941,17 @@ msgstr ""
 "<p> Ha nincs szöveg kijelölve, akkor az a bekezdés módosul, amelyikben a "
 "kurzor található.</p>"
 
-#: TextTool.cpp:465
+#: TextTool.cpp:463
 #, kde-format
 msgid "Style Manager..."
 msgstr "Stíluskezelő…"
 
-#: TextTool.cpp:467
+#: TextTool.cpp:465
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "Stílusjellemzők módosítása"
 
-#: TextTool.cpp:468
+#: TextTool.cpp:466
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change font and paragraph attributes of styles.<p>Multiple styles can be "
@@ -2963,130 +2963,126 @@ msgstr ""
 "A stílusok betű- és bekezdés-tulajdonságainak módosítása.<p>A párbeszédablak "
 "használatával több stílus is módosítható."
 
-#: TextTool.cpp:475
+#: TextTool.cpp:473
 #, kde-format
 msgid "Special Character..."
 msgstr "Speciális karakterek…"
 
-#: TextTool.cpp:479
+#: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 "Olyan karaktereket szúr be, amelyek nem érhető el közvetlenül a "
 "billentyűzeten"
 
-#: TextTool.cpp:480
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 "Olyan karaktereket szúr be, amelyek nem érhető el közvetlenül a "
 "billentyűzeten."
 
-#: TextTool.cpp:483
+#: TextTool.cpp:481
 #, kde-format
 msgid "Repaint"
 msgstr "Újrarajzolás"
 
-#: TextTool.cpp:488
+#: TextTool.cpp:486
 #, kde-format
 msgid "Insert Comment"
 msgstr "Megjegyzés beszúrása"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:570
 #, kde-format
 msgid "Insertion"
 msgstr "Beszúrás"
 
-#: TextTool.cpp:576
+#: TextTool.cpp:572
 #, kde-format
 msgid "Deletion"
 msgstr "Törlés"
 
-#: TextTool.cpp:578
+#: TextTool.cpp:574
 #, kde-format
 msgid "Formatting"
 msgstr "Formázás"
 
-#: TextTool.cpp:593
+#: TextTool.cpp:589
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Ctrl+kattintás a hivatkozásra ugráshoz "
 
-#: TextTool.cpp:600
+#: TextTool.cpp:596
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Ctrl+kattintás a jegyzetre ugráshoz "
 
-#: TextTool.cpp:606
+#: TextTool.cpp:602
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr "Ctrl+kattintás a jegyzethivatkozásra ugráshoz"
 
-#: TextTool.cpp:707
+#: TextTool.cpp:698
 #, kde-format
 msgid "follows along"
 msgstr ""
 
-#: TextTool.cpp:737
+#: TextTool.cpp:728
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "Nyomja le a Shiftet, hogy ne méretezze át ezt"
 
-#: TextTool.cpp:939
+#: TextTool.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Szegélyformázás módosítása"
 
-#: TextTool.cpp:1158
+#: TextTool.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Kivágás"
 
-#: TextTool.cpp:1418
+#: TextTool.cpp:1413
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Oszlopszélesség igazítása"
 
-#: TextTool.cpp:1461
+#: TextTool.cpp:1457
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Sormagasság igazítása"
 
-#: TextTool.cpp:2257
+#: TextTool.cpp:2258
 #, kde-format
 msgid "Table"
 msgstr "Táblázat"
 
-#: TextTool.cpp:2616 TextTool.cpp:2621
+#: TextTool.cpp:2634 TextTool.cpp:2639
 #, kde-format
 msgid "Autocorrection"
 msgstr "Automatikus korrekció"
 
-#: TextTool.cpp:2616
+#: TextTool.cpp:2634
 #, kde-format
 msgid "Key Press"
 msgstr "Gomb lenyomása"
-
-#: TextTool.cpp:2930
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Ez a hivatkozás egy programra vagy szkriptre mutat: „%1”\n"
-"A rosszindulatú programok kár tehetnek a számítógépében. Biztosan futtatni "
-"szeretné ezt a programot?"
-
-#: TextTool.cpp:2935
-#, kde-format
-msgid "Open Link?"
-msgstr "Link megnyitása?"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
 msgstr "Szövegszerkesztés"
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Ez a hivatkozás egy programra vagy szkriptre mutat: „%1”\n"
+#~ "A rosszindulatú programok kár tehetnek a számítógépében. Biztosan "
+#~ "futtatni szeretné ezt a programot?"
+
+#~ msgid "Open Link?"
+#~ msgstr "Link megnyitása?"
 
 #, fuzzy
 #~| msgid "Quick search:"

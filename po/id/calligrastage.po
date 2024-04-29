@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2021-05-02 17:19+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -68,7 +68,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Ciptakan animasi bentuk"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr "Edit peristiwa pemicu animasi"
@@ -95,12 +95,12 @@ msgid_plural "Delete slides"
 msgstr[0] "Hapus salindia"
 msgstr[1] "Hapus salindia-salindia"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "Edit tundaan/durasi animasi"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
 msgstr "Edit pertunjukan salindia kustom"
@@ -110,12 +110,12 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "Ciptakan Efek Salindia"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "Modifikasi Efek Salindia"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
 msgstr "Hapus Efek Salindia"
@@ -125,163 +125,163 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "Modifikasikan Transisi Salindia"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "Ubah nama pertunjukan salindia kustom"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "Urutkan ulang animasi"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr "Calligra Stage"
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, kde-format
 msgid "Presentation Tool"
 msgstr "Alat Presentasi"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "Hakcipta 1998-%1, Para Tim Stage"
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
 msgid "Former maintainer"
 msgstr "Mantan pemelihara"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Original author"
 msgstr "Penulis asli"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr "Reginald Stadlbauer"
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr "Toshitaka Fujioka"
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr "Percy Leonhardt"
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr "Boudewijn Rempt "
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
 msgstr "Carlos Licea "
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
 msgstr "C. Boemann "
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr "Fredy Yanardi "
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr "Jan Hambrecht "
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr "Marijn Kruisselbrink "
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr "Martin Pfeiffe "
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr "Sven Langkamp "
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr "Timothée Lacroix "
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Wantoyo"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "wantoyek@gmail.com"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Wantoyo"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr "Tak diketahui"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "Salindia  %1"
@@ -291,7 +291,7 @@ msgstr "Salindia  %1"
 msgid "End of presentation. Click to exit."
 msgstr "Akhiri presentasi. Klik untuk keluar."
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
 msgid "Layout"
 msgstr "Tataletak"
@@ -315,7 +315,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr "Error Penginstalan"
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
 msgstr "Sisipkan Gambar"
@@ -326,81 +326,74 @@ msgid "Placeholder shape"
 msgstr "Bentuk placeholder"
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, kde-format
 msgid "Double click to add a title"
 msgstr "Klik ganda untuk menambahkan sebuah judul"
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, kde-format
 msgid "Double click to add an outline"
 msgstr "Klik ganda untuk menambahkan kerangka"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, kde-format
 msgid "Double click to add a text"
 msgstr "Klik ganda untuk menambahkan sebuah teks"
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, kde-format
 msgid "Double click to add notes"
 msgstr "Klik ganda untuk menambahkan catatan"
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
 msgstr "Klik ganda untuk menambahkan sebuah gambar"
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
 msgstr "Klik ganda untuk menambahkan sebuah bagan"
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
 msgstr "Klik ganda untuk menambahkan sebuah objek"
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
 msgid "Pen Color"
 msgstr "Warna Pena"
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
 msgstr "Ukuran Pena"
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, kde-format
 msgid "Black"
 msgstr "Hitam"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
 msgstr "Putih"
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr "Hijau"
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr "Merah"
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr "Biru"
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, kde-format
 msgid "Yellow"
 msgstr "Kuning"
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, kde-format
 msgid "Next Slide"
 msgstr "Salindia Selanjutnya"
@@ -410,234 +403,234 @@ msgstr "Salindia Selanjutnya"
 msgid "Speaker Notes"
 msgstr "Catatan Berbicara"
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "Current Slide %1 of %2"
 msgstr "Salindia Saat ini %1 dari %2"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "End of Slide Show"
 msgstr "Akhiri Pertunjukan Salindia"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
 msgstr "mulai saat klik mouse"
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, kde-format
 msgid "start after previous animation"
 msgstr "mulai sesudah animasi sebelumnya"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, kde-format
 msgid "start with previous animation"
 msgstr "mulai dengan animasi sebelumnya"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "Mulaikan sesudah %1 detik. Durasinya %2 detik."
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "Animasi"
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
 msgstr "Bentuk"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, kde-format
 msgid "&Move Here"
 msgstr "&Pindah Sini"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, kde-format
 msgid "&Copy Here"
 msgstr "&Salin Sini"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
 msgstr "&Batal"
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, kde-format
 msgid "Show Master Slides"
 msgstr "Tampilkan Salindia Master"
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
 msgstr "Impor Pertunjukan Salindia..."
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, kde-format
 msgid "Insert Slide"
 msgstr "Sisipkan Salindia"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr "Sisipkan sebuah salindia baru sesudah yang satu ini"
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, kde-format
 msgid "Copy Slide"
 msgstr "Salin Salindia"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, kde-format
 msgid "Copy the current slide"
 msgstr "Salin salindia saat ini"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
 msgid "Delete Slide"
 msgstr "Hapus Salindia"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, kde-format
 msgid "Delete the current slide"
 msgstr "Hapus salindia saat ini"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
 msgstr "Salindia Master..."
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, kde-format
 msgid "Previous Slide"
 msgstr "Salindia Sebelumnya"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, kde-format
 msgid "Go to previous slide"
 msgstr "Menuju ke salindia sebelumnya"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, kde-format
 msgid "Go to next slide"
 msgstr "Menuju ke salindia selanjutnya"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, kde-format
 msgid "First Slide"
 msgstr "Salindia Pertama"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, kde-format
 msgid "Go to first slide"
 msgstr "Menuju ke salindia pertama"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, kde-format
 msgid "Last Slide"
 msgstr "Salindia Terakhir"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, kde-format
 msgid "Go to last slide"
 msgstr "Menuju ke salindia terakhir"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
 msgstr "Konfigurasikan Stage..."
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Ekspor sebagai HTML..."
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Sisipkan Gambar sebagai Salindia..."
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Ciptakan Animasi Muncul"
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Edit Pertunjukan Salindia Kustom..."
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, kde-format
 msgid "Start Presentation"
 msgstr "Mulai Presentasi"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, kde-format
 msgid "From Current Slide"
 msgstr "Dari Salindia Saat Ini"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, kde-format
 msgid "From First Slide"
 msgstr "Dari Salindia Pertama"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, kde-format
 msgid "Stop presentation"
 msgstr "Hentikan presentasi"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Tampilkan Bilah Status"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Sembunyikan Bilah Status"
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Tampilkan atau sembunyikan bilah status"
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Konfigurasikan Pertunjukan Salindia..."
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Konfigurasikan Tampilan Pesenter..."
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Gambari pada presentasi..."
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Soroti perentasi..."
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Layarhitam pada presentasi..."
@@ -717,56 +710,56 @@ msgstr "Salin"
 msgid "Paste"
 msgstr "Tempel"
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, kde-format
 msgid "Slide Show %1"
 msgstr "Pertunjukan Salindia %1"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, kde-format
 msgid "All slides"
 msgstr "Semua salindia"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, kde-format
 msgid "Error"
 msgstr "Error"
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr "Tidak boleh ada dua pertunjukan salindia dengan nama yang sama"
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Set Tataletak"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
 msgstr "Pratinjau animasi otomatis"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, kde-format
 msgid "Preview animation"
 msgstr "Pratinjau animasi"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, kde-format
 msgid "Slide Transitions"
 msgstr "Transisi Salindia"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
 msgstr "Aksi Klik Bentuk"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
 msgid "Shape Animations"
 msgstr "Animasi Bentuk"
@@ -807,7 +800,7 @@ msgid "Duration: "
 msgstr "Durasi: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, kde-format
 msgid "Preview Shape Animation"
 msgstr "Pratinjau Animasi Bentuk"
@@ -817,74 +810,74 @@ msgstr "Pratinjau Animasi Bentuk"
 msgid "No Effect"
 msgstr "Tanpa efek"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
 msgstr " det"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr "Manual"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr "Otomatis"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
 msgstr "Transisi Salindia:"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
 msgid "Apply To All Slides"
 msgstr "Terapkan Ke Semua Salindia"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Terapkan Efek Salindia ke semua Salindia"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr "Masuk"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
 msgstr "Keluar"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
 msgstr "Tekanan"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
 msgstr "Kustom"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr "Alur pergerakan"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
 msgstr "Aksi ole"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr "Panggilan Media"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Edit animation"
 msgstr "Edit animasi"
@@ -894,32 +887,32 @@ msgstr "Edit animasi"
 msgid "Add new animation"
 msgstr "Tambahkan animasi baru"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, kde-format
 msgid "Remove animation"
 msgstr "Hapus animasi"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
 msgstr "Urutan: "
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, kde-format
 msgid "Move animation up"
 msgstr "Pindahkan naik animasi"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, kde-format
 msgid "Move animation down"
 msgstr "Pindahkan turun animasi"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, kde-format
 msgid "Add a new animation"
 msgstr "Tambahkan sebuah animasi baru"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Delete current animation"
 msgstr "Hapus animasi saat ini"
@@ -1147,197 +1140,185 @@ msgstr "Ekspor html"
 msgid "Export"
 msgstr "Ekspor"
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr "Sudah ada sebuah file favorit dengan nama ini"
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr "Salah file, .zip saja atau zip terkorupsi"
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr "File zip harus mengandung style.css"
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
 msgid "Delete Template"
 msgstr "Hapus Templat"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr "Kamu tidak boleh menghapus templat yang disediakan dengan aplikasi"
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
 msgid "Add Template"
 msgstr "Tambahkan Template"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr "Apakah kamu yakin ingin menghapus \"%1\"?"
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
 msgstr "Konfirmasi hapus"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Apakah kamu yakin ingin menghapus \"%1\"?"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Ubah aksi suara"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "No sound"
 msgstr "Tanpa suara"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "Import..."
 msgstr "Impor..."
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
 msgstr "Bilah"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, kde-format
-msgid "From Left"
-msgstr "Dari Kiri"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, kde-format
-msgid "From Top"
-msgstr "Dari Atas"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, kde-format
-msgid "From Right"
-msgstr "Dari Kanan"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Bottom"
 msgstr "Dari Bawah"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Left"
+msgstr "Dari Kiri"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Right"
+msgstr "Dari Kanan"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+msgid "From Top"
+msgstr "Dari Atas"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
 msgstr "Sub-tipe tak diketahui"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Clock"
 msgstr "Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, kde-format
 msgid "From Twelve Clockwise"
 msgstr "Dari Duabelas Searah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, kde-format
 msgid "From Three Clockwise"
 msgstr "Dari Tiga Searah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, kde-format
 msgid "From Six Clockwise"
 msgstr "Dari Enam Searah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, kde-format
 msgid "From Nine Clockwise"
 msgstr "Dari Sembilan Searah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, kde-format
 msgid "From Twelve Counterclockwise"
 msgstr "Dari Duabelas Lawan-Arah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, kde-format
 msgid "From Three Counterclockwise"
 msgstr "Dari Tiga Lawan-Arah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, kde-format
 msgid "From Six Counterclockwise"
 msgstr "Dari Enam Lawan-Arah-Jarum-Jam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, kde-format
 msgid "From Nine Counterclockwise"
 msgstr "Dari Sembilan Lawan-Arah-Jarum-Jam"
 
@@ -1346,33 +1327,27 @@ msgstr "Dari Sembilan Lawan-Arah-Jarum-Jam"
 msgid "Double Fan"
 msgstr "Kipas Ganda"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan Out Vertical"
 msgstr "Kipas Keluar Tegak"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
 msgstr "Kipas Keluar Mendatar"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical"
 msgstr "Kipas Masuk Tegak"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
 msgstr "Kipas Masuk Mendatar"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
 msgid "Fan In Vertical Reverse"
 msgstr "Kipas Masuk Tegak Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
 msgid "Fan In Horizontal Reverse"
 msgstr "Kipas Masuk Mendatar Kebalikan"
 
@@ -1381,132 +1356,108 @@ msgstr "Kipas Masuk Mendatar Kebalikan"
 msgid "Double Sweep"
 msgstr "Usap Ganda"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 msgid "Parallel Vertical"
 msgstr "Tegak Paralel"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 msgid "Parallel Diagonal"
 msgstr "Diagonal Pararlel"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Opposite Vertical"
 msgstr "Tegak Berlawanan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Opposite Horizontal"
 msgstr "Mendatar Berlawanan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 msgid "Parallel Diagonal Top Left"
 msgstr "Paralel Diagonal Kiri Atas"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 msgid "Parallel Diagonal Bottom Left"
 msgstr "Pararel Diagonal Kiri Bawah"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 msgid "Parallel Vertical Reverse"
 msgstr "Paralel Tegak Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 msgid "Parallel Diagonal Reverse"
 msgstr "Paralel Diagonal Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 msgid "Opposite Vertical Reverse"
 msgstr "Berlawanan Tegak Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Opposite Horizontal Reverse"
 msgstr "Berlawanan Mendatar Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "Paralel Diagonal Kiri Atas Kebalikan"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "Paralel Diagonal Kiri Bawah Kebalikan"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
 msgstr "Kipas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Right"
 msgstr "Kanan Tengah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Top"
 msgstr "Atas Tengah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
 msgid "Center Left"
 msgstr "Kiri Tengah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
 msgid "Center Bottom"
 msgstr "Bawah Tengah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, kde-format
 msgid "Fan Out Top"
 msgstr "Kipas Keluar Atas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, kde-format
 msgid "Fan Out Right"
 msgstr "Kipas Keluar Kanan"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, kde-format
 msgid "Fan Out Bottom"
 msgstr "Kipas Keluar Bawah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, kde-format
 msgid "Fan Out Left"
 msgstr "Kipas Keluar Kiri"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, kde-format
 msgid "Fan In Top"
 msgstr "Kipas Masuk Atas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, kde-format
 msgid "Fan In Right"
 msgstr "Kipas Masuk Kanan"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, kde-format
 msgid "Fan In Bottom"
 msgstr "Kipas Masuk Bawah"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, kde-format
 msgid "Fan In Left"
 msgstr "Kipas Masuk Kiri"
 
@@ -1515,33 +1466,27 @@ msgstr "Kipas Masuk Kiri"
 msgid "Pin Wheel"
 msgstr "Roda Pin"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Two Blades Vertical Clockwise"
 msgstr "Dua Pisau Tegak Searah-jarum-jam"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Horizontal Clockwise"
 msgstr "Dua Pisau Mendatar Searah-jarum-jam"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Four Blades Horizontal Clockwise"
 msgstr "Empat Pisau Mendatar Searah-jarum-jam"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "Dua Pisau Tegak Lawan-arah-jarum-jam"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "Dua Pisau Mendatar Lawan-arah-jarum-jam"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "Empat Pisau Mendatar Lawan-arah-jarum-jam"
 
@@ -1550,112 +1495,92 @@ msgstr "Empat Pisau Mendatar Lawan-arah-jarum-jam"
 msgid "Saloon Door"
 msgstr "Pintu Bar"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
 msgid "To Top"
 msgstr "Ke Atas"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
 msgid "To Left"
 msgstr "Ke Kiri"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
 msgid "To Bottom"
 msgstr "Ke Bawah"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
 msgid "To Right"
 msgstr "Ke Kanan"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Single Sweep"
 msgstr "Usap Tunggal"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 msgid "Clockwise Top"
 msgstr "Searah-jarum-jam Atas"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 msgid "Clockwise Right"
 msgstr "Searah-jarum-jam Kanan"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 msgid "Clockwise Bottom"
 msgstr "Searah-jarum-jam Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Clockwise Left"
 msgstr "Searah-jarum-jam Kiri"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Top Left"
 msgstr "Searah-jarum-jam Kiri Atas"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Bottom Left"
 msgstr "Lawan-arah-jarum-jam Kiri Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right"
 msgstr "Searah-jarum-jam Kanan Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Right"
 msgstr "Lawan-arah-jarum-jam Kanan Atas"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top"
 msgstr "Lawan-arah-jarum-jam Atas"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Right"
 msgstr "Lawan-arah-jarum-jam Kanan"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Bottom"
 msgstr "Lawan-arah-jarum-jam Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Counterclockwise Left"
 msgstr "Lawan-arah-jarum-jam Kiri"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Top Left"
 msgstr "Lawan-arah-jarum-jam Kiri Atas"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Bottom Left"
 msgstr "Searah-jarum-jam Kiri Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right"
 msgstr "Lawan-arah-jarum-jam Kanan Bawah"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
 msgid "Clockwise Top Right"
 msgstr "Searah-jarum-jam Kanan Atas"
 
@@ -1664,76 +1589,68 @@ msgstr "Searah-jarum-jam Kanan Atas"
 msgid "Windshield"
 msgstr "Kaca Depan"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
 msgid "Right"
 msgstr "Kanan"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
 msgstr "Naik"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical"
 msgstr "Tegak"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
 msgid "Horizontal"
 msgstr "Mendatar"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 msgid "Right Reverse"
 msgstr "Kanan Kebalikan"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Up Reverse"
 msgstr "Naik Kebalikan"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Vertical Reverse"
 msgstr "Tegak Kebalikan"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 msgid "Horizontal Reverse"
 msgstr "Mendatar Kebalikan"
 
@@ -1742,23 +1659,19 @@ msgstr "Mendatar Kebalikan"
 msgid "Barn Door"
 msgstr "Pintu Gudang"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 msgid "Diagonal Bottom Left"
 msgstr "Diagonal Kiri Bawah"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 msgid "Diagonal Bottom Left Reverse"
 msgstr "Diagonal Kiri Bawah Kebalikan"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
 msgid "Diagonal Top Left"
 msgstr "Diagonal Kiri Atas"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
 msgid "Diagonal Top Left Reverse"
 msgstr "Diagonal Kiri Atas Kebalikan"
 
@@ -1772,46 +1685,40 @@ msgstr "Ve Gudang"
 msgid "Barn Zig Zag"
 msgstr "Zig Zag Gudang"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, kde-format
-msgid "Vertical Reversed"
-msgstr "Tegak Kebalikan"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Horizontal Reversed"
 msgstr "Mendatar Kebalikan"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+msgid "Vertical Reversed"
+msgstr "Tegak Kebalikan"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
 msgstr "Kotak"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 msgid "From Top Left"
 msgstr "Dari Kiri Atas"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 msgid "From Top Right"
 msgstr "Dari Kanan Atas"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
 msgid "From Bottom Left"
 msgstr "Dari Kiri Bawah"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
 msgid "From Bottom Right"
 msgstr "Dari Kanan Bawah"
 
@@ -1825,23 +1732,19 @@ msgstr "Diagonal"
 msgid "Four Box"
 msgstr "Empat Kotak"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In"
 msgstr "Sudut Masuk"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In Reverse"
 msgstr "Sudut Masuk Kebalikan"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out"
 msgstr "Sudut Keluar"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out Reverse"
 msgstr "Sudut Keluar Kebalikan"
 
@@ -1851,12 +1754,10 @@ msgid "Misc Diagonal"
 msgstr "Aneka Diagonal"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, kde-format
 msgid "Double Barn Door"
 msgstr "Pintu Gudang Ganda"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, kde-format
 msgid "Double Diamond"
 msgstr "Berlian Ganda"
 
@@ -1875,13 +1776,11 @@ msgstr "Zig Zag"
 msgid "Fade"
 msgstr "Lesap"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr "Lesap Silang"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
 msgstr "Lesap lintas Warna"
 
@@ -1890,48 +1789,42 @@ msgstr "Lesap lintas Warna"
 msgid "ArrowHead"
 msgstr "Kepala Panah"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
 msgid "Down"
 msgstr "Turun"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 msgid "Down Reverse"
 msgstr "Turun Kebalikan"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
 msgid "Left"
 msgstr "Kiri"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
 msgid "Left Reverse"
 msgstr "Kiri Kebalikan"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr "Bulat"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr "Lingkaran"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle Reverse"
 msgstr "Lingkaran Kebalikan"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr "Mata"
@@ -1946,48 +1839,40 @@ msgstr "Segienam"
 msgid "Iris"
 msgstr "Wajik"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, kde-format
-msgid "Rectangular"
-msgstr "Persegi"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, kde-format
-msgid "Rectangular Reverse"
-msgstr "Persegi Kebalikan"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond"
 msgstr "Berlian"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond Reverse"
 msgstr "Berlian Kebalikan"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular"
+msgstr "Persegi"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular Reverse"
+msgstr "Persegi Kebalikan"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr "Aneka"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
 msgstr "Jantung"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart Reverse"
 msgstr "Jantung Kebalikan"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole"
 msgstr "Lubang Kunci"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole Reverse"
 msgstr "Lubang Kunci Kebalikan"
 
@@ -1996,7 +1881,7 @@ msgstr "Lubang Kunci Kebalikan"
 msgid "Pentagon"
 msgstr "Segilima"
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, kde-format
 msgid "RoundRect"
 msgstr "Persegi"
@@ -2006,33 +1891,27 @@ msgstr "Persegi"
 msgid "Star"
 msgstr "Bintang"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Four Point Star"
 msgstr "Empat Titik Bintang"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Four Point Star Reverse"
 msgstr "Empat Titik Bintang Kebalikan"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
 msgstr "Lima Titik Bintang"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
 msgstr "Lima Titik Bintang Kebalikan"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
 msgstr "Enam Titik Bintang"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
 msgid "Six Point Star Reverse"
 msgstr "Enam Titik Bintang Kebalikan"
 
@@ -2046,63 +1925,51 @@ msgstr "Segitiga"
 msgid "Box Snakes"
 msgstr "Kotak Ular"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Top In"
 msgstr "Dua Kotak Atas Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 msgid "Two Box Bottom In"
 msgstr "Dua Kotak Bawah Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 msgid "Two Box Left In"
 msgstr "Dua Kotak Kiri Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 msgid "Two Box Right In"
 msgstr "Dua Kotak Kanan Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 msgid "Four Box Vertical In"
 msgstr "Empat Kotak Tegak Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 msgid "Four Box Horizontal In"
 msgstr "Empat Kotak Mendatar Masuk"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Top Out"
 msgstr "Dua Kotak Atas Keluar"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Bottom Out"
 msgstr "Dua Kotak Bawah Keluar"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Two Box Left Out"
 msgstr "Dua Kotak Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Two Box Right Out"
 msgstr "Dua Kotak Kanan Keluar"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
 msgid "Four Box Vertical Out"
 msgstr "Empat Kotak Tegak Keluar"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
 msgid "Four Box Horizontal Out"
 msgstr "Empat Kotak Mendatar Keluar"
 
@@ -2111,103 +1978,83 @@ msgstr "Empat Kotak Mendatar Keluar"
 msgid "Parallel Snakes"
 msgstr "Ular Paralel"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
 msgid "Vertical Top Same In"
 msgstr "Tegak Atas Sama Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
 msgid "Vertical Top Same Out"
 msgstr "Tegak Atas Sama Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
 msgid "Vertical Bottom Same In"
 msgstr "Tegak Bawah Sama Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
 msgid "Vertical Bottom Same Out"
 msgstr "Tegak Bawah Sama Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 msgid "Vertical Top Left Opposite In"
 msgstr "Tegak Atas Berlawanan Kiri Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
 msgid "Vertical Top Left Opposite Out"
 msgstr "Tegak Atas Berlawanan Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
 msgid "Vertical Bottom Left Opposite In"
 msgstr "Tegak Bawah Berlawanan Kiri Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "Tegak Bawah Berlawanan Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
 msgid "Horizontal Left Same In"
 msgstr "Mendatar Kiri Sama Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
 msgid "Horizontal Left Same Out"
 msgstr "Mendatar Kiri Sama Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
 msgid "Horizontal Right Same In"
 msgstr "Mendatar Kanan Sama Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
 msgid "Horizontal Right Same Out"
 msgstr "Mendatar Kanan Sama Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
 msgid "Horizontal Top Left Opposite In"
 msgstr "Mendatar Atas Berlawanan Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
 msgid "Horizontal Top Left Opposite Out"
 msgstr "Mendatar Atas Berlawanan Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
 msgid "Horizontal Top Right Opposite In"
 msgstr "Mendatar Atas Berlawanan Kanan Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 msgid "Horizontal Top Right Opposite Out"
 msgstr "Mendatar Atas Berlawanan Kanan Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "Diagonal Bawah Berlawanan Kiri Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "Diagonal Bawah Berlawanan Kiri Keluar"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
 msgid "Diagonal Top Left Opposite In"
 msgstr "Diagonal Atas Berlawanan Kiri Masuk"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
 msgid "Diagonal Top Left Opposite Out"
 msgstr "Diagonal Atas Berlawanan Kiri Keluar"
 
@@ -2221,83 +2068,67 @@ msgstr "Ular"
 msgid "Spiral"
 msgstr "Spiral"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
 msgid "Clockwise Top Left In"
 msgstr "Searah-jarum-jam Kiri Atas Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
 msgid "Clockwise Top Left Out"
 msgstr "Searah-jarum-jam Kiri Atas Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 msgid "Clockwise Top Right In"
 msgstr "Searah-jarum-jam Kanan Atas Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
 msgid "Clockwise Top Right Out"
 msgstr "Searah-jarum-jam Kanan Atas Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
 msgid "Clockwise Bottom Left In"
 msgstr "Searah-jarum-jam Kiri Bawah Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Left Out"
 msgstr "Searah-jarum-jam Kiri Bawah Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 msgid "Clockwise Bottom Right In"
 msgstr "Searah-jarum-jam Kanan Bawah Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right Out"
 msgstr "Searah-jarum-jam Kanan Bawah Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Left In"
 msgstr "Lawan-arah-jarum-jam Kiri Atas Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top Left Out"
 msgstr "Lawan-arah-jarum-jam Kiri Atas Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
 msgid "Counterclockwise Top Right In"
 msgstr "Lawan-arah-jarum-jam Kanan Atas Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Right Out"
 msgstr "Lawan-arah-jarum-jam Kanan Atas Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
 msgid "Counterclockwise Bottom Left In"
 msgstr "Lawan-arah-jarum-jam Kiri Bawah Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Left Out"
 msgstr "Lawan-arah-jarum-jam Kiri Bawah Keluar"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
 msgid "Counterclockwise Bottom Right In"
 msgstr "Lawan-arah-jarum-jam Kanan Bawah Masuk"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right Out"
 msgstr "Lawan-arah-jarum-jam Kanan Bawah Keluar"
 
@@ -2306,43 +2137,35 @@ msgstr "Lawan-arah-jarum-jam Kanan Bawah Keluar"
 msgid "Waterfall"
 msgstr "Air Terjun"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 msgid "Top Left Vertical"
 msgstr "Kiri Atas Tegak"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 msgid "Top Left Horizontal"
 msgstr "Kiri Atas Mendatar"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
 msgid "Top Right Vertical"
 msgstr "Kanan Atas Tegak"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 msgid "Top Right Horizontal"
 msgstr "Kanan Atas Mendatar"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
 msgid "Bottom Left Vertical"
 msgstr "Kiri Bawah Tegak"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 msgid "Bottom Left Horizontal"
 msgstr "Kiri Bawah Mendatar"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
 msgid "Bottom Right Vertical"
 msgstr "Kanan Bawah Tegak"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
 msgid "Bottom Right Horizontal"
 msgstr "Kanan Bawah Mendatar"
 

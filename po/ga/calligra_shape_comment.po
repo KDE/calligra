@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CommentShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-12-28 12:28-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -27,7 +27,7 @@ msgstr "Níl aon fháil ar an mbreiseán a thaispeánann nótaí tráchta."
 msgid "Plugin Missing"
 msgstr "Breiseán Ar Iarraidh"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -36,7 +36,7 @@ msgstr ""
 "Níl an breiseán a thaispeánann nótaí tráchta comhoiriúnach leis an leagan "
 "reatha den ghiuirléid."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Breiseán Neamh-Chomhoiriúnach"

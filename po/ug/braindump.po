@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -95,18 +95,18 @@ msgstr "ھالەت"
 msgid "State:"
 msgstr "ھالەت:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
 msgstr "ھالەت شەكىللىرى"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, fuzzy, kde-format
 #| msgid "State Shape"
 msgid "A state shape"
 msgstr "ھالەت شەكىللىرى"
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr "ھالەت قورالى تاللانمىلىرى"
@@ -129,12 +129,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr ""
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, kde-format
 msgid "Web Shape"
 msgstr "تور شەكلى"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, kde-format
 msgid "A web shape"
 msgstr "بىر تور شەكلى"
@@ -145,52 +145,52 @@ msgstr "بىر تور شەكلى"
 msgid "Web shape editing"
 msgstr "تور شەكلى"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr "Braindump"
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr ""
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr ""
 
-#: src/AboutData.h:39 src/AboutData.h:40
+#: src/AboutData.h:42
+#, kde-format
+msgid "Somsubhra Bairi"
+msgstr ""
+
+#: src/AboutData.h:43 src/AboutData.h:46
 #, fuzzy, kde-format
 #| msgid "Maintainer"
 msgid "Former maintainer"
 msgstr "مەسئۇل كىشى"
 
-#: src/AboutData.h:39
-#, kde-format
-msgid "Somsubhra Bairi"
-msgstr ""
-
-#: src/AboutData.h:40
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr "Cyrille Berger"
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -239,7 +239,7 @@ msgstr "ئاق تاختىنى ئۈستىگە يۆتكە"
 msgid "Delete the whiteboard"
 msgstr "ئاق تاختىنى ئۆچۈر"
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
 msgstr ""
@@ -259,42 +259,42 @@ msgstr ""
 msgid "Toggles organising the options in tabs or not"
 msgstr ""
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, kde-format
 msgid "Column"
 msgstr "ئىستون"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr "بوش"
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr ""
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, kde-format
 msgid "Untitled %1"
 msgstr "ماۋزۇسىز %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr ""
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr "ئاق تاختا"
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, kde-format
 msgid "Minimal View"
 msgstr "ئەڭ كىچىك كۆرۈنۈش"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Detailed View"
 msgstr "تەپسىلات كۆرۈنۈش"
@@ -327,33 +327,33 @@ msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
 msgid "Add new whiteboard as child of current."
 msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
 msgstr "ئۆچۈر(&E)"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "كۆچۈر(&D)"
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
 msgstr "شەكىللەرنى گۇرۇپپىلا"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
 msgstr "شەكىللەرنى گۇرۇپپىلىما"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "شەكىللەرنى گۇرۇپپىلا"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "شەكىللەرنى گۇرۇپپىلىما"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-17 01:46+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-16 12:11+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -44,83 +44,83 @@ msgstr "Малювання контуру"
 msgid "Freehand path"
 msgstr "Малювання довільних контурів"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:448
+#: basicflakes/tools/KoCreatePathTool.cpp:443
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr "Крок кута прилипання:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:455
+#: basicflakes/tools/KoCreatePathTool.cpp:450
 #, kde-format
 msgid "Activate angle snap:"
 msgstr "Задіяння прилипання під кутом:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
+#: basicflakes/tools/KoCreatePathTool.cpp:458
 #, kde-format
 msgid "Angle Constraints"
 msgstr "Обмеження кута"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:467
-#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
 msgstr "Лінійна"
 
-#: basicflakes/tools/KoPencilTool.cpp:273
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
 msgid "Precision:"
 msgstr "Точність:"
 
-#: basicflakes/tools/KoPencilTool.cpp:275
+#: basicflakes/tools/KoPencilTool.cpp:280
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Без обробки"
 
-#: basicflakes/tools/KoPencilTool.cpp:276
+#: basicflakes/tools/KoPencilTool.cpp:281
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Curve"
 msgstr "Крива"
 
-#: basicflakes/tools/KoPencilTool.cpp:277
+#: basicflakes/tools/KoPencilTool.cpp:282
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, kde-format
 msgid "Straight"
 msgstr "Пряма"
 
-#: basicflakes/tools/KoPencilTool.cpp:286
-#: basicflakes/tools/KoPencilTool.cpp:292
+#: basicflakes/tools/KoPencilTool.cpp:291
+#: basicflakes/tools/KoPencilTool.cpp:297
 #, kde-format
 msgid "Optimize"
 msgstr "Оптимізувати"
 
-#: basicflakes/tools/KoPencilTool.cpp:298
+#: basicflakes/tools/KoPencilTool.cpp:303
 #, kde-format
 msgid "Exactness:"
 msgstr "Акуратність:"
 
-#: basicflakes/tools/KoPencilTool.cpp:331
-#: basicflakes/tools/KoPencilTool.cpp:332
+#: basicflakes/tools/KoPencilTool.cpp:336
+#: basicflakes/tools/KoPencilTool.cpp:337
 #, kde-format
 msgid "Pencil"
 msgstr "Олівець"
 
-#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Change Connection"
 msgstr ""
 "Змінити тип з’єднання\n"
 "зміну типу з’єднання"
 
-#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+#: flake/commands/KoParameterHandleMoveCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change parameter"
 msgstr ""
 "Змінити параметр\n"
 "зміну параметра"
 
-#: flake/commands/KoParameterToPathCommand.cpp:31
-#: flake/commands/KoParameterToPathCommand.cpp:40
+#: flake/commands/KoParameterToPathCommand.cpp:32
+#: flake/commands/KoParameterToPathCommand.cpp:41
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr ""
@@ -134,50 +134,50 @@ msgstr ""
 "Розбити підконтур у точках\n"
 "розбиття підконтуру у точках"
 
-#: flake/commands/KoPathCombineCommand.cpp:45
+#: flake/commands/KoPathCombineCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr ""
 "Сполучити контури\n"
 "сполучення контурів"
 
-#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#: flake/commands/KoPathControlPointMoveCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr ""
 "Пересунути контрольну точку\n"
 "пересування контрольної точки"
 
-#: flake/commands/KoPathFillRuleCommand.cpp:31
+#: flake/commands/KoPathFillRuleCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
 msgstr ""
 "Встановити правило заповнення\n"
 "встановлення правила заповнення"
 
-#: flake/commands/KoPathPointInsertCommand.cpp:66
+#: flake/commands/KoPathPointInsertCommand.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr ""
 "Вставити точки\n"
 "вставлення точок"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:139
+#: flake/commands/KoPathPointMergeCommand.cpp:134
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr ""
 "Об’єднати точки\n"
 "об’єднання точок"
 
-#: flake/commands/KoPathPointMoveCommand.cpp:29
-#: flake/commands/KoPathPointMoveCommand.cpp:45
+#: flake/commands/KoPathPointMoveCommand.cpp:31
+#: flake/commands/KoPathPointMoveCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr ""
 "Пересунути точки\n"
 "пересування точок"
 
-#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:92
 #: flake/commands/KoPathPointRemoveCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Remove points"
@@ -185,14 +185,14 @@ msgstr ""
 "Вилучити точки\n"
 "вилучення точок"
 
-#: flake/commands/KoPathPointTypeCommand.cpp:35
+#: flake/commands/KoPathPointTypeCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr ""
 "Встановити тип точки\n"
 "встановлення типу точки"
 
-#: flake/commands/KoPathReverseCommand.cpp:38
+#: flake/commands/KoPathReverseCommand.cpp:41
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
 msgstr ""
@@ -206,64 +206,64 @@ msgstr ""
 "Розбити підконтур\n"
 "розбиття підконтуру"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr ""
 "Перетворити відтинки на криві\n"
 "перетворення відтинків на криві"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+#: flake/commands/KoPathSegmentTypeCommand.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr ""
 "Перетворити відтинки на прямі\n"
 "перетворення відтинків на прямі"
 
-#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+#: flake/commands/KoPathShapeMarkerCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "Встановити позначку"
 
-#: flake/commands/KoShapeAlignCommand.cpp:74
+#: flake/commands/KoShapeAlignCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr ""
 "Вирівняти форми\n"
 "вирівнювання форм"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:50
-#: flake/commands/KoShapeBackgroundCommand.cpp:61
-#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#: flake/commands/KoShapeBackgroundCommand.cpp:51
+#: flake/commands/KoShapeBackgroundCommand.cpp:62
+#: flake/commands/KoShapeBackgroundCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr ""
 "Встановити тло\n"
 "встановлення тла"
 
-#: flake/commands/KoShapeClipCommand.cpp:57
-#: flake/commands/KoShapeClipCommand.cpp:73
+#: flake/commands/KoShapeClipCommand.cpp:64
+#: flake/commands/KoShapeClipCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
 msgstr ""
 "Зафіксувати форму\n"
 "фіксацію форми"
 
-#: flake/commands/KoShapeCreateCommand.cpp:39
+#: flake/commands/KoShapeCreateCommand.cpp:41
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr ""
 "Створити форму\n"
 "створення форми"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:43
+#: flake/commands/KoShapeDeleteCommand.cpp:45
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr ""
 "Вилучити форму\n"
 "вилучення форми"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:56
+#: flake/commands/KoShapeDeleteCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
@@ -280,21 +280,21 @@ msgstr[3] ""
 "Вилучити форму\n"
 "вилучення форми"
 
-#: flake/commands/KoShapeDistributeCommand.cpp:117
+#: flake/commands/KoShapeDistributeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
 msgstr ""
 "Розставити форми\n"
 "розставлення форм"
 
-#: flake/commands/KoShapeGroupCommand.cpp:82
+#: flake/commands/KoShapeGroupCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr ""
 "Згрупувати форми\n"
 "групування форм"
 
-#: flake/commands/KoShapeGroupCommand.cpp:84
+#: flake/commands/KoShapeGroupCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
 msgstr ""
@@ -315,15 +315,15 @@ msgstr ""
 "Зафіксувати форми\n"
 "фіксацію форм"
 
-#: flake/commands/KoShapeMoveCommand.cpp:36
-#: flake/commands/KoShapeMoveCommand.cpp:54
+#: flake/commands/KoShapeMoveCommand.cpp:37
+#: flake/commands/KoShapeMoveCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr ""
 "Пересунути форми\n"
 "пересування форм"
 
-#: flake/commands/KoShapeRenameCommand.cpp:28
+#: flake/commands/KoShapeRenameCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
 msgstr ""
@@ -337,37 +337,37 @@ msgstr ""
 "Перевпорядкувати форми\n"
 "перевпорядкування форм"
 
-#: flake/commands/KoShapeRunAroundCommand.cpp:59
+#: flake/commands/KoShapeRunAroundCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr ""
 "Змінити обтікання форми\n"
 "зміну обтікання форми"
 
-#: flake/commands/KoShapeShadowCommand.cpp:54
-#: flake/commands/KoShapeShadowCommand.cpp:71
-#: flake/commands/KoShapeShadowCommand.cpp:82
+#: flake/commands/KoShapeShadowCommand.cpp:57
+#: flake/commands/KoShapeShadowCommand.cpp:74
+#: flake/commands/KoShapeShadowCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr ""
 "Встановити тінь\n"
 "встановлення тіні"
 
-#: flake/commands/KoShapeShearCommand.cpp:38
+#: flake/commands/KoShapeShearCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
 msgstr ""
 "Перекосити форми\n"
 "перекошення форм"
 
-#: flake/commands/KoShapeSizeCommand.cpp:30
+#: flake/commands/KoShapeSizeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr ""
 "Змінити розмір форм\n"
 "зміну розміру форм"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:61
 #: flake/commands/KoShapeStrokeCommand.cpp:78
 #: flake/commands/KoShapeStrokeCommand.cpp:89
 msgctxt "(qtundo-format)"
@@ -376,44 +376,44 @@ msgstr ""
 "Встановити штрих\n"
 "встановлення штриха"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:35
-#: flake/commands/KoShapeTransparencyCommand.cpp:46
-#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#: flake/commands/KoShapeTransparencyCommand.cpp:37
+#: flake/commands/KoShapeTransparencyCommand.cpp:48
+#: flake/commands/KoShapeTransparencyCommand.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr ""
 "Встановити непрозорість\n"
 "встановлення непрозорості"
 
-#: flake/commands/KoShapeUnclipCommand.cpp:107
+#: flake/commands/KoShapeUnclipCommand.cpp:114
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
 msgstr ""
 "Зняти фіксацію форми\n"
 "зняття фіксації форми"
 
-#: flake/commands/KoShapeUnclipCommand.cpp:116
+#: flake/commands/KoShapeUnclipCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
 msgstr ""
 "Зняти фіксацію форм\n"
 "зняти фіксацію форм"
 
-#: flake/commands/KoShapeUngroupCommand.cpp:46
+#: flake/commands/KoShapeUngroupCommand.cpp:48
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr ""
 "Розгрупувати форми\n"
 "розгрупування форм"
 
-#: flake/commands/KoSubpathJoinCommand.cpp:38
+#: flake/commands/KoSubpathJoinCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
 msgstr ""
 "Замкнути підконтур\n"
 "замикання підконтуру"
 
-#: flake/commands/KoSubpathJoinCommand.cpp:40
+#: flake/commands/KoSubpathJoinCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
 msgstr ""
@@ -441,7 +441,7 @@ msgstr "Лінії"
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
 #: flake/KoConnectionShapeConfigWidget.ui:17
 #: widgets/koDocumentInfoAboutWidget.ui:141
-#: widgets/KoGradientEditWidget.cpp:152
+#: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
 msgid "Type:"
 msgstr "Тип:"
@@ -456,12 +456,12 @@ msgstr "З’єднати"
 msgid "A connection between two other shapes"
 msgstr "З’єднання між двома іншими формами"
 
-#: flake/KoGridData.cpp:210
+#: flake/KoGridData.cpp:206
 #, kde-format
 msgid "Show Grid"
 msgstr "Показати ґратку"
 
-#: flake/KoGridData.cpp:211
+#: flake/KoGridData.cpp:207
 #, kde-format
 msgid "Shows or hides grid"
 msgstr "Показує або ховає ґратку"
@@ -476,26 +476,26 @@ msgstr "Проста форма контуру"
 msgid "A simple path shape"
 msgstr "Проста форма контуру"
 
-#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
-#: rdf/InsertSemanticObjectReferenceAction.cpp:51
-#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:42
+#: rdf/InsertSemanticObjectReferenceAction.cpp:48
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:46
 #, kde-format
 msgid "%1 Options"
 msgstr "Параметри %1"
 
-#: flake/KoShapePaste.cpp:155
+#: flake/KoShapePaste.cpp:163
 msgctxt "(qtundo-format)"
 msgid "Paste Shapes"
 msgstr ""
 "Вставити форми\n"
 "вставлення форм"
 
-#: flake/KoToolManager.cpp:451
+#: flake/KoToolManager.cpp:442
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Активний засіб: %1"
 
-#: flake/KoToolProxy.cpp:587
+#: flake/KoToolProxy.cpp:589
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
 msgstr ""
@@ -565,118 +565,118 @@ msgstr "Створення об'єкта"
 msgid "Pan"
 msgstr "Панорамування"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr ""
 "Перетворити відтинок\n"
 "перетворення відтинку"
 
-#: flake/tools/KoPathTool.cpp:97
+#: flake/tools/KoPathTool.cpp:95
 #, kde-format
 msgid "Corner point"
 msgstr "Кутова точка"
 
-#: flake/tools/KoPathTool.cpp:102
+#: flake/tools/KoPathTool.cpp:100
 #, kde-format
 msgid "Smooth point"
 msgstr "Гладка точка"
 
-#: flake/tools/KoPathTool.cpp:107
+#: flake/tools/KoPathTool.cpp:105
 #, kde-format
 msgid "Symmetric Point"
 msgstr "Симетрична точка"
 
-#: flake/tools/KoPathTool.cpp:112
+#: flake/tools/KoPathTool.cpp:110
 #, kde-format
 msgid "Make curve point"
 msgstr "Зробити точкою кривої"
 
-#: flake/tools/KoPathTool.cpp:116
+#: flake/tools/KoPathTool.cpp:114
 #, kde-format
 msgid "Make line point"
 msgstr "Зробити точкою прямої"
 
-#: flake/tools/KoPathTool.cpp:120
+#: flake/tools/KoPathTool.cpp:118
 #, kde-format
 msgid "Segment to Line"
 msgstr "Відрізок у пряму"
 
-#: flake/tools/KoPathTool.cpp:125
+#: flake/tools/KoPathTool.cpp:123
 #, kde-format
 msgid "Segment to Curve"
 msgstr "Відрізок у криву"
 
-#: flake/tools/KoPathTool.cpp:130
+#: flake/tools/KoPathTool.cpp:128
 #, kde-format
 msgid "Insert point"
 msgstr "Вставити точку"
 
-#: flake/tools/KoPathTool.cpp:135
+#: flake/tools/KoPathTool.cpp:133
 #, kde-format
 msgid "Remove point"
 msgstr "Вилучити точку"
 
-#: flake/tools/KoPathTool.cpp:140
+#: flake/tools/KoPathTool.cpp:138
 #, kde-format
 msgid "Break at point"
 msgstr "Розірвати у точці"
 
-#: flake/tools/KoPathTool.cpp:144
+#: flake/tools/KoPathTool.cpp:142
 #, kde-format
 msgid "Break at segment"
 msgstr "Розірвати на відрізку"
 
-#: flake/tools/KoPathTool.cpp:148
+#: flake/tools/KoPathTool.cpp:146
 #, kde-format
 msgid "Join with segment"
 msgstr "З’єднати відрізком"
 
-#: flake/tools/KoPathTool.cpp:153
+#: flake/tools/KoPathTool.cpp:151
 #, kde-format
 msgid "Merge points"
 msgstr "Об’єднати точки"
 
-#: flake/tools/KoPathTool.cpp:157
+#: flake/tools/KoPathTool.cpp:155
 #, kde-format
 msgid "To Path"
 msgstr "У контур"
 
-#: flake/tools/KoPathTool.cpp:190
+#: flake/tools/KoPathTool.cpp:188
 #, kde-format
 msgid "Line/Curve"
 msgstr "Лінія/Крива"
 
-#: flake/tools/KoPathTool.cpp:528
+#: flake/tools/KoPathTool.cpp:522
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Перетягніть, щоб пересунути засіб керування."
 
-#: flake/tools/KoPathTool.cpp:592
+#: flake/tools/KoPathTool.cpp:586
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Перетягніть, щоб пересунути точку. Клацніть з утримуванням натиснутою "
 "клавіші Shift, щоб змінити тип точки."
 
-#: flake/tools/KoPathTool.cpp:594
+#: flake/tools/KoPathTool.cpp:588
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Перетягніть, щоб пересунути контрольну точку."
 
-#: flake/tools/KoPathTool.cpp:619
+#: flake/tools/KoPathTool.cpp:613
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Перетягніть вказівником, щоб змінити криву безпосередньо. Двічі клацніть "
 "кнопкою миші, щоб додати нову точку контуру."
 
-#: flake/tools/KoPathTool.cpp:626
+#: flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Натисніть клавішу «B», щоб розбити контур у вибраній точці."
 
-#: flake/tools/KoPathTool.cpp:628
+#: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Натисніть клавішу «B», щоб розбити контур на вибраних відрізках."
@@ -686,7 +686,7 @@ msgstr "Натисніть клавішу «B», щоб розбити конт�
 msgid "Path editing"
 msgstr "Редагування контурів"
 
-#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:34
 #: widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
@@ -746,25 +746,25 @@ msgstr "…"
 msgid "Convert To Path"
 msgstr "Перетворити на контур"
 
-#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
 #, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Вернути"
 
-#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
 #: main/KoUndoStackAction.cpp:41
 #, kde-format
 msgid "Undo %1"
 msgstr "Вернути %1"
 
-#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
 #, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Повторити"
 
-#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
 #: main/KoUndoStackAction.cpp:41
 #, kde-format
 msgid "Redo %1"
@@ -775,13 +775,13 @@ msgstr "Повторити %1"
 msgid "<empty>"
 msgstr "<порожньо>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Повторити"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -805,164 +805,164 @@ msgstr "П&араметри"
 msgid "File"
 msgstr "Файл"
 
-#: main/config/KoConfigDocumentPage.cpp:46
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#: main/config/KoConfigDocumentPage.cpp:47
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgid "Document Settings"
 msgstr "Параметри документа"
 
-#: main/config/KoConfigDocumentPage.cpp:62
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgid "No autosave"
 msgstr "Без автозбереження"
 
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:64
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr " хв."
 
-#: main/config/KoConfigDocumentPage.cpp:65
+#: main/config/KoConfigDocumentPage.cpp:66
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Інтервал автозбереження:"
 
-#: main/config/KoConfigDocumentPage.cpp:69
+#: main/config/KoConfigDocumentPage.cpp:70
 #, kde-format
 msgid "Create backup file:"
 msgstr "Створити резервний файл:"
 
-#: main/config/KoConfigGridPage.cpp:55
+#: main/config/KoConfigGridPage.cpp:56
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "Ґратка"
 
-#: main/config/KoConfigGridPage.cpp:63
+#: main/config/KoConfigGridPage.cpp:64
 #, kde-format
 msgid "Show grid:"
 msgstr "Показати ґратку:"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Snap to grid:"
 msgstr "Чіплятися до ґратки:"
 
-#: main/config/KoConfigGridPage.cpp:65
+#: main/config/KoConfigGridPage.cpp:66
 #, kde-format
 msgid "Grid color:"
 msgstr "Колір ґратки:"
 
-#: main/config/KoConfigGridPage.cpp:67
+#: main/config/KoConfigGridPage.cpp:68
 #, kde-format
 msgid "Spacing"
 msgstr "Інтервал"
 
-#: main/config/KoConfigGridPage.cpp:78
+#: main/config/KoConfigGridPage.cpp:79
 #, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "&Horizontal:"
 msgstr "&Горизонтальний:"
 
-#: main/config/KoConfigGridPage.cpp:79
+#: main/config/KoConfigGridPage.cpp:80
 #, kde-format
 msgctxt "Vertical grid spacing"
 msgid "&Vertical:"
 msgstr "&Вертикальний:"
 
-#: main/config/KoConfigMiscPage.cpp:66
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
-#: pigment/KoCompositeOpRegistry.cpp:31
+#: main/config/KoConfigMiscPage.cpp:68
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Misc"
 msgstr "Інше"
 
-#: main/config/KoConfigMiscPage.cpp:76
+#: main/config/KoConfigMiscPage.cpp:78
 #, kde-format
 msgid "Units:"
 msgstr "Одиниця:"
 
-#: main/config/KoConfigMiscPage.cpp:85
+#: main/config/KoConfigMiscPage.cpp:87
 #, kde-format
 msgid "Handle radius:"
 msgstr "Радіус елемента керування:"
 
-#: main/config/KoConfigMiscPage.cpp:92
+#: main/config/KoConfigMiscPage.cpp:94
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "Радіус захоплення:"
 
-#: main/config/KoConfigMiscPage.cpp:99
+#: main/config/KoConfigMiscPage.cpp:101
 #, kde-format
 msgid "Paste offset:"
 msgstr "Відступ вставлення:"
 
-#: main/config/KoConfigMiscPage.cpp:103
+#: main/config/KoConfigMiscPage.cpp:105
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr "Вставляти під вказівником:"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:189
 #, kde-format
 msgid "Only print and exit"
 msgstr "Тільки надрукувати і вийти"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:191
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
 "Відкрити новий документ на основі вказаного шаблону (назви файла .desktop)"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:192
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Відкрити новий документ на основі вказаного файла шаблону"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:193
 #, kde-format
 msgid "Override display DPI"
 msgstr "Змінити роздільну здатність екрана"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Лише експортувати до PDF і вийти"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:195
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Назва файла експорту до pdf"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "Просто завантажити файл і завершити роботу"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 "завантажити файл, показати вікно і смужку поступу, а потім завершити роботу"
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Назва файла, до якого буде записано дані профілювання."
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Завантажити файл і зберегти його як файл ODF. Призначено для налагоджування."
 
-#: main/KoApplication.cpp:209
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Файли або адреси, які слід відкрити"
 
-#: main/KoApplication.cpp:219
+#: main/KoApplication.cpp:215
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -973,12 +973,12 @@ msgstr ""
 "Ми не рекомендуємо таке поєднання.\n"
 "Будь ласка, отримайте і встановіть пакунок для архітектури x86-64."
 
-#: main/KoApplication.cpp:261
+#: main/KoApplication.cpp:255
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: критична помилка"
 
-#: main/KoApplication.cpp:261
+#: main/KoApplication.cpp:256
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -989,22 +989,22 @@ msgstr ""
 "Причиною може бути неналежне встановлення пакунка.\n"
 "Спробуйте перезапустити програму або перевстановити пакунок."
 
-#: main/KoApplication.cpp:510
+#: main/KoApplication.cpp:493
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не знайдено шаблон для: %1"
 
-#: main/KoApplication.cpp:513
+#: main/KoApplication.cpp:496
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Знайдено забагато шаблонів для: %1"
 
-#: main/KoApplication.cpp:535 main/KoApplication.cpp:553
+#: main/KoApplication.cpp:518 main/KoApplication.cpp:535
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Не вдалось завантажити шаблон %1."
 
-#: main/KoApplication.cpp:543
+#: main/KoApplication.cpp:525
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Не знайдено шаблону у %1"
@@ -1020,7 +1020,7 @@ msgstr "Відновлення файлів"
 msgid "The following autosave file can be recovered:"
 msgstr "Дані можна відновити з вказаного нижче автоматично збереженого файла:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:174
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "Дані можна відновити з вказаних нижче автоматично збережених файлів:"
@@ -1037,17 +1037,17 @@ msgstr "Завжди використовувати з цей шаблон пі�
 msgid "Always use this template"
 msgstr "Завжди використовувати цей шаблон"
 
-#: main/KoDocument.cpp:549
+#: main/KoDocument.cpp:544
 #, kde-format
 msgid "Making backup..."
 msgstr "Створення резервної копії…"
 
-#: main/KoDocument.cpp:564
+#: main/KoDocument.cpp:559
 #, kde-format
 msgid "Saving..."
 msgstr "Збереження…"
 
-#: main/KoDocument.cpp:592
+#: main/KoDocument.cpp:587
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1056,7 +1056,7 @@ msgstr ""
 "Неможливо зберегти\n"
 "%1"
 
-#: main/KoDocument.cpp:594
+#: main/KoDocument.cpp:589
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1065,12 +1065,12 @@ msgstr ""
 "Неможливо зберегти %1\n"
 "Причина: %2"
 
-#: main/KoDocument.cpp:623
+#: main/KoDocument.cpp:617
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Документ <i>%1</i> збережено"
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:705
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1079,38 +1079,38 @@ msgstr ""
 "Невідомий пароль цього зашифрованого документа. Автозбереження перервано! "
 "Будь ласка, збережіть вашу роботу вручну."
 
-#: main/KoDocument.cpp:715
+#: main/KoDocument.cpp:708
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автозбереження…"
 
-#: main/KoDocument.cpp:727
+#: main/KoDocument.cpp:720
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Помилка під час автозбереження! Розділ на диску повний?"
 
-#: main/KoDocument.cpp:820
+#: main/KoDocument.cpp:808
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Неможливо створити файл для збереження"
 
-#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
-#: main/KoDocument.cpp:951
+#: main/KoDocument.cpp:852 main/KoDocument.cpp:874 main/KoDocument.cpp:904
+#: main/KoDocument.cpp:938
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Не вдається записати «%1». Розділ на диску повний?"
 
-#: main/KoDocument.cpp:871
+#: main/KoDocument.cpp:859
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Не вдається записати метадані RDF. Розділ на диску заповнено?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1991
+#: main/KoDocument.cpp:867 main/KoDocument.cpp:913 main/KoDocument.cpp:1971
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Помилка при записі «%1». Розділ на диску повний?"
 
-#: main/KoDocument.cpp:1205
+#: main/KoDocument.cpp:1213
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1119,7 +1119,7 @@ msgstr ""
 "Помилка в URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1221
+#: main/KoDocument.cpp:1229
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1128,102 +1128,102 @@ msgstr ""
 "Вже існує автоматично збережена копія цього документа.\n"
 "Відкрити натомість її?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
+#: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існує."
 
-#: main/KoDocument.cpp:1467
+#: main/KoDocument.cpp:1429
 #, kde-format
 msgid "Opening Document"
 msgstr "Відкриття документа"
 
-#: main/KoDocument.cpp:1482
+#: main/KoDocument.cpp:1445
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Неможливо створити додаток фільтрування"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1449
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Не вдалося створити документ з результатами роботи"
 
-#: main/KoDocument.cpp:1488
+#: main/KoDocument.cpp:1453
 #, kde-format
 msgid "File not found"
 msgstr "Файл не знайдено"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1457
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Не вдається зберегти дані"
 
-#: main/KoDocument.cpp:1494
+#: main/KoDocument.cpp:1461
 #, kde-format
 msgid "Bad MIME type"
 msgstr "неправильний тип MIME"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1465
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Помилка у вбудованому документі"
 
-#: main/KoDocument.cpp:1500
+#: main/KoDocument.cpp:1469
 #, kde-format
 msgid "Format not recognized"
 msgstr "Не розпізнано формат"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1473
 #, kde-format
 msgid "Not implemented"
 msgstr "Не впроваджено"
 
-#: main/KoDocument.cpp:1506
+#: main/KoDocument.cpp:1477
 #, kde-format
 msgid "Parsing error"
 msgstr "Помилка синтаксичного аналізу"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Document is password protected"
 msgstr "Документ захищений паролем"
 
-#: main/KoDocument.cpp:1512
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Invalid file format"
 msgstr "Некоректний формат файла"
 
-#: main/KoDocument.cpp:1519
+#: main/KoDocument.cpp:1493
 #, kde-format
 msgid "Internal error"
 msgstr "Внутрішня помилка"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Out of memory"
 msgstr "Не вистачає пам'яті"
 
-#: main/KoDocument.cpp:1525
+#: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Порожній додаток фільтрування"
 
-#: main/KoDocument.cpp:1528
+#: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Спроба завантаження до документа помилкового типу"
 
-#: main/KoDocument.cpp:1531
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Не вдалося отримати віддалений файл"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1518
 #, kde-format
 msgid "Unknown error"
 msgstr "Невідома помилка"
 
-#: main/KoDocument.cpp:1542
+#: main/KoDocument.cpp:1523
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1234,17 +1234,17 @@ msgstr ""
 "Причина: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1600
+#: main/KoDocument.cpp:1581
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Документ <i>%1</i> завантажено"
 
-#: main/KoDocument.cpp:1658 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не вдалось знайти %1"
 
-#: main/KoDocument.cpp:1670
+#: main/KoDocument.cpp:1650
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1253,22 +1253,22 @@ msgstr ""
 "Помилка розбору синтаксису в %1, рядок — %2, позиція — %3\n"
 "Повідомлення: %4"
 
-#: main/KoDocument.cpp:1691
+#: main/KoDocument.cpp:1673
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 не є файлом."
 
-#: main/KoDocument.cpp:1706
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Не вдалось відкрити файл для читання (перевірте права доступу)."
 
-#: main/KoDocument.cpp:1717
+#: main/KoDocument.cpp:1699
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Не вдається прочитати початок файла."
 
-#: main/KoDocument.cpp:1747
+#: main/KoDocument.cpp:1730
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1277,17 +1277,17 @@ msgstr ""
 "Помилка розбору синтаксису головного документа в рядку %1, стовпчик %2\n"
 "Повідомлення помилки: %3"
 
-#: main/KoDocument.cpp:1768
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Це не файл Calligra: %1"
 
-#: main/KoDocument.cpp:1853
+#: main/KoDocument.cpp:1832
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Неправильний документ: немає «maindoc.xml»."
 
-#: main/KoDocument.cpp:1877
+#: main/KoDocument.cpp:1856
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1296,25 +1296,25 @@ msgstr ""
 "Документ <i>%1</i> містить декілька версій. Скористайтеся меню «Файл» -> "
 "«Версії», щоб відкрити стару версію."
 
-#: main/KoDocument.cpp:2078 main/KoDocument.cpp:2550 main/KoDocument.cpp:2579
-#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
+#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
 #, kde-format
 msgid "Untitled"
 msgstr "Без назви"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
+#: main/KoDocument.cpp:2060 main/KoMainWindow.cpp:1138
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>«%1»</b> було змінено.</p><p>Зберегти зміни?</p>"
 
-#: main/KoDocument.cpp:2167
+#: main/KoDocument.cpp:2143
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Внутрішня помилка: saveXML не впроваджено"
 
-#: main/KoDocument.cpp:2204
+#: main/KoDocument.cpp:2176
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1323,7 +1323,7 @@ msgstr ""
 "Неможливо відкрити\n"
 "%1"
 
-#: main/KoDocument.cpp:2207
+#: main/KoDocument.cpp:2178
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1332,32 +1332,27 @@ msgstr ""
 "Не вдається відкрити %1\n"
 "Причина: %2"
 
-#: main/KoDocument.cpp:2264
-#, kde-format
+#: main/KoDocument.cpp:2231
 msgid "a word processing"
 msgstr "документ"
 
-#: main/KoDocument.cpp:2265
-#, kde-format
+#: main/KoDocument.cpp:2232
 msgid "a spreadsheet"
 msgstr "електронна таблиця"
 
-#: main/KoDocument.cpp:2266
-#, kde-format
+#: main/KoDocument.cpp:2233
 msgid "a presentation"
 msgstr "презентація"
 
-#: main/KoDocument.cpp:2267
-#, kde-format
+#: main/KoDocument.cpp:2234
 msgid "a chart"
 msgstr "діаграма"
 
-#: main/KoDocument.cpp:2268
-#, kde-format
+#: main/KoDocument.cpp:2235
 msgid "a drawing"
 msgstr "малюнок"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2543
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1366,12 +1361,12 @@ msgstr ""
 "До документа «%1» було внесено зміни.\n"
 "Зберегти ці зміни чи відкинути їх?"
 
-#: main/KoDocument.cpp:2585
+#: main/KoDocument.cpp:2546
 #, kde-format
 msgid "Close Document"
 msgstr "Закриття документа"
 
-#: main/KoDocumentSectionDelegate.cpp:508
+#: main/KoDocumentSectionDelegate.cpp:506
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -1386,17 +1381,17 @@ msgstr "Ні"
 msgid "Yes"
 msgstr "Так"
 
-#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Could not export file."
 msgstr "Не вдалось експортувати файл."
 
-#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Немає фільтра для експортування"
 
-#: main/KoFilterManager.cpp:518
+#: main/KoFilterManager.cpp:530
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1405,7 +1400,7 @@ msgstr ""
 "Не вдається імпортувати файл з типом\n"
 "%1"
 
-#: main/KoFilterManager.cpp:520
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Немає фільтра для імпортування"
@@ -1415,128 +1410,128 @@ msgstr "Немає фільтра для імпортування"
 msgid "Choose Filter"
 msgstr "Виберіть фільтр"
 
-#: main/KoFindText.cpp:46
+#: main/KoFindText.cpp:47
 #, kde-format
 msgid "Case Sensitive"
 msgstr "З врахуванням регістру"
 
-#: main/KoFindText.cpp:46
+#: main/KoFindText.cpp:47
 #, kde-format
 msgid "Match cases when searching"
 msgstr "Враховувати регістр символів під час пошуку"
 
-#: main/KoFindText.cpp:47
+#: main/KoFindText.cpp:48
 #, kde-format
 msgid "Match only whole words"
 msgstr "Шукати лише цілі слова"
 
-#: main/KoFindText.cpp:47
+#: main/KoFindText.cpp:48
 #, kde-format
 msgid "Whole Words Only"
 msgstr "Лише цілі слова"
 
-#: main/KoFindText.cpp:48
+#: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
 msgstr "Шукати від курсора"
 
-#: main/KoFindText.cpp:48
+#: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
 msgstr "Почати пошук з поточної позиції курсора"
 
-#: main/KoMainWindow.cpp:164
+#: main/KoMainWindow.cpp:158
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 незбережений документ (%2)"
 
-#: main/KoMainWindow.cpp:273
+#: main/KoMainWindow.cpp:263
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Експортувати до PDF…"
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Reload"
 msgstr "Перезавантажити"
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Versions..."
 msgstr "Версії…"
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Відкрити в&же створений документ як документ без назви…"
 
-#: main/KoMainWindow.cpp:295
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "E&xport..."
 msgstr "Е&кспортувати…"
 
-#: main/KoMainWindow.cpp:299
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "En&crypt Document"
 msgstr "За&шифрувати документ"
 
-#: main/KoMainWindow.cpp:304
+#: main/KoMainWindow.cpp:296
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "&Розпакувати до каталогу"
 
-#: main/KoMainWindow.cpp:309
+#: main/KoMainWindow.cpp:301
 #, kde-format
 msgid "&New View"
 msgstr "С&творити нову панель перегляду"
 
-#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Інформація про документ"
 
-#: main/KoMainWindow.cpp:339
+#: main/KoMainWindow.cpp:331
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Повноекранний режим"
 
-#: main/KoMainWindow.cpp:344
+#: main/KoMainWindow.cpp:336
 #, kde-format
 msgid "Show Dockers"
 msgstr "Показати панелі"
 
-#: main/KoMainWindow.cpp:349
+#: main/KoMainWindow.cpp:341
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Показати смужки заголовків панелей"
 
-#: main/KoMainWindow.cpp:356
+#: main/KoMainWindow.cpp:348
 #, kde-format
 msgid "Dockers"
 msgstr "Бічні панелі"
 
-#: main/KoMainWindow.cpp:650
+#: main/KoMainWindow.cpp:632
 #, kde-format
 msgid "(write protected)"
 msgstr "(захист від запису)"
 
-#: main/KoMainWindow.cpp:655
+#: main/KoMainWindow.cpp:637
 #, kde-format
 msgid "Save as %1"
 msgstr "Зберегти як %1"
 
-#: main/KoMainWindow.cpp:657
+#: main/KoMainWindow.cpp:639
 #, kde-format
 msgid "Save"
 msgstr "Зберегти"
 
-#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (невідомий тип файла)"
 
-#: main/KoMainWindow.cpp:845
+#: main/KoMainWindow.cpp:825
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1545,12 +1540,12 @@ msgstr ""
 "<qt>Збереження як %1 може призвести до часткової втрати форматування."
 "<p>Хочете зберегти в цьому форматі, попри все?</qt>"
 
-#: main/KoMainWindow.cpp:848
+#: main/KoMainWindow.cpp:828
 #, kde-format
 msgid "Confirm Save"
 msgstr "Підтвердження збереження"
 
-#: main/KoMainWindow.cpp:857
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1559,52 +1554,52 @@ msgstr ""
 "<qt>Експортування як %1 може призвести до часткової втрати форматування."
 "<p>Хочете експортувати в цьому форматі, попри все?</qt>"
 
-#: main/KoMainWindow.cpp:860
+#: main/KoMainWindow.cpp:837
 #, kde-format
 msgid "Confirm Export"
 msgstr "Підтвердження експорту"
 
-#: main/KoMainWindow.cpp:861
+#: main/KoMainWindow.cpp:838
 #, kde-format
 msgid "Export"
 msgstr "Експортувати"
 
-#: main/KoMainWindow.cpp:959
+#: main/KoMainWindow.cpp:936
 #, kde-format
 msgid "untitled"
 msgstr "без назви"
 
-#: main/KoMainWindow.cpp:1235
+#: main/KoMainWindow.cpp:1200
 #, kde-format
 msgid "Open Document"
 msgstr "Відкрити документ"
 
-#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
 #, kde-format
 msgid "Import Document"
 msgstr "Імпортувати документ"
 
-#: main/KoMainWindow.cpp:1409
+#: main/KoMainWindow.cpp:1374
 #, kde-format
 msgid "Export as PDF"
 msgstr "Експортувати до PDF"
 
-#: main/KoMainWindow.cpp:1446
+#: main/KoMainWindow.cpp:1416
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Не вдалося експортувати дані до вказаного файла"
 
-#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Документ"
 
-#: main/KoMainWindow.cpp:1653
+#: main/KoMainWindow.cpp:1622
 #, kde-format
 msgid "Document - %1"
 msgstr "Документ — %1"
 
-#: main/KoMainWindow.cpp:1690
+#: main/KoMainWindow.cpp:1662
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1613,74 +1608,74 @@ msgstr ""
 "Всі зміни з часу останнього збереження буде втрачено.\n"
 "Хочете продовжити?"
 
-#: main/KoMainWindow.cpp:1692
+#: main/KoMainWindow.cpp:1664
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
 
-#: main/KoMainWindow.cpp:2057
+#: main/KoMainWindow.cpp:2030
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показати пенал %1"
 
-#: main/KoMainWindow.cpp:2059
+#: main/KoMainWindow.cpp:2032
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Сховати пенал %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Відкрити наявний документ"
 
-#: main/KoOpenPane.cpp:199
+#: main/KoOpenPane.cpp:198
 #, kde-format
 msgid "Recent Documents"
 msgstr "Недавні документи"
 
-#: main/KoOpenPane.cpp:299
+#: main/KoOpenPane.cpp:289
 #, kde-format
 msgid "Custom Document"
 msgstr "Нетиповий документ"
 
-#: main/KoPrintingDialog.cpp:43
+#: main/KoPrintingDialog.cpp:44
 #, kde-format
 msgid "Stop"
 msgstr "Зупинити"
 
-#: main/KoPrintingDialog.cpp:132
+#: main/KoPrintingDialog.cpp:134
 #, kde-format
 msgid "Printing"
 msgstr "Друк"
 
-#: main/KoPrintingDialog_p.h:136
+#: main/KoPrintingDialog_p.h:140
 #, kde-format
 msgid "Printing done"
 msgstr "Друк завершено"
 
-#: main/KoPrintingDialog_p.h:137
+#: main/KoPrintingDialog_p.h:141
 #, kde-format
 msgid "Close"
 msgstr "Закрити"
 
-#: main/KoPrintingDialog_p.h:157
+#: main/KoPrintingDialog_p.h:160
 #, kde-format
 msgid "Stopped"
 msgstr "Зупинено"
 
-#: main/KoRecentDocumentsPane.cpp:71
+#: main/KoRecentDocumentsPane.cpp:68
 #, kde-format
 msgid "Open This Document"
 msgstr "Відкрити цей документ"
 
-#: main/KoRecentDocumentsPane.cpp:174
+#: main/KoRecentDocumentsPane.cpp:167
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Модифіковано:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:177
+#: main/KoRecentDocumentsPane.cpp:170
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1696,174 +1691,174 @@ msgstr "Показати напрямні"
 msgid "Shows or hides guides"
 msgstr "Показує або ховає напрямні"
 
-#: main/KoTemplateCreateDia.cpp:104
+#: main/KoTemplateCreateDia.cpp:103
 #, kde-format
 msgid "Create Template"
 msgstr "Створити шаблон"
 
-#: main/KoTemplateCreateDia.cpp:113
+#: main/KoTemplateCreateDia.cpp:112
 #, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "Назва:"
 
-#: main/KoTemplateCreateDia.cpp:123
+#: main/KoTemplateCreateDia.cpp:121
 #, kde-format
 msgid "Group:"
 msgstr "Група:"
 
-#: main/KoTemplateCreateDia.cpp:138
+#: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
 msgstr "Додати &групу…"
 
-#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, kde-format
 msgid "&Remove"
 msgstr "Ви&лучити"
 
-#: main/KoTemplateCreateDia.cpp:147
+#: main/KoTemplateCreateDia.cpp:145
 #, kde-format
 msgid "Picture"
 msgstr "Зображення"
 
-#: main/KoTemplateCreateDia.cpp:150
+#: main/KoTemplateCreateDia.cpp:148
 #, kde-format
 msgid "&Preview"
 msgstr "&Перегляд"
 
-#: main/KoTemplateCreateDia.cpp:155
+#: main/KoTemplateCreateDia.cpp:153
 #, kde-format
 msgid "Custom:"
 msgstr "Нетипове:"
 
-#: main/KoTemplateCreateDia.cpp:159
+#: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
 msgstr "В&ибрати…"
 
-#: main/KoTemplateCreateDia.cpp:168
+#: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
 msgstr "Використовувати новий шаблон як типовий"
 
-#: main/KoTemplateCreateDia.cpp:309
+#: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "Ви дійсно хочете перезаписати поточний шаблон «%1»?"
 
-#: main/KoTemplateCreateDia.cpp:422 main/KoTemplateCreateDia.cpp:429
+#: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
 msgid "Add Group"
 msgstr "Додати групу"
 
-#: main/KoTemplateCreateDia.cpp:422
+#: main/KoTemplateCreateDia.cpp:416
 #, kde-format
 msgid "Enter group name:"
 msgstr "Введіть назву групи:"
 
-#: main/KoTemplateCreateDia.cpp:429
+#: main/KoTemplateCreateDia.cpp:421
 #, kde-format
 msgid "This name is already used."
 msgstr "Назву вже використано."
 
-#: main/KoTemplateCreateDia.cpp:453
+#: main/KoTemplateCreateDia.cpp:445
 #, kde-format
 msgid "Do you really want to remove that group?"
 msgstr "Ви дійсно хочете вилучити цю групу?"
 
-#: main/KoTemplateCreateDia.cpp:454
+#: main/KoTemplateCreateDia.cpp:446
 #, kde-format
 msgid "Remove Group"
 msgstr "Вилучити групу"
 
-#: main/KoTemplateCreateDia.cpp:456
+#: main/KoTemplateCreateDia.cpp:448
 #, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "Ви дійсно хочете вилучити цей шаблон?"
 
-#: main/KoTemplateCreateDia.cpp:457
+#: main/KoTemplateCreateDia.cpp:449
 #, kde-format
 msgid "Remove Template"
 msgstr "Вилучити шаблон"
 
-#: main/KoTemplateCreateDia.cpp:508
+#: main/KoTemplateCreateDia.cpp:497
 #, kde-format
 msgid "Could not load picture."
 msgstr "Неможливо завантажити малюнок."
 
-#: main/KoTemplateCreateDia.cpp:511
+#: main/KoTemplateCreateDia.cpp:499
 #, kde-format
 msgid "No picture available."
 msgstr "Малюнок відсутній."
 
-#: main/KoTemplatesPane.cpp:37
+#: main/KoTemplatesPane.cpp:36
 #, kde-format
 msgid "Use This Template"
 msgstr "Використати цей шаблон"
 
-#: main/KoVersionDialog.cpp:35
+#: main/KoVersionDialog.cpp:34
 #, kde-format
 msgid "Version"
 msgstr "Версія"
 
-#: main/KoVersionDialog.cpp:49
+#: main/KoVersionDialog.cpp:48
 #, kde-format
 msgid "Date & Time"
 msgstr "Дата і час"
 
-#: main/KoVersionDialog.cpp:50
+#: main/KoVersionDialog.cpp:49
 #, kde-format
 msgid "Saved By"
 msgstr "Збережено"
 
-#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
 #, kde-format
 msgid "Comment"
 msgstr "Коментар"
 
-#: main/KoVersionDialog.cpp:58
+#: main/KoVersionDialog.cpp:57
 #, kde-format
 msgid "&Add"
 msgstr "&Додати"
 
-#: main/KoVersionDialog.cpp:64
+#: main/KoVersionDialog.cpp:63
 #, kde-format
 msgid "&Modify"
 msgstr "&Змінити"
 
-#: main/KoVersionDialog.cpp:67
+#: main/KoVersionDialog.cpp:66
 #, kde-format
 msgid "&Open"
 msgstr "&Відкрити"
 
-#: main/KoVersionDialog.cpp:120
+#: main/KoVersionDialog.cpp:116
 #, kde-format
 msgid "A new version could not be added"
 msgstr "Не вдалося додати нову версію"
 
-#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
 #, kde-format
 msgid "Date: %1"
 msgstr "Дата: %1"
 
-#: main/KoView.cpp:330
+#: main/KoView.cpp:335
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активний профіль автора"
 
-#: main/KoView.cpp:342 main/KoView.cpp:396
+#: main/KoView.cpp:347 main/KoView.cpp:401
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Анонімний"
 
-#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Типовий профіль автора"
 
-#: odf/KoDocumentInfo.cpp:40
+#: odf/KoDocumentInfo.cpp:56
 #, kde-format
 msgid "Unknown"
 msgstr "Невідомо"
@@ -1882,221 +1877,192 @@ msgstr ""
 "Помилка розбору синтаксису головного документа в рядку %1, стовпчик %2\n"
 "Повідомлення помилки: %3"
 
-#: odf/KoPageFormat.cpp:46
-#, kde-format
+#: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "ISO A3"
 
-#: odf/KoPageFormat.cpp:47
-#, kde-format
+#: odf/KoPageFormat.cpp:49
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "ISO A4"
 
-#: odf/KoPageFormat.cpp:48
-#, kde-format
+#: odf/KoPageFormat.cpp:50
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "ISO A5"
 
-#: odf/KoPageFormat.cpp:49
-#, kde-format
+#: odf/KoPageFormat.cpp:51
 msgctxt "Page size"
 msgid "US Letter"
 msgstr "US Letter"
 
-#: odf/KoPageFormat.cpp:50
-#, kde-format
+#: odf/KoPageFormat.cpp:52
 msgctxt "Page size"
 msgid "US Legal"
 msgstr "US Legal"
 
-#: odf/KoPageFormat.cpp:51
-#, kde-format
+#: odf/KoPageFormat.cpp:53
 msgctxt "Page size"
 msgid "Screen"
 msgstr "Слайд"
 
-#: odf/KoPageFormat.cpp:52
-#, kde-format
+#: odf/KoPageFormat.cpp:54
 msgctxt "Page size"
 msgid "Custom"
 msgstr "Нетиповий"
 
-#: odf/KoPageFormat.cpp:53
-#, kde-format
+#: odf/KoPageFormat.cpp:55
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "ISO B5"
 
-#: odf/KoPageFormat.cpp:54
-#, kde-format
+#: odf/KoPageFormat.cpp:56
 msgctxt "Page size"
 msgid "US Executive"
 msgstr "US Executive"
 
-#: odf/KoPageFormat.cpp:55
-#, kde-format
+#: odf/KoPageFormat.cpp:57
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "ISO A0"
 
-#: odf/KoPageFormat.cpp:56
-#, kde-format
+#: odf/KoPageFormat.cpp:58
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "ISO A1"
 
-#: odf/KoPageFormat.cpp:57
-#, kde-format
+#: odf/KoPageFormat.cpp:59
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "ISO A2"
 
-#: odf/KoPageFormat.cpp:58
-#, kde-format
+#: odf/KoPageFormat.cpp:60
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "ISO A6"
 
-#: odf/KoPageFormat.cpp:59
-#, kde-format
+#: odf/KoPageFormat.cpp:61
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "ISO A7"
 
-#: odf/KoPageFormat.cpp:60
-#, kde-format
+#: odf/KoPageFormat.cpp:62
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "ISO A8"
 
-#: odf/KoPageFormat.cpp:61
-#, kde-format
+#: odf/KoPageFormat.cpp:63
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "ISO A9"
 
-#: odf/KoPageFormat.cpp:62
-#, kde-format
+#: odf/KoPageFormat.cpp:64
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "ISO B0"
 
-#: odf/KoPageFormat.cpp:63
-#, kde-format
+#: odf/KoPageFormat.cpp:65
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "ISO B1"
 
-#: odf/KoPageFormat.cpp:64
-#, kde-format
+#: odf/KoPageFormat.cpp:66
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "ISO B10"
 
-#: odf/KoPageFormat.cpp:65
-#, kde-format
+#: odf/KoPageFormat.cpp:67
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "ISO B2"
 
-#: odf/KoPageFormat.cpp:66
-#, kde-format
+#: odf/KoPageFormat.cpp:68
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "ISO B3"
 
-#: odf/KoPageFormat.cpp:67
-#, kde-format
+#: odf/KoPageFormat.cpp:69
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "ISO B4"
 
-#: odf/KoPageFormat.cpp:68
-#, kde-format
+#: odf/KoPageFormat.cpp:70
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "ISO B6"
 
-#: odf/KoPageFormat.cpp:69
-#, kde-format
+#: odf/KoPageFormat.cpp:71
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "ISO C5"
 
-#: odf/KoPageFormat.cpp:70
-#, kde-format
+#: odf/KoPageFormat.cpp:72
 msgctxt "Page size"
 msgid "US Common 10"
 msgstr "US Common 10"
 
-#: odf/KoPageFormat.cpp:71
-#, kde-format
+#: odf/KoPageFormat.cpp:73
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "ISO DL"
 
-#: odf/KoPageFormat.cpp:72
-#, kde-format
+#: odf/KoPageFormat.cpp:74
 msgctxt "Page size"
 msgid "US Folio"
 msgstr "US Folio"
 
-#: odf/KoPageFormat.cpp:73
-#, kde-format
+#: odf/KoPageFormat.cpp:75
 msgctxt "Page size"
 msgid "US Ledger"
 msgstr "US Ledger"
 
-#: odf/KoPageFormat.cpp:74
-#, kde-format
+#: odf/KoPageFormat.cpp:76
 msgctxt "Page size"
 msgid "US Tabloid"
 msgstr "US Tabloid"
 
-#: odf/KoUnit.cpp:37
+#: odf/KoUnit.cpp:27
 #, kde-format
 msgid "Millimeters (mm)"
 msgstr "міліметри (мм)"
 
-#: odf/KoUnit.cpp:39
+#: odf/KoUnit.cpp:29
 #, kde-format
 msgid "Centimeters (cm)"
 msgstr "сантиметри (см)"
 
-#: odf/KoUnit.cpp:41
+#: odf/KoUnit.cpp:31
 #, kde-format
 msgid "Decimeters (dm)"
 msgstr "дециметри (дм)"
 
-#: odf/KoUnit.cpp:43
+#: odf/KoUnit.cpp:33
 #, kde-format
 msgid "Inches (in)"
 msgstr "дюйми (дюйм)"
 
-#: odf/KoUnit.cpp:45
+#: odf/KoUnit.cpp:35
 #, kde-format
 msgid "Pica (pi)"
 msgstr "піки (pi)"
 
-#: odf/KoUnit.cpp:47
+#: odf/KoUnit.cpp:37
 #, kde-format
 msgid "Cicero (cc)"
 msgstr "цицеро (cc)"
 
-#: odf/KoUnit.cpp:49
+#: odf/KoUnit.cpp:39
 #, kde-format
 msgid "Points (pt)"
 msgstr "точки (тч)"
 
-#: odf/KoUnit.cpp:51
+#: odf/KoUnit.cpp:41
 #, kde-format
 msgid "Pixels (px)"
 msgstr "пікселі (px)"
 
-#: odf/KoUnit.cpp:53
+#: odf/KoUnit.cpp:43
 #, kde-format
 msgid "Unsupported unit"
 msgstr "Непідтримувана одиниця"
@@ -2108,14 +2074,14 @@ msgstr ""
 "Змінити шаблон слайда\n"
 "зміну шаблона слайда"
 
-#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change master page"
 msgstr ""
 "Змінити шаблон сторінки\n"
 "зміну шаблона сторінки"
 
-#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
 msgstr ""
@@ -2129,14 +2095,14 @@ msgstr ""
 "Показати тло шаблона\n"
 "показ тла шаблона"
 
-#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Display slide background"
 msgstr ""
 "Показати тло слайда\n"
 "показ тла слайда"
 
-#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Display page background"
 msgstr ""
@@ -2150,7 +2116,7 @@ msgstr ""
 "Показати форми шаблонів\n"
 "показ форм шаблонів"
 
-#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Hide master shapes"
 msgstr ""
@@ -2164,14 +2130,14 @@ msgstr ""
 "Вилучити слайд\n"
 "вилучення слайда"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:28
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
 msgstr ""
 "Вилучити сторінку\n"
 "вилучення сторінки"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
@@ -2188,7 +2154,7 @@ msgstr[3] ""
 "Вилучити слайд\n"
 "вилучення слайда"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
@@ -2212,7 +2178,7 @@ msgstr ""
 "Вставити слайд\n"
 "вставлення слайда"
 
-#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+#: pageapp/commands/KoPAPageInsertCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr ""
@@ -2236,7 +2202,7 @@ msgstr[3] ""
 "Пересунути слайд\n"
 "пересування слайда"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+#: pageapp/commands/KoPAPageMoveCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
@@ -2253,24 +2219,24 @@ msgstr[3] ""
 "Пересунути сторінку\n"
 "пересування сторінки"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
 #, kde-format
 msgid "Configure"
 msgstr "Налаштування"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Документ"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Автор"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Автор"
@@ -2291,211 +2257,208 @@ msgid "Select a master page design:"
 msgstr "Виберіть компонування шаблона сторінки:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
 #, kde-format
 msgid "Master Page"
 msgstr "Шаблон сторінки"
 
-#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Slide %1"
 msgstr "Слайд %1"
 
-#: pageapp/KoPADocumentModel.cpp:174
+#: pageapp/KoPADocumentModel.cpp:172
 #, kde-format
 msgid "Page  %1"
 msgstr "Сторінка %1"
 
-#: pageapp/KoPADocumentModel.cpp:177
-#: pageapp/KoPADocumentStructureDocker.cpp:102
+#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
 #, kde-format
 msgid "Layer"
 msgstr "Шар"
 
-#: pageapp/KoPADocumentModel.cpp:179
+#: pageapp/KoPADocumentModel.cpp:177
 #, kde-format
 msgid "Group"
 msgstr "Група"
 
-#: pageapp/KoPADocumentModel.cpp:181
+#: pageapp/KoPADocumentModel.cpp:179
 #, kde-format
 msgid "Shape"
 msgstr "Форма"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:267
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr ""
 "Перейменувати слайд\n"
 "перейменування слайда"
 
-#: pageapp/KoPADocumentModel.cpp:274
+#: pageapp/KoPADocumentModel.cpp:269
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr ""
 "Перейменувати сторінку\n"
 "перейменування сторінки"
 
-#: pageapp/KoPADocumentModel.cpp:278
+#: pageapp/KoPADocumentModel.cpp:272
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr ""
 "Перейменувати шар\n"
 "перейменування шару"
 
-#: pageapp/KoPADocumentModel.cpp:314
-#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Slide"
 msgstr "Слайд"
 
-#: pageapp/KoPADocumentModel.cpp:317
+#: pageapp/KoPADocumentModel.cpp:311
 #, kde-format
 msgid "Visible"
 msgstr "Видиме"
 
-#: pageapp/KoPADocumentModel.cpp:318
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Locked"
 msgstr "Зафіксовано"
 
-#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr ""
 "Перепідпорядкувати форми\n"
 "перепідпорядковування форм"
 
-#: pageapp/KoPADocumentModel.cpp:686
+#: pageapp/KoPADocumentModel.cpp:675
 #, kde-format
 msgid "&Move Here"
 msgstr "П&ересунути сюди"
 
-#: pageapp/KoPADocumentModel.cpp:690
+#: pageapp/KoPADocumentModel.cpp:679
 #, kde-format
 msgid "&Copy Here"
 msgstr "С&копіювати сюди"
 
-#: pageapp/KoPADocumentModel.cpp:694
+#: pageapp/KoPADocumentModel.cpp:683
 #, kde-format
 msgid "C&ancel"
 msgstr "&Скасувати"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:89
+#: pageapp/KoPADocumentStructureDocker.cpp:85
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Додати новий слайд або шар"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:92
+#: pageapp/KoPADocumentStructureDocker.cpp:87
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Додати нову сторінку або шар"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:100
-#: widgets/KoPageLayoutDialog.cpp:37
+#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Сторінка"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:109
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#: pageapp/KoPADocumentStructureDocker.cpp:590
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Вилучити вибрані об’єкти"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:115
+#: pageapp/KoPADocumentStructureDocker.cpp:108
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Розмістити вибрані об’єкти вище"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:114
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Розмістити вибрані об’єкти нижче"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:130
+#: pageapp/KoPADocumentStructureDocker.cpp:123
 #, kde-format
 msgid "Minimal View"
 msgstr "Мінімалістичний перегляд"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:132
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Detailed View"
 msgstr "Перегляд з подробицями"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:134
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Перегляд мініатюр"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:144
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "View mode"
 msgstr "Режим перегляду"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Введіть назву нового шару:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, kde-format
 msgid "New Layer"
 msgstr "Новий шар"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:302
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, kde-format
 msgid "New layer"
 msgstr "Новий шар"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:315
+#: pageapp/KoPADocumentStructureDocker.cpp:301
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr ""
 "Створити шар\n"
 "створення шару"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:341
+#: pageapp/KoPADocumentStructureDocker.cpp:327
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr ""
 "Вилучити шар\n"
 "вилучення шару"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:344
+#: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "Неможливо вилучити всі шари. Має залишитися хоча б один шар."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:344
+#: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Помилка під час вилучення шарів"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:611
+#: pageapp/KoPADocumentStructureDocker.cpp:586
 #, kde-format
 msgid "Add a new slide"
 msgstr "Додати новий слайд"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:588
 #, kde-format
 msgid "Add a new page"
 msgstr "Додати нову сторінку"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:592
 #, kde-format
 msgid "Cut"
 msgstr "Вирізати"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:619
-#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
-#: pigment/KoCompositeOpRegistry.cpp:87
+#: pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
 msgid "Copy"
 msgstr "Копіювання"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:594
 #, kde-format
 msgid "Paste"
 msgstr "Вставити"
@@ -2505,7 +2468,7 @@ msgstr "Вставити"
 msgid "Page %1"
 msgstr "Сторінка %1"
 
-#: pageapp/KoPAPastePage.cpp:118
+#: pageapp/KoPAPastePage.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Paste Slide"
 msgid_plural "Paste Slides"
@@ -2522,7 +2485,7 @@ msgstr[3] ""
 "Вставити слайд\n"
 "вставлення слайда"
 
-#: pageapp/KoPAPastePage.cpp:121
+#: pageapp/KoPAPastePage.cpp:114
 msgctxt "(qtundo-format)"
 msgid "Paste Page"
 msgid_plural "Paste Pages"
@@ -2539,108 +2502,108 @@ msgstr[3] ""
 "Вставити сторінку\n"
 "вставлення сторінки"
 
-#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr "Інструменти"
 
-#: pageapp/KoPAView.cpp:350
+#: pageapp/KoPAView.cpp:346
 #, kde-format
 msgid "D&elete"
 msgstr "В&илучити"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:356
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Чіплятися до ґратки"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:365
 #, kde-format
 msgid "Show Master Pages"
 msgstr "Показати шаблони сторінок"
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Rulers"
 msgstr "Показати лінійки"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:371
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "Показати/сховати лінійки перегляду"
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show Page Margins"
 msgstr "Показати поля сторінок"
 
-#: pageapp/KoPAView.cpp:383
+#: pageapp/KoPAView.cpp:377
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "Показати/Сховати поля сторінок"
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Insert Page"
 msgstr "Вставити сторінку"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "Вставити нову сторінку одразу за поточною"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Copy Page"
 msgstr "Копіювати сторінку"
 
-#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
 #, kde-format
 msgid "Copy the current page"
 msgstr "Копіювати поточну сторінку"
 
-#: pageapp/KoPAView.cpp:399
+#: pageapp/KoPAView.cpp:393
 #, kde-format
 msgid "Delete Page"
 msgstr "Вилучити сторінку"
 
-#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete the current page"
 msgstr "Вилучити поточну сторінку"
 
-#: pageapp/KoPAView.cpp:406
+#: pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Master Page..."
 msgstr "Шаблон сторінки…"
 
-#: pageapp/KoPAView.cpp:410
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Page Layout..."
 msgstr "Формат сторінки…"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Змінна"
 
-#: pageapp/KoPAView.cpp:425
+#: pageapp/KoPAView.cpp:419
 #, kde-format
 msgid "Import Document..."
 msgstr "Імпортувати документ…"
 
-#: pageapp/KoPAView.cpp:429
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Configure..."
 msgstr "Налаштувати…"
 
-#: pageapp/KoPAView.cpp:521
+#: pageapp/KoPAView.cpp:513
 #, kde-format
 msgid "Import Slideshow"
 msgstr "Імпортувати показ слайдів"
 
-#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2649,7 +2612,7 @@ msgstr ""
 "Не вдалося імпортувати\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:666
+#: pageapp/KoPAView.cpp:655
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr ""
@@ -2662,197 +2625,197 @@ msgstr ""
 msgid "Set image ..."
 msgstr "Встановити зображення…"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, kde-format
 msgid "Background"
 msgstr "Тло"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #, kde-format
 msgid "Page Background"
 msgstr "Тло сторінки"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
 #, kde-format
 msgid "Page Design"
 msgstr "Компонування сторінки"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
 #, kde-format
 msgid "Slide Design"
 msgstr "Компонування слайда"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master page"
 msgstr "Використовувати зображення тла шаблона сторінки"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master slide"
 msgstr "Використовувати зображення тла шаблона слайда"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master page"
 msgstr "Показувати форми шаблона сторінки"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master slide"
 msgstr "Показувати форми шаблона слайда"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
-msgctxt "(qtundo-format)"
-msgid "Change slide background image"
-msgstr ""
-"Змінити зображення тла слайда\n"
-"зміну зображення тла слайда"
-
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr ""
 "Змінити зображення тла сторінки\n"
 "зміну зображення тла сторінки"
 
-#: pageapp/widgets/KoPageNavigator.cpp:55
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr ""
+"Змінити зображення тла слайда\n"
+"зміну зображення тла слайда"
+
+#: pageapp/widgets/KoPageNavigator.cpp:53
 #, kde-format
 msgid "Master Slide %1/%2"
 msgstr "Головний слайд %1 з %2"
 
-#: pageapp/widgets/KoPageNavigator.cpp:56
+#: pageapp/widgets/KoPageNavigator.cpp:53
 #, kde-format
 msgid "Slide %1/%2"
 msgstr "Слайд %1 з %2"
 
-#: pageapp/widgets/KoPageNavigator.cpp:57
+#: pageapp/widgets/KoPageNavigator.cpp:54
 #, kde-format
 msgid "Master Page %1/%2"
 msgstr "Шаблон сторінки %1 з %2"
 
-#: pageapp/widgets/KoPageNavigator.cpp:58
+#: pageapp/widgets/KoPageNavigator.cpp:54
 #, kde-format
 msgid "Page %1/%2"
 msgstr "Сторінка %1 з %2"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:35
 #, kde-format
 msgid "Clear"
 msgstr "Очистити"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
-#: pigment/compositeops/KoCompositeOps.h:127
-#: pigment/KoCompositeOpRegistry.cpp:38
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:102
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:29
 #, kde-format
 msgid "Subtract"
 msgstr "Відняти"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
-#: pigment/compositeops/KoCompositeOps.h:129
-#: pigment/KoCompositeOpRegistry.cpp:39
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:167
+#: pigment/compositeops/KoCompositeOps.h:137
+#: pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
 msgid "Multiply"
 msgstr "Множення"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:182
-#: pigment/KoColorModelStandardIds.cpp:12
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:227
+#: pigment/colorspaces/KoAlphaColorSpace.h:205
+#: pigment/KoColorModelStandardIds.cpp:11
 #, kde-format
 msgid "Alpha mask"
 msgstr "Альфа-маска"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
-#: pigment/colorspaces/KoLabColorSpace.cpp:34
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:229
+#: pigment/colorspaces/KoLabColorSpace.cpp:49
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:32
 #, kde-format
 msgid "Alpha"
 msgstr "Альфа"
 
-#: pigment/colorspaces/KoAlphaColorSpace.h:128
-#: pigment/colorspaces/KoAlphaColorSpace.h:133
-#: pigment/colorspaces/KoAlphaColorSpace.h:137
-#: pigment/colorspaces/KoAlphaColorSpace.h:141
-#: pigment/colorspaces/KoAlphaColorSpace.h:144
-#: pigment/colorspaces/KoAlphaColorSpace.h:147
-#: pigment/colorspaces/KoAlphaColorSpace.h:150
-#: pigment/colorspaces/KoAlphaColorSpace.h:153
-#: pigment/colorspaces/KoAlphaColorSpace.h:159
-#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#: pigment/colorspaces/KoAlphaColorSpace.h:145
+#: pigment/colorspaces/KoAlphaColorSpace.h:151
+#: pigment/colorspaces/KoAlphaColorSpace.h:156
+#: pigment/colorspaces/KoAlphaColorSpace.h:161
+#: pigment/colorspaces/KoAlphaColorSpace.h:165
+#: pigment/colorspaces/KoAlphaColorSpace.h:169
+#: pigment/colorspaces/KoAlphaColorSpace.h:173
+#: pigment/colorspaces/KoAlphaColorSpace.h:177
+#: pigment/colorspaces/KoAlphaColorSpace.h:184
+#: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
 msgstr "Невизначена дія у просторі кольорів альфа-каналу"
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:27
-#: pigment/colorspaces/KoLabColorSpace.h:63
+#: pigment/colorspaces/KoLabColorSpace.cpp:26
+#: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
 msgstr "L*a*b* (16-бітове ціле/канал, без керування)"
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:31
-#: pigment/compositeops/KoCompositeOps.h:196
-#: pigment/KoCompositeOpRegistry.cpp:111
+#: pigment/colorspaces/KoLabColorSpace.cpp:28
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:102
 #, kde-format
 msgid "Lightness"
 msgstr "Освіченість"
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:32
-#: pigment/KoBasicHistogramProducers.cpp:430
+#: pigment/colorspaces/KoLabColorSpace.cpp:35
+#: pigment/KoBasicHistogramProducers.cpp:416
 #, kde-format
 msgid "a*"
 msgstr "a*"
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:33
-#: pigment/KoBasicHistogramProducers.cpp:431
+#: pigment/colorspaces/KoLabColorSpace.cpp:42
+#: pigment/KoBasicHistogramProducers.cpp:417
 #, kde-format
 msgid "b*"
 msgstr "b*"
 
-#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
-#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:25
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
 msgstr "RGB (16-бітове ціле/канал, без керування)"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
-#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
 msgstr "RGB (8-бітове ціле/канал, без керування)"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
 msgid "Blue"
 msgstr "Блакитний"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:30
 #, kde-format
 msgid "Green"
 msgstr "Зелений"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:31
 #, kde-format
 msgid "Red"
 msgstr "Червоний"
 
-#: pigment/colorspaces/KoSimpleColorSpace.h:60
-#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#: pigment/colorspaces/KoSimpleColorSpace.h:62
+#: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
 msgstr "Невизначена дія у просторі кольорів %1"
 
-#: pigment/colorspaces/KoSimpleColorSpace.h:84
-#: pigment/colorspaces/KoSimpleColorSpace.h:89
-#: pigment/colorspaces/KoSimpleColorSpace.h:94
-#: pigment/colorspaces/KoSimpleColorSpace.h:99
-#: pigment/colorspaces/KoSimpleColorSpace.h:104
-#: pigment/colorspaces/KoSimpleColorSpace.h:108
-#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:91
+#: pigment/colorspaces/KoSimpleColorSpace.h:97
+#: pigment/colorspaces/KoSimpleColorSpace.h:103
+#: pigment/colorspaces/KoSimpleColorSpace.h:109
 #: pigment/colorspaces/KoSimpleColorSpace.h:115
-#: pigment/colorspaces/KoSimpleColorSpace.h:118
-#: pigment/colorspaces/KoSimpleColorSpace.h:124
-#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#: pigment/colorspaces/KoSimpleColorSpace.h:120
+#: pigment/colorspaces/KoSimpleColorSpace.h:125
+#: pigment/colorspaces/KoSimpleColorSpace.h:129
+#: pigment/colorspaces/KoSimpleColorSpace.h:133
+#: pigment/colorspaces/KoSimpleColorSpace.h:140
+#: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
 msgstr "Невизначена дія у просторі кольорів %1"
@@ -2863,630 +2826,630 @@ msgid "Simple Color Conversion Engine"
 msgstr "Простий рушій перетворення кольорів"
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
-#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
-#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:233
 #, kde-format
 msgid "Alpha darken"
 msgstr "Альфа-затемнення"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
-#: pigment/KoCompositeOpRegistry.cpp:69
+#: pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgid "Behind"
 msgstr "Задній план"
 
-#: pigment/compositeops/KoCompositeOpDissolve.h:49
-#: pigment/KoCompositeOpRegistry.cpp:83
+#: pigment/compositeops/KoCompositeOpDissolve.h:42
+#: pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgid "Dissolve"
 msgstr "Розчинити"
 
-#: pigment/compositeops/KoCompositeOpErase.h:27
-#: pigment/KoCompositeOpRegistry.cpp:72
+#: pigment/compositeops/KoCompositeOpErase.h:26
+#: pigment/KoCompositeOpRegistry.cpp:63
 #, kde-format
 msgid "Erase"
 msgstr "Витирання"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
-#: pigment/KoCompositeOpRegistry.cpp:70
+#: pigment/KoCompositeOpRegistry.cpp:61
 #, kde-format
 msgid "Greater"
 msgstr "Більше"
 
-#: pigment/compositeops/KoCompositeOpOver.h:49
-#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
-#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
-#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#: pigment/compositeops/KoCompositeOpOver.h:48
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:244
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:200
+#: pigment/KoCompositeOpRegistry.cpp:59 pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
 msgid "Normal"
 msgstr "Звичайний"
 
-#: pigment/compositeops/KoCompositeOps.h:101
-#: pigment/KoCompositeOpRegistry.cpp:71
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:62
 #, kde-format
 msgid "Overlay"
 msgstr "Накладання"
 
-#: pigment/compositeops/KoCompositeOps.h:102
-#: pigment/KoCompositeOpRegistry.cpp:75
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgid "Grain Merge"
 msgstr "Об’єднання зерен"
 
-#: pigment/compositeops/KoCompositeOps.h:103
-#: pigment/KoCompositeOpRegistry.cpp:76
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgid "Grain Extract"
 msgstr "Видобування зерен"
 
-#: pigment/compositeops/KoCompositeOps.h:104
-#: pigment/KoCompositeOpRegistry.cpp:74
+#: pigment/compositeops/KoCompositeOps.h:112
+#: pigment/KoCompositeOpRegistry.cpp:65
 #, kde-format
 msgid "Hard Mix"
 msgstr "Агресивне змішування"
 
-#: pigment/compositeops/KoCompositeOps.h:105
-#: pigment/KoCompositeOpRegistry.cpp:79
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
 msgstr "Середнє геометричне"
 
-#: pigment/compositeops/KoCompositeOps.h:106
-#: pigment/KoCompositeOpRegistry.cpp:77
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:68
 #, kde-format
 msgid "Parallel"
 msgstr "Паралель"
 
-#: pigment/compositeops/KoCompositeOps.h:107
-#: pigment/KoCompositeOpRegistry.cpp:78
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Allanon"
 msgstr "Алланон"
 
-#: pigment/compositeops/KoCompositeOps.h:109
-#: pigment/KoCompositeOpRegistry.cpp:53
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:44
 #, kde-format
 msgid "Screen"
 msgstr "Екран"
 
-#: pigment/compositeops/KoCompositeOps.h:110
-#: pigment/KoCompositeOpRegistry.cpp:49
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:40
 #, kde-format
 msgid "Color Dodge"
 msgstr "Висвітлювання кольорів"
 
-#: pigment/compositeops/KoCompositeOps.h:111
-#: pigment/KoCompositeOpRegistry.cpp:50
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:41
 #, kde-format
 msgid "Linear Dodge"
 msgstr "Лінійне висвітлювання"
 
-#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
-#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
+#: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
 #, kde-format
 msgid "Lighten"
 msgstr "Світліше"
 
-#: pigment/compositeops/KoCompositeOps.h:113
-#: pigment/KoCompositeOpRegistry.cpp:56
+#: pigment/compositeops/KoCompositeOps.h:121
+#: pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
 msgid "Hard Light"
 msgstr "Яскраве світло"
 
-#: pigment/compositeops/KoCompositeOps.h:114
-#: pigment/KoCompositeOpRegistry.cpp:58
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:49
 #, kde-format
 msgid "Soft Light (SVG)"
 msgstr "Розсіяне світло (SVG)"
 
-#: pigment/compositeops/KoCompositeOps.h:115
-#: pigment/KoCompositeOpRegistry.cpp:57
+#: pigment/compositeops/KoCompositeOps.h:123
+#: pigment/KoCompositeOpRegistry.cpp:48
 #, kde-format
 msgid "Soft Light (Photoshop)"
 msgstr "Розсіяне світло (Photoshop)"
 
-#: pigment/compositeops/KoCompositeOps.h:116
-#: pigment/KoCompositeOpRegistry.cpp:59
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
 msgid "Gamma Light"
 msgstr "Освітлення гами"
 
-#: pigment/compositeops/KoCompositeOps.h:117
-#: pigment/KoCompositeOpRegistry.cpp:55
+#: pigment/compositeops/KoCompositeOps.h:125
+#: pigment/KoCompositeOpRegistry.cpp:46
 #, kde-format
 msgid "Vivid Light"
 msgstr "Ясне світло"
 
-#: pigment/compositeops/KoCompositeOps.h:118
-#: pigment/KoCompositeOpRegistry.cpp:54
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:45
 #, kde-format
 msgid "Pin Light"
 msgstr "Точкове світло"
 
-#: pigment/compositeops/KoCompositeOps.h:119
-#: pigment/KoCompositeOpRegistry.cpp:52
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:43
 #, kde-format
 msgid "Linear Light"
 msgstr "Лінійне світло"
 
-#: pigment/compositeops/KoCompositeOps.h:121
+#: pigment/compositeops/KoCompositeOps.h:129
 #, kde-format
 msgid "Color Burn"
 msgstr "Випалювання кольорів"
 
-#: pigment/compositeops/KoCompositeOps.h:122
-#: pigment/KoCompositeOpRegistry.cpp:44
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:35
 #, kde-format
 msgid "Linear Burn"
 msgstr "Лінійне випалювання"
 
-#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
-#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#: pigment/compositeops/KoCompositeOps.h:131 pigment/KoCompositeOp.cpp:35
+#: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:36
 #, kde-format
 msgid "Darken"
 msgstr "Темніше"
 
-#: pigment/compositeops/KoCompositeOps.h:124
-#: pigment/KoCompositeOpRegistry.cpp:46
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
 msgstr "Затемнення гами"
 
-#: pigment/compositeops/KoCompositeOps.h:126
-#: pigment/KoCompositeOpRegistry.cpp:37
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:28
 #, kde-format
 msgid "Addition"
 msgstr "Додавання"
 
-#: pigment/compositeops/KoCompositeOps.h:128
+#: pigment/compositeops/KoCompositeOps.h:136
 #, kde-format
 msgid "Inversed-Subtract"
 msgstr "Інвертоване віднімання"
 
-#: pigment/compositeops/KoCompositeOps.h:130
-#: pigment/KoCompositeOpRegistry.cpp:40
+#: pigment/compositeops/KoCompositeOps.h:138
+#: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
 msgstr "Ділення"
 
-#: pigment/compositeops/KoCompositeOps.h:132
-#: pigment/KoCompositeOpRegistry.cpp:66
+#: pigment/compositeops/KoCompositeOps.h:140
+#: pigment/KoCompositeOpRegistry.cpp:57
 #, kde-format
 msgid "Arcus Tangent"
 msgstr "Вигин арки"
 
-#: pigment/compositeops/KoCompositeOps.h:133
-#: pigment/KoCompositeOpRegistry.cpp:62
+#: pigment/compositeops/KoCompositeOps.h:141
+#: pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
 msgid "Difference"
 msgstr "Різниця"
 
-#: pigment/compositeops/KoCompositeOps.h:134
-#: pigment/KoCompositeOpRegistry.cpp:65
+#: pigment/compositeops/KoCompositeOps.h:142
+#: pigment/KoCompositeOpRegistry.cpp:56
 #, kde-format
 msgid "Exclusion"
 msgstr "Виключення"
 
-#: pigment/compositeops/KoCompositeOps.h:135
-#: pigment/KoCompositeOpRegistry.cpp:63
+#: pigment/compositeops/KoCompositeOps.h:143
+#: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Equivalence"
 msgstr "Рівновага"
 
-#: pigment/compositeops/KoCompositeOps.h:136
+#: pigment/compositeops/KoCompositeOps.h:144
 #, kde-format
 msgid "Additive-Subtractive"
 msgstr "Додавання-віднімання"
 
-#: pigment/compositeops/KoCompositeOps.h:165
-#: pigment/KoCompositeOpRegistry.cpp:84
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
 msgid "Copy Red"
 msgstr "Копіювання червоного"
 
-#: pigment/compositeops/KoCompositeOps.h:166
-#: pigment/KoCompositeOpRegistry.cpp:85
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:76
 #, kde-format
 msgid "Copy Green"
 msgstr "Копіювання зеленого"
 
-#: pigment/compositeops/KoCompositeOps.h:167
-#: pigment/KoCompositeOpRegistry.cpp:86
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgid "Copy Blue"
 msgstr "Копіювання синього"
 
-#: pigment/compositeops/KoCompositeOps.h:168
-#: pigment/KoCompositeOpRegistry.cpp:88
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
 msgid "Tangent Normalmap"
 msgstr "Дотична нормальна карта"
 
-#: pigment/compositeops/KoCompositeOps.h:169
+#: pigment/compositeops/KoCompositeOps.h:179
 #, kde-format
 msgid "Combine Normal Maps"
 msgstr "Створити нормальні картографування"
 
-#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
-#: pigment/KoCompositeOpRegistry.cpp:90
+#: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:81
 #, kde-format
 msgid "Color"
 msgstr "Колір"
 
-#: pigment/compositeops/KoCompositeOps.h:172
-#: pigment/KoCompositeOpRegistry.cpp:91
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgid "Hue"
 msgstr "Відтінок"
 
-#: pigment/compositeops/KoCompositeOps.h:173
-#: pigment/KoCompositeOpRegistry.cpp:92
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgid "Saturation"
 msgstr "Насиченість"
 
-#: pigment/compositeops/KoCompositeOps.h:174
-#: pigment/KoCompositeOpRegistry.cpp:95
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:86
 #, kde-format
 msgid "Increase Saturation"
 msgstr "Збільшити насиченість"
 
-#: pigment/compositeops/KoCompositeOps.h:175
-#: pigment/KoCompositeOpRegistry.cpp:94
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:85
 #, kde-format
 msgid "Decrease Saturation"
 msgstr "Зменшити насиченість"
 
-#: pigment/compositeops/KoCompositeOps.h:176
-#: pigment/KoCompositeOpRegistry.cpp:93
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:84
 #, kde-format
 msgid "Luminosity"
 msgstr "Яскравість світла"
 
-#: pigment/compositeops/KoCompositeOps.h:177
-#: pigment/KoCompositeOpRegistry.cpp:97
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgid "Increase Luminosity"
 msgstr "Збільшити яскравість світла"
 
-#: pigment/compositeops/KoCompositeOps.h:178
-#: pigment/KoCompositeOpRegistry.cpp:96
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:87
 #, kde-format
 msgid "Decrease Luminosity"
 msgstr "Зменшити яскравість світла"
 
-#: pigment/compositeops/KoCompositeOps.h:179
-#: pigment/KoCompositeOpRegistry.cpp:47
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:38
 #, kde-format
 msgid "Darker Color"
 msgstr "Темніший колір"
 
-#: pigment/compositeops/KoCompositeOps.h:180
-#: pigment/KoCompositeOpRegistry.cpp:60
+#: pigment/compositeops/KoCompositeOps.h:190
+#: pigment/KoCompositeOpRegistry.cpp:51
 #, kde-format
 msgid "Lighter Color"
 msgstr "Світліший колір"
 
-#: pigment/compositeops/KoCompositeOps.h:182
-#: pigment/KoCompositeOpRegistry.cpp:99
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
 msgid "Color HSI"
 msgstr "Колір HSI"
 
-#: pigment/compositeops/KoCompositeOps.h:183
-#: pigment/KoCompositeOpRegistry.cpp:100
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgid "Hue HSI"
 msgstr "Відтінок HSI"
 
-#: pigment/compositeops/KoCompositeOps.h:184
-#: pigment/KoCompositeOpRegistry.cpp:101
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format
 msgid "Saturation HSI"
 msgstr "Насиченість HSI"
 
-#: pigment/compositeops/KoCompositeOps.h:185
-#: pigment/KoCompositeOpRegistry.cpp:104
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:95
 #, kde-format
 msgid "Increase Saturation HSI"
 msgstr "Збільшити насиченість HSI"
 
-#: pigment/compositeops/KoCompositeOps.h:186
-#: pigment/KoCompositeOpRegistry.cpp:103
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:94
 #, kde-format
 msgid "Decrease Saturation HSI"
 msgstr "Зменшити насиченість HSI"
 
-#: pigment/compositeops/KoCompositeOps.h:187
-#: pigment/KoCompositeOpRegistry.cpp:102
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
 msgid "Intensity"
 msgstr "Інтенсивність"
 
-#: pigment/compositeops/KoCompositeOps.h:188
-#: pigment/KoCompositeOpRegistry.cpp:106
+#: pigment/compositeops/KoCompositeOps.h:199
+#: pigment/KoCompositeOpRegistry.cpp:97
 #, kde-format
 msgid "Increase Intensity"
 msgstr "Збільшити інтенсивність"
 
-#: pigment/compositeops/KoCompositeOps.h:189
-#: pigment/KoCompositeOpRegistry.cpp:105
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:96
 #, kde-format
 msgid "Decrease Intensity"
 msgstr "Зменшити інтенсивність"
 
-#: pigment/compositeops/KoCompositeOps.h:191
-#: pigment/KoCompositeOpRegistry.cpp:108
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
 msgid "Color HSL"
 msgstr "Колір HSL"
 
-#: pigment/compositeops/KoCompositeOps.h:192
-#: pigment/KoCompositeOpRegistry.cpp:109
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgid "Hue HSL"
 msgstr "Відтінок HSL"
 
-#: pigment/compositeops/KoCompositeOps.h:193
-#: pigment/KoCompositeOpRegistry.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgid "Saturation HSL"
 msgstr "Насиченість HSL"
 
-#: pigment/compositeops/KoCompositeOps.h:194
-#: pigment/KoCompositeOpRegistry.cpp:113
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgid "Increase Saturation HSL"
 msgstr "Збільшити насиченість HSL"
 
-#: pigment/compositeops/KoCompositeOps.h:195
-#: pigment/KoCompositeOpRegistry.cpp:112
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
 msgid "Decrease Saturation HSL"
 msgstr "Зменшити насиченість HSL"
 
-#: pigment/compositeops/KoCompositeOps.h:197
-#: pigment/KoCompositeOpRegistry.cpp:115
+#: pigment/compositeops/KoCompositeOps.h:208
+#: pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgid "Increase Lightness"
 msgstr "Збільшити освітленість"
 
-#: pigment/compositeops/KoCompositeOps.h:198
-#: pigment/KoCompositeOpRegistry.cpp:114
+#: pigment/compositeops/KoCompositeOps.h:209
+#: pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
 msgid "Decrease Lightness"
 msgstr "Зменшити освітленість"
 
-#: pigment/compositeops/KoCompositeOps.h:200
-#: pigment/KoCompositeOpRegistry.cpp:117
+#: pigment/compositeops/KoCompositeOps.h:211
+#: pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
 msgid "Color HSV"
 msgstr "Колір HSV"
 
-#: pigment/compositeops/KoCompositeOps.h:201
-#: pigment/KoCompositeOpRegistry.cpp:118
+#: pigment/compositeops/KoCompositeOps.h:212
+#: pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgid "Hue HSV"
 msgstr "Відтінок HSV"
 
-#: pigment/compositeops/KoCompositeOps.h:202
-#: pigment/KoCompositeOpRegistry.cpp:119
+#: pigment/compositeops/KoCompositeOps.h:213
+#: pigment/KoCompositeOpRegistry.cpp:110
 #, kde-format
 msgid "Saturation HSV"
 msgstr "Насиченість HSV"
 
-#: pigment/compositeops/KoCompositeOps.h:203
-#: pigment/KoCompositeOpRegistry.cpp:122
+#: pigment/compositeops/KoCompositeOps.h:214
+#: pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
 msgid "Increase Saturation HSV"
 msgstr "Збільшити насиченість HSV"
 
-#: pigment/compositeops/KoCompositeOps.h:204
-#: pigment/KoCompositeOpRegistry.cpp:121
+#: pigment/compositeops/KoCompositeOps.h:215
+#: pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
 msgid "Decrease Saturation HSV"
 msgstr "Зменшити насиченість HSV"
 
-#: pigment/compositeops/KoCompositeOps.h:205
-#: pigment/KoCompositeOpRegistry.cpp:120
+#: pigment/compositeops/KoCompositeOps.h:216
+#: pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
 msgid "Value"
 msgstr "Значення"
 
-#: pigment/compositeops/KoCompositeOps.h:206
-#: pigment/KoCompositeOpRegistry.cpp:124
+#: pigment/compositeops/KoCompositeOps.h:217
+#: pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
 msgid "Increase Value"
 msgstr "Збільшити значення"
 
-#: pigment/compositeops/KoCompositeOps.h:207
-#: pigment/KoCompositeOpRegistry.cpp:123
+#: pigment/compositeops/KoCompositeOps.h:218
+#: pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgid "Decrease Value"
 msgstr "Зменшити значення"
 
-#: pigment/KoBasicHistogramProducers.cpp:352
-#: pigment/KoBasicHistogramProducers.cpp:419
+#: pigment/KoBasicHistogramProducers.cpp:340
+#: pigment/KoBasicHistogramProducers.cpp:405
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr "Загальна гістограма RGB"
 
-#: pigment/KoBasicHistogramProducers.cpp:356
+#: pigment/KoBasicHistogramProducers.cpp:344
 #, kde-format
 msgid "R"
 msgstr "R"
 
-#: pigment/KoBasicHistogramProducers.cpp:357
+#: pigment/KoBasicHistogramProducers.cpp:345
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: pigment/KoBasicHistogramProducers.cpp:358
+#: pigment/KoBasicHistogramProducers.cpp:346
 #, kde-format
 msgid "B"
 msgstr "B"
 
-#: pigment/KoBasicHistogramProducers.cpp:425
+#: pigment/KoBasicHistogramProducers.cpp:411
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr "Гістограма L*a*b*"
 
-#: pigment/KoBasicHistogramProducers.cpp:429
+#: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
 msgid "L*"
 msgstr "L*"
 
-#: pigment/KoBasicHistogramProducers.cpp:503
+#: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "Загальна гістограма L*a*b*"
 
-#: pigment/KoColorModelStandardIds.cpp:13
+#: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
 msgstr "RGB"
 
-#: pigment/KoColorModelStandardIds.cpp:14
+#: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "XYZ"
 msgstr "XYZ"
 
-#: pigment/KoColorModelStandardIds.cpp:15
+#: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
 msgstr "L*a*b*"
 
-#: pigment/KoColorModelStandardIds.cpp:16
+#: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
 msgstr "CMYK"
 
-#: pigment/KoColorModelStandardIds.cpp:17
+#: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
 msgid "Grayscale"
 msgstr "Тони сірого"
 
-#: pigment/KoColorModelStandardIds.cpp:18
+#: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
 msgstr "Тони сірого (без прозорості)"
 
-#: pigment/KoColorModelStandardIds.cpp:19
+#: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
 msgid "YCbCr"
 msgstr "YCbCr"
 
-#: pigment/KoColorModelStandardIds.cpp:21
+#: pigment/KoColorModelStandardIds.cpp:20
 #, kde-format
 msgid "8 Bits"
 msgstr "8 бітів"
 
-#: pigment/KoColorModelStandardIds.cpp:22
+#: pigment/KoColorModelStandardIds.cpp:21
 #, kde-format
 msgid "16 Bits"
 msgstr "16 бітів"
 
-#: pigment/KoColorModelStandardIds.cpp:23
+#: pigment/KoColorModelStandardIds.cpp:22
 #, kde-format
 msgid "16 Bits Float"
 msgstr "16-бітове з рухомою комою"
 
-#: pigment/KoColorModelStandardIds.cpp:24
+#: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "32 Bits Float"
 msgstr "32-бітове з рухомою комою"
 
-#: pigment/KoColorModelStandardIds.cpp:25
+#: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
 msgid "64 Bits Float"
 msgstr "64-бітове з рухомою комою"
 
-#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#: pigment/KoCompositeOp.cpp:23 pigment/KoCompositeOpRegistry.cpp:24
 #, kde-format
 msgid "Arithmetic"
 msgstr "Арифметичний"
 
-#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Negative"
 msgstr "Негатив"
 
-#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#: pigment/KoCompositeOp.cpp:39 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "HSY"
 msgstr "HSY"
 
-#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#: pigment/KoCompositeOp.cpp:43 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSI"
 msgstr "HSI"
 
-#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#: pigment/KoCompositeOp.cpp:47 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSL"
 msgstr "HSL"
 
-#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSV"
 msgstr "HSV"
 
-#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Mix"
 msgstr "Суміш"
 
-#: pigment/KoCompositeOpRegistry.cpp:41
+#: pigment/KoCompositeOpRegistry.cpp:32
 #, kde-format
 msgid "Inverse Subtract"
 msgstr "Інвертоване віднімання"
 
-#: pigment/KoCompositeOpRegistry.cpp:43
+#: pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
 msgid "Burn"
 msgstr "Затемнення"
 
-#: pigment/KoCompositeOpRegistry.cpp:64
+#: pigment/KoCompositeOpRegistry.cpp:55
 #, kde-format
 msgid "Additive Subtractive"
 msgstr "Додавання-віднімання"
 
-#: pigment/KoCompositeOpRegistry.cpp:73
+#: pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
 msgid "Alpha Darken"
 msgstr "Альфа-затемнення"
 
-#: pigment/KoCompositeOpRegistry.cpp:81
+#: pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgid "Bumpmap"
 msgstr "Рельєф"
 
-#: pigment/KoCompositeOpRegistry.cpp:82
+#: pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
 msgid "Combine Normal Map"
 msgstr "Створити нормальне картографування"
 
-#: pigment/resources/KoStopGradient.cpp:421
+#: pigment/resources/KoStopGradient.cpp:419
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Градієнт SVG"
 
-#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#: rdf/InsertSemanticObjectReferenceAction.cpp:40
 #, kde-format
 msgid "Select the object you want to reference"
 msgstr "Виберіть об’єкт, на який бажаєте послатися"
 
-#: rdf/KoDocumentRdf.cpp:618
+#: rdf/KoDocumentRdf.cpp:594
 #, kde-format
 msgid "Reference"
 msgstr "Посилання"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:229
+#: rdf/KoDocumentRdfEditWidget.cpp:234
 #, kde-format
 msgid "Set For All Existing"
 msgstr "Встановити для поточних"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:297
+#: rdf/KoDocumentRdfEditWidget.cpp:296
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3501,13 +3464,13 @@ msgstr[2] ""
 msgstr[3] ""
 "<qt>Зміни буде втрачено.<p>Не виправлено ще %1 некоректну команду.</qt>"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:300
+#: rdf/KoDocumentRdfEditWidget.cpp:299
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr "Відкинути некоректні команди?"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:341
+#: rdf/KoDocumentRdfEditWidget.cpp:338
 #, kde-format
 msgid "Rdf"
 msgstr "RDF"
@@ -3718,28 +3681,28 @@ msgid "Apply Stylesheet"
 msgstr "Застосувати таблицю стилів"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#: rdf/KoSemanticStylesheetsEditor.cpp:96
 #, kde-format
 msgid "System"
 msgstr "Система"
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
-#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
+#: rdf/KoSemanticStylesheetsEditor.cpp:111
 #, kde-format
 msgid "User"
 msgstr "Користувач"
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:121
 #, kde-format
 msgid "Reapply Current"
 msgstr "Повторно застосувати поточну"
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:124
 #, kde-format
 msgid "Disassociate"
 msgstr "Зняти прив’язку"
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:143
 #, kde-format
 msgid "Edit %1"
 msgstr "Редагувати %1"
@@ -3773,17 +3736,17 @@ msgstr "Назва таблиці стилів"
 msgid "Empty"
 msgstr "Порожній"
 
-#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:28
 #, kde-format
 msgid "URI"
 msgstr "URI"
 
-#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:29
 #, kde-format
 msgid "Literal"
 msgstr "Буквально"
 
-#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:30
 #, kde-format
 msgid "Blank"
 msgstr "Бланк"
@@ -3823,7 +3786,7 @@ msgstr "Тип даних"
 msgid "Stored In"
 msgstr "Збережено у"
 
-#: store/KoEncryptedStore.cpp:229
+#: store/KoEncryptedStore.cpp:244
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3832,13 +3795,13 @@ msgstr ""
 "Цей документ має невідому контрольну суму. Коли ви введете пароль, його, "
 "можливо, не можна буде перевірити."
 
-#: store/KoEncryptedStore.cpp:229
+#: store/KoEncryptedStore.cpp:245
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Попередження"
 
-#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3847,14 +3810,14 @@ msgstr ""
 "Цей документ зашифровано невідомим методом. Деякі його частини можуть "
 "виявитися непридатними для читання."
 
-#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
-#: store/KoEncryptedStore.cpp:287
+#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
+#: store/KoEncryptedStore.cpp:309
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Попередження"
 
-#: store/KoEncryptedStore.cpp:287
+#: store/KoEncryptedStore.cpp:308
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3863,16 +3826,7 @@ msgstr ""
 "Цей документ містить неповні дані про шифрування. Деякі його частини можуть "
 "бути непридатними для читання."
 
-#: store/KoEncryptedStore.cpp:301
-#, kde-format
-msgid ""
-"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
-"not be opened."
-msgstr ""
-"У QCA зараз відсутня підтримка SHA1 або PBKDF2 з використанням SHA1. "
-"Відкрити документ неможливо."
-
-#: store/KoEncryptedStore.cpp:331
+#: store/KoEncryptedStore.cpp:349
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3883,7 +3837,7 @@ msgstr ""
 "залишиться непридатним до читання. Будь ласка, спробуйте зберегти документ "
 "ще раз, щоб запобігти втраті результатів вашої роботи."
 
-#: store/KoEncryptedStore.cpp:429
+#: store/KoEncryptedStore.cpp:447
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3893,51 +3847,51 @@ msgstr ""
 "читання. Будь ласка, спробуйте зберегти документ ще раз, щоб запобігти "
 "втраті результатів вашої роботи."
 
-#: store/KoEncryptedStore.cpp:550
+#: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Будь ласка, введіть пароль, щоб відкрити цей файл."
 
-#: store/KoEncryptedStore.cpp:710
+#: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Будь ласка, введіть пароль для шифрування документа."
 
-#: store/KoEncryptedStore.cpp:724
+#: store/KoEncryptedStore.cpp:783
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Хочете зберегти пароль?"
 
-#: store/KoNetAccess.cpp:90
+#: store/KoNetAccess.cpp:89
 #, kde-format
 msgid "File '%1' is not readable"
 msgstr "Файл «%1» непридатний до читання"
 
-#: store/KoNetAccess.cpp:389
+#: store/KoNetAccess.cpp:370
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "ПОМИЛКА: невідомий протокол «%1»"
 
-#: store/KoStore.cpp:168
-#, kde-format
-msgid "The directory mode is not supported for remote locations."
-msgstr "Режим каталогів не підтримується для віддалених адрес."
-
-#: store/KoStore.cpp:169
+#: store/KoStore.cpp:152
 #, kde-format
 msgid "Calligra Storage"
 msgstr "Сховище даних Calligra"
 
-#: text/commands/ChangeListCommand.cpp:28
-#: text/commands/ChangeListCommand.cpp:76
-#: text/commands/ChangeListCommand.cpp:89
+#: store/KoStore.cpp:152
+#, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr "Режим каталогів не підтримується для віддалених адрес."
+
+#: text/commands/ChangeListCommand.cpp:30
+#: text/commands/ChangeListCommand.cpp:78
+#: text/commands/ChangeListCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Change List"
 msgstr ""
 "Змінити список\n"
 "зміну списку"
 
-#: text/commands/ChangeStylesMacroCommand.cpp:24
+#: text/commands/ChangeStylesMacroCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
 msgstr ""
@@ -3950,16 +3904,16 @@ msgid "Delete"
 msgstr "Вилучити"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:508 text/KoTextEditor_undo.cpp:74
-#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
-#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
+#: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr ""
 "Текст\n"
 "текст"
 
-#: text/commands/DeleteCommand.cpp:59
+#: text/commands/DeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr ""
@@ -3980,14 +3934,14 @@ msgstr ""
 "Вилучити рядок\n"
 "вилучення рядка"
 
-#: text/commands/InsertNoteCommand.cpp:21
+#: text/commands/InsertNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
 msgstr ""
 "Вставити підрядкове посилання\n"
 "вставлення підрядкового посилання"
 
-#: text/commands/InsertNoteCommand.cpp:23
+#: text/commands/InsertNoteCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Insert Endnote"
 msgstr ""
@@ -4078,21 +4032,21 @@ msgstr ""
 "Відділити завершення розділів\n"
 "відділення завершення розділів"
 
-#: text/commands/TextPasteCommand.cpp:51
+#: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
 msgid "Paste As Text"
 msgstr ""
 "Вставити як текст\n"
 "вставлення тексту"
 
-#: text/commands/TextPasteCommand.cpp:53
+#: text/commands/TextPasteCommand.cpp:55
 msgctxt "(qtundo-format)"
 msgid "Paste"
 msgstr ""
 "Вставити\n"
 "вставлення"
 
-#: text/InsertTextLocator.cpp:14
+#: text/InsertTextLocator.cpp:13
 #, kde-format
 msgid "Index Reference"
 msgstr "Посилання покажчика"
@@ -4112,7 +4066,7 @@ msgstr "Будь ласка, спочатку створіть пункт для
 msgid "Select the index you want to reference"
 msgstr "Виберіть індекс, на який бажаєте послатися"
 
-#: text/KoFindStrategy.cpp:51
+#: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
@@ -4121,7 +4075,7 @@ msgstr[1] "Знайдено %1 відповідники"
 msgstr[2] "Знайдено %1 відповідників"
 msgstr[3] "Знайдено %1 відповідник"
 
-#: text/KoFindStrategy.cpp:51
+#: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found no match"
 msgstr "Відповідників не знайдено"
@@ -4137,7 +4091,7 @@ msgstr ""
 "\n"
 "Жодної заміни не проведено"
 
-#: text/KoReplaceStrategy.cpp:46
+#: text/KoReplaceStrategy.cpp:45
 #, kde-format
 msgid "1 replacement made"
 msgid_plural "%1 replacements made"
@@ -4146,7 +4100,7 @@ msgstr[1] "Виконано %1 заміни"
 msgstr[2] "Виконано %1 замін"
 msgstr[3] "Виконано %1 заміну"
 
-#: text/KoReplaceStrategy.cpp:59
+#: text/KoReplaceStrategy.cpp:57
 #, kde-format
 msgid "Replace %1 with %2?"
 msgstr "Замінити %1 на %2?"
@@ -4175,279 +4129,279 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Подвійне"
 
-#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
-#: text/KoTextEditor.cpp:1503
+#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
+#: text/KoTextEditor.cpp:1483
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr ""
 "Створити абзац\n"
 "створення абзацу"
 
-#: text/KoTextEditor.cpp:470
+#: text/KoTextEditor.cpp:473
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr ""
 "Додати закладку\n"
 "додавання закладки"
 
-#: text/KoTextEditor.cpp:485
+#: text/KoTextEditor.cpp:488
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr ""
 "Додати анотацію\n"
 "додавання анотації"
 
-#: text/KoTextEditor.cpp:509
+#: text/KoTextEditor.cpp:512
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr ""
 "Вставити покажчик\n"
 "вставлення покажчика"
 
-#: text/KoTextEditor.cpp:535
+#: text/KoTextEditor.cpp:538
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr ""
 "Вставити змінну\n"
 "вставлення змінної"
 
-#: text/KoTextEditor.cpp:602
+#: text/KoTextEditor.cpp:603
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr ""
 "Вставити розрив\n"
 "вставлення розриву"
 
-#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
-#: text/KoTextEditor.cpp:940
+#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
+#: text/KoTextEditor.cpp:928
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr ""
 "Вставити таблицю\n"
 "вставлення таблиці"
 
-#: text/KoTextEditor.cpp:1080
+#: text/KoTextEditor.cpp:1068
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr ""
 "Об'єднати комірки\n"
 "об’єднання комірок"
 
-#: text/KoTextEditor.cpp:1097
+#: text/KoTextEditor.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr ""
 "Розділити комірки\n"
 "поділ комірки"
 
-#: text/KoTextEditor.cpp:1126
+#: text/KoTextEditor.cpp:1113
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "Скоригувати ширину таблиці"
 
-#: text/KoTextEditor.cpp:1143
+#: text/KoTextEditor.cpp:1129
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Змінити форматування рамки"
 
-#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
-#: text/KoTextEditor.cpp:1210
+#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
+#: text/KoTextEditor.cpp:1196
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr ""
 "Вставити зміст\n"
 "вставлення змісту"
 
-#: text/KoTextEditor.cpp:1249
+#: text/KoTextEditor.cpp:1235
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "Змінити зміст"
 
-#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
-#: text/KoTextEditor.cpp:1287
+#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
+#: text/KoTextEditor.cpp:1273
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr ""
 "Вставити бібліографію\n"
 "вставлення бібліографії"
 
-#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr ""
 "Додати цитату\n"
 "додавання цитати"
 
-#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
-#: text/KoTextEditor.cpp:1393
+#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
+#: text/KoTextEditor.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
 "Введення даних\n"
 "введення даних"
 
-#: text/KoTextEditor_format.cpp:54
+#: text/KoTextEditor_format.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Bold"
 msgstr ""
 "Жирний\n"
 "жирний"
 
-#: text/KoTextEditor_format.cpp:67
+#: text/KoTextEditor_format.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Italic"
 msgstr ""
 "Курсив\n"
 "курсив"
 
-#: text/KoTextEditor_format.cpp:80
+#: text/KoTextEditor_format.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Underline"
 msgstr ""
 "Підкреслити\n"
 "підкреслення"
 
-#: text/KoTextEditor_format.cpp:99
+#: text/KoTextEditor_format.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
 msgstr ""
 "Закреслити\n"
 "закреслення"
 
-#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#: text/KoTextEditor_format.cpp:139 text/KoTextEditor_format.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Change Alignment"
 msgstr ""
 "Змінити вирівнювання\n"
 "зміну вирівнювання"
 
-#: text/KoTextEditor_format.cpp:150
+#: text/KoTextEditor_format.cpp:157
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Alignment"
 msgstr ""
 "Встановити вертикальне вирівнювання\n"
 "встановлення вертикального вирівнювання"
 
-#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+#: text/KoTextEditor_format.cpp:192 text/KoTextEditor_format.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
 msgstr ""
 "Зменшити відступ\n"
 "зменшення відступу"
 
-#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+#: text/KoTextEditor_format.cpp:229 text/KoTextEditor_format.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr ""
 "Збільшити відступ\n"
 "збільшення відступу"
 
-#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr ""
 "Зменшити розмір шрифту\n"
 "зменшення розміру шрифту"
 
-#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr ""
 "Збільшити розмір шрифту\n"
 "збільшення розміру шрифту"
 
-#: text/KoTextEditor_format.cpp:282
+#: text/KoTextEditor_format.cpp:294
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr ""
 "Вибрати шрифт\n"
 "вибір шрифту"
 
-#: text/KoTextEditor_format.cpp:295
+#: text/KoTextEditor_format.cpp:307
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr ""
 "Вибрати розмір шрифту\n"
 "вибір розміру шрифту"
 
-#: text/KoTextEditor_format.cpp:308
+#: text/KoTextEditor_format.cpp:320
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr ""
 "Встановити колір тла\n"
 "встановлення кольору тла"
 
-#: text/KoTextEditor_format.cpp:321
+#: text/KoTextEditor_format.cpp:333
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 "Встановити колір тексту\n"
 "встановлення кольору тексту"
 
-#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr ""
 "Встановити символьний стиль\n"
 "встановлення символьного стилю"
 
-#: text/KoTextEditor_format.cpp:455
+#: text/KoTextEditor_format.cpp:466
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr ""
 "Встановити абзацний стиль\n"
 "встановлення абзацного стилю"
 
-#: text/KoTextEditor_format.cpp:517
+#: text/KoTextEditor_format.cpp:528
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr ""
 "Форматування\n"
 "форматування"
 
-#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr ""
 "Форматувати\n"
 "форматування"
 
-#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
 #, kde-format
 msgid "Default"
 msgstr "Типовий"
 
-#: widgets/KoColorPopupAction.cpp:76
+#: widgets/KoColorPopupAction.cpp:82
 #, kde-format
 msgid "Opacity"
 msgstr "Непрозорість"
 
-#: widgets/KoColorSetWidget.cpp:148
+#: widgets/KoColorSetWidget.cpp:150
 #, kde-format
 msgid "Recent:"
 msgstr "Недавні:"
 
-#: widgets/KoColorSetWidget.cpp:161
+#: widgets/KoColorSetWidget.cpp:163
 #, kde-format
 msgid "Add / Remove Colors..."
 msgstr "Додати / Вилучити кольори…"
 
-#: widgets/KoConfigAuthorPage.cpp:51
+#: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
 msgstr "Додати новий профіль автора (початкові дані з поточного профілю)"
 
-#: widgets/KoConfigAuthorPage.cpp:55
+#: widgets/KoConfigAuthorPage.cpp:54
 #, kde-format
 msgid "Delete the author profile"
 msgstr "Вилучити профіль автора"
 
-#: widgets/KoConfigAuthorPage.cpp:129
+#: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Назва (непорожня і невикористана):"
 
-#: widgets/KoConfigAuthorPage.cpp:129
+#: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name of Profile"
 msgstr "Назва профілю"
@@ -4530,59 +4484,41 @@ msgstr "Місто:"
 msgid "Country:"
 msgstr "Країна:"
 
-#: widgets/KoCsvImportDialog.cpp:85
+#: widgets/KoCsvImportDialog.cpp:86
 #, kde-format
 msgid "Import Data"
 msgstr "Імпортувати дані"
 
-#: widgets/KoCsvImportDialog.cpp:88
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Recommended ( %1 )"
-msgstr "Рекомендовано ( %1 )"
-
-#: widgets/KoCsvImportDialog.cpp:89
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Locale ( %1 )"
-msgstr "Локаль ( %1 )"
-
-#: widgets/KoCsvImportDialog.cpp:92
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Other ( %1 )"
-msgstr "Інше ( %1 )"
-
-#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
-#: widgets/KoCsvImportDialog.cpp:570
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
+#: widgets/KoCsvImportDialog.cpp:483
 #, kde-format
 msgid "Generic"
 msgstr "Загальні"
 
-#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
-#: widgets/KoModeBox.cpp:572
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoModeBox.cpp:563
 #, kde-format
 msgid "Text"
 msgstr "Текст"
 
-#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
 #, kde-format
 msgid "Currency"
 msgstr "Валюти"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
-#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
+#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "Немає"
 
-#: widgets/KoCsvImportDialog.cpp:712
+#: widgets/KoCsvImportDialog.cpp:618
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "
@@ -4591,203 +4527,192 @@ msgstr ""
 "Перевірте вказані діапазони. Початкове значення мусить бути меншим за "
 "кінцеве."
 
-#: widgets/KoCsvImportDialog.cpp:758
-#, kde-format
-msgid "Cannot find encoding: %1"
-msgstr "Не вдається знайти кодування: %1"
-
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
 #: widgets/KoCsvImportDialog.ui:52
 #, kde-format
 msgid "Data"
 msgstr "Дані"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
-#: widgets/KoCsvImportDialog.ui:63
-#, kde-format
-msgid "E&ncoding:"
-msgstr "&Кодування:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
-#: widgets/KoCsvImportDialog.ui:107
+#: widgets/KoCsvImportDialog.ui:64
 #, kde-format
 msgid "First row contains headers"
 msgstr "Перший рядок містить заголовки"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
-#: widgets/KoCsvImportDialog.ui:120
+#: widgets/KoCsvImportDialog.ui:77
 #, kde-format
 msgid "First column contains headers"
 msgstr "Перший стовпчик містить заголовки"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
-#: widgets/KoCsvImportDialog.ui:144
+#: widgets/KoCsvImportDialog.ui:101
 #, kde-format
 msgid "Format"
 msgstr "Формат"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: widgets/KoCsvImportDialog.ui:156
+#: widgets/KoCsvImportDialog.ui:113
 #, kde-format
 msgid "Delimiter"
 msgstr "Розділювач"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: widgets/KoCsvImportDialog.ui:162
+#: widgets/KoCsvImportDialog.ui:119
 #, kde-format
 msgid "Comma"
 msgstr "Кома"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: widgets/KoCsvImportDialog.ui:172
+#: widgets/KoCsvImportDialog.ui:129
 #, kde-format
 msgid "Semicolon"
 msgstr "Крапка з комою"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: widgets/KoCsvImportDialog.ui:179
+#: widgets/KoCsvImportDialog.ui:136
 #, kde-format
 msgid "Other"
 msgstr "Інше"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: widgets/KoCsvImportDialog.ui:186
+#: widgets/KoCsvImportDialog.ui:143
 #, kde-format
 msgid "Tabulator"
 msgstr "Табуляція"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: widgets/KoCsvImportDialog.ui:193
+#: widgets/KoCsvImportDialog.ui:150
 #, kde-format
 msgid "Space"
 msgstr "Пробіл"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
-#: widgets/KoCsvImportDialog.ui:238
+#: widgets/KoCsvImportDialog.ui:195
 #, kde-format
 msgid "Text&quote:"
 msgstr "&Цитата тексту:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.ui:255
+#: widgets/KoCsvImportDialog.ui:212
 #, kde-format
 msgid "\""
 msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.ui:260
+#: widgets/KoCsvImportDialog.ui:217
 #, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
-#: widgets/KoCsvImportDialog.ui:289
+#: widgets/KoCsvImportDialog.ui:246
 #, kde-format
 msgid "Decimal symbol:"
 msgstr "Символ відокремлення десяткових:"
 
 #. i18n: ectx: property (text), widget (QLabel, label4)
-#: widgets/KoCsvImportDialog.ui:318
+#: widgets/KoCsvImportDialog.ui:275
 #, kde-format
 msgid "Thousands separator:"
 msgstr "Символ відокремлення тисяч:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
-#: widgets/KoCsvImportDialog.ui:363
+#: widgets/KoCsvImportDialog.ui:320
 #, kde-format
 msgid "Ignore duplicate delimiters"
 msgstr "Ігнорувати подвійні розділювачі"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
-#: widgets/KoCsvImportDialog.ui:370
+#: widgets/KoCsvImportDialog.ui:327
 #, kde-format
 msgid "&Format:"
 msgstr "&Формат:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
-#: widgets/KoCsvImportDialog.ui:384
+#: widgets/KoCsvImportDialog.ui:341
 #, kde-format
 msgid "Ranges"
 msgstr "Діапазони"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
-#: widgets/KoCsvImportDialog.ui:390
+#: widgets/KoCsvImportDialog.ui:347
 #, kde-format
 msgid "Update"
 msgstr "Оновити"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
-#: widgets/KoCsvImportDialog.ui:457
+#: widgets/KoCsvImportDialog.ui:414
 #, kde-format
 msgid "Import columns:"
 msgstr "Імпортувати стовпчики:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
-#: widgets/KoCsvImportDialog.ui:476
+#: widgets/KoCsvImportDialog.ui:433
 #, kde-format
 msgid "Import lines:"
 msgstr "Імпортувати рядки:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#: widgets/KoCsvImportDialog.ui:443 widgets/KoCsvImportDialog.ui:466
 #, kde-format
 msgid "to"
 msgstr "до"
 
-#: widgets/KoDialog.cpp:248
+#: widgets/KoDialog.cpp:246
 #, kde-format
 msgid "&Try"
 msgstr "С&пробувати"
 
-#: widgets/KoDialog.cpp:461
+#: widgets/KoDialog.cpp:449
 #, kde-format
 msgid "modified"
 msgstr "змінено"
 
-#: widgets/KoDialog.cpp:472
+#: widgets/KoDialog.cpp:458
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
-#: widgets/KoDialog.cpp:828
+#: widgets/KoDialog.cpp:813
 #, kde-format
 msgid "&Details"
 msgstr "&Подробиці"
 
-#: widgets/KoDialog.cpp:983
+#: widgets/KoDialog.cpp:961
 #, kde-format
 msgid "Get help..."
 msgstr "Відкрити довідку…"
 
-#: widgets/KoDockWidgetTitleBar.cpp:52
+#: widgets/KoDockWidgetTitleBar.cpp:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
 msgstr "Від’єднати бічну панель"
 
-#: widgets/KoDockWidgetTitleBar.cpp:59
+#: widgets/KoDockWidgetTitleBar.cpp:61
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Закрити бічну панель"
 
-#: widgets/KoDockWidgetTitleBar.cpp:67
+#: widgets/KoDockWidgetTitleBar.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
 msgstr "Згорнути бічну панель"
 
-#: widgets/KoDockWidgetTitleBar.cpp:76
+#: widgets/KoDockWidgetTitleBar.cpp:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
 msgstr "Зафіксувати бічну панель"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
-#: widgets/KoDocumentInfoDlg.cpp:331
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
+#: widgets/KoDocumentInfoDlg.cpp:329
 #, kde-format
 msgid "&Encrypt"
 msgstr "За&шифрувати"
@@ -4871,62 +4796,62 @@ msgstr "&Скинути"
 msgid "Language:"
 msgstr "Мова:"
 
-#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#: widgets/KoDocumentInfoDlg.cpp:108 widgets/KoDocumentInfoDlg.cpp:109
 #, kde-format
 msgid "General"
 msgstr "Загальні"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:136
 #, kde-format
 msgid "Last saved by"
 msgstr "Востаннє збережено"
 
-#: widgets/KoDocumentInfoDlg.cpp:189
+#: widgets/KoDocumentInfoDlg.cpp:193
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Використовувати «;» (наприклад, Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:313
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Цей документ буде розшифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:315
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Не розшифровувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Цей документ зашифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:227 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Розшифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Цей документ буде зашифровано."
 
-#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:325
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Не шифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#: widgets/KoDocumentInfoDlg.cpp:235 widgets/KoDocumentInfoDlg.cpp:327
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Цей документ не зашифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:239
+#: widgets/KoDocumentInfoDlg.cpp:241
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Цей документ не підтримує шифрування"
 
-#: widgets/KoDocumentInfoDlg.cpp:352
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4935,17 +4860,17 @@ msgstr ""
 "<qt>Розшифрування документа вилучить з нього парольний захист.<p>Все ще "
 "бажаєте розшифрувати файл?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:351
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Підтвердження розшифрування"
 
-#: widgets/KoDocumentInfoDlg.cpp:355
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid "Decrypt"
 msgstr "Розшифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:361
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4954,13 +4879,13 @@ msgstr ""
 "<qt>Ваш документ не можна зберегти автоматично.<p>Щоб завершити "
 "розшифрування, будь ласка, збережіть цей документ.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
+#: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
+#: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
 #, kde-format
 msgid "Save Document"
 msgstr "Зберегти документ"
 
-#: widgets/KoDocumentInfoDlg.cpp:373
+#: widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4969,7 +4894,7 @@ msgstr ""
 "<qt>Щоб завершити розшифрування, документ слід зберегти.<p>Бажаєте зберегти "
 "його зараз?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4980,17 +4905,17 @@ msgstr ""
 "<b>OASIS OpenDocument</b>, щоб його можна було зашифрувати.<p>Бажаєте "
 "змінити файл на OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:395
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid "Change Filetype"
 msgstr "Змінити тип файла"
 
-#: widgets/KoDocumentInfoDlg.cpp:396
+#: widgets/KoDocumentInfoDlg.cpp:392
 #, kde-format
 msgid "Change"
 msgstr "Змінити"
 
-#: widgets/KoDocumentInfoDlg.cpp:409
+#: widgets/KoDocumentInfoDlg.cpp:404
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4999,7 +4924,7 @@ msgstr ""
 "<qt>Ваш документ не вдалося зберегти автоматично.<p>Щоб завершити "
 "шифрування, будь ласка, збережіть документ.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:412
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5065,148 +4990,148 @@ msgstr "Палітра"
 msgid "Add/Remove Colors"
 msgstr "Додати/Вилучити кольори"
 
-#: widgets/KoFillConfigWidget.cpp:211
+#: widgets/KoFillConfigWidget.cpp:146
 #, kde-format
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "Немає"
 
-#: widgets/KoFillConfigWidget.cpp:219
+#: widgets/KoFillConfigWidget.cpp:154
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr "Суцільний"
 
-#: widgets/KoFillConfigWidget.cpp:227
+#: widgets/KoFillConfigWidget.cpp:162
 #, kde-format
 msgid "Gradient"
 msgstr "Градієнтний"
 
-#: widgets/KoFillConfigWidget.cpp:235
+#: widgets/KoFillConfigWidget.cpp:170
 #, kde-format
 msgid "Pattern"
 msgstr "Візерунок"
 
-#: widgets/KoFillConfigWidget.cpp:249
+#: widgets/KoFillConfigWidget.cpp:184
 #, kde-format
 msgid "Change the filling color"
 msgstr "Змінити колір заповнення"
 
-#: widgets/KoFillConfigWidget.cpp:260
+#: widgets/KoFillConfigWidget.cpp:195
 #, kde-format
 msgid "Change the filling gradient"
 msgstr "Змінити градієнт заповнення"
 
-#: widgets/KoFillConfigWidget.cpp:267
+#: widgets/KoFillConfigWidget.cpp:202
 #, kde-format
 msgid "Change the filling pattern"
 msgstr "Змінити візерунок заповнення"
 
-#: widgets/KoGradientEditWidget.cpp:145
+#: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Target:"
 msgstr "Ціль:"
 
-#: widgets/KoGradientEditWidget.cpp:148
+#: widgets/KoGradientEditWidget.cpp:151
 #, kde-format
 msgid "Fill"
 msgstr "Заповнення"
 
-#: widgets/KoGradientEditWidget.cpp:154
+#: widgets/KoGradientEditWidget.cpp:157
 #, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
 msgstr "Лінійний"
 
-#: widgets/KoGradientEditWidget.cpp:155
+#: widgets/KoGradientEditWidget.cpp:158
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
 msgstr "Радіальний"
 
-#: widgets/KoGradientEditWidget.cpp:156
+#: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
 msgstr "Конічний"
 
-#: widgets/KoGradientEditWidget.cpp:159
+#: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Repeat:"
 msgstr "Повторення:"
 
-#: widgets/KoGradientEditWidget.cpp:161
+#: widgets/KoGradientEditWidget.cpp:164
 #, kde-format
 msgctxt "No gradient spread"
 msgid "None"
 msgstr "Немає"
 
-#: widgets/KoGradientEditWidget.cpp:162
+#: widgets/KoGradientEditWidget.cpp:165
 #, kde-format
 msgid "Reflect"
 msgstr "Віддзеркалення"
 
-#: widgets/KoGradientEditWidget.cpp:163
+#: widgets/KoGradientEditWidget.cpp:166
 #, kde-format
 msgid "Repeat"
 msgstr "Повторення"
 
-#: widgets/KoGradientEditWidget.cpp:166
+#: widgets/KoGradientEditWidget.cpp:169
 #, kde-format
 msgid "Overall opacity:"
 msgstr "Загальна непрозорість:"
 
-#: widgets/KoGradientEditWidget.cpp:171
+#: widgets/KoGradientEditWidget.cpp:174
 #, kde-format
 msgid "Color stop:"
 msgstr "Колір межі:"
 
-#: widgets/KoGradientEditWidget.cpp:179
+#: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
 msgstr "Колір межі."
 
-#: widgets/KoGradientEditWidget.cpp:182
+#: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
 msgstr "&Додати до попередньо визначених градієнтів"
 
-#: widgets/KoModeBox.cpp:575
+#: widgets/KoModeBox.cpp:566
 #, kde-format
 msgid "Icon and Text"
 msgstr "Піктограма і текст"
 
-#: widgets/KoModeBox.cpp:576
+#: widgets/KoModeBox.cpp:567
 #, kde-format
 msgid "Icon only"
 msgstr "Лише піктограма"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:570
 #, kde-format
 msgid "Tabs side"
 msgstr "Бік вкладок"
 
-#: widgets/KoModeBox.cpp:583
+#: widgets/KoModeBox.cpp:574
 #, kde-format
 msgid "Top side"
 msgstr "Верхній бік"
 
-#: widgets/KoModeBox.cpp:584
+#: widgets/KoModeBox.cpp:575
 #, kde-format
 msgid "Bottom side"
 msgstr "Нижній бік"
 
-#: widgets/KoModeBox.cpp:587
+#: widgets/KoModeBox.cpp:578
 #, kde-format
 msgid "Left side"
 msgstr "Лівий бік"
 
-#: widgets/KoModeBox.cpp:588
+#: widgets/KoModeBox.cpp:579
 #, kde-format
 msgid "Right side"
 msgstr "Правий бік"
 
-#: widgets/KoPageLayoutDialog.cpp:33
+#: widgets/KoPageLayoutDialog.cpp:36
 #, kde-format
 msgid "Page Layout"
 msgstr "Формат сторінки"
@@ -5216,43 +5141,43 @@ msgstr "Формат сторінки"
 msgid "Apply to document"
 msgstr "Застосувати до документа"
 
-#: widgets/KoPageLayoutWidget.cpp:175
+#: widgets/KoPageLayoutWidget.cpp:177
 #, kde-format
 msgid "Left Edge:"
 msgstr "Ліве поле:"
 
-#: widgets/KoPageLayoutWidget.cpp:176
+#: widgets/KoPageLayoutWidget.cpp:178
 #, kde-format
 msgid "Right Edge:"
 msgstr "Праве поле:"
 
-#: widgets/KoPageLayoutWidget.cpp:179
+#: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Binding Edge:"
 msgstr "Корінець:"
 
-#: widgets/KoPageLayoutWidget.cpp:180
+#: widgets/KoPageLayoutWidget.cpp:181
 #, kde-format
 msgid "Page Edge:"
 msgstr "Поле сторінки:"
 
-#: widgets/KoPageLayoutWidget.cpp:276
+#: widgets/KoPageLayoutWidget.cpp:280
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Розгортка:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Розгортки"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:283
 #, kde-format
 msgid "Page Layout:"
 msgstr "Формат сторінки:"
 
-#: widgets/KoPageLayoutWidget.cpp:281
+#: widgets/KoPageLayoutWidget.cpp:284
 #, kde-format
 msgid "Page spread"
 msgstr "Розгортка сторінки"
@@ -5371,26 +5296,26 @@ msgstr "Поле сторінки:"
 msgid "Bottom:"
 msgstr "Знизу:"
 
-#: widgets/KoResourceItemChooser.cpp:137
+#: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Імпортувати ресурс"
 
-#: widgets/KoResourceItemChooser.cpp:144
+#: widgets/KoResourceItemChooser.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Вилучити ресурс"
 
-#: widgets/KoResourceItemChooser.cpp:192
+#: widgets/KoResourceItemChooser.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
 msgstr "Виберіть файл для додавання"
 
-#: widgets/KoResourceItemChooserContextMenu.cpp:107
-#: widgets/KoTagToolButton.cpp:51
+#: widgets/KoResourceItemChooserContextMenu.cpp:105
+#: widgets/KoTagToolButton.cpp:52
 #, kde-format
 msgid "New tag"
 msgstr "Створити теґ"
@@ -5405,22 +5330,22 @@ msgstr "Пов’язати з теґом"
 msgid "Remove from this tag"
 msgstr "Вилучити з цього теґу"
 
-#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#: widgets/KoResourceItemChooserContextMenu.cpp:159
 #, kde-format
 msgid "Remove from other tag"
 msgstr "Вилучити з іншого теґу"
 
-#: widgets/KoResourceModel.cpp:78
+#: widgets/KoResourceModel.cpp:69
 #, kde-format
 msgid "Tags"
 msgstr "Теґи"
 
-#: widgets/KoResourceTaggingManager.cpp:143
+#: widgets/KoResourceTaggingManager.cpp:133
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr "Не вдалося відновити теґ"
 
-#: widgets/KoResourceTaggingManager.cpp:144
+#: widgets/KoResourceTaggingManager.cpp:134
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
@@ -5429,22 +5354,22 @@ msgstr ""
 "<qt>Пункт теґу, вилучення якого ви намагаєтеся скасувати, вже існує у списку "
 "теґів.<br>Будь ласка, вкажіть для теґу нову унікальну назву.</qt>"
 
-#: widgets/KoResourceTaggingManager.cpp:151
+#: widgets/KoResourceTaggingManager.cpp:142
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr "Теґ не було відновлено."
 
-#: widgets/KoRuler.cpp:1266
+#: widgets/KoRuler.cpp:1174
 #, kde-format
 msgid "First line indent"
 msgstr "Відступ у першому рядку"
 
-#: widgets/KoRuler.cpp:1267
+#: widgets/KoRuler.cpp:1177
 #, kde-format
 msgid "Left indent"
 msgstr "Відступ ліворуч"
 
-#: widgets/KoRuler.cpp:1268
+#: widgets/KoRuler.cpp:1180
 #, kde-format
 msgid "Right indent"
 msgstr "Відступ праворуч"
@@ -5501,22 +5426,22 @@ msgstr "Фасочне"
 msgid "Miter limit"
 msgstr "Обмеження фацета"
 
-#: widgets/KoStrokeConfigWidget.cpp:203
+#: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
 msgid "Thickness:"
 msgstr "Товщина:"
 
-#: widgets/KoStrokeConfigWidget.cpp:213
+#: widgets/KoStrokeConfigWidget.cpp:212
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Встановити товщину лінії для позначення"
 
-#: widgets/KoStrokeConfigWidget.cpp:229
+#: widgets/KoStrokeConfigWidget.cpp:228
 #, kde-format
 msgid "Change the color of the line/border"
 msgstr "Змінити колір ліній або рамки"
 
-#: widgets/KoTagChooserWidget.cpp:41
+#: widgets/KoTagChooserWidget.cpp:42
 #, kde-format
 msgid "Tag"
 msgstr "Теґ"
@@ -5551,7 +5476,7 @@ msgstr ""
 "<br>Створіть інший теґ або перемкніться на вже створений інший теґ, якщо вам "
 "потрібно зберегти список фільтрованих ресурсів до іменованого набору.</qt>"
 
-#: widgets/KoTagFilterWidget.cpp:53
+#: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5576,12 +5501,12 @@ msgstr ""
 "<interface>Enter</interface> або кнопки <interface>Зберегти</interface> "
 "призведе до зберігання внесених змін.</qt>"
 
-#: widgets/KoTagFilterWidget.cpp:68
+#: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
 msgstr "Тут можна вказати фільтри ресурсів"
 
-#: widgets/KoTagFilterWidget.cpp:79
+#: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5591,7 +5516,7 @@ msgstr ""
 "<qt>Зберегти поточний відфільтрований набір як новий набір елементів "
 "поточного теґу.</qt>"
 
-#: widgets/KoTagToolButton.cpp:44
+#: widgets/KoTagToolButton.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
@@ -5602,44 +5527,44 @@ msgstr "<qt>Показати параметри поля теґів.</qt>"
 msgid "Rename tag"
 msgstr "Перейменувати теґ"
 
-#: widgets/KoTagToolButton.cpp:71
+#: widgets/KoTagToolButton.cpp:70
 #, kde-format
 msgid "Delete this tag"
 msgstr "Вилучити цей теґ"
 
-#: widgets/KoTagToolButton.cpp:89
+#: widgets/KoTagToolButton.cpp:86
 #, kde-format
 msgid "Clear undelete list"
 msgstr "Спорожнити список скасування вилучення"
 
-#: widgets/KoTagToolButton.cpp:119
+#: widgets/KoTagToolButton.cpp:114
 #, kde-format
 msgid "Undelete"
 msgstr "Відновити"
 
-#: widgets/KoToolBox.cpp:294
+#: widgets/KoToolBox.cpp:270
 #, kde-format
 msgid "Icon Size"
 msgstr "Розмір піктограм"
 
-#: widgets/KoToolBox.cpp:295
+#: widgets/KoToolBox.cpp:271
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Типовий"
 
-#: widgets/KoToolBox.cpp:302
+#: widgets/KoToolBox.cpp:277
 #, kde-format
 msgid "%1x%2"
 msgstr "%1⨯%2"
 
-#: widgets/KoToolBoxButton.cpp:55
+#: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
 msgstr "%1"
 
-#: widgets/KoToolBoxButton.cpp:56
+#: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
@@ -5650,49 +5575,45 @@ msgstr "%1 (%2)"
 msgid "Toolbox"
 msgstr "Інструменти"
 
-#: widgets/KoToolDocker.cpp:184
+#: widgets/KoToolDocker.cpp:183
 #, kde-format
 msgid "Tool Options"
 msgstr "Параметри інструмента"
 
-#: widgets/KoToolDocker.cpp:216
+#: widgets/KoToolDocker.cpp:217
 #, kde-format
 msgid "Toggles organizing the options in tabs or not"
 msgstr "Вмикає або вимикає впорядкування вкладок"
 
-#: widgets/KoViewItemContextBar.cpp:183
+#: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
 msgid "deselect item"
 msgstr "скасувати позначення об’єкта"
 
-#: widgets/KoViewItemContextBar.cpp:183
+#: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
 msgid "select item"
 msgstr "позначити об’єкта"
 
-#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
-#: widgets/KoZoomMode.cpp:13
+#: widgets/KoZoomAction.cpp:189 widgets/KoZoomAction.cpp:201
+#: widgets/KoZoomMode.cpp:11
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
-#: widgets/KoZoomMode.cpp:14
-#, kde-format
+#: widgets/KoZoomMode.cpp:12
 msgid "Fit Page Width"
 msgstr "Влаштувати в ширину"
 
-#: widgets/KoZoomMode.cpp:15
-#, kde-format
+#: widgets/KoZoomMode.cpp:13
 msgid "Fit Page"
 msgstr "Влаштувати сторінку"
 
-#: widgets/KoZoomMode.cpp:17
-#, kde-format
+#: widgets/KoZoomMode.cpp:15
 msgid "Actual Pixels"
 msgstr "Фактичні пікселі"
 
-#: widgets/KoZoomMode.cpp:21
-#, kde-format
+#: widgets/KoZoomMode.cpp:19
 msgid "Fit Text Width"
 msgstr "Влаштувати в ширину"
 
@@ -5711,21 +5632,46 @@ msgstr "Збільшити вибрану область"
 msgid "Zoom to All"
 msgstr "Збільшити до повного розміру"
 
-#: widgetutils/KoFileDialog.cpp:454
+#: widgetutils/KoFileDialog.cpp:394
 #, kde-format
 msgid "All files"
 msgstr "усі файли"
 
-#: widgetutils/KoFileDialog.cpp:457
+#: widgetutils/KoFileDialog.cpp:397
 #, kde-format
 msgid "All supported formats"
 msgstr "Усі підтримувані формати"
 
-#: widgetutils/KoGroupButton.cpp:131
+#: widgetutils/KoGroupButton.cpp:134
 #, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid ""
+#~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
+#~ "can not be opened."
+#~ msgstr ""
+#~ "У QCA зараз відсутня підтримка SHA1 або PBKDF2 з використанням SHA1. "
+#~ "Відкрити документ неможливо."
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Рекомендовано ( %1 )"
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Локаль ( %1 )"
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Інше ( %1 )"
+
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Не вдається знайти кодування: %1"
+
+#~ msgid "E&ncoding:"
+#~ msgstr "&Кодування:"
 
 #~ msgid "Scripts"
 #~ msgstr "Скрипти"

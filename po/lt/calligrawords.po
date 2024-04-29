@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-12-29 20:55+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -110,7 +110,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
 msgstr "Įterpti puslapio stilių"
 
-#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "Puslapio savybės"
@@ -120,63 +120,63 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "Sukurti formą"
 
-#: part/dialogs/KWAnchoringProperties.cpp:422
+#: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
 msgstr "Bazinė linija"
 
-#: part/dialogs/KWAnchoringProperties.cpp:423
-#: part/dialogs/KWAnchoringProperties.cpp:434
+#: part/dialogs/KWAnchoringProperties.cpp:413
+#: part/dialogs/KWAnchoringProperties.cpp:424
 #, kde-format
 msgid "Character"
 msgstr "Rašmuo"
 
-#: part/dialogs/KWAnchoringProperties.cpp:426
+#: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
 msgid "Row"
 msgstr "Eilutė"
 
-#: part/dialogs/KWAnchoringProperties.cpp:427
-#: part/dialogs/KWAnchoringProperties.cpp:435
+#: part/dialogs/KWAnchoringProperties.cpp:417
+#: part/dialogs/KWAnchoringProperties.cpp:425
 #, fuzzy, kde-format
 #| msgid "Page text area"
 msgid "Page (entire) area"
 msgstr "Puslapio teksto sritis"
 
-#: part/dialogs/KWAnchoringProperties.cpp:428
-#: part/dialogs/KWAnchoringProperties.cpp:436
+#: part/dialogs/KWAnchoringProperties.cpp:418
+#: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
 msgstr "Puslapio teksto sritis"
 
-#: part/dialogs/KWAnchoringProperties.cpp:429
-#: part/dialogs/KWAnchoringProperties.cpp:443
+#: part/dialogs/KWAnchoringProperties.cpp:419
+#: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
 msgstr "Pastraipos sritis"
 
-#: part/dialogs/KWAnchoringProperties.cpp:430
-#: part/dialogs/KWAnchoringProperties.cpp:444
+#: part/dialogs/KWAnchoringProperties.cpp:420
+#: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
 msgstr "Pastraipos teksto sritis"
 
-#: part/dialogs/KWAnchoringProperties.cpp:437
+#: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
 msgstr "Kairysis puslapio kraštas"
 
-#: part/dialogs/KWAnchoringProperties.cpp:438
+#: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
 msgstr "Dešinysis puslapio kraštas"
 
-#: part/dialogs/KWAnchoringProperties.cpp:445
+#: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
 msgid "Right paragraph border"
 msgstr "Dešinysis pastraipos kraštas"
 
-#: part/dialogs/KWAnchoringProperties.cpp:446
+#: part/dialogs/KWAnchoringProperties.cpp:436
 #, kde-format
 msgid "Left paragraph border"
 msgstr "Kairysis pastraipos kraštas"
@@ -346,12 +346,12 @@ msgstr "Stulpeliai:"
 msgid "Column spacing:"
 msgstr "Tarpai tarp stulpelių:"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:101
+#: part/dialogs/KWFrameConnectSelector.cpp:98
 #, fuzzy, kde-format
 msgid "frameset"
 msgstr "Iš naujo"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:126
+#: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
 msgstr ""
@@ -386,7 +386,7 @@ msgstr "Iš naujo"
 msgid "Smart Positioning"
 msgstr "Išmanus išdėstymas"
 
-#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
 msgstr ""
@@ -537,40 +537,40 @@ msgid "Distance Between Shape and Text:"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
 #, kde-format
 msgid "Columns"
 msgstr "Stulpeliai"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:42
+#: part/dialogs/KWPageSettingsDialog.cpp:41
 #, kde-format
 msgid "Style"
 msgstr "Stilius"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:48
+#: part/dialogs/KWPageSettingsDialog.cpp:47
 #, kde-format
 msgid "Clone"
 msgstr "Klonuoti"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
 #, kde-format
 msgid "Delete"
 msgstr "Trinti"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:137
+#: part/dialogs/KWPageSettingsDialog.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "Keisti puslapio stilių"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:211
-#, kde-format
-msgid "Add a new page style with the name:"
-msgstr ""
-
-#: part/dialogs/KWPageSettingsDialog.cpp:211
+#: part/dialogs/KWPageSettingsDialog.cpp:217
 #, kde-format
 msgid "Clone Page Style"
 msgstr "Klonuoti puslapio stilių"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:218
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
@@ -639,27 +639,27 @@ msgstr "&Pervadinti"
 msgid "&Delete"
 msgstr "&Trinti"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:68
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Pervadinti žymelę"
-
-#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr ""
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Pervadinti žymelę"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr ""
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
 msgstr "Pasirinkite žymelę"
 
-#: part/dialogs/KWShapeConfigFactory.cpp:44
+#: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
 msgid "Geometry"
 msgstr "Geometrija"
@@ -671,7 +671,7 @@ msgid "Page Size && Margins"
 msgstr "Puslapio dydis &ir paraštės"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
 #, kde-format
 msgid "Create"
 msgstr "Sukurti"
@@ -686,18 +686,18 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, fuzzy, kde-format
 #| msgid "&Page"
 msgid "Page #"
 msgstr "&Puslapis"
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Section"
 msgstr ""
 
-#: part/dockers/KWRdfDocker.cpp:39
+#: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
 msgstr ""
@@ -707,47 +707,47 @@ msgstr ""
 msgid "Statistics"
 msgstr "Statistika"
 
-#: part/dockers/KWStatisticsWidget.cpp:128
+#: part/dockers/KWStatisticsWidget.cpp:127
 #, kde-format
 msgid "Words:"
 msgstr "Žodžiai:"
 
-#: part/dockers/KWStatisticsWidget.cpp:131
+#: part/dockers/KWStatisticsWidget.cpp:130
 #, kde-format
 msgid "Sentences:"
 msgstr "Sakiniai:"
 
-#: part/dockers/KWStatisticsWidget.cpp:134
+#: part/dockers/KWStatisticsWidget.cpp:133
 #, kde-format
 msgid "Syllables:"
 msgstr "Skiemenys:"
 
-#: part/dockers/KWStatisticsWidget.cpp:137
+#: part/dockers/KWStatisticsWidget.cpp:136
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "Rašmenys (tarpai):"
 
-#: part/dockers/KWStatisticsWidget.cpp:140
+#: part/dockers/KWStatisticsWidget.cpp:139
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "Rašmenys (be tarpų):"
 
-#: part/dockers/KWStatisticsWidget.cpp:143
+#: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
 msgid "Lines:"
 msgstr "Eilutės:"
 
-#: part/dockers/KWStatisticsWidget.cpp:146
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
 msgstr ""
 
-#: part/dockers/KWStatisticsWidget.cpp:148
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "Flesch reading ease"
 msgstr ""
 
-#: part/dockers/KWStatisticsWidget.cpp:150
+#: part/dockers/KWStatisticsWidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "Create"
 msgid "East asian characters:"
@@ -1089,328 +1089,328 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr ""
 
-#: part/KWAboutData.h:20
+#: part/KWAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "Calligra Words"
 
-#: part/KWAboutData.h:22
+#: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
 msgstr "Tekstų rengyklė"
 
-#: part/KWAboutData.h:24
+#: part/KWAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "© 1998-2013, The Words Team"
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "© 1998-2013, Words komanda"
 
-#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
 msgstr ""
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:31
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "Pierre Ducroquet"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:32
 #, kde-format
 msgid "C. Boemann"
 msgstr "C. Boemann"
 
-#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
 msgstr "Viską"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:33
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:34
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Formatting stuff"
 msgstr ""
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
-#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
-#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
-#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
-#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
+#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
+#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
+#: part/KWAboutData.h:66 part/KWAboutData.h:67
 #, kde-format
 msgid "Filter"
 msgstr "Filtras"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Matus Uzak"
 msgstr ""
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
 msgstr ""
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Pavol Korinek"
 msgstr ""
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Shreya Pandit"
 msgstr ""
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Statistics docker"
 msgstr "Statistikos skydelis"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Brijesh Patel"
 msgstr ""
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Foot and endnotes"
 msgstr ""
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Bibliography"
 msgstr "Bibliografija"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Smit Patel"
 msgstr ""
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, fuzzy, kde-format
 #| msgid "Mojtaba Shahi Senobari"
 msgid "Mojtaba Shahi"
 msgstr "Mojtaba Shahi Senobari"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
 msgstr ""
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr ""
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Hanzes Matus"
 msgstr ""
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "Lukáš Tvrdý"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "Girish Ramakrishnan"
 
-#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
 msgid "ODF Support"
 msgstr "ODF palaikymas"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr ""
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "Sven Lüppken"
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "Frank Dekervel"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "Krister Wicksell Eriksson"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Dag Andersen"
 msgstr "Dag Andersen"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "Nash Hoogwater"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "KFormula"
 msgstr "KFormula"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "Ulrich Kuettler"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "Shaheed Haque"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Clarence Dang"
 msgstr "Clarence Dang"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "Robert Jacolin"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Ewald Snel"
 msgstr "Ewald Snel"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "Tomasz Grobelny"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Michael Johnson"
 msgstr "Michael Johnson"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr ""
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Page break icon"
 msgstr "Puslapio lūžio ženkliukas"
 
-#. i18n translator strings
-#: part/KWAboutData.h:71
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Andrius Štikonas, Liudas Ališauskas"
-
-#: part/KWAboutData.h:72
+#: part/KWAboutData.h:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "andrius@stikonas.eu, liudas@akmc.lt"
 
-#: part/KWDocument.cpp:495
+#. i18n translator strings
+#: part/KWAboutData.h:70
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andrius Štikonas, Liudas Ališauskas"
+
+#: part/KWDocument.cpp:492
 #, kde-format
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Standartinis"
 
-#: part/KWDocument.cpp:546
+#: part/KWDocument.cpp:544
 #, kde-format
 msgid "Document Title"
 msgstr "Dokumento pavadinimas"
 
-#: part/KWDocument.cpp:553
+#: part/KWDocument.cpp:551
 #, kde-format
 msgid "Head 1"
 msgstr "Galva 1"
 
-#: part/KWDocument.cpp:559
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 2"
 msgstr "Galva 2"
 
-#: part/KWDocument.cpp:565
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 3"
 msgstr "Galva 3"
 
-#: part/KWDocument.cpp:571
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Bullet List"
 msgstr "Ženkliukų sąrašas"
 
-#: part/KWGui.cpp:69
+#: part/KWGui.cpp:68
 #, kde-format
 msgid "Tools"
 msgstr "Įrankiai"
@@ -1420,12 +1420,12 @@ msgstr "Įrankiai"
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr ""
 
-#: part/KWOdfLoader.cpp:95
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr ""
 
-#: part/KWOdfLoader.cpp:97
+#: part/KWOdfLoader.cpp:96
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1439,12 +1439,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standartinis"
 
-#: part/KWPart.cpp:141
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
 
-#: part/KWPart.cpp:142
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Diegimo klaida"
@@ -1474,91 +1474,91 @@ msgstr "Puslapis  %1-%2 iš %3"
 msgid "Line %1"
 msgstr "Linija %1"
 
-#: part/KWStatusBar.cpp:124
+#: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
 msgstr "Puslapio numeris"
 
-#: part/KWStatusBar.cpp:137
+#: part/KWStatusBar.cpp:145
 #, kde-format
 msgid "Line Number"
 msgstr "Eilutės numeris"
 
-#: part/KWStatusBar.cpp:149
+#: part/KWStatusBar.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Page Style"
 msgid "Change the page style"
 msgstr "Keisti puslapio stilių"
 
-#: part/KWStatusBar.cpp:155
+#: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
 msgstr "Puslapio stilius"
 
-#: part/KWStatusBar.cpp:169
+#: part/KWStatusBar.cpp:179
 #, kde-format
 msgid "Page Size"
 msgstr "Puslapio dydis"
 
-#: part/KWStatusBar.cpp:184
+#: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
 msgstr "Išsaugota/Pakeista"
 
-#: part/KWStatusBar.cpp:197
+#: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
 msgstr ""
 
-#: part/KWStatusBar.cpp:211
+#: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
 msgstr ""
 
-#: part/KWView.cpp:183
+#: part/KWView.cpp:184
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:260
+#: part/KWView.cpp:276
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Formos savybės..."
 
-#: part/KWView.cpp:262
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:271
+#: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Sukurti šabloną iš dokumento..."
 
-#: part/KWView.cpp:272
+#: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr ""
 
-#: part/KWView.cpp:273
+#: part/KWView.cpp:290
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
 
-#: part/KWView.cpp:292
+#: part/KWView.cpp:309
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr ""
 
-#: part/KWView.cpp:298
+#: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr ""
 
-#: part/KWView.cpp:299
+#: part/KWView.cpp:317
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1566,35 +1566,35 @@ msgid ""
 "printing characters."
 msgstr ""
 
-#: part/KWView.cpp:301
+#: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:307
+#: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:308
+#: part/KWView.cpp:327
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:310
+#: part/KWView.cpp:329
 #, fuzzy, kde-format
 #| msgid "Show Table Borders"
 msgid "Show Text Shape Borders"
 msgstr "Rodyti lentelės rėmus"
 
-#: part/KWView.cpp:311
+#: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr ""
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:337
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1602,51 +1602,51 @@ msgid ""
 "page."
 msgstr ""
 
-#: part/KWView.cpp:319
+#: part/KWView.cpp:340
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Rodyti lentelės rėmus"
 
-#: part/KWView.cpp:325
+#: part/KWView.cpp:346
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:348
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
 
-#: part/KWView.cpp:328
+#: part/KWView.cpp:350
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:334
+#: part/KWView.cpp:356
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr ""
 
-#: part/KWView.cpp:335
+#: part/KWView.cpp:358
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:360
 #, kde-format
 msgid "Show Rulers"
 msgstr "Rodyti liniuotes"
 
-#: part/KWView.cpp:339
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Rodo arba slepia liniuotes"
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:364
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1655,98 +1655,98 @@ msgid ""
 "being displayed.</p>"
 msgstr ""
 
-#: part/KWView.cpp:351
+#: part/KWView.cpp:375
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Pritraukti prie tinklelio"
 
-#: part/KWView.cpp:359
+#: part/KWView.cpp:383
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Rodyti būsenos juostą"
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Rodo arba paslepia būsenos juostą."
 
-#: part/KWView.cpp:366
+#: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:367
+#: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:374
+#: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr ""
 
-#: part/KWView.cpp:376
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr ""
 
-#: part/KWView.cpp:377
+#: part/KWView.cpp:401
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:392
+#: part/KWView.cpp:416
 #, kde-format
 msgid "Configure..."
 msgstr "Konfigūruoti..."
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:425
 #, kde-format
 msgid "Page Layout..."
 msgstr "Puslapio išdėstymas..."
 
-#: part/KWView.cpp:403
+#: part/KWView.cpp:427
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Shape Properties"
 msgid "Change properties of entire page"
 msgstr "Keisti formos savybes"
 
-#: part/KWView.cpp:404
+#: part/KWView.cpp:429
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
 
-#: part/KWView.cpp:407
+#: part/KWView.cpp:432
 #, kde-format
 msgid "Create Header"
 msgstr "Sukurti antraštę"
 
-#: part/KWView.cpp:413
+#: part/KWView.cpp:438
 #, kde-format
 msgid "Create Footer"
 msgstr "Sukurti poraštę"
 
-#: part/KWView.cpp:420
+#: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
 msgstr "Rodyti komentarus"
 
-#: part/KWView.cpp:421
+#: part/KWView.cpp:446
 #, kde-format
 msgid "Shows comments in the document"
 msgstr ""
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
 msgstr "Žodžių skaičius"
 
-#: part/KWView.cpp:428
+#: part/KWView.cpp:453
 #, fuzzy, kde-format
 #| msgid "Shows or hides the status bar"
 msgid "Shows or hides word counting in status bar"
@@ -1777,55 +1777,55 @@ msgstr "Puslapių išdėstymas"
 msgid "..."
 msgstr "..."
 
-#: part/widgets/KoFindToolbar.cpp:55
+#: part/widgets/KoFindToolbar.cpp:64
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:68
+#: part/widgets/KoFindToolbar.cpp:81
 #, kde-format
 msgctxt "Next search result"
 msgid "Next"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:78
+#: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:87
+#: part/widgets/KoFindToolbar.cpp:104
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "Search options"
 msgid "Options"
 msgstr "Parinktys"
 
-#: part/widgets/KoFindToolbar.cpp:115
+#: part/widgets/KoFindToolbar.cpp:134
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:125
+#: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:131
+#: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:139
+#: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:200
+#: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
@@ -1835,51 +1835,51 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: part/widgets/KoFindToolbar.cpp:210
+#: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:216
+#: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:218
+#: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
 msgstr ""
 
-#: part/Words.cpp:45
+#: part/Words.cpp:41
 #, fuzzy, kde-format
 #| msgid "Create Header"
 msgid "Odd Pages Header"
 msgstr "Sukurti antraštę"
 
-#: part/Words.cpp:47
+#: part/Words.cpp:43
 #, fuzzy, kde-format
 #| msgid "Create Header"
 msgid "Even Pages Header"
 msgstr "Sukurti antraštę"
 
-#: part/Words.cpp:49
+#: part/Words.cpp:45
 #, fuzzy, kde-format
 #| msgid "Create Footer"
 msgid "Odd Pages Footer"
 msgstr "Sukurti poraštę"
 
-#: part/Words.cpp:51
+#: part/Words.cpp:47
 #, fuzzy, kde-format
 #| msgid "Create Footer"
 msgid "Even Pages Footer"
 msgstr "Sukurti poraštę"
 
-#: part/Words.cpp:53
+#: part/Words.cpp:49
 #, kde-format
 msgid "Main text"
 msgstr ""
 
-#: part/Words.cpp:55
+#: part/Words.cpp:51
 #, kde-format
 msgid "Other text"
 msgstr ""

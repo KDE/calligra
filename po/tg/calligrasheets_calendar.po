@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-09-11 18:57+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: American English <http://www.kde.tj>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -26,7 +26,7 @@ msgstr ""
 "Санаи охирин пеш аз санаи аввалин меистад. Мутмаин шавед, ки санаи охирин "
 "баъд аз санаи аввалин меистад."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "Хато"
@@ -40,7 +40,7 @@ msgstr ""
 "Тақвимҳо набояд, ки аз 10 сол зиёд бошанд. Агар чунин давраҳои зиёд ба шумо "
 "лозим ҳастанд, шумо бояд онҳоро тақсим кунед."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -49,12 +49,12 @@ msgstr ""
 "Санаи охирин ва санаи аввалин баробар ҳастанд! Танҳо як рӯз ворид карда "
 "мешавад. Давом медиҳед?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "Огоҳӣ"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -63,7 +63,7 @@ msgstr ""
 "Эҷодкунии тақвим барои давраи зиёд аз даҳ сол метавонад ҷои бисёр бигирад, "
 "давом медиҳед?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -76,24 +76,24 @@ msgstr ""
 "ро интихоб мекунед, ҷои лозимӣ барои тақвими дилхоҳ интихоб карда мешавад ва "
 "ин тавр шумо метавонед бубинед, ки кадом маълумот дубора навишта мешавад."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 #| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Тақвимро ворид кунед"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Тақвим аз %1 то %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "ҳафта"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 #| msgid "Calendar Tool"
 msgid "Calendar"

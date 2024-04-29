@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-04-12 16:20+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -107,7 +107,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
 msgstr "पान शैली अंतर्भूत करा"
 
-#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "पानाचे गुणधर्म"
@@ -117,62 +117,62 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "आकार तयार करा"
 
-#: part/dialogs/KWAnchoringProperties.cpp:422
+#: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
 msgstr "बेसलाइन"
 
-#: part/dialogs/KWAnchoringProperties.cpp:423
-#: part/dialogs/KWAnchoringProperties.cpp:434
+#: part/dialogs/KWAnchoringProperties.cpp:413
+#: part/dialogs/KWAnchoringProperties.cpp:424
 #, kde-format
 msgid "Character"
 msgstr "अक्षर"
 
-#: part/dialogs/KWAnchoringProperties.cpp:426
+#: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
 msgid "Row"
 msgstr "ओळ"
 
-#: part/dialogs/KWAnchoringProperties.cpp:427
-#: part/dialogs/KWAnchoringProperties.cpp:435
+#: part/dialogs/KWAnchoringProperties.cpp:417
+#: part/dialogs/KWAnchoringProperties.cpp:425
 #, kde-format
 msgid "Page (entire) area"
 msgstr "पान (संपूर्ण) क्षेत्र"
 
-#: part/dialogs/KWAnchoringProperties.cpp:428
-#: part/dialogs/KWAnchoringProperties.cpp:436
+#: part/dialogs/KWAnchoringProperties.cpp:418
+#: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
 msgstr "पान मजकूर क्षेत्र"
 
-#: part/dialogs/KWAnchoringProperties.cpp:429
-#: part/dialogs/KWAnchoringProperties.cpp:443
+#: part/dialogs/KWAnchoringProperties.cpp:419
+#: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
 msgstr "परिच्छेद क्षेत्र"
 
-#: part/dialogs/KWAnchoringProperties.cpp:430
-#: part/dialogs/KWAnchoringProperties.cpp:444
+#: part/dialogs/KWAnchoringProperties.cpp:420
+#: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
 msgstr "परिच्छेद मजकूर क्षेत्र"
 
-#: part/dialogs/KWAnchoringProperties.cpp:437
+#: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
 msgstr "डावी पान किनार"
 
-#: part/dialogs/KWAnchoringProperties.cpp:438
+#: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
 msgstr "उजवी पान किनार"
 
-#: part/dialogs/KWAnchoringProperties.cpp:445
+#: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
 msgid "Right paragraph border"
 msgstr "उजवी परिच्छेद किनार"
 
-#: part/dialogs/KWAnchoringProperties.cpp:446
+#: part/dialogs/KWAnchoringProperties.cpp:436
 #, kde-format
 msgid "Left paragraph border"
 msgstr "डावी परिच्छेद किनार"
@@ -339,12 +339,12 @@ msgstr "स्तंभ:"
 msgid "Column spacing:"
 msgstr "स्तंभ अंतर :"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:101
+#: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
 msgid "frameset"
 msgstr "फ्रेमसेट"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:126
+#: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
 msgstr "दस्तऐवजात फ्रेमसेट आढळले नाही"
@@ -378,7 +378,7 @@ msgstr "फ्रेमसेट नाव"
 msgid "Smart Positioning"
 msgstr "हुशारीने स्थान ठरवा"
 
-#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
 msgstr "मजकूर बाजुने चालवणे"
@@ -526,40 +526,40 @@ msgid "Distance Between Shape and Text:"
 msgstr "आकार व मजकूरातील अंतर :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
 #, kde-format
 msgid "Columns"
 msgstr "स्थंभ"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:42
+#: part/dialogs/KWPageSettingsDialog.cpp:41
 #, kde-format
 msgid "Style"
 msgstr "शैली"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:48
+#: part/dialogs/KWPageSettingsDialog.cpp:47
 #, kde-format
 msgid "Clone"
 msgstr "प्रतिकृत करा"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
 #, kde-format
 msgid "Delete"
 msgstr "काढून टाका"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:137
+#: part/dialogs/KWPageSettingsDialog.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "पान शैली बदला"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:211
-#, kde-format
-msgid "Add a new page style with the name:"
-msgstr "या नावाने नवीन पान शैली जोडा :"
-
-#: part/dialogs/KWPageSettingsDialog.cpp:211
+#: part/dialogs/KWPageSettingsDialog.cpp:217
 #, kde-format
 msgid "Clone Page Style"
 msgstr "पान शैली प्रतिकृत करा"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:218
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "या नावाने नवीन पान शैली जोडा :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
@@ -627,27 +627,27 @@ msgstr "नाव बदला (&R)"
 msgid "&Delete"
 msgstr "काढून टाका (&D)"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:68
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "ओळखचिन्हाचे नाव बदला"
-
-#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "कृपया ओळखचिन्हाचे नवे नाव पुरवा"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "ओळखचिन्हाचे नाव बदला"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "\"%1\" नावाचे ओळखचिन्ह अगोदरच अस्तित्वात आहे."
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
 msgstr "ओळखचिन्ह निवडा"
 
-#: part/dialogs/KWShapeConfigFactory.cpp:44
+#: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
 msgid "Geometry"
 msgstr "भूमिती"
@@ -659,7 +659,7 @@ msgid "Page Size && Margins"
 msgstr "पानाचा आकार व समास"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
 #, kde-format
 msgid "Create"
 msgstr "निर्माण करा"
@@ -674,18 +674,18 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, fuzzy, kde-format
 #| msgid "&Page"
 msgid "Page #"
 msgstr "पान (&P)"
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Section"
 msgstr ""
 
-#: part/dockers/KWRdfDocker.cpp:39
+#: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
 msgstr "RDF"
@@ -695,47 +695,47 @@ msgstr "RDF"
 msgid "Statistics"
 msgstr "आकडेवारी"
 
-#: part/dockers/KWStatisticsWidget.cpp:128
+#: part/dockers/KWStatisticsWidget.cpp:127
 #, kde-format
 msgid "Words:"
 msgstr "शब्द :"
 
-#: part/dockers/KWStatisticsWidget.cpp:131
+#: part/dockers/KWStatisticsWidget.cpp:130
 #, kde-format
 msgid "Sentences:"
 msgstr "वाक्ये :"
 
-#: part/dockers/KWStatisticsWidget.cpp:134
+#: part/dockers/KWStatisticsWidget.cpp:133
 #, kde-format
 msgid "Syllables:"
 msgstr "अक्षरे :"
 
-#: part/dockers/KWStatisticsWidget.cpp:137
+#: part/dockers/KWStatisticsWidget.cpp:136
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "अक्षरे (जागा):"
 
-#: part/dockers/KWStatisticsWidget.cpp:140
+#: part/dockers/KWStatisticsWidget.cpp:139
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "अक्षरे (जागा सोडून):"
 
-#: part/dockers/KWStatisticsWidget.cpp:143
+#: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
 msgid "Lines:"
 msgstr "ओळी :"
 
-#: part/dockers/KWStatisticsWidget.cpp:146
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
 msgstr "वाचनोपयोगी :"
 
-#: part/dockers/KWStatisticsWidget.cpp:148
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "Flesch reading ease"
 msgstr "फ्लेश सोपे वाचन"
 
-#: part/dockers/KWStatisticsWidget.cpp:150
+#: part/dockers/KWStatisticsWidget.cpp:149
 #, kde-format
 msgid "East asian characters:"
 msgstr "पूर्व एशियन अक्षरे :"
@@ -1070,327 +1070,327 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr "धूसर वर व खाली"
 
-#: part/KWAboutData.h:20
+#: part/KWAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "कॅलिग्रा वर्डस"
 
-#: part/KWAboutData.h:22
+#: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
 msgstr "वर्ड प्रोसेसर"
 
-#: part/KWAboutData.h:24
+#: part/KWAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "© 1998-2012, The Words Team"
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "© 1998-2012, वर्डस समूह"
 
-#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
 msgstr "सह पालक"
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:31
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "पीयरे ड्युक्रोक्वेट"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:32
 #, kde-format
 msgid "C. Boemann"
 msgstr "सी. बोएमान्न"
 
-#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
 msgstr "सर्वकाही"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:33
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "सेबेस्तियन सॉअर"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:34
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "बौडेविज्न रेम्प्ट"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "पीयरे स्टिर्नवेइस"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Formatting stuff"
 msgstr "फॉर्मेटिंग स्टफ"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Inge Wallin"
 msgstr "इन्गे वाल्लिन"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "थार्स्टन जाकमैन"
 
-#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
-#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
-#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
-#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
-#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
+#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
+#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
+#: part/KWAboutData.h:66 part/KWAboutData.h:67
 #, kde-format
 msgid "Filter"
 msgstr "गाळणी"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Matus Uzak"
 msgstr "मातुस उझाक"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
 msgstr "रचना व छपाई"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Pavol Korinek"
 msgstr "पाव्होल कोरिनेक"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Shreya Pandit"
 msgstr "श्रेया पंडित"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Statistics docker"
 msgstr "आकडेवारी डॉकर"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Brijesh Patel"
 msgstr "ब्रिजेश पटेल"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Foot and endnotes"
 msgstr "पाया व अंतिम नोंदी"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Bibliography"
 msgstr "ग्रंथ सूची"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Smit Patel"
 msgstr "स्मित पटेल"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Mojtaba Shahi"
 msgstr "मोज्ताबा शाही"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
 msgstr "शैली व्यवस्थापक"
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr "लास्सी निएमिनेन"
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Hanzes Matus"
 msgstr "हान्झेस मातुस"
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "लुकास ट्विर्डी"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Thomas Zander"
 msgstr "थॉमस जेंडर"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "गिरिष रामाक्रिष्नन"
 
-#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
 msgid "ODF Support"
 msgstr "ODF समर्थन"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr "रोबर्ट माथिआस मार्मोर्स्टेन"
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "डेविड फ़ॉउर"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Laurent Montel"
 msgstr "लोरेन्ट मोन्टेल"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "स्वेन ल्युप्पकेन "
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "फ्रैंक डेकरवेल"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "क्रिस्टर विकसेल एरिक्सन"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Dag Andersen"
 msgstr "डैग एंडरसन"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "नैश हूगवाटर"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "KFormula"
 msgstr "के-फॉर्म्यूला"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "अलरिच कुएटलर"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "शाहिद हक़"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Werner Trobin"
 msgstr "वेर्नर ट्रोबिन"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "निकोलस गाउते"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "अरिया हिदायत"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Clarence Dang"
 msgstr "क्लेरेन्स डेंग"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "रॉबर्ट जेकोलिन"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Enno Bartels"
 msgstr "एनो बारतेल्स"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Ewald Snel"
 msgstr "एवाल्द स्नेल"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "टोमास्ज ग्रोबेल्नी"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Michael Johnson"
 msgstr "माइकल जान्सन"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr "फेटकाउ वेब होस्टींग"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Page break icon"
 msgstr "पान तोडणारे चिन्ह"
 
-#. i18n translator strings
-#: part/KWAboutData.h:71
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "चेतन खोना"
-
-#: part/KWAboutData.h:72
+#: part/KWAboutData.h:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "chetan@kompkin.com"
 
-#: part/KWDocument.cpp:495
+#. i18n translator strings
+#: part/KWAboutData.h:70
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "चेतन खोना"
+
+#: part/KWDocument.cpp:492
 #, kde-format
 msgid "Copy"
 msgstr "प्रत करा"
 
-#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "प्रमाणित"
 
-#: part/KWDocument.cpp:546
+#: part/KWDocument.cpp:544
 #, kde-format
 msgid "Document Title"
 msgstr "दस्तऐवज शिर्षक"
 
-#: part/KWDocument.cpp:553
+#: part/KWDocument.cpp:551
 #, kde-format
 msgid "Head 1"
 msgstr "शिर्षक 1"
 
-#: part/KWDocument.cpp:559
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 2"
 msgstr "शिर्षक 2"
 
-#: part/KWDocument.cpp:565
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 3"
 msgstr "शिर्षक 3"
 
-#: part/KWDocument.cpp:571
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Bullet List"
 msgstr "बुलेट यादी"
 
-#: part/KWGui.cpp:69
+#: part/KWGui.cpp:68
 #, kde-format
 msgid "Tools"
 msgstr "साधने"
@@ -1400,12 +1400,12 @@ msgstr "साधने"
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr "अवैध ओएसिस ओपनडोक्युमेंट फाईल. ऑफ़िस:बॉडी टॅग सापडला नाही."
 
-#: part/KWOdfLoader.cpp:95
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr "अवैध ओएसिस ओपनडोक्युमेंट फाईल. ऑफ़िस:बॉडी अंतर्गत टॅग सापडला नाही."
 
-#: part/KWOdfLoader.cpp:97
+#: part/KWOdfLoader.cpp:96
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1420,12 +1420,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "प्रमाणित"
 
-#: part/KWPart.cpp:141
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "गरजेचा मजकूर घटक सापडला नाही. वर्डस् आता बाहेर पडेल"
 
-#: part/KWPart.cpp:142
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "प्रतिष्ठापना त्रुटी"
@@ -1455,74 +1455,74 @@ msgstr "पान %1-%2/%3"
 msgid "Line %1"
 msgstr "ओळ %1"
 
-#: part/KWStatusBar.cpp:124
+#: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
 msgstr "पान क्रमांक"
 
-#: part/KWStatusBar.cpp:137
+#: part/KWStatusBar.cpp:145
 #, kde-format
 msgid "Line Number"
 msgstr "ओळ क्रमांक"
 
-#: part/KWStatusBar.cpp:149
+#: part/KWStatusBar.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Page Style"
 msgid "Change the page style"
 msgstr "पान शैली बदला"
 
-#: part/KWStatusBar.cpp:155
+#: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
 msgstr "पान शैली"
 
-#: part/KWStatusBar.cpp:169
+#: part/KWStatusBar.cpp:179
 #, kde-format
 msgid "Page Size"
 msgstr "पानाचा आकार"
 
-#: part/KWStatusBar.cpp:184
+#: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
 msgstr "साठवले/सुधारले"
 
-#: part/KWStatusBar.cpp:197
+#: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
 msgstr "माऊसचा कर्सर X:Y"
 
-#: part/KWStatusBar.cpp:211
+#: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
 msgstr "झूम नियंत्रक"
 
-#: part/KWView.cpp:183
+#: part/KWView.cpp:184
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:260
+#: part/KWView.cpp:276
 #, kde-format
 msgid "Shape Properties..."
 msgstr "आकार गुणधर्म..."
 
-#: part/KWView.cpp:262
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "आकाराची वागणूक बदला"
 
-#: part/KWView.cpp:271
+#: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "दस्तऐवजा वरून नमूना बनवा"
 
-#: part/KWView.cpp:272
+#: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "हा दस्तऐवज साठवा व नंतर नमूना म्हणून वापरा"
 
-#: part/KWView.cpp:273
+#: part/KWView.cpp:290
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1531,17 +1531,17 @@ msgstr ""
 "हा दस्तऐवज नमूना म्हणून साठवू शकता.<br><br>हा नवीन नमूना इतर दस्तऐवजाची सुरुवात म्हणून "
 "वापरू शकता."
 
-#: part/KWView.cpp:292
+#: part/KWView.cpp:309
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "फॉर्मेटिंग अक्षरे दर्शवा"
 
-#: part/KWView.cpp:298
+#: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "छपाई अयोग्य अक्षरांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:299
+#: part/KWView.cpp:317
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1551,34 +1551,34 @@ msgstr ""
 "छपाई अयोग्य अक्षरांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हा पर्याय कार्यान्वित असेल तर "
 "वर्डस् तुम्हाला टॅब्स, रिकाम्या जागा, केरिएज रिटर्न व इतर छपाई अयोग्य अक्षरे दर्शवितो."
 
-#: part/KWView.cpp:301
+#: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "प्रक्षेत्र शेडिंग्स दाखवा"
 
-#: part/KWView.cpp:307
+#: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "प्रक्षेत्राची शेडेड पार्श्वभूमी चालू/बंद करा"
 
-#: part/KWView.cpp:308
+#: part/KWView.cpp:327
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr "प्रक्षेत्राचे (व्हेरियेबल्स इ.) दृश्य त्याची पार्श्वभूमी विरुध्द रंगात रंगवून चालू/बंद करतो."
 
-#: part/KWView.cpp:310
+#: part/KWView.cpp:329
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "मजकूर आकार किनारे दर्शवा"
 
-#: part/KWView.cpp:311
+#: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "किनारा प्रदर्शन चालू व बंद करतो"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:337
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1588,17 +1588,17 @@ msgstr ""
 "किनारा प्रदर्शन चालू व बंद करतो.<br/><br/>किनारे कधीही छापले जात नाहीत. दस्तऐवज "
 "छापलेल्या पानावर कसे दिसेल ते बघण्यासाठी हा पर्याय उपयोगी आहे."
 
-#: part/KWView.cpp:319
+#: part/KWView.cpp:340
 #, kde-format
 msgid "Show Table Borders"
 msgstr "कोष्टक किनारे दर्शवा"
 
-#: part/KWView.cpp:325
+#: part/KWView.cpp:346
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:348
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1607,18 +1607,18 @@ msgstr ""
 "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हे कार्यान्वित असेल तर कोणतीही "
 "अदृश्य कोष्टक किनार वर्डस् एक पातळ धूसर रेषेने दर्शवितो."
 
-#: part/KWView.cpp:328
+#: part/KWView.cpp:350
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:334
+#: part/KWView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Toggle the display of table borders"
 msgid "Toggle the display of section bounds"
 msgstr "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:335
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1630,17 +1630,17 @@ msgstr ""
 "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हे कार्यान्वित असेल तर कोणतीही "
 "अदृश्य कोष्टक किनार वर्डस् एक पातळ धूसर रेषेने दर्शवितो."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:360
 #, kde-format
 msgid "Show Rulers"
 msgstr "मोजपट्टी दर्शवा"
 
-#: part/KWView.cpp:339
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "मोजपट्टी दर्शवितो व लपवतो"
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:364
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1652,42 +1652,42 @@ msgstr ""
 "व फ्रेमचे स्थान व रुंदी दर्शवितात व टेब्युलेटर्सचे स्थान ठरविण्यासाठी वापरतात.<p>जर "
 "मोजपट्ट्या प्रदर्शित हव्या असतील तर हे निवडा.</p>"
 
-#: part/KWView.cpp:351
+#: part/KWView.cpp:375
 #, kde-format
 msgid "Snap to Grid"
 msgstr "जाळ्याकडे खेचा"
 
-#: part/KWView.cpp:359
+#: part/KWView.cpp:383
 #, kde-format
 msgid "Show Status Bar"
 msgstr "स्थिती पट्टी दर्शवा"
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "स्थिती पट्टी दर्शवितो व लपवतो"
 
-#: part/KWView.cpp:366
+#: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:367
+#: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:374
+#: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "सेमेंटीक शैलीतक्ते..."
 
-#: part/KWView.cpp:376
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "सेमेंटीक शैलीतक्ते बदला व जोडा"
 
-#: part/KWView.cpp:377
+#: part/KWView.cpp:401
 #, fuzzy, kde-format
 #| msgid ""
 #| "Stylesheets are used to format contact, event, and location information "
@@ -1698,22 +1698,22 @@ msgid ""
 msgstr ""
 "Rdf मध्ये साठवलेल्या संपर्क, घटना व स्थान माहितीस स्वरूप देण्यासाठी  शैलीतक्ते वापरले जातात"
 
-#: part/KWView.cpp:392
+#: part/KWView.cpp:416
 #, kde-format
 msgid "Configure..."
 msgstr "संयोजीत करा..."
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:425
 #, kde-format
 msgid "Page Layout..."
 msgstr "पानाची रचना..."
 
-#: part/KWView.cpp:403
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "पूर्ण पानाचे गुणधर्म बदला"
 
-#: part/KWView.cpp:404
+#: part/KWView.cpp:429
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1722,33 +1722,33 @@ msgstr ""
 "पूर्ण पानाचे गुणधर्म बदला.<p>वर्तमानात तुम्ही पानाचा आकार, पानाचा कल, शिर्षक व "
 "अधोशिर्षक आकार, व स्थंभ संयोजना बदलू शकता.</p>"
 
-#: part/KWView.cpp:407
+#: part/KWView.cpp:432
 #, kde-format
 msgid "Create Header"
 msgstr "शिर्षक तयार करा"
 
-#: part/KWView.cpp:413
+#: part/KWView.cpp:438
 #, kde-format
 msgid "Create Footer"
 msgstr "अधोशिर्षक तयार करा"
 
-#: part/KWView.cpp:420
+#: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
-#: part/KWView.cpp:421
+#: part/KWView.cpp:446
 #, fuzzy, kde-format
 #| msgid "No framesets in document"
 msgid "Shows comments in the document"
 msgstr "दस्तऐवजात फ्रेमसेट आढळले नाही"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:428
+#: part/KWView.cpp:453
 #, fuzzy, kde-format
 #| msgid "Shows or hides the status bar"
 msgid "Shows or hides word counting in status bar"
@@ -1779,55 +1779,55 @@ msgstr "पानाची रचना"
 msgid "..."
 msgstr "..."
 
-#: part/widgets/KoFindToolbar.cpp:55
+#: part/widgets/KoFindToolbar.cpp:64
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:68
+#: part/widgets/KoFindToolbar.cpp:81
 #, kde-format
 msgctxt "Next search result"
 msgid "Next"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:78
+#: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:87
+#: part/widgets/KoFindToolbar.cpp:104
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "Search options"
 msgid "Options"
 msgstr "पर्याय"
 
-#: part/widgets/KoFindToolbar.cpp:115
+#: part/widgets/KoFindToolbar.cpp:134
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:125
+#: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:131
+#: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:139
+#: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:200
+#: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
@@ -1835,47 +1835,47 @@ msgid_plural "%1 matches found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: part/widgets/KoFindToolbar.cpp:210
+#: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:216
+#: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:218
+#: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
 msgstr ""
 
-#: part/Words.cpp:45
+#: part/Words.cpp:41
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "विषम पाने शिर्षक"
 
-#: part/Words.cpp:47
+#: part/Words.cpp:43
 #, kde-format
 msgid "Even Pages Header"
 msgstr "सम पाने शिर्षक"
 
-#: part/Words.cpp:49
+#: part/Words.cpp:45
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "विषम पाने अधोशिर्षक"
 
-#: part/Words.cpp:51
+#: part/Words.cpp:47
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "सम पाने अधोशिर्षक"
 
-#: part/Words.cpp:53
+#: part/Words.cpp:49
 #, kde-format
 msgid "Main text"
 msgstr "मुख्य मजकूर"
 
-#: part/Words.cpp:55
+#: part/Words.cpp:51
 #, kde-format
 msgid "Other text"
 msgstr "इतर मजकूर"

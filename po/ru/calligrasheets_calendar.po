@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-07-06 07:35+0400\n"
 "Last-Translator: Georgiy Syptchenko <superzhook@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -25,14 +25,14 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
 "start date."
 msgstr "Дата окончания находится раньше даты начала!"
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "Ошибка"
@@ -46,7 +46,7 @@ msgstr ""
 "Период календаря не должен превышать 10 лет. Если вы хотите указать более "
 "длительный период, вставьте несколько календарей."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -55,12 +55,12 @@ msgstr ""
 "Даты начала и окончания совпадают! Будет вставлена эта указанная дата. Вы "
 "хотите продолжить?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -69,7 +69,7 @@ msgstr ""
 "Календарь с периодом больше года может занять очень много места на листе. Вы "
 "хотите продолжить?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -81,22 +81,22 @@ msgstr ""
 "они будут потеряны. Вы хотите перезаписать данные? Если вы нажмёте на кнопку "
 "«Нет», то будет выделена область ячеек, необходимая для вставки календаря."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Вставить календарь"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Календарь с %1 по %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "неделя"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, kde-format
 msgid "Calendar"
 msgstr "Календарь"

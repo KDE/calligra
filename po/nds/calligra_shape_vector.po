@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VectorShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-09-30 13:17+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -18,29 +18,29 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ChangeVectorDataCommand.cpp:26
+#: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
 msgstr "Vektordaten ännern"
 
-#: VectorShapeFactory.cpp:27
+#: VectorShapeFactory.cpp:26
 #, kde-format
 msgid "Vector image"
 msgstr "Vektorbild"
 
-#: VectorShapeFactory.cpp:29
+#: VectorShapeFactory.cpp:28
 #, fuzzy, kde-format
 #| msgid "A shape that shows a vector image"
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgstr "En Form, de en Vektorbild dorstellt"
 
-#: VectorTool.cpp:64
+#: VectorTool.cpp:63
 #, fuzzy, kde-format
 #| msgid "A shape that shows a vector image"
 msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "En Form, de en Vektorbild dorstellt"
 
-#: VectorToolFactory.cpp:20
+#: VectorToolFactory.cpp:19
 #, fuzzy, kde-format
 #| msgid "A shape that shows a vector image"
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"

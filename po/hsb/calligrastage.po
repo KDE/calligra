@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2005-05-09 17:30+0200\n"
 "Last-Translator:  <hertn@gmx.de>\n"
 "Language-Team: Hornjoserbšćina <hsb@li.org>\n"
@@ -72,7 +72,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Nawigacija"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 #, fuzzy
 #| msgid "Navigation"
 msgctxt "(qtundo-format)"
@@ -111,14 +111,14 @@ msgstr[1] "&Wobrazowy efekt:"
 msgstr[2] "&Wobrazowy efekt:"
 msgstr[3] "&Wobrazowy efekt:"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 #, fuzzy
 #| msgid "Navigation"
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "Nawigacija"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 #, fuzzy
 #| msgid "Image &effect:"
 msgctxt "(qtundo-format)"
@@ -132,14 +132,14 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "&Wobrazowy efekt:"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 #, fuzzy
 #| msgid "Image &effect:"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "&Wobrazowy efekt:"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 #, fuzzy
 #| msgid "Image &effect:"
 msgctxt "(qtundo-format)"
@@ -153,168 +153,168 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "Sćin"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 #, fuzzy
 #| msgid "Image &effect:"
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "&Wobrazowy efekt:"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 #, fuzzy
 #| msgid "Shade"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "Sćin"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr ""
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Presentation Tool"
 msgstr "Nawigacija"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr ""
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
 msgid "Former maintainer"
 msgstr ""
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr ""
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr ""
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Original author"
 msgstr ""
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr ""
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Werner Trobin"
 msgstr ""
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr ""
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr ""
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr ""
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr ""
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr ""
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr ""
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
 msgstr ""
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr ""
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
 msgstr ""
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
 msgstr ""
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr ""
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr ""
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr ""
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr ""
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr ""
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr ""
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Edward Wornar"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "edi.werner@gmx.de"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Edward Wornar"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr "Njeznate"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "Folija %1"
@@ -324,7 +324,7 @@ msgstr "Folija %1"
 msgid "End of presentation. Click to exit."
 msgstr "Kónc prezentacije. Klikńće, zo byšće ju wopušćili."
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
 msgid "Layout"
 msgstr "Layout"
@@ -344,7 +344,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr "Zmylk při instalaciji"
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 #, fuzzy
 #| msgid "Shade"
 msgctxt "(qtundo-format)"
@@ -357,82 +357,75 @@ msgid "Placeholder shape"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, kde-format
 msgid "Double click to add a title"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, kde-format
 msgid "Double click to add an outline"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, kde-format
 msgid "Double click to add a text"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, kde-format
 msgid "Double click to add notes"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
 msgid "Pen Color"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, fuzzy, kde-format
 #| msgid "C&olors:"
 msgid "Black"
 msgstr "Ba&rby:"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, kde-format
 msgid "Yellow"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Next Slide"
@@ -443,269 +436,269 @@ msgstr "Sćin"
 msgid "Speaker Notes"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Current Slide %1 of %2"
 msgstr "Sćin"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "End of Slide Show"
 msgstr "Sćin"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "start after previous animation"
 msgstr "Nawigacija"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "start with previous animation"
 msgstr "Nawigacija"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Animation"
 msgstr "Nawigacija"
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
 msgstr "Forma"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "&Move Here"
 msgstr "Sćin"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "&Copy Here"
 msgstr "Sćin"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
 msgstr ""
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, fuzzy, kde-format
 #| msgid "Normalize"
 msgid "Normal"
 msgstr "Normalizować"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Show Master Slides"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Import Slideshow..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Insert Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr ""
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Copy Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Copy the current slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Delete Slide"
 msgstr "&Wobrazowy efekt:"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Delete the current slide"
 msgstr "&Wobrazowy efekt:"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Master Slide..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Previous Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Go to previous slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Go to next slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "First Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Go to first slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Last Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Go to last slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Configure Stage..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Insert Pictures as Slides..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Create Appear Animation"
 msgstr "Nawigacija"
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Edit Custom Slide Shows..."
 msgstr "&Wobrazowy efekt:"
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Start Presentation"
 msgstr "Nawigacija"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "From Current Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "From First Slide"
 msgstr "Sćin"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Stop presentation"
 msgstr "Nawigacija"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Hide Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr ""
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Configure Slide Show..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Configure Presenter View..."
 msgstr "Sćin"
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Draw on the presentation..."
 msgstr "Nawigacija"
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Highlight the presentation..."
 msgstr "Nawigacija"
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Blackscreen on the presentation..."
@@ -796,63 +789,63 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Slide Show %1"
 msgstr "Sćin"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "All slides"
 msgstr "&Wobrazowy efekt:"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, kde-format
 msgid "Error"
 msgstr ""
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr ""
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 #, fuzzy
 #| msgid "Shade"
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Sćin"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
 msgstr ""
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Preview animation"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Slide Transitions"
 msgstr "Sćin"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Shape Click Actions"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Shape Animations"
@@ -897,7 +890,7 @@ msgid "Duration: "
 msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Preview Shape Animation"
@@ -909,76 +902,76 @@ msgstr "Nawigacija"
 msgid "No Effect"
 msgstr "&Wobrazowy efekt:"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Slide Transition:"
 msgstr "Sćin"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Apply To All Slides"
 msgstr "&Wobrazowy efekt:"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Edit animation"
@@ -990,36 +983,36 @@ msgstr "Nawigacija"
 msgid "Add new animation"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Remove animation"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
 msgstr ""
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Move animation up"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Move animation down"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Add a new animation"
 msgstr "Nawigacija"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Delete current animation"
@@ -1257,212 +1250,212 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Delete Template"
 msgstr "&Wobrazowy efekt:"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Add Template"
 msgstr "&Wobrazowy efekt:"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr ""
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "No sound"
 msgstr ""
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, fuzzy, kde-format
 #| msgid "Shade"
 msgid "Import..."
 msgstr "Sćin"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
 msgstr ""
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, fuzzy, kde-format
-#| msgid "Image &effect:"
-msgid "From Left"
-msgstr "&Wobrazowy efekt:"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "Image &effect:"
-msgid "From Top"
-msgstr "&Wobrazowy efekt:"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, fuzzy, kde-format
-#| msgid "Image &effect:"
-msgid "From Right"
-msgstr "&Wobrazowy efekt:"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Bottom"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Image &effect:"
+msgid "From Left"
+msgstr "&Wobrazowy efekt:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Image &effect:"
+msgid "From Right"
+msgstr "&Wobrazowy efekt:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Image &effect:"
+msgid "From Top"
+msgstr "&Wobrazowy efekt:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, fuzzy, kde-format
 #| msgid "C&olors:"
 msgid "Clock"
 msgstr "Ba&rby:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Twelve Clockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Three Clockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Six Clockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Nine Clockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Twelve Counterclockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Three Counterclockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Six Counterclockwise"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Nine Counterclockwise"
 msgstr "&Wobrazowy efekt:"
@@ -1473,36 +1466,33 @@ msgstr "&Wobrazowy efekt:"
 msgid "Double Fan"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Fan Out Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Fan In Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Fan In Vertical Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
 msgid "Fan In Horizontal Reverse"
 msgstr ""
 
@@ -1512,145 +1502,134 @@ msgstr ""
 msgid "Double Sweep"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Opposite Vertical"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Opposite Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Bottom Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Vertical Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Opposite Vertical Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Opposite Horizontal Reverse"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Center Right"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Top"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Center Left"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Center Bottom"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, kde-format
 msgid "Fan Out Top"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, kde-format
 msgid "Fan Out Right"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, kde-format
 msgid "Fan Out Bottom"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, kde-format
 msgid "Fan Out Left"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, kde-format
 msgid "Fan In Top"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Fan In Right"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, kde-format
 msgid "Fan In Bottom"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, kde-format
 msgid "Fan In Left"
 msgstr ""
 
@@ -1660,35 +1639,32 @@ msgstr ""
 msgid "Pin Wheel"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Two Blades Vertical Clockwise"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Horizontal Clockwise"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Four Blades Horizontal Clockwise"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "&Wobrazowy efekt:"
@@ -1699,131 +1675,130 @@ msgstr "&Wobrazowy efekt:"
 msgid "Saloon Door"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
 msgid "To Top"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "To Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "To Bottom"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "To Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Single Sweep"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Right"
 msgstr "&Wobrazowy efekt:"
@@ -1834,79 +1809,75 @@ msgstr "&Wobrazowy efekt:"
 msgid "Windshield"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
 msgid "Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 msgid "Right Reverse"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Up Reverse"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Reverse"
 msgstr "&Wobrazowy efekt:"
@@ -1917,26 +1888,26 @@ msgstr "&Wobrazowy efekt:"
 msgid "Barn Door"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Bottom Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Bottom Left Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left Reverse"
 msgstr "&Wobrazowy efekt:"
@@ -1952,16 +1923,16 @@ msgstr ""
 msgid "Barn Zig Zag"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
-#| msgid "Image &effect:"
-msgid "Vertical Reversed"
-msgstr "&Wobrazowy efekt:"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Reversed"
+msgstr "&Wobrazowy efekt:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
+#| msgid "Image &effect:"
+msgid "Vertical Reversed"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
@@ -1969,34 +1940,34 @@ msgstr "&Wobrazowy efekt:"
 msgid "Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Top Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Top Right"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Bottom Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "From Bottom Right"
 msgstr "&Wobrazowy efekt:"
@@ -2012,26 +1983,26 @@ msgstr "&Wobrazowy efekt:"
 msgid "Four Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 #| msgid "Contrast"
 msgid "Corners In"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 #| msgid "Contrast"
 msgid "Corners In Reverse"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 #| msgid "Contrast"
 msgid "Corners Out"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 #| msgid "Contrast"
 msgid "Corners Out Reverse"
 msgstr "Kontrast"
@@ -2043,13 +2014,13 @@ msgid "Misc Diagonal"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Double Barn Door"
 msgstr "&Wobrazowy efekt:"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Double Diamond"
 msgstr "&Wobrazowy efekt:"
@@ -2070,13 +2041,11 @@ msgstr "&Wobrazowy efekt:"
 msgid "Fade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
 msgstr ""
 
@@ -2086,52 +2055,50 @@ msgstr ""
 msgid "ArrowHead"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
 msgid "Down"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy
 #| msgid "Contrast"
 msgid "Down Reverse"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Left"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Left Reverse"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Contrast"
 msgid "Circle Reverse"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr ""
@@ -2146,51 +2113,46 @@ msgstr ""
 msgid "Iris"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, kde-format
-msgid "Rectangular"
-msgstr ""
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, kde-format
-msgid "Rectangular Reverse"
-msgstr ""
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diamond"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diamond Reverse"
 msgstr "&Wobrazowy efekt:"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+msgid "Rectangular Reverse"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Contrast"
 msgid "Heart Reverse"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole Reverse"
 msgstr ""
 
@@ -2199,7 +2161,7 @@ msgstr ""
 msgid "Pentagon"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "RoundRect"
@@ -2210,34 +2172,29 @@ msgstr "&Wobrazowy efekt:"
 msgid "Star"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Four Point Star"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
+#, fuzzy
 #| msgid "Contrast"
 msgid "Four Point Star Reverse"
 msgstr "Kontrast"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
 msgid "Six Point Star Reverse"
 msgstr ""
 
@@ -2252,74 +2209,74 @@ msgstr ""
 msgid "Box Snakes"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Top In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Bottom In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Left In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Right In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Four Box Vertical In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Four Box Horizontal In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Top Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Bottom Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Left Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Two Box Right Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Four Box Vertical Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Four Box Horizontal Out"
 msgstr "&Wobrazowy efekt:"
@@ -2330,122 +2287,122 @@ msgstr "&Wobrazowy efekt:"
 msgid "Parallel Snakes"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Top Same In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Top Same Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Bottom Same In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Bottom Same Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Top Left Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Top Left Opposite Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Bottom Left Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Left Same In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Left Same Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Right Same In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Right Same Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Top Left Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Top Left Opposite Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Top Right Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Horizontal Top Right Opposite Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left Opposite In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left Opposite Out"
 msgstr "&Wobrazowy efekt:"
@@ -2462,98 +2419,98 @@ msgstr "Forma"
 msgid "Spiral"
 msgstr "Kužoł"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Left In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Left Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Right In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Top Right Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Left In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Left Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Right In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Bottom Right Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Left In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Left Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Right In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Top Right Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Left In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Left Out"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Right In"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Counterclockwise Bottom Right Out"
 msgstr "&Wobrazowy efekt:"
@@ -2564,46 +2521,41 @@ msgstr "&Wobrazowy efekt:"
 msgid "Waterfall"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 msgid "Top Left Vertical"
 msgstr ""
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 msgid "Top Left Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Top Right Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 msgid "Top Right Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Bottom Left Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 msgid "Bottom Left Horizontal"
 msgstr ""
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Bottom Right Vertical"
 msgstr "&Wobrazowy efekt:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
 msgid "Bottom Right Horizontal"
 msgstr ""
 

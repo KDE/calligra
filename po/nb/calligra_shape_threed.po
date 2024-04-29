@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2012-11-23 13:24+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: ThreedShapeFactory.cpp:35
+#: ThreedShapeFactory.cpp:34
 #, kde-format
 msgid "3D Scene"
 msgstr "3D Scene"
 
-#: ThreedShapeFactory.cpp:37
+#: ThreedShapeFactory.cpp:36
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "Form som viser en enkel 3D-scene."

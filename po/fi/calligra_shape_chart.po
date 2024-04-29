@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2021-03-25 11:31+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -29,29 +29,29 @@ msgid "Your emails"
 msgstr "lasse.liehu@gmail.com, translator@legisign.org"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
-#: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
+#: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
 msgstr "Alku"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
-#: AxesConfigWidget.cpp:81 AxesConfigWidget.cpp:85 LegendConfigWidget.ui:43
+#: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
 msgstr "Loppu"
 
-#: AxesConfigWidget.cpp:83
+#: AxesConfigWidget.cpp:80
 #, kde-format
 msgid "Near-axis"
 msgstr ""
 
-#: AxesConfigWidget.cpp:84
+#: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
 msgstr ""
 
-#: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
-#: DataSetConfigWidget.cpp:353
+#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
+#: DataSetConfigWidget.cpp:347
 #, kde-format
 msgid "Axistitle"
 msgstr "Akseliotsikko"
@@ -172,7 +172,12 @@ msgstr "Toissijainen X-akseli"
 msgid "Secondary Y Axis"
 msgstr "Toissijainen Y-akseli"
 
-#: ChartShape.cpp:311
+#: ChartShape.cpp:301
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Liitännäinen puuttuu"
+
+#: ChartShape.cpp:301
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
@@ -180,12 +185,7 @@ msgstr ""
 "Tekstinimiöiden kaavioissa näyttämiseen tarvittava liitännäinen ei ole "
 "käytettävissä."
 
-#: ChartShape.cpp:312
-#, kde-format
-msgid "Plugin Missing"
-msgstr "Liitännäinen puuttuu"
-
-#: ChartShape.cpp:316
+#: ChartShape.cpp:305
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
@@ -194,31 +194,31 @@ msgstr ""
 "Tekstinimiöiden näyttämiseen tarvittu liitännäinen ei ole yhteensopiva "
 "kaavio-Flake-muodon nykyisen version kanssa."
 
-#: ChartShape.cpp:317
+#: ChartShape.cpp:306
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Liitännäinen on yhteensopimaton"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: ChartShape.cpp:335 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
 msgstr "Otsikko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
-#: ChartShape.cpp:365 TitlesConfigWidget.ui:85
+#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
 msgstr "Alaotsikko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
-#: ChartShape.cpp:395 TitlesConfigWidget.ui:126
+#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
 msgstr "Alatunniste"
 
-#: ChartShape.cpp:787
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -227,334 +227,334 @@ msgstr ""
 "Tämä tiedosto sisältää ulkoisen linkin etätiedostoon\n"
 "%1"
 
-#: ChartShape.cpp:788
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Vahvistus tarvitaan"
 
-#: ChartShape.cpp:788
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr "Lataa"
 
-#: ChartShape.cpp:788
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr "Ohita"
 
-#: ChartShapeFactory.cpp:57
+#: ChartShapeFactory.cpp:55
 #, kde-format
 msgid "Chart"
 msgstr "Kaavio"
 
-#: ChartShapeFactory.cpp:60
+#: ChartShapeFactory.cpp:58
 #, kde-format
 msgid "Business charts"
 msgstr "Liiketoimintakaaviot"
 
-#: ChartShapeFactory.cpp:79 DataSetConfigWidget.cpp:202
-#: PlotAreaConfigWidget.cpp:236
+#: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
+#: PlotAreaConfigWidget.cpp:232
 #, kde-format
 msgid "Bar Chart"
 msgstr "Pylväskaavio"
 
-#: ChartShapeFactory.cpp:80
+#: ChartShapeFactory.cpp:78
 #, kde-format
 msgid "Normal bar chart"
 msgstr "Tavallinen pylväskaavio"
 
-#: ChartShapeFactory.cpp:90
+#: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
 msgstr "Pinottu pylväskaavio"
 
-#: ChartShapeFactory.cpp:91
+#: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
 msgstr "Pinottu pylväskaavio"
 
-#: ChartShapeFactory.cpp:101
+#: ChartShapeFactory.cpp:99
 #, kde-format
 msgid "Percent Bar Chart"
 msgstr "Prosentuaalinen pylväskaavio"
 
-#: ChartShapeFactory.cpp:102
+#: ChartShapeFactory.cpp:100
 #, kde-format
 msgid "Percent bar chart"
 msgstr "Prosentuaalinen pylväskaavio"
 
-#: ChartShapeFactory.cpp:112 DataSetConfigWidget.cpp:207
-#: PlotAreaConfigWidget.cpp:242
+#: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
+#: PlotAreaConfigWidget.cpp:238
 #, kde-format
 msgid "Line Chart"
 msgstr "Viivakaavio"
 
-#: ChartShapeFactory.cpp:113
+#: ChartShapeFactory.cpp:111
 #, kde-format
 msgid "Normal line chart"
 msgstr "Tavallinen viivakaavio"
 
-#: ChartShapeFactory.cpp:123
+#: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
 msgstr "Pinottu viivakaavio"
 
-#: ChartShapeFactory.cpp:124
+#: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
 msgstr "Pinottu viivakaavio"
 
-#: ChartShapeFactory.cpp:134
+#: ChartShapeFactory.cpp:132
 #, kde-format
 msgid "Percent Line Chart"
 msgstr "Prosentuaalinen viivakaavio"
 
-#: ChartShapeFactory.cpp:135
+#: ChartShapeFactory.cpp:133
 #, kde-format
 msgid "Percent line chart"
 msgstr "Prosentuaalinen viivakaavio"
 
-#: ChartShapeFactory.cpp:145 DataSetConfigWidget.cpp:212
-#: PlotAreaConfigWidget.cpp:248
+#: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
+#: PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Area Chart"
 msgstr "Aluekaavio"
 
-#: ChartShapeFactory.cpp:146
+#: ChartShapeFactory.cpp:144
 #, kde-format
 msgid "Normal area chart"
 msgstr "Tavallinen aluekaavio"
 
-#: ChartShapeFactory.cpp:156
+#: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
 msgstr "Pinottu aluekaavio"
 
-#: ChartShapeFactory.cpp:157
+#: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
 msgstr "Pinottu aluekaavio"
 
-#: ChartShapeFactory.cpp:167
+#: ChartShapeFactory.cpp:165
 #, kde-format
 msgid "Percent Area Chart"
 msgstr "Prosentuaalinen aluekaavio"
 
-#: ChartShapeFactory.cpp:168
+#: ChartShapeFactory.cpp:166
 #, kde-format
 msgid "Percent area chart"
 msgstr "Prosentuaalinen aluekaavio"
 
-#: ChartShapeFactory.cpp:178 DataSetConfigWidget.cpp:217
-#: PlotAreaConfigWidget.cpp:256
+#: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
+#: PlotAreaConfigWidget.cpp:252
 #, kde-format
 msgid "Pie Chart"
 msgstr "Ympyräkaavio"
 
-#: ChartShapeFactory.cpp:179
+#: ChartShapeFactory.cpp:177
 #, kde-format
 msgid "Pie chart"
 msgstr "Ympyräkaavio"
 
-#: ChartShapeFactory.cpp:189 DataSetConfigWidget.cpp:218
-#: PlotAreaConfigWidget.cpp:257
+#: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
+#: PlotAreaConfigWidget.cpp:253
 #, kde-format
 msgid "Ring Chart"
 msgstr "Rengaskaavio"
 
-#: ChartShapeFactory.cpp:190
+#: ChartShapeFactory.cpp:188
 #, kde-format
 msgid "Ring chart"
 msgstr "Rengaskaavio"
 
-#: ChartShapeFactory.cpp:200 DataSetConfigWidget.cpp:229
-#: PlotAreaConfigWidget.cpp:270
+#: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
+#: PlotAreaConfigWidget.cpp:266
 #, kde-format
 msgid "Bubble Chart"
 msgstr "Kuplakaavio"
 
-#: ChartShapeFactory.cpp:201
+#: ChartShapeFactory.cpp:199
 #, kde-format
 msgid "Bubble chart"
 msgstr "Kuplakaavio"
 
-#: ChartShapeFactory.cpp:211 DataSetConfigWidget.cpp:231
-#: PlotAreaConfigWidget.cpp:269
+#: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
+#: PlotAreaConfigWidget.cpp:265
 #, kde-format
 msgid "Scatter Chart"
 msgstr "Pistekaavio"
 
-#: ChartShapeFactory.cpp:212
+#: ChartShapeFactory.cpp:210
 #, kde-format
 msgid "Scatter chart"
 msgstr "Pistekaavio"
 
-#: ChartShapeFactory.cpp:222
+#: ChartShapeFactory.cpp:220
 #, kde-format
 msgid "Radar Chart"
 msgstr "Säteittäinen kaavio"
 
-#: ChartShapeFactory.cpp:223
+#: ChartShapeFactory.cpp:221
 #, kde-format
 msgid "Radar chart"
 msgstr "Säteittäinen kaavio"
 
-#: ChartShapeFactory.cpp:233
+#: ChartShapeFactory.cpp:231
 #, kde-format
 msgid "Filled Radar Chart"
 msgstr "Täytetty säteittäinen kaavio"
 
-#: ChartShapeFactory.cpp:234
+#: ChartShapeFactory.cpp:232
 #, kde-format
 msgid "Filled radar chart"
 msgstr "Täytetty säteittäinen kaavio"
 
-#: ChartShapeFactory.cpp:244
+#: ChartShapeFactory.cpp:242
 #, kde-format
 msgid "Candle Stick Stock Chart"
 msgstr "Kynttilänjalkapörssikaavio"
 
-#: ChartShapeFactory.cpp:245
+#: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
 msgstr "Japanilainen kynttilänjalkapörssikaavio"
 
-#: ChartShapeFactory.cpp:255
+#: ChartShapeFactory.cpp:253
 #, kde-format
 msgid "OHLC Stock Chart"
 msgstr "OHLC-pörssikaavio"
 
-#: ChartShapeFactory.cpp:256
+#: ChartShapeFactory.cpp:254
 #, fuzzy, kde-format
 #| msgid "OpenHighLowClose"
 msgid "Open High Low Close stock chart"
 msgstr "Avaus, ylin, alin ja viime"
 
-#: ChartShapeFactory.cpp:266
+#: ChartShapeFactory.cpp:264
 #, kde-format
 msgid "HLC Stock Chart"
 msgstr "HLC-pörssikaavio"
 
-#: ChartShapeFactory.cpp:267
+#: ChartShapeFactory.cpp:265
 #, fuzzy, kde-format
 #| msgid "HighLowClose"
 msgid "High Low Close stock chart"
 msgstr "Ylin, alin ja viime"
 
-#: ChartShapeFactory.cpp:364 ChartShapeFactory.cpp:550
-#: ChartShapeFactory.cpp:633
+#: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
+#: ChartShapeFactory.cpp:631
 #, kde-format
 msgid "January"
 msgstr "Tammikuu"
 
-#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:551
-#: ChartShapeFactory.cpp:634
+#: ChartShapeFactory.cpp:359 ChartShapeFactory.cpp:549
+#: ChartShapeFactory.cpp:632
 #, kde-format
 msgid "July"
 msgstr "Heinäkuu"
 
-#: ChartShapeFactory.cpp:366 ChartShapeFactory.cpp:552
-#: ChartShapeFactory.cpp:635
+#: ChartShapeFactory.cpp:360 ChartShapeFactory.cpp:550
+#: ChartShapeFactory.cpp:633
 #, kde-format
 msgid "December"
 msgstr "Joulukuu"
 
-#: ChartShapeFactory.cpp:369 ChartShapeFactory.cpp:370
-#: ChartShapeFactory.cpp:371 ChartShapeFactory.cpp:372
+#: ChartShapeFactory.cpp:363 ChartShapeFactory.cpp:364
+#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:366
+#: ChartShapeFactory.cpp:553 ChartShapeFactory.cpp:554
 #: ChartShapeFactory.cpp:555 ChartShapeFactory.cpp:556
-#: ChartShapeFactory.cpp:557 ChartShapeFactory.cpp:558
-#: ChartShapeFactory.cpp:638 ChartShapeFactory.cpp:639
-#: dialogs/BubbleDataEditor.cpp:67 dialogs/ScatterDataEditor.cpp:71
+#: ChartShapeFactory.cpp:636 ChartShapeFactory.cpp:637
+#: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
 #, kde-format
 msgid "Column %1"
 msgstr "Sarake %1"
 
-#: ChartShapeFactory.cpp:396
+#: ChartShapeFactory.cpp:390
 #, kde-format
 msgid "Month"
 msgstr "Kuukausi"
 
-#: ChartShapeFactory.cpp:398
+#: ChartShapeFactory.cpp:392
 #, kde-format
 msgid "Growth in %"
 msgstr "Kasvu prosentteina"
 
-#: ChartShapeFactory.cpp:460
+#: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
 msgstr ""
 
-#: ChartShapeFactory.cpp:461
+#: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
 msgstr ""
 
-#: ChartShapeFactory.cpp:462
+#: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
 msgstr ""
 
-#: ChartShapeFactory.cpp:465
+#: ChartShapeFactory.cpp:459
 #, kde-format
 msgid "Open"
 msgstr "Avaa"
 
-#: ChartShapeFactory.cpp:466
+#: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "High"
 msgstr "Suuri"
 
-#: ChartShapeFactory.cpp:467
+#: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Low"
 msgstr "Vähäinen"
 
-#: ChartShapeFactory.cpp:468
+#: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Close"
 msgstr "Sulje"
 
-#: ChartShapeFactory.cpp:583
+#: ChartShapeFactory.cpp:581
 #, kde-format
 msgid "Growth"
 msgstr "Kasvu"
 
-#: ChartTool.cpp:103
+#: ChartTool.cpp:99
 #, kde-format
 msgid "Do something"
 msgstr "Tee jotain"
 
-#: ChartTool.cpp:108
+#: ChartTool.cpp:104
 #, kde-format
 msgid "Do something else"
 msgstr "Tee jotain muuta"
 
-#: ChartTool.cpp:277
+#: ChartTool.cpp:271
 #, kde-format
 msgid "Titles"
 msgstr "Otsikot"
 
-#: ChartTool.cpp:292
+#: ChartTool.cpp:286
 #, kde-format
 msgid "Legend"
 msgstr "Selite"
 
-#: ChartTool.cpp:312
+#: ChartTool.cpp:299
 #, kde-format
 msgid "Plot Area"
 msgstr "Kaavion alue"
 
-#: ChartTool.cpp:1142
+#: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "Näytä kuvion selite"
 
-#: ChartTool.cpp:1144
+#: ChartTool.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
 msgstr "Piilota kuvion selite"
 
-#: ChartToolFactory.cpp:29
+#: ChartToolFactory.cpp:26
 #, kde-format
 msgid "Chart editing"
 msgstr "Kaavion muokkaus"
@@ -569,125 +569,125 @@ msgctxt "(qtundo-format)"
 msgid "Remove Axis"
 msgstr "Poista akseli"
 
-#: commands/AxisCommand.cpp:120
+#: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
 msgstr ""
 "Näytä akselin otsikko\n"
 "akselin otsikon näyttäminen"
 
-#: commands/AxisCommand.cpp:122
+#: commands/AxisCommand.cpp:115
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
 msgstr ""
 "Piilota akselin otsikko\n"
 "akselin otsikon piilottaminen"
 
-#: commands/AxisCommand.cpp:147
+#: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
 msgstr "Näytä akseli"
 
-#: commands/AxisCommand.cpp:149
+#: commands/AxisCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
 msgstr "Piilota akseli"
 
-#: commands/AxisCommand.cpp:158
+#: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
 msgstr "Näytä akseliselitteet"
 
-#: commands/AxisCommand.cpp:160
+#: commands/AxisCommand.cpp:153
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
 msgstr "Piilota akseliselitteet"
 
-#: commands/AxisCommand.cpp:169
+#: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
 msgstr "Näytä akselin väljempi ruudukko"
 
-#: commands/AxisCommand.cpp:171
+#: commands/AxisCommand.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
 msgstr "Piilota akselin väljempi ruudukko"
 
-#: commands/AxisCommand.cpp:180
+#: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
 msgstr "Näytä akselin tiuhempi ruudukko"
 
-#: commands/AxisCommand.cpp:182
+#: commands/AxisCommand.cpp:175
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
 msgstr "Piilota akselin tiuhempi ruudukko"
 
-#: commands/AxisCommand.cpp:191
+#: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
 msgstr "Logaritminen asteikko"
 
-#: commands/AxisCommand.cpp:193
+#: commands/AxisCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
 msgstr "Lineaarinen asteikko"
 
-#: commands/AxisCommand.cpp:201
+#: commands/AxisCommand.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
 msgstr ""
 "Aseta akselin askeleen leveys\n"
 "akselin askeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:208
+#: commands/AxisCommand.cpp:201
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
 msgstr ""
 "Aseta akselin aliaskeleen leveys\n"
 "akselin aliaskeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:216
+#: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
 msgstr ""
 "Aseta automaattinen askeleen leveys\n"
 "automaattisen askeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:218
+#: commands/AxisCommand.cpp:211
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
 msgstr ""
 "Aseta manuaalinen askeleen leveys\n"
 "manuaalisen askeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:227
+#: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
 msgstr ""
 "Aseta automaattisen aliaskeleen leveys\n"
 "automaattisen aliaskeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:229
+#: commands/AxisCommand.cpp:222
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
 msgstr ""
 "Aseta manuaalisen aliaskeleen leveys\n"
 "manuaalisen aliaskeleen leveyden asettaminen"
 
-#: commands/AxisCommand.cpp:237
+#: commands/AxisCommand.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
 msgstr ""
 "Aseta akselin nimiön fontti\n"
 "akselin nimiön fontin asettaminen"
 
-#: commands/AxisCommand.cpp:243
+#: commands/AxisCommand.cpp:236
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
 msgstr "Aseta akselin sijainti"
 
-#: commands/AxisCommand.cpp:264
+#: commands/AxisCommand.cpp:257
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
 msgstr "Aseta akseliselitteen sijainti"
@@ -706,259 +706,259 @@ msgstr ""
 "Piilota tekstimuoto\n"
 "tekstimuodon piilottaminen"
 
-#: commands/ChartTypeCommand.cpp:80
+#: commands/ChartTypeCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
 msgstr "Tavallinen pylväskaavio"
 
-#: commands/ChartTypeCommand.cpp:83
+#: commands/ChartTypeCommand.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
 msgstr "Pinottu pylväskaavio"
 
-#: commands/ChartTypeCommand.cpp:86
+#: commands/ChartTypeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
 msgstr "Prosentuaalinen pylväskaavio"
 
-#: commands/ChartTypeCommand.cpp:95
+#: commands/ChartTypeCommand.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
 msgstr "Tavallinen viivakaavio"
 
-#: commands/ChartTypeCommand.cpp:98
+#: commands/ChartTypeCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
 msgstr "Pinottu viivakaavio"
 
-#: commands/ChartTypeCommand.cpp:101
+#: commands/ChartTypeCommand.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
 msgstr "Prosentuaalinen viivakaavio"
 
-#: commands/ChartTypeCommand.cpp:110
+#: commands/ChartTypeCommand.cpp:107
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
 msgstr "Tavallinen aluekaavio"
 
-#: commands/ChartTypeCommand.cpp:113
+#: commands/ChartTypeCommand.cpp:110
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
 msgstr "Pinottu aluekaavio"
 
-#: commands/ChartTypeCommand.cpp:116
+#: commands/ChartTypeCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
 msgstr "Prosentuaalinen aluekaavio"
 
-#: commands/ChartTypeCommand.cpp:123
+#: commands/ChartTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
 msgstr "Ympyräkaavio"
 
-#: commands/ChartTypeCommand.cpp:126
+#: commands/ChartTypeCommand.cpp:123
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
 msgstr "Rengaskaavio"
 
-#: commands/ChartTypeCommand.cpp:129
+#: commands/ChartTypeCommand.cpp:126
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
 msgstr "Pistekaavio"
 
-#: commands/ChartTypeCommand.cpp:132
+#: commands/ChartTypeCommand.cpp:129
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
 msgstr "Säteittäinen kaavio"
 
-#: commands/ChartTypeCommand.cpp:135
+#: commands/ChartTypeCommand.cpp:132
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
 msgstr "Täytetty säteittäinen kaavio"
 
-#: commands/ChartTypeCommand.cpp:138
+#: commands/ChartTypeCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
 msgstr "Pörssikaavio"
 
-#: commands/ChartTypeCommand.cpp:141
+#: commands/ChartTypeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr "Kuplakaavio"
 
-#: commands/ChartTypeCommand.cpp:144
+#: commands/ChartTypeCommand.cpp:141
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
 msgstr "Pintakaavio"
 
-#: commands/ChartTypeCommand.cpp:147
+#: commands/ChartTypeCommand.cpp:144
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
 msgstr "Gantt-kaavio"
 
-#: commands/DatasetCommand.cpp:144
+#: commands/DatasetCommand.cpp:137
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
 msgstr ""
 "Aseta tietojoukon kaavion tyyppi\n"
 "tietojoukon kaavion tyypin asettaminen"
 
-#: commands/DatasetCommand.cpp:152
+#: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
 msgstr ""
 "Näytä tietojoukon luokka\n"
 "tietojoukon luokan näyttäminen"
 
-#: commands/DatasetCommand.cpp:154
+#: commands/DatasetCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
 msgstr ""
 "Piilota tietojoukon luokka\n"
 "tietojoukon luokan piilottaminen"
 
-#: commands/DatasetCommand.cpp:163
+#: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
 msgstr ""
 "Näytä tietojoukon numero\n"
 "tietojoukon numeron näyttäminen"
 
-#: commands/DatasetCommand.cpp:165
+#: commands/DatasetCommand.cpp:158
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
 msgstr ""
 "Piilota tietojoukon numero\n"
 "tietojoukon numeron piilottaminen"
 
-#: commands/DatasetCommand.cpp:174
+#: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
 msgstr ""
 "Näytä tietojoukon prosenttimäärä\n"
 "tietojoukon prosenttimäärän näyttäminen"
 
-#: commands/DatasetCommand.cpp:176
+#: commands/DatasetCommand.cpp:169
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
 msgstr ""
 "Piilota tietojoukon prosenttimäärä\n"
 "tietojoukon prosenttimäärän piilottaminen"
 
-#: commands/DatasetCommand.cpp:185
+#: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
 msgstr ""
 "Näytä tietojoukon symboli\n"
 "tietojoukon symbolin näyttäminen"
 
-#: commands/DatasetCommand.cpp:187
+#: commands/DatasetCommand.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
 msgstr ""
 "Piilota tietojoukon symboli\n"
 "tietojoukon symbolin piilottaminen"
 
-#: commands/DatasetCommand.cpp:195
+#: commands/DatasetCommand.cpp:188
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
 msgstr ""
 "Aseta tietojoukon siveltimen väri\n"
 "tietojoukon siveltimen värin asettaminen"
 
-#: commands/DatasetCommand.cpp:202
+#: commands/DatasetCommand.cpp:195
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
 msgstr ""
 "Aseta tietojoukon kynän väri\n"
 "tietojoukon kynän värin asettaminen"
 
-#: commands/DatasetCommand.cpp:211
+#: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
 msgstr "Piilota tietojoukon osoitin"
 
-#: commands/DatasetCommand.cpp:213
+#: commands/DatasetCommand.cpp:206
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
 msgstr "Näytä tietojoukon osoitin"
 
-#: commands/DatasetCommand.cpp:221
+#: commands/DatasetCommand.cpp:214
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
 msgstr ""
 "Aseta tietojoukon akseli\n"
 "tietojoukon akselin asettaminen"
 
-#: commands/GapCommand.cpp:61
+#: commands/GapCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
 msgstr "Aseta pylväiden väli"
 
-#: commands/GapCommand.cpp:68
+#: commands/GapCommand.cpp:67
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
 msgstr "Aseta joukkojen väli"
 
-#: commands/LegendCommand.cpp:78
+#: commands/LegendCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
 msgstr ""
 "Aseta selitteen otsikko\n"
 "selitteen otsikon asettaminen"
 
-#: commands/LegendCommand.cpp:86
+#: commands/LegendCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
 msgstr ""
 "Aseta selitteen fontti\n"
 "selitteen fontin asettaminen"
 
-#: commands/LegendCommand.cpp:93
+#: commands/LegendCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
 msgstr ""
 "Aseta selitteen fonttikoko\n"
 "selitteen fonttikoon asettaminen"
 
-#: commands/LegendCommand.cpp:100
+#: commands/LegendCommand.cpp:97
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
 msgstr ""
 "Aseta selitteen suunta\n"
 "selitteen suunnan asettaminen"
 
-#: commands/PlotAreaCommand.cpp:59
+#: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
 msgstr "Aseta vaakapylväät"
 
-#: commands/PlotAreaCommand.cpp:61
+#: commands/PlotAreaCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
 msgstr "Aseta pystypylväät"
 
-#: DataSet.cpp:262
+#: DataSet.cpp:274
 #, kde-format
 msgid "Series %1"
 msgstr "Sarja %1"
 
-#: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
 #, kde-format
 msgid "Chart Type"
 msgstr "Kaavion laji"
 
-#: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
-#: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
-#: PlotAreaConfigWidget.cpp:237 PlotAreaConfigWidget.cpp:243
-#: PlotAreaConfigWidget.cpp:249 PlotAreaConfigWidget.cpp:263
+#: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
+#: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
+#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
+#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
 #, kde-format
 msgid "Normal"
 msgstr "Tavallinen"
 
-#: DataSetConfigWidget.cpp:204 DataSetConfigWidget.cpp:209
-#: DataSetConfigWidget.cpp:214 PlotAreaConfigWidget.cpp:238
-#: PlotAreaConfigWidget.cpp:244 PlotAreaConfigWidget.cpp:250
+#: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
+#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
 #, kde-format
 msgid "Stacked"
 msgstr "Pinottu"
@@ -966,62 +966,62 @@ msgstr "Pinottu"
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
-#: DataSetConfigWidget.cpp:205 DataSetConfigWidget.cpp:210
-#: DataSetConfigWidget.cpp:215 DataSetConfigWidget.ui:245
-#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:239
-#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:251
+#: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
+#: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
+#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
 msgstr "Prosenttimäärät"
 
-#: DataSetConfigWidget.cpp:220 PlotAreaConfigWidget.cpp:262
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Polar Chart"
 msgstr "Säteittäinen kaavio"
 
-#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:264
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
 #, kde-format
 msgid "Filled"
 msgstr "Täytetty"
 
-#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:275
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "Stock Chart"
 msgstr "Pörssikaavio"
 
-#: DataSetConfigWidget.cpp:225 PlotAreaConfigWidget.cpp:276
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "Candlestick"
 msgstr "Kynttilänjalka"
 
-#: DataSetConfigWidget.cpp:226 PlotAreaConfigWidget.cpp:277
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
 #, kde-format
 msgid "OpenHighLowClose"
 msgstr "Avaus, ylin, alin ja viime"
 
-#: DataSetConfigWidget.cpp:227 PlotAreaConfigWidget.cpp:278
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
 #, kde-format
 msgid "HighLowClose"
 msgstr "Ylin, alin ja viime"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
-#: DataSetConfigWidget.cpp:245 DataSetConfigWidget.cpp:387
-#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:84
-#: widgets/RadarDataSetConfigWidget.cpp:188
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
+#: widgets/RadarDataSetConfigWidget.cpp:182
 #, kde-format
 msgid "None"
 msgstr "Ei mitään"
 
 #. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
 #. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
-#: DataSetConfigWidget.cpp:246 dialogs/AxisScalingDialog.ui:49
-#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:85
+#: DataSetConfigWidget.cpp:243 dialogs/AxisScalingDialog.ui:49
+#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:83
 #, kde-format
 msgid "Automatic"
 msgstr "Automaattinen"
 
-#: DataSetConfigWidget.cpp:248 widgets/RadarDataSetConfigWidget.cpp:87
+#: DataSetConfigWidget.cpp:245 widgets/RadarDataSetConfigWidget.cpp:85
 #, kde-format
 msgid "Select"
 msgstr "Valitse"
@@ -1032,17 +1032,17 @@ msgstr "Valitse"
 #. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
-#: DataSetConfigWidget.cpp:396 TitlesConfigWidget.ui:52
+#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
-#: widgets/RadarDataSetConfigWidget.cpp:197
+#: widgets/RadarDataSetConfigWidget.cpp:191
 #, kde-format
 msgid "Auto"
 msgstr "Automaattinen"
 
-#: DataSetConfigWidget.cpp:658 PlotAreaConfigWidget.cpp:638
-#: PlotAreaConfigWidget.cpp:689 PlotAreaConfigWidget.cpp:871
-#: widgets/RadarDataSetConfigWidget.cpp:303
+#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
+#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
+#: widgets/RadarDataSetConfigWidget.cpp:297
 #, kde-format
 msgid "Data Set %1"
 msgstr "Tietojoukko %1"
@@ -1089,7 +1089,7 @@ msgstr "Merkki"
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowCategory)
-#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:32
+#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:35
 #: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
 #: widgets/RingConfigWidget.ui:106
 #, kde-format
@@ -1112,7 +1112,7 @@ msgstr "Virhepalkit"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
-#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:61
+#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:64
 #: dialogs/PieDataEditor.ui:33
 #, kde-format
 msgid "Insert"
@@ -1143,36 +1143,36 @@ msgstr "Askeleen leveys:"
 msgid "Substep Width:"
 msgstr "Aliaskeleen leveys:"
 
-#: dialogs/BubbleDataEditor.cpp:105
+#: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
 msgid "Bubble Data Editor"
 msgstr "Kuplatietomuokkain"
 
-#: dialogs/BubbleDataEditor.cpp:111 dialogs/ScatterDataEditor.cpp:117
+#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
 #, kde-format
 msgid "Insert Column Before"
 msgstr "Lisää sarakkeita edelle"
 
-#: dialogs/BubbleDataEditor.cpp:112 dialogs/ScatterDataEditor.cpp:118
+#: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
 #, kde-format
 msgid "Insert Column After"
 msgstr "Lisää sarakkeita jälkeen"
 
-#: dialogs/BubbleDataEditor.cpp:113 dialogs/ScatterDataEditor.cpp:119
-#: dialogs/StockDataEditor.cpp:96
+#: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
+#: dialogs/StockDataEditor.cpp:98
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Lisää rivejä ylle"
 
-#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:120
-#: dialogs/StockDataEditor.cpp:97
+#: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
+#: dialogs/StockDataEditor.cpp:99
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Lisää rivejä alle"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
-#: dialogs/BubbleDataEditor.cpp:115 dialogs/PieDataEditor.cpp:62
-#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:121
+#: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
+#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
 #, kde-format
 msgid "Delete"
 msgstr "Poista"
@@ -1288,62 +1288,62 @@ msgstr ""
 msgid "Dataset Name"
 msgstr "Tietojoukon nimi"
 
-#: dialogs/BubbleDataSetTableModel.cpp:104
-#: dialogs/ScatterDataSetTableModel.cpp:104
+#: dialogs/BubbleDataSetTableModel.cpp:105
+#: dialogs/ScatterDataSetTableModel.cpp:105
 #, kde-format
 msgid "X-Values"
 msgstr "X-arvot"
 
-#: dialogs/BubbleDataSetTableModel.cpp:105
-#: dialogs/ScatterDataSetTableModel.cpp:105
+#: dialogs/BubbleDataSetTableModel.cpp:107
+#: dialogs/ScatterDataSetTableModel.cpp:107
 #, kde-format
 msgid "Y-Values"
 msgstr "Y-arvot"
 
-#: dialogs/BubbleDataSetTableModel.cpp:106
+#: dialogs/BubbleDataSetTableModel.cpp:109
 #, kde-format
 msgid "Bubble Size"
 msgstr "Kuplan koko"
 
-#: dialogs/BubbleDataSetTableModel.cpp:146
-#: dialogs/ScatterDataSetTableModel.cpp:142
+#: dialogs/BubbleDataSetTableModel.cpp:149
+#: dialogs/ScatterDataSetTableModel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
 msgstr "Selite: %1"
 
-#: dialogs/BubbleDataSetTableModel.cpp:148
-#: dialogs/ScatterDataSetTableModel.cpp:144
+#: dialogs/BubbleDataSetTableModel.cpp:151
+#: dialogs/ScatterDataSetTableModel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
 msgstr "Oletusselite: %1"
 
-#: dialogs/BubbleDataSetTableModel.cpp:153
-#: dialogs/ScatterDataSetTableModel.cpp:149
+#: dialogs/BubbleDataSetTableModel.cpp:156
+#: dialogs/ScatterDataSetTableModel.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
 msgstr "X-arvojen solualue: %1"
 
-#: dialogs/BubbleDataSetTableModel.cpp:155
-#: dialogs/BubbleDataSetTableModel.cpp:162
-#: dialogs/BubbleDataSetTableModel.cpp:169
-#: dialogs/ScatterDataSetTableModel.cpp:151
-#: dialogs/ScatterDataSetTableModel.cpp:158
+#: dialogs/BubbleDataSetTableModel.cpp:158
+#: dialogs/BubbleDataSetTableModel.cpp:165
+#: dialogs/BubbleDataSetTableModel.cpp:172
+#: dialogs/ScatterDataSetTableModel.cpp:153
+#: dialogs/ScatterDataSetTableModel.cpp:160
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
 msgstr "Käytetyt oletusarvot"
 
-#: dialogs/BubbleDataSetTableModel.cpp:160
-#: dialogs/ScatterDataSetTableModel.cpp:156
+#: dialogs/BubbleDataSetTableModel.cpp:163
+#: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
 msgstr "Y-arvojen solualue: %1"
 
-#: dialogs/BubbleDataSetTableModel.cpp:167
+#: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
@@ -1417,7 +1417,7 @@ msgstr "Tietojoukot &riveillä"
 msgid "Data sets in &columns"
 msgstr "Tietojoukot &sarakkeissa"
 
-#: dialogs/FontEditorDialog.cpp:20
+#: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
 msgstr "Valitse fontti"
@@ -1516,7 +1516,7 @@ msgid "Same for both"
 msgstr "Sama molemmissa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
+#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
 #, kde-format
 msgid "Value"
 msgstr "Arvo"
@@ -1591,7 +1591,7 @@ msgstr "&Y"
 msgid "Title:"
 msgstr "Otsikko:"
 
-#: dialogs/PieDataEditor.cpp:55
+#: dialogs/PieDataEditor.cpp:58
 #, kde-format
 msgid "Pie Data Editor"
 msgstr "Piirakkakaaviomuokkain"
@@ -1602,12 +1602,12 @@ msgstr "Piirakkakaaviomuokkain"
 msgid "Del"
 msgstr "Poista"
 
-#: dialogs/ScatterDataEditor.cpp:94 widgets/RingConfigWidget.cpp:101
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
 #, kde-format
 msgid "Row %1"
 msgstr "Rivi %1"
 
-#: dialogs/ScatterDataEditor.cpp:111
+#: dialogs/ScatterDataEditor.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Hide Dataset Category"
@@ -1617,7 +1617,7 @@ msgstr ""
 "tietojoukon luokan piilottaminen"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
-#: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
+#: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Hide Dataset Category"
@@ -1626,7 +1626,7 @@ msgstr ""
 "Piilota tietojoukon luokka\n"
 "tietojoukon luokan piilottaminen"
 
-#: dialogs/StockDataEditor.cpp:98
+#: dialogs/StockDataEditor.cpp:100
 #, kde-format
 msgid "Delete Row"
 msgstr "Poista rivi"
@@ -1637,37 +1637,37 @@ msgstr "Poista rivi"
 msgid "Delete row"
 msgstr "Poista rivi"
 
-#: dialogs/TableEditorDialog.cpp:58
+#: dialogs/TableEditorDialog.cpp:56
 #, kde-format
 msgid "Insert Above"
 msgstr "Lisää ylle"
 
-#: dialogs/TableEditorDialog.cpp:59
+#: dialogs/TableEditorDialog.cpp:57
 #, kde-format
 msgid "Insert Below"
 msgstr "Lisää alle"
 
-#: dialogs/TableEditorDialog.cpp:60
+#: dialogs/TableEditorDialog.cpp:58
 #, kde-format
 msgid "Insert Before"
 msgstr "Lisää edelle"
 
-#: dialogs/TableEditorDialog.cpp:61
+#: dialogs/TableEditorDialog.cpp:59
 #, kde-format
 msgid "Insert After"
 msgstr "Lisää jälkeen"
 
-#: dialogs/TableEditorDialog.cpp:62
+#: dialogs/TableEditorDialog.cpp:60
 #, kde-format
 msgid "Delete Selection"
 msgstr "Poista valinta"
 
-#: dialogs/TableEditorDialog.cpp:169 dialogs/TableEditorDialog.cpp:193
+#: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
 msgid "New Row"
 msgstr "Uusi rivi"
 
-#: dialogs/TableEditorDialog.cpp:217 dialogs/TableEditorDialog.cpp:241
+#: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
 #, kde-format
 msgid "New Column"
 msgstr "Uusi sarake"
@@ -1762,7 +1762,7 @@ msgstr "Suunta"
 msgid "Fonts..."
 msgstr "Fontit…"
 
-#: PieConfigWidget.cpp:101
+#: PieConfigWidget.cpp:100
 #, fuzzy, kde-format
 #| msgid "Data Set %1"
 msgid "Data Point %1"
@@ -1774,12 +1774,12 @@ msgstr "Tietojoukko %1"
 msgid "E&xplode Factor"
 msgstr "&Hajotuskerroin"
 
-#: PlotAreaConfigWidget.cpp:281
+#: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Surface Chart"
 msgstr "Pintakaavio"
 
-#: PlotAreaConfigWidget.cpp:283
+#: PlotAreaConfigWidget.cpp:279
 #, kde-format
 msgid "Gantt Chart"
 msgstr "Gantt-kaavio"
@@ -1902,12 +1902,12 @@ msgstr "Viisteliitos"
 msgid "Miter limit"
 msgstr ""
 
-#: widgets/StrokeConfigWidget.cpp:197
+#: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Aseta todellisen valinnan viivan paksuus"
 
-#: widgets/StrokeConfigWidget.cpp:211
+#: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
 msgstr "Muuta viivan väriä"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CommentShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-05-30 08:28+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -27,7 +27,7 @@ msgstr "Το πρόσθετο που απαιτείται για την εμφά
 msgid "Plugin Missing"
 msgstr "Λείπει το πρόσθετο"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -36,7 +36,7 @@ msgstr ""
 "Το πρόσθετο που απαιτείται για την εμφάνιση της σημείωσης δεν είναι συμβατό "
 "με την τρέχουσα έκδοση του comment shape."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Ασυμβατότητα πρόσθετου"

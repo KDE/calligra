@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-10-12 08:09+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 20.04.2\n"
 
-#: karbon/image/ImageExport.cpp:90
+#: karbon/image/ImageExport.cpp:88
 #, kde-format
 msgid "%1 Export Options"
 msgstr "%1 Επιλογές εξαγωγής"
 
-#: karbon/image/ImageExportOptionsWidget.cpp:47
+#: karbon/image/ImageExportOptionsWidget.cpp:48
 #, kde-format
 msgid "Page %1"
 msgstr "Σελίδα %1"
@@ -96,120 +96,120 @@ msgid "Opacity"
 msgstr "Αδιαφάνεια"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
-#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
-#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
-#: sheets/xlsx/XlsxXmlTableReader.cpp:67
-#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
-#: stage/pptx/PptxXmlDocumentReader.cpp:146
-#: stage/pptx/PptxXmlSlideReader.cpp:321
-#: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:185
-#: words/docx/import/DocxXmlEndnoteReader.cpp:83
-#: words/docx/import/DocxXmlFontTableReader.cpp:81
-#: words/docx/import/DocxXmlFooterReader.cpp:88
-#: words/docx/import/DocxXmlFootnoteReader.cpp:83
-#: words/docx/import/DocxXmlHeaderReader.cpp:88
-#: words/docx/import/DocxXmlNumberingReader.cpp:78
-#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#: libmsooxml/MsooXmlReader.cpp:164 libmsooxml/MsooXmlThemesReader.cpp:356
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:97
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:128
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:107
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:456
+#: sheets/xlsx/XlsxXmlTableReader.cpp:68
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:295
+#: stage/pptx/PptxXmlDocumentReader.cpp:150
+#: stage/pptx/PptxXmlSlideReader.cpp:330
+#: words/docx/import/DocxXmlCommentsReader.cpp:84
+#: words/docx/import/DocxXmlDocumentReader.cpp:187
+#: words/docx/import/DocxXmlEndnoteReader.cpp:85
+#: words/docx/import/DocxXmlFontTableReader.cpp:80
+#: words/docx/import/DocxXmlFooterReader.cpp:90
+#: words/docx/import/DocxXmlFootnoteReader.cpp:85
+#: words/docx/import/DocxXmlHeaderReader.cpp:90
+#: words/docx/import/DocxXmlNumberingReader.cpp:79
+#: words/docx/import/DocxXmlSettingsReader.cpp:79
 #, kde-format
 msgid "Namespace \"%1\" not found"
 msgstr "Το πεδίο ορισμού \"%1\" δεν βρέθηκε"
 
-#: libmsooxml/MsooXmlImport.cpp:102
+#: libmsooxml/MsooXmlImport.cpp:92
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "Αδυναμία ανοίγματος του αρχείου %1 που ζητήθηκε"
 
-#: libmsooxml/MsooXmlImport.cpp:125
+#: libmsooxml/MsooXmlImport.cpp:115
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Αδυναμία ανάγνωσης του ZIP καταλόγου του αρχείου %1 που ζητήθηκε"
 
-#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
 #, kde-format
 msgid "Enter password"
 msgstr "Εισαγωγή κωδικού"
 
-#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#: libmsooxml/MsooXmlImport.cpp:328 libmsooxml/MsooXmlImport.cpp:447
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
 "Αυτό το έγγραφο είναι κρυπτογραφημένο, παρακαλώ δώστε τον κωδικό για να το "
 "αποκρυπτογραφήσετε:"
 
-#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
 "Λανθασμένος κωδικός, παρακαλώ δώστε τον κωδικό για να αποκρυπτογραφήσετε "
 "αυτό το έγγραφο:"
 
-#: libmsooxml/MsooXmlImport.cpp:633
+#: libmsooxml/MsooXmlImport.cpp:622
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Αδυναμία εύρεσης διαδρομής για τον τύπο %1"
 
-#: libmsooxml/MsooXmlReader.cpp:135
+#: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1 (γραμμή %2, στήλη %3)"
 
-#: libmsooxml/MsooXmlReader.cpp:137
+#: libmsooxml/MsooXmlReader.cpp:132
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1 (%2, γραμμή %3, στήλη %4)"
 
-#: libmsooxml/MsooXmlReader.cpp:161
+#: libmsooxml/MsooXmlReader.cpp:154
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "Το στοιχείο \"%1\" δεν βρέθηκε"
 
-#: libmsooxml/MsooXmlReader.cpp:166
+#: libmsooxml/MsooXmlReader.cpp:159
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "Η ιδιότητα \"%1\" δεν βρέθηκε"
 
-#: libmsooxml/MsooXmlReader.cpp:176
+#: libmsooxml/MsooXmlReader.cpp:169
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "Μη αναμενόμενη τιμή \"%1\" ιδιότητας \"%2\""
 
-#: libmsooxml/MsooXmlReader.cpp:181
+#: libmsooxml/MsooXmlReader.cpp:174
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "Μη αναμενόμενη δεύτερη εμφάνιση του \"%1\" στοιχείου"
 
-#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#: libmsooxml/MsooXmlReader.cpp:191 libmsooxml/MsooXmlReader.cpp:242
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "Αναμενόμενο κλείσιμο του στοιχείου \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:240
+#: libmsooxml/MsooXmlReader.cpp:233
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "Κανένα από τα αναμενόμενα στοιχεία δεν βρέθηκε: %1"
 
-#: libmsooxml/MsooXmlRelationships.cpp:90
+#: libmsooxml/MsooXmlRelationships.cpp:89
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
 msgstr ""
 "Αδυναμία εύρεσης προορισμού για το αναγνωριστικό \"%1\" στο αρχείο \"%2\""
 
-#: libmsooxml/MsooXmlRelationships.cpp:94
-#: libmsooxml/MsooXmlRelationships.cpp:114
+#: libmsooxml/MsooXmlRelationships.cpp:93
+#: libmsooxml/MsooXmlRelationships.cpp:112
 #, kde-format
 msgid "Could not find relationships file \"%1\""
 msgstr "Αδυναμία εύρεσης συσχετίσεων για το αρχείο \"%1\""
 
-#: libmsooxml/MsooXmlRelationships.cpp:109
+#: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "Αδυναμία εύρεσης προορισμού για συσχέτιση \"%1\" στο αρχείο \"%2\""
 
-#: libmsooxml/MsooXmlUtils.cpp:168
+#: libmsooxml/MsooXmlUtils.cpp:165
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
@@ -218,55 +218,32 @@ msgstr ""
 "Συντακτικό σφάλμα στο κύριο έγγραφο στη γραμμή %1, στήλη %2.\n"
 "Μήνυμα σφάλματος: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:217
+#: libmsooxml/MsooXmlUtils.cpp:212
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr "Η δοθείσα τιμή '%1' δεν βρέθηκε."
 
-#: libmsooxml/MsooXmlUtils.cpp:223
+#: libmsooxml/MsooXmlUtils.cpp:218
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr "Η δοθείσα τιμή '%1' δεν είναι αρχείο."
 
-#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
-#: libmsooxml/MsooXmlUtils.cpp:388
+#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
+#: libmsooxml/MsooXmlUtils.cpp:378
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr "Αδυναμία ανοίγματος της δοθείσας τιμής \"%1\" για εγγραφή."
 
-#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
-#: libmsooxml/MsooXmlUtils.cpp:399
+#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
+#: libmsooxml/MsooXmlUtils.cpp:389
 #, kde-format
 msgid "Could not write block"
 msgstr "Αδυναμία εγγραφής στο τμήμα"
 
-#: sheets/csv/csvexport.cc:268
+#: sheets/csv/csvexport.cc:253
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<ΟΝΟΜΑΦΥΛΛΟΥ>"
-
-#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Recommended ( %1 )"
-msgstr "Συνιστώμενο ( %1 )"
-
-#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Locale ( %1 )"
-msgstr "Εντοπιότητα ( %1 )"
-
-#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Other ( %1 )"
-msgstr "Άλλο ( %1 )"
-
-#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
-#, kde-format
-msgid "Cannot find encoding: %1"
-msgstr "Δε βρέθηκε η κωδικοποίηση: %1"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -275,142 +252,130 @@ msgstr ""
 "Το φίλτρο CSV δεν μπορεί να ανοίξει το αρχείο εισόδου - παρακαλώ κάνετε μια "
 "αναφορά."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
-#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
-#, kde-format
-msgid "Encoding"
-msgstr "Κωδικοποίηση"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
-#, kde-format
-msgid "E&ncoding:"
-msgstr "&Κωδικοποίηση:"
-
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
-#: sheets/csv/exportdialogui.ui:76
+#: sheets/csv/exportdialogui.ui:27 sheets/csv/exportdialogui.ui:33
 #, kde-format
 msgid "End of Line"
 msgstr "Τέλος γραμμής"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
-#: sheets/csv/exportdialogui.ui:82
+#: sheets/csv/exportdialogui.ui:39
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
 msgstr "Στιλ &UNIX (συνιστώμενο· μόνο line feed)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
-#: sheets/csv/exportdialogui.ui:92
+#: sheets/csv/exportdialogui.ui:49
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
 msgstr "Στιλ &Windows (carriage return και line feed)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
-#: sheets/csv/exportdialogui.ui:102
+#: sheets/csv/exportdialogui.ui:59
 #, kde-format
 msgid "&MacOS style (carriage return only)"
 msgstr "Στιλ &MacOS (μόνο carriage return)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: sheets/csv/exportdialogui.ui:132
+#: sheets/csv/exportdialogui.ui:89
 #, kde-format
 msgid "Sheets"
 msgstr "Φύλλα"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
-#: sheets/csv/exportdialogui.ui:145
+#: sheets/csv/exportdialogui.ui:102
 #, kde-format
 msgid "Select sheets to export:"
 msgstr "Επιλογή φύλλων για εξαγωγή:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
-#: sheets/csv/exportdialogui.ui:161
+#: sheets/csv/exportdialogui.ui:118
 #, kde-format
 msgid "Delimiter Line"
 msgstr "Γραμμή οριοθέτη"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
-#: sheets/csv/exportdialogui.ui:167
+#: sheets/csv/exportdialogui.ui:124
 #, kde-format
 msgid "********<SHEETNAME>********"
 msgstr "********<ΟΝΟΜΑΦΥΛΛΟΥ>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
-#: sheets/csv/exportdialogui.ui:180
+#: sheets/csv/exportdialogui.ui:137
 #, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 msgstr "Το <ΟΝΟΜΑΦΥΛΛΟΥ> αντικαθίσταται από το όνομα του επόμενου φύλλου."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
-#: sheets/csv/exportdialogui.ui:199
+#: sheets/csv/exportdialogui.ui:156
 #, kde-format
 msgid "Print delimiter line above every sheet"
 msgstr "Εκτύπωση γραμμής οριοθέτη πάνω από κάθε φύλλο"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
-#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#: sheets/csv/exportdialogui.ui:167 sheets/csv/exportdialogui.ui:251
 #, kde-format
 msgid "Cells"
 msgstr "Κελιά"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: sheets/csv/exportdialogui.ui:222
+#: sheets/csv/exportdialogui.ui:179
 #, kde-format
 msgid "Delimiter"
 msgstr "Οριοθέτης"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: sheets/csv/exportdialogui.ui:228
+#: sheets/csv/exportdialogui.ui:185
 #, kde-format
 msgid "Comma"
 msgstr "Κόμμα"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: sheets/csv/exportdialogui.ui:238
+#: sheets/csv/exportdialogui.ui:195
 #, kde-format
 msgid "Semicolon"
 msgstr "Άνω τελεία"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: sheets/csv/exportdialogui.ui:245
+#: sheets/csv/exportdialogui.ui:202
 #, kde-format
 msgid "Tabulator"
 msgstr "Στηλοθέτης"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: sheets/csv/exportdialogui.ui:252
+#: sheets/csv/exportdialogui.ui:209
 #, kde-format
 msgid "Space"
 msgstr "Κενό"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: sheets/csv/exportdialogui.ui:259
+#: sheets/csv/exportdialogui.ui:216
 #, kde-format
 msgid "Other:"
 msgstr "Άλλο:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
-#: sheets/csv/exportdialogui.ui:309
+#: sheets/csv/exportdialogui.ui:266
 #, kde-format
 msgid "Quotes:"
 msgstr "Εισαγωγικά:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:329
+#: sheets/csv/exportdialogui.ui:286
 #, kde-format
 msgid "\""
 msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:334
+#: sheets/csv/exportdialogui.ui:291
 #, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
-#: sheets/csv/exportdialogui.ui:365
+#: sheets/csv/exportdialogui.ui:322
 #, kde-format
 msgid "Export selection only"
 msgstr "Εξαγωγή επιλογής μόνο"
@@ -425,64 +390,38 @@ msgstr "Ο τύπος αρχειοθέτησης δεν υποστηρίζετα
 msgid "Could not read from file."
 msgstr "Αδυναμία ανάγνωσης από το αρχείο."
 
-#: sheets/html/exportdialog.cc:21
+#: sheets/html/exportdialog.cc:20
 #, kde-format
 msgid "Export Sheet to HTML"
 msgstr "Εξαγωγή φύλλου σε HTML"
 
-#: sheets/html/exportdialog.cc:32
-#, kde-format
-msgid "Recommended: UTF-8"
-msgstr "Συνιστάται: UTF-8"
-
-#: sheets/html/exportdialog.cc:33
-#, kde-format
-msgid "Locale (%1)"
-msgstr "Εντοπιότητα (%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: sheets/html/exportwidget.ui:19
-#, kde-format
-msgid "En&coding:"
-msgstr "Κ&ωδικοποίηση:"
-
-#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
-#: sheets/html/exportwidget.ui:32
-#, kde-format
-msgid ""
-"With this option you can define the encoding of the HTML file. The "
-"recommended encoding (UTF8) is selected as default."
-msgstr ""
-"Με αυτή την επιλογή μπορείτε να ορίσετε την κωδικοποίηση του HTML αρχείου. Η "
-"συνιστώμενη κωδικοποίηση (UTF8) είναι εξ ορισμού επιλεγμένη."
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
-#: sheets/html/exportwidget.ui:57
+#: sheets/html/exportwidget.ui:17
 #, kde-format
 msgid "Sheet Selection"
 msgstr "Επιλογή φύλλου"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
-#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#: sheets/html/exportwidget.ui:32 sheets/html/exportwidget.ui:42
 #, kde-format
 msgid "Click here to select all sheets in the list."
 msgstr "Κάντε κλικ εδώ για να επιλέξετε όλα τα φύλλα της λίστας."
 
 #. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
-#: sheets/html/exportwidget.ui:75
+#: sheets/html/exportwidget.ui:35
 #, kde-format
 msgid "Select &All"
 msgstr "Επι&λογή όλων"
 
 #. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
-#: sheets/html/exportwidget.ui:85
+#: sheets/html/exportwidget.ui:45
 #, kde-format
 msgid "Desele&ct All"
 msgstr "Αποεπιλο&γή όλων"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
-#: sheets/html/exportwidget.ui:110
+#: sheets/html/exportwidget.ui:70
 #, kde-format
 msgid ""
 "This option will make the HTML export filter generate a new page for each "
@@ -493,19 +432,19 @@ msgstr ""
 "μία σελίδα."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
-#: sheets/html/exportwidget.ui:113
+#: sheets/html/exportwidget.ui:73
 #, kde-format
 msgid "Use &separate files for each table"
 msgstr "Χρήση &ξεχωριστών αρχείων για κάθε πίνακα"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
-#: sheets/html/exportwidget.ui:123
+#: sheets/html/exportwidget.ui:83
 #, kde-format
 msgid "Style"
 msgstr "Στιλ"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
-#: sheets/html/exportwidget.ui:129
+#: sheets/html/exportwidget.ui:89
 #, kde-format
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
@@ -514,13 +453,13 @@ msgstr ""
 "γραμματοσειρές και χρώματα για τη σελίδα HTML."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
-#: sheets/html/exportwidget.ui:132
+#: sheets/html/exportwidget.ui:92
 #, kde-format
 msgid "Use &default style"
 msgstr "Χρήση &προκαθορισμένου στιλ"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
-#: sheets/html/exportwidget.ui:142
+#: sheets/html/exportwidget.ui:102
 #, kde-format
 msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
@@ -531,13 +470,13 @@ msgstr ""
 "πληκτρολογήσετε το όνομά του στο παρακάτω πεδίο."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
-#: sheets/html/exportwidget.ui:145
+#: sheets/html/exportwidget.ui:105
 #, kde-format
 msgid "Use &external stylesheet:"
 msgstr "Χρήση &εξωτερικού φύλλου αισθητικής επικάλυψης:"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
-#: sheets/html/exportwidget.ui:155
+#: sheets/html/exportwidget.ui:115
 #, kde-format
 msgid ""
 "In this field you can enter an URL for your stylesheet. It is possible to "
@@ -547,13 +486,13 @@ msgstr ""
 "δυνατό να επιλέξετε ένα φύλλο αισθητικής στο δίσκο, ή κάπου στο διαδίκτυο."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
-#: sheets/html/exportwidget.ui:165
+#: sheets/html/exportwidget.ui:125
 #, kde-format
 msgid "Layout"
 msgstr "Διάταξη"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
-#: sheets/html/exportwidget.ui:171
+#: sheets/html/exportwidget.ui:131
 #, kde-format
 msgid "Use this option to enable or disable borders around the cells."
 msgstr ""
@@ -561,14 +500,14 @@ msgstr ""
 "τα περιγράμματα γύρω από τα κελιά."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
-#: sheets/html/exportwidget.ui:174
+#: sheets/html/exportwidget.ui:134
 #, kde-format
 msgid "Use &borders"
 msgstr "Χρήση &περιγραμμάτων"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
-#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#: sheets/html/exportwidget.ui:146 sheets/html/exportwidget.ui:168
 #, kde-format
 msgid ""
 "Use this option to define how many pixels there should be between the cells. "
@@ -579,12 +518,12 @@ msgstr ""
 "ενεργοποιήσετε και το <b>Χρήση περιγραμμάτων</b>."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
-#: sheets/html/exportwidget.ui:189
+#: sheets/html/exportwidget.ui:149
 #, kde-format
 msgid "Pi&xels between cells:"
 msgstr "Ει&κονοστοιχεία μεταξύ των κελιών:"
 
-#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#: sheets/html/htmlexport.cc:198 sheets/html/htmlexport.cc:373
 #, kde-format
 msgid "Top"
 msgstr "Πάνω"
@@ -728,6 +667,12 @@ msgstr "Κατάλογος εικόνων:"
 msgid "Language"
 msgstr "Γλώσσα"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Κωδικοποίηση"
+
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:261
 #, kde-format
@@ -782,22 +727,22 @@ msgstr "Εξαγωγή σημειώσεων σε σχόλια στο περιθ�
 msgid "Export notes in comments"
 msgstr "Εξαγωγή σημειώσεων σε σχόλια"
 
-#: sheets/opencalc/opencalcexport.cc:890
+#: sheets/opencalc/opencalcexport.cc:889
 #, kde-format
 msgid "Page "
 msgstr "Σελίδα "
 
-#: sheets/opencalc/opencalcimport.cc:1199
+#: sheets/opencalc/opencalcimport.cc:1198
 #, kde-format
 msgid "The file seems to be corrupt. Skipping a table."
 msgstr "Το αρχείο φαίνεται να είναι κατεστραμμένο. Παράλειψη ενός πίνακα."
 
-#: sheets/opencalc/opencalcimport.cc:1211
+#: sheets/opencalc/opencalcimport.cc:1210
 #, kde-format
 msgid "Skipping a table."
 msgstr "Παράλειψη ενός πίνακα."
 
-#: sheets/opencalc/opencalcimport.cc:1911
+#: sheets/opencalc/opencalcimport.cc:1909
 #, kde-format
 msgid ""
 "This document was created with OpenOffice.org version '%1'. This filter was "
@@ -810,7 +755,7 @@ msgstr ""
 "προκαλέσει παράξενη συμπεριφορά, καταρρεύσεις ή λανθασμένη εμφάνιση των "
 "δεδομένων. Θέλετε να συνεχίσετε τη μετατροπή αυτού του εγγράφου;"
 
-#: sheets/opencalc/opencalcimport.cc:1912
+#: sheets/opencalc/opencalcimport.cc:1910
 #, kde-format
 msgid "Unsupported document version"
 msgstr "Μη υποστηριζόμενη έκδοση εγγράφου"
@@ -831,34 +776,34 @@ msgstr ""
 "Αδυναμία ανοίγματος αρχείων προστατευμένων με κωδικό πρόσβασης.\n"
 "Ο αλγόριθμος του κωδικού πρόσβασης δεν έχει δημοσιευτεί"
 
-#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
-#: words/docx/import/DocxImport.cpp:151
+#: sheets/xlsx/XlsxImport.cpp:573 stage/pptx/PptxImport.cpp:1310
+#: words/docx/import/DocxImport.cpp:143
 #, kde-format
 msgid "Unable to find part for type %1"
 msgstr "Αδυναμία εύρεσης τμήματος για τον τύπο %1"
 
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:175
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
 msgstr "Δηλώθηκε πολύ μικρός αριθμός κοινόχρηστων συμβολοσειρών (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:570
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
 msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ των γραμματοσειρών (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:926
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
 msgstr "Δηλώθηκε πολύ μικρός αριθμός για τον τύπο των κελιών (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1053
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1374
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
 msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ γεμίσματος (%1)"
 
-#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:341
 #, kde-format
 msgid ""
 "The data could not be loaded completely because the maximum size of sheet "
@@ -867,22 +812,22 @@ msgstr ""
 "Δεν έγινε πλήρης φόρτωση δεδομένων εξαιτίας υπέρβασης στο μέγιστο μέγεθος "
 "φύλλου"
 
-#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1403
 #, kde-format
 msgid "Expected integer or floating point number"
 msgstr "Αναμένεται αριθμός ακέραιος ή κινητής υποδιαστολής"
 
-#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#: stage/pptx/PptxXmlDocumentReader.cpp:291
 #, kde-format
 msgid "Slide layout \"%1\" not found"
 msgstr "το περίγραμμα της διαφάνειας \"%1\" δεν βρέθηκε"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:617
+#: stage/pptx/PptxXmlSlideReader.cpp:603
 #, kde-format
 msgid "Slide %1"
 msgstr "Διαφάνεια %1"
 
-#: words/ascii/ImportDialog.cc:32
+#: words/ascii/ImportDialog.cc:30
 #, kde-format
 msgid "Words's Plain Text Import Filter"
 msgstr "Φίλτρο εισαγωγής απλού κειμένου του Words"
@@ -894,85 +839,119 @@ msgid "Plain Text Import Dialog"
 msgstr "Διάλογος εισαγωγής απλού κειμένου"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
-#: words/ascii/ImportDialogUI.ui:65
+#: words/ascii/ImportDialogUI.ui:22
 #, kde-format
 msgid "End of Paragraph"
 msgstr "Τέλος παραγράφου"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
-#: words/ascii/ImportDialogUI.ui:71
+#: words/ascii/ImportDialogUI.ui:28
 #, kde-format
 msgid "&As is: At the end of line"
 msgstr "Ό&πως είναι: Στο τέλος της γραμμής"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
-#: words/ascii/ImportDialogUI.ui:81
+#: words/ascii/ImportDialogUI.ui:38
 #, kde-format
 msgid "&Sentence: If the end of line is the end of a sentence"
 msgstr "Π&ρόταση: Αν το τέλος γραμμής είναι το τέλος μιας πρότασης"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
-#: words/ascii/ImportDialogUI.ui:88
+#: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
 msgstr "&Κενή γραμμή: Αν η γραμμή είναι κενή"
 
-#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#: words/epub/OdtHtmlConverter.cpp:258 words/mobi/OdtMobiHtmlConverter.cpp:285
 #, kde-format
 msgid "End notes"
 msgstr "Τέλος σημειώσεων"
 
-#: words/msword-odf/conversion.cpp:828
+#: words/msword-odf/conversion.cpp:783
 #, kde-format
 msgid "Even Pages Header"
 msgstr "Κεφαλίδα ζυγών σελίδων"
 
-#: words/msword-odf/conversion.cpp:830
+#: words/msword-odf/conversion.cpp:785
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "Κεφαλίδα μονών σελίδων"
 
-#: words/msword-odf/conversion.cpp:832
+#: words/msword-odf/conversion.cpp:787
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "Υποσέλιδο ζυγών σελίδων"
 
-#: words/msword-odf/conversion.cpp:834
+#: words/msword-odf/conversion.cpp:789
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "Υποσέλιδο μονών σελίδων"
 
-#: words/msword-odf/conversion.cpp:836
+#: words/msword-odf/conversion.cpp:791
 #, kde-format
 msgid "First Page Header"
 msgstr "Κεφαλίδα πρώτης σελίδας"
 
-#: words/msword-odf/conversion.cpp:838
+#: words/msword-odf/conversion.cpp:793
 #, kde-format
 msgid "First Page Footer"
 msgstr "Υποσέλιδο πρώτης σελίδας"
 
-#: words/msword-odf/texthandler.cpp:632
+#: words/msword-odf/texthandler.cpp:623
 #, kde-format
 msgid "Table %1"
 msgstr "Πίνακας %1"
 
-#: words/rtf/import/rtfimport.cpp:55
+#: words/rtf/import/rtfimport.cpp:54
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr ""
 "Το αρχείο δεν μπορεί να φορτωθεί, καθώς φαίνεται ότι δεν είναι έγγραφο RTF."
 
-#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
-#: words/rtf/import/rtfimport.cpp:80
+#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
+#: words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "Words's RTF Import Filter"
 msgstr "Φίλτρο εισαγωγής RTF του Words"
 
-#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Αδυναμία φόρτωσης αρχείου."
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Συνιστώμενο ( %1 )"
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Εντοπιότητα ( %1 )"
+
+#~ msgctxt "Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Άλλο ( %1 )"
+
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Δε βρέθηκε η κωδικοποίηση: %1"
+
+#~ msgid "E&ncoding:"
+#~ msgstr "&Κωδικοποίηση:"
+
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Συνιστάται: UTF-8"
+
+#~ msgid "Locale (%1)"
+#~ msgstr "Εντοπιότητα (%1)"
+
+#~ msgid "En&coding:"
+#~ msgstr "Κ&ωδικοποίηση:"
+
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Με αυτή την επιλογή μπορείτε να ορίσετε την κωδικοποίηση του HTML "
+#~ "αρχείου. Η συνιστώμενη κωδικοποίηση (UTF8) είναι εξ ορισμού επιλεγμένη."
 
 #~ msgid "Failed to read data."
 #~ msgstr "Αποτυχία ανάγνωσης των δεδομένων."

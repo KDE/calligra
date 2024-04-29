@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-06-27 17:37+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -72,7 +72,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 #, fuzzy
 #| msgid "Save Configuration..."
 msgctxt "(qtundo-format)"
@@ -109,14 +109,14 @@ msgid_plural "Delete slides"
 msgstr[0] "ਸਲਾਇਡ ਹਟਾਓ"
 msgstr[1] "ਸਲਾਇਡ ਹਟਾਓ"
 
-#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 #, fuzzy
 #| msgid "Presentation duration: "
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
 msgstr "ਪੇਸ਼ਕਾਰੀ ਅੰਤਰਾਲ:"
 
-#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
@@ -128,14 +128,14 @@ msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
 msgstr "ਤਬਦੀਲ ਪ੍ਰਤੀਬਿੰਬ"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:41
+#: part/commands/KPrPageEffectSetCommand.cpp:40
 #, fuzzy
 #| msgid "Image &effect:"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: part/commands/KPrPageEffectSetCommand.cpp:45
+#: part/commands/KPrPageEffectSetCommand.cpp:43
 #, fuzzy
 #| msgid "Delete Slide"
 msgctxt "(qtundo-format)"
@@ -149,173 +149,173 @@ msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
 msgstr "ਸਲਾਇਡ ਤਬਦੀਲੀ"
 
-#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 #, fuzzy
 #| msgid "Define Custom Slide Show"
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ ਪ੍ਰੀਭਾਸ਼ਾ"
 
-#: part/commands/KPrReorderAnimationCommand.cpp:33
+#: part/commands/KPrReorderAnimationCommand.cpp:34
 #, fuzzy
 #| msgid "Slide Transition"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
 msgstr "ਸਲਾਇਡ ਤਬਦੀਲੀ"
 
-#: part/KPrAboutData.h:21
+#: part/KPrAboutData.h:19
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgctxt "application name"
 msgid "Calligra Stage"
 msgstr "ਸਲਾਇਡ ਸ਼ੋ ਸੰਰਚਨਾ..."
 
-#: part/KPrAboutData.h:23
+#: part/KPrAboutData.h:21
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Presentation Tool"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrAboutData.h:25
+#: part/KPrAboutData.h:23
 #, fuzzy, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "੧੯੯੮-੨੦੦੪, ਕੇ-ਪੇਸ਼ਕਾਰ ਟੀਮ ਕੋਲ ਹੱਕ ਰਾਂਖਵੇ ਹਨ"
 
-#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, fuzzy, kde-format
 #| msgid "current maintainer"
 msgid "Former maintainer"
 msgstr "ਮੌਜੂਦਾ ਪ੍ਰਬੰਧਕ"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr ""
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
 msgstr ""
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, fuzzy, kde-format
 #| msgid "original author"
 msgid "Original author"
 msgstr "ਅਸਲੀ ਲੇਖਕ"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr ""
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:34
 #, fuzzy, kde-format
 #| msgid "Centered"
 msgid "Werner Trobin"
 msgstr "ਕੇਂਦਰੀ"
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
 msgstr ""
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr ""
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr ""
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr ""
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr ""
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
 msgstr ""
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:41
 #, fuzzy, kde-format
 msgid "Peter Simonsson"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr ""
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:43
 #, fuzzy, kde-format
 #| msgid "&Closed Line"
 msgid "Carlos Licea "
 msgstr "ਰੇਖਾ &ਬੰਦ"
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
 msgstr ""
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr ""
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr ""
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr ""
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr ""
 
-#: part/KPrAboutData.h:51
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
 msgstr ""
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr ""
 
-#. i18n translator strings
-#: part/KPrAboutData.h:54
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ"
-
-#: part/KPrAboutData.h:55
+#: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "aalam@users.sf.net"
 
+#. i18n translator strings
+#: part/KPrAboutData.h:52
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ"
+
 #: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:86
+#: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
 msgstr ""
 
 #: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "ਸਲਾਇਡ %1"
@@ -325,7 +325,7 @@ msgstr "ਸਲਾਇਡ %1"
 msgid "End of presentation. Click to exit."
 msgstr "ਪੇਸ਼ਕਾਰੀ ਦੀ ਸਮਾਪਤ। ਬੰਦ ਤੇ ਦਬਾਓ"
 
-#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, fuzzy, kde-format
 #| msgid "Set Page Layout"
 msgid "Layout"
@@ -346,7 +346,7 @@ msgstr ""
 msgid "Installation Error"
 msgstr ""
 
-#: part/KPrPicturesImport.cpp:62
+#: part/KPrPicturesImport.cpp:61
 #, fuzzy
 #| msgid "Insert Picture"
 msgctxt "(qtundo-format)"
@@ -359,83 +359,76 @@ msgid "Placeholder shape"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:34
-#, kde-format
 msgid "Double click to add a title"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:35
-#, kde-format
 msgid "Double click to add an outline"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
-#, kde-format
 msgid "Double click to add a text"
 msgstr ""
 
 #: part/KPrPlaceholderStrategy.cpp:38
-#, kde-format
 msgid "Double click to add notes"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:46
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:48
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
 msgstr ""
 
-#: part/KPrPlaceholderStrategy.cpp:50
-#, kde-format
+#: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:88
 #, fuzzy, kde-format
 #| msgid "Color"
 msgid "Pen Color"
 msgstr "ਰੰਗ"
 
-#: part/KPrPresentationDrawWidget.cpp:90
+#: part/KPrPresentationDrawWidget.cpp:89
 #, fuzzy, kde-format
 msgid "Pen Size"
 msgstr "ਫੋਂਟ ਆਕਾਰ ਵਧਾਓ"
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:91
 #, fuzzy, kde-format
 msgid "Black"
 msgstr "ਰੰਗ:"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:92
 #, fuzzy, kde-format
 msgid "White"
 msgstr "ਚੌੜਾਈ:"
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
 msgstr "ਹਰਾ"
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
 msgstr "ਲਾਲ"
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
 msgstr "ਨੀਲਾ"
 
-#: part/KPrPresentationDrawWidget.cpp:97
+#: part/KPrPresentationDrawWidget.cpp:96
 #, fuzzy, kde-format
 #| msgid "Slow"
 msgid "Yellow"
 msgstr "ਹੌਲੀ"
 
-#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, fuzzy, kde-format
 #| msgid "&Next Slide"
 msgid "Next Slide"
@@ -446,266 +439,266 @@ msgstr "ਅ&ਗਲੀ ਸਲਾਇਡ"
 msgid "Speaker Notes"
 msgstr ""
 
-#: part/KPrPresenterViewInterface.cpp:90
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show"
 msgid "Current Slide %1 of %2"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrPresenterViewInterface.cpp:91
+#: part/KPrPresenterViewInterface.cpp:87
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "End of Slide Show"
 msgstr "ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrShapeAnimations.cpp:168
+#: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:170
+#: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "start after previous animation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrShapeAnimations.cpp:172
+#: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "start with previous animation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrShapeAnimations.cpp:180
+#: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/KPrShapeAnimations.cpp:201
+#: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
 msgstr "ਸ਼ਕਲ"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:291
+#: part/KPrSlidesSorterDocumentModel.cpp:281
 #, fuzzy, kde-format
 #| msgid "Move Slide"
 msgid "&Move Here"
 msgstr "ਸਲਾਇਡ ਏਧਰ-ਓਧਰ"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:295
+#: part/KPrSlidesSorterDocumentModel.cpp:285
 #, fuzzy, kde-format
 #| msgid "No Slide"
 msgid "&Copy Here"
 msgstr "ਸਲਾਇਡ ਨਹੀਂ"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:299
+#: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
 msgstr ""
 
-#: part/KPrView.cpp:73
+#: part/KPrView.cpp:74
 #, kde-format
 msgid "Normal"
 msgstr "ਸਧਾਰਨ"
 
-#: part/KPrView.cpp:78
+#: part/KPrView.cpp:79
 #, fuzzy, kde-format
 #| msgid "Paste Slide"
 msgid "Show Master Slides"
 msgstr "ਸਲਾਇਡ ਚਿਪਕਾਓ"
 
-#: part/KPrView.cpp:79
+#: part/KPrView.cpp:80
 #, fuzzy, kde-format
 #| msgid "Goto Slide..."
 msgid "Import Slideshow..."
 msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ...."
 
-#: part/KPrView.cpp:80
+#: part/KPrView.cpp:81
 #, fuzzy, kde-format
 #| msgid "Insert New Slide"
 msgid "Insert Slide"
 msgstr "ਨਵੀਂ ਸਲਾਇਡ ਸ਼ਾਮਿਲ"
 
-#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
 msgstr ""
 
-#: part/KPrView.cpp:83
+#: part/KPrView.cpp:84
 #, fuzzy, kde-format
 #| msgid "No Slide"
 msgid "Copy Slide"
 msgstr "ਸਲਾਇਡ ਨਹੀਂ"
 
-#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show"
 msgid "Copy the current slide"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Delete Slide"
 msgstr "ਸਲਾਇਡ ਹਟਾਓ"
 
-#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Delete the current slide"
 msgstr "ਸਲਾਇਡ ਹਟਾਓ"
 
-#: part/KPrView.cpp:89
+#: part/KPrView.cpp:90
 #, fuzzy, kde-format
 #| msgid "Insert &Slide..."
 msgid "Master Slide..."
 msgstr "&ਸਲਾਇਡ ਸ਼ਾਮਿਲ..."
 
-#: part/KPrView.cpp:90
+#: part/KPrView.cpp:91
 #, fuzzy, kde-format
 #| msgid "&Previous Slide"
 msgid "Previous Slide"
 msgstr "&ਪਿਛਲੀ ਸਲਾਇਡ"
 
-#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, fuzzy, kde-format
 #| msgid "Previous slide"
 msgid "Go to previous slide"
 msgstr "ਪਿੱਛਲੀ ਸਲਾਇਡ"
 
-#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, fuzzy, kde-format
 #| msgid "Go to slide:"
 msgid "Go to next slide"
 msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ:"
 
-#: part/KPrView.cpp:96
+#: part/KPrView.cpp:97
 #, fuzzy, kde-format
 #| msgid "Paste Slide"
 msgid "First Slide"
 msgstr "ਸਲਾਇਡ ਚਿਪਕਾਓ"
 
-#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, fuzzy, kde-format
 #| msgid "Go to slide:"
 msgid "Go to first slide"
 msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ:"
 
-#: part/KPrView.cpp:99
+#: part/KPrView.cpp:100
 #, fuzzy, kde-format
 #| msgid "Paste Slide"
 msgid "Last Slide"
 msgstr "ਸਲਾਇਡ ਚਿਪਕਾਓ"
 
-#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, fuzzy, kde-format
 #| msgid "Go to slide:"
 msgid "Go to last slide"
 msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ:"
 
-#: part/KPrView.cpp:102
+#: part/KPrView.cpp:103
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Stage..."
 msgstr "ਸਲਾਇਡ ਸ਼ੋ ਸੰਰਚਨਾ..."
 
-#: part/KPrView.cpp:225
+#: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:251
+#: part/KPrView.cpp:263
 #, fuzzy, kde-format
 #| msgid "Insert Picture"
 msgid "Insert Pictures as Slides..."
 msgstr "ਤਸਵੀਰ ਸ਼ਾਮਿਲ"
 
-#: part/KPrView.cpp:260
+#: part/KPrView.cpp:272
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Create Appear Animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/KPrView.cpp:264
+#: part/KPrView.cpp:276
 #, fuzzy, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrView.cpp:268
+#: part/KPrView.cpp:280
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrView.cpp:271
+#: part/KPrView.cpp:283
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show"
 msgid "From Current Slide"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrView.cpp:275
+#: part/KPrView.cpp:287
 #, fuzzy, kde-format
 msgid "From First Slide"
 msgstr "ਸ਼ੁਰੂ"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:292
 #, fuzzy, kde-format
 msgid "Stop presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrView.cpp:286
+#: part/KPrView.cpp:298
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Show Status Bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Hide Status Bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:288
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Shows or hides the status bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:297
+#: part/KPrView.cpp:309
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Slide Show..."
 msgstr "ਸਲਾਇਡ ਸ਼ੋ ਸੰਰਚਨਾ..."
 
-#: part/KPrView.cpp:301
+#: part/KPrView.cpp:313
 #, fuzzy, kde-format
 #| msgid "Configure KPresenter"
 msgid "Configure Presenter View..."
 msgstr "ਕੇ-ਪੇਸ਼ਕਾਰ ਸੰਰਚਨਾ"
 
-#: part/KPrView.cpp:305
+#: part/KPrView.cpp:317
 #, fuzzy, kde-format
 msgid "Draw on the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"
 
-#: part/KPrView.cpp:312
+#: part/KPrView.cpp:324
 #, fuzzy, kde-format
 msgid "Highlight the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"
 
-#: part/KPrView.cpp:319
+#: part/KPrView.cpp:331
 #, fuzzy, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"
@@ -796,64 +789,64 @@ msgstr "ਨ&ਕਲ"
 msgid "Paste"
 msgstr "ਰਸਤਾ"
 
-#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Slide Show %1"
 msgstr "ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "All Files"
 msgid "All slides"
 msgstr "ਸਭ ਫਾਇਲਾਂ"
 
-#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
-#: part/ui/KPrHtmlExportDialog.cpp:203
+#: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
+#: part/ui/KPrHtmlExportDialog.cpp:207
 #, fuzzy, kde-format
 #| msgid "Arrow"
 msgid "Error"
 msgstr "ਤੀਰ"
 
-#: part/KPrViewModeSlidesSorter.cpp:686
+#: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
 msgstr ""
 
-#: part/pagelayout/KPrPlaceholders.cpp:46
-#: part/pagelayout/KPrPlaceholders.cpp:47
+#: part/pagelayout/KPrPlaceholders.cpp:48
+#: part/pagelayout/KPrPlaceholders.cpp:49
 #, fuzzy
 #| msgid "Set Page Layout"
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "ਸਫ਼ਾ ਖਾਕ ਨਿਰਧਾਰਨ"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, fuzzy, kde-format
 msgid "Automatic animation preview"
 msgstr "ਜਾਂ"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview animation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, fuzzy, kde-format
 #| msgid "Slide Transition"
 msgid "Slide Transitions"
 msgstr "ਸਲਾਇਡ ਤਬਦੀਲੀ"
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Shape Click Actions"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Shape Animations"
@@ -899,7 +892,7 @@ msgid "Duration: "
 msgstr "ਦਰਿਸ਼ ਅੰਤਰਾਲ"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview Shape Animation"
@@ -910,79 +903,79 @@ msgstr "ਪੇਸ਼ਕਾਰੀ"
 msgid "No Effect"
 msgstr "ਪ੍ਰਭਾਵ ਨਹੀਂ"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, fuzzy, kde-format
 #| msgid " seconds"
 msgid " sec"
 msgstr " ਸਕਿੰਟ"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
 msgstr ""
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, fuzzy, kde-format
 #| msgid "Slide Transition"
 msgid "Slide Transition:"
 msgstr "ਸਲਾਇਡ ਤਬਦੀਲੀ"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "Apply Styles"
 msgid "Apply To All Slides"
 msgstr "ਸ਼ੈਲੀ ਲਾਗੂ"
 
-#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 #, fuzzy
 #| msgid "Apply Styles"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "ਸ਼ੈਲੀ ਲਾਗੂ"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, fuzzy, kde-format
 msgid "Custom"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, fuzzy, kde-format
 msgid "Ole Action"
 msgstr "ਏਧਰ-ਓਧਰ"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
 msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Edit animation"
@@ -994,36 +987,36 @@ msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 msgid "Add new animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Remove animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
 msgstr ""
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Move animation up"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Move animation down"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Add a new animation"
 msgstr "ਸਲਾਇਡ-ਸ਼ੋ"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Delete current animation"
@@ -1269,215 +1262,215 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:194
+#: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:199
+#: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:297
+#: part/ui/KPrHtmlExportDialog.cpp:306
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Delete Template"
 msgstr "ਸਲਾਇਡ ਹਟਾਓ"
 
-#: part/ui/KPrHtmlExportDialog.cpp:300
+#: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr ""
 
-#: part/ui/KPrHtmlExportDialog.cpp:308
+#: part/ui/KPrHtmlExportDialog.cpp:315
 #, fuzzy, kde-format
 #| msgid "Delete Slide"
 msgid "Add Template"
 msgstr "ਸਲਾਇਡ ਹਟਾਓ"
 
-#: part/ui/KPrHtmlExportDialog.cpp:317
-#, kde-format
-msgid "Are you sure you want to remove \"%1\"?"
-msgstr ""
-
-#: part/ui/KPrHtmlExportDialog.cpp:317
+#: part/ui/KPrHtmlExportDialog.cpp:325
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Confirm remove"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: part/ui/KPrHtmlExportDialog.cpp:326
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 #, fuzzy
 #| msgid "Change Rotation"
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "ਘੁੰਮਾਓ ਤਬਦੀਲ"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, fuzzy, kde-format
 #| msgid " seconds"
 msgid "No sound"
 msgstr " ਸਕਿੰਟ"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, fuzzy, kde-format
 #| msgid "Goto Slide..."
 msgid "Import..."
 msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ...."
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
 msgstr ""
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
-#, fuzzy, kde-format
-#| msgid "Come From Left"
-msgid "From Left"
-msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "Come From Top"
-msgid "From Top"
-msgstr "ਓਪਰੋਂ ਆਏ"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
-#, fuzzy, kde-format
-#| msgid "Come From Right"
-msgid "From Right"
-msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
-
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#, fuzzy
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "ਓਪਰੋਂ ਆਏ"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, fuzzy, kde-format
 msgid "Clock"
 msgstr "ਰੰਗ:"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Twelve Clockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Three Clockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Six Clockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Nine Clockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Twelve Counterclockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Three Counterclockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Six Counterclockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Nine Counterclockwise"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
@@ -1488,38 +1481,38 @@ msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 msgid "Double Fan"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan Out Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan In Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan In Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Fan In Vertical Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Fan In Horizontal Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
@@ -1530,155 +1523,155 @@ msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 msgid "Double Sweep"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Parallel Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Parallel Diagonal"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Opposite Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Opposite Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Parallel Vertical Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Parallel Diagonal Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Opposite Vertical Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Opposite Horizontal Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left Reverse"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, fuzzy, kde-format
 msgid "Fan"
 msgstr "ਤਰਤੀਬ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Center Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Centered"
 msgid "Center Top"
 msgstr "ਕੇਂਦਰੀ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Centered"
 msgid "Center Left"
 msgstr "ਕੇਂਦਰੀ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Center Bottom"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Top"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Right"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Fan Out Bottom"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan Out Left"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan In Top"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Fan In Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Fan In Bottom"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Come From Left"
 msgid "Fan In Left"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
@@ -1689,38 +1682,38 @@ msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 msgid "Pin Wheel"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Two Blades Vertical Clockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Two Blades Horizontal Clockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Four Blades Horizontal Clockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Four Blades Horizontal Counterclockwise"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
@@ -1731,127 +1724,127 @@ msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 msgid "Saloon Door"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Come From Top"
 msgid "To Top"
 msgstr "ਓਪਰੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "To Left"
 msgstr "ਲੰਬਾਈ:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy
 msgid "To Bottom"
 msgstr "ਤਲ:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy
 msgid "To Right"
 msgstr "ਸੱਜਾ:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, fuzzy, kde-format
 #| msgid "Image &effect:"
 msgid "Single Sweep"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Clockwise Right"
 msgstr "ਸੱਜਾ:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Clockwise Bottom"
 msgstr "ਤਲ:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Left"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
@@ -1862,79 +1855,78 @@ msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 msgid "Windshield"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, fuzzy
 msgid "Right"
 msgstr "ਸੱਜਾ:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
+#, fuzzy
 msgid "Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Right Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Up Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Vertical Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
@@ -1945,26 +1937,26 @@ msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 msgid "Barn Door"
 msgstr "ਪਿੱਠਭੂਮੀ ਰੰਗ:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left Reverse"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left Reverse"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
@@ -1980,51 +1972,51 @@ msgstr ""
 msgid "Barn Zig Zag"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
-msgid "Vertical Reversed"
-msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
-
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Reversed"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#, fuzzy
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Come From Left"
 msgid "From Top Left"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Come From Right"
 msgid "From Top Right"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom Left"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom Right"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
@@ -2039,23 +2031,23 @@ msgstr "1"
 msgid "Four Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners In"
 msgstr "ਕੋਨੋ:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners In Reverse"
 msgstr "ਕੋਨੋ:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners Out"
 msgstr "ਕੋਨੋ:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
-#, fuzzy, kde-format
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#, fuzzy
 msgid "Corners Out Reverse"
 msgstr "ਕੋਨੋ:"
 
@@ -2065,13 +2057,13 @@ msgid "Misc Diagonal"
 msgstr "1"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Background color:"
 msgid "Double Barn Door"
 msgstr "ਪਿੱਠਭੂਮੀ ਰੰਗ:"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, fuzzy, kde-format
+#, fuzzy
 #| msgid "Image &effect:"
 msgid "Double Diamond"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
@@ -2092,13 +2084,12 @@ msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 msgid "Fade"
 msgstr "ਮੱਧਮ"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
-#, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
-#, fuzzy, kde-format
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
+#, fuzzy
 msgid "Fade over Color"
 msgstr "ਪਾਠ ਰੰਗ"
 
@@ -2108,52 +2099,51 @@ msgstr "ਪਾਠ ਰੰਗ"
 msgid "ArrowHead"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy
 #| msgid "Done"
 msgid "Down"
 msgstr "ਸਮਾਪਤ"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Down Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy
 msgid "Left"
 msgstr "ਲੰਬਾਈ:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Left Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Ellipse"
 msgstr "ਅੰਡਾਕਾਰ"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
-#, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
 msgstr "ਚੱਕਰ"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Circle Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
 msgstr ""
@@ -2169,55 +2159,55 @@ msgstr "ਪੇਸ਼ਕਾਰੀ"
 msgid "Iris"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rectangle"
-msgid "Rectangular"
-msgstr "ਚਤਰਭੁਜ"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
-#| msgid "Rectangle"
-msgid "Rectangular Reverse"
-msgstr "ਚਤਰਭੁਜ"
-
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Diamond"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Diamond Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "ਚਤਰਭੁਜ"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#, fuzzy
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "ਚਤਰਭੁਜ"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
 msgid "Misc"
 msgstr "ਫੁਟਕਲ"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Header"
 msgid "Heart"
 msgstr "ਸਿਰਲੇਖ"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Heart Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Keyhole"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Vertical Lines"
 msgid "Keyhole Reverse"
 msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
@@ -2228,7 +2218,7 @@ msgstr "ਲੰਬਕਾਰੀ ਰੇਖਾਵਾਂ"
 msgid "Pentagon"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, fuzzy, kde-format
 msgid "RoundRect"
 msgstr "ਧੁਨੀ ਪ੍ਰਭਾਵ"
@@ -2238,38 +2228,38 @@ msgstr "ਧੁਨੀ ਪ੍ਰਭਾਵ"
 msgid "Star"
 msgstr "&ਚਾਰਟ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Four Point Star"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Four Point Star Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Five Point Star"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Five Point Star Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Six Point Star"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
-#, fuzzy, kde-format
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Six Point Star Reverse"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
@@ -2286,70 +2276,70 @@ msgstr "ਤਣਿਆ"
 msgid "Box Snakes"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Box In"
 msgid "Two Box Top In"
 msgstr "ਬਕਸਾ ਅੰਦਰ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy
 msgid "Two Box Bottom In"
 msgstr "ਤਲ:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy
 msgid "Two Box Left In"
 msgstr "ਲੰਬਾਈ:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy
 msgid "Two Box Right In"
 msgstr "ਸੱਜਾ:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Four Box Vertical In"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Four Box Horizontal In"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Box Out"
 msgid "Two Box Top Out"
 msgstr "ਬਕਸਾ ਬਾਹਰ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy
 msgid "Two Box Bottom Out"
 msgstr "ਤਲ:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Two Box Left Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Two Box Right Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Four Box Vertical Out"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Four Box Horizontal Out"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
@@ -2360,111 +2350,111 @@ msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 msgid "Parallel Snakes"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Vertical Alignment"
 msgid "Vertical Top Same In"
 msgstr "ਲੰਬਕਾਰੀ ਇਕਸਾਰਤਾ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Vertical Alignment"
 msgid "Vertical Top Same Out"
 msgstr "ਲੰਬਕਾਰੀ ਇਕਸਾਰਤਾ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Vertical Alignment"
 msgid "Vertical Bottom Same In"
 msgstr "ਲੰਬਕਾਰੀ ਇਕਸਾਰਤਾ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Vertical Alignment"
 msgid "Vertical Bottom Same Out"
 msgstr "ਲੰਬਕਾਰੀ ਇਕਸਾਰਤਾ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy
 msgid "Vertical Top Left Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy
 msgid "Vertical Top Left Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy
 msgid "Vertical Bottom Left Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Left Same In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Left Same Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Right Same In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Right Same Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy
 msgid "Horizontal Top Left Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy
 msgid "Horizontal Top Left Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy
 msgid "Horizontal Top Right Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy
 msgid "Horizontal Top Right Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy
 msgid "Diagonal Top Left Opposite In"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy
 msgid "Diagonal Top Left Opposite Out"
 msgstr "ਖਿਤਿਜੀ ਰੇਖਾਵਾਂ"
 
@@ -2480,98 +2470,98 @@ msgstr "ਸ਼ਕਲ"
 msgid "Spiral"
 msgstr "ਫੈਲਿਆ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left In"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left Out"
 msgstr "ਖੱਬੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right In"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right Out"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left In"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right In"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left In"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right In"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right Out"
 msgstr "ਸੱਜੇ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left In"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right In"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right Out"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
@@ -2582,50 +2572,50 @@ msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 msgid "Waterfall"
 msgstr "ਚਿੱਤਰ &ਪ੍ਰਭਾਵ:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Top Left Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Top Left Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy
 #| msgid "Open Vertical"
 msgid "Top Right Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy
 #| msgid "Open Horizontal"
 msgid "Top Right Horizontal"
 msgstr "ਖਿਤਿਜੀ ਖੁੱਲਦਾ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy
 #| msgid "Close Vertical"
 msgid "Bottom Left Vertical"
 msgstr "ਲੰਬਕਾਰੀ ਬੰਦ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy
 #| msgid "Close Horizontal"
 msgid "Bottom Left Horizontal"
 msgstr "ਖਿਤਿਜੀ ਬੰਦ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy
 #| msgid "Come From Bottom"
 msgid "Bottom Right Vertical"
 msgstr "ਹੇਠਾਂ ਤੋਂ ਆਏ"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
-#, fuzzy, kde-format
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy
 msgid "Bottom Right Horizontal"
 msgstr "1"
 

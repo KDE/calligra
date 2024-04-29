@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2008-01-20 20:11+0200\n"
 "Last-Translator: Abdelrahman <abd_elrahman_em@yahoo.com>\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -28,7 +28,7 @@ msgstr ""
 "تاريخ النهاية يقع قبل تاريخ البدء! يرجى التأكد من أن تاريخ النهاية يأتي بعد "
 "تاريخ البدء."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "خطأ"
@@ -42,19 +42,19 @@ msgstr ""
 "التقويمات يجب ألا تكون أطول من 10 سنوات. إذا احتجت فعلا لفترات طويلة كذلك "
 "فأنت بحاجة للفصل بينها."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
 msgstr "تاريخى البدء والنهاية متساويين! سيدرج فقط يوم واحد، هل تريد المتابعة؟"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "تحذير"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "إن إنشاء تقويم لفترة أطول من عام قد يأخد مساحة كبيرة، هل تريد المتابعة؟"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -74,24 +74,24 @@ msgstr ""
 "بالكتابة فوق البيانات الموجودة؟ إذا اخترت لا فإن المنطقة التي قد يتطلبها "
 "التقويم المرغوب ستكون منتقاة وبهذا يمكنك رؤية البيانات التي سيُكتَب فوقها."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 #| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "أدرج تقويماً"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "التقويم من %1 إلى %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "أسبوع"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 msgid "Calendar"
 msgstr "التقويم من %1 إلى %2"

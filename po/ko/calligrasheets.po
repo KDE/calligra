@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21,57 +21,57 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "page"
 msgstr "쪽"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "pages"
 msgstr "쪽"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "file"
 msgstr "파일"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "name"
 msgstr "이름"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "time"
 msgstr "시간"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "date"
 msgstr "날짜"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "author"
 msgstr "작성자"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "email"
 msgstr "이메일"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "org"
 msgstr "조직"
 
-#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "sheet"
 msgstr "시트"
 
-#: core/ksp/SheetsKspDoc.cpp:42
+#: core/ksp/SheetsKspDoc.cpp:43
 #, kde-format
 msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
@@ -80,7 +80,7 @@ msgstr ""
 "잘못된 문서입니다. 예상한 MIME 형식은 application/x-kspread 또는 application/"
 "vnd.kde.kspread였으나 %1을(를) 받았습니다"
 
-#: core/ksp/SheetsKspDoc.cpp:51
+#: core/ksp/SheetsKspDoc.cpp:52
 #, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
@@ -91,37 +91,37 @@ msgstr ""
 "이 문서는 더 새로운 버전의 Calligra Sheets(문법 버전: %1)로 작성되었습니다.\n"
 "이 버전의 Calligra Sheets로 문서를 열면 일부 정보가 손실될 수 있습니다."
 
-#: core/ksp/SheetsKspDoc.cpp:53
+#: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
 msgid "File Format Mismatch"
 msgstr "파일 형식 일치하지 않음"
 
-#: core/ksp/SheetsKspDoc.cpp:100
+#: core/ksp/SheetsKspDoc.cpp:105
 #, kde-format
 msgid "Styles cannot be loaded."
 msgstr "스타일을 불러올 수 없습니다."
 
-#: core/ksp/SheetsKspDoc.cpp:108
+#: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
 msgid "Invalid document. No map tag."
 msgstr "잘못된 문서입니다. map 태그가 없습니다."
 
-#: core/ksp/SheetsKspMap.cpp:78
+#: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
 msgid "This document has no sheets (tables)."
 msgstr "이 문서에는 시트(테이블)가 없습니다."
 
-#: core/ksp/SheetsKspSheet.cpp:53
+#: core/ksp/SheetsKspSheet.cpp:51
 #, kde-format
 msgid "Invalid document. Sheet name is empty."
 msgstr "문서가 잘못되었습니다. 시트 이름이 비어 있습니다."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:189
+#: core/Map.cpp:241 engine/MapBase.cpp:182
 #, kde-format
 msgid "Sheet%1"
 msgstr "시트%1"
 
-#: core/Sheet.cpp:655
+#: core/Sheet.cpp:660
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "셀 %1의 유효성 검사 실패"
@@ -136,40 +136,40 @@ msgstr "머리글"
 msgid "Header1"
 msgstr "머리글1"
 
-#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
+#: ui/dialogs/LayoutPage_General.cpp:143
 #, kde-format
 msgid "Default"
 msgstr "기본값"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "AM"
 msgstr "오전"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "PM"
 msgstr "오후"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:557
 #, kde-format
 msgid "h"
 msgstr "시간"
 
-#: core/ValueFormatter.cpp:558
+#: core/ValueFormatter.cpp:559
 #, kde-format
 msgid "min"
 msgstr "분"
 
-#: core/ValueFormatter.cpp:560
+#: core/ValueFormatter.cpp:561
 #, kde-format
 msgid "s"
 msgstr "초"
 
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:120
 #, kde-format
 msgid "Text"
 msgstr "텍스트"
@@ -247,96 +247,96 @@ msgstr "인자"
 
 #: engine/FunctionDescription.cpp:180
 #, kde-format
-msgid "<li><b>Comment:</b> %1"
-msgstr "<li><b>설명:</b> %1"
-
-#: engine/FunctionDescription.cpp:181
-#, kde-format
 msgid "<br><b>Type:</b> %1"
 msgstr "<br><b>종류:</b> %1"
 
-#: engine/FunctionDescription.cpp:187
+#: engine/FunctionDescription.cpp:180
+#, kde-format
+msgid "<li><b>Comment:</b> %1"
+msgstr "<li><b>설명:</b> %1"
+
+#: engine/FunctionDescription.cpp:186
 #, kde-format
 msgid "Examples"
 msgstr "예제"
 
-#: engine/FunctionDescription.cpp:196
+#: engine/FunctionDescription.cpp:195
 #, kde-format
 msgid "Related Functions"
 msgstr "관련 함수"
 
-#: engine/Localization.cpp:748
+#: engine/Localization.cpp:769
 #, kde-format
 msgid "true"
 msgstr "참"
 
-#: engine/Localization.cpp:749
+#: engine/Localization.cpp:770
 #, kde-format
 msgid "false"
 msgstr "거짓"
 
-#: engine/SheetBase.cpp:345
+#: engine/SheetBase.cpp:359
 #, kde-format
 msgid "Dependency"
 msgstr "의존성"
 
 # https://support.office.com/ko-kr/article/-div-0-%EC%98%A4%EB%A5%98%EB%A5%BC-%EC%88%98%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-3a5a18a9-8d80-4ebb-a908-39e759a009a5
 # #! 형식의 오류는 한국어로 번역하지 않음.
-#: engine/Value.cpp:597
+#: engine/Value.cpp:662
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:670
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:678
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:686
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:694
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:702
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:710
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:718
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:726
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:734
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -864,14 +864,14 @@ msgstr "CARY(12; 0)은 0을 반환함"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid "Number"
 msgstr "숫자"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
 msgstr "서식"
@@ -1215,7 +1215,7 @@ msgstr "날짜와 시간"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Date"
 msgstr "날짜"
@@ -1287,7 +1287,7 @@ msgstr "DAYS360(\"2002/02/22\"; \"2002/04/21\"; FALSE)는 59를 반환함"
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:105
 #, kde-format
 msgid "Time"
 msgstr "시간"
@@ -3919,7 +3919,7 @@ msgid "Fractional Dollar"
 msgstr "분수 달러"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:89
 #, kde-format
 msgid "Fraction"
 msgstr "분수"
@@ -5120,13 +5120,13 @@ msgstr "ZERO_COUPON(액면가; 이율; 년)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20)은148.64를 반환함"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:440
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
 #, kde-format
 msgid "Manual"
 msgstr "설명서"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutPage_Float.cpp:184
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
 msgstr "자동"
@@ -7786,7 +7786,7 @@ msgstr "절대 번호(선택)"
 msgid "A1 style (optional)"
 msgstr "A1 스타일(선택)"
 
-#: functions/reference.xml:27 ui/MapModel.cpp:142
+#: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
 msgid "Sheet name"
 msgstr "시트 이름"
@@ -11142,7 +11142,7 @@ msgstr "FINDB(찾을_텍스트;다음_텍스트에서;바이트위치 시작)"
 msgid "Source string"
 msgstr "원본 문자열"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Position"
 msgstr "위치"
@@ -12217,196 +12217,196 @@ msgstr "SECH(실수)"
 msgid "SECH(0) equals 1"
 msgstr "SECH(0)은 1을 반환함"
 
-#: part/AboutData.h:28
+#: part/AboutData.h:27
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "Calligra Sheets"
 
-#: part/AboutData.h:30
+#: part/AboutData.h:29
 #, kde-format
 msgid "Spreadsheet Application"
 msgstr "스프레드시트 앱"
 
-#: part/AboutData.h:32
+#: part/AboutData.h:31
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "Copyright 1998-%1, The Calligra Sheets Team"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Original Author"
 msgstr "원 작성자"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Torben Weis"
 msgstr "Torben Weis"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Maintainer"
 msgstr "관리자"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr "Marijn Kruisselbrink"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr "ODS 및 Excel, 함수, 스크립팅"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/AboutData.h:43
+#: part/AboutData.h:42
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:43
 #, kde-format
 msgid "John Dailey"
 msgstr "John Dailey"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:44
 #, kde-format
 msgid "Philipp Müller"
 msgstr "Philipp Müller"
 
-#: part/AboutData.h:46
+#: part/AboutData.h:45
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/AboutData.h:47
+#: part/AboutData.h:46
 #, kde-format
 msgid "Norbert Andres"
 msgstr "Norbert Andres"
 
-#: part/AboutData.h:48
-#, kde-format
-msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
-
-#: part/AboutData.h:49 part/AboutData.h:52 part/AboutData.h:55
-#: part/AboutData.h:59 part/AboutData.h:62 part/AboutData.h:65
-#: part/AboutData.h:68 part/AboutData.h:71 part/AboutData.h:74
+#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
+#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
+#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
 #, kde-format
 msgid "Import/export filter developer"
 msgstr "가져오기/내보내기 필터 개발"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:47
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/AboutData.h:48
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/AboutData.h:54
+#: part/AboutData.h:49
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr "Nikolas Zimmermann"
 
-#: part/AboutData.h:57
+#: part/AboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/AboutData.h:58
+#: part/AboutData.h:51
 #, kde-format
 msgid "Helge Deller"
 msgstr "Helge Deller"
 
-#: part/AboutData.h:61
+#: part/AboutData.h:52
 #, kde-format
 msgid "Percy Leonhart"
 msgstr "Percy Leonhart"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:53
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr "Eva Brucherseifer"
 
-#: part/AboutData.h:67
+#: part/AboutData.h:54
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr "Phillip Ezolt"
 
-#: part/AboutData.h:70
+#: part/AboutData.h:55
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/AboutData.h:73
+#: part/AboutData.h:56
 #, kde-format
 msgid "Graham Short"
 msgstr "Graham Short"
 
-#: part/AboutData.h:76
+#: part/AboutData.h:57
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/AboutData.h:77
+#: part/AboutData.h:58
 #, kde-format
 msgid "Tomas Mecir"
 msgstr "Tomas Mecir"
 
-#: part/AboutData.h:78
+#: part/AboutData.h:59
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr "Raphael Langerhorst"
 
-#: part/AboutData.h:79
+#: part/AboutData.h:60
 #, kde-format
 msgid "John Tapsell"
 msgstr "John Tapsell"
 
-#: part/AboutData.h:80
+#: part/AboutData.h:61
 #, kde-format
 msgid "Robert Knight"
 msgstr "Robert Knight"
 
-#: part/AboutData.h:81
+#: part/AboutData.h:62
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr "Stefan Nikolaus"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Developer (functions)"
 msgstr "개발자(함수)"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Sascha Pfau"
 msgstr "Sascha Pfau"
 
-#: part/AboutData.h:83
+#: part/AboutData.h:64
 #, kde-format
 msgid "Brad Hards"
 msgstr "Brad Hards"
 
-#: part/AboutData.h:84
+#: part/AboutData.h:64
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr "다양한 함수 구현, 검토 및 테스트"
 
-#. i18n translator strings
-#: part/AboutData.h:87
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "박신조"
-
-#: part/AboutData.h:88
+#: part/AboutData.h:66
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde@peremen.name"
+
+#. i18n translator strings
+#: part/AboutData.h:66
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "박신조"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12434,7 +12434,7 @@ msgid "Clear"
 msgstr "지우기"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:448
+#: part/calligrasheets.rc:44 part/View.cpp:430
 #, kde-format
 msgid "Delete"
 msgstr "삭제"
@@ -12551,7 +12551,7 @@ msgstr "활성화"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "글꼴"
@@ -12562,27 +12562,27 @@ msgstr "글꼴"
 msgid "Color/Border"
 msgstr "색상/경계"
 
-#: part/CanvasBase.cpp:679
+#: part/CanvasBase.cpp:675
 #, kde-format
 msgid "Comment:"
 msgstr "주석:"
 
-#: part/CellEditorDocker.cpp:45
+#: part/CellEditorDocker.cpp:44
 #, kde-format
 msgid "Cell Editor"
 msgstr "셀 편집기"
 
-#: part/CellEditorDocker.cpp:56
+#: part/CellEditorDocker.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "수식"
 
-#: part/CellTool.cpp:64
+#: part/CellTool.cpp:63
 #, kde-format
 msgid "Define Print Range"
 msgstr "인쇄 범위 정의"
 
-#: part/CellTool.cpp:67
+#: part/CellTool.cpp:66
 #, kde-format
 msgid "Define the print range in the current sheet"
 msgstr "현재 시트에서 인쇄 범위 정의"
@@ -12623,7 +12623,7 @@ msgid "First column as label"
 msgstr "첫 번째 열을 머리글로"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Data Format"
 msgstr "데이터 서식"
@@ -12640,12 +12640,12 @@ msgstr "행의 데이터 집합"
 msgid "Data sets in columns"
 msgstr "열의 데이터 집합"
 
-#: part/commands/DefinePrintRangeCommand.cpp:22
+#: part/commands/DefinePrintRangeCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
 msgstr "인쇄 범위 정의"
 
-#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
+#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
 msgstr "쪽 레이아웃 설정"
@@ -12819,18 +12819,18 @@ msgstr ""
 "보기 -> 쪽 테두리 표시 메뉴 항목을 선택하면 쪽 테두리를 표시합니다. 이 옵션"
 "을 선택하면 기본값이 빨간색이 아닌 다른 색으로 테두리를 표시합니다."
 
-#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
-#: part/dialogs/PageLayoutDialog.cpp:97
+#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
+#: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
-#: part/dialogs/PageLayoutDialog.cpp:105
+#: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
 msgid "No Limit"
 msgstr "무제한"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
 #, kde-format
 msgid "Sheet"
 msgstr "시트"
@@ -12983,139 +12983,139 @@ msgstr "수평"
 msgid "Vertical"
 msgstr "수직"
 
-#: part/dialogs/PreferenceDialog.cpp:277
+#: part/dialogs/PreferenceDialog.cpp:269
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "설정"
 
-#: part/dialogs/PreferenceDialog.cpp:294
+#: part/dialogs/PreferenceDialog.cpp:286
 #, kde-format
 msgid "Interface"
 msgstr "인터페이스"
 
-#: part/dialogs/PreferenceDialog.cpp:299
+#: part/dialogs/PreferenceDialog.cpp:291
 #, kde-format
 msgid "Down"
 msgstr "아래"
 
-#: part/dialogs/PreferenceDialog.cpp:300
+#: part/dialogs/PreferenceDialog.cpp:292
 #, kde-format
 msgid "Up"
 msgstr "위"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "오른쪽"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "왼쪽"
 
-#: part/dialogs/PreferenceDialog.cpp:303
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Down, First Column"
 msgstr "아래, 첫 번째 열"
 
-#: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
+#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
 #, kde-format
 msgid "None"
 msgstr "없음"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
 #, kde-format
 msgid "Sum"
 msgstr "합계"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
 #, kde-format
 msgid "Min"
 msgstr "최소"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
 #, kde-format
 msgid "Max"
 msgstr "최대"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
 #, kde-format
 msgid "Average"
 msgstr "평균"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
 #, kde-format
 msgid "Count"
 msgstr "개수"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
 
-#: part/dialogs/PreferenceDialog.cpp:327
+#: part/dialogs/PreferenceDialog.cpp:318
 #, kde-format
 msgid "Open/Save"
 msgstr "열기/저장"
 
-#: part/dialogs/PreferenceDialog.cpp:339
+#: part/dialogs/PreferenceDialog.cpp:329
 #, kde-format
 msgid "Function Modules"
 msgstr "함수 모듈"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
 #, kde-format
 msgid "Tools"
 msgstr "도구"
 
-#: part/dialogs/PreferenceDialog.cpp:343
+#: part/dialogs/PreferenceDialog.cpp:332
 #, kde-format
 msgid "Plugins"
 msgstr "플러그인"
 
-#: part/dialogs/PreferenceDialog.cpp:351 part/dialogs/PreferenceDialog.cpp:358
+#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spelling"
 msgstr "맞춤법 검사"
 
-#: part/dialogs/PreferenceDialog.cpp:353
+#: part/dialogs/PreferenceDialog.cpp:342
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "맞춤법 검사기 동작"
 
-#: part/dialogs/PreferenceDialog.cpp:359
+#: part/dialogs/PreferenceDialog.cpp:348
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: part/dialogs/PreferenceDialog.cpp:360
+#: part/dialogs/PreferenceDialog.cpp:349
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: part/dialogs/PreferenceDialog.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:421
 #, kde-format
 msgid "&Completion mode:"
 msgstr "자동 완성 모드(&M):"
 
-#: part/dialogs/PreferenceDialog.cpp:437
+#: part/dialogs/PreferenceDialog.cpp:425
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr "자동 텍스트 완성 모드를 드롭다운 선택 상자에서 선택할 수 있습니다."
 
-#: part/dialogs/PreferenceDialog.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:429
 #, kde-format
 msgid "Popup"
 msgstr "팝업"
 
-#: part/dialogs/PreferenceDialog.cpp:443
+#: part/dialogs/PreferenceDialog.cpp:431
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "반자동"
@@ -13450,438 +13450,438 @@ msgstr "선택 취소"
 msgid "Move selected sheet to the bottom"
 msgstr "선택한 시트를 맨 아래로 이동"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Case Sensitive"
 msgstr "대소문자 구분"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Match cases when searching"
 msgstr "검색 시 대소문자 구분"
 
-#: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "높이: %1 %2"
 
-#: part/HeaderItems.cpp:163 part/HeaderWidgets.cpp:157
+#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
 #, kde-format
 msgid "Hide Row"
 msgstr "행 숨기기"
 
-#: part/HeaderItems.cpp:334 part/HeaderWidgets.cpp:325
+#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "너비: %1 %2"
 
-#: part/HeaderItems.cpp:336 part/HeaderWidgets.cpp:327
+#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
 #, kde-format
 msgid "Hide Column"
 msgstr "열 숨기기"
 
-#: part/Headers.cpp:233 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:724
 #, kde-format
 msgid "Area is too large."
 msgstr "영역이 너무 큽니다."
 
-#: part/PrintJob.cpp:87
+#: part/PrintJob.cpp:88
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
 msgstr "인쇄할 %1 시트를 찾을 수 없음"
 
-#: part/PrintJob.cpp:300
+#: part/PrintJob.cpp:286
 #, kde-format
 msgid "Nothing to print for sheet(s) %1."
 msgstr "%1 시트에 인쇄할 내용이 없습니다."
 
-#: part/View.cpp:228
+#: part/View.cpp:225
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "시트 속성..."
 
-#: part/View.cpp:231
+#: part/View.cpp:228
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "현재 시트의 속성 수정"
 
-#: part/View.cpp:234 part/View.cpp:2051
+#: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
 msgid "Insert Sheet"
 msgstr "시트 삽입"
 
-#: part/View.cpp:235
+#: part/View.cpp:232
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "새 시트 삽입"
 
-#: part/View.cpp:239
+#: part/View.cpp:236
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "시트 복제"
 
-#: part/View.cpp:240
+#: part/View.cpp:237
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "선택한 시트 복제"
 
-#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
+#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
 #, kde-format
 msgid "Remove Sheet"
 msgstr "시트 삭제"
 
-#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
+#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "활성 시트 삭제"
 
-#: part/View.cpp:250
+#: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "시트 이름 바꾸기..."
 
-#: part/View.cpp:253
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "활성 시트 이름 바꾸기"
 
-#: part/View.cpp:255
+#: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
 msgstr "시트 표시..."
 
-#: part/View.cpp:258
+#: part/View.cpp:255
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "숨겨진 시트 표시"
 
-#: part/View.cpp:260
+#: part/View.cpp:257
 #, kde-format
 msgid "Hide Sheet"
 msgstr "시트 숨기기"
 
-#: part/View.cpp:263
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "활성 시트 숨기기"
 
-#: part/View.cpp:265
+#: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
 msgstr "쪽 레이아웃..."
 
-#: part/View.cpp:268
+#: part/View.cpp:265
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "인쇄할 스프레드 시트의 레이아웃 지정"
 
-#: part/View.cpp:270
+#: part/View.cpp:267
 #, kde-format
 msgid "Reset Print Range"
 msgstr "인쇄 범위 초기화"
 
-#: part/View.cpp:273
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "현재 시트의 인쇄 범위 초기화"
 
-#: part/View.cpp:275
+#: part/View.cpp:272
 #, kde-format
 msgid "Page Outline"
 msgstr "쪽 테두리"
 
-#: part/View.cpp:276
+#: part/View.cpp:273
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "스프레드시트에 쪽 경계선 표시"
 
-#: part/View.cpp:280
+#: part/View.cpp:277
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "시트 다시 계산"
 
-#: part/View.cpp:282 part/View.cpp:290
+#: part/View.cpp:279 part/View.cpp:287
 #, kde-format
 msgid "Recalculate"
 msgstr "다시 계산"
 
-#: part/View.cpp:286
+#: part/View.cpp:283
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "현재 워크시트의 모든 셀 값을 다시 계산"
 
-#: part/View.cpp:288
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate Document"
 msgstr "문서 다시 계산"
 
-#: part/View.cpp:294
+#: part/View.cpp:291
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "모든 워크시트에서 모든 셀의 값을 다시 계산"
 
-#: part/View.cpp:296
+#: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "시트 보호(&S)..."
 
-#: part/View.cpp:298
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "시트가 수정되지 않도록 보호"
 
-#: part/View.cpp:302
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
 msgstr "문서 보호(&D)..."
 
-#: part/View.cpp:304
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "문서가 수정되지 않도록 보호"
 
-#: part/View.cpp:309
+#: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "문서에서 템플릿 만들기(&C)..."
 
-#: part/View.cpp:313
+#: part/View.cpp:309
 #, kde-format
 msgid "Anchor"
 msgstr "고정"
 
-#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
+#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
 #, kde-format
 msgid "Cell"
 msgstr "셀"
 
-#: part/View.cpp:315 part/View.cpp:1085
+#: part/View.cpp:311 part/View.cpp:1037
 #, kde-format
 msgid "Page"
 msgstr "쪽"
 
-#: part/View.cpp:317
+#: part/View.cpp:313
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "모양 고정 전환"
 
-#: part/View.cpp:324
+#: part/View.cpp:319
 #, kde-format
 msgid "Next Sheet"
 msgstr "다음 시트"
 
-#: part/View.cpp:325
+#: part/View.cpp:320
 #, kde-format
 msgid "Next"
 msgstr "다음"
 
-#: part/View.cpp:326
+#: part/View.cpp:321
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "다음 시트로 이동"
 
-#: part/View.cpp:331
+#: part/View.cpp:326
 #, kde-format
 msgid "Previous Sheet"
 msgstr "이전 시트"
 
-#: part/View.cpp:332
+#: part/View.cpp:327
 #, kde-format
 msgid "Previous"
 msgstr "이전"
 
-#: part/View.cpp:333
+#: part/View.cpp:328
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "이전 시트로 이동"
 
-#: part/View.cpp:338
+#: part/View.cpp:333
 #, kde-format
 msgid "First Sheet"
 msgstr "첫 시트"
 
-#: part/View.cpp:339
+#: part/View.cpp:334
 #, kde-format
 msgid "First"
 msgstr "처음"
 
-#: part/View.cpp:340
+#: part/View.cpp:335
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "첫 번째 시트로 이동"
 
-#: part/View.cpp:344
+#: part/View.cpp:339
 #, kde-format
 msgid "Last Sheet"
 msgstr "마지막 시트"
 
-#: part/View.cpp:345
+#: part/View.cpp:340
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "마지막"
 
-#: part/View.cpp:346
+#: part/View.cpp:341
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "마지막 시트로 이동"
 
-#: part/View.cpp:352
+#: part/View.cpp:347
 #, kde-format
 msgid "Column Header"
 msgstr "열 머리글"
 
-#: part/View.cpp:353
+#: part/View.cpp:348
 #, kde-format
 msgid "Show the column header"
 msgstr "열 머리글 표시"
 
-#: part/View.cpp:358
+#: part/View.cpp:352
 #, kde-format
 msgid "Row Header"
 msgstr "행 머리글"
 
-#: part/View.cpp:359
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the row header"
 msgstr "행 머리글 표시"
 
-#: part/View.cpp:364
+#: part/View.cpp:357
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "수평 스크롤 바"
 
-#: part/View.cpp:365
+#: part/View.cpp:358
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "수평 스크롤 바 표시"
 
-#: part/View.cpp:370
+#: part/View.cpp:362
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "수직 스크롤 바"
 
-#: part/View.cpp:371
+#: part/View.cpp:363
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "수직 스크롤 바 표시"
 
-#: part/View.cpp:376
+#: part/View.cpp:367
 #, kde-format
 msgid "Status Bar"
 msgstr "상태 표시줄"
 
-#: part/View.cpp:377
+#: part/View.cpp:368
 #, kde-format
 msgid "Show the status bar"
 msgstr "상태 표시줄 표시"
 
-#: part/View.cpp:382
+#: part/View.cpp:372
 #, kde-format
 msgid "Tab Bar"
 msgstr "탭 표시줄"
 
-#: part/View.cpp:383
+#: part/View.cpp:373
 #, kde-format
 msgid "Show the tab bar"
 msgstr "탭 표시줄 표시"
 
-#: part/View.cpp:389
+#: part/View.cpp:378
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "다양한 Calligra Sheets 옵션 설정"
 
-#: part/View.cpp:402
+#: part/View.cpp:390
 #, kde-format
 msgid "No calculation"
 msgstr "계산 안 함"
 
-#: part/View.cpp:409
+#: part/View.cpp:396
 #, kde-format
 msgid "Calculate using sum"
 msgstr "합계 계산"
 
-#: part/View.cpp:416
+#: part/View.cpp:402
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "최솟값 계산"
 
-#: part/View.cpp:423
+#: part/View.cpp:408
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "최댓값 계산"
 
-#: part/View.cpp:430
+#: part/View.cpp:414
 #, kde-format
 msgid "Calculate using average"
 msgstr "평균 계산"
 
-#: part/View.cpp:437
+#: part/View.cpp:420
 #, kde-format
 msgid "Calculate using the count"
 msgstr "개수 계산"
 
-#: part/View.cpp:444
+#: part/View.cpp:426
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "countA 계산"
 
-#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
+#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "보호된 시트를 변경할 수 없습니다."
 
-#: part/View.cpp:1474
+#: part/View.cpp:1428
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "표시된 단 하나의 시트를 숨길 수 없습니다."
 
-#: part/View.cpp:1554
+#: part/View.cpp:1510
 #, kde-format
 msgid "Enter a password."
 msgstr "암호를 입력하십시오."
 
-#: part/View.cpp:1566
+#: part/View.cpp:1522
 #, kde-format
 msgid "Enter the password."
 msgstr "암호를 입력하십시오."
 
-#: part/View.cpp:1574
+#: part/View.cpp:1530
 #, kde-format
 msgid "Password is incorrect."
 msgstr "암호가 잘못되었습니다."
 
-#: part/View.cpp:1592
+#: part/View.cpp:1546
 #, kde-format
 msgid "Protect Document"
 msgstr "문서 보호"
 
-#: part/View.cpp:1595
+#: part/View.cpp:1548
 #, kde-format
 msgid "Unprotect Document"
 msgstr "문서 보호 해제"
 
-#: part/View.cpp:1615
+#: part/View.cpp:1567
 #, kde-format
 msgid "Protect Sheet"
 msgstr "시트 보호"
 
-#: part/View.cpp:1618
+#: part/View.cpp:1569
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "시트 보호 해제"
 
-#: part/View.cpp:1852
+#: part/View.cpp:1804
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "인쇄 범위 초기화"
 
-#: part/View.cpp:1861
+#: part/View.cpp:1813
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "단 하나의 시트를 삭제할 수 없습니다."
 
-#: part/View.cpp:1864
+#: part/View.cpp:1817
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13890,83 +13890,83 @@ msgstr ""
 "활성 시트를 삭제하려고 합니다.\n"
 "계속 진행하시겠습니까?"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Enter name:"
 msgstr "이름 입력:"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Rename Sheet"
 msgstr "시트 이름 바꾸기"
 
-#: part/View.cpp:1894 part/View.cpp:1900
+#: part/View.cpp:1847 part/View.cpp:1853
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "시트 이름 바꾸기"
 
-#: part/View.cpp:1894
+#: part/View.cpp:1847
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "시트 이름을 비워 둘 수 없습니다."
 
-#: part/View.cpp:1900
+#: part/View.cpp:1853
 #, kde-format
 msgid "This name is already used."
 msgstr "같은 이름이 이미 있습니다."
 
-#: part/View.cpp:1968
+#: part/View.cpp:1921
 #, kde-format
 msgid "Sum: "
 msgstr "합계: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1925
 #, kde-format
 msgid "Average: "
 msgstr "평균: "
 
-#: part/View.cpp:1976
+#: part/View.cpp:1929
 #, kde-format
 msgid "Min: "
 msgstr "최소: "
 
-#: part/View.cpp:1980
+#: part/View.cpp:1933
 #, kde-format
 msgid "Max: "
 msgstr "최대: "
 
-#: part/View.cpp:1984
+#: part/View.cpp:1937
 #, kde-format
 msgid "Count: "
 msgstr "개수: "
 
-#: part/View.cpp:1988
+#: part/View.cpp:1941
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1995
+#: part/View.cpp:1948
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128
+#: part/ViewAdaptor.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "글자색 변경"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
+#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "배경색 바꾸기"
 
-#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
-#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
+#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
 
-#: ui/CellToolBase.cpp:807
+#: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
@@ -13995,230 +13995,218 @@ msgstr "숫자 서식"
 msgid "Merge"
 msgstr "합치기"
 
-#: ui/commands/AbstractRegionCommand.cpp:172
-#, kde-format
-msgid ""
-"Processing is not possible, because some cells are locked as elements of a "
-"matrix."
-msgstr "일부 셀이 행렬의 원소로 잠겨 있어서 처리할 수 없습니다."
-
-#: ui/commands/AbstractRegionCommand.cpp:185
-#, kde-format
-msgid "Processing is not possible, because some cells are protected."
-msgstr "일부 셀이 보호되어 있어서 처리할 수 없습니다."
-
 #: ui/commands/ApplyFilterCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "필터 적용"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "January"
 msgstr "1월"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "February"
 msgstr "2월"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "March"
 msgstr "3월"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "April"
 msgstr "4월"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "May"
 msgstr "5월"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "June"
 msgstr "6월"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "July"
 msgstr "7월"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "August"
 msgstr "8월"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "September"
 msgstr "9월"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "October"
 msgstr "10월"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "November"
 msgstr "11월"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "December"
 msgstr "12월"
 
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Jan"
 msgstr "1월"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Feb"
 msgstr "2월"
 
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Mar"
 msgstr "3월"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Apr"
 msgstr "4월"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "5월"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Jun"
 msgstr "6월"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Jul"
 msgstr "7월"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Aug"
 msgstr "8월"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Sep"
 msgstr "9월"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Oct"
 msgstr "10월"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
 msgid "Nov"
 msgstr "11월"
 
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Dec"
 msgstr "12월"
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Monday"
 msgstr "월요일"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Tuesday"
 msgstr "화요일"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Wednesday"
 msgstr "수요일"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Thursday"
 msgstr "목요일"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:149
 #, kde-format
 msgid "Friday"
 msgstr "금요일"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:150
 #, kde-format
 msgid "Saturday"
 msgstr "토요일"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:151
 #, kde-format
 msgid "Sunday"
 msgstr "일요일"
 
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Mon"
 msgstr "월"
 
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Tue"
 msgstr "화"
 
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Wed"
 msgstr "수"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Thu"
 msgstr "목"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:160
 #, kde-format
 msgid "Fri"
 msgstr "금"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:161
 #, kde-format
 msgid "Sat"
 msgstr "토"
 
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:162
 #, kde-format
 msgid "Sun"
 msgstr "일"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:673
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "자동 완성"
 
-#: ui/commands/DataManipulators.cpp:107
+#: ui/commands/DataManipulators.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "값 변경"
 
-#: ui/commands/DataManipulators.cpp:180 ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "셀 삽입"
 
-#: ui/commands/DataManipulators.cpp:193
+#: ui/commands/DataManipulators.cpp:191
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "셀 삭제"
@@ -14228,27 +14216,27 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "삭제"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "가로로 셀 병합"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "세로로 셀 병합"
 
-#: ui/commands/MergeCommand.cpp:89
+#: ui/commands/MergeCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "셀 병합"
 
-#: ui/commands/MergeCommand.cpp:92
+#: ui/commands/MergeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "셀 병합 해제"
 
-#: ui/commands/MergeCommand.cpp:98
+#: ui/commands/MergeCommand.cpp:96
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "열 또는 행 병합은 지원하지 않습니다."
@@ -14273,116 +14261,116 @@ msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "행 크기 조정"
 
-#: ui/commands/RowColumnManipulators.cpp:277
+#: ui/commands/RowColumnManipulators.cpp:283
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "행/열 숨기기"
 
-#: ui/commands/RowColumnManipulators.cpp:279
+#: ui/commands/RowColumnManipulators.cpp:285
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "열 숨기기"
 
-#: ui/commands/RowColumnManipulators.cpp:281
+#: ui/commands/RowColumnManipulators.cpp:287
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "행 숨기기"
 
-#: ui/commands/RowColumnManipulators.cpp:284
+#: ui/commands/RowColumnManipulators.cpp:290
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "행/열 표시"
 
-#: ui/commands/RowColumnManipulators.cpp:286
+#: ui/commands/RowColumnManipulators.cpp:292
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "열 표시"
 
-#: ui/commands/RowColumnManipulators.cpp:288
+#: ui/commands/RowColumnManipulators.cpp:294
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "행 표시"
 
-#: ui/commands/RowColumnManipulators.cpp:535
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "열/행 조정"
 
-#: ui/commands/RowColumnManipulators.cpp:537
+#: ui/commands/RowColumnManipulators.cpp:541
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "열 조정"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "행 조정"
 
-#: ui/commands/RowColumnManipulators.cpp:552
-#: ui/commands/RowColumnManipulators.cpp:570
+#: ui/commands/RowColumnManipulators.cpp:556
+#: ui/commands/RowColumnManipulators.cpp:574
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "열 삽입"
 
-#: ui/commands/RowColumnManipulators.cpp:572
+#: ui/commands/RowColumnManipulators.cpp:576
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "열 삭제"
 
-#: ui/commands/RowColumnManipulators.cpp:629
-#: ui/commands/RowColumnManipulators.cpp:647
+#: ui/commands/RowColumnManipulators.cpp:631
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "행 삽입"
 
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:651
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "행 삭제"
 
-#: ui/commands/SheetCommands.cpp:24
+#: ui/commands/SheetCommands.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
 msgstr "시트 이름 바꾸기"
 
-#: ui/commands/SheetCommands.cpp:45
+#: ui/commands/SheetCommands.cpp:46
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "시트 %1 숨기기"
 
-#: ui/commands/SheetCommands.cpp:46
+#: ui/commands/SheetCommands.cpp:48
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet"
 msgstr "시트 숨기기"
 
-#: ui/commands/SheetCommands.cpp:73
+#: ui/commands/SheetCommands.cpp:77
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "시트 %1 표시"
 
-#: ui/commands/SheetCommands.cpp:74 ui/dialogs/ShowDialog.cpp:71
+#: ui/commands/SheetCommands.cpp:79 ui/dialogs/ShowDialog.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
 msgstr "시트 표시"
 
-#: ui/commands/SheetCommands.cpp:98
+#: ui/commands/SheetCommands.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
 msgstr "시트 추가"
 
-#: ui/commands/SheetCommands.cpp:125
+#: ui/commands/SheetCommands.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
 msgstr "시트 복제"
 
-#: ui/commands/SheetCommands.cpp:163
+#: ui/commands/SheetCommands.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Remove Sheet"
 msgstr "시트 삭제"
 
-#: ui/commands/SheetCommands.cpp:193
+#: ui/commands/SheetCommands.cpp:197
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "시트 속성 변경"
@@ -14478,8 +14466,8 @@ msgid "Bold"
 msgstr "굵게"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
-#: ui/dialogs/LayoutPage_Pattern.cpp:119
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:308
+#: ui/dialogs/LayoutPage_Pattern.cpp:116
 #, kde-format
 msgid "Color:"
 msgstr "색:"
@@ -14554,8 +14542,8 @@ msgstr ""
 "류를 선택하십시오."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
-#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
+#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "미리 보기"
@@ -14567,56 +14555,56 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "현재 셀에 선택한 글꼴을 미리 볼 수 있습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format
 msgid "Cell Format"
 msgstr "셀 서식"
 
-#: ui/dialogs/LayoutDialog.cpp:123
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "셀 서식"
 
-#: ui/dialogs/LayoutDialog.cpp:132
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "일반(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "테두리"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:147
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "배경(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:153
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
 msgstr "셀 보호(&C)"
 
-#: ui/dialogs/LayoutPage_Border.cpp:273
+#: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
 msgid "Preselect"
 msgstr "미리 선택"
 
-#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#: ui/dialogs/LayoutPage_Border.cpp:279 ui/dialogs/LayoutPage_Pattern.cpp:94
 #, kde-format
 msgid "Pattern"
 msgstr "패턴"
 
-#: ui/dialogs/LayoutPage_Border.cpp:328
+#: ui/dialogs/LayoutPage_Border.cpp:312
 #, kde-format
 msgid "Customize"
 msgstr "사용자 정의"
 
-#: ui/dialogs/LayoutPage_Float.cpp:58
+#: ui/dialogs/LayoutPage_Float.cpp:57
 #, kde-format
 msgid "Generic"
 msgstr "일반"
@@ -14634,7 +14622,7 @@ msgstr ""
 "시간을 오른쪽 정렬하고 다른 것은 왼쪽 정렬합니다."
 
 # 실제 시스템 설정 프로그램의 메뉴 구조를 반영할 것
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -14644,12 +14632,12 @@ msgstr ""
 "시스템 설정 -> 지역 설정 -> 서식 -> 숫자 탭에서 전역 설정한 숫자 표기법을 사"
 "용합니다. 숫자는 기본적으로 오른쪽 정렬합니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:66
+#: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
 msgid "Percent"
 msgstr "백분율"
 
-#: ui/dialogs/LayoutPage_Float.cpp:67
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -14666,12 +14654,12 @@ msgstr ""
 "일반 셀 서식으로 다시 전환하면 12로 되돌아갑니다.\n"
 "서식 도구 모음에서 백분율 아이콘을 사용할 수도 있습니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:70
+#: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
 msgid "Money"
 msgstr "돈"
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -14687,12 +14675,12 @@ msgstr ""
 "서식 도구 모음의 통화 아이콘을 사용하여 셀 서식을 현재 통화처럼 보이도록 설정"
 "할 수도 있습니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:74
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid "Scientific"
 msgstr "과학"
 
-#: ui/dialogs/LayoutPage_Float.cpp:75
+#: ui/dialogs/LayoutPage_Float.cpp:85
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -14702,7 +14690,7 @@ msgstr ""
 "과학 서식은 과학적 표기법으로 숫자를 변경합니다. 예를 들어 0.0012는 1.2E-03으"
 "로 변경합니다. 일반 셀 서식으로 되돌아가면 0.0012가 다시 표시됩니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:79
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -14723,7 +14711,7 @@ msgstr ""
 "8/16\"입니다. 숫자가 1.4이고 같은 분수 설정을 선택했다면 가장 가까운 1/16의 "
 "정수배인 \"1 6/16\"을 표시합니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/dialogs/LayoutPage_Float.cpp:100
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -14739,7 +14727,7 @@ msgstr ""
 "숫자를 아래로 드래그하는 것처럼 날짜를 아래로 드래그하면 다음 셀에도 날짜가 "
 "표시됩니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:87
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -14758,13 +14746,13 @@ msgstr ""
 "셀의 숫자를 시간으로 처리할 수 없으면 Calligra Sheet에서는 시스템 설정에 지정"
 "한 전역 서식으로 00:00을 표시합니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:90
+#: ui/dialogs/LayoutPage_Float.cpp:113
 #, fuzzy, kde-format
 #| msgid "Date & Time"
 msgid "Datetime"
 msgstr "날짜와 시간"
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:115
 #, fuzzy, kde-format
 #| msgid ""
 #| "To enter a date, you should enter it in one of the formats set in System "
@@ -14787,7 +14775,7 @@ msgstr ""
 "숫자를 아래로 드래그하는 것처럼 날짜를 아래로 드래그하면 다음 셀에도 날짜가 "
 "표시됩니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:95
+#: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -14801,19 +14789,19 @@ msgstr ""
 "를 왼쪽으로 정렬하며, 계산이나 수식에 사용할 수 없습니다. 또한 셀 정렬 방식"
 "을 변경합니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: ui/dialogs/LayoutPage_Float.cpp:99
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr ""
 "사용자 정의 서식은 아직 작동하지 않습니다. 다음 릴리스에서 활성화될 예정입니"
 "다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:136
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -14822,12 +14810,12 @@ msgstr ""
 "선택을 미리 표시하여 확인 단추를 클릭하기 전에 서식을 어떻게 변경할지를 확인"
 "할 수 있습니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:117
+#: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "분수, 날짜 또는 시간 서식의 세부 서식 선택을 표시합니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:156
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -14836,12 +14824,12 @@ msgstr ""
 "$HK 기호처럼 셀 내용에 선택한 서식을 지정한 후 붙일 접미사를 추가할 수 있습니"
 "다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:130
+#: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
 msgid "variable"
 msgstr "변수"
 
-#: ui/dialogs/LayoutPage_Float.cpp:133
+#: ui/dialogs/LayoutPage_Float.cpp:163
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -14852,7 +14840,7 @@ msgstr ""
 "소수점 자릿수 증가 또는 소수점 자릿수 감소 단추를 사용하여 변경할 수도 있습니"
 "다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:137
+#: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -14861,7 +14849,7 @@ msgstr ""
 "$ 기호처럼 셀 내용에 선택한 서식을 지정하기 전에 붙일 접두사를 추가할 수 있습"
 "니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:141
+#: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -14870,78 +14858,78 @@ msgstr ""
 "양수 값 앞에 + 기호를 표시할지 여부와 음수 값을 빨간색으로 표시할지 여부를 선"
 "택할 수 있습니다."
 
-#: ui/dialogs/LayoutPage_Float.cpp:147
+#: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
 msgid "Postfix:"
 msgstr "접미사:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:151
+#: ui/dialogs/LayoutPage_Float.cpp:182
 #, kde-format
 msgid "Prefix:"
 msgstr "접두사:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:155
+#: ui/dialogs/LayoutPage_Float.cpp:186
 #, kde-format
 msgid "Precision:"
 msgstr "소수점 아래 자릿수:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:203
 #, kde-format
 msgid "Format:"
 msgstr "서식:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:176
+#: ui/dialogs/LayoutPage_Float.cpp:207
 #, kde-format
 msgid "Currency:"
 msgstr "통화:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:283
+#: ui/dialogs/LayoutPage_Float.cpp:313
 #, kde-format
 msgid "Halves 1/2"
 msgstr "이등분 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:284
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "사등분 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:285
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "팔등분 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:286
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "16등분 1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:287
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "10등분 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:288
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "100등분 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:289
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "One digit 5/9"
 msgstr "한 자리 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:290
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "두 자리 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:291
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "세 자리 153/652"
 
 # 테스트 문자열
-#: ui/dialogs/LayoutPage_Font.cpp:53
+#: ui/dialogs/LayoutPage_Font.cpp:45
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "다람쥐 헌 쳇바퀴에 타고파"
@@ -14962,32 +14950,32 @@ msgstr "이름:"
 msgid "Inherit style:"
 msgstr "상속 스타일:"
 
-#: ui/dialogs/LayoutPage_General.cpp:90
+#: ui/dialogs/LayoutPage_General.cpp:88
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "같은 이름의 스타일이 이미 존재합니다."
 
-#: ui/dialogs/LayoutPage_General.cpp:94
+#: ui/dialogs/LayoutPage_General.cpp:92
 #, kde-format
 msgid "The style name can not be empty."
 msgstr "스타일 이름을 비워 둘 수 없습니다."
 
-#: ui/dialogs/LayoutPage_General.cpp:106
+#: ui/dialogs/LayoutPage_General.cpp:104
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "스타일은 자기 자신으로부터 상속받을 수 없습니다."
 
-#: ui/dialogs/LayoutPage_General.cpp:110
+#: ui/dialogs/LayoutPage_General.cpp:108
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr "재귀 참조로 때문에 '%1'에서 스타일을 상속받을 수 없습니다."
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:128
+#: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
 msgid "Background color:"
 msgstr "배경색:"
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:136
+#: ui/dialogs/LayoutPage_Pattern.cpp:132
 #, kde-format
 msgid "No Color"
 msgstr "색 없음"
@@ -15255,77 +15243,81 @@ msgstr "시트 표시"
 msgid "Select hidden sheets to show:"
 msgstr "표시할 숨겨진 시트 선택:"
 
-#: ui/ExternalEditor.cpp:56
+#: ui/ExternalEditor.cpp:55
 #, kde-format
 msgid "Apply"
 msgstr "적용"
 
-#: ui/ExternalEditor.cpp:57
+#: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply changes"
 msgstr "변경 사항 적용"
 
-#: ui/ExternalEditor.cpp:61
+#: ui/ExternalEditor.cpp:60
 #, kde-format
 msgid "Cancel"
 msgstr "취소"
 
-#: ui/ExternalEditor.cpp:62
+#: ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Discard changes"
 msgstr "변경 사항 취소"
 
-#: ui/FilterPopup.cpp:55
+#: ui/FilterPopup.cpp:54
 #, kde-format
 msgid "All"
 msgstr "모두"
 
-#: ui/FilterPopup.cpp:58
+#: ui/FilterPopup.cpp:57
 #, kde-format
 msgid "Empty"
 msgstr "비어 있음"
 
-#: ui/FilterPopup.cpp:62
+#: ui/FilterPopup.cpp:61
 #, kde-format
 msgid "Non-empty"
 msgstr "내용이 있음"
 
-#: ui/MapViewModel.cpp:180
+#: ui/MapViewModel.cpp:179
 #, kde-format
 msgctxt "Activate sheet named foo"
 msgid "Activate %1"
 msgstr "%1 활성화"
 
-#: ui/RegionSelector.cpp:145
+#: ui/RegionSelector.cpp:144
 #, kde-format
 msgid "Select Single Cell"
 msgstr "단일 셀 선택"
 
-#: ui/RegionSelector.cpp:147
+#: ui/RegionSelector.cpp:146
 #, kde-format
 msgid "Select Multiple Cells"
 msgstr "여러 셀 선택"
 
-#: ui/strategy/HyperlinkStrategy.cpp:66
+#: ui/strategy/HyperlinkStrategy.cpp:67
 #, kde-format
 msgid "Link %1 activated"
 msgstr "링크 %1 활성화됨"
 
-#: ui/strategy/HyperlinkStrategy.cpp:83
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"이 링크는 프로그램 또는 스크립트 '%1'을(를) 가리킵니다.\n"
-"악성 프로그램이 컴퓨터를 손상시킬 수 있습니다. 이 프로그램을 실행하시겠습니"
-"까?"
+#~ msgid ""
+#~ "Processing is not possible, because some cells are locked as elements of "
+#~ "a matrix."
+#~ msgstr "일부 셀이 행렬의 원소로 잠겨 있어서 처리할 수 없습니다."
 
-#: ui/strategy/HyperlinkStrategy.cpp:89
-#, kde-format
-msgid "Open Link?"
-msgstr "링크를 여시겠습니까?"
+#~ msgid "Processing is not possible, because some cells are protected."
+#~ msgstr "일부 셀이 보호되어 있어서 처리할 수 없습니다."
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "이 링크는 프로그램 또는 스크립트 '%1'을(를) 가리킵니다.\n"
+#~ "악성 프로그램이 컴퓨터를 손상시킬 수 있습니다. 이 프로그램을 실행하시겠습"
+#~ "니까?"
+
+#~ msgid "Open Link?"
+#~ msgstr "링크를 여시겠습니까?"
 
 #~ msgid "Date and Time"
 #~ msgstr "날짜와 시간"

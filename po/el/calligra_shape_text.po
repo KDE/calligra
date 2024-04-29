@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2020-10-11 17:05+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -36,7 +36,7 @@ msgstr "Σχήμα σχολίου για εμφάνιση του περιεχο�
 msgid "Annotation Shape"
 msgstr "Σχήμα σχολίου"
 
-#: commands/AcceptChangeCommand.cpp:30
+#: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Accept change"
 msgstr "Αποδοχή τροποποίησης"
@@ -71,12 +71,12 @@ msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
 msgstr "%1 συρρίκνωση για προσαρμογή"
 
-#: commands/ChangeListLevelCommand.cpp:29
+#: commands/ChangeListLevelCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
 msgstr "Τροποποίηση επιπέδου λίστας"
 
-#: commands/RejectChangeCommand.cpp:34
+#: commands/RejectChangeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Reject change"
 msgstr "Απόρριψη τροποποίησης"
@@ -143,12 +143,12 @@ msgstr "Ημερομηνία"
 msgid "Type"
 msgstr "Τύπος"
 
-#: dialogs/BibliographyConfigureDialog.cpp:96
+#: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
 msgstr "Αύξουσα"
 
-#: dialogs/BibliographyConfigureDialog.cpp:97
+#: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
 msgstr "Φθίνουσα"
@@ -236,17 +236,17 @@ msgstr "Βιβλιογραφία"
 msgid "References"
 msgstr "Παραπομπές"
 
-#: dialogs/ChangeConfigureDialog.cpp:136
+#: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Αυτή είναι γραμμή εισαχθέντος κειμένου"
 
-#: dialogs/ChangeConfigureDialog.cpp:142
+#: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Αυτή είναι γραμμή διαγραφέντος κειμένου"
 
-#: dialogs/ChangeConfigureDialog.cpp:148
+#: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Αυτή είναι γραμμή κειμένου η μορφή του οποίου έχει αλλάξει."
@@ -526,37 +526,37 @@ msgstr "Στιλ προγόνου:"
 msgid "Include in table of contents"
 msgstr "Συμπερίληψη στον πίνακα των περιεχομένων"
 
-#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
 #, kde-format
 msgid "Normal"
 msgstr "Κανονικό"
 
-#: dialogs/CharacterHighlighting.cpp:261
+#: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
 msgstr "Μικρά κεφαλαία"
 
-#: dialogs/CharacterHighlighting.cpp:262
+#: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
 msgid "Uppercase"
 msgstr "Κεφαλαία"
 
-#: dialogs/CharacterHighlighting.cpp:263
+#: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
 msgid "Lowercase"
 msgstr "Πεζά"
 
-#: dialogs/CharacterHighlighting.cpp:264
+#: dialogs/CharacterHighlighting.cpp:302
 #, kde-format
 msgid "Capitalize"
 msgstr "Μετατροπή σε κεφαλαία"
 
-#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
 #, kde-format
 msgid "Superscript"
 msgstr "Εκθέτης"
 
-#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
 msgstr "Δείκτης"
@@ -598,12 +598,17 @@ msgctxt "Character position"
 msgid "Position:"
 msgstr "Θέση:"
 
-#: dialogs/CitationInsertionDialog.cpp:25
+#: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
 msgstr "Επιλογή"
 
-#: dialogs/CitationInsertionDialog.cpp:40
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#, kde-format
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+#: dialogs/CitationInsertionDialog.cpp:41
 #, kde-format
 msgid ""
 "The document already contains the bibliography entry with different data.\n"
@@ -612,13 +617,8 @@ msgstr ""
 "Το έγγραφο περιέχει ήδη τη βιβλιογραφική παράθεση με διαφορετικά δεδομένα.\n"
 "Θέλετε να διευθετήσετε τις υφιστάμενες παραθέσεις;"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
-#, kde-format
-msgid "Warning"
-msgstr "Προειδοποίηση"
-
-#: dialogs/CitationInsertionDialog.cpp:55
-#: dialogs/CitationInsertionDialog.cpp:73
+#: dialogs/CitationInsertionDialog.cpp:58
+#: dialogs/CitationInsertionDialog.cpp:75
 #, kde-format
 msgid "Short name%1"
 msgstr "Σύντομο όνομα%1"
@@ -993,12 +993,12 @@ msgstr "OR"
 msgid "From the document:"
 msgstr "Από το έγγραφο:"
 
-#: dialogs/DockerStylesComboModel.cpp:61
+#: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
 msgstr "Μεταχειρισμένα στιλ"
 
-#: dialogs/DockerStylesComboModel.cpp:64
+#: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
 msgid "Unused Styles"
 msgstr "Αχρησιμοποίητα στιλ"
@@ -1044,7 +1044,7 @@ msgstr "Αυτόματος συλλαβισμός"
 msgid "Select Font"
 msgstr "Επιλογή γραμματοσειράς"
 
-#: dialogs/FontDia.cpp:68
+#: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "Γραμματοσειρά"
@@ -1052,7 +1052,7 @@ msgstr "Γραμματοσειρά"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Εισαγωγή βιβλιογραφίας"
@@ -1166,7 +1166,7 @@ msgstr "Ειδικοί χαρακτήρες"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#: ReferencesTool.cpp:116 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Εισαγωγή"
@@ -1183,28 +1183,28 @@ msgstr "Κλείσιμο"
 msgid "Quick search:"
 msgstr "Γρήγορη αναζήτηση:"
 
-#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
-#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
+#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
 #, kde-format
 msgid "The URL is invalid"
 msgstr "Το URL δεν είναι έγκυρο"
 
-#: dialogs/LinkInsertionDialog.cpp:88
+#: dialogs/LinkInsertionDialog.cpp:87
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "Ο σελιδοδείκτης δεν υπάρχει"
 
-#: dialogs/LinkInsertionDialog.cpp:190
+#: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "Προσκόμιση τίτλου: 0% συμπληρωμένο"
 
-#: dialogs/LinkInsertionDialog.cpp:213
+#: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
 msgstr "Λήξη χρόνου προσκόμισης"
 
-#: dialogs/LinkInsertionDialog.cpp:268
+#: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "Προσκόμιση τίτλου: %1% συμπληρωμένο"
@@ -1450,32 +1450,32 @@ msgstr "&Μετονομασία"
 msgid "&Delete"
 msgstr "&Διαγραφή"
 
-#: dialogs/ManageBookmarkDialog.cpp:69
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Μετονομασία σελιδοδείκτη"
-
-#: dialogs/ManageBookmarkDialog.cpp:70
+#: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "Δώστε νέο όνομα στον σελιδοδείκτη"
 
-#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#: dialogs/ManageBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Μετονομασία σελιδοδείκτη"
+
+#: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "Σελιδοδείκτης με όνομα \"%1\" ήδη υπάρχει."
 
-#: dialogs/ManageBookmarkDialog.cpp:110
+#: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
 msgid "Insert Bookmark"
 msgstr "Εισαγωγή σελιδοδείκτη"
 
-#: dialogs/ManageBookmarkDialog.cpp:111
+#: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
 msgstr "Δώστε όνομα στον σελιδοδείκτη"
 
-#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Διαχείριση σελιδοδεικτών"
@@ -1646,7 +1646,7 @@ msgctxt "None"
 msgid "Nothing"
 msgstr "Τίποτε"
 
-#: dialogs/ParagraphBulletsNumbers.cpp:335
+#: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
 msgstr "Επιλογή εικόνας λίστας"
@@ -1752,7 +1752,7 @@ msgid "Browse..."
 msgstr "Περιήγηση..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
 #, kde-format
 msgid "Background"
 msgstr "Φόντο"
@@ -1972,7 +1972,7 @@ msgstr "Αφήστε τουλάχιστον τόσες γραμμές (ορφα�
 msgid "Paragraph Format"
 msgstr "Μορφή παραγράφου"
 
-#: dialogs/QuickTableButton.cpp:146
+#: dialogs/QuickTableButton.cpp:147
 #, kde-format
 msgid "Insert a table"
 msgstr "Εισαγωγή πίνακα"
@@ -1982,12 +1982,12 @@ msgstr "Εισαγωγή πίνακα"
 msgid "Section name"
 msgstr "Όνομα ενότητας"
 
-#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
 msgstr "Διαμόρφωση ρυθμίσεων"
 
-#: dialogs/SectionFormatDialog.cpp:154
+#: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
 msgid "Invalid characters or section with such name exists."
 msgstr "Μη έγκυροι χαρακτήρες ή υπάρχει ενότητα με τέτοιο όνομα."
@@ -2052,7 +2052,7 @@ msgid "Insert citation at current position"
 msgstr "Εισαγωγή παραπομπής στην τρέχουσα θέση"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr "Εισαγωγή παραπομπής"
@@ -2063,12 +2063,12 @@ msgstr "Εισαγωγή παραπομπής"
 msgid "Configure Bibliography"
 msgstr "Διαμόρφωση βιβλιογραφίας"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
 msgstr "Εισαγωγή υποσημείωσης στην τρέχουσα θέση του δρομέα"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
 msgstr "Εισαγωγή σημείωσης τέλους στην τρέχουσα θέση του δρομέα"
@@ -2100,7 +2100,7 @@ msgid "Hyperlinks"
 msgstr "Σύνδεσμοι"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
 #, kde-format
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
@@ -2122,7 +2122,7 @@ msgstr "Βιβλιοθήκη μορφών επιπέδων"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -2147,7 +2147,7 @@ msgstr "Ορισμός νέας μορφής κουκίδας ή αρίθμησ�
 msgid "Define New List Level Format"
 msgstr "Ορισμός νέας μορφής επιπέδου λίστας"
 
-#: dialogs/SimpleParagraphWidget.cpp:532
+#: dialogs/SimpleParagraphWidget.cpp:549
 #, kde-format
 msgid "Edit List Level Format"
 msgstr "Επεξεργασία μορφής επιπέδου λίστας"
@@ -2164,13 +2164,13 @@ msgstr "Περιεχόμενα"
 msgid "Set Border Color..."
 msgstr "Ορισμός χρώματος περιγράμματος..."
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:169
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Κανένα"
 
-#: dialogs/SimpleTableWidget.cpp:171
+#: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
 msgid "No Border"
 msgstr "Κανένα περίγραμμα"
@@ -2180,24 +2180,24 @@ msgstr "Κανένα περίγραμμα"
 msgid "Create a new style inheriting the current style"
 msgstr "Δημιουργία νέου στιλ που να κληρονομεί το τρέχον στιλ"
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
 #, kde-format
 msgid "New Style"
 msgstr "Νέο στιλ"
 
-#: dialogs/StyleManager.cpp:426
+#: dialogs/StyleManager.cpp:431
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr "Ένα άλλο στιλ με όνομα '%1' ήδη υπάρχει. Επιλέξτε άλλο όνομα."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "Παράγραφος"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "Χαρακτήρας"
@@ -2213,12 +2213,12 @@ msgstr "&Νέο"
 msgid "Style Manager"
 msgstr "Διαχειριστής στιλ"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:50
 #, kde-format
 msgid "Save Changes"
 msgstr "Αποθήκευση τροποποιήσεων"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:51
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "
@@ -2269,13 +2269,13 @@ msgstr ""
 msgid "Create a new style with the current properties"
 msgstr "δημιουργία νέου στιλ με τις τρέχουσες ιδιότητες"
 
-#: dialogs/StylesComboPreview.cpp:179
+#: dialogs/StylesComboPreview.cpp:175
 #, kde-format
 msgid "New style"
 msgstr "Νέο στιλ"
 
-#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
-#: dialogs/StylesModel.cpp:197
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
+#: dialogs/StylesModel.cpp:195
 #, kde-format
 msgid "None"
 msgstr "Κανένα"
@@ -2327,38 +2327,38 @@ msgstr "Προσαρμογή στα περιεχόμενα"
 msgid "Fit to available surrounding"
 msgstr "Προσαρμογή στο διαθέσιμο περιβάλλον"
 
-#: dialogs/TableOfContentsConfigure.cpp:62
+#: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
 msgstr "Περιεχόμενα - Διαμόρφωση"
 
-#: dialogs/TableOfContentsConfigure.cpp:64
+#: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
 msgid "Table Title"
 msgstr "Τίτλος πίνακα"
 
-#: dialogs/TableOfContentsConfigure.cpp:65
+#: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Use outline"
 msgstr "Χρήση περιγράμματος"
 
-#: dialogs/TableOfContentsConfigure.cpp:66
+#: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
 msgstr "Χρήση στιλ"
 
-#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure"
 msgstr "Διαμόρφωση"
 
-#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsConfigure.cpp:67
 #, kde-format
 msgid "Index"
 msgstr "Ευρετήριο"
 
-#: dialogs/TableOfContentsConfigure.cpp:69
-#: dialogs/TableOfContentsStyleModel.cpp:232
+#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsStyleModel.cpp:229
 #, kde-format
 msgid "Styles"
 msgstr "Στιλ"
@@ -2401,23 +2401,23 @@ msgstr "Στηλοθέτης 2"
 msgid "Level %1"
 msgstr "Επίπεδο %1"
 
-#: dialogs/TableOfContentsEntryModel.cpp:137
-#: dialogs/TableOfContentsStyleModel.cpp:234
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsStyleModel.cpp:231
 #, kde-format
 msgid "Level"
 msgstr "Επίπεδο"
 
-#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsEntryModel.cpp:141
 #, kde-format
 msgid "Style"
 msgstr "Στιλ"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
 msgstr "Περιεχόμενα - Διαμόρφωση στιλ"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
 msgstr "Διαθέσιμα στιλ"
@@ -2428,8 +2428,8 @@ msgstr "Διαθέσιμα στιλ"
 msgid "TextLabel"
 msgstr "TextLabel"
 
-#: dialogs/TableOfContentsStyleDelegate.cpp:43
-#: dialogs/TableOfContentsStyleModel.cpp:97
+#: dialogs/TableOfContentsStyleDelegate.cpp:40
+#: dialogs/TableOfContentsStyleModel.cpp:95
 #, kde-format
 msgid "Disabled"
 msgstr "Ανενεργό"
@@ -2439,107 +2439,107 @@ msgstr "Ανενεργό"
 msgid "Table Of Contents"
 msgstr "Πίνακας περιεχομένων"
 
-#: ReferencesTool.cpp:116
+#: ReferencesTool.cpp:118
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr "Εισαγωγή πίνακα περιεχομένων στο έγγραφο."
 
-#: ReferencesTool.cpp:118 TextTool.cpp:410
+#: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Εισαγωγή προσαρμογής..."
 
-#: ReferencesTool.cpp:120
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr "Εισαγωγή προσαρμοσμένου πίνακα περιεχομένων στο έγγραφο."
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure..."
 msgstr "Διαμόρφωση..."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:126
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr "Διαμόρφωση του πίνακα περιεχομένων"
 
-#: ReferencesTool.cpp:127
+#: ReferencesTool.cpp:129
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr "Εισαγωγή υποσέλιδου με αυτόματη αρίθμηση"
 
-#: ReferencesTool.cpp:132
+#: ReferencesTool.cpp:134
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr "Εισαγωγή υποσημείωσης με τίτλο"
 
-#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
 #, kde-format
 msgid "Insert with label:"
 msgstr "Εισαγωγή με ετικέτα:"
 
-#: ReferencesTool.cpp:138
+#: ReferencesTool.cpp:140
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr "Εισαγωγή σημείωσης τέλους με αυτόματη αρίθμηση"
 
-#: ReferencesTool.cpp:143
+#: ReferencesTool.cpp:145
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr "Εισαγωγή σημείωσης τέλους με τίτλο"
 
-#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, kde-format
 msgid "Settings..."
 msgstr "Ρυθμίσεις..."
 
-#: ReferencesTool.cpp:159
+#: ReferencesTool.cpp:161
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr "Εισαγωγή παράθεσης στο έγγραφο."
 
-#: ReferencesTool.cpp:164
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr "Εισαγωγή βιβλιογραφίας στο έγγραφο."
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας"
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:170
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας στο έγγραφο."
 
-#: ReferencesTool.cpp:172
+#: ReferencesTool.cpp:174
 #, kde-format
 msgid "Configure the bibliography"
 msgstr "Διαμόρφωση της βιβλιογραφίας"
 
-#: ReferencesTool.cpp:175
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert Link"
 msgstr "Εισαγωγή συνδέσμου"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:179
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr "Εισαγάγετε ιστοσύνδεσμο ή σύνδεσμο σε σελιδοδείκτη."
 
-#: ReferencesTool.cpp:181
+#: ReferencesTool.cpp:183
 #, kde-format
 msgid "Add Bookmark"
 msgstr "Προσθήκη σελιδοδείκτη"
 
-#: ReferencesTool.cpp:182
+#: ReferencesTool.cpp:184
 #, kde-format
 msgid "Add Bookmark :"
 msgstr "Προσθήκη σελιδοδείκτη :"
 
-#: ReferencesTool.cpp:187
+#: ReferencesTool.cpp:189
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
@@ -2548,7 +2548,7 @@ msgstr ""
 "Εισάγετε σελιδοδείκτη. Χρησιμεύει στη δημιουργία συνδέσμων που δείχνουν σε "
 "περιοχές του εγγράφου"
 
-#: ReferencesTool.cpp:191
+#: ReferencesTool.cpp:193
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
@@ -2557,7 +2557,7 @@ msgstr ""
 "Εμφανίζει ένα αναδυόμενο πλαίσιο επιλογών για προσθήκη νέου σελιδοδείκτη ή "
 "για το χειρισμό των υφισταμένων σελιδοδεικτών"
 
-#: ReferencesTool.cpp:195
+#: ReferencesTool.cpp:197
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
@@ -2565,23 +2565,23 @@ msgstr ""
 "Διαχειριστείτε τους σελιδοδείκτες σας. Ελέγξτε που δείχνουν, διαγράψτε ή "
 "μετονομάστε τους."
 
-#: ReferencesTool.cpp:231
+#: ReferencesTool.cpp:232
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr "Πίνακες, λίστες & δείκτες"
 
-#: ReferencesTool.cpp:234
+#: ReferencesTool.cpp:235
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr "Υποσημειώσεις και Σημειώσεις τέλους"
 
-#: ReferencesTool.cpp:237
+#: ReferencesTool.cpp:238
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr "Παραθέσεις και Βιβλιογραφία"
 
-#: ReferencesTool.cpp:240
+#: ReferencesTool.cpp:241
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr "Σύνδεσμοι και σελιδοδείκτες"
@@ -2636,306 +2636,306 @@ msgstr "Ένα σχήμα που εμφανίζει κάποιο κείμενο"
 msgid "Text Shape"
 msgstr "Text Shape"
 
-#: TextTool.cpp:201
+#: TextTool.cpp:202
 #, kde-format
 msgid "Configure current section"
 msgstr "Διαμόρφωση τρέχουσας ενότητας"
 
-#: TextTool.cpp:205
+#: TextTool.cpp:206
 #, kde-format
 msgid "Insert new section"
 msgstr "Εισαγωγή τρέχουσας ενότητας"
 
-#: TextTool.cpp:209
+#: TextTool.cpp:210
 #, kde-format
 msgid "Insert paragraph between sections"
 msgstr "Εισαγωγή παραγράφου μεταξύ ενοτήτων"
 
-#: TextTool.cpp:213
+#: TextTool.cpp:214
 #, kde-format
 msgid "Paste As Text"
 msgstr "Επικόλληση ως κείμενο"
 
-#: TextTool.cpp:218
+#: TextTool.cpp:219
 #, kde-format
 msgid "Bold"
 msgstr "Έντονα"
 
-#: TextTool.cpp:224
+#: TextTool.cpp:225
 #, kde-format
 msgid "Italic"
 msgstr "Πλάγια"
 
-#: TextTool.cpp:230
+#: TextTool.cpp:231
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Υπογράμμιση"
 
-#: TextTool.cpp:236
+#: TextTool.cpp:237
 #, kde-format
 msgid "Strikethrough"
 msgstr "Επιγράμμιση"
 
-#: TextTool.cpp:242
+#: TextTool.cpp:243
 #, kde-format
 msgid "Align Left"
 msgstr "Στοίχιση αριστερά"
 
-#: TextTool.cpp:249
+#: TextTool.cpp:250
 #, kde-format
 msgid "Align Right"
 msgstr "Στοίχιση δεξιά"
 
-#: TextTool.cpp:256
+#: TextTool.cpp:257
 #, kde-format
 msgid "Align Center"
 msgstr "Στοίχιση στο κέντρο"
 
-#: TextTool.cpp:264
+#: TextTool.cpp:265
 #, kde-format
 msgid "Align Block"
 msgstr "Στοίχιση τμήματος"
 
-#: TextTool.cpp:271
+#: TextTool.cpp:272
 #, kde-format
 msgid "Change text direction"
 msgstr "Αλλαγή κατεύθυνσης κειμένου"
 
-#: TextTool.cpp:273
+#: TextTool.cpp:274
 #, kde-format
 msgid "Change writing direction"
 msgstr "Αλλαγή κατεύθυνσης γραφής"
 
-#: TextTool.cpp:295
+#: TextTool.cpp:293
 #, kde-format
 msgid "Increase Indent"
 msgstr "Αύξηση εσοχής"
 
-#: TextTool.cpp:302
+#: TextTool.cpp:299
 #, kde-format
 msgid "Decrease Indent"
 msgstr "Μείωση εσοχής"
 
-#: TextTool.cpp:306
+#: TextTool.cpp:303
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr "Εναλλαγή λίστας ή μορφής επιπέδου λίστας"
 
-#: TextTool.cpp:307
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr "Εναλλαγή λίστας on/off, ή αλλαγή μορφής του τρέχοντος επιπέδου"
 
-#: TextTool.cpp:310
+#: TextTool.cpp:307
 #, kde-format
 msgid "Increase Font Size"
 msgstr "Αύξηση μεγέθους γραμματοσειράς"
 
-#: TextTool.cpp:315
+#: TextTool.cpp:312
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "Μείωση μεγέθους γραμματοσειράς"
 
-#: TextTool.cpp:321
+#: TextTool.cpp:318
 #, kde-format
 msgid "Font Family"
 msgstr "Οικογένεια γραμματοσειράς"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:322
 #, kde-format
 msgid "Variable"
 msgstr "Μεταβλητή"
 
-#: TextTool.cpp:330
+#: TextTool.cpp:326
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "Εισαγωγή κενού χωρίς διακοπή"
 
-#: TextTool.cpp:335
+#: TextTool.cpp:331
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "Εισαγωγή παύλας χωρίς διακοπή"
 
-#: TextTool.cpp:340
+#: TextTool.cpp:336
 #, kde-format
 msgid "Insert Index"
 msgstr "Εισαγωγή ευρετηρίου"
 
-#: TextTool.cpp:345
+#: TextTool.cpp:341
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "Εισαγωγή παύλας συλλαβισμού"
 
-#: TextTool.cpp:351
+#: TextTool.cpp:347
 #, kde-format
 msgid "Line Break"
 msgstr "Αλλαγή γραμμής"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:352
 #, kde-format
 msgid "Page Break"
 msgstr "Αλλαγή σελίδας"
 
-#: TextTool.cpp:360
+#: TextTool.cpp:356
 #, kde-format
 msgid "Insert a page break"
 msgstr "Εισαγωγή χαρακτήρα αλλαγής σελίδας"
 
-#: TextTool.cpp:361
+#: TextTool.cpp:357
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr ""
 "Όλο το κείμενο μετά από το σημείο αυτό θα μεταφερθεί στην επόμενη σελίδα."
 
-#: TextTool.cpp:364
+#: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
 msgstr "Γραμματοσειρά..."
 
-#: TextTool.cpp:367
+#: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "Τροποποίηση μεγέθους, γραμματοσειράς, έντονων, πλαγίων χαρακτήρων κτλ."
 
-#: TextTool.cpp:368
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "Τροποποίηση των ιδιοτήτων των τρεχόντων επιλεγμένων χαρακτήρων."
 
-#: TextTool.cpp:371
+#: TextTool.cpp:367
 #, kde-format
 msgid "Font Size"
 msgstr "Μέγεθος γραμματοσειράς"
 
-#: TextTool.cpp:377
+#: TextTool.cpp:373
 #, kde-format
 msgid "Text Color..."
 msgstr "Χρώμα κειμένου..."
 
-#: TextTool.cpp:378
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color"
 msgstr "Χρώμα κειμένου"
 
-#: TextTool.cpp:384
+#: TextTool.cpp:380
 #, kde-format
 msgid "Background Color..."
 msgstr "Χρώμα φόντου..."
 
-#: TextTool.cpp:389
+#: TextTool.cpp:385
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr "Αυτόματη προσαρμογή μεγέθους στο περιεχόμενο"
 
-#: TextTool.cpp:394
+#: TextTool.cpp:390
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr "Ανάπτυξη για προσαρμογή στο πλάτος"
 
-#: TextTool.cpp:399
+#: TextTool.cpp:395
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr "Ανάπτυξη για προσαρμογή στο ύψος"
 
-#: TextTool.cpp:404
+#: TextTool.cpp:400
 #, kde-format
 msgid "Shrink To Fit"
 msgstr "Συρρίκνωση για προσαρμογή"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:408
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "Εισαγωγή πίνακα στο έγγραφο."
 
-#: TextTool.cpp:415
+#: TextTool.cpp:411
 #, kde-format
 msgid "Row Above"
 msgstr "Προηγούμενη γραμμή"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:412
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Εισαγωγή προηγούμενης γραμμής"
 
-#: TextTool.cpp:420
+#: TextTool.cpp:416
 #, kde-format
 msgid "Row Below"
 msgstr "Επόμενη γραμμή"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:417
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Εισαγωγή επόμενης γραμμής"
 
-#: TextTool.cpp:425
+#: TextTool.cpp:421
 #, kde-format
 msgid "Column Left"
 msgstr "Στήλη αριστερά"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:422
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Εισαγωγή στήλης αριστερά"
 
-#: TextTool.cpp:430
+#: TextTool.cpp:426
 #, kde-format
 msgid "Column Right"
 msgstr "Στήλη δεξιά"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:427
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Εισαγωγή στήλης δεξιά"
 
-#: TextTool.cpp:435
+#: TextTool.cpp:431
 #, kde-format
 msgid "Column"
 msgstr "Στήλη"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:432
 #, kde-format
 msgid "Delete Column"
 msgstr "Διαγραφή στήλης"
 
-#: TextTool.cpp:440
+#: TextTool.cpp:436
 #, kde-format
 msgid "Row"
 msgstr "Γραμμή"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:437
 #, kde-format
 msgid "Delete Row"
 msgstr "Διαγραφή γραμμής"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:441
 #, kde-format
 msgid "Merge Cells"
 msgstr "Συγχώνευση κελιών"
 
-#: TextTool.cpp:449
+#: TextTool.cpp:445
 #, kde-format
 msgid "Split Cells"
 msgstr "Διαχωρισμός κελιών"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr "Επιλέξτε στιλ περιγράμματος και ζωγραφίστε το στιλ αυτό σε έναν πίνακα"
 
-#: TextTool.cpp:458
+#: TextTool.cpp:454
 #, kde-format
 msgid "Paragraph..."
 msgstr "Παράγραφος..."
 
-#: TextTool.cpp:461
+#: TextTool.cpp:457
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
 "Τροποποίηση των περιθωρίων, της ροής κειμένου, των περιγραμμάτων, των "
 "κουκίδων, της αρίθμησης, κτλ της παραγράφου."
 
-#: TextTool.cpp:462
+#: TextTool.cpp:459
 #, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -2949,17 +2949,17 @@ msgstr ""
 "p><p>Αν δεν επιλεγεί κείμενο, θα γίνει τροποποίηση της παραγράφου στην οποία "
 "βρίσκεται ο δρομέας.</p>"
 
-#: TextTool.cpp:465
+#: TextTool.cpp:463
 #, kde-format
 msgid "Style Manager..."
 msgstr "Διαχειριστής στιλ..."
 
-#: TextTool.cpp:467
+#: TextTool.cpp:465
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "Τροποποίηση ιδιοτήτων των στιλ"
 
-#: TextTool.cpp:468
+#: TextTool.cpp:466
 #, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
@@ -2969,130 +2969,126 @@ msgstr ""
 "p><p>Μπορεί να γίνει τροποποίηση πολλαπλών στιλ με αυτό το πλαίσιο διαλόγου."
 "</p>"
 
-#: TextTool.cpp:475
+#: TextTool.cpp:473
 #, kde-format
 msgid "Special Character..."
 msgstr "Ειδικός χαρακτήρας..."
 
-#: TextTool.cpp:479
+#: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 "Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
 "πληκτρολόγιο"
 
-#: TextTool.cpp:480
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 "Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
 "πληκτρολόγιο."
 
-#: TextTool.cpp:483
+#: TextTool.cpp:481
 #, kde-format
 msgid "Repaint"
 msgstr "Ανασχεδίαση"
 
-#: TextTool.cpp:488
+#: TextTool.cpp:486
 #, kde-format
 msgid "Insert Comment"
 msgstr "Εισαγωγή σχολίου"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:570
 #, kde-format
 msgid "Insertion"
 msgstr "Εισαγωγή"
 
-#: TextTool.cpp:576
+#: TextTool.cpp:572
 #, kde-format
 msgid "Deletion"
 msgstr "Διαγραφή"
 
-#: TextTool.cpp:578
+#: TextTool.cpp:574
 #, kde-format
 msgid "Formatting"
 msgstr "Μορφοποίηση"
 
-#: TextTool.cpp:593
+#: TextTool.cpp:589
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Ctrl και κλικ για μετάβαση στο σύνδεσμο "
 
-#: TextTool.cpp:600
+#: TextTool.cpp:596
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Ctrl και κλικ για μετάβαση στη σημείωση "
 
-#: TextTool.cpp:606
+#: TextTool.cpp:602
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr "Ctrl και κλικ για μετάβαση στην παραπομπή σημείωσης"
 
-#: TextTool.cpp:707
+#: TextTool.cpp:698
 #, kde-format
 msgid "follows along"
 msgstr "ακολουθεί την"
 
-#: TextTool.cpp:737
+#: TextTool.cpp:728
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "Πιέστε shift για να μη γίνει αλλαγή μεγέθους"
 
-#: TextTool.cpp:939
+#: TextTool.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Αλλαγή διαμόρφωσης περιγράμματος"
 
-#: TextTool.cpp:1158
+#: TextTool.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Αποκοπή"
 
-#: TextTool.cpp:1418
+#: TextTool.cpp:1413
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Προσαρμογή πλάτους στήλης"
 
-#: TextTool.cpp:1461
+#: TextTool.cpp:1457
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Προσαρμογή ύψους γραμμής"
 
-#: TextTool.cpp:2257
+#: TextTool.cpp:2258
 #, kde-format
 msgid "Table"
 msgstr "Πίνακας"
 
-#: TextTool.cpp:2616 TextTool.cpp:2621
+#: TextTool.cpp:2634 TextTool.cpp:2639
 #, kde-format
 msgid "Autocorrection"
 msgstr "Αυτόματη διόρθωση"
 
-#: TextTool.cpp:2616
+#: TextTool.cpp:2634
 #, kde-format
 msgid "Key Press"
 msgstr "Πίεση πλήκτρου"
-
-#: TextTool.cpp:2930
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Αυτός ο σύνδεσμος δείχνει στο πρόγραμμα ή σενάριο '%1'.\n"
-"Τα κακόβουλα προγράμματα μπορούν να κάνουν ζημιά στον υπολογιστή σας. "
-"Επιθυμείτε σίγουρα την εκτέλεση αυτού του προγράμματος;"
-
-#: TextTool.cpp:2935
-#, kde-format
-msgid "Open Link?"
-msgstr "Άνοιγμα συνδέσμου;"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
 msgstr "Επεξεργασία κειμένου"
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Αυτός ο σύνδεσμος δείχνει στο πρόγραμμα ή σενάριο '%1'.\n"
+#~ "Τα κακόβουλα προγράμματα μπορούν να κάνουν ζημιά στον υπολογιστή σας. "
+#~ "Επιθυμείτε σίγουρα την εκτέλεση αυτού του προγράμματος;"
+
+#~ msgid "Open Link?"
+#~ msgstr "Άνοιγμα συνδέσμου;"
 
 #, fuzzy
 #~| msgid "Quick search:"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-10-14 16:07+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: <en@li.org>\n"
@@ -34,146 +34,146 @@ msgstr "البحث عن:"
 msgid "S&earch"
 msgstr "ابحث"
 
-#: Thesaurus.cpp:101
+#: Thesaurus.cpp:103
 #, fuzzy, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
 msgstr "الخلف"
 
-#: Thesaurus.cpp:105
+#: Thesaurus.cpp:107
 #, fuzzy, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
 msgstr "مرر"
 
-#: Thesaurus.cpp:108
+#: Thesaurus.cpp:110
 #, fuzzy, kde-format
 msgid "Change Language..."
 msgstr "غيّر اللغة."
 
-#: Thesaurus.cpp:122
+#: Thesaurus.cpp:124
 #, kde-format
 msgid "&Thesaurus"
 msgstr "&قاموس"
 
-#: Thesaurus.cpp:126
+#: Thesaurus.cpp:128
 #, kde-format
 msgid "Synonyms"
 msgstr "المرادفات"
 
-#: Thesaurus.cpp:133
+#: Thesaurus.cpp:135
 #, kde-format
 msgid "More General Words"
 msgstr "المزيد من الكلمات العامة"
 
-#: Thesaurus.cpp:140
+#: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
 msgstr "المزيد من الكلمات المحددة"
 
-#: Thesaurus.cpp:170
+#: Thesaurus.cpp:166
 #, fuzzy, kde-format
 msgid "&Wordnet"
 msgstr "وردنيت - علامة تجارية لمعجم مفردات"
 
-#: Thesaurus.cpp:192
+#: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
 msgstr "استبدل &ب:"
 
-#: Thesaurus.cpp:255
+#: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
 msgstr "ا&ستبدل"
 
-#: Thesaurus.cpp:267
+#: Thesaurus.cpp:264
 #, fuzzy, kde-format
 msgid "Replace Word"
 msgstr "استبدل الكلمه"
 
-#: Thesaurus.cpp:295
+#: Thesaurus.cpp:292
 #, fuzzy, kde-format
 msgid "Related Words - %1"
 msgstr "متعلق كلمات 1"
 
-#: Thesaurus.cpp:409
+#: Thesaurus.cpp:406
 #, fuzzy, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr "الـ ملفّ ليس موجود رجاء استخدام غيّر اللغة إلى تحديد a ملفّ."
 
-#: Thesaurus.cpp:429
+#: Thesaurus.cpp:428
 #, fuzzy, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
 msgstr "<b> خطأ</b> فشل إلى نفِّذ."
 
-#: Thesaurus.cpp:581
+#: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
 msgstr "المترادفات/Hypernyms_ مرتبة حسب التردد"
 
-#: Thesaurus.cpp:582
+#: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
 msgstr "المرادفات_ مرتبة حسب تشابه المعنى (الأفعال فقط)"
 
-#: Thesaurus.cpp:583
+#: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
 msgstr "Antonyms_ كلمات ذات معنى معاكس"
 
-#: Thesaurus.cpp:584
+#: Thesaurus.cpp:581
 #, fuzzy, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
 msgstr "هو a من 1"
 
-#: Thesaurus.cpp:585
+#: Thesaurus.cpp:582
 #, fuzzy, kde-format
 msgid "Meronyms - %1 has a ..."
 msgstr "a."
 
-#: Thesaurus.cpp:587
+#: Thesaurus.cpp:584
 #, fuzzy, kde-format
 msgid "Holonyms - ... has a %1"
 msgstr "a 1"
 
-#: Thesaurus.cpp:588
+#: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
 msgstr "خواص"
 
-#: Thesaurus.cpp:589
+#: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
 msgstr "تؤدي إلى (صالحة لبعض الأفعال فقط)"
 
-#: Thesaurus.cpp:590
+#: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
 msgstr "مستلزمات الفعل ( صالحة لبعض الأفعال فقط)"
 
-#: Thesaurus.cpp:591
+#: Thesaurus.cpp:588
 #, fuzzy, kde-format
 msgid "Familiarity & Polysemy Count"
 msgstr "الألفة العدد"
 
-#: Thesaurus.cpp:593
+#: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
 msgstr "إطار الفعل (أمثلة لإستخدام الفعل)"
 
-#: Thesaurus.cpp:594
+#: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
 msgstr "لائحة الكلمات المركبة"
 
-#: Thesaurus.cpp:595
+#: Thesaurus.cpp:592
 #, fuzzy, kde-format
 msgid "Overview of Senses"
 msgstr "الرؤية العامة من الأحاسيس"
 
-#: Thesaurus.cpp:623
+#: Thesaurus.cpp:621
 #, fuzzy, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
@@ -188,7 +188,7 @@ msgstr ""
 "\">http://www.cogsci.princeton.edu/~wn/</a>. ترجى ملاحظة أن WordNet يدعم "
 "اللغة الإنجليزية فقط."
 
-#: Thesaurus.cpp:635
+#: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
 msgstr "لا يوجد مطابق ل '%1'."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-01-13 21:07+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -96,17 +96,17 @@ msgstr "Negeri"
 msgid "State:"
 msgstr "Keadaan:"
 
-#: plugins/stateshape/StateShapeFactory.cpp:31
+#: plugins/stateshape/StateShapeFactory.cpp:30
 #, fuzzy, kde-format
 msgid "State Shape"
 msgstr "Bentuk"
 
-#: plugins/stateshape/StateShapeFactory.cpp:33
+#: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
 msgstr ""
 
-#: plugins/stateshape/StateTool.cpp:108
+#: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
 msgstr ""
@@ -128,12 +128,12 @@ msgstr "URL:"
 msgid "Use a cache copy"
 msgstr ""
 
-#: plugins/webshape/WebShapeFactory.cpp:34
+#: plugins/webshape/WebShapeFactory.cpp:33
 #, fuzzy, kde-format
 msgid "Web Shape"
 msgstr "Bentuk"
 
-#: plugins/webshape/WebShapeFactory.cpp:36
+#: plugins/webshape/WebShapeFactory.cpp:35
 #, fuzzy, kde-format
 msgid "A web shape"
 msgstr "Bentuk"
@@ -143,51 +143,51 @@ msgstr "Bentuk"
 msgid "Web shape editing"
 msgstr "Bentuk"
 
-#: src/AboutData.h:31
+#: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
 msgstr ""
 
-#: src/AboutData.h:32
+#: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
 msgstr ""
 
-#: src/AboutData.h:34
+#: src/AboutData.h:36
 #, kde-format
 msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
 
-#: src/AboutData.h:35
+#: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 msgstr ""
 
-#: src/AboutData.h:39 src/AboutData.h:40
-#, fuzzy, kde-format
-msgid "Former maintainer"
-msgstr "Penyelenggara"
-
-#: src/AboutData.h:39
+#: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
 msgstr ""
 
-#: src/AboutData.h:40
+#: src/AboutData.h:43 src/AboutData.h:46
+#, fuzzy, kde-format
+msgid "Former maintainer"
+msgstr "Penyelenggara"
+
+#: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
 msgstr ""
 
 #. i18n translator strings
-#: src/AboutData.h:42
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Sharuzzaman Ahmat Raslan"
 
-#: src/AboutData.h:43
+#: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -235,7 +235,7 @@ msgstr ""
 msgid "Delete the whiteboard"
 msgstr ""
 
-#: src/import/DockerManager_p.h:51
+#: src/import/DockerManager_p.h:62
 #, fuzzy, kde-format
 msgid "Tool Bars"
 msgstr "Alat"
@@ -255,42 +255,42 @@ msgstr ""
 msgid "Toggles organising the options in tabs or not"
 msgstr ""
 
-#: src/layouts/ColumnLayout.cpp:125
+#: src/layouts/ColumnLayout.cpp:129
 #, fuzzy, kde-format
 msgid "Column"
 msgstr "Lajur"
 
-#: src/layouts/FreeLayout.cpp:60
+#: src/layouts/FreeLayout.cpp:62
 #, kde-format
 msgid "Free"
 msgstr ""
 
-#: src/MainWindow.cpp:118
+#: src/MainWindow.cpp:120
 #, kde-format
 msgid "Dockers"
 msgstr ""
 
-#: src/SectionGroup.cpp:83
+#: src/SectionGroup.cpp:88
 #, fuzzy, kde-format
 msgid "Untitled %1"
 msgstr "Tak Bertajuk %1"
 
-#: src/SectionPropertiesDock.cpp:32
+#: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
 msgstr ""
 
-#: src/SectionsBoxDock.cpp:40
+#: src/SectionsBoxDock.cpp:43
 #, kde-format
 msgid "Whiteboards"
 msgstr ""
 
-#: src/SectionsBoxDock.cpp:54
+#: src/SectionsBoxDock.cpp:56
 #, fuzzy, kde-format
 msgid "Minimal View"
 msgstr "Paparan Thumbnail"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, fuzzy, kde-format
 msgid "Detailed View"
 msgstr "Paparan Terperinci"
@@ -320,34 +320,34 @@ msgstr ""
 msgid "Add new whiteboard as child of current."
 msgstr ""
 
-#: src/View.cpp:183
+#: src/View.cpp:182
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "&Padam"
 
-#: src/View.cpp:190
+#: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr ""
 
-#: src/View.cpp:195
+#: src/View.cpp:194
 #, fuzzy, kde-format
 msgid "Group Shapes"
 msgstr "Bentuk"
 
-#: src/View.cpp:200
+#: src/View.cpp:199
 #, fuzzy, kde-format
 msgid "Ungroup Shapes"
 msgstr "Bentuk"
 
-#: src/View.cpp:384
+#: src/View.cpp:377
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Bentuk"
 
-#: src/View.cpp:406
+#: src/View.cpp:399
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"

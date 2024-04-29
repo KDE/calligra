@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-10-17 04:56+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -29,57 +29,57 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "page"
 msgstr "бет"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "pages"
 msgstr "беттер"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "file"
 msgstr "файл"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "name"
 msgstr "атауы"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "time"
 msgstr "уақыты"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "date"
 msgstr "күні"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "author"
 msgstr "авторы"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "email"
 msgstr "эл.пошта"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "org"
 msgstr "ұйымы"
 
-#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "sheet"
 msgstr "бет"
 
-#: core/ksp/SheetsKspDoc.cpp:42
+#: core/ksp/SheetsKspDoc.cpp:43
 #, kde-format
 msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
@@ -88,7 +88,7 @@ msgstr ""
 "Бұл дұрыс құжат емес. Күткен MIME түрі application/x-kspread немесе "
 "application/vnd.kde.kspread, ал мұндағы - %1"
 
-#: core/ksp/SheetsKspDoc.cpp:51
+#: core/ksp/SheetsKspDoc.cpp:52
 #, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
@@ -100,37 +100,37 @@ msgstr ""
 "нұсқасы: %1)\n"
 "Бұны осы Calligra Sheets, нұсқасында ашса, кейбір ақпараттар жоғалуы мүмкін."
 
-#: core/ksp/SheetsKspDoc.cpp:53
+#: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
 msgid "File Format Mismatch"
 msgstr "Файл пішімінің сәйкессіздігі"
 
-#: core/ksp/SheetsKspDoc.cpp:100
+#: core/ksp/SheetsKspDoc.cpp:105
 #, kde-format
 msgid "Styles cannot be loaded."
 msgstr "Стильдер жүктелмейді."
 
-#: core/ksp/SheetsKspDoc.cpp:108
+#: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
 msgid "Invalid document. No map tag."
 msgstr "Құжат дұрыс емес. map деген тегі жоқ."
 
-#: core/ksp/SheetsKspMap.cpp:78
+#: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
 msgid "This document has no sheets (tables)."
 msgstr "Бұл құжатта беттер (кестелері) жоқ."
 
-#: core/ksp/SheetsKspSheet.cpp:53
+#: core/ksp/SheetsKspSheet.cpp:51
 #, kde-format
 msgid "Invalid document. Sheet name is empty."
 msgstr "Бұл дұрыс құжат емес. Беттің атауы жоқ."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:189
+#: core/Map.cpp:241 engine/MapBase.cpp:182
 #, kde-format
 msgid "Sheet%1"
 msgstr "Бет%1"
 
-#: core/Sheet.cpp:655
+#: core/Sheet.cpp:660
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "%1 ұяшығы тексеруден өтпеді"
@@ -145,40 +145,40 @@ msgstr "Айдар"
 msgid "Header1"
 msgstr "Айдар1"
 
-#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
+#: ui/dialogs/LayoutPage_General.cpp:143
 #, kde-format
 msgid "Default"
 msgstr "Әдетті"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "AM"
 msgstr "AM"
 
-#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
 msgid "PM"
 msgstr "PM"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:557
 #, kde-format
 msgid "h"
 msgstr "сағ"
 
-#: core/ValueFormatter.cpp:558
+#: core/ValueFormatter.cpp:559
 #, kde-format
 msgid "min"
 msgstr "мин"
 
-#: core/ValueFormatter.cpp:560
+#: core/ValueFormatter.cpp:561
 #, kde-format
 msgid "s"
 msgstr "сек"
 
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:120
 #, kde-format
 msgid "Text"
 msgstr "Мәтін"
@@ -256,94 +256,94 @@ msgstr "Параметрлері"
 
 #: engine/FunctionDescription.cpp:180
 #, kde-format
-msgid "<li><b>Comment:</b> %1"
-msgstr "<li><b>Түсініктемесі:</b> %1"
-
-#: engine/FunctionDescription.cpp:181
-#, kde-format
 msgid "<br><b>Type:</b> %1"
 msgstr "<br><b>Түрі:</b> %1"
 
-#: engine/FunctionDescription.cpp:187
+#: engine/FunctionDescription.cpp:180
+#, kde-format
+msgid "<li><b>Comment:</b> %1"
+msgstr "<li><b>Түсініктемесі:</b> %1"
+
+#: engine/FunctionDescription.cpp:186
 #, kde-format
 msgid "Examples"
 msgstr "Мысалдары"
 
-#: engine/FunctionDescription.cpp:196
+#: engine/FunctionDescription.cpp:195
 #, kde-format
 msgid "Related Functions"
 msgstr "Жақын функциялары"
 
-#: engine/Localization.cpp:748
+#: engine/Localization.cpp:769
 #, kde-format
 msgid "true"
 msgstr "true"
 
-#: engine/Localization.cpp:749
+#: engine/Localization.cpp:770
 #, kde-format
 msgid "false"
 msgstr "false"
 
-#: engine/SheetBase.cpp:345
+#: engine/SheetBase.cpp:359
 #, kde-format
 msgid "Dependency"
 msgstr "Тәуелдік"
 
-#: engine/Value.cpp:597
+#: engine/Value.cpp:662
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#ТҰЙЫҚ!"
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:670
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#ТӘУЕЛДІК!"
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:678
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#БӨЛУ/0!"
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:686
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#А/Ж"
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:694
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#АТАУ?"
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:702
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#САН!"
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:710
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#НӨЛ!"
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:718
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#ТАЛДАУ!"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:726
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#СІЛ!"
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:734
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -887,14 +887,14 @@ msgstr "CARY(12;0) қайтаратыны 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid "Number"
 msgstr "Сан"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
 msgstr "Пішін"
@@ -1242,7 +1242,7 @@ msgstr "Күн мен уақыт"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Date"
 msgstr "Күн"
@@ -1315,7 +1315,7 @@ msgstr "DAYS360(\"22.02.2002\"; \"21.04.2002\"; FALSE) қайтаратыны 59
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:105
 #, kde-format
 msgid "Time"
 msgstr "Уақыт"
@@ -4034,7 +4034,7 @@ msgid "Fractional Dollar"
 msgstr "Бөлшекті доллар"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:89
 #, kde-format
 msgid "Fraction"
 msgstr "Бөлшек"
@@ -5286,13 +5286,13 @@ msgstr "ZERO_COUPON(номиналы;пайызы;жылдар)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;0,1;20) нәтижесі 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:440
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
 #, kde-format
 msgid "Manual"
 msgstr "Қолмен"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutPage_Float.cpp:184
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
 msgstr "Авто"
@@ -8048,7 +8048,7 @@ msgstr "Абсолютті нөмірі (келтірмеуге де болад�
 msgid "A1 style (optional)"
 msgstr "A1 стилі (келтірмеуге де болады)"
 
-#: functions/reference.xml:27 ui/MapModel.cpp:142
+#: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
 msgid "Sheet name"
 msgstr "Беттің атауы"
@@ -11481,7 +11481,7 @@ msgstr "FINDB(қай_мәтінді; қай_мәтінде; БайтОрны б�
 msgid "Source string"
 msgstr "Бастапқы мәтін"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Position"
 msgstr "Орны"
@@ -12570,198 +12570,198 @@ msgstr "SECH(жыл.үтірлі)"
 msgid "SECH(0) equals 1"
 msgstr "SECH(0) нәтижесі 1"
 
-#: part/AboutData.h:28
+#: part/AboutData.h:27
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "Calligra Sheets"
 
-#: part/AboutData.h:30
+#: part/AboutData.h:29
 #, fuzzy, kde-format
 #| msgid "Calligra Spreadsheet Application"
 msgid "Spreadsheet Application"
 msgstr "Calligra электрондық кесте қолданбасы"
 
-#: part/AboutData.h:32
+#: part/AboutData.h:31
 #, fuzzy, kde-format
 #| msgid "(c) 1998-2013, The Calligra Sheets Team"
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "(c) 1998-2013, Calligra Sheets тобы"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Original Author"
 msgstr "Бастапқы авторы"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:39
 #, kde-format
 msgid "Torben Weis"
 msgstr "Torben Weis"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Maintainer"
 msgstr "Жетілдірушісі"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:40
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr "Marijn Kruisselbrink"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr "ODS және Excel, функциялар, скрипттер"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:41
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/AboutData.h:43
+#: part/AboutData.h:42
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:43
 #, kde-format
 msgid "John Dailey"
 msgstr "John Dailey"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:44
 #, kde-format
 msgid "Philipp Müller"
 msgstr "Philipp Müller"
 
-#: part/AboutData.h:46
+#: part/AboutData.h:45
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/AboutData.h:47
+#: part/AboutData.h:46
 #, kde-format
 msgid "Norbert Andres"
 msgstr "Norbert Andres"
 
-#: part/AboutData.h:48
-#, kde-format
-msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
-
-#: part/AboutData.h:49 part/AboutData.h:52 part/AboutData.h:55
-#: part/AboutData.h:59 part/AboutData.h:62 part/AboutData.h:65
-#: part/AboutData.h:68 part/AboutData.h:71 part/AboutData.h:74
+#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
+#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
+#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
 #, kde-format
 msgid "Import/export filter developer"
 msgstr "Импорт/Экспорт сүзгі жасаушысы"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:47
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/AboutData.h:48
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/AboutData.h:54
+#: part/AboutData.h:49
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr "Nikolas Zimmermann"
 
-#: part/AboutData.h:57
+#: part/AboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/AboutData.h:58
+#: part/AboutData.h:51
 #, kde-format
 msgid "Helge Deller"
 msgstr "Helge Deller"
 
-#: part/AboutData.h:61
+#: part/AboutData.h:52
 #, kde-format
 msgid "Percy Leonhart"
 msgstr "Percy Leonhart"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:53
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr "Eva Brucherseifer"
 
-#: part/AboutData.h:67
+#: part/AboutData.h:54
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr "Phillip Ezolt"
 
-#: part/AboutData.h:70
+#: part/AboutData.h:55
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/AboutData.h:73
+#: part/AboutData.h:56
 #, kde-format
 msgid "Graham Short"
 msgstr "Graham Short"
 
-#: part/AboutData.h:76
+#: part/AboutData.h:57
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/AboutData.h:77
+#: part/AboutData.h:58
 #, kde-format
 msgid "Tomas Mecir"
 msgstr "Tomas Mecir"
 
-#: part/AboutData.h:78
+#: part/AboutData.h:59
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr "Raphael Langerhorst"
 
-#: part/AboutData.h:79
+#: part/AboutData.h:60
 #, kde-format
 msgid "John Tapsell"
 msgstr "John Tapsell"
 
-#: part/AboutData.h:80
+#: part/AboutData.h:61
 #, kde-format
 msgid "Robert Knight"
 msgstr "Robert Knight"
 
-#: part/AboutData.h:81
+#: part/AboutData.h:62
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr "Stefan Nikolaus"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Developer (functions)"
 msgstr "Жасаушысы (функциялар)"
 
-#: part/AboutData.h:82
+#: part/AboutData.h:63
 #, kde-format
 msgid "Sascha Pfau"
 msgstr "Sascha Pfau"
 
-#: part/AboutData.h:83
+#: part/AboutData.h:64
 #, kde-format
 msgid "Brad Hards"
 msgstr "Brad Hards"
 
-#: part/AboutData.h:84
+#: part/AboutData.h:64
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr "Бір қатар функцияларды жасаған, жетілдірген және тексерген"
 
-#. i18n translator strings
-#: part/AboutData.h:87
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Сайран Киккарин"
-
-#: part/AboutData.h:88
+#: part/AboutData.h:66
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "sairan@computer.org"
+
+#. i18n translator strings
+#: part/AboutData.h:66
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Сайран Киккарин"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12789,7 +12789,7 @@ msgid "Clear"
 msgstr "Тазалау"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:448
+#: part/calligrasheets.rc:44 part/View.cpp:430
 #, kde-format
 msgid "Delete"
 msgstr "Өшіру"
@@ -12906,7 +12906,7 @@ msgstr "Белсендету"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "Қаріп"
@@ -12917,27 +12917,27 @@ msgstr "Қаріп"
 msgid "Color/Border"
 msgstr "Түсі/Шегі"
 
-#: part/CanvasBase.cpp:679
+#: part/CanvasBase.cpp:675
 #, kde-format
 msgid "Comment:"
 msgstr "Түсініктемесі:"
 
-#: part/CellEditorDocker.cpp:45
+#: part/CellEditorDocker.cpp:44
 #, kde-format
 msgid "Cell Editor"
 msgstr "Ұяшық редакторы"
 
-#: part/CellEditorDocker.cpp:56
+#: part/CellEditorDocker.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "Формула"
 
-#: part/CellTool.cpp:64
+#: part/CellTool.cpp:63
 #, kde-format
 msgid "Define Print Range"
 msgstr "Басу аумағын анықтау"
 
-#: part/CellTool.cpp:67
+#: part/CellTool.cpp:66
 #, kde-format
 msgid "Define the print range in the current sheet"
 msgstr "Назардағы бетте басу аумағын анықтау"
@@ -12978,7 +12978,7 @@ msgid "First column as label"
 msgstr "Бірінші баған - атаулар"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Data Format"
 msgstr "Деректің пішімі"
@@ -12995,12 +12995,12 @@ msgstr "Деректер жолдарда"
 msgid "Data sets in columns"
 msgstr "Деректер бағандарда"
 
-#: part/commands/DefinePrintRangeCommand.cpp:22
+#: part/commands/DefinePrintRangeCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
 msgstr "Басу аумағын анықтау"
 
-#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
+#: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
 msgstr "Парақ пішімі"
@@ -13181,18 +13181,18 @@ msgstr ""
 "беттегі парақтардың шектері көрсетіледі. Бұның түсін әдетті қызылдан өзгерту "
 "үшін осыны түртіңіз."
 
-#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
-#: part/dialogs/PageLayoutDialog.cpp:97
+#: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
+#: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
-#: part/dialogs/PageLayoutDialog.cpp:105
+#: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
 msgid "No Limit"
 msgstr "Шектелмеген"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
 #, kde-format
 msgid "Sheet"
 msgstr "Бет"
@@ -13345,127 +13345,127 @@ msgstr "Көлденеңінен"
 msgid "Vertical"
 msgstr "Тігінен"
 
-#: part/dialogs/PreferenceDialog.cpp:277
+#: part/dialogs/PreferenceDialog.cpp:269
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Баптау"
 
-#: part/dialogs/PreferenceDialog.cpp:294
+#: part/dialogs/PreferenceDialog.cpp:286
 #, kde-format
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: part/dialogs/PreferenceDialog.cpp:299
+#: part/dialogs/PreferenceDialog.cpp:291
 #, kde-format
 msgid "Down"
 msgstr "Төмен"
 
-#: part/dialogs/PreferenceDialog.cpp:300
+#: part/dialogs/PreferenceDialog.cpp:292
 #, kde-format
 msgid "Up"
 msgstr "Жоғары"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Оңға"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Солға"
 
-#: part/dialogs/PreferenceDialog.cpp:303
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Down, First Column"
 msgstr "Төмен, бірінші бағанына"
 
-#: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
+#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
 #, kde-format
 msgid "None"
 msgstr "Жоқ"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
 #, kde-format
 msgid "Sum"
 msgstr "Қосындысы"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
 #, kde-format
 msgid "Min"
 msgstr "Ең кішісі"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
 #, kde-format
 msgid "Max"
 msgstr "Ең үлкені"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
 #, kde-format
 msgid "Average"
 msgstr "Орташасы"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
 #, kde-format
 msgid "Count"
 msgstr "Санағы"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
 
-#: part/dialogs/PreferenceDialog.cpp:327
+#: part/dialogs/PreferenceDialog.cpp:318
 #, kde-format
 msgid "Open/Save"
 msgstr "Ашу/Сақтау"
 
-#: part/dialogs/PreferenceDialog.cpp:339
+#: part/dialogs/PreferenceDialog.cpp:329
 #, kde-format
 msgid "Function Modules"
 msgstr "Функция модульдері"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
 #, kde-format
 msgid "Tools"
 msgstr "Құралдар"
 
-#: part/dialogs/PreferenceDialog.cpp:343
+#: part/dialogs/PreferenceDialog.cpp:332
 #, kde-format
 msgid "Plugins"
 msgstr "Плагиндері"
 
-#: part/dialogs/PreferenceDialog.cpp:351 part/dialogs/PreferenceDialog.cpp:358
+#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spelling"
 msgstr "Емлені тексеру"
 
-#: part/dialogs/PreferenceDialog.cpp:353
+#: part/dialogs/PreferenceDialog.cpp:342
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "Емле тексеру тәртібі"
 
-#: part/dialogs/PreferenceDialog.cpp:359
+#: part/dialogs/PreferenceDialog.cpp:348
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Авторы"
 
-#: part/dialogs/PreferenceDialog.cpp:360
+#: part/dialogs/PreferenceDialog.cpp:349
 #, kde-format
 msgid "Author"
 msgstr "Авторы"
 
-#: part/dialogs/PreferenceDialog.cpp:433
+#: part/dialogs/PreferenceDialog.cpp:421
 #, kde-format
 msgid "&Completion mode:"
 msgstr "&Автоаяқтау тәртібі:"
 
-#: part/dialogs/PreferenceDialog.cpp:437
+#: part/dialogs/PreferenceDialog.cpp:425
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13473,12 +13473,12 @@ msgid ""
 msgstr ""
 "Теріп жатқан мәтінді (авто)аяқтау тәртібін ашылмалы тізімінен таңдап алыңыз."
 
-#: part/dialogs/PreferenceDialog.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:429
 #, kde-format
 msgid "Popup"
 msgstr "Қалқымалы ұсыныс"
 
-#: part/dialogs/PreferenceDialog.cpp:443
+#: part/dialogs/PreferenceDialog.cpp:431
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "Жарты-жарым автоматты түрде"
@@ -13820,521 +13820,521 @@ msgstr "Таңдаудан айну"
 msgid "Move selected sheet to the bottom"
 msgstr "Таңдалған беттерді төмендету"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Үлкен-кішілігін ескеріп"
 
-#: part/Find.cpp:35
+#: part/Find.cpp:40
 #, kde-format
 msgid "Match cases when searching"
 msgstr "Үлкен-кішілігін ескеріп іздеу"
 
-#: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Биіктігі: %1 %2"
 
-#: part/HeaderItems.cpp:163 part/HeaderWidgets.cpp:157
+#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
 #, kde-format
 msgid "Hide Row"
 msgstr "Жолды жасыру"
 
-#: part/HeaderItems.cpp:334 part/HeaderWidgets.cpp:325
+#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Ені: %1 %2"
 
-#: part/HeaderItems.cpp:336 part/HeaderWidgets.cpp:327
+#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
 #, kde-format
 msgid "Hide Column"
 msgstr "Бағанды жасыру"
 
-#: part/Headers.cpp:233 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:724
 #, kde-format
 msgid "Area is too large."
 msgstr "Тым үлкен аумақ."
 
-#: part/PrintJob.cpp:87
+#: part/PrintJob.cpp:88
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
 msgstr "Басып шығаратын %1 беті табылған жоқ"
 
-#: part/PrintJob.cpp:300
+#: part/PrintJob.cpp:286
 #, kde-format
 msgid "Nothing to print for sheet(s) %1."
 msgstr "%1 бет(тер)інде басып шығаратын ештеңе жоқ."
 
-#: part/View.cpp:228
+#: part/View.cpp:225
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Беттің қасиеттері"
 
-#: part/View.cpp:231
+#: part/View.cpp:228
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Таңдалған беттің қасиеттерін өзгерту"
 
-#: part/View.cpp:234 part/View.cpp:2051
+#: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Бетті ендіру"
 
-#: part/View.cpp:235
+#: part/View.cpp:232
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Жаңа бетті ендіру"
 
-#: part/View.cpp:239
+#: part/View.cpp:236
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Беттің көшірмесін жасау"
 
-#: part/View.cpp:240
+#: part/View.cpp:237
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Таңдалған беттің көшірмесін жасау"
 
-#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
+#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Бетті жою"
 
-#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
+#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Назардағы бетті алып тастау"
 
-#: part/View.cpp:250
+#: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Бетті қайта атау..."
 
-#: part/View.cpp:253
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Назардағы беттің атауын өзгерту"
 
-#: part/View.cpp:255
+#: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Бетті көрсету..."
 
-#: part/View.cpp:258
+#: part/View.cpp:255
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Жасырған бетті көрсету"
 
-#: part/View.cpp:260
+#: part/View.cpp:257
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Бетті жасыру"
 
-#: part/View.cpp:263
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Назардағы бетті жасыру"
 
-#: part/View.cpp:265
+#: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
 msgstr "Беттің пішімі..."
 
-#: part/View.cpp:268
+#: part/View.cpp:265
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Беттің басып шығаратынын ұйымдастыру"
 
-#: part/View.cpp:270
+#: part/View.cpp:267
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Басу аумағын ысырып тастау"
 
-#: part/View.cpp:273
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Назардағы бетте басу аумағын ысырып тастау"
 
-#: part/View.cpp:275
+#: part/View.cpp:272
 #, kde-format
 msgid "Page Outline"
 msgstr "Айнала сызық"
 
-#: part/View.cpp:276
+#: part/View.cpp:273
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Кесте бетінде парақ шектерін көрсету"
 
-#: part/View.cpp:280
+#: part/View.cpp:277
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Бетті қайта есептеп шығу"
 
-#: part/View.cpp:282 part/View.cpp:290
+#: part/View.cpp:279 part/View.cpp:287
 #, kde-format
 msgid "Recalculate"
 msgstr "Қайта есептеп шығу"
 
-#: part/View.cpp:286
+#: part/View.cpp:283
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Назардағы беттегі бүкіл ұяшықтарында қайта есептеп шығу"
 
-#: part/View.cpp:288
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Құжатты қайта есептеп шығу"
 
-#: part/View.cpp:294
+#: part/View.cpp:291
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Барлық беттердегі бүкіл ұяшықтарын қайта есептеп шығу"
 
-#: part/View.cpp:296
+#: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "&Бетті қорғау..."
 
-#: part/View.cpp:298
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Бетті өзгерістен қорғау"
 
-#: part/View.cpp:302
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Құ&жатты қорғау..."
 
-#: part/View.cpp:304
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Құжатты өзгерістен қорғау"
 
-#: part/View.cpp:309
+#: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "Құжаттан үлгі &жасау..."
 
-#: part/View.cpp:313
+#: part/View.cpp:309
 #, kde-format
 msgid "Anchor"
 msgstr "Бекіткіш"
 
-#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
+#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
 #, kde-format
 msgid "Cell"
 msgstr "Ұяшық"
 
-#: part/View.cpp:315 part/View.cpp:1085
+#: part/View.cpp:311 part/View.cpp:1037
 #, kde-format
 msgid "Page"
 msgstr "Парақ"
 
-#: part/View.cpp:317
+#: part/View.cpp:313
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Қалыптың бекітуін ауыстыру"
 
-#: part/View.cpp:324
+#: part/View.cpp:319
 #, kde-format
 msgid "Next Sheet"
 msgstr "Келесі бет"
 
-#: part/View.cpp:325
+#: part/View.cpp:320
 #, kde-format
 msgid "Next"
 msgstr "Келесі"
 
-#: part/View.cpp:326
+#: part/View.cpp:321
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Келесі бетке ауысу"
 
-#: part/View.cpp:331
+#: part/View.cpp:326
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Алдыңғы бет"
 
-#: part/View.cpp:332
+#: part/View.cpp:327
 #, kde-format
 msgid "Previous"
 msgstr "Алдыңғысы"
 
-#: part/View.cpp:333
+#: part/View.cpp:328
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Алдыңғы бетке ауысу"
 
-#: part/View.cpp:338
+#: part/View.cpp:333
 #, kde-format
 msgid "First Sheet"
 msgstr "Бірінші бет"
 
-#: part/View.cpp:339
+#: part/View.cpp:334
 #, kde-format
 msgid "First"
 msgstr "Бірінші"
 
-#: part/View.cpp:340
+#: part/View.cpp:335
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Бірінші бетке ауысу"
 
-#: part/View.cpp:344
+#: part/View.cpp:339
 #, kde-format
 msgid "Last Sheet"
 msgstr "Соңғы бет"
 
-#: part/View.cpp:345
+#: part/View.cpp:340
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Соңғы"
 
-#: part/View.cpp:346
+#: part/View.cpp:341
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Соңғы бетке ауысу"
 
-#: part/View.cpp:352
+#: part/View.cpp:347
 #, kde-format
 msgid "Column Header"
 msgstr "Бағанның айдары"
 
-#: part/View.cpp:353
+#: part/View.cpp:348
 #, kde-format
 msgid "Show the column header"
 msgstr "Бағанның айдары болсын"
 
-#: part/View.cpp:358
+#: part/View.cpp:352
 #, kde-format
 msgid "Row Header"
 msgstr "Жолдың айдар"
 
-#: part/View.cpp:359
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the row header"
 msgstr "Жолдарының айдары болсын"
 
-#: part/View.cpp:364
+#: part/View.cpp:357
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Көлденең жүгірткі жолағы"
 
-#: part/View.cpp:365
+#: part/View.cpp:358
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Көлденең жүгірткі жолағы болсын"
 
-#: part/View.cpp:370
+#: part/View.cpp:362
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Тік жүгірткі жолағы болсын"
 
-#: part/View.cpp:371
+#: part/View.cpp:363
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Тік жүгірткі жолағы болсын"
 
-#: part/View.cpp:376
+#: part/View.cpp:367
 #, kde-format
 msgid "Status Bar"
 msgstr "Күй-жай жолағы"
 
-#: part/View.cpp:377
+#: part/View.cpp:368
 #, kde-format
 msgid "Show the status bar"
 msgstr "Күй-жай жолағы көрсетілсін"
 
-#: part/View.cpp:382
+#: part/View.cpp:372
 #, kde-format
 msgid "Tab Bar"
 msgstr "Қойындының жиегі"
 
-#: part/View.cpp:383
+#: part/View.cpp:373
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Қойындының жиегі көрсетілсін"
 
-#: part/View.cpp:389
+#: part/View.cpp:378
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Түрлі Calligra Sheets параметрлерін орнату"
 
-#: part/View.cpp:402
+#: part/View.cpp:390
 #, kde-format
 msgid "No calculation"
 msgstr "Есептемеу"
 
-#: part/View.cpp:409
+#: part/View.cpp:396
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Қосындысын есептеу"
 
-#: part/View.cpp:416
+#: part/View.cpp:402
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Минимумын есептеу"
 
-#: part/View.cpp:423
+#: part/View.cpp:408
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Минимумін есептеу"
 
-#: part/View.cpp:430
+#: part/View.cpp:414
 #, kde-format
 msgid "Calculate using average"
 msgstr "Орташасын есептеу"
 
-#: part/View.cpp:437
+#: part/View.cpp:420
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Сандары санау"
 
-#: part/View.cpp:444
+#: part/View.cpp:426
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "countA қолданып есептеу"
 
-#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
+#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Қорғаулы бетті өзгертуге болмайды."
 
-#: part/View.cpp:1474
+#: part/View.cpp:1428
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Соңғы көрінетін бетті жасыруға болмайды."
 
-#: part/View.cpp:1554
+#: part/View.cpp:1510
 #, kde-format
 msgid "Enter a password."
 msgstr "Паролін келтіріңіз."
 
-#: part/View.cpp:1566
+#: part/View.cpp:1522
 #, kde-format
 msgid "Enter the password."
 msgstr "Паролін келтіріңіз."
 
-#: part/View.cpp:1574
+#: part/View.cpp:1530
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Паролі дұрыс емес."
 
-#: part/View.cpp:1592
+#: part/View.cpp:1546
 #, kde-format
 msgid "Protect Document"
 msgstr "Құжатты қорғау"
 
-#: part/View.cpp:1595
+#: part/View.cpp:1548
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Құжаттың қорғауын шешу"
 
-#: part/View.cpp:1615
+#: part/View.cpp:1567
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Бетті қорғау"
 
-#: part/View.cpp:1618
+#: part/View.cpp:1569
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Беттің қорғауын шешу"
 
-#: part/View.cpp:1852
+#: part/View.cpp:1804
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Басу аумағын ысырып тастау"
 
-#: part/View.cpp:1861
+#: part/View.cpp:1813
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Соңғы бетті алып тастауға болмайды."
 
-#: part/View.cpp:1864
+#: part/View.cpp:1817
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Назардағы бетті алып тастамақсыз ба?"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Enter name:"
 msgstr "Атауы:"
 
-#: part/View.cpp:1889
+#: part/View.cpp:1841
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Беттің атауын өзгерту"
 
-#: part/View.cpp:1894 part/View.cpp:1900
+#: part/View.cpp:1847 part/View.cpp:1853
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Беттің атауын өзгерту"
 
-#: part/View.cpp:1894
+#: part/View.cpp:1847
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Беттің атауы бос бола алмайды."
 
-#: part/View.cpp:1900
+#: part/View.cpp:1853
 #, kde-format
 msgid "This name is already used."
 msgstr "Бұл қолданыста бар атау."
 
-#: part/View.cpp:1968
+#: part/View.cpp:1921
 #, kde-format
 msgid "Sum: "
 msgstr "Қосындысы: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1925
 #, kde-format
 msgid "Average: "
 msgstr "Орташасы: "
 
-#: part/View.cpp:1976
+#: part/View.cpp:1929
 #, kde-format
 msgid "Min: "
 msgstr "Ең кішісі: "
 
-#: part/View.cpp:1980
+#: part/View.cpp:1933
 #, kde-format
 msgid "Max: "
 msgstr "Ең үлкені: "
 
-#: part/View.cpp:1984
+#: part/View.cpp:1937
 #, kde-format
 msgid "Count: "
 msgstr "Сандар санағы: "
 
-#: part/View.cpp:1988
+#: part/View.cpp:1941
 #, kde-format
 msgid "CountA: "
 msgstr "Санағы: "
 
-#: part/View.cpp:1995
+#: part/View.cpp:1948
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128
+#: part/ViewAdaptor.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Мәтіннің түсін өзгерту"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
+#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Аясының түсін өзгерту"
 
-#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
-#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
+#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Шегін өзгерту"
 
-#: ui/CellToolBase.cpp:807
+#: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
@@ -14363,232 +14363,218 @@ msgstr "Сан пішімі"
 msgid "Merge"
 msgstr "Біріктіру"
 
-#: ui/commands/AbstractRegionCommand.cpp:172
-#, kde-format
-msgid ""
-"Processing is not possible, because some cells are locked as elements of a "
-"matrix."
-msgstr ""
-"Істеу мүмкін емес, өйткені кейбір ұяшықтар матрица элементтері ретінде "
-"бұғатталған."
-
-#: ui/commands/AbstractRegionCommand.cpp:185
-#, kde-format
-msgid "Processing is not possible, because some cells are protected."
-msgstr "Істеу мүмкін емес, өйткені ұяшықтар қорғаулы."
-
 #: ui/commands/ApplyFilterCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Сүзгіні іске қосу"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "January"
 msgstr "Қаңтар"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "February"
 msgstr "Ақпан"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "March"
 msgstr "Наурыз"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "April"
 msgstr "Сәуір"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "May"
 msgstr "Мамыр"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "June"
 msgstr "Маусым"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "July"
 msgstr "Шілде"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "August"
 msgstr "Тамыз"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "September"
 msgstr "Қыркүйек"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "October"
 msgstr "Қазан"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "November"
 msgstr "Қараша"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "December"
 msgstr "Желтоқсан"
 
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Jan"
 msgstr "Қаң"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Feb"
 msgstr "Ақп"
 
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Mar"
 msgstr "Нау"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Apr"
 msgstr "Сәу"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "Мам"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Jun"
 msgstr "Мау"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Jul"
 msgstr "Шіл"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Aug"
 msgstr "Там"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Sep"
 msgstr "Қыр"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Oct"
 msgstr "Қаз"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
 msgid "Nov"
 msgstr "Қар"
 
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Dec"
 msgstr "Жел"
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Monday"
 msgstr "Дүйсенбі"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Tuesday"
 msgstr "Сейсенбі"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Wednesday"
 msgstr "Сәрсенбі"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Thursday"
 msgstr "Бейсенбі"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:149
 #, kde-format
 msgid "Friday"
 msgstr "Жұма"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:150
 #, kde-format
 msgid "Saturday"
 msgstr "Сенбі"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:151
 #, kde-format
 msgid "Sunday"
 msgstr "Жексенбі"
 
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Mon"
 msgstr "Дс"
 
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Tue"
 msgstr "Сс"
 
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Wed"
 msgstr "Ср"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Thu"
 msgstr "Бс"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:160
 #, kde-format
 msgid "Fri"
 msgstr "Жм"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:161
 #, kde-format
 msgid "Sat"
 msgstr "Сн"
 
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:162
 #, kde-format
 msgid "Sun"
 msgstr "Жк"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:673
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Автотолтыру"
 
-#: ui/commands/DataManipulators.cpp:107
+#: ui/commands/DataManipulators.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "Мәнін өзгерту"
 
-#: ui/commands/DataManipulators.cpp:180 ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "Ұяшықтарды ендіру"
 
-#: ui/commands/DataManipulators.cpp:193
+#: ui/commands/DataManipulators.cpp:191
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "Ұяшықтарды жою"
@@ -14598,35 +14584,35 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "Өшіру"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 #, fuzzy
 #| msgid "Merge Cells Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "Ұяшықтарды жатығынан біріктіру"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 #, fuzzy
 #| msgid "Merge Cells Vertically"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "Ұяшықтарды тігінен біріктіру"
 
-#: ui/commands/MergeCommand.cpp:89
+#: ui/commands/MergeCommand.cpp:87
 #, fuzzy
 #| msgid "Merge Cells"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Ұяшықтарды біріктіру"
 
-#: ui/commands/MergeCommand.cpp:92
+#: ui/commands/MergeCommand.cpp:90
 #, fuzzy
 #| msgid "Dissociate Cells"
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "Ұяларды ыдырату"
 
-#: ui/commands/MergeCommand.cpp:98
+#: ui/commands/MergeCommand.cpp:96
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "Бағандарды не жолдарды біріктіруінің қолдауы жоқ."
@@ -14651,138 +14637,138 @@ msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "Жол өлшемін өзгерту"
 
-#: ui/commands/RowColumnManipulators.cpp:277
+#: ui/commands/RowColumnManipulators.cpp:283
 #, fuzzy
 #| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "Бағандарды жасыру"
 
-#: ui/commands/RowColumnManipulators.cpp:279
+#: ui/commands/RowColumnManipulators.cpp:285
 #, fuzzy
 #| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "Бағандарды жасыру"
 
-#: ui/commands/RowColumnManipulators.cpp:281
+#: ui/commands/RowColumnManipulators.cpp:287
 #, fuzzy
 #| msgid "Hide Rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "Жолдарды жасыру"
 
-#: ui/commands/RowColumnManipulators.cpp:284
+#: ui/commands/RowColumnManipulators.cpp:290
 #, fuzzy
 #| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "Бағандарды көрсету"
 
-#: ui/commands/RowColumnManipulators.cpp:286
+#: ui/commands/RowColumnManipulators.cpp:292
 #, fuzzy
 #| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "Бағандарды көрсету"
 
-#: ui/commands/RowColumnManipulators.cpp:288
+#: ui/commands/RowColumnManipulators.cpp:294
 #, fuzzy
 #| msgid "Show Rows"
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Жолдарды көрсету"
 
-#: ui/commands/RowColumnManipulators.cpp:535
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 #| msgid "Adjust Columns/Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Баған/Жолды туралау"
 
-#: ui/commands/RowColumnManipulators.cpp:537
+#: ui/commands/RowColumnManipulators.cpp:541
 #, fuzzy
 #| msgid "Adjust Columns"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Бағанды туралау"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:543
 #, fuzzy
 #| msgid "Adjust Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Жолды туралау"
 
-#: ui/commands/RowColumnManipulators.cpp:552
-#: ui/commands/RowColumnManipulators.cpp:570
+#: ui/commands/RowColumnManipulators.cpp:556
+#: ui/commands/RowColumnManipulators.cpp:574
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Бағандарды ендіру"
 
-#: ui/commands/RowColumnManipulators.cpp:572
+#: ui/commands/RowColumnManipulators.cpp:576
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Бағандарды жою"
 
-#: ui/commands/RowColumnManipulators.cpp:629
-#: ui/commands/RowColumnManipulators.cpp:647
+#: ui/commands/RowColumnManipulators.cpp:631
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Жолдарды ендіру"
 
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:651
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Бағандарды жою"
 
-#: ui/commands/SheetCommands.cpp:24
+#: ui/commands/SheetCommands.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
 msgstr "Беттің атауын өзгерту"
 
-#: ui/commands/SheetCommands.cpp:45
+#: ui/commands/SheetCommands.cpp:46
 #, fuzzy, kde-format
 #| msgid "Hide Sheet %1"
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "%1 бетін жасыру"
 
-#: ui/commands/SheetCommands.cpp:46
+#: ui/commands/SheetCommands.cpp:48
 #, fuzzy
 #| msgid "Hide Sheet"
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet"
 msgstr "Бетті жасыру"
 
-#: ui/commands/SheetCommands.cpp:73
+#: ui/commands/SheetCommands.cpp:77
 #, fuzzy, kde-format
 #| msgid "Show Sheet %1"
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "%1 бетін көрсету"
 
-#: ui/commands/SheetCommands.cpp:74 ui/dialogs/ShowDialog.cpp:71
+#: ui/commands/SheetCommands.cpp:79 ui/dialogs/ShowDialog.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
 msgstr "Бетті көрсету"
 
-#: ui/commands/SheetCommands.cpp:98
+#: ui/commands/SheetCommands.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
 msgstr "Бетті қосу"
 
-#: ui/commands/SheetCommands.cpp:125
+#: ui/commands/SheetCommands.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
 msgstr "Беттің көшірмесін жасау"
 
-#: ui/commands/SheetCommands.cpp:163
+#: ui/commands/SheetCommands.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Remove Sheet"
 msgstr "Бетті жою"
 
-#: ui/commands/SheetCommands.cpp:193
+#: ui/commands/SheetCommands.cpp:197
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "Беттің қасиеттерін өзгерту"
@@ -14879,8 +14865,8 @@ msgid "Bold"
 msgstr "Қалың"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
-#: ui/dialogs/LayoutPage_Pattern.cpp:119
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:308
+#: ui/dialogs/LayoutPage_Pattern.cpp:116
 #, kde-format
 msgid "Color:"
 msgstr "Түсі:"
@@ -14956,8 +14942,8 @@ msgstr ""
 "керек шоғырын түртіп қалыңыз."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
-#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
+#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "Қарап шығу"
@@ -14969,56 +14955,56 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Назардағы ұяшықтағы мәтіннің таңдалған пішімінің үлгісі көрсетіледі."
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format
 msgid "Cell Format"
 msgstr "Ұяшық пішімі"
 
-#: ui/dialogs/LayoutDialog.cpp:123
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "Ұяшық пішімі"
 
-#: ui/dialogs/LayoutDialog.cpp:132
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&Жалпы"
 
-#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "Шегі"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:147
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "А&ясы"
 
-#: ui/dialogs/LayoutDialog.cpp:153
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
 msgstr "Ұя&шық қорғауы"
 
-#: ui/dialogs/LayoutPage_Border.cpp:273
+#: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
 msgid "Preselect"
 msgstr "Таңдалған"
 
-#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#: ui/dialogs/LayoutPage_Border.cpp:279 ui/dialogs/LayoutPage_Pattern.cpp:94
 #, kde-format
 msgid "Pattern"
 msgstr "Түрі"
 
-#: ui/dialogs/LayoutPage_Border.cpp:328
+#: ui/dialogs/LayoutPage_Border.cpp:312
 #, kde-format
 msgid "Customize"
 msgstr "Ыңғайлау"
 
-#: ui/dialogs/LayoutPage_Float.cpp:58
+#: ui/dialogs/LayoutPage_Float.cpp:57
 #, kde-format
 msgid "Generic"
 msgstr "Жалпы"
@@ -15035,7 +15021,7 @@ msgstr ""
 "автоматты түрде таниды. Әдет бойынша Calligra Sheets сан, күн, уақыт "
 "жазуларын ұяшығының оң жағына, қалған деректерді сол жағына туралайды."
 
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -15046,12 +15032,12 @@ msgstr ""
 "тәртібі -> Жергілікті стандарттар -> Ел/өлке және тіл -> Сандар қойындысында "
 "орнатылады. Әдетте сандар ұяшығының оң жағына тураланады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:66
+#: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
 msgid "Percent"
 msgstr "Пайыз"
 
-#: ui/dialogs/LayoutPage_Float.cpp:67
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -15069,12 +15055,12 @@ msgstr ""
 "қайтарылса, ол қайтадан 12 болады.\n"
 "Бұны Пішім құралдар панеліндегі Пайыз таңбашасы арқылы ауыстыруға да болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:70
+#: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
 msgid "Money"
 msgstr "Ақша"
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -15089,12 +15075,12 @@ msgstr ""
 "қойындысында орнатылған пішіміне ауыстырады.\n"
 "Бұны Пішім құралдар панеліндегі Ақша таңбашасы арқылы ауыстыруға да болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:74
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid "Scientific"
 msgstr "Ғылыми"
 
-#: ui/dialogs/LayoutPage_Float.cpp:75
+#: ui/dialogs/LayoutPage_Float.cpp:85
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -15104,7 +15090,7 @@ msgstr ""
 "Ғылыми пішімі санды ғылыми түріне ауыстырады. Мысалы, 0,0012 деген сан "
 "1,2E-03 деп өзгереді. Негізгі пішіміне қайтқанда ол қайтадан 0,0012 болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:79
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -15125,7 +15111,7 @@ msgstr ""
 "Бұл нақты теңдік. Дал осы бөлімімен 1,4 деген санды айналдырса - ұяшықта \"1 "
 "6/16\" деген бөлшек пайда болады. Бұл ең жақын оналтылық бөлшек."
 
-#: ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/dialogs/LayoutPage_Float.cpp:100
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -15142,7 +15128,7 @@ msgstr ""
 "Жай сандар секілді, күн белгілерді ұяшықтарға автотолтыру арқылы толтыруға "
 "болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:87
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -15162,13 +15148,13 @@ msgstr ""
 "параметрлерінде орнатылған. Егер ұяшықтағы сан уақытқа келмесе, Calligra "
 "Sheets жалпы жүйелік пішімінде 00:00 деген уақытты көрсетеді. "
 
-#: ui/dialogs/LayoutPage_Float.cpp:90
+#: ui/dialogs/LayoutPage_Float.cpp:113
 #, fuzzy, kde-format
 #| msgid "Date & Time"
 msgid "Datetime"
 msgstr "Күн мен уақыт"
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:115
 #, fuzzy, kde-format
 #| msgid ""
 #| "To enter a date, you should enter it in one of the formats set in System "
@@ -15192,7 +15178,7 @@ msgstr ""
 "Жай сандар секілді, күн белгілерді ұяшықтарға автотолтыру арқылы толтыруға "
 "болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:95
+#: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -15207,17 +15193,17 @@ msgstr ""
 "пішімделген санды есеп және формуларда қолдануға болмайды. Сонымен қатар, "
 "айдалғандай, ұяшықтың туралау тәртібі өзгереді."
 
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid "Custom"
 msgstr "Өзгеше"
 
-#: ui/dialogs/LayoutPage_Float.cpp:99
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "Өзгеше пішім бұнда істемейді. Ол болашақтағы шығарлымда болмақ."
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:136
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -15226,12 +15212,12 @@ msgstr ""
 "Бұл таңдағанның нәтижесін, ОК батырмасын басудың алдында, алдын-ала қарап "
 "шығу үшін."
 
-#: ui/dialogs/LayoutPage_Float.cpp:117
+#: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "Бөлшек, күн, уақыт пішімдерінің болатын таңдауларын көрсетеді."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:156
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -15240,12 +15226,12 @@ msgstr ""
 "Мұнда ұяшықтың мазмұнының соңында қосылатын жұрнақ таңбаны келтіруге болады. "
 "Мысалы, \"тг\" деп."
 
-#: ui/dialogs/LayoutPage_Float.cpp:130
+#: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
 msgid "variable"
 msgstr "айнымалы"
 
-#: ui/dialogs/LayoutPage_Float.cpp:133
+#: ui/dialogs/LayoutPage_Float.cpp:163
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -15256,7 +15242,7 @@ msgstr ""
 "таңдау. Бұны Пішім құралдар панеліндегі \"Дәлдігін артыру\" және \"Дәлдігін "
 "төмендету\" таңбашалары арқылы өзгертуге де болады. "
 
-#: ui/dialogs/LayoutPage_Float.cpp:137
+#: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -15265,7 +15251,7 @@ msgstr ""
 "Мұнда ұяшықтың мазмұнының алдында қосылатын префикс таңбаны келтіруге "
 "болады. Мысалы, \"$\" немесе \"T\" деп."
 
-#: ui/dialogs/LayoutPage_Float.cpp:141
+#: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -15274,77 +15260,77 @@ msgstr ""
 "Мұнда оң сандардың алдында \"+\" белгісін жазу керек пе және теріс сандарды "
 "қызыл түспен бояп көрсетуді таңдауға болады."
 
-#: ui/dialogs/LayoutPage_Float.cpp:147
+#: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
 msgid "Postfix:"
 msgstr "Жалғауы:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:151
+#: ui/dialogs/LayoutPage_Float.cpp:182
 #, kde-format
 msgid "Prefix:"
 msgstr "Префиксі:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:155
+#: ui/dialogs/LayoutPage_Float.cpp:186
 #, kde-format
 msgid "Precision:"
 msgstr "Дәлділігі:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:203
 #, kde-format
 msgid "Format:"
 msgstr "Пішімі:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:176
+#: ui/dialogs/LayoutPage_Float.cpp:207
 #, kde-format
 msgid "Currency:"
 msgstr "Ақша:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:283
+#: ui/dialogs/LayoutPage_Float.cpp:313
 #, kde-format
 msgid "Halves 1/2"
 msgstr "Жартылар 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:284
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "Ширектер 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:285
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "Сегізіктер 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:286
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "Оналтылықтар 1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:287
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "Ондықтар 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:288
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "Жүздіктер 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:289
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "One digit 5/9"
 msgstr "Бір таңбалы 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:290
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "Екі таңбалы 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:291
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Үш таңбалы 153/652"
 
-#: ui/dialogs/LayoutPage_Font.cpp:53
+#: ui/dialogs/LayoutPage_Font.cpp:45
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "Dolor Ipse"
@@ -15365,32 +15351,32 @@ msgstr "Атауы:"
 msgid "Inherit style:"
 msgstr "Мұра ететін стилі:"
 
-#: ui/dialogs/LayoutPage_General.cpp:90
+#: ui/dialogs/LayoutPage_General.cpp:88
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Былай аталған стиль бар ғой."
 
-#: ui/dialogs/LayoutPage_General.cpp:94
+#: ui/dialogs/LayoutPage_General.cpp:92
 #, kde-format
 msgid "The style name can not be empty."
 msgstr "Стиль атауы бос болмауға тиіс."
 
-#: ui/dialogs/LayoutPage_General.cpp:106
+#: ui/dialogs/LayoutPage_General.cpp:104
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "Стильді өз-өзінен мұра етуге болмайды."
 
-#: ui/dialogs/LayoutPage_General.cpp:110
+#: ui/dialogs/LayoutPage_General.cpp:108
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr "Тұйық сілтемелер болдырмау үшін стиль '%1' дегеннен мұра етілмеді."
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:128
+#: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
 msgid "Background color:"
 msgstr "Ая түсі:"
 
-#: ui/dialogs/LayoutPage_Pattern.cpp:136
+#: ui/dialogs/LayoutPage_Pattern.cpp:132
 #, kde-format
 msgid "No Color"
 msgstr "Түссіз"
@@ -15660,76 +15646,82 @@ msgstr "Бетті көрсету"
 msgid "Select hidden sheets to show:"
 msgstr "Көрсететін жасырын беттер:"
 
-#: ui/ExternalEditor.cpp:56
+#: ui/ExternalEditor.cpp:55
 #, kde-format
 msgid "Apply"
 msgstr "Іске асыру"
 
-#: ui/ExternalEditor.cpp:57
+#: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply changes"
 msgstr "Өзгерістерді іске асыру"
 
-#: ui/ExternalEditor.cpp:61
+#: ui/ExternalEditor.cpp:60
 #, kde-format
 msgid "Cancel"
 msgstr "Қайту"
 
-#: ui/ExternalEditor.cpp:62
+#: ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Discard changes"
 msgstr "Өзгерістерді ысырып тастау"
 
-#: ui/FilterPopup.cpp:55
+#: ui/FilterPopup.cpp:54
 #, kde-format
 msgid "All"
 msgstr "Барлық"
 
-#: ui/FilterPopup.cpp:58
+#: ui/FilterPopup.cpp:57
 #, kde-format
 msgid "Empty"
 msgstr "Бос"
 
-#: ui/FilterPopup.cpp:62
+#: ui/FilterPopup.cpp:61
 #, kde-format
 msgid "Non-empty"
 msgstr "Бос емес"
 
-#: ui/MapViewModel.cpp:180
+#: ui/MapViewModel.cpp:179
 #, kde-format
 msgctxt "Activate sheet named foo"
 msgid "Activate %1"
 msgstr "%1 дегенді белсендету"
 
-#: ui/RegionSelector.cpp:145
+#: ui/RegionSelector.cpp:144
 #, kde-format
 msgid "Select Single Cell"
 msgstr "Жалғыз ұяшықты таңдау"
 
-#: ui/RegionSelector.cpp:147
+#: ui/RegionSelector.cpp:146
 #, kde-format
 msgid "Select Multiple Cells"
 msgstr "Бірнеше ұяшықтарды таңдау"
 
-#: ui/strategy/HyperlinkStrategy.cpp:66
+#: ui/strategy/HyperlinkStrategy.cpp:67
 #, kde-format
 msgid "Link %1 activated"
 msgstr "%1 сілтемесі белсендірілді"
 
-#: ui/strategy/HyperlinkStrategy.cpp:83
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-"Бұл '%1' деген бағдарлама не скрипт сілтемесі.\n"
-"Бөтен бағдарлама зиян келтіруі мүмкін. Бағдарлама орындалсын ба?"
+#~ msgid ""
+#~ "Processing is not possible, because some cells are locked as elements of "
+#~ "a matrix."
+#~ msgstr ""
+#~ "Істеу мүмкін емес, өйткені кейбір ұяшықтар матрица элементтері ретінде "
+#~ "бұғатталған."
 
-#: ui/strategy/HyperlinkStrategy.cpp:89
-#, kde-format
-msgid "Open Link?"
-msgstr "Сілтеме ашылсын ба?"
+#~ msgid "Processing is not possible, because some cells are protected."
+#~ msgstr "Істеу мүмкін емес, өйткені ұяшықтар қорғаулы."
+
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Бұл '%1' деген бағдарлама не скрипт сілтемесі.\n"
+#~ "Бөтен бағдарлама зиян келтіруі мүмкін. Бағдарлама орындалсын ба?"
+
+#~ msgid "Open Link?"
+#~ msgstr "Сілтеме ашылсын ба?"
 
 #~ msgid "Date and Time"
 #~ msgstr "Күн мен уақыт"

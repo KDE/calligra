@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2010-12-17 15:37+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <kde-i18n-doc@kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 1.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -28,7 +28,7 @@ msgstr ""
 "تاریخ پایان قبل از تاریخ آغاز است! لطفاً، مطمئن شوید که تاریخ پایان بعد از "
 "تاریخ آغاز بیاید."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr "خطا"
@@ -42,7 +42,7 @@ msgstr ""
 "تقویمها نباید طولانی‌تر از ۱۰ سال باشند. اگر واقعاً به چنین دوره‌های طولانی "
 "نیاز دارید، لازم است آنها را بشکافید."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -50,12 +50,12 @@ msgid ""
 msgstr ""
 "تاریخ آغاز و پایان برابر هستند! فقط یک روز درج می‌شود، می‌خواهید ادامه دهید؟"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr "اخطار"
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -64,7 +64,7 @@ msgstr ""
 "ایجاد تقویمی برای دوره‌ای طولانی‌تر از یک سال که می‌تواند فضای بسیار زیادی را "
 "بگیرد، می‌خواهید ادامه دهید؟"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -77,24 +77,24 @@ msgstr ""
 "برای تقویم مورد نظر نیاز است انتخاب می‌شود به طوری که می‌توانید ببینید چه "
 "داده‌هایی جای‌نوشت می‌شود."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 #| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "درج تقویم"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "تقویم از %1 تا %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "هفته"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 #| msgid "Calendar Tool"
 msgid "Calendar"

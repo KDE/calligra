@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-03-14 20:20-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -20,78 +20,78 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:63
+#: shapecollection/OdfCollectionLoader.cpp:60
 #, kde-format
 msgid "Found no shapes in the collection! %1"
 msgstr "コレクションに図形が見つかりません。%1"
 
-#: shapecollection/OdfCollectionLoader.cpp:132
+#: shapecollection/OdfCollectionLoader.cpp:120
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "有効な Calligra ファイルではありません: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:157
+#: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
 msgid "No body tag found in file: %1"
 msgstr "ファイルに body タグが見つかりません: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:165
+#: shapecollection/OdfCollectionLoader.cpp:151
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
 msgstr "ファイルに office:drawing タグが見つかりません: %1"
 
-#: shapecollection/OdfCollectionLoader.cpp:173
-#: shapecollection/OdfCollectionLoader.cpp:181
+#: shapecollection/OdfCollectionLoader.cpp:159
+#: shapecollection/OdfCollectionLoader.cpp:167
 #, kde-format
 msgid "No shapes found in file: %1"
 msgstr "ファイルに図形が見つかりません: %1"
 
-#: shapecollection/ShapeCollectionDocker.cpp:111
+#: shapecollection/ShapeCollectionDocker.cpp:110
 #, kde-format
 msgid "Add Shape"
 msgstr "図形を追加"
 
-#: shapecollection/ShapeCollectionDocker.cpp:146
+#: shapecollection/ShapeCollectionDocker.cpp:144
 #, kde-format
 msgid "More"
 msgstr "もっと表示"
 
-#: shapecollection/ShapeCollectionDocker.cpp:176
+#: shapecollection/ShapeCollectionDocker.cpp:172
 #, kde-format
 msgid "Open Shape Collection"
 msgstr "図形コレクションを開く"
 
-#: shapecollection/ShapeCollectionDocker.cpp:184
+#: shapecollection/ShapeCollectionDocker.cpp:180
 #, kde-format
 msgid "Remove Shape Collection"
 msgstr "図形コレクションを削除"
 
-#: shapecollection/ShapeCollectionDocker.cpp:330
+#: shapecollection/ShapeCollectionDocker.cpp:327
 #, kde-format
 msgid "Default"
 msgstr "標準"
 
-#: shapecollection/ShapeCollectionDocker.cpp:334
+#: shapecollection/ShapeCollectionDocker.cpp:331
 #, kde-format
 msgid "Geometrics"
 msgstr "幾何学的図形"
 
-#: shapecollection/ShapeCollectionDocker.cpp:345
+#: shapecollection/ShapeCollectionDocker.cpp:342
 #, kde-format
 msgid "Arrows"
 msgstr "矢印"
 
-#: shapecollection/ShapeCollectionDocker.cpp:349
+#: shapecollection/ShapeCollectionDocker.cpp:346
 #, kde-format
 msgid "Funny"
 msgstr "ユーモア"
 
-#: shapecollection/ShapeCollectionDocker.cpp:522
+#: shapecollection/ShapeCollectionDocker.cpp:513
 #, kde-format
 msgid "Collection Error"
 msgstr "コレクションのエラー"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:35
+#: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
 msgstr "図形のプロパティ"

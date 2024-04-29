@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-01-24 23:41+0100\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -13,12 +13,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ThreedShapeFactory.cpp:35
+#: ThreedShapeFactory.cpp:34
 #, kde-format
 msgid "3D Scene"
 msgstr "3D-Szene"
 
-#: ThreedShapeFactory.cpp:37
+#: ThreedShapeFactory.cpp:36
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "Ein Objekt, das eine einfache 3D-Szene anzeigt."

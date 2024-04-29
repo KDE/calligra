@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2004-07-06 15:43+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
 #, fuzzy
 #| msgid "Boolean Operation"
 msgctxt "(qtundo-format)"
@@ -126,132 +126,132 @@ msgstr "Effeithiau"
 msgid "View"
 msgstr "Ymylon:"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#: plugins/flattenpath/FlattenPathPlugin.cpp:49
 #, kde-format
 msgid "&Flatten Path..."
 msgstr "&Lleddfu Llwybr..."
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#: plugins/flattenpath/FlattenPathPlugin.cpp:86
 #, fuzzy, kde-format
 #| msgid "Flatten Path"
 msgid "Flatten Path"
 msgstr "Lleddfu Llwybr"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:102
-#: plugins/refinepath/RefinePathPlugin.cpp:95
-#: plugins/roundcorners/RoundCornersPlugin.cpp:111
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#: plugins/flattenpath/FlattenPathPlugin.cpp:98
+#: plugins/refinepath/RefinePathPlugin.cpp:93
+#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, fuzzy, kde-format
 msgid "Properties"
 msgstr "Priodweddau Trawiadau"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
 #, kde-format
 msgid "Flatness:"
 msgstr "Gwastadrwydd:"
 
-#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:152
 #, fuzzy
 #| msgid "Flatten Path"
 msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "Lleddfu Llwybr"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "Cau Llwybr"
 
-#: plugins/refinepath/RefinePathPlugin.cpp:51
+#: plugins/refinepath/RefinePathPlugin.cpp:49
 #, fuzzy, kde-format
 #| msgid "&Flatten Path..."
 msgid "&Refine Path..."
 msgstr "&Lleddfu Llwybr..."
 
-#: plugins/refinepath/RefinePathPlugin.cpp:87
+#: plugins/refinepath/RefinePathPlugin.cpp:85
 #, fuzzy, kde-format
 msgid "Refine Path"
 msgstr "Cau Llwybr"
 
-#: plugins/refinepath/RefinePathPlugin.cpp:99
+#: plugins/refinepath/RefinePathPlugin.cpp:97
 #, kde-format
 msgid "Subdivisions:"
 msgstr ""
 
-#: plugins/roundcorners/RoundCornersCommand.cpp:28
-#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#: plugins/roundcorners/RoundCornersCommand.cpp:30
+#: plugins/roundcorners/RoundCornersPlugin.cpp:81
 #, fuzzy
 #| msgid "Round Corners"
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "Corneli Crwn"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#: plugins/roundcorners/RoundCornersPlugin.cpp:52
 #, kde-format
 msgid "&Round Corners..."
 msgstr "C&orneli Crwn..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#: plugins/roundcorners/RoundCornersPlugin.cpp:97
 #, kde-format
 msgid "Round Corners"
 msgstr "Corneli Crwn"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:115
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
 msgstr "Radiws:"
 
-#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
 #, fuzzy
 #| msgid "Whirl Pinch"
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
 msgstr "Troelli/Gwasgu"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
 #, kde-format
 msgid "&Whirl/Pinch..."
 msgstr "&Troelli/Cywasgu..."
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
 msgid "Whirl Pinch"
 msgstr "Troelli/Gwasgu"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
 #, kde-format
 msgid "Info"
 msgstr ""
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:104
 #, kde-format
 msgid ""
 "The result of the Whirlpinch effect can be improved by refining the path "
 "shape beforehand."
 msgstr ""
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
 #, kde-format
 msgid "Angle:"
 msgstr "Ongl:"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:122
 #, kde-format
 msgid "Pinch:"
 msgstr "Gwasgu:"
 
-#: ui/commands/KarbonLayerReorderCommand.cpp:24
-#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:38
 #, fuzzy
 #| msgid "Raise Layer"
 msgctxt "(qtundo-format)"
 msgid "Raise Layer"
 msgstr "Codi Haen"
 
-#: ui/commands/KarbonLayerReorderCommand.cpp:26
-#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#: ui/commands/KarbonLayerReorderCommand.cpp:28
+#: ui/commands/KarbonLayerReorderCommand.cpp:40
 #, fuzzy
 #| msgid "Lower Layer"
 msgctxt "(qtundo-format)"
@@ -263,368 +263,368 @@ msgstr "Gostwng Haen"
 msgid "Configure"
 msgstr "Ffurfweddu Karbon..."
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:43
-#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/dialogs/KarbonConfigureDialog.cpp:40
+#: ui/dialogs/KarbonConfigureDialog.cpp:41
 #: ui/widgets/KarbonConfigInterfacePage.cpp:41
 #, kde-format
 msgid "Interface"
 msgstr "Rhwngwyneb"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:48
-#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#: ui/dialogs/KarbonConfigureDialog.cpp:45
+#: ui/dialogs/KarbonConfigureDialog.cpp:46
 #, kde-format
 msgid "Misc"
 msgstr "Amrywiol"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:53
-#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#: ui/dialogs/KarbonConfigureDialog.cpp:50
+#: ui/dialogs/KarbonConfigureDialog.cpp:51
 #, kde-format
 msgid "Grid"
 msgstr "Grid"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#: ui/dialogs/KarbonConfigureDialog.cpp:57
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dogfen"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#: ui/dialogs/KarbonConfigureDialog.cpp:58
 #, kde-format
 msgid "Document Settings"
 msgstr "Gosodiadau Dogfennau"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#: ui/dialogs/KarbonConfigureDialog.cpp:62
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr ""
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#: ui/dialogs/KarbonConfigureDialog.cpp:63
 #, kde-format
 msgid "Author"
 msgstr ""
 
-#: ui/KarbonAboutData.h:22
+#: ui/KarbonAboutData.h:20
 #, kde-format
 msgid "Karbon"
 msgstr ""
 
-#: ui/KarbonAboutData.h:24
+#: ui/KarbonAboutData.h:22
 #, kde-format
 msgid "A Vector Graphics Drawing Application."
 msgstr ""
 
-#: ui/KarbonAboutData.h:26
+#: ui/KarbonAboutData.h:24
 #, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr ""
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr ""
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:32
 #, kde-format
 msgid "Rob Buis"
 msgstr ""
 
-#: ui/KarbonAboutData.h:42
+#: ui/KarbonAboutData.h:33
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr ""
 
-#: ui/KarbonAboutData.h:46
+#: ui/KarbonAboutData.h:34
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr ""
 
-#: ui/KarbonAboutData.h:50
-#, kde-format
-msgid "Jan Hambrecht"
-msgstr ""
-
-#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
-#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr ""
 
-#: ui/KarbonAboutData.h:54
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr ""
+
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Peter Simonsson"
 msgstr ""
 
-#: ui/KarbonAboutData.h:58
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Tim Beaulen"
 msgstr ""
 
-#: ui/KarbonAboutData.h:62
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr ""
 
-#: ui/KarbonAboutData.h:66
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr ""
 
-#: ui/KarbonAboutData.h:70
-#, kde-format
-msgid "Inge Wallin"
-msgstr ""
-
-#: ui/KarbonAboutData.h:71
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Bug fixes"
 msgstr ""
 
-#: ui/KarbonAboutData.h:74
+#: ui/KarbonAboutData.h:40
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Alan Horkan"
 msgstr ""
 
-#: ui/KarbonAboutData.h:75
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr ""
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:78
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Kyfieithu: Peter Bradley,jr,KD"
 
-#: ui/KarbonAboutData.h:79
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "apvx95@dsl.pipex.com,,"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
 #, fuzzy
 #| msgid "Insert Sinus"
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Mewnosod Sinws"
 
-#: ui/KarbonView.cpp:351
+#: ui/KarbonView.cpp:367
 #, fuzzy, kde-format
 #| msgid "Choose Pattern to Add"
 msgid "Choose Graphic to Add"
 msgstr "Dewis Patrwm i'w Ychwanegu"
 
-#: ui/KarbonView.cpp:386
+#: ui/KarbonView.cpp:403
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
+#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
 #, fuzzy, kde-format
 #| msgid "&Import Graphic..."
 msgid "Import graphic"
 msgstr "&Mewnforio Graffeg..."
 
-#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
+#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
 
-#: ui/KarbonView.cpp:617
+#: ui/KarbonView.cpp:634
 #, fuzzy
 #| msgid "H&orizontal:"
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "Ll&orweddol:"
 
-#: ui/KarbonView.cpp:619
+#: ui/KarbonView.cpp:636
 #, fuzzy
 #| msgid "H&orizontal:"
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "Ll&orweddol:"
 
-#: ui/KarbonView.cpp:621
+#: ui/KarbonView.cpp:638
 #, fuzzy
 #| msgid "H&orizontal:"
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "Ll&orweddol:"
 
-#: ui/KarbonView.cpp:676
+#: ui/KarbonView.cpp:693
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "Lleddfu Llwybr"
 
-#: ui/KarbonView.cpp:857
+#: ui/KarbonView.cpp:874
 #, fuzzy, kde-format
 #| msgid "View &Mode"
 msgid "Outline &Mode"
 msgstr "&Modd Golwg"
 
-#: ui/KarbonView.cpp:865
+#: ui/KarbonView.cpp:882
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "&Mewnforio Graffeg..."
 
-#: ui/KarbonView.cpp:869
+#: ui/KarbonView.cpp:886
 #, fuzzy, kde-format
 #| msgid "Hide Grid"
 msgid "Edit Guides"
 msgstr "Cuddio Grid"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:892
 #, fuzzy, kde-format
 #| msgid "&Duplicate"
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Dyblyg"
 
-#: ui/KarbonView.cpp:880
+#: ui/KarbonView.cpp:897
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "Dosbarthu i'r Canol (Llorweddol)"
 
-#: ui/KarbonView.cpp:884
+#: ui/KarbonView.cpp:901
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Dosbarthu Bylchau (Llorweddol)"
 
-#: ui/KarbonView.cpp:888
+#: ui/KarbonView.cpp:905
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "Dosbarthu Ymylon Chwith"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:909
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "Dosbarthu Ymylon De"
 
-#: ui/KarbonView.cpp:896
+#: ui/KarbonView.cpp:913
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "Dosbarthu i'r Canol (Fertigol)"
 
-#: ui/KarbonView.cpp:900
+#: ui/KarbonView.cpp:917
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "Dosbarthu Bylchau (Fertigol)"
 
-#: ui/KarbonView.cpp:904
+#: ui/KarbonView.cpp:921
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "Dosbarthu Ymylon Gwaelod"
 
-#: ui/KarbonView.cpp:908
+#: ui/KarbonView.cpp:925
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "Dosbarthu Ymylon Brig"
 
-#: ui/KarbonView.cpp:912
+#: ui/KarbonView.cpp:929
 #, fuzzy, kde-format
 msgid "Show Color Palette"
 msgstr "Dangos neu guddio mesuryddion."
 
-#: ui/KarbonView.cpp:914
+#: ui/KarbonView.cpp:931
 #, fuzzy, kde-format
 msgid "Show or hide color palette"
 msgstr "Dangos neu guddio mesuryddion."
 
-#: ui/KarbonView.cpp:918
+#: ui/KarbonView.cpp:935
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Clip Object"
 msgstr "&Gwrthrych"
 
-#: ui/KarbonView.cpp:922
+#: ui/KarbonView.cpp:939
 #, fuzzy, kde-format
 #| msgid "&Ungroup Objects"
 msgid "&Unclip Objects"
 msgstr "&Dadgasglu gwrthrychau"
 
-#: ui/KarbonView.cpp:926
+#: ui/KarbonView.cpp:943
 #, fuzzy, kde-format
 #| msgid "H&orizontal:"
 msgid "Mirror Vertically"
 msgstr "Ll&orweddol:"
 
-#: ui/KarbonView.cpp:930
+#: ui/KarbonView.cpp:947
 #, fuzzy, kde-format
 #| msgid "H&orizontal:"
 msgid "Mirror Horizontally"
 msgstr "Ll&orweddol:"
 
-#: ui/KarbonView.cpp:937
+#: ui/KarbonView.cpp:954
 #, kde-format
 msgid "&Close Path"
 msgstr "&Cau Llwybr"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:960
 #, fuzzy, kde-format
 msgid "Com&bine Path"
 msgstr "Cau Llwybr"
 
-#: ui/KarbonView.cpp:949
+#: ui/KarbonView.cpp:966
 #, fuzzy, kde-format
 msgid "Se&parate Path"
 msgstr "Lleddfu Llwybr"
 
-#: ui/KarbonView.cpp:955
+#: ui/KarbonView.cpp:972
 #, fuzzy, kde-format
 #| msgid "&Close Path"
 msgid "Re&verse Path"
 msgstr "&Cau Llwybr"
 
-#: ui/KarbonView.cpp:961
+#: ui/KarbonView.cpp:978
 #, fuzzy, kde-format
 #| msgid "Edit Base Path"
 msgid "Intersect Paths"
 msgstr "Golygu'r Llwybr Sail"
 
-#: ui/KarbonView.cpp:967
+#: ui/KarbonView.cpp:984
 #, fuzzy, kde-format
 msgid "Subtract Paths"
 msgstr "Lleddfu Llwybr"
 
-#: ui/KarbonView.cpp:973
+#: ui/KarbonView.cpp:990
 #, fuzzy, kde-format
 #| msgid "Edit Base Path"
 msgid "Unite Paths"
 msgstr "Golygu'r Llwybr Sail"
 
-#: ui/KarbonView.cpp:979
+#: ui/KarbonView.cpp:996
 #, kde-format
 msgid "Exclude Paths"
 msgstr ""
 
-#: ui/KarbonView.cpp:985
+#: ui/KarbonView.cpp:1002
 #, fuzzy, kde-format
 #| msgid "Snap to Grid"
 msgid "Snap Path to Grid"
 msgstr "Snapio i'r Grid"
 
-#: ui/KarbonView.cpp:993
+#: ui/KarbonView.cpp:1010
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Zoom to Selection"
 msgstr "Detholiad"
 
-#: ui/KarbonView.cpp:997
+#: ui/KarbonView.cpp:1014
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Zoom to Drawing"
 msgstr "Detholiad"
 
-#: ui/KarbonZoomController.cpp:51
+#: ui/KarbonZoomController.cpp:55
 #, fuzzy, kde-format
 msgid "Zoom"
 msgstr "Erfyn Chwyddo"
@@ -645,48 +645,48 @@ msgstr "Nifer o ffeiliau diweddar:"
 msgid "Palette font size:"
 msgstr ""
 
-#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#: ui/widgets/KarbonPaletteBarWidget.cpp:51
 #, fuzzy, kde-format
 msgid "Select palette"
 msgstr "Erfyn Dethol Nodau"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format
 msgid "Press to apply fill to selection"
 msgstr ""
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#: ui/widgets/KarbonSmallStylePreview.cpp:90
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "Dim"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#: ui/widgets/KarbonSmallStylePreview.cpp:112
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr ""
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#: ui/widgets/KarbonSmallStylePreview.cpp:161
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr ""
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#: ui/widgets/KarbonSmallStylePreview.cpp:167
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "Dim"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#: ui/widgets/KarbonSmallStylePreview.cpp:187
 #, fuzzy, kde-format
 #| msgid "Stroke"
 msgid "Stroke:"
 msgstr "Trawiad"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#: ui/widgets/KarbonSmallStylePreview.cpp:192
 #, fuzzy, kde-format
 #| msgid "Fill"
 msgid "Fill:"

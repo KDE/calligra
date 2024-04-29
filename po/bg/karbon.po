@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2011-07-25 20:47+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "Булево действие"
@@ -119,97 +119,97 @@ msgstr "Ефекти"
 msgid "View"
 msgstr "Изглед"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#: plugins/flattenpath/FlattenPathPlugin.cpp:49
 #, kde-format
 msgid "&Flatten Path..."
 msgstr "&Изглаждане на път..."
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#: plugins/flattenpath/FlattenPathPlugin.cpp:86
 #, kde-format
 msgid "Flatten Path"
 msgstr "Изглаждане на път"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:102
-#: plugins/refinepath/RefinePathPlugin.cpp:95
-#: plugins/roundcorners/RoundCornersPlugin.cpp:111
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#: plugins/flattenpath/FlattenPathPlugin.cpp:98
+#: plugins/refinepath/RefinePathPlugin.cpp:93
+#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, kde-format
 msgid "Properties"
 msgstr "Подробности"
 
-#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
 #, kde-format
 msgid "Flatness:"
 msgstr "Гладкост:"
 
-#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "Изглаждане на път"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "Уточняване на път"
 
-#: plugins/refinepath/RefinePathPlugin.cpp:51
+#: plugins/refinepath/RefinePathPlugin.cpp:49
 #, kde-format
 msgid "&Refine Path..."
 msgstr "&Уточняване на път..."
 
-#: plugins/refinepath/RefinePathPlugin.cpp:87
+#: plugins/refinepath/RefinePathPlugin.cpp:85
 #, kde-format
 msgid "Refine Path"
 msgstr "Уточняване на път"
 
-#: plugins/refinepath/RefinePathPlugin.cpp:99
+#: plugins/refinepath/RefinePathPlugin.cpp:97
 #, kde-format
 msgid "Subdivisions:"
 msgstr "Подраздели:"
 
-#: plugins/roundcorners/RoundCornersCommand.cpp:28
-#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#: plugins/roundcorners/RoundCornersCommand.cpp:30
+#: plugins/roundcorners/RoundCornersPlugin.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "Заобляне на ъгли"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#: plugins/roundcorners/RoundCornersPlugin.cpp:52
 #, kde-format
 msgid "&Round Corners..."
 msgstr "&Заобляне на ъгли..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#: plugins/roundcorners/RoundCornersPlugin.cpp:97
 #, kde-format
 msgid "Round Corners"
 msgstr "Заобляне на ъгли"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:115
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
 msgstr "Радиус:"
 
-#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
 msgstr "Завъртане и стесняване"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
 #, kde-format
 msgid "&Whirl/Pinch..."
 msgstr "&Завъртане и стесняване..."
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
 msgid "Whirl Pinch"
 msgstr "Завъртане и стесняване"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
 #, kde-format
 msgid "Info"
 msgstr "Данни"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:104
 #, kde-format
 msgid ""
 "The result of the Whirlpinch effect can be improved by refining the path "
@@ -218,24 +218,24 @@ msgstr ""
 "Резултатът от ефекта \"завъртане и стесняване\" може да бъде подобрен с "
 "предварително уточняване на пътя."
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
 #, kde-format
 msgid "Angle:"
 msgstr "Ъгъл:"
 
-#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:122
 #, kde-format
 msgid "Pinch:"
 msgstr "Стесняване:"
 
-#: ui/commands/KarbonLayerReorderCommand.cpp:24
-#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Raise Layer"
 msgstr "Издигане на слой"
 
-#: ui/commands/KarbonLayerReorderCommand.cpp:26
-#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#: ui/commands/KarbonLayerReorderCommand.cpp:28
+#: ui/commands/KarbonLayerReorderCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Lower Layer"
 msgstr "Снижаване на слой"
@@ -245,344 +245,344 @@ msgstr "Снижаване на слой"
 msgid "Configure"
 msgstr "Настройки"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:43
-#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/dialogs/KarbonConfigureDialog.cpp:40
+#: ui/dialogs/KarbonConfigureDialog.cpp:41
 #: ui/widgets/KarbonConfigInterfacePage.cpp:41
 #, kde-format
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:48
-#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#: ui/dialogs/KarbonConfigureDialog.cpp:45
+#: ui/dialogs/KarbonConfigureDialog.cpp:46
 #, kde-format
 msgid "Misc"
 msgstr "Разни"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:53
-#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#: ui/dialogs/KarbonConfigureDialog.cpp:50
+#: ui/dialogs/KarbonConfigureDialog.cpp:51
 #, kde-format
 msgid "Grid"
 msgstr "Мрежа"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#: ui/dialogs/KarbonConfigureDialog.cpp:57
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Документ"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#: ui/dialogs/KarbonConfigureDialog.cpp:58
 #, kde-format
 msgid "Document Settings"
 msgstr "Настройки на документ"
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#: ui/dialogs/KarbonConfigureDialog.cpp:62
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr ""
 
-#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#: ui/dialogs/KarbonConfigureDialog.cpp:63
 #, kde-format
 msgid "Author"
 msgstr ""
 
-#: ui/KarbonAboutData.h:22
+#: ui/KarbonAboutData.h:20
 #, fuzzy, kde-format
 msgid "Karbon"
 msgstr "Karbon14"
 
-#: ui/KarbonAboutData.h:24
+#: ui/KarbonAboutData.h:22
 #, kde-format
 msgid "A Vector Graphics Drawing Application."
 msgstr "Програма за векторни графики"
 
-#: ui/KarbonAboutData.h:26
+#: ui/KarbonAboutData.h:24
 #, fuzzy, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr "(c) 2001-2009, разработчиците на Karbon"
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr ""
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:32
 #, kde-format
 msgid "Rob Buis"
 msgstr "Rob Buis"
 
-#: ui/KarbonAboutData.h:42
+#: ui/KarbonAboutData.h:33
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr "Tomislav Lukman"
 
-#: ui/KarbonAboutData.h:46
+#: ui/KarbonAboutData.h:34
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr "Benoît Vautrin"
 
-#: ui/KarbonAboutData.h:50
-#, kde-format
-msgid "Jan Hambrecht"
-msgstr "Jan Hambrecht"
-
-#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
-#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr "Поправка на грешки и подобрения"
 
-#: ui/KarbonAboutData.h:54
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: ui/KarbonAboutData.h:58
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Tim Beaulen"
 msgstr "Tim Beaulen"
 
-#: ui/KarbonAboutData.h:62
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: ui/KarbonAboutData.h:66
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: ui/KarbonAboutData.h:70
-#, kde-format
-msgid "Inge Wallin"
-msgstr "Inge Wallin"
-
-#: ui/KarbonAboutData.h:71
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Bug fixes"
 msgstr "Поправка на грешки"
 
-#: ui/KarbonAboutData.h:74
+#: ui/KarbonAboutData.h:40
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Alan Horkan"
 msgstr "Alan Horkan"
 
-#: ui/KarbonAboutData.h:75
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr "Полезни поправки и съвети"
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:78
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Ясен Праматаров,Златко Попов"
 
-#: ui/KarbonAboutData.h:79
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "yasen@lindeas.com,zlatkopopov@fsa-bg.org"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Вмъкване на графики"
 
-#: ui/KarbonView.cpp:351
+#: ui/KarbonView.cpp:367
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "Избор на изображение за добавяне"
 
-#: ui/KarbonView.cpp:386
+#: ui/KarbonView.cpp:403
 #, kde-format
 msgid "Could not load image."
 msgstr "Грешка при зареждане на изображение."
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
+#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
 #, kde-format
 msgid "Import graphic"
 msgstr "Внасяне на графика"
 
-#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
+#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
 #, kde-format
 msgid "Could not create image shape."
 msgstr "Грешка при създаване на форма за изображение."
 
-#: ui/KarbonView.cpp:617
+#: ui/KarbonView.cpp:634
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "Огледално по хоризонтала"
 
-#: ui/KarbonView.cpp:619
+#: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "Огледално по вертикала"
 
-#: ui/KarbonView.cpp:621
+#: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "Огледално по хоризонтала и вертикала"
 
-#: ui/KarbonView.cpp:676
+#: ui/KarbonView.cpp:693
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "&Разделяне на път"
 
-#: ui/KarbonView.cpp:857
+#: ui/KarbonView.cpp:874
 #, kde-format
 msgid "Outline &Mode"
 msgstr "&Режим на преглед"
 
-#: ui/KarbonView.cpp:865
+#: ui/KarbonView.cpp:882
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "&Внасяне на графика..."
 
-#: ui/KarbonView.cpp:869
+#: ui/KarbonView.cpp:886
 #, kde-format
 msgid "Edit Guides"
 msgstr "Редактиране на водачите"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:892
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Дублиране"
 
-#: ui/KarbonView.cpp:880
+#: ui/KarbonView.cpp:897
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "Разпределение центрирано (хоризонтално)"
 
-#: ui/KarbonView.cpp:884
+#: ui/KarbonView.cpp:901
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Разпределяне на празнини (хоризонтално)"
 
-#: ui/KarbonView.cpp:888
+#: ui/KarbonView.cpp:905
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "Разпределяне по левия кант"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:909
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "Разпределяне по десния кант"
 
-#: ui/KarbonView.cpp:896
+#: ui/KarbonView.cpp:913
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "Разпределяне централно (вертикално)"
 
-#: ui/KarbonView.cpp:900
+#: ui/KarbonView.cpp:917
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "Разпределяне на празнини (вертикално)"
 
-#: ui/KarbonView.cpp:904
+#: ui/KarbonView.cpp:921
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "Разпределяне по долния кант"
 
-#: ui/KarbonView.cpp:908
+#: ui/KarbonView.cpp:925
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "Разпределяне по горния кант"
 
-#: ui/KarbonView.cpp:912
+#: ui/KarbonView.cpp:929
 #, fuzzy, kde-format
 msgid "Show Color Palette"
 msgstr "Показване и скриване на линийките"
 
-#: ui/KarbonView.cpp:914
+#: ui/KarbonView.cpp:931
 #, fuzzy, kde-format
 msgid "Show or hide color palette"
 msgstr "Показване и скриване на линийките"
 
-#: ui/KarbonView.cpp:918
+#: ui/KarbonView.cpp:935
 #, kde-format
 msgid "&Clip Object"
 msgstr "&Групиране на обект"
 
-#: ui/KarbonView.cpp:922
+#: ui/KarbonView.cpp:939
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "&Разгрупиране на обекти"
 
-#: ui/KarbonView.cpp:926
+#: ui/KarbonView.cpp:943
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Огледално по вертикала"
 
-#: ui/KarbonView.cpp:930
+#: ui/KarbonView.cpp:947
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Огледално по хоризонтала"
 
-#: ui/KarbonView.cpp:937
+#: ui/KarbonView.cpp:954
 #, kde-format
 msgid "&Close Path"
 msgstr "&Затваряне на път"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:960
 #, kde-format
 msgid "Com&bine Path"
 msgstr "Ком&биниране на път"
 
-#: ui/KarbonView.cpp:949
+#: ui/KarbonView.cpp:966
 #, kde-format
 msgid "Se&parate Path"
 msgstr "&Разделяне на път"
 
-#: ui/KarbonView.cpp:955
+#: ui/KarbonView.cpp:972
 #, kde-format
 msgid "Re&verse Path"
 msgstr "&Обръщане на път"
 
-#: ui/KarbonView.cpp:961
+#: ui/KarbonView.cpp:978
 #, kde-format
 msgid "Intersect Paths"
 msgstr "Пресичане на пътища"
 
-#: ui/KarbonView.cpp:967
+#: ui/KarbonView.cpp:984
 #, kde-format
 msgid "Subtract Paths"
 msgstr "Изваждане на пътища"
 
-#: ui/KarbonView.cpp:973
+#: ui/KarbonView.cpp:990
 #, kde-format
 msgid "Unite Paths"
 msgstr "Обединяване на пътища"
 
-#: ui/KarbonView.cpp:979
+#: ui/KarbonView.cpp:996
 #, kde-format
 msgid "Exclude Paths"
 msgstr "Изключване на пътища"
 
-#: ui/KarbonView.cpp:985
+#: ui/KarbonView.cpp:1002
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "Прилепване на пътя към мрежата"
 
-#: ui/KarbonView.cpp:993
+#: ui/KarbonView.cpp:1010
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "Мащабиране до избраното"
 
-#: ui/KarbonView.cpp:997
+#: ui/KarbonView.cpp:1014
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "Мащабиране до рисуваното"
 
-#: ui/KarbonZoomController.cpp:51
+#: ui/KarbonZoomController.cpp:55
 #, kde-format
 msgid "Zoom"
 msgstr "Мащабиране"
@@ -602,45 +602,45 @@ msgstr "Брой наскоро отворени файлове:"
 msgid "Palette font size:"
 msgstr "Размер на шрифта на палитра:"
 
-#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#: ui/widgets/KarbonPaletteBarWidget.cpp:51
 #, fuzzy, kde-format
 msgid "Select palette"
 msgstr "Избор на изображение"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format
 msgid "Press to apply fill to selection"
 msgstr "Натиснете за запълване на избраното"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#: ui/widgets/KarbonSmallStylePreview.cpp:90
 #, kde-format
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "Без"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#: ui/widgets/KarbonSmallStylePreview.cpp:112
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr "Натиснете за прилагане на щрих към избраното"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#: ui/widgets/KarbonSmallStylePreview.cpp:161
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr "Потребителски"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#: ui/widgets/KarbonSmallStylePreview.cpp:167
 #, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "Без"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#: ui/widgets/KarbonSmallStylePreview.cpp:187
 #, kde-format
 msgid "Stroke:"
 msgstr "Щрих:"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#: ui/widgets/KarbonSmallStylePreview.cpp:192
 #, kde-format
 msgid "Fill:"
 msgstr "Запълване:"

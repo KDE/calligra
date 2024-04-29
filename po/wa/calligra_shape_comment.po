@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2010-11-18 14:10+0100\n"
 "Last-Translator: Djan Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -27,7 +27,7 @@ msgstr "Vos n' avoz nén l' tchôke-divins po håyner les rawetes di tecse."
 msgid "Plugin Missing"
 msgstr "I manke on tchôke-divins"
 
-#: CommentShape.cpp:51
+#: CommentShape.cpp:52
 #, kde-format
 msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
@@ -36,7 +36,7 @@ msgstr ""
 "Li tchôke-divins k' i fåt po håyner les rawetes di tecse n' est nén "
 "compatibe avou l' modêye do moumint del fôme di rawete di tecse."
 
-#: CommentShape.cpp:52
+#: CommentShape.cpp:53
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Tchôke-divins nén compatibe."

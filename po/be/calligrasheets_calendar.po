@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-01-26 06:21+0100\n"
 "Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -18,7 +18,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
 "%100>=11 && n%100<=14 ? 2 : 3);\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, fuzzy, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -27,7 +27,7 @@ msgstr ""
 "Дата канчатка знаходзіцца раней даты пачатку! Дата канчатка павінна быць "
 "пасля даты пачатку."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr ""
@@ -41,7 +41,7 @@ msgstr ""
 "Перыяд каляндара не павінен перавышаць 10 гадоў. Калі вы жадаеце паказаць "
 "больш працяглы перыяд, устаўце некалькі каляндароў."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, fuzzy, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -50,12 +50,12 @@ msgstr ""
 "Даты пачатку і канчаткі супадаюць! Будзе ўстаўленая гэтая паказаная дата. Вы "
 "жадаеце працягнуць?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr ""
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, fuzzy, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -64,7 +64,7 @@ msgstr ""
 "Каляндар з перыядам больш года можа заняць вельмі шмат месцы на лісце. Вы "
 "жадаеце працягнуць?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, fuzzy, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -77,23 +77,23 @@ msgstr ""
 "націснеце на кнопку \"Не\", то будзе вылучаная вобласць вочак, неабходная "
 "для ўстаўкі каляндара."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Уставіць каляндар"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, fuzzy, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Каляндар з %1 па %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, fuzzy, kde-format
 msgid "week"
 msgstr "тыдзень"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 msgid "Calendar"
 msgstr "Каляндар з %1 па %2"

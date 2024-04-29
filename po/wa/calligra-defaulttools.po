@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2009-10-20 18:39+0200\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -46,145 +46,145 @@ msgstr "Aroymint a hintche"
 msgid "%"
 msgstr "%"
 
-#: connectionTool/ConnectionTool.cpp:66
+#: connectionTool/ConnectionTool.cpp:65
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Edit connection points"
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:73
+#: connectionTool/ConnectionTool.cpp:72
 #, fuzzy, kde-format
 #| msgid "Align Left"
 msgid "Align to left edge"
 msgstr "Aroymint a hintche"
 
-#: connectionTool/ConnectionTool.cpp:76
+#: connectionTool/ConnectionTool.cpp:75
 #, fuzzy, kde-format
 #| msgid "Horizontally Center"
 msgid "Align to horizontal center"
 msgstr "Mete å mitan, di coutchî"
 
-#: connectionTool/ConnectionTool.cpp:79
+#: connectionTool/ConnectionTool.cpp:78
 #, fuzzy, kde-format
 #| msgid "Align Right"
 msgid "Align to right edge"
 msgstr "Aroymint a droete"
 
-#: connectionTool/ConnectionTool.cpp:82
+#: connectionTool/ConnectionTool.cpp:81
 #, fuzzy, kde-format
 #| msgid "Align Bottom"
 msgid "Align to top edge"
 msgstr "Aroymint al valêye"
 
-#: connectionTool/ConnectionTool.cpp:85
+#: connectionTool/ConnectionTool.cpp:84
 #, fuzzy, kde-format
 #| msgid "Vertically Center"
 msgid "Align to vertical center"
 msgstr "Mete å mitan, d' astampé"
 
-#: connectionTool/ConnectionTool.cpp:88
+#: connectionTool/ConnectionTool.cpp:87
 #, fuzzy, kde-format
 #| msgid "Align Bottom"
 msgid "Align to bottom edge"
 msgstr "Aroymint al valêye"
 
-#: connectionTool/ConnectionTool.cpp:92
+#: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:95
+#: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:98
+#: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:101
+#: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:104
+#: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:107
+#: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:110
+#: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:434
+#: connectionTool/ConnectionTool.cpp:429
 #, fuzzy
 #| msgid "Connection Shape"
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Drag to edit connection."
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
 #, fuzzy, kde-format
 #| msgid "Click and drag to move guide line."
 msgid "Double click connection or press delete to remove it."
 msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 
-#: connectionTool/ConnectionTool.cpp:778
+#: connectionTool/ConnectionTool.cpp:774
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Click to edit connection points."
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:794
+#: connectionTool/ConnectionTool.cpp:790
 #, fuzzy, kde-format
 #| msgid "Click and drag to move guide line."
 msgid "Double click connection point or press delete to remove it."
 msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 
-#: connectionTool/ConnectionTool.cpp:796
+#: connectionTool/ConnectionTool.cpp:792
 #, fuzzy, kde-format
 #| msgid "Click and drag to move guide line."
 msgid "Double click to add connection point."
 msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 
-#: connectionTool/ConnectionTool.cpp:799
+#: connectionTool/ConnectionTool.cpp:795
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Drag to create new connection."
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:827
+#: connectionTool/ConnectionTool.cpp:823
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Connection"
 msgstr "Fôme di raloyaedje"
 
-#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Line"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:837
+#: connectionTool/ConnectionTool.cpp:833
 #, fuzzy, kde-format
 #| msgid "Connection Shape"
 msgid "Connection Point"
@@ -195,72 +195,72 @@ msgstr "Fôme di raloyaedje"
 msgid "Connect shapes"
 msgstr "Grouper fômes"
 
-#: defaulttool/DefaultTool.cpp:205
+#: defaulttool/DefaultTool.cpp:219
 #, kde-format
 msgid "Bring to &Front"
 msgstr "Mete å &prumî plan"
 
-#: defaulttool/DefaultTool.cpp:210
+#: defaulttool/DefaultTool.cpp:224
 #, kde-format
 msgid "&Raise"
 msgstr "&Rimonter"
 
-#: defaulttool/DefaultTool.cpp:215
+#: defaulttool/DefaultTool.cpp:229
 #, kde-format
 msgid "&Lower"
 msgstr "&Baxhî"
 
-#: defaulttool/DefaultTool.cpp:221
+#: defaulttool/DefaultTool.cpp:234
 #, kde-format
 msgid "Send to &Back"
 msgstr "Evoyî en &erî"
 
-#: defaulttool/DefaultTool.cpp:227
+#: defaulttool/DefaultTool.cpp:239
 #, kde-format
 msgid "Align Left"
 msgstr "Aroymint a hintche"
 
-#: defaulttool/DefaultTool.cpp:232
+#: defaulttool/DefaultTool.cpp:243
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Mete å mitan, di coutchî"
 
-#: defaulttool/DefaultTool.cpp:237
+#: defaulttool/DefaultTool.cpp:247
 #, kde-format
 msgid "Align Right"
 msgstr "Aroymint a droete"
 
-#: defaulttool/DefaultTool.cpp:241
+#: defaulttool/DefaultTool.cpp:251
 #, kde-format
 msgid "Align Top"
 msgstr "Aroymint al copete"
 
-#: defaulttool/DefaultTool.cpp:246
+#: defaulttool/DefaultTool.cpp:255
 #, kde-format
 msgid "Vertically Center"
 msgstr "Mete å mitan, d' astampé"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:259
 #, kde-format
 msgid "Align Bottom"
 msgstr "Aroymint al valêye"
 
-#: defaulttool/DefaultTool.cpp:256
+#: defaulttool/DefaultTool.cpp:263
 #, kde-format
 msgid "Group"
 msgstr "Grouper"
 
-#: defaulttool/DefaultTool.cpp:261
+#: defaulttool/DefaultTool.cpp:267
 #, kde-format
 msgid "Ungroup"
 msgstr "Disgrouper"
 
-#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 
-#: defaulttool/DefaultTool.cpp:454
+#: defaulttool/DefaultTool.cpp:467
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -268,22 +268,22 @@ msgstr ""
 "Clitchî hintche fwait tourner åtoû do mitan, clitchî droet åtoû di l' "
 "eplaeçmint e sorbriyance."
 
-#: defaulttool/DefaultTool.cpp:456
+#: defaulttool/DefaultTool.cpp:469
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Clitchî, bodjî eyet saetchî po taeyî l' tchoes."
 
-#: defaulttool/DefaultTool.cpp:459
+#: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Clitchî, bodjî eyet saetchî po candjî l' grandeu do tchoes."
 
-#: defaulttool/DefaultTool.cpp:511
+#: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Clitchî, bodjî eyet saetchî displaecî l' tchoes."
 
-#: defaulttool/DefaultTool.cpp:516
+#: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -291,36 +291,36 @@ msgstr ""
 "Clitchî, bodjî eyet saetchî po candjî l' grandeu do tchoes. Clitchî å mitan "
 "do defini l' eplaeçmint e sorbriyance."
 
-#: defaulttool/DefaultTool.cpp:1039
+#: defaulttool/DefaultTool.cpp:1043
 #, fuzzy
 #| msgid "Group shapes"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Grouper fômes"
 
-#: defaulttool/DefaultTool.cpp:1071
+#: defaulttool/DefaultTool.cpp:1075
 #, fuzzy
 #| msgid "Ungroup shapes"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Disgrouper fômes"
 
-#: defaulttool/DefaultTool.cpp:1161
+#: defaulttool/DefaultTool.cpp:1163
 #, kde-format
 msgid "Arrange"
 msgstr "Arindjî"
 
-#: defaulttool/DefaultTool.cpp:1164
+#: defaulttool/DefaultTool.cpp:1166
 #, kde-format
 msgid "Geometry"
 msgstr "Djeyometreye"
 
-#: defaulttool/DefaultTool.cpp:1172
+#: defaulttool/DefaultTool.cpp:1174
 #, kde-format
 msgid "Fill"
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:1177
+#: defaulttool/DefaultTool.cpp:1179
 #, kde-format
 msgid "Shadow"
 msgstr ""
@@ -330,37 +330,37 @@ msgstr ""
 msgid "Shape handling"
 msgstr ""
 
-#: defaulttool/DefaultToolTransformWidget.cpp:100
-#: defaulttool/ShapeRotateStrategy.cpp:137
+#: defaulttool/DefaultToolTransformWidget.cpp:97
+#: defaulttool/ShapeRotateStrategy.cpp:140
 #, fuzzy
 #| msgid "Rotate"
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Fé tourner"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:138
+#: defaulttool/DefaultToolTransformWidget.cpp:135
 #, fuzzy
 #| msgid "Shear X"
 msgctxt "(qtundo-format)"
 msgid "Shear X"
 msgstr "Taeyaedje X"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:176
+#: defaulttool/DefaultToolTransformWidget.cpp:173
 #, fuzzy
 #| msgid "Shear Y"
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
 msgstr "Taeyaedje Y"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:218
-#: defaulttool/DefaultToolTransformWidget.cpp:255
+#: defaulttool/DefaultToolTransformWidget.cpp:215
+#: defaulttool/DefaultToolTransformWidget.cpp:252
 #, fuzzy
 #| msgid "Scale"
 msgctxt "(qtundo-format)"
 msgid "Scale"
 msgstr "Schåle"
 
-#: defaulttool/DefaultToolTransformWidget.cpp:287
+#: defaulttool/DefaultToolTransformWidget.cpp:284
 #, fuzzy
 #| msgid "Reset Transformations"
 msgctxt "(qtundo-format)"
@@ -415,8 +415,8 @@ msgstr "Wårder l' rapoirt lårdjeur/hôteur"
 msgid "Reset Transformations"
 msgstr "Rimete a zero candjmints"
 
-#: defaulttool/DefaultToolWidget.cpp:225
-#: defaulttool/ShapeResizeStrategy.cpp:304
+#: defaulttool/DefaultToolWidget.cpp:217
+#: defaulttool/ShapeResizeStrategy.cpp:332
 #, fuzzy
 #| msgid "Resize"
 msgctxt "(qtundo-format)"
@@ -440,7 +440,7 @@ msgstr "Y:"
 msgid "Press ALT to hold x- or y-position."
 msgstr "Tchôkîz ALT po wårder l' eplaeçmint X- ou y-."
 
-#: defaulttool/ShapeResizeStrategy.cpp:92
+#: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Tchôkîz CTRL po candjî d' grandeu a pårti do mitan."
@@ -450,7 +450,7 @@ msgstr "Tchôkîz CTRL po candjî d' grandeu a pårti do mitan."
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Tchôkîz ALT po fé tourner pas etapes di 45 digrés."
 
-#: defaulttool/ShapeShearStrategy.cpp:169
+#: defaulttool/ShapeShearStrategy.cpp:193
 #, fuzzy
 #| msgid "Shear"
 msgctxt "(qtundo-format)"
@@ -469,12 +469,12 @@ msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr "Clitchî, bodjî eyet saetchî po bodjî les royes di moennaedje."
 
-#: guidestool/GuidesTool.cpp:374
+#: guidestool/GuidesTool.cpp:373
 #, kde-format
 msgid "Guides Editor"
 msgstr ""
 
-#: guidestool/GuidesTool.cpp:382
+#: guidestool/GuidesTool.cpp:379
 #, kde-format
 msgid "Guides Insertor"
 msgstr ""

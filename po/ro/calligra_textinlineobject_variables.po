@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2008-03-11 22:00-0500\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 
-#: ChapterVariable.cpp:202 UserVariableOptionsWidget.cpp:57
+#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr ""
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:206
 #, kde-format
 msgid "Number"
 msgstr ""
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:206
 #, kde-format
 msgid "Name"
 msgstr ""
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:206
 #, kde-format
 msgid "Number and name"
 msgstr ""
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:206
 #, kde-format
 msgid "Number without separator"
 msgstr ""
@@ -83,112 +83,112 @@ msgstr ""
 msgid "Short locale date & time format"
 msgstr ""
 
-#: FixedDateFormat.cpp:108
+#: FixedDateFormat.cpp:116
 #, kde-format
 msgid "Day"
 msgstr ""
 
-#: FixedDateFormat.cpp:109
+#: FixedDateFormat.cpp:117
 #, kde-format
 msgid "Month"
 msgstr ""
 
-#: FixedDateFormat.cpp:110
+#: FixedDateFormat.cpp:118
 #, kde-format
 msgid "Year"
 msgstr ""
 
-#: FixedDateFormat.cpp:111
+#: FixedDateFormat.cpp:119
 #, kde-format
 msgid "Hour"
 msgstr ""
 
-#: FixedDateFormat.cpp:112
+#: FixedDateFormat.cpp:120
 #, kde-format
 msgid "Minute"
 msgstr ""
 
-#: FixedDateFormat.cpp:113
+#: FixedDateFormat.cpp:121
 #, kde-format
 msgid "Second"
 msgstr ""
 
-#: FixedDateFormat.cpp:121
+#: FixedDateFormat.cpp:129
 #, kde-format
 msgid "Flexible Digits (1-31)"
 msgstr ""
 
-#: FixedDateFormat.cpp:122
+#: FixedDateFormat.cpp:130
 #, kde-format
 msgid "2 Digits (01-31)"
 msgstr ""
 
-#: FixedDateFormat.cpp:123 FixedDateFormat.cpp:127
+#: FixedDateFormat.cpp:131 FixedDateFormat.cpp:135
 #, kde-format
 msgid "Abbreviated Name"
 msgstr ""
 
-#: FixedDateFormat.cpp:124 FixedDateFormat.cpp:128
+#: FixedDateFormat.cpp:132 FixedDateFormat.cpp:136
 #, kde-format
 msgid "Long Name"
 msgstr ""
 
-#: FixedDateFormat.cpp:125
+#: FixedDateFormat.cpp:133
 #, kde-format
 msgid "Flexible Digits (1-12)"
 msgstr ""
 
-#: FixedDateFormat.cpp:126
+#: FixedDateFormat.cpp:134
 #, kde-format
 msgid "2 Digits (01-12)"
 msgstr ""
 
-#: FixedDateFormat.cpp:129
+#: FixedDateFormat.cpp:137
 #, kde-format
 msgid "Possessive Abbreviated Name"
 msgstr ""
 
-#: FixedDateFormat.cpp:130
+#: FixedDateFormat.cpp:138
 #, kde-format
 msgid "Possessive Long Name"
 msgstr ""
 
-#: FixedDateFormat.cpp:131
+#: FixedDateFormat.cpp:139
 #, kde-format
 msgid "2 Digits (01-99)"
 msgstr ""
 
-#: FixedDateFormat.cpp:132
+#: FixedDateFormat.cpp:140
 #, kde-format
 msgid "4 Digits"
 msgstr ""
 
-#: FixedDateFormat.cpp:133
+#: FixedDateFormat.cpp:141
 #, kde-format
 msgid "Flexible Digits (1-23)"
 msgstr ""
 
-#: FixedDateFormat.cpp:134
+#: FixedDateFormat.cpp:142
 #, kde-format
 msgid "2 Digits (01-23)"
 msgstr ""
 
-#: FixedDateFormat.cpp:135 FixedDateFormat.cpp:137
+#: FixedDateFormat.cpp:143 FixedDateFormat.cpp:145
 #, kde-format
 msgid "Flexible Digits (1-59)"
 msgstr ""
 
-#: FixedDateFormat.cpp:136 FixedDateFormat.cpp:138
+#: FixedDateFormat.cpp:144 FixedDateFormat.cpp:146
 #, kde-format
 msgid "2 Digits (01-59)"
 msgstr ""
 
-#: FixedDateFormat.cpp:139
+#: FixedDateFormat.cpp:147
 #, kde-format
 msgid "am/pm"
 msgstr ""
 
-#: FixedDateFormat.cpp:140
+#: FixedDateFormat.cpp:148
 #, kde-format
 msgid "AM/PM"
 msgstr ""
@@ -223,32 +223,32 @@ msgstr ""
 msgid "..."
 msgstr ""
 
-#: InfoVariableFactory.cpp:25
+#: InfoVariableFactory.cpp:24
 #, kde-format
 msgid "Author Name"
 msgstr ""
 
-#: InfoVariableFactory.cpp:33
+#: InfoVariableFactory.cpp:32
 #, kde-format
 msgid "Title"
 msgstr ""
 
-#: InfoVariableFactory.cpp:41
+#: InfoVariableFactory.cpp:40
 #, kde-format
 msgid "Subject"
 msgstr ""
 
-#: InfoVariableFactory.cpp:49
+#: InfoVariableFactory.cpp:48
 #, kde-format
 msgid "File Name"
 msgstr ""
 
-#: InfoVariableFactory.cpp:57
+#: InfoVariableFactory.cpp:56
 #, kde-format
 msgid "Keywords"
 msgstr ""
 
-#: InfoVariableFactory.cpp:65
+#: InfoVariableFactory.cpp:64
 #, kde-format
 msgid "Comments"
 msgstr ""
@@ -273,82 +273,82 @@ msgstr ""
 msgid "Name:"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:46
+#: UserVariableOptionsWidget.cpp:45
 #, kde-format
 msgid "New"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:50
+#: UserVariableOptionsWidget.cpp:49
 #, kde-format
 msgid "Delete"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:63
+#: UserVariableOptionsWidget.cpp:62
 #, kde-format
 msgid "String"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:64
+#: UserVariableOptionsWidget.cpp:63
 #, kde-format
 msgid "Boolean"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:65
+#: UserVariableOptionsWidget.cpp:64
 #, kde-format
 msgid "Float"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:66
+#: UserVariableOptionsWidget.cpp:65
 #, kde-format
 msgid "Percentage"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:67
+#: UserVariableOptionsWidget.cpp:66
 #, kde-format
 msgid "Currency"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:68
+#: UserVariableOptionsWidget.cpp:67
 #, kde-format
 msgid "Date"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:69
+#: UserVariableOptionsWidget.cpp:68
 #, kde-format
 msgid "Time"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:70
+#: UserVariableOptionsWidget.cpp:69
 #, kde-format
 msgid "Formula"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:71
+#: UserVariableOptionsWidget.cpp:70
 #, kde-format
 msgid "Void"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:76
+#: UserVariableOptionsWidget.cpp:75
 #, kde-format
 msgid "Value:"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:149
+#: UserVariableOptionsWidget.cpp:152
 #, kde-format
 msgid "New Variable"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:149
+#: UserVariableOptionsWidget.cpp:152
 #, kde-format
 msgid "Name for new variable:"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:165
+#: UserVariableOptionsWidget.cpp:168
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr ""
 
-#: UserVariableOptionsWidget.cpp:166
+#: UserVariableOptionsWidget.cpp:169
 #, kde-format
 msgid "Delete Variable"
 msgstr ""

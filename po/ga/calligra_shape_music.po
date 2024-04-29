@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/MusicShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2007-07-22 14:30-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: actions/AccidentalAction.cpp:54
+#: actions/AccidentalAction.cpp:52
 #, kde-format
 msgid "Double flat"
 msgstr "Maol dúbailte"
 
-#: actions/AccidentalAction.cpp:55
+#: actions/AccidentalAction.cpp:54
 #, kde-format
 msgctxt "lowered half a step"
 msgid "Flat"
@@ -33,23 +33,23 @@ msgstr "Maol"
 msgid "Natural"
 msgstr "Nádúrtha"
 
-#: actions/AccidentalAction.cpp:57
+#: actions/AccidentalAction.cpp:58
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
 msgstr "Géar"
 
-#: actions/AccidentalAction.cpp:58
+#: actions/AccidentalAction.cpp:60
 #, kde-format
 msgid "Double sharp"
 msgstr "Géar dúbailte"
 
-#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:48
 #, kde-format
 msgid "%1 flats"
 msgstr "%1 maol"
 
-#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#: actions/AccidentalAction.cpp:65 actions/KeySignatureAction.cpp:50
 #, kde-format
 msgid "%1 sharps"
 msgstr "%1 géar"
@@ -64,63 +64,63 @@ msgstr "Poncanna"
 msgid "Eraser"
 msgstr "Léirscriosán"
 
-#: actions/KeySignatureAction.cpp:28
+#: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
 msgstr "Mórghléas A♭ "
 
-#: actions/KeySignatureAction.cpp:29
+#: actions/KeySignatureAction.cpp:31
 #, kde-format
 msgid "Eb Major"
 msgstr "Mórghléas E♭"
 
-#: actions/KeySignatureAction.cpp:30
+#: actions/KeySignatureAction.cpp:33
 #, kde-format
 msgid "Bb Major"
 msgstr "Mórghléas B♭"
 
-#: actions/KeySignatureAction.cpp:31
+#: actions/KeySignatureAction.cpp:35
 #, kde-format
 msgid "F Major"
 msgstr "Mórghléas F"
 
-#: actions/KeySignatureAction.cpp:32
+#: actions/KeySignatureAction.cpp:37
 #, kde-format
 msgid "C Major"
 msgstr "Mórghléas C"
 
-#: actions/KeySignatureAction.cpp:33
+#: actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "G Major"
 msgstr "Mórghléas G"
 
-#: actions/KeySignatureAction.cpp:34
+#: actions/KeySignatureAction.cpp:41
 #, kde-format
 msgid "D Major"
 msgstr "Mórghléas D"
 
-#: actions/KeySignatureAction.cpp:35
+#: actions/KeySignatureAction.cpp:43
 #, kde-format
 msgid "A Major"
 msgstr "Mórghléas A"
 
-#: actions/KeySignatureAction.cpp:36
+#: actions/KeySignatureAction.cpp:45
 #, kde-format
 msgid "E Major"
 msgstr "Mórghléas E"
 
-#: actions/KeySignatureAction.cpp:49
+#: actions/KeySignatureAction.cpp:62
 #, kde-format
 msgctxt "Other key signature"
 msgid "Other"
 msgstr "Eile"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "note"
 msgstr "nóta"
 
-#: actions/NoteEntryAction.cpp:55
+#: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "rest"
 msgstr "sos"
@@ -130,52 +130,52 @@ msgstr "sos"
 msgid "Double whole "
 msgstr "Lán-nóta dúbailte "
 
-#: actions/NoteEntryAction.cpp:58
+#: actions/NoteEntryAction.cpp:59
 #, kde-format
 msgid "Whole "
 msgstr "Lán-Nóta "
 
-#: actions/NoteEntryAction.cpp:59
+#: actions/NoteEntryAction.cpp:61
 #, kde-format
 msgid "Half "
 msgstr "Leathnóta "
 
-#: actions/NoteEntryAction.cpp:60
+#: actions/NoteEntryAction.cpp:63
 #, kde-format
 msgid "Quarter "
 msgstr "Ceathrú "
 
-#: actions/NoteEntryAction.cpp:61
+#: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "Eighth "
 msgstr "Ochtú "
 
-#: actions/NoteEntryAction.cpp:62
+#: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "16th "
 msgstr "16ú "
 
-#: actions/NoteEntryAction.cpp:63
+#: actions/NoteEntryAction.cpp:69
 #, kde-format
 msgid "32nd "
 msgstr "32ú "
 
-#: actions/NoteEntryAction.cpp:64
+#: actions/NoteEntryAction.cpp:71
 #, kde-format
 msgid "64th "
 msgstr "64ú "
 
-#: actions/NoteEntryAction.cpp:65
+#: actions/NoteEntryAction.cpp:73
 #, kde-format
 msgid "128th "
 msgstr "128ú "
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown note"
 msgstr "Nóta anaithnid"
 
-#: actions/NoteEntryAction.cpp:67
+#: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown rest"
 msgstr "Sos anaithnid"
@@ -190,42 +190,42 @@ msgstr "Bain barra"
 msgid "Select"
 msgstr "Roghnaigh"
 
-#: actions/SetClefAction.cpp:39
+#: actions/SetClefAction.cpp:40
 #, kde-format
 msgctxt "Treble clef"
 msgid "Treble"
 msgstr "Eochair na Tribile"
 
-#: actions/SetClefAction.cpp:40
+#: actions/SetClefAction.cpp:42
 #, kde-format
 msgctxt "Bass clef"
 msgid "Bass"
 msgstr "Dordeochair"
 
-#: actions/SetClefAction.cpp:43
+#: actions/SetClefAction.cpp:46
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
 msgstr "Eochair an tsopráin"
 
-#: actions/SetClefAction.cpp:44
+#: actions/SetClefAction.cpp:48
 #, kde-format
 msgctxt "Alto clef"
 msgid "Alto"
 msgstr "Alteochair"
 
-#: actions/SetClefAction.cpp:45
+#: actions/SetClefAction.cpp:50
 #, kde-format
 msgctxt "Tenor clef"
 msgid "Tenor"
 msgstr "Eochair an teanóir"
 
-#: actions/SetClefAction.cpp:46
+#: actions/SetClefAction.cpp:52
 #, kde-format
 msgid "C clef on line %1"
 msgstr "C-eochair ar líne %1"
 
-#: actions/SetClefAction.cpp:49
+#: actions/SetClefAction.cpp:55
 #, kde-format
 msgid "Unknown clef"
 msgstr "Eochair anaithnid"
@@ -235,25 +235,25 @@ msgstr "Eochair anaithnid"
 msgid "Tied notes"
 msgstr "Nótaí ceangailte"
 
-#: commands/AddBarsCommand.cpp:17
+#: commands/AddBarsCommand.cpp:19
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add measures"
 msgstr "Cuir tomhais leis"
 
-#: commands/AddDotCommand.cpp:17
+#: commands/AddDotCommand.cpp:18
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add dot"
 msgstr "Cuir ponc leis"
 
-#: commands/AddNoteCommand.cpp:29
+#: commands/AddNoteCommand.cpp:34
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
 msgstr "Socraigh tréimhse an chorda"
 
-#: commands/AddNoteCommand.cpp:31
+#: commands/AddNoteCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add note"
@@ -271,49 +271,49 @@ msgstr "Cuir páirt leis"
 msgid "Part %1"
 msgstr "Comhpháirteanna"
 
-#: commands/ChangePartDetailsCommand.cpp:30
+#: commands/ChangePartDetailsCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change part details"
 msgstr "Athraigh mionsonraí na páirte"
 
-#: commands/CreateChordCommand.cpp:20
+#: commands/CreateChordCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add chord"
 msgstr "Cuir corda leis"
 
-#: commands/CreateChordCommand.cpp:28
+#: commands/CreateChordCommand.cpp:31
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add rest"
 msgstr "Cuir sos leis"
 
-#: commands/MakeRestCommand.cpp:19
+#: commands/MakeRestCommand.cpp:20
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
 msgstr "Athraigh an corda go sos"
 
-#: commands/RemoveBarCommand.cpp:18
+#: commands/RemoveBarCommand.cpp:20
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
 msgstr "Bain barra"
 
-#: commands/RemoveChordCommand.cpp:19
+#: commands/RemoveChordCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
 msgstr "Bain sos"
 
-#: commands/RemoveChordCommand.cpp:21
+#: commands/RemoveChordCommand.cpp:23
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
 msgstr "Bain corda"
 
-#: commands/RemoveNoteCommand.cpp:19
+#: commands/RemoveNoteCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove note"
@@ -325,44 +325,44 @@ msgctxt "(qtundo-format)"
 msgid "Remove part"
 msgstr "Bain páirt"
 
-#: commands/RemoveStaffElementCommand.cpp:22
+#: commands/RemoveStaffElementCommand.cpp:25
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
 msgstr "Bain eochair"
 
-#: commands/RemoveStaffElementCommand.cpp:24
+#: commands/RemoveStaffElementCommand.cpp:27
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
 msgstr "Bain ball cléithe"
 
-#: commands/SetAccidentalsCommand.cpp:19
+#: commands/SetAccidentalsCommand.cpp:22
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
 msgstr "Socraigh seachtráin"
 
-#: commands/SetClefCommand.cpp:19
+#: commands/SetClefCommand.cpp:22
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change clef"
 msgstr "Athraigh an eochair"
 
-#: commands/SetKeySignatureCommand.cpp:25
-#: commands/SetKeySignatureCommand.cpp:72
+#: commands/SetKeySignatureCommand.cpp:26
+#: commands/SetKeySignatureCommand.cpp:76
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
 msgstr "Athraigh an gléaschomhartha"
 
-#: commands/SetTimeSignatureCommand.cpp:21
+#: commands/SetTimeSignatureCommand.cpp:22
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
 msgstr "Athraigh an t-amchomhartha"
 
-#: commands/ToggleTiedNoteCommand.cpp:19
+#: commands/ToggleTiedNoteCommand.cpp:20
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
@@ -481,20 +481,20 @@ msgid "Voice 4"
 msgstr "Guth 4"
 
 #. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
-#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
-#: SimpleEntryTool.cpp:678
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
+#: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add measures"
 msgstr "Cuir tomhais leis"
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
-#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
 #, kde-format
 msgid "Import"
 msgstr "Iompórtáil"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportButton)
-#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
 #, kde-format
 msgid "Export"
 msgstr "Easpórtáil"
@@ -505,43 +505,43 @@ msgstr "Easpórtáil"
 msgid "Part 1"
 msgstr "Comhpháirteanna"
 
-#: MusicShapeFactory.cpp:36
+#: MusicShapeFactory.cpp:34
 #, kde-format
 msgid "Music Shape"
 msgstr "Giuirléid Cheoil"
 
-#: MusicShapeFactory.cpp:38
+#: MusicShapeFactory.cpp:36
 #, kde-format
 msgid "A shape which provides a music editor"
 msgstr "Giuirléid a sholáthraíonn eagarthóir ceoil"
 
-#: MusicTool.cpp:85
+#: MusicTool.cpp:83
 #, kde-format
 msgid "Parts"
 msgstr "Comhpháirteanna"
 
-#: MusicToolFactory.cpp:19
+#: MusicToolFactory.cpp:18
 #, fuzzy, kde-format
 #| msgid "Music editing tool, parts"
 msgid "Music editing, parts"
 msgstr "Uirlis eagarthóireachta ceoil, comhpháirteanna"
 
-#: SimpleEntryTool.cpp:226
+#: SimpleEntryTool.cpp:227
 #, kde-format
 msgid "Clef"
 msgstr "Eochair"
 
-#: SimpleEntryTool.cpp:255
+#: SimpleEntryTool.cpp:256
 #, kde-format
 msgid "Time signature"
 msgstr "Amchomhartha"
 
-#: SimpleEntryTool.cpp:285
+#: SimpleEntryTool.cpp:286
 #, kde-format
 msgid "Key signature"
 msgstr "Gléaschomhartha"
 
-#: SimpleEntryTool.cpp:679
+#: SimpleEntryTool.cpp:681
 #, fuzzy, kde-format
 msgid "Add how many measures?"
 msgstr "Cuir tomhais leis"
@@ -553,19 +553,19 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "Iompórtáil"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr ""
 
-#: SimpleEntryTool.cpp:760
+#: SimpleEntryTool.cpp:761
 #, fuzzy, kde-format
 #| msgid "Export"
 msgctxt "@title:window"
 msgid "Export"
 msgstr "Easpórtáil"
 
-#: SimpleEntryToolFactory.cpp:18
+#: SimpleEntryToolFactory.cpp:17
 #, fuzzy, kde-format
 #| msgid "Music editing tool"
 msgid "Music editing"

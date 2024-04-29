@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2013-04-10 17:09+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Annotation Shape"
 msgstr "टीप :"
 
-#: commands/AcceptChangeCommand.cpp:30
+#: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Accept change"
 msgstr "बदल स्वीकारा"
@@ -69,12 +69,12 @@ msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
 msgstr ""
 
-#: commands/ChangeListLevelCommand.cpp:29
+#: commands/ChangeListLevelCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
 msgstr ""
 
-#: commands/RejectChangeCommand.cpp:34
+#: commands/RejectChangeCommand.cpp:35
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Accept change"
@@ -148,12 +148,12 @@ msgstr "दिनांक"
 msgid "Type"
 msgstr "प्रकार"
 
-#: dialogs/BibliographyConfigureDialog.cpp:96
+#: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
 msgstr "चढत्या क्रमाने"
 
-#: dialogs/BibliographyConfigureDialog.cpp:97
+#: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
 msgstr "उतरत्या क्रमाने"
@@ -248,17 +248,17 @@ msgstr "ग्रंथ सूची"
 msgid "References"
 msgstr "संयोजीत करा"
 
-#: dialogs/ChangeConfigureDialog.cpp:136
+#: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr ""
 
-#: dialogs/ChangeConfigureDialog.cpp:142
+#: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr ""
 
-#: dialogs/ChangeConfigureDialog.cpp:148
+#: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr ""
@@ -504,38 +504,38 @@ msgstr "वापरलेल्या शैली"
 msgid "Include in table of contents"
 msgstr "मचकूराची यादी"
 
-#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
 
-#: dialogs/CharacterHighlighting.cpp:261
+#: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
 msgstr ""
 
-#: dialogs/CharacterHighlighting.cpp:262
+#: dialogs/CharacterHighlighting.cpp:300
 #, fuzzy, kde-format
 #| msgid "Lowercase"
 msgid "Uppercase"
 msgstr "लोअरकेस"
 
-#: dialogs/CharacterHighlighting.cpp:263
+#: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
 msgid "Lowercase"
 msgstr "लोअरकेस"
 
-#: dialogs/CharacterHighlighting.cpp:264
+#: dialogs/CharacterHighlighting.cpp:302
 #, kde-format
 msgid "Capitalize"
 msgstr ""
 
-#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
 #, kde-format
 msgid "Superscript"
 msgstr "सुपरस्क्रिप्ट"
 
-#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
 msgstr "सबस्क्रिप्ट"
@@ -580,25 +580,25 @@ msgctxt "Character position"
 msgid "Position:"
 msgstr "स्थान :"
 
-#: dialogs/CitationInsertionDialog.cpp:25
+#: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
 msgstr "निवडा"
 
-#: dialogs/CitationInsertionDialog.cpp:40
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#, kde-format
+msgid "Warning"
+msgstr "इशारा"
+
+#: dialogs/CitationInsertionDialog.cpp:41
 #, kde-format
 msgid ""
 "The document already contains the bibliography entry with different data.\n"
 "Do you want to adjust existing entries?"
 msgstr ""
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
-#, kde-format
-msgid "Warning"
-msgstr "इशारा"
-
-#: dialogs/CitationInsertionDialog.cpp:55
-#: dialogs/CitationInsertionDialog.cpp:73
+#: dialogs/CitationInsertionDialog.cpp:58
+#: dialogs/CitationInsertionDialog.cpp:75
 #, kde-format
 msgid "Short name%1"
 msgstr "लहान नाव %1"
@@ -983,12 +983,12 @@ msgstr "किंवा"
 msgid "From the document:"
 msgstr ""
 
-#: dialogs/DockerStylesComboModel.cpp:61
+#: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
 msgstr "वापरलेल्या शैली"
 
-#: dialogs/DockerStylesComboModel.cpp:64
+#: dialogs/DockerStylesComboModel.cpp:67
 #, fuzzy, kde-format
 #| msgid "Used Styles"
 msgid "Unused Styles"
@@ -1036,7 +1036,7 @@ msgstr ""
 msgid "Select Font"
 msgstr "फॉन्ट निवडा"
 
-#: dialogs/FontDia.cpp:68
+#: dialogs/FontDia.cpp:70
 #, fuzzy
 #| msgid "Font"
 msgctxt "(qtundo-format)"
@@ -1046,7 +1046,7 @@ msgstr "फॉन्ट"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Insert Bibliography"
@@ -1167,7 +1167,7 @@ msgstr "विशिष्ठ अक्षरे"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#: ReferencesTool.cpp:116 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "अंतर्भूत करा"
@@ -1184,28 +1184,28 @@ msgstr "बंद करा"
 msgid "Quick search:"
 msgstr "त्वरित शोध :"
 
-#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
-#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
+#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
 #, kde-format
 msgid "The URL is invalid"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:88
+#: dialogs/LinkInsertionDialog.cpp:87
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:190
+#: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:213
+#: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:268
+#: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr ""
@@ -1446,34 +1446,34 @@ msgstr ""
 msgid "&Delete"
 msgstr "काढून टाका (&D)"
 
-#: dialogs/ManageBookmarkDialog.cpp:69
+#: dialogs/ManageBookmarkDialog.cpp:68
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: dialogs/ManageBookmarkDialog.cpp:68
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Rename Bookmark"
 msgstr "ओळखचिन्हे"
 
-#: dialogs/ManageBookmarkDialog.cpp:70
-#, kde-format
-msgid "Please provide a new name for the bookmark"
-msgstr ""
-
-#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr ""
 
-#: dialogs/ManageBookmarkDialog.cpp:110
+#: dialogs/ManageBookmarkDialog.cpp:105
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Insert Bookmark"
 msgstr "ओळखचिन्हे"
 
-#: dialogs/ManageBookmarkDialog.cpp:111
+#: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
 msgstr ""
 
-#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Manage Bookmarks"
@@ -1649,7 +1649,7 @@ msgctxt "None"
 msgid "Nothing"
 msgstr "काही नाही"
 
-#: dialogs/ParagraphBulletsNumbers.cpp:335
+#: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
 msgstr ""
@@ -1761,7 +1761,7 @@ msgid "Browse..."
 msgstr "संचार करा..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
 #, kde-format
 msgid "Background"
 msgstr "पार्श्वभूमी"
@@ -1993,7 +1993,7 @@ msgstr ""
 msgid "Paragraph Format"
 msgstr "परिच्छेद"
 
-#: dialogs/QuickTableButton.cpp:146
+#: dialogs/QuickTableButton.cpp:147
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert a table"
@@ -2004,13 +2004,13 @@ msgstr "कोष्टक अंतर्भूत करा"
 msgid "Section name"
 msgstr ""
 
-#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Configure sections"
 msgstr "संयोजीत करा"
 
-#: dialogs/SectionFormatDialog.cpp:154
+#: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
 msgid "Invalid characters or section with such name exists."
 msgstr ""
@@ -2083,7 +2083,7 @@ msgid "Insert citation at current position"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Citation"
@@ -2096,12 +2096,12 @@ msgstr "लिंक अंतर्भूत करा"
 msgid "Configure Bibliography"
 msgstr "ग्रंथ सूची"
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
 msgstr ""
 
-#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
 msgstr ""
@@ -2133,7 +2133,7 @@ msgid "Hyperlinks"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
 #, kde-format
 msgid "Bookmarks"
 msgstr "ओळखचिन्हे"
@@ -2156,7 +2156,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "काढून टाका"
@@ -2181,7 +2181,7 @@ msgstr ""
 msgid "Define New List Level Format"
 msgstr ""
 
-#: dialogs/SimpleParagraphWidget.cpp:532
+#: dialogs/SimpleParagraphWidget.cpp:549
 #, kde-format
 msgid "Edit List Level Format"
 msgstr ""
@@ -2199,13 +2199,13 @@ msgstr "मजकूर"
 msgid "Set Border Color..."
 msgstr "पाठ्य रंग..."
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:169
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "काही नाही"
 
-#: dialogs/SimpleTableWidget.cpp:171
+#: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
 msgid "No Border"
 msgstr "किनार नाही"
@@ -2215,25 +2215,25 @@ msgstr "किनार नाही"
 msgid "Create a new style inheriting the current style"
 msgstr ""
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "New Style"
 msgstr "शैली"
 
-#: dialogs/StyleManager.cpp:426
+#: dialogs/StyleManager.cpp:431
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "परिच्छेद"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "अक्षर"
@@ -2249,12 +2249,12 @@ msgstr "नवीन (&N)"
 msgid "Style Manager"
 msgstr "शैली व्यवस्थापक"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:50
 #, kde-format
 msgid "Save Changes"
 msgstr "बदल साठवा"
 
-#: dialogs/StyleManagerDialog.cpp:49
+#: dialogs/StyleManagerDialog.cpp:51
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "
@@ -2287,14 +2287,14 @@ msgstr ""
 msgid "Create a new style with the current properties"
 msgstr ""
 
-#: dialogs/StylesComboPreview.cpp:179
+#: dialogs/StylesComboPreview.cpp:175
 #, fuzzy, kde-format
 #| msgid "Used Styles"
 msgid "New style"
 msgstr "वापरलेल्या शैली"
 
-#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
-#: dialogs/StylesModel.cpp:197
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
+#: dialogs/StylesModel.cpp:195
 #, kde-format
 msgid "None"
 msgstr "काही नाही"
@@ -2348,42 +2348,42 @@ msgstr "मचकूराची यादी"
 msgid "Fit to available surrounding"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:62
+#: dialogs/TableOfContentsConfigure.cpp:61
 #, fuzzy, kde-format
 #| msgid "Table of Contents"
 msgid "Table of Contents - Configure"
 msgstr "मचकूराची यादी"
 
-#: dialogs/TableOfContentsConfigure.cpp:64
+#: dialogs/TableOfContentsConfigure.cpp:63
 #, fuzzy, kde-format
 #| msgid "Title"
 msgid "Table Title"
 msgstr "शिर्षक"
 
-#: dialogs/TableOfContentsConfigure.cpp:65
+#: dialogs/TableOfContentsConfigure.cpp:64
 #, fuzzy, kde-format
 #| msgid "Used Styles"
 msgid "Use outline"
 msgstr "वापरलेल्या शैली"
 
-#: dialogs/TableOfContentsConfigure.cpp:66
+#: dialogs/TableOfContentsConfigure.cpp:65
 #, fuzzy, kde-format
 #| msgid "Used Styles"
 msgid "Use styles"
 msgstr "वापरलेल्या शैली"
 
-#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure"
 msgstr "संयोजीत करा"
 
-#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsConfigure.cpp:67
 #, kde-format
 msgid "Index"
 msgstr "सूची"
 
-#: dialogs/TableOfContentsConfigure.cpp:69
-#: dialogs/TableOfContentsStyleModel.cpp:232
+#: dialogs/TableOfContentsConfigure.cpp:68
+#: dialogs/TableOfContentsStyleModel.cpp:229
 #, kde-format
 msgid "Styles"
 msgstr "शैली"
@@ -2426,24 +2426,24 @@ msgstr "टॅब 2"
 msgid "Level %1"
 msgstr "पातळी %1"
 
-#: dialogs/TableOfContentsEntryModel.cpp:137
-#: dialogs/TableOfContentsStyleModel.cpp:234
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsStyleModel.cpp:231
 #, kde-format
 msgid "Level"
 msgstr "पातळी"
 
-#: dialogs/TableOfContentsEntryModel.cpp:139
+#: dialogs/TableOfContentsEntryModel.cpp:141
 #, kde-format
 msgid "Style"
 msgstr "शैली"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, fuzzy, kde-format
 #| msgid "Table of Contents"
 msgid "Table of Contents - Configure Styles"
 msgstr "मचकूराची यादी"
 
-#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Styles available"
@@ -2455,8 +2455,8 @@ msgstr "शैली व्यवस्थापक"
 msgid "TextLabel"
 msgstr "पाठ्य-लेबल"
 
-#: dialogs/TableOfContentsStyleDelegate.cpp:43
-#: dialogs/TableOfContentsStyleModel.cpp:97
+#: dialogs/TableOfContentsStyleDelegate.cpp:40
+#: dialogs/TableOfContentsStyleModel.cpp:95
 #, kde-format
 msgid "Disabled"
 msgstr "अकार्यान्वित"
@@ -2466,156 +2466,156 @@ msgstr "अकार्यान्वित"
 msgid "Table Of Contents"
 msgstr "मचकूराची यादी"
 
-#: ReferencesTool.cpp:116
+#: ReferencesTool.cpp:118
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:118 TextTool.cpp:410
+#: ReferencesTool.cpp:120 TextTool.cpp:406
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Custom..."
 msgstr "लिंक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:120
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure..."
 msgstr "संयोजीत करा..."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:126
 #, fuzzy, kde-format
 #| msgid "Table of Contents"
 msgid "Configure the Table of Contents"
 msgstr "मचकूराची यादी"
 
-#: ReferencesTool.cpp:127
+#: ReferencesTool.cpp:129
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr ""
 
-#: ReferencesTool.cpp:132
+#: ReferencesTool.cpp:134
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Labeled Footnote"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert with label:"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:138
+#: ReferencesTool.cpp:140
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert endnote with auto number"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:143
+#: ReferencesTool.cpp:145
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Labeled Endnote"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, kde-format
 msgid "Settings..."
 msgstr "संयोजना..."
 
-#: ReferencesTool.cpp:159
+#: ReferencesTool.cpp:161
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:164
+#: ReferencesTool.cpp:166
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Insert a bibliography into the document."
 msgstr "ग्रंथ सूची"
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:168
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Insert Custom Bibliography"
 msgstr "ग्रंथ सूची"
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:170
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Insert a custom Bibliography into the document."
 msgstr "ग्रंथ सूची"
 
-#: ReferencesTool.cpp:172
+#: ReferencesTool.cpp:174
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Configure the bibliography"
 msgstr "ग्रंथ सूची"
 
-#: ReferencesTool.cpp:175
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert Link"
 msgstr "लिंक अंतर्भूत करा"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:179
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr ""
 
-#: ReferencesTool.cpp:181
+#: ReferencesTool.cpp:183
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Add Bookmark"
 msgstr "ओळखचिन्हे"
 
-#: ReferencesTool.cpp:182
+#: ReferencesTool.cpp:184
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Add Bookmark :"
 msgstr "ओळखचिन्हे"
 
-#: ReferencesTool.cpp:187
+#: ReferencesTool.cpp:189
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
 "the document"
 msgstr ""
 
-#: ReferencesTool.cpp:191
+#: ReferencesTool.cpp:193
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
 
-#: ReferencesTool.cpp:195
+#: ReferencesTool.cpp:197
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
 msgstr ""
 
-#: ReferencesTool.cpp:231
+#: ReferencesTool.cpp:232
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr ""
 
-#: ReferencesTool.cpp:234
+#: ReferencesTool.cpp:235
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr ""
 
-#: ReferencesTool.cpp:237
+#: ReferencesTool.cpp:238
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgid "Citations and Bibliography"
 msgstr "ग्रंथ सूची"
 
-#: ReferencesTool.cpp:240
+#: ReferencesTool.cpp:241
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgid "Links and Bookmarks"
@@ -2675,321 +2675,321 @@ msgstr ""
 msgid "Text Shape"
 msgstr "पाठ्य-लेबल"
 
-#: TextTool.cpp:201
+#: TextTool.cpp:202
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Configure current section"
 msgstr "संयोजीत करा"
 
-#: TextTool.cpp:205
+#: TextTool.cpp:206
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert new section"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:209
+#: TextTool.cpp:210
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert paragraph between sections"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:213
+#: TextTool.cpp:214
 #, kde-format
 msgid "Paste As Text"
 msgstr ""
 
-#: TextTool.cpp:218
+#: TextTool.cpp:219
 #, kde-format
 msgid "Bold"
 msgstr "ठळक"
 
-#: TextTool.cpp:224
+#: TextTool.cpp:225
 #, kde-format
 msgid "Italic"
 msgstr "तिरपे"
 
-#: TextTool.cpp:230
+#: TextTool.cpp:231
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "अधोरेखित"
 
-#: TextTool.cpp:236
+#: TextTool.cpp:237
 #, kde-format
 msgid "Strikethrough"
 msgstr ""
 
-#: TextTool.cpp:242
+#: TextTool.cpp:243
 #, kde-format
 msgid "Align Left"
 msgstr "डावीकडे स्थीत करा"
 
-#: TextTool.cpp:249
+#: TextTool.cpp:250
 #, kde-format
 msgid "Align Right"
 msgstr "उजवीकडे स्थीत करा"
 
-#: TextTool.cpp:256
+#: TextTool.cpp:257
 #, kde-format
 msgid "Align Center"
 msgstr "केंद्राकडे स्थीत करा"
 
-#: TextTool.cpp:264
+#: TextTool.cpp:265
 #, kde-format
 msgid "Align Block"
 msgstr "ब्लॉक स्थीत करा"
 
-#: TextTool.cpp:271
+#: TextTool.cpp:272
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Change text direction"
 msgstr "संयोजीत करा"
 
-#: TextTool.cpp:273
+#: TextTool.cpp:274
 #, kde-format
 msgid "Change writing direction"
 msgstr ""
 
-#: TextTool.cpp:295
+#: TextTool.cpp:293
 #, kde-format
 msgid "Increase Indent"
 msgstr "समास वाढवा"
 
-#: TextTool.cpp:302
+#: TextTool.cpp:299
 #, kde-format
 msgid "Decrease Indent"
 msgstr "समास कमी करा"
 
-#: TextTool.cpp:306
+#: TextTool.cpp:303
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:310
+#: TextTool.cpp:307
 #, kde-format
 msgid "Increase Font Size"
 msgstr "फॉन्ट आकार वाढवा"
 
-#: TextTool.cpp:315
+#: TextTool.cpp:312
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "फॉन्ट आकार कमी करा"
 
-#: TextTool.cpp:321
+#: TextTool.cpp:318
 #, kde-format
 msgid "Font Family"
 msgstr "फॉन्ट परिवार"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:322
 #, kde-format
 msgid "Variable"
 msgstr "परिवर्तनीय"
 
-#: TextTool.cpp:330
+#: TextTool.cpp:326
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr ""
 
-#: TextTool.cpp:335
+#: TextTool.cpp:331
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Non-Breaking Hyphen"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:340
+#: TextTool.cpp:336
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Index"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:345
+#: TextTool.cpp:341
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Soft Hyphen"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:351
+#: TextTool.cpp:347
 #, kde-format
 msgid "Line Break"
 msgstr ""
 
-#: TextTool.cpp:356
+#: TextTool.cpp:352
 #, kde-format
 msgid "Page Break"
 msgstr ""
 
-#: TextTool.cpp:360
+#: TextTool.cpp:356
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert a page break"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: TextTool.cpp:361
+#: TextTool.cpp:357
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr ""
 
-#: TextTool.cpp:364
+#: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
 msgstr "फॉन्ट..."
 
-#: TextTool.cpp:367
+#: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "अक्षराचे आकार, फॉन्ट, ठळक, तिरपे इ. बदला."
 
-#: TextTool.cpp:368
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr ""
 
-#: TextTool.cpp:371
+#: TextTool.cpp:367
 #, kde-format
 msgid "Font Size"
 msgstr "फॉन्ट आकार"
 
-#: TextTool.cpp:377
+#: TextTool.cpp:373
 #, kde-format
 msgid "Text Color..."
 msgstr "पाठ्य रंग..."
 
-#: TextTool.cpp:378
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color"
 msgstr "मजकूर रंग"
 
-#: TextTool.cpp:384
+#: TextTool.cpp:380
 #, kde-format
 msgid "Background Color..."
 msgstr "पार्श्वभूमीचा रंग..."
 
-#: TextTool.cpp:389
+#: TextTool.cpp:385
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr ""
 
-#: TextTool.cpp:394
+#: TextTool.cpp:390
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr ""
 
-#: TextTool.cpp:399
+#: TextTool.cpp:395
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr ""
 
-#: TextTool.cpp:404
+#: TextTool.cpp:400
 #, kde-format
 msgid "Shrink To Fit"
 msgstr ""
 
-#: TextTool.cpp:412
+#: TextTool.cpp:408
 #, kde-format
 msgid "Insert a table into the document."
 msgstr ""
 
-#: TextTool.cpp:415
+#: TextTool.cpp:411
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Row Above"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:412
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Row Above"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:420
+#: TextTool.cpp:416
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Row Below"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:417
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Row Below"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:425
+#: TextTool.cpp:421
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "Column Left"
 msgstr "स्तंभ"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:422
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Column Left"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:430
+#: TextTool.cpp:426
 #, fuzzy, kde-format
 #| msgid "Align Right"
 msgid "Column Right"
 msgstr "उजवीकडे स्थीत करा"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:427
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Column Right"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:435
+#: TextTool.cpp:431
 #, kde-format
 msgid "Column"
 msgstr "स्तंभ"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:432
 #, fuzzy, kde-format
 #| msgid "Delete Row"
 msgid "Delete Column"
 msgstr "ओळ काढून टाका"
 
-#: TextTool.cpp:440
+#: TextTool.cpp:436
 #, kde-format
 msgid "Row"
 msgstr "ओळ"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:437
 #, kde-format
 msgid "Delete Row"
 msgstr "ओळ काढून टाका"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:441
 #, kde-format
 msgid "Merge Cells"
 msgstr ""
 
-#: TextTool.cpp:449
+#: TextTool.cpp:445
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Split Cells"
 msgstr "संयोजीत करा"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr ""
 
-#: TextTool.cpp:458
+#: TextTool.cpp:454
 #, kde-format
 msgid "Paragraph..."
 msgstr "परिच्छेद..."
 
-#: TextTool.cpp:461
+#: TextTool.cpp:457
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
 
-#: TextTool.cpp:462
+#: TextTool.cpp:459
 #, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -2998,148 +2998,138 @@ msgid ""
 "cursor is located will be changed.</p>"
 msgstr ""
 
-#: TextTool.cpp:465
+#: TextTool.cpp:463
 #, kde-format
 msgid "Style Manager..."
 msgstr "शैली व्यवस्थापक..."
 
-#: TextTool.cpp:467
+#: TextTool.cpp:465
 #, kde-format
 msgid "Change attributes of styles"
 msgstr ""
 
-#: TextTool.cpp:468
+#: TextTool.cpp:466
 #, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
 
-#: TextTool.cpp:475
+#: TextTool.cpp:473
 #, fuzzy, kde-format
 #| msgid "Special Characters"
 msgid "Special Character..."
 msgstr "विशिष्ठ अक्षरे"
 
-#: TextTool.cpp:479
+#: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 
-#: TextTool.cpp:480
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 
-#: TextTool.cpp:483
+#: TextTool.cpp:481
 #, kde-format
 msgid "Repaint"
 msgstr ""
 
-#: TextTool.cpp:488
+#: TextTool.cpp:486
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Comment"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:570
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insertion"
 msgstr "अंतर्भूत करा"
 
-#: TextTool.cpp:576
+#: TextTool.cpp:572
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Deletion"
 msgstr "काढून टाका"
 
-#: TextTool.cpp:578
+#: TextTool.cpp:574
 #, kde-format
 msgid "Formatting"
 msgstr "फॉर्मेटिंग"
 
-#: TextTool.cpp:593
+#: TextTool.cpp:589
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr ""
 
-#: TextTool.cpp:600
+#: TextTool.cpp:596
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr ""
 
-#: TextTool.cpp:606
+#: TextTool.cpp:602
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr ""
 
-#: TextTool.cpp:707
+#: TextTool.cpp:698
 #, kde-format
 msgid "follows along"
 msgstr ""
 
-#: TextTool.cpp:737
+#: TextTool.cpp:728
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr ""
 
-#: TextTool.cpp:939
+#: TextTool.cpp:929
 #, fuzzy
 #| msgid "Change font format"
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "फॉन्ट स्वरूप बदला"
 
-#: TextTool.cpp:1158
+#: TextTool.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "कापा"
 
-#: TextTool.cpp:1418
+#: TextTool.cpp:1413
 #, fuzzy
 #| msgid "Insert Link"
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "लिंक अंतर्भूत करा"
 
-#: TextTool.cpp:1461
+#: TextTool.cpp:1457
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr ""
 
-#: TextTool.cpp:2257
+#: TextTool.cpp:2258
 #, kde-format
 msgid "Table"
 msgstr "कोष्टक"
 
-#: TextTool.cpp:2616 TextTool.cpp:2621
+#: TextTool.cpp:2634 TextTool.cpp:2639
 #, kde-format
 msgid "Autocorrection"
 msgstr "स्वयंचलित सुधारणा"
 
-#: TextTool.cpp:2616
+#: TextTool.cpp:2634
 #, kde-format
 msgid "Key Press"
 msgstr ""
-
-#: TextTool.cpp:2930
-#, kde-format
-msgid ""
-"This link points to the program or script '%1'.\n"
-"Malicious programs can harm your computer. Are you sure that you want to run "
-"this program?"
-msgstr ""
-
-#: TextTool.cpp:2935
-#, kde-format
-msgid "Open Link?"
-msgstr "लिंक उघडायची का?"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
 msgstr ""
+
+#~ msgid "Open Link?"
+#~ msgstr "लिंक उघडायची का?"
 
 #, fuzzy
 #~| msgid "Quick search:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-17 01:46+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2002-09-27 16:44+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -38,83 +38,83 @@ msgstr "Verstek skrif tipe:"
 msgid "Freehand path"
 msgstr "Verwyder Groep"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:448
+#: basicflakes/tools/KoCreatePathTool.cpp:443
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:455
+#: basicflakes/tools/KoCreatePathTool.cpp:450
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
+#: basicflakes/tools/KoCreatePathTool.cpp:458
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Angle Constraints"
 msgstr "Verander Inkeep"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:467
-#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, fuzzy, kde-format
 msgid "Line"
 msgstr "Lemmetjie Groen"
 
-#: basicflakes/tools/KoPencilTool.cpp:273
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "Posisie"
 
-#: basicflakes/tools/KoPencilTool.cpp:275
+#: basicflakes/tools/KoPencilTool.cpp:280
 #, fuzzy, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Meroen"
 
-#: basicflakes/tools/KoPencilTool.cpp:276
+#: basicflakes/tools/KoPencilTool.cpp:281
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, fuzzy, kde-format
 msgid "Curve"
 msgstr "Huidige Seksie"
 
-#: basicflakes/tools/KoPencilTool.cpp:277
+#: basicflakes/tools/KoPencilTool.cpp:282
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, fuzzy, kde-format
 msgid "Straight"
 msgstr "Enkel"
 
-#: basicflakes/tools/KoPencilTool.cpp:286
-#: basicflakes/tools/KoPencilTool.cpp:292
+#: basicflakes/tools/KoPencilTool.cpp:291
+#: basicflakes/tools/KoPencilTool.cpp:297
 #, kde-format
 msgid "Optimize"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:298
+#: basicflakes/tools/KoPencilTool.cpp:303
 #, kde-format
 msgid "Exactness:"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:331
-#: basicflakes/tools/KoPencilTool.cpp:332
+#: basicflakes/tools/KoPencilTool.cpp:336
+#: basicflakes/tools/KoPencilTool.cpp:337
 #, kde-format
 msgid "Pencil"
 msgstr ""
 
-#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:17
 #, fuzzy
 #| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Change Connection"
 msgstr "Verander Inkeep"
 
-#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+#: flake/commands/KoParameterHandleMoveCommand.cpp:26
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change parameter"
 msgstr "Verander Tabel-vormer"
 
-#: flake/commands/KoParameterToPathCommand.cpp:31
-#: flake/commands/KoParameterToPathCommand.cpp:40
+#: flake/commands/KoParameterToPathCommand.cpp:32
+#: flake/commands/KoParameterToPathCommand.cpp:41
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
@@ -126,57 +126,57 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
 msgstr "Kantlyne"
 
-#: flake/commands/KoPathCombineCommand.cpp:45
+#: flake/commands/KoPathCombineCommand.cpp:47
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "Pasmaak Petroon"
 
-#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#: flake/commands/KoPathControlPointMoveCommand.cpp:27
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr "Kantlyne"
 
-#: flake/commands/KoPathFillRuleCommand.cpp:31
+#: flake/commands/KoPathFillRuleCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
 msgstr ""
 
-#: flake/commands/KoPathPointInsertCommand.cpp:66
+#: flake/commands/KoPathPointInsertCommand.cpp:70
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Voeg by Skakel"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:139
+#: flake/commands/KoPathPointMergeCommand.cpp:134
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "Kantlyne"
 
-#: flake/commands/KoPathPointMoveCommand.cpp:29
-#: flake/commands/KoPathPointMoveCommand.cpp:45
+#: flake/commands/KoPathPointMoveCommand.cpp:31
+#: flake/commands/KoPathPointMoveCommand.cpp:47
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr "Verwyder skakel"
 
-#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:92
 #: flake/commands/KoPathPointRemoveCommand.cpp:120
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove points"
 msgstr "Verwyder skakel"
 
-#: flake/commands/KoPathPointTypeCommand.cpp:35
+#: flake/commands/KoPathPointTypeCommand.cpp:32
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Kies Skrif tipe"
 
-#: flake/commands/KoPathReverseCommand.cpp:38
+#: flake/commands/KoPathReverseCommand.cpp:41
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
@@ -188,58 +188,58 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Verwyder Groep"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Verander Karakter na Simbool"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+#: flake/commands/KoPathSegmentTypeCommand.cpp:122
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Verander Karakter na Simbool"
 
-#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+#: flake/commands/KoPathShapeMarkerCommand.cpp:23
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "Tweede"
 
-#: flake/commands/KoShapeAlignCommand.cpp:74
+#: flake/commands/KoShapeAlignCommand.cpp:78
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Oplyn"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:50
-#: flake/commands/KoShapeBackgroundCommand.cpp:61
-#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#: flake/commands/KoShapeBackgroundCommand.cpp:51
+#: flake/commands/KoShapeBackgroundCommand.cpp:62
+#: flake/commands/KoShapeBackgroundCommand.cpp:77
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "Tweede"
 
-#: flake/commands/KoShapeClipCommand.cpp:57
-#: flake/commands/KoShapeClipCommand.cpp:73
+#: flake/commands/KoShapeClipCommand.cpp:64
+#: flake/commands/KoShapeClipCommand.cpp:81
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
 msgstr "graf"
 
-#: flake/commands/KoShapeCreateCommand.cpp:39
+#: flake/commands/KoShapeCreateCommand.cpp:41
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "Skep Werkvoorbeeld"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:43
+#: flake/commands/KoShapeDeleteCommand.cpp:45
 #, fuzzy
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:56
+#: flake/commands/KoShapeDeleteCommand.cpp:57
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
@@ -247,20 +247,20 @@ msgid_plural "Delete shapes"
 msgstr[0] "Uitvee Teks"
 msgstr[1] "Uitvee Teks"
 
-#: flake/commands/KoShapeDistributeCommand.cpp:117
+#: flake/commands/KoShapeDistributeCommand.cpp:121
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeGroupCommand.cpp:82
+#: flake/commands/KoShapeGroupCommand.cpp:85
 #, fuzzy
 #| msgid "Current Section"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Huidige Seksie"
 
-#: flake/commands/KoShapeGroupCommand.cpp:84
+#: flake/commands/KoShapeGroupCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
 msgstr ""
@@ -276,14 +276,14 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Oplyn"
 
-#: flake/commands/KoShapeMoveCommand.cpp:36
-#: flake/commands/KoShapeMoveCommand.cpp:54
+#: flake/commands/KoShapeMoveCommand.cpp:37
+#: flake/commands/KoShapeMoveCommand.cpp:57
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeRenameCommand.cpp:28
+#: flake/commands/KoShapeRenameCommand.cpp:29
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
@@ -295,33 +295,33 @@ msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeRunAroundCommand.cpp:59
+#: flake/commands/KoShapeRunAroundCommand.cpp:77
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Verander Tabel-vormer"
 
-#: flake/commands/KoShapeShadowCommand.cpp:54
-#: flake/commands/KoShapeShadowCommand.cpp:71
-#: flake/commands/KoShapeShadowCommand.cpp:82
+#: flake/commands/KoShapeShadowCommand.cpp:57
+#: flake/commands/KoShapeShadowCommand.cpp:74
+#: flake/commands/KoShapeShadowCommand.cpp:85
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "Skadu"
 
-#: flake/commands/KoShapeShearCommand.cpp:38
+#: flake/commands/KoShapeShearCommand.cpp:43
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeSizeCommand.cpp:30
+#: flake/commands/KoShapeSizeCommand.cpp:33
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Uitvee Teks"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:61
 #: flake/commands/KoShapeStrokeCommand.cpp:78
 #: flake/commands/KoShapeStrokeCommand.cpp:89
 #, fuzzy
@@ -329,39 +329,39 @@ msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Tweede"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:35
-#: flake/commands/KoShapeTransparencyCommand.cpp:46
-#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#: flake/commands/KoShapeTransparencyCommand.cpp:37
+#: flake/commands/KoShapeTransparencyCommand.cpp:48
+#: flake/commands/KoShapeTransparencyCommand.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "Onderskrif"
 
-#: flake/commands/KoShapeUnclipCommand.cpp:107
+#: flake/commands/KoShapeUnclipCommand.cpp:114
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
 msgstr "Skep Werkvoorbeeld"
 
-#: flake/commands/KoShapeUnclipCommand.cpp:116
+#: flake/commands/KoShapeUnclipCommand.cpp:124
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
 msgstr "Oplyn"
 
-#: flake/commands/KoShapeUngroupCommand.cpp:46
+#: flake/commands/KoShapeUngroupCommand.cpp:48
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Oplyn"
 
-#: flake/commands/KoSubpathJoinCommand.cpp:38
+#: flake/commands/KoSubpathJoinCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
 msgstr "Verwyder Groep"
 
-#: flake/commands/KoSubpathJoinCommand.cpp:40
+#: flake/commands/KoSubpathJoinCommand.cpp:38
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
@@ -387,7 +387,7 @@ msgstr "Lemmetjie Groen"
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
 #: flake/KoConnectionShapeConfigWidget.ui:17
 #: widgets/koDocumentInfoAboutWidget.ui:141
-#: widgets/KoGradientEditWidget.cpp:152
+#: widgets/KoGradientEditWidget.cpp:155
 #, fuzzy, kde-format
 msgid "Type:"
 msgstr "Bo:"
@@ -403,12 +403,12 @@ msgstr "Tyd"
 msgid "A connection between two other shapes"
 msgstr ""
 
-#: flake/KoGridData.cpp:210
+#: flake/KoGridData.cpp:206
 #, fuzzy, kde-format
 msgid "Show Grid"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: flake/KoGridData.cpp:211
+#: flake/KoGridData.cpp:207
 #, fuzzy, kde-format
 msgid "Shows or hides grid"
 msgstr "Vertoon %1 Nutsbalk"
@@ -423,25 +423,25 @@ msgstr "Skep Werkvoorbeeld"
 msgid "A simple path shape"
 msgstr "Skep Werkvoorbeeld"
 
-#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
-#: rdf/InsertSemanticObjectReferenceAction.cpp:51
-#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:42
+#: rdf/InsertSemanticObjectReferenceAction.cpp:48
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:46
 #, fuzzy, kde-format
 msgid "%1 Options"
 msgstr "Uitsonderings"
 
-#: flake/KoShapePaste.cpp:155
+#: flake/KoShapePaste.cpp:163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Shapes"
 msgstr "Skep Werkvoorbeeld"
 
-#: flake/KoToolManager.cpp:451
+#: flake/KoToolManager.cpp:442
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Verstek Kleur"
 
-#: flake/KoToolProxy.cpp:587
+#: flake/KoToolProxy.cpp:589
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -512,115 +512,115 @@ msgstr "Open Dokument"
 msgid "Pan"
 msgstr "Tan"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
 #, fuzzy
 #| msgid "Change Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Verander Oplyn"
 
-#: flake/tools/KoPathTool.cpp:97
+#: flake/tools/KoPathTool.cpp:95
 #, fuzzy, kde-format
 msgid "Corner point"
 msgstr "Verander Oplyn"
 
-#: flake/tools/KoPathTool.cpp:102
+#: flake/tools/KoPathTool.cpp:100
 #, fuzzy, kde-format
 msgid "Smooth point"
 msgstr "Verwyder skakel"
 
-#: flake/tools/KoPathTool.cpp:107
+#: flake/tools/KoPathTool.cpp:105
 #, kde-format
 msgid "Symmetric Point"
 msgstr ""
 
-#: flake/tools/KoPathTool.cpp:112
+#: flake/tools/KoPathTool.cpp:110
 #, fuzzy, kde-format
 msgid "Make curve point"
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:116
+#: flake/tools/KoPathTool.cpp:114
 #, fuzzy, kde-format
 msgid "Make line point"
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:120
+#: flake/tools/KoPathTool.cpp:118
 #, fuzzy, kde-format
 msgid "Segment to Line"
 msgstr "Verander Karakter na Simbool"
 
-#: flake/tools/KoPathTool.cpp:125
+#: flake/tools/KoPathTool.cpp:123
 #, fuzzy, kde-format
 msgid "Segment to Curve"
 msgstr "Verander Karakter na Simbool"
 
-#: flake/tools/KoPathTool.cpp:130
+#: flake/tools/KoPathTool.cpp:128
 #, fuzzy, kde-format
 msgid "Insert point"
 msgstr "Voeg by Skakel"
 
-#: flake/tools/KoPathTool.cpp:135
+#: flake/tools/KoPathTool.cpp:133
 #, fuzzy, kde-format
 msgid "Remove point"
 msgstr "Verwyder skakel"
 
-#: flake/tools/KoPathTool.cpp:140
+#: flake/tools/KoPathTool.cpp:138
 #, fuzzy, kde-format
 msgid "Break at point"
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:144
+#: flake/tools/KoPathTool.cpp:142
 #, kde-format
 msgid "Break at segment"
 msgstr ""
 
-#: flake/tools/KoPathTool.cpp:148
+#: flake/tools/KoPathTool.cpp:146
 #, kde-format
 msgid "Join with segment"
 msgstr ""
 
-#: flake/tools/KoPathTool.cpp:153
+#: flake/tools/KoPathTool.cpp:151
 #, fuzzy, kde-format
 msgid "Merge points"
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:157
+#: flake/tools/KoPathTool.cpp:155
 #, fuzzy, kde-format
 #| msgid "Edit Path"
 msgid "To Path"
 msgstr "Redigeer Gids soeklys"
 
-#: flake/tools/KoPathTool.cpp:190
+#: flake/tools/KoPathTool.cpp:188
 #, fuzzy, kde-format
 msgid "Line/Curve"
 msgstr "Huidige Seksie"
 
-#: flake/tools/KoPathTool.cpp:528
+#: flake/tools/KoPathTool.cpp:522
 #, fuzzy, kde-format
 msgid "Drag to move handle."
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:592
+#: flake/tools/KoPathTool.cpp:586
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 
-#: flake/tools/KoPathTool.cpp:594
+#: flake/tools/KoPathTool.cpp:588
 #, fuzzy, kde-format
 msgid "Drag to move control point."
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:619
+#: flake/tools/KoPathTool.cpp:613
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 
-#: flake/tools/KoPathTool.cpp:626
+#: flake/tools/KoPathTool.cpp:620
 #, fuzzy, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Kantlyne"
 
-#: flake/tools/KoPathTool.cpp:628
+#: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr ""
@@ -630,7 +630,7 @@ msgstr ""
 msgid "Path editing"
 msgstr "Donker Oranje"
 
-#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:34
 #: widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
@@ -690,25 +690,25 @@ msgstr "Voeg by Groep..."
 msgid "Convert To Path"
 msgstr "Skakel om na Grieks"
 
-#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
 #, fuzzy, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Antwoord"
 
-#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 msgid "Undo %1"
 msgstr "Antwoord"
 
-#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
 #, fuzzy, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Antwoord"
 
-#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 msgid "Redo %1"
@@ -719,13 +719,13 @@ msgstr "Antwoord"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "Antwoord"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -749,166 +749,166 @@ msgstr "Enkel"
 msgid "File"
 msgstr "Lêernaam"
 
-#: main/config/KoConfigDocumentPage.cpp:46
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#: main/config/KoConfigDocumentPage.cpp:47
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 msgid "Document Settings"
 msgstr "Dokument Abstrak"
 
-#: main/config/KoConfigDocumentPage.cpp:62
+#: main/config/KoConfigDocumentPage.cpp:63
 #, fuzzy, kde-format
 #| msgid "No value"
 msgid "No autosave"
 msgstr "Nee waarde"
 
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:64
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:65
+#: main/config/KoConfigDocumentPage.cpp:66
 #, kde-format
 msgid "Autosave interval:"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:69
+#: main/config/KoConfigDocumentPage.cpp:70
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Skep Werkvoorbeeld"
 
-#: main/config/KoConfigGridPage.cpp:55
+#: main/config/KoConfigGridPage.cpp:56
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
 #, fuzzy, kde-format
 msgid "Grid"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/config/KoConfigGridPage.cpp:63
+#: main/config/KoConfigGridPage.cpp:64
 #, fuzzy, kde-format
 msgid "Show grid:"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
 msgid "Snap to grid:"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/config/KoConfigGridPage.cpp:65
+#: main/config/KoConfigGridPage.cpp:66
 #, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "Agtergrond kleur:"
 
-#: main/config/KoConfigGridPage.cpp:67
+#: main/config/KoConfigGridPage.cpp:68
 #, fuzzy, kde-format
 msgid "Spacing"
 msgstr "Lyn Spasiëring"
 
-#: main/config/KoConfigGridPage.cpp:78
+#: main/config/KoConfigGridPage.cpp:79
 #, fuzzy, kde-format
 #| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
 msgid "&Horizontal:"
 msgstr "Horisontaal"
 
-#: main/config/KoConfigGridPage.cpp:79
+#: main/config/KoConfigGridPage.cpp:80
 #, fuzzy, kde-format
 #| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
 msgid "&Vertical:"
 msgstr "Vertikaal"
 
-#: main/config/KoConfigMiscPage.cpp:66
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
-#: pigment/KoCompositeOpRegistry.cpp:31
+#: main/config/KoConfigMiscPage.cpp:68
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Misc"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:76
+#: main/config/KoConfigMiscPage.cpp:78
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "Eenheid:"
 
-#: main/config/KoConfigMiscPage.cpp:85
+#: main/config/KoConfigMiscPage.cpp:87
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:92
+#: main/config/KoConfigMiscPage.cpp:94
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:99
+#: main/config/KoConfigMiscPage.cpp:101
 #, fuzzy, kde-format
 #| msgid "Shadow:"
 msgid "Paste offset:"
 msgstr "Skadu:"
 
-#: main/config/KoConfigMiscPage.cpp:103
+#: main/config/KoConfigMiscPage.cpp:105
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:189
 #, kde-format
 msgid "Only print and exit"
 msgstr ""
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:191
 #, fuzzy, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Skep nuwe dokument van 'n werkvoorbeeld"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:192
 #, fuzzy, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Skep nuwe dokument van 'n werkvoorbeeld"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:193
 #, kde-format
 msgid "Override display DPI"
 msgstr ""
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr ""
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:195
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr ""
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "just load the file and then exit"
 msgstr ""
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr ""
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 
-#: main/KoApplication.cpp:209
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:219
+#: main/KoApplication.cpp:215
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -916,12 +916,12 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: main/KoApplication.cpp:261
+#: main/KoApplication.cpp:255
 #, fuzzy, kde-format
 msgid "%1: Critical Error"
 msgstr "Voltooiïng Woord"
 
-#: main/KoApplication.cpp:261
+#: main/KoApplication.cpp:256
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -929,22 +929,22 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:510
+#: main/KoApplication.cpp:493
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Nee handteerder gevind vir %1"
 
-#: main/KoApplication.cpp:513
+#: main/KoApplication.cpp:496
 #, fuzzy, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Nee handteerder gevind vir %1"
 
-#: main/KoApplication.cpp:535 main/KoApplication.cpp:553
+#: main/KoApplication.cpp:518 main/KoApplication.cpp:535
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr ""
 
-#: main/KoApplication.cpp:543
+#: main/KoApplication.cpp:525
 #, fuzzy, kde-format
 msgid "No template found at: %1"
 msgstr "Nee handteerder gevind vir %1"
@@ -960,7 +960,7 @@ msgstr "maltees"
 msgid "The following autosave file can be recovered:"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:174
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr ""
@@ -977,17 +977,17 @@ msgstr "Skep Werkvoorbeeld"
 msgid "Always use this template"
 msgstr "Skep Werkvoorbeeld"
 
-#: main/KoDocument.cpp:549
+#: main/KoDocument.cpp:544
 #, kde-format
 msgid "Making backup..."
 msgstr ""
 
-#: main/KoDocument.cpp:564
+#: main/KoDocument.cpp:559
 #, fuzzy, kde-format
 msgid "Saving..."
 msgstr "Lêer Stooring"
 
-#: main/KoDocument.cpp:592
+#: main/KoDocument.cpp:587
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -996,7 +996,7 @@ msgstr ""
 "Kon nie stoor\n"
 "%1"
 
-#: main/KoDocument.cpp:594
+#: main/KoDocument.cpp:589
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1005,51 +1005,51 @@ msgstr ""
 "Kon nie stoor %1\n"
 "Rede: %2"
 
-#: main/KoDocument.cpp:623
+#: main/KoDocument.cpp:617
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> saved"
 msgstr "Dokument Titel"
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:705
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
 
-#: main/KoDocument.cpp:715
+#: main/KoDocument.cpp:708
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "Lêer Stooring"
 
-#: main/KoDocument.cpp:727
+#: main/KoDocument.cpp:720
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr ""
 
-#: main/KoDocument.cpp:820
+#: main/KoDocument.cpp:808
 #, fuzzy, kde-format
 msgid "Could not create the file for saving"
 msgstr "Kon nie voer uit lêer"
 
-#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
-#: main/KoDocument.cpp:951
+#: main/KoDocument.cpp:852 main/KoDocument.cpp:874 main/KoDocument.cpp:904
+#: main/KoDocument.cpp:938
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr ""
 
-#: main/KoDocument.cpp:871
+#: main/KoDocument.cpp:859
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr ""
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1991
+#: main/KoDocument.cpp:867 main/KoDocument.cpp:913 main/KoDocument.cpp:1971
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr ""
 
-#: main/KoDocument.cpp:1205
+#: main/KoDocument.cpp:1213
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1058,7 +1058,7 @@ msgstr ""
 "Misformde Url\n"
 "%1"
 
-#: main/KoDocument.cpp:1221
+#: main/KoDocument.cpp:1229
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1067,103 +1067,103 @@ msgstr ""
 "'n autogered lêer bestaan vir hierdie dokument.\n"
 "Doen jy wil hê na open dit in plaas van?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
+#: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr ""
 
-#: main/KoDocument.cpp:1467
+#: main/KoDocument.cpp:1429
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "Open Dokument"
 
-#: main/KoDocument.cpp:1482
+#: main/KoDocument.cpp:1445
 #, fuzzy, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Kon nie voer uit lêer"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1449
 #, fuzzy, kde-format
 msgid "Could not create the output document"
 msgstr "Kon nie voer uit lêer"
 
-#: main/KoDocument.cpp:1488
+#: main/KoDocument.cpp:1453
 #, fuzzy, kde-format
 msgid "File not found"
 msgstr "Fout: Lêer nie gevind."
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1457
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "Skep Werkvoorbeeld"
 
-#: main/KoDocument.cpp:1494
+#: main/KoDocument.cpp:1461
 #, kde-format
 msgid "Bad MIME type"
 msgstr ""
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1465
 #, fuzzy, kde-format
 msgid "Error in embedded document"
 msgstr "Fout terwyl stooring ingebedde dokumente"
 
-#: main/KoDocument.cpp:1500
+#: main/KoDocument.cpp:1469
 #, kde-format
 msgid "Format not recognized"
 msgstr ""
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1473
 #, fuzzy, kde-format
 msgid "Not implemented"
 msgstr "byvoeging"
 
-#: main/KoDocument.cpp:1506
+#: main/KoDocument.cpp:1477
 #, kde-format
 msgid "Parsing error"
 msgstr ""
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Document is password protected"
 msgstr ""
 
-#: main/KoDocument.cpp:1512
+#: main/KoDocument.cpp:1485
 #, fuzzy, kde-format
 msgid "Invalid file format"
 msgstr "Datum Formaat"
 
-#: main/KoDocument.cpp:1519
+#: main/KoDocument.cpp:1493
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "Internet"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Out of memory"
 msgstr ""
 
-#: main/KoDocument.cpp:1525
+#: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1528
+#: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1531
+#: main/KoDocument.cpp:1509
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "Kon nie open lêer %1"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1518
 #, kde-format
 msgid "Unknown error"
 msgstr ""
 
-#: main/KoDocument.cpp:1542
+#: main/KoDocument.cpp:1523
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1173,70 +1173,70 @@ msgstr ""
 "Kon nie open %1\n"
 "Rede: %2"
 
-#: main/KoDocument.cpp:1600
+#: main/KoDocument.cpp:1581
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokument Titel"
 
-#: main/KoDocument.cpp:1658 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
 #, fuzzy, kde-format
 msgid "Could not find %1"
 msgstr "Kon nie soek module %1"
 
-#: main/KoDocument.cpp:1670
+#: main/KoDocument.cpp:1650
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr "Verwerking fout in lêer na lyn %1, kolom %2"
 
-#: main/KoDocument.cpp:1691
+#: main/KoDocument.cpp:1673
 #, fuzzy, kde-format
 msgid "%1 is not a file."
 msgstr "%1 is nie 'n geldige skakel."
 
-#: main/KoDocument.cpp:1706
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
 
-#: main/KoDocument.cpp:1717
+#: main/KoDocument.cpp:1699
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Kon nie voer uit lêer"
 
-#: main/KoDocument.cpp:1747
+#: main/KoDocument.cpp:1730
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr "Verwerking fout in lêer na lyn %1, kolom %2"
 
-#: main/KoDocument.cpp:1768
+#: main/KoDocument.cpp:1751
 #, fuzzy, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Nie 'n geldige Koffice lêer"
 
-#: main/KoDocument.cpp:1853
+#: main/KoDocument.cpp:1832
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr ""
 
-#: main/KoDocument.cpp:1877
+#: main/KoDocument.cpp:1856
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2078 main/KoDocument.cpp:2550 main/KoDocument.cpp:2579
-#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
+#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Titel"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
+#: main/KoDocument.cpp:2060 main/KoMainWindow.cpp:1138
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1245,12 +1245,12 @@ msgstr ""
 "<p>Die dokument <b>'%1'</b> het al veranderde.</p><p>Doen jy wil hê na stoor "
 "dit?</p>"
 
-#: main/KoDocument.cpp:2167
+#: main/KoDocument.cpp:2143
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr ""
 
-#: main/KoDocument.cpp:2204
+#: main/KoDocument.cpp:2176
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1259,7 +1259,7 @@ msgstr ""
 "Kon nie open\n"
 "%1"
 
-#: main/KoDocument.cpp:2207
+#: main/KoDocument.cpp:2178
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1268,33 +1268,32 @@ msgstr ""
 "Kon nie open %1\n"
 "Rede: %2"
 
-#: main/KoDocument.cpp:2264
-#, kde-format
+#: main/KoDocument.cpp:2231
 msgid "a word processing"
 msgstr ""
 
-#: main/KoDocument.cpp:2265
-#, fuzzy, kde-format
+#: main/KoDocument.cpp:2232
+#, fuzzy
 #| msgid "Page Preview"
 msgid "a spreadsheet"
 msgstr "Bladsy Voorskou"
 
-#: main/KoDocument.cpp:2266
-#, fuzzy, kde-format
+#: main/KoDocument.cpp:2233
+#, fuzzy
 msgid "a presentation"
 msgstr "Aanbieding"
 
-#: main/KoDocument.cpp:2267
-#, fuzzy, kde-format
+#: main/KoDocument.cpp:2234
+#, fuzzy
 msgid "a chart"
 msgstr "Sjokolade"
 
-#: main/KoDocument.cpp:2268
-#, fuzzy, kde-format
+#: main/KoDocument.cpp:2235
+#, fuzzy
 msgid "a drawing"
 msgstr "Donker Oranje"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2543
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1306,12 +1305,12 @@ msgstr ""
 "<p>Die dokument <b>'%1'</b> het al veranderde.</p><p>Doen jy wil hê na stoor "
 "dit?</p>"
 
-#: main/KoDocument.cpp:2585
+#: main/KoDocument.cpp:2546
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Open Dokument"
 
-#: main/KoDocumentSectionDelegate.cpp:508
+#: main/KoDocumentSectionDelegate.cpp:506
 #, kde-format
 msgid "%1 %"
 msgstr ""
@@ -1326,17 +1325,17 @@ msgstr "Nota"
 msgid "Yes"
 msgstr ""
 
-#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, fuzzy, kde-format
 msgid "Could not export file."
 msgstr "Kon nie voer uit lêer"
 
-#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Kort Voer uit Filter"
 
-#: main/KoFilterManager.cpp:518
+#: main/KoFilterManager.cpp:530
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1345,7 +1344,7 @@ msgstr ""
 "Kon nie in voer lêer van tipe\n"
 "%1"
 
-#: main/KoFilterManager.cpp:520
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Kort In voer Filter"
@@ -1355,268 +1354,268 @@ msgstr "Kort In voer Filter"
 msgid "Choose Filter"
 msgstr "Kies"
 
-#: main/KoFindText.cpp:46
+#: main/KoFindText.cpp:47
 #, kde-format
 msgid "Case Sensitive"
 msgstr ""
 
-#: main/KoFindText.cpp:46
+#: main/KoFindText.cpp:47
 #, kde-format
 msgid "Match cases when searching"
 msgstr ""
 
-#: main/KoFindText.cpp:47
+#: main/KoFindText.cpp:48
 #, kde-format
 msgid "Match only whole words"
 msgstr ""
 
-#: main/KoFindText.cpp:47
+#: main/KoFindText.cpp:48
 #, kde-format
 msgid "Whole Words Only"
 msgstr ""
 
-#: main/KoFindText.cpp:48
+#: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
 msgstr ""
 
-#: main/KoFindText.cpp:48
+#: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:164
+#: main/KoMainWindow.cpp:158
 #, fuzzy, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "Stoor Dokument As"
 
-#: main/KoMainWindow.cpp:273
+#: main/KoMainWindow.cpp:263
 #, fuzzy, kde-format
 msgid "Export as PDF..."
 msgstr "Verwyder..."
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:275
 #, fuzzy, kde-format
 msgid "Reload"
 msgstr "Aflaai"
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Versions..."
 msgstr ""
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:283
 #, fuzzy, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Open 'n bestaande dokument"
 
-#: main/KoMainWindow.cpp:295
+#: main/KoMainWindow.cpp:287
 #, fuzzy, kde-format
 msgid "E&xport..."
 msgstr "Verwyder..."
 
-#: main/KoMainWindow.cpp:299
+#: main/KoMainWindow.cpp:291
 #, fuzzy, kde-format
 msgid "En&crypt Document"
 msgstr "Open Dokument"
 
-#: main/KoMainWindow.cpp:304
+#: main/KoMainWindow.cpp:296
 #, fuzzy, kde-format
 msgid "&Uncompress to Directory"
 msgstr "Open Dokument"
 
-#: main/KoMainWindow.cpp:309
+#: main/KoMainWindow.cpp:301
 #, fuzzy, kde-format
 msgid "&New View"
 msgstr "Verwyder Besigtig"
 
-#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Dokument Informasie"
 
-#: main/KoMainWindow.cpp:339
+#: main/KoMainWindow.cpp:331
 #, kde-format
 msgid "Full Screen Mode"
 msgstr ""
 
-#: main/KoMainWindow.cpp:344
+#: main/KoMainWindow.cpp:336
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Show Dockers"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/KoMainWindow.cpp:349
+#: main/KoMainWindow.cpp:341
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/KoMainWindow.cpp:356
+#: main/KoMainWindow.cpp:348
 #, fuzzy, kde-format
 msgid "Dockers"
 msgstr "Solied Lyn"
 
-#: main/KoMainWindow.cpp:650
+#: main/KoMainWindow.cpp:632
 #, fuzzy, kde-format
 msgid "(write protected)"
 msgstr "Rigting:"
 
-#: main/KoMainWindow.cpp:655
+#: main/KoMainWindow.cpp:637
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "maltees"
 
-#: main/KoMainWindow.cpp:657
+#: main/KoMainWindow.cpp:639
 #, fuzzy, kde-format
 msgid "Save"
 msgstr "graf"
 
-#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
 #, fuzzy, kde-format
 msgid "%1 (unknown file type)"
 msgstr "Onbekende lêer tipe %1"
 
-#: main/KoMainWindow.cpp:845
+#: main/KoMainWindow.cpp:825
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:848
+#: main/KoMainWindow.cpp:828
 #, fuzzy, kde-format
 msgid "Confirm Save"
 msgstr "Versiering"
 
-#: main/KoMainWindow.cpp:857
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:860
+#: main/KoMainWindow.cpp:837
 #, fuzzy, kde-format
 msgid "Confirm Export"
 msgstr "Versiering"
 
-#: main/KoMainWindow.cpp:861
+#: main/KoMainWindow.cpp:838
 #, fuzzy, kde-format
 msgid "Export"
 msgstr "Verwyder..."
 
-#: main/KoMainWindow.cpp:959
+#: main/KoMainWindow.cpp:936
 #, fuzzy, kde-format
 msgid "untitled"
 msgstr "Titel"
 
-#: main/KoMainWindow.cpp:1235
+#: main/KoMainWindow.cpp:1200
 #, kde-format
 msgid "Open Document"
 msgstr "Open Dokument"
 
-#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
 #, fuzzy, kde-format
 msgid "Import Document"
 msgstr "Open Dokument"
 
-#: main/KoMainWindow.cpp:1409
+#: main/KoMainWindow.cpp:1374
 #, fuzzy, kde-format
 msgid "Export as PDF"
 msgstr "Verwyder..."
 
-#: main/KoMainWindow.cpp:1446
+#: main/KoMainWindow.cpp:1416
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "Open Dokument"
 
-#: main/KoMainWindow.cpp:1653
+#: main/KoMainWindow.cpp:1622
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "Dokument Titel"
 
-#: main/KoMainWindow.cpp:1690
+#: main/KoMainWindow.cpp:1662
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1692
+#: main/KoMainWindow.cpp:1664
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Donker Oranje"
 
-#: main/KoMainWindow.cpp:2057
+#: main/KoMainWindow.cpp:2030
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/KoMainWindow.cpp:2059
+#: main/KoMainWindow.cpp:2032
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Vertoon %1 Nutsbalk"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
 #, fuzzy, kde-format
 msgid "Open Existing Document"
 msgstr "Open 'n bestaande dokument"
 
-#: main/KoOpenPane.cpp:199
+#: main/KoOpenPane.cpp:198
 #, fuzzy, kde-format
 msgid "Recent Documents"
 msgstr "Open 'n onlangse dokument"
 
-#: main/KoOpenPane.cpp:299
+#: main/KoOpenPane.cpp:289
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Open Dokument"
 
-#: main/KoPrintingDialog.cpp:43
+#: main/KoPrintingDialog.cpp:44
 #, kde-format
 msgid "Stop"
 msgstr ""
 
-#: main/KoPrintingDialog.cpp:132
+#: main/KoPrintingDialog.cpp:134
 #, fuzzy, kde-format
 msgid "Printing"
 msgstr "Donker Oranje"
 
-#: main/KoPrintingDialog_p.h:136
+#: main/KoPrintingDialog_p.h:140
 #, fuzzy, kde-format
 msgid "Printing done"
 msgstr "Donker Oranje"
 
-#: main/KoPrintingDialog_p.h:137
+#: main/KoPrintingDialog_p.h:141
 #, fuzzy, kde-format
 msgid "Close"
 msgstr "Kleure:"
 
-#: main/KoPrintingDialog_p.h:157
+#: main/KoPrintingDialog_p.h:160
 #, kde-format
 msgid "Stopped"
 msgstr ""
 
-#: main/KoRecentDocumentsPane.cpp:71
+#: main/KoRecentDocumentsPane.cpp:68
 #, fuzzy, kde-format
 msgid "Open This Document"
 msgstr "Open Dokument"
 
-#: main/KoRecentDocumentsPane.cpp:174
+#: main/KoRecentDocumentsPane.cpp:167
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr ""
 
-#: main/KoRecentDocumentsPane.cpp:177
+#: main/KoRecentDocumentsPane.cpp:170
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1632,177 +1631,177 @@ msgstr "Vertoon %1 Nutsbalk"
 msgid "Shows or hides guides"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/KoTemplateCreateDia.cpp:104
+#: main/KoTemplateCreateDia.cpp:103
 #, kde-format
 msgid "Create Template"
 msgstr "Skep Werkvoorbeeld"
 
-#: main/KoTemplateCreateDia.cpp:113
+#: main/KoTemplateCreateDia.cpp:112
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgctxt "Template name"
 msgid "Name:"
 msgstr "Naam:"
 
-#: main/KoTemplateCreateDia.cpp:123
+#: main/KoTemplateCreateDia.cpp:121
 #, kde-format
 msgid "Group:"
 msgstr "Groep:"
 
-#: main/KoTemplateCreateDia.cpp:138
+#: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
 msgstr "Voeg by Groep..."
 
-#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, fuzzy, kde-format
 msgid "&Remove"
 msgstr "Verwyder Besigtig"
 
-#: main/KoTemplateCreateDia.cpp:147
+#: main/KoTemplateCreateDia.cpp:145
 #, kde-format
 msgid "Picture"
 msgstr "Prent"
 
-#: main/KoTemplateCreateDia.cpp:150
+#: main/KoTemplateCreateDia.cpp:148
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "&Preview"
 msgstr "Voorskou"
 
-#: main/KoTemplateCreateDia.cpp:155
+#: main/KoTemplateCreateDia.cpp:153
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom:"
 msgstr "Pasmaak"
 
-#: main/KoTemplateCreateDia.cpp:159
+#: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
 msgstr "Kies..."
 
-#: main/KoTemplateCreateDia.cpp:168
+#: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
 msgstr ""
 
-#: main/KoTemplateCreateDia.cpp:309
+#: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "Doen jy rerig wil hê na oorskryf die bestaande '%1' werkvoorbeeld?"
 
-#: main/KoTemplateCreateDia.cpp:422 main/KoTemplateCreateDia.cpp:429
+#: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
 msgid "Add Group"
 msgstr "Voeg by Groep"
 
-#: main/KoTemplateCreateDia.cpp:422
+#: main/KoTemplateCreateDia.cpp:416
 #, kde-format
 msgid "Enter group name:"
 msgstr "Invoer groep naam:"
 
-#: main/KoTemplateCreateDia.cpp:429
+#: main/KoTemplateCreateDia.cpp:421
 #, kde-format
 msgid "This name is already used."
 msgstr ""
 
-#: main/KoTemplateCreateDia.cpp:453
+#: main/KoTemplateCreateDia.cpp:445
 #, kde-format
 msgid "Do you really want to remove that group?"
 msgstr "Doen jy rerig wil hê na verwyder wat groep?"
 
-#: main/KoTemplateCreateDia.cpp:454
+#: main/KoTemplateCreateDia.cpp:446
 #, kde-format
 msgid "Remove Group"
 msgstr "Verwyder Groep"
 
-#: main/KoTemplateCreateDia.cpp:456
+#: main/KoTemplateCreateDia.cpp:448
 #, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "Doen jy rerig wil hê na verwyder wat werkvoorbeeld?"
 
-#: main/KoTemplateCreateDia.cpp:457
+#: main/KoTemplateCreateDia.cpp:449
 #, kde-format
 msgid "Remove Template"
 msgstr "Verwyder Werkvoorbeeld"
 
-#: main/KoTemplateCreateDia.cpp:508
+#: main/KoTemplateCreateDia.cpp:497
 #, kde-format
 msgid "Could not load picture."
 msgstr "Kon nie las prent."
 
-#: main/KoTemplateCreateDia.cpp:511
+#: main/KoTemplateCreateDia.cpp:499
 #, kde-format
 msgid "No picture available."
 msgstr "Nee prent beskikbaar."
 
-#: main/KoTemplatesPane.cpp:37
+#: main/KoTemplatesPane.cpp:36
 #, fuzzy, kde-format
 msgid "Use This Template"
 msgstr "Skep Werkvoorbeeld"
 
-#: main/KoVersionDialog.cpp:35
+#: main/KoVersionDialog.cpp:34
 #, kde-format
 msgid "Version"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:49
+#: main/KoVersionDialog.cpp:48
 #, fuzzy, kde-format
 msgid "Date & Time"
 msgstr "Datum (Vasgemaakte)"
 
-#: main/KoVersionDialog.cpp:50
+#: main/KoVersionDialog.cpp:49
 #, fuzzy, kde-format
 msgid "Saved By"
 msgstr "graf"
 
-#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
 #, kde-format
 msgid "Comment"
 msgstr "Kommentaar"
 
-#: main/KoVersionDialog.cpp:58
+#: main/KoVersionDialog.cpp:57
 #, kde-format
 msgid "&Add"
 msgstr "Voeg by"
 
-#: main/KoVersionDialog.cpp:64
+#: main/KoVersionDialog.cpp:63
 #, fuzzy, kde-format
 msgid "&Modify"
 msgstr "Middelste:"
 
-#: main/KoVersionDialog.cpp:67
+#: main/KoVersionDialog.cpp:66
 #, kde-format
 msgid "&Open"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:120
+#: main/KoVersionDialog.cpp:116
 #, kde-format
 msgid "A new version could not be added"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
 #, fuzzy, kde-format
 msgid "Date: %1"
 msgstr "Datum"
 
-#: main/KoView.cpp:330
+#: main/KoView.cpp:335
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Verstek Kleur"
 
-#: main/KoView.cpp:342 main/KoView.cpp:396
+#: main/KoView.cpp:347 main/KoView.cpp:401
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Verstek Kleur"
 
-#: odf/KoDocumentInfo.cpp:40
+#: odf/KoDocumentInfo.cpp:56
 #, kde-format
 msgid "Unknown"
 msgstr ""
@@ -1819,226 +1818,223 @@ msgid ""
 "Error message: %3"
 msgstr "Verwerking fout in lêer na lyn %1, kolom %2"
 
-#: odf/KoPageFormat.cpp:46
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:48
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "Din A3"
 
-#: odf/KoPageFormat.cpp:47
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:49
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "Din A4"
 
-#: odf/KoPageFormat.cpp:48
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:50
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "Din A5"
 
-#: odf/KoPageFormat.cpp:49
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:51
+#, fuzzy
 #| msgid "US Letter"
 msgctxt "Page size"
 msgid "US Letter"
 msgstr "Us Brief"
 
-#: odf/KoPageFormat.cpp:50
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:52
+#, fuzzy
 #| msgid "US Legal"
 msgctxt "Page size"
 msgid "US Legal"
 msgstr "Us Wettig"
 
-#: odf/KoPageFormat.cpp:51
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:53
+#, fuzzy
 #| msgid "Screen"
 msgctxt "Page size"
 msgid "Screen"
 msgstr "Skerm"
 
-#: odf/KoPageFormat.cpp:52
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:54
+#, fuzzy
 #| msgid "Custom"
 msgctxt "Page size"
 msgid "Custom"
 msgstr "Pasmaak"
 
-#: odf/KoPageFormat.cpp:53
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:55
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "Din B5"
 
-#: odf/KoPageFormat.cpp:54
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:56
+#, fuzzy
 #| msgid "US Executive"
 msgctxt "Page size"
 msgid "US Executive"
 msgstr "Us Uitvoerbare"
 
-#: odf/KoPageFormat.cpp:55
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:57
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "Din A0"
 
-#: odf/KoPageFormat.cpp:56
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:58
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "Din A1"
 
-#: odf/KoPageFormat.cpp:57
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:59
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "Din A2"
 
-#: odf/KoPageFormat.cpp:58
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:60
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "Din A6"
 
-#: odf/KoPageFormat.cpp:59
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:61
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "Din A7"
 
-#: odf/KoPageFormat.cpp:60
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:62
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "Din A8"
 
-#: odf/KoPageFormat.cpp:61
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:63
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "Din A9"
 
-#: odf/KoPageFormat.cpp:62
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:64
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "Din B0"
 
-#: odf/KoPageFormat.cpp:63
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:65
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "Din B1"
 
-#: odf/KoPageFormat.cpp:64
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:66
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "Din B10"
 
-#: odf/KoPageFormat.cpp:65
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:67
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "Din B2"
 
-#: odf/KoPageFormat.cpp:66
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:68
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "Din B3"
 
-#: odf/KoPageFormat.cpp:67
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:69
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "Din B4"
 
-#: odf/KoPageFormat.cpp:68
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:70
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "Din B6"
 
-#: odf/KoPageFormat.cpp:69
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:71
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "Din A5"
 
-#: odf/KoPageFormat.cpp:70
-#, kde-format
+#: odf/KoPageFormat.cpp:72
 msgctxt "Page size"
 msgid "US Common 10"
 msgstr ""
 
-#: odf/KoPageFormat.cpp:71
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:73
+#, fuzzy
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "Din A3"
 
-#: odf/KoPageFormat.cpp:72
-#, kde-format
+#: odf/KoPageFormat.cpp:74
 msgctxt "Page size"
 msgid "US Folio"
 msgstr ""
 
-#: odf/KoPageFormat.cpp:73
-#, fuzzy, kde-format
+#: odf/KoPageFormat.cpp:75
+#, fuzzy
 msgctxt "Page size"
 msgid "US Ledger"
 msgstr "Us Brief"
 
-#: odf/KoPageFormat.cpp:74
-#, kde-format
+#: odf/KoPageFormat.cpp:76
 msgctxt "Page size"
 msgid "US Tabloid"
 msgstr ""
 
-#: odf/KoUnit.cpp:37
+#: odf/KoUnit.cpp:27
 #, kde-format
 msgid "Millimeters (mm)"
 msgstr "Milimeters (mm)"
 
-#: odf/KoUnit.cpp:39
+#: odf/KoUnit.cpp:29
 #, fuzzy, kde-format
 msgid "Centimeters (cm)"
 msgstr "Milimeters (mm)"
 
-#: odf/KoUnit.cpp:41
+#: odf/KoUnit.cpp:31
 #, fuzzy, kde-format
 msgid "Decimeters (dm)"
 msgstr "Milimeters (mm)"
 
-#: odf/KoUnit.cpp:43
+#: odf/KoUnit.cpp:33
 #, kde-format
 msgid "Inches (in)"
 msgstr "Duime (in)"
 
-#: odf/KoUnit.cpp:45
+#: odf/KoUnit.cpp:35
 #, fuzzy, kde-format
 msgid "Pica (pi)"
 msgstr "Punte (pt)"
 
-#: odf/KoUnit.cpp:47
+#: odf/KoUnit.cpp:37
 #, kde-format
 msgid "Cicero (cc)"
 msgstr ""
 
-#: odf/KoUnit.cpp:49
+#: odf/KoUnit.cpp:39
 #, kde-format
 msgid "Points (pt)"
 msgstr "Punte (pt)"
 
-#: odf/KoUnit.cpp:51
+#: odf/KoUnit.cpp:41
 #, fuzzy, kde-format
 msgid "Pixels (px)"
 msgstr "Punte (pt)"
 
-#: odf/KoUnit.cpp:53
+#: odf/KoUnit.cpp:43
 #, kde-format
 msgid "Unsupported unit"
 msgstr ""
@@ -2050,14 +2046,14 @@ msgctxt "(qtundo-format)"
 msgid "Change master slide"
 msgstr "Verander Lys Tipe"
 
-#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
 #, fuzzy
 #| msgid "Change List Type"
 msgctxt "(qtundo-format)"
 msgid "Change master page"
 msgstr "Verander Lys Tipe"
 
-#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
 #, fuzzy
 #| msgid "Page Layout"
 msgctxt "(qtundo-format)"
@@ -2070,13 +2066,13 @@ msgctxt "(qtundo-format)"
 msgid "Display master background"
 msgstr "Tweede"
 
-#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Display slide background"
 msgstr "Tweede"
 
-#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:23
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Display page background"
@@ -2088,7 +2084,7 @@ msgctxt "(qtundo-format)"
 msgid "Show master shapes"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:20
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide master shapes"
@@ -2100,13 +2096,13 @@ msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "Uitvee Teks"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:28
 #, fuzzy
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
 msgstr "Uitvee Teks"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:49
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
@@ -2114,7 +2110,7 @@ msgid_plural "Delete slides"
 msgstr[0] "Uitvee Teks"
 msgstr[1] "Uitvee Teks"
 
-#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:51
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete page"
@@ -2129,7 +2125,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert slide"
 msgstr "Voeg by Teks"
 
-#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+#: pageapp/commands/KoPAPageInsertCommand.cpp:26
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert page"
@@ -2144,7 +2140,7 @@ msgid_plural "Move slides"
 msgstr[0] "Plak Teks"
 msgstr[1] "Plak Teks"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+#: pageapp/commands/KoPAPageMoveCommand.cpp:47
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move page"
@@ -2152,25 +2148,25 @@ msgid_plural "Move pages"
 msgstr[0] "Uitvee Teks"
 msgstr[1] "Uitvee Teks"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
 #, kde-format
 msgid "Configure"
 msgstr ""
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
 #, fuzzy, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Open Dokument"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Outeur"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Outeur"
@@ -2192,214 +2188,211 @@ msgid "Select a master page design:"
 msgstr ""
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page"
 msgstr "Plak Teks"
 
-#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
 #, fuzzy, kde-format
 msgid "Slide %1"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: pageapp/KoPADocumentModel.cpp:174
+#: pageapp/KoPADocumentModel.cpp:172
 #, fuzzy, kde-format
 msgid "Page  %1"
 msgstr "Datum"
 
-#: pageapp/KoPADocumentModel.cpp:177
-#: pageapp/KoPADocumentStructureDocker.cpp:102
+#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
 #, fuzzy, kde-format
 msgid "Layer"
 msgstr "Rooi"
 
-#: pageapp/KoPADocumentModel.cpp:179
+#: pageapp/KoPADocumentModel.cpp:177
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgid "Group"
 msgstr "Groep:"
 
-#: pageapp/KoPADocumentModel.cpp:181
+#: pageapp/KoPADocumentModel.cpp:179
 #, fuzzy, kde-format
 msgid "Shape"
 msgstr "graf"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:267
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Plak Teks"
 
-#: pageapp/KoPADocumentModel.cpp:274
+#: pageapp/KoPADocumentModel.cpp:269
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPADocumentModel.cpp:278
+#: pageapp/KoPADocumentModel.cpp:272
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/KoPADocumentModel.cpp:314
-#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
 #, fuzzy, kde-format
 #| msgid "Size:"
 msgid "Slide"
 msgstr "Grootte:"
 
-#: pageapp/KoPADocumentModel.cpp:317
+#: pageapp/KoPADocumentModel.cpp:311
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgid "Visible"
 msgstr "Veranderlike"
 
-#: pageapp/KoPADocumentModel.cpp:318
+#: pageapp/KoPADocumentModel.cpp:312
 #, fuzzy, kde-format
 msgid "Locked"
 msgstr "Lokalisering"
 
-#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPADocumentModel.cpp:686
+#: pageapp/KoPADocumentModel.cpp:675
 #, fuzzy, kde-format
 msgid "&Move Here"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPADocumentModel.cpp:690
+#: pageapp/KoPADocumentModel.cpp:679
 #, fuzzy, kde-format
 msgid "&Copy Here"
 msgstr "Skerm"
 
-#: pageapp/KoPADocumentModel.cpp:694
+#: pageapp/KoPADocumentModel.cpp:683
 #, fuzzy, kde-format
 msgid "C&ancel"
 msgstr "Verander Kas"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:89
+#: pageapp/KoPADocumentStructureDocker.cpp:85
 #, fuzzy, kde-format
 msgid "Add a new slide or layer"
 msgstr "Nuwe reel"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:92
+#: pageapp/KoPADocumentStructureDocker.cpp:87
 #, fuzzy, kde-format
 msgid "Add a new page or layer"
 msgstr "Nuwe reel"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:100
-#: widgets/KoPageLayoutDialog.cpp:37
+#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Volgende styl:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:109
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#: pageapp/KoPADocumentStructureDocker.cpp:590
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Delete selected objects"
 msgstr "Verwyder Gekose Teks"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:115
+#: pageapp/KoPADocumentStructureDocker.cpp:108
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Raise selected objects"
 msgstr "Verwyder Gekose Teks"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:114
 #, fuzzy, kde-format
 msgid "Lower selected objects"
 msgstr "Open Dokument"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:130
+#: pageapp/KoPADocumentStructureDocker.cpp:123
 #, kde-format
 msgid "Minimal View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:132
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Detailed View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:134
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Thumbnail View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:144
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "View mode"
 msgstr "Verander Grense"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, fuzzy, kde-format
 msgid "New Layer"
 msgstr "Rooi"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:302
+#: pageapp/KoPADocumentStructureDocker.cpp:288
 #, fuzzy, kde-format
 msgid "New layer"
 msgstr "Rooi"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:315
+#: pageapp/KoPADocumentStructureDocker.cpp:301
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:341
+#: pageapp/KoPADocumentStructureDocker.cpp:327
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:344
+#: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:344
+#: pageapp/KoPADocumentStructureDocker.cpp:329
 #, fuzzy, kde-format
 msgid "Error deleting layers"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:611
+#: pageapp/KoPADocumentStructureDocker.cpp:586
 #, fuzzy, kde-format
 msgid "Add a new slide"
 msgstr "Nuwe reel"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:588
 #, fuzzy, kde-format
 msgid "Add a new page"
 msgstr "Nuwe reel"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:592
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "Pasmaak"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:619
-#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
-#: pigment/KoCompositeOpRegistry.cpp:87
+#: pigment/KoCompositeOpRegistry.cpp:78
 #, fuzzy, kde-format
 msgid "Copy"
 msgstr "Maatskappy"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:594
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"
@@ -2410,7 +2403,7 @@ msgstr "Datum"
 msgid "Page %1"
 msgstr "Datum"
 
-#: pageapp/KoPAPastePage.cpp:118
+#: pageapp/KoPAPastePage.cpp:112
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -2419,7 +2412,7 @@ msgid_plural "Paste Slides"
 msgstr[0] "Plak Teks"
 msgstr[1] "Plak Teks"
 
-#: pageapp/KoPAPastePage.cpp:121
+#: pageapp/KoPAPastePage.cpp:114
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -2428,110 +2421,110 @@ msgid_plural "Paste Pages"
 msgstr[0] "Plak Teks"
 msgstr[1] "Plak Teks"
 
-#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Verstek Kleur"
 
-#: pageapp/KoPAView.cpp:350
+#: pageapp/KoPAView.cpp:346
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:356
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Solied Lyn"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:365
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:369
 #, fuzzy, kde-format
 msgid "Show Rulers"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:371
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:375
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "Skep Werkvoorbeeld"
 
-#: pageapp/KoPAView.cpp:383
+#: pageapp/KoPAView.cpp:377
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:381
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "Voeg by Teks"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:387
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Page"
 msgstr "Maatskappy Naam"
 
-#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPAView.cpp:399
+#: pageapp/KoPAView.cpp:393
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "Uitvee Teks"
 
-#: pageapp/KoPAView.cpp:406
+#: pageapp/KoPAView.cpp:400
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page..."
 msgstr "Plak Teks"
 
-#: pageapp/KoPAView.cpp:410
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Page Layout..."
 msgstr "Bladsy Uitleg..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Veranderlike"
 
-#: pageapp/KoPAView.cpp:425
+#: pageapp/KoPAView.cpp:419
 #, fuzzy, kde-format
 msgid "Import Document..."
 msgstr "Open Dokument"
 
-#: pageapp/KoPAView.cpp:429
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Configure..."
 msgstr ""
 
-#: pageapp/KoPAView.cpp:521
+#: pageapp/KoPAView.cpp:513
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "In voer Styl"
 
-#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2543,7 +2536,7 @@ msgstr ""
 "Kon nie open\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:666
+#: pageapp/KoPAView.cpp:655
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -2555,201 +2548,201 @@ msgstr "Verander Tabel-vormer"
 msgid "Set image ..."
 msgstr "Tweede"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, fuzzy, kde-format
 msgid "Background"
 msgstr "Tweede"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #, fuzzy, kde-format
 msgid "Page Background"
 msgstr "Tweede"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page Design"
 msgstr "Bladsy Voorskou"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
 #, fuzzy, kde-format
 msgid "Slide Design"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, fuzzy, kde-format
 msgid "Use background of master page"
 msgstr "Tweede"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, fuzzy, kde-format
 msgid "Use background of master slide"
 msgstr "Tweede"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, fuzzy, kde-format
 #| msgid "Change List Type"
 msgid "Display shapes of master page"
 msgstr "Verander Lys Tipe"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, fuzzy, kde-format
 #| msgid "Change List Type"
 msgid "Display shapes of master slide"
 msgstr "Verander Lys Tipe"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change slide background image"
-msgstr "Tweede"
-
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "Tweede"
 
-#: pageapp/widgets/KoPageNavigator.cpp:55
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr "Tweede"
+
+#: pageapp/widgets/KoPageNavigator.cpp:53
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Slide %1/%2"
 msgstr "Plak Teks"
 
-#: pageapp/widgets/KoPageNavigator.cpp:56
+#: pageapp/widgets/KoPageNavigator.cpp:53
 #, fuzzy, kde-format
 msgid "Slide %1/%2"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: pageapp/widgets/KoPageNavigator.cpp:57
+#: pageapp/widgets/KoPageNavigator.cpp:54
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page %1/%2"
 msgstr "Plak Teks"
 
-#: pageapp/widgets/KoPageNavigator.cpp:58
+#: pageapp/widgets/KoPageNavigator.cpp:54
 #, fuzzy, kde-format
 msgid "Page %1/%2"
 msgstr "Datum"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:35
 #, kde-format
 msgid "Clear"
 msgstr ""
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
-#: pigment/compositeops/KoCompositeOps.h:127
-#: pigment/KoCompositeOpRegistry.cpp:38
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:102
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:29
 #, fuzzy, kde-format
 msgid "Subtract"
 msgstr "Abstrak"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
-#: pigment/compositeops/KoCompositeOps.h:129
-#: pigment/KoCompositeOpRegistry.cpp:39
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:167
+#: pigment/compositeops/KoCompositeOps.h:137
+#: pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
 msgid "Multiply"
 msgstr ""
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:182
-#: pigment/KoColorModelStandardIds.cpp:12
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:227
+#: pigment/colorspaces/KoAlphaColorSpace.h:205
+#: pigment/KoColorModelStandardIds.cpp:11
 #, fuzzy, kde-format
 msgid "Alpha mask"
 msgstr "Donker Groen"
 
-#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
-#: pigment/colorspaces/KoLabColorSpace.cpp:34
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:229
+#: pigment/colorspaces/KoLabColorSpace.cpp:49
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:32
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Alpha"
 msgstr "Maatskappy Naam"
 
-#: pigment/colorspaces/KoAlphaColorSpace.h:128
-#: pigment/colorspaces/KoAlphaColorSpace.h:133
-#: pigment/colorspaces/KoAlphaColorSpace.h:137
-#: pigment/colorspaces/KoAlphaColorSpace.h:141
-#: pigment/colorspaces/KoAlphaColorSpace.h:144
-#: pigment/colorspaces/KoAlphaColorSpace.h:147
-#: pigment/colorspaces/KoAlphaColorSpace.h:150
-#: pigment/colorspaces/KoAlphaColorSpace.h:153
-#: pigment/colorspaces/KoAlphaColorSpace.h:159
-#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#: pigment/colorspaces/KoAlphaColorSpace.h:145
+#: pigment/colorspaces/KoAlphaColorSpace.h:151
+#: pigment/colorspaces/KoAlphaColorSpace.h:156
+#: pigment/colorspaces/KoAlphaColorSpace.h:161
+#: pigment/colorspaces/KoAlphaColorSpace.h:165
+#: pigment/colorspaces/KoAlphaColorSpace.h:169
+#: pigment/colorspaces/KoAlphaColorSpace.h:173
+#: pigment/colorspaces/KoAlphaColorSpace.h:177
+#: pigment/colorspaces/KoAlphaColorSpace.h:184
+#: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
 msgstr ""
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:27
-#: pigment/colorspaces/KoLabColorSpace.h:63
+#: pigment/colorspaces/KoLabColorSpace.cpp:26
+#: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
 msgstr ""
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:31
-#: pigment/compositeops/KoCompositeOps.h:196
-#: pigment/KoCompositeOpRegistry.cpp:111
+#: pigment/colorspaces/KoLabColorSpace.cpp:28
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:102
 #, fuzzy, kde-format
 msgid "Lightness"
 msgstr "Ligte Cyan"
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:32
-#: pigment/KoBasicHistogramProducers.cpp:430
+#: pigment/colorspaces/KoLabColorSpace.cpp:35
+#: pigment/KoBasicHistogramProducers.cpp:416
 #, kde-format
 msgid "a*"
 msgstr ""
 
-#: pigment/colorspaces/KoLabColorSpace.cpp:33
-#: pigment/KoBasicHistogramProducers.cpp:431
+#: pigment/colorspaces/KoLabColorSpace.cpp:42
+#: pigment/KoBasicHistogramProducers.cpp:417
 #, kde-format
 msgid "b*"
 msgstr ""
 
-#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
-#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:25
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
 msgstr ""
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
-#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
 msgstr ""
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, fuzzy, kde-format
 msgid "Blue"
 msgstr "Waarde"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:30
 #, fuzzy, kde-format
 msgid "Green"
 msgstr "Skerm"
 
-#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:31
 #, fuzzy, kde-format
 msgid "Red"
 msgstr "Antwoord"
 
-#: pigment/colorspaces/KoSimpleColorSpace.h:60
-#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#: pigment/colorspaces/KoSimpleColorSpace.h:62
+#: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
 msgstr ""
 
-#: pigment/colorspaces/KoSimpleColorSpace.h:84
-#: pigment/colorspaces/KoSimpleColorSpace.h:89
-#: pigment/colorspaces/KoSimpleColorSpace.h:94
-#: pigment/colorspaces/KoSimpleColorSpace.h:99
-#: pigment/colorspaces/KoSimpleColorSpace.h:104
-#: pigment/colorspaces/KoSimpleColorSpace.h:108
-#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:91
+#: pigment/colorspaces/KoSimpleColorSpace.h:97
+#: pigment/colorspaces/KoSimpleColorSpace.h:103
+#: pigment/colorspaces/KoSimpleColorSpace.h:109
 #: pigment/colorspaces/KoSimpleColorSpace.h:115
-#: pigment/colorspaces/KoSimpleColorSpace.h:118
-#: pigment/colorspaces/KoSimpleColorSpace.h:124
-#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#: pigment/colorspaces/KoSimpleColorSpace.h:120
+#: pigment/colorspaces/KoSimpleColorSpace.h:125
+#: pigment/colorspaces/KoSimpleColorSpace.h:129
+#: pigment/colorspaces/KoSimpleColorSpace.h:133
+#: pigment/colorspaces/KoSimpleColorSpace.h:140
+#: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
 msgstr ""
@@ -2760,651 +2753,651 @@ msgid "Simple Color Conversion Engine"
 msgstr ""
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
-#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
-#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:233
 #, fuzzy, kde-format
 msgid "Alpha darken"
 msgstr "Donker Groen"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
-#: pigment/KoCompositeOpRegistry.cpp:69
+#: pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgid "Behind"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOpDissolve.h:49
-#: pigment/KoCompositeOpRegistry.cpp:83
+#: pigment/compositeops/KoCompositeOpDissolve.h:42
+#: pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgid "Dissolve"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOpErase.h:27
-#: pigment/KoCompositeOpRegistry.cpp:72
+#: pigment/compositeops/KoCompositeOpErase.h:26
+#: pigment/KoCompositeOpRegistry.cpp:63
 #, fuzzy, kde-format
 msgid "Erase"
 msgstr "Kas"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
-#: pigment/KoCompositeOpRegistry.cpp:70
+#: pigment/KoCompositeOpRegistry.cpp:61
 #, fuzzy, kde-format
 msgid "Greater"
 msgstr "Skep Werkvoorbeeld"
 
-#: pigment/compositeops/KoCompositeOpOver.h:49
-#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
-#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
-#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#: pigment/compositeops/KoCompositeOpOver.h:48
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:244
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:200
+#: pigment/KoCompositeOpRegistry.cpp:59 pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
 msgid "Normal"
 msgstr "Normale"
 
-#: pigment/compositeops/KoCompositeOps.h:101
-#: pigment/KoCompositeOpRegistry.cpp:71
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:62
 #, fuzzy, kde-format
 msgid "Overlay"
 msgstr "Onderstreep:"
 
-#: pigment/compositeops/KoCompositeOps.h:102
-#: pigment/KoCompositeOpRegistry.cpp:75
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:66
 #, fuzzy, kde-format
 #| msgid "Mail Merge"
 msgid "Grain Merge"
 msgstr "Pos Saamvlans"
 
-#: pigment/compositeops/KoCompositeOps.h:103
-#: pigment/KoCompositeOpRegistry.cpp:76
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgid "Grain Extract"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:104
-#: pigment/KoCompositeOpRegistry.cpp:74
+#: pigment/compositeops/KoCompositeOps.h:112
+#: pigment/KoCompositeOpRegistry.cpp:65
 #, fuzzy, kde-format
 msgid "Hard Mix"
 msgstr "Hoogte:"
 
-#: pigment/compositeops/KoCompositeOps.h:105
-#: pigment/KoCompositeOpRegistry.cpp:79
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:106
-#: pigment/KoCompositeOpRegistry.cpp:77
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:68
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgid "Parallel"
 msgstr "Veranderlike"
 
-#: pigment/compositeops/KoCompositeOps.h:107
-#: pigment/KoCompositeOpRegistry.cpp:78
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Allanon"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:109
-#: pigment/KoCompositeOpRegistry.cpp:53
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:44
 #, kde-format
 msgid "Screen"
 msgstr "Skerm"
 
-#: pigment/compositeops/KoCompositeOps.h:110
-#: pigment/KoCompositeOpRegistry.cpp:49
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:40
 #, fuzzy, kde-format
 msgid "Color Dodge"
 msgstr "Kleure:"
 
-#: pigment/compositeops/KoCompositeOps.h:111
-#: pigment/KoCompositeOpRegistry.cpp:50
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:41
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "Linear Dodge"
 msgstr "Verander Grense"
 
-#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
-#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
+#: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
 #, fuzzy, kde-format
 msgid "Lighten"
 msgstr "Ligte Groen"
 
-#: pigment/compositeops/KoCompositeOps.h:113
-#: pigment/KoCompositeOpRegistry.cpp:56
+#: pigment/compositeops/KoCompositeOps.h:121
+#: pigment/KoCompositeOpRegistry.cpp:47
 #, fuzzy, kde-format
 msgid "Hard Light"
 msgstr "Hoogte:"
 
-#: pigment/compositeops/KoCompositeOps.h:114
-#: pigment/KoCompositeOpRegistry.cpp:58
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:49
 #, fuzzy, kde-format
 msgid "Soft Light (SVG)"
 msgstr "Enkel"
 
-#: pigment/compositeops/KoCompositeOps.h:115
-#: pigment/KoCompositeOpRegistry.cpp:57
+#: pigment/compositeops/KoCompositeOps.h:123
+#: pigment/KoCompositeOpRegistry.cpp:48
 #, fuzzy, kde-format
 msgid "Soft Light (Photoshop)"
 msgstr "Enkel"
 
-#: pigment/compositeops/KoCompositeOps.h:116
-#: pigment/KoCompositeOpRegistry.cpp:59
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:50
 #, fuzzy, kde-format
 msgid "Gamma Light"
 msgstr "Ligte Groen"
 
-#: pigment/compositeops/KoCompositeOps.h:117
-#: pigment/KoCompositeOpRegistry.cpp:55
+#: pigment/compositeops/KoCompositeOps.h:125
+#: pigment/KoCompositeOpRegistry.cpp:46
 #, fuzzy, kde-format
 msgid "Vivid Light"
 msgstr "Ligte Groen"
 
-#: pigment/compositeops/KoCompositeOps.h:118
-#: pigment/KoCompositeOpRegistry.cpp:54
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:45
 #, fuzzy, kde-format
 msgid "Pin Light"
 msgstr "Ligte Groen"
 
-#: pigment/compositeops/KoCompositeOps.h:119
-#: pigment/KoCompositeOpRegistry.cpp:52
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:43
 #, fuzzy, kde-format
 msgid "Linear Light"
 msgstr "Wydte:"
 
-#: pigment/compositeops/KoCompositeOps.h:121
+#: pigment/compositeops/KoCompositeOps.h:129
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color Burn"
 msgstr "Kleur:"
 
-#: pigment/compositeops/KoCompositeOps.h:122
-#: pigment/KoCompositeOpRegistry.cpp:44
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:35
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "Linear Burn"
 msgstr "Verander Grense"
 
-#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
-#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#: pigment/compositeops/KoCompositeOps.h:131 pigment/KoCompositeOp.cpp:35
+#: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:36
 #, fuzzy, kde-format
 msgid "Darken"
 msgstr "Donker Groen"
 
-#: pigment/compositeops/KoCompositeOps.h:124
-#: pigment/KoCompositeOpRegistry.cpp:46
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:126
-#: pigment/KoCompositeOpRegistry.cpp:37
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:28
 #, fuzzy, kde-format
 #| msgid "Add Fraction"
 msgid "Addition"
 msgstr "Voeg by Fraksionele"
 
-#: pigment/compositeops/KoCompositeOps.h:128
+#: pigment/compositeops/KoCompositeOps.h:136
 #, fuzzy, kde-format
 msgid "Inversed-Subtract"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:130
-#: pigment/KoCompositeOpRegistry.cpp:40
+#: pigment/compositeops/KoCompositeOps.h:138
+#: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:132
-#: pigment/KoCompositeOpRegistry.cpp:66
+#: pigment/compositeops/KoCompositeOps.h:140
+#: pigment/KoCompositeOpRegistry.cpp:57
 #, kde-format
 msgid "Arcus Tangent"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:133
-#: pigment/KoCompositeOpRegistry.cpp:62
+#: pigment/compositeops/KoCompositeOps.h:141
+#: pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
 msgid "Difference"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:134
-#: pigment/KoCompositeOpRegistry.cpp:65
+#: pigment/compositeops/KoCompositeOps.h:142
+#: pigment/KoCompositeOpRegistry.cpp:56
 #, fuzzy, kde-format
 #| msgid "Exceptions"
 msgid "Exclusion"
 msgstr "Uitsonderings"
 
-#: pigment/compositeops/KoCompositeOps.h:135
-#: pigment/KoCompositeOpRegistry.cpp:63
+#: pigment/compositeops/KoCompositeOps.h:143
+#: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Equivalence"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:136
+#: pigment/compositeops/KoCompositeOps.h:144
 #, fuzzy, kde-format
 msgid "Additive-Subtractive"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:165
-#: pigment/KoCompositeOpRegistry.cpp:84
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:75
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Red"
 msgstr "Maatskappy Naam"
 
-#: pigment/compositeops/KoCompositeOps.h:166
-#: pigment/KoCompositeOpRegistry.cpp:85
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:76
 #, fuzzy, kde-format
 msgid "Copy Green"
 msgstr "Skerm"
 
-#: pigment/compositeops/KoCompositeOps.h:167
-#: pigment/KoCompositeOpRegistry.cpp:86
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:77
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Blue"
 msgstr "Maatskappy Naam"
 
-#: pigment/compositeops/KoCompositeOps.h:168
-#: pigment/KoCompositeOpRegistry.cpp:88
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:79
 #, fuzzy, kde-format
 msgid "Tangent Normalmap"
 msgstr "Pasmaak Petroon"
 
-#: pigment/compositeops/KoCompositeOps.h:169
+#: pigment/compositeops/KoCompositeOps.h:179
 #, fuzzy, kde-format
 msgid "Combine Normal Maps"
 msgstr "Pasmaak Petroon"
 
-#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
-#: pigment/KoCompositeOpRegistry.cpp:90
+#: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:81
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color"
 msgstr "Kleur:"
 
-#: pigment/compositeops/KoCompositeOps.h:172
-#: pigment/KoCompositeOpRegistry.cpp:91
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgid "Hue"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:173
-#: pigment/KoCompositeOpRegistry.cpp:92
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:83
 #, fuzzy, kde-format
 msgid "Saturation"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:174
-#: pigment/KoCompositeOpRegistry.cpp:95
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:86
 #, fuzzy, kde-format
 msgid "Increase Saturation"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:175
-#: pigment/KoCompositeOpRegistry.cpp:94
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:85
 #, fuzzy, kde-format
 msgid "Decrease Saturation"
 msgstr "Versiering"
 
-#: pigment/compositeops/KoCompositeOps.h:176
-#: pigment/KoCompositeOpRegistry.cpp:93
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:84
 #, fuzzy, kde-format
 msgid "Luminosity"
 msgstr "Basis skrif tipe grootte:"
 
-#: pigment/compositeops/KoCompositeOps.h:177
-#: pigment/KoCompositeOpRegistry.cpp:97
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:88
 #, fuzzy, kde-format
 msgid "Increase Luminosity"
 msgstr "Basis skrif tipe grootte:"
 
-#: pigment/compositeops/KoCompositeOps.h:178
-#: pigment/KoCompositeOpRegistry.cpp:96
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:87
 #, fuzzy, kde-format
 msgid "Decrease Luminosity"
 msgstr "Basis skrif tipe grootte:"
 
-#: pigment/compositeops/KoCompositeOps.h:179
-#: pigment/KoCompositeOpRegistry.cpp:47
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:38
 #, fuzzy, kde-format
 msgid "Darker Color"
 msgstr "Tweede"
 
-#: pigment/compositeops/KoCompositeOps.h:180
-#: pigment/KoCompositeOpRegistry.cpp:60
+#: pigment/compositeops/KoCompositeOps.h:190
+#: pigment/KoCompositeOpRegistry.cpp:51
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgid "Lighter Color"
 msgstr "Meer Lyn Kleure..."
 
-#: pigment/compositeops/KoCompositeOps.h:182
-#: pigment/KoCompositeOpRegistry.cpp:99
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:90
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color HSI"
 msgstr "Kleur:"
 
-#: pigment/compositeops/KoCompositeOps.h:183
-#: pigment/KoCompositeOpRegistry.cpp:100
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgid "Hue HSI"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:184
-#: pigment/KoCompositeOpRegistry.cpp:101
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:92
 #, fuzzy, kde-format
 msgid "Saturation HSI"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:185
-#: pigment/KoCompositeOpRegistry.cpp:104
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:95
 #, fuzzy, kde-format
 msgid "Increase Saturation HSI"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:186
-#: pigment/KoCompositeOpRegistry.cpp:103
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:94
 #, fuzzy, kde-format
 msgid "Decrease Saturation HSI"
 msgstr "Versiering"
 
-#: pigment/compositeops/KoCompositeOps.h:187
-#: pigment/KoCompositeOpRegistry.cpp:102
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:93
 #, fuzzy, kde-format
 #| msgid "Internet"
 msgid "Intensity"
 msgstr "Internet"
 
-#: pigment/compositeops/KoCompositeOps.h:188
-#: pigment/KoCompositeOpRegistry.cpp:106
+#: pigment/compositeops/KoCompositeOps.h:199
+#: pigment/KoCompositeOpRegistry.cpp:97
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Increase Intensity"
 msgstr "Verander Inkeep"
 
-#: pigment/compositeops/KoCompositeOps.h:189
-#: pigment/KoCompositeOpRegistry.cpp:105
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:96
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Decrease Intensity"
 msgstr "Verander Inkeep"
 
-#: pigment/compositeops/KoCompositeOps.h:191
-#: pigment/KoCompositeOpRegistry.cpp:108
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:99
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color HSL"
 msgstr "Kleur:"
 
-#: pigment/compositeops/KoCompositeOps.h:192
-#: pigment/KoCompositeOpRegistry.cpp:109
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgid "Hue HSL"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:193
-#: pigment/KoCompositeOpRegistry.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:101
 #, fuzzy, kde-format
 msgid "Saturation HSL"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:194
-#: pigment/KoCompositeOpRegistry.cpp:113
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:104
 #, fuzzy, kde-format
 msgid "Increase Saturation HSL"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:195
-#: pigment/KoCompositeOpRegistry.cpp:112
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:103
 #, fuzzy, kde-format
 msgid "Decrease Saturation HSL"
 msgstr "Versiering"
 
-#: pigment/compositeops/KoCompositeOps.h:197
-#: pigment/KoCompositeOpRegistry.cpp:115
+#: pigment/compositeops/KoCompositeOps.h:208
+#: pigment/KoCompositeOpRegistry.cpp:106
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Increase Lightness"
 msgstr "Verander Inkeep"
 
-#: pigment/compositeops/KoCompositeOps.h:198
-#: pigment/KoCompositeOpRegistry.cpp:114
+#: pigment/compositeops/KoCompositeOps.h:209
+#: pigment/KoCompositeOpRegistry.cpp:105
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Decrease Lightness"
 msgstr "Verander Inkeep"
 
-#: pigment/compositeops/KoCompositeOps.h:200
-#: pigment/KoCompositeOpRegistry.cpp:117
+#: pigment/compositeops/KoCompositeOps.h:211
+#: pigment/KoCompositeOpRegistry.cpp:108
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color HSV"
 msgstr "Kleur:"
 
-#: pigment/compositeops/KoCompositeOps.h:201
-#: pigment/KoCompositeOpRegistry.cpp:118
+#: pigment/compositeops/KoCompositeOps.h:212
+#: pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgid "Hue HSV"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOps.h:202
-#: pigment/KoCompositeOpRegistry.cpp:119
+#: pigment/compositeops/KoCompositeOps.h:213
+#: pigment/KoCompositeOpRegistry.cpp:110
 #, fuzzy, kde-format
 msgid "Saturation HSV"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:203
-#: pigment/KoCompositeOpRegistry.cpp:122
+#: pigment/compositeops/KoCompositeOps.h:214
+#: pigment/KoCompositeOpRegistry.cpp:113
 #, fuzzy, kde-format
 msgid "Increase Saturation HSV"
 msgstr "Abstrak"
 
-#: pigment/compositeops/KoCompositeOps.h:204
-#: pigment/KoCompositeOpRegistry.cpp:121
+#: pigment/compositeops/KoCompositeOps.h:215
+#: pigment/KoCompositeOpRegistry.cpp:112
 #, fuzzy, kde-format
 msgid "Decrease Saturation HSV"
 msgstr "Versiering"
 
-#: pigment/compositeops/KoCompositeOps.h:205
-#: pigment/KoCompositeOpRegistry.cpp:120
+#: pigment/compositeops/KoCompositeOps.h:216
+#: pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
 msgid "Value"
 msgstr "Waarde"
 
-#: pigment/compositeops/KoCompositeOps.h:206
-#: pigment/KoCompositeOpRegistry.cpp:124
+#: pigment/compositeops/KoCompositeOps.h:217
+#: pigment/KoCompositeOpRegistry.cpp:115
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Increase Value"
 msgstr "Verander Inkeep"
 
-#: pigment/compositeops/KoCompositeOps.h:207
-#: pigment/KoCompositeOpRegistry.cpp:123
+#: pigment/compositeops/KoCompositeOps.h:218
+#: pigment/KoCompositeOpRegistry.cpp:114
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Decrease Value"
 msgstr "Verander Inkeep"
 
-#: pigment/KoBasicHistogramProducers.cpp:352
-#: pigment/KoBasicHistogramProducers.cpp:419
+#: pigment/KoBasicHistogramProducers.cpp:340
+#: pigment/KoBasicHistogramProducers.cpp:405
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:356
+#: pigment/KoBasicHistogramProducers.cpp:344
 #, kde-format
 msgid "R"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:357
+#: pigment/KoBasicHistogramProducers.cpp:345
 #, kde-format
 msgid "G"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:358
+#: pigment/KoBasicHistogramProducers.cpp:346
 #, kde-format
 msgid "B"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:425
+#: pigment/KoBasicHistogramProducers.cpp:411
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:429
+#: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
 msgid "L*"
 msgstr ""
 
-#: pigment/KoBasicHistogramProducers.cpp:503
+#: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:13
+#: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:14
+#: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "XYZ"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:15
+#: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:16
+#: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:17
+#: pigment/KoColorModelStandardIds.cpp:16
 #, fuzzy, kde-format
 msgid "Grayscale"
 msgstr "Duits"
 
-#: pigment/KoColorModelStandardIds.cpp:18
+#: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:19
+#: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
 msgid "YCbCr"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:21
+#: pigment/KoColorModelStandardIds.cpp:20
 #, kde-format
 msgid "8 Bits"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:22
+#: pigment/KoColorModelStandardIds.cpp:21
 #, kde-format
 msgid "16 Bits"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:23
+#: pigment/KoColorModelStandardIds.cpp:22
 #, kde-format
 msgid "16 Bits Float"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:24
+#: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "32 Bits Float"
 msgstr ""
 
-#: pigment/KoColorModelStandardIds.cpp:25
+#: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
 msgid "64 Bits Float"
 msgstr ""
 
-#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#: pigment/KoCompositeOp.cpp:23 pigment/KoCompositeOpRegistry.cpp:24
 #, fuzzy, kde-format
 msgid "Arithmetic"
 msgstr "Outokorreksie"
 
-#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:25
 #, fuzzy, kde-format
 msgid "Negative"
 msgstr "Relatiewe grootte:"
 
-#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#: pigment/KoCompositeOp.cpp:39 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "HSY"
 msgstr ""
 
-#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#: pigment/KoCompositeOp.cpp:43 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSI"
 msgstr ""
 
-#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#: pigment/KoCompositeOp.cpp:47 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSL"
 msgstr ""
 
-#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSV"
 msgstr ""
 
-#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Mix"
 msgstr ""
 
-#: pigment/KoCompositeOpRegistry.cpp:41
+#: pigment/KoCompositeOpRegistry.cpp:32
 #, fuzzy, kde-format
 msgid "Inverse Subtract"
 msgstr "Abstrak"
 
-#: pigment/KoCompositeOpRegistry.cpp:43
+#: pigment/KoCompositeOpRegistry.cpp:34
 #, fuzzy, kde-format
 msgid "Burn"
 msgstr " brown "
 
-#: pigment/KoCompositeOpRegistry.cpp:64
+#: pigment/KoCompositeOpRegistry.cpp:55
 #, fuzzy, kde-format
 msgid "Additive Subtractive"
 msgstr "Abstrak"
 
-#: pigment/KoCompositeOpRegistry.cpp:73
+#: pigment/KoCompositeOpRegistry.cpp:64
 #, fuzzy, kde-format
 msgid "Alpha Darken"
 msgstr "Donker Groen"
 
-#: pigment/KoCompositeOpRegistry.cpp:81
+#: pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgid "Bumpmap"
 msgstr ""
 
-#: pigment/KoCompositeOpRegistry.cpp:82
+#: pigment/KoCompositeOpRegistry.cpp:73
 #, fuzzy, kde-format
 msgid "Combine Normal Map"
 msgstr "Pasmaak Petroon"
 
-#: pigment/resources/KoStopGradient.cpp:421
+#: pigment/resources/KoStopGradient.cpp:419
 #, kde-format
 msgid "SVG Gradient"
 msgstr ""
 
-#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#: rdf/InsertSemanticObjectReferenceAction.cpp:40
 #, kde-format
 msgid "Select the object you want to reference"
 msgstr ""
 
-#: rdf/KoDocumentRdf.cpp:618
+#: rdf/KoDocumentRdf.cpp:594
 #, kde-format
 msgid "Reference"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:229
+#: rdf/KoDocumentRdfEditWidget.cpp:234
 #, kde-format
 msgid "Set For All Existing"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:297
+#: rdf/KoDocumentRdfEditWidget.cpp:296
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3413,13 +3406,13 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:300
+#: rdf/KoDocumentRdfEditWidget.cpp:299
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:341
+#: rdf/KoDocumentRdfEditWidget.cpp:338
 #, fuzzy, kde-format
 msgid "Rdf"
 msgstr "Antwoord"
@@ -3575,28 +3568,28 @@ msgid "Apply Stylesheet"
 msgstr "Wend aan Styl %1"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#: rdf/KoSemanticStylesheetsEditor.cpp:96
 #, kde-format
 msgid "System"
 msgstr ""
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
-#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
+#: rdf/KoSemanticStylesheetsEditor.cpp:111
 #, fuzzy, kde-format
 msgid "User"
 msgstr "Voeg by:"
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:121
 #, kde-format
 msgid "Reapply Current"
 msgstr ""
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:124
 #, kde-format
 msgid "Disassociate"
 msgstr ""
 
-#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:143
 #, fuzzy, kde-format
 msgid "Edit %1"
 msgstr "Voeg by Groep..."
@@ -3631,17 +3624,17 @@ msgstr "Styl"
 msgid "Empty"
 msgstr ""
 
-#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:28
 #, kde-format
 msgid "URI"
 msgstr ""
 
-#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:29
 #, fuzzy, kde-format
 msgid "Literal"
 msgstr "Ligte Koraal"
 
-#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:30
 #, kde-format
 msgid "Blank"
 msgstr "Leë"
@@ -3683,48 +3676,41 @@ msgstr "Datum"
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:229
+#: store/KoEncryptedStore.cpp:244
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:229
+#: store/KoEncryptedStore.cpp:245
 #, fuzzy, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Donker Oranje"
 
-#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
-#: store/KoEncryptedStore.cpp:287
+#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
+#: store/KoEncryptedStore.cpp:309
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Donker Oranje"
 
-#: store/KoEncryptedStore.cpp:287
+#: store/KoEncryptedStore.cpp:308
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:301
-#, kde-format
-msgid ""
-"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
-"not be opened."
-msgstr ""
-
-#: store/KoEncryptedStore.cpp:331
+#: store/KoEncryptedStore.cpp:349
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3732,57 +3718,57 @@ msgid ""
 "prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:429
+#: store/KoEncryptedStore.cpp:447
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:550
+#: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:710
+#: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:724
+#: store/KoEncryptedStore.cpp:783
 #, fuzzy, kde-format
 msgid "Do you want to save the password?"
 msgstr "Doen jy rerig wil hê na verwyder wat werkvoorbeeld?"
 
-#: store/KoNetAccess.cpp:90
+#: store/KoNetAccess.cpp:89
 #, fuzzy, kde-format
 msgid "File '%1' is not readable"
 msgstr "%1 is nie 'n geldige skakel."
 
-#: store/KoNetAccess.cpp:389
+#: store/KoNetAccess.cpp:370
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""
 
-#: store/KoStore.cpp:168
-#, kde-format
-msgid "The directory mode is not supported for remote locations."
-msgstr ""
-
-#: store/KoStore.cpp:169
+#: store/KoStore.cpp:152
 #, kde-format
 msgid "Calligra Storage"
 msgstr ""
 
-#: text/commands/ChangeListCommand.cpp:28
-#: text/commands/ChangeListCommand.cpp:76
-#: text/commands/ChangeListCommand.cpp:89
+#: store/KoStore.cpp:152
+#, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr ""
+
+#: text/commands/ChangeListCommand.cpp:30
+#: text/commands/ChangeListCommand.cpp:78
+#: text/commands/ChangeListCommand.cpp:90
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change List"
 msgstr "Verander Karakter na Simbool"
 
-#: text/commands/ChangeStylesMacroCommand.cpp:24
+#: text/commands/ChangeStylesMacroCommand.cpp:23
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
@@ -3794,16 +3780,16 @@ msgid "Delete"
 msgstr "Uitvee Teks"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:508 text/KoTextEditor_undo.cpp:74
-#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
-#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
+#: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 #, fuzzy
 #| msgid "Text"
 msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr "Teks"
 
-#: text/commands/DeleteCommand.cpp:59
+#: text/commands/DeleteCommand.cpp:56
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete"
@@ -3821,13 +3807,13 @@ msgctxt "(qtundo-format)"
 msgid "Delete Row"
 msgstr "Uitvee Teks"
 
-#: text/commands/InsertNoteCommand.cpp:21
+#: text/commands/InsertNoteCommand.cpp:20
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
 msgstr "Voeg by Skakel"
 
-#: text/commands/InsertNoteCommand.cpp:23
+#: text/commands/InsertNoteCommand.cpp:22
 #, fuzzy
 #| msgid "Insert Text"
 msgctxt "(qtundo-format)"
@@ -3911,21 +3897,21 @@ msgctxt "(qtundo-format)"
 msgid "Split sections endings"
 msgstr ""
 
-#: text/commands/TextPasteCommand.cpp:51
+#: text/commands/TextPasteCommand.cpp:53
 #, fuzzy
 #| msgid "Shadow:"
 msgctxt "(qtundo-format)"
 msgid "Paste As Text"
 msgstr "Skadu:"
 
-#: text/commands/TextPasteCommand.cpp:53
+#: text/commands/TextPasteCommand.cpp:55
 #, fuzzy
 #| msgid "Date"
 msgctxt "(qtundo-format)"
 msgid "Paste"
 msgstr "Datum"
 
-#: text/InsertTextLocator.cpp:14
+#: text/InsertTextLocator.cpp:13
 #, kde-format
 msgid "Index Reference"
 msgstr ""
@@ -3945,14 +3931,14 @@ msgstr ""
 msgid "Select the index you want to reference"
 msgstr ""
 
-#: text/KoFindStrategy.cpp:51
+#: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
 msgstr[0] ""
 msgstr[1] ""
 
-#: text/KoFindStrategy.cpp:51
+#: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found no match"
 msgstr ""
@@ -3965,14 +3951,14 @@ msgid ""
 "No text was replaced"
 msgstr ""
 
-#: text/KoReplaceStrategy.cpp:46
+#: text/KoReplaceStrategy.cpp:45
 #, fuzzy, kde-format
 msgid "1 replacement made"
 msgid_plural "%1 replacements made"
 msgstr[0] "Vervang Teks"
 msgstr[1] "Vervang Teks"
 
-#: text/KoReplaceStrategy.cpp:59
+#: text/KoReplaceStrategy.cpp:57
 #, fuzzy, kde-format
 #| msgctxt "We add the 1/2 char at the %1"
 #| msgid "Re&place 1/2... with %1..."
@@ -4005,265 +3991,265 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Dubbel"
 
-#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
-#: text/KoTextEditor.cpp:1503
+#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
+#: text/KoTextEditor.cpp:1483
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "Normale paragraaf teks"
 
-#: text/KoTextEditor.cpp:470
+#: text/KoTextEditor.cpp:473
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Voeg by Naam"
 
-#: text/KoTextEditor.cpp:485
+#: text/KoTextEditor.cpp:488
 #, fuzzy
 #| msgid "Add Fraction"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "Voeg by Fraksionele"
 
-#: text/KoTextEditor.cpp:509
+#: text/KoTextEditor.cpp:512
 #, fuzzy
 #| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "Voeg by Teks"
 
-#: text/KoTextEditor.cpp:535
+#: text/KoTextEditor.cpp:538
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "Voeg by Teks"
 
-#: text/KoTextEditor.cpp:602
+#: text/KoTextEditor.cpp:603
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "Voeg by Lyn Breek"
 
-#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
-#: text/KoTextEditor.cpp:940
+#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
+#: text/KoTextEditor.cpp:928
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "Voeg by Teks"
 
-#: text/KoTextEditor.cpp:1080
+#: text/KoTextEditor.cpp:1068
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Kantlyne"
 
-#: text/KoTextEditor.cpp:1097
+#: text/KoTextEditor.cpp:1085
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "Vertikaal"
 
-#: text/KoTextEditor.cpp:1126
+#: text/KoTextEditor.cpp:1113
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "Pasmaak Petroon"
 
-#: text/KoTextEditor.cpp:1143
+#: text/KoTextEditor.cpp:1129
 #, fuzzy
 #| msgid "Change Text Format"
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Verander Teks Formaat"
 
-#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
-#: text/KoTextEditor.cpp:1210
+#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
+#: text/KoTextEditor.cpp:1196
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "Voeg by Teks"
 
-#: text/KoTextEditor.cpp:1249
+#: text/KoTextEditor.cpp:1235
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "Voeg by Teks"
 
-#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
-#: text/KoTextEditor.cpp:1287
+#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
+#: text/KoTextEditor.cpp:1273
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "Voeg by Lyn Breek"
 
-#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
 #, fuzzy
 #| msgid "Add Fraction"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "Voeg by Fraksionele"
 
-#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
-#: text/KoTextEditor.cpp:1393
+#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
+#: text/KoTextEditor.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:54
+#: text/KoTextEditor_format.cpp:57
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Bold"
 msgstr "Vetdruk:"
 
-#: text/KoTextEditor_format.cpp:67
+#: text/KoTextEditor_format.cpp:70
 #, fuzzy
 #| msgid "Italic:"
 msgctxt "(qtundo-format)"
 msgid "Italic"
 msgstr "Kursief:"
 
-#: text/KoTextEditor_format.cpp:80
+#: text/KoTextEditor_format.cpp:83
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Underline"
 msgstr "Onderstreep:"
 
-#: text/KoTextEditor_format.cpp:99
+#: text/KoTextEditor_format.cpp:102
 #, fuzzy
 #| msgid "Strikeout:"
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
 msgstr "Opgehewe:"
 
-#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#: text/KoTextEditor_format.cpp:139 text/KoTextEditor_format.cpp:140
 #, fuzzy
 #| msgid "Change Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Alignment"
 msgstr "Verander Oplyn"
 
-#: text/KoTextEditor_format.cpp:150
+#: text/KoTextEditor_format.cpp:157
 #, fuzzy
 #| msgid "Vertical alignment:"
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Alignment"
 msgstr "Vertikaal oplyn:"
 
-#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+#: text/KoTextEditor_format.cpp:192 text/KoTextEditor_format.cpp:193
 #, fuzzy
 #| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
 msgstr "Verander Inkeep"
 
-#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+#: text/KoTextEditor_format.cpp:229 text/KoTextEditor_format.cpp:230
 #, fuzzy
 #| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "Verander Inkeep"
 
-#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "Basis skrif tipe grootte:"
 
-#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "Basis skrif tipe grootte:"
 
-#: text/KoTextEditor_format.cpp:282
+#: text/KoTextEditor_format.cpp:294
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Kies Skrif tipe"
 
-#: text/KoTextEditor_format.cpp:295
+#: text/KoTextEditor_format.cpp:307
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Kies Skrif tipe"
 
-#: text/KoTextEditor_format.cpp:308
+#: text/KoTextEditor_format.cpp:320
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Tweede"
 
-#: text/KoTextEditor_format.cpp:321
+#: text/KoTextEditor_format.cpp:333
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Verstek Kleur"
 
-#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Skep Nuwe Styl"
 
-#: text/KoTextEditor_format.cpp:455
+#: text/KoTextEditor_format.cpp:466
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Normale paragraaf teks"
 
-#: text/KoTextEditor_format.cpp:517
+#: text/KoTextEditor_format.cpp:528
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Datum Formaat"
 
-#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Datum Formaat"
 
-#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
 #, fuzzy, kde-format
 msgid "Default"
 msgstr "Verstek"
 
-#: widgets/KoColorPopupAction.cpp:76
+#: widgets/KoColorPopupAction.cpp:82
 #, fuzzy, kde-format
 msgid "Opacity"
 msgstr "Onderskrif"
 
-#: widgets/KoColorSetWidget.cpp:148
+#: widgets/KoColorSetWidget.cpp:150
 #, fuzzy, kde-format
 msgid "Recent:"
 msgstr "Onlangse Lêer:"
 
-#: widgets/KoColorSetWidget.cpp:161
+#: widgets/KoColorSetWidget.cpp:163
 #, fuzzy, kde-format
 #| msgid "More Colors..."
 msgid "Add / Remove Colors..."
 msgstr "Meer Kleure..."
 
-#: widgets/KoConfigAuthorPage.cpp:51
+#: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
 msgstr ""
 
-#: widgets/KoConfigAuthorPage.cpp:55
+#: widgets/KoConfigAuthorPage.cpp:54
 #, fuzzy, kde-format
 msgid "Delete the author profile"
 msgstr "Uitvee Teks"
 
-#: widgets/KoConfigAuthorPage.cpp:129
+#: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr ""
 
-#: widgets/KoConfigAuthorPage.cpp:129
+#: widgets/KoConfigAuthorPage.cpp:128
 #, fuzzy, kde-format
 msgid "Name of Profile"
 msgstr "Nommer van Bladsye"
@@ -4346,69 +4332,46 @@ msgstr "Stad:"
 msgid "Country:"
 msgstr "Land:"
 
-#: widgets/KoCsvImportDialog.cpp:85
+#: widgets/KoCsvImportDialog.cpp:86
 #, fuzzy, kde-format
 msgid "Import Data"
 msgstr "Open Dokument"
 
-#: widgets/KoCsvImportDialog.cpp:88
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Recommended ( %1 )"
-msgstr ""
-
-#: widgets/KoCsvImportDialog.cpp:89
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Locale ( %1 )"
-msgstr ""
-
-#: widgets/KoCsvImportDialog.cpp:92
-#, kde-format
-msgctxt "Descriptive encoding name"
-msgid "Other ( %1 )"
-msgstr ""
-
-#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
-#: widgets/KoCsvImportDialog.cpp:570
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
+#: widgets/KoCsvImportDialog.cpp:483
 #, fuzzy, kde-format
 #| msgid "General"
 msgid "Generic"
 msgstr "Algemeen"
 
-#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
-#: widgets/KoModeBox.cpp:572
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoModeBox.cpp:563
 #, kde-format
 msgid "Text"
 msgstr "Teks"
 
-#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
 #, fuzzy, kde-format
 msgid "Currency"
 msgstr "Huidige Seksie"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
-#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
+#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "Geen"
 
-#: widgets/KoCsvImportDialog.cpp:712
+#: widgets/KoCsvImportDialog.cpp:618
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "
 "the end value."
-msgstr ""
-
-#: widgets/KoCsvImportDialog.cpp:758
-#, kde-format
-msgid "Cannot find encoding: %1"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
@@ -4417,193 +4380,187 @@ msgstr ""
 msgid "Data"
 msgstr "Datum"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
-#: widgets/KoCsvImportDialog.ui:63
-#, fuzzy, kde-format
-msgid "E&ncoding:"
-msgstr "Onderstreep:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
-#: widgets/KoCsvImportDialog.ui:107
+#: widgets/KoCsvImportDialog.ui:64
 #, kde-format
 msgid "First row contains headers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
-#: widgets/KoCsvImportDialog.ui:120
+#: widgets/KoCsvImportDialog.ui:77
 #, kde-format
 msgid "First column contains headers"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
-#: widgets/KoCsvImportDialog.ui:144
+#: widgets/KoCsvImportDialog.ui:101
 #, fuzzy, kde-format
 msgid "Format"
 msgstr "Datum Formaat"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: widgets/KoCsvImportDialog.ui:156
+#: widgets/KoCsvImportDialog.ui:113
 #, fuzzy, kde-format
 msgid "Delimiter"
 msgstr "Links Skeisimbool"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: widgets/KoCsvImportDialog.ui:162
+#: widgets/KoCsvImportDialog.ui:119
 #, fuzzy, kde-format
 msgid "Comma"
 msgstr "Maatskappy"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: widgets/KoCsvImportDialog.ui:172
+#: widgets/KoCsvImportDialog.ui:129
 #, fuzzy, kde-format
 msgid "Semicolon"
 msgstr "Tweede"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: widgets/KoCsvImportDialog.ui:179
+#: widgets/KoCsvImportDialog.ui:136
 #, fuzzy, kde-format
 msgid "Other"
 msgstr "Internet"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: widgets/KoCsvImportDialog.ui:186
+#: widgets/KoCsvImportDialog.ui:143
 #, fuzzy, kde-format
 msgid "Tabulator"
 msgstr "Tabelleerders"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: widgets/KoCsvImportDialog.ui:193
+#: widgets/KoCsvImportDialog.ui:150
 #, fuzzy, kde-format
 msgid "Space"
 msgstr "Voeg by Spasie"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
-#: widgets/KoCsvImportDialog.ui:238
+#: widgets/KoCsvImportDialog.ui:195
 #, kde-format
 msgid "Text&quote:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.ui:255
+#: widgets/KoCsvImportDialog.ui:212
 #, kde-format
 msgid "\""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.ui:260
+#: widgets/KoCsvImportDialog.ui:217
 #, kde-format
 msgid "'"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
-#: widgets/KoCsvImportDialog.ui:289
+#: widgets/KoCsvImportDialog.ui:246
 #, kde-format
 msgid "Decimal symbol:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label4)
-#: widgets/KoCsvImportDialog.ui:318
+#: widgets/KoCsvImportDialog.ui:275
 #, kde-format
 msgid "Thousands separator:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
-#: widgets/KoCsvImportDialog.ui:363
+#: widgets/KoCsvImportDialog.ui:320
 #, kde-format
 msgid "Ignore duplicate delimiters"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
-#: widgets/KoCsvImportDialog.ui:370
+#: widgets/KoCsvImportDialog.ui:327
 #, fuzzy, kde-format
 msgid "&Format:"
 msgstr "Datum Formaat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
-#: widgets/KoCsvImportDialog.ui:384
+#: widgets/KoCsvImportDialog.ui:341
 #, fuzzy, kde-format
 msgid "Ranges"
 msgstr "Oranje"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
-#: widgets/KoCsvImportDialog.ui:390
+#: widgets/KoCsvImportDialog.ui:347
 #, fuzzy, kde-format
 msgid "Update"
 msgstr "Datum"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
-#: widgets/KoCsvImportDialog.ui:457
+#: widgets/KoCsvImportDialog.ui:414
 #, fuzzy, kde-format
 msgid "Import columns:"
 msgstr "Open Dokument"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
-#: widgets/KoCsvImportDialog.ui:476
+#: widgets/KoCsvImportDialog.ui:433
 #, fuzzy, kde-format
 msgid "Import lines:"
 msgstr "In voer Styl"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#: widgets/KoCsvImportDialog.ui:443 widgets/KoCsvImportDialog.ui:466
 #, fuzzy, kde-format
 #| msgid "Author"
 msgid "to"
 msgstr "Outeur"
 
-#: widgets/KoDialog.cpp:248
+#: widgets/KoDialog.cpp:246
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:461
+#: widgets/KoDialog.cpp:449
 #, fuzzy, kde-format
 msgid "modified"
 msgstr "Middelste:"
 
-#: widgets/KoDialog.cpp:472
+#: widgets/KoDialog.cpp:458
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:828
+#: widgets/KoDialog.cpp:813
 #, fuzzy, kde-format
 msgid "&Details"
 msgstr "Verstek"
 
-#: widgets/KoDialog.cpp:983
+#: widgets/KoDialog.cpp:961
 #, kde-format
 msgid "Get help..."
 msgstr ""
 
-#: widgets/KoDockWidgetTitleBar.cpp:52
+#: widgets/KoDockWidgetTitleBar.cpp:54
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
 msgstr "Open Dokument"
 
-#: widgets/KoDockWidgetTitleBar.cpp:59
+#: widgets/KoDockWidgetTitleBar.cpp:61
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Open Dokument"
 
-#: widgets/KoDockWidgetTitleBar.cpp:67
+#: widgets/KoDockWidgetTitleBar.cpp:71
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
 msgstr "Open Dokument"
 
-#: widgets/KoDockWidgetTitleBar.cpp:76
+#: widgets/KoDockWidgetTitleBar.cpp:80
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
 msgstr "Solied Lyn"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
-#: widgets/KoDocumentInfoDlg.cpp:331
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
+#: widgets/KoDocumentInfoDlg.cpp:329
 #, fuzzy, kde-format
 msgid "&Encrypt"
 msgstr "Versiering"
@@ -4692,100 +4649,100 @@ msgstr "Herstel"
 msgid "Language:"
 msgstr "Plak Teks"
 
-#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#: widgets/KoDocumentInfoDlg.cpp:108 widgets/KoDocumentInfoDlg.cpp:109
 #, kde-format
 msgid "General"
 msgstr "Algemeen"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:136
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Last saved by"
 msgstr "Plak Teks"
 
-#: widgets/KoDocumentInfoDlg.cpp:189
+#: widgets/KoDocumentInfoDlg.cpp:193
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:313
 #, kde-format
 msgid "This document will be decrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:315
 #, fuzzy, kde-format
 msgid "Do not decrypt"
 msgstr "Versiering"
 
-#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document is encrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:227 widgets/KoDocumentInfoDlg.cpp:319
 #, fuzzy, kde-format
 msgid "D&ecrypt"
 msgstr "Versiering"
 
-#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "This document will be encrypted."
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:325
 #, fuzzy, kde-format
 msgid "Do not encrypt"
 msgstr "Versiering"
 
-#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#: widgets/KoDocumentInfoDlg.cpp:235 widgets/KoDocumentInfoDlg.cpp:327
 #, kde-format
 msgid "This document is not encrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:239
+#: widgets/KoDocumentInfoDlg.cpp:241
 #, kde-format
 msgid "This document does not support encryption"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:352
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:351
 #, fuzzy, kde-format
 msgid "Confirm Decrypt"
 msgstr "Versiering"
 
-#: widgets/KoDocumentInfoDlg.cpp:355
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, fuzzy, kde-format
 msgid "Decrypt"
 msgstr "Versiering"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:361
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
+#: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
+#: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
 #, fuzzy, kde-format
 msgid "Save Document"
 msgstr "Stoor Dokument As"
 
-#: widgets/KoDocumentInfoDlg.cpp:373
+#: widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4793,24 +4750,24 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:395
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, fuzzy, kde-format
 msgid "Change Filetype"
 msgstr "Verander Lys Tipe"
 
-#: widgets/KoDocumentInfoDlg.cpp:396
+#: widgets/KoDocumentInfoDlg.cpp:392
 #, fuzzy, kde-format
 msgid "Change"
 msgstr "Verander Kas"
 
-#: widgets/KoDocumentInfoDlg.cpp:409
+#: widgets/KoDocumentInfoDlg.cpp:404
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:412
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -4874,155 +4831,155 @@ msgstr "maltees"
 msgid "Add/Remove Colors"
 msgstr "Verwyder Kolom"
 
-#: widgets/KoFillConfigWidget.cpp:211
+#: widgets/KoFillConfigWidget.cpp:146
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "Geen"
 
-#: widgets/KoFillConfigWidget.cpp:219
+#: widgets/KoFillConfigWidget.cpp:154
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:227
+#: widgets/KoFillConfigWidget.cpp:162
 #, kde-format
 msgid "Gradient"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:235
+#: widgets/KoFillConfigWidget.cpp:170
 #, kde-format
 msgid "Pattern"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:249
+#: widgets/KoFillConfigWidget.cpp:184
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling color"
 msgstr "Verander Eerste Lyn Inkeep"
 
-#: widgets/KoFillConfigWidget.cpp:260
+#: widgets/KoFillConfigWidget.cpp:195
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling gradient"
 msgstr "Verander Eerste Lyn Inkeep"
 
-#: widgets/KoFillConfigWidget.cpp:267
+#: widgets/KoFillConfigWidget.cpp:202
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling pattern"
 msgstr "Verander Eerste Lyn Inkeep"
 
-#: widgets/KoGradientEditWidget.cpp:145
+#: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Target:"
 msgstr "Teiken:"
 
-#: widgets/KoGradientEditWidget.cpp:148
+#: widgets/KoGradientEditWidget.cpp:151
 #, fuzzy, kde-format
 msgid "Fill"
 msgstr "Opvul:"
 
-#: widgets/KoGradientEditWidget.cpp:154
+#: widgets/KoGradientEditWidget.cpp:157
 #, fuzzy, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
 msgstr "Lemmetjie Groen"
 
-#: widgets/KoGradientEditWidget.cpp:155
+#: widgets/KoGradientEditWidget.cpp:158
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:156
+#: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:159
+#: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Repeat:"
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:161
+#: widgets/KoGradientEditWidget.cpp:164
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "No gradient spread"
 msgid "None"
 msgstr "Geen"
 
-#: widgets/KoGradientEditWidget.cpp:162
+#: widgets/KoGradientEditWidget.cpp:165
 #, kde-format
 msgid "Reflect"
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:163
+#: widgets/KoGradientEditWidget.cpp:166
 #, kde-format
 msgid "Repeat"
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:166
+#: widgets/KoGradientEditWidget.cpp:169
 #, fuzzy, kde-format
 msgid "Overall opacity:"
 msgstr "Stad:"
 
-#: widgets/KoGradientEditWidget.cpp:171
+#: widgets/KoGradientEditWidget.cpp:174
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color stop:"
 msgstr "Kleur:"
 
-#: widgets/KoGradientEditWidget.cpp:179
+#: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
 msgstr ""
 
-#: widgets/KoGradientEditWidget.cpp:182
+#: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:575
+#: widgets/KoModeBox.cpp:566
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "Teks"
 
-#: widgets/KoModeBox.cpp:576
+#: widgets/KoModeBox.cpp:567
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:570
 #, fuzzy, kde-format
 msgid "Tabs side"
 msgstr "Oplyn"
 
-#: widgets/KoModeBox.cpp:583
+#: widgets/KoModeBox.cpp:574
 #, fuzzy, kde-format
 msgid "Top side"
 msgstr "Oplyn"
 
-#: widgets/KoModeBox.cpp:584
+#: widgets/KoModeBox.cpp:575
 #, fuzzy, kde-format
 msgid "Bottom side"
 msgstr "Oplyn"
 
-#: widgets/KoModeBox.cpp:587
+#: widgets/KoModeBox.cpp:578
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Lyn"
 
-#: widgets/KoModeBox.cpp:588
+#: widgets/KoModeBox.cpp:579
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Ligte Groen"
 
-#: widgets/KoPageLayoutDialog.cpp:33
+#: widgets/KoPageLayoutDialog.cpp:36
 #, kde-format
 msgid "Page Layout"
 msgstr "Bladsy Uitleg"
@@ -5032,47 +4989,47 @@ msgstr "Bladsy Uitleg"
 msgid "Apply to document"
 msgstr "Open Dokument"
 
-#: widgets/KoPageLayoutWidget.cpp:175
+#: widgets/KoPageLayoutWidget.cpp:177
 #, fuzzy, kde-format
 #| msgid "Left:"
 msgid "Left Edge:"
 msgstr "Links:"
 
-#: widgets/KoPageLayoutWidget.cpp:176
+#: widgets/KoPageLayoutWidget.cpp:178
 #, fuzzy, kde-format
 #| msgid "Right:"
 msgid "Right Edge:"
 msgstr "Regterkant:"
 
-#: widgets/KoPageLayoutWidget.cpp:179
+#: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
 msgid "Binding Edge:"
 msgstr "Donker Oranje"
 
-#: widgets/KoPageLayoutWidget.cpp:180
+#: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
 #| msgid "Page Size"
 msgid "Page Edge:"
 msgstr "Bladsy Grootte"
 
-#: widgets/KoPageLayoutWidget.cpp:276
+#: widgets/KoPageLayoutWidget.cpp:280
 #, fuzzy, kde-format
 msgid "Facing Pages:"
 msgstr "Volgende styl:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 msgid "Facing pages"
 msgstr "Volgende styl:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:283
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout:"
 msgstr "Bladsy Uitleg"
 
-#: widgets/KoPageLayoutWidget.cpp:281
+#: widgets/KoPageLayoutWidget.cpp:284
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page spread"
@@ -5194,26 +5151,26 @@ msgstr "Bladsy Voorskou"
 msgid "Bottom:"
 msgstr "Oplyn"
 
-#: widgets/KoResourceItemChooser.cpp:137
+#: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Open Dokument"
 
-#: widgets/KoResourceItemChooser.cpp:144
+#: widgets/KoResourceItemChooser.cpp:145
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Uitvee Teks"
 
-#: widgets/KoResourceItemChooser.cpp:192
+#: widgets/KoResourceItemChooser.cpp:191
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
 msgstr "Kies"
 
-#: widgets/KoResourceItemChooserContextMenu.cpp:107
-#: widgets/KoTagToolButton.cpp:51
+#: widgets/KoResourceItemChooserContextMenu.cpp:105
+#: widgets/KoTagToolButton.cpp:52
 #, fuzzy, kde-format
 msgid "New tag"
 msgstr "Normale paragraaf teks"
@@ -5228,45 +5185,45 @@ msgstr "Oplyn"
 msgid "Remove from this tag"
 msgstr "Verwyder skakel"
 
-#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#: widgets/KoResourceItemChooserContextMenu.cpp:159
 #, fuzzy, kde-format
 #| msgid "Remove Comment"
 msgid "Remove from other tag"
 msgstr "Verwyder Kommentaar"
 
-#: widgets/KoResourceModel.cpp:78
+#: widgets/KoResourceModel.cpp:69
 #, kde-format
 msgid "Tags"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:143
+#: widgets/KoResourceTaggingManager.cpp:133
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:144
+#: widgets/KoResourceTaggingManager.cpp:134
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:151
+#: widgets/KoResourceTaggingManager.cpp:142
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr ""
 
-#: widgets/KoRuler.cpp:1266
+#: widgets/KoRuler.cpp:1174
 #, fuzzy, kde-format
 msgid "First line indent"
 msgstr "Verander Eerste Lyn Inkeep"
 
-#: widgets/KoRuler.cpp:1267
+#: widgets/KoRuler.cpp:1177
 #, fuzzy, kde-format
 msgid "Left indent"
 msgstr "Lyn"
 
-#: widgets/KoRuler.cpp:1268
+#: widgets/KoRuler.cpp:1180
 #, fuzzy, kde-format
 msgid "Right indent"
 msgstr "Ligte Groen"
@@ -5324,22 +5281,22 @@ msgstr "Verwyder skakel"
 msgid "Miter limit"
 msgstr "Verander Oplyn"
 
-#: widgets/KoStrokeConfigWidget.cpp:203
+#: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
 msgid "Thickness:"
 msgstr ""
 
-#: widgets/KoStrokeConfigWidget.cpp:213
+#: widgets/KoStrokeConfigWidget.cpp:212
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr ""
 
-#: widgets/KoStrokeConfigWidget.cpp:229
+#: widgets/KoStrokeConfigWidget.cpp:228
 #, kde-format
 msgid "Change the color of the line/border"
 msgstr ""
 
-#: widgets/KoTagChooserWidget.cpp:41
+#: widgets/KoTagChooserWidget.cpp:42
 #, fuzzy, kde-format
 msgid "Tag"
 msgstr "Tan"
@@ -5360,7 +5317,7 @@ msgid ""
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
 
-#: widgets/KoTagFilterWidget.cpp:53
+#: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5374,12 +5331,12 @@ msgid ""
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
 
-#: widgets/KoTagFilterWidget.cpp:68
+#: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
 msgstr ""
 
-#: widgets/KoTagFilterWidget.cpp:79
+#: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5387,7 +5344,7 @@ msgid ""
 "qt>"
 msgstr ""
 
-#: widgets/KoTagToolButton.cpp:44
+#: widgets/KoTagToolButton.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
@@ -5398,45 +5355,45 @@ msgstr ""
 msgid "Rename tag"
 msgstr "Uitvee Teks"
 
-#: widgets/KoTagToolButton.cpp:71
+#: widgets/KoTagToolButton.cpp:70
 #, fuzzy, kde-format
 msgid "Delete this tag"
 msgstr "Uitvee Teks"
 
-#: widgets/KoTagToolButton.cpp:89
+#: widgets/KoTagToolButton.cpp:86
 #, kde-format
 msgid "Clear undelete list"
 msgstr ""
 
-#: widgets/KoTagToolButton.cpp:119
+#: widgets/KoTagToolButton.cpp:114
 #, fuzzy, kde-format
 msgid "Undelete"
 msgstr "Uitvee Teks"
 
-#: widgets/KoToolBox.cpp:294
+#: widgets/KoToolBox.cpp:270
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Icon Size"
 msgstr "Kies Skrif tipe"
 
-#: widgets/KoToolBox.cpp:295
+#: widgets/KoToolBox.cpp:271
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Verstek"
 
-#: widgets/KoToolBox.cpp:302
+#: widgets/KoToolBox.cpp:277
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: widgets/KoToolBoxButton.cpp:55
+#: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
 msgstr ""
 
-#: widgets/KoToolBoxButton.cpp:56
+#: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
@@ -5447,51 +5404,50 @@ msgstr ""
 msgid "Toolbox"
 msgstr "Verstek Kleur"
 
-#: widgets/KoToolDocker.cpp:184
+#: widgets/KoToolDocker.cpp:183
 #, fuzzy, kde-format
 msgid "Tool Options"
 msgstr "Voltooiïng Woord"
 
-#: widgets/KoToolDocker.cpp:216
+#: widgets/KoToolDocker.cpp:217
 #, kde-format
 msgid "Toggles organizing the options in tabs or not"
 msgstr ""
 
-#: widgets/KoViewItemContextBar.cpp:183
+#: widgets/KoViewItemContextBar.cpp:176
 #, fuzzy, kde-format
 #| msgid "Select Character"
 msgid "deselect item"
 msgstr "Kies Karakter"
 
-#: widgets/KoViewItemContextBar.cpp:183
+#: widgets/KoViewItemContextBar.cpp:176
 #, fuzzy, kde-format
 #| msgid "Select Character"
 msgid "select item"
 msgstr "Kies Karakter"
 
-#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
-#: widgets/KoZoomMode.cpp:13
+#: widgets/KoZoomAction.cpp:189 widgets/KoZoomAction.cpp:201
+#: widgets/KoZoomMode.cpp:11
 #, kde-format
 msgid "%1%"
 msgstr ""
 
-#: widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
+#: widgets/KoZoomMode.cpp:12
+#, fuzzy
 msgid "Fit Page Width"
 msgstr "Volgende styl:"
 
-#: widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
+#: widgets/KoZoomMode.cpp:13
+#, fuzzy
 msgid "Fit Page"
 msgstr "Volgende styl:"
 
-#: widgets/KoZoomMode.cpp:17
-#, kde-format
+#: widgets/KoZoomMode.cpp:15
 msgid "Actual Pixels"
 msgstr ""
 
-#: widgets/KoZoomMode.cpp:21
-#, fuzzy, kde-format
+#: widgets/KoZoomMode.cpp:19
+#, fuzzy
 msgid "Fit Text Width"
 msgstr "Volgende styl:"
 
@@ -5512,21 +5468,25 @@ msgstr "Voltooiïng"
 msgid "Zoom to All"
 msgstr "Voltooiïng"
 
-#: widgetutils/KoFileDialog.cpp:454
+#: widgetutils/KoFileDialog.cpp:394
 #, kde-format
 msgid "All files"
 msgstr ""
 
-#: widgetutils/KoFileDialog.cpp:457
+#: widgetutils/KoFileDialog.cpp:397
 #, kde-format
 msgid "All supported formats"
 msgstr ""
 
-#: widgetutils/KoGroupButton.cpp:131
+#: widgetutils/KoGroupButton.cpp:134
 #, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~ msgid "E&ncoding:"
+#~ msgstr "Onderstreep:"
 
 #, fuzzy
 #~ msgid "Scripts"

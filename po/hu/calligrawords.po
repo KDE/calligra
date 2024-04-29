@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2015-09-09 09:40+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -108,7 +108,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
 msgstr "Oldalstílus beszúrása"
 
-#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "Oldalbeállítások"
@@ -118,62 +118,62 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "Alakzat létrehozása"
 
-#: part/dialogs/KWAnchoringProperties.cpp:422
+#: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
 msgstr "Alapvonal"
 
-#: part/dialogs/KWAnchoringProperties.cpp:423
-#: part/dialogs/KWAnchoringProperties.cpp:434
+#: part/dialogs/KWAnchoringProperties.cpp:413
+#: part/dialogs/KWAnchoringProperties.cpp:424
 #, kde-format
 msgid "Character"
 msgstr "Karakter"
 
-#: part/dialogs/KWAnchoringProperties.cpp:426
+#: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
 msgid "Row"
 msgstr "Sor"
 
-#: part/dialogs/KWAnchoringProperties.cpp:427
-#: part/dialogs/KWAnchoringProperties.cpp:435
+#: part/dialogs/KWAnchoringProperties.cpp:417
+#: part/dialogs/KWAnchoringProperties.cpp:425
 #, kde-format
 msgid "Page (entire) area"
 msgstr "Oldal (teljes) területe"
 
-#: part/dialogs/KWAnchoringProperties.cpp:428
-#: part/dialogs/KWAnchoringProperties.cpp:436
+#: part/dialogs/KWAnchoringProperties.cpp:418
+#: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
 msgstr "Oldal szövegterülete"
 
-#: part/dialogs/KWAnchoringProperties.cpp:429
-#: part/dialogs/KWAnchoringProperties.cpp:443
+#: part/dialogs/KWAnchoringProperties.cpp:419
+#: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
 msgstr "Bekezdés területe"
 
-#: part/dialogs/KWAnchoringProperties.cpp:430
-#: part/dialogs/KWAnchoringProperties.cpp:444
+#: part/dialogs/KWAnchoringProperties.cpp:420
+#: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
 msgstr "Bekezdés szövegterülete"
 
-#: part/dialogs/KWAnchoringProperties.cpp:437
+#: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
 msgstr "Bal oldalszegély"
 
-#: part/dialogs/KWAnchoringProperties.cpp:438
+#: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
 msgstr "Jobb oldalszegély"
 
-#: part/dialogs/KWAnchoringProperties.cpp:445
+#: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
 msgid "Right paragraph border"
 msgstr "Jobb bekezdésszegély"
 
-#: part/dialogs/KWAnchoringProperties.cpp:446
+#: part/dialogs/KWAnchoringProperties.cpp:436
 #, kde-format
 msgid "Left paragraph border"
 msgstr "Bal bekezdésszegély"
@@ -341,12 +341,12 @@ msgstr "Oszlopok:"
 msgid "Column spacing:"
 msgstr "Oszloptávolság:"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:101
+#: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
 msgid "frameset"
 msgstr "keretcsoport"
 
-#: part/dialogs/KWFrameConnectSelector.cpp:126
+#: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
 msgstr "A dokumentumban nincs keretcsoport"
@@ -380,7 +380,7 @@ msgstr "A keretcsoport neve"
 msgid "Smart Positioning"
 msgstr "Intelligens elrendezés"
 
-#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
 msgstr "A szöveg körbefolyatása"
@@ -528,40 +528,40 @@ msgid "Distance Between Shape and Text:"
 msgstr "Az alakzat és a szöveg távolsága:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
 #, kde-format
 msgid "Columns"
 msgstr "Oszlopok"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:42
+#: part/dialogs/KWPageSettingsDialog.cpp:41
 #, kde-format
 msgid "Style"
 msgstr "Stílus"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:48
+#: part/dialogs/KWPageSettingsDialog.cpp:47
 #, kde-format
 msgid "Clone"
 msgstr "Klónozás"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
 #, kde-format
 msgid "Delete"
 msgstr "Törlés"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:137
+#: part/dialogs/KWPageSettingsDialog.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "Oldalstílus megváltoztatása"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:211
-#, kde-format
-msgid "Add a new page style with the name:"
-msgstr "Új oldalstílus hozzáadása ezzel a névvel:"
-
-#: part/dialogs/KWPageSettingsDialog.cpp:211
+#: part/dialogs/KWPageSettingsDialog.cpp:217
 #, kde-format
 msgid "Clone Page Style"
 msgstr "Oldalstílus klónozása"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:218
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "Új oldalstílus hozzáadása ezzel a névvel:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
@@ -629,27 +629,27 @@ msgstr "Átneve&zés"
 msgid "&Delete"
 msgstr "&Törlés"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:68
-#, kde-format
-msgid "Rename Bookmark"
-msgstr "Átnevezés"
-
-#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
 msgstr "Adjon meg új nevet a könyvjelzőhöz"
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Átnevezés"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
 msgstr "Már létezik „%1” nevű könyvjelző."
 
-#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
 msgstr "Könyvjelző kiválasztása"
 
-#: part/dialogs/KWShapeConfigFactory.cpp:44
+#: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
 msgid "Geometry"
 msgstr "Méretek"
@@ -661,7 +661,7 @@ msgid "Page Size && Margins"
 msgstr "Oldalméret és margók"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
 #, kde-format
 msgid "Create"
 msgstr "Létrehozás"
@@ -676,17 +676,17 @@ msgstr "Hibakeresés"
 msgid "Navigation"
 msgstr "Navigáció"
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Page #"
 msgstr "Oldal #"
 
-#: part/dockers/KWNavigationWidget.cpp:95
+#: part/dockers/KWNavigationWidget.cpp:94
 #, kde-format
 msgid "Section"
 msgstr "Szakasz"
 
-#: part/dockers/KWRdfDocker.cpp:39
+#: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
 msgstr "RDF"
@@ -696,47 +696,47 @@ msgstr "RDF"
 msgid "Statistics"
 msgstr "Statisztika"
 
-#: part/dockers/KWStatisticsWidget.cpp:128
+#: part/dockers/KWStatisticsWidget.cpp:127
 #, kde-format
 msgid "Words:"
 msgstr "Szavak:"
 
-#: part/dockers/KWStatisticsWidget.cpp:131
+#: part/dockers/KWStatisticsWidget.cpp:130
 #, kde-format
 msgid "Sentences:"
 msgstr "Mondatok:"
 
-#: part/dockers/KWStatisticsWidget.cpp:134
+#: part/dockers/KWStatisticsWidget.cpp:133
 #, kde-format
 msgid "Syllables:"
 msgstr "Szótagok:"
 
-#: part/dockers/KWStatisticsWidget.cpp:137
+#: part/dockers/KWStatisticsWidget.cpp:136
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "Karakterek (szóközökkel):"
 
-#: part/dockers/KWStatisticsWidget.cpp:140
+#: part/dockers/KWStatisticsWidget.cpp:139
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "Karakterek (szóközök nélkül):"
 
-#: part/dockers/KWStatisticsWidget.cpp:143
+#: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
 msgid "Lines:"
 msgstr "Sorok:"
 
-#: part/dockers/KWStatisticsWidget.cpp:146
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
 msgstr "Olvashatóság:"
 
-#: part/dockers/KWStatisticsWidget.cpp:148
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "Flesch reading ease"
 msgstr "Flesch-féle olvashatósági szám"
 
-#: part/dockers/KWStatisticsWidget.cpp:150
+#: part/dockers/KWStatisticsWidget.cpp:149
 #, kde-format
 msgid "East asian characters:"
 msgstr "Kelet-ázsiai karakterek:"
@@ -1071,327 +1071,327 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr "Szürke (felül és alul)"
 
-#: part/KWAboutData.h:20
+#: part/KWAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "Calligra Words"
 
-#: part/KWAboutData.h:22
+#: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
 msgstr "Szövegszerkesztő"
 
-#: part/KWAboutData.h:24
+#: part/KWAboutData.h:23
 #, fuzzy, kde-format
 #| msgid "© 1998-%1, The Words Team"
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "© A Words fejlesztői, 1998-%1."
 
-#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
 msgstr "Segédkarbantartó"
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:31
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "Pierre Ducroquet"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:32
 #, kde-format
 msgid "C. Boemann"
 msgstr "C. Boemann"
 
-#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
 msgstr "Minden"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:33
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:34
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Formatting stuff"
 msgstr "Formázások"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
-#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
-#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
-#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
-#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
+#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
+#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
+#: part/KWAboutData.h:66 part/KWAboutData.h:67
 #, kde-format
 msgid "Filter"
 msgstr "Szűrő"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Matus Uzak"
 msgstr "Matus Uzak"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
 msgstr "Elrendezés és festés"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Pavol Korinek"
 msgstr "Pavol Korinek"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Shreya Pandit"
 msgstr "Shreya Pandit"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Statistics docker"
 msgstr "Statisztika dokkoló"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Brijesh Patel"
 msgstr "Brijesh Patel"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Foot and endnotes"
 msgstr "Láb- és végjegyzetek"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Bibliography"
 msgstr "Irodalomjegyzék"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Smit Patel"
 msgstr "Smit Patel"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Mojtaba Shahi"
 msgstr "Mojtaba Shahi"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
 msgstr "Stíluskezelő"
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr "Lassi Nieminen"
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Hanzes Matus"
 msgstr "Hanzes Matus"
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "Lukáš Tvrdý"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "Girish Ramakrishnan"
 
-#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
 msgid "ODF Support"
 msgstr "ODF-Support"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr "Robert Mathias Marmorstein"
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "Sven Lüppken"
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "Frank Dekervel"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "Krister Wicksell Eriksson"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Dag Andersen"
 msgstr "Dag Andersen"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "Nash Hoogwater"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "KFormula"
 msgstr "KFormula"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "Ulrich Kuettler"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "Shaheed Haque"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Clarence Dang"
 msgstr "Clarence Dang"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "Robert Jacolin"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Ewald Snel"
 msgstr "Ewald Snel"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "Tomasz Grobelny"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Michael Johnson"
 msgstr "Michael Johnson"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr "Fatcow Web Hosting"
 
-#: part/KWAboutData.h:69
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Page break icon"
 msgstr "Oldaltörés ikon"
 
-#. i18n translator strings
-#: part/KWAboutData.h:71
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Kiszel Kristóf,Úr Balázs"
-
-#: part/KWAboutData.h:72
+#: part/KWAboutData.h:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
 
-#: part/KWDocument.cpp:495
+#. i18n translator strings
+#: part/KWAboutData.h:70
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kiszel Kristóf,Úr Balázs"
+
+#: part/KWDocument.cpp:492
 #, kde-format
 msgid "Copy"
 msgstr "Másolás"
 
-#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWDocument.cpp:546
+#: part/KWDocument.cpp:544
 #, kde-format
 msgid "Document Title"
 msgstr "Dokumentumcím"
 
-#: part/KWDocument.cpp:553
+#: part/KWDocument.cpp:551
 #, kde-format
 msgid "Head 1"
 msgstr "Fejléc 1"
 
-#: part/KWDocument.cpp:559
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 2"
 msgstr "Fejléc 2"
 
-#: part/KWDocument.cpp:565
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 3"
 msgstr "Fejléc 3"
 
-#: part/KWDocument.cpp:571
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Bullet List"
 msgstr "Felsorolásjeles lista"
 
-#: part/KWGui.cpp:69
+#: part/KWGui.cpp:68
 #, kde-format
 msgid "Tools"
 msgstr "Eszközök"
@@ -1401,14 +1401,14 @@ msgstr "Eszközök"
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr "Érvénytelen OASIS OpenDocument-fájl. Nem található office:body címke."
 
-#: part/KWOdfLoader.cpp:95
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr ""
 "Érvénytelen OASIS OpenDocument-fájl. Egy címke sincs az office:body címkén "
 "belül."
 
-#: part/KWOdfLoader.cpp:97
+#: part/KWOdfLoader.cpp:96
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1423,12 +1423,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWPart.cpp:141
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "A szükséges szöveges komponens nem található. A Words kilép"
 
-#: part/KWPart.cpp:142
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Telepítési hiba"
@@ -1458,75 +1458,75 @@ msgstr "%3 / %1-%2. oldal"
 msgid "Line %1"
 msgstr "%1. sor"
 
-#: part/KWStatusBar.cpp:124
+#: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
 msgstr "Oldalszám"
 
-#: part/KWStatusBar.cpp:137
+#: part/KWStatusBar.cpp:145
 #, kde-format
 msgid "Line Number"
 msgstr "Sorszám"
 
-#: part/KWStatusBar.cpp:149
+#: part/KWStatusBar.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Page Style"
 msgid "Change the page style"
 msgstr "Oldalstílus megváltoztatása"
 
-#: part/KWStatusBar.cpp:155
+#: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
 msgstr "Oldalstílus"
 
-#: part/KWStatusBar.cpp:169
+#: part/KWStatusBar.cpp:179
 #, kde-format
 msgid "Page Size"
 msgstr "Oldalméret"
 
-#: part/KWStatusBar.cpp:184
+#: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
 msgstr "Mentett/módosított"
 
-#: part/KWStatusBar.cpp:197
+#: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
 msgstr "Egérmutató: X:Y"
 
-#: part/KWStatusBar.cpp:211
+#: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
 msgstr "Nagyításvezérlő"
 
-#: part/KWView.cpp:183
+#: part/KWView.cpp:184
 #, fuzzy, kde-format
 #| msgid "Exit Distraction-Free Mode"
 msgid "Exit Fullscreen Mode"
 msgstr "Kilépés a zaklatottságmentes módból"
 
-#: part/KWView.cpp:260
+#: part/KWView.cpp:276
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Alakzattulajdonságok…"
 
-#: part/KWView.cpp:262
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Az alakzat viselkedésének módosítása"
 
-#: part/KWView.cpp:271
+#: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Sablon létrehozása dokumentumból…"
 
-#: part/KWView.cpp:272
+#: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "A dokumentum elmentése később felhasználható sablonként"
 
-#: part/KWView.cpp:273
+#: part/KWView.cpp:290
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1535,17 +1535,17 @@ msgstr ""
 "A dokumentum sablonként való elmentése nem sikerült.<br><br>A létrejött "
 "sablont új dokumentumok kiindulási mintájának lehet használni."
 
-#: part/KWView.cpp:292
+#: part/KWView.cpp:309
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Formázókarakterek megjelenítése"
 
-#: part/KWView.cpp:298
+#: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása"
 
-#: part/KWView.cpp:299
+#: part/KWView.cpp:317
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1556,17 +1556,17 @@ msgstr ""
 ">Ha ez be van jelölve, a Words megjeleníti a tabulátorokat, szóközöket, "
 "sorvége jeleket és a többi nem nyomtatható karaktert."
 
-#: part/KWView.cpp:301
+#: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Mezőárnyékolók megjelenítése"
 
-#: part/KWView.cpp:307
+#: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "A mezők árnyékolt hátterének átváltása"
 
-#: part/KWView.cpp:308
+#: part/KWView.cpp:327
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1575,17 +1575,17 @@ msgstr ""
 "A mezők (változók, stb.) megjelenésének váltása a hátterük kontrasztos "
 "színnel való rajzolásával."
 
-#: part/KWView.cpp:310
+#: part/KWView.cpp:329
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Szövegalakzat szegélyeinek megjelenítése"
 
-#: part/KWView.cpp:311
+#: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "A szegélyek megjelenítésének ki- és bekapcsolása"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:337
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1596,17 +1596,17 @@ msgstr ""
 "jelennek lesznek kinyomtatva, tehát ez a beállítás csak a papír alakjának "
 "megjelenítését szolgálja."
 
-#: part/KWView.cpp:319
+#: part/KWView.cpp:340
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Táblázatszegélyek megjelenítése"
 
-#: part/KWView.cpp:325
+#: part/KWView.cpp:346
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:348
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1616,18 +1616,18 @@ msgstr ""
 "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
 "táblázatszegélyeket."
 
-#: part/KWView.cpp:328
+#: part/KWView.cpp:350
 #, fuzzy, kde-format
 msgid "Show Section Bounds"
 msgstr "Az automatikus javítás beállításainak megváltoztatása."
 
-#: part/KWView.cpp:334
+#: part/KWView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Toggle the display of table borders"
 msgid "Toggle the display of section bounds"
 msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
 
-#: part/KWView.cpp:335
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1640,17 +1640,17 @@ msgstr ""
 "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
 "táblázatszegélyeket."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:360
 #, kde-format
 msgid "Show Rulers"
 msgstr "Vonalzók megjelenítése"
 
-#: part/KWView.cpp:339
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "A vonalzók ki- és bekapcsolása"
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:364
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1663,43 +1663,43 @@ msgstr ""
 "pozícióját megmérni.<p>Ha nem szeretné használni a vonalzókat, szüntesse meg "
 "a kijelölést.</p>"
 
-#: part/KWView.cpp:351
+#: part/KWView.cpp:375
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Rácshoz illesztés"
 
-#: part/KWView.cpp:359
+#: part/KWView.cpp:383
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Az állapotsor megjelenítése"
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Az állapotsor megjelenítése és elrejtése"
 
-#: part/KWView.cpp:366
+#: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:367
+#: part/KWView.cpp:391
 #, fuzzy, kde-format
 #| msgid "Set view in distraction free mode"
 msgid "Set view in fullscreen mode"
 msgstr "Nézet beállítása a zaklatottságmentes módban"
 
-#: part/KWView.cpp:374
+#: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Szemantikus stíluslapok…"
 
-#: part/KWView.cpp:376
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Szemantikus stíluslapok módosítása és hozzáadása"
 
-#: part/KWView.cpp:377
+#: part/KWView.cpp:401
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1708,22 +1708,22 @@ msgstr ""
 "A stíluslapok az RDF-fájlokban tárolt információk megjelenítésének "
 "formázásához használhatók."
 
-#: part/KWView.cpp:392
+#: part/KWView.cpp:416
 #, kde-format
 msgid "Configure..."
 msgstr "Beállítás…"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:425
 #, kde-format
 msgid "Page Layout..."
 msgstr "Oldalelrendezés…"
 
-#: part/KWView.cpp:403
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Az oldal tulajdonságainak megváltoztatása"
 
-#: part/KWView.cpp:404
+#: part/KWView.cpp:429
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1733,32 +1733,32 @@ msgstr ""
 "fejléc illetve a lábléc méretét és az oszlopok beállításait lehet "
 "megváltoztatni.</p>"
 
-#: part/KWView.cpp:407
+#: part/KWView.cpp:432
 #, kde-format
 msgid "Create Header"
 msgstr "Fejléc létrehozása"
 
-#: part/KWView.cpp:413
+#: part/KWView.cpp:438
 #, kde-format
 msgid "Create Footer"
 msgstr "Lábléc létrehozása"
 
-#: part/KWView.cpp:420
+#: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
 msgstr "Megjegyzések megjelenítése"
 
-#: part/KWView.cpp:421
+#: part/KWView.cpp:446
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Megjeleníti a megjegyzéseket a dokumentumban"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
 msgstr "Szavak száma"
 
-#: part/KWView.cpp:428
+#: part/KWView.cpp:453
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Megjeleníti vagy elrejti a szavak számát az állapotsoron"
@@ -1788,61 +1788,61 @@ msgstr "Oldalelrendezés"
 msgid "..."
 msgstr "…"
 
-#: part/widgets/KoFindToolbar.cpp:55
+#: part/widgets/KoFindToolbar.cpp:64
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:68
+#: part/widgets/KoFindToolbar.cpp:81
 #, fuzzy, kde-format
 #| msgid "Next Page"
 msgctxt "Next search result"
 msgid "Next"
 msgstr "Következő oldal"
 
-#: part/widgets/KoFindToolbar.cpp:78
+#: part/widgets/KoFindToolbar.cpp:93
 #, fuzzy, kde-format
 #| msgid "Previous Page"
 msgctxt "Previous search result"
 msgid "Previous"
 msgstr "Előző oldal"
 
-#: part/widgets/KoFindToolbar.cpp:87
+#: part/widgets/KoFindToolbar.cpp:104
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "Search options"
 msgid "Options"
 msgstr "Beállítások"
 
-#: part/widgets/KoFindToolbar.cpp:115
+#: part/widgets/KoFindToolbar.cpp:134
 #, fuzzy, kde-format
 #| msgid "Replace Word"
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
 msgstr "A szó cseréje"
 
-#: part/widgets/KoFindToolbar.cpp:125
+#: part/widgets/KoFindToolbar.cpp:146
 #, fuzzy, kde-format
 #| msgid "Replace Word"
 msgctxt "Replace the current match"
 msgid "Replace"
 msgstr "A szó cseréje"
 
-#: part/widgets/KoFindToolbar.cpp:131
+#: part/widgets/KoFindToolbar.cpp:154
 #, fuzzy, kde-format
 #| msgid "Replace Word"
 msgctxt "Replace all found matches"
 msgid "Replace All"
 msgstr "A szó cseréje"
 
-#: part/widgets/KoFindToolbar.cpp:139
+#: part/widgets/KoFindToolbar.cpp:164
 #, fuzzy, kde-format
 #| msgid "Replace Word"
 msgid "Replace"
 msgstr "A szó cseréje"
 
-#: part/widgets/KoFindToolbar.cpp:200
+#: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
@@ -1850,47 +1850,47 @@ msgid_plural "%1 matches found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: part/widgets/KoFindToolbar.cpp:210
+#: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:216
+#: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
 msgstr ""
 
-#: part/widgets/KoFindToolbar.cpp:218
+#: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
 msgstr ""
 
-#: part/Words.cpp:45
+#: part/Words.cpp:41
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "Fejléc - a páratlan oldalakon"
 
-#: part/Words.cpp:47
+#: part/Words.cpp:43
 #, kde-format
 msgid "Even Pages Header"
 msgstr "Fejléc - a páros oldalakon"
 
-#: part/Words.cpp:49
+#: part/Words.cpp:45
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "Lábjegyzet - a páratlan oldalakon"
 
-#: part/Words.cpp:51
+#: part/Words.cpp:47
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "Lábjegyzet - a páros oldalakon"
 
-#: part/Words.cpp:53
+#: part/Words.cpp:49
 #, kde-format
 msgid "Main text"
 msgstr "Egyszerű szöveg"
 
-#: part/Words.cpp:55
+#: part/Words.cpp:51
 #, kde-format
 msgid "Other text"
 msgstr "Egyéb szöveg"

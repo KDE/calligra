@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2012-03-04 01:57+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -27,19 +27,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "sairan@computer.org"
 
-#: main.cpp:61
+#: main.cpp:62
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
 msgstr "<filename>%1</filename> файлдың MIME түрі табылмады!"
 
-#: main.cpp:119
+#: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
 msgstr "<application>%1</application> дегенмен ашу"
 
-#: main.cpp:124
+#: main.cpp:122
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -51,39 +51,39 @@ msgstr ""
 "жоқ.<nl/>Әдетті <application>%2</application> бағдарламасымен ашыла берсін "
 "бе?"
 
-#: main.cpp:127
+#: main.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
 msgstr "Calligra қолданбасы табылмады"
 
-#: main.cpp:157
+#: main.cpp:156
 #, kde-format
 msgid "Calligra Opener"
 msgstr "Calligra ашқышы"
 
-#: main.cpp:159
+#: main.cpp:158
 #, kde-format
 msgid "Calligra Document Opener"
 msgstr "Calligra құжат ашу құралы"
 
-#: main.cpp:161
+#: main.cpp:160
 #, fuzzy, kde-format
 #| msgid "(c) 2010-2011 Calligra developers"
 msgid "Copyright 2010-%1 Calligra developers"
 msgstr "(c) 2010-2011 Calligra құрастырғыштары"
 
-#: main.cpp:162
+#: main.cpp:161
 #, kde-format
 msgid "Jarosław Staniek"
 msgstr "Jarosław Staniek"
 
-#: main.cpp:169
+#: main.cpp:168
 #, kde-format
 msgid "Lists names of all available Calligra applications"
 msgstr "Бар Calligra қолданбалар атауының тізімін көрсетеді"
 
-#: main.cpp:170
+#: main.cpp:169
 #, kde-format
 msgid "Files to open"
 msgstr "Аштын файлдар"

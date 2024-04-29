@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2023-02-22 16:45+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -27,19 +27,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "vit@pelcak.org"
 
-#: main.cpp:61
+#: main.cpp:62
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
 msgstr "Typ MIME pro <filename>%1</filename> nenalezen."
 
-#: main.cpp:119
+#: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
 msgstr "Otevřít pomocí <application>%1</application>"
 
-#: main.cpp:124
+#: main.cpp:122
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -51,38 +51,38 @@ msgstr ""
 "filename>.<nl/> Přejete si otevřít soubor výchozí aplikací <application>%2</"
 "application>?"
 
-#: main.cpp:127
+#: main.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
 msgstr "Aplikace Calligra nenalezena"
 
-#: main.cpp:157
+#: main.cpp:156
 #, kde-format
 msgid "Calligra Opener"
 msgstr "Otvírač Calligra"
 
-#: main.cpp:159
+#: main.cpp:158
 #, kde-format
 msgid "Calligra Document Opener"
 msgstr "Otvírač dokumentů Calligra"
 
-#: main.cpp:161
+#: main.cpp:160
 #, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
 msgstr "Autorská práva 2010-%1 Vývojáři Calligra"
 
-#: main.cpp:162
+#: main.cpp:161
 #, kde-format
 msgid "Jarosław Staniek"
 msgstr "Jarosław Staniek"
 
-#: main.cpp:169
+#: main.cpp:168
 #, kde-format
 msgid "Lists names of all available Calligra applications"
 msgstr "Vypíše názvy všech dostupných aplikací Calligra"
 
-#: main.cpp:170
+#: main.cpp:169
 #, kde-format
 msgid "Files to open"
 msgstr "Soubory k otevření"

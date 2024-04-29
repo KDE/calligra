@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: all2.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandrakesoft.com>\n"
 "Language-Team: cy <LL@li.org>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: CalendarTool.cpp:63
+#: CalendarTool.cpp:62
 #, kde-format
 msgid ""
 "End date is before start date! Please make sure that end date comes after "
@@ -21,7 +21,7 @@ msgstr ""
 "Mae'r dyddiad gorffen yn dod cyn y dyddiad dechrau!  Sicrhewch fod y dyddiad "
 "gorffen yn dod ar ôl y dyddiad dechrau."
 
-#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
 msgstr ""
@@ -35,7 +35,7 @@ msgstr ""
 "Ni ddylai calendrau fod yn hirach na deng mlynedd.  Os mae angen cyfnodau "
 "hir fel hyn arnoch, rhaid eu hollti."
 
-#: CalendarTool.cpp:73
+#: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
@@ -45,12 +45,12 @@ msgstr ""
 "fydd yn cael ei fewnosod - ydych eisiau mynd ymlaen?Gall creu calendr am "
 "gyfnod hirach na blwyddyn gymryd llawer o le.  Ydych eisiau mynd ymlaen?"
 
-#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
 msgstr ""
 
-#: CalendarTool.cpp:78
+#: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
@@ -59,7 +59,7 @@ msgstr ""
 "Gall creu calendr am gyfnod hirach na blwyddyn gymryd llawer o le.  Ydych "
 "eisiau mynd ymlaen?"
 
-#: CalendarTool.cpp:95
+#: CalendarTool.cpp:109
 #, kde-format
 msgid ""
 "The area where the calendar is inserted is NOT empty, are you sure you want "
@@ -72,24 +72,24 @@ msgstr ""
 "ardal ofynnol ar gyfer y calendr dymunol yn cael ei detholi , i chi weld pa "
 "ddata fydd yn cael ei drosysgrifo."
 
-#: CalendarTool.cpp:102
+#: CalendarTool.cpp:120
 #, fuzzy
 #| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "Mewnosod Calendr"
 
-#: CalendarTool.cpp:108
+#: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
 msgstr "Calendr o %1 at %2"
 
-#: CalendarTool.cpp:150
+#: CalendarTool.cpp:166
 #, kde-format
 msgid "week"
 msgstr "wythnos"
 
-#: CalendarToolFactory.cpp:24
+#: CalendarToolFactory.cpp:22
 #, fuzzy, kde-format
 #| msgid "Calendar from %1 to %2"
 msgid "Calendar"
