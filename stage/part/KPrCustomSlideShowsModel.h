@@ -34,7 +34,7 @@ public:
         SlidesMove ///< move slides
     };
 
-    explicit KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent = 0);
+    explicit KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent = nullptr);
 
     ~KPrCustomSlideShowsModel() override;
 

@@ -114,7 +114,7 @@ public:
 
     virtual const KoPageLayout &activePageLayout() const;
 
-    virtual void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0);
+    virtual void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = nullptr);
 
     QPointF origin();
 

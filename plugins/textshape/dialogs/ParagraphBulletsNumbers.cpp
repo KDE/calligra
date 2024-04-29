@@ -322,7 +322,7 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
 void ParagraphBulletsNumbers::recalcPreview()
 {
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
@@ -332,7 +332,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
     } else {
         widget.doubleSpinBox->setEnabled(true);
     }
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
     recalcPreview();
 }
 

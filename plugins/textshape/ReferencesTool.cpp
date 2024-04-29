@@ -74,7 +74,7 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
 
 void LabeledWidget::returnPressed()
 {
-    emit textTriggered(m_lineEdit->text());
+    Q_EMIT textTriggered(m_lineEdit->text());
 }
 
 void LabeledWidget::enterEvent(QEnterEvent *event)

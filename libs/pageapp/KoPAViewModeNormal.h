@@ -50,7 +50,7 @@ public:
 
     void removeShape(KoShape *shape) override;
 
-    void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0) override;
+    void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = nullptr) override;
 
 private:
     void paintMargins(QPainter &painter, const KoViewConverter &converter);

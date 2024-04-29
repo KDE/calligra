@@ -219,7 +219,7 @@ void KoPositionSelector::setPosition(KoFlake::Position position)
 void KoPositionSelector::positionChanged(int position)
 {
     d->position = static_cast<KoFlake::Position>(position);
-    emit positionSelected(d->position);
+    Q_EMIT positionSelected(d->position);
 }
 
 void KoPositionSelector::paintEvent(QPaintEvent *)

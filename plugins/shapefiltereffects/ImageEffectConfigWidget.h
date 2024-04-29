@@ -17,7 +17,7 @@ class ImageEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit ImageEffectConfigWidget(QWidget *parent = 0);
+    explicit ImageEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

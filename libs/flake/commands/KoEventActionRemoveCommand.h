@@ -18,7 +18,7 @@ class KoEventActionRemoveCommandPrivate;
 class FLAKE_EXPORT KoEventActionRemoveCommand : public KUndo2Command
 {
 public:
-    KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = 0);
+    KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = nullptr);
     ~KoEventActionRemoveCommand() override;
 
     /// redo the command

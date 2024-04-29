@@ -55,8 +55,8 @@ Qt::DropActions KoPADocumentModel::supportedDragActions() const
 
 void KoPADocumentModel::update()
 {
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
+    Q_EMIT layoutAboutToBeChanged();
+    Q_EMIT layoutChanged();
     if (m_document) {
         dataChanged(index(0, 0), index(m_document->pageCount() - 1, columnCount() - 1));
     }
@@ -292,7 +292,7 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
         return false;
     }
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 
@@ -517,7 +517,7 @@ bool KoPADocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
                 return false;
             }
 
-            emit layoutAboutToBeChanged();
+            Q_EMIT layoutAboutToBeChanged();
             beginInsertRows(parent, group->shapeCount(), group->shapeCount() + toplevelShapes.count());
 
             KUndo2Command *cmd = new KUndo2Command();
@@ -532,11 +532,11 @@ bool KoPADocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
             canvasController->canvas()->addCommand(cmd);
 
             endInsertRows();
-            emit layoutChanged();
+            Q_EMIT layoutChanged();
         } else {
             debugPageApp << "KoPADocumentModel::dropMimeData parent = container";
             if (toplevelShapes.count()) {
-                emit layoutAboutToBeChanged();
+                Q_EMIT layoutAboutToBeChanged();
                 beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
 
                 KUndo2Command *cmd = new KUndo2Command();
@@ -561,7 +561,7 @@ bool KoPADocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
                 canvasController->canvas()->addCommand(cmd);
 
                 endInsertRows();
-                emit layoutChanged();
+                Q_EMIT layoutChanged();
             } else if (layers.count()) {
                 KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(container);
                 if (!layer) {
@@ -712,7 +712,7 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
         KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, pages, pageAfter);
         m_document->addCommand(command);
         if ((m_document->pageIndex(pageAfter) + pages.count()) < m_document->pageCount()) {
-            emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
+            Q_EMIT requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
         }
         return true;
     }
@@ -733,7 +733,7 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
                 break;
             }
         }
-        emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType) - 1);
+        Q_EMIT requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType) - 1);
         return true;
     }
     default:

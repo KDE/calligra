@@ -277,5 +277,5 @@ void LinkDialog::setLink(const QString &link)
 
 void LinkDialog::onApply()
 {
-    emit applyLink(text(), link());
+    Q_EMIT applyLink(text(), link());
 }

@@ -35,7 +35,7 @@ class ScatterDataEditor : public KoDialog
     Q_OBJECT
 
 public:
-    ScatterDataEditor(ChartShape *chart, QWidget *parent = 0);
+    ScatterDataEditor(ChartShape *chart, QWidget *parent = nullptr);
     ~ScatterDataEditor();
 
 Q_SIGNALS:

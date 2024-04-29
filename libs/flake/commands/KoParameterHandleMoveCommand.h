@@ -33,7 +33,7 @@ public:
                                  const QPointF &startPoint,
                                  const QPointF &endPoint,
                                  Qt::KeyboardModifiers keyModifiers,
-                                 KUndo2Command *parent = 0);
+                                 KUndo2Command *parent = nullptr);
     ~KoParameterHandleMoveCommand() override;
 
     /// redo the command

@@ -48,5 +48,5 @@ void FloodEffectConfigWidget::colorChanged()
         return;
 
     m_effect->setFloodColor(m_actionStopColor->currentColor());
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

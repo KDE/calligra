@@ -44,7 +44,7 @@
 class DialogMenu : public QMenu
 {
 public:
-    DialogMenu(QWidget *parent = 0);
+    DialogMenu(QWidget *parent = nullptr);
     QSize sizeHint() const override;
 };
 
@@ -236,10 +236,10 @@ void KPrShapeAnimationDocker::verifyMotionPathChanged(const QModelIndex &index, 
     if (index.isValid()) {
         KPrShapeAnimation *animation = m_animationsModel->animationByRow(index.row());
         if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
-            emit motionPathAddedRemoved();
+            Q_EMIT motionPathAddedRemoved();
             return;
         }
-        emit shapeAnimationsChanged(animation->shape());
+        Q_EMIT shapeAnimationsChanged(animation->shape());
     }
 }
 

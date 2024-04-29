@@ -37,7 +37,7 @@ public:
     };
 
     /// Constructor
-    explicit KoInlineTextObjectManager(QObject *parent = 0);
+    explicit KoInlineTextObjectManager(QObject *parent = nullptr);
     ~KoInlineTextObjectManager() override;
 
     /**

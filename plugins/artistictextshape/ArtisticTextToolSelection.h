@@ -18,7 +18,7 @@ class QPainter;
 class ArtisticTextToolSelection : public KoToolSelection
 {
 public:
-    explicit ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
+    explicit ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = nullptr);
     ~ArtisticTextToolSelection() override;
 
     // reimplemented from KoToolSelection

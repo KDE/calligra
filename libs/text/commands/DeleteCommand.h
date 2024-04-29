@@ -28,7 +28,7 @@ class DeleteCommand : public KoTextCommandBase
 public:
     enum DeleteMode { PreviousChar, NextChar };
 
-    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent = 0);
+    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent = nullptr);
     ~DeleteCommand() override;
 
     void undo() override;

@@ -23,7 +23,7 @@ class SimpleTableOfContentsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
+    explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = nullptr);
     ~SimpleTableOfContentsWidget() override;
 
 public Q_SLOTS:

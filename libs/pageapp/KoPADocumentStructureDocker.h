@@ -46,7 +46,7 @@ class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserverB
     Q_OBJECT
 
 public:
-    explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget *parent = 0);
+    explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget *parent = nullptr);
     ~KoPADocumentStructureDocker() override;
 
     void setCanvas(KoCanvasBase *canvas) override;

@@ -60,7 +60,7 @@ CalendarToolWidget::~CalendarToolWidget()
 
 void CalendarToolWidget::emitInsertCalendar()
 {
-    emit insertCalendar(startDate(), endDate());
+    Q_EMIT insertCalendar(startDate(), endDate());
 }
 
 void CalendarToolWidget::setStartDate(const QDate &date)

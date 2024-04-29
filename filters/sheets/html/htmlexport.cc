@@ -154,7 +154,7 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
 
     }
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     return KoFilter::OK;
 }
 
@@ -227,7 +227,7 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
     for (int currentrow = 1 ; currentrow <= iMaxUsedRow ; ++currentrow, ++i) {
         if (i > step) {
             value += 2;
-            emit sigProgress(value);
+            Q_EMIT sigProgress(value);
             i = 0;
         }
 

@@ -1033,7 +1033,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
 void TextTool::updateSelectionHandler()
 {
     if (m_textEditor) {
-        emit selectionChanged(m_textEditor.data()->hasSelection());
+        Q_EMIT selectionChanged(m_textEditor.data()->hasSelection());
         if (m_textEditor.data()->hasSelection()) {
             QClipboard *clipboard = QApplication::clipboard();
             if (clipboard->supportsSelection())
@@ -1993,9 +1993,9 @@ void TextTool::updateActions()
     action("insert_annotation")->setEnabled(notInAnnotation);
 
     /// TODO if selection contains several different format
-    emit blockChanged(textEditor->block());
-    emit charFormatChanged(cf, textEditor->blockCharFormat());
-    emit blockFormatChanged(bf);
+    Q_EMIT blockChanged(textEditor->block());
+    Q_EMIT charFormatChanged(cf, textEditor->blockCharFormat());
+    Q_EMIT blockFormatChanged(bf);
 }
 
 void TextTool::updateStyleManager()
@@ -2003,7 +2003,7 @@ void TextTool::updateStyleManager()
     if (!m_textShapeData)
         return;
     KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
-    emit styleManagerChanged(styleManager);
+    Q_EMIT styleManagerChanged(styleManager);
 
     // TODO move this to its own method
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
@@ -2034,7 +2034,7 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &sh
         }
     }
     if (!m_textShape) { // none found
-        emit done();
+        Q_EMIT done();
         // This is how we inform the rulers of the active range
         // No shape means no active range
         canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
@@ -2626,7 +2626,7 @@ void TextTool::selectAll()
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();
     if (selectionLength != qAbs(textEditor->position() - textEditor->anchor())) // it actually changed
-        emit selectionChanged(true);
+        Q_EMIT selectionChanged(true);
 }
 
 void TextTool::startMacro(const QString &title)
@@ -2795,7 +2795,7 @@ void TextTool::shapeDataRemoved()
         Q_ASSERT(doc);
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(doc->documentLayout());
         if (!lay || lay->shapes().isEmpty()) {
-            emit done();
+            Q_EMIT done();
             return;
         }
         m_textShape = static_cast<TextShape *>(lay->shapes().first());
@@ -2812,8 +2812,8 @@ void TextTool::createStyleFromCurrentBlockFormat(const QString &name)
     paragraphStyle->setName(name);
     styleManager->add(paragraphStyle);
     m_textEditor.data()->setStyle(paragraphStyle);
-    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
-    emit blockFormatChanged(m_textEditor.data()->blockFormat());
+    Q_EMIT charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+    Q_EMIT blockFormatChanged(m_textEditor.data()->blockFormat());
 }
 
 void TextTool::createStyleFromCurrentCharFormat(const QString &name)
@@ -2833,7 +2833,7 @@ void TextTool::createStyleFromCurrentCharFormat(const QString &name)
     autoStyle->setName(name);
     styleManager->add(autoStyle);
     m_textEditor.data()->setStyle(autoStyle);
-    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+    Q_EMIT charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
 }
 
 // ---------- editing plugins methods.

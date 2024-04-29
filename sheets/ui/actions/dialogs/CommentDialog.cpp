@@ -46,5 +46,5 @@ QString CommentDialog::comment() const
 
 void CommentDialog::onApply()
 {
-    emit changeComment(comment());
+    Q_EMIT changeComment(comment());
 }

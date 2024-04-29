@@ -78,7 +78,7 @@ APPLIXWORDImport::nextLine(QTextStream & stream)
     if (m_instep > m_stepsize) {
         m_instep    = 0;
         m_progress += 2;
-        emit sigProgress(m_progress) ;
+        Q_EMIT sigProgress(m_progress) ;
     }
 
     return s;
@@ -404,7 +404,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         }
     }
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body

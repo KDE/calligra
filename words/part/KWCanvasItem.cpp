@@ -54,7 +54,7 @@ void KWCanvasItem::pageSetupChanged()
 void KWCanvasItem::updateSize()
 {
     resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
-    emit documentSize(m_viewMode->contentsSize());
+    Q_EMIT documentSize(m_viewMode->contentsSize());
 }
 
 void KWCanvasItem::setDocumentOffset(const QPoint &offset)
@@ -148,7 +148,7 @@ void KWCanvasItem::updateInputMethodInfo()
 void KWCanvasItem::updateCanvas(const QRectF &rc)
 {
     Q_UNUSED(rc)
-    emit canvasUpdated();
+    Q_EMIT canvasUpdated();
 }
 
 void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)

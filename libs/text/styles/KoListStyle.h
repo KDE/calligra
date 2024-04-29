@@ -116,13 +116,13 @@ public:
      * Constructor
      * Create a new list style which uses numbered (KoListStyle::ListDecimal) listitems.
      */
-    explicit KoListStyle(QObject *parent = 0);
+    explicit KoListStyle(QObject *parent = nullptr);
 
     /// Destructor
     ~KoListStyle() override;
 
     /// creates a clone of this style with the specified parent
-    KoListStyle *clone(QObject *parent = 0);
+    KoListStyle *clone(QObject *parent = nullptr);
 
     /// each style has a unique ID (non persistent) given out by the styleManager
     int styleId() const;

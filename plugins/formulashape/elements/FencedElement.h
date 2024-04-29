@@ -22,7 +22,7 @@ class KOFORMULA_EXPORT FencedElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit FencedElement(BasicElement *parent = 0);
+    explicit FencedElement(BasicElement *parent = nullptr);
 
     /**
      * Render the element to the given QPainter

@@ -129,7 +129,7 @@ void ViewController::setView(View *newView)
             d->canvasController = nullptr;
         }
 
-        emit viewChanged();
+        Q_EMIT viewChanged();
     }
 }
 
@@ -156,7 +156,7 @@ void ViewController::setFlickable(QQuickItem *item)
             connect(d->flickable, SIGNAL(contentYChanged()), this, SLOT(contentPositionChanged()));
             connect(d->flickable, &QQuickItem::widthChanged, this, &ViewController::flickableWidthChanged);
         }
-        emit flickableChanged();
+        Q_EMIT flickableChanged();
     }
 }
 
@@ -170,7 +170,7 @@ void ViewController::setMinimumZoom(float newValue)
     if (newValue != d->minimumZoom) {
         d->minimumZoom = newValue;
         KoZoomMode::setMinimumZoom(newValue);
-        emit minimumZoomChanged();
+        Q_EMIT minimumZoomChanged();
     }
 }
 
@@ -186,7 +186,7 @@ void ViewController::setMinimumZoomFitsWidth(bool newValue)
 
         flickableWidthChanged();
 
-        emit minimumZoomFitsWidthChanged();
+        Q_EMIT minimumZoomFitsWidthChanged();
     }
 }
 
@@ -229,7 +229,7 @@ void ViewController::setZoom(float newZoom)
             }
         }
 
-        emit zoomChanged();
+        Q_EMIT zoomChanged();
     }
 }
 
@@ -243,7 +243,7 @@ void ViewController::setMaximumZoom(float newValue)
     if (newValue != d->maximumZoom) {
         d->maximumZoom = newValue;
         KoZoomMode::setMaximumZoom(newValue);
-        emit maximumZoomChanged();
+        Q_EMIT maximumZoomChanged();
     }
 }
 
@@ -265,7 +265,7 @@ void ViewController::setUseZoomProxy(bool proxy)
             update();
         }
 
-        emit useZoomProxyChanged();
+        Q_EMIT useZoomProxyChanged();
     }
 }
 
@@ -303,7 +303,7 @@ bool ViewController::event(QEvent *event)
             } else {
                 d->canvasController->setScrollBarValue(syncObject->scrollBarValue);
             }
-            emit d->view->document()->requestViewUpdate();
+            Q_EMIT d->view->document()->requestViewUpdate();
         }
 
         return true;
@@ -404,7 +404,7 @@ void ViewController::contentPositionChanged()
     d->lastX = newX;
     d->lastY = newY;
 
-    emit d->view->document()->requestViewUpdate();
+    Q_EMIT d->view->document()->requestViewUpdate();
 }
 
 void ViewController::documentChanged()

@@ -65,7 +65,7 @@ class CapNJoinMenu : public QMenu
 {
     Q_OBJECT
 public:
-    CapNJoinMenu(QWidget *parent = 0);
+    CapNJoinMenu(QWidget *parent = nullptr);
     QSize sizeHint() const override;
 
     KoUnitDoubleSpinBox *miterLimit;

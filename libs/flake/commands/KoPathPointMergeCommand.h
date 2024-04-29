@@ -26,7 +26,7 @@ public:
      * @param pointData2 the data of the second point to merge
      * @param parent the parent command used for macro commands
      */
-    KoPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent = 0);
+    KoPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent = nullptr);
     ~KoPathPointMergeCommand() override;
 
     /// redo the command

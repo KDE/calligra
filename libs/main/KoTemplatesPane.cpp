@@ -123,7 +123,7 @@ void KoTemplatesPane::openFile(const QModelIndex &index)
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
-        emit openUrl(QUrl::fromLocalFile(item->data(Qt::UserRole + 1).toString()));
+        Q_EMIT openUrl(QUrl::fromLocalFile(item->data(Qt::UserRole + 1).toString()));
     }
 }
 
@@ -145,7 +145,7 @@ void KoTemplatesPane::alwaysUseClicked()
     KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
     cfgGrp.sync();
-    emit alwaysUseChanged(this, d->m_alwaysUseTemplate);
+    Q_EMIT alwaysUseChanged(this, d->m_alwaysUseTemplate);
 }
 
 void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane *sender, const QString &alwaysUse)

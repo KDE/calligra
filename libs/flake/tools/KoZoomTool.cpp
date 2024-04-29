@@ -40,7 +40,7 @@ void KoZoomTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     if (m_temporary) {
-        emit KoToolBase::done();
+        Q_EMIT KoToolBase::done();
     }
 }
 

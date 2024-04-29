@@ -23,7 +23,7 @@ class Style;
 class CALLIGRA_SHEETS_UI_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
-    explicit AbstractDataManipulator(KUndo2Command *parent = 0);
+    explicit AbstractDataManipulator(KUndo2Command *parent = nullptr);
     ~AbstractDataManipulator() override;
 
     bool process(Element *element) override;
@@ -51,7 +51,7 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
-    explicit AbstractDFManipulator(KUndo2Command *parent = 0);
+    explicit AbstractDFManipulator(KUndo2Command *parent = nullptr);
     ~AbstractDFManipulator() override;
     bool process(Element *element) override;
 
@@ -80,7 +80,7 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT DataManipulator : public AbstractDataManipulator
 {
 public:
-    explicit DataManipulator(KUndo2Command *parent = 0);
+    explicit DataManipulator(KUndo2Command *parent = nullptr);
     ~DataManipulator() override;
     void setParsing(bool val)
     {
@@ -123,7 +123,7 @@ class CALLIGRA_SHEETS_UI_EXPORT ShiftManipulator : public AbstractRegionCommand
 {
 public:
     enum Direction { ShiftRight, ShiftBottom };
-    explicit ShiftManipulator(KUndo2Command *parent = 0);
+    explicit ShiftManipulator(KUndo2Command *parent = nullptr);
     ~ShiftManipulator() override;
     void setDirection(Direction direction)
     {

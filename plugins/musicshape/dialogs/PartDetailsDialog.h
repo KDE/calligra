@@ -20,9 +20,9 @@ class PartDetailsDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit PartDetailsDialog(MusicCore::Part *part, QWidget *parent = 0);
+    explicit PartDetailsDialog(MusicCore::Part *part, QWidget *parent = nullptr);
 
-    static void showDialog(MusicTool *tool, MusicCore::Part *part, QWidget *parent = 0);
+    static void showDialog(MusicTool *tool, MusicCore::Part *part, QWidget *parent = nullptr);
 
 private:
     Ui::PartDetailsDialog widget;

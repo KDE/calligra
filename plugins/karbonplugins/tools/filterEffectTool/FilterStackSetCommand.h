@@ -16,7 +16,7 @@ class KoShape;
 class FilterStackSetCommand : public KUndo2Command
 {
 public:
-    FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent = 0);
+    FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent = nullptr);
     ~FilterStackSetCommand() override;
 
     /// redo the command

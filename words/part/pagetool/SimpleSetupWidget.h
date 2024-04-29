@@ -14,7 +14,7 @@ class SimpleSetupWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleSetupWidget(KWView *view, QWidget *parent = 0);
+    explicit SimpleSetupWidget(KWView *view, QWidget *parent = nullptr);
     ~SimpleSetupWidget() override;
 
 private:

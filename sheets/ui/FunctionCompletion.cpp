@@ -165,7 +165,7 @@ void FunctionCompletion::doneCompletion()
     d->hintLabel->hide();
     d->completionPopup->close();
     d->editor->setFocus();
-    emit selectedCompletion(d->completionListBox->currentItem()->text());
+    Q_EMIT selectedCompletion(d->completionListBox->currentItem()->text());
 }
 
 void FunctionCompletion::showCompletion(const QStringList &choices)

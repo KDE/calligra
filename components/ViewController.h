@@ -124,7 +124,7 @@ public:
      *
      * \param parent The parent item.
      */
-    explicit ViewController(QQuickItem *parent = 0);
+    explicit ViewController(QQuickItem *parent = nullptr);
     /**
      * Destructor.
      */

@@ -24,7 +24,7 @@ public:
      * @param shape the shape the filter effect is applied to
      * @param parent the parent undo command
      */
-    explicit FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape = 0, KUndo2Command *parent = 0);
+    explicit FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape = 0, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

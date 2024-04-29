@@ -504,7 +504,7 @@ void ValidityDialog::onApply()
     }
 
     Validity validity = getValidity();
-    emit applyValidity(validity);
+    Q_EMIT applyValidity(validity);
 }
 
 Validity ValidityDialog::getValidity()

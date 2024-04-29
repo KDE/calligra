@@ -40,7 +40,7 @@ void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &
             break;
     }
     if (!m_shape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(Qt::ArrowCursor);

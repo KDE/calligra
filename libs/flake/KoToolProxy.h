@@ -51,7 +51,7 @@ public:
      * @param canvas Each canvas has 1 toolProxy. Pass the parent here.
      * @param parent a parent QObject for memory management purposes.
      */
-    explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
+    explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = nullptr);
     ~KoToolProxy() override;
 
     /// Forwarded to the current KoToolBase

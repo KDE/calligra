@@ -23,7 +23,7 @@ public:
      * Constructor.
      * @param parent a parent for memory management purposes.
      */
-    explicit KoToolSelection(QObject *parent = 0);
+    explicit KoToolSelection(QObject *parent = nullptr);
     ~KoToolSelection() override;
 
     /// return true if the tool currently has something selected that can be copied or deleted.

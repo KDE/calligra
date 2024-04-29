@@ -61,7 +61,7 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT ShowSheetCommand : public KUndo2Command
 {
 public:
-    explicit ShowSheetCommand(Sheet *sheet, KUndo2Command *parent = 0);
+    explicit ShowSheetCommand(Sheet *sheet, KUndo2Command *parent = nullptr);
 
     void redo() override;
     void undo() override;

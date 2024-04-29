@@ -47,7 +47,7 @@ class KARBONUI_EXPORT KarbonView : public KoPAView
     Q_OBJECT
 
 public:
-    KarbonView(KarbonPart *part, KarbonDocument *doc, QWidget *parent = 0);
+    KarbonView(KarbonPart *part, KarbonDocument *doc, QWidget *parent = nullptr);
     ~KarbonView() override;
 
     /// Returns the view is attached to

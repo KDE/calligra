@@ -32,7 +32,7 @@ public:
     KoShapeTransformCommand(const QList<KoShape *> &shapes,
                             const QVector<QTransform> &oldState,
                             const QVector<QTransform> &newState,
-                            KUndo2Command *parent = 0);
+                            KUndo2Command *parent = nullptr);
     ~KoShapeTransformCommand() override;
     /// redo the command
     void redo() override;

@@ -32,7 +32,7 @@ class KPrShapeAnimationDocker : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrShapeAnimationDocker(QWidget *parent = 0);
+    explicit KPrShapeAnimationDocker(QWidget *parent = nullptr);
     ~KPrShapeAnimationDocker() override;
     void setView(KoPAViewBase *view);
 

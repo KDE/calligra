@@ -196,7 +196,7 @@ void KarbonGradientTool::mouseMoveEvent(KoPointerEvent *event)
         else if (m_currentStrategy->hitHandle(event->point, *canvas()->viewConverter(), false)) {
             m_currentStrategy->repaint(*canvas()->viewConverter());
             useCursor(KarbonCursor::needleMoveArrow());
-            emit statusTextChanged(i18n("Drag to move gradient position."));
+            Q_EMIT statusTextChanged(i18n("Drag to move gradient position."));
             return;
         }
         // are we on a gradient stop handle ?
@@ -205,16 +205,16 @@ void KarbonGradientTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(KarbonCursor::needleMoveArrow());
             const QGradient *g = m_currentStrategy->gradient();
             if (g && g->stops().count() > 2)
-                emit statusTextChanged(i18n("Drag to move color stop. Double click to remove color stop."));
+                Q_EMIT statusTextChanged(i18n("Drag to move color stop. Double click to remove color stop."));
             else
-                emit statusTextChanged(i18n("Drag to move color stop."));
+                Q_EMIT statusTextChanged(i18n("Drag to move color stop."));
             return;
         }
         // are we near the gradient line ?
         else if (m_currentStrategy->hitLine(event->point, *canvas()->viewConverter(), false)) {
             m_currentStrategy->repaint(*canvas()->viewConverter());
             useCursor(Qt::SizeAllCursor);
-            emit statusTextChanged(i18n("Drag to move gradient position. Double click to insert color stop."));
+            Q_EMIT statusTextChanged(i18n("Drag to move gradient position. Double click to insert color stop."));
             return;
         }
     }
@@ -307,7 +307,7 @@ void KarbonGradientTool::activate(ToolActivation toolActivation, const QSet<KoSh
 {
     Q_UNUSED(toolActivation);
     if (shapes.isEmpty()) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

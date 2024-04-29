@@ -35,7 +35,7 @@ public:
     /**
      * Constructor.
      */
-    DatasetCommand(DataSet *dataSet, ChartShape *chart, int section = -1, KUndo2Command *parent = 0);
+    DatasetCommand(DataSet *dataSet, ChartShape *chart, int section = -1, KUndo2Command *parent = nullptr);
 
     /**
      * Destructor.

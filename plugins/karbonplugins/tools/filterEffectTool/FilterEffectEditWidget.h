@@ -20,7 +20,7 @@ class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
 {
     Q_OBJECT
 public:
-    explicit FilterEffectEditWidget(QWidget *parent = 0);
+    explicit FilterEffectEditWidget(QWidget *parent = nullptr);
     ~FilterEffectEditWidget() override;
 
     /// Edits effects of given shape

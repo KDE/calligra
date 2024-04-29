@@ -32,7 +32,7 @@ class SheetBase;
 class CALLIGRA_SHEETS_UI_EXPORT PasteCommand : public AbstractRegionCommand
 {
 public:
-    PasteCommand(KUndo2Command *parent = 0);
+    PasteCommand(KUndo2Command *parent = nullptr);
     ~PasteCommand() override;
 
     bool setMimeData(const QMimeData *mimeData, bool sameApp);

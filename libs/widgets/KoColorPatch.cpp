@@ -38,7 +38,7 @@ void KoColorPatch::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
-    emit triggered(this);
+    Q_EMIT triggered(this);
 }
 
 void KoColorPatch::paintEvent(QPaintEvent *pe)

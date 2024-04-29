@@ -27,7 +27,7 @@ public:
      * @param page the page to delete
      * @param parent the parent command used for macro commands
      */
-    KoPAPageDeleteCommand(KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent = 0);
+    KoPAPageDeleteCommand(KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent = nullptr);
 
     /**
      * Command to delete multiple pages.
@@ -35,7 +35,7 @@ public:
      * @param pages a list of pages to delete
      * @param parent the parent command used for macro commands
      */
-    KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent = 0);
+    KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent = nullptr);
 
     ~KoPAPageDeleteCommand() override;
 

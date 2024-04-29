@@ -17,7 +17,7 @@ class KOFORMULA_EXPORT PhantomElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit PhantomElement(BasicElement *parent = 0);
+    explicit PhantomElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

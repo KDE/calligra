@@ -111,7 +111,7 @@ void KPrTimeLineView::keyPressEvent(QKeyEvent *event)
         if (row != m_mainView->selectedRow() || column != m_mainView->selectedColumn()) {
             QModelIndex index = m_mainView->model()->index(row, column);
             m_mainView->setCurrentIndex(index);
-            emit clicked(index);
+            Q_EMIT clicked(index);
             return;
         }
     }
@@ -127,7 +127,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
     m_mainView->setSelectedColumn(column);
     // Request context menu
     if (event->button() == Qt::RightButton) {
-        emit customContextMenuRequested(event->pos());
+        Q_EMIT customContextMenuRequested(event->pos());
     }
     // Check if user wants to move the time bars
     if (event->button() == Qt::LeftButton) {
@@ -155,7 +155,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
             }
         }
     }
-    emit clicked(m_mainView->model()->index(row, column));
+    Q_EMIT clicked(m_mainView->model()->index(row, column));
 }
 
 void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
@@ -182,7 +182,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             newLength = qFloor((newLength - modD(newLength, subSteps)) * 100.0) / 100.0;
             // update bar length
             m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::Duration), newLength * 1000);
-            emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::Duration));
+            Q_EMIT timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::Duration));
             m_adjust = false;
             if (newLength < duration)
                 m_adjust = true;
@@ -215,7 +215,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             newPos = qFloor((newPos - modD(newPos, subSteps)) * 100.0) / 100.0;
             // update bar position
             m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::StartTime), newPos * 1000);
-            emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::StartTime));
+            Q_EMIT timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::StartTime));
             m_adjust = false;
             if (newPos <= start) {
                 m_adjust = true;

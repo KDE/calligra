@@ -76,7 +76,7 @@ void KoTextEditor::Private::documentCommandAdded()
     class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, KoTextEditor::Private *p, KUndo2Command *parent = 0)
+        UndoTextCommand(QTextDocument *document, KoTextEditor::Private *p, KUndo2Command *parent = nullptr)
             : KUndo2Command(kundo2_i18n("Text"), parent)
             , m_document(document)
             , m_p(p)

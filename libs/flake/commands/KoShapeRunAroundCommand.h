@@ -25,7 +25,7 @@ public:
                             qreal distanceBottom,
                             qreal threshold,
                             KoShape::TextRunAroundContour contour,
-                            KUndo2Command *parent = 0);
+                            KUndo2Command *parent = nullptr);
     ~KoShapeRunAroundCommand() override;
 
     /// redo the command

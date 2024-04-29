@@ -22,7 +22,7 @@ void ParagraphDecorations::slotBackgroundColorChanged()
 {
     m_backgroundColorReset = false;
     m_backgroundColorChanged = true;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphDecorations::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
@@ -52,5 +52,5 @@ void ParagraphDecorations::clearBackgroundColor()
 {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }

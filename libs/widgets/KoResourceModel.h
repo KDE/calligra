@@ -21,7 +21,7 @@ class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:
-    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject *parent = 0);
+    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject *parent = nullptr);
     ~KoResourceModel() override;
 
     /// reimplemented

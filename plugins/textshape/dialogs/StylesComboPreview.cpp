@@ -105,7 +105,7 @@ bool StylesComboPreview::isAddButtonShown() const
 void StylesComboPreview::resizeEvent(QResizeEvent *ev)
 {
     QLineEdit::resizeEvent(ev);
-    emit resized();
+    Q_EMIT resized();
     updateAddButton();
 }
 
@@ -120,7 +120,7 @@ void StylesComboPreview::keyPressEvent(QKeyEvent *e)
     } else if (m_shouldAddNewStyle && (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)) {
         m_renamingNewStyle = false;
         m_shouldAddNewStyle = false;
-        emit newStyleRequested(text());
+        Q_EMIT newStyleRequested(text());
         setReadOnly(true);
         setText(QString());
         e->accept();
@@ -135,7 +135,7 @@ void StylesComboPreview::focusOutEvent(QFocusEvent *e)
         if (m_shouldAddNewStyle) {
             m_renamingNewStyle = false;
             m_shouldAddNewStyle = false;
-            emit newStyleRequested(text());
+            Q_EMIT newStyleRequested(text());
             setReadOnly(true);
             setText(QString());
             e->accept();
@@ -152,7 +152,7 @@ void StylesComboPreview::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
     if (!m_renamingNewStyle) {
-        emit clicked();
+        Q_EMIT clicked();
     }
 }
 

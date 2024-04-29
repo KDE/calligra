@@ -40,7 +40,7 @@ public:
 
     enum AdditionalRoles { CharacterStylePointer = Qt::UserRole + 1, ParagraphStylePointer, isModifiedStyle, isTitleRole, TitleString };
 
-    explicit AbstractStylesModel(QObject *parent = 0);
+    explicit AbstractStylesModel(QObject *parent = nullptr);
 
     /** Re-implement from QAbstractItemModel.
      *

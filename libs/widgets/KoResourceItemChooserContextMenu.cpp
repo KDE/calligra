@@ -52,7 +52,7 @@ bool KoLineEditAction::closeParentOnTrigger()
 void KoLineEditAction::onTriggered(const QString &text)
 {
     if (!text.isEmpty()) {
-        emit triggered(text);
+        Q_EMIT triggered(text);
         m_editBox->clear();
 
         if (m_closeParentOnTrigger) {
@@ -95,7 +95,7 @@ ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource *resource,
 
 void ContextMenuExistingTagAction::onTriggered()
 {
-    emit triggered(m_resource, m_tag);
+    Q_EMIT triggered(m_resource, m_tag);
 }
 NewTagAction::NewTagAction(KoResource *resource, QMenu *parent)
     : KoLineEditAction(parent)
@@ -113,7 +113,7 @@ NewTagAction::NewTagAction(KoResource *resource, QMenu *parent)
 
 void NewTagAction::onTriggered(const QString &tagName)
 {
-    emit triggered(m_resource, tagName);
+    Q_EMIT triggered(m_resource, tagName);
 }
 
 KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource *resource,

@@ -62,7 +62,7 @@ void KWConfigureDialog::slotApply()
     m_docPage->apply();
     m_authorPage->apply();
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KWConfigureDialog::slotDefault()

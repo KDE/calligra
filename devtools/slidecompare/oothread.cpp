@@ -109,10 +109,10 @@ void OoThread::run()
 
         if (toOdp) {
             convertToOdp(toOdp);
-            emit toOdpDone(toOdp.to);
+            Q_EMIT toOdpDone(toOdp.to);
         } else if (toPng) {
             convertToPng(toPng);
-            emit toPngDone(toPng.to);
+            Q_EMIT toPngDone(toPng.to);
         }
     }
     delete oo;

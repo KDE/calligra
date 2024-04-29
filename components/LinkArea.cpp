@@ -52,7 +52,7 @@ void LinkArea::setDocument(Calligra::Components::Document *newDocument)
 {
     if (newDocument != d->document) {
         d->document = newDocument;
-        emit documentChanged();
+        Q_EMIT documentChanged();
     }
 }
 
@@ -80,9 +80,9 @@ void LinkArea::mouseReleaseEvent(QMouseEvent *event)
         url = d->document->urlAtPoint(pos);
 
     if (url.isEmpty()) {
-        emit clicked();
+        Q_EMIT clicked();
     } else {
-        emit linkClicked(url);
+        Q_EMIT linkClicked(url);
     }
     event->accept();
 }
@@ -90,7 +90,7 @@ void LinkArea::mouseReleaseEvent(QMouseEvent *event)
 void LinkArea::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    emit doubleClicked();
+    Q_EMIT doubleClicked();
 }
 
 float LinkArea::controllerZoom() const
@@ -102,6 +102,6 @@ void LinkArea::setControllerZoom(float newZoom)
 {
     if (d->controllerZoom != newZoom) {
         d->controllerZoom = newZoom;
-        emit controllerZoomChanged();
+        Q_EMIT controllerZoomChanged();
     }
 }

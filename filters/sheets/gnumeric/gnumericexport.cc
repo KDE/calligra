@@ -1172,7 +1172,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         for (int currentrow = 1; currentrow <= iMaxRow; ++currentrow, ++i) {
             if (i > step) {
                 value += 2;
-                emit sigProgress(value);
+                Q_EMIT sigProgress(value);
                 i = 0;
             }
 
@@ -1334,7 +1334,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     str = gnumeric_doc.toString();
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     // Ok, now write to export file
 

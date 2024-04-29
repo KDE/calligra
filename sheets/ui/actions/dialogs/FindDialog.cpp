@@ -58,7 +58,7 @@ FindOption::FindOption(QWidget *parent)
     m_searchDirection->insertItems(0, lst);
 
     m_findExtension->hide();
-    emit adjustSize();
+    Q_EMIT adjustSize();
 }
 
 FindOption::searchTypeValue FindOption::searchType() const
@@ -92,7 +92,7 @@ void FindOption::slotMoreOptions()
         m_findExtension->hide();
         m_moreOptions->setText(i18n("More Options"));
     }
-    emit adjustSize();
+    Q_EMIT adjustSize();
 }
 
 bool FindOption::searchInAllSheet() const

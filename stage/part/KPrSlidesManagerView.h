@@ -20,7 +20,7 @@ class KPrSlidesManagerView : public QListView
 {
     Q_OBJECT
 public:
-    explicit KPrSlidesManagerView(QWidget *parent = 0);
+    explicit KPrSlidesManagerView(QWidget *parent = nullptr);
 
     ~KPrSlidesManagerView() override;
 

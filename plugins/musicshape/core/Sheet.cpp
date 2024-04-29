@@ -55,7 +55,7 @@ Part *Sheet::addPart(const QString &name)
 {
     Part *part = new Part(this, name);
     d->parts.append(part);
-    emit partAdded(d->parts.size(), part);
+    Q_EMIT partAdded(d->parts.size(), part);
     return part;
 }
 
@@ -64,7 +64,7 @@ void Sheet::addPart(Part *part)
     Q_ASSERT(part);
     part->setParent(this);
     d->parts.append(part);
-    emit partAdded(d->parts.size(), part);
+    Q_EMIT partAdded(d->parts.size(), part);
 }
 
 Part *Sheet::insertPart(int before, const QString &name)
@@ -72,7 +72,7 @@ Part *Sheet::insertPart(int before, const QString &name)
     Q_ASSERT(before >= 0 && before <= partCount());
     Part *part = new Part(this, name);
     d->parts.insert(before, part);
-    emit partAdded(before, part);
+    Q_EMIT partAdded(before, part);
     return part;
 }
 
@@ -82,14 +82,14 @@ void Sheet::insertPart(int before, Part *part)
     Q_ASSERT(part);
     part->setParent(this);
     d->parts.insert(before, part);
-    emit partAdded(before, part);
+    Q_EMIT partAdded(before, part);
 }
 
 void Sheet::removePart(int index, bool deletePart)
 {
     Q_ASSERT(index >= 0 && index < partCount());
     Part *part = d->parts.takeAt(index);
-    emit partRemoved(index, part);
+    Q_EMIT partRemoved(index, part);
     if (deletePart) {
         delete part;
     }

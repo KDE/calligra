@@ -28,7 +28,7 @@ class Global : public QObject
 {
     Q_OBJECT
 public:
-    explicit Global(QObject *parent = 0);
+    explicit Global(QObject *parent = nullptr);
 
     static Q_INVOKABLE int documentType(const QUrl &document);
 };

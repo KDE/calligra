@@ -586,7 +586,7 @@ void WordsTableHandler::tableCellStart()
 
     QString cellStyleName = m_mainStyles->insert(cellStyle, "cell");
 
-    //     emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name,
+    //     Q_EMIT sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name,
     //                             brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
 
     // Start a table cell in the content.

@@ -56,5 +56,5 @@ QString AddNamedAreaDialog::areaName() const
 
 void AddNamedAreaDialog::onApply()
 {
-    emit addArea(areaName());
+    Q_EMIT addArea(areaName());
 }

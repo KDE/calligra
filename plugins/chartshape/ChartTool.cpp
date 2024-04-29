@@ -223,7 +223,7 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
     }
     debugChartTool << shapes << d->shape;
     if (!d->shape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(Qt::ArrowCursor);

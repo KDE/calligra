@@ -270,7 +270,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
             for (int row = 1, i = 1 ; row <= CSVMaxRow ; ++row, ++i) {
                 if (i > step) {
                     value += 2;
-                    emit sigProgress(value);
+                    Q_EMIT sigProgress(value);
                     i = 0;
                 }
 
@@ -295,7 +295,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         }
     }
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     QFile out(m_chain->outputFile());
     if (!out.open(QIODevice::WriteOnly)) {

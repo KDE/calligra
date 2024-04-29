@@ -25,13 +25,13 @@ public:
      * @param shape the shape this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand(KoParameterShape *shape, KUndo2Command *parent = 0);
+    explicit KoParameterToPathCommand(KoParameterShape *shape, KUndo2Command *parent = nullptr);
     /**
      * Constructor.
      * @param shapes the list of shapes this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand(const QList<KoParameterShape *> &shapes, KUndo2Command *parent = 0);
+    explicit KoParameterToPathCommand(const QList<KoParameterShape *> &shapes, KUndo2Command *parent = nullptr);
     ~KoParameterToPathCommand() override;
 
     /// redo the command

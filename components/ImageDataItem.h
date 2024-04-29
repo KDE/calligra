@@ -39,7 +39,7 @@ class ImageDataItem : public QQuickItem
     Q_PROPERTY(QImage data READ data WRITE setData NOTIFY dataChanged)
 
 public:
-    explicit ImageDataItem(QQuickItem *parent = 0);
+    explicit ImageDataItem(QQuickItem *parent = nullptr);
     ~ImageDataItem() override;
 
     /**

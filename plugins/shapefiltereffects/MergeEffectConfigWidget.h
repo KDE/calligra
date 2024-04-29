@@ -16,7 +16,7 @@ class MergeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit MergeEffectConfigWidget(QWidget *parent = 0);
+    explicit MergeEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

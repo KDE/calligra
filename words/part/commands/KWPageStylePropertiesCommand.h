@@ -33,7 +33,7 @@ public:
      * @param styleAfter the new style.
      * @param parent the parent for macro command functionality
      */
-    explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent = 0);
+    explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

@@ -60,7 +60,7 @@ void SpaceNavigatorPollingThread::run()
                 currRX = static_cast<int>(posfactor * event.motion.rx);
                 currRY = static_cast<int>(-posfactor * event.motion.rz);
                 currRZ = static_cast<int>(-posfactor * event.motion.ry);
-                emit moveEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons);
+                Q_EMIT moveEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons);
             } else {
                 /* SPNAV_EVENT_BUTTON */
                 Qt::MouseButton button = event.button.bnum == 0 ? Qt::LeftButton : Qt::RightButton;
@@ -74,7 +74,7 @@ void SpaceNavigatorPollingThread::run()
                     buttons &= ~button;
                     type = KoInputDeviceHandlerEvent::ButtonReleased;
                 }
-                emit buttonEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type);
+                Q_EMIT buttonEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type);
             }
             spnav_remove_events(event.type);
         }

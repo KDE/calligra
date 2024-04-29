@@ -19,7 +19,7 @@ class ListLevelWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ListLevelWidget(QWidget *parent = 0);
+    explicit ListLevelWidget(QWidget *parent = nullptr);
     ~ListLevelWidget() override
     {
     }

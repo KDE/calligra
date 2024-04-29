@@ -231,7 +231,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
     delete a;
     w.close();
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     return KoFilter::OK;
 }

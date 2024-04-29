@@ -33,7 +33,7 @@ public:
     KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel,
                                KPrShapeAnimation *oldAnimation,
                                KPrShapeAnimation *newAnimation,
-                               KUndo2Command *parent = 0);
+                               KUndo2Command *parent = nullptr);
 
     ~KPrReorderAnimationCommand() override;
 

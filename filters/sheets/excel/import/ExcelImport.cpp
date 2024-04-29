@@ -205,7 +205,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
 #endif
     d->outputDoc->setOutputMimeType(to);
 
-    emit sigProgress(0);
+    Q_EMIT sigProgress(0);
 
     QBuffer storeBuffer; // TODO: use temporary file instead
     delete d->storeout;
@@ -230,8 +230,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
         return KoFilter::PasswordProtected;
     }
 
-    emit sigProgress(-1);
-    emit sigProgress(0);
+    Q_EMIT sigProgress(-1);
+    Q_EMIT sigProgress(0);
 
     // count the number of rows in total to provide a good progress value
     d->rowsCountTotal = d->rowsCountDone = 0;
@@ -365,7 +365,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
     d->outputDoc = 0;
     d->shapesXml = 0;
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     return KoFilter::OK;
 }
 
@@ -489,12 +489,12 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement &rootElemen
             const int progress = int(currentSheet / qreal(numSheetTotal) * EMBEDDEDPROGRESS
                                      + (EMBEDDEDPROGRESS / qreal(numSheetTotal) * currentCell / numCellElements) + SIDEWINDERPROGRESS + ODFPROGRESS)
                 + 0.5;
-            emit q->sigProgress(progress);
+            Q_EMIT q->sigProgress(progress);
         }
 
         ++currentSheet;
         const int progress = int(currentSheet / qreal(numSheetTotal) * EMBEDDEDPROGRESS + SIDEWINDERPROGRESS + ODFPROGRESS + 0.5);
-        emit q->sigProgress(progress);
+        Q_EMIT q->sigProgress(progress);
     }
 }
 
@@ -1330,7 +1330,7 @@ void ExcelImport::Private::addProgress(int addValue)
 {
     rowsCountDone += addValue;
     const int progress = int(rowsCountDone / qreal(rowsCountTotal) * ODFPROGRESS + 0.5 + SIDEWINDERPROGRESS);
-    emit q->sigProgress(progress);
+    Q_EMIT q->sigProgress(progress);
 }
 
 KoXmlWriter *ExcelImport::Private::beginMemoryXmlWriter(const char *docElement)
@@ -1428,7 +1428,7 @@ void ExcelImport::Private::processNumberFormats()
 
 void ExcelImport::slotSigProgress(int progress)
 {
-    emit sigProgress(int(SIDEWINDERPROGRESS / 100.0 * progress + 0.5));
+    Q_EMIT sigProgress(int(SIDEWINDERPROGRESS / 100.0 * progress + 0.5));
 }
 
 #include "ExcelImport.moc"

@@ -172,7 +172,7 @@ void KWDocumentStatistics::updateData()
             continue;
         computeStatistics(*doc);
     }
-    emit refreshed();
+    Q_EMIT refreshed();
     d->running = false;
 }
 

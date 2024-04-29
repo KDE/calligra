@@ -14,7 +14,7 @@ class ProxyView : public KoView
 {
     Q_OBJECT
 public:
-    ProxyView(KoPart *part, KoDocument *doc, QWidget *parent = 0);
+    ProxyView(KoPart *part, KoDocument *doc, QWidget *parent = nullptr);
     ~ProxyView() override;
 
     void updateReadWrite(bool readwrite) override;

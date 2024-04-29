@@ -41,7 +41,7 @@ private Q_SLOTS:
     void slotHandleOoPng(const QString &path);
 
 public:
-    explicit CombinedView(QWidget *parent = 0);
+    explicit CombinedView(QWidget *parent = nullptr);
     ~CombinedView();
     void openFile(const QString &path);
 };

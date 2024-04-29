@@ -69,5 +69,5 @@ void CQTextDocumentModel::setThumbnailSize(const QSize &newSize)
         CQImageProvider::s_imageProvider->clearCache();
         dataChanged(index(0), index(kw_document->pageCount() - 1));
     }
-    emit thumbnailSizeChanged();
+    Q_EMIT thumbnailSizeChanged();
 }

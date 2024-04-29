@@ -22,7 +22,7 @@ class QLabel;
 class CSTCompareView : public QWidget
 {
 public:
-    explicit CSTCompareView(QWidget *parent = 0);
+    explicit CSTCompareView(QWidget *parent = nullptr);
     ~CSTCompareView() override;
 
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);

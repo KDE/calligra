@@ -348,7 +348,7 @@ void KoTableStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoTableStyle::styleId() const

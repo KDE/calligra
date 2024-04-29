@@ -199,7 +199,7 @@ void KoRecentDocumentsPane::openFile(const QModelIndex &index)
     KFileItem fileItem = item->fileItem();
 
     if (!fileItem.isNull()) {
-        emit openUrl(fileItem.url());
+        Q_EMIT openUrl(fileItem.url());
     }
 }
 

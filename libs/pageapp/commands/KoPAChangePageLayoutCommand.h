@@ -23,7 +23,7 @@ public:
                                 KoPAMasterPage *page,
                                 const KoPageLayout &newPageLayout,
                                 bool applyToDocument,
-                                KUndo2Command *parent = 0);
+                                KUndo2Command *parent = nullptr);
     ~KoPAChangePageLayoutCommand() override;
 
     /// redo the command

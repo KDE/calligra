@@ -18,7 +18,7 @@ class KPrCustomSlideShowsModel;
 class STAGE_TEST_EXPORT KPrDelCustomSlideShowCommand : public KUndo2Command
 {
 public:
-    KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = 0);
+    KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = nullptr);
 
     ~KPrDelCustomSlideShowCommand() override;
 

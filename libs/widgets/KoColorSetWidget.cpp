@@ -188,7 +188,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 {
     int i;
 
-    emit thePublic->colorChanged(patch->color(), true);
+    Q_EMIT thePublic->colorChanged(patch->color(), true);
 
     for (i = 0; i < numRecents; i++)
         if (patch == recentPatches[i]) {
@@ -222,7 +222,7 @@ KoColorSet *KoColorSetWidget::colorSet()
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 {
-    emit widgetSizeChanged(event->size());
+    Q_EMIT widgetSizeChanged(event->size());
     QFrame::resizeEvent(event);
 }
 

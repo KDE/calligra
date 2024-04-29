@@ -75,7 +75,7 @@ void KoTagChooserWidget::contextDeleteCurrentTag()
     if (selectedTagIsReadOnly()) {
         return;
     }
-    emit tagDeletionRequested(currentlySelectedTag());
+    Q_EMIT tagDeletionRequested(currentlySelectedTag());
 }
 
 void KoTagChooserWidget::slotTagRenamingRequested(const QString &newName)
@@ -83,7 +83,7 @@ void KoTagChooserWidget::slotTagRenamingRequested(const QString &newName)
     if (newName.isEmpty() || selectedTagIsReadOnly()) {
         return;
     }
-    emit tagRenamingRequested(currentlySelectedTag(), newName);
+    Q_EMIT tagRenamingRequested(currentlySelectedTag(), newName);
 }
 
 void KoTagChooserWidget::setUndeletionCandidate(const QString &tag)
@@ -174,7 +174,7 @@ void KoTagChooserWidget::tagOptionsContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
-    emit popupMenuAboutToShow();
+    Q_EMIT popupMenuAboutToShow();
 }
 
 void KoTagChooserWidget::showTagToolButton(bool show)

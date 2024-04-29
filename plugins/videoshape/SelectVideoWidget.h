@@ -16,7 +16,7 @@ class QCheckBox;
 class SelectVideoWidget : public QWidget
 {
 public:
-    explicit SelectVideoWidget(QWidget *parent = 0);
+    explicit SelectVideoWidget(QWidget *parent = nullptr);
     ~SelectVideoWidget();
 
     QUrl selectedUrl() const;

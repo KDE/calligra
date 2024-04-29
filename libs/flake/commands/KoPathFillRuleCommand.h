@@ -24,7 +24,7 @@ public:
      * @param fillRule the new fill rule
      * @param parent the parent command used for macro commands
      */
-    KoPathFillRuleCommand(const QList<KoPathShape *> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = 0);
+    KoPathFillRuleCommand(const QList<KoPathShape *> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = nullptr);
     ~KoPathFillRuleCommand() override;
     /// redo the command
     void redo() override;

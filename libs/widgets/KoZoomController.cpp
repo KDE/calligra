@@ -231,7 +231,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         d->canvasController->proxyObject->emitCanvasOffsetXChanged(d->canvasController->canvasOffsetX());
         d->canvasController->proxyObject->emitCanvasOffsetYChanged(d->canvasController->canvasOffsetY());
     }
-    emit zoomChanged(mode, d->action->effectiveZoom());
+    Q_EMIT zoomChanged(mode, d->action->effectiveZoom());
 }
 
 QSize KoZoomController::documentToViewport(const QSizeF &size)

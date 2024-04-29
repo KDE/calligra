@@ -45,7 +45,7 @@ void KWFrameSet::addShape(KoShape *shape)
             addCopy(copyShape);
         }
     }
-    emit shapeAdded(shape);
+    Q_EMIT shapeAdded(shape);
 }
 
 void KWFrameSet::removeShape(KoShape *shape)
@@ -69,7 +69,7 @@ void KWFrameSet::removeShape(KoShape *shape)
     }
 
     if (m_shapes.removeAll(shape)) {
-        emit shapeRemoved(shape);
+        Q_EMIT shapeRemoved(shape);
     }
 }
 

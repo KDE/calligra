@@ -17,7 +17,7 @@ class BlendEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit BlendEffectConfigWidget(QWidget *parent = 0);
+    explicit BlendEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

@@ -16,7 +16,7 @@ class CQThumbnailItem : public QDeclarativeItem
     Q_PROPERTY(QPixmap content READ content WRITE setContent NOTIFY contentChanged)
 
 public:
-    explicit CQThumbnailItem(QDeclarativeItem *parent = 0);
+    explicit CQThumbnailItem(QDeclarativeItem *parent = nullptr);
     ~CQThumbnailItem();
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *);

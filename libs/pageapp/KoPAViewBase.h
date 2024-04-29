@@ -110,7 +110,7 @@ public:
 
     void emitActivePageChanged()
     {
-        emit activePageChanged();
+        Q_EMIT activePageChanged();
     }
 
 public Q_SLOTS:

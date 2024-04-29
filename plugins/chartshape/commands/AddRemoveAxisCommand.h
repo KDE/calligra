@@ -31,7 +31,7 @@ public:
     /**
      * Constructor.
      */
-    AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KoShapeManager *shapeManager, KUndo2Command *parent = 0);
+    AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KoShapeManager *shapeManager, KUndo2Command *parent = nullptr);
 
     /**
      * Destructor.

@@ -46,7 +46,7 @@ void TemplateTool::activate(ToolActivation toolActivation, const QSet<KoShape *>
     }
 
     if (!m_templateshape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

@@ -23,7 +23,7 @@ class SimpleCitationBibliographyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent = 0);
+    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent = nullptr);
     ~SimpleCitationBibliographyWidget() override;
 
 public Q_SLOTS:

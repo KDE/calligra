@@ -227,7 +227,7 @@ bool SheetModel::setData(const QModelIndex &index, const QVariant &value, int ro
     default:
         return false;
     }
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 
@@ -272,7 +272,7 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
     default:
         return false;
     }
-    emit dataChanged(range.topLeft(), range.bottomRight());
+    Q_EMIT dataChanged(range.topLeft(), range.bottomRight());
     return true;
 }
 

@@ -21,7 +21,7 @@ class ArtisticTextShapeOnPathWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ArtisticTextShapeOnPathWidget(ArtisticTextTool *tool, QWidget *parent = 0);
+    explicit ArtisticTextShapeOnPathWidget(ArtisticTextTool *tool, QWidget *parent = nullptr);
     ~ArtisticTextShapeOnPathWidget() override;
 
 public Q_SLOTS:

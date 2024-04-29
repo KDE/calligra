@@ -37,12 +37,12 @@ public:
 
     Q_PROPERTY(GroupPosition groupPosition READ groupPosition WRITE setGroupPosition NOTIFY groupPositionChanged)
 
-    explicit KoGroupButton(GroupPosition position, QWidget *parent = 0);
+    explicit KoGroupButton(GroupPosition position, QWidget *parent = nullptr);
 
     /**
      * Creates button with no NoGroup position.
      */
-    explicit KoGroupButton(QWidget *parent = 0);
+    explicit KoGroupButton(QWidget *parent = nullptr);
 
     ~KoGroupButton() override;
 

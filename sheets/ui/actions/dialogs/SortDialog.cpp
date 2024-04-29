@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(Qt::SortOrder)
 class SortDialog::Private : public QStyledItemDelegate
 {
 public:
-    Private(SortDialog *parent = 0)
+    Private(SortDialog *parent = nullptr)
         : QStyledItemDelegate(parent)
     {
     }

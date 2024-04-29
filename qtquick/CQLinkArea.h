@@ -20,7 +20,7 @@ class CQLinkArea : public QDeclarativeItem
     Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor NOTIFY linkColorChanged)
 
 public:
-    explicit CQLinkArea(QDeclarativeItem *parent = 0);
+    explicit CQLinkArea(QDeclarativeItem *parent = nullptr);
     virtual ~CQLinkArea();
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 

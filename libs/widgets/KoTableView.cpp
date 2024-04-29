@@ -24,7 +24,7 @@ void KoTableView::resizeEvent(QResizeEvent *event)
     QTableView::resizeEvent(event);
     updateView();
 
-    emit sigSizeChanged();
+    Q_EMIT sigSizeChanged();
 }
 
 void KoTableView::setViewMode(KoTableView::ViewMode mode)

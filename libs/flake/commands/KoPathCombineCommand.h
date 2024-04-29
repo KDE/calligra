@@ -25,7 +25,7 @@ public:
      * @param paths the list of paths to combine
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape *> &paths, KUndo2Command *parent = 0);
+    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape *> &paths, KUndo2Command *parent = nullptr);
     ~KoPathCombineCommand() override;
     /// redo the command
     void redo() override;

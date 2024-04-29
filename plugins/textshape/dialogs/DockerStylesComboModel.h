@@ -20,7 +20,7 @@ class DockerStylesComboModel : public StylesFilteredModelBase
 public:
     enum CategoriesInternalIds { UsedStyleId = -32000, UnusedStyleId = -32001 };
 
-    explicit DockerStylesComboModel(QObject *parent = 0);
+    explicit DockerStylesComboModel(QObject *parent = nullptr);
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 

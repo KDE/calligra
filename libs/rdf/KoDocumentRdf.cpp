@@ -875,12 +875,12 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 
 void KoDocumentRdf::emitSemanticObjectAdded(hKoRdfBasicSemanticItem item) const
 {
-    emit semanticObjectAdded(item);
+    Q_EMIT semanticObjectAdded(item);
 }
 
 void KoDocumentRdf::emitSemanticObjectAddedConst(const hKoRdfBasicSemanticItem item) const
 {
-    emit semanticObjectAdded(item);
+    Q_EMIT semanticObjectAdded(item);
 }
 
 void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item)
@@ -895,7 +895,7 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item)
         insertReflow(col, si);
         applyReflow(col);
     }
-    emit semanticObjectUpdated(item);
+    Q_EMIT semanticObjectUpdated(item);
 }
 
 void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem baseItem, const QString &xmlid)
@@ -907,7 +907,7 @@ void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem ba
     hKoRdfSemanticItem item(static_cast<KoRdfSemanticItem *>(baseItem.data()));
     if (item) {
         RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
-        emit semanticObjectViewSiteUpdated(item, xmlid);
+        Q_EMIT semanticObjectViewSiteUpdated(item, xmlid);
     }
 }
 

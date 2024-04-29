@@ -264,8 +264,8 @@ void TextDocumentImpl::setCurrentIndex(int newValue)
     KWPage newPage = d->document->pageManager()->page(newValue + 1);
     QRectF newRect = d->canvas->viewConverter()->documentToView(newPage.rect());
     canvasController()->setScrollBarValue(newRect.topLeft().toPoint());
-    emit requestViewUpdate();
-    emit currentIndexChanged();
+    Q_EMIT requestViewUpdate();
+    Q_EMIT currentIndexChanged();
 }
 
 int TextDocumentImpl::indexCount() const

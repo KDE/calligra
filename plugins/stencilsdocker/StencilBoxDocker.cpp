@@ -212,7 +212,7 @@ void StencilBoxDockerLoader::loadShapeCollections()
             debugStencilBox << path + collectionDirName;
         }
     }
-    emit resultReady();
+    Q_EMIT resultReady();
 }
 
 bool StencilBoxDockerLoader::addCollection(const QString &path)

@@ -32,7 +32,7 @@ public:
     KoShapeMoveCommand(const QList<KoShape *> &shapes,
                        const QVector<QPointF> &previousPositions,
                        const QVector<QPointF> &newPositions,
-                       KUndo2Command *parent = 0);
+                       KUndo2Command *parent = nullptr);
 
     /**
      * Constructor.
@@ -52,7 +52,7 @@ public:
                        const QVector<QPointF> &newPositions,
                        const QVector<QPointF> &previousOffsets,
                        const QVector<QPointF> &newOffsets,
-                       KUndo2Command *parent = 0);
+                       KUndo2Command *parent = nullptr);
     /// Destuctor.
     ~KoShapeMoveCommand() override;
     /// redo the command

@@ -132,7 +132,7 @@ class Section : public QWidget
 public:
     enum SeparatorFlag { SeparatorTop = 0x0001, /* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008 };
     Q_DECLARE_FLAGS(Separators, SeparatorFlag)
-    explicit Section(QWidget *parent = 0)
+    explicit Section(QWidget *parent = nullptr)
         : QWidget(parent)
         , m_layout(new SectionLayout(this))
     {

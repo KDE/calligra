@@ -50,14 +50,14 @@ public:
     };
 
     /// Constructor
-    explicit KoSectionStyle(QObject *parent = 0);
+    explicit KoSectionStyle(QObject *parent = nullptr);
     /// Creates a KoSectionStyle with the given frame format and \a parent
-    explicit KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
+    explicit KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = nullptr);
     /// Destructor
     ~KoSectionStyle() override;
 
     /// creates a clone of this style with the specified parent
-    KoSectionStyle *clone(QObject *parent = 0) const;
+    KoSectionStyle *clone(QObject *parent = nullptr) const;
 
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(qreal margin);

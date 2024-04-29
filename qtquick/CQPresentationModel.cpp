@@ -102,7 +102,7 @@ void CQPresentationModel::setCanvas(QDeclarativeItem *canvas)
         d->canvas = qobject_cast<CQPresentationCanvas *>(canvas);
         connect(d->canvas, SIGNAL(sourceChanged()), SLOT(canvasSourceChanged()));
         canvasSourceChanged();
-        emit canvasChanged();
+        Q_EMIT canvasChanged();
     }
 }
 
@@ -113,10 +113,10 @@ void CQPresentationModel::setThumbnailSize(const QSizeF &size)
         d->thumbnails.clear(); // Size changed, so cache is invalid
 
         if (d->document) {
-            emit dataChanged(index(0, 0), index(d->document->pageCount() - 1));
+            Q_EMIT dataChanged(index(0, 0), index(d->document->pageCount() - 1));
         }
 
-        emit thumbnailSizeChanged();
+        Q_EMIT thumbnailSizeChanged();
     }
 }
 

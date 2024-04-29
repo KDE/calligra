@@ -39,7 +39,7 @@ class CQTextDocumentCanvas : public CQCanvasBase
 
     Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
-    explicit CQTextDocumentCanvas(QDeclarativeItem *parent = 0);
+    explicit CQTextDocumentCanvas(QDeclarativeItem *parent = nullptr);
     virtual ~CQTextDocumentCanvas();
 
     int currentPageNumber() const;

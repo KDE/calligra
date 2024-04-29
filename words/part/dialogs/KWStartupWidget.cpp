@@ -82,5 +82,5 @@ void KWStartupWidget::buttonClicked()
 
     m_doc->relayout();
 
-    emit documentSelected();
+    Q_EMIT documentSelected();
 }

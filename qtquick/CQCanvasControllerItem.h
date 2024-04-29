@@ -20,7 +20,7 @@ class CQCanvasControllerItem : public QDeclarativeItem
     Q_PROPERTY(qreal minimumZoom READ minimumZoom WRITE setMinimumZoom NOTIFY minimumZoomChanged)
     Q_PROPERTY(qreal maximumZoom READ maximumZoom WRITE setMaximumZoom NOTIFY maximumZoomChanged)
 public:
-    explicit CQCanvasControllerItem(QDeclarativeItem *parent = 0);
+    explicit CQCanvasControllerItem(QDeclarativeItem *parent = nullptr);
     ~CQCanvasControllerItem();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);

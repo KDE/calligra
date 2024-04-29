@@ -20,7 +20,7 @@ class ShowChangesCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:
-    ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent = 0);
+    ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent = nullptr);
     ~ShowChangesCommand() override;
 
     void undo() override;

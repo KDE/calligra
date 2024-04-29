@@ -25,7 +25,7 @@ class KPrPresenterViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewWidget(KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0);
+    KPrPresenterViewWidget(KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = nullptr);
     ~KPrPresenterViewWidget() override;
     void setActivePage(KoPAPageBase *page);
     void setActivePage(int pageIndex);

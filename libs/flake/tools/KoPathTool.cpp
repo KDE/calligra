@@ -519,7 +519,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             int handleId = parameterShape->handleIdAt(roi);
             if (handleId != -1) {
                 useCursor(m_moveCursor);
-                emit statusTextChanged(i18n("Drag to move handle."));
+                Q_EMIT statusTextChanged(i18n("Drag to move handle."));
                 if (m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
@@ -583,9 +583,9 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
 
                 useCursor(m_moveCursor);
                 if (bestPointType == KoPathPoint::Node)
-                    emit statusTextChanged(i18n("Drag to move point. Shift click to change point type."));
+                    Q_EMIT statusTextChanged(i18n("Drag to move point. Shift click to change point type."));
                 else
-                    emit statusTextChanged(i18n("Drag to move control point."));
+                    Q_EMIT statusTextChanged(i18n("Drag to move control point."));
 
                 PointHandle *prev = dynamic_cast<PointHandle *>(m_activeHandle);
                 if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType)
@@ -610,16 +610,16 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     PathSegment *hoveredSegment = segmentAtPoint(event->point);
     if (hoveredSegment) {
         useCursor(Qt::PointingHandCursor);
-        emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
+        Q_EMIT statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
         m_activeSegment = hoveredSegment;
     } else {
         uint selectedPointCount = m_pointSelection.size();
         if (selectedPointCount == 0)
-            emit statusTextChanged("");
+            Q_EMIT statusTextChanged("");
         else if (selectedPointCount == 1)
-            emit statusTextChanged(i18n("Press B to break path at selected point."));
+            Q_EMIT statusTextChanged(i18n("Press B to break path at selected point."));
         else
-            emit statusTextChanged(i18n("Press B to break path at selected segments."));
+            Q_EMIT statusTextChanged(i18n("Press B to break path at selected segments."));
     }
 }
 
@@ -640,9 +640,9 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         m_currentStrategy = 0;
 
         if (m_pointSelection.selectedShapes().count() == 1)
-            emit pathChanged(m_pointSelection.selectedShapes().constFirst());
+            Q_EMIT pathChanged(m_pointSelection.selectedShapes().constFirst());
         else
-            emit pathChanged(0);
+            Q_EMIT pathChanged(0);
     }
 }
 
@@ -824,7 +824,7 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &
         }
     }
     if (selectedShapes.isEmpty()) {
-        emit done();
+        Q_EMIT done();
         return;
     }
     m_pointSelection.setSelectedShapes(selectedShapes);
@@ -858,10 +858,10 @@ void KoPathTool::updateOptionsWidget()
         type |= parameterShape && parameterShape->isParametricShape() ? PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
     }
     if (selectedShapes.count() == 1)
-        emit pathChanged(selectedShapes.first());
+        Q_EMIT pathChanged(selectedShapes.first());
     else
-        emit pathChanged(0);
-    emit typeChanged(type);
+        Q_EMIT pathChanged(0);
+    Q_EMIT typeChanged(type);
 }
 
 void KoPathTool::updateActions()
@@ -925,7 +925,7 @@ void KoPathTool::pointSelectionChanged()
     Q_D(KoToolBase);
     updateActions();
     d->canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().values());
-    emit selectionChanged(m_pointSelection.hasSelection());
+    Q_EMIT selectionChanged(m_pointSelection.hasSelection());
 }
 
 void KoPathTool::repaint(const QRectF &repaintRect)

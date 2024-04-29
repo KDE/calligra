@@ -17,7 +17,7 @@ class OffsetEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit OffsetEffectConfigWidget(QWidget *parent = 0);
+    explicit OffsetEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

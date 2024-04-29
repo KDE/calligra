@@ -28,7 +28,7 @@ public:
      * @param position the position - start or end - of the marker on the shape
      * @param parent the parent command used for macro commands
      */
-    KoPathShapeMarkerCommand(const QList<KoPathShape *> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
+    KoPathShapeMarkerCommand(const QList<KoPathShape *> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = nullptr);
 
     ~KoPathShapeMarkerCommand() override;
     /// redo the command

@@ -28,7 +28,7 @@ class KPrPlaceholders;
 class KPrPageLayoutCommand : public KUndo2Command
 {
 public:
-    KPrPageLayoutCommand(KPrPlaceholders *placeholders, KPrPageLayout *layout, KUndo2Command *parent = 0);
+    KPrPageLayoutCommand(KPrPlaceholders *placeholders, KPrPageLayout *layout, KUndo2Command *parent = nullptr);
     ~KPrPageLayoutCommand() override;
 
     /// redo the command

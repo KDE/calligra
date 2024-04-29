@@ -22,7 +22,7 @@ public:
      * @param paths the list of paths to reverse
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathReverseCommand(const QList<KoPathShape *> &paths, KUndo2Command *parent = 0);
+    explicit KoPathReverseCommand(const QList<KoPathShape *> &paths, KUndo2Command *parent = nullptr);
     ~KoPathReverseCommand() override;
     /// redo the command
     void redo() override;

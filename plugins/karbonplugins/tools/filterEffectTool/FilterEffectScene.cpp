@@ -343,5 +343,5 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
     ConnectionSource source(outputEffect, outputType);
     ConnectionTarget target(inputEffect, inputIndex);
-    emit connectionCreated(source, target);
+    Q_EMIT connectionCreated(source, target);
 }

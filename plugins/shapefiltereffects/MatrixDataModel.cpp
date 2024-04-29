@@ -61,7 +61,7 @@ bool MatrixDataModel::setData(const QModelIndex &index, const QVariant &value, i
     if (!valid)
         return false;
     m_matrix[element] = elementValue;
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 

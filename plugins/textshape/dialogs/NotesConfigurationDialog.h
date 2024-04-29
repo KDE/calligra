@@ -20,7 +20,7 @@ class NotesConfigurationDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent = 0);
+    explicit NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent = nullptr);
     Ui::NotesConfigurationDialog widget;
 
 public Q_SLOTS:

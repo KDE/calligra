@@ -53,7 +53,7 @@ void ManageBookmark::selectionChanged(int currentRow)
 {
     widget.buttonRename->setEnabled(currentRow != -1);
     widget.buttonDelete->setEnabled(currentRow != -1);
-    emit bookmarkSelectionChanged(currentRow);
+    Q_EMIT bookmarkSelectionChanged(currentRow);
 }
 
 void ManageBookmark::slotBookmarkRename()
@@ -73,7 +73,7 @@ void ManageBookmark::slotBookmarkRename()
                 continue;
             }
             item->setText(newName);
-            emit bookmarkNameChanged(curName, newName);
+            Q_EMIT bookmarkNameChanged(curName, newName);
         }
         break;
     }
@@ -85,7 +85,7 @@ void ManageBookmark::slotBookmarkDelete()
     Q_ASSERT(currentRow >= 0);
     QListWidgetItem *deletedItem = widget.bookmarkList->takeItem(currentRow);
     QString deletedName = deletedItem->text();
-    emit bookmarkItemDeleted(deletedName);
+    Q_EMIT bookmarkItemDeleted(deletedName);
     delete deletedItem;
 }
 
@@ -93,7 +93,7 @@ void ManageBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
 {
     Q_ASSERT(item);
     lastBookMarkItem = item->text();
-    emit bookmarkItemDoubleClicked(item);
+    Q_EMIT bookmarkItemDoubleClicked(item);
 }
 
 void ManageBookmark::slotBookmarkInsert()

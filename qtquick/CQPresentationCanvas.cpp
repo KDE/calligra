@@ -181,9 +181,9 @@ void CQPresentationCanvas::setCurrentSlide(int slide)
         d->currentSlide = slide;
         d->view->doUpdateActivePage(d->document->pageByIndex(slide, false));
         d->pageSize = d->view->activePage()->size();
-        emit currentSlideChanged();
+        Q_EMIT currentSlideChanged();
         d->updateLinkTargets();
-        emit linkTargetsChanged();
+        Q_EMIT linkTargetsChanged();
     }
 }
 
@@ -238,7 +238,7 @@ void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
 
 void CQPresentationCanvas::openFile(const QString &uri)
 {
-    emit loadingBegun();
+    Q_EMIT loadingBegun();
 
     KoDocumentEntry entry;
     const auto metaDatas = KoPluginLoader::pluginLoaders("calligra/parts");
@@ -307,14 +307,14 @@ void CQPresentationCanvas::openFile(const QString &uri)
     if (d->document->pageCount() > 0) {
         d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
         d->pageSize = d->view->activePage()->size();
-        emit currentSlideChanged();
+        Q_EMIT currentSlideChanged();
 
         d->updateLinkTargets();
-        emit linkTargetsChanged();
+        Q_EMIT linkTargetsChanged();
     }
 
-    emit documentChanged();
-    emit loadingFinished();
+    Q_EMIT documentChanged();
+    Q_EMIT loadingFinished();
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase *canvas)
@@ -378,7 +378,7 @@ bool CQPresentationCanvas::event(QEvent *event)
     }
         //         case KisTabletEvent::TabletPressEx:
         //         case KisTabletEvent::TabletReleaseEx:
-        //             emit interactionStarted();
+        //             Q_EMIT interactionStarted();
         //             d->canvas->inputManager()->eventFilter(this, event);
         //             return true;
         //         case KisTabletEvent::TabletMoveEx:

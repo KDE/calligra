@@ -132,7 +132,7 @@ public:
     /**
      *  Create a new view for the document.
      */
-    KoView *createView(KoDocument *document, QWidget *parent = 0);
+    KoView *createView(KoDocument *document, QWidget *parent = nullptr);
 
     /**
      * Adds a view to the document. If the part doesn't know yet about

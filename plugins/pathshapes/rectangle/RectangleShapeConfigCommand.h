@@ -22,7 +22,7 @@ public:
      * @param cornerRadiusY the y corner radius
      * @param parent the optional parent command
      */
-    RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent = 0);
+    RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent = nullptr);
     /// redo the command
     void redo() override;
     /// revert the actions done in redo

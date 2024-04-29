@@ -19,7 +19,7 @@ class UnitActionGroup : public QActionGroup
 {
     Q_OBJECT
 public:
-    explicit UnitActionGroup(KoDocument *document, bool addPixelUnit, QObject *parent = 0)
+    explicit UnitActionGroup(KoDocument *document, bool addPixelUnit, QObject *parent = nullptr)
         : QActionGroup(parent)
         , m_document(document)
         , m_listOptions(addPixelUnit ? KoUnit::ListAll : KoUnit::HidePixel)

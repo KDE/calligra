@@ -26,7 +26,7 @@ class SimpleCharacterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
+    explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = nullptr);
     ~SimpleCharacterWidget() override;
 
     void setInitialUsedStyles(QVector<int> list);

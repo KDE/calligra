@@ -20,7 +20,7 @@ class KOFORMULA_EXPORT PaddedElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit PaddedElement(BasicElement *parent = 0);
+    explicit PaddedElement(BasicElement *parent = nullptr);
 
     /**
      * Calculate the size of the element and the positions of its children

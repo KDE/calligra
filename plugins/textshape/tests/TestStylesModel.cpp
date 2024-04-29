@@ -26,7 +26,7 @@ private:
 class MockModel : public StylesModel
 {
 public:
-    MockModel(KoStyleManager *manager, QObject *parent = 0)
+    MockModel(KoStyleManager *manager, QObject *parent = nullptr)
         : StylesModel(manager, parent)
     {
     }

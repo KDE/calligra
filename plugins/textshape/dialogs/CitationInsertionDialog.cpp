@@ -47,7 +47,7 @@ void CitationInsertionDialog::insert()
                 //    *existingCite = *toCite();                       //update all cites with new values
                 //    existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
                 //}
-                emit accept();
+                Q_EMIT accept();
             } else
                 return;
         }
@@ -60,7 +60,7 @@ void CitationInsertionDialog::insert()
         dialog.shortName->setSelection(dialog.shortName->text().length(), 0);
     }
     *cite = *toCite();
-    emit accept();
+    Q_EMIT accept();
 }
 
 void CitationInsertionDialog::selectionChangedFromExistingCites()

@@ -39,10 +39,10 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface(const QList<KoP
 
 void KPrPresenterViewSlidesInterface::itemClicked(const QModelIndex &index)
 {
-    emit selectedPageChanged(index.row(), false);
+    Q_EMIT selectedPageChanged(index.row(), false);
 }
 
 void KPrPresenterViewSlidesInterface::itemDoubleClicked(const QModelIndex &index)
 {
-    emit selectedPageChanged(index.row(), true);
+    Q_EMIT selectedPageChanged(index.row(), true);
 }

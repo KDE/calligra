@@ -93,5 +93,5 @@ void FrameConfigSharedState::setKeepAspectRatio(bool on)
     if (m_protectAspectRatio == on)
         return;
     m_protectAspectRatio = on;
-    emit keepAspectRatioChanged(on);
+    Q_EMIT keepAspectRatioChanged(on);
 }

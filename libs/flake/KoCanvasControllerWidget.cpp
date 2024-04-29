@@ -445,7 +445,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
 
 void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget>> &widgetMap)
 {
-    emit toolOptionWidgetsChanged(widgetMap);
+    Q_EMIT toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)

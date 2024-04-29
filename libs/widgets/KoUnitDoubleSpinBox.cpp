@@ -113,7 +113,7 @@ void KoUnitDoubleSpinBox::changeValue(double val)
 
 void KoUnitDoubleSpinBox::privateValueChanged()
 {
-    emit valueChangedPt(value());
+    Q_EMIT valueChangedPt(value());
 }
 
 void KoUnitDoubleSpinBox::setUnit(const KoUnit &unit)

@@ -32,7 +32,7 @@ class DataProxy : public QSortFilterProxyModel
 public:
     DataSetTableModel *dataSetModel;
 
-    DataProxy(QObject *parent = 0)
+    DataProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
         , dataSetModel(0)
     {

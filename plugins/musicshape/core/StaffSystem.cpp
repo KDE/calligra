@@ -57,7 +57,7 @@ void StaffSystem::setTop(qreal top)
     if (d->top == top)
         return;
     d->top = top;
-    emit topChanged(top);
+    Q_EMIT topChanged(top);
 }
 
 int StaffSystem::firstBar() const
@@ -70,7 +70,7 @@ void StaffSystem::setFirstBar(int bar)
     if (d->firstBar == bar)
         return;
     d->firstBar = bar;
-    emit firstBarChanged(bar);
+    Q_EMIT firstBarChanged(bar);
 }
 
 qreal StaffSystem::indent() const

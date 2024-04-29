@@ -42,7 +42,7 @@ class MyCommand : public KUndo2Command
 {
 public:
 
-    MyCommand(MyCommandParameters, KUndo2Command* parent = 0);
+    MyCommand(MyCommandParameters, KUndo2Command* parent = nullptr);
     virtual ~MyCommand();
 
     virtual void undo();

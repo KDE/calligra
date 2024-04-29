@@ -24,7 +24,7 @@ class FLAKE_EXPORT KoShapeGroupCommand : public KUndo2Command
 public:
     /**
      * Create command to group a set of shapes into a predefined container.
-     * This uses the KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+     * This uses the KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = nullptr);
      * constructor.
      * The createCommand will make sure that the group will have the z-index and the parent of the top most shape in the group.
      *
@@ -32,7 +32,7 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    static KoShapeGroupCommand *createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    static KoShapeGroupCommand *createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = nullptr);
 
     /**
      * Command to group a set of shapes into a predefined container.
@@ -48,7 +48,7 @@ public:
                         const QList<KoShape *> &shapes,
                         const QList<bool> &clipped,
                         const QList<bool> &inheritTransform,
-                        KUndo2Command *parent = 0);
+                        KUndo2Command *parent = nullptr);
     /**
      * Command to group a set of shapes into a predefined container.
      * Convenience constructor since KoShapeGroup does not allow clipping.
@@ -56,7 +56,7 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent = nullptr);
     ~KoShapeGroupCommand() override;
     /// redo the command
     void redo() override;

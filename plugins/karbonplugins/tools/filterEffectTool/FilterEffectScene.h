@@ -65,7 +65,7 @@ class FilterEffectScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit FilterEffectScene(QObject *parent = 0);
+    explicit FilterEffectScene(QObject *parent = nullptr);
     ~FilterEffectScene() override;
 
     /// initializes the scene from the filter effect stack

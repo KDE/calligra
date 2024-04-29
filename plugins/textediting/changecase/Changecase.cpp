@@ -76,7 +76,7 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
 
 void Changecase::process()
 {
-    emit startMacro(i18n("Change case"));
+    Q_EMIT startMacro(i18n("Change case"));
 
     if (m_sentenceCaseRadio->isChecked())
         sentenceCase();
@@ -89,7 +89,7 @@ void Changecase::process()
     else if (m_toggleCaseRadio->isChecked())
         toggleCase();
 
-    emit stopMacro();
+    Q_EMIT stopMacro();
 }
 
 void Changecase::sentenceCase()

@@ -31,7 +31,7 @@ public:
      * \param parent The parent QWidget
      * \param f Qt window flags
      */
-    explicit KoFindToolbar(KoFindBase *find, KActionCollection *ac, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KoFindToolbar(KoFindBase *find, KActionCollection *ac, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     ~KoFindToolbar() override;
 
 public Q_SLOTS:

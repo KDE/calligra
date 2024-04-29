@@ -12,7 +12,7 @@ class KoTextRange;
 class AddTextRangeCommand : public KUndo2Command
 {
 public:
-    explicit AddTextRangeCommand(KoTextRange *range, KUndo2Command *parent = 0);
+    explicit AddTextRangeCommand(KoTextRange *range, KUndo2Command *parent = nullptr);
     ~AddTextRangeCommand() override;
 
     void undo() override;

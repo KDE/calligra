@@ -21,7 +21,7 @@ class SpreadsheetImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    explicit SpreadsheetImpl(QObject *parent = 0);
+    explicit SpreadsheetImpl(QObject *parent = nullptr);
     ~SpreadsheetImpl() override;
 
     bool load(const QUrl &url) override;

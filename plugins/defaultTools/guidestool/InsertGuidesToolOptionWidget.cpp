@@ -35,5 +35,5 @@ void InsertGuidesToolOptionWidget::onCreateButtonClicked(bool checked)
     transaction->horizontalGuides = m_widget.m_horizontalSpinBox->value();
     transaction->insertHorizontalEdgesGuides = m_widget.m_horizontalEdgesCheckBox->isChecked();
 
-    emit createGuides(transaction);
+    Q_EMIT createGuides(transaction);
 }

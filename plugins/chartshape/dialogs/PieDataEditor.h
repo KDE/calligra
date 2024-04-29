@@ -25,7 +25,7 @@ class PieDataEditor : public KoDialog
     Q_OBJECT
 
 public:
-    PieDataEditor(QWidget *parent = 0);
+    PieDataEditor(QWidget *parent = nullptr);
     ~PieDataEditor();
 
     void setModel(QAbstractItemModel *model);

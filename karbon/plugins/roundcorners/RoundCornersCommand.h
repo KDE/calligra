@@ -18,7 +18,7 @@ class KoPathPoint;
 class RoundCornersCommand : public KUndo2Command
 {
 public:
-    RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent = 0);
+    RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent = nullptr);
     ~RoundCornersCommand() override;
 
     /// redo the command

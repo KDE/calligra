@@ -221,7 +221,7 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
 
 void CQTextDocumentCanvas::openFile(const QString &uri)
 {
-    emit loadingBegun();
+    Q_EMIT loadingBegun();
 
     KoDocumentEntry entry;
     const auto metaDatas = KoPluginLoader::pluginLoaders("calligra/parts");
@@ -325,21 +325,21 @@ void CQTextDocumentCanvas::openFile(const QString &uri)
 
     d->document = qobject_cast<KWDocument *>(document);
     d->documentModel = new CQTextDocumentModel(this, d->document, d->canvas->shapeManager());
-    emit documentModelChanged();
-    emit thumbnailSizeChanged();
+    Q_EMIT documentModelChanged();
+    Q_EMIT thumbnailSizeChanged();
     connect(d->documentModel, SIGNAL(thumbnailSizeChanged()), SIGNAL(thumbnailSizeChanged()));
 
     d->updateLinkTargets();
-    emit linkTargetsChanged();
+    Q_EMIT linkTargetsChanged();
 
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(shapeTransparencyChanged()));
 
     d->notes = new CQTextDocumentNotesModel(this);
-    emit notesChanged();
+    Q_EMIT notesChanged();
 
-    emit textEditorChanged();
-    emit loadingFinished();
+    Q_EMIT textEditorChanged();
+    Q_EMIT loadingFinished();
 }
 
 void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
@@ -403,7 +403,7 @@ QObject *CQTextDocumentCanvas::textEditor()
         if (d->textEditor) {
             disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
         }
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
         return d->textEditor;
     }
     return 0;
@@ -454,7 +454,7 @@ void CQTextDocumentCanvas::setThumbnailSize(const QSizeF &newSize)
     if (d->documentModel) {
         d->documentModel->setThumbnailSize(newSize.toSize());
     }
-    emit thumbnailSizeChanged();
+    Q_EMIT thumbnailSizeChanged();
 }
 
 void CQTextDocumentCanvas::deselectEverything()
@@ -569,13 +569,13 @@ void CQTextDocumentCanvas::addNote(const QString &text, const QString &color, co
 void CQTextDocumentCanvas::setCameraY(int cameraY)
 {
     d->currentPoint.setY(cameraY);
-    emit cameraYChanged();
+    Q_EMIT cameraYChanged();
 }
 
 void CQTextDocumentCanvas::alignTopWith(int y)
 {
     d->currentPoint.setY(y);
-    emit cameraYChanged();
+    Q_EMIT cameraYChanged();
 }
 
 int CQTextDocumentCanvas::currentPageNumber() const
@@ -634,14 +634,14 @@ bool CQTextDocumentCanvas::event(QEvent *event)
             zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
 
             qApp->processEvents();
-            emit positionShouldChange(syncObject->documentOffset);
+            Q_EMIT positionShouldChange(syncObject->documentOffset);
         }
 
         return true;
     }
         //         case KisTabletEvent::TabletPressEx:
         //         case KisTabletEvent::TabletReleaseEx:
-        //             emit interactionStarted();
+        //             Q_EMIT interactionStarted();
         //             d->canvas->inputManager()->eventFilter(this, event);
         //             return true;
         //         case KisTabletEvent::TabletMoveEx:
@@ -670,7 +670,7 @@ void CQTextDocumentCanvas::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseDoubleClickEvent(&pe);
     updateCanvas();
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -680,7 +680,7 @@ void CQTextDocumentCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseMoveEvent(&pe);
     updateCanvas();
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -690,7 +690,7 @@ void CQTextDocumentCanvas::mousePressEvent(QGraphicsSceneMouseEvent *e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mousePressEvent(&pe);
     updateCanvas();
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -700,7 +700,7 @@ void CQTextDocumentCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseReleaseEvent(&pe);
     updateCanvas();
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -736,7 +736,7 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase *canvas)
     connect(canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
     connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), SIGNAL(zoomActionChanged()));
     kwCanvasItem->updateSize();
-    emit zoomActionChanged();
+    Q_EMIT zoomActionChanged();
 }
 
 void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument *document)
@@ -756,7 +756,7 @@ void CQTextDocumentCanvas::setSearchTerm(const QString &term)
     if (!term.isEmpty()) {
         d->findText->find(term);
     }
-    emit searchTermChanged();
+    Q_EMIT searchTermChanged();
 }
 
 void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
@@ -822,5 +822,5 @@ QSize CQTextDocumentCanvas::documentSize() const
 void CQTextDocumentCanvas::updateDocumentSize(const QSize &size)
 {
     d->documentSize = size;
-    emit documentSizeChanged();
+    Q_EMIT documentSizeChanged();
 }

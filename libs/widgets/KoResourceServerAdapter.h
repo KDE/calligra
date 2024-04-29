@@ -86,7 +86,7 @@ class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public K
     typedef typename Policy::PointerType PointerType;
 
 public:
-    KoResourceServerAdapter(ServerType *resourceServer, QObject *parent = 0)
+    KoResourceServerAdapter(ServerType *resourceServer, QObject *parent = nullptr)
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
         , m_sortingEnabled(false)

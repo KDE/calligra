@@ -15,7 +15,7 @@ class KarbonPatternOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KarbonPatternOptionsWidget(QWidget *parent = 0);
+    explicit KarbonPatternOptionsWidget(QWidget *parent = nullptr);
     ~KarbonPatternOptionsWidget() override;
 
     /// Sets the pattern repeat

@@ -37,7 +37,7 @@ class KPrAnimationsTimeLineView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrAnimationsTimeLineView(QWidget *parent = 0);
+    explicit KPrAnimationsTimeLineView(QWidget *parent = nullptr);
 
     /**
      * @brief Set the filter model (model that returns animations belonging to the same group)

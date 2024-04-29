@@ -20,7 +20,7 @@ class ComponentTransferEffectConfigWidget : public KoFilterEffectConfigWidgetBas
 {
     Q_OBJECT
 public:
-    explicit ComponentTransferEffectConfigWidget(QWidget *parent = 0);
+    explicit ComponentTransferEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

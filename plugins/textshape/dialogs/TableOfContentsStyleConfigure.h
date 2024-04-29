@@ -27,7 +27,7 @@ class TableOfContentsStyleConfigure : public QDialog
     Q_OBJECT
 
 public:
-    explicit TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent = 0);
+    explicit TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent = nullptr);
     ~TableOfContentsStyleConfigure() override;
     void initializeUi(KoTableOfContentsGeneratorInfo *info);
 

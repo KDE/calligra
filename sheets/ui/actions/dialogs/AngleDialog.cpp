@@ -70,6 +70,6 @@ void AngleDialog::slotDefault()
 
 void AngleDialog::onApply()
 {
-    emit adjustAngle(angle());
+    Q_EMIT adjustAngle(angle());
     m_pAngle->setFocus();
 }

@@ -24,7 +24,7 @@ class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase
     Q_OBJECT
 public:
     /// constructor
-    explicit KPrSoundCollection(QObject *parent = 0);
+    explicit KPrSoundCollection(QObject *parent = nullptr);
     ~KPrSoundCollection() override;
 
     /**

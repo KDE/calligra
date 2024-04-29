@@ -23,7 +23,7 @@ class SheetsEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SheetsEditor(TableShape *tableShape, QWidget *parent = 0);
+    explicit SheetsEditor(TableShape *tableShape, QWidget *parent = nullptr);
     virtual ~SheetsEditor();
 
 private Q_SLOTS:

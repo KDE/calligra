@@ -22,7 +22,7 @@ public:
                                  int connectionPointId,
                                  const KoConnectionPoint &oldPoint,
                                  const KoConnectionPoint &newPoint,
-                                 KUndo2Command *parent = 0);
+                                 KUndo2Command *parent = nullptr);
     ~ChangeConnectionPointCommand() override;
     /// reimplemented from KUndo2Command
     void redo() override;

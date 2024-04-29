@@ -440,7 +440,7 @@ public:
      * \param name The name of this style.
      * \param parent The style whose attributes are inherited - the parent style.
      */
-    explicit CustomStyle(const QString &name, CustomStyle *parent = 0);
+    explicit CustomStyle(const QString &name, CustomStyle *parent = nullptr);
     CustomStyle(const CustomStyle &style);
     ~CustomStyle() override;
     CustomStyle &operator=(const CustomStyle &other);

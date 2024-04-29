@@ -16,7 +16,7 @@ namespace KoChart
 class CellRegionDialog : public QDialog, public Ui::CellRegionDialog
 {
 public:
-    explicit CellRegionDialog(QWidget *parent = 0);
+    explicit CellRegionDialog(QWidget *parent = nullptr);
     ~CellRegionDialog();
 };
 

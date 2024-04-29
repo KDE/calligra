@@ -37,9 +37,9 @@ struct InputChangeData {
 class FilterInputChangeCommand : public KUndo2Command
 {
 public:
-    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, KUndo2Command *parent = 0);
+    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, KUndo2Command *parent = nullptr);
 
-    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = 0, KUndo2Command *parent = 0);
+    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = 0, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

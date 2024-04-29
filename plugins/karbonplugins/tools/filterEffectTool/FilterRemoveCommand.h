@@ -17,7 +17,7 @@ class KoFilterEffectStack;
 class FilterRemoveCommand : public KUndo2Command
 {
 public:
-    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent = 0);
+    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent = nullptr);
     ~FilterRemoveCommand() override;
     /// redo the command
     void redo() override;

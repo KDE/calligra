@@ -30,7 +30,7 @@ class CALLIGRA_SHEETS_CORE_EXPORT BindingModel : public QAbstractTableModel, pub
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
 public:
-    explicit BindingModel(Binding *binding, QObject *parent = 0);
+    explicit BindingModel(Binding *binding, QObject *parent = nullptr);
 
     // QAbstractTableModel interface
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

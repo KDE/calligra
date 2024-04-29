@@ -87,7 +87,7 @@ void CQLinkArea::setLinks(const QVariantList &newLinks)
         link.linkTarget = obj->property("linkTarget").toUrl();
         d->realLinks.append(link);
     }
-    emit linksChanged();
+    Q_EMIT linksChanged();
 }
 
 QSizeF CQLinkArea::sourceSize() const
@@ -99,7 +99,7 @@ void CQLinkArea::setSourceSize(const QSizeF &size)
 {
     if (size != d->sourceSize) {
         d->sourceSize = size;
-        emit sourceSizeChanged();
+        Q_EMIT sourceSizeChanged();
         update();
     }
 }
@@ -114,7 +114,7 @@ void CQLinkArea::setLinkColor(const QColor &color)
     if (color != d->linkColor) {
         d->linkColor = color;
         d->linkColor.setAlphaF(0.25);
-        emit linkColorChanged();
+        Q_EMIT linkColorChanged();
         update();
     }
 }
@@ -147,14 +147,14 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
     if (url.isEmpty()) {
-        emit clicked();
+        Q_EMIT clicked();
     } else {
-        emit linkClicked(url);
+        Q_EMIT linkClicked(url);
     }
 }
 
 void CQLinkArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
-    emit doubleClicked();
+    Q_EMIT doubleClicked();
 }

@@ -158,7 +158,7 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &in
     }
     m_previewAnimation = m_animationsData->loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
     if (m_previewAnimation) {
-        emit requestPreviewAnimation(m_previewAnimation);
+        Q_EMIT requestPreviewAnimation(m_previewAnimation);
     }
 }
 
@@ -191,7 +191,7 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested()
     }
     m_previewAnimation = m_animationsData->loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
     if (m_previewAnimation) {
-        emit requestPreviewAnimation(m_previewAnimation);
+        Q_EMIT requestPreviewAnimation(m_previewAnimation);
     }
 }
 
@@ -242,7 +242,7 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
     KPrShapeAnimation *newAnimation = m_animationsData->loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
     if (newAnimation) {
-        emit requestAcceptAnimation(newAnimation);
+        Q_EMIT requestAcceptAnimation(newAnimation);
     }
 }
 
@@ -271,7 +271,7 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
         m_subTypeContextBar = 0;
         m_subTypePreviewButton = 0;
     }
-    emit previousStateChanged(isEnable);
+    Q_EMIT previousStateChanged(isEnable);
 }
 
 bool KPrAnimationSelectorWidget::loadPreviewConfig()

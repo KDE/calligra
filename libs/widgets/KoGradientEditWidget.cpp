@@ -324,7 +324,7 @@ void KoGradientEditWidget::combosChange(int)
     m_type = static_cast<QGradient::Type>(m_gradientType->currentIndex());
     m_spread = static_cast<QGradient::Spread>(m_gradientRepeat->currentIndex());
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KoGradientEditWidget::opacityChanged(qreal value, bool final)
@@ -337,7 +337,7 @@ void KoGradientEditWidget::opacityChanged(qreal value, bool final)
     for (uint i = 0; i < stopCount; ++i)
         m_stops[i].second.setAlphaF(m_gradOpacity);
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KoGradientEditWidget::addGradientToPredefs()
@@ -386,6 +386,6 @@ void KoGradientEditWidget::stopChanged()
     if (m_stopIndex >= 0 && m_stopIndex < m_stops.count()) {
         m_stops[m_stopIndex].first = m_stopPosition->value();
         m_stops[m_stopIndex].second = m_actionStopColor->currentColor();
-        emit changed();
+        Q_EMIT changed();
     }
 }

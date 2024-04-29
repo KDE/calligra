@@ -29,7 +29,7 @@ public:
     ChangeTrackedDeleteCommand(DeleteMode mode,
                                QTextDocument *document,
                                KoShapeController *shapeController,
-                               KUndo2Command* parent = 0);
+                               KUndo2Command* parent = nullptr);
     virtual ~ChangeTrackedDeleteCommand();
 
     virtual void undo();

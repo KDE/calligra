@@ -31,8 +31,8 @@ class TableOfContentsConfigure : public QDialog
     Q_OBJECT
 
 public:
-    explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = 0);
-    TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent = 0);
+    explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = nullptr);
+    TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent = nullptr);
     ~TableOfContentsConfigure() override;
     KoTableOfContentsGeneratorInfo *currentToCData();
 

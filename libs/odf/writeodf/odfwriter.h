@@ -58,7 +58,7 @@ protected:
     void endChild()
     {
         if (child) {
-            child->parent = 0;
+            child->parent = nullptr;
             child->end();
             child = 0;
         }

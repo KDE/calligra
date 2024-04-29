@@ -29,7 +29,7 @@ namespace Bubble
 class DataProxy : public QSortFilterProxyModel
 {
 public:
-    DataProxy(QObject *parent = 0)
+    DataProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
     {
     }
@@ -298,17 +298,17 @@ void BubbleDataEditor::enableActions()
 //             break;
 //         case 1: {
 //             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit xDataChanged(ds, CellRegion(m_chart->tableSource(), s));
+//             Q_EMIT xDataChanged(ds, CellRegion(m_chart->tableSource(), s));
 //             break;
 //         }
 //         case 2: {
 //             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit yDataChanged(ds, CellRegion(m_chart->tableSource(), s));
+//             Q_EMIT yDataChanged(ds, CellRegion(m_chart->tableSource(), s));
 //             break;
 //         }
 //         case 3: {
 //             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit bubbleDataChanged(ds, CellRegion(m_chart->tableSource(), s));
+//             Q_EMIT bubbleDataChanged(ds, CellRegion(m_chart->tableSource(), s));
 //             break;
 //         }
 //     }

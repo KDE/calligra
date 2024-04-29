@@ -439,7 +439,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
     }
 
     ++d->s_stylesNumber;
-    emit characterStyleAdded(style);
+    Q_EMIT characterStyleAdded(style);
 }
 
 void KoStyleManager::add(KoParagraphStyle *style)
@@ -471,7 +471,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     }
 
     ++d->s_stylesNumber;
-    emit paragraphStyleAdded(style);
+    Q_EMIT paragraphStyleAdded(style);
 }
 
 void KoStyleManager::add(KoListStyle *style)
@@ -483,7 +483,7 @@ void KoStyleManager::add(KoListStyle *style)
     d->listStyles.insert(d->s_stylesNumber, style);
 
     ++d->s_stylesNumber;
-    emit listStyleAdded(style);
+    Q_EMIT listStyleAdded(style);
 }
 
 void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
@@ -503,7 +503,7 @@ void KoStyleManager::add(KoTableStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit tableStyleAdded(style);
+    Q_EMIT tableStyleAdded(style);
 }
 
 void KoStyleManager::add(KoTableColumnStyle *style)
@@ -513,7 +513,7 @@ void KoStyleManager::add(KoTableColumnStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableColumnStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit tableColumnStyleAdded(style);
+    Q_EMIT tableColumnStyleAdded(style);
 }
 
 void KoStyleManager::add(KoTableRowStyle *style)
@@ -523,7 +523,7 @@ void KoStyleManager::add(KoTableRowStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableRowStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit tableRowStyleAdded(style);
+    Q_EMIT tableRowStyleAdded(style);
 }
 
 void KoStyleManager::add(KoTableCellStyle *style)
@@ -534,7 +534,7 @@ void KoStyleManager::add(KoTableCellStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableCellStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit tableCellStyleAdded(style);
+    Q_EMIT tableCellStyleAdded(style);
 }
 
 void KoStyleManager::add(KoSectionStyle *style)
@@ -545,7 +545,7 @@ void KoStyleManager::add(KoSectionStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->sectionStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit sectionStyleAdded(style);
+    Q_EMIT sectionStyleAdded(style);
 }
 
 void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
@@ -564,13 +564,13 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
 void KoStyleManager::slotAppliedParagraphStyle(const KoParagraphStyle *style)
 {
     d->m_usedParagraphStyles.append(style->styleId());
-    emit paragraphStyleApplied(style);
+    Q_EMIT paragraphStyleApplied(style);
 }
 
 void KoStyleManager::slotAppliedCharacterStyle(const KoCharacterStyle *style)
 {
     d->m_usedCharacterStyles.append(style->styleId());
-    emit characterStyleApplied(style);
+    Q_EMIT characterStyleApplied(style);
 }
 
 void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
@@ -596,7 +596,7 @@ void KoStyleManager::remove(KoCharacterStyle *style)
     }
 
     if (d->charStyles.remove(style->styleId())) {
-        emit characterStyleRemoved(style);
+        Q_EMIT characterStyleRemoved(style);
     }
 }
 
@@ -607,7 +607,7 @@ void KoStyleManager::remove(KoParagraphStyle *style)
     }
 
     if (d->paragStyles.remove(style->styleId())) {
-        emit paragraphStyleRemoved(style);
+        Q_EMIT paragraphStyleRemoved(style);
     }
 }
 
@@ -618,7 +618,7 @@ void KoStyleManager::remove(KoListStyle *style)
     }
 
     if (d->listStyles.remove(style->styleId())) {
-        emit listStyleRemoved(style);
+        Q_EMIT listStyleRemoved(style);
     }
 }
 
@@ -629,7 +629,7 @@ void KoStyleManager::remove(KoTableStyle *style)
     }
 
     if (d->tableStyles.remove(style->styleId())) {
-        emit tableStyleRemoved(style);
+        Q_EMIT tableStyleRemoved(style);
     }
 }
 
@@ -640,7 +640,7 @@ void KoStyleManager::remove(KoTableColumnStyle *style)
     }
 
     if (d->tableColumnStyles.remove(style->styleId())) {
-        emit tableColumnStyleRemoved(style);
+        Q_EMIT tableColumnStyleRemoved(style);
     }
 }
 
@@ -651,7 +651,7 @@ void KoStyleManager::remove(KoTableRowStyle *style)
     }
 
     if (d->tableRowStyles.remove(style->styleId())) {
-        emit tableRowStyleRemoved(style);
+        Q_EMIT tableRowStyleRemoved(style);
     }
 }
 
@@ -662,7 +662,7 @@ void KoStyleManager::remove(KoTableCellStyle *style)
     }
 
     if (d->tableCellStyles.remove(style->styleId())) {
-        emit tableCellStyleRemoved(style);
+        Q_EMIT tableCellStyleRemoved(style);
     }
 }
 
@@ -673,7 +673,7 @@ void KoStyleManager::remove(KoSectionStyle *style)
     }
 
     if (d->sectionStyles.remove(style->styleId())) {
-        emit sectionStyleRemoved(style);
+        Q_EMIT sectionStyleRemoved(style);
     }
 }
 
@@ -690,7 +690,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
         return;
     }
     KoParagraphStyle *style = paragraphStyle(id);
-    emit paragraphStyleHasChanged(id, style, newStyle);
+    Q_EMIT paragraphStyleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach (const KoParagraphStyle *ps, d->paragStyles) {
@@ -712,7 +712,7 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
         return;
     }
     KoCharacterStyle *style = characterStyle(id);
-    emit characterStyleHasChanged(id, style, newStyle);
+    Q_EMIT characterStyleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach (const KoCharacterStyle *cs, d->charStyles) {
@@ -733,7 +733,7 @@ void KoStyleManager::alteredStyle(const KoListStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableStyle *style)
@@ -748,7 +748,7 @@ void KoStyleManager::alteredStyle(const KoTableStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
@@ -763,7 +763,7 @@ void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
@@ -778,7 +778,7 @@ void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
@@ -793,7 +793,7 @@ void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoSectionStyle *style)
@@ -804,17 +804,17 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::beginEdit()
 {
-    emit editHasBegun();
+    Q_EMIT editHasBegun();
 }
 
 void KoStyleManager::endEdit()
 {
-    emit editHasEnded();
+    Q_EMIT editHasEnded();
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(int id) const
@@ -1118,7 +1118,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
         root->setParentStyle(d->defaultParagraphStyle);
 
-    emit paragraphStyleAdded(style);
+    Q_EMIT paragraphStyleAdded(style);
 }
 
 KoParagraphStyle *KoStyleManager::unusedStyle(int id) const

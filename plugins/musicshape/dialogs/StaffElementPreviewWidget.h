@@ -20,7 +20,7 @@ class StaffElementPreviewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StaffElementPreviewWidget(QWidget *parent = 0);
+    explicit StaffElementPreviewWidget(QWidget *parent = nullptr);
     ~StaffElementPreviewWidget() override;
 
     QSize sizeHint() const override;

@@ -555,7 +555,7 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
     }
     if (!d->tableShape) {
         warnSheets << "No table shape found in selection.";
-        emit done();
+        Q_EMIT done();
         return;
     }
     d->tableShape->setPaintingDisabled(true);

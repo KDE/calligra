@@ -26,7 +26,7 @@ FormulaData::~FormulaData()
 
 void FormulaData::notifyDataChange(FormulaCommand *command, bool undo)
 {
-    emit dataChanged(command, undo);
+    Q_EMIT dataChanged(command, undo);
 }
 
 void FormulaData::setFormulaElement(FormulaElement *element)

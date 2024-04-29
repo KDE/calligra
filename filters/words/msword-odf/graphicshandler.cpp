@@ -230,7 +230,7 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 
 void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
 {
-    emit textBoxFound(index, stylesxml);
+    Q_EMIT textBoxFound(index, stylesxml);
 }
 
 QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData &data, const bool isBulletPicture)
@@ -1004,7 +1004,7 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer &o, Dr
         }
     }
     if (textIdValid) {
-        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+        Q_EMIT textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame

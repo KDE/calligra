@@ -119,7 +119,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
     QString field;
     int value = 0;
-    emit sigProgress(value);
+    Q_EMIT sigProgress(value);
 
     QpRecFactory            lFactory(lIn);
     QpTableList             lTableNames;
@@ -229,7 +229,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
     ksdoc->map()->loadingInfo()->setInitialActiveSheet(table);
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     if (bSuccess)
         return KoFilter::OK;
     else

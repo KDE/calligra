@@ -521,13 +521,13 @@ void SheetAdaptor::handleDamages(const QList<Damage *> &damages)
             debugSheetsDamage << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & SheetDamage::Name) {
-                emit nameChanged();
+                Q_EMIT nameChanged();
             }
             if (changes & SheetDamage::Shown) {
-                emit showChanged();
+                Q_EMIT showChanged();
             }
             if (changes & SheetDamage::Hidden) {
-                emit hideChanged();
+                Q_EMIT hideChanged();
             }
             continue;
         }

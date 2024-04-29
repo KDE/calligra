@@ -18,7 +18,7 @@ class KOFORMULA_EXPORT EncloseElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit EncloseElement(BasicElement *parent = 0);
+    explicit EncloseElement(BasicElement *parent = nullptr);
 
     /**
      * Render the element to the given QPainter

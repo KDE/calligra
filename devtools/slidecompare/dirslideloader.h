@@ -143,12 +143,12 @@ private Q_SLOTS:
         }
         if (slides != newslides) {
             slides = newslides;
-            emit slidesChanged();
+            Q_EMIT slidesChanged();
         }
     }
 
 public:
-    DirSlideLoader(QObject *parent = 0)
+    DirSlideLoader(QObject *parent = nullptr)
         : SlideLoader(parent)
         , watcher(this)
     {

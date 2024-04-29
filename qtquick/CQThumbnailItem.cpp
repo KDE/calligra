@@ -54,6 +54,6 @@ QPixmap CQThumbnailItem::content() const
 void CQThumbnailItem::setContent(const QPixmap &content)
 {
     d->content = content;
-    emit contentChanged();
+    Q_EMIT contentChanged();
     update();
 }

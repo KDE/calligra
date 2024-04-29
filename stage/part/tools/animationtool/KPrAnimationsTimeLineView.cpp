@@ -233,12 +233,12 @@ void KPrAnimationsTimeLineView::adjustScale()
 void KPrAnimationsTimeLineView::notifyTimeValuesChanged(const QModelIndex &index)
 {
     QModelIndex newIndex = m_model->mapFromSource(index);
-    emit timeValuesChanged(newIndex);
+    Q_EMIT timeValuesChanged(newIndex);
 }
 
 void KPrAnimationsTimeLineView::requestContextMenu(QPoint pos)
 {
-    emit customContextMenuRequested(m_view->mapToParent(pos));
+    Q_EMIT customContextMenuRequested(m_view->mapToParent(pos));
 }
 
 int KPrAnimationsTimeLineView::stepsScale()

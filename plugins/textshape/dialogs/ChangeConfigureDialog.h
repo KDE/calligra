@@ -13,7 +13,7 @@
 class ColorDisplayLabel : public QLabel
 {
 public:
-    explicit ColorDisplayLabel(QWidget *parent = 0);
+    explicit ColorDisplayLabel(QWidget *parent = nullptr);
     ~ColorDisplayLabel() override;
     void paintEvent(QPaintEvent *event) override;
     const QColor &color() const;

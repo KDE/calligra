@@ -108,7 +108,7 @@ void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> 
     emit(shapeChanged(m_currentShape));
     if (m_currentShape == 0) {
         // none found
-        emit done();
+        Q_EMIT done();
         return;
     }
 }

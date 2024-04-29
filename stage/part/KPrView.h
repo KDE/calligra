@@ -31,7 +31,7 @@ class STAGE_EXPORT KPrView : public KoPAView
     friend class KPrConfigureSlideShowDialog;
 
 public:
-    explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = 0);
+    explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = nullptr);
     ~KPrView() override;
 
     using KoPAViewBase::viewConverter;

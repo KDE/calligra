@@ -202,7 +202,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
         if (!m_backgroundFrameSet) {
             m_backgroundFrameSet = new KWFrameSet(Words::BackgroundFrameSet);
             m_backgroundFrameSet->setName("backgroundFrames");
-            emit newFrameSet(m_backgroundFrameSet);
+            Q_EMIT newFrameSet(m_backgroundFrameSet);
             Q_ASSERT(m_frameSets.contains(m_backgroundFrameSet)); // the emit should have made that so :)
         }
         KoShape *background = sequencedShapeOn(m_backgroundFrameSet, page);
@@ -688,7 +688,7 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(Words::TextFrameSetType type, const K
             newFS->setPageStyle(page.pageStyle());
             m_pageStyles.insert(page.pageStyle(), frameSets);
         }
-        emit newFrameSet(newFS);
+        Q_EMIT newFrameSet(newFS);
         Q_ASSERT(m_frameSets.contains(newFS)); // the emit should have made that so :)
     }
 

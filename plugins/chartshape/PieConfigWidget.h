@@ -25,8 +25,8 @@ class PieConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    PieConfigWidget(QWidget *parent = 0);
-    PieConfigWidget(QList<ChartType> types, QWidget *parent = 0);
+    PieConfigWidget(QWidget *parent = nullptr);
+    PieConfigWidget(QList<ChartType> types, QWidget *parent = nullptr);
     ~PieConfigWidget();
 
     void open(ChartShape *shape) override;

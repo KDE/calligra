@@ -421,7 +421,7 @@ void KoDocumentInfoDlg::saveEncryption()
         saveas = true; // Force saveas because save will silently fail when doc is not modified
     }
     // Why do the dirty work ourselves?
-    emit saveRequested(saveas, false, doc->specialOutputFlag());
+    Q_EMIT saveRequested(saveas, false, doc->specialOutputFlag());
     d->toggleEncryption = false;
     d->applyToggleEncryption = false;
     // Detects when the user cancelled saving

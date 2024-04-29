@@ -20,7 +20,7 @@ class RejectChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:
-    RejectChangeCommand(int changeId, const QList<QPair<int, int>> &changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
+    RejectChangeCommand(int changeId, const QList<QPair<int, int>> &changeRanges, QTextDocument *document, KUndo2Command *parent = nullptr);
     ~RejectChangeCommand() override;
 
     void redo() override;

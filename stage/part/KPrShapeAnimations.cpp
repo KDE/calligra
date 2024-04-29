@@ -303,11 +303,11 @@ bool KPrShapeAnimations::setData(const QModelIndex &index, const QVariant &value
             return false;
         case StartTime:
             setTimeRangeIncrementalChange(thisAnimation, value.toInt(), thisAnimation->globalDuration(), BeginTime);
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
             return true;
         case Duration:
             setTimeRangeIncrementalChange(thisAnimation, thisAnimation->timeRange().first, value.toInt(), DurationTime);
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
             return true;
         case AnimationClass:
             return false;
@@ -403,8 +403,8 @@ void KPrShapeAnimations::removeStep(KPrAnimationStep *step)
 void KPrShapeAnimations::swapSteps(int i, int j)
 {
     m_shapeAnimations.swapItemsAt(i, j);
-    emit dataChanged(this->index(i, 0), this->index(i, COLUMN_COUNT));
-    emit dataChanged(this->index(j, 0), this->index(j, COLUMN_COUNT));
+    Q_EMIT dataChanged(this->index(i, 0), this->index(i, COLUMN_COUNT));
+    Q_EMIT dataChanged(this->index(j, 0), this->index(j, COLUMN_COUNT));
 }
 
 void KPrShapeAnimations::swapAnimations(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
@@ -435,8 +435,8 @@ void KPrShapeAnimations::swapAnimations(KPrShapeAnimation *oldAnimation, KPrShap
     newAnimation->setSubStep(oldSubStep);
     QModelIndex indexOld = indexByAnimation(oldAnimation);
     QModelIndex indexNew = indexByAnimation(newAnimation);
-    emit dataChanged(this->index(indexOld.row(), 0), this->index(indexOld.row(), COLUMN_COUNT));
-    emit dataChanged(this->index(indexNew.row(), 0), this->index(indexNew.row(), COLUMN_COUNT));
+    Q_EMIT dataChanged(this->index(indexOld.row(), 0), this->index(indexOld.row(), COLUMN_COUNT));
+    Q_EMIT dataChanged(this->index(indexNew.row(), 0), this->index(indexNew.row(), COLUMN_COUNT));
 }
 
 void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
@@ -449,7 +449,7 @@ void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrSh
     subStep->insertAnimation(currentAnimationIndex, newAnimation);
     subStep->removeAnimation(oldAnimation);
     QModelIndex indexModified = indexByAnimation(newAnimation);
-    emit dataChanged(this->index(indexModified.row(), 0), this->index(indexModified.row(), COLUMN_COUNT));
+    Q_EMIT dataChanged(this->index(indexModified.row(), 0), this->index(indexModified.row(), COLUMN_COUNT));
 }
 
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
@@ -466,7 +466,7 @@ void KPrShapeAnimations::endTimeLineEdition()
             m_currentEditedAnimation->setBeginTime(m_oldBegin);
             m_currentEditedAnimation->setGlobalDuration(m_oldDuration);
             setTimeRange(m_currentEditedAnimation, begin, duration);
-            emit timeScaleModified();
+            Q_EMIT timeScaleModified();
         }
         m_oldBegin = INVALID;
         m_oldDuration = INVALID;
@@ -545,7 +545,7 @@ bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShap
         } else if (currentType == KPrShapeAnimation::OnClick) {
             if (index.row() < 1) {
                 // Resync trigger event edit widget
-                emit layoutChanged();
+                Q_EMIT layoutChanged();
                 return false;
             }
         }
@@ -642,7 +642,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
         } else if (currentType == KPrShapeAnimation::OnClick) {
             if (index.row() < 1) {
                 // Resync trigger event edit widget
-                emit layoutChanged();
+                Q_EMIT layoutChanged();
                 return false;
             }
             // On click to With Previous
@@ -832,7 +832,7 @@ void KPrShapeAnimations::setBeginTime(const QModelIndex &index, const int begin)
     KPrShapeAnimation *item = animationByRow(index.row());
     if (item) {
         setTimeRange(item, begin, item->globalDuration());
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 
@@ -844,7 +844,7 @@ void KPrShapeAnimations::setDuration(const QModelIndex &index, const int duratio
     KPrShapeAnimation *item = animationByRow(index.row());
     if (item) {
         setTimeRange(item, item->timeRange().first, duration);
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 
@@ -853,7 +853,7 @@ void KPrShapeAnimations::notifyAnimationEdited()
     if (KPrShapeAnimation *animation = qobject_cast<KPrShapeAnimation *>(sender())) {
         QModelIndex index = indexByAnimation(animation);
         if (index.isValid()) {
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
         }
     }
 }
@@ -862,13 +862,13 @@ void KPrShapeAnimations::notifyAnimationChanged(KPrShapeAnimation *animation)
 {
     QModelIndex index = indexByAnimation(animation);
     if (index.isValid()) {
-        emit dataChanged(this->index(index.row(), 0), this->index(index.row(), COLUMN_COUNT));
+        Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), COLUMN_COUNT));
     }
 }
 
 void KPrShapeAnimations::notifyOnClickEventChanged()
 {
-    emit onClickEventChanged();
+    Q_EMIT onClickEventChanged();
 }
 
 KPrShapeAnimation *KPrShapeAnimations::animationByRow(int row, int *pGroup, KPrShapeAnimation::NodeType *pNodeType) const
@@ -1168,7 +1168,7 @@ bool KPrShapeAnimations::createTriggerEventEditCmd(KPrShapeAnimation *animation,
     KPrAnimationEditNodeTypeCommand *command = new KPrAnimationEditNodeTypeCommand(animation, oldType, newType, this);
     if (m_document) {
         m_document->addCommand(command);
-        emit timeScaleModified();
+        Q_EMIT timeScaleModified();
         return true;
     }
     return false;

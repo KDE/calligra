@@ -84,9 +84,9 @@ void KoProperties::save(QDomElement &root) const
     QMap<QString, QVariant>::ConstIterator it;
     for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
         QDomElement e = doc.createElement(QStringLiteral("property"));
-        e.setAttribute(QStringLiteral("name"), QString(it.key().toLatin1()));
+        e.setAttribute(QStringLiteral("name"), it.key());
         QVariant v = it.value();
-        e.setAttribute(QStringLiteral("type"), v.typeName());
+        e.setAttribute(QStringLiteral("type"), QString::fromLatin1(v.typeName()));
 
         QByteArray bytes;
         QDataStream out(&bytes, QIODevice::WriteOnly);

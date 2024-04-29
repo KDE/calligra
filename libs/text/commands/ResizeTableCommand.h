@@ -15,7 +15,7 @@ class KoTableRowStyle;
 class ResizeTableCommand : public KUndo2Command
 {
 public:
-    ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent = 0);
+    ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent = nullptr);
     ~ResizeTableCommand() override;
 
     void undo() override;

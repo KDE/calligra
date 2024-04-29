@@ -250,5 +250,5 @@ int KPrViewAdaptor::numPresentationPages() const
  */
 void KPrViewAdaptor::presentationActivated()
 {
-    emit presentationStarted(numPresentationPages());
+    Q_EMIT presentationStarted(numPresentationPages());
 }

@@ -35,7 +35,7 @@ public:
                                   KoPathShape *pathA,
                                   KoPathShape *pathB,
                                   BooleanOperation operation,
-                                  KUndo2Command *parent = 0);
+                                  KUndo2Command *parent = nullptr);
     ~KarbonBooleanCommand() override;
     /// redo the command
     void redo() override;

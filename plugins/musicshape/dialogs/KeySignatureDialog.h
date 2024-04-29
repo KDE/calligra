@@ -18,7 +18,7 @@ class KeySignatureDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KeySignatureDialog(QWidget *parent = 0);
+    explicit KeySignatureDialog(QWidget *parent = nullptr);
 
     void setBar(int bar);
     int accidentals();

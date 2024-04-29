@@ -21,7 +21,7 @@ class CharacterHighlighting : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterHighlighting(QWidget *parent = 0);
+    explicit CharacterHighlighting(QWidget *parent = nullptr);
     ~CharacterHighlighting() override
     {
     }

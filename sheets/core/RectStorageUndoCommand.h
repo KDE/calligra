@@ -36,7 +36,7 @@ class RectStorageUndoCommand : public KUndo2Command
 public:
     typedef QPair<QRectF, T> Pair;
 
-    RectStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = 0);
+    RectStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = nullptr);
 
     void undo() override;
 

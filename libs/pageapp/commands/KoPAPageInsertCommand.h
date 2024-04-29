@@ -20,7 +20,7 @@ class KoPAPageBase;
 class KOPAGEAPP_TEST_EXPORT KoPAPageInsertCommand : public KUndo2Command
 {
 public:
-    KoPAPageInsertCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0);
+    KoPAPageInsertCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = nullptr);
     ~KoPAPageInsertCommand() override;
 
     /// redo the command

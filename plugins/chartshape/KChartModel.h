@@ -65,7 +65,7 @@ class KChartModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit KChartModel(PlotArea *plotArea, QObject *parent = 0);
+    explicit KChartModel(PlotArea *plotArea, QObject *parent = nullptr);
     ~KChartModel();
 
     enum DataRole {

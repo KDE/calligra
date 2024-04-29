@@ -18,7 +18,7 @@ class KPrSoundEventActionWidget : public KPrEventActionWidget
 {
     Q_OBJECT
 public:
-    explicit KPrSoundEventActionWidget(QWidget *parent = 0);
+    explicit KPrSoundEventActionWidget(QWidget *parent = nullptr);
     virtual ~KPrSoundEventActionWidget();
 
 public Q_SLOTS:

@@ -148,7 +148,7 @@ public:
      * @param parent The parent of the dialog.
      * @param flags  The widget flags passed to the QDialog constructor
      */
-    explicit KoDialog(QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit KoDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
     /**
      * Destroys the dialog.

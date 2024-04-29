@@ -21,7 +21,7 @@ class ConvolveMatrixEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit ConvolveMatrixEffectConfigWidget(QWidget *parent = 0);
+    explicit ConvolveMatrixEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

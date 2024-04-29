@@ -19,7 +19,7 @@ class CQSpreadsheetListModel : public QAbstractListModel
 public:
     enum RoleNames { SheetNameRole = Qt::UserRole, ThumbnailRole };
 
-    explicit CQSpreadsheetListModel(QObject *parent = 0);
+    explicit CQSpreadsheetListModel(QObject *parent = nullptr);
     virtual ~CQSpreadsheetListModel();
 
     virtual QVariant data(const QModelIndex &index, int role) const;

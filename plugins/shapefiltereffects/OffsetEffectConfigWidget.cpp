@@ -59,5 +59,5 @@ void OffsetEffectConfigWidget::offsetChanged(double /*offset*/)
         return;
 
     m_effect->setOffset(0.01 * QPointF(m_offsetX->value(), m_offsetY->value()));
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

@@ -205,7 +205,7 @@ void ComponentTransferEffectConfigWidget::slopeChanged(double slope)
         return;
 
     m_effect->setSlope(m_currentChannel, slope);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::interceptChanged(double intercept)
@@ -214,7 +214,7 @@ void ComponentTransferEffectConfigWidget::interceptChanged(double intercept)
         return;
 
     m_effect->setIntercept(m_currentChannel, intercept);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::amplitudeChanged(double amplitude)
@@ -223,7 +223,7 @@ void ComponentTransferEffectConfigWidget::amplitudeChanged(double amplitude)
         return;
 
     m_effect->setAmplitude(m_currentChannel, amplitude);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::exponentChanged(double exponent)
@@ -232,7 +232,7 @@ void ComponentTransferEffectConfigWidget::exponentChanged(double exponent)
         return;
 
     m_effect->setExponent(m_currentChannel, exponent);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::offsetChanged(double offset)
@@ -241,7 +241,7 @@ void ComponentTransferEffectConfigWidget::offsetChanged(double offset)
         return;
 
     m_effect->setOffset(m_currentChannel, offset);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::tableValuesChanged()
@@ -252,7 +252,7 @@ void ComponentTransferEffectConfigWidget::tableValuesChanged()
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::discreteValuesChanged()
@@ -263,7 +263,7 @@ void ComponentTransferEffectConfigWidget::discreteValuesChanged()
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::functionChanged(int index)
@@ -273,7 +273,7 @@ void ComponentTransferEffectConfigWidget::functionChanged(int index)
 
     m_effect->setFunction(m_currentChannel, static_cast<ComponentTransferEffect::Function>(index));
 
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ComponentTransferEffectConfigWidget::channelSelected(int channel)

@@ -36,7 +36,7 @@ class PointStorageUndoCommand : public KUndo2Command
 public:
     typedef QPair<QPoint, T> Pair;
 
-    PointStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = 0);
+    PointStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = nullptr);
 
     void undo() override;
 

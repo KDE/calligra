@@ -16,7 +16,7 @@ class KWCreateBookmark : public QWidget
 {
     Q_OBJECT
 public:
-    KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent = nullptr);
     QString bookmarkName();
 
 Q_SIGNALS:
@@ -30,7 +30,7 @@ class KWCreateBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent = nullptr);
     QString newBookmarkName();
 
 private Q_SLOTS:

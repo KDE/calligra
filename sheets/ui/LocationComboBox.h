@@ -32,7 +32,7 @@ class CALLIGRA_SHEETS_UI_EXPORT LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    explicit LocationComboBox(QWidget *parent = 0);
+    explicit LocationComboBox(QWidget *parent = nullptr);
 
     void setSelection(Selection *selection);
 

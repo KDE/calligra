@@ -70,7 +70,7 @@ void Bar::setPosition(const QPointF &position, bool setPrefix)
     if (setPrefix) {
         setPrefixPosition(position - QPointF(prefix(), 0));
     }
-    emit positionChanged(position);
+    Q_EMIT positionChanged(position);
 }
 
 qreal Bar::size() const
@@ -83,7 +83,7 @@ void Bar::setSize(qreal size)
     if (d->size == size)
         return;
     d->size = size;
-    emit sizeChanged(size);
+    Q_EMIT sizeChanged(size);
 }
 
 qreal Bar::naturalSize() const

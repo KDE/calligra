@@ -22,7 +22,7 @@ class OdfCollectionLoader : public QObject
 {
     Q_OBJECT
 public:
-    explicit OdfCollectionLoader(const QString &path, QObject *parent = 0);
+    explicit OdfCollectionLoader(const QString &path, QObject *parent = nullptr);
     ~OdfCollectionLoader() override;
 
     void load();

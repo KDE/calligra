@@ -66,7 +66,7 @@ void _Private::PixmapScaler::run()
 
     m_image = m_image.scaled(m_size.width(), m_size.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-    emit finished(key, m_image);
+    Q_EMIT finished(key, m_image);
 }
 
 // ----------------------------------------------------------------- //

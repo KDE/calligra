@@ -67,5 +67,5 @@ void ImageEffectConfigWidget::selectImage()
     m_effect->setImage(newImage);
     editFilterEffect(m_effect);
 
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

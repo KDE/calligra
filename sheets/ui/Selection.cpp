@@ -618,7 +618,7 @@ void Selection::setActiveSheet(Sheet *sheet)
         return;
     }
     d->activeSheet = sheet;
-    emit activeSheetChanged(sheet);
+    Q_EMIT activeSheetChanged(sheet);
 }
 
 Sheet *Selection::activeSheet() const
@@ -805,14 +805,14 @@ void Selection::endReferenceSelection(bool saveChanges)
         return;
     }
     if (originSheet() != activeSheet()) {
-        emit visibleSheetRequested(originSheet());
+        Q_EMIT visibleSheetRequested(originSheet());
     }
     d->referenceMode = false;
     d->multipleOccurences = false;
     // While entering a formula the choose mode is turned on and off.
     // Clear the choice. Otherwise, cell references will stay highlighted.
     if (!isEmpty()) {
-        emit changed(*this);
+        Q_EMIT changed(*this);
         clear(); // all elements; no residuum
     }
     if (saveChanges) {
@@ -846,32 +846,32 @@ bool Selection::referenceSelection() const
 
 void Selection::emitAboutToModify()
 {
-    emit aboutToModify(*this);
+    Q_EMIT aboutToModify(*this);
 }
 
 void Selection::emitModified()
 {
-    emit modified(*this);
+    Q_EMIT modified(*this);
 }
 
 void Selection::emitRefreshSheetViews()
 {
-    emit refreshSheetViews();
+    Q_EMIT refreshSheetViews();
 }
 
 void Selection::emitVisibleSheetRequested(Sheet *sheet)
 {
-    emit visibleSheetRequested(sheet);
+    Q_EMIT visibleSheetRequested(sheet);
 }
 
 void Selection::emitCloseEditor(bool saveChanges, bool expandMatrix)
 {
-    emit closeEditor(saveChanges, expandMatrix);
+    Q_EMIT closeEditor(saveChanges, expandMatrix);
 }
 
 void Selection::emitRequestFocusEditor()
 {
-    emit requestFocusEditor();
+    Q_EMIT requestFocusEditor();
 }
 
 QRect Selection::extendToMergedAreas(const QRect &_area, Sheet *sheet) const
@@ -1058,7 +1058,7 @@ void Selection::emitChanged(const Region &region)
     for (int i = 0; i < masterCells.count(); ++i)
         extendedRegion.add(masterCells[i].cellPosition(), sheet);
 
-    emit changed(extendedRegion);
+    Q_EMIT changed(extendedRegion);
 
     emitModified();
 }
@@ -1069,7 +1069,7 @@ void Selection::scrollToCursor()
     Sheet *const sheet = activeSheet();
 
     // Adjust the maximum accessed column and row for the scrollbars.
-    emit updateAccessedCellRange(sheet, location);
+    Q_EMIT updateAccessedCellRange(sheet, location);
 
     // The cell geometry expanded by some pixels in each direction.
     const Cell cell = Cell(sheet, location).masterCell();

@@ -23,7 +23,7 @@ namespace Sheets
 class CALLIGRA_SHEETS_UI_EXPORT StyleCommand : public AbstractRegionCommand
 {
 public:
-    explicit StyleCommand(KUndo2Command *parent = 0);
+    explicit StyleCommand(KUndo2Command *parent = nullptr);
     ~StyleCommand() override;
 
     void setStyle(const Style &s)

@@ -19,7 +19,7 @@ class UserVariableOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserVariableOptionsWidget(UserVariable *userVariable, QWidget *parent = 0);
+    explicit UserVariableOptionsWidget(UserVariable *userVariable, QWidget *parent = nullptr);
     ~UserVariableOptionsWidget() override;
 private Q_SLOTS:
     void nameChanged();

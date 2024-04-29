@@ -15,7 +15,7 @@ class SlideLoader : public QObject
 private:
     Q_OBJECT
 public:
-    explicit SlideLoader(QObject *parent = 0)
+    explicit SlideLoader(QObject *parent = nullptr)
         : QObject(parent)
     {
     }

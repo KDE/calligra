@@ -17,7 +17,7 @@ class KoShape;
 class FLAKE_EXPORT KoShapeRenameCommand : public KUndo2Command
 {
 public:
-    KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent = 0);
+    KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent = nullptr);
     ~KoShapeRenameCommand() override;
 
     /// redo the command

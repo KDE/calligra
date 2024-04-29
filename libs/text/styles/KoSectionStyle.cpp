@@ -288,7 +288,7 @@ void KoSectionStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoSectionStyle::styleId() const

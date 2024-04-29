@@ -19,7 +19,7 @@
 class SectionFormatDialog::ProxyModel : public QIdentityProxyModel
 {
 public:
-    ProxyModel(KoSectionModel *model, QObject *parent = 0)
+    ProxyModel(KoSectionModel *model, QObject *parent = nullptr)
         : QIdentityProxyModel(parent)
     {
         setSourceModel(model);

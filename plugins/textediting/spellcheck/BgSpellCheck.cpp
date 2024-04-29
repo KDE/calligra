@@ -62,7 +62,7 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
         debugSpellCheck << "Starting:" << m_currentPosition << m_endPosition;
         start();
     } else {
-        emit done();
+        Q_EMIT done();
     }
 }
 
@@ -164,7 +164,7 @@ QString BgSpellCheck::fetchMoreText()
 void BgSpellCheck::foundMisspelling(const QString &word, int start)
 {
     // debugSpellCheck << "Misspelling: " << word << " : " << start;
-    emit misspelledWord(word, m_currentPosition + start, true);
+    Q_EMIT misspelledWord(word, m_currentPosition + start, true);
     BackgroundChecker::continueChecking();
 }
 

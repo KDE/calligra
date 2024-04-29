@@ -34,7 +34,7 @@ class KOTEXT_EXPORT KoChangeTracker : public QObject
 public:
     enum ChangeSaveFormat { ODF_1_2 = 0, DELTAXML, UNKNOWN = 9999 };
 
-    explicit KoChangeTracker(QObject *parent = 0);
+    explicit KoChangeTracker(QObject *parent = nullptr);
     ~KoChangeTracker() override;
 
     void setRecordChanges(bool enabled);

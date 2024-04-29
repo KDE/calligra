@@ -45,7 +45,7 @@ class KWStatusBarBaseItem : public QStackedWidget
 public:
     QLabel *m_label;
     QWidget *m_widget;
-    KWStatusBarBaseItem(QWidget *parent = 0)
+    KWStatusBarBaseItem(QWidget *parent = nullptr)
         : QStackedWidget(parent)
         , m_widget(0)
     {
@@ -86,7 +86,7 @@ class KWStatusBarEditItem : public KWStatusBarBaseItem
 {
 public:
     QLineEdit *m_edit;
-    KWStatusBarEditItem(QWidget *parent = 0)
+    KWStatusBarEditItem(QWidget *parent = nullptr)
         : KWStatusBarBaseItem(parent)
     {
         m_edit = new QLineEdit(this);
@@ -101,7 +101,7 @@ class KWStatusBarButtonItem : public KWStatusBarBaseItem
 {
 public:
     QToolButton *m_button;
-    KWStatusBarButtonItem(QWidget *parent = 0)
+    KWStatusBarButtonItem(QWidget *parent = nullptr)
         : KWStatusBarBaseItem(parent)
     {
         m_button = new QToolButton(this);

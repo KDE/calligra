@@ -51,7 +51,7 @@ BorderButton::BorderButton(QWidget *parent, const char * /*_name*/)
 void BorderButton::mousePressEvent(QMouseEvent *)
 {
     this->setChecked(!isChecked());
-    emit clicked(this);
+    Q_EMIT clicked(this);
 }
 
 void BorderButton::setUndefined()
@@ -113,12 +113,12 @@ void Border::paintEvent(QPaintEvent *_ev)
         painter.drawLine(width() - OFFSETX, height() / 2 - 5, width() - OFFSETX, height() / 2 + 5);
     }
     painter.end();
-    emit redraw();
+    Q_EMIT redraw();
 }
 
 void Border::mousePressEvent(QMouseEvent *_ev)
 {
-    emit choosearea(_ev);
+    Q_EMIT choosearea(_ev);
 }
 
 PatternSelect::PatternSelect(QWidget *parent, const char *)
@@ -163,7 +163,7 @@ void PatternSelect::mousePressEvent(QMouseEvent *)
 {
     slotSelect();
 
-    emit clicked(this);
+    Q_EMIT clicked(this);
 }
 
 void PatternSelect::slotUnselect()

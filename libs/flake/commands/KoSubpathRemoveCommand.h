@@ -22,7 +22,7 @@ public:
      * @param subpathIndex the index. See KoPathShape::removeSubpath()
      * @param parent the parent command if the resulting command is a compound undo command.
      */
-    KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent = 0);
+    KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent = nullptr);
     ~KoSubpathRemoveCommand() override;
 
     /// redo the command

@@ -52,7 +52,7 @@ void ImageDataItem::setData(const QImage &newValue)
         setImplicitHeight(d->data.height());
         d->imageChanged = true;
         update();
-        emit dataChanged();
+        Q_EMIT dataChanged();
     }
 }
 

@@ -65,10 +65,10 @@ class KUNDO2_EXPORT KUndo2View : public QListView
     Q_PROPERTY(QIcon cleanIcon READ cleanIcon WRITE setCleanIcon)
 
 public:
-    explicit KUndo2View(QWidget *parent = 0);
-    explicit KUndo2View(KUndo2QStack *stack, QWidget *parent = 0);
+    explicit KUndo2View(QWidget *parent = nullptr);
+    explicit KUndo2View(KUndo2QStack *stack, QWidget *parent = nullptr);
 #ifndef QT_NO_UNDOGROUP
-    explicit KUndo2View(KUndo2Group *group, QWidget *parent = 0);
+    explicit KUndo2View(KUndo2Group *group, QWidget *parent = nullptr);
 #endif
     ~KUndo2View() override;
 

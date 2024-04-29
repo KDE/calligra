@@ -55,14 +55,14 @@ void ComponentsKoCanvasController::setZoomWithWheel(bool zoom)
 void ComponentsKoCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     setDocumentSize(sz);
-    emit documentSizeChanged(sz);
+    Q_EMIT documentSizeChanged(sz);
 }
 
 void ComponentsKoCanvasController::setScrollBarValue(const QPoint &value)
 {
     setDocumentOffset(const_cast<QPoint &>(value));
     proxyObject->emitMoveDocumentOffset(value);
-    emit documentPositionChanged(value);
+    Q_EMIT documentPositionChanged(value);
 }
 
 QPoint ComponentsKoCanvasController::scrollBarValue() const
@@ -75,7 +75,7 @@ void ComponentsKoCanvasController::pan(const QPoint &distance)
     QPoint offset = documentOffset() + distance;
     setDocumentOffset(offset);
     proxyObject->emitMoveDocumentOffset(offset);
-    emit documentPositionChanged(offset);
+    Q_EMIT documentPositionChanged(offset);
 }
 
 QPointF ComponentsKoCanvasController::preferredCenter() const

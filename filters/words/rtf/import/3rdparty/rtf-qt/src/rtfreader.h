@@ -40,7 +40,7 @@ public:
     /**
        Normal constructor
     */
-    explicit Reader(QObject *parent = 0);
+    explicit Reader(QObject *parent = nullptr);
 
     /**
        Open a document

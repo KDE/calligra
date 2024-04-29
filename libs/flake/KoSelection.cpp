@@ -64,7 +64,7 @@ void KoSelectionPrivate::requestSelectionChangedEvent()
 void KoSelectionPrivate::selectionChangedEvent()
 {
     eventTriggered = false;
-    emit q->selectionChanged();
+    Q_EMIT q->selectionChanged();
 }
 
 void KoSelectionPrivate::selectGroupChildren(KoShapeGroup *group)
@@ -312,7 +312,7 @@ void KoSelection::setActiveLayer(KoShapeLayer *layer)
 {
     Q_D(KoSelection);
     d->activeLayer = layer;
-    emit currentLayerChanged(layer);
+    Q_EMIT currentLayerChanged(layer);
 }
 
 KoShapeLayer *KoSelection::activeLayer() const

@@ -212,7 +212,7 @@ void CropWidget::emitCropRegionChanged()
 {
     if (!compareRects(m_oldSelectionRect, m_selectionRect.getRect(), 0.01)) {
         m_oldSelectionRect = m_selectionRect.getRect();
-        emit sigCropRegionChanged(m_selectionRect.getRect(), m_undoLast);
+        Q_EMIT sigCropRegionChanged(m_selectionRect.getRect(), m_undoLast);
         update();
 
         m_undoLast = m_isMousePressed;

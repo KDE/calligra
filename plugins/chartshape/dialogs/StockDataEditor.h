@@ -26,7 +26,7 @@ class StockDataEditor : public KoDialog
     Q_OBJECT
 
 public:
-    StockDataEditor(ChartShape *chart, QWidget *parent = 0);
+    StockDataEditor(ChartShape *chart, QWidget *parent = nullptr);
     ~StockDataEditor();
 
 protected Q_SLOTS:

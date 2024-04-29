@@ -23,7 +23,7 @@ class KOFORMULA_EXPORT TableDataElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit TableDataElement(BasicElement *parent = 0);
+    explicit TableDataElement(BasicElement *parent = nullptr);
 
     //    /**
     //     * Calculate the size of the element and the positions of its children

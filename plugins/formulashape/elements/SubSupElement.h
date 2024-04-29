@@ -18,7 +18,7 @@ class KOFORMULA_EXPORT SubSupElement : public FixedElement
 {
 public:
     /// The standard constructor
-    explicit SubSupElement(BasicElement *parent = 0, ElementType elementType = SubSupScript);
+    explicit SubSupElement(BasicElement *parent = nullptr, ElementType elementType = SubSupScript);
 
     /// The destructor
     ~SubSupElement() override;

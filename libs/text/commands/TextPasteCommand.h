@@ -22,7 +22,7 @@ public:
                      QTextDocument *document,
                      KoShapeController *shapeController,
                      KoCanvasBase *canvas,
-                     KUndo2Command *parent = 0,
+                     KUndo2Command *parent = nullptr,
                      bool pasteAsText = false);
 
     void undo() override;

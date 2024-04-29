@@ -73,7 +73,7 @@ QString CharacterSelectDialog::font() const
 
 void CharacterSelectDialog::onApply()
 {
-    emit insertChar(chr(), font());
+    Q_EMIT insertChar(chr(), font());
 }
 
 QWidget *CharacterSelectDialog::defaultWidget()

@@ -23,7 +23,7 @@ class StylesComboPreview : public QLineEdit
     Q_PROPERTY(bool showAddButton READ isAddButtonShown WRITE setAddButtonShown)
 
 public:
-    explicit StylesComboPreview(QWidget *parent = 0);
+    explicit StylesComboPreview(QWidget *parent = nullptr);
     ~StylesComboPreview() override;
 
     QSize availableSize() const;

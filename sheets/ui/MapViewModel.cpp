@@ -155,9 +155,9 @@ void MapViewModel::setActiveSheet(Sheet *sheet)
     }
     const QModelIndex oldIndex(index(oldRow, 0));
     const QModelIndex newIndex(index(newRow, 0));
-    emit dataChanged(oldIndex, oldIndex);
-    emit dataChanged(newIndex, newIndex);
-    emit activeSheetChanged(sheet);
+    Q_EMIT dataChanged(oldIndex, oldIndex);
+    Q_EMIT dataChanged(newIndex, newIndex);
+    Q_EMIT activeSheetChanged(sheet);
 }
 
 void MapViewModel::addSheet(SheetBase *sheet)

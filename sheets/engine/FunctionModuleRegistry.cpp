@@ -160,7 +160,7 @@ void FunctionModuleRegistry::loadFunctionModules()
 
 #else
     QList<FunctionModule *> modules;
-    QObject *parent = 0;
+    QObject *parent = nullptr;
 
     modules << new BitOpsModule(parent);
     modules << new ConversionModule(parent);

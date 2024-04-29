@@ -29,7 +29,7 @@ public:
      * @param coef indicates by how many levels the list item should be displaced
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListLevelCommand(const QTextCursor &cursor, CommandType type, int coef, KUndo2Command *parent = 0);
+    ChangeListLevelCommand(const QTextCursor &cursor, CommandType type, int coef, KUndo2Command *parent = nullptr);
 
     ~ChangeListLevelCommand() override;
 

@@ -19,7 +19,7 @@ class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction(KoResource *resource, const QString &tag, QObject *parent = 0);
+    explicit ContextMenuExistingTagAction(KoResource *resource, const QString &tag, QObject *parent = nullptr);
     ~ContextMenuExistingTagAction() override = default;
 
 Q_SIGNALS:

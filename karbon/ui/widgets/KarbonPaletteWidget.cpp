@@ -76,7 +76,7 @@ void KarbonPaletteWidget::setPalette(KoColorSet *colorSet)
     m_palette = colorSet;
     m_scrollOffset = 0;
     update();
-    emit scrollOffsetChanged();
+    Q_EMIT scrollOffsetChanged();
 }
 
 KoColorSet *KarbonPaletteWidget::palette() const
@@ -134,7 +134,7 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
 
     const int releasedIndex = indexFromPosition(event->pos());
     if (!m_hasDragged && releasedIndex == m_pressedIndex && releasedIndex != -1) {
-        emit colorSelected(m_palette->getColor(releasedIndex).color);
+        Q_EMIT colorSelected(m_palette->getColor(releasedIndex).color);
     }
     m_pressedIndex = -1;
     m_hasDragged = false;
@@ -233,6 +233,6 @@ void KarbonPaletteWidget::applyScrolling(int delta)
     if (newScrollOffset != m_scrollOffset) {
         m_scrollOffset = newScrollOffset;
         update();
-        emit scrollOffsetChanged();
+        Q_EMIT scrollOffsetChanged();
     }
 }

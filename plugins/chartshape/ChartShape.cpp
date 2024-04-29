@@ -590,7 +590,7 @@ void ChartShape::setChartType(ChartType type)
     ChartType prev = chartType();
     d->proxyModel->setDataDimensions(numDimensions(type));
     d->plotArea->setChartType(type);
-    emit chartTypeChanged(type, prev);
+    Q_EMIT chartTypeChanged(type, prev);
 }
 
 void ChartShape::setChartSubType(ChartSubtype subType, bool reset)
@@ -612,7 +612,7 @@ void ChartShape::setChartSubType(ChartSubtype subType, bool reset)
             d->proxyModel->reset(region);
         }
     }
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 void ChartShape::setThreeD(bool threeD)
@@ -1216,7 +1216,7 @@ void ChartShape::update() const
     KoShape::update();
     layout()->scheduleRelayout();
 
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 void ChartShape::relayout() const

@@ -125,7 +125,7 @@ void RenderThread::run()
         draw(painter);
         painter.end();
     }
-    emit finished(m_boundingSize, image);
+    Q_EMIT finished(m_boundingSize, image);
 }
 
 void RenderThread::draw(QPainter &painter)

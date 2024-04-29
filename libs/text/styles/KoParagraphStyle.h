@@ -166,19 +166,19 @@ public:
     enum VerticalAlign { VAlignAuto, VAlignBaseline, VAlignBottom, VAlignMiddle, VAlignTop };
 
     /// Constructor
-    KoParagraphStyle(QObject *parent = 0);
+    KoParagraphStyle(QObject *parent = nullptr);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
-    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent = 0);
+    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent = nullptr);
     /// Destructor
     ~KoParagraphStyle() override;
 
     KoCharacterStyle::Type styleType() const override;
 
     /// Creates a KoParagraphStyle that represents the formatting of \a block.
-    static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
+    static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = nullptr);
 
     /// creates a clone of this style with the specified parent
-    KoParagraphStyle *clone(QObject *parent = 0) const;
+    KoParagraphStyle *clone(QObject *parent = nullptr) const;
 
     //  ***** Linespacing
     /**

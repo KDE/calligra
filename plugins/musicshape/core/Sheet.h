@@ -32,7 +32,7 @@ public:
     /**
      * Constructor, this will create a sheet containing no parts.
      */
-    explicit Sheet(QObject *parent = 0);
+    explicit Sheet(QObject *parent = nullptr);
 
     /**
      * Destructor.

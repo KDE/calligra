@@ -20,7 +20,7 @@ public:
     enum Type { PlainPath = 1, ParametricShape = 2 };
     Q_DECLARE_FLAGS(Types, Type)
 
-    explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
+    explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = nullptr);
     ~PathToolOptionWidget() override;
 
 public Q_SLOTS:

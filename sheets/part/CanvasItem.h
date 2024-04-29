@@ -56,7 +56,7 @@ class CALLIGRA_SHEETS_PART_EXPORT CanvasItem : public QGraphicsWidget, public Ca
     Q_OBJECT
 
 public:
-    explicit CanvasItem(Doc *doc, QGraphicsItem *parent = 0);
+    explicit CanvasItem(Doc *doc, QGraphicsItem *parent = nullptr);
     ~CanvasItem() override;
 
     QWidget *canvasWidget() override

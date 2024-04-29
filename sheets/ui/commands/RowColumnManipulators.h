@@ -28,7 +28,7 @@ class Style;
 class CALLIGRA_SHEETS_UI_EXPORT ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
-    explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
+    explicit ResizeColumnManipulator(KUndo2Command *parent = nullptr);
     ~ResizeColumnManipulator() override;
 
     void setSize(double size)
@@ -53,7 +53,7 @@ private:
 class CALLIGRA_SHEETS_UI_EXPORT ResizeRowManipulator : public AbstractRegionCommand
 {
 public:
-    explicit ResizeRowManipulator(KUndo2Command *parent = 0);
+    explicit ResizeRowManipulator(KUndo2Command *parent = nullptr);
     ~ResizeRowManipulator() override;
 
     void setSize(double size)
@@ -78,7 +78,7 @@ private:
 class CALLIGRA_SHEETS_UI_EXPORT AdjustColumnRowManipulator : public AbstractRegionCommand
 {
 public:
-    explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
+    explicit AdjustColumnRowManipulator(KUndo2Command *parent = nullptr);
     ~AdjustColumnRowManipulator() override;
 
     void setAdjustColumn(bool state)
@@ -122,7 +122,7 @@ private:
 class CALLIGRA_SHEETS_UI_EXPORT HideShowManipulator : public AbstractRegionCommand
 {
 public:
-    explicit HideShowManipulator(KUndo2Command *parent = 0);
+    explicit HideShowManipulator(KUndo2Command *parent = nullptr);
     ~HideShowManipulator() override;
 
     void setHide(bool hide);
@@ -162,7 +162,7 @@ private:
 class CALLIGRA_SHEETS_UI_EXPORT InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
-    explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
+    explicit InsertDeleteColumnManipulator(KUndo2Command *parent = nullptr);
     ~InsertDeleteColumnManipulator() override;
 
     void setTemplate(const ColFormat &columnFormat);
@@ -187,7 +187,7 @@ private:
 class CALLIGRA_SHEETS_UI_EXPORT InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
-    explicit InsertDeleteRowManipulator(KUndo2Command *parent = 0);
+    explicit InsertDeleteRowManipulator(KUndo2Command *parent = nullptr);
     ~InsertDeleteRowManipulator() override;
 
     void setTemplate(const RowFormat &rowFormat);

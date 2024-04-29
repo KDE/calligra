@@ -157,7 +157,7 @@ void ConsolidateDialog::accept()
         }
     }
 
-    emit applyChange();
+    Q_EMIT applyChange();
     KoDialog::accept();
 }
 

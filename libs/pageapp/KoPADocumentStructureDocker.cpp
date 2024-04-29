@@ -216,11 +216,11 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
             selection->deselectAll();
             m_sectionView->setCurrentIndex(index);
             m_selectedShapes.clear();
-            emit pageChanged(dynamic_cast<KoPAPageBase *>(shape));
+            Q_EMIT pageChanged(dynamic_cast<KoPAPageBase *>(shape));
         } else {
             // There are more than one page selected
             if (m_sectionView->selectionModel()->selectedIndexes().size() == 1) {
-                emit pageChanged(dynamic_cast<KoPAPageBase *>(shape));
+                Q_EMIT pageChanged(dynamic_cast<KoPAPageBase *>(shape));
             }
         }
     } else {
@@ -236,7 +236,7 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
                 selection->deselectAll();
                 m_sectionView->setCurrentIndex(index);
                 m_selectedShapes.clear();
-                emit pageChanged(newPageByShape);
+                Q_EMIT pageChanged(newPageByShape);
                 if (layer) {
                     selection->setActiveLayer(layer);
                 } else {
@@ -276,7 +276,7 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
             m_sectionView->setCurrentIndex(index);
             selection->select(shape);
             shape->update();
-            emit pageChanged(newPageByShape);
+            Q_EMIT pageChanged(newPageByShape);
         }
         m_selectedShapes.append(shape);
     }
@@ -657,7 +657,7 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
     if ((start < 0) || (count < 1)) {
         return;
     }
-    emit pageChanged(m_doc->pageByIndex(start, false));
+    Q_EMIT pageChanged(m_doc->pageByIndex(start, false));
     m_sectionView->clearSelection();
     for (int i = start; i < (start + count); i++) {
         QModelIndex index = m_model->index(i, 0, QModelIndex());

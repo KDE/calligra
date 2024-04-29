@@ -155,7 +155,7 @@ Table *TableSource::add(const QString &name, QAbstractItemModel *model)
     d->tablesByModel.insert(model, table);
     d->tables.insert(table);
 
-    emit tableAdded(table);
+    Q_EMIT tableAdded(table);
 
     return table;
 }
@@ -169,7 +169,7 @@ void TableSource::remove(const QString &name)
         d->tablesByName.remove(table->m_name);
         d->tablesByModel.remove(table->m_model);
         d->tables.remove(table);
-        emit tableRemoved(table);
+        Q_EMIT tableRemoved(table);
         // Don't delete the Table instance, it might still be in use.
         table->m_model = 0;
     }

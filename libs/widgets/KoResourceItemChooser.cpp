@@ -344,7 +344,7 @@ void KoResourceItemChooser::activated(const QModelIndex & /*index*/)
     KoResource *resource = currentResource();
     if (resource) {
         d->updatesBlocked = true;
-        emit resourceSelected(resource);
+        Q_EMIT resourceSelected(resource);
         d->updatesBlocked = false;
 
         updatePreview(resource);

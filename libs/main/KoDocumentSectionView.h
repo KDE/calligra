@@ -43,7 +43,7 @@ public:
     /**
      * Create a new KoDocumentSectionView.
      */
-    explicit KoDocumentSectionView(QWidget *parent = 0);
+    explicit KoDocumentSectionView(QWidget *parent = nullptr);
     ~KoDocumentSectionView() override;
 
     /// how items should be displayed

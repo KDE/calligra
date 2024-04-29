@@ -1132,7 +1132,7 @@ void View::finishLoading()
 void View::updateReadWrite(bool readwrite)
 {
     // inform the cell tool
-    emit documentReadWriteToggled(readwrite);
+    Q_EMIT documentReadWriteToggled(readwrite);
 
     const QList<QAction *> actions = actionCollection()->actions();
     for (int i = 0; i < actions.count(); ++i) {
@@ -1582,7 +1582,7 @@ void View::toggleProtectSheet(bool mode)
     d->canvas->update();
 
     // inform the cell tool
-    emit sheetProtectionToggled(mode);
+    Q_EMIT sheetProtectionToggled(mode);
 }
 
 void View::togglePageOutline(bool mode)
@@ -2254,6 +2254,6 @@ void View::slotAutoScroll()
         QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
 
         QApplication::postEvent(canvas(), event);
-        emit autoScroll(scrollDistance);
+        Q_EMIT autoScroll(scrollDistance);
     }
 }

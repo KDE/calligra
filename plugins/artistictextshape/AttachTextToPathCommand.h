@@ -16,7 +16,7 @@ class KoPathShape;
 class AttachTextToPathCommand : public KUndo2Command
 {
 public:
-    AttachTextToPathCommand(ArtisticTextShape *textShape, KoPathShape *pathShape, KUndo2Command *parent = 0);
+    AttachTextToPathCommand(ArtisticTextShape *textShape, KoPathShape *pathShape, KUndo2Command *parent = nullptr);
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command

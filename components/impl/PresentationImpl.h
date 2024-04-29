@@ -21,7 +21,7 @@ class PresentationImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    explicit PresentationImpl(QObject *parent = 0);
+    explicit PresentationImpl(QObject *parent = nullptr);
     ~PresentationImpl() override;
 
     bool load(const QUrl &url) override;

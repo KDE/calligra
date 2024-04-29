@@ -41,7 +41,7 @@ class ShapeCollectionDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit ShapeCollectionDocker(QWidget *parent = 0);
+    explicit ShapeCollectionDocker(QWidget *parent = nullptr);
 
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;

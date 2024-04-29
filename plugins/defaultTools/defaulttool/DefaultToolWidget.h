@@ -19,7 +19,7 @@ class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget
 {
     Q_OBJECT
 public:
-    explicit DefaultToolWidget(KoInteractionTool *tool, QWidget *parent = 0);
+    explicit DefaultToolWidget(KoInteractionTool *tool, QWidget *parent = nullptr);
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);

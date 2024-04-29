@@ -67,14 +67,14 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
 void KPrSlidesManagerView::contextMenuEvent(QContextMenuEvent *event)
 {
-    emit requestContextMenu(event);
+    Q_EMIT requestContextMenu(event);
 }
 
 void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     event->accept();
     // do not call QListView::mouseDoubleClickEvent(event); here as this triggers a rename command to be added
-    emit slideDblClick();
+    Q_EMIT slideDblClick();
 }
 
 void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
@@ -142,22 +142,22 @@ void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 void KPrSlidesManagerView::focusOutEvent(QFocusEvent *event)
 {
     Q_UNUSED(event);
-    emit focusLost();
+    Q_EMIT focusLost();
 }
 
 void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
 {
     Q_UNUSED(event);
-    emit focusGot();
+    Q_EMIT focusGot();
 }
 
 void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
 {
     if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
         if (event->angleDelta().y() > 0) {
-            emit zoomIn();
+            Q_EMIT zoomIn();
         } else {
-            emit zoomOut();
+            Q_EMIT zoomOut();
         }
     } else {
         QListView::wheelEvent(event);
@@ -167,9 +167,9 @@ void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
 void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     if (!this->selectionModel()->selection().isEmpty()) {
-        emit itemSelected();
+        Q_EMIT itemSelected();
     } else {
-        emit selectionCleared();
+        Q_EMIT selectionCleared();
     }
     QListView::selectionChanged(selected, deselected);
 }
@@ -207,7 +207,7 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
                 // Selects the last item of the row
                 QModelIndex last_index = model()->index(qMin(cursorSlideIndex(), model()->rowCount(QModelIndex()) - 1), 0, QModelIndex());
                 setCurrentIndex(last_index);
-                emit indexChanged(last_index);
+                Q_EMIT indexChanged(last_index);
             }
             break;
         }

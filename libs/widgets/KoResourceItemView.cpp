@@ -36,11 +36,11 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection & /*deselected*/)
 {
     if (!selected.isEmpty())
-        emit currentResourceChanged(selected.indexes().first());
+        Q_EMIT currentResourceChanged(selected.indexes().first());
 }
 
 void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)
 {
     QTableView::contextMenuEvent(event);
-    emit contextMenuRequested(event->globalPos());
+    Q_EMIT contextMenuRequested(event->globalPos());
 }

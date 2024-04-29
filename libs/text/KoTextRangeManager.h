@@ -26,7 +26,7 @@ class KOTEXT_EXPORT KoTextRangeManager : public QObject
     Q_OBJECT
 public:
     /// Constructor
-    explicit KoTextRangeManager(QObject *parent = 0);
+    explicit KoTextRangeManager(QObject *parent = nullptr);
     ~KoTextRangeManager() override;
 
     QList<KoTextRange *> textRanges() const;

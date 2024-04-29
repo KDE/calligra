@@ -28,7 +28,7 @@ class StylesFilteredModelBase : public AbstractStylesModel
 {
     Q_OBJECT
 public:
-    explicit StylesFilteredModelBase(QObject *parent = 0);
+    explicit StylesFilteredModelBase(QObject *parent = nullptr);
 
     /** Re-implement from QAbstractItemModel. */
 

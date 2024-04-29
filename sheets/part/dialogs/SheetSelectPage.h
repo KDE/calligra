@@ -29,7 +29,7 @@ class SheetSelectPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SheetSelectPage(QWidget *parent = 0);
+    explicit SheetSelectPage(QWidget *parent = nullptr);
     //     ~SheetSelectPage();
 
     /**

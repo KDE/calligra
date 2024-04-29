@@ -15,7 +15,7 @@ class KPrAnimationGroupProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit KPrAnimationGroupProxyModel(QObject *parent = 0);
+    explicit KPrAnimationGroupProxyModel(QObject *parent = nullptr);
     ~KPrAnimationGroupProxyModel() override;
 
     /**

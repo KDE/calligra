@@ -613,7 +613,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             refPos = refShape->absoluteTransformation(0).map(refPos);
 
             // FIXME we need a more precise position than anchorParagraph Rect
-            emit foundAnnotation(annotation->annotationShape(), refPos);
+            Q_EMIT foundAnnotation(annotation->annotationShape(), refPos);
         }
     }
 }
@@ -666,7 +666,7 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
-    emit layoutIsDirty();
+    Q_EMIT layoutIsDirty();
 }
 
 void KoTextDocumentLayout::layout()
@@ -694,7 +694,7 @@ void KoTextDocumentLayout::layout()
 
     if (finished) {
         // We are only finished with layouting if continuousLayout()==true.
-        emit finishedLayout();
+        Q_EMIT finishedLayout();
     }
 }
 
@@ -1003,9 +1003,9 @@ void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
     QTextBlock block = it.currentBlock();
     if (block.isValid()) {
         int percent = block.position() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
-        emit layoutProgressChanged(percent);
+        Q_EMIT layoutProgressChanged(percent);
     } else if (it.currentFrame()) {
         int percent = it.currentFrame()->firstPosition() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
-        emit layoutProgressChanged(percent);
+        Q_EMIT layoutProgressChanged(percent);
     }
 }

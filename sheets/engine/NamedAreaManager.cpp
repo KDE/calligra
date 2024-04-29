@@ -70,7 +70,7 @@ void NamedAreaManager::insert(const Region &region, const QString &name)
     namedArea.name = name;
     namedArea.sheet->cellStorage()->setNamedArea(Region(region.lastRange(), region.lastSheet()), name);
     d->namedAreas[name] = namedArea;
-    emit namedAreaAdded(name);
+    Q_EMIT namedAreaAdded(name);
 }
 
 void NamedAreaManager::remove(const QString &name)
@@ -80,7 +80,7 @@ void NamedAreaManager::remove(const QString &name)
     NamedArea namedArea = d->namedAreas.value(name);
     namedArea.sheet->cellStorage()->removeNamedArea(Region(namedArea.range, namedArea.sheet), name);
     d->namedAreas.remove(name);
-    emit namedAreaRemoved(name);
+    Q_EMIT namedAreaRemoved(name);
 }
 
 void NamedAreaManager::remove(SheetBase *sheet)
@@ -128,7 +128,7 @@ void NamedAreaManager::regionChanged(const Region &region)
         for (int j = 0; j < namedAreas.count(); ++j) {
             Q_ASSERT(d->namedAreas.contains(namedAreas[j].second));
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
-            emit namedAreaModified(namedAreas[j].second);
+            Q_EMIT namedAreaModified(namedAreas[j].second);
         }
     }
 }
@@ -143,7 +143,7 @@ void NamedAreaManager::updateAllNamedAreas()
         for (int j = 0; j < namedAreas.count(); ++j) {
             Q_ASSERT(d->namedAreas.contains(namedAreas[j].second));
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
-            emit namedAreaModified(namedAreas[j].second);
+            Q_EMIT namedAreaModified(namedAreas[j].second);
         }
     }
 }

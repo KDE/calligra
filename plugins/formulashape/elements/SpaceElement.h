@@ -35,7 +35,7 @@ class KOFORMULA_EXPORT SpaceElement : public BasicElement
 {
 public:
     /// The standard constructor
-    explicit SpaceElement(BasicElement *parent = 0);
+    explicit SpaceElement(BasicElement *parent = nullptr);
 
     /**
      * Render the element to the given QPainter

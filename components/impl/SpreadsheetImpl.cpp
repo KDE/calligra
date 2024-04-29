@@ -195,7 +195,7 @@ void SpreadsheetImpl::setCurrentIndex(int newValue)
         Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
         d->canvas->setActiveSheet(sheet);
         d->updateLinkTargets();
-        emit currentIndexChanged();
+        Q_EMIT currentIndexChanged();
     }
 }
 

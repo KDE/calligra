@@ -386,7 +386,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
 void MSWordOdfImport::setProgress(const int percent)
 {
-    emit sigProgress(percent);
+    Q_EMIT sigProgress(percent);
 }
 
 /*

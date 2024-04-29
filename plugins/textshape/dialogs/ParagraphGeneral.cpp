@@ -167,7 +167,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     }
 
     if (m_style == savingStyle) {
-        emit styleAltered(savingStyle);
+        Q_EMIT styleAltered(savingStyle);
     }
 }
 

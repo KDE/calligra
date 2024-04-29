@@ -554,7 +554,7 @@ void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCell
     QSize newObscuredRange(obscuredArea.right(), obscuredArea.bottom());
     if (newObscuredRange != d->obscuredRange) {
         d->obscuredRange = newObscuredRange;
-        emit obscuredRangeChanged(d->obscuredRange);
+        Q_EMIT obscuredRangeChanged(d->obscuredRange);
     }
 }
 
@@ -674,7 +674,7 @@ void SheetView::updateAccessedCellRange(const QPoint &location)
     if (d->reportedSize == newSize)
         return;
     d->reportedSize = newSize;
-    emit visibleSizeChanged(newSize);
+    Q_EMIT visibleSizeChanged(newSize);
 }
 
 CellView *SheetView::createDefaultCellView()

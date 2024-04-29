@@ -20,7 +20,7 @@ class InsertBibliographyDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent = 0);
+    explicit InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent = nullptr);
     QString bibliographyType();
 
 public Q_SLOTS:

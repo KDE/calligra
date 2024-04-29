@@ -50,7 +50,7 @@ KoGroupButton::~KoGroupButton()
 void KoGroupButton::setGroupPosition(KoGroupButton::GroupPosition groupPosition)
 {
     d->groupPosition = groupPosition;
-    emit groupPositionChanged();
+    Q_EMIT groupPositionChanged();
 }
 
 KoGroupButton::GroupPosition KoGroupButton::groupPosition() const

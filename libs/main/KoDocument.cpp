@@ -291,9 +291,9 @@ public:
         }
         const bool ret = openFile();
         if (ret) {
-            emit document->completed();
+            Q_EMIT document->completed();
         } else {
-            emit document->canceled(QString());
+            Q_EMIT document->canceled(QString());
         }
         return ret;
     }
@@ -360,12 +360,12 @@ public:
         Q_ASSERT(job == m_job);
         m_job = 0;
         if (job->error())
-            emit document->canceled(job->errorString());
+            Q_EMIT document->canceled(job->errorString());
         else {
             if (openFile()) {
-                emit document->completed();
+                Q_EMIT document->completed();
             } else {
-                emit document->canceled(QString());
+                Q_EMIT document->canceled(QString());
             }
         }
     }
@@ -414,7 +414,7 @@ public:
 
             m_uploadJob = 0;
             document->setModified(false);
-            emit document->completed();
+            Q_EMIT document->completed();
             m_saveOk = true;
         }
         m_duringSaveAs = false;
@@ -541,7 +541,7 @@ bool KoDocument::saveFile()
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(), entry,
                                      d->parentPart->currentMainwindow())) { // this file exists => backup
-                emit statusBarMessage(i18n("Making backup..."));
+                Q_EMIT statusBarMessage(i18n("Making backup..."));
                 QUrl backup;
                 if (d->backupPath.isEmpty())
                     backup = url();
@@ -556,7 +556,7 @@ bool KoDocument::saveFile()
         }
     }
 
-    emit statusBarMessage(i18n("Saving..."));
+    Q_EMIT statusBarMessage(i18n("Saving..."));
     qApp->processEvents();
     bool ret = false;
     bool suppressErrorDialog = false;
@@ -610,7 +610,7 @@ bool KoDocument::saveFile()
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave(isExporting(), false);
     }
-    emit clearStatusBarMessage();
+    Q_EMIT clearStatusBarMessage();
 
     if (ret) {
         KNotification *notify = new KNotification("DocumentSaved");
@@ -702,10 +702,10 @@ void KoDocument::slotAutoSave()
         // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
         if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
             // That advice should also fix this error from occurring again
-            emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
+            Q_EMIT statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
             connect(this, &KoDocument::sigProgress, d->parentPart->currentMainwindow(), &KoMainWindow::slotProgress);
-            emit statusBarMessage(i18n("Autosaving..."));
+            Q_EMIT statusBarMessage(i18n("Autosaving..."));
             d->autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
             setModified(true);
@@ -714,10 +714,10 @@ void KoDocument::slotAutoSave()
                 d->autoSaveTimer.stop(); // until the next change
             }
             d->autosaving = false;
-            emit clearStatusBarMessage();
+            Q_EMIT clearStatusBarMessage();
             disconnect(this, &KoDocument::sigProgress, d->parentPart->currentMainwindow(), &KoMainWindow::slotProgress);
             if (!ret && !d->disregardAutosaveFailure) {
-                emit statusBarMessage(i18n("Error during autosave! Partition full?"));
+                Q_EMIT statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
         }
     }
@@ -2029,7 +2029,7 @@ void KoDocument::setModified(bool mod)
 
     // This influences the title
     setTitleModified();
-    emit modified(mod);
+    Q_EMIT modified(mod);
 }
 
 bool KoDocument::alwaysAllowSaving() const
@@ -2106,7 +2106,7 @@ QString KoDocument::caption() const
 
 void KoDocument::setTitleModified()
 {
-    emit titleModified(caption(), isModified());
+    Q_EMIT titleModified(caption(), isModified());
 }
 
 bool KoDocument::completeLoading(KoStore *)
@@ -2262,7 +2262,7 @@ void KoDocument::setUnit(const KoUnit &unit)
 {
     if (d->unit != unit) {
         d->unit = unit;
-        emit unitChanged(unit);
+        Q_EMIT unitChanged(unit);
     }
 }
 
@@ -2459,7 +2459,7 @@ bool KoDocument::save()
     if (ok) {
         return saveToUrl();
     } else {
-        emit canceled(QString());
+        Q_EMIT canceled(QString());
     }
     return false;
 }
@@ -2581,7 +2581,7 @@ bool KoDocument::saveToUrl()
 {
     if (d->m_url.isLocalFile()) {
         d->document->setModified(false);
-        emit completed();
+        Q_EMIT completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
         Q_ASSERT(!d->m_bTemp);
         d->m_saveOk = true;

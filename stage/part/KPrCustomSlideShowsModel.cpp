@@ -345,7 +345,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         // update the SlideShow with the resulting list
         KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(m_document, m_activeCustomSlideShowName, selectedSlideShow);
         m_document->addCommand(command);
-        emit selectPages(start, slides.count());
+        Q_EMIT selectPages(start, slides.count());
     }
     return updated;
 }
@@ -372,11 +372,11 @@ void KPrCustomSlideShowsModel::updateCustomSlideShowsList(const QString &name)
 {
     m_activeCustomSlideShowName.clear();
     setActiveSlideShow(name);
-    emit customSlideShowsChanged();
+    Q_EMIT customSlideShowsChanged();
 }
 
 void KPrCustomSlideShowsModel::updateModel()
 {
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
+    Q_EMIT layoutAboutToBeChanged();
+    Q_EMIT layoutChanged();
 }

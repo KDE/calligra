@@ -235,7 +235,7 @@ void Sheet::addShape(KoShape *shape)
         return;
     d->shapes.append(shape);
     shape->setApplicationData(new ShapeApplicationData());
-    emit shapeAdded(this, shape);
+    Q_EMIT shapeAdded(this, shape);
 }
 
 void Sheet::removeShape(KoShape *shape)
@@ -243,7 +243,7 @@ void Sheet::removeShape(KoShape *shape)
     if (!shape)
         return;
     d->shapes.removeAll(shape);
-    emit shapeRemoved(this, shape);
+    Q_EMIT shapeRemoved(this, shape);
 }
 
 void Sheet::deleteShapes()
@@ -411,13 +411,13 @@ QSizeF Sheet::documentSize() const
 void Sheet::adjustDocumentWidth(double deltaWidth)
 {
     d->documentSize.rwidth() += deltaWidth;
-    emit documentSizeChanged(d->documentSize);
+    Q_EMIT documentSizeChanged(d->documentSize);
 }
 
 void Sheet::adjustDocumentHeight(double deltaHeight)
 {
     d->documentSize.rheight() += deltaHeight;
-    emit documentSizeChanged(d->documentSize);
+    Q_EMIT documentSizeChanged(d->documentSize);
 }
 
 void Sheet::adjustCellAnchoredShapesX(double minX, double maxX, double delta)
@@ -540,7 +540,7 @@ void Sheet::insertColumns(int col, int number)
 
     changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), Sheet::ColumnInsert);
 
-    emit columnsAdded(col, number);
+    Q_EMIT columnsAdded(col, number);
 }
 
 void Sheet::insertRows(int row, int number)
@@ -549,7 +549,7 @@ void Sheet::insertRows(int row, int number)
 
     changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), Sheet::RowInsert);
 
-    emit rowsAdded(row, number);
+    Q_EMIT rowsAdded(row, number);
 }
 
 void Sheet::removeColumns(int col, int number)
@@ -558,7 +558,7 @@ void Sheet::removeColumns(int col, int number)
 
     changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), Sheet::ColumnRemove);
 
-    emit columnsRemoved(col, number);
+    Q_EMIT columnsRemoved(col, number);
 }
 
 void Sheet::removeRows(int row, int number)
@@ -567,7 +567,7 @@ void Sheet::removeRows(int row, int number)
 
     changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), Sheet::RowRemove);
 
-    emit rowsRemoved(row, number);
+    Q_EMIT rowsRemoved(row, number);
 }
 
 // helper function for Sheet::areaIsEmpty
@@ -788,7 +788,7 @@ bool Sheet::rowIsHidden(int row) const
 
 void Sheet::showStatusMessage(const QString &message, int timeout) const
 {
-    emit statusMessage(message, timeout);
+    Q_EMIT statusMessage(message, timeout);
 }
 
 bool Sheet::setSheetName(const QString &name)
@@ -805,7 +805,7 @@ bool Sheet::setSheetName(const QString &name)
 
     setObjectName(name);
 
-    emit nameChanged(old_name, name);
+    Q_EMIT nameChanged(old_name, name);
 
     return true;
 }

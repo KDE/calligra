@@ -45,5 +45,5 @@ InsertCharacter::InsertCharacter(QWidget *parent)
 
 void InsertCharacter::insertCharacter()
 {
-    emit insertCharacter(QString(m_charSelector->currentChar()));
+    Q_EMIT insertCharacter(QString(m_charSelector->currentChar()));
 }

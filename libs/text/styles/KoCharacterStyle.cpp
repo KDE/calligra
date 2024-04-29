@@ -485,7 +485,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
         format.clearProperty(property);
     }
     if (emitSignal) {
-        emit styleApplied(this);
+        Q_EMIT styleApplied(this);
         d->m_inUse = true;
     }
 }
@@ -900,7 +900,7 @@ void KoCharacterStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 int KoCharacterStyle::styleId() const
 {

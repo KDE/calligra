@@ -75,7 +75,7 @@ void KeySignature::setAccidentals(int accidentals)
 
     setWidth(6 * std::abs(accidentals) + 6 * std::abs(d->cancelCount));
 
-    emit accidentalsChanged(accidentals);
+    Q_EMIT accidentalsChanged(accidentals);
 }
 
 int KeySignature::accidentals(int pitch) const

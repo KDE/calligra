@@ -54,7 +54,7 @@ protected:
      *                           office:text element will be created within office:body, etc.
      * @param parent parent object.
      */
-    KoOdfExporter(const QString &bodyContentElement, QObject *parent = 0);
+    KoOdfExporter(const QString &bodyContentElement, QObject *parent = nullptr);
 
     /**
      * @return true if @a mime is accepted source mime type.

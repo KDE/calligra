@@ -35,7 +35,7 @@ class CALLIGRA_SHEETS_PART_EXPORT Part : public KoPart
     Q_OBJECT
 
 public:
-    explicit Part(QObject *parent = 0);
+    explicit Part(QObject *parent = nullptr);
 
     /**
      * Destroys the document.

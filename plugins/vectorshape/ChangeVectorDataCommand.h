@@ -15,7 +15,7 @@
 class ChangeVectorDataCommand : public KUndo2Command
 {
 public:
-    ChangeVectorDataCommand(VectorShape *shape, const QByteArray &newImageData, VectorShape::VectorType newVectorType, KUndo2Command *parent = 0);
+    ChangeVectorDataCommand(VectorShape *shape, const QByteArray &newImageData, VectorShape::VectorType newVectorType, KUndo2Command *parent = nullptr);
     ~ChangeVectorDataCommand() override;
 
     /// redo the command

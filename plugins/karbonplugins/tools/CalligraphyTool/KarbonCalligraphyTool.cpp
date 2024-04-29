@@ -459,5 +459,5 @@ void KarbonCalligraphyTool::updateSelectedPath()
     // emit signal it there wasn't a selected path and now there is
     // or the other way around
     if ((m_selectedPath != 0) != (oldSelectedPath != 0))
-        emit pathSelectedChanged(m_selectedPath != 0);
+        Q_EMIT pathSelectedChanged(m_selectedPath != 0);
 }

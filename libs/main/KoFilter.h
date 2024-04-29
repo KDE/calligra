@@ -114,7 +114,7 @@ protected:
     /**
      * This is the constructor your filter has to call, obviously.
      */
-    KoFilter(QObject *parent = 0);
+    KoFilter(QObject *parent = nullptr);
 
     /**
      * Use this pointer to access all information about input/output

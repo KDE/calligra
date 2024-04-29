@@ -26,7 +26,7 @@ class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface(const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0);
+    KPrPresenterViewInterface(const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = nullptr);
 
     void setPreviewSize(const QSize &size);
 

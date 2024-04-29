@@ -23,7 +23,7 @@ class KOFORMULA_EXPORT FixedElement : public BasicElement
 {
 public:
     /// The standard constructor
-    explicit FixedElement(BasicElement *parent = 0);
+    explicit FixedElement(BasicElement *parent = nullptr);
 
     /// The standard destructor
     ~FixedElement() override;

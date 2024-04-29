@@ -66,10 +66,10 @@ void KoShapeManager::Private::updateTree()
     detector.fireSignals();
     if (selectionModified) {
         selection->updateSizeAndPosition();
-        emit q->selectionContentChanged();
+        Q_EMIT q->selectionContentChanged();
     }
     if (anyModified) {
-        emit q->contentChanged();
+        Q_EMIT q->contentChanged();
     }
 }
 
@@ -195,7 +195,7 @@ void KoShapeManager::remove(KoShape *shape)
 
     // This signal is used in the annotation shape.
     // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
-    emit shapeRemoved(shape);
+    Q_EMIT shapeRemoved(shape);
 }
 
 void KoShapeManager::removeAdditional(KoShape *shape)
@@ -512,7 +512,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
         QTimer::singleShot(100, this, [this]() {
             d->updateTree();
         });
-    emit shapeChanged(shape);
+    Q_EMIT shapeChanged(shape);
 }
 
 QList<KoShape *> KoShapeManager::shapes() const

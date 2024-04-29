@@ -186,7 +186,7 @@ QString KoListLevelProperties::listItemPrefix() const
 void KoListLevelProperties::setLabelType(KoListStyle::LabelType labelType)
 {
     setProperty(QTextListFormat::ListStyle, (int)labelType);
-    emit styleChanged(labelType);
+    Q_EMIT styleChanged(labelType);
 }
 
 KoListStyle::LabelType KoListLevelProperties::labelType() const

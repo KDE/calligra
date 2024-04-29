@@ -13,7 +13,7 @@ class ChangeTrackingOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChangeTrackingOptionsWidget(TextTool *tool, QWidget *parent = 0);
+    explicit ChangeTrackingOptionsWidget(TextTool *tool, QWidget *parent = nullptr);
 
 private Q_SLOTS:
     void recordChangesChanged(int isChecked);

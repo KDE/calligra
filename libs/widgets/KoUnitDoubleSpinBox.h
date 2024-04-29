@@ -38,7 +38,7 @@ public:
      * the default unit of points.
      * @param parent the parent widget
      */
-    explicit KoUnitDoubleSpinBox(QWidget *parent = 0);
+    explicit KoUnitDoubleSpinBox(QWidget *parent = nullptr);
     ~KoUnitDoubleSpinBox() override;
 
     /**

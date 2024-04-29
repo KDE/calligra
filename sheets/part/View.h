@@ -426,7 +426,7 @@ class SheetsCanvasControllerWidget : public KoCanvasControllerWidget
 {
     Q_OBJECT
 public:
-    explicit SheetsCanvasControllerWidget(KActionCollection *actionCollection, View *parent = 0);
+    explicit SheetsCanvasControllerWidget(KActionCollection *actionCollection, View *parent = nullptr);
     ~SheetsCanvasControllerWidget() override;
 
 protected:

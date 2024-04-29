@@ -99,7 +99,7 @@ void StylesManagerModel::replaceStyle(KoCharacterStyle *oldStyle, KoCharacterSty
     if (row != -1) {
         m_styles[row] = newStyle;
         QModelIndex index = this->index(row);
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 
@@ -111,7 +111,7 @@ void StylesManagerModel::updateStyle(KoCharacterStyle *style)
         debugTextShape << style << style->name();
         m_styleThumbnailer->removeFromCache(style);
         QModelIndex index = this->index(row);
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 

@@ -530,21 +530,21 @@ void PlotAreaConfigWidget::chartTypeSelected(QAction *action)
         subtype = NoChartSubtype;
     }
 
-    emit chartTypeChanged(type, subtype);
+    Q_EMIT chartTypeChanged(type, subtype);
     updateData();
 }
 
 void PlotAreaConfigWidget::setThreeDMode(bool threeD)
 {
     d->threeDMode = threeD;
-    emit threeDModeToggled(threeD);
+    Q_EMIT threeDModeToggled(threeD);
 
     updateData();
 }
 
 void PlotAreaConfigWidget::ui_chartOrientationChanged(int value)
 {
-    emit chartOrientationChanged(static_cast<Qt::Orientation>(value + 1));
+    Q_EMIT chartOrientationChanged(static_cast<Qt::Orientation>(value + 1));
 }
 
 /**
@@ -789,7 +789,7 @@ void PlotAreaConfigWidget::ui_dataSetXDataRegionChanged()
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
 
-    emit dataSetXDataRegionChanged(dataSet, region);
+    Q_EMIT dataSetXDataRegionChanged(dataSet, region);
 }
 
 void PlotAreaConfigWidget::ui_dataSetYDataRegionChanged()
@@ -803,7 +803,7 @@ void PlotAreaConfigWidget::ui_dataSetYDataRegionChanged()
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
 
-    emit dataSetYDataRegionChanged(dataSet, region);
+    Q_EMIT dataSetYDataRegionChanged(dataSet, region);
 }
 
 void PlotAreaConfigWidget::ui_dataSetCustomDataRegionChanged()
@@ -817,7 +817,7 @@ void PlotAreaConfigWidget::ui_dataSetCustomDataRegionChanged()
     //
     //     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
     //
-    //     emit dataSetCustomDataRegionChanged(dataSet, region);
+    //     Q_EMIT dataSetCustomDataRegionChanged(dataSet, region);
 }
 
 void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
@@ -831,7 +831,7 @@ void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
 
-    emit dataSetCategoryDataRegionChanged(dataSet, region);
+    Q_EMIT dataSetCategoryDataRegionChanged(dataSet, region);
 }
 
 void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
@@ -845,7 +845,7 @@ void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
 
-    emit dataSetLabelDataRegionChanged(dataSet, region);
+    Q_EMIT dataSetLabelDataRegionChanged(dataSet, region);
 
     // label may have changed
     QString title = dataSet->labelData().toString();

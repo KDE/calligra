@@ -16,7 +16,7 @@ class StencilListView : public QListView
 public:
     using QListView::contentsSize;
 
-    explicit StencilListView(QWidget *parent = 0);
+    explicit StencilListView(QWidget *parent = nullptr);
 
 Q_SIGNALS:
     void pressed(const QString &name, const QString &xml, const QPoint &globalPos);

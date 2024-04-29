@@ -55,7 +55,7 @@ void KoRdfLocation::showInViewer()
 #ifdef CAN_USE_MARBLE
     kDebug(30015) << "RDFLocation::showInViewer() opening a marble widget...";
 
-    QWidget *parent = 0;
+    QWidget *parent = nullptr;
     QWidget *ret = new QWidget(parent);
     viewWidget.setupUi(ret);
     viewWidget.name->setText(m_name);

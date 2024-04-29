@@ -120,7 +120,7 @@ void StylesCombo::slotSelectionChanged(int index)
     m_selectedItem = index;
     m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
     update();
-    //    emit selectionChanged(index);
+    //    Q_EMIT selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(const QModelIndex &index)
@@ -131,8 +131,8 @@ void StylesCombo::slotItemClicked(const QModelIndex &index)
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
     m_currentIndex = index;
     update();
-    emit selected(m_selectedItem);
-    emit selected(index);
+    Q_EMIT selected(m_selectedItem);
+    Q_EMIT selected(index);
     hidePopup(); // the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
 }
 
@@ -175,12 +175,12 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
 
 void StylesCombo::slotShowDia(const QModelIndex &index)
 {
-    emit showStyleManager(index.row());
+    Q_EMIT showStyleManager(index.row());
 }
 
 void StylesCombo::slotDeleteStyle(const QModelIndex &index)
 {
-    emit deleteStyle(index.row());
+    Q_EMIT deleteStyle(index.row());
 }
 
 void StylesCombo::slotModelReset()

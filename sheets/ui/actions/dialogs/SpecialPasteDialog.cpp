@@ -29,7 +29,7 @@ SpecialPasteDialog::SpecialPasteDialog(QWidget *parent)
 
 void SpecialPasteDialog::onApply()
 {
-    emit paste();
+    Q_EMIT paste();
     accept();
 }
 

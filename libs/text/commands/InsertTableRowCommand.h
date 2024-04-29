@@ -15,7 +15,7 @@ class QTextTable;
 class InsertTableRowCommand : public KUndo2Command
 {
 public:
-    InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent = 0);
+    InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent = nullptr);
 
     void undo() override;
     void redo() override;

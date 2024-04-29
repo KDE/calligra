@@ -548,7 +548,7 @@ void KoShape::setParent(KoShapeContainer *parent)
     if (d->parent == parent)
         return;
     KoShapeContainer *oldParent = d->parent;
-    d->parent = 0; // avoids recursive removing
+    d->parent = nullptr; // avoids recursive removing
     if (oldParent)
         oldParent->removeShape(this);
     if (parent && parent != this) {

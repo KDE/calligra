@@ -24,7 +24,7 @@ class CharacterGeneral : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CharacterGeneral(QWidget *parent = 0);
+    explicit CharacterGeneral(QWidget *parent = nullptr);
 
     void setStyle(KoCharacterStyle *style, bool directFormattingMode);
     void hideStyleName(bool hide);

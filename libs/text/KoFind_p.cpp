@@ -145,12 +145,12 @@ void KoFindPrivate::startReplace()
 
 void KoFindPrivate::findDocumentSetNext(QTextDocument *document)
 {
-    emit q->findDocumentSetNext(document);
+    Q_EMIT q->findDocumentSetNext(document);
 }
 
 void KoFindPrivate::findDocumentSetPrevious(QTextDocument *document)
 {
-    emit q->findDocumentSetPrevious(document);
+    Q_EMIT q->findDocumentSetPrevious(document);
 }
 
 void KoFindPrivate::parseSettingsAndFind()

@@ -78,7 +78,7 @@ bool KoSemanticStylesheet::isMutable() const
 void KoSemanticStylesheet::name(const QString &v)
 {
     if (d->m_isMutable) {
-        emit nameChanging(hKoSemanticStylesheet(this), d->m_name, v);
+        Q_EMIT nameChanging(hKoSemanticStylesheet(this), d->m_name, v);
         d->m_name = v;
     }
 }

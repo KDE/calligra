@@ -50,7 +50,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
     QVector<KPluginMetaData> plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
-    if (config.whiteList && config.blacklist && config.group) {
+    if (!config.whiteList.isEmpty() && !config.blacklist.isEmpty() && !config.group.isEmpty()) {
         debugPlugin << "Loading" << directory << "with checking the config";
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
@@ -84,14 +84,14 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
     QMap<QString, KPluginMetaData> serviceNames;
     for (KPluginMetaData loader : plugins) {
         if (serviceNames.contains(loader.fileName())) { // duplicate
-            QJsonObject json2 = loader.rawData().value("MetaData").toObject();
-            QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
+            const QJsonObject json2 = loader.rawData().value(QLatin1StringView("MetaData")).toObject();
+            const QVariant pluginVersion2 = json2.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
-            KPluginMetaData currentLoader = serviceNames.value(loader.fileName());
-            QJsonObject json = currentLoader.rawData().value("MetaData").toObject();
-            QVariant pluginVersion = json.value("X-Flake-PluginVersion").toVariant();
+            const KPluginMetaData currentLoader = serviceNames.value(loader.fileName());
+            const QJsonObject json = currentLoader.rawData().value(QLatin1StringView("MetaData")).toObject();
+            const QVariant pluginVersion = json.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
             }
@@ -114,7 +114,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
         }
     }
 
-    if (configChanged && config.whiteList && config.blacklist && config.group) {
+    if (configChanged && !config.whiteList.isEmpty() && !config.blacklist.isEmpty() && !config.group.isEmpty()) {
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
@@ -153,8 +153,8 @@ QVector<KPluginMetaData> KoPluginLoader::pluginLoaders(const QString &directory,
 
         if (!mimeType.isEmpty()) {
             QStringList mimeTypes = metaData.mimeTypes();
-            mimeTypes += metaData.rawData().value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-            mimeTypes += metaData.rawData().value("X-KDE-NativeMimeType").toString();
+            mimeTypes += metaData.rawData().value(QLatin1StringView("X-KDE-ExtraNativeMimeTypes")).toVariant().toStringList();
+            mimeTypes += metaData.rawData().value(QLatin1StringView("X-KDE-NativeMimeType")).toString();
             if (!mimeTypes.contains(mimeType)) {
                 return false;
             }

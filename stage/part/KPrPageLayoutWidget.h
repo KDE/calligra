@@ -32,7 +32,7 @@ class KPrPageLayoutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPageLayoutWidget(QWidget *parent = 0);
+    explicit KPrPageLayoutWidget(QWidget *parent = nullptr);
 
     void setView(KPrView *view);
 

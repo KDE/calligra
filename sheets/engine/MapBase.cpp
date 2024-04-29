@@ -196,7 +196,7 @@ SheetBase *MapBase::addNewSheet(const QString &name)
 void MapBase::addSheet(SheetBase *_sheet)
 {
     d->lstSheets.append(_sheet);
-    emit sheetAdded(_sheet);
+    Q_EMIT sheetAdded(_sheet);
 }
 
 void MapBase::removeSheet(SheetBase *sheet)
@@ -207,7 +207,7 @@ void MapBase::removeSheet(SheetBase *sheet)
     d->lstSheets.removeAll(sheet);
     d->lstDeletedSheets.append(sheet);
     namedAreaManager()->remove(sheet);
-    emit sheetRemoved(sheet);
+    Q_EMIT sheetRemoved(sheet);
 }
 
 void MapBase::reviveSheet(SheetBase *sheet)
@@ -221,17 +221,17 @@ void MapBase::reviveSheet(SheetBase *sheet)
             d->lstSheets.append(sheet);
     } else
         d->lstSheets.append(sheet);
-    emit sheetRevived(sheet);
+    Q_EMIT sheetRevived(sheet);
 }
 
 void MapBase::onSheetHidden(SheetBase *sheet, bool hidden)
 {
     if (hidden) {
         addDamage(new SheetDamage(sheet, SheetDamage::Hidden));
-        emit sheetHidden(sheet);
+        Q_EMIT sheetHidden(sheet);
     } else {
         addDamage(new SheetDamage(sheet, SheetDamage::Shown));
-        emit sheetShown(sheet);
+        Q_EMIT sheetShown(sheet);
     }
 }
 
@@ -324,7 +324,7 @@ void MapBase::flushDamages()
     // Copy the damages to process. This allows new damages while processing.
     QList<Damage *> damages = d->damages;
     d->damages.clear();
-    emit damagesFlushed(damages);
+    Q_EMIT damagesFlushed(damages);
     qDeleteAll(damages);
 }
 

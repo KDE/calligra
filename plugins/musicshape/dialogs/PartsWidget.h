@@ -21,7 +21,7 @@ class PartsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PartsWidget(MusicTool *tool, QWidget *parent = 0);
+    explicit PartsWidget(MusicTool *tool, QWidget *parent = nullptr);
 
 public Q_SLOTS:
     void setShape(MusicShape *shape);

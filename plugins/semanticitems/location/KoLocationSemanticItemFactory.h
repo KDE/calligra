@@ -27,7 +27,7 @@ public: // KoRdfSemanticItemFactoryBase API
     virtual hKoRdfBasicSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
     virtual hKoRdfBasicSemanticItem
-    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent = 0) const;
+    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent = nullptr) const;
     virtual bool isBasic() const;
 };
 

@@ -1789,7 +1789,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
         while (!cell.isNull()) {
             value += 2;
-            emit sigProgress(value);
+            Q_EMIT sigProgress(value);
 
             QDomElement e = cell.toElement(); // try to convert the node to an element.
             if (!e.isNull()) { // the node was really an element.
@@ -1962,7 +1962,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         ksdoc->map()->loadingInfo()->setInitialActiveSheet(selTable);
     }
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     if (bSuccess)
         return KoFilter::OK;
     else

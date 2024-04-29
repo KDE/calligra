@@ -24,7 +24,7 @@ public:
      * @param newLock list of new lock states the same length as @p shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeLockCommand(const QList<KoShape *> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent = 0);
+    KoShapeLockCommand(const QList<KoShape *> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent = nullptr);
     ~KoShapeLockCommand() override;
 
     /// redo the command

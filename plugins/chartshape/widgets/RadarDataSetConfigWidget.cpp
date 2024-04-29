@@ -258,7 +258,7 @@ void RadarDataSetConfigWidget::datasetMarkerSelected(QAction *action)
         d->ui.datasetMarkerMenu->setText(type);
         d->ui.datasetMarkerMenu->setIcon(QIcon());
     }
-    emit dataSetMarkerChanged(dataSet, symbolType, style);
+    Q_EMIT dataSetMarkerChanged(dataSet, symbolType, style);
 }
 
 void RadarDataSetConfigWidget::datasetBrushSelected(const QColor &color)
@@ -266,7 +266,7 @@ void RadarDataSetConfigWidget::datasetBrushSelected(const QColor &color)
     if (d->selectedDataSet < 0)
         return;
 
-    emit datasetBrushChanged(d->dataSets[d->selectedDataSet], color, -1);
+    Q_EMIT datasetBrushChanged(d->dataSets[d->selectedDataSet], color, -1);
     updateMarkers();
 }
 
@@ -275,7 +275,7 @@ void RadarDataSetConfigWidget::datasetPenSelected(const QColor &color)
     if (d->selectedDataSet < 0)
         return;
 
-    emit datasetPenChanged(d->dataSets[d->selectedDataSet], color, -1);
+    Q_EMIT datasetPenChanged(d->dataSets[d->selectedDataSet], color, -1);
     updateMarkers();
 }
 
@@ -345,7 +345,7 @@ void RadarDataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void RadarDataSetConfigWidget::ui_dataSetShowNumberChanged(bool b)
@@ -354,7 +354,7 @@ void RadarDataSetConfigWidget::ui_dataSetShowNumberChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void RadarDataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
@@ -363,7 +363,7 @@ void RadarDataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void RadarDataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
@@ -372,5 +372,5 @@ void RadarDataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
 }

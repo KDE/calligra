@@ -18,14 +18,19 @@ class ArtisticTextShape;
 class ReplaceTextRangeCommand : public KUndo2Command
 {
 public:
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const ArtisticTextRange &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = nullptr);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape,
+                            const ArtisticTextRange &text,
+                            int from,
+                            int count,
+                            ArtisticTextTool *tool,
+                            KUndo2Command *parent = nullptr);
     ReplaceTextRangeCommand(ArtisticTextShape *shape,
                             const QList<ArtisticTextRange> &text,
                             int from,
                             int count,
                             ArtisticTextTool *tool,
-                            KUndo2Command *parent = 0);
+                            KUndo2Command *parent = nullptr);
 
     void redo() override;
     void undo() override;

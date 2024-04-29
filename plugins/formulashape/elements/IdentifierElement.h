@@ -20,7 +20,7 @@ class KOFORMULA_EXPORT IdentifierElement : public TokenElement
 {
 public:
     /// The standard constructor
-    explicit IdentifierElement(BasicElement *parent = 0);
+    explicit IdentifierElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

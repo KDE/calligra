@@ -897,7 +897,7 @@ void KoXmlNodeData::clear()
     attr.clear();
     attrNS.clear();
 
-    parent = 0;
+    parent = nullptr;
     prev = next = 0;
     first = last = 0;
 

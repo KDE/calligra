@@ -1107,7 +1107,7 @@ void PlotArea::setAngleOffset(qreal angle)
 {
     d->angleOffset = angle;
 
-    emit angleOffsetChanged(angle);
+    Q_EMIT angleOffsetChanged(angle);
 }
 
 ChartShape *PlotArea::parent() const

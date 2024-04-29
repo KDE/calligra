@@ -207,7 +207,7 @@ public:
 
     void emitUpdate(KoPAPageBase *page)
     {
-        emit update(page);
+        Q_EMIT update(page);
     }
 
     /**

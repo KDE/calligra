@@ -35,7 +35,7 @@ class CollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit CollectionItemModel(QObject *parent = 0);
+    explicit CollectionItemModel(QObject *parent = nullptr);
 
     Qt::DropActions supportedDragActions() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

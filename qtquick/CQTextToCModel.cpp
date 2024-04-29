@@ -199,6 +199,6 @@ void CQTextToCModel::setCanvas(QObject *newCanvas)
         // connect to FinishedLayout
         connect(d->documentLayout, SIGNAL(finishedLayout()), this, SLOT(startDoneTimer()));
     }
-    emit canvasChanged();
+    Q_EMIT canvasChanged();
     endResetModel();
 }

@@ -33,7 +33,7 @@ class KWNavigationWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KWNavigationWidget(QWidget *parent = 0);
+    explicit KWNavigationWidget(QWidget *parent = nullptr);
     ~KWNavigationWidget() override;
 
     friend class KWNavigationDocker;

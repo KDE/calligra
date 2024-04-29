@@ -114,7 +114,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
     int value = 0;
 
-    emit sigProgress(value);
+    Q_EMIT sigProgress(value);
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     Cell cell(sheet, 1, 1);
@@ -126,7 +126,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
             int progress = (int) (100.0 * processed / (numRows * numCols));
             if (progress != value) {
                 value = progress;
-                emit sigProgress(value);
+                Q_EMIT sigProgress(value);
             }
 
             const QString text(dialog->text(row, col));
@@ -179,7 +179,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
         }
     }
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     QGuiApplication::restoreOverrideCursor();
     delete dialog;
 

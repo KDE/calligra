@@ -83,7 +83,7 @@ class KUndo2Action : public QAction
 {
     Q_OBJECT
 public:
-    KUndo2Action(const QString &textTemplate, const QString &defaultText, QObject *parent = 0);
+    KUndo2Action(const QString &textTemplate, const QString &defaultText, QObject *parent = nullptr);
 public Q_SLOTS:
     void setPrefixedText(const QString &text);
 

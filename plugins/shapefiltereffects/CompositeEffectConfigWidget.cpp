@@ -73,7 +73,7 @@ void CompositeEffectConfigWidget::operationChanged(int index)
     m_arithmeticWidget->setVisible(index == 6);
     if (m_effect) {
         m_effect->setOperation(static_cast<CompositeEffect::Operation>(index));
-        emit filterChanged();
+        Q_EMIT filterChanged();
     }
 }
 
@@ -88,5 +88,5 @@ void CompositeEffectConfigWidget::valueChanged()
     }
 
     m_effect->setArithmeticValues(k);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

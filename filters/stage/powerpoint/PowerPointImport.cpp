@@ -30,6 +30,6 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray &from, con
 
 void PowerPointImport::setProgress(const int percent)
 {
-    emit sigProgress(percent);
+    Q_EMIT sigProgress(percent);
 }
 #include "PowerPointImport.moc"

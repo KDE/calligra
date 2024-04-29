@@ -30,7 +30,7 @@ protected:
     {
         QFrame::resizeEvent(event);
         if (event->oldSize().isValid())
-            emit readyAfterResize();
+            Q_EMIT readyAfterResize();
     }
 
 Q_SIGNALS:
@@ -248,7 +248,7 @@ void FormattingButton::itemSelected()
         m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();
-    emit itemTriggered(m_lastId);
+    Q_EMIT itemTriggered(m_lastId);
 }
 
 bool FormattingButton::hasItemId(int id)

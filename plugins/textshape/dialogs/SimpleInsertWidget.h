@@ -19,7 +19,7 @@ class SimpleInsertWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleInsertWidget(TextTool *tool, QWidget *parent = 0);
+    explicit SimpleInsertWidget(TextTool *tool, QWidget *parent = nullptr);
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);

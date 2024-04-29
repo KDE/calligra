@@ -21,8 +21,8 @@ class KoPAPageBase;
 class KOPAGEAPP_TEST_EXPORT KoPAPageMoveCommand : public KUndo2Command
 {
 public:
-    KoPAPageMoveCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0);
-    KoPAPageMoveCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = 0);
+    KoPAPageMoveCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = nullptr);
+    KoPAPageMoveCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = nullptr);
     void init(const QList<KoPAPageBase *> &pages);
     ~KoPAPageMoveCommand() override;
 

@@ -18,7 +18,7 @@ class DefaultToolTransformWidget : public QMenu, Ui::DefaultToolTransformWidget
 {
     Q_OBJECT
 public:
-    explicit DefaultToolTransformWidget(KoInteractionTool *tool, QWidget *parent = 0);
+    explicit DefaultToolTransformWidget(KoInteractionTool *tool, QWidget *parent = nullptr);
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);

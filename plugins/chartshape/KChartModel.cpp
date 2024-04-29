@@ -283,7 +283,7 @@ void KChartModel::dataSetChanged(DataSet *dataSet)
     // Header data that belongs to this data set (e.g. label)
     int first = dataSetNumber * dataDimensions();
     int last = first + dataDimensions() - 1;
-    emit headerDataChanged(dataDirection(), first, last);
+    Q_EMIT headerDataChanged(dataDirection(), first, last);
 }
 
 void KChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/, int first /* = -1 */, int last /* = -1 */)
@@ -315,7 +315,7 @@ void KChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/, int first 
         qSwap(first, last);
 
     int dataSetNumber = d->dataSetIndex(dataSet);
-    emit dataChanged(d->dataPointFirstModelIndex(dataSetNumber, first), d->dataPointLastModelIndex(dataSetNumber, last));
+    Q_EMIT dataChanged(d->dataPointFirstModelIndex(dataSetNumber, first), d->dataPointLastModelIndex(dataSetNumber, last));
 }
 
 void KChartModel::dataSetSizeChanged(DataSet *dataSet, int newSize)

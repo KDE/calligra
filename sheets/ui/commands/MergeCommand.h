@@ -24,7 +24,7 @@ class Selection;
 class MergeCommand : public AbstractRegionCommand
 {
 public:
-    explicit MergeCommand(KUndo2Command *parent = 0);
+    explicit MergeCommand(KUndo2Command *parent = nullptr);
     ~MergeCommand() override;
 
     void setMerge(bool merge)

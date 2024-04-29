@@ -17,7 +17,7 @@ class ListsSpinBox : public QSpinBox
 {
     Q_OBJECT
 public:
-    explicit ListsSpinBox(QWidget *parent = 0);
+    explicit ListsSpinBox(QWidget *parent = nullptr);
 
     void setNumberFormat(const KoOdfNumberDefinition &format);
     QString textFromValue(int value) const override;

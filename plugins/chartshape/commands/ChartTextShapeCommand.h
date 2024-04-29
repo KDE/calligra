@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape *textShape, ChartShape *chart, bool isVisible, KUndo2Command *parent = 0);
+    ChartTextShapeCommand(KoShape *textShape, ChartShape *chart, bool isVisible, KUndo2Command *parent = nullptr);
 
     /**
      * Destructor.

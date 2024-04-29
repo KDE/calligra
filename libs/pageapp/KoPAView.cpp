@@ -591,7 +591,7 @@ void KoPAView::editSelectAll()
     if (!selection)
         return;
     if (!this->isVisible()) {
-        emit selectAllRequested();
+        Q_EMIT selectAllRequested();
         return;
     }
 
@@ -615,7 +615,7 @@ void KoPAView::editSelectAll()
 void KoPAView::editDeselectAll()
 {
     if (!this->isVisible()) {
-        emit deselectAllRequested();
+        Q_EMIT deselectAllRequested();
         return;
     }
 

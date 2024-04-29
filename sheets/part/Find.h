@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    explicit Find(QObject *parent = 0);
+    explicit Find(QObject *parent = nullptr);
 
 public Q_SLOTS:
     /**

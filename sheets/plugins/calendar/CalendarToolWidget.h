@@ -47,7 +47,7 @@ public:
      * The dates in the dialog initialize to a complete calendar for the
      * current month.
      */
-    explicit CalendarToolWidget(QWidget *parent = 0);
+    explicit CalendarToolWidget(QWidget *parent = nullptr);
 
     /**
      * Virtual destructor.

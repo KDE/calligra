@@ -25,7 +25,7 @@ class StyleManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StyleManager(QWidget *parent = 0);
+    explicit StyleManager(QWidget *parent = nullptr);
     ~StyleManager() override;
 
     void setStyleManager(KoStyleManager *sm);

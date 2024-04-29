@@ -20,7 +20,7 @@ class KOWIDGETUTILS_EXPORT KoProgressBar : public QProgressBar, public KoProgres
 {
     Q_OBJECT
 public:
-    explicit KoProgressBar(QWidget *parent = 0);
+    explicit KoProgressBar(QWidget *parent = nullptr);
 
     ~KoProgressBar() override;
 

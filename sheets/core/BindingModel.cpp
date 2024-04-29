@@ -82,7 +82,7 @@ bool BindingModel::isCellRegionValid(const QString &regionName) const
 
 void BindingModel::emitChanged(const Region &region)
 {
-    emit changed(region);
+    Q_EMIT changed(region);
 }
 
 void BindingModel::emitDataChanged(const QRect &rect)
@@ -90,7 +90,7 @@ void BindingModel::emitDataChanged(const QRect &rect)
     const QPoint tl = rect.topLeft();
     const QPoint br = rect.bottomRight();
     // debugSheetsUI << "emit QAbstractItemModel::dataChanged" << QString("%1:%2").arg(tl).arg(br);
-    emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
+    Q_EMIT dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
 }
 
 QVariant BindingModel::data(const QModelIndex &index, int role) const

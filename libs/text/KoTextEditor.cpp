@@ -91,7 +91,7 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
 
 void KoTextEditor::Private::emitTextFormatChanged()
 {
-    emit q->textFormatChanged();
+    Q_EMIT q->textFormatChanged();
 }
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
@@ -561,7 +561,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         endEditBlock();
     }
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::updateInlineObjectPosition(int start, int end)
@@ -618,7 +618,7 @@ void KoTextEditor::insertFrameBreak()
         d->caret.setBlockFormat(bf);
     }
     d->updateState(KoTextEditor::Private::NoOp);
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool pasteAsText)
@@ -680,7 +680,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
     }
 
     addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::setListProperties(const KoListLevelProperties &llp, ChangeListFlags flags, KUndo2Command *parent)
@@ -707,7 +707,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp, ChangeLis
     }
 
     addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 int KoTextEditor::anchor() const
@@ -804,7 +804,7 @@ void KoTextEditor::deleteChar()
 
     deleteChar(false);
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::deletePreviousChar()
@@ -846,7 +846,7 @@ void KoTextEditor::deletePreviousChar()
 
     deleteChar(true);
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 QTextDocument *KoTextEditor::document() const
@@ -984,7 +984,7 @@ void KoTextEditor::insertTable(int rows, int columns)
         d->updateState(KoTextEditor::Private::NoOp);
     }
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::insertTableRowAbove()
@@ -1148,7 +1148,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
     InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
     addCommand(cmd);
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
     return cmd->m_inlineNote;
 }
 
@@ -1161,7 +1161,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
     addCommand(cmd);
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
     return cmd->m_inlineNote;
 }
 
@@ -1221,7 +1221,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
         d->updateState(KoTextEditor::Private::NoOp);
     }
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block)
@@ -1241,7 +1241,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
     cursor.setBlockFormat(tocBlockFormat);
 
     d->updateState(KoTextEditor::Private::NoOp);
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
     const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
@@ -1300,7 +1300,7 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
         d->updateState(KoTextEditor::Private::NoOp);
     }
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 KoInlineCite *KoTextEditor::insertCitation()
@@ -1420,14 +1420,14 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
             if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (operation == QTextCursor::End) {
                     d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
-                    emit cursorPositionChanged();
+                    Q_EMIT cursorPositionChanged();
                     return true;
                 }
                 return false;
             }
         }
         d->caret = after;
-        emit cursorPositionChanged();
+        Q_EMIT cursorPositionChanged();
         return b;
     }
     return false;
@@ -1441,7 +1441,7 @@ void KoTextEditor::newSection()
 
     NewSectionCommand *cmd = new NewSectionCommand(d->document);
     addCommand(cmd);
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
@@ -1450,7 +1450,7 @@ void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
         return;
     }
     addCommand(new SplitSectionsCommand(d->document, SplitSectionsCommand::Startings, sectionIdToInsertBefore));
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
@@ -1459,7 +1459,7 @@ void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
         return;
     }
     addCommand(new SplitSectionsCommand(d->document, SplitSectionsCommand::Endings, sectionIdToInsertAfter));
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 void KoTextEditor::renameSection(KoSection *section, const QString &newName)
@@ -1495,7 +1495,7 @@ void KoTextEditor::newLine()
         d->updateState(KoTextEditor::Private::NoOp);
     }
 
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 class WithinSelectionVisitor : public KoTextVisitor
@@ -1576,7 +1576,7 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 
     if (mode == QTextCursor::MoveAnchor) {
         d->caret.setPosition(pos, mode);
-        emit cursorPositionChanged();
+        Q_EMIT cursorPositionChanged();
     }
 
     // We need protection against moving in and out of note areas
@@ -1595,7 +1595,7 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 
     if (beforeFrame == afterFrame) {
         d->caret = after;
-        emit cursorPositionChanged();
+        Q_EMIT cursorPositionChanged();
     }
 }
 

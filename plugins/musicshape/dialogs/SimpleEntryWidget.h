@@ -16,7 +16,7 @@ class SimpleEntryWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = 0);
+    explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = nullptr);
     void setVoiceListEnabled(bool enabled);
 Q_SIGNALS:
     void voiceChanged(int voice);

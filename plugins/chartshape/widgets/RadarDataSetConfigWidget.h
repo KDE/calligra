@@ -28,8 +28,8 @@ class RadarDataSetConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    RadarDataSetConfigWidget(QWidget *parent = 0);
-    RadarDataSetConfigWidget(QList<KoChart::ChartType> types, QWidget *parent = 0);
+    RadarDataSetConfigWidget(QWidget *parent = nullptr);
+    RadarDataSetConfigWidget(QList<KoChart::ChartType> types, QWidget *parent = nullptr);
     ~RadarDataSetConfigWidget();
 
     void open(ChartShape *shape) override;

@@ -89,7 +89,7 @@ void KPrSoundEventActionWidget::soundComboChanged()
         new KoEventActionAddCommand(m_shape, eventAction, cmd);
     }
 
-    emit addCommand(cmd);
+    Q_EMIT addCommand(cmd);
 
     updateCombo(soundData ? soundData->title() : "");
 }

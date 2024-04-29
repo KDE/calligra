@@ -160,7 +160,7 @@ void RingConfigWidget::brushChanged(const QColor &color)
 {
     int section = m_ui.categories->currentIndex();
     if (section >= 0) {
-        emit brushChanged(0, color, section);
+        Q_EMIT brushChanged(0, color, section);
     }
 }
 
@@ -169,7 +169,7 @@ void RingConfigWidget::penChanged(const QColor &color)
     DataSet *ds = m_dataSets.value(0);
     int section = m_ui.categories->currentIndex();
     if (ds && section >= 0) {
-        emit penChanged(ds, color, section);
+        Q_EMIT penChanged(ds, color, section);
     }
 }
 
@@ -178,7 +178,7 @@ void RingConfigWidget::explodeFactorChanged(int percent)
     int index = m_ui.dataSets->currentIndex();
     DataSet *ds = m_dataSets.value(index);
     if (ds) {
-        emit explodeFactorChanged(ds, -1, percent);
+        Q_EMIT explodeFactorChanged(ds, -1, percent);
     }
 }
 
@@ -187,7 +187,7 @@ void RingConfigWidget::showCategoryChanged(bool b)
     DataSet *ds = m_dataSets.value(0);
     int section = m_ui.categories->currentIndex();
     if (ds && section >= 0) {
-        emit showCategoryChanged(ds, b, section);
+        Q_EMIT showCategoryChanged(ds, b, section);
     }
 }
 
@@ -196,7 +196,7 @@ void RingConfigWidget::showNumberChanged(bool b)
     DataSet *ds = m_dataSets.value(0);
     int section = m_ui.categories->currentIndex();
     if (ds && section >= 0) {
-        emit showNumberChanged(ds, b, section);
+        Q_EMIT showNumberChanged(ds, b, section);
     }
 }
 
@@ -205,6 +205,6 @@ void RingConfigWidget::showPercentChanged(bool b)
     DataSet *ds = m_dataSets.value(0);
     int section = m_ui.categories->currentIndex();
     if (ds && section >= 0) {
-        emit showPercentChanged(ds, b, section);
+        Q_EMIT showPercentChanged(ds, b, section);
     }
 }

@@ -19,7 +19,7 @@ class ImageExportOptionsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ImageExportOptionsWidget(KarbonDocument *doc, QWidget *parent = 0);
+    explicit ImageExportOptionsWidget(KarbonDocument *doc, QWidget *parent = nullptr);
 
     /// Sets the initial unit to use
     void setUnit(const KoUnit &unit);

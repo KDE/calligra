@@ -59,7 +59,7 @@ class KUNDO2_EXPORT KUndo2Group : public QObject
     Q_DECLARE_PRIVATE(KUndo2Group)
 
 public:
-    explicit KUndo2Group(QObject *parent = 0);
+    explicit KUndo2Group(QObject *parent = nullptr);
     ~KUndo2Group() override;
 
     void addStack(KUndo2QStack *stack);

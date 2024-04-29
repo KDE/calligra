@@ -23,7 +23,7 @@ class CropWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit CropWidget(QWidget *parent = 0);
+    explicit CropWidget(QWidget *parent = nullptr);
 
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;

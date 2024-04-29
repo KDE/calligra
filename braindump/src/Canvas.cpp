@@ -108,7 +108,7 @@ void Canvas::updateCanvas(const QRectF &rc)
     clipRect.moveTopLeft(clipRect.topLeft() - m_documentOffset);
     update(clipRect);
 
-    emit canvasUpdated();
+    Q_EMIT canvasUpdated();
 }
 
 KoViewConverter *Canvas::viewConverter() const
@@ -255,7 +255,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 
 void Canvas::resizeEvent(QResizeEvent *event)
 {
-    emit sizeChanged(event->size());
+    Q_EMIT sizeChanged(event->size());
     updateOriginAndSize();
 }
 

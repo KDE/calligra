@@ -35,7 +35,7 @@ public:
      * @param commandType the type of the command to redo
      * @param parent the parent command used for stacking
      */
-    KarbonLayerReorderCommand(KarbonDocument *document, KoShapeLayer *layer, ReorderType commandType, KUndo2Command *parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument *document, KoShapeLayer *layer, ReorderType commandType, KUndo2Command *parent = nullptr);
 
     /**
      * Layer command which works on a single layer.
@@ -44,7 +44,7 @@ public:
      * @param commandType the type of the command to redo
      * @param parent the parent command used for stacking
      */
-    KarbonLayerReorderCommand(KarbonDocument *document, QList<KoShapeLayer *> layers, ReorderType commandType, KUndo2Command *parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument *document, QList<KoShapeLayer *> layers, ReorderType commandType, KUndo2Command *parent = nullptr);
 
     virtual ~KarbonLayerReorderCommand();
 

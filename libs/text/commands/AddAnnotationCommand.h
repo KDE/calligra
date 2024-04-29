@@ -13,7 +13,7 @@ class KoShape;
 class AddAnnotationCommand : public AddTextRangeCommand
 {
 public:
-    explicit AddAnnotationCommand(KoAnnotation *range, KUndo2Command *parent = 0);
+    explicit AddAnnotationCommand(KoAnnotation *range, KUndo2Command *parent = nullptr);
     ~AddAnnotationCommand() override;
 
     void undo() override;

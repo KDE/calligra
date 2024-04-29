@@ -34,7 +34,7 @@ class StyleStorageUndoCommand : public KUndo2Command
 public:
     typedef QPair<QRectF, SharedSubStyle> Pair;
 
-    explicit StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent = 0);
+    explicit StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent = nullptr);
 
     void undo() override;
 

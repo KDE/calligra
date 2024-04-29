@@ -125,7 +125,7 @@ void CQSpreadsheetListModel::setCanvas(QObject *canvas)
         d->map = d->canvas->documentMap();
         beginInsertRows(QModelIndex(), 0, d->map->count());
         endInsertRows();
-        emit canvasChanged();
+        Q_EMIT canvasChanged();
     }
 }
 
@@ -134,6 +134,6 @@ void CQSpreadsheetListModel::setThumbnailSize(const QSize &size)
     if (size != d->thumbnailSize) {
         d->thumbnailSize = size;
         d->thumbnails.clear();
-        emit thumbnailSizeChanged();
+        Q_EMIT thumbnailSizeChanged();
     }
 }

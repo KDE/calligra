@@ -207,7 +207,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
-    emit sigProgress(0);
+    Q_EMIT sigProgress(0);
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
@@ -224,8 +224,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         return KoFilter::PasswordProtected;
     }
 
-    emit sigProgress(-1);
-    emit sigProgress(0);
+    Q_EMIT sigProgress(-1);
+    Q_EMIT sigProgress(0);
 
     d->styles = new KoGenStyles();
     d->mainStyles = new KoGenStyles();
@@ -292,7 +292,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->colCellStyles.clear();
     d->sheetStyles.clear();
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     return KoFilter::OK;
 }
 

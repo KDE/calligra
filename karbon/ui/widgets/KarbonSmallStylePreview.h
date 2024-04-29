@@ -19,7 +19,7 @@ class KarbonSmallStylePreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KarbonSmallStylePreview(QWidget *parent = 0L);
+    explicit KarbonSmallStylePreview(QWidget *parent = nullptrL);
     ~KarbonSmallStylePreview() override;
 
 Q_SIGNALS:

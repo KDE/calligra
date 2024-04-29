@@ -33,7 +33,7 @@ class KPrCollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit KPrCollectionItemModel(QObject *parent = 0);
+    explicit KPrCollectionItemModel(QObject *parent = nullptr);
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

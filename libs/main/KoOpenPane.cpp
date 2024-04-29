@@ -84,7 +84,7 @@ private:
 class KoSectionListDelegate : public QStyledItemDelegate
 {
 public:
-    KoSectionListDelegate(QObject *parent = 0)
+    KoSectionListDelegate(QObject *parent = nullptr)
         : QStyledItemDelegate(parent)
     {
     }
@@ -158,7 +158,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const QStringList &mimeFilter, const QSt
     sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
 
     if (!sizes.isEmpty())
-        emit splitterResized(0, sizes);
+        Q_EMIT splitterResized(0, sizes);
 
     connect(this, &KoOpenPane::splitterResized, this, &KoOpenPane::saveSplitterSizes);
 
@@ -190,7 +190,7 @@ void KoOpenPane::openFileDialog()
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
     QUrl url = QUrl::fromUserInput(dialog.filename());
-    emit openExistingFile(url);
+    Q_EMIT openExistingFile(url);
 }
 
 void KoOpenPane::initRecentDocs()
@@ -271,7 +271,7 @@ void KoOpenPane::dropEvent(QDropEvent *event)
         // XXX: when the MVC refactoring is done, this can open a bunch of
         //      urls, but since the part/document combination is still 1:1
         //      that won't work for now.
-        emit openExistingFile(event->mimeData()->urls().first());
+        Q_EMIT openExistingFile(event->mimeData()->urls().first());
     }
 }
 

@@ -25,7 +25,7 @@ class CQPresentationCanvas : public CQCanvasBase
     Q_PROPERTY(QObject *textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
-    explicit CQPresentationCanvas(QDeclarativeItem *parent = 0);
+    explicit CQPresentationCanvas(QDeclarativeItem *parent = nullptr);
     virtual ~CQPresentationCanvas();
 
     int currentSlide() const;

@@ -57,7 +57,7 @@ void KoPACanvas::updateSize()
         size.setHeight(qRound(koPAView()->zoomHandler()->zoomItX(pageLayout.height)));
     }
 
-    emit documentSize(size);
+    Q_EMIT documentSize(size);
 }
 
 void KoPACanvas::updateCanvas(const QRectF &rc)
@@ -67,7 +67,7 @@ void KoPACanvas::updateCanvas(const QRectF &rc)
     clipRect.moveTopLeft(clipRect.topLeft() - documentOffset());
     update(clipRect);
 
-    emit canvasUpdated();
+    Q_EMIT canvasUpdated();
 }
 
 bool KoPACanvas::event(QEvent *e)
@@ -177,7 +177,7 @@ void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KoPACanvas::resizeEvent(QResizeEvent *event)
 {
-    emit sizeChanged(event->size());
+    Q_EMIT sizeChanged(event->size());
 }
 
 void KoPACanvas::showContextMenu(const QPoint &globalPos, const QList<QAction *> &actionList)

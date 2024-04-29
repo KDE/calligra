@@ -27,7 +27,7 @@ public:
      * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = nullptr);
 
     /**
      * Command to set a new shape background.
@@ -35,7 +35,7 @@ public:
      * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(KoShape *shape, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(KoShape *shape, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = nullptr);
 
     /**
      * Command to set new shape backgrounds.
@@ -43,7 +43,7 @@ public:
      * @param fills the new backgrounds, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, const QList<QSharedPointer<KoShapeBackground>> &fills, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, const QList<QSharedPointer<KoShapeBackground>> &fills, KUndo2Command *parent = nullptr);
 
     ~KoShapeBackgroundCommand() override;
     /// redo the command

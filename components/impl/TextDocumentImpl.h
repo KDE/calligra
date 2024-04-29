@@ -21,7 +21,7 @@ class TextDocumentImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    explicit TextDocumentImpl(QObject *parent = 0);
+    explicit TextDocumentImpl(QObject *parent = nullptr);
     ~TextDocumentImpl() override;
 
     bool load(const QUrl &url) override;

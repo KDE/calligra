@@ -535,7 +535,7 @@ void DefaultTool::updateCursor()
     }
     useCursor(cursor);
     if (currentStrategy() == 0)
-        emit statusTextChanged(statusText);
+        Q_EMIT statusTextChanged(statusText);
 }
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -1349,7 +1349,7 @@ void DefaultTool::updateActions()
     }
     action("object_ungroup")->setEnabled(groupShape);
 
-    emit selectionChanged(selection->count());
+    Q_EMIT selectionChanged(selection->count());
 }
 
 KoToolSelection *DefaultTool::selection()

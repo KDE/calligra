@@ -27,7 +27,7 @@ class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget
     Q_OBJECT
 public:
     /// Standard constructor
-    explicit FormulaToolWidget(KoFormulaTool *tool, QWidget *parent = 0);
+    explicit FormulaToolWidget(KoFormulaTool *tool, QWidget *parent = nullptr);
 
     /// Standard destructor
     ~FormulaToolWidget() override;

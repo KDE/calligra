@@ -21,7 +21,7 @@ class BibliographyPreview : public QFrame
 {
     Q_OBJECT
 public:
-    explicit BibliographyPreview(QWidget *parent = 0);
+    explicit BibliographyPreview(QWidget *parent = nullptr);
     ~BibliographyPreview() override;
     void setStyleManager(KoStyleManager *styleManager);
     /// sets the size of the generated preview pixmap if not set then it takes the widget's size

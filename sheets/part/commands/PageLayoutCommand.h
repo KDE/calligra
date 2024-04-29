@@ -25,7 +25,7 @@ class Sheet;
 class PageLayoutCommand : public KUndo2Command
 {
 public:
-    explicit PageLayoutCommand(Sheet *sheet, const PrintSettings &settings, KUndo2Command *parent = 0);
+    explicit PageLayoutCommand(Sheet *sheet, const PrintSettings &settings, KUndo2Command *parent = nullptr);
 
     void redo() override;
     void undo() override;

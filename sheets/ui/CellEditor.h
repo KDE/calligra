@@ -39,7 +39,7 @@ public:
      * \param wordList the word list
      * \param parent the parent widget
      */
-    explicit CellEditor(CellToolBase *cellTool, QMultiHash<int, QString> &wordList, QWidget *parent = 0);
+    explicit CellEditor(CellToolBase *cellTool, QMultiHash<int, QString> &wordList, QWidget *parent = nullptr);
     ~CellEditor() override;
 
     Selection *selection() const;

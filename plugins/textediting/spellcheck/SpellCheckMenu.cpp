@@ -82,7 +82,7 @@ void SpellCheckMenu::ignoreWord()
     // see comment in ctor why this will never work
     m_speller.addToSession(m_currentMisspelled);
 
-    emit clearHighlightingForWord(m_currentMisspelledPosition);
+    Q_EMIT clearHighlightingForWord(m_currentMisspelledPosition);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

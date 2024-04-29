@@ -53,7 +53,7 @@ public:
     /**
      * Constructor.
      */
-    explicit DeleteCommand(KUndo2Command *parent = 0);
+    explicit DeleteCommand(KUndo2Command *parent = nullptr);
 
     /**
      * Destructor.

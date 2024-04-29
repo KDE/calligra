@@ -7,7 +7,7 @@
 #ifndef KO_MIX_COLORS_OP_H
 #define KO_MIX_COLORS_OP_H
 
-#include <limits.h>
+#include <QtTypes>
 
 /**
  * Base class of the mix color operation. It's defined by

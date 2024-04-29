@@ -47,36 +47,36 @@ void ParagraphIndentSpacing::autoTextIndentChanged(int state)
 {
     widget.first->setEnabled(state == Qt::Unchecked);
     m_autoTextIndentInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 void ParagraphIndentSpacing::firstIndentValueChanged()
 {
     m_textIndentInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::rightMarginValueChanged()
 {
     m_rightMarginIngerited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::leftMarginValueChanged()
 {
     m_leftMarginInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::topMarginValueChanged()
 {
     m_topMarginInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::bottomMarginValueChanged()
 {
     m_bottomMarginInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
@@ -175,19 +175,19 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
 
     widget.useFont->setEnabled(row != 5);
     widget.useFont->setChecked(row == 5 ? false : m_fontMetricsChecked);
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::spacingPercentChanged()
 {
     m_spacingInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::spacingValueChanged()
 {
     m_spacingInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)
@@ -262,23 +262,23 @@ void ParagraphIndentSpacing::useFontMetrices(bool on)
 {
     if (widget.lineSpacing->currentIndex() != 5)
         m_fontMetricsChecked = on;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::firstLineMarginChanged(qreal margin)
 {
     Q_UNUSED(margin);
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::leftMarginChanged(qreal margin)
 {
     Q_UNUSED(margin);
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphIndentSpacing::rightMarginChanged(qreal margin)
 {
     Q_UNUSED(margin);
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }

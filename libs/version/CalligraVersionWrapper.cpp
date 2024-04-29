@@ -15,13 +15,13 @@ QString CalligraVersionWrapper::versionYear()
 
 QString CalligraVersionWrapper::versionString(bool checkGit)
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QLatin1StringView calligraVersion(CALLIGRA_VERSION_STRING);
     QString version = calligraVersion;
 
     if (checkGit) {
 #ifdef CALLIGRA_GIT_SHA1_STRING
-        QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-        version = QString("%1 (git %2)").arg(calligraVersion, gitVersion).toLatin1();
+        QLatin1StringView gitVersion(CALLIGRA_GIT_SHA1_STRING);
+        version = QStringLiteral("%1 (git %2)").arg(calligraVersion, gitVersion);
 #endif
     }
     return version;

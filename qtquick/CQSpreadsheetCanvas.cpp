@@ -139,9 +139,9 @@ void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
     if (sheet != d->currentSheet) {
         d->currentSheet = sheet;
         d->canvas->setActiveSheet(d->document->map()->sheet(d->currentSheet));
-        emit currentSheetChanged();
+        Q_EMIT currentSheetChanged();
         d->updateLinkTargets();
-        emit linkTargetsChanged();
+        Q_EMIT linkTargetsChanged();
     }
 }
 
@@ -177,7 +177,7 @@ void CQSpreadsheetCanvas::openFile(const QString &uri)
     d->canvas->setGeometry(x(), y(), width(), height());
 
     d->updateLinkTargets();
-    emit linkTargetsChanged();
+    Q_EMIT linkTargetsChanged();
 
     Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
     if (sheet) {

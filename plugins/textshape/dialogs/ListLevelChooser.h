@@ -14,7 +14,7 @@ class ListLevelChooser : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit ListLevelChooser(const int offset, QWidget *parent = 0);
+    explicit ListLevelChooser(const int offset, QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

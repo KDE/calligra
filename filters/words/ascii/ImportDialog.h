@@ -23,7 +23,7 @@ public:
         EndOfSentence,
         EmptyLine,
     };
-    explicit AsciiImportDialog(QWidget *parent = 0);
+    explicit AsciiImportDialog(QWidget *parent = nullptr);
     ~AsciiImportDialog() override;
     ParagraphStrategy getParagraphStrategy() const;
 

@@ -63,7 +63,7 @@ void KoPAConfigureDialog::slotApply()
     m_miscPage->apply();
     m_authorPage->apply();
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KoPAConfigureDialog::slotDefault()

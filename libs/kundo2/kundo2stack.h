@@ -73,8 +73,8 @@ class KUNDO2_EXPORT KUndo2Command
     int timedID;
 
 public:
-    explicit KUndo2Command(KUndo2Command *parent = 0);
-    explicit KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent = 0);
+    explicit KUndo2Command(KUndo2Command *parent = nullptr);
+    explicit KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent = nullptr);
     virtual ~KUndo2Command();
 
     virtual void undo();
@@ -147,7 +147,7 @@ class KUNDO2_EXPORT KUndo2QStack : public QObject
     Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit)
 
 public:
-    explicit KUndo2QStack(QObject *parent = 0);
+    explicit KUndo2QStack(QObject *parent = nullptr);
     ~KUndo2QStack() override;
     void clear();
 
@@ -236,7 +236,7 @@ class KUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
 {
     Q_OBJECT
 public:
-    explicit KUndo2Stack(QObject *parent = 0);
+    explicit KUndo2Stack(QObject *parent = nullptr);
 
     // functions from KUndoStack
     QAction *createRedoAction(KActionCollection *actionCollection, const QString &actionName = QString());

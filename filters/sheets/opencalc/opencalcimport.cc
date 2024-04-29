@@ -1284,7 +1284,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         }
 
         progress += step;
-        emit sigProgress(progress);
+        Q_EMIT sigProgress(progress);
         sheet = sheet.nextSibling();
     }
 
@@ -1302,7 +1302,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         m_doc->map()->setProtected(passwd);
     }
 
-    emit sigProgress(98);
+    Q_EMIT sigProgress(98);
 
     return true;
 }
@@ -2277,15 +2277,15 @@ KoFilter::ConversionStatus OpenCalcImport::convert(QByteArray const & from, QByt
     if (preStatus != KoFilter::OK)
         return preStatus;
 
-    emit sigProgress(13);
+    Q_EMIT sigProgress(13);
     int tables = readMetaData();
 
-    emit sigProgress(15);
+    Q_EMIT sigProgress(15);
 
     if (!parseBody(tables))
         return KoFilter::StupidError;
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
     return KoFilter::OK;
 }
 
@@ -2314,7 +2314,7 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
 
     delete store;
 
-    emit sigProgress(10);
+    Q_EMIT sigProgress(10);
 
     if (!createStyleMap(styles))
         return KoFilter::UserCancelled;

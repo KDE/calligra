@@ -59,7 +59,7 @@
 class KoDocumentSectionModel : public QAbstractItemModel
 {
 public:
-    explicit KoDocumentSectionModel(QObject *parent = 0)
+    explicit KoDocumentSectionModel(QObject *parent = nullptr)
         : QAbstractItemModel(parent)
     {
     }

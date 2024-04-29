@@ -53,7 +53,7 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT CommentCommand : public AbstractRegionCommand
 {
 public:
-    explicit CommentCommand(KUndo2Command *parent = 0);
+    explicit CommentCommand(KUndo2Command *parent = nullptr);
     void setComment(const QString &comment);
 
 protected:

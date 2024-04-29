@@ -21,7 +21,7 @@ class TextDocumentInspectionDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    explicit TextDocumentInspectionDocker(QWidget *parent = 0);
+    explicit TextDocumentInspectionDocker(QWidget *parent = nullptr);
     ~TextDocumentInspectionDocker() override;
     /// reimplemented from KoCanvasObserverBase
     QString observerName() const override

@@ -157,5 +157,5 @@ void SeriesDialog::onApply()
         }
     }
 
-    emit insertSeries(m_dstart, m_dend, m_dstep, column->isChecked(), isLinear);
+    Q_EMIT insertSeries(m_dstart, m_dend, m_dstep, column->isChecked(), isLinear);
 }

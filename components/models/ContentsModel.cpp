@@ -84,7 +84,7 @@ void ContentsModel::setDocument(Document *newDocument)
 
         updateImpl();
 
-        emit documentChanged();
+        Q_EMIT documentChanged();
     }
 }
 
@@ -100,10 +100,10 @@ void ContentsModel::setThumbnailSize(const QSize &newValue)
 
         if (d->impl) {
             d->impl->setThumbnailSize(newValue);
-            emit dataChanged(index(0), index(d->impl->rowCount() - 1), QVector<int>{} << ThumbnailRole);
+            Q_EMIT dataChanged(index(0), index(d->impl->rowCount() - 1), QVector<int>{} << ThumbnailRole);
         }
 
-        emit thumbnailSizeChanged();
+        Q_EMIT thumbnailSizeChanged();
     }
 }
 
@@ -112,7 +112,7 @@ void ContentsModel::setUseToC(bool newValue)
     beginResetModel();
     if (d->impl)
         d->impl->setUseToC(newValue);
-    emit useToCChanged();
+    Q_EMIT useToCChanged();
     endResetModel();
 }
 

@@ -260,7 +260,7 @@ void CellStorage::setLink(int column, int row, const QString &link)
 
 void CellStorage::emitInsertNamedArea(const Region &region, const QString &namedArea)
 {
-    emit insertNamedArea(region, namedArea);
+    Q_EMIT insertNamedArea(region, namedArea);
 }
 
 Style CellStorage::style(int column, int row) const

@@ -24,7 +24,7 @@ public:
      * @param shapes a set of all the shapes to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes, KUndo2Command *parent = nullptr);
 
     /**
      * Command to remove clip path from a single shape.
@@ -32,7 +32,7 @@ public:
      * @param shape a single shape to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent = 0);
+    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent = nullptr);
 
     /// Destroys the command
     ~KoShapeUnclipCommand() override;

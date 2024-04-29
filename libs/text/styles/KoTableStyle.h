@@ -65,17 +65,17 @@ public:
     };
 
     /// Constructor
-    explicit KoTableStyle(QObject *parent = 0);
+    explicit KoTableStyle(QObject *parent = nullptr);
     /// Creates a KoTableStyle with the given table format, and \a parent
-    explicit KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
+    explicit KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = nullptr);
     /// Destructor
     ~KoTableStyle() override;
 
     /// Creates a KoTableStyle that represents the formatting of \a table.
-    static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);
+    static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = nullptr);
 
     /// creates a clone of this style with the specified parent
-    KoTableStyle *clone(QObject *parent = 0);
+    KoTableStyle *clone(QObject *parent = nullptr);
 
     /// See similar named method on QTextFrameFormat
     void setWidth(const QTextLength &width);

@@ -33,7 +33,7 @@ class KWStatisticsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KWStatisticsWidget(QWidget *parent = 0, bool shortVersion = false);
+    explicit KWStatisticsWidget(QWidget *parent = nullptr, bool shortVersion = false);
     ~KWStatisticsWidget() override;
 
     enum LayoutDirection { LayoutVertical, LayoutHorizontal };

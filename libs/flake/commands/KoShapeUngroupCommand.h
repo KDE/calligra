@@ -28,7 +28,7 @@ public:
     KoShapeUngroupCommand(KoShapeContainer *container,
                           const QList<KoShape *> &shapes,
                           const QList<KoShape *> &topLevelShapes = QList<KoShape *>(),
-                          KUndo2Command *parent = 0);
+                          KUndo2Command *parent = nullptr);
     /// redo the command
     void redo() override;
     /// revert the actions done in redo

@@ -52,7 +52,7 @@ void CQCanvasBase::setSource(const QString &source)
     if (source != d->source) {
         d->source = source;
         openFile(d->source);
-        emit sourceChanged();
+        Q_EMIT sourceChanged();
     }
 }
 
@@ -64,14 +64,14 @@ qreal CQCanvasBase::shapeTransparency() const
 void CQCanvasBase::setShapeTransparency(qreal newTransparency)
 {
     Q_UNUSED(newTransparency);
-    emit shapeTransparencyChanged();
+    Q_EMIT shapeTransparencyChanged();
 }
 
 void CQCanvasBase::setCanvasController(CQCanvasController *controller)
 {
     if (d->canvasController != controller) {
         d->canvasController = controller;
-        emit canvasControllerChanged();
+        Q_EMIT canvasControllerChanged();
     }
 }
 

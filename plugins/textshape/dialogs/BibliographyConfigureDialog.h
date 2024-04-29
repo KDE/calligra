@@ -21,7 +21,7 @@ class BibliographyConfigureDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
+    explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = nullptr);
 
 public Q_SLOTS:
     void addSortKey();

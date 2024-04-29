@@ -45,7 +45,7 @@ public:
     virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
     virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
-    virtual KoRdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
+    virtual KoRdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = nullptr);
     virtual Soprano::Node linkingSubject() const;
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
     virtual void exportToMime(QMimeData *md) const;

@@ -21,8 +21,8 @@ class CompareView : public QWidget
     Q_OBJECT
 
 public:
-    explicit CompareView(QWidget *parent = 0);
-    CompareView(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, QWidget *parent = 0);
+    explicit CompareView(QWidget *parent = nullptr);
+    CompareView(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, QWidget *parent = nullptr);
     ~CompareView() override;
 
     void update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, const QImage &forcedDeltaView);

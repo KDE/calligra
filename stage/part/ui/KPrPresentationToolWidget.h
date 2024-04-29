@@ -14,7 +14,7 @@ class KPrPresentationToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPresentationToolWidget(QWidget *parent = 0);
+    explicit KPrPresentationToolWidget(QWidget *parent = nullptr);
     Ui::KPrPresentationTool presentationToolUi();
 
 protected:

@@ -21,7 +21,7 @@ class MusicWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MusicWidget(QWidget *parent = 0);
+    explicit MusicWidget(QWidget *parent = nullptr);
 
     /**
      * Set the sheet that is displayed in this MusicWidget. The widget doesn't take ownership of the sheet,

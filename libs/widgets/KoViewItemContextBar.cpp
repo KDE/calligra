@@ -143,7 +143,7 @@ void KoViewItemContextBar::slotViewportEntered()
 
 void KoViewItemContextBar::setItemSelected()
 {
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 
     if (m_IndexUnderCursor.isValid()) {
         QItemSelectionModel *selModel = m_view->selectionModel();

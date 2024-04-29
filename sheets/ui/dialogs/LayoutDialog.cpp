@@ -108,7 +108,7 @@ void LayoutDialog::setOkButtonEnabled(bool enabled)
 
 void LayoutDialog::onApply()
 {
-    emit applyStyle();
+    Q_EMIT applyStyle();
     accept();
 }
 

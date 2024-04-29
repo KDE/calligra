@@ -22,7 +22,7 @@ class KoDocumentSectionDelegate : public QAbstractItemDelegate
     Q_OBJECT
 
 public:
-    explicit KoDocumentSectionDelegate(KoDocumentSectionView *view, QObject *parent = 0);
+    explicit KoDocumentSectionDelegate(KoDocumentSectionView *view, QObject *parent = nullptr);
     ~KoDocumentSectionDelegate() override;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;

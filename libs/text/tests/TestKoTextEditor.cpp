@@ -361,7 +361,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
             SectionHandle *handle = new SectionHandle(sec);
             if (sectionStack.empty()) {
                 rootSections.push_back(handle);
-                handle->parent = 0;
+                handle->parent = nullptr;
             } else {
                 sectionStack.top()->children.push_back(handle);
                 handle->parent = sectionStack.top()->sec;

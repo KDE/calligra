@@ -187,5 +187,5 @@ void TextContentsModelImpl::documentLayoutFinished()
         block = block.next();
     }
 
-    emit listContentsCompleted();
+    Q_EMIT listContentsCompleted();
 }

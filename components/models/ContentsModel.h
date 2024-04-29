@@ -43,7 +43,7 @@ public:
         ContentIndexRole,
     };
 
-    explicit ContentsModel(QObject *parent = 0);
+    explicit ContentsModel(QObject *parent = nullptr);
     ~ContentsModel() override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

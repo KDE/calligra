@@ -75,7 +75,7 @@ public:
      * SemanticItems because the returned widgetItem can also create a
      * menu and perform other actions for the SemanticItem.
      */
-    virtual KoRdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
+    virtual KoRdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = nullptr);
 
     /**
      * Insert the SemanticItem into the document at the current cursor

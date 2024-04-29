@@ -32,7 +32,7 @@ public:
      * @param actionCollection the action collection for this widget
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(KActionCollection *actionCollection, QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection *actionCollection, QWidget *parent = nullptr);
     ~KoCanvasControllerWidget() override;
 
     /// Reimplemented from QObject

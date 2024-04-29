@@ -15,7 +15,7 @@ class StyleManagerWelcome : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StyleManagerWelcome(QWidget *parent = 0);
+    explicit StyleManagerWelcome(QWidget *parent = nullptr);
 
 private:
     Ui::StyleManagerWelcome widget;

@@ -17,9 +17,9 @@ class KOWIDGETS_EXPORT KoColorSlider : public KSelector
 {
     Q_OBJECT
 public:
-    explicit KoColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    explicit KoColorSlider(QWidget *parent = nullptr, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KoColorSlider(Qt::Orientation orientation,
-                           QWidget *parent = 0,
+                           QWidget *parent = nullptr,
                            KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KoColorSlider() override;
 

@@ -190,7 +190,7 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 
     // page layout could change
     if (sep->bkc != bkcNewColumn) {
-        emit sectionFound(sep);
+        Q_EMIT sectionFound(sep);
     }
     // check for a column break
     //     if (sep->bkc == bkcNewColumn) {
@@ -301,7 +301,7 @@ void WordsTextHandler::sectionEnd()
     }
 
     if (m_sep->bkc != bkcNewColumn) {
-        emit sectionEnd(m_sep);
+        Q_EMIT sectionEnd(m_sep);
     }
     if (m_sep->ccolM1 > 0) {
         m_bodyWriter->endElement(); // text:section
@@ -326,7 +326,7 @@ void WordsTextHandler::headersFound(const wvWare::HeaderFunctor &parseHeaders)
     // ie. new sections for columns trigger this function again, but we've
     // already parsed the headers
     if (m_sep->bkc != bkcNewColumn) {
-        emit headersFound(new wvWare::HeaderFunctor(parseHeaders), 0);
+        Q_EMIT headersFound(new wvWare::HeaderFunctor(parseHeaders), 0);
     }
 }
 
@@ -445,7 +445,7 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
     // save the state of tables/paragraphs/lists
     saveState();
     // signal Document to parse the footnote
-    emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), data.type);
+    Q_EMIT footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), data.type);
 
     //     if (listIsOpen()) {
     //         closeList();
@@ -586,7 +586,7 @@ void WordsTextHandler::annotationFound(wvWare::UString characters,
     // save the state of tables/paragraphs/lists
     saveState();
     // signal Document to parse the annotation
-    emit annotationFound(new wvWare::AnnotationFunctor(parseAnnotation), 0);
+    Q_EMIT annotationFound(new wvWare::AnnotationFunctor(parseAnnotation), 0);
 
     //     if (listIsOpen()) {
     //         closeList();
@@ -680,7 +680,7 @@ void WordsTextHandler::tableEndFound()
     }
 
     // must delete table in Document!
-    emit tableFound(m_currentTable);
+    Q_EMIT tableFound(m_currentTable);
     m_currentTable = 0L;
 
     if (floating) {
@@ -724,9 +724,9 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
     }
 
     if (data) {
-        emit inlineObjectFound(*data, writer);
+        Q_EMIT inlineObjectFound(*data, writer);
     } else {
-        emit floatingObjectFound(globalCP, writer);
+        Q_EMIT floatingObjectFound(globalCP, writer);
     }
 
     //     if (listIsOpen()) {

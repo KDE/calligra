@@ -37,7 +37,7 @@ public:
                         const QList<qreal> &previousShearYs,
                         const QList<qreal> &newShearXs,
                         const QList<qreal> &newShearYs,
-                        KUndo2Command *parent = 0);
+                        KUndo2Command *parent = nullptr);
 
     ~KoShapeShearCommand() override;
     /// redo the command

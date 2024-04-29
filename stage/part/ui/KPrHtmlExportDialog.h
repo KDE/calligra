@@ -21,7 +21,7 @@ class KPrHtmlExportDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    KPrHtmlExportDialog(const QList<KoPAPageBase *> &slides, const QString &title, const QString &author, QWidget *parent = 0);
+    KPrHtmlExportDialog(const QList<KoPAPageBase *> &slides, const QString &title, const QString &author, QWidget *parent = nullptr);
 
     QList<KoPAPageBase *> checkedSlides();
     QStringList slidesNames();

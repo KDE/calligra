@@ -34,7 +34,7 @@ class KWRdfDockerTree : public QTreeWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit KWRdfDockerTree(QWidget *parent = 0);
+    explicit KWRdfDockerTree(QWidget *parent = nullptr);
 
     void setDocumentRdf(KoDocumentRdf *rdf);
     /// reimplemented from KoCanvasObserver

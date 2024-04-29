@@ -18,7 +18,7 @@ public:
     /**
      * The @p _fallback delegate is used to take care of drawing/editing of the items.
      */
-    explicit CategorizedItemDelegate(QAbstractItemDelegate *_fallback, QObject *parent = 0);
+    explicit CategorizedItemDelegate(QAbstractItemDelegate *_fallback, QObject *parent = nullptr);
     ~CategorizedItemDelegate();
     virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);

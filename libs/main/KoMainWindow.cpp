@@ -511,7 +511,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     updateCaption();
 
     setActivePart(d->rootPart, d->rootView);
-    emit restoringDone();
+    Q_EMIT restoringDone();
 
     delete oldRootView;
 
@@ -746,7 +746,7 @@ void KoMainWindow::slotLoadCompleted()
     if (d->rootDocument && d->rootDocument->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
-        emit loadCompleted(this);
+        Q_EMIT loadCompleted(this);
     } else if (d->rootDocument && !d->rootDocument->isEmpty()) {
         // Open in a new main window
         // (Note : could create the main window first and the doc next for this
@@ -755,11 +755,11 @@ void KoMainWindow::slotLoadCompleted()
         s->show();
         newpart->removeMainWindow(this);
         s->setRootDocument(newdoc, newpart);
-        emit loadCompleted(s);
+        Q_EMIT loadCompleted(s);
     } else {
         // We had no document, set the new one
         setRootDocument(newdoc);
-        emit loadCompleted(this);
+        Q_EMIT loadCompleted(this);
     }
 
     slotProgress(-1);
@@ -782,7 +782,7 @@ void KoMainWindow::slotLoadCanceled(const QString &errMsg)
     disconnect(doc, &KoDocument::completed, this, &KoMainWindow::slotLoadCompleted);
     disconnect(doc, &KoDocument::canceled, this, &KoMainWindow::slotLoadCanceled);
     d->openingDocument = false;
-    emit loadCanceled();
+    Q_EMIT loadCanceled();
 }
 
 void KoMainWindow::slotSaveCanceled(const QString &errMsg)
@@ -852,7 +852,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     bool reset_url;
 
     if (d->rootDocument->isEmpty() || d->rootDocument->url().isEmpty()) {
-        emit saveDialogShown();
+        Q_EMIT saveDialogShown();
         reset_url = true;
         saveas = true;
     } else {
@@ -1229,26 +1229,26 @@ void KoMainWindow::slotFileOpenRecent(const QUrl &url)
 void KoMainWindow::slotFileSave()
 {
     if (saveDocument())
-        emit documentSaved();
+        Q_EMIT documentSaved();
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
     // Need the specialOutputFlag here to avoid encrypted docs silently beeing saved unencrypted.
     if (saveDocument(true, false, d->rootDocument->specialOutputFlag()))
-        emit documentSaved();
+        Q_EMIT documentSaved();
 }
 
 void KoMainWindow::slotEncryptDocument()
 {
     if (saveDocument(false, false, KoDocument::SaveEncrypted))
-        emit documentSaved();
+        Q_EMIT documentSaved();
 }
 
 void KoMainWindow::slotUncompressToDir()
 {
     if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore))
-        emit documentSaved();
+        Q_EMIT documentSaved();
 }
 
 void KoMainWindow::slotDocumentInfo()
@@ -1443,7 +1443,7 @@ void KoMainWindow::slotConfigureKeys()
         redoAction->setText(oldRedoText);
     }
 
-    emit keyBindingsChanged();
+    Q_EMIT keyBindingsChanged();
 }
 
 void KoMainWindow::slotConfigureToolbars()

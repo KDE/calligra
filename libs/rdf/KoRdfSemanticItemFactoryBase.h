@@ -83,7 +83,7 @@ public: // API to be implemented
      * Create a new instance of a semantic item from the passed mimeData. Returns 0 if that fails.
      */
     virtual hKoRdfBasicSemanticItem
-    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
+    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent = nullptr) const = 0;
 
     virtual bool isBasic() const = 0;
 

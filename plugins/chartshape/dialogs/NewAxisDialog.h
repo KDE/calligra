@@ -16,7 +16,7 @@ namespace KoChart
 class NewAxisDialog : public QDialog, public Ui::NewAxisDialog
 {
 public:
-    explicit NewAxisDialog(QWidget *parent = 0);
+    explicit NewAxisDialog(QWidget *parent = nullptr);
     ~NewAxisDialog();
 };
 

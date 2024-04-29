@@ -1036,7 +1036,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
     if (minPageNum != m_minPageNum || maxPageNum != m_maxPageNum) {
         m_minPageNum = minPageNum;
         m_maxPageNum = maxPageNum;
-        emit shownPagesChanged();
+        Q_EMIT shownPagesChanged();
     }
 }
 

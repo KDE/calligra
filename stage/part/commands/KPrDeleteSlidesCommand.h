@@ -29,7 +29,7 @@ public:
      * @param page the page to delete
      * @param parent the parent command used for macro commands
      */
-    KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent = 0);
+    KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent = nullptr);
 
     /**
      * Command to delete multiple pages.
@@ -37,7 +37,7 @@ public:
      * @param pages a list of pages to delete
      * @param parent the parent command used for macro commands
      */
-    KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent = 0);
+    KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent = nullptr);
 
     ~KPrDeleteSlidesCommand() override;
 

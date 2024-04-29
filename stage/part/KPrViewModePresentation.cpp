@@ -204,14 +204,14 @@ void KPrViewModePresentation::activate(KoPAViewMode *previousViewMode)
 
     m_tool->activate(KoToolBase::DefaultActivation, QSet<KoShape *>());
 
-    emit activated();
-    emit pageChanged(m_animationDirector->currentPage(), m_animationDirector->numStepsInPage());
-    emit stepChanged(m_animationDirector->currentStep());
+    Q_EMIT activated();
+    Q_EMIT pageChanged(m_animationDirector->currentPage(), m_animationDirector->numStepsInPage());
+    Q_EMIT stepChanged(m_animationDirector->currentStep());
 }
 
 void KPrViewModePresentation::deactivate()
 {
-    emit deactivated();
+    Q_EMIT deactivated();
 
     m_animationDirector->deactivate();
     KoPAPageBase *page = m_view->activePage();
@@ -324,9 +324,9 @@ void KPrViewModePresentation::navigate(KPrAnimationDirector::Navigation navigati
 
     int newPage = m_animationDirector->currentPage();
     if (previousPage != newPage) {
-        emit pageChanged(newPage, m_animationDirector->numStepsInPage());
+        Q_EMIT pageChanged(newPage, m_animationDirector->numStepsInPage());
     }
-    emit stepChanged(m_animationDirector->currentStep());
+    Q_EMIT stepChanged(m_animationDirector->currentStep());
 
     if (finished) {
         activateSavedViewMode();
@@ -344,8 +344,8 @@ void KPrViewModePresentation::navigateToPage(int index)
         m_pvAnimationDirector->navigateToPage(index);
     }
 
-    emit pageChanged(m_animationDirector->currentPage(), m_animationDirector->numStepsInPage());
-    emit stepChanged(m_animationDirector->currentStep());
+    Q_EMIT pageChanged(m_animationDirector->currentPage(), m_animationDirector->numStepsInPage());
+    Q_EMIT stepChanged(m_animationDirector->currentStep());
 }
 
 bool KPrViewModePresentation::isActivated()

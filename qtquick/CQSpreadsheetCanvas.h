@@ -30,7 +30,7 @@ class CQSpreadsheetCanvas : public CQCanvasBase
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
-    explicit CQSpreadsheetCanvas(QDeclarativeItem *parent = 0);
+    explicit CQSpreadsheetCanvas(QDeclarativeItem *parent = nullptr);
     virtual ~CQSpreadsheetCanvas();
 
     int currentSheet() const;

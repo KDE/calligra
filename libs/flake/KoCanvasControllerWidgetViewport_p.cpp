@@ -366,7 +366,7 @@ void Viewport::resetLayout()
         update();
     }
 
-    emit sizeChanged();
+    Q_EMIT sizeChanged();
 #if 0
      debugFlake <<"View port geom:" << geometry();
      if (m_canvas)

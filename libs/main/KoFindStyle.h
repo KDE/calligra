@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    explicit KoFindStyle(QObject *parent = 0);
+    explicit KoFindStyle(QObject *parent = nullptr);
     /**
      * Destructor.
      */

@@ -23,8 +23,8 @@ class StockConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    StockConfigWidget(QWidget *parent = 0);
-    StockConfigWidget(QList<ChartType> types, QWidget *parent = 0);
+    StockConfigWidget(QWidget *parent = nullptr);
+    StockConfigWidget(QList<ChartType> types, QWidget *parent = nullptr);
     ~StockConfigWidget();
 
     void open(ChartShape *shape) override;

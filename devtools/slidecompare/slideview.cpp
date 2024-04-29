@@ -268,7 +268,7 @@ void SlideView::slotViewChanged()
     sendingChange = true;
     int h = view.horizontalScrollBar()->value();
     int v = view.verticalScrollBar()->value();
-    emit viewChanged(zoomfactor, h, v);
+    Q_EMIT viewChanged(zoomfactor, h, v);
     sendingChange = false;
 }
 void SlideView::toggleSlideZoom(const GraphicsSlideItem *item)

@@ -17,7 +17,7 @@ class ParagraphDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit ParagraphDecorations(QWidget *parent = 0);
+    explicit ParagraphDecorations(QWidget *parent = nullptr);
     ~ParagraphDecorations() override
     {
     }

@@ -27,7 +27,7 @@ class KPrAnimationSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData, QWidget *parent = 0);
+    explicit KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData, QWidget *parent = nullptr);
     ~KPrAnimationSelectorWidget() override;
 
     /**

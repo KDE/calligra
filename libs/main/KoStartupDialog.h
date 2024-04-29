@@ -17,7 +17,7 @@ class KoStartupDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit KoStartupDialog(QWidget *parent = 0);
+    explicit KoStartupDialog(QWidget *parent = nullptr);
 
 Q_SIGNALS:
 

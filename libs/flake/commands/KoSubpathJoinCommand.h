@@ -26,7 +26,7 @@ public:
      * @param pointData2 the data of the second point to join
      * @param parent the parent command used for macro commands
      */
-    KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent = 0);
+    KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent = nullptr);
     ~KoSubpathJoinCommand() override;
 
     /// redo the command

@@ -28,11 +28,11 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KoDialog
     Q_OBJECT
 
 private:
-    KoTemplateCreateDia(const QString &templatesResourcePath, const QString &filePath, const QPixmap &thumbnail, QWidget *parent = 0);
+    KoTemplateCreateDia(const QString &templatesResourcePath, const QString &filePath, const QPixmap &thumbnail, QWidget *parent = nullptr);
     ~KoTemplateCreateDia() override;
 
 public:
-    static void createTemplate(const QString &templatesResourcePath, const char *suffix, KoDocument *document, QWidget *parent = 0);
+    static void createTemplate(const QString &templatesResourcePath, const char *suffix, KoDocument *document, QWidget *parent = nullptr);
 
 private Q_SLOTS:
     void slotOk();

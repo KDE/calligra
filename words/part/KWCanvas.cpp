@@ -60,7 +60,7 @@ void KWCanvas::updateSize()
     if (showAnnotations()) {
         canvasSize += QSize(AnnotationAreaWidth, 0.0);
     }
-    emit documentSize(canvasSize);
+    Q_EMIT documentSize(canvasSize);
 }
 
 void KWCanvas::setDocumentOffset(const QPoint &offset)

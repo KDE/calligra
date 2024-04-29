@@ -25,7 +25,7 @@ class KOFORMULA_EXPORT FractionElement : public FixedElement
 {
 public:
     /// The standard constructor
-    explicit FractionElement(BasicElement *parent = 0);
+    explicit FractionElement(BasicElement *parent = nullptr);
 
     /// The standard destructor
     ~FractionElement() override;

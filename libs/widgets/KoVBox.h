@@ -32,7 +32,7 @@ public:
     /**
      * Creates a new hbox.
      */
-    explicit KoVBox(QWidget *parent = 0);
+    explicit KoVBox(QWidget *parent = nullptr);
 
     /**
      * Destructor.

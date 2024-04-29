@@ -26,5 +26,5 @@ void ChartTableView::currentChanged(const QModelIndex &current, const QModelInde
 {
     Q_UNUSED(previous);
 
-    emit currentIndexChanged(current);
+    Q_EMIT currentIndexChanged(current);
 }

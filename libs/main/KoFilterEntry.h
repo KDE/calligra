@@ -32,7 +32,7 @@ public:
     explicit KoFilterEntry(const KPluginMetaData &metaData);
     ~KoFilterEntry();
 
-    KoFilter *createFilter(KoFilterChain *chain, QObject *parent = 0);
+    KoFilter *createFilter(KoFilterChain *chain, QObject *parent = nullptr);
 
     /**
      *  The imported mimetype(s).

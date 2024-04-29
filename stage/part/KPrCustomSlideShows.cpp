@@ -47,7 +47,7 @@ void KPrCustomSlideShows::update(const QString &name, const QList<KoPAPageBase *
     Q_ASSERT(it != m_customSlideShows.constEnd());
     Q_UNUSED(it); // only used in the above Q_ASSERT.
     m_customSlideShows.insert(name, slideShow);
-    emit updated();
+    Q_EMIT updated();
 }
 void KPrCustomSlideShows::rename(const QString &oldName, const QString &newName)
 {
@@ -95,7 +95,7 @@ void KPrCustomSlideShows::addSlideToAll(KoPAPageBase *page, unsigned int positio
         it.value().insert((position <= size) ? position : size, page);
         ++it;
     }
-    emit updated();
+    Q_EMIT updated();
 }
 
 void KPrCustomSlideShows::addSlidesToAll(const QList<KoPAPageBase *> &slideShow, unsigned int position)
@@ -114,7 +114,7 @@ void KPrCustomSlideShows::removeSlideFromAll(KoPAPageBase *page)
         it.value().removeAll(page);
         ++it;
     }
-    emit updated();
+    Q_EMIT updated();
 }
 
 void KPrCustomSlideShows::removeSlidesFromAll(const QList<KoPAPageBase *> &slideShow)

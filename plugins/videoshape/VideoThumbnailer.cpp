@@ -32,7 +32,7 @@ VideoThumbnailer::~VideoThumbnailer()
 
 void VideoThumbnailer::createThumbnail(VideoData *videoData, const QSize &size)
 {
-    emit signalCreateThumbnail(videoData, size);
+    Q_EMIT signalCreateThumbnail(videoData, size);
 }
 
 void VideoThumbnailer::slotCreateThumbnail(VideoData *videoData, const QSize &size)
@@ -58,7 +58,7 @@ void VideoThumbnailer::slotCreateThumbnail(VideoData *videoData, const QSize &si
     }
     m_media.stop();
 
-    emit thumbnailReady();
+    Q_EMIT thumbnailReady();
 }
 
 void VideoThumbnailer::frameReady(const Phonon::Experimental::VideoFrame2 &frame)

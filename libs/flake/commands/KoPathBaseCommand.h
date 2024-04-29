@@ -20,13 +20,13 @@ public:
     /**
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand(KUndo2Command *parent = 0);
+    explicit KoPathBaseCommand(KUndo2Command *parent = nullptr);
 
     /** initialize the base command with a single shape
      * @param shape the shape
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand(KoPathShape *shape, KUndo2Command *parent = 0);
+    explicit KoPathBaseCommand(KoPathShape *shape, KUndo2Command *parent = nullptr);
 
 protected:
     /**

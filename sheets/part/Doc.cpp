@@ -164,7 +164,7 @@ QDomDocument Doc::saveXML()
          foreach(KoView* view, views())
          static_cast<View *>(view)->selection()->emitCloseEditor(true);
          */
-        emit closeEditor(true);
+        Q_EMIT closeEditor(true);
     }
 
     return DocBase::saveXML();
@@ -222,7 +222,7 @@ void Doc::paintContent(QPainter &painter, const QRect &rect, Sheet *_sheet)
 
 void Doc::updateAllViews()
 {
-    emit updateView();
+    Q_EMIT updateView();
 }
 
 void Doc::addIgnoreWordAll(const QString &word)
@@ -275,7 +275,7 @@ bool Doc::saveOdf(SavingContext &documentContext)
         foreach(KoView* view, views())
             static_cast<View *>(view)->selection()->emitCloseEditor(true);
         */
-        emit closeEditor(true);
+        Q_EMIT closeEditor(true);
     }
 
     return DocBase::saveOdf(documentContext);

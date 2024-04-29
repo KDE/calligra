@@ -26,7 +26,7 @@ class ExportDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit ExportDialog(QWidget *parent = 0);
+    explicit ExportDialog(QWidget *parent = nullptr);
     ~ExportDialog() override;
 
     void setSheets(const QStringList &);

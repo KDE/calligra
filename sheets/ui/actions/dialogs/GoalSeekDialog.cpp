@@ -128,5 +128,5 @@ void GoalSeekDialog::setNotice(const QString &text)
 
 void GoalSeekDialog::slotStart()
 {
-    emit calculate();
+    Q_EMIT calculate();
 }

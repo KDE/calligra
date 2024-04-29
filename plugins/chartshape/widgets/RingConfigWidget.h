@@ -25,8 +25,8 @@ class RingConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    RingConfigWidget(QWidget *parent = 0);
-    RingConfigWidget(QList<ChartType> types, QWidget *parent = 0);
+    RingConfigWidget(QWidget *parent = nullptr);
+    RingConfigWidget(QList<ChartType> types, QWidget *parent = nullptr);
     ~RingConfigWidget();
 
     void open(ChartShape *shape) override;

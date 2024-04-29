@@ -30,7 +30,7 @@ class DataColumnDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit DataColumnDelegate(QObject *parent = 0);
+    explicit DataColumnDelegate(QObject *parent = nullptr);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 

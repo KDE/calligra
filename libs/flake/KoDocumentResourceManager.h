@@ -81,7 +81,7 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoDocumentResourceManager(QObject *parent = 0);
+    explicit KoDocumentResourceManager(QObject *parent = nullptr);
     ~KoDocumentResourceManager() override;
 
     /**

@@ -28,7 +28,7 @@ public:
      * @param pointType the new point type to set
      * @param parent the parent command used for macro commands
      */
-    KoPathPointTypeCommand(const QList<KoPathPointData> &pointDataList, PointType pointType, KUndo2Command *parent = 0);
+    KoPathPointTypeCommand(const QList<KoPathPointData> &pointDataList, PointType pointType, KUndo2Command *parent = nullptr);
     ~KoPathPointTypeCommand() override;
 
     /// redo the command

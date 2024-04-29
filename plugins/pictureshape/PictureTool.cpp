@@ -71,7 +71,7 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape *> 
     }
 
     if (!m_pictureshape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

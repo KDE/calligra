@@ -36,7 +36,7 @@ class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 public:
     static const qreal AnnotationAreaWidth;
 
-    explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
+    explicit KWCanvasBase(KWDocument *document, QObject *parent = nullptr);
     ~KWCanvasBase() override;
 
 public: // KoCanvasBase interface methods.

@@ -21,7 +21,7 @@
 class Q_DECL_HIDDEN KoProgressUpdater::Private
 {
 public:
-    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode, QTextStream *output_ = 0)
+    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode, QTextStream *output_ = nullptr)
         : parent(_parent)
         , progressBar(p)
         , mode(_mode)
@@ -132,7 +132,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight, const QString &n
 
 void KoProgressUpdater::cancel()
 {
-    foreach (KoUpdaterPrivate *updater, d->subtasks) {
+    for (KoUpdaterPrivate *updater : std::as_const(d->subtasks)) {
         updater->setProgress(100);
         updater->interrupt();
     }
@@ -159,7 +159,7 @@ void KoProgressUpdater::updateUi()
 
     if (d->updated) {
         int totalProgress = 0;
-        foreach (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+        for (QPointer<KoUpdaterPrivate> updater : std::as_const(d->subtasks)) {
             if (updater->interrupted()) {
                 d->currentProgress = -1;
                 return;
@@ -197,16 +197,17 @@ bool KoProgressUpdater::interrupted() const
 
 bool KoProgressUpdater::hasOutput() const
 {
-    return d->output != 0;
+    return d->output != nullptr;
 }
 
 void KoProgressUpdater::Private::logEvents(QTextStream &out, KoProgressUpdater::Private *updater, QTime startTime, const QString &prefix)
 {
     // initial implementation: write out the names of all events
-    foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {
+    for (QPointer<KoUpdaterPrivate> p : std::as_const(updater->subtasks)) {
         if (!p)
             continue;
-        foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
+        const auto points = p->getPoints();
+        for (const KoUpdaterPrivate::TimePoint &tp : points) {
             out << prefix + p->objectName() << '\t' << startTime.msecsTo(tp.time) << '\t' << tp.value << Qt::endl;
         }
     }

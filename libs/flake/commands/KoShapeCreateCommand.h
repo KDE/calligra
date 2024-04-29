@@ -23,7 +23,7 @@ public:
      * @param shape the shape thats just been created.
      * @param parent the parent command used for macro commands
      */
-    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent = 0);
+    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent = nullptr);
     ~KoShapeCreateCommand() override;
     /// redo the command
     void redo() override;

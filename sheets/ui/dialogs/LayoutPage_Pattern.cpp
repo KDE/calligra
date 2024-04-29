@@ -63,7 +63,7 @@ void BrushSelect::mousePressEvent(QMouseEvent *)
 {
     slotSelect();
 
-    emit clicked(this);
+    Q_EMIT clicked(this);
 }
 
 void BrushSelect::slotUnselect()

@@ -29,7 +29,7 @@ CommentTool::~CommentTool()
 void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> & /*shapes*/)
 {
     const QCursor cursor(Qt::ArrowCursor);
-    emit useCursor(cursor);
+    Q_EMIT useCursor(cursor);
 
     QList<KoShape *> allShapes = m_canvas->shapeManager()->shapes();
     foreach (KoShape *shape, allShapes) {
@@ -88,10 +88,10 @@ void CommentTool::mouseMoveEvent(KoPointerEvent *event)
     InitialsCommentShape *shapeUnderCursor = dynamic_cast<InitialsCommentShape *>(m_canvas->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop, false));
     if (shapeUnderCursor) {
         const QCursor cursor(Qt::PointingHandCursor);
-        emit useCursor(cursor);
+        Q_EMIT useCursor(cursor);
     } else {
         const QCursor cursor(Qt::ArrowCursor);
-        emit useCursor(cursor);
+        Q_EMIT useCursor(cursor);
     }
 }
 

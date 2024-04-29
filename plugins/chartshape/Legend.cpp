@@ -143,7 +143,7 @@ void Legend::setTitle(const QString &title)
     d->kdLegend->setTitleText(title);
     d->pixmapRepaintRequested = true;
 
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 QFont Legend::font() const
@@ -161,7 +161,7 @@ void Legend::setFont(const QFont &font)
     d->kdLegend->setTextAttributes(attributes);
 
     d->pixmapRepaintRequested = true;
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 qreal Legend::fontSize() const
@@ -181,7 +181,7 @@ void Legend::setFontSize(qreal size)
     d->kdLegend->setTextAttributes(attributes);
 
     d->pixmapRepaintRequested = true;
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 void Legend::setFontColor(const QColor &color)
@@ -247,7 +247,7 @@ void Legend::setExpansion(LegendExpansion expansion)
     d->kdLegend->setOrientation(LegendExpansionToQtOrientation(expansion));
     d->pixmapRepaintRequested = true;
 
-    emit updateConfigWidget();
+    Q_EMIT updateConfigWidget();
 }
 
 Qt::Alignment Legend::alignment() const

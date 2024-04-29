@@ -97,5 +97,5 @@ void AutoFormatDialog::onApply()
     int idx = d->combo->currentIndex();
     if (idx < 0)
         return;
-    emit applyFormat(selectedOption());
+    Q_EMIT applyFormat(selectedOption());
 }

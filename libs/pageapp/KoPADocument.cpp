@@ -185,7 +185,7 @@ bool KoPADocument::loadOdf(KoOdfReadStore &odfStore)
     loadOdfDocumentStyles(paContext);
 
     if (d->pages.size() > 1) {
-        emit actionsPossible(KoPAView::ActionDeletePage, false);
+        Q_EMIT actionsPossible(KoPAView::ActionDeletePage, false);
     }
 
     updatePageCount();
@@ -517,7 +517,7 @@ void KoPADocument::addShape(KoShape *shape)
     // the KoShapeController sets the active layer as parent
     KoPAPageBase *page(pageByShape(shape));
 
-    emit shapeAdded(shape);
+    Q_EMIT shapeAdded(shape);
 
     // it can happen in Stage notes view that there is no page
     if (page) {
@@ -539,7 +539,7 @@ void KoPADocument::removeShape(KoShape *shape)
 
     KoPAPageBase *page(pageByShape(shape));
 
-    emit shapeRemoved(shape);
+    Q_EMIT shapeRemoved(shape);
 
     page->shapeRemoved(shape);
     postRemoveShape(page, shape);
@@ -645,9 +645,9 @@ void KoPADocument::insertPage(KoPAPageBase *page, int index)
     pages.insert(index, page);
     updatePageCount();
 
-    emit actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
+    Q_EMIT actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
 
-    emit pageAdded(page);
+    Q_EMIT pageAdded(page);
 }
 
 void KoPADocument::insertPage(KoPAPageBase *page, KoPAPageBase *after)
@@ -670,9 +670,9 @@ void KoPADocument::insertPage(KoPAPageBase *page, KoPAPageBase *after)
     pages.insert(index, page);
     updatePageCount();
 
-    emit actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
+    Q_EMIT actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
 
-    emit pageAdded(page);
+    Q_EMIT pageAdded(page);
 }
 
 int KoPADocument::takePage(KoPAPageBase *page)
@@ -695,12 +695,12 @@ int KoPADocument::takePage(KoPAPageBase *page)
 
         updatePageCount();
 
-        emit replaceActivePage(page, newActivePage);
-        emit pageRemoved(page, index);
+        Q_EMIT replaceActivePage(page, newActivePage);
+        Q_EMIT pageRemoved(page, index);
     }
 
     if (pages.size() == 1) {
-        emit actionsPossible(KoPAView::ActionDeletePage, false);
+        Q_EMIT actionsPossible(KoPAView::ActionDeletePage, false);
     }
 
     return index;

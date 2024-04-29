@@ -30,7 +30,7 @@ class KPrShapeAnimation;
 class KPrEditAnimationTimeLineCommand : public KUndo2Command
 {
 public:
-    KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation, const int begin, const int duration, KUndo2Command *parent = 0);
+    KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation, const int begin, const int duration, KUndo2Command *parent = nullptr);
 
     ~KPrEditAnimationTimeLineCommand() override;
 

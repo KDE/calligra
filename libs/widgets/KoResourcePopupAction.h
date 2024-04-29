@@ -29,7 +29,7 @@ public:
      * @param gradientResourceAdapter A pointer to gradient resource adapter.
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter, QObject *parent = nullptr);
 
     /**
      * Destructor

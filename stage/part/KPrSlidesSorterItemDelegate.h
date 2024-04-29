@@ -26,7 +26,7 @@ class KPrSlidesSorterItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KPrSlidesSorterItemDelegate(QObject *parent = 0);
+    explicit KPrSlidesSorterItemDelegate(QObject *parent = nullptr);
 
     ~KPrSlidesSorterItemDelegate() override;
 

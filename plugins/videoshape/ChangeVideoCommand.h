@@ -15,7 +15,7 @@ class VideoShape;
 class ChangeVideoCommand : public KUndo2Command
 {
 public:
-    ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent = 0);
+    ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent = nullptr);
     ~ChangeVideoCommand();
 
     /// redo the command

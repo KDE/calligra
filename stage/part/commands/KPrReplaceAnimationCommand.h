@@ -31,7 +31,7 @@ class KPrDocument;
 class STAGE_EXPORT KPrReplaceAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent = 0);
+    KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent = nullptr);
 
     ~KPrReplaceAnimationCommand() override;
 

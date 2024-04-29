@@ -706,7 +706,7 @@ void ChartProxyModel::dataChanged(const QModelIndex &topLeft, const QModelIndex 
             dataSet->customDataChanged(QRect());
     }
 
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }
 
 QVariant ChartProxyModel::headerData(int section, Qt::Orientation orientation, int role /* = Qt::DisplayRole */) const

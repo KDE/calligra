@@ -244,7 +244,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
         axis = chart->plotArea()->secondaryXAxis();
         if (!axis) {
             debugChartUiAxes << "create secondary x axis";
-            emit axisAdded(XAxisDimension, i18n("Axistitle"));
+            Q_EMIT axisAdded(XAxisDimension, i18n("Axistitle"));
             return;
         }
         break;
@@ -252,7 +252,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
         axis = chart->plotArea()->secondaryYAxis();
         if (!axis) {
             debugChartUiAxes << "create secondary y axis";
-            emit axisAdded(YAxisDimension, i18n("Axistitle"));
+            Q_EMIT axisAdded(YAxisDimension, i18n("Axistitle"));
             return;
         }
         break;
@@ -308,7 +308,7 @@ void AxesConfigWidget::ui_axisShowTitleChanged(bool b)
 {
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
-        emit axisShowTitleChanged(a, b);
+        Q_EMIT axisShowTitleChanged(a, b);
     }
 }
 
@@ -317,7 +317,7 @@ void AxesConfigWidget::ui_axisShowChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisShowChanged(a, b);
+        Q_EMIT axisShowChanged(a, b);
     }
 }
 
@@ -326,7 +326,7 @@ void AxesConfigWidget::ui_axisPositionChanged(int index)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << index;
-        emit axisPositionChanged(a, d->ui.axisPosition->currentData().toString());
+        Q_EMIT axisPositionChanged(a, d->ui.axisPosition->currentData().toString());
     }
 }
 
@@ -335,7 +335,7 @@ void AxesConfigWidget::ui_axisLabelsPositionChanged(int index)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << index;
-        emit axisLabelsPositionChanged(a, d->ui.axislabelPosition->currentData().toString());
+        Q_EMIT axisLabelsPositionChanged(a, d->ui.axislabelPosition->currentData().toString());
     }
 }
 
@@ -344,7 +344,7 @@ void AxesConfigWidget::ui_axisShowLabelsChanged(bool value)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << value;
-        emit axisShowLabelsChanged(a, value);
+        Q_EMIT axisShowLabelsChanged(a, value);
     }
 }
 
@@ -353,7 +353,7 @@ void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisShowMajorGridLinesChanged(a, b);
+        Q_EMIT axisShowMajorGridLinesChanged(a, b);
     }
 }
 
@@ -362,7 +362,7 @@ void AxesConfigWidget::ui_axisShowMinorGridLinesChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisShowMinorGridLinesChanged(a, b);
+        Q_EMIT axisShowMinorGridLinesChanged(a, b);
     }
 }
 
@@ -372,7 +372,7 @@ void AxesConfigWidget::ui_axisLabelsFontChanged()
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << font;
-        emit axisLabelsFontChanged(a, font);
+        Q_EMIT axisLabelsFontChanged(a, font);
     }
 }
 
@@ -381,7 +381,7 @@ void AxesConfigWidget::ui_axisUseLogarithmicScalingChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisUseLogarithmicScalingChanged(a, b);
+        Q_EMIT axisUseLogarithmicScalingChanged(a, b);
     }
 }
 
@@ -390,7 +390,7 @@ void AxesConfigWidget::ui_axisStepWidthChanged(double width)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << width;
-        emit axisStepWidthChanged(a, width);
+        Q_EMIT axisStepWidthChanged(a, width);
     }
 }
 
@@ -399,7 +399,7 @@ void AxesConfigWidget::ui_axisSubStepWidthChanged(double width)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << width;
-        emit axisSubStepWidthChanged(a, width);
+        Q_EMIT axisSubStepWidthChanged(a, width);
     }
 }
 
@@ -408,7 +408,7 @@ void AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisUseAutomaticStepWidthChanged(a, b);
+        Q_EMIT axisUseAutomaticStepWidthChanged(a, b);
     }
 }
 
@@ -417,7 +417,7 @@ void AxesConfigWidget::ui_axisUseAutomaticSubStepWidthChanged(bool b)
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes << a << b;
-        emit axisUseAutomaticSubStepWidthChanged(a, b);
+        Q_EMIT axisUseAutomaticSubStepWidthChanged(a, b);
     }
 }
 
@@ -441,7 +441,7 @@ void AxesConfigWidget::slotGapBetweenBars()
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a && a->dimension() == YAxisDimension) {
         debugChartUiAxes << a << d->ui.gapBetweenBars->value();
-        emit gapBetweenBarsChanged(a, d->ui.gapBetweenBars->value());
+        Q_EMIT gapBetweenBarsChanged(a, d->ui.gapBetweenBars->value());
     }
 }
 
@@ -450,6 +450,6 @@ void AxesConfigWidget::slotGapBetweenSets()
     Axis *a = axis(d->ui.axes->currentIndex());
     if (a && a->dimension() == YAxisDimension) {
         debugChartUiAxes << a << d->ui.gapBetweenSets->value();
-        emit gapBetweenSetsChanged(a, d->ui.gapBetweenSets->value());
+        Q_EMIT gapBetweenSetsChanged(a, d->ui.gapBetweenSets->value());
     }
 }

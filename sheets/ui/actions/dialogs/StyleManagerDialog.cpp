@@ -150,7 +150,7 @@ void StyleManagerDialog::onApply()
         return;
 
     QString name(item->text(0));
-    emit setStyle(name);
+    Q_EMIT setStyle(name);
 }
 
 void StyleManagerDialog::slotNew()

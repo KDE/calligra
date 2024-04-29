@@ -138,7 +138,7 @@ void PieConfigWidget::brushChanged(const QColor &color)
     if (index < 0) {
         return;
     }
-    emit brushChanged(m_dataSet, color, index);
+    Q_EMIT brushChanged(m_dataSet, color, index);
 }
 
 void PieConfigWidget::penChanged(const QColor &color)
@@ -147,7 +147,7 @@ void PieConfigWidget::penChanged(const QColor &color)
     if (index < 0) {
         return;
     }
-    emit penChanged(m_dataSet, color, index);
+    Q_EMIT penChanged(m_dataSet, color, index);
 }
 
 void PieConfigWidget::explodeFactorChanged(int percent)
@@ -156,7 +156,7 @@ void PieConfigWidget::explodeFactorChanged(int percent)
     if (index < 0) {
         return;
     }
-    emit explodeFactorChanged(m_dataSet, index, percent);
+    Q_EMIT explodeFactorChanged(m_dataSet, index, percent);
 }
 
 void PieConfigWidget::showCategoryChanged(bool b)
@@ -165,7 +165,7 @@ void PieConfigWidget::showCategoryChanged(bool b)
     if (index < 0) {
         return;
     }
-    emit showCategoryChanged(m_dataSet, b, index);
+    Q_EMIT showCategoryChanged(m_dataSet, b, index);
 }
 
 void PieConfigWidget::showNumberChanged(bool b)
@@ -174,7 +174,7 @@ void PieConfigWidget::showNumberChanged(bool b)
     if (index < 0) {
         return;
     }
-    emit showNumberChanged(m_dataSet, b, index);
+    Q_EMIT showNumberChanged(m_dataSet, b, index);
 }
 
 void PieConfigWidget::showPercentChanged(bool b)
@@ -183,5 +183,5 @@ void PieConfigWidget::showPercentChanged(bool b)
     if (index < 0) {
         return;
     }
-    emit showPercentChanged(m_dataSet, b, index);
+    Q_EMIT showPercentChanged(m_dataSet, b, index);
 }

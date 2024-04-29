@@ -425,7 +425,7 @@ void CanvasItem::setObscuredRange(const QSize &size)
     if (!sheetView)
         return;
 
-    emit obscuredRangeChanged(sheetView->sheet(), size);
+    Q_EMIT obscuredRangeChanged(sheetView->sheet(), size);
 }
 
 void CanvasItem::updateAccessedCellRange(Sheet *sheet, const QPoint &location)

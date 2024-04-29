@@ -19,7 +19,7 @@ class ShapePropertiesDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit ShapePropertiesDocker(QWidget *parent = 0);
+    explicit ShapePropertiesDocker(QWidget *parent = nullptr);
     ~ShapePropertiesDocker() override;
     /// reimplemented
     QString observerName() const override

@@ -23,7 +23,7 @@ class KPrPresenterViewSlidesInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    explicit KPrPresenterViewSlidesInterface(const QList<KoPAPageBase *> &pages, QWidget *parent = 0);
+    explicit KPrPresenterViewSlidesInterface(const QList<KoPAPageBase *> &pages, QWidget *parent = nullptr);
 
 Q_SIGNALS:
     void selectedPageChanged(int index, bool doubleClicked);

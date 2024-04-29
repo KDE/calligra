@@ -267,7 +267,7 @@ void ListDialog::onApply()
             return;
     }
 
-    emit saveChanges(customLists());
+    Q_EMIT saveChanges(customLists());
 }
 
 void ListDialog::slotModify()

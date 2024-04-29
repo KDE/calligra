@@ -16,7 +16,7 @@ namespace KoChart
 class AxisScalingDialog : public QDialog, public Ui::AxisScalingDialog
 {
 public:
-    explicit AxisScalingDialog(QWidget *parent = 0);
+    explicit AxisScalingDialog(QWidget *parent = nullptr);
     ~AxisScalingDialog();
 };
 

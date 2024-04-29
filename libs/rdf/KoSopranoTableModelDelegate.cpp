@@ -56,5 +56,5 @@ void KoSopranoTableModelDelegate::setModelData(QWidget *editor, QAbstractItemMod
 
 void KoSopranoTableModelDelegate::emitCommitData()
 {
-    emit commitData(qobject_cast<QWidget *>(sender()));
+    Q_EMIT commitData(qobject_cast<QWidget *>(sender()));
 }

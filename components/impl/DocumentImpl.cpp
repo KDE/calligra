@@ -139,6 +139,6 @@ void DocumentImpl::setDocumentSize(const QSize &size)
 {
     if (size != d->documentSize) {
         d->documentSize = size;
-        emit documentSizeChanged();
+        Q_EMIT documentSizeChanged();
     }
 }

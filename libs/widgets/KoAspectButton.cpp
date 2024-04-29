@@ -132,7 +132,7 @@ void KoAspectButton::setKeepAspectRatio(bool on)
         return;
     d->keepAspect = on;
     update();
-    emit keepAspectRatioChanged(d->keepAspect);
+    Q_EMIT keepAspectRatioChanged(d->keepAspect);
 }
 
 void KoAspectButton::paintEvent(QPaintEvent *)

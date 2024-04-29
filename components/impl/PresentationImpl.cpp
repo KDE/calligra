@@ -217,8 +217,8 @@ void PresentationImpl::setCurrentIndex(int newValue)
     if (newValue != currentIndex()) {
         d->koPaView->doUpdateActivePage(d->document->pageByIndex(newValue, false));
         d->updateLinkTargets();
-        emit requestViewUpdate();
-        emit currentIndexChanged();
+        Q_EMIT requestViewUpdate();
+        Q_EMIT currentIndexChanged();
     }
 }
 

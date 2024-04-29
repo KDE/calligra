@@ -81,7 +81,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *
 
     if (m_formulaShape == 0) // none found
     {
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(Qt::IBeamCursor);

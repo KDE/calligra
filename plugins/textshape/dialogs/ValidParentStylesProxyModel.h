@@ -33,7 +33,7 @@ class ValidParentStylesProxyModel : public StylesFilteredModelBase
 {
     Q_OBJECT
 public:
-    explicit ValidParentStylesProxyModel(QObject *parent = 0);
+    explicit ValidParentStylesProxyModel(QObject *parent = nullptr);
 
     void setStyleManager(KoStyleManager *manager); // it is needed to travel the style's parenting chain in order to assess if the currentChildStyle is suitable
                                                    // for being a parent

@@ -57,7 +57,7 @@ public:
      *
      * \param parent The parent item.
      */
-    explicit View(QQuickItem *parent = 0);
+    explicit View(QQuickItem *parent = nullptr);
     /**
      * Destructor.
      */

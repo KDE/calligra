@@ -45,7 +45,7 @@ void KWDocumentColumns::setTextAreaAvailable(bool available)
         optionsChanged();
     else {
         m_columns.count = 1;
-        emit columnsChanged(m_columns);
+        Q_EMIT columnsChanged(m_columns);
     }
 }
 
@@ -62,7 +62,7 @@ void KWDocumentColumns::optionsChanged()
     // once some editing is done, drop any individual column data
     // TODO: complete UI to set individual column data
     m_columns.columnData.clear();
-    emit columnsChanged(m_columns);
+    Q_EMIT columnsChanged(m_columns);
 }
 
 void KWDocumentColumns::setShowPreview(bool on)

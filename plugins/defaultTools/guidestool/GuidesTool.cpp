@@ -169,7 +169,7 @@ void GuidesTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 
     if (m_mode != EditGuide)
-        emit done();
+        Q_EMIT done();
 }
 
 void GuidesTool::mouseDoubleClickEvent(KoPointerEvent *event)

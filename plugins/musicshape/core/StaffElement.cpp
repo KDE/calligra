@@ -62,7 +62,7 @@ void StaffElement::setX(qreal x)
     if (d->x == x)
         return;
     d->x = x;
-    emit xChanged(x);
+    Q_EMIT xChanged(x);
 }
 
 qreal StaffElement::y() const
@@ -75,7 +75,7 @@ void StaffElement::setY(qreal y)
     if (d->y == y)
         return;
     d->y = y;
-    emit yChanged(y);
+    Q_EMIT yChanged(y);
 }
 
 qreal StaffElement::width() const
@@ -88,7 +88,7 @@ void StaffElement::setWidth(qreal width)
     if (d->width == width)
         return;
     d->width = width;
-    emit widthChanged(width);
+    Q_EMIT widthChanged(width);
 }
 
 qreal StaffElement::height() const
@@ -101,7 +101,7 @@ void StaffElement::setHeight(qreal height)
     if (d->height == height)
         return;
     d->height = height;
-    emit heightChanged(height);
+    Q_EMIT heightChanged(height);
 }
 
 int StaffElement::startTime() const
@@ -114,7 +114,7 @@ void StaffElement::setStartTime(int startTime)
     if (d->startTime == startTime)
         return;
     d->startTime = startTime;
-    emit startTimeChanged(startTime);
+    Q_EMIT startTimeChanged(startTime);
 }
 
 } // namespace MusicCore

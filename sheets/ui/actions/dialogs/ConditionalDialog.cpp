@@ -459,5 +459,5 @@ void ConditionalDialog::onApply()
     if (!checkInputData())
         return;
 
-    emit applyCondition();
+    Q_EMIT applyCondition();
 }

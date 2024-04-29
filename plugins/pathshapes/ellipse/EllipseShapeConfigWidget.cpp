@@ -79,5 +79,5 @@ void EllipseShapeConfigWidget::closeEllipse()
     widget.startAngle->blockSignals(false);
     widget.endAngle->blockSignals(false);
 
-    emit propertyChanged();
+    Q_EMIT propertyChanged();
 }

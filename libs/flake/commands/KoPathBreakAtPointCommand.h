@@ -27,7 +27,7 @@ public:
      * @param pointDataList List of point data where the path should be split.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = 0);
+    explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = nullptr);
     ~KoPathBreakAtPointCommand() override;
 
     /// redo the command

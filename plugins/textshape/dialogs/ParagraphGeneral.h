@@ -28,7 +28,7 @@ class ParagraphGeneral : public CharacterGeneral
 {
     Q_OBJECT
 public:
-    explicit ParagraphGeneral(QWidget *parent = 0);
+    explicit ParagraphGeneral(QWidget *parent = nullptr);
 
     void setStyle(KoParagraphStyle *style, int level, bool directFormattingMode);
     void setUnit(const KoUnit &unit);

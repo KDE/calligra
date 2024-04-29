@@ -40,6 +40,9 @@ class Document : public QObject
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly NOTIFY readOnlyChanged)
 
+    Q_PROPERTY(QWindow *windowView)
+    Q_PROPERTY(KoView *view)
+
     /**
      * \property currentIndex
      * \brief The current visible 'index', i.e. page, sheet or slide.
@@ -78,7 +81,7 @@ class Document : public QObject
     Q_PROPERTY(QObject *textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
-    explicit Document(QObject *parent = 0);
+    explicit Document(QObject *parent = nullptr);
     ~Document() override;
 
     QUrl source() const;

@@ -37,7 +37,7 @@ public:
      * @param resourceAdapter the resource adapter providing the resources to display
      * @param parent the parent widget
      */
-    explicit KoResourceSelector(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0);
+    explicit KoResourceSelector(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = nullptr);
 
     /// Destroys the resource selector
     ~KoResourceSelector() override;

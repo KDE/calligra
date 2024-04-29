@@ -15,9 +15,9 @@ class ChangeImageCommand : public QObject, public KUndo2Command
     Q_OBJECT
 
 public:
-    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent = 0);
-    ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent = 0);
-    ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent = 0);
+    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent = nullptr);
+    ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent = nullptr);
+    ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent = nullptr);
     ~ChangeImageCommand() override;
 
     /// redo the command

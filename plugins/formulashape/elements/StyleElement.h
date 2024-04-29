@@ -21,7 +21,7 @@ class KOFORMULA_EXPORT StyleElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit StyleElement(BasicElement *parent = 0);
+    explicit StyleElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

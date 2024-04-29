@@ -20,7 +20,7 @@ void KoUpdaterPrivate::cancel()
 void KoUpdaterPrivate::interrupt()
 {
     m_interrupted = true;
-    emit sigInterrupted();
+    Q_EMIT sigInterrupted();
 }
 
 void KoUpdaterPrivate::setProgress(int percent)
@@ -29,5 +29,5 @@ void KoUpdaterPrivate::setProgress(int percent)
         return;
     }
     m_progress = percent;
-    emit sigUpdated();
+    Q_EMIT sigUpdated();
 }

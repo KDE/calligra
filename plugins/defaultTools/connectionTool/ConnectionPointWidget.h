@@ -17,7 +17,7 @@ class ConnectionPointWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConnectionPointWidget(ConnectionTool *tool, QWidget *parent = 0);
+    explicit ConnectionPointWidget(ConnectionTool *tool, QWidget *parent = nullptr);
 
 private Q_SLOTS:
     void toggleEditModeCheckbox(bool checked);

@@ -156,7 +156,7 @@ void KPrShapeAnimation::setBeginTime(int timeMS)
             a->setBegin(a->begin() + timeDiff);
         }
     }
-    emit timeChanged(timeMS, timeRange().second);
+    Q_EMIT timeChanged(timeMS, timeRange().second);
 }
 
 void KPrShapeAnimation::setGlobalDuration(int timeMS)
@@ -176,7 +176,7 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
             a->setBegin((a->begin() - minStart) * timeRatio + minStart);
         }
     }
-    emit timeChanged(timeRange().first, timeMS);
+    Q_EMIT timeChanged(timeRange().first, timeMS);
 }
 
 void KPrShapeAnimation::setTextBlockUserData(QTextBlockUserData *textBlockUserData)

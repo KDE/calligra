@@ -21,7 +21,7 @@ class KOFORMULA_EXPORT NumberElement : public TokenElement
 {
 public:
     /// Standard constructor
-    explicit NumberElement(BasicElement *parent = 0);
+    explicit NumberElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

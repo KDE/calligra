@@ -52,7 +52,7 @@ class TextDocumentStructureModel : public QAbstractItemModel
     enum Columns { nameColumn = 0, endColumn };
 
 public:
-    explicit TextDocumentStructureModel(QObject *parent = 0);
+    explicit TextDocumentStructureModel(QObject *parent = nullptr);
     ~TextDocumentStructureModel() override;
 
 public: // QAbstractItemModel API

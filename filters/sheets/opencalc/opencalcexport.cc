@@ -105,7 +105,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
     if (!writeFile(ksdoc))
         return KoFilter::CreationError;
 
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     return KoFilter::OK;
 }

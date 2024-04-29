@@ -36,7 +36,7 @@ public:
      * @param selectedCharts all charts that this dialog will show for user modification
      * @param parent a parent widget for the purpose of centering the dialog
      */
-    explicit ChartDialog(const QList<KoChart::ChartShape *> &selectedCharts, QWidget *parent = 0);
+    explicit ChartDialog(const QList<KoChart::ChartShape *> &selectedCharts, QWidget *parent = nullptr);
     ~ChartDialog() override;
 
     /**

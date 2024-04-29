@@ -311,7 +311,7 @@ void SimpleEntryTool::activate(ToolActivation toolActivation, const QSet<KoShape
         }
     }
     if (!m_musicshape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(Qt::ArrowCursor);

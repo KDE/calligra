@@ -131,8 +131,8 @@ void StylesWidget::applyParagraphStyle()
     Q_ASSERT(index.isValid());
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     if (paragraphStyle) {
-        emit paragraphStyleSelected(paragraphStyle);
-        emit doneWithFocus();
+        Q_EMIT paragraphStyleSelected(paragraphStyle);
+        Q_EMIT doneWithFocus();
         return;
     }
 }
@@ -143,8 +143,8 @@ void StylesWidget::applyCharacterStyle()
     Q_ASSERT(index.isValid());
     KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
     if (characterStyle) {
-        emit characterStyleSelected(characterStyle);
-        emit doneWithFocus();
+        Q_EMIT characterStyleSelected(characterStyle);
+        Q_EMIT doneWithFocus();
         return;
     }
 }

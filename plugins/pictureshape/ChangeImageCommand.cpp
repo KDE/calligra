@@ -72,7 +72,7 @@ void ChangeImageCommand::redo()
 
     m_shape->setColorMode(m_newColorMode);
     m_shape->setCropRect(m_newCroppingRect);
-    emit sigExecuted();
+    Q_EMIT sigExecuted();
 }
 
 void ChangeImageCommand::undo()
@@ -84,5 +84,5 @@ void ChangeImageCommand::undo()
 
     m_shape->setColorMode(m_oldColorMode);
     m_shape->setCropRect(m_oldCroppingRect);
-    emit sigExecuted();
+    Q_EMIT sigExecuted();
 }

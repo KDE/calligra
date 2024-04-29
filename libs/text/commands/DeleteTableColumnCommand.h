@@ -16,7 +16,7 @@ class QTextTable;
 class DeleteTableColumnCommand : public KUndo2Command
 {
 public:
-    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = 0);
+    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = nullptr);
 
     void undo() override;
     void redo() override;

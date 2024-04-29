@@ -37,7 +37,7 @@ public:
     enum Buttons { Button_Import, Button_Remove };
 
     /// \p usePreview shows the aside preview with the resource's image
-    explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
+    explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = nullptr, bool usePreview = false);
     ~KoResourceItemChooser() override;
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly

@@ -18,7 +18,7 @@ class ChartTableView : public QTableView
     Q_OBJECT
 
 public:
-    explicit ChartTableView(QWidget *parent = 0);
+    explicit ChartTableView(QWidget *parent = nullptr);
     ~ChartTableView();
 
 Q_SIGNALS:

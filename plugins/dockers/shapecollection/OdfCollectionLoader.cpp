@@ -57,7 +57,7 @@ void OdfCollectionLoader::load()
 
     if (m_fileList.isEmpty()) {
         qCritical() << "Found no shapes in the collection!" << m_path;
-        emit loadingFailed(i18n("Found no shapes in the collection! %1", m_path));
+        Q_EMIT loadingFailed(i18n("Found no shapes in the collection! %1", m_path));
         return;
     }
 
@@ -84,7 +84,7 @@ void OdfCollectionLoader::loadShape()
             m_loadingTimer->stop();
 
             if (m_fileList.isEmpty()) {
-                emit loadingFinished();
+                Q_EMIT loadingFinished();
             } else {
                 nextFile();
             }
@@ -117,7 +117,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
     KoStore *store = KoStore::createStore(path, KoStore::Read);
 
     if (store->bad()) {
-        emit loadingFailed(i18n("Not a valid Calligra file: %1", m_path));
+        Q_EMIT loadingFailed(i18n("Not a valid Calligra file: %1", m_path));
         delete store;
         return;
     }
@@ -126,7 +126,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
     QString errorMessage;
 
     if (!m_odfStore->loadAndParse(errorMessage)) {
-        emit loadingFailed(errorMessage);
+        Q_EMIT loadingFailed(errorMessage);
         return;
     }
 
@@ -140,7 +140,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
 
     if (realBody.isNull()) {
         qCritical() << "No body tag found!" << Qt::endl;
-        emit loadingFailed(i18n("No body tag found in file: %1", path));
+        Q_EMIT loadingFailed(i18n("No body tag found in file: %1", path));
         return;
     }
 
@@ -148,7 +148,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
 
     if (m_body.isNull()) {
         qCritical() << "No office:drawing tag found!" << Qt::endl;
-        emit loadingFailed(i18n("No office:drawing tag found in file: %1", path));
+        Q_EMIT loadingFailed(i18n("No office:drawing tag found in file: %1", path));
         return;
     }
 
@@ -156,7 +156,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
 
     if (m_page.isNull()) {
         qCritical() << "No shapes found!" << Qt::endl;
-        emit loadingFailed(i18n("No shapes found in file: %1", path));
+        Q_EMIT loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
 
@@ -164,7 +164,7 @@ void OdfCollectionLoader::loadNativeFile(const QString &path)
 
     if (m_shape.isNull()) {
         qCritical() << "No shapes found!" << Qt::endl;
-        emit loadingFailed(i18n("No shapes found in file: %1", path));
+        Q_EMIT loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
 

@@ -51,7 +51,7 @@ void KoM2MMLFormulaTool::activate(KoToolBase::ToolActivation toolActivation, con
 
     if (m_formulaShape == 0) // none found
     {
-        emit done();
+        Q_EMIT done();
         return;
     }
     FormulaElement *element = m_formulaShape->formulaData()->formulaElement();

@@ -139,7 +139,7 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    explicit KoDocumentRdf(QObject *parent = 0);
+    explicit KoDocumentRdf(QObject *parent = nullptr);
 
     /** The destructor */
     ~KoDocumentRdf();
@@ -274,7 +274,7 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    hKoRdfBasicSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
+    hKoRdfBasicSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = nullptr) const;
 
     /**
      * This is used for triples that do not specify their xhtml:about

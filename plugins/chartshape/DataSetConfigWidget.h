@@ -34,8 +34,8 @@ class DataSetConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    DataSetConfigWidget(QWidget *parent = 0);
-    DataSetConfigWidget(QList<ChartType> types, QWidget *parent = 0);
+    DataSetConfigWidget(QWidget *parent = nullptr);
+    DataSetConfigWidget(QList<ChartType> types, QWidget *parent = nullptr);
     ~DataSetConfigWidget();
 
     void open(ChartShape *shape) override;

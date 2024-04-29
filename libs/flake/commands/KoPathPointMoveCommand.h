@@ -28,7 +28,7 @@ public:
      * @param offset the offset by which the point is moved in document coordinates
      * @param parent the parent command used for macro commands
      */
-    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, KUndo2Command *parent = 0);
+    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, KUndo2Command *parent = nullptr);
 
     /**
      * Command to move path points.
@@ -36,7 +36,7 @@ public:
      * @param offsets the offsets by which the points are moved in document coordinates
      * @param parent the parent command used for macro commands
      */
-    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QVector<QPointF> &offsets, KUndo2Command *parent = 0);
+    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QVector<QPointF> &offsets, KUndo2Command *parent = nullptr);
 
     ~KoPathPointMoveCommand() override;
 

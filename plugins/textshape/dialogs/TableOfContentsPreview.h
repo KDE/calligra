@@ -21,7 +21,7 @@ class TableOfContentsPreview : public QFrame
 {
     Q_OBJECT
 public:
-    explicit TableOfContentsPreview(QWidget *parent = 0);
+    explicit TableOfContentsPreview(QWidget *parent = nullptr);
     ~TableOfContentsPreview() override;
     void setStyleManager(KoStyleManager *styleManager);
     /// sets the size of the generated preview pixmap if not set then it takes the widget's size

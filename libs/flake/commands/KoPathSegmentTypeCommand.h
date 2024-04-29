@@ -28,7 +28,7 @@ public:
      * @param segmentType to which the segment should be changed to
      * @param parent the parent command used for macro commands
      */
-    KoPathSegmentTypeCommand(const KoPathPointData &pointData, SegmentType segmentType, KUndo2Command *parent = 0);
+    KoPathSegmentTypeCommand(const KoPathPointData &pointData, SegmentType segmentType, KUndo2Command *parent = nullptr);
 
     /**
      * Command for changing the segment type ( curve/line )
@@ -36,7 +36,7 @@ public:
      * @param segmentType to which the segments should be changed to
      * @param parent the parent command used for macro commands
      */
-    KoPathSegmentTypeCommand(const QList<KoPathPointData> &pointDataList, SegmentType segmentType, KUndo2Command *parent = 0);
+    KoPathSegmentTypeCommand(const QList<KoPathPointData> &pointDataList, SegmentType segmentType, KUndo2Command *parent = nullptr);
     ~KoPathSegmentTypeCommand() override;
 
     /// redo the command

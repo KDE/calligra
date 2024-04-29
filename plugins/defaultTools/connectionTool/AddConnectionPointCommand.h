@@ -17,7 +17,7 @@ class AddConnectionPointCommand : public KUndo2Command
 {
 public:
     /// Creates new command to add connection point to shape
-    AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent = 0);
+    AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent = nullptr);
     ~AddConnectionPointCommand() override;
     /// reimplemented from KUndo2Command
     void redo() override;

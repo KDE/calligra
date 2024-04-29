@@ -80,7 +80,7 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoCanvasResourceManager(QObject *parent = 0);
+    explicit KoCanvasResourceManager(QObject *parent = nullptr);
     ~KoCanvasResourceManager() override;
 
 public Q_SLOTS:

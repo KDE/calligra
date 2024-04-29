@@ -56,7 +56,7 @@ void VideoTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
     }
 
     if (!m_videoShape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

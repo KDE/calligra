@@ -35,8 +35,8 @@ class AxesConfigWidget : public ConfigSubWidgetBase
     Q_OBJECT
 
 public:
-    AxesConfigWidget(QWidget *parent = 0);
-    AxesConfigWidget(QList<ChartType> types, QWidget *parent = 0);
+    AxesConfigWidget(QWidget *parent = nullptr);
+    AxesConfigWidget(QList<ChartType> types, QWidget *parent = nullptr);
     ~AxesConfigWidget();
 
     void open(ChartShape *shape) override;

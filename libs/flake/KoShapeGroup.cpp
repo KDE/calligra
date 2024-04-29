@@ -187,7 +187,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
             addShape(shape);
         }
     }
-    KoShapeLayer *parent = 0;
+    KoShapeLayer *parent = nullptr;
     int maxUseCount = 0;
     // find most used layer and use this as parent for the group
     for (QHash<KoShapeLayer *, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {

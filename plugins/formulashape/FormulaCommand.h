@@ -34,7 +34,7 @@ class TableRowElement;
 class FormulaCommand : public KUndo2Command
 {
 public:
-    explicit FormulaCommand(KUndo2Command *parent = 0);
+    explicit FormulaCommand(KUndo2Command *parent = nullptr);
 
     virtual void changeCursor(FormulaCursor &cursor, bool undo) const;
 
@@ -54,7 +54,7 @@ Q_DECLARE_METATYPE(FormulaCommand *)
 class FormulaCommandReplaceText : public FormulaCommand
 {
 public:
-    FormulaCommandReplaceText(TokenElement *owner, int position, int length, const QString &added, KUndo2Command *parent = 0);
+    FormulaCommandReplaceText(TokenElement *owner, int position, int length, const QString &added, KUndo2Command *parent = nullptr);
 
     ~FormulaCommandReplaceText() override;
 
@@ -86,7 +86,12 @@ private:
 class FormulaCommandReplaceElements : public FormulaCommand
 {
 public:
-    FormulaCommandReplaceElements(RowElement *owner, int position, int length, QList<BasicElement *> elements, bool wrap = false, KUndo2Command *parent = 0);
+    FormulaCommandReplaceElements(RowElement *owner,
+                                  int position,
+                                  int length,
+                                  QList<BasicElement *> elements,
+                                  bool wrap = false,
+                                  KUndo2Command *parent = nullptr);
 
     ~FormulaCommandReplaceElements() override;
 
@@ -123,7 +128,7 @@ private:
 class FormulaCommandLoad : public FormulaCommand
 {
 public:
-    FormulaCommandLoad(FormulaData *data, FormulaElement *newelement, KUndo2Command *parent = 0);
+    FormulaCommandLoad(FormulaData *data, FormulaElement *newelement, KUndo2Command *parent = nullptr);
 
     ~FormulaCommandLoad() override;
 

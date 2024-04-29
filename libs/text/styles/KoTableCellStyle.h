@@ -77,9 +77,9 @@ public:
     };
 
     /// Constructor
-    explicit KoTableCellStyle(QObject *parent = 0);
+    explicit KoTableCellStyle(QObject *parent = nullptr);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
-    explicit KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    explicit KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = nullptr);
     KoTableCellStyle(const KoTableCellStyle &other);
     KoTableCellStyle &operator=(const KoTableCellStyle &other);
 
@@ -87,7 +87,7 @@ public:
     ~KoTableCellStyle() override;
 
     /// Creates a KoTableCellStyle that represents the formatting of \a block.
-    static KoTableCellStyle *fromTableCell(const QTextTableCell &table, QObject *parent = 0);
+    static KoTableCellStyle *fromTableCell(const QTextTableCell &table, QObject *parent = nullptr);
 
     /// Creates a clean QTextCharFormat, but keeps all the table cell properties.
     /// This is needed since block.charformat doubles as the QTextTableCellFormat
@@ -95,7 +95,7 @@ public:
     static QTextCharFormat cleanCharFormat(const QTextCharFormat &charFormat);
 
     /// creates a clone of this style with the specified parent
-    KoTableCellStyle *clone(QObject *parent = 0);
+    KoTableCellStyle *clone(QObject *parent = nullptr);
 
     /**
      * Adjust the bounding rectangle \p boundingRect according to the paddings and margins

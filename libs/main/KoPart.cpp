@@ -139,7 +139,7 @@ void KoPart::addView(KoView *view, KoDocument *document)
     if (d->views.size() == 1) {
         KoApplication *app = qobject_cast<KoApplication *>(qApp);
         if (0 != app) {
-            emit app->documentOpened('/' + objectName());
+            Q_EMIT app->documentOpened('/' + objectName());
         }
     }
 }
@@ -151,7 +151,7 @@ void KoPart::removeView(KoView *view)
     if (d->views.isEmpty()) {
         KoApplication *app = qobject_cast<KoApplication *>(qApp);
         if (0 != app) {
-            emit app->documentClosed('/' + objectName());
+            Q_EMIT app->documentClosed('/' + objectName());
         }
     }
 }

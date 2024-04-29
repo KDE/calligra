@@ -144,9 +144,9 @@ public:
      * Constructor. Initializes with standard size/font properties.
      * @param parent the parent object for memory management purposes.
      */
-    explicit KoCharacterStyle(QObject *parent = 0);
+    explicit KoCharacterStyle(QObject *parent = nullptr);
     /// Copy constructor
-    explicit KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
+    explicit KoCharacterStyle(const QTextCharFormat &format, QObject *parent = nullptr);
     /// Destructor
     ~KoCharacterStyle() override;
 
@@ -384,7 +384,7 @@ public:
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
-    KoCharacterStyle *clone(QObject *parent = 0) const;
+    KoCharacterStyle *clone(QObject *parent = nullptr) const;
 
     /// return the name of the style.
     QString name() const;

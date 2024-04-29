@@ -17,7 +17,7 @@ class LanguageTab : public QWidget
 
 public:
     explicit LanguageTab(/*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ bool uniqueFormat,
-                         QWidget *parent = 0,
+                         QWidget *parent = nullptr,
                          Qt::WindowFlags fl = Qt::WindowFlags());
     ~LanguageTab() override;
 

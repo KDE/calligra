@@ -300,21 +300,21 @@ void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_hoverText) {
         useCursor(QCursor(Qt::IBeamCursor));
         if (m_hoverText == m_currentShape)
-            emit statusTextChanged(i18n("Click to change cursor position."));
+            Q_EMIT statusTextChanged(i18n("Click to change cursor position."));
         else
-            emit statusTextChanged(i18n("Click to select text shape."));
+            Q_EMIT statusTextChanged(i18n("Click to select text shape."));
     } else if (m_hoverPath && m_currentShape && !hoverOnBaseline) {
         useCursor(QCursor(Qt::PointingHandCursor));
-        emit statusTextChanged(i18n("Double click to put text on path."));
+        Q_EMIT statusTextChanged(i18n("Double click to put text on path."));
     } else if (m_hoverHandle) {
         useCursor(QCursor(Qt::ArrowCursor));
-        emit statusTextChanged(i18n("Drag handle to change start offset."));
+        Q_EMIT statusTextChanged(i18n("Drag handle to change start offset."));
     } else {
         useCursor(QCursor(Qt::ArrowCursor));
         if (m_currentShape)
-            emit statusTextChanged(i18n("Press escape to finish editing."));
+            Q_EMIT statusTextChanged(i18n("Press escape to finish editing."));
         else
-            emit statusTextChanged("");
+            Q_EMIT statusTextChanged("");
     }
 }
 
@@ -483,7 +483,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     }
     if (!m_currentShape) {
         // none found
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(Qt::ArrowCursor);
@@ -491,7 +491,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_hoverPath = 0;
 
     updateActions();
-    emit statusTextChanged(i18n("Press return to finish editing."));
+    Q_EMIT statusTextChanged(i18n("Press return to finish editing."));
     repaintDecorations();
 
     KoShapeManager *manager = canvas()->shapeManager();
@@ -589,7 +589,7 @@ void ArtisticTextTool::convertText()
     canvas()->shapeController()->removeShape(m_currentShape, cmd);
     canvas()->addCommand(cmd);
 
-    emit done();
+    Q_EMIT done();
 }
 
 QList<QPointer<QWidget>> ArtisticTextTool::createOptionWidgets()
@@ -676,7 +676,7 @@ void ArtisticTextTool::setCurrentShape(ArtisticTextShape *currentShape)
     m_selection.setSelectedShape(m_currentShape);
     if (m_currentShape)
         enableTextCursor(true);
-    emit shapeSelected();
+    Q_EMIT shapeSelected();
 }
 
 void ArtisticTextTool::setTextCursorInternal(int textCursor)
@@ -686,7 +686,7 @@ void ArtisticTextTool::setTextCursorInternal(int textCursor)
     createTextCursorShape();
     updateTextCursorArea();
     updateActions();
-    emit shapeSelected();
+    Q_EMIT shapeSelected();
 }
 
 void ArtisticTextTool::createTextCursorShape()

@@ -35,7 +35,7 @@ class DocumentImpl : public QObject
 {
     Q_OBJECT
 public:
-    explicit DocumentImpl(QObject *parent = 0);
+    explicit DocumentImpl(QObject *parent = nullptr);
     ~DocumentImpl() override;
 
     virtual bool load(const QUrl &url) = 0;

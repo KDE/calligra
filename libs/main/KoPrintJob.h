@@ -33,7 +33,7 @@ public:
      * Constructor.
      * @param parent the parent qobject that is passed for memory management purposes.
      */
-    explicit KoPrintJob(QObject *parent = 0);
+    explicit KoPrintJob(QObject *parent = nullptr);
     ~KoPrintJob() override;
 
     /// A policy to allow the printjob to delete itself after its done printing.

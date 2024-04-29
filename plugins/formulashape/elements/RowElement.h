@@ -33,7 +33,7 @@ class KOFORMULA_EXPORT RowElement : public BasicElement
 {
 public:
     /// The standard constructor
-    explicit RowElement(BasicElement *parent = 0);
+    explicit RowElement(BasicElement *parent = nullptr);
 
     /// The standard destructor
     ~RowElement() override;

@@ -188,12 +188,12 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
     m_active = stack;
 
     if (m_active == 0) {
-        emit canUndoChanged(false);
-        emit undoTextChanged(QString());
-        emit canRedoChanged(false);
-        emit redoTextChanged(QString());
-        emit cleanChanged(true);
-        emit indexChanged(0);
+        Q_EMIT canUndoChanged(false);
+        Q_EMIT undoTextChanged(QString());
+        Q_EMIT canRedoChanged(false);
+        Q_EMIT redoTextChanged(QString());
+        Q_EMIT cleanChanged(true);
+        Q_EMIT indexChanged(0);
     } else {
         connect(m_active, &KUndo2QStack::canUndoChanged, this, &KUndo2Group::canUndoChanged);
         connect(m_active, &KUndo2QStack::undoTextChanged, this, &KUndo2Group::undoTextChanged);
@@ -201,15 +201,15 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
         connect(m_active, &KUndo2QStack::redoTextChanged, this, &KUndo2Group::redoTextChanged);
         connect(m_active, &KUndo2QStack::indexChanged, this, &KUndo2Group::indexChanged);
         connect(m_active, &KUndo2QStack::cleanChanged, this, &KUndo2Group::cleanChanged);
-        emit canUndoChanged(m_active->canUndo());
-        emit undoTextChanged(m_active->undoText());
-        emit canRedoChanged(m_active->canRedo());
-        emit redoTextChanged(m_active->redoText());
-        emit cleanChanged(m_active->isClean());
-        emit indexChanged(m_active->index());
+        Q_EMIT canUndoChanged(m_active->canUndo());
+        Q_EMIT undoTextChanged(m_active->undoText());
+        Q_EMIT canRedoChanged(m_active->canRedo());
+        Q_EMIT redoTextChanged(m_active->redoText());
+        Q_EMIT cleanChanged(m_active->isClean());
+        Q_EMIT indexChanged(m_active->index());
     }
 
-    emit activeStackChanged(m_active);
+    Q_EMIT activeStackChanged(m_active);
 }
 
 /*!

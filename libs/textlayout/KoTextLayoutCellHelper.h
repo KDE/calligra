@@ -25,7 +25,7 @@ class KOTEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = 0);
+    explicit KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = nullptr);
 
     /// draws a horizontal wave line
     void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;

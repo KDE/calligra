@@ -58,7 +58,7 @@ MsooXmlImport::~MsooXmlImport()
 
 void MsooXmlImport::reportProgress(unsigned progress)
 {
-    emit sigProgress(progress);
+    Q_EMIT sigProgress(progress);
 }
 
 void MsooXmlImport::writeConfigurationSettings(KoXmlWriter *settings) const
@@ -754,7 +754,7 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
     MsooXmlRelationships relationships(*this, writers, errorMessage);
     RETURN_IF_ERROR(parseParts(writers, &relationships, errorMessage))
     //! @todo sigProgress()
-    emit sigProgress(10);
+    Q_EMIT sigProgress(10);
 
     return KoFilter::OK;
 }

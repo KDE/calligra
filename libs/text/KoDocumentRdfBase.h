@@ -43,7 +43,7 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    explicit KoDocumentRdfBase(QObject *parent = 0);
+    explicit KoDocumentRdfBase(QObject *parent = nullptr);
     ~KoDocumentRdfBase() override;
 
     /**

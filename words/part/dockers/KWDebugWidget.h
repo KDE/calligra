@@ -21,7 +21,7 @@ class KWDebugWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KWDebugWidget(QWidget *parent = 0);
+    explicit KWDebugWidget(QWidget *parent = nullptr);
     ~KWDebugWidget() override;
 
     friend class KWDebugDocker;

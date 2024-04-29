@@ -21,7 +21,7 @@ class KOFORMULA_EXPORT ActionElement : public RowElement
 {
 public:
     /// The standard constructor
-    explicit ActionElement(BasicElement *parent = 0);
+    explicit ActionElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

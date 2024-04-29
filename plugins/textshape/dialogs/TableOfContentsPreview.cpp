@@ -150,7 +150,7 @@ void TableOfContentsPreview::finishedPreviewLayout()
         KoShapePaintingContext paintContext; // FIXME
         m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
-    emit pixmapGenerated();
+    Q_EMIT pixmapGenerated();
     update();
 }
 

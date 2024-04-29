@@ -40,7 +40,7 @@ KoCanvasResourceManager::~KoCanvasResourceManager()
 void KoCanvasResourceManager::setResource(int key, const QVariant &value)
 {
     d->manager.setResource(key, value);
-    emit canvasResourceChanged(key, value);
+    Q_EMIT canvasResourceChanged(key, value);
 }
 
 QVariant KoCanvasResourceManager::resource(int key) const
@@ -149,5 +149,5 @@ void KoCanvasResourceManager::clearResource(int key)
 {
     d->manager.clearResource(key);
     QVariant empty;
-    emit canvasResourceChanged(key, empty);
+    Q_EMIT canvasResourceChanged(key, empty);
 }

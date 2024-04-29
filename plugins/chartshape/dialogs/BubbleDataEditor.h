@@ -35,7 +35,7 @@ class BubbleDataEditor : public KoDialog
     Q_OBJECT
 
 public:
-    BubbleDataEditor(ChartShape *chart, QWidget *parent = 0);
+    BubbleDataEditor(ChartShape *chart, QWidget *parent = nullptr);
     ~BubbleDataEditor();
 
 Q_SIGNALS:

@@ -58,7 +58,7 @@ public:
      * The standard constructor
      * @param parent pointer to the BasicElement's parent
      */
-    explicit BasicElement(BasicElement *parent = 0);
+    explicit BasicElement(BasicElement *parent = nullptr);
 
     /// The standard destructor
     virtual ~BasicElement();

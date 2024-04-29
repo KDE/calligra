@@ -345,7 +345,7 @@ void Map::handleDamages(const QList<Damage *> &damages)
 
 void Map::addCommand(KUndo2Command *command)
 {
-    emit commandAdded(command);
+    Q_EMIT commandAdded(command);
 }
 
 KoDocumentResourceManager *Map::resourceManager() const

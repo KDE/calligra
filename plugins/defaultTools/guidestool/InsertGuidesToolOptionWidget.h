@@ -27,7 +27,7 @@ class InsertGuidesToolOptionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit InsertGuidesToolOptionWidget(QWidget *parent = 0);
+    explicit InsertGuidesToolOptionWidget(QWidget *parent = nullptr);
     ~InsertGuidesToolOptionWidget() override;
 
 Q_SIGNALS:

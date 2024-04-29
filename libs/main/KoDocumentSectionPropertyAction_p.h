@@ -32,7 +32,7 @@ Q_SIGNALS:
     void toggled(bool on, const QPersistentModelIndex &index, int property);
 
 public:
-    PropertyAction(int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = 0)
+    PropertyAction(int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = nullptr)
         : QAction(parent)
         , m_property(p)
         , m_num(num)
@@ -48,7 +48,7 @@ private Q_SLOTS:
     {
         m_property.state = !m_property.state.toBool();
         setIcon(m_property.state.toBool() ? m_property.onIcon : m_property.offIcon);
-        emit toggled(m_property.state.toBool(), m_index, m_num);
+        Q_EMIT toggled(m_property.state.toBool(), m_index, m_num);
     }
 };
 

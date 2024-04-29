@@ -21,7 +21,7 @@ public:
                                     KPrCustomSlideShowsModel *model,
                                     const QString &oldName,
                                     const QString &newName,
-                                    KUndo2Command *parent = 0);
+                                    KUndo2Command *parent = nullptr);
 
     ~KPrRenameCustomSlideShowCommand() override;
 

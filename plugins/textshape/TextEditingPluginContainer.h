@@ -22,7 +22,7 @@ class TextEditingPluginContainer : public QObject
 public:
     enum ResourceManagerId { ResourceId = 345681743 };
 
-    explicit TextEditingPluginContainer(QObject *parent = 0);
+    explicit TextEditingPluginContainer(QObject *parent = nullptr);
     ~TextEditingPluginContainer() override;
 
     KoTextEditingPlugin *spellcheck() const;

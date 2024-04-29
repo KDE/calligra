@@ -344,14 +344,14 @@ void DataSetConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     if (index >= d->dataSetAxes.count()) {
         // Add the axis
         debugChartUiDataSet << "create secondary y axis";
-        emit axisAdded(YAxisDimension, i18n("Axistitle"));
+        Q_EMIT axisAdded(YAxisDimension, i18n("Axistitle"));
     }
     if (index < 0 || index >= d->dataSetAxes.count()) {
         return;
     }
     DataSet *dataSet = d->dataSets[d->ui.dataSets->currentIndex()];
     Axis *axis = d->dataSetAxes[index];
-    emit dataSetAxisChanged(dataSet, axis);
+    Q_EMIT dataSetAxisChanged(dataSet, axis);
 }
 
 void DataSetConfigWidget::updateMarkers()
@@ -414,9 +414,9 @@ void DataSetConfigWidget::ui_dataSetHasChartTypeChanged(bool b)
         return;
     }
     if (b) {
-        emit dataSetChartTypeChanged(dataSet, chart->chartType(), chart->chartSubType());
+        Q_EMIT dataSetChartTypeChanged(dataSet, chart->chartType(), chart->chartSubType());
     } else {
-        emit dataSetChartTypeChanged(dataSet, LastChartType, NoChartSubtype);
+        Q_EMIT dataSetChartTypeChanged(dataSet, LastChartType, NoChartSubtype);
     }
 }
 
@@ -502,7 +502,7 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
     if (iconName.size() > 0)
         d->ui.dataSetChartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
-    emit dataSetChartTypeChanged(dataSet, type, subtype);
+    Q_EMIT dataSetChartTypeChanged(dataSet, type, subtype);
 
     updateData(type, subtype);
 }
@@ -571,7 +571,7 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
         d->ui.datasetMarkerMenu->setText(type);
         d->ui.datasetMarkerMenu->setIcon(QIcon());
     }
-    emit dataSetMarkerChanged(dataSet, symbolType, style);
+    Q_EMIT dataSetMarkerChanged(dataSet, symbolType, style);
 
     updateData(dataSet->chartType(), dataSet->chartSubType());
 }
@@ -581,7 +581,7 @@ void DataSetConfigWidget::datasetBrushSelected(const QColor &color)
     if (d->selectedDataSet < 0)
         return;
 
-    emit datasetBrushChanged(d->dataSets[d->selectedDataSet], color, -1);
+    Q_EMIT datasetBrushChanged(d->dataSets[d->selectedDataSet], color, -1);
     updateMarkers();
 }
 
@@ -590,7 +590,7 @@ void DataSetConfigWidget::datasetPenSelected(const QColor &color)
     if (d->selectedDataSet < 0)
         return;
 
-    emit datasetPenChanged(d->dataSets[d->selectedDataSet], color, -1);
+    Q_EMIT datasetPenChanged(d->dataSets[d->selectedDataSet], color, -1);
     updateMarkers();
 }
 
@@ -736,7 +736,7 @@ void DataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void DataSetConfigWidget::ui_datasetShowErrorBarChanged(bool b)
@@ -754,7 +754,7 @@ void DataSetConfigWidget::ui_dataSetShowNumberChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void DataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
@@ -763,7 +763,7 @@ void DataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
 void DataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
@@ -772,5 +772,5 @@ void DataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
         return;
     }
     debugChartUiDataSet << b;
-    emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
+    Q_EMIT datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
 }

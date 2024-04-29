@@ -399,7 +399,7 @@ void NetAccess::slotResult(KJob *job)
         *d->m_metaData = kioJob->metaData();
     }
 
-    emit leaveModality();
+    Q_EMIT leaveModality();
 }
 
 void NetAccess::slotData(KIO::Job *, const QByteArray &data)

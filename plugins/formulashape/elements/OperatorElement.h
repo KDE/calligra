@@ -22,7 +22,7 @@ class KOFORMULA_EXPORT OperatorElement : public TokenElement
 {
 public:
     /// The standard constructor
-    explicit OperatorElement(BasicElement *parent = 0);
+    explicit OperatorElement(BasicElement *parent = nullptr);
 
     /**
      * Used by FenceElement to render its open, close fences as well as the separators

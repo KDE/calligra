@@ -44,7 +44,7 @@ public:
      * Create a new style manager.
      * @param parent pass a parent to use qobject memory management
      */
-    explicit KoStyleManager(QObject *parent = 0);
+    explicit KoStyleManager(QObject *parent = nullptr);
 
     /**
      * Destructor.

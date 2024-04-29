@@ -25,7 +25,7 @@ public:
                                const QTextCharFormat &characterFormat,
                                const QTextBlockFormat &blockFormat,
                                const KoListLevelProperties &llp,
-                               KUndo2Command *parent = 0);
+                               KUndo2Command *parent = nullptr);
 
     ~ParagraphFormattingCommand() override;
 

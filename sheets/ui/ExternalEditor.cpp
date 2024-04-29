@@ -174,7 +174,7 @@ void ExternalEditor::slotTextChanged()
 {
     if (!hasFocus())
         return; // only report change if we have focus
-    emit textModified(toPlainText());
+    Q_EMIT textModified(toPlainText());
     // Update the cursor position again, because this slot is invoked after
     // slotCursorPositionChanged().
     if (d->cellTool->editor()) {

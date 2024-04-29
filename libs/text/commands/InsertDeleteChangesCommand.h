@@ -15,7 +15,7 @@ class QTextDocument;
 class InsertDeleteChangesCommand : public KUndo2Command
 {
 public:
-    explicit InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent = 0);
+    explicit InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent = nullptr);
     void redo();
 
 private:

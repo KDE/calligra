@@ -113,7 +113,7 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem *canvas)
             d->useViewport = false;
         }
 
-        emit canvasChanged();
+        Q_EMIT canvasChanged();
     }
 }
 
@@ -133,7 +133,7 @@ void CQCanvasControllerItem::setFlickable(QDeclarativeItem *item)
         d->flickable = item;
         d->flickable->setProperty("contentWidth", d->documentSize.width());
         d->flickable->setProperty("contentHeight", d->documentSize.height());
-        emit flickableChanged();
+        Q_EMIT flickableChanged();
     }
 }
 
@@ -155,7 +155,7 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
         if (d->canvas && d->canvas->zoomController()) {
             d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
         }
-        emit zoomChanged();
+        Q_EMIT zoomChanged();
     }
 }
 
@@ -173,7 +173,7 @@ void CQCanvasControllerItem::zoomToPage()
         d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, d->canvas->zoomController()->zoomAction()->effectiveZoom());
         d->zoom = d->canvas->zoomController()->zoomAction()->effectiveZoom();
-        emit zoomChanged();
+        Q_EMIT zoomChanged();
     }
 }
 
@@ -192,7 +192,7 @@ void CQCanvasControllerItem::setMinimumZoom(qreal newZoom)
     if (newZoom != d->minimumZoom && newZoom < KoZoomMode::maximumZoom() && newZoom > 0.f) {
         d->minimumZoom = newZoom;
         KoZoomMode::setMinimumZoom(d->minimumZoom);
-        emit minimumZoomChanged();
+        Q_EMIT minimumZoomChanged();
     }
 }
 
@@ -201,7 +201,7 @@ void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
     if (newZoom != d->maximumZoom && newZoom > KoZoomMode::minimumZoom()) {
         d->maximumZoom = newZoom;
         KoZoomMode::setMaximumZoom(d->maximumZoom);
-        emit maximumZoomChanged();
+        Q_EMIT maximumZoomChanged();
     }
 }
 
@@ -354,7 +354,7 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
         }
     }
 
-    emit documentSizeChanged();
+    Q_EMIT documentSizeChanged();
 }
 
 void CQCanvasControllerItem::updateDocumentPosition(const QPoint &pos)

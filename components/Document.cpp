@@ -68,13 +68,13 @@ void Document::setSource(const QUrl &value)
 {
     if (value != d->source) {
         d->source = value;
-        emit sourceChanged();
+        Q_EMIT sourceChanged();
 
         d->status = DocumentStatus::Loading;
-        emit statusChanged();
+        Q_EMIT statusChanged();
 
         d->updateImpl();
-        emit documentTypeChanged();
+        Q_EMIT documentTypeChanged();
 
         if (d->impl) {
             d->impl->setReadOnly(d->readOnly);
@@ -88,8 +88,8 @@ void Document::setSource(const QUrl &value)
             d->status = DocumentStatus::Unloaded;
         }
 
-        emit indexCountChanged();
-        emit statusChanged();
+        Q_EMIT indexCountChanged();
+        Q_EMIT statusChanged();
     }
 }
 
@@ -103,7 +103,7 @@ void Document::setReadOnly(bool readOnly)
     if (d->readOnly != readOnly) {
         d->readOnly = readOnly;
 
-        emit readOnlyChanged();
+        Q_EMIT readOnlyChanged();
     }
 }
 
@@ -232,7 +232,7 @@ void Document::deselectEverything()
         editor->clearSelection();
     }
     d->impl->canvasController()->canvas()->shapeManager()->selection()->deselectAll();
-    emit requestViewUpdate();
+    Q_EMIT requestViewUpdate();
 }
 
 void Document::Private::updateImpl()
@@ -260,7 +260,7 @@ void Document::Private::updateImpl()
         connect(impl, &DocumentImpl::currentIndexChanged, q, &Document::currentIndexChanged);
         connect(impl, &DocumentImpl::requestViewUpdate, q, &Document::requestViewUpdate);
     }
-    emit q->documentChanged();
+    Q_EMIT q->documentChanged();
 }
 
 #include "moc_Document.cpp"

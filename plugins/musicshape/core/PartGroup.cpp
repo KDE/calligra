@@ -51,7 +51,7 @@ void PartGroup::setFirstPart(int index)
     if (d->firstPart == index)
         return;
     d->firstPart = index;
-    emit firstPartChanged(index);
+    Q_EMIT firstPartChanged(index);
 }
 
 int PartGroup::lastPart() const
@@ -65,7 +65,7 @@ void PartGroup::setLastPart(int index)
     if (d->lastPart == index)
         return;
     d->lastPart = index;
-    emit lastPartChanged(index);
+    Q_EMIT lastPartChanged(index);
 }
 
 QString PartGroup::name() const
@@ -78,9 +78,9 @@ void PartGroup::setName(const QString &name)
     if (d->name == name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
     if (d->shortName.isNull())
-        emit shortNameChanged(name);
+        Q_EMIT shortNameChanged(name);
 }
 
 QString PartGroup::shortName(bool useFull) const
@@ -97,7 +97,7 @@ void PartGroup::setShortName(const QString &shortName)
     if (d->shortName == shortName)
         return;
     d->shortName = shortName;
-    emit shortNameChanged(shortName);
+    Q_EMIT shortNameChanged(shortName);
 }
 
 PartGroup::GroupSymbol PartGroup::symbol() const
@@ -110,7 +110,7 @@ void PartGroup::setSymbol(GroupSymbol symbol)
     if (d->symbol == symbol)
         return;
     d->symbol = symbol;
-    emit symbolChanged(symbol);
+    Q_EMIT symbolChanged(symbol);
 }
 
 bool PartGroup::commonBarLines() const
@@ -123,7 +123,7 @@ void PartGroup::setCommonBarLines(bool commonBarLines)
     if (d->commonBarLines == commonBarLines)
         return;
     d->commonBarLines = commonBarLines;
-    emit commonBarLinesChanged(commonBarLines);
+    Q_EMIT commonBarLinesChanged(commonBarLines);
 }
 
 } // namespace MusicCore

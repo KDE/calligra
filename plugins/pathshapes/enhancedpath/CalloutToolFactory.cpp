@@ -72,7 +72,7 @@ void CalloutPathTool::activate(ToolActivation toolActivation, const QSet<KoShape
         }
     }
     if (selectedShapes.isEmpty()) {
-        emit done();
+        Q_EMIT done();
         return;
     }
     m_pointSelection.setSelectedShapes(selectedShapes);

@@ -77,7 +77,7 @@ void AcceptChangeCommand::redo()
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     }
-    emit acceptRejectChange();
+    Q_EMIT acceptRejectChange();
 }
 
 void AcceptChangeCommand::undo()
@@ -85,5 +85,5 @@ void AcceptChangeCommand::undo()
     m_changeTracker->acceptRejectChange(m_changeId, false);
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
-    emit acceptRejectChange();
+    Q_EMIT acceptRejectChange();
 }

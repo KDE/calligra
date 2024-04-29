@@ -23,7 +23,7 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    explicit KoDockWidgetTitleBarButton(QWidget *parent = 0);
+    explicit KoDockWidgetTitleBarButton(QWidget *parent = nullptr);
     ~KoDockWidgetTitleBarButton() override;
 
     QSize sizeHint() const override; ///< reimplemented from QWidget

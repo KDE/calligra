@@ -69,7 +69,7 @@ void VoiceElement::setX(qreal x)
     if (d->x == x)
         return;
     d->x = x;
-    emit xChanged(x);
+    Q_EMIT xChanged(x);
 }
 
 qreal VoiceElement::y() const
@@ -82,7 +82,7 @@ void VoiceElement::setY(qreal y)
     if (d->y == y)
         return;
     d->y = y;
-    emit yChanged(y);
+    Q_EMIT yChanged(y);
 }
 
 qreal VoiceElement::width() const
@@ -95,7 +95,7 @@ void VoiceElement::setWidth(qreal width)
     if (d->width == width)
         return;
     d->width = width;
-    emit widthChanged(width);
+    Q_EMIT widthChanged(width);
 }
 
 qreal VoiceElement::height() const
@@ -108,7 +108,7 @@ void VoiceElement::setHeight(qreal height)
     if (d->height == height)
         return;
     d->height = height;
-    emit heightChanged(height);
+    Q_EMIT heightChanged(height);
 }
 
 int VoiceElement::length() const
@@ -121,7 +121,7 @@ void VoiceElement::setLength(int length)
     if (d->length == length)
         return;
     d->length = length;
-    emit lengthChanged(length);
+    Q_EMIT lengthChanged(length);
 }
 
 qreal VoiceElement::beatline() const

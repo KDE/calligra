@@ -20,7 +20,7 @@ class SimpleSpellCheckingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent = 0);
+    explicit SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent = nullptr);
     ~SimpleSpellCheckingWidget() override;
 
 private:

@@ -19,7 +19,7 @@ class CQTextDocumentNotesModel : public QAbstractListModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum NoteRoles { Text = Qt::UserRole + 1, Image, Color, ColorCount, CategoryName, FirstOfThisColor, Position, Expanded };
-    explicit CQTextDocumentNotesModel(QObject *parent = 0);
+    explicit CQTextDocumentNotesModel(QObject *parent = nullptr);
     virtual ~CQTextDocumentNotesModel();
 
     virtual QVariant data(const QModelIndex &index, int role) const;

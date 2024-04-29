@@ -483,7 +483,7 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
         KoShape *hitShape = findShapeAtPosition(event->point);
         if (!hitShape) {
             deactivate();
-            emit done();
+            Q_EMIT done();
         } else if (dynamic_cast<KoConnectionShape *>(hitShape)) {
             repaintDecorations();
             setEditMode(EditConnection, m_currentShape, -1);
@@ -496,7 +496,7 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         deactivate();
-        emit done();
+        Q_EMIT done();
     } else if (event->key() == Qt::Key_Backspace) {
         deleteSelection();
         event->accept();
@@ -663,7 +663,7 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
         }
     }
     if (mode == Idle) {
-        emit sendConnectionType(m_connectionType);
+        Q_EMIT sendConnectionType(m_connectionType);
     }
     m_currentShape = currentShape;
     m_activeHandle = handle;
@@ -676,7 +676,7 @@ void ConnectionTool::resetEditMode()
 {
     m_connectionType = KoConnectionShape::Standard;
     setEditMode(Idle, 0, -1);
-    emit sendConnectionPointEditState(false);
+    Q_EMIT sendConnectionPointEditState(false);
 }
 
 void ConnectionTool::updateActions()
@@ -757,7 +757,7 @@ void ConnectionTool::updateActions()
             break;
         }
     }
-    emit connectionPointEnabled(connectionPointSelected);
+    Q_EMIT connectionPointEnabled(connectionPointSelected);
 }
 
 void ConnectionTool::updateStatusText()
@@ -767,35 +767,35 @@ void ConnectionTool::updateStatusText()
         if (m_currentShape) {
             if (dynamic_cast<KoConnectionShape *>(m_currentShape)) {
                 if (m_activeHandle >= 0)
-                    emit statusTextChanged(i18n("Drag to edit connection."));
+                    Q_EMIT statusTextChanged(i18n("Drag to edit connection."));
                 else
-                    emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
+                    Q_EMIT statusTextChanged(i18n("Double click connection or press delete to remove it."));
             } else if (m_activeHandle < 0) {
-                emit statusTextChanged(i18n("Click to edit connection points."));
+                Q_EMIT statusTextChanged(i18n("Click to edit connection points."));
             }
         } else {
-            emit statusTextChanged("");
+            Q_EMIT statusTextChanged("");
         }
         break;
     case EditConnection:
         if (m_activeHandle >= 0)
-            emit statusTextChanged(i18n("Drag to edit connection."));
+            Q_EMIT statusTextChanged(i18n("Drag to edit connection."));
         else
-            emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
+            Q_EMIT statusTextChanged(i18n("Double click connection or press delete to remove it."));
         break;
     case EditConnectionPoint:
         if (m_activeHandle >= KoConnectionPoint::FirstCustomConnectionPoint)
-            emit statusTextChanged(i18n("Drag to move connection point. Double click connection or press delete to remove it."));
+            Q_EMIT statusTextChanged(i18n("Drag to move connection point. Double click connection or press delete to remove it."));
         else if (m_activeHandle >= 0)
-            emit statusTextChanged(i18n("Double click connection point or press delete to remove it."));
+            Q_EMIT statusTextChanged(i18n("Double click connection point or press delete to remove it."));
         else
-            emit statusTextChanged(i18n("Double click to add connection point."));
+            Q_EMIT statusTextChanged(i18n("Double click to add connection point."));
         break;
     case CreateConnection:
-        emit statusTextChanged(i18n("Drag to create new connection."));
+        Q_EMIT statusTextChanged(i18n("Drag to create new connection."));
         break;
     default:
-        emit statusTextChanged("");
+        Q_EMIT statusTextChanged("");
     }
 }
 

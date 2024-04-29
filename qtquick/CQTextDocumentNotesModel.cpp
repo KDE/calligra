@@ -178,5 +178,5 @@ void CQTextDocumentNotesModel::addEntry(const QString &text, const QString &imag
     d->entries.insert(before, entry);
     endInsertRows();
     dataChanged(index(position - colorCount), index(position - 1));
-    emit countChanged();
+    Q_EMIT countChanged();
 }

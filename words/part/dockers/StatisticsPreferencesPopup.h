@@ -22,7 +22,7 @@ class StatisticsPreferencesPopup : public QMenu
 {
     Q_OBJECT
 public:
-    explicit StatisticsPreferencesPopup(QWidget *parent = 0);
+    explicit StatisticsPreferencesPopup(QWidget *parent = nullptr);
     QSize sizeHint() const override;
     Ui::StatisticsPreferencesPopup *w;
 

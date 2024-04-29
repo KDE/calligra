@@ -195,8 +195,8 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
             const QString name(value.toString());
             if (!name.isEmpty()) {
                 KUndo2Command *const command = new RenameSheetCommand(sheet, name);
-                emit addCommandRequested(command);
-                emit dataChanged(index, index);
+                Q_EMIT addCommandRequested(command);
+                Q_EMIT dataChanged(index, index);
                 return true;
             }
             break;
@@ -223,7 +223,7 @@ bool MapModel::setHidden(Sheet *sheet, bool hidden)
     } else {
         return false; // nothing to do
     }
-    emit addCommandRequested(command);
+    Q_EMIT addCommandRequested(command);
     return true;
 }
 
@@ -235,11 +235,11 @@ Map *MapModel::map() const
 void MapModel::addSheet(SheetBase *sheet)
 {
     debugSheets << "Added sheet:" << sheet->sheetName();
-    emit layoutChanged();
+    Q_EMIT layoutChanged();
 }
 
 void MapModel::removeSheet(SheetBase *sheet)
 {
     debugSheets << "Removed sheet:" << sheet->sheetName();
-    emit layoutChanged();
+    Q_EMIT layoutChanged();
 }

@@ -20,7 +20,7 @@ public:
      * @param type the connection type
      * @param parent the optional parent command
      */
-    KoConnectionShapeTypeCommand(KoConnectionShape *connection, KoConnectionShape::Type type, KUndo2Command *parent = 0);
+    KoConnectionShapeTypeCommand(KoConnectionShape *connection, KoConnectionShape::Type type, KUndo2Command *parent = nullptr);
     /// redo the command
     void redo() override;
     /// revert the actions done in redo

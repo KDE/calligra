@@ -65,7 +65,7 @@ bool KoDetailsPane::eventFilter(QObject *watched, QEvent *e)
 
     if (watched == m_documentList) {
         if ((e->type() == QEvent::Resize) && isVisible()) {
-            emit splitterResized(this, m_splitter->sizes());
+            Q_EMIT splitterResized(this, m_splitter->sizes());
         }
 
         if ((e->type() == QEvent::KeyPress)) {

@@ -16,7 +16,7 @@ class KoPAPageBase;
 class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand : public KUndo2Command
 {
 public:
-    KPrEditCustomSlideShowsCommand(KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0);
+    KPrEditCustomSlideShowsCommand(KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = nullptr);
 
     ~KPrEditCustomSlideShowsCommand() override;
 

@@ -18,7 +18,7 @@ class GuidesToolOptionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit GuidesToolOptionWidget(QWidget *parent = 0);
+    explicit GuidesToolOptionWidget(QWidget *parent = nullptr);
     ~GuidesToolOptionWidget() override;
 
     /// Sets horizontal guide lines

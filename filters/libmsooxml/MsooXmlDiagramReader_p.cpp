@@ -296,7 +296,7 @@ void AbstractNode::addChild(AbstractNode *node)
 void AbstractNode::removeChild(AbstractNode *node)
 {
     Q_ASSERT(node->m_parent == this);
-    node->m_parent = 0;
+    node->m_parent = nullptr;
     if (m_orderedChildrenReverse.contains(node)) {
         int index = m_orderedChildrenReverse.take(node);
         QList<AbstractNode *> nodes = m_orderedChildren[index];

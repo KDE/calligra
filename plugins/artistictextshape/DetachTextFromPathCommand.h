@@ -16,7 +16,7 @@ class KoPathShape;
 class DetachTextFromPathCommand : public KUndo2Command
 {
 public:
-    explicit DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent = 0);
+    explicit DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent = nullptr);
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command

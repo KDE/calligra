@@ -40,7 +40,7 @@ void TrackedChangeManager::setModel(TrackedChangeModel *model)
 void TrackedChangeManager::slotCurrentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex)
 {
     Q_UNUSED(previousIndex);
-    emit currentChanged(newIndex);
+    Q_EMIT currentChanged(newIndex);
 }
 
 void TrackedChangeManager::selectItem(const QModelIndex &newIndex)

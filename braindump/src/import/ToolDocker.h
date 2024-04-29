@@ -21,7 +21,7 @@ class ToolDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit ToolDocker(QWidget *parent = 0);
+    explicit ToolDocker(QWidget *parent = nullptr);
     ~ToolDocker();
 
 protected:

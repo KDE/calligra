@@ -9,6 +9,7 @@
 #ifndef _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 #define _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 
+#include "KoColorSpace.h"
 #include "KoColorTransformation.h"
 
 #include <cstring>

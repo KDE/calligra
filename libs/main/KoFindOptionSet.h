@@ -31,7 +31,7 @@ public:
      *
      * Constructs an instance without any options.
      */
-    explicit KoFindOptionSet(QObject *parent = 0);
+    explicit KoFindOptionSet(QObject *parent = nullptr);
     /**
      * Destructor.
      */

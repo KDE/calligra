@@ -21,7 +21,7 @@ class KOFORMULA_EXPORT GlyphElement : public TokenElement
 {
 public:
     /// The standard constructor
-    explicit GlyphElement(BasicElement *parent = 0);
+    explicit GlyphElement(BasicElement *parent = nullptr);
 
     /// @return The element's ElementType
     ElementType elementType() const override;

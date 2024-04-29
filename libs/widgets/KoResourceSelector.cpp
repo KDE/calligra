@@ -116,7 +116,7 @@ void KoResourceSelector::mousePressEvent(QMouseEvent *event)
 
         KoResource *resource = static_cast<KoResource *>(index.internalPointer());
         if (resource)
-            emit resourceApplied(resource);
+            Q_EMIT resourceApplied(resource);
     }
 }
 
@@ -183,7 +183,7 @@ void KoResourceSelector::indexChanged(int)
 
     KoResource *resource = static_cast<KoResource *>(index.internalPointer());
     if (resource)
-        emit resourceSelected(resource);
+        Q_EMIT resourceSelected(resource);
 }
 
 void KoResourceSelector::resourceAdded(KoResource *)

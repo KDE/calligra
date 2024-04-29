@@ -108,7 +108,7 @@ void GuidesToolOptionWidget::updatePosition(int index)
         else
             widget.position->changeValue(m_vGuides[index]);
 
-        emit guideLineSelected(orientation(), index);
+        Q_EMIT guideLineSelected(orientation(), index);
     }
 
     widget.position->blockSignals(false);
@@ -130,7 +130,7 @@ void GuidesToolOptionWidget::positionChanged(qreal position)
     if (item)
         item->setText(m_unit.toUserStringValue(position));
 
-    emit guideLinesChanged(orientation());
+    Q_EMIT guideLinesChanged(orientation());
 }
 
 void GuidesToolOptionWidget::removeLine()
@@ -150,7 +150,7 @@ void GuidesToolOptionWidget::removeLine()
 
     widget.positionList->blockSignals(false);
 
-    emit guideLinesChanged(orientation());
+    Q_EMIT guideLinesChanged(orientation());
 }
 
 void GuidesToolOptionWidget::addLine()
@@ -167,8 +167,8 @@ void GuidesToolOptionWidget::addLine()
     widget.positionList->setCurrentRow(widget.positionList->count() - 1);
     widget.positionList->blockSignals(false);
 
-    emit guideLinesChanged(o);
-    emit guideLineSelected(o, widget.positionList->currentRow());
+    Q_EMIT guideLinesChanged(o);
+    Q_EMIT guideLineSelected(o, widget.positionList->currentRow());
 }
 
 void GuidesToolOptionWidget::setUnit(const KoUnit &unit)

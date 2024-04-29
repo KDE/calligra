@@ -60,7 +60,7 @@ QWidget *GotoDialog::defaultWidget()
 void GotoDialog::onApply()
 {
     QString region = m_nameCell->currentText();
-    emit gotoCell(region);
+    Q_EMIT gotoCell(region);
     m_nameCell->lineEdit()->selectAll();
     m_nameCell->setFocus();
 }

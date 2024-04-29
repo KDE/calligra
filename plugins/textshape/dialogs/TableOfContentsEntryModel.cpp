@@ -113,7 +113,7 @@ bool TableOfContentsEntryModel::setData(const QModelIndex &index, const QVariant
 
     // show data in preview
     saveData();
-    emit tocEntryDataChanged();
+    Q_EMIT tocEntryDataChanged();
 
     return true;
 }

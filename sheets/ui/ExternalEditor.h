@@ -25,7 +25,7 @@ class CALLIGRA_SHEETS_UI_EXPORT ExternalEditor : public KTextEdit
 {
     Q_OBJECT
 public:
-    explicit ExternalEditor(QWidget *parent = 0);
+    explicit ExternalEditor(QWidget *parent = nullptr);
     ~ExternalEditor() override;
 
     QSize sizeHint() const override;

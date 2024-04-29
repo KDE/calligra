@@ -22,7 +22,7 @@ namespace KoChart
 class PieProxy : public QSortFilterProxyModel
 {
 public:
-    PieProxy(QObject *parent = 0)
+    PieProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
     {
     }

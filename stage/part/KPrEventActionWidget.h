@@ -23,7 +23,7 @@ class STAGE_EXPORT KPrEventActionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrEventActionWidget(QWidget *parent = 0);
+    explicit KPrEventActionWidget(QWidget *parent = nullptr);
     ~KPrEventActionWidget() override;
 
     /**

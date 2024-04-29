@@ -182,7 +182,7 @@ void KWDocument::addShape(KoShape *shape)
     }
 
     if (!(shape->shapeId() == "AnnotationTextShapeID")) {
-        emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+        Q_EMIT shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
     }
 
     shape->update();
@@ -198,7 +198,7 @@ void KWDocument::removeShape(KoShape *shape)
         else
             fs->removeShape(shape);
     } else { // not in a frameset, but we still have to remove it from views.
-        emit shapeRemoved(shape);
+        Q_EMIT shapeRemoved(shape);
     }
     if (shape->shapeId() == "AnnotationTextShapeID") {
         annotationLayoutManager()->removeAnnotationShape(shape);
@@ -308,7 +308,7 @@ void KWDocument::firePageSetupChanged()
     debugWords;
     if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
-    emit pageSetupChanged();
+    Q_EMIT pageSetupChanged();
 }
 
 void KWDocument::removeFrameSet(KWFrameSet *fs)
@@ -420,14 +420,14 @@ void KWDocument::addSequencedShape(KoShape *shape)
 {
     debugWords << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
     // firePageSetupChanged();
-    emit shapeAdded(shape, KoShapeManager::AddWithoutRepaint);
+    Q_EMIT shapeAdded(shape, KoShapeManager::AddWithoutRepaint);
 }
 
 void KWDocument::removeSequencedShape(KoShape *shape)
 {
     debugWords << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
 
-    emit shapeRemoved(shape);
+    Q_EMIT shapeRemoved(shape);
     KWPage page = pageManager()->page(shape);
     if (!page.isValid())
         return;

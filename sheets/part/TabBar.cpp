@@ -568,7 +568,7 @@ void TabBar::setActiveTab(const QString &text)
     d->updateButtons();
     update();
 
-    emit tabChanged(text);
+    Q_EMIT tabChanged(text);
 }
 
 void TabBar::autoScrollBack()
@@ -695,7 +695,7 @@ void TabBar::mousePressEvent(QMouseEvent *ev)
         d->activeTab = tab;
         update();
 
-        emit tabChanged(d->tabs[d->activeTab - 1]);
+        Q_EMIT tabChanged(d->tabs[d->activeTab - 1]);
 
         // scroll if partially visible
         if (d->tabRects[tab - 1].right() > width() - d->offset)
@@ -704,7 +704,7 @@ void TabBar::mousePressEvent(QMouseEvent *ev)
 
     if (ev->button() == Qt::RightButton)
         if (!d->readOnly)
-            emit contextMenu(ev->globalPos());
+            Q_EMIT contextMenu(ev->globalPos());
 }
 
 void TabBar::mouseReleaseEvent(QMouseEvent *ev)
@@ -715,7 +715,7 @@ void TabBar::mouseReleaseEvent(QMouseEvent *ev)
     d->autoScroll = false;
 
     if (ev->button() == Qt::LeftButton && d->targetTab != 0) {
-        emit tabMoved(d->activeTab - 1, d->targetTab - 1);
+        Q_EMIT tabMoved(d->activeTab - 1, d->targetTab - 1);
         d->targetTab = 0;
     }
 }
@@ -784,7 +784,7 @@ void TabBar::mouseDoubleClickEvent(QMouseEvent *ev)
     int offset = isRightToLeft() ? 0 : d->offset;
     if (ev->pos().x() > offset)
         if (!d->readOnly)
-            emit doubleClicked();
+            Q_EMIT doubleClicked();
 }
 
 void TabBar::wheelEvent(QWheelEvent *e)
@@ -828,7 +828,7 @@ void TabBar::wheelEvent(QWheelEvent *e)
     }
 
     update();
-    emit tabChanged(d->tabs[d->activeTab - 1]);
+    Q_EMIT tabChanged(d->tabs[d->activeTab - 1]);
 }
 
 } // namespace Sheets

@@ -32,7 +32,10 @@ public:
      * @param flags the list flags.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties, KoTextEditor::ChangeListFlags flags, KUndo2Command *parent = 0);
+    ChangeListCommand(const QTextCursor &cursor,
+                      const KoListLevelProperties &levelProperties,
+                      KoTextEditor::ChangeListFlags flags,
+                      KUndo2Command *parent = nullptr);
 
     /**
      * Change the list command.
@@ -42,7 +45,7 @@ public:
      * @param flags the list flags.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level, KoTextEditor::ChangeListFlags flags, KUndo2Command *parent = 0);
+    ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level, KoTextEditor::ChangeListFlags flags, KUndo2Command *parent = nullptr);
     ~ChangeListCommand() override;
 
     /// redo the command

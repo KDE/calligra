@@ -14,7 +14,7 @@ class MatrixDataModel : public QAbstractTableModel
 {
 public:
     /// Creates a new matrix data model
-    explicit MatrixDataModel(QObject *parent = 0);
+    explicit MatrixDataModel(QObject *parent = nullptr);
 
     /// Sets the matrix data and rows/columns to use
     void setMatrix(const QVector<qreal> &matrix, int rows, int cols);

@@ -27,7 +27,7 @@ class KOFORMULA_EXPORT UnknownElement : public BasicElement
 {
 public:
     /// The standard constructor
-    explicit UnknownElement(BasicElement *parent = 0);
+    explicit UnknownElement(BasicElement *parent = nullptr);
 
     /// The standard destructor
     ~UnknownElement() override;

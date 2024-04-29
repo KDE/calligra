@@ -326,7 +326,7 @@ void KoToolManager::Private::disconnectActiveTool()
     }
 
     // emit a empty status text to clear status text from last active tool
-    emit q->changedStatusText(QString());
+    Q_EMIT q->changedStatusText(QString());
 }
 
 void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
@@ -446,7 +446,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     // Activate the actions for the currently active tool
     canvasData->activateToolActions();
 
-    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
+    Q_EMIT q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget *>(canvasData->canvas);
     if (canvasControllerWidget) {
@@ -483,11 +483,11 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
     }
 
     if (oldInputDevice != canvasData->inputDevice) {
-        emit q->inputDeviceChanged(canvasData->inputDevice);
+        Q_EMIT q->inputDeviceChanged(canvasData->inputDevice);
     }
 
     if (oldCanvas != canvasData->canvas->canvas()) {
-        emit q->changedCanvas(canvasData->canvas->canvas());
+        Q_EMIT q->changedCanvas(canvasData->canvas->canvas());
     }
 }
 
@@ -551,7 +551,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         delete tool;
     }
     canvasses.remove(controller);
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
@@ -596,7 +596,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
         currentLayerChanged(layer);
     });
 
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
@@ -693,7 +693,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape *> &shapes)
             switchTool(KoInteractionTool_ID, false);
         }
     }
-    emit q->toolCodesSelected(types);
+    Q_EMIT q->toolCodesSelected(types);
     // First time the tool is activated, it is not shown
     // because activetool must be set before optionwidgets are set.
     // Activetool is not set until q->toolCodesSelected() is emitted above,
@@ -709,7 +709,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape *> &shapes)
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
 {
-    emit q->currentLayerChanged(canvasData->canvas, layer);
+    Q_EMIT q->currentLayerChanged(canvasData->canvas, layer);
     layerExplicitlyDisabled = layer && !layer->isEditable();
     updateToolForProxy();
 
@@ -1063,7 +1063,7 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
             continue;
         }
 
-        emit addedTool(tool->toolAction(), controller);
+        Q_EMIT addedTool(tool->toolAction(), controller);
     }
 }
 

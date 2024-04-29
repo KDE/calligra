@@ -134,7 +134,7 @@ void ConvolveMatrixEffectConfigWidget::edgeModeChanged(int id)
         m_effect->setEdgeMode(ConvolveMatrixEffect::None);
         break;
     }
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ConvolveMatrixEffectConfigWidget::orderChanged(int)
@@ -155,7 +155,7 @@ void ConvolveMatrixEffectConfigWidget::orderChanged(int)
             kernel.resize(newSize);
         }
         m_effect->setKernel(kernel);
-        emit filterChanged();
+        Q_EMIT filterChanged();
     }
 
     m_targetX->setMaximum(newOrder.x());
@@ -171,7 +171,7 @@ void ConvolveMatrixEffectConfigWidget::targetChanged(int)
     QPoint oldTarget = m_effect->target();
     if (newTarget != oldTarget) {
         m_effect->setTarget(newTarget);
-        emit filterChanged();
+        Q_EMIT filterChanged();
     }
 }
 
@@ -182,7 +182,7 @@ void ConvolveMatrixEffectConfigWidget::divisorChanged(double divisor)
 
     if (divisor != m_effect->divisor()) {
         m_effect->setDivisor(divisor);
-        emit filterChanged();
+        Q_EMIT filterChanged();
     }
 }
 
@@ -193,7 +193,7 @@ void ConvolveMatrixEffectConfigWidget::biasChanged(double bias)
 
     if (bias != m_effect->bias()) {
         m_effect->setBias(bias);
-        emit filterChanged();
+        Q_EMIT filterChanged();
     }
 }
 
@@ -203,7 +203,7 @@ void ConvolveMatrixEffectConfigWidget::preserveAlphaChanged(bool checked)
         return;
 
     m_effect->enablePreserveAlpha(checked);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ConvolveMatrixEffectConfigWidget::editKernel()
@@ -235,7 +235,7 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     connect(buttonBox, &QDialogButtonBox::rejected, dlg.data(), &QDialog::reject);
     if (dlg->exec() == QDialog::Accepted) {
         m_effect->setKernel(m_matrixModel->matrix());
-        emit filterChanged();
+        Q_EMIT filterChanged();
     } else {
         m_effect->setKernel(oldKernel);
     }
@@ -250,5 +250,5 @@ void ConvolveMatrixEffectConfigWidget::kernelChanged()
         return;
 
     m_effect->setKernel(m_matrixModel->matrix());
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

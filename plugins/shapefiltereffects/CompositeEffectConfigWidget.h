@@ -18,7 +18,7 @@ class CompositeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit CompositeEffectConfigWidget(QWidget *parent = 0);
+    explicit CompositeEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

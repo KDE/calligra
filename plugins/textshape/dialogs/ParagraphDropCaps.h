@@ -25,7 +25,7 @@ class ParagraphDropCaps : public QWidget
     Q_OBJECT
 
 public:
-    explicit ParagraphDropCaps(QWidget *parent = 0);
+    explicit ParagraphDropCaps(QWidget *parent = nullptr);
 
     void setDisplay(KoParagraphStyle *style, bool directFormattingMode);
     void save(KoParagraphStyle *style);

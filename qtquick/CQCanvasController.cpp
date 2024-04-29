@@ -53,7 +53,7 @@ void CQCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCen
 {
     Q_UNUSED(recalculateCenter)
     setDocumentSize(sz);
-    emit documentSizeChanged(sz);
+    Q_EMIT documentSizeChanged(sz);
 }
 
 void CQCanvasController::setScrollBarValue(const QPoint &value)
@@ -71,7 +71,7 @@ void CQCanvasController::pan(const QPoint &distance)
     QPoint offset = documentOffset() + distance;
     setDocumentOffset(offset);
     proxyObject->emitMoveDocumentOffset(offset);
-    emit documentPositionChanged(offset);
+    Q_EMIT documentPositionChanged(offset);
 }
 
 QPointF CQCanvasController::preferredCenter() const

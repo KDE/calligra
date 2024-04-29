@@ -164,5 +164,5 @@ void KoConfigMiscPage::slotUnitChanged(int u)
     d->pasteOffset->setUnit(unit);
     d->pasteOffset->blockSignals(false);
 
-    emit unitChanged(unit);
+    Q_EMIT unitChanged(unit);
 }

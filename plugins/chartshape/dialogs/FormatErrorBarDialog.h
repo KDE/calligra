@@ -17,7 +17,7 @@ class FormatErrorBarDialog : public QDialog, public Ui::FormatErrorBarDialog
 {
     Q_OBJECT
 public:
-    explicit FormatErrorBarDialog(QWidget *parent = 0);
+    explicit FormatErrorBarDialog(QWidget *parent = nullptr);
     ~FormatErrorBarDialog();
     Ui::FormatErrorBarDialog widget;
 

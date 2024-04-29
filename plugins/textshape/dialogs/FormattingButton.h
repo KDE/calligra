@@ -22,7 +22,7 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit FormattingButton(QWidget *parent = 0);
+    explicit FormattingButton(QWidget *parent = nullptr);
 
     ItemChooserAction *addItemChooser(int columns, const QString &title = QString());
     void setItemsBackground(ItemChooserAction *chooser, const QColor &color);

@@ -201,7 +201,7 @@ void Workbook::setPassword(unsigned long hash)
 
 void Workbook::emitProgress(int value)
 {
-    emit sigProgress(value);
+    Q_EMIT sigProgress(value);
 }
 
 int Workbook::addFormat(const Format &format)

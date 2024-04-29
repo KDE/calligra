@@ -87,14 +87,14 @@ void LayoutPageGeneral::styleNameChanged(const QString &name)
     if ((name != m_name) && (!m_manager->validateStyleName(name))) {
         m_nameStatus->setText(i18n("A style with this name already exists."));
         m_nameStatus->show();
-        emit validDataChanged(false);
+        Q_EMIT validDataChanged(false);
     } else if (name.isEmpty()) {
         m_nameStatus->setText(i18n("The style name can not be empty."));
         m_nameStatus->show();
-        emit validDataChanged(false);
+        Q_EMIT validDataChanged(false);
     } else {
         m_nameStatus->hide();
-        emit validDataChanged(true);
+        Q_EMIT validDataChanged(true);
     }
 }
 
@@ -103,14 +103,14 @@ void LayoutPageGeneral::parentChanged(const QString &parentName)
     if (m_nameEdit->text() == parentName) {
         m_parentStatus->setText(i18n("A style cannot inherit from itself."));
         m_parentStatus->show();
-        emit validDataChanged(false);
+        Q_EMIT validDataChanged(false);
     } else if (!m_manager->checkCircle(m_nameEdit->text(), parentName)) {
         m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.", m_parentBox->currentText()));
         m_parentStatus->show();
-        emit validDataChanged(false);
+        Q_EMIT validDataChanged(false);
     } else {
         m_parentStatus->hide();
-        emit validDataChanged(true);
+        Q_EMIT validDataChanged(true);
     }
 }
 

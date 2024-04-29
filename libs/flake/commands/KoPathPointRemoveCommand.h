@@ -31,7 +31,7 @@ public:
      * @param shapeController shape controller in charge
      * @param parent the parent command used for macro commands
      */
-    static KUndo2Command *createCommand(const QList<KoPathPointData> &pointDataList, KoShapeController *shapeController, KUndo2Command *parent = 0);
+    static KUndo2Command *createCommand(const QList<KoPathPointData> &pointDataList, KoShapeController *shapeController, KUndo2Command *parent = nullptr);
 
     /**
      * @brief Command to remove a points from path shapes
@@ -41,7 +41,7 @@ public:
      * @param pointDataList List of point data to remove.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathPointRemoveCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = 0);
+    explicit KoPathPointRemoveCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = nullptr);
     ~KoPathPointRemoveCommand() override;
 
     /// redo the command

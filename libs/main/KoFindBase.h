@@ -29,7 +29,7 @@ class KOMAIN_EXPORT KoFindBase : public QObject
 public:
     typedef QList<KoFindMatch> KoFindMatchList;
 
-    explicit KoFindBase(QObject *parent = 0);
+    explicit KoFindBase(QObject *parent = nullptr);
     ~KoFindBase() override;
 
     /**

@@ -19,9 +19,9 @@ class ConfigSubWidgetBase : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigSubWidgetBase(QWidget *parent = 0);
+    ConfigSubWidgetBase(QWidget *parent = nullptr);
 
-    ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent = 0);
+    ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent = nullptr);
 
     ~ConfigSubWidgetBase();
 

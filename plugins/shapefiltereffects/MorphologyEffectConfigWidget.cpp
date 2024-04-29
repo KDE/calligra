@@ -82,7 +82,7 @@ void MorphologyEffectConfigWidget::operatorChanged(int id)
         m_effect->setMorphologyOperator(MorphologyEffect::Dilate);
         break;
     }
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void MorphologyEffectConfigWidget::radiusXChanged(double x)
@@ -94,7 +94,7 @@ void MorphologyEffectConfigWidget::radiusXChanged(double x)
     if (radius.x() != x)
         m_effect->setMorphologyRadius(QPointF(x * 0.01, radius.y()));
 
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void MorphologyEffectConfigWidget::radiusYChanged(double y)
@@ -106,5 +106,5 @@ void MorphologyEffectConfigWidget::radiusYChanged(double y)
     if (radius.y() != y)
         m_effect->setMorphologyRadius(QPointF(radius.x(), y * 0.01));
 
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

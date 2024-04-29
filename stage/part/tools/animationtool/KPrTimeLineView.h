@@ -32,7 +32,7 @@ class KPrTimeLineView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrTimeLineView(QWidget *parent = 0);
+    explicit KPrTimeLineView(QWidget *parent = nullptr);
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
     bool eventFilter(QObject *target, QEvent *event) override;

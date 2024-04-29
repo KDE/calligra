@@ -86,7 +86,7 @@ void View::setDocument(Document *newValue)
         });
 
         d->updateCanvas();
-        emit documentChanged();
+        Q_EMIT documentChanged();
     }
 }
 

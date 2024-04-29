@@ -18,7 +18,7 @@ namespace KoChart
 class FontEditorDialog : public KoDialog
 {
 public:
-    explicit FontEditorDialog(QWidget *parent = 0);
+    explicit FontEditorDialog(QWidget *parent = nullptr);
     ~FontEditorDialog();
     KFontChooser *fontChooser;
 };

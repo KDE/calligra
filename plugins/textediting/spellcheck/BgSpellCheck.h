@@ -21,8 +21,8 @@ class BgSpellCheck : public BackgroundChecker
 {
     Q_OBJECT
 public:
-    explicit BgSpellCheck(const Speller &speller, QObject *parent = 0);
-    explicit BgSpellCheck(QObject *parent = 0);
+    explicit BgSpellCheck(const Speller &speller, QObject *parent = nullptr);
+    explicit BgSpellCheck(QObject *parent = nullptr);
     void startRun(QTextDocument *document, int startPosition, int endPosition);
     QString currentLanguage() const;
     QString currentCountry() const;

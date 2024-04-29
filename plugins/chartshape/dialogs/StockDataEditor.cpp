@@ -26,7 +26,7 @@ class DataProxy : public QSortFilterProxyModel
 public:
     ChartShape *chart;
 
-    DataProxy(QObject *parent = 0)
+    DataProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
         , chart(0)
     {

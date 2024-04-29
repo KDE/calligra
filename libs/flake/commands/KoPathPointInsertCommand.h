@@ -31,7 +31,7 @@ public:
      * @param insertPosition the position to insert at [0..1]
      * @param parent the parent command used for macro commands
      */
-    KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, KUndo2Command *parent = 0);
+    KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, KUndo2Command *parent = nullptr);
     ~KoPathPointInsertCommand() override;
 
     /// redo the command

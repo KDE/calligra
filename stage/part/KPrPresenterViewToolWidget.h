@@ -23,7 +23,7 @@ class KPrPresenterViewToolWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit KPrPresenterViewToolWidget(QWidget *parent = 0);
+    explicit KPrPresenterViewToolWidget(QWidget *parent = nullptr);
     void toggleSlideThumbnails(bool toggle);
 
 Q_SIGNALS:

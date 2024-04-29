@@ -19,7 +19,7 @@ class CQTextToCModel : public QAbstractListModel
 
 public:
     enum TextToCModelRoleNames { Title = Qt::UserRole + 1, Level, PageNumber };
-    explicit CQTextToCModel(QObject *parent = 0);
+    explicit CQTextToCModel(QObject *parent = nullptr);
     virtual ~CQTextToCModel();
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual int rowCount(const QModelIndex &parent) const;

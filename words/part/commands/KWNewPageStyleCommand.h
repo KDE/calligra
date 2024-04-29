@@ -25,7 +25,7 @@ public:
      * @param newStyle the new style
      * @param parent the parent for command macros
      */
-    explicit KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent = 0);
+    explicit KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

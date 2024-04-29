@@ -22,7 +22,7 @@ class KoEditColorSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
+    KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = nullptr);
     ~KoEditColorSetWidget() override;
 
     /**

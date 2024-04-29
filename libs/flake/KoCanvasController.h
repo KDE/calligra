@@ -313,46 +313,46 @@ class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(KoCanvasControllerProxyObject)
 public:
-    explicit KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
+    explicit KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = nullptr);
 
 public:
     // Convenience methods to invoke the signals from subclasses
 
     void emitCanvasRemoved(KoCanvasController *canvasController)
     {
-        emit canvasRemoved(canvasController);
+        Q_EMIT canvasRemoved(canvasController);
     }
     void emitCanvasSet(KoCanvasController *canvasController)
     {
-        emit canvasSet(canvasController);
+        Q_EMIT canvasSet(canvasController);
     }
     void emitCanvasOffsetXChanged(int offset)
     {
-        emit canvasOffsetXChanged(offset);
+        Q_EMIT canvasOffsetXChanged(offset);
     }
     void emitCanvasOffsetYChanged(int offset)
     {
-        emit canvasOffsetYChanged(offset);
+        Q_EMIT canvasOffsetYChanged(offset);
     }
     void emitCanvasMousePositionChanged(const QPoint &position)
     {
-        emit canvasMousePositionChanged(position);
+        Q_EMIT canvasMousePositionChanged(position);
     }
     void emitDocumentMousePositionChanged(const QPointF &position)
     {
-        emit documentMousePositionChanged(position);
+        Q_EMIT documentMousePositionChanged(position);
     }
     void emitSizeChanged(const QSize &size)
     {
-        emit sizeChanged(size);
+        Q_EMIT sizeChanged(size);
     }
     void emitMoveDocumentOffset(const QPoint &point)
     {
-        emit moveDocumentOffset(point);
+        Q_EMIT moveDocumentOffset(point);
     }
     void emitZoomRelative(const qreal factor, const QPointF &stillPoint)
     {
-        emit zoomRelative(factor, stillPoint);
+        Q_EMIT zoomRelative(factor, stillPoint);
     }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer

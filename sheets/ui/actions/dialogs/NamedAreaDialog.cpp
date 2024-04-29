@@ -179,7 +179,7 @@ void NamedAreaDialog::slotActivated()
     m_sheets->setCurrentIndex(m_sheets->findText(sheet->sheetName()));
     m_cellRange->setText(region.name(sheet));
 
-    emit requestSelection(region, fullSheet);
+    Q_EMIT requestSelection(region, fullSheet);
 }
 
 void NamedAreaDialog::onSelectionChanged(Selection *)

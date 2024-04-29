@@ -30,7 +30,7 @@ public:
                                    int oldConnectionPointId,
                                    KoShape *newConnectedShape,
                                    int newConnectionPointId,
-                                   KUndo2Command *parent = 0);
+                                   KUndo2Command *parent = nullptr);
 
     /// Destroys the command
     ~KoShapeConnectionChangeCommand() override;

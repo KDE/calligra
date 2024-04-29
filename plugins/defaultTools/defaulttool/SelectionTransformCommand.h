@@ -16,7 +16,10 @@ class KoShape;
 class SelectionTransformCommand : public KUndo2Command
 {
 public:
-    SelectionTransformCommand(KoSelection *selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command *parent = 0);
+    SelectionTransformCommand(KoSelection *selection,
+                              const QTransform &oldTransformation,
+                              const QTransform &newTransformation,
+                              KUndo2Command *parent = nullptr);
 
     /// reimplemented from KUndo2Command
     void redo() override;

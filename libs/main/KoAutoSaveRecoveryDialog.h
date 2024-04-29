@@ -18,7 +18,7 @@ class KoAutoSaveRecoveryDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
+    explicit KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = nullptr);
     QStringList recoverableFiles();
 
 public Q_SLOTS:

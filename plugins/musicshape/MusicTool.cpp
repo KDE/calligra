@@ -39,10 +39,10 @@ void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
             break;
     }
     if (!m_musicshape) {
-        emit done();
+        Q_EMIT done();
         return;
     }
-    emit shapeChanged(m_musicshape);
+    Q_EMIT shapeChanged(m_musicshape);
     useCursor(Qt::ArrowCursor);
 }
 

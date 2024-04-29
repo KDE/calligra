@@ -124,7 +124,7 @@ bool KPrSlidesSorterDocumentModel::setData(const QModelIndex &index, const QVari
         return false;
     }
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 
@@ -208,8 +208,8 @@ Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) cons
 
 void KPrSlidesSorterDocumentModel::update()
 {
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
+    Q_EMIT layoutAboutToBeChanged();
+    Q_EMIT layoutChanged();
 }
 
 bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)

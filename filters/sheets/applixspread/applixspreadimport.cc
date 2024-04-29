@@ -37,7 +37,7 @@ QString APPLIXSPREADImport::nextLine(QTextStream & stream)
     if (m_instep > m_stepsize) {
         m_instep = 0;
         m_progress += 2;
-        emit sigProgress(m_progress);
+        Q_EMIT sigProgress(m_progress);
     }
     return s;
 }
@@ -561,7 +561,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
         }
 
     }
-    emit sigProgress(100);
+    Q_EMIT sigProgress(100);
 
     str += "  </table>\n"
            " </map>\n"

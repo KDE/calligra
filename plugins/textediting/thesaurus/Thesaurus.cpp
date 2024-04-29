@@ -261,12 +261,12 @@ void Thesaurus::process()
     if (replacement == m_word.trimmed())
         return;
 
-    emit startMacro(i18n("Replace Word"));
+    Q_EMIT startMacro(i18n("Replace Word"));
     QTextCursor cursor(m_document);
     cursor.setPosition(m_startPosition);
     cursor.setPosition(m_startPosition + m_word.trimmed().length(), QTextCursor::KeepAnchor);
     cursor.insertText(replacement);
-    emit stopMacro();
+    Q_EMIT stopMacro();
 }
 
 void Thesaurus::dialogClosed()

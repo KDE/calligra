@@ -25,7 +25,7 @@ void KPresenterSlideLoader::close()
     delete m_doc;
     m_doc = 0;
     version++;
-    emit slidesChanged();
+    Q_EMIT slidesChanged();
 }
 
 void KPresenterSlideLoader::open(const QString &path)
@@ -51,7 +51,7 @@ void KPresenterSlideLoader::open(const QString &path)
     }
     doc->setReadWrite(false);
     doc->setAutoSave(0);
-    emit slidesChanged();
+    Q_EMIT slidesChanged();
 }
 int KPresenterSlideLoader::numberOfSlides()
 {

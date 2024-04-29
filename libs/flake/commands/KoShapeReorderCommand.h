@@ -27,7 +27,7 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeReorderCommand(const QList<KoShape *> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
+    KoShapeReorderCommand(const QList<KoShape *> &shapes, QList<int> &newIndexes, KUndo2Command *parent = nullptr);
     ~KoShapeReorderCommand() override;
 
     /// An enum for defining what kind of reordering to use.
@@ -47,7 +47,7 @@ public:
      * @param parent the parent command for grouping purposes.
      * @return command for reordering the shapes or 0 if no reordering happened
      */
-    static KoShapeReorderCommand *createCommand(const QList<KoShape *> &shapes, KoShapeManager *manager, MoveShapeType move, KUndo2Command *parent = 0);
+    static KoShapeReorderCommand *createCommand(const QList<KoShape *> &shapes, KoShapeManager *manager, MoveShapeType move, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

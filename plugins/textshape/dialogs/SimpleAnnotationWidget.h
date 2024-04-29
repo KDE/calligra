@@ -11,7 +11,7 @@ class SimpleAnnotationWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent = 0);
+    explicit SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent = nullptr);
     // virtual ~SimpleAnnotationWidget();
 
 Q_SIGNALS:

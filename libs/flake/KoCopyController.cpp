@@ -30,7 +30,7 @@ void KoCopyControllerPrivate::copy()
         // means the copy can be done by a flake tool
         canvas->toolProxy()->copy();
     else // if not; then the application gets a request to do the copy
-        emit parent->copyRequested();
+        Q_EMIT parent->copyRequested();
 }
 
 void KoCopyControllerPrivate::cut()
@@ -38,7 +38,7 @@ void KoCopyControllerPrivate::cut()
     if (canvas->toolProxy()->hasSelection()) {
         canvas->toolProxy()->cut();
     } else {
-        emit parent->copyRequested();
+        Q_EMIT parent->copyRequested();
     }
 }
 

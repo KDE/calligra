@@ -79,17 +79,17 @@ void KoFindBase::find(const QString &pattern)
     d->matches.clear();
     findImplementation(pattern, d->matches);
 
-    emit hasMatchesChanged(d->matches.count() > 0);
+    Q_EMIT hasMatchesChanged(d->matches.count() > 0);
     if (d->matches.size() > 0) {
         if (d->currentMatch >= d->matches.size()) {
             d->currentMatch = 0;
         }
-        emit matchFound(d->matches.at(d->currentMatch));
+        Q_EMIT matchFound(d->matches.at(d->currentMatch));
     } else {
-        emit noMatchFound();
+        Q_EMIT noMatchFound();
     }
 
-    emit updateCanvas();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::findNext()
@@ -99,13 +99,13 @@ void KoFindBase::findNext()
     }
 
     d->currentMatch = (d->currentMatch + 1) % d->matches.count();
-    emit matchFound(d->matches.at(d->currentMatch));
+    Q_EMIT matchFound(d->matches.at(d->currentMatch));
 
     if (d->currentMatch == 0) {
-        emit wrapAround(true);
+        Q_EMIT wrapAround(true);
     }
 
-    emit updateCanvas();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::findPrevious()
@@ -115,20 +115,20 @@ void KoFindBase::findPrevious()
     }
 
     d->currentMatch = (--d->currentMatch) >= 0 ? d->currentMatch : d->matches.count() - 1;
-    emit matchFound(d->matches.at(d->currentMatch));
+    Q_EMIT matchFound(d->matches.at(d->currentMatch));
 
     if (d->currentMatch == d->matches.count() - 1) {
-        emit wrapAround(false);
+        Q_EMIT wrapAround(false);
     }
 
-    emit updateCanvas();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::finished()
 {
     clearMatches();
     d->matches.clear();
-    emit updateCanvas();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::replaceCurrent(const QVariant &value)
@@ -144,11 +144,11 @@ void KoFindBase::replaceCurrent(const QVariant &value)
     }
 
     if (d->matches.count() > 0) {
-        emit matchFound(d->matches.at(0));
+        Q_EMIT matchFound(d->matches.at(0));
     } else {
-        emit noMatchFound();
+        Q_EMIT noMatchFound();
     }
-    emit updateCanvas();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::replaceAll(const QVariant &value)
@@ -160,8 +160,8 @@ void KoFindBase::replaceAll(const QVariant &value)
     // Intentionally not using clearMatches since we should not clear
     // highlighting here.
     d->matches.clear();
-    emit noMatchFound();
-    emit updateCanvas();
+    Q_EMIT noMatchFound();
+    Q_EMIT updateCanvas();
 }
 
 void KoFindBase::clearMatches()

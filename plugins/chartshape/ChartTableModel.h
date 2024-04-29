@@ -36,7 +36,7 @@ class ChartTableModel : public QStandardItemModel, public KoChart::ChartModel
     Q_INTERFACES(KoChart::ChartModel)
 
 public:
-    explicit ChartTableModel(QObject *parent = 0);
+    explicit ChartTableModel(QObject *parent = nullptr);
     ~ChartTableModel();
 
     QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;

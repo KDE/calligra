@@ -14,7 +14,7 @@
 class MySpellCheck : public BgSpellCheck
 {
 public:
-    MySpellCheck(QObject *parent = 0)
+    MySpellCheck(QObject *parent = nullptr)
         : BgSpellCheck(parent)
     {
     }

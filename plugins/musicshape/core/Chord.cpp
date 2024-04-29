@@ -185,7 +185,7 @@ void Chord::setDuration(Duration duration)
         length += baseLength >> (i + 1);
     }
     setLength(length);
-    emit durationChanged(duration);
+    Q_EMIT durationChanged(duration);
 }
 
 int Chord::dots() const
@@ -204,7 +204,7 @@ void Chord::setDots(int dots)
         length += baseLength >> (i + 1);
     }
     setLength(length);
-    emit dotsChanged(dots);
+    Q_EMIT dotsChanged(dots);
 }
 
 int Chord::noteCount() const

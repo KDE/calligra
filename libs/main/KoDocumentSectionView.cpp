@@ -192,7 +192,7 @@ void KoDocumentSectionView::contextMenuEvent(QContextMenuEvent *e)
 
 void KoDocumentSectionView::showContextMenu(const QPoint &globalPos, const QModelIndex &index)
 {
-    emit contextMenuRequested(globalPos, index);
+    Q_EMIT contextMenuRequested(globalPos, index);
 }
 
 void KoDocumentSectionView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -221,7 +221,7 @@ void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModel
 void KoDocumentSectionView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QTreeView::selectionChanged(selected, deselected);
-    emit selectionChanged(selectedIndexes());
+    Q_EMIT selectionChanged(selectedIndexes());
 }
 
 void KoDocumentSectionView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)

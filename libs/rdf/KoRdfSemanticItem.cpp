@@ -58,7 +58,7 @@ void KoRdfSemanticItem::importFromDataComplete(const QByteArray &ba, const KoDoc
 
     // Create and populate and editor with the current data,
     // then update the Rdf from that editor.
-    QWidget *parent = 0;
+    QWidget *parent = nullptr;
     QWidget *objectEditor = createEditor(parent);
     updateFromEditorData();
 

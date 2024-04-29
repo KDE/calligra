@@ -215,7 +215,7 @@ public Q_SLOTS:
      * @param parent a parent command for the commands created by this methods. If present, the commands
      *    will not be added to the document's undo stack automatically.
      */
-    void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = 0);
+    void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = nullptr);
 
     /**
      * update the position of all inline objects from the given start point to the given end point.
@@ -276,7 +276,7 @@ public Q_SLOTS:
      */
     void setListProperties(const KoListLevelProperties &llp,
                            KoTextEditor::ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList),
-                           KUndo2Command *parent = 0);
+                           KUndo2Command *parent = nullptr);
 
 public:
     // -------------------------------------------------------------
@@ -323,7 +323,7 @@ public:
      * and only if there is a selection
      * @p previous should be @c true if act like backspace
      */
-    void deleteChar(bool previous, KUndo2Command *parent = 0);
+    void deleteChar(bool previous, KUndo2Command *parent = nullptr);
 
     bool hasComplexSelection() const;
 

@@ -297,7 +297,7 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
 
     // now that all name styles have been added we resolve parent relation ships
     foreach (const OdfCharStyle &odfStyle, characterStyles) {
-        KoCharacterStyle *parent = 0;
+        KoCharacterStyle *parent = nullptr;
         if (!odfStyle.parentStyle.isEmpty()) {
             parent = characterStyle(odfStyle.parentStyle, false);
             if (!parent)

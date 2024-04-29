@@ -12,7 +12,7 @@
 class StylesSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
-    explicit StylesSortFilterProxyModel(QObject *parent = 0);
+    explicit StylesSortFilterProxyModel(QObject *parent = nullptr);
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;

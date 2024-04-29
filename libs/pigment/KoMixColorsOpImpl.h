@@ -8,6 +8,7 @@
 #ifndef KOMIXCOLORSOPIMPL_H
 #define KOMIXCOLORSOPIMPL_H
 
+#include "KoColorSpaceMaths.h"
 #include "KoMixColorsOp.h"
 
 template<class _CSTrait>

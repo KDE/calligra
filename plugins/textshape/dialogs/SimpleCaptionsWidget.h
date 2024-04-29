@@ -19,7 +19,7 @@ class SimpleCaptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCaptionsWidget(QWidget *parent = 0);
+    explicit SimpleCaptionsWidget(QWidget *parent = nullptr);
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);

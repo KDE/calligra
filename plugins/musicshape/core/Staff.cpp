@@ -60,7 +60,7 @@ void Staff::setSpacing(qreal spacing)
     if (d->spacing == spacing)
         return;
     d->spacing = spacing;
-    emit spacingChanged(spacing);
+    Q_EMIT spacingChanged(spacing);
 }
 
 qreal Staff::top()
@@ -102,7 +102,7 @@ void Staff::setLineCount(int lineCount)
     if (d->lineCount == lineCount)
         return;
     d->lineCount = lineCount;
-    emit lineCountChanged(lineCount);
+    Q_EMIT lineCountChanged(lineCount);
 }
 
 qreal Staff::lineSpacing() const
@@ -115,7 +115,7 @@ void Staff::setLineSpacing(qreal lineSpacing)
     if (d->lineSpacing == lineSpacing)
         return;
     d->lineSpacing = lineSpacing;
-    emit lineSpacingChanged(lineSpacing);
+    Q_EMIT lineSpacingChanged(lineSpacing);
 }
 
 int Staff::line(qreal y) const

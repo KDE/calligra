@@ -20,7 +20,7 @@ class LinkInsertionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
+    explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = nullptr);
     ~LinkInsertionDialog() override;
 
 private Q_SLOTS:

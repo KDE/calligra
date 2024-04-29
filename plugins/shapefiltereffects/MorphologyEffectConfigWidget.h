@@ -18,7 +18,7 @@ class MorphologyEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    explicit MorphologyEffectConfigWidget(QWidget *parent = 0);
+    explicit MorphologyEffectConfigWidget(QWidget *parent = nullptr);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     bool editFilterEffect(KoFilterEffect *filterEffect) override;

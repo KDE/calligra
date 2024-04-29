@@ -45,7 +45,7 @@ class StylesModel : public AbstractStylesModel
 public:
     enum CategoriesInternalIds { NoneStyleId = -1 };
 
-    explicit StylesModel(KoStyleManager *styleManager, AbstractStylesModel::Type modelType, QObject *parent = 0);
+    explicit StylesModel(KoStyleManager *styleManager, AbstractStylesModel::Type modelType, QObject *parent = nullptr);
     ~StylesModel() override;
 
     /** Re-implemented from QAbstractItemModel. */

@@ -40,7 +40,7 @@ private Q_SLOTS:
     void slotViewChanged();
 
 public:
-    explicit SlideView(SlideLoader *loader, QWidget *parent = 0);
+    explicit SlideView(SlideLoader *loader, QWidget *parent = nullptr);
 public Q_SLOTS:
     void setView(qreal zoomFactor, int h, int v);
 Q_SIGNALS:

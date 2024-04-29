@@ -18,7 +18,7 @@ class SnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
+    explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = nullptr);
     ~SnapGuideConfigWidget() override;
 
 private Q_SLOTS:

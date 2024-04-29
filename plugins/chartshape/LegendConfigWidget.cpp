@@ -137,17 +137,17 @@ void LegendConfigWidget::updateData()
 
 void LegendConfigWidget::setLegendOrientation(int boxEntryIndex)
 {
-    emit legendOrientationChanged((Qt::Orientation)boxEntryIndex);
+    Q_EMIT legendOrientationChanged((Qt::Orientation)boxEntryIndex);
 }
 /*
 void LegendConfigWidget::setLegendShowTitle(bool show)
 {
     if (show) {
         d->ui.legendTitle->setEnabled(true);
-        emit legendTitleChanged(d->ui.legendTitle->text());
+        Q_EMIT legendTitleChanged(d->ui.legendTitle->text());
     } else {
         d->ui.legendTitle->setEnabled(false);
-        emit legendTitleChanged("");
+        Q_EMIT legendTitleChanged("");
     }
 }
 */
@@ -167,7 +167,7 @@ void LegendConfigWidget::setLegendAlignment(int index)
     default:
         break;
     }
-    emit legendAlignmentChanged(align);
+    Q_EMIT legendAlignmentChanged(align);
 }
 
 void LegendConfigWidget::setLegendPosition(int index)
@@ -202,7 +202,7 @@ void LegendConfigWidget::setLegendPosition(int index)
         pos = CenterPosition;
         break;
     }
-    emit legendPositionChanged(pos);
+    Q_EMIT legendPositionChanged(pos);
 }
 
 void LegendConfigWidget::createActions()

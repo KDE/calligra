@@ -35,7 +35,7 @@ class SheetPropertiesDialog : public KoDialog
     Q_OBJECT
 
 public:
-    explicit SheetPropertiesDialog(QWidget *parent = 0);
+    explicit SheetPropertiesDialog(QWidget *parent = nullptr);
 
     ~SheetPropertiesDialog() override;
 
