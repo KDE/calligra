@@ -6,7 +6,6 @@
 #include "KoInlineCite.h"
 
 #include "KoInlineTextObjectManager.h"
-#include "TextDebug.h"
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleManager.h>

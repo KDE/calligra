@@ -38,7 +38,7 @@ class FlattenDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit FlattenDlg(QWidget *parent = nullptrL, const char *name = 0L);
+    explicit FlattenDlg(QWidget *parent = nullptr, const char *name = nullptr);
 
     qreal flatness() const;
     void setFlatness(qreal value);

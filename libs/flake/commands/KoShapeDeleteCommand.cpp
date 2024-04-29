@@ -25,8 +25,7 @@ public:
         if (!deleteShapes)
             return;
 
-        foreach (KoShape *shape, shapes)
-            delete shape;
+        qDeleteAll(shapes);
     }
 
     KoShapeBasedDocumentBase *controller; ///< the shape controller to use for removing/readding
@@ -50,7 +49,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
     , d(new Private(controller))
 {
     d->shapes = shapes;
-    foreach (KoShape *shape, d->shapes) {
+    for (KoShape *shape : std::as_const(d->shapes)) {
         d->oldParents.append(shape->parent());
     }
 

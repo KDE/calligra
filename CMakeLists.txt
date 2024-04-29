@@ -146,7 +146,7 @@ calligra_set_productset(${PRODUCTSET})
 ###########################
 ##########################
 set(REQUIRED_KF6_VERSION "5.76.0")
-set(REQUIRED_QT_VERSION "5.12.0")
+set(REQUIRED_QT_VERSION "6.0.0")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

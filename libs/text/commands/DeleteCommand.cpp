@@ -66,12 +66,12 @@ void DeleteCommand::undo()
 
     // KoTextRange
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
-    foreach (KoTextRange *range, m_rangesToRemove) {
+    for (KoTextRange *range : std::as_const(m_rangesToRemove)) {
         rangeManager->insert(range);
     }
 
     // KoInlineObject
-    foreach (KoInlineObject *object, m_invalidInlineObjects) {
+    for (KoInlineObject *object : std::as_const(m_invalidInlineObjects)) {
         object->manager()->addInlineObject(object);
     }
 
@@ -87,7 +87,7 @@ void DeleteCommand::redo()
 
         // KoTextRange
         KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
-        foreach (KoTextRange *range, m_rangesToRemove) {
+        for (KoTextRange *range : std::as_const(m_rangesToRemove)) {
             rangeManager->remove(range);
         }
 
@@ -154,16 +154,16 @@ public:
         bool doesEndInside = false;
         if (block.position() >= caret.selectionStart()) { // Begin of the block is inside selection.
             doesBeginInside = true;
-            QList<KoSection *> openList = KoSectionUtils::sectionStartings(block.blockFormat());
-            foreach (KoSection *sec, openList) {
+            const QList<KoSection *> openList = KoSectionUtils::sectionStartings(block.blockFormat());
+            for (KoSection *sec : openList) {
                 m_curSectionDelimiters.push_back(SectionHandle(sec->name(), sec));
             }
         }
 
         if (block.position() + block.length() <= caret.selectionEnd()) { // End of the block is inside selection.
             doesEndInside = true;
-            QList<KoSectionEnd *> closeList = KoSectionUtils::sectionEndings(block.blockFormat());
-            foreach (KoSectionEnd *se, closeList) {
+            const QList<KoSectionEnd *> closeList = KoSectionUtils::sectionEndings(block.blockFormat());
+            for (KoSectionEnd *se : closeList) {
                 if (!m_curSectionDelimiters.empty() && m_curSectionDelimiters.last().name == se->name()) {
                     KoSection *section = se->correspondingSection();
                     int childIdx = KoTextDocument(m_command->m_document).sectionModel()->findRowOfChild(section);
@@ -260,7 +260,7 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
     if (v.m_hasEntirelyInsideBlock || v.m_startBlockNum != -1 || v.m_endBlockNum != -1) {
         QList<KoSection *> openList;
         QList<KoSectionEnd *> closeList;
-        foreach (const DeleteVisitor::SectionHandle &handle, v.m_curSectionDelimiters) {
+        for (const DeleteVisitor::SectionHandle &handle : std::as_const(v.m_curSectionDelimiters)) {
             if (handle.type == v.SectionOpen) { // Start of the section.
                 openList << handle.dataSec;
             } else { // End of the section.
@@ -310,7 +310,8 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
             QList<KoSectionEnd *> pairedEndings;
             QList<KoSectionEnd *> unpairedEndings;
 
-            foreach (KoSectionEnd *se, KoSectionUtils::sectionEndings(fmt)) {
+            const auto endings = KoSectionUtils::sectionEndings(fmt);
+            for (KoSectionEnd *se : endings) {
                 KoSection *sec = se->correspondingSection();
 
                 if (allStartings.contains(sec)) {
@@ -350,7 +351,7 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
 void DeleteCommand::deleteSectionsFromModel()
 {
     KoSectionModel *model = KoTextDocument(m_document).sectionModel();
-    foreach (const SectionDeleteInfo &info, m_sectionsToRemove) {
+    for (const SectionDeleteInfo &info : std::as_const(m_sectionsToRemove)) {
         model->deleteFromModel(info.section);
     }
 }
@@ -388,7 +389,7 @@ void DeleteCommand::doDelete()
     finalizeSectionHandling(caret, visitor); // Finalize section handling routine.
 
     // InlineObjects
-    foreach (KoInlineObject *object, m_invalidInlineObjects) {
+    for (KoInlineObject *object : std::as_const(m_invalidInlineObjects)) {
         deleteInlineObject(object);
     }
 
@@ -401,7 +402,7 @@ void DeleteCommand::doDelete()
                                                               textEditor->selectionStart(),
                                                               textEditor->selectionEnd());
 
-    foreach (KoTextRange *range, m_rangesToRemove) {
+    for (KoTextRange *range : std::as_const(m_rangesToRemove)) {
         KoAnchorTextRange *anchorRange = qobject_cast<KoAnchorTextRange *>(range);
         KoAnnotation *annotation = qobject_cast<KoAnnotation *>(range);
         if (anchorRange) {

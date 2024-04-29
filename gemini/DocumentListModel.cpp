@@ -16,11 +16,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-/*#include <QSparqlConnection>
-#include <KFileItem>
-#include <QSparqlError>*/
-#include <QSparqlResult>
-
 QDebug operator<<(QDebug dbg, const DocumentListModel::DocumentInfo &d)
 {
     dbg.nospace() << d.filePath << "," << d.fileName << "," << d.docType << "," << d.fileSize << "," << d.authorName << "," << d.accessedTime << ","
@@ -65,10 +60,10 @@ void SearchThread::run()
         info.fileSize = QString("%1").arg(it.fileInfo().size());
         info.docType = m_docTypes.value(info.filePath.split('.').last());
         info.uuid = "not known...";
-        emit documentFound(info);
+        Q_EMIT documentFound(info);
     }
 
-    emit finished();
+    Q_EMIT finished();
 }
 
 DocumentListModel::DocumentListModel(QObject *parent)
@@ -239,7 +234,7 @@ void DocumentListModel::groupBy(GroupBy role)
 void DocumentListModel::relayout()
 {
     beginResetModel();
-    emit layoutAboutToBeChanged();
+    Q_EMIT layoutAboutToBeChanged();
 
     QList<DocumentInfo> newList;
     foreach (const DocumentInfo &docInfo, m_allDocumentInfos) {
@@ -250,7 +245,7 @@ void DocumentListModel::relayout()
     }
 
     m_currentDocumentInfos = newList;
-    emit layoutChanged();
+    Q_EMIT layoutChanged();
     endResetModel();
 }
 
@@ -272,7 +267,7 @@ void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)
 {
     m_filter = newFilter;
     relayout();
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void DocumentListModel::componentComplete()

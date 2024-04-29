@@ -9,7 +9,6 @@
 
 #include <QVector>
 
-#include "DebugPigment.h"
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
 

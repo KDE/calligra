@@ -31,7 +31,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor,
 
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.labelType());
     const auto levelValues = m_levels.values();
-    QSet<int> levels{levelValues.cbegin(), levelValues.cend()};
+    const QSet<int> levels{levelValues.cbegin(), levelValues.cend()};
     KoListStyle::LabelType labelType = levelProperties.labelType();
     KoListStyle listStyle;
 
@@ -39,7 +39,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor,
     if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         labelType = KoListStyle::None;
 
-    foreach (int lev, levels) {
+    for (int lev : levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setLabelType(labelType);
@@ -177,7 +177,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             // attempt to merge with next block if previous failed
             isMergeable = true;
             QTextBlock next = m_blocks.value(m_blocks.size() - 1).next();
-            foreach (int lev, levels) {
+            for (int lev : levels) {
                 KoListLevelProperties llp = listStyle->levelProperties(lev);
                 isMergeable = (isMergeable && next.isValid() && next.textList() && (formatsEqual(llp, next.textList()->format())));
             }

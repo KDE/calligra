@@ -43,7 +43,7 @@ class WhirlPinchDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit WhirlPinchDlg(QWidget *parent = nullptrL, const char *name = 0L);
+    explicit WhirlPinchDlg(QWidget *parent = nullptr, const char *name = nullptr);
 
     qreal angle() const;
     qreal pinch() const;

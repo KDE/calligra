@@ -29,8 +29,9 @@
 #include <KoXmlReader.h>
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
-#include <fontconfig/fcfreetype.h>
 #include <fontconfig/fontconfig.h>
+
+#include <fontconfig/fcfreetype.h>
 #include <ft2build.h>
 #include <string.h>
 #include FT_FREETYPE_H

@@ -9,7 +9,6 @@
 
 // Calligra includes
 #include "KoChangeTrackerElement.h"
-#include "TextDebug.h"
 #include "styles/KoCharacterStyle.h"
 #include <KoFormatChangeInformation.h>
 #include <KoGenChanges.h>

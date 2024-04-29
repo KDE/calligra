@@ -9,9 +9,9 @@
 
 #include <QVector>
 
-#include "DebugPigment.h"
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
+#include "KoColorSpaceTraits.h"
 
 /**
  * Base class for CMYK traits, it provides some convenient functions to

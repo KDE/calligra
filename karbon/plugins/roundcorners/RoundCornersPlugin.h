@@ -41,7 +41,7 @@ class RoundCornersDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit RoundCornersDlg(QWidget *parent = nullptrL, const char *name = 0L);
+    explicit RoundCornersDlg(QWidget *parent = nullptr, const char *name = nullptr);
 
     qreal radius() const;
     void setRadius(qreal value);

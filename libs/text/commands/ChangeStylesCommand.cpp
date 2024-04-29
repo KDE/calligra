@@ -119,7 +119,7 @@ void ChangeStylesCommand::redo()
         KoStyleManager *sm = KoTextDocument(m_document).styleManager();
 
         QTextCursor cursor(m_document);
-        foreach (Memento *memento, m_mementos) {
+        for (Memento *memento : std::as_const(m_mementos)) {
             cursor.setPosition(memento->blockPosition);
             QTextBlock block = cursor.block();
 
@@ -151,7 +151,7 @@ void ChangeStylesCommand::redo()
 
             QList<QTextCharFormat>::ConstIterator fmtIt = memento->fragmentDirectFormats.constBegin();
             QList<int>::ConstIterator idIt = memento->fragmentStyleId.constBegin();
-            foreach (QTextCursor fragCursor, memento->fragmentCursors) {
+            for (QTextCursor fragCursor : std::as_const(memento->fragmentCursors)) {
                 QTextCharFormat cf(block.charFormat()); // start with block formatting
 
                 if (*idIt > 0) {
@@ -182,7 +182,8 @@ void ChangeStylesCommand::undo()
 void ChangeStylesCommand::clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat)
 {
     Q_ASSERT(firstFormat);
-    foreach (int key, secondFormat.properties().keys()) {
+    const auto properties = secondFormat.properties().keys();
+    for (int key : properties) {
         if (firstFormat->property(key) == secondFormat.property(key)) {
             firstFormat->clearProperty(key);
         }

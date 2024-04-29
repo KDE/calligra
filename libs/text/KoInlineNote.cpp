@@ -6,7 +6,6 @@
  */
 #include "KoInlineNote.h"
 
-#include "TextDebug.h"
 #include <KoOdfNumberDefinition.h>
 #include <KoParagraphStyle.h>
 #include <KoShapeSavingContext.h>
@@ -20,6 +19,8 @@
 #include <writeodf/writeodfdc.h>
 #include <writeodf/writeodfoffice.h>
 #include <writeodf/writeodftext.h>
+
+#include "TextDebug.h"
 
 #include <QDateTime>
 #include <QFontMetricsF>

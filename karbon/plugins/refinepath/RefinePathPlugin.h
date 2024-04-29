@@ -39,7 +39,7 @@ class RefinePathDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit RefinePathDlg(QWidget *parent = nullptrL, const char *name = 0L);
+    explicit RefinePathDlg(QWidget *parent = nullptr, const char *name = nullptr);
 
     uint knots() const;
     void setKnots(uint value);
