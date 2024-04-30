@@ -181,11 +181,9 @@
 <para
 >Les taules de dades se solen mantenir en fitxers de text amb els valors en una línia separats per una coma, un espai, un tabulador o un altre caràcter, per exemple <emphasis
 >123, 456, 789, abcd, efgh</emphasis
->. Tals fitxers se solen anomenar fitxers <quote
-><acronym
+>. Tals fitxers se solen anomenar fitxers «<acronym
 >CSV</acronym
-></quote
-> (valors separats per comes), fins i tot quan el caràcter de separació no es tracta d'una coma.</para>
+>» (valors separats per comes), fins i tot quan el caràcter de separació no es tracta d'una coma.</para>
 <para
 >Si demaneu a &sheets; que obri un fitxer de text aquest assumeix que el fitxer de text està en format <acronym
 >CSV</acronym
@@ -1818,7 +1816,7 @@ to insert a picture.
 >, <guilabel
 >Navegació</guilabel
 >, <guilabel
->Tipus de lletra</guilabel
+>Lletra</guilabel
 >, <guilabel
 >Format</guilabel
 > i <guilabel

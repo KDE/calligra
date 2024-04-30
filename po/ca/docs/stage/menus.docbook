@@ -68,11 +68,7 @@ Be sure to comment it out again when you are done -->
 >A més dels menús, el &stage; també té una barra d'eines. La barra d'eines es compon d'una col·lecció d'icones. Una icona de la barra d'eines sovint presenta una drecera còmoda per a una ordre que es troba en un dels menús.</para>
 
 <para
->Podeu moure la barra d'eines desbloquejada arrossegant la nansa de l'esquerra. La barra d'eines desbloquejada es pot <quote
->acoblar</quote
-> o afegir a qualsevol costat de la finestra del &stage;. Si voleu, també podeu tenir la barra d'eines <quote
->flotant</quote
-> a la seva pròpia finestra, separada de la finestra principal del &stage;.</para>
+>Podeu moure la barra d'eines desbloquejada arrossegant la nansa de l'esquerra. La barra d'eines desbloquejada es pot «acoblar» o afegir a qualsevol costat de la finestra del &stage;. Si voleu, també podeu tenir la barra d'eines «flotant» a la seva pròpia finestra, separada de la finestra principal del &stage;.</para>
 
 <para
 >Si no us agrada arrossegar les barres d'eines, feu clic <mousebutton
@@ -1016,9 +1012,7 @@ visible; if disabled, they are not.</para>
 </term>
 <listitem
 ><para
->Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'<quote
->ajustarà</quote
-> o es mourà, al punt de la graella més proper.</para>
+>Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'«ajustarà» o es mourà, al punt de la graella més proper.</para>
 <para
 >Això redueix la vostra llibertat de posicionar lliurement els objectes de la diapositiva, però també ajuda a alinear els objectes de manera precisa. S'inhabilita fàcilment amb aquesta entrada del menú, permetent-vos el millor d'ambdós mons.</para>
 </listitem>
@@ -1035,9 +1029,7 @@ visible; if disabled, they are not.</para>
 </term>
 <listitem>
 <para
->Quan treballeu amb el &stage;, podeu disposar d'una <quote
->línia guia</quote
-> per a les regles vertical o horitzontal al vostre document. Aquesta línia no s'imprimirà ni es mostrarà en la presentació final, és només per a ajudar-vos a alinear objectes a la pantalla. Si aquest element està activat, aquestes línies guia són visibles. Si està desactivat, no ho són.</para>
+>Quan treballeu amb el &stage;, podeu disposar d'una «línia guia» per a les regles vertical o horitzontal al vostre document. Aquesta línia no s'imprimirà ni es mostrarà en la presentació final, és només per a ajudar-vos a alinear objectes a la pantalla. Si aquest element està activat, aquestes línies guia són visibles. Si està desactivat, no ho són.</para>
 
 <para
 >Les línies guia funcionen per a totes les diapositives i us permeten d'alinear objectes de la mateixa manera per múltiples diapositives.</para>
@@ -1429,19 +1421,19 @@ section.</para>
 ><guimenu
 >Format</guimenu
 > <guimenuitem
->Tipus de lletra...</guimenuitem
+>Lletra...</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
 
 <para
 >El diàleg <guilabel
->Selecció del tipus de lletra</guilabel
+>Selecció de la lletra</guilabel
 > conté opcions per als segments seleccionats de text.</para>
 
 <para
 >Amb aquest diàleg, podeu <action
->canviar el tipus de lletra, l'estil i mida del text seleccionat</action
+>canviar la lletra, l'estil i mida del text seleccionat</action
 >. La <interface
 >quadre de vista prèvia</interface
 > de baix us permet d'<action
@@ -2623,9 +2615,7 @@ transition <emphasis
 >Control</keycap
 > i <keycap
 >Y</keycap
-> per a obtenir el diàleg <quote
->Quant al KDE</quote
->.</para>
+> per a obtenir el diàleg «Quant al KDE».</para>
 
 <para
 >El botó mostra què s'hi ha assignat. Cliqueu <guibutton

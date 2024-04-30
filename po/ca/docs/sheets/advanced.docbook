@@ -37,9 +37,7 @@
 <para
 >Mentre construïu un full de càlcul sovint necessitareu incloure una sèrie de valors, com 10, 11, 12... en una fila o columna. Hi ha diverses maneres en què ho podeu fer al &sheets;.</para>
 <para
->Per a una sèrie curta i simple com 5, 6, 7, 8... el mètode <quote
->Arrossega i copia</quote
-> és el més simple. Introduïu el valor d'inici dintre de la cel·la d'inici i el valor següent de la sèrie dintre d'una cel·la adjacent. Després seleccioneu ambdues cel·les i moveu el punter del cursor perquè resti sobre el petit quadrat a la cantonada inferior dreta; el cursor canviarà a una doble fletxa diagonal. Després manteniu premut el &BER; mentre arrossegueu les cel·les cap avall o cap al costat tant com calgui.</para>
+>Per a una sèrie curta i simple com 5, 6, 7, 8... el mètode «Arrossega i copia» és el més simple. Introduïu el valor d'inici dintre de la cel·la d'inici i el valor següent de la sèrie dintre d'una cel·la adjacent. Després seleccioneu ambdues cel·les i moveu el punter del cursor perquè resti sobre el petit quadrat a la cantonada inferior dreta; el cursor canviarà a una doble fletxa diagonal. Després manteniu premut el &BER; mentre arrossegueu les cel·les cap avall o cap al costat tant com calgui.</para>
 <para
 >La mida del pas es calcula com la diferència entre els dos valors d'inici que heu introduït. Per exemple, si introduïu <userinput
 >4</userinput
@@ -48,15 +46,11 @@
 > dintre d'A2 després seleccioneu ambdues cel·les, arrossegueu-les i copieu-les a sota. La mida del pas es calcularà com el valor en A2 menys el valor en A1, -0,5 en aquest cas obtindreu la sèrie 4, 3,5, 3, 2,5, 2...</para>
 
 <para
->El mètode <quote
->Arrossega i copia</quote
-> fins i tot pot tractar amb sèries a on el valor del pas no sigui un valor constant, sinó una sèrie per si mateixa. De manera que si comença amb 1, 3, 4, 6... arrossegant i copiant s'estendrà a 1, 3, 4, 6, 7, 9, 10, 12..., el valor del pas en aquest exemple és la sèrie 2, 1, 2, 1...</para>
+>El mètode «Arrossega i copia» fins i tot pot tractar amb sèries a on el valor del pas no sigui un valor constant, sinó una sèrie per si mateixa. De manera que si comença amb 1, 3, 4, 6... arrossegant i copiant s'estendrà a 1, 3, 4, 6, 7, 9, 10, 12..., el valor del pas en aquest exemple és la sèrie 2, 1, 2, 1...</para>
 
  <!--FIXME does not work here -->
 <para
->&sheets; també reconeix algunes <quote
->sèries</quote
-> especials com els dies de la setmana. Intenteu introduir <userinput
+>&sheets; també reconeix algunes «sèries» especials com els dies de la setmana. Intenteu introduir <userinput
 >divendres</userinput
 > dintre d'una cel·la i <userinput
 >dissabte</userinput

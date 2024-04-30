@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-02-03 15:48+0100\n"
+"POT-Creation-Date: 2024-04-30 00:38+0000\n"
+"PO-Revision-Date: 2024-04-29 11:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -210,12 +210,12 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "მოხაზულობის შექმნა"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:45
+#: flake/commands/KoShapeDeleteCommand.cpp:44
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "ფორმის წაშლა"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:57
+#: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
@@ -3491,8 +3491,7 @@ msgid ""
 msgstr ""
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "შეტყობინება"
@@ -3506,8 +3505,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "შეტყობინება"
@@ -3587,7 +3585,7 @@ msgid "Delete"
 msgstr "წაშლა"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
 #: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"
@@ -4363,7 +4361,7 @@ msgstr "მისამართი:"
 #: widgets/koDocumentInfoAboutWidget.ui:280
 #, kde-format
 msgid "&Reset"
-msgstr ""
+msgstr "ჩ&ამოყრა"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
@@ -4548,7 +4546,7 @@ msgstr "პალიტრა"
 #: widgets/KoEditColorSetDialog.cpp:201
 #, kde-format
 msgid "Add/Remove Colors"
-msgstr ""
+msgstr "ფერების დამატება/წაშლა"
 
 #: widgets/KoFillConfigWidget.cpp:146
 #, kde-format
@@ -4575,7 +4573,7 @@ msgstr "შაბლონი"
 #: widgets/KoFillConfigWidget.cpp:184
 #, kde-format
 msgid "Change the filling color"
-msgstr ""
+msgstr "შევსების ფერის შეცვლა"
 
 #: widgets/KoFillConfigWidget.cpp:195
 #, kde-format
@@ -4935,7 +4933,7 @@ msgstr "მარჯვნივ შეწევა"
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
 msgid "Change the color of the shadow"
-msgstr ""
+msgstr "ჩრდილის ფერის შეცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoShadowConfigWidget.ui:67

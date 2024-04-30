@@ -1,18 +1,18 @@
 # Translation of calligra_shape_artistictext.po to Catalan
-# Copyright (C) 2008-2020 This_file_is_part_of_KDE
+# Copyright (C) 2008-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the ArtisticTextShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2011, 2014, 2015, 2016, 2018.
+# Josep M. Ferrer <txemaq@gmail.com>, 2011, 2014, 2015, 2016, 2018, 2024.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2020-08-04 22:08+0200\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2024-04-29 10:28+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
-"X-Generator: Lokalize 20.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -151,7 +151,7 @@ msgstr "Canvia l'ancoratge del text"
 #: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
-msgstr "Canvia el tipus de lletra"
+msgstr "Canvia la lletra"
 
 #: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"

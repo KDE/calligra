@@ -95,9 +95,7 @@
 <para
 >En aquest punt podeu pensar que &sheets; no fa més del que podeu fer amb un llapis, paper i una calculadora, i teniu raó. Però recordeu que aquest és un exemple molt petit d'un full de càlcul que fa càlculs senzills amb tan sols uns pocs números. Per a quantitats de valors o de dades raonablement grans, usar un full de càlcul per a realitzar els càlculs és molt més ràpid i molt més fiable que fer-ho a mà.</para>
 <para
->També, un full de càlcul us permet jugar al joc de <quote
->Què passa si?</quote
->. Atès que cada fórmula es recalcula automàticament quan es canvia qualsevol dels valors als quals es refereix, podeu veure ràpidament el que succeeix si altereu qualsevol de les dades. Usant el nostre exemple podeu veure l'efecte de reduir la despesa en menjar al desembre simplement introduint un valor nou a la cel·la C2. Si teniu un full de càlcul que modela l'efecte hivernacle de manera adequada veureu l'efecte de reducció d'un 50 per cent en la quantitat de metà dintre de l'atmosfera.</para>
+>També, un full de càlcul us permet jugar al joc de «Què passa si?». Atès que cada fórmula es recalcula automàticament quan es canvia qualsevol dels valors als quals es refereix, podeu veure ràpidament el que succeeix si altereu qualsevol de les dades. Usant el nostre exemple podeu veure l'efecte de reduir la despesa en menjar al desembre simplement introduint un valor nou a la cel·la C2. Si teniu un full de càlcul que modela l'efecte hivernacle de manera adequada veureu l'efecte de reducció d'un 50 per cent en la quantitat de metà dintre de l'atmosfera.</para>
 </sect1>
 
 <sect1 id="selecting">
@@ -205,9 +203,7 @@
 ></listitem>
 <listitem
 ><para
->Les dates s'han d'introduir en el format del vostre <quote
->sistema</quote
->, tal com estan definides a &systemsettings; sota la pestanya <menuchoice
+>Les dates s'han d'introduir en el format del vostre «sistema», tal com estan definides a &systemsettings; sota la pestanya <menuchoice
 ><guimenu
 >Configuració regional</guimenu
 > <guisubmenu
@@ -223,9 +219,7 @@
 ></listitem>
 <listitem
 ><para
->Les hores també s'han d'introduir usant el format del <quote
->sistema</quote
->. Per exemple, si esteu usant un rellotge de 12 hores aleshores introduireu les hores en el format HH:MIN am|pm o HH:MIN:SS am|pm com a <userinput
+>Les hores també s'han d'introduir usant el format del «sistema». Per exemple, si esteu usant un rellotge de 12 hores aleshores introduireu les hores en el format HH:MIN am|pm o HH:MIN:SS am|pm com a <userinput
 >9:42 am</userinput
 > o <userinput
 >10:30:52 pm</userinput
@@ -233,9 +227,7 @@
 ></listitem>
 <listitem
 ><para
->&sheets; defineix qualsevol dada d'entrada com a <quote
->text</quote
-> si no pot reconèixer les dades com a números, dates o hores. </para
+>&sheets; defineix qualsevol dada d'entrada com a «text» si no pot reconèixer les dades com a números, dates o hores. </para
 ></listitem>
 </itemizedlist>
 <note
@@ -256,13 +248,9 @@
 <title
 >Format de cel·la genèric</title>
 <para
->&sheets; usa el format de cel·la <quote
->Genèric</quote
-> per omissió. Encara que s'usi aquest format, &sheets; detecta automàticament el tipus de dades real segons les dades actuals de la cel·la. Per exemple, si introduïu algun text dintre d'una cel·la i posteriorment introduïu un número dintre de la mateixa cel·la, &sheets; interpretarà automàticament les dades noves com a número. Si voleu definir el tipus de dades, el podeu establir en el <link linkend="formatdata"
+>&sheets; usa el format de cel·la «Genèric» per omissió. Encara que s'usi aquest format, &sheets; detecta automàticament el tipus de dades real segons les dades actuals de la cel·la. Per exemple, si introduïu algun text dintre d'una cel·la i posteriorment introduïu un número dintre de la mateixa cel·la, &sheets; interpretarà automàticament les dades noves com a número. Si voleu definir el tipus de dades, el podeu establir en el <link linkend="formatdata"
 >format de cel·la</link
->. En qualsevol moment podeu retornar al format <quote
->Genèric</quote
->. </para>
+>. En qualsevol moment podeu retornar al format «Genèric». </para>
 </sect2>
 
 </sect1>
@@ -342,9 +330,7 @@
 <para
 >Si es retalla o copia una àrea rectangular de cel·les, diguem B2:C3, i les enganxeu dintre d'una àrea més gran com A10:D13, el patró original de cel·les es repetirà per a completar l'àrea de destinació.</para>
 <para
->&sheets; també proveeix un mètode <quote
->Arrossega i copia</quote
-> per a copiar cel·les immediatament a sota o a la dreta de les cel·les originals. Per a usar aquest mètode, seleccioneu les cel·les a copiar, després situeu el punter del ratolí sobre el petit quadrat negre en la cantonada inferior dreta de les cel·les seleccionades perquè el cursor canviï a una doble fletxa. Aleshores manteniu premut el &BER; mentre arrossegueu les cel·les seleccionades tan lluny com voleu. Tingueu present que les referències a les cel·les en les fórmules s'incrementen d'acord amb els canvis relatius de la posició. Les referències absolutes no són canviades.</para>
+>&sheets; també proveeix un mètode «Arrossega i copia» per a copiar cel·les immediatament a sota o a la dreta de les cel·les originals. Per a usar aquest mètode, seleccioneu les cel·les a copiar, després situeu el punter del ratolí sobre el petit quadrat negre en la cantonada inferior dreta de les cel·les seleccionades perquè el cursor canviï a una doble fletxa. Aleshores manteniu premut el &BER; mentre arrossegueu les cel·les seleccionades tan lluny com voleu. Tingueu present que les referències a les cel·les en les fórmules s'incrementen d'acord amb els canvis relatius de la posició. Les referències absolutes no són canviades.</para>
 </sect2>
 
 <sect2 id="specialpaste">
@@ -353,7 +339,7 @@
 <para
 >Una cel·la pot contenir text, un valor o una fórmula, i també pot contenir <link linkend="formatspread"
 >informació de format</link
-> especial per al tipus de lletra, vores o fons. &sheets; té versions especials per a enganxar que us permeten manejar aquests elements de diferents maneres.</para>
+> especial per a la lletra, vores o fons. &sheets; té versions especials per a enganxar que us permeten manejar aquests elements de diferents maneres.</para>
 
 <para
 ><menuchoice
@@ -866,7 +852,7 @@ selected area. For more complex sorting select <menuchoice
 >.</para>
 
 <para
->Per a millorar l'aparença de la sortida impresa, podeu canviar el tipus de lletra, colors, vores i mides de les cel·les en el full de treball, mireu la secció <link linkend="formatspread"
+>Per a millorar l'aparença de la sortida impresa, podeu canviar la lletra, colors, vores i mides de les cel·les en el full de treball, mireu la secció <link linkend="formatspread"
 >Donar format a un full de càlcul</link
 > per a més detalls sobre com fer això.</para>
 

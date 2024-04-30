@@ -387,7 +387,7 @@ better-->
 
 <sect2 id="formattext">
 <title
->Opcions de tipus de lletra i de text</title>
+>Opcions de lletra i de text</title>
 <para>
 <mediaobject>
 <imageobject>
@@ -395,26 +395,26 @@ better-->
 </imageobject>
 <textobject>
 <phrase
->Tipus de lletra de la pàgina.</phrase>
+>Pàgina de lletres.</phrase>
 </textobject>
 </mediaobject>
 </para>
 <para
 >La pàgina <guilabel
->Tipus de lletra</guilabel
-> us permet seleccionar la família del tipus de lletra, <guilabel
+>Lletra</guilabel
+> us permet seleccionar la família de la lletra, <guilabel
 >Estil:</guilabel
 >, <guilabel
 >Mida:</guilabel
 >, <guilabel
-> Tipus:</guilabel
+>Tipus:</guilabel
 > i <guilabel
 >Color:</guilabel
 > per a la cel·la actual, a més d'algunes opcions addicionals com el subratllat i el taxat del text. La part inferior de la pàgina ofereix una <guilabel
 >Vista prèvia</guilabel
 > del format de text seleccionat.</para>
 <para
->El tipus de lletra per omissió per a totes les cel·les és establert en el menú <menuchoice
+>La lletra per omissió per a totes les cel·les és establert en el menú <menuchoice
 ><guimenu
 >Format</guimenu
 ><guimenuitem
@@ -826,7 +826,7 @@ better-->
 >Format</guimenu
 >. Es mostrarà el diàleg <guilabel
 >Estils condicionals</guilabel
->, on podreu fer que el tipus de lletra i el color d'una cel·la canviï quan el valor compleixi una o més condicions. Tingueu present que les condicions segona i tercera tan sols seran aplicades si les condicions prèvies no es compleixen.</para>
+>, on podreu fer que la lletra i el color d'una cel·la canviï quan el valor compleixi una o més condicions. Tingueu present que les condicions segona i tercera tan sols seran aplicades si les condicions prèvies no es compleixen.</para>
 <para
 >Utilitzeu <menuchoice
 ><guisubmenu

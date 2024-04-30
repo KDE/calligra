@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-04-30 00:38+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -250,14 +250,14 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:45
+#: flake/commands/KoShapeDeleteCommand.cpp:44
 #, fuzzy
 #| msgid "Delete shape"
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:57
+#: flake/commands/KoShapeDeleteCommand.cpp:56
 #, fuzzy
 #| msgid "Delete shape"
 msgctxt "(qtundo-format)"
@@ -3918,7 +3918,7 @@ msgid "Delete"
 msgstr "ਹਟਾਓ(&e)"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
 #: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"

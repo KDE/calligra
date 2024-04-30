@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-04-30 00:38+0000\n"
 "PO-Revision-Date: 2023-04-23 12:28+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -220,12 +220,12 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "Tworzenie kształtu"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:45
+#: flake/commands/KoShapeDeleteCommand.cpp:44
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "Usuń kształt"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:57
+#: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
@@ -3710,7 +3710,7 @@ msgid "Delete"
 msgstr "Usuń"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
 #: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"

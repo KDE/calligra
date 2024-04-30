@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-01-17 21:00+0100\n"
+"PO-Revision-Date: 2024-04-29 10:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -83,7 +83,7 @@ msgstr "Mostra les etiquetes"
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
@@ -665,7 +665,7 @@ msgstr "Amplada manual de subpas"
 #: commands/AxisCommand.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "Estableix el tipus de lletra de l'etiqueta de l'eix"
+msgstr "Estableix la lletra de l'etiqueta de l'eix"
 
 #: commands/AxisCommand.cpp:236
 msgctxt "(qtundo-format)"
@@ -865,12 +865,12 @@ msgstr "Estableix el títol de la llegenda"
 #: commands/LegendCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "Estableix el tipus de lletra de la llegenda"
+msgstr "Estableix la lletra de la llegenda"
 
 #: commands/LegendCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Estableix la mida del tipus de lletra de la llegenda"
+msgstr "Estableix la mida de la lletra de la llegenda"
 
 #: commands/LegendCommand.cpp:97
 msgctxt "(qtundo-format)"
@@ -1368,7 +1368,7 @@ msgstr "Les dades s'arrangen en &columnes"
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
-msgstr "Selecció del tipus de lletra"
+msgstr "Selecció de la lletra"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
@@ -1700,7 +1700,7 @@ msgstr "Orientació"
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr "Tipus de lletra..."
+msgstr "Lletres..."
 
 #: PieConfigWidget.cpp:100
 #, kde-format

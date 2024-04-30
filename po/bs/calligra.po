@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-04-30 00:38+0000\n"
 "PO-Revision-Date: 2015-02-26 18:25+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -210,7 +210,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr "Kreiraj oblik"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:45
+#: flake/commands/KoShapeDeleteCommand.cpp:44
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Delete shape"
@@ -219,7 +219,7 @@ msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "Izbriši oblik"
 
-#: flake/commands/KoShapeDeleteCommand.cpp:57
+#: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
@@ -3780,7 +3780,7 @@ msgid "Delete"
 msgstr "Izbriši"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:483 text/KoTextEditor_undo.cpp:80
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
 #: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"

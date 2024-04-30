@@ -1,5 +1,5 @@
 # Translation of calligrasheets.po to Catalan
-# Copyright (C) 2000-2023 This_file_is_part_of_KDE
+# Copyright (C) 2000-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
@@ -7,20 +7,20 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-08-08 18:04+0200\n"
+"PO-Revision-Date: 2024-04-29 10:34+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -12967,7 +12967,7 @@ msgstr "Activa"
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
 #: part/calligrasheets.rc:261
@@ -14876,12 +14876,12 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Podeu seleccionar aquí l'estil del tipus de lletra, la mida i el color, "
-"incloent-hi algunes opcions addicionals com el subratllat o el text barrat "
-"per a la cel·la de text actual. La part baixa de la pàgina us dona una vista "
-"prèvia del format del text seleccionat.\n"
-"El tipus de lletra predeterminat se selecciona per a totes les cel·les en el "
-"menú «Format -> Gestor d'estils» amb l'estil usat actualment."
+"Podeu seleccionar aquí l'estil de la lletra, la mida i el color, incloent-hi "
+"algunes opcions addicionals com el subratllat o el text barrat per a la "
+"cel·la de text actual. La part baixa de la pàgina us dona una vista prèvia "
+"del format del text seleccionat.\n"
+"La lletra predeterminada se selecciona per a totes les cel·les en el menú "
+"«Format -> Gestor d'estils» amb l'estil usat actualment."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -14893,7 +14893,7 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Escull l'estil dels tipus de lletra per a les cel·les seleccionades. Quan "
+"Escull l'estil de les lletres per a les cel·les seleccionades. Quan "
 "seleccioneu diferents cel·les amb diferents estils, l'estil mostrat està "
 "configurat com a Divers (sense canvi) i, si el deixeu així, es deixarà la "
 "configuració de l'estil actual per a cada cel·la. Si canvieu a Roman, per "
@@ -14930,12 +14930,11 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
-"Escull l'estil dels tipus de lletra per a les cel·les seleccionades. Quan "
-"seleccioneu diferents cel·les amb diferents estils del tipus de lletra, "
-"l'estil mostrat està configurat com a Divers (sense canvi) i, si el deixeu "
-"així, es deixarà la configuració de l'estil actual per a cada cel·la. Si "
-"canvieu a Negreta, per exemple, canviaran tots els estils de les cel·les a "
-"Negreta."
+"Escull l'estil de la lletra per a les cel·les seleccionades. Quan "
+"seleccioneu diferents cel·les amb diferents estils de lletra, l'estil "
+"mostrat està configurat com a Divers (sense canvi) i, si el deixeu així, es "
+"deixarà la configuració de l'estil actual per a cada cel·la. Si canvieu a "
+"Negreta, per exemple, canviaran tots els estils de les cel·les a Negreta."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:78
@@ -15014,7 +15013,7 @@ msgstr "Barrat"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr "Trieu la mida del tipus de lletra."
+msgstr "Trieu la mida de la lletra."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -15023,8 +15022,8 @@ msgid ""
 "This box lists all your available font families. Click on one family to set "
 "it in the current cell."
 msgstr ""
-"Aquest quadre llista totes les famílies de tipus de lletra disponibles. "
-"Cliqueu en una família per a configurar-la a la cel·la actual."
+"Aquest quadre llista totes les famílies de lletres disponibles. Cliqueu en "
+"una família per a configurar-la a la cel·la actual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
@@ -15039,8 +15038,8 @@ msgstr "Vista prèvia"
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-"Podeu veure una vista prèvia del tipus de lletra que escolliu per a la "
-"cel·la actual."
+"Podeu veure una vista prèvia de la lletra que escolliu per a la cel·la "
+"actual."
 
 #: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format

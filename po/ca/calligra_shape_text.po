@@ -1,16 +1,16 @@
 # Translation of calligra_shape_text.po to Catalan
-# Copyright (C) 2008-2023 This_file_is_part_of_KDE
+# Copyright (C) 2008-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the TextShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2016, 2019, 2020, 2021, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-10-19 18:59+0200\n"
+"PO-Revision-Date: 2024-04-29 10:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -493,7 +493,7 @@ msgstr "Mostra els canvis"
 #: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
 #: dialogs/CharacterGeneral.ui:27
@@ -1042,12 +1042,12 @@ msgstr "Separació de paraules automàtica"
 #: dialogs/FontDia.cpp:34
 #, kde-format
 msgid "Select Font"
-msgstr "Selecció del tipus de lletra"
+msgstr "Selecció de la lletra"
 
 #: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
@@ -1904,7 +1904,7 @@ msgstr " %"
 #: dialogs/ParagraphIndentSpacing.ui:180
 #, kde-format
 msgid "Use Font Metrics:"
-msgstr "Usa mètrica de tipus de lletra:"
+msgstr "Usa mètrica de lletra:"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/ParagraphIndentSpacing.ui:202
@@ -2042,7 +2042,7 @@ msgstr "Afegeix una llegenda"
 #: dialogs/SimpleCharacterWidget.cpp:53
 #, kde-format
 msgid "Change font format"
-msgstr "Canvi de format del tipus de lletra"
+msgstr "Canvi de format de la lletra"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:23
@@ -2728,17 +2728,17 @@ msgstr ""
 #: TextTool.cpp:307
 #, kde-format
 msgid "Increase Font Size"
-msgstr "Incrementa la mida del tipus de lletra"
+msgstr "Incrementa la mida de la lletra"
 
 #: TextTool.cpp:312
 #, kde-format
 msgid "Decrease Font Size"
-msgstr "Disminueix la mida del tipus de lletra"
+msgstr "Disminueix la mida de la lletra"
 
 #: TextTool.cpp:318
 #, kde-format
 msgid "Font Family"
-msgstr "Família del tipus de lletra"
+msgstr "Família de la lletra"
 
 #: TextTool.cpp:322
 #, kde-format
@@ -2788,12 +2788,12 @@ msgstr "Tot el text després d'aquest punt es trasllada a la pàgina següent."
 #: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
-msgstr "Tipus de lletra..."
+msgstr "Lletra..."
 
 #: TextTool.cpp:363
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
-msgstr "Canvia la mida, tipus de lletra, negreta, cursiva, etc., del caràcter."
+msgstr "Canvia la mida, lletra, negreta, cursiva, etc., del caràcter."
 
 #: TextTool.cpp:364
 #, kde-format
@@ -2803,7 +2803,7 @@ msgstr "Canvia els atributs dels caràcters seleccionats."
 #: TextTool.cpp:367
 #, kde-format
 msgid "Font Size"
-msgstr "Mida del tipus de lletra"
+msgstr "Mida de la lletra"
 
 #: TextTool.cpp:373
 #, kde-format
@@ -2960,8 +2960,8 @@ msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
-"<p>Canvia el tipus de lletra i els atributs de paràgraf dels estils.</"
-"p><p>Es pot canviar més d'un estil usant el diàleg.</p>"
+"<p>Canvia la lletra i els atributs de paràgraf dels estils.</p><p>Es pot "
+"canviar més d'un estil usant el diàleg.</p>"
 
 #: TextTool.cpp:473
 #, kde-format

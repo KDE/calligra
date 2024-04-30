@@ -176,9 +176,7 @@
 ></term>
 <listitem
 ><para
->Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'<quote
->ajustarà</quote
-> o es mourà, al punt de la graella més proper.</para>
+>Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'«ajustarà» o es mourà, al punt de la graella més proper.</para>
 <para
 >Això redueix la vostra llibertat de posicionar lliurement els objectes de la diapositiva, però també ajuda a alinear els objectes de manera precisa. S'inhabilita fàcilment amb aquesta opció, permetent-vos el millor d'ambdós mons.</para
 ></listitem>

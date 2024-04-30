@@ -180,9 +180,7 @@
 >La meva mare, per exemple, s'espanta dels botons i les entrades de menú que no entén. Per a adaptar el &calligra; a les seves necessitats, vaig reduir la interfície gràfica d'usuari a un mínim de funcionalitats. Com que ella només vol escriure cartes i usar certes plantilles, no calen moltes més funcionalitats que desar, carregar, imprimir, &etc; </para>
 
 <para
->Gràcies al concepte <quote
->acció</quote
-> de les &Qt; i el &kde;, podeu personalitzar lliurement les barres de menús i les barres d'eines del &calligra;. Malauradament, i de moment, no hi ha diàlegs fàcils d'usar per a fer-ho. El &calligra; desa les seves configuracions de la interfície gràfica d'usuari en fitxers &XML; i els heu d'editar. Esperem que aquesta situació canviï en el futur; per ara, us caldrà algun coneixement bàsic de com funciona un document &XML; (o &HTML;, que és un subformat d'&XML;). </para>
+>Gràcies al concepte «acció» de les &Qt; i el &kde;, podeu personalitzar lliurement les barres de menús i les barres d'eines del &calligra;. Malauradament, i de moment, no hi ha diàlegs fàcils d'usar per a fer-ho. El &calligra; desa les seves configuracions de la interfície gràfica d'usuari en fitxers &XML; i els heu d'editar. Esperem que aquesta situació canviï en el futur; per ara, us caldrà algun coneixement bàsic de com funciona un document &XML; (o &HTML;, que és un subformat d'&XML;). </para>
 
 <para
 >Normalment, cada aplicació del &calligra; té almenys dos d'aquests fitxers &XML;: Un descriu la interfície gràfica d'usuari general (bàsicament, és el que veieu si no hi ha cap document obert) i un altre descriu la interfície de la part respectiva (això és el que veureu normalment). Per exemple, per al &words;, aquests dos fitxers &XML; s'anomenen <filename
