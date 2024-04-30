@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "kopabackgroundtool",
         "Name": "Page Application Background Tool",
+        "Name[ca]": "Eina d'aplicació de fons de pàgina",
+        "Name[es]": "Herramienta de aplicación de fondo a página",
+        "Name[gl]": "Ferramenta de fondos de aplicacións de páxinas",
+        "Name[ka]": "გვერდის აპლიკაციის ფონის ხელსაწყო",
+        "Name[nl]": "Hulpmiddel voor de achtergrond van een pagina-applicatie",
+        "Name[sl]": "Orodje za ozadje aplikacije strani",
+        "Name[tr]": "Sayfa Uygulaması Arka Plan Aracı",
+        "Name[uk]": "Програма для роботи з тлом сторінки",
+        "Name[x-test]": "xxPage Application Background Toolxx",
         "ServiceTypes": [
             "CalligraPageApp/Tool"
         ]

@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "musicshape",
         "Name": "Music Shape",
+        "Name[ca]": "Forma de música",
+        "Name[es]": "Forma de música",
+        "Name[gl]": "Obxecto musical",
+        "Name[ka]": "Music Shape",
+        "Name[nl]": "Muziekvorm",
+        "Name[sl]": "Oblika glasbe",
+        "Name[tr]": "Müzik Şekli",
+        "Name[uk]": "Музична форма",
+        "Name[x-test]": "xxMusic Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

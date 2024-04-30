@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[ca]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[es]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[gl]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA.",
+        "Description[nl]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[sl]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[tr]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[uk]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[x-test]": "xxDAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATAxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "DatabaseModule",
         "License": "GPL",
         "Name": "Database Functions",
+        "Name[ca]": "Funcions de base de dades",
+        "Name[es]": "Funciones de bases de datos",
+        "Name[gl]": "Funcións de bases de datos",
+        "Name[nl]": "Databasefucties",
+        "Name[sl]": "Funkcije podatkovne baze",
+        "Name[tr]": "Veritabanı İşlevleri",
+        "Name[uk]": "Функції баз даних",
+        "Name[x-test]": "xxDatabase Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

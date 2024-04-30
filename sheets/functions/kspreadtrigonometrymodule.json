@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[ca]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[es]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[gl]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH.",
+        "Description[nl]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[sl]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[tr]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[uk]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[x-test]": "xxACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANHxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "TrigonometryModule",
         "License": "GPL",
         "Name": "Trigonometry Functions",
+        "Name[ca]": "Funcions trigonomètriques",
+        "Name[es]": "Funciones trigonométricas",
+        "Name[gl]": "Funcións trigonométricas",
+        "Name[nl]": "Trigonometrie-functies",
+        "Name[sl]": "Trigonometrijske funkcije",
+        "Name[tr]": "Trigonometri İşlevleri",
+        "Name[uk]": "Тригонометричні функції",
+        "Name[x-test]": "xxTrigonometry Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

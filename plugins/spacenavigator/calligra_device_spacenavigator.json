@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "spacenavigator",
         "Name": "Spacenavigator Device",
+        "Name[ca]": "Aparell NavegadorEspacial",
+        "Name[es]": "Dispositivo navegador espacial",
+        "Name[gl]": "Dispositivo de Spacenavigator",
+        "Name[ka]": "სივრცეში ნავიგაციის მოწყობილობა",
+        "Name[nl]": "Spacenavigator-apparaat",
+        "Name[sl]": "Naprava za krmarjenje po prostoru",
+        "Name[tr]": "Spacenavigator Aygıtı",
+        "Name[uk]": "Пристрій просторового орієнтування",
+        "Name[x-test]": "xxSpacenavigator Devicexx",
         "ServiceTypes": [
             "Calligra/Device"
         ]

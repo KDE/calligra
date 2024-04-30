@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "basicflakesplugin",
         "Name": "Basic Flakes",
+        "Name[ca]": "Formes bàsiques",
+        "Name[es]": "Láminas básicas",
+        "Name[gl]": "Básico de Flakes",
+        "Name[ka]": "მარტივი ფანტელები",
+        "Name[nl]": "Basis Flakes",
+        "Name[sl]": "Osnovni kosmiči",
+        "Name[tr]": "Temel Tanecikler",
+        "Name[uk]": "Основні модулі",
+        "Name[x-test]": "xxBasic Flakesxx",
         "ServiceTypes": [
             "Calligra/Tool"
         ]

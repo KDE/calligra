@@ -1,8 +1,25 @@
 {
     "KPlugin": {
         "Description": "A plugin to map location items between document and RDF database",
+        "Description[ca]": "Un connector per a relacionar elements d'ubicació entre documents i una base de dades RDF",
+        "Description[es]": "Complemento para asignar elementos de ubicación entre el documento y la base de datos RDF",
+        "Description[gl]": "Un complemento para asociar elementos de lugar entre un documento e unha base de datos RDF.",
+        "Description[nl]": "Een plug-in om verbinding te maken tussen locatie-items in een document en een RDF-database",
+        "Description[sl]": "Vtičnik za preslikavo elementov lokacije med dokumentom in bazo podatkov RDF",
+        "Description[tr]": "Belge ve RDF veritabanı arasında konum ögelerini eşlemlemek için bir eklenti",
+        "Description[uk]": "Додаток для створення зв’язку між записами місць у документі та у базі даних RDF",
+        "Description[x-test]": "xxA plugin to map location items between document and RDF databasexx",
         "Id": "calligra_semanticitem_location",
         "Name": "RDF Location Plugin",
+        "Name[ca]": "Connector d'ubicació RDF",
+        "Name[es]": "Complemento de ubicación RDF",
+        "Name[gl]": "Complemento de lugar de RDF",
+        "Name[ka]": "RDF მდებარეობის დამატება",
+        "Name[nl]": "Plug-in voor RDF-locatie",
+        "Name[sl]": "Vtičnik RDF lokacije",
+        "Name[tr]": "RDF Konum Eklentisi",
+        "Name[uk]": "Додаток місць RDF",
+        "Name[x-test]": "xxRDF Location Pluginxx",
         "ServiceTypes": [
             "Calligra/SemanticItem"
         ]

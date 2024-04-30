@@ -3,6 +3,14 @@
         "Icon": "",
         "Id": "calligrastageeventactions",
         "Name": "Presentation Event Actions",
+        "Name[ca]": "Accions de presentació d'esdeveniments",
+        "Name[es]": "Acciones de eventos de presentaciones",
+        "Name[gl]": "Accións do evento de presentación",
+        "Name[nl]": "Acties na presentatie-events",
+        "Name[sl]": "Dejanja predstavitvenih dogodkov",
+        "Name[tr]": "Sunum Olayı Eylemi",
+        "Name[uk]": "Реакція на події у презентації",
+        "Name[x-test]": "xxPresentation Event Actionsxx",
         "ServiceTypes": [
             "Calligra/PresentationEventAction"
         ]

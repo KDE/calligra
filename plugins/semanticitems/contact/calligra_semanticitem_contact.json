@@ -1,8 +1,25 @@
 {
     "KPlugin": {
         "Description": "A plugin to map contact items between document and RDF database",
+        "Description[ca]": "Un connector per a relacionar elements de contacte entre documents i una base de dades RDF",
+        "Description[es]": "Complemento para asignar elementos de contactos entre el documento y la base de datos RDF",
+        "Description[gl]": "Un complemento para asociar elementos de contactos entre un documento e unha base de datos RDF.",
+        "Description[nl]": "Een plug-in om verbinding te maken tussen contact-items in een document en een RDF-database",
+        "Description[sl]": "Vtičnik za preslikavo kontaktnih postavk med dokumentom in bazo podatkov RDF",
+        "Description[tr]": "Belge ve RDF veritabanı arasında kişi ögelerini eşlemlemek için bir eklenti",
+        "Description[uk]": "Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF",
+        "Description[x-test]": "xxA plugin to map contact items between document and RDF databasexx",
         "Id": "calligra_semanticitem_contact",
         "Name": "RDF Contact Plugin",
+        "Name[ca]": "Connector de contacte RDF",
+        "Name[es]": "Complemento de contacto RDF",
+        "Name[gl]": "Complemento de contactos de RDF",
+        "Name[ka]": "RDF კონტაქტის დამატება",
+        "Name[nl]": "Plug-in voor RDF-contactpersoon",
+        "Name[sl]": "Vtičnik RDF Contact",
+        "Name[tr]": "RDF Kişi Eklentisi",
+        "Name[uk]": "Додаток контактів RDF",
+        "Name[x-test]": "xxRDF Contact Pluginxx",
         "ServiceTypes": [
             "Calligra/SemanticItem"
         ]

@@ -1,6 +1,14 @@
 {
     "KPlugin": {
         "Name": "Sheets Solver Plugin",
+        "Name[ca]": "Connector solucionador del Sheets",
+        "Name[es]": "Complemento de resolución de hojas",
+        "Name[gl]": "Complemento de resolución para Sheets",
+        "Name[nl]": "Plug-in voor Sheet oplosser",
+        "Name[sl]": "Vtičnik reševalnika preglednic",
+        "Name[tr]": "Tablolar Çözücü Eklentisi",
+        "Name[uk]": "Додаток розв’язання задач для Sheets",
+        "Name[x-test]": "xxSheets Solver Pluginxx",
         "ServiceTypes": [
             "Sheets/ViewPlugin"
         ]

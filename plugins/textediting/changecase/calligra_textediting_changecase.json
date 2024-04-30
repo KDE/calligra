@@ -2,6 +2,14 @@
     "KPlugin": {
         "Id": "changecase",
         "Name": "Change case plugin",
+        "Name[ca]": "Connector de canvi de caixa",
+        "Name[es]": "Complemento de cambio de mayúsculas y minúsculas",
+        "Name[gl]": "Complemento para o cambio de maiúsculas",
+        "Name[nl]": "Hoofd-/kleine lettersplug-in",
+        "Name[sl]": "Vtičnik spremembe velikosti črk ",
+        "Name[tr]": "Harf Biçimini Değiştir Eklentisi",
+        "Name[uk]": "Додаток зміни регістру",
+        "Name[x-test]": "xxChange case pluginxx",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

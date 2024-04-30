@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "pictureshape",
         "Name": "Picture Shape",
+        "Name[ca]": "Forma d'imatge",
+        "Name[es]": "Forma de imagen",
+        "Name[gl]": "Obxecto de imaxe",
+        "Name[ka]": "სურათის ფორმა",
+        "Name[nl]": "Afbeeldingvorm",
+        "Name[sl]": "Oblika slike",
+        "Name[tr]": "Resim Şekli",
+        "Name[uk]": "Форма-зображення",
+        "Name[x-test]": "xxPicture Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

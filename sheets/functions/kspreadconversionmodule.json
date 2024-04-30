@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[ca]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[es]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[gl]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING.",
+        "Description[nl]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[sl]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[tr]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[uk]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[x-test]": "xxARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRINGxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "ConversionModule",
         "License": "GPL",
         "Name": "Conversion Functions",
+        "Name[ca]": "Funcions de conversió",
+        "Name[es]": "Funciones de conversión",
+        "Name[gl]": "Funcións de conversión",
+        "Name[nl]": "Conversiefunctions",
+        "Name[sl]": "Funkcije konverzije",
+        "Name[tr]": "Dönüştürme İşlevleri",
+        "Name[uk]": "Функції перетворення",
+        "Name[x-test]": "xxConversion Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

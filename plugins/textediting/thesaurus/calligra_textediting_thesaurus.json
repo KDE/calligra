@@ -1,9 +1,25 @@
 {
     "KPlugin": {
         "Description": "Show Related Words",
+        "Description[ca]": "Mostra paraules relacionades",
+        "Description[es]": "Mostrar palabras relacionadas",
+        "Description[gl]": "Amosa as palabras relacionadas.",
+        "Description[nl]": "Toon gerelateerde woorden",
+        "Description[sl]": "Pokaži sorodne besede",
+        "Description[tr]": "İlgili sözcükleri göster",
+        "Description[uk]": "Показати пов’язані слова",
+        "Description[x-test]": "xxShow Related Wordsxx",
         "Icon": "",
         "Id": "thesaurustool",
         "Name": "Thesaurus Tool",
+        "Name[ca]": "Eina Tesaurus",
+        "Name[es]": "Herramienta de tesauro",
+        "Name[gl]": "Ferramenta de palabras relacionadas",
+        "Name[nl]": "Thesaurus hulpprogramma",
+        "Name[sl]": "Orodje tezaver",
+        "Name[tr]": "Eşanlamlılar Sözlüğü Aracı",
+        "Name[uk]": "Засіб синонімів",
+        "Name[x-test]": "xxThesaurus Toolxx",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

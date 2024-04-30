@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "formulashape",
         "Name": "Formula Shape",
+        "Name[ca]": "Forma de la fórmula",
+        "Name[es]": "Forma de fórmula",
+        "Name[gl]": "Obxecto de fórmula",
+        "Name[ka]": "ფორმულის ფორმა",
+        "Name[nl]": "Formula-vorm",
+        "Name[sl]": "Oblika formule",
+        "Name[tr]": "Formül Şekli",
+        "Name[uk]": "Форма формули",
+        "Name[x-test]": "xxFormula Shapexx",
         "ServiceTypes": [
             "Calligra/Flake"
         ]

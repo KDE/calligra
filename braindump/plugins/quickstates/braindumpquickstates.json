@@ -1,6 +1,15 @@
 {
     "KPlugin": {
         "Name": "Quickstates Plugin",
+        "Name[ca]": "Connector Quickstates",
+        "Name[es]": "Complemento de estados rápidos",
+        "Name[gl]": "Complemento Quickstates",
+        "Name[ka]": "სწრაფი სტატისტიკის მოდული",
+        "Name[nl]": "Plug-in voor snelstatussen",
+        "Name[sl]": "Vtičnik Quickstates",
+        "Name[tr]": "Quickstates Eklentisi",
+        "Name[uk]": "Додаток станів",
+        "Name[x-test]": "xxQuickstates Pluginxx",
         "ServiceTypes": [
             "Braindump/Extensions"
         ]

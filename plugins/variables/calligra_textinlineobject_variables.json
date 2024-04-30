@@ -3,6 +3,14 @@
         "Icon": "",
         "Id": "textvariables",
         "Name": "Text Variables",
+        "Name[ca]": "Variables de text",
+        "Name[es]": "Variables de texto",
+        "Name[gl]": "Variábeis de texto",
+        "Name[nl]": "Tekstvariabelen",
+        "Name[sl]": "Spremenljivke besedila",
+        "Name[tr]": "Metin Değişkenleri",
+        "Name[uk]": "Текстові змінні",
+        "Name[x-test]": "xxText Variablesxx",
         "ServiceTypes": [
             "Calligra/Text-InlineObject"
         ]

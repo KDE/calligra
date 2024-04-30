@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "stateshape",
         "Name": "State Shape",
+        "Name[ca]": "Forma d'estat",
+        "Name[es]": "Forma de estado",
+        "Name[gl]": "Obxecto de estado",
+        "Name[ka]": "მდგომარეობის ობიექტი",
+        "Name[nl]": "Statusvorm",
+        "Name[sl]": "Oblika stanja",
+        "Name[tr]": "Şekil Durumu",
+        "Name[uk]": "Форма стану",
+        "Name[x-test]": "xxState Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

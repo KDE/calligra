@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "defaulttools",
         "Name": "Default Flake Tools",
+        "Name[ca]": "Eines de floc per defecte",
+        "Name[es]": "Herramientas de láminas predeterminadas",
+        "Name[gl]": "Ferramentas predeterminadas de Flake",
+        "Name[ka]": "ფიფქის ნაგულისხმები ხელასწყოები",
+        "Name[nl]": "Standaard Flake-gereedschappen",
+        "Name[sl]": "Orodja privzetih kosmičev",
+        "Name[tr]": "Öntanımlı Tanecik Araçları",
+        "Name[uk]": "Типові інструменти Flake",
+        "Name[x-test]": "xxDefault Flake Toolsxx",
         "ServiceTypes": [
             "Calligra/Tool"
         ]

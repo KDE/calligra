@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[ca]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[es]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[gl]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE.",
+        "Description[nl]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[sl]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[tr]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[uk]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[x-test]": "xxASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUExx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "TextModule",
         "License": "GPL",
         "Name": "Text Functions",
+        "Name[ca]": "Funcions de text",
+        "Name[es]": "Funciones de texto",
+        "Name[gl]": "Funcións de texto",
+        "Name[nl]": "Tekstfuncties",
+        "Name[sl]": "Besedilne funkcije",
+        "Name[tr]": "Metin İşlevleri",
+        "Name[uk]": "Текстові функції",
+        "Name[x-test]": "xxText Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

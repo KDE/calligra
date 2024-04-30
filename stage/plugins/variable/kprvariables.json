@@ -3,6 +3,14 @@
         "Icon": "",
         "Id": "kprvariables",
         "Name": "Presentation Variables",
+        "Name[ca]": "Variables de presentació",
+        "Name[es]": "Variables de presentaciones",
+        "Name[gl]": "Variábeis de presentación",
+        "Name[nl]": "Presentatievariabelen",
+        "Name[sl]": "Spremenljivke predstavitve",
+        "Name[tr]": "Sunum Değişkenleri",
+        "Name[uk]": "Змінні презентації",
+        "Name[x-test]": "xxPresentation Variablesxx",
         "ServiceTypes": [
             "Calligra/Text-InlineObject"
         ]

@@ -1,8 +1,25 @@
 {
     "KPlugin": {
         "Description": "A plugin to map calendar event items between document and RDF database",
+        "Description[ca]": "Un connector per a relacionar elements de calendari entre documents i una base de dades RDF",
+        "Description[es]": "Complemento para asignar elementos de eventos de calendario entre el documento y la base de datos RDF",
+        "Description[gl]": "Un complemento para asociar elementos de evento de calendario entre un documento e unha base de datos RDF.",
+        "Description[nl]": "Een plug-in om verbinding te maken tussen gebeurtenis-items in een document en een RDF-database",
+        "Description[sl]": "Vtičnik za preslikavo elementov koledarskih dogodkov med dokumentom in bazo podatkov RDF",
+        "Description[tr]": "Belge ve RDF veritabanı arasında takvim etkinliği ögelerini eşlemlemek için bir eklenti",
+        "Description[uk]": "Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF",
+        "Description[x-test]": "xxA plugin to map calendar event items between document and RDF databasexx",
         "Id": "calligra_semanticitem_event",
         "Name": "RDF Calendar Event Plugin",
+        "Name[ca]": "Connector d'esdeveniments de calendari RDF",
+        "Name[es]": "Complemento de evento de calendario RDF",
+        "Name[gl]": "Complemento de eventos de calendario de RDF",
+        "Name[ka]": "RDF კალენდარის მოვლენის დამატება",
+        "Name[nl]": "Plug-in voor gebeurtenis in RDF-agenda",
+        "Name[sl]": "Vtičnik dogodka v koledarju",
+        "Name[tr]": "RDF Takvim Etkinliği Eklentisi",
+        "Name[uk]": "Додаток подій календаря RDF",
+        "Name[x-test]": "xxRDF Calendar Event Pluginxx",
         "ServiceTypes": [
             "Calligra/SemanticItem"
         ]

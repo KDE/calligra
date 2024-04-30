@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "templateshape",
         "Name": "Template Shape",
+        "Name[ca]": "Forma de plantilla",
+        "Name[es]": "Forma de plantilla",
+        "Name[gl]": "Obxecto de modelo",
+        "Name[ka]": "ნიმუშის ფორმა",
+        "Name[nl]": "Vorm van sjabloon",
+        "Name[sl]": "Oblika predloge",
+        "Name[tr]": "Şablon Şekli",
+        "Name[uk]": "Форма-шаблон",
+        "Name[x-test]": "xxTemplate Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

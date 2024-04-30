@@ -11,6 +11,14 @@
             "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
         ],
         "Name": "Calligra Stage Component",
+        "Name[ca]": "Component Stage del Calligra",
+        "Name[es]": "Componente Stage de Calligra",
+        "Name[gl]": "Compoñente de Calligra Stage",
+        "Name[nl]": "Component van Calligra Stage",
+        "Name[sl]": "Komponenta Calligra Stage",
+        "Name[tr]": "Calligra Sahne Bileşeni",
+        "Name[uk]": "Компонент Calligra Stage",
+        "Name[x-test]": "xxCalligra Stage Componentxx",
         "ServiceTypes": [
             "Calligra/Part"
         ]

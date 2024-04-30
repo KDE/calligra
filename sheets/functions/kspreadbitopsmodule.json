@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[ca]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[es]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[gl]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT.",
+        "Description[nl]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[sl]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[tr]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[uk]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[x-test]": "xxBITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFTxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "BitOpsModule",
         "License": "GPL",
         "Name": "Bit Operation Functions",
+        "Name[ca]": "Funcions d'operació de bit",
+        "Name[es]": "Funciones de operaciones con bits",
+        "Name[gl]": "Funcións de lóxica binaria",
+        "Name[nl]": "Bit-operatie functies",
+        "Name[sl]": "Funkcije operacij nad biti",
+        "Name[tr]": "Bit İşlemi İşlevleri",
+        "Name[uk]": "Бітові дії",
+        "Name[x-test]": "xxBit Operation Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

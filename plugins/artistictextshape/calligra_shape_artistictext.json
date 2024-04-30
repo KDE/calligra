@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "artistictextshape",
         "Name": "Artistic Text Shape",
+        "Name[ca]": "Forma de text artístic",
+        "Name[es]": "Forma de texto artístico",
+        "Name[gl]": "Obxecto de texto artístico",
+        "Name[ka]": "ტექსტის უცნაური ფორმა",
+        "Name[nl]": "Artistieke tekstvorm",
+        "Name[sl]": "Oblika umetniškega besedila",
+        "Name[tr]": "Sanatsal Metin Şekli",
+        "Name[uk]": "Художній текст",
+        "Name[x-test]": "xxArtistic Text Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

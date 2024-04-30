@@ -2,6 +2,14 @@
     "KPlugin": {
         "Id": "spellcheck",
         "Name": "SpellCheck plugin",
+        "Name[ca]": "Connector d'ortografia",
+        "Name[es]": "Complemento de comprobación ortográfica",
+        "Name[gl]": "Complemento de corrección ortográfica",
+        "Name[nl]": "Spellingcontroleplug-in",
+        "Name[sl]": "Vtičnik črkovalnika",
+        "Name[tr]": "Yazım Denetimi Eklentisi",
+        "Name[uk]": "Додаток перевірки правопису",
+        "Name[x-test]": "xxSpellCheck pluginxx",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

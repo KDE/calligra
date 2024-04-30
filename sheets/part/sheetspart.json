@@ -12,6 +12,14 @@
             "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
         ],
         "Name": "Calligra Spreadsheet Component",
+        "Name[ca]": "Component de full de càlcul del Calligra",
+        "Name[es]": "Componente de hoja de cálculo de Calligra",
+        "Name[gl]": "Compoñente para Calligra de follas de cálculo",
+        "Name[nl]": "Component van Calligra Rekenblad",
+        "Name[sl]": "Komponenta preglednice Calligra",
+        "Name[tr]": "Calligra Hesap Tablosu Bileşeni",
+        "Name[uk]": "Компонент електронних таблиць Calligra",
+        "Name[x-test]": "xxCalligra Spreadsheet Componentxx",
         "ServiceTypes": [
             "Calligra/Part"
         ]

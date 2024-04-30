@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[ca]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[es]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[gl]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR.",
+        "Description[nl]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[sl]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[tr]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[uk]": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+        "Description[x-test]": "xxAND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XORxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "LogicModule",
         "License": "GPL",
         "Name": "Logic Functions",
+        "Name[ca]": "Funcions lògiques",
+        "Name[es]": "Funciones lógicas",
+        "Name[gl]": "Funcións lóxicas",
+        "Name[nl]": "Logische functies",
+        "Name[sl]": "Logične funkcije",
+        "Name[tr]": "Mantık İşlevleri",
+        "Name[uk]": "Логічні функції",
+        "Name[x-test]": "xxLogic Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

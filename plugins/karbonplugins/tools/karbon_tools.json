@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "karbontools",
         "Name": "Karbon Tools",
+        "Name[ca]": "Eines del Karbon",
+        "Name[es]": "Herramientas de Karbon",
+        "Name[gl]": "Ferramentas de Karbon",
+        "Name[ka]": "Karbon -ის ხელსაწყოები",
+        "Name[nl]": "Hulpmiddelen voor Karbon",
+        "Name[sl]": "Orodja Karbon",
+        "Name[tr]": "Karbon Araçları",
+        "Name[uk]": "Засоби Karbon",
+        "Name[x-test]": "xxKarbon Toolsxx",
         "ServiceTypes": [
             "Calligra/Tool"
         ]

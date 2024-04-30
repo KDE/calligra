@@ -2,6 +2,15 @@
     "KPlugin": {
         "Id": "webshape",
         "Name": "Web Shape",
+        "Name[ca]": "Forma de web",
+        "Name[es]": "Forma web",
+        "Name[gl]": "Obxecto web",
+        "Name[ka]": "Web ფორმა",
+        "Name[nl]": "Webvorm",
+        "Name[sl]": "Oblika splet",
+        "Name[tr]": "Web Şekli",
+        "Name[uk]": "Форма мережі",
+        "Name[x-test]": "xxWeb Shapexx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

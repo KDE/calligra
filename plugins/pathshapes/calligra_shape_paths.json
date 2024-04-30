@@ -3,6 +3,15 @@
         "Icon": "",
         "Id": "pathshapes",
         "Name": "Path Shapes",
+        "Name[ca]": "Formes de camí",
+        "Name[es]": "Formas de rutas",
+        "Name[gl]": "Obxecto de ruta",
+        "Name[ka]": "ბილიკის ფორმები",
+        "Name[nl]": "Padvormen",
+        "Name[sl]": "Oblike poti",
+        "Name[tr]": "Yol Şekilleri",
+        "Name[uk]": "Форми контурів",
+        "Name[x-test]": "xxPath Shapesxx",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

@@ -2,6 +2,14 @@
     "KPlugin": {
         "Id": "textshape",
         "Name": "Text Shape",
+        "Name[ca]": "Forma de text",
+        "Name[es]": "Forma de texto",
+        "Name[gl]": "Obxecto de texto",
+        "Name[nl]": "Tekstvorm",
+        "Name[sl]": "Oblika besedila",
+        "Name[tr]": "Metin Şekli",
+        "Name[uk]": "Форма-текст",
+        "Name[x-test]": "xxText Shapexx",
         "ServiceTypes": [
             "Calligra/Flake"
         ]

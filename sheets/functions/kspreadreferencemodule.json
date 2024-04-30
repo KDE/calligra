@@ -3,16 +3,40 @@
         "Authors": [
             {
                 "Email": "calligra-devel@kde.org",
-                "Name": "The KSpread Team"
+                "Name": "The KSpread Team",
+                "Name[ca]": "L'equip del KSpread",
+                "Name[es]": "El equipo de KSpread",
+                "Name[gl]": "Equipo de KSpread",
+                "Name[nl]": "Het team van KSpread",
+                "Name[sl]": "Ekipa KSpread",
+                "Name[tr]": "KSpread Takımı",
+                "Name[uk]": "Команда KSpread",
+                "Name[x-test]": "xxThe KSpread Teamxx"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[ca]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[es]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[gl]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP.",
+        "Description[nl]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP",
+        "Description[sl]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[tr]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[uk]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[x-test]": "xxADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUPxx",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "ReferenceModule",
         "License": "GPL",
         "Name": "Reference Functions",
+        "Name[ca]": "Funcions de referència",
+        "Name[es]": "Funciones de referencia",
+        "Name[gl]": "Funcións de referencia",
+        "Name[nl]": "Referentie-functies",
+        "Name[sl]": "Funkcije referenc",
+        "Name[tr]": "Başvuru İşlevleri",
+        "Name[uk]": "Еталонні функції",
+        "Name[x-test]": "xxReference Functionsxx",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"
