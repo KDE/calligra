@@ -19,6 +19,7 @@
   <name xml:lang="gl">Calligra Sheets</name>
   <name xml:lang="id">Calligra Sheets</name>
   <name xml:lang="it">Calligra Sheets</name>
+  <name xml:lang="ka">Calligra Sheets</name>
   <name xml:lang="ko">Calligra 시트</name>
   <name xml:lang="nl">Calligra Sheets</name>
   <name xml:lang="pl">Arkusze Calligra</name>
@@ -51,6 +52,7 @@
   <summary xml:lang="id">Lembar-sebar</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
   <summary xml:lang="ja">スプレッドシート</summary>
+  <summary xml:lang="ka">ელექტრონული ცხრილი</summary>
   <summary xml:lang="ko">스프레드시트</summary>
   <summary xml:lang="nl">Rekenblad</summary>
   <summary xml:lang="pl">Arkusz kalkulacyjny</summary>
@@ -85,6 +87,7 @@
     <p xml:lang="id">Calligra Sheets adalah alat penghitungan dan lembar-kerja berfitur lengkap. Gunakanlah ini agar secara cepat untuk membuat dan menghitung berbagai lembar-kerja yang terkait dengan bisnis, seperti pendapatan dan pengeluaran, jam kerja karyawan, dll</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolare e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
     <p xml:lang="ja">Calligra Sheets は豊富な機能を持った表計算ツールです。収入と支出、従業員の労働時間などビジネスなどに必要なスプレッドシートの作成、計算を短時間で行うことができます。</p>
+    <p xml:lang="ka">Calligra Sheets სრული ფუნქციონალის მქონე გამოთვლისა და ელცხრილების პროგრამაა. გამოიყენეთ ის სხვადასხვა ბიზნესთან დაკავშირებული ელცხრილების, როგორიცაა შემოსავლები, შექმნისა და გამოთვლისათვის.</p>
     <p xml:lang="ko">Caligra 시트는 모든 기능을 갖춘 계산 및 스프레드시트 도구입니다. 소득 및 지출, 직원 근무 시간 등 다양한 비즈니스 관련 스프레드시트를 신속하게 작성 및 계산할 수 있습니다.</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
     <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
@@ -150,6 +153,7 @@
       <li xml:lang="id">Gunakan shapes untuk membuat catatan atau rancangan</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
       <li xml:lang="ja">シェイプを使用したメモの貼り付けやマインドマップの作成</li>
+      <li xml:lang="ka">გამოიყენეთ მოხაზულობები რუკების და შენიშვნების შესაქმნელად</li>
       <li xml:lang="ko">도형을 사용하여 노트 또는 마인드맵 작성</li>
       <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
       <li xml:lang="pl">Używa kształtów do robienia notatek i map umysłu</li>

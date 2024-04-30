@@ -91,6 +91,7 @@
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha gran aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
     <p xml:lang="id">Karbon adalah aplikasi menggambar vektor dengan antarmuka pengguna yang mudah digunakan, sangat dapat disesuaikan, dan dapat diekstensi. Itu membuat Karbon adalah aplikasi yang bagus untuk pengguna yang mulai menjelajahi dunia grafis vektor dan juga bagi para seniman yang ingin membuat seni vektor yang menakjubkan.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare straordinarie opere vettoriali. </p>
+    <p xml:lang="ka">Karbon ვექტორული ხაზვის აპლიკაციაა მომხმარებლის ინტერფეისით რომელიც იოლი, მორგებადი და გაფართოებადია. ეს Karbon-ს გადასარევ აპლიკაციად ქმნის მოხმარებლებისთვის, რომლებსაც სურთ, მიმოიხილონ ვექტორული გრაფიკის სამყარო და ხელოვნებისთვის, რომლებიც სუნთქვისშემკვრელ ვექტორულ გრაფიკას ქმნიან.</p>
     <p xml:lang="ko">Karbon은 사용하기 쉽고 원하는 대로 그릴 수 있는 확장성이 뛰어난 사용자 인터페이스를 갖춘 벡터 그리기 앱입니다. 이로 인해 Karbon은 벡터 그래픽의 세계를 탐험하기 시작하는 사용자들과 놀랄 만큼 아름다운 벡터 아트를 만들고자 하는 예술가들에게 훌륭한 앱이 되었습니다.</p>
     <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
     <p xml:lang="pl">Karbon jest programem do rysowania wektorowego z układem sterowania, który jest łatwy w użyciu, wysoce dostosowywalny i rozszerzalny. To czyni Karbon wspaniałym programem dla użytkowników zaczynających poznawanie świata grafiki wektorowej, a artystów zachęca do tworzenie sztuki wektorowej zapierającej dech w piersiach.</p>
@@ -222,6 +223,7 @@
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
       <li xml:lang="id">Antarmuka pengguna yang dapat dikustomisasi dengan docker dan toolbar yang secara bebas dapat ditempatkan</li>
       <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
+      <li xml:lang="ka">მორგებადი მომხმარებლის ინტერფეისი სურვილისამებრ გადაადგილებადი მიმაგრებადი მენიუებით</li>
       <li xml:lang="ko">자유롭게 배치할 수 있는 도구 모음 및 고정 표시 도구가 있는 사용자 정의 가능한 사용자 인터페이스</li>
       <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en verankeringen</li>
       <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
@@ -251,6 +253,7 @@
       <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
       <li xml:lang="id">Docker layer untuk memudahkan penanganan dokumen rumit termasuk gambar-mini pratinjau, dukungan untuk pengelompokan bentuk melalui seret dan taruh, mengontrol visibilitas bentuk atau penguncian</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
+      <li xml:lang="ka">ფენის მიმაგრება კომპლექსური დოკუმენტების ადვილად დასამუშავებლად მინიატურების ჩათვლით. მონახაზებს დაჯგუფების მხარდაჭერა გადათრევა/დაგდებით. აკონტროლეთ მონახაზების ხილვადობა და ჩაკეტვა</li>
       <li xml:lang="ko">섬네일 미리 보기, 드래그 앤 드롭으로 도형 그룹화 지원, 도형 또는 잠금의 가시성을 제어하는 복잡한 문서를 쉽게 처리 할 수 있는 레이어 고정 표시 도구</li>
       <li xml:lang="nl">Laagverankering voor gemakkelijke behandeling van complexe documenten inclusief voorbeeldminiaturen, ondersteuning voor groeperen van vormen via slepen en laten vallen, besturing van zichtbaarheid van vormen of vastzetten</li>
       <li xml:lang="pl">Dokowanie warstw dla łatwiejszej obsługi złożonych dokumentów zawierający: podgląd miniatur, obsługę grupowania kształtów poprzez przeciągnij i upuść, sterowanie widocznością kształtów czy blokowanie.</li>
@@ -279,6 +282,7 @@
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
       <li xml:lang="id">Alat pengeditan alur tingkat-lanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
+      <li xml:lang="ka">დამატებითი ბილიკის ჩასწორების ხელსაწყო ტილოზე ჩასწორების შესაძლებლობებით</li>
       <li xml:lang="ko">뛰어난 캔버스 편집 기능을 갖춘 고급 경로 편집 도구</li>
       <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
       <li xml:lang="pl">Narzędzia rozbudowane edytowania ścieżki z szerokimi możliwościami edytowania na płótnie</li>
@@ -307,6 +311,7 @@
       <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de rutas, incluíndo unha ferramenta de debuxo de rutas, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
       <li xml:lang="id">Berbagai alat menggambar untuk membuat bentuk alur termasuk alat alur gambar, alat pensil serta alat menggambar kaligrafi</li>
       <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
+      <li xml:lang="ka">სხვადასხვა სახატავი ხელსაწყოები ბილიკის მოხაზულობების შესაქმნელად ბილიკის ხაზვის ხელსაწყოს ჩათვლით, ფანქარი და კალიგრაფიის სახატავი ხელსაწყო</li>
       <li xml:lang="ko">그리기 경로 도구, 연필 도구 뿐만 아니라 붓글씨 그리기 도구 등 경로 모양을 만드는 다양한 그리기 도구</li>
       <li xml:lang="nl">Verschillende tekengereedschappen voor het maken van padvormen inclusief een tekenhulpmiddel voor paden, een potloodhulpmiddel evenals een tekengereedschap voor kalligrafie</li>
       <li xml:lang="pl">Różne narzędzia rysownicze do tworzenia kształtów ścieżek uwzględniając w tym: narzędzie rysowania ścieżki, narzędzie ołówka, a także kaligraficzne narzędzia rysownicze </li>
@@ -335,6 +340,7 @@
       <li xml:lang="gl">Ferramentas de gradacións e padróns para editar degradados e estilos de padróns facilmente sobre o lenzo.</li>
       <li xml:lang="id">Alat gradien dan pola untuk pengeditan gradien dan pola yang mudah di kanvas</li>
       <li xml:lang="it">Strumenti di gradienti e motivi per una facile modifica sul posto di stili di gradienti e motivi</li>
+      <li xml:lang="ka">გრადიენტისა და ნიუშის ხელსაწყოები მათი ტილოზე ადვილად ჩასასწორებლად</li>
       <li xml:lang="ko">그라데이션 및 패턴 스타일을 손쉽게 캔버스 상에서 편집하는 그라데이션 및 패턴 도구</li>
       <li xml:lang="nl">Hulpmiddelen voor gradiënten en patronen voor gemakkelijk werken op het werkblad van gradiënten en patroonstijlen</li>
       <li xml:lang="pl">Narzędzia gradientu i wzorca dla łatwiejszego ich edytowania na płótnie</li>
@@ -364,6 +370,7 @@
       <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de rutas, caixas de límites, posicións ortogonais, cruzamento de formas de rutas ou extensións de liñas e rutas).</li>
       <li xml:lang="id">Fasilitas snapping yang berada di atas untuk menggambar dan mengedit yang dipandu (mis. Snapping ke kisi, garis pandu, simpul alur, kotak pembatas, posisi ortogonal, persimpangan bentuk lintasan atau ekstensi garis dan alur)</li>
       <li xml:lang="it">Capacità di alto livello di regolazione per disegno e modifica guidata (ad es. aggancio alla griglia, linee guida, nodi di tracciato, riquadri collegati, posizioni ortgonali, intersezioni di forme di tracciato o estensioni di linee e tracciati)</li>
+      <li xml:lang="ka">საკაიფო მიბმის ხელსაწყოები წინასწარ მითითებული ხატვისა და ჩასწორებისთვის (მაგ: ბადეზე მიმაგრება, გიდის ხაზები, ბილიკის კვანძები, ჩარჩოები, ორთოგონალური მდებარეობები და ხაზებისა და ბილიკის გაფართოებები)</li>
       <li xml:lang="ko">안내선을 따라 그리고 편집할 때 필요한 최고 수준의 스냅 기능(예: 격자에 물리기, 안내선, 패스 노드, 경계 상자, 직교 위치, 패스 모양의 교차 또는 선과 패스의 확장)</li>
       <li xml:lang="nl">Excellente vastklik faciliteiten voor geleid tekenen en bewerken (bijv. vastklikken aan raster, gidslijnen, padpunten, begrenzingsvakken, orthogonale posities, kruispunten van padvormen of extensies van lijnen en paden)</li>
       <li xml:lang="pl">Możliwości przyciągania z najwyższej półki rysowania i edytowania ze wspomaganiem (np. przyciąganie do siatki, -prowadnic, węzłów ścieżki, pól ograniczających, prostopadłych położeń, przecięć kształtów ścieżek lub wydłużeń linii i ścieżek)</li>
@@ -394,6 +401,7 @@
       <li xml:lang="gl">Inclúe moitas formas predefinidas, entre elas formas básicas como estrelas, círculos, elipses, rectángulos e imaxes.</li>
       <li xml:lang="id">Memasukkan banyak bentuk standar termasuk bentuk dasar seperti bintang, lingkaran/bulatan, persegi panjang, gambar</li>
       <li xml:lang="it">Include molte forme predefinite tra cui forme base come stelle, cerchi/ellissi, rettangoli e immagini</li>
+      <li xml:lang="ka">შეიცავს მრავალ წინასწარ აღწერილ მოხაზულობას ისეთი ძირითადი მოხაზულობების ჩათვლით, როგორიცაა ვარსკვლავი, წრე/ოვალი, მართკუთხედი, გამოსახულება</li>
       <li xml:lang="ko">별, 원/타원, 직사각형, 이미지와 같은 기본 도형 등 미리 정의된 여러 도형이 들어 있음</li>
       <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, afbeelding</li>
       <li xml:lang="pl">Zawiera wiele uprzednio stworzonych kształtów, do których można zaliczyć gwiazdy, okręgi, elipsy, prostokąty, obrazy</li>
@@ -422,6 +430,7 @@
       <li xml:lang="gl">Forma de texto artístico que permite seguir o contorno de rutas (é dicir, texto sobre rutas).</li>
       <li xml:lang="id">Bentuk teks artistik dengan dukungan untuk kerangka alur berikut (yaitu teks di alur)</li>
       <li xml:lang="it">Forme di testo artistico con supporto per le bordature che seguono il tracciato (ad es. testo su tracciato)</li>
+      <li xml:lang="ka">არტისტული ტექსტის მოხაზულობა ბილიკის მიყოლით (ანუ ტექსტი ბილიკზე)</li>
       <li xml:lang="ko">경로 외곽성을 따라서 텍스트를 배치할 수 있는 예술적 텍스트 도형</li>
       <li xml:lang="nl">Artistieke tekstvormen met ondersteuning voor het volden van paden (dwz. tekst op een pad)</li>
       <li xml:lang="pl">Kształty artystycznego tekstu z obsługą dla następujących zarysów ścieżek (tj. tekst na ścieżce)</li>
@@ -450,6 +459,7 @@
       <li xml:lang="gl">Operacións de rutas complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de rutas; así como efectos de xiro e picada.</li>
       <li xml:lang="id">Operasi dan efek alur yang rumit seperti operasi set boolean, perataan alur, pembulatan dan pemurnian serta efek pusaran/cubitan</li>
       <li xml:lang="it">Operazioni complesse su tracciati ed effetti del tipo operazioni su insiemi booleani, appiattimento di tracciati, arrotondamento e affinamento così come effetti di vortice/pizzico</li>
+      <li xml:lang="ka">კომპლექსური ბილიკის ოპერაციები და ეფექტები, როგორიცაა ლოგიკური ოპერაციები, ბილიკის გაბრტყელება, მომრგვალება და დაზუსტება, სხვადასხვა ეფექტებთან ერთად</li>
       <li xml:lang="ko">복잡한 경로 작업과 불린 세트 작업, 경로 펼치기, 반올림 및 정제, 회오리 효과/핀치 효과와 같은 효과를 제공합니다</li>
       <li xml:lang="nl">Complexe bewerkingen van paden en effecten zoals booleaanse set bewerkingen, afvlakken van paden, afronding en verfijning evenals wervel/put-effecten</li>
       <li xml:lang="pl">Złożone działania i efekty na ścieżce takie jak działania boolean, spłaszczanie ścieżki, zaokrąglanie, a także efekty polepszające wraz z efektami wiru/rozdmuchania</li>
@@ -479,6 +489,7 @@
       <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
       <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, shape, dan docker baru</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
+      <li xml:lang="ka">გაფართოებადი დამატებებით ახალი ხელსაწყოებისთვის, მოხაზულობებისთვის და პანელებისთვის</li>
       <li xml:lang="ko">새로운 도구, 모양 및 고정 표시 도구용 플러그인을 작성하여 확장 가능</li>
       <li xml:lang="nl">Uit te breiden door het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pl">Rozszerzalne wtyczki zapisu dla nowych narzędzi, kształtów i dokowań</li>
