@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "pluginshape",
         "Name": "Plugin Shape",
+        "Name[ca@valencia]": "Forma de connector",
         "Name[ca]": "Forma de connector",
         "Name[es]": "Forma de complemento",
         "Name[gl]": "Obxecto de complemento",
+        "Name[it]": "Forma di estensione",
         "Name[ka]": "დამატების ფორმა",
         "Name[nl]": "Plug-in voor vorm",
         "Name[sl]": "Oblika vtičnika",

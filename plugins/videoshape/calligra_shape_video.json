@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "videoshape",
         "Name": "Video Shape",
+        "Name[ca@valencia]": "Forma de vídeo",
         "Name[ca]": "Forma de vídeo",
         "Name[es]": "Forma de vídeo",
         "Name[gl]": "Obxecto de vídeo",
+        "Name[it]": "Forma video",
+        "Name[ka]": "ვიდეოს ფორმა",
         "Name[nl]": "Video-vorm",
         "Name[sl]": "Oblika videa",
         "Name[tr]": "Video Şekli",

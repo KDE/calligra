@@ -1,9 +1,12 @@
 {
     "KPlugin": {
         "Name": "Sheets Solver Plugin",
+        "Name[ca@valencia]": "Connector solucionador de Sheets",
         "Name[ca]": "Connector solucionador del Sheets",
         "Name[es]": "Complemento de resolución de hojas",
         "Name[gl]": "Complemento de resolución para Sheets",
+        "Name[it]": "Estensione Solutore di Sheets",
+        "Name[ka]": "Sheets-ის ამომხსნელის დამატება",
         "Name[nl]": "Plug-in voor Sheet oplosser",
         "Name[sl]": "Vtičnik reševalnika preglednic",
         "Name[tr]": "Tablolar Çözücü Eklentisi",

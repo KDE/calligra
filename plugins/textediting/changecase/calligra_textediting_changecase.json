@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "changecase",
         "Name": "Change case plugin",
+        "Name[ca@valencia]": "Connector de canvi de caixa",
         "Name[ca]": "Connector de canvi de caixa",
         "Name[es]": "Complemento de cambio de mayúsculas y minúsculas",
         "Name[gl]": "Complemento para o cambio de maiúsculas",
+        "Name[it]": "Estensione di modifica delle maiuscole",
+        "Name[ka]": "რეგისტრის შეცვლის დამატება",
         "Name[nl]": "Hoofd-/kleine lettersplug-in",
         "Name[sl]": "Vtičnik spremembe velikosti črk ",
         "Name[tr]": "Harf Biçimini Değiştir Eklentisi",

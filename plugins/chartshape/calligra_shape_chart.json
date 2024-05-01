@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "chartshape",
         "Name": "Chart Shape",
+        "Name[ca@valencia]": "Forma del diagrama",
         "Name[ca]": "Forma del diagrama",
         "Name[es]": "Forma de mapa",
         "Name[gl]": "Obxecto de gráfico",
+        "Name[it]": "Forma di grafico",
         "Name[ka]": "გრაფიკის ფორმა",
         "Name[nl]": "Grafiekvorm",
         "Name[sl]": "Oblika grafikona",

@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "spacenavigator",
         "Name": "Spacenavigator Device",
+        "Name[ca@valencia]": "Aparell NavegadorEspacial",
         "Name[ca]": "Aparell NavegadorEspacial",
         "Name[es]": "Dispositivo navegador espacial",
         "Name[gl]": "Dispositivo de Spacenavigator",
+        "Name[it]": "Dispositivo per la navigazione spaziale",
         "Name[ka]": "სივრცეში ნავიგაციის მოწყობილობა",
         "Name[nl]": "Spacenavigator-apparaat",
         "Name[sl]": "Naprava za krmarjenje po prostoru",

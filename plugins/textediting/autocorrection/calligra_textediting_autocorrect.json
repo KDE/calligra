@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "autocorrect",
         "Name": "Autocorrection plugin",
+        "Name[ca@valencia]": "Connector de correcció automàtica",
         "Name[ca]": "Connector de correcció automàtica",
         "Name[es]": "Complemento de corrección automática",
         "Name[gl]": "Complemento de corrección automática",
+        "Name[it]": "Estensione di correzione automatica",
+        "Name[ka]": "ავტოკორექციის დამატება",
         "Name[nl]": "Autocorrectieplug-in",
         "Name[sl]": "Vtičnik samodejnega popravljanja",
         "Name[tr]": "Kendiliğinden Düzeltme Eklentisi",

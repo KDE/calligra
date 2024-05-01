@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "basicflakesplugin",
         "Name": "Basic Flakes",
+        "Name[ca@valencia]": "Formes bàsiques",
         "Name[ca]": "Formes bàsiques",
         "Name[es]": "Láminas básicas",
         "Name[gl]": "Básico de Flakes",
+        "Name[it]": "Oggetti base di Flake",
         "Name[ka]": "მარტივი ფანტელები",
         "Name[nl]": "Basis Flakes",
         "Name[sl]": "Osnovni kosmiči",

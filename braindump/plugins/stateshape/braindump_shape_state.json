@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "stateshape",
         "Name": "State Shape",
+        "Name[ca@valencia]": "Forma d'estat",
         "Name[ca]": "Forma d'estat",
         "Name[es]": "Forma de estado",
         "Name[gl]": "Obxecto de estado",
+        "Name[it]": "Forma di stato",
         "Name[ka]": "მდგომარეობის ობიექტი",
         "Name[nl]": "Statusvorm",
         "Name[sl]": "Oblika stanja",

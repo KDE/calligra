@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "webshape",
         "Name": "Web Shape",
+        "Name[ca@valencia]": "Forma de web",
         "Name[ca]": "Forma de web",
         "Name[es]": "Forma web",
         "Name[gl]": "Obxecto web",
+        "Name[it]": "Forma Web",
         "Name[ka]": "Web ფორმა",
         "Name[nl]": "Webvorm",
         "Name[sl]": "Oblika splet",

@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "templateshape",
         "Name": "Template Shape",
+        "Name[ca@valencia]": "Forma de plantilla",
         "Name[ca]": "Forma de plantilla",
         "Name[es]": "Forma de plantilla",
         "Name[gl]": "Obxecto de modelo",
+        "Name[it]": "Forma di modello",
         "Name[ka]": "ნიმუშის ფორმა",
         "Name[nl]": "Vorm van sjabloon",
         "Name[sl]": "Oblika predloge",

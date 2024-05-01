@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "calligra_docker_stencils",
         "Name": "Calligra Stencils Docker plugin",
+        "Name[ca@valencia]": "Connector d'acobladors de plantilles de Calligra",
         "Name[ca]": "Connector d'acobladors de plantilles del Calligra",
         "Name[es]": "Complemento de panel de plantillas de Calligra",
         "Name[gl]": "Complemento de doca de figuras para Calligra",
+        "Name[it]": "Estensione per le aree di aggancio delle forme di Calligra",
         "Name[ka]": "Calligra -ის სტენსილის ზოლის დამატება",
         "Name[nl]": "Vastzetterplug-in voor Calligra Stencils",
         "Name[sl]": "Vtičnik Calligra Stencils Docker",

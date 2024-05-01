@@ -1,9 +1,11 @@
 {
     "KPlugin": {
         "Name": "Quickstates Plugin",
+        "Name[ca@valencia]": "Connector Quickstates",
         "Name[ca]": "Connector Quickstates",
         "Name[es]": "Complemento de estados rápidos",
         "Name[gl]": "Complemento Quickstates",
+        "Name[it]": "Estensione Quickstates",
         "Name[ka]": "სწრაფი სტატისტიკის მოდული",
         "Name[nl]": "Plug-in voor snelstatussen",
         "Name[sl]": "Vtičnik Quickstates",

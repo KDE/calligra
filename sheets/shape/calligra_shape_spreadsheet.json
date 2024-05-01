@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "spreadsheetshape",
         "Name": "Spreadsheet Shape",
+        "Name[ca@valencia]": "Forma de full de càlcul",
         "Name[ca]": "Forma de full de càlcul",
         "Name[es]": "Forma de hoja de cálculo",
         "Name[gl]": "Obxecto de folla de cálculo",
+        "Name[it]": "Forma di foglio di calcolo",
         "Name[ka]": "ელცხრილის ფორმა",
         "Name[nl]": "Rekenblad-vorm",
         "Name[sl]": "Oblika preglednice",

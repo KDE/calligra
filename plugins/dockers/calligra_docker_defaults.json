@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "calligradockers",
         "Name": "Calligra Dockers plugin",
+        "Name[ca@valencia]": "Connector d'acobladors de Calligra",
         "Name[ca]": "Connector d'acobladors del Calligra",
         "Name[es]": "Complemento de paneles de Calligra",
         "Name[gl]": "Complemento de docas para Calligra",
+        "Name[it]": "Estensione per le aree di aggancio di Calligra",
         "Name[ka]": "Calligra-ის ზოლების დამატება",
         "Name[nl]": "Vastzetterplug-in voor Calligra",
         "Name[sl]": "Vtičnik Calligra Dockers",

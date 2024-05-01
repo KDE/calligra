@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "karbontools",
         "Name": "Karbon Tools",
+        "Name[ca@valencia]": "Eines de Karbon",
         "Name[ca]": "Eines del Karbon",
         "Name[es]": "Herramientas de Karbon",
         "Name[gl]": "Ferramentas de Karbon",
+        "Name[it]": "Strumenti di Karbon",
         "Name[ka]": "Karbon -ის ხელსაწყოები",
         "Name[nl]": "Hulpmiddelen voor Karbon",
         "Name[sl]": "Orodja Karbon",

@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "textshape",
         "Name": "Text Shape",
+        "Name[ca@valencia]": "Forma de text",
         "Name[ca]": "Forma de text",
         "Name[es]": "Forma de texto",
         "Name[gl]": "Obxecto de texto",
+        "Name[it]": "Forma di testo",
+        "Name[ka]": "ფორმა-ტექსტი",
         "Name[nl]": "Tekstvorm",
         "Name[sl]": "Oblika besedila",
         "Name[tr]": "Metin Şekli",

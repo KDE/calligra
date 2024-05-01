@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "calligrastagetoolanimation",
         "Name": "Animation Tool",
+        "Name[ca@valencia]": "Eina d'animació",
         "Name[ca]": "Eina d'animació",
         "Name[es]": "Herramienta de animación",
         "Name[gl]": "Ferramenta de animación",
+        "Name[it]": "Strumento di animazione",
+        "Name[ka]": "ანიმაციის ხელსაწყო",
         "Name[nl]": "Animatie-hulpmiddel",
         "Name[sl]": "Orodje animacije",
         "Name[tr]": "Canlandırma Aracı",

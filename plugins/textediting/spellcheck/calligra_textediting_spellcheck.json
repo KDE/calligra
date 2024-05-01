@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "spellcheck",
         "Name": "SpellCheck plugin",
+        "Name[ca@valencia]": "Connector d'ortografia",
         "Name[ca]": "Connector d'ortografia",
         "Name[es]": "Complemento de comprobación ortográfica",
         "Name[gl]": "Complemento de corrección ortográfica",
+        "Name[it]": "Estensione di correzione ortografica",
+        "Name[ka]": "მართლწერის შემოწმების დამატება",
         "Name[nl]": "Spellingcontroleplug-in",
         "Name[sl]": "Vtičnik črkovalnika",
         "Name[tr]": "Yazım Denetimi Eklentisi",

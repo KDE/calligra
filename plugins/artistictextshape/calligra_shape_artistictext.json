@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "artistictextshape",
         "Name": "Artistic Text Shape",
+        "Name[ca@valencia]": "Forma de text artístic",
         "Name[ca]": "Forma de text artístic",
         "Name[es]": "Forma de texto artístico",
         "Name[gl]": "Obxecto de texto artístico",
+        "Name[it]": "Forma di testo artistica",
         "Name[ka]": "ტექსტის უცნაური ფორმა",
         "Name[nl]": "Artistieke tekstvorm",
         "Name[sl]": "Oblika umetniškega besedila",

@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "musicshape",
         "Name": "Music Shape",
+        "Name[ca@valencia]": "Forma de música",
         "Name[ca]": "Forma de música",
         "Name[es]": "Forma de música",
         "Name[gl]": "Obxecto musical",
+        "Name[it]": "Forma di musica",
         "Name[ka]": "Music Shape",
         "Name[nl]": "Muziekvorm",
         "Name[sl]": "Oblika glasbe",

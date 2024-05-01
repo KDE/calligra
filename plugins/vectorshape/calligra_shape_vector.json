@@ -2,9 +2,12 @@
     "KPlugin": {
         "Id": "vectorshape",
         "Name": "Static Vector Shape",
+        "Name[ca@valencia]": "Forma de vector estàtic",
         "Name[ca]": "Forma de vector estàtic",
         "Name[es]": "Forma de vector estático",
         "Name[gl]": "Obxecto de vector estático",
+        "Name[it]": "Forma di vettore statico",
+        "Name[ka]": "სტატიკური ვექტორის ფორმა",
         "Name[nl]": "Statische vectorvorm",
         "Name[sl]": "Oblika statičnega vektorja",
         "Name[tr]": "Durağan Vektör Şekli",

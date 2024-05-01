@@ -2,9 +2,11 @@
     "KPlugin": {
         "Id": "threedshape",
         "Name": "3D Scene Shape",
+        "Name[ca@valencia]": "Forma d'escena 3D",
         "Name[ca]": "Forma d'escena 3D",
         "Name[es]": "Forma de escena 3D",
         "Name[gl]": "Forma de escena en 3D",
+        "Name[it]": "Forma di scena 3D",
         "Name[ka]": "3D სცენის ფორმა",
         "Name[nl]": "Vorm van 3D-scène",
         "Name[sl]": "Oblika 3D scene",
