@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 17:09+0200\n"
+"PO-Revision-Date: 2024-04-30 09:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
 msgctxt "(qtundo-format)"
@@ -192,17 +192,17 @@ msgstr "რადიუსი:"
 #: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
-msgstr ""
+msgstr "დაგრეხა & შეკუმშვა"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
 #, kde-format
 msgid "&Whirl/Pinch..."
-msgstr ""
+msgstr "&დაგრეხა/შეკუმშვა..."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
 msgid "Whirl Pinch"
-msgstr ""
+msgstr "დაგრეხა შეკუმშვა"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
 #, kde-format
@@ -215,6 +215,8 @@ msgid ""
 "The result of the Whirlpinch effect can be improved by refining the path "
 "shape beforehand."
 msgstr ""
+"გრეხისა და შეკუმშვის ეფექტის შედეგი შეგიძლიათ გააუმჯობესოთ სინასწარ ბილიკის "
+"ფორმის გაუმჯობესებით."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
 #, kde-format
@@ -224,7 +226,7 @@ msgstr "კუთხე:"
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:122
 #, kde-format
 msgid "Pinch:"
-msgstr ""
+msgstr "შეკუმშვა:"
 
 #: ui/commands/KarbonLayerReorderCommand.cpp:26
 #: ui/commands/KarbonLayerReorderCommand.cpp:38
@@ -292,12 +294,12 @@ msgstr "Karbon"
 #: ui/KarbonAboutData.h:22
 #, kde-format
 msgid "A Vector Graphics Drawing Application."
-msgstr ""
+msgstr "ვექტორული გრაფიკის აპლიკაცია."
 
 #: ui/KarbonAboutData.h:24
 #, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
-msgstr ""
+msgstr "(c) 2001-%1, Karbon-ის პროგრამისტები"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
@@ -328,7 +330,7 @@ msgstr "Benoît Vautrin"
 #: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Bug fixes and improvements"
-msgstr ""
+msgstr "შეცდომების გასწორება, კოდის გასუფთავება"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format
@@ -358,7 +360,7 @@ msgstr "Pierre Stirnweiss"
 #: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Bug fixes"
-msgstr ""
+msgstr "შეცდომების გასწორება"
 
 #: ui/KarbonAboutData.h:40
 #, kde-format
@@ -373,7 +375,7 @@ msgstr "Alan Horkan"
 #: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Helpful patches and advice"
-msgstr ""
+msgstr "პაჩები და სასარგებლო რჩევები"
 
 #. i18n translator strings
 #: ui/KarbonAboutData.h:44
@@ -411,32 +413,32 @@ msgstr "გრაფიკის შემოტანა"
 #: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
 #, kde-format
 msgid "Could not create image shape."
-msgstr ""
+msgstr "გამოსახულების მოხაზულობის შექმნა შეუძლებელია."
 
 #: ui/KarbonView.cpp:634
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "ჰორიზონტალური ანარეკლი"
 
 #: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "ვერტიკალურ ანარეკლი"
 
 #: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
-msgstr ""
+msgstr "ანარეკლი ჰორიზონტალურად და ვერტიკალურად"
 
 #: ui/KarbonView.cpp:693
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
-msgstr ""
+msgstr "ბილიკების გაყოფა"
 
 #: ui/KarbonView.cpp:874
 #, kde-format
 msgid "Outline &Mode"
-msgstr ""
+msgstr "კონტურის &რეჟიმი"
 
 #: ui/KarbonView.cpp:882
 #, kde-format
@@ -446,7 +448,7 @@ msgstr "გრაფიკის &შემოტანა..."
 #: ui/KarbonView.cpp:886
 #, kde-format
 msgid "Edit Guides"
-msgstr ""
+msgstr "გიდების ჩასწორება"
 
 #: ui/KarbonView.cpp:892
 #, kde-format
@@ -457,117 +459,117 @@ msgstr "&დუბლირება"
 #: ui/KarbonView.cpp:897
 #, kde-format
 msgid "Distribute Center (Horizontal)"
-msgstr ""
+msgstr "ცენტრების განაწილება (ჰორიზონტალური)"
 
 #: ui/KarbonView.cpp:901
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
-msgstr ""
+msgstr "ინტერვალების განაწილება (ჰორიზონტალური)"
 
 #: ui/KarbonView.cpp:905
 #, kde-format
 msgid "Distribute Left Borders"
-msgstr ""
+msgstr "მარცხენა ნაპირების განაწილება"
 
 #: ui/KarbonView.cpp:909
 #, kde-format
 msgid "Distribute Right Borders"
-msgstr ""
+msgstr "მარჯვენა ნაპირების განაწილება"
 
 #: ui/KarbonView.cpp:913
 #, kde-format
 msgid "Distribute Center (Vertical)"
-msgstr ""
+msgstr "ცენტრების განაწილება (ვერტიკალურად)"
 
 #: ui/KarbonView.cpp:917
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
-msgstr ""
+msgstr "ინტერვალების განაწილება (ვერტიკალურად)"
 
 #: ui/KarbonView.cpp:921
 #, kde-format
 msgid "Distribute Bottom Borders"
-msgstr ""
+msgstr "ქვედა ნაპირების განაწილება"
 
 #: ui/KarbonView.cpp:925
 #, kde-format
 msgid "Distribute Top Borders"
-msgstr ""
+msgstr "ზედა ნაპირების განაწილება"
 
 #: ui/KarbonView.cpp:929
 #, kde-format
 msgid "Show Color Palette"
-msgstr ""
+msgstr "ფერების პალიტრს ჩვენება"
 
 #: ui/KarbonView.cpp:931
 #, kde-format
 msgid "Show or hide color palette"
-msgstr ""
+msgstr "ვაჩვენო თუ დავმალო ფერების პალიტრა"
 
 #: ui/KarbonView.cpp:935
 #, kde-format
 msgid "&Clip Object"
-msgstr ""
+msgstr "ობიექტების &ფიქსაცია"
 
 #: ui/KarbonView.cpp:939
 #, kde-format
 msgid "&Unclip Objects"
-msgstr ""
+msgstr "&ობიექტის ფიქსაციის გაუქმება"
 
 #: ui/KarbonView.cpp:943
 #, kde-format
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "ვერტიკალურ ანარეკლი"
 
 #: ui/KarbonView.cpp:947
 #, kde-format
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "ჰორიზონტალური ანარეკლი"
 
 #: ui/KarbonView.cpp:954
 #, kde-format
 msgid "&Close Path"
-msgstr ""
+msgstr "&კონტურის დახურვა"
 
 #: ui/KarbonView.cpp:960
 #, kde-format
 msgid "Com&bine Path"
-msgstr ""
+msgstr "კონტ&ურების გაერთიანება"
 
 #: ui/KarbonView.cpp:966
 #, kde-format
 msgid "Se&parate Path"
-msgstr ""
+msgstr "კონ&ტურების გაყოფა"
 
 #: ui/KarbonView.cpp:972
 #, kde-format
 msgid "Re&verse Path"
-msgstr ""
+msgstr "&კონტურების რევერსი"
 
 #: ui/KarbonView.cpp:978
 #, kde-format
 msgid "Intersect Paths"
-msgstr ""
+msgstr "კონტურების კვეთა"
 
 #: ui/KarbonView.cpp:984
 #, kde-format
 msgid "Subtract Paths"
-msgstr ""
+msgstr "კონტურების გამოკლება"
 
 #: ui/KarbonView.cpp:990
 #, kde-format
 msgid "Unite Paths"
-msgstr ""
+msgstr "კონტურების გაერთიანება"
 
 #: ui/KarbonView.cpp:996
 #, kde-format
 msgid "Exclude Paths"
-msgstr ""
+msgstr "კონტურების ამოღება"
 
 #: ui/KarbonView.cpp:1002
 #, kde-format
 msgid "Snap Path to Grid"
-msgstr ""
+msgstr "კონტურის მიბმა ბადეზე"
 
 #: ui/KarbonView.cpp:1010
 #, kde-format
@@ -577,7 +579,7 @@ msgstr "მონიშნულამდე გადიდება"
 #: ui/KarbonView.cpp:1014
 #, kde-format
 msgid "Zoom to Drawing"
-msgstr ""
+msgstr "გადიდება ნახატამდე"
 
 #: ui/KarbonZoomController.cpp:55
 #, kde-format
@@ -607,7 +609,7 @@ msgstr "აირჩიეთ პალიტრა"
 #: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format
 msgid "Press to apply fill to selection"
-msgstr ""
+msgstr "დააწექით მონიშნულის შესავსებად"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:90
 #, kde-format
@@ -618,7 +620,7 @@ msgstr "არაფერი"
 #: ui/widgets/KarbonSmallStylePreview.cpp:112
 #, kde-format
 msgid "Press to apply stroke to selection"
-msgstr ""
+msgstr "დააწექით მონიშნულის გარშემო შემოსავლებად"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:161
 #, kde-format
@@ -635,7 +637,7 @@ msgstr "არაფერი"
 #: ui/widgets/KarbonSmallStylePreview.cpp:187
 #, kde-format
 msgid "Stroke:"
-msgstr ""
+msgstr "გამოძრავება:"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:192
 #, kde-format

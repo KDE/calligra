@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-12-04 06:46+0100\n"
+"PO-Revision-Date: 2024-04-30 14:03+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -90,32 +90,32 @@ msgstr "ოვალი"
 #: enhancedpath/CalloutShapeFactory.cpp:33
 #, kde-format
 msgid "A callout shape"
-msgstr ""
+msgstr "შენიშვნის ფორმა"
 
 #: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
-msgstr ""
+msgstr "მართკუთხედი შენიშვნა"
 
 #: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
 msgid "A rectangular callout"
-msgstr ""
+msgstr "მართკუთხედი შენიშვნა"
 
 #: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
-msgstr ""
+msgstr "მრგვალი შენიშვნა"
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "A rounded rectangular callout"
-msgstr ""
+msgstr "მომრგვალებული მართკუთხედი შენიშვნა"
 
 #: enhancedpath/CalloutToolFactory.cpp:23
 #, kde-format
 msgid "Callout editing"
-msgstr ""
+msgstr "შენიშვნის ჩასწორება"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format

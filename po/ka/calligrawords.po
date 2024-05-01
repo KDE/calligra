@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 17:08+0200\n"
+"PO-Revision-Date: 2024-04-30 10:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -71,7 +71,7 @@ msgstr "მართლწერა"
 #: part/calligrawords.rc:83
 #, kde-format
 msgid "AutoCorrection"
-msgstr ""
+msgstr "ავტოკორექცია"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -137,87 +137,87 @@ msgstr "მწკრივი"
 #: part/dialogs/KWAnchoringProperties.cpp:425
 #, kde-format
 msgid "Page (entire) area"
-msgstr ""
+msgstr "გვერდის სრული ალაგი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
-msgstr ""
+msgstr "გვერდის ტექსტურ ალაგი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
-msgstr ""
+msgstr "პარაგრაფის ალაგი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
-msgstr ""
+msgstr "პარაგრაფის ტექსტის ალაგი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
-msgstr ""
+msgstr "მარცხენა გვერდის საზღვარი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
-msgstr ""
+msgstr "მარჯვენა გვერდის საზღვარი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
 msgid "Right paragraph border"
-msgstr ""
+msgstr "მარჯვენა პარაგრაფის საზღვარი"
 
 #: part/dialogs/KWAnchoringProperties.cpp:436
 #, kde-format
 msgid "Left paragraph border"
-msgstr ""
+msgstr "მარცხენა პარაგრაფის საზღვარი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "მიმაგრება ტექსტზე:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "ხაზშივე ტექსტთან (იქცევა, როგორც სიმბოლო)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "მცურავი, მაგრამ მიმაგრებული სიმბოლოს მდებარეობაზე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "მცურავი, მაგრამ მიმაგრებული პარაგრაფის მდებარეობაზე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "თავისუფლად მცურავი (ტექსტზე მიმაგრების გარეშე)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
 #, kde-format
 msgid "Vertical Positioning"
-msgstr ""
+msgstr "ვერტიკალური მდებარეობა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
 #, kde-format
 msgid "Top align with:"
-msgstr ""
+msgstr "სწორება ზედა საზღვართან:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
@@ -225,13 +225,13 @@ msgstr ""
 #: part/dialogs/KWAnchoringProperties.ui:186
 #, kde-format
 msgid "Center align with:"
-msgstr ""
+msgstr "სწორება ცენტრთან:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
 #, kde-format
 msgid "Bottom align with:"
-msgstr ""
+msgstr "სწორება ქვედა საზღვართან:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -253,19 +253,19 @@ msgstr "საიდან:"
 #: part/dialogs/KWAnchoringProperties.ui:163
 #, kde-format
 msgid "Horizontal Positioning"
-msgstr ""
+msgstr "ჰორიზონტალური მდებარეობა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
 #, kde-format
 msgid "Left align with:"
-msgstr ""
+msgstr "მარცხნივ სწორება:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
 #, kde-format
 msgid "Right align with:"
-msgstr ""
+msgstr "მარჯვნივ სწორება:"
 
 #: part/dialogs/KWConfigureDialog.cpp:28
 #, kde-format
@@ -318,6 +318,8 @@ msgid ""
 "Bookmarks allow you to jump between parts of your document.\n"
 "Please provide the name of your bookmark."
 msgstr ""
+"რჩეულები საშუალებას გაძლევენ, თქვენი დოკუმენტის ნაწილებს შორის გადახვიდეთ.\n"
+"შეიყვანეთ სახელი თქვენი რჩეულისთვის."
 
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #: part/dialogs/KWCreateBookmark.ui:38
@@ -340,62 +342,62 @@ msgstr "სვეტების დაშორება:"
 #: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
 msgid "frameset"
-msgstr ""
+msgstr "ჩანაჭერი"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
-msgstr ""
+msgstr "დოკუმენტში ჩანაჭერები არაა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/KWFrameConnectSelector.ui:67
 #, kde-format
 msgid "Name of frameset:"
-msgstr ""
+msgstr "ჩანაჭერის სახელი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:82
 #, kde-format
 msgid "Create a new frameset:"
-msgstr ""
+msgstr "ახალი ჩანაჭერის შექმნა:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:89
 #, kde-format
 msgid "Select existing frameset to connect to:"
-msgstr ""
+msgstr "აირჩიეთ არსებული ჩანაჭერი მისაერთებლად:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, framesList)
 #: part/dialogs/KWFrameConnectSelector.ui:122
 #, kde-format
 msgid "Frameset Name"
-msgstr ""
+msgstr "ჩანაჭერის სახელი"
 
 #: part/dialogs/KWFrameDialog.cpp:29
 #, kde-format
 msgid "Smart Positioning"
-msgstr ""
+msgstr "ჭკვიანი მდებარეობა"
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
-msgstr ""
+msgstr "ტექსტის გარშემოხვევა"
 
 #: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
 #, kde-format
 msgid "Connect Text Frames"
-msgstr ""
+msgstr "ტექსტური ბლოკების შეერთება"
 
 #: part/dialogs/KWFrameDialog.cpp:66
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr ""
+msgstr "კონტურის თვისებების შეცვლა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr ""
+msgstr "მიმაგრება..."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -413,19 +415,19 @@ msgstr "&პარაგრაფი"
 #: part/dialogs/KWInsertImage.ui:40
 #, kde-format
 msgid "&To Character"
-msgstr ""
+msgstr "&სიმბოლოზე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
 #, kde-format
 msgid "&As Character"
-msgstr ""
+msgstr "&როგორც სიმბოლო"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
 #, kde-format
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "ჰორიზონტალური სწორება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
 #: part/dialogs/KWInsertImage.ui:65
@@ -449,7 +451,7 @@ msgstr "მარჯვენა"
 #: part/dialogs/KWInsertImage.ui:92
 #, kde-format
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "ვერტიკალური სწორება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
 #: part/dialogs/KWInsertImage.ui:98
@@ -473,55 +475,55 @@ msgstr "ქ&ვედა"
 #: part/dialogs/KWInsertImage.ui:127
 #, kde-format
 msgid "Text Wrap-around"
-msgstr ""
+msgstr "ტექსტის შემოხვევა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
 #, kde-format
 msgid "Run through this shape"
-msgstr ""
+msgstr "ობიექტზე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
 #, kde-format
 msgid "Skip below this shape"
-msgstr ""
+msgstr "ობიექტის ქვეშ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
 #, kde-format
 msgid "Run on left side of this shape"
-msgstr ""
+msgstr "ობიექტის მარცხნივ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
 #, kde-format
 msgid "Run on right side of this shape"
-msgstr ""
+msgstr "ობიექტის მარჯვნივ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
 #, kde-format
 msgid "Run on longest side of this shape"
-msgstr ""
+msgstr "ობიექტის ყველაზე გრძელ მხარეს"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
 #, kde-format
 msgid "Run on both sides of this shape"
-msgstr ""
+msgstr "ობიექტის ორივე მხარეს"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "ობიექტების მხარეს, რომელიც ფართოა, ვიდრე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
 #, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr ""
+msgstr "მანძილი ობიექტსა და ტექსტს შორს:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
@@ -547,35 +549,35 @@ msgstr "წაშლა"
 #: part/dialogs/KWPageSettingsDialog.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr ""
+msgstr "გვერდის სტილის შეცვლა"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:217
 #, kde-format
 msgid "Clone Page Style"
-msgstr ""
+msgstr "გვერდის სტილის დაკლონვა"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:218
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "ახალი გვერდის სტილის დამატება სახელით:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "ტექსტის მდებარეობა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/KWRunAroundProperties.ui:105
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "ობიექტის გავლენა ტექსტზე:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:114
 #, kde-format
 msgid "Bounding box"
-msgstr ""
+msgstr "შემომსაზღვრელი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:121
@@ -587,31 +589,31 @@ msgstr "კონტური"
 #: part/dialogs/KWRunAroundProperties.ui:131
 #, kde-format
 msgid "Shape and text is separated:"
-msgstr ""
+msgstr "ობიექტი და ტექსტი გაიყოფა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWRunAroundProperties.ui:140
 #, kde-format
 msgid "Left by:"
-msgstr ""
+msgstr "მარცხნიდან:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/KWRunAroundProperties.ui:169
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "ზემოდან:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: part/dialogs/KWRunAroundProperties.ui:198
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "ქვემოდან:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: part/dialogs/KWRunAroundProperties.ui:227
 #, kde-format
 msgid "Right by:"
-msgstr ""
+msgstr "მარჯვნიდან:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -628,7 +630,7 @@ msgstr "&წაშლა"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr ""
+msgstr "შეიყვანეთ ახალი სახელი სანიშნისთვის"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
@@ -638,7 +640,7 @@ msgstr "სანიშნის გადარქმევა"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr ""
+msgstr "სანიშნე სახელით \"%1\" უკვე არსებობს."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
@@ -654,7 +656,7 @@ msgstr "გეომეტრია"
 #: part/dialogs/KWStartupWidget.ui:24
 #, kde-format
 msgid "Page Size && Margins"
-msgstr ""
+msgstr "გვერდის ზომა და საზღვრები"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
 #: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
@@ -705,17 +707,17 @@ msgstr "წინადადებები:"
 #: part/dockers/KWStatisticsWidget.cpp:133
 #, kde-format
 msgid "Syllables:"
-msgstr ""
+msgstr "მარცვლები:"
 
 #: part/dockers/KWStatisticsWidget.cpp:136
 #, kde-format
 msgid "Characters (spaces):"
-msgstr ""
+msgstr "სიმბოლოები (ჰარეები):"
 
 #: part/dockers/KWStatisticsWidget.cpp:139
 #, kde-format
 msgid "Characters (no spaces):"
-msgstr ""
+msgstr "სიმბოლოები (ჰარების არჩათვლით):"
 
 #: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
@@ -730,12 +732,12 @@ msgstr "კითხვადობა:"
 #: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "Flesch reading ease"
-msgstr ""
+msgstr "კითხვის სიადვილის ინდექსი ფლეშის მიხედვით"
 
 #: part/dockers/KWStatisticsWidget.cpp:149
 #, kde-format
 msgid "East asian characters:"
-msgstr ""
+msgstr "აღმოსავლეთ აზიური სიმბოლოები:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
@@ -753,7 +755,7 @@ msgstr "წინადადებები"
 #: part/dockers/StatisticsPreferencesPopup.ui:31
 #, kde-format
 msgid "Syllables"
-msgstr ""
+msgstr "მარცვლები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_lines)
 #: part/dockers/StatisticsPreferencesPopup.ui:38
@@ -765,25 +767,25 @@ msgstr "ხაზები"
 #: part/dockers/StatisticsPreferencesPopup.ui:45
 #, kde-format
 msgid "Characters With Spaces"
-msgstr ""
+msgstr "სიმბოლოები ჰარეებით"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
 #, kde-format
 msgid "Characters without spaces"
-msgstr ""
+msgstr "სიმბოლოები ჰარეების არჩათვლით"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59
 #, kde-format
 msgid "East Asian characters"
-msgstr ""
+msgstr "აღმოსავლეთ აზიური სიმბოლოები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
 #, kde-format
 msgid "Flesch Reading Ease"
-msgstr ""
+msgstr "კითხვის სიადვილის ინდექსი ფლეშის მიხედვით"
 
 #: part/i18n/stylenames.cpp:8
 #, kde-format
@@ -1035,58 +1037,58 @@ msgstr "ბადე 3"
 #, kde-format
 msgctxt "Style name"
 msgid "Gray Heading"
-msgstr ""
+msgstr "ნაცრისფერი სათაური"
 
 #: part/i18n/stylenames.cpp:56
 #, kde-format
 msgctxt "Style name"
 msgid "Blue Heading"
-msgstr ""
+msgstr "ლურჯისათაური"
 
 #: part/i18n/stylenames.cpp:57
 #, kde-format
 msgctxt "Style name"
 msgid "Blue Traditional"
-msgstr ""
+msgstr "ლურჯი ჩვეულებრივი"
 
 #: part/i18n/stylenames.cpp:58
 #, kde-format
 msgctxt "Style name"
 msgid "Gray Traditional"
-msgstr ""
+msgstr "ნაცრისფერი ჩვეულებრივი"
 
 #: part/i18n/stylenames.cpp:59
 #, kde-format
 msgctxt "Style name"
 msgid "Blue Top and Bottom"
-msgstr ""
+msgstr "ლურჯი ზედა და ქვედა"
 
 #: part/i18n/stylenames.cpp:60
 #, kde-format
 msgctxt "Style name"
 msgid "Gray Top and Bottom"
-msgstr ""
+msgstr "ნაცრისფერი ზედა და ქვედა"
 
 #: part/KWAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr ""
+msgstr "Calligra Words"
 
 #: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
-msgstr ""
+msgstr "ტექსტური პროცესორი"
 
 #: part/KWAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr ""
+msgstr "Copyright 1998-%1, Words-ის გუნდი"
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
-msgstr ""
+msgstr "თანაწამყვანი"
 
 #: part/KWAboutData.h:31
 #, kde-format
@@ -1122,7 +1124,7 @@ msgstr "Pierre Stirnweiss"
 #: part/KWAboutData.h:36
 #, kde-format
 msgid "Formatting stuff"
-msgstr ""
+msgstr "დაფორმატების ინსტრუმენტები"
 
 #: part/KWAboutData.h:36
 #, kde-format
@@ -1151,7 +1153,7 @@ msgstr "Matus Uzak"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "განლაგება და ხატვა"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1166,7 +1168,7 @@ msgstr "Shreya Pandit"
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Statistics docker"
-msgstr ""
+msgstr "სტატისტიკის პანელი"
 
 #: part/KWAboutData.h:41
 #, kde-format
@@ -1176,7 +1178,7 @@ msgstr "Brijesh Patel"
 #: part/KWAboutData.h:41
 #, kde-format
 msgid "Foot and endnotes"
-msgstr ""
+msgstr "ქვედა კოლონტიტული და ბოლოსართები"
 
 #: part/KWAboutData.h:42
 #, kde-format
@@ -1196,7 +1198,7 @@ msgstr "Mojtaba Shahi"
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "სტილების მმართველი"
 
 #: part/KWAboutData.h:44
 #, kde-format
@@ -1226,7 +1228,7 @@ msgstr "Girish Ramakrishnan"
 #: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
 msgid "ODF Support"
-msgstr ""
+msgstr "ODF-ის მხარდაჭერა"
 
 #: part/KWAboutData.h:49
 #, kde-format
@@ -1331,12 +1333,12 @@ msgstr "Michael Johnson"
 #: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "ჰოსტინგის კომპანია Fatcow"
 
 #: part/KWAboutData.h:68
 #, kde-format
 msgid "Page break icon"
-msgstr ""
+msgstr "გვერდის გახლეჩის ხატულა"
 
 #: part/KWAboutData.h:70
 #, kde-format
@@ -1394,12 +1396,12 @@ msgstr "ხელსაწყოები"
 #: part/KWOdfLoader.cpp:83
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-msgstr ""
+msgstr "არასწორი OASIS OpenDocument ტიპის ფაილი. ჭდე office:body ვერ ვიპოვე."
 
 #: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-msgstr ""
+msgstr "არასწორი OASIS OpenDocument ტიპის ფაილი.office:body-ში ჭდე ვერ ვიპოვე."
 
 #: part/KWOdfLoader.cpp:96
 #, kde-format
@@ -1407,6 +1409,8 @@ msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
 msgstr ""
+"ეს ტექსტის პროცესორის ფაილი კი არა, %1-ია. სცადეთ, შესაბამისი აპლიკაციით "
+"გახსნათ."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
 #, kde-format
@@ -1417,7 +1421,7 @@ msgstr "სტანდარტული"
 #: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr ""
+msgstr "საჭირო ტექსტური დოკუმენტი აღმოჩენილი არაა. Words მუშაობას დაასრულებს"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1477,12 +1481,12 @@ msgstr "Page Size"
 #: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
-msgstr ""
+msgstr "შენახულია/შეცვლილია"
 
 #: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr ""
+msgstr "თაგუნას კურსორი X:Y"
 
 #: part/KWStatusBar.cpp:220
 #, kde-format
@@ -1502,17 +1506,17 @@ msgstr "ფორმის თვისებები..."
 #: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "კონტურის ქცევის შეცვლა"
 
 #: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
-msgstr ""
+msgstr "ნიმუშის შექმნა დოკუმენტიდან..."
 
 #: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "დოკუმენტის შენახვა და მოგვიანებით ნიმუშად გამოყენება"
 
 #: part/KWView.cpp:290
 #, kde-format
@@ -1520,16 +1524,18 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"შეგიძლიათ, ეს დოკუმენტი ნიმუშად შეინახოთ. <br><br>შეგიძლიათ, ეს ნიმუში სხვა "
+"დოკუმენტის საწყის წერტილად გამოიყენოთ."
 
 #: part/KWView.cpp:309
 #, kde-format
 msgid "Show Formatting Characters"
-msgstr ""
+msgstr "დაფორმატების სიმბოლოების ჩვენება"
 
 #: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
-msgstr ""
+msgstr "არაბეჭდვადი სიმბოლოების ჩვენების გადართვა"
 
 #: part/KWView.cpp:317
 #, kde-format
@@ -1538,16 +1544,19 @@ msgid ""
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
+"არაბეჭდვადი სიმბოლოების ჩვენების გადართვა.<br/><br>როცა ეს ჩართულია, Words "
+"გაჩვენებთ ტაბულაციის, ჰარეს, გადატანის და სხვა სიმბოლოებს, რომელიც არ "
+"იბეჭდება."
 
 #: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "ველის დაჩრდილვების ჩვენება"
 
 #: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "ველების დაჩრდილული ფონის გადართვა"
 
 #: part/KWView.cpp:327
 #, kde-format
@@ -1555,16 +1564,18 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
+"ველების (ცვლადების, ა.შ.) ვიზუალიზაციის გადართვა მათი ფონის კონტრასტული "
+"ფერის დახატვით."
 
 #: part/KWView.cpp:329
 #, kde-format
 msgid "Show Text Shape Borders"
-msgstr ""
+msgstr "ტექსტს ბლოკის საზღვრების ჩვენება"
 
 #: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
-msgstr ""
+msgstr "გადართავს საზღვრის ჩვენებას"
 
 #: part/KWView.cpp:337
 #, kde-format
@@ -1573,16 +1584,19 @@ msgid ""
 "This option is useful to see how the document will appear on the printed "
 "page."
 msgstr ""
+"გადართავს საზღვრის ჩვენებას.<br/><br/>საზღვრები არასდროს იბეჭდება. ეს "
+"პარამეტრი სასარგებლოა, რომ დაინახოთ, როგორ გამოჩნდება დოკუმენტი დაბეჭდილ "
+"გვერდზე."
 
 #: part/KWView.cpp:340
 #, kde-format
 msgid "Show Table Borders"
-msgstr ""
+msgstr "ცხრილის საზღვრების ჩვენება"
 
 #: part/KWView.cpp:346
 #, kde-format
 msgid "Toggle the display of table borders"
-msgstr ""
+msgstr "ცხრილის საზღვრების ჩვენების გადართვა"
 
 #: part/KWView.cpp:348
 #, kde-format
@@ -1590,16 +1604,18 @@ msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
+"ცხრილის საზღვრების ჩვენების გადართვა.<br/><br/>როცა ეს ჩართულია, Words "
+"უჩინარი ცხრილის საზღვრებს თხელი ნაცრისფერი ხაზით გაჩვენებთ."
 
 #: part/KWView.cpp:350
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "ნაწილის საზღვრების ჩვენება"
 
 #: part/KWView.cpp:356
 #, kde-format
 msgid "Toggle the display of section bounds"
-msgstr ""
+msgstr "ნაწილის საზღვრების ჩვენების გადრთვა"
 
 #: part/KWView.cpp:358
 #, kde-format
@@ -1607,6 +1623,8 @@ msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
+"ნაწილის საზღვრების ჩვენების გადართვა.<br/><br/>როცა ეს ჩართულია, ყველა "
+"ნაწილის საზღვარი თხელი ჰორიზონტალური ბრჭყალებით მოინიშნება."
 
 #: part/KWView.cpp:360
 #, kde-format
@@ -1626,6 +1644,10 @@ msgid ""
 "position tabulators among others.<p>Uncheck this to disable the rulers from "
 "being displayed.</p>"
 msgstr ""
+"სახაზავები თეთრი ადგილებია დოკუმენტის მარცხნივ და ზემოდან. ეს სახაზავები "
+"გაჩვენებთ მდებარეობას და სიგანეს გვერდებისთვის და კონტურებისთვის და "
+"შეგიძლიათ გამოიყენოთ ტაბულატორების განსათავსებლად და ა.შ.<p>გამორთეთ, რომ "
+"სახაზავები ნაჩვენები აღარ იყოს.</p>"
 
 #: part/KWView.cpp:375
 #, kde-format
@@ -1640,7 +1662,7 @@ msgstr "მდგომარეობის ზოლის ჩვენებ�
 #: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr ""
+msgstr "სტატუსის ზოლის ჩვენება/დამალვა"
 
 #: part/KWView.cpp:390
 #, kde-format
@@ -1650,17 +1672,17 @@ msgstr "სრული ეკრანის რეჟიმი"
 #: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "ხედის დაყენება სრული ეკრანის რეჟიმში"
 
 #: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "სემანტიკური სტილის ცხრილები..."
 
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "სემანტიკური სტილის ცხრილების შეცვლა და დამატება"
 
 #: part/KWView.cpp:401
 #, kde-format
@@ -1668,6 +1690,8 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
+"სტილის ცხრილები RDF-ში დამახსოვრებული ინფორმაცის ჩვენების დასაფორმატებლად "
+"გამოიყენება."
 
 #: part/KWView.cpp:416
 #, kde-format
@@ -1682,7 +1706,7 @@ msgstr "გვერდის განლაგება..."
 #: part/KWView.cpp:427
 #, kde-format
 msgid "Change properties of entire page"
-msgstr ""
+msgstr "მთელი გვერდის თვისებების შეცვლა"
 
 #: part/KWView.cpp:429
 #, kde-format
@@ -1690,6 +1714,9 @@ msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
+"მთელი გვერდის თვისებების შეცვლა.<p>ამჟამად შეგიძლიათ შეცვალოთ ფურცლის ზომა, "
+"გვერდის ორიენტაცია, თავსართისა და ქვედა კოლონტიტულის ზომები და სვეტის "
+"პარამეტრები.</p>"
 
 #: part/KWView.cpp:432
 #, kde-format
@@ -1709,7 +1736,7 @@ msgstr "კომენტარების ჩვენება"
 #: part/KWView.cpp:446
 #, kde-format
 msgid "Shows comments in the document"
-msgstr ""
+msgstr "აჩვენებს კომტენტარებს დოკუმენტში"
 
 #: part/KWView.cpp:452
 #, kde-format
@@ -1719,7 +1746,7 @@ msgstr "სიტყვების რაოდენობა"
 #: part/KWView.cpp:453
 #, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr ""
+msgstr "აჩვენებს ან დამალავს სიტყვების რაოდენობას სტატუსის ზოლში"
 
 #: part/pagetool/KWPageTool.cpp:85
 #, kde-format
@@ -1798,8 +1825,8 @@ msgstr "ჩანაცვლება"
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ნაპოვნია 1 დამთხვევა"
+msgstr[1] "ნაპოვნია %1 დამთხვევა"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
@@ -1809,12 +1836,12 @@ msgstr "დათხვევა არ არსებობს"
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "ძებნა ბოლოშია. ვაგრძელებ თავიდან."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "ძებნა თავშია. ვაგრძელებ ბოლოდან."
 
 #: part/Words.cpp:41
 #, kde-format

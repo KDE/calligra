@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 17:08+0200\n"
+"PO-Revision-Date: 2024-04-30 13:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -63,90 +63,90 @@ msgstr "გამართვა"
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუს დამატება"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr ""
+msgstr "ფორმის ანიმაცის შექმნა"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr ""
+msgstr "ანიმაციის ტრიგერის მოვლენის ჩასწორება"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr ""
+msgstr "ფორმის ანიმაციის წაშლა"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუს წაშლა"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr ""
+msgstr "სლაიდის წაშლა"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "სლაიდის წაშლა"
+msgstr[1] "სლაიდების წაშლა"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr ""
+msgstr "ანიმაციის დაყოვნების/ხანგრძლივობის ჩასწორება"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუს ჩასწორება"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr ""
+msgstr "სლაიდის ეფექტის შექმნა"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr ""
+msgstr "სლაიდის ეფექტის შეცვლა"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr ""
+msgstr "სლაიდის ეფექტის წაშლა"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr ""
+msgstr "სლაიდის გადასვლის შეცვლა"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუს სახელის გადარქმევა"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr ""
+msgstr "ანიმაციების გადალაგება"
 
 #: part/KPrAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr ""
+msgstr "Calligra Stage"
 
 #: part/KPrAboutData.h:21
 #, kde-format
 msgid "Presentation Tool"
-msgstr ""
+msgstr "პრეზენტაციის პროგრამა"
 
 #: part/KPrAboutData.h:23
 #, kde-format
@@ -291,7 +291,7 @@ msgstr "სლაიდი %1"
 #: part/KPrEndOfSlideShowPage.cpp:69
 #, kde-format
 msgid "End of presentation. Click to exit."
-msgstr ""
+msgstr "პრეზენტაციის დასასრული. გამოსასვლელად დააწკაპუნეთ."
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
@@ -302,11 +302,14 @@ msgstr "განლაგება"
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
+"საჭირო ტექსტური დოკუმენტი აღმოჩენილი არაა. Calligra Stage მუშაობას "
+"დაასრულებს."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
+"საჭირო სურათის დოკუმენტი აღმოჩენილი არაა. Calligra Stage მუშაობას დაასრულებს."
 
 #: part/KPrPart.cpp:87
 #, kde-format
@@ -321,35 +324,35 @@ msgstr "სურათების ჩასმა"
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
 msgid "Placeholder shape"
-msgstr ""
+msgstr "ადგილმჭერის ფორმა"
 
 #: part/KPrPlaceholderStrategy.cpp:34
 msgid "Double click to add a title"
-msgstr ""
+msgstr "ორმაგი-წკაპი სათაურის დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:35
 msgid "Double click to add an outline"
-msgstr ""
+msgstr "ორმაგი-წკაპი ჩარჩოს დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
 msgid "Double click to add a text"
-msgstr ""
+msgstr "ორმაგი-წკაპი ტექსტის დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:38
 msgid "Double click to add notes"
-msgstr ""
+msgstr "ორმაგი-წკაპი შენიშვნის დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
-msgstr ""
+msgstr "ორმაგი-წკაპი სურათის დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
-msgstr ""
+msgstr "ორმაგი-წკაპი გრაფიკის დასამატებლად"
 
 #: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
-msgstr ""
+msgstr "ორმაგი-წკაპი ობიექტის დასამატებლად"
 
 #: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
@@ -399,43 +402,43 @@ msgstr "შემდეგი სლაიდი"
 #: part/KPrPresenterViewInterface.cpp:59
 #, kde-format
 msgid "Speaker Notes"
-msgstr ""
+msgstr "წარმომდგენის შენიშვნები"
 
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "Current Slide %1 of %2"
-msgstr ""
+msgstr "მიმდინარე სლაიდი %1 %2-დან"
 
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "End of Slide Show"
-msgstr ""
+msgstr "სლაიდშოუს დასასრული"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "დაწყება თაგუნას წკაპისას"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
 #, kde-format
 msgid "start after previous animation"
-msgstr ""
+msgstr "დაწყება წინა ანიმაციის შემდეგ"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
 #, kde-format
 msgid "start with previous animation"
-msgstr ""
+msgstr "დაწყება წინა ანიმაციასთან ერთად"
 
 #: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "დაწყება %1 წამის შემდეგ. ხანგრძლივობა %2 წამი."
 
 #: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
@@ -471,12 +474,12 @@ msgstr "ჩვეულებრივი"
 #: part/KPrView.cpp:79
 #, kde-format
 msgid "Show Master Slides"
-msgstr ""
+msgstr "ნიმუში სლაიდების ჩვენება"
 
 #: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
-msgstr ""
+msgstr "სლაიდშოუს შემოტანა..."
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -486,7 +489,7 @@ msgstr "სლაიდის ჩასმა"
 #: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
-msgstr ""
+msgstr "ახალი სლაიდის ჩასმა მიმდინარეს შემდეგ"
 
 #: part/KPrView.cpp:84
 #, kde-format
@@ -496,7 +499,7 @@ msgstr "სლაიდის კოპირება"
 #: part/KPrView.cpp:85 part/KPrView.cpp:86
 #, kde-format
 msgid "Copy the current slide"
-msgstr ""
+msgstr "მიმდინარე სლაიდის კოპირება"
 
 #: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
@@ -506,92 +509,92 @@ msgstr "სლაიდის წაშლა"
 #: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, kde-format
 msgid "Delete the current slide"
-msgstr ""
+msgstr "მიმდინარე სლაიდის წაშლა"
 
 #: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
-msgstr ""
+msgstr "მთავარი სლაიდი..."
 
 #: part/KPrView.cpp:91
 #, kde-format
 msgid "Previous Slide"
-msgstr ""
+msgstr "წინა სლაიდი"
 
 #: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, kde-format
 msgid "Go to previous slide"
-msgstr ""
+msgstr "წინა სლაიდზე გადასვლა"
 
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, kde-format
 msgid "Go to next slide"
-msgstr ""
+msgstr "შემდეგ სლაიდზე გადასვლა"
 
 #: part/KPrView.cpp:97
 #, kde-format
 msgid "First Slide"
-msgstr ""
+msgstr "პირველი სლაიდი"
 
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, kde-format
 msgid "Go to first slide"
-msgstr ""
+msgstr "პირველი სლაიდზე გადასვლა"
 
 #: part/KPrView.cpp:100
 #, kde-format
 msgid "Last Slide"
-msgstr ""
+msgstr "ბოლო სლაიდი"
 
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, kde-format
 msgid "Go to last slide"
-msgstr ""
+msgstr "ბოლო სლაიდზე გადასვლა"
 
 #: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
-msgstr ""
+msgstr "Stage-ის მორგება..."
 
 #: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
-msgstr ""
+msgstr "HTML-ში გატანა..."
 
 #: part/KPrView.cpp:263
 #, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr ""
+msgstr "სურათების ჩასმა სლაიდებად..."
 
 #: part/KPrView.cpp:272
 #, kde-format
 msgid "Create Appear Animation"
-msgstr ""
+msgstr "გამოჩენის ანიმაციის შექმნა"
 
 #: part/KPrView.cpp:276
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუს ჩასწორება..."
 
 #: part/KPrView.cpp:280
 #, kde-format
 msgid "Start Presentation"
-msgstr ""
+msgstr "პრეზენტაციის დაწყება"
 
 #: part/KPrView.cpp:283
 #, kde-format
 msgid "From Current Slide"
-msgstr ""
+msgstr "მიმდინარე სლაიდიდან"
 
 #: part/KPrView.cpp:287
 #, kde-format
 msgid "From First Slide"
-msgstr ""
+msgstr "პირველი სლაიდიდან"
 
 #: part/KPrView.cpp:292
 #, kde-format
 msgid "Stop presentation"
-msgstr ""
+msgstr "პრეზენტაციის გაჩერება"
 
 #: part/KPrView.cpp:298
 #, kde-format
@@ -606,32 +609,32 @@ msgstr "მდგომარეობის ზოლის დამალვ�
 #: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr ""
+msgstr "სტატუსის ზოლის ჩვენება/დამალვა"
 
 #: part/KPrView.cpp:309
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr ""
+msgstr "სლაიდშოუს მორგება..."
 
 #: part/KPrView.cpp:313
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr ""
+msgstr "წარმომდგენის ხედის მორგება..."
 
 #: part/KPrView.cpp:317
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr ""
+msgstr "დახატვა პრეზენტაციაზე..."
 
 #: part/KPrView.cpp:324
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr ""
+msgstr "პრეზენტაციის გამოკვეთა..."
 
 #: part/KPrView.cpp:331
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr ""
+msgstr "შავი ეკრანი პრეზენტაციაზე..."
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -641,37 +644,37 @@ msgstr "შენიშვნები"
 #: part/KPrViewModeSlidesSorter.cpp:64
 #, kde-format
 msgid "Slides Sorter"
-msgstr ""
+msgstr "სლაიდების დამლაგებელი"
 
 #: part/KPrViewModeSlidesSorter.cpp:74
 #, kde-format
 msgid "Slide Show: "
-msgstr ""
+msgstr "სლაიდშოუ: "
 
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
 msgid "Add a new custom slide show"
-msgstr ""
+msgstr "ახალი მომხმარებლის სლაიდშოუს დამატება"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr ""
+msgstr "მიმდინარე მომხმარებლის სლაიდშოუს წაშლა"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
 msgid "Add slides to current custom slide show"
-msgstr ""
+msgstr "მიმდინარე მომხმარებლის სლაიდშოუში სლაიდების დამატება"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
 #, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr ""
+msgstr "მიმდინარე მომხმარებლის სლაიდშოდან სლაიდების წაშლა"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
 #, kde-format
 msgid "Duplicate Slide"
-msgstr ""
+msgstr "სლაიდის დუბლირება"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
 #, kde-format
@@ -681,12 +684,12 @@ msgstr "სლაიდშოუს დაწყება"
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, kde-format
 msgid "Add a new slide"
-msgstr ""
+msgstr "ახალი სლაიდის დამატება"
 
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
 #, kde-format
 msgid "Delete selected slides"
-msgstr ""
+msgstr "მონიშნული სლაიდების წაშლა"
 
 #: part/KPrViewModeSlidesSorter.cpp:537
 #, kde-format
@@ -711,13 +714,13 @@ msgstr "ჩასმა"
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, kde-format
 msgid "Slide Show %1"
-msgstr ""
+msgstr "სლაიდშოუ %1"
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
 #, kde-format
 msgid "All slides"
-msgstr ""
+msgstr "ყველა სლაიდი"
 
 #: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
 #: part/ui/KPrHtmlExportDialog.cpp:207
@@ -728,44 +731,44 @@ msgstr "შეცდომა"
 #: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
-msgstr ""
+msgstr "ორ სხვადასხვა სლაიდშოუს ერთი და იგივე სახელი ვერ ექნება."
 
 #: part/pagelayout/KPrPlaceholders.cpp:48
 #: part/pagelayout/KPrPlaceholders.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr ""
+msgstr "განლაგების დაყენება"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
-msgstr ""
+msgstr "ავტომატური ანიმაციის მინიატურა"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
 #, kde-format
 msgid "Preview animation"
-msgstr ""
+msgstr "ანიმაციის მინიატურა"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, kde-format
 msgid "Slide Transitions"
-msgstr ""
+msgstr "სლაიდის გადასვლები"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
-msgstr ""
+msgstr "მოხაზულობაზე წკაპის ქმედებები"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
 msgid "Shape Animations"
-msgstr ""
+msgstr "მოხაზულობის ანიმაციები"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
 #, kde-format
 msgid "Manage animation delay and duration: "
-msgstr ""
+msgstr "ანიმაციის დაყოვნებისა და ხანგრძლივობის მართვა: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
 #, kde-format
@@ -775,22 +778,22 @@ msgstr "დასაწყისი: "
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr ""
+msgstr "თაგუნას წკაპზე"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
 #, kde-format
 msgid "after previous animation"
-msgstr ""
+msgstr "წინა ანიმაციის შემდეგ"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
 #, kde-format
 msgid "with previous animation"
-msgstr ""
+msgstr "წინა ანიმაციასთან ერთად"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
 msgid "Delay: "
-msgstr ""
+msgstr "დაყოვნება: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
 #, kde-format
@@ -801,12 +804,12 @@ msgstr "ხანგრძლივობა: "
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, kde-format
 msgid "Preview Shape Animation"
-msgstr ""
+msgstr "ფორმის ანიმაციის მინიატურა"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
 msgid "No Effect"
-msgstr ""
+msgstr "ეფექტების გარეშე"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
@@ -826,22 +829,22 @@ msgstr "ავტომატური"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
-msgstr ""
+msgstr "სლაიდის გადასვლა:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
 msgid "Apply To All Slides"
-msgstr ""
+msgstr "ყველა სლაიდზე გადატარება"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr ""
+msgstr "სლაიდის ეფექტის გადატარება ყველა სლაიდზე"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "შესასვლელი"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
@@ -851,7 +854,7 @@ msgstr "გასვლა"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
-msgstr ""
+msgstr "მონიშნული"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
@@ -861,59 +864,59 @@ msgstr "ხელით მითითებული"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "მოძრაობის ბილიკი"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
-msgstr ""
+msgstr "Ole ქმედება"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
-msgstr ""
+msgstr "Media Call"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Edit animation"
-msgstr ""
+msgstr "ანიმაციის ჩასწორება"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
 #, kde-format
 msgid "Add new animation"
-msgstr ""
+msgstr "ახალი ანიმაციის დამატება"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, kde-format
 msgid "Remove animation"
-msgstr ""
+msgstr "ანიმაციის წაშლა"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
-msgstr ""
+msgstr "მიმდევრობა: "
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, kde-format
 msgid "Move animation up"
-msgstr ""
+msgstr "ანიმაციის აწევა"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, kde-format
 msgid "Move animation down"
-msgstr ""
+msgstr "ანიმაციის დაწევა"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
 #, kde-format
 msgid "Add a new animation"
-msgstr ""
+msgstr "ახალი ანიმაციის დამატება"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Delete current animation"
-msgstr ""
+msgstr "მიმდინარე ანიმაციის წაშლა"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
@@ -942,7 +945,7 @@ msgstr "&სიგანე:"
 #: part/tools/animationtool/wdg_tool_crop.ui:63
 #, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr ""
+msgstr "ამოჭრის სიგანე მუდმივი იქნება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -954,7 +957,7 @@ msgstr "&სიმაღლე:"
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr ""
+msgstr "ამოჭრის სიმაღლე მუდმივი იქნება"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -966,13 +969,13 @@ msgstr "Y:"
 #: part/tools/animationtool/wdg_tool_crop.ui:111
 #, kde-format
 msgid "R&atio:"
-msgstr ""
+msgstr "&ფარდობა:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
 #: part/tools/animationtool/wdg_tool_crop.ui:114
 #, kde-format
 msgid "Will keep the ratio constant"
-msgstr ""
+msgstr "ფარდობა მუდმივი იქნება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132
@@ -990,35 +993,35 @@ msgstr "გამოსახულება"
 #: part/tools/animationtool/wdg_tool_crop.ui:145
 #, kde-format
 msgid "&Crop"
-msgstr ""
+msgstr "&ამოჭრა"
 
 #: part/tools/KPrPlaceholderTool.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Edit Shape"
-msgstr ""
+msgstr "ფორმის ჩასწორება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/ui/KPrConfigurePresenterView.ui:16
 #, kde-format
 msgid "Multiple monitors"
-msgstr ""
+msgstr "ერთზე მეტი ეკრანი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigurePresenterView.ui:24
 #, kde-format
 msgid "Presentation monitor:"
-msgstr ""
+msgstr "პრეზენტაციის ეკრანი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
 #, kde-format
 msgid "Enable presenter view"
-msgstr ""
+msgstr "წარმომდგენის ხედის ჩართვა"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
 msgid "Monitor %1 (primary)"
-msgstr ""
+msgstr "ეკრანი %1 (ძირითადი)"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:29
 #, kde-format
@@ -1028,56 +1031,56 @@ msgstr "%1-ე მონიტორი"
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, kde-format
 msgid "Configure Presenter View"
-msgstr ""
+msgstr "წარმომდგენის ხედის მორგება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
 #: part/ui/KPrConfigureSlideShow.ui:13
 #: part/ui/KPrConfigureSlideShowDialog.cpp:32
 #, kde-format
 msgid "Configure Slide Show"
-msgstr ""
+msgstr "სლაიდშოუს მორგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/ui/KPrConfigureSlideShow.ui:19
 #, kde-format
 msgid "Slides"
-msgstr ""
+msgstr "სლაიდერი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigureSlideShow.ui:27
 #, kde-format
 msgid "Presentation Slides:"
-msgstr ""
+msgstr "პრეზენტაციის სლაიდები:"
 
 #. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr ""
+msgstr "მომხმარებლის სლაიდშოუების ჩასწორება..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
 #, kde-format
 msgid "HTML Export"
-msgstr ""
+msgstr "HTML-ში გატანა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
 #: part/ui/KPrHtmlExport.ui:29
 #, kde-format
 msgid "Tick the slide should be exported :"
-msgstr ""
+msgstr "დააწკაპუნეთ გასატან სლაიდზე:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
 #, kde-format
 msgid "Select all"
-msgstr ""
+msgstr "ყველას მონიშვნა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_css)
 #: part/ui/KPrHtmlExport.ui:65
 #, kde-format
 msgid "Select template (.css) :"
-msgstr ""
+msgstr "აირჩიეთ შაბლონი (.css) :"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
 #: part/ui/KPrHtmlExport.ui:78
@@ -1095,7 +1098,7 @@ msgstr "სათაური"
 #: part/ui/KPrHtmlExport.ui:117
 #, kde-format
 msgid "Output preview"
-msgstr ""
+msgstr "გამოტანის მინიატურა"
 
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
@@ -1120,7 +1123,7 @@ msgstr "ავტორი"
 #: part/ui/KPrHtmlExport.ui:258
 #, kde-format
 msgid "Delete Favorite"
-msgstr ""
+msgstr "სანიშნეს წაშ₾ა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
 #: part/ui/KPrHtmlExport.ui:286
@@ -1131,27 +1134,27 @@ msgstr "ბრაუზერში გახსნა"
 #: part/ui/KPrHtmlExportDialog.cpp:34
 #, kde-format
 msgid "Html Export"
-msgstr ""
+msgstr "HTML-ში გატანა"
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
 msgid "Export"
-msgstr ""
+msgstr "გატანა"
 
 #: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
-msgstr ""
+msgstr "სანიშნეს ფაილი ამ სახელით უკვე არსებობს"
 
 #: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
-msgstr ""
+msgstr "არასწორი ფაილი, მხოლოდ, .zip ან დაზიანებული zip"
 
 #: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr ""
+msgstr "Zip ფაილი, აუცილებელია, style.css-ს შეიცავდეს"
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
@@ -1161,27 +1164,27 @@ msgstr "ნიმუშის წაშლა"
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
-msgstr ""
+msgstr "აპლიკაციასთან ერთად დაყენებულ ნიმუშებს ვერ წაშლით"
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
 msgid "Add Template"
-msgstr ""
+msgstr "ნიმუშის დამატება"
 
 #: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
-msgstr ""
+msgstr "წაშლის დადასტურება"
 
 #: part/ui/KPrHtmlExportDialog.cpp:326
 #, kde-format
 msgid "Are you sure you want to remove \"%1\"?"
-msgstr ""
+msgstr "დარწმუნებული ბრძანდებით, რომ გნებავთ წაშალოთ \"%1\"?"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
-msgstr ""
+msgstr "ხმის ქმედების შეცვლა"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
@@ -1207,7 +1210,7 @@ msgstr "ზოლი"
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Bottom"
-msgstr ""
+msgstr "ქვემოდან"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
@@ -1218,7 +1221,7 @@ msgstr ""
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Left"
-msgstr ""
+msgstr "მარცხნიდან"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
@@ -1229,7 +1232,7 @@ msgstr ""
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Right"
-msgstr ""
+msgstr "მარჯვნიდან"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
@@ -1240,7 +1243,7 @@ msgstr ""
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
 msgid "From Top"
-msgstr ""
+msgstr "ზემოდან"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
@@ -1281,7 +1284,7 @@ msgstr ""
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
-msgstr ""
+msgstr "უცნობი ქვეტიპი"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
@@ -1290,117 +1293,117 @@ msgstr "საათი"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 msgid "From Twelve Clockwise"
-msgstr ""
+msgstr "12 საათის ისრის მიმართულებიდან"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
 msgid "From Three Clockwise"
-msgstr ""
+msgstr "3 საათის ისრის მიმართულებიდან"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
 msgid "From Six Clockwise"
-msgstr ""
+msgstr "6 საათის ისრის მიმართულებიდან"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
 msgid "From Nine Clockwise"
-msgstr ""
+msgstr "9 საათის ისრის მიმართულებიდან"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
 msgid "From Twelve Counterclockwise"
-msgstr ""
+msgstr "12 საათის ისრის საწინააღმდეგოდ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
 msgid "From Three Counterclockwise"
-msgstr ""
+msgstr "3 საათის ისრის საწინააღმდეგოდ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
 msgid "From Six Counterclockwise"
-msgstr ""
+msgstr "6 საათის ისრის საწინააღმდეგოდ"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
 msgid "From Nine Counterclockwise"
-msgstr ""
+msgstr "9 საათის ისრის საწინააღმდეგოდ"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Double Fan"
-msgstr ""
+msgstr "ორმაგი ვენტილატორი"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan Out Vertical"
-msgstr ""
+msgstr "ვერტიკალურად გადაბრუნება"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
-msgstr ""
+msgstr "ჰორიზონტალურად გადაბრუნება"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical"
-msgstr ""
+msgstr "ვერტიკალურად გადმობრუნება"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
-msgstr ""
+msgstr "ჰორიზონტალურად გადმობრუნება"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
 msgid "Fan In Vertical Reverse"
-msgstr ""
+msgstr "ვერტიკალურად გადმობრუნება რევერსულად"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
 msgid "Fan In Horizontal Reverse"
-msgstr ""
+msgstr "ჰორიზონტალურად გადმობრუნება რევერსულად"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Double Sweep"
-msgstr ""
+msgstr "ორმაგად გადაბრუნება"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 msgid "Parallel Vertical"
-msgstr ""
+msgstr "პარალელური ვერტიკალური"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 msgid "Parallel Diagonal"
-msgstr ""
+msgstr "პარალელური დიაგონალური"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Opposite Vertical"
-msgstr ""
+msgstr "საპირისპირო ვერტიკალური"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Opposite Horizontal"
-msgstr ""
+msgstr "საპირისპირო ჰორიზონტალური"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 msgid "Parallel Diagonal Top Left"
-msgstr ""
+msgstr "პარალელური დიაგონალური ზედა მარცხენა"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 msgid "Parallel Diagonal Bottom Left"
-msgstr ""
+msgstr "პარალელური დიაგონალური ქვედა მარცხენა"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 msgid "Parallel Vertical Reverse"
-msgstr ""
+msgstr "ვერტიკალურად პარალელური რევერსულად"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 msgid "Parallel Diagonal Reverse"
-msgstr ""
+msgstr "ვერტიკალურად დიაგონალური რევერსულად"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 msgid "Opposite Vertical Reverse"
-msgstr ""
+msgstr "საპირისპირო ვერტიკალური რევერსული"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Opposite Horizontal Reverse"
-msgstr ""
+msgstr "საპირისპირო ჰორიზონტალური რევერსული"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr ""
+msgstr "პარალელური დიაგონალური ზედა მარცხენა რევერსული"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr ""
+msgstr "პარალელური დიაგონალური ქვედა მარცხენა რევერსული"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
@@ -1410,54 +1413,54 @@ msgstr "ვენტილატორი"
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Right"
-msgstr ""
+msgstr "მარჯვენა ცენტრი"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Top"
-msgstr ""
+msgstr "ცენტრში ზემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
 msgid "Center Left"
-msgstr ""
+msgstr "მარცხენა ცენტრი"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
 msgid "Center Bottom"
-msgstr ""
+msgstr "ცენტრში ქვემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
 msgid "Fan Out Top"
-msgstr ""
+msgstr "ვერტიკალურად გადაბრუნდება ზემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
 msgid "Fan Out Right"
-msgstr ""
+msgstr "ვერტიკალურად გადაბრუნდება მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
 msgid "Fan Out Bottom"
-msgstr ""
+msgstr "ვერტიკალურად გადაბრუნდება ქვემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
 msgid "Fan Out Left"
-msgstr ""
+msgstr "ვერტიკალურად გადაბრუნდება მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
 msgid "Fan In Top"
-msgstr ""
+msgstr "გადმობრუნება ზემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
 msgid "Fan In Right"
-msgstr ""
+msgstr "გადმობრუნება მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
 msgid "Fan In Bottom"
-msgstr ""
+msgstr "გადმობრუნება ზემოთ"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
 msgid "Fan In Left"
-msgstr ""
+msgstr "გადმობრუნება მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
 #, kde-format
@@ -1667,7 +1670,7 @@ msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
 msgid "Diagonal Top Left"
-msgstr ""
+msgstr "დიაგონალურად ზედა მარცხენა"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
 msgid "Diagonal Top Left Reverse"
@@ -1723,7 +1726,7 @@ msgstr ""
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Diagonal"
-msgstr ""
+msgstr "დიაგონალური"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
@@ -1767,7 +1770,7 @@ msgstr ""
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
 #, kde-format
 msgid "Zig Zag"
-msgstr ""
+msgstr "ზიგაზი"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
 #, kde-format
@@ -1860,7 +1863,7 @@ msgstr "სხვანი"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart"
-msgstr ""
+msgstr "გული"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart Reverse"
@@ -1891,7 +1894,7 @@ msgstr "ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Four Point Star"
-msgstr ""
+msgstr "ოთხწერტილიანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Four Point Star Reverse"
@@ -1899,7 +1902,7 @@ msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
-msgstr ""
+msgstr "ხუთწერტილიანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
@@ -1907,7 +1910,7 @@ msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
-msgstr ""
+msgstr "ექვსწერტილანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
 msgid "Six Point Star Reverse"
@@ -2170,12 +2173,12 @@ msgstr ""
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
 #, kde-format
 msgid "Slide"
-msgstr ""
+msgstr "სლაიდი"
 
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
 #, kde-format
 msgid "Space Rotation"
-msgstr ""
+msgstr "სივრცული მოტრალება"
 
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
 #, kde-format

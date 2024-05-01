@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-12-14 18:11+0100\n"
+"PO-Revision-Date: 2024-04-30 15:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -256,27 +256,27 @@ msgstr "პანელის გრაფიკები"
 #: ChartShapeFactory.cpp:78
 #, kde-format
 msgid "Normal bar chart"
-msgstr ""
+msgstr "ჩვეულებრივი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "შედგენილი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
-msgstr ""
+msgstr "შედგენილი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:99
 #, kde-format
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "პროცენტული ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:100
 #, kde-format
 msgid "Percent bar chart"
-msgstr ""
+msgstr "პროცენტული ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:238
@@ -287,58 +287,58 @@ msgstr "ხაზოვანი გრაფიკები"
 #: ChartShapeFactory.cpp:111
 #, kde-format
 msgid "Normal line chart"
-msgstr ""
+msgstr "ჩვეულებრივი ხაზოვანი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "შედგენილი ხაზოვანი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
-msgstr ""
+msgstr "შედგენილი ხაზოვანი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:132
 #, kde-format
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "პროცენტული ხაზოვანი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:133
 #, kde-format
 msgid "Percent line chart"
-msgstr ""
+msgstr "პროცენტული ხაზოვანი ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Area Chart"
-msgstr ""
+msgstr "ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:144
 #, kde-format
 msgid "Normal area chart"
-msgstr ""
+msgstr "ნორმალური ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "შეგენილი ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
-msgstr ""
+msgstr "შეგენილი ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:165
 #, kde-format
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "პროცენტული ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:166
 #, kde-format
 msgid "Percent area chart"
-msgstr ""
+msgstr "პროცენტული ალაგის ჰისტოგრამა"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:252
@@ -349,7 +349,7 @@ msgstr "Pie გრაფიკი"
 #: ChartShapeFactory.cpp:177
 #, kde-format
 msgid "Pie chart"
-msgstr ""
+msgstr "სექტორული დიაგრამა"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:253
@@ -360,29 +360,29 @@ msgstr "ბეჭდის გრაფიკი"
 #: ChartShapeFactory.cpp:188
 #, kde-format
 msgid "Ring chart"
-msgstr ""
+msgstr "წრიული დიაგრამა"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
 #: PlotAreaConfigWidget.cpp:266
 #, kde-format
 msgid "Bubble Chart"
-msgstr ""
+msgstr "ბუშტის ფორმის დიაგრამა"
 
 #: ChartShapeFactory.cpp:199
 #, kde-format
 msgid "Bubble chart"
-msgstr ""
+msgstr "ბუშტის ფორმის დიაგრამა"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
 #: PlotAreaConfigWidget.cpp:265
 #, kde-format
 msgid "Scatter Chart"
-msgstr ""
+msgstr "წერტილოვანი დიაგრამა"
 
 #: ChartShapeFactory.cpp:210
 #, kde-format
 msgid "Scatter chart"
-msgstr ""
+msgstr "წერტილოვანი დიაგრამა"
 
 #: ChartShapeFactory.cpp:220
 #, kde-format
@@ -900,7 +900,7 @@ msgstr "ნორმალური"
 #: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
 #, kde-format
 msgid "Stacked"
-msgstr ""
+msgstr "ჩალაგებული"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
@@ -1101,13 +1101,13 @@ msgstr ""
 #: dialogs/StockDataEditor.cpp:98
 #, kde-format
 msgid "Insert Row Above"
-msgstr ""
+msgstr "მწკრივის ზემოთ ჩასმა"
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
 #, kde-format
 msgid "Insert Row Below"
-msgstr ""
+msgstr "მწკრივის ქვემოთ ჩასმა"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
@@ -1771,7 +1771,7 @@ msgstr ""
 #: TitlesConfigWidget.ui:18
 #, kde-format
 msgid "Positioning"
-msgstr ""
+msgstr "პოზიციონირება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28

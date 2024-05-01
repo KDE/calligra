@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 17:11+0200\n"
+"PO-Revision-Date: 2024-04-30 07:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -32,17 +32,17 @@ msgstr "Temuri.doghonadze@gmail.com"
 #: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
-msgstr ""
+msgstr "CalligraConverter"
 
 #: calligraconverter.cpp:181
 #, kde-format
 msgid "Calligra Document Converter"
-msgstr ""
+msgstr "Calligra -ის დოკუმენტის გადამყვანი"
 
 #: calligraconverter.cpp:183
 #, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr ""
+msgstr "Copyright 2001-%1 Calligra-ის პროგრამისტები"
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -72,47 +72,47 @@ msgstr "გამოტანის ფაილი"
 #: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
-msgstr ""
+msgstr "სამიზნე ფაილის მარქაფის შექმნა"
 
 #: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
-msgstr ""
+msgstr "საბითუმო რეჟიმი: დიალოგები ნაჩვენები არ იქნება"
 
 #: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr ""
+msgstr "ინტერაქტიური რეჟიმი: დიალოგების ჩვენება (ნაგულისხმევი)"
 
 #: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
-msgstr ""
+msgstr "გამოტანის ფაილის mime ტიპი"
 
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "დაბეჭდვის ორიენტაცია. შეიძლება იყოს პორტრეტული ან ლანდშაფტი."
 
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "ქაღალდის ზომა. A4, ოფიციალური, წერილი და ა.შ..."
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "ქაღალდის მინდვრის ზომა. ნაგულისხმევი ზომაა 0.2."
 
 #: calligraconverter.cpp:215
 #, kde-format
 msgid "Two arguments required"
-msgstr ""
+msgstr "აუცილებელია ორი არგუმენტი"
 
 #: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr ""
+msgstr "შეყვანის ფალისთვის %1 MIME ტიპი ვერ ვიპოვე!"
 
 #: calligraconverter.cpp:252
 #, kde-format
@@ -122,7 +122,7 @@ msgstr "Mimetype ვერ ვიპოვე %1"
 #: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr ""
+msgstr "MIME ტიპი ვერ ვიპოვე. სცადეთ -mimetype პარამეტრი მიუთითოთ"
 
 #: calligraconverter.cpp:282
 #, kde-format

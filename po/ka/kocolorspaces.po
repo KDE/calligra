@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 11:34+0200\n"
+"PO-Revision-Date: 2024-04-30 07:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -270,7 +270,7 @@ msgstr "YCBCR (8-ბიტიანი მთელი/არხი)"
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
 msgid "Bumpmap"
-msgstr ""
+msgstr "რელიეფური"
 
 #: lcms2/compositeops/RgbCompositeOpClear.h:20
 #, kde-format

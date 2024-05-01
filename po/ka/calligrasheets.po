@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-04-26 06:35+0200\n"
+"PO-Revision-Date: 2024-04-30 13:36+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -10653,7 +10653,7 @@ msgstr ""
 #: functions/text.xml:571
 #, kde-format
 msgid "Count of repetitions"
-msgstr ""
+msgstr "გამეორებების რაოდენობა"
 
 #: functions/text.xml:575
 #, kde-format
@@ -10672,12 +10672,12 @@ msgstr ""
 #: functions/text.xml:577
 #, kde-format
 msgid "REPT(\"KSpread\";3) returns \"KSpreadKSpreadKSpread\""
-msgstr ""
+msgstr "REPT(\"KSpread\";3) აბრუნებს \"KSpreadKSpreadKSpread\""
 
 #: functions/text.xml:578
 #, kde-format
 msgid "REPT(\"KSpread\";0) returns \"\""
-msgstr ""
+msgstr "REPT(\"KSpread\";0) აბრუნებს \"\""
 
 #: functions/text.xml:590
 #, kde-format
@@ -10702,12 +10702,12 @@ msgstr "ROT13(ტექსტი)"
 #: functions/text.xml:593
 #, kde-format
 msgid "ROT13(\"KSpread\") returns \"XFcernq\""
-msgstr ""
+msgstr "ROT13(\"KSpread\") აბრუნებს \"XFcernq\""
 
 #: functions/text.xml:594
 #, kde-format
 msgid "ROT13(\"XFcernq\") returns \"KSpread\""
-msgstr ""
+msgstr "ROT13(\"XFcernq\") აბრუნებს \"KSpread\""
 
 #: functions/text.xml:606
 #, kde-format
@@ -10724,17 +10724,17 @@ msgstr "TOGGLE(ტექსტი)"
 #: functions/text.xml:608
 #, kde-format
 msgid "TOGGLE(\"hello\") returns \"HELLO\""
-msgstr ""
+msgstr "TOGGLE(\"hello\") აბრუნებს \"HELLO\""
 
 #: functions/text.xml:609
 #, kde-format
 msgid "TOGGLE(\"HELLO\") returns \"hello\""
-msgstr ""
+msgstr "TOGGLE(\"HELLO\") აბრუნებს \"hello\""
 
 #: functions/text.xml:610
 #, kde-format
 msgid "TOGGLE(\"HeLlO\") returns \"hElLo\""
-msgstr ""
+msgstr "TOGGLE(\"HeLlO\") აბრუნებს \"hElLo\""
 
 #: functions/text.xml:624
 #, kde-format
@@ -10780,12 +10780,12 @@ msgstr "UPPER(ტექსტი)"
 #: functions/text.xml:655
 #, kde-format
 msgid "UPPER(\"hello\") returns \"HELLO\""
-msgstr ""
+msgstr "UPPER(\"hello\") აბრუნებს \"HELLO\""
 
 #: functions/text.xml:656
 #, kde-format
 msgid "UPPER(\"HELLO\") returns \"HELLO\""
-msgstr ""
+msgstr "UPPER(\"HELLO\") აბრუნებს \"HELLO\""
 
 #: functions/text.xml:670
 #, kde-format
@@ -10800,12 +10800,12 @@ msgstr "LOWER(ტექსტი)"
 #: functions/text.xml:672
 #, kde-format
 msgid "LOWER(\"hello\") returns \"hello\""
-msgstr ""
+msgstr "LOWER(\"hello\") აბრუნებს \"hello\""
 
 #: functions/text.xml:673
 #, kde-format
 msgid "LOWER(\"HELLO\") returns \"hello\""
-msgstr ""
+msgstr "LOWER(\"HELLO\") აბრუნებს \"hello\""
 
 #: functions/text.xml:683 functions/text.xml:794
 #, kde-format
@@ -10825,7 +10825,7 @@ msgstr "CHAR(კოდი)"
 #: functions/text.xml:689
 #, kde-format
 msgid "CHAR(65) returns \"A\""
-msgstr ""
+msgstr "CHAR(65) აბრუნებს \"A\""
 
 #: functions/text.xml:702
 #, kde-format
@@ -10842,7 +10842,7 @@ msgstr "CODE(ტექსტი)"
 #: functions/text.xml:704
 #, kde-format
 msgid "CODE(\"KDE\") returns 75"
-msgstr ""
+msgstr "CODE(\"KDE\") აბრუნებს 75"
 
 #: functions/text.xml:717
 #, kde-format
@@ -10857,7 +10857,7 @@ msgstr "VALUE(ტექსტი)"
 #: functions/text.xml:719
 #, kde-format
 msgid "VALUE(\"14.03\") returns 14.03"
-msgstr ""
+msgstr "VALUE(\"14.03\") აბრუნებს 14.03"
 
 #: functions/text.xml:727 functions/text.xml:756
 #, kde-format
@@ -12348,7 +12348,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesDialog.cpp:17
 #, kde-format
 msgid "Sheet Properties"
-msgstr ""
+msgstr "გვერდის თვისებები"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, directionComboBox)
 #: part/dialogs/SheetPropertiesDialog.cpp:53
@@ -12454,7 +12454,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:153
 #, kde-format
 msgid "&Hide zero"
-msgstr ""
+msgstr "&ნულის დამალვა"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:160
@@ -12542,19 +12542,19 @@ msgstr "ყველა გვერდი"
 #: part/dialogs/SheetSelectWidget.ui:47
 #, kde-format
 msgid "Active Sheet"
-msgstr ""
+msgstr "აქტიური ფურცელი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
 #, kde-format
 msgid "Selected Sheets:"
-msgstr ""
+msgstr "მონიშნული ფურცლები:"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:67
 #, kde-format
 msgid "Available sheets"
-msgstr ""
+msgstr "ხელმისაწვდომი ფურცლები"
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:72
@@ -12595,13 +12595,13 @@ msgstr ""
 #: part/dialogs/SheetSelectWidget.ui:124
 #, kde-format
 msgid "Selected Sheets"
-msgstr ""
+msgstr "მონიშნული ფურცლები"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonSelectAll)
 #: part/dialogs/SheetSelectWidget.ui:154
 #, kde-format
 msgid "Select all sheets"
-msgstr ""
+msgstr "ყველა ფურცლის მონიშვნა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveTop)
 #: part/dialogs/SheetSelectWidget.ui:167
@@ -14195,7 +14195,7 @@ msgstr ""
 #: ui/dialogs/PositionWidget.ui:186
 #, kde-format
 msgid "Wrap text"
-msgstr ""
+msgstr "ტექსტის გადატანა"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
 #: ui/dialogs/PositionWidget.ui:193
@@ -14207,7 +14207,7 @@ msgstr ""
 #: ui/dialogs/PositionWidget.ui:200
 #, kde-format
 msgid "Shrink to fit"
-msgstr ""
+msgstr "ჩატევამდე დაპატარავება"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
 #: ui/dialogs/ProtectionWidget.ui:35
@@ -14250,7 +14250,7 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:61
 #, kde-format
 msgid "Protection"
-msgstr ""
+msgstr "დაცვა"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
 #: ui/dialogs/ProtectionWidget.ui:69
@@ -14342,7 +14342,7 @@ msgstr "ცარიელი"
 #: ui/FilterPopup.cpp:61
 #, kde-format
 msgid "Non-empty"
-msgstr ""
+msgstr "ცარიელი რა"
 
 #: ui/MapViewModel.cpp:179
 #, kde-format

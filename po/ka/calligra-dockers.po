@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 16:37+0200\n"
+"PO-Revision-Date: 2024-04-30 13:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,38 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: shapecollection/OdfCollectionLoader.cpp:60
 #, kde-format
 msgid "Found no shapes in the collection! %1"
-msgstr ""
+msgstr "კოლექციაში %1 ფორმები ვერ ვიპოვე"
 
 #: shapecollection/OdfCollectionLoader.cpp:120
 #, kde-format
 msgid "Not a valid Calligra file: %1"
-msgstr ""
+msgstr "Calligra -ის არასწორი ფაილი: %1"
 
 #: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
 msgid "No body tag found in file: %1"
-msgstr ""
+msgstr "ფაილში ჭდე body ვერ ვიპოვე: %1"
 
 #: shapecollection/OdfCollectionLoader.cpp:151
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
-msgstr ""
+msgstr "ფაილში ჭდე office:drawing ვერ ვიპოვე: %1"
 
 #: shapecollection/OdfCollectionLoader.cpp:159
 #: shapecollection/OdfCollectionLoader.cpp:167
 #, kde-format
 msgid "No shapes found in file: %1"
-msgstr ""
+msgstr "ვერ ვიპოვე ფორმები ფაილში: %1"
 
 #: shapecollection/ShapeCollectionDocker.cpp:110
 #, kde-format
 msgid "Add Shape"
-msgstr ""
+msgstr "მოხაზულობის დამატება"
 
 #: shapecollection/ShapeCollectionDocker.cpp:144
 #, kde-format
@@ -58,12 +58,12 @@ msgstr "მეტი"
 #: shapecollection/ShapeCollectionDocker.cpp:172
 #, kde-format
 msgid "Open Shape Collection"
-msgstr ""
+msgstr "მოხაზულობების კოლექციის დამატება"
 
 #: shapecollection/ShapeCollectionDocker.cpp:180
 #, kde-format
 msgid "Remove Shape Collection"
-msgstr ""
+msgstr "მოხაზულობების კოლექციის წაშლა"
 
 #: shapecollection/ShapeCollectionDocker.cpp:327
 #, kde-format

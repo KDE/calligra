@@ -1,5 +1,5 @@
 # Translation of calligrasheets.po to Catalan (Valencian)
-# Copyright (C) 2000-2023 This_file_is_part_of_KDE
+# Copyright (C) 2000-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
@@ -7,20 +7,20 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-08-08 18:04+0200\n"
+"PO-Revision-Date: 2024-04-29 10:34+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -12959,7 +12959,7 @@ msgstr "Edita"
 #: part/calligrasheets.rc:219
 #, kde-format
 msgid "Navigation"
-msgstr "Navegació"
+msgstr "Navegueu"
 
 #. i18n: ectx: Menu
 #: part/calligrasheets.rc:225
@@ -12973,7 +12973,7 @@ msgstr "Activa"
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
 #: part/calligrasheets.rc:261
@@ -13136,8 +13136,8 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
-"Seleccioneu esta casella si voleu crear fitxers de seguretat. De manera "
-"predeterminada, està seleccionada."
+"Marqueu esta casella si voleu crear fitxers de seguretat. De manera "
+"predeterminada, està marcada."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/InterfaceOptionsWidget.ui:17
@@ -13608,8 +13608,8 @@ msgid ""
 "If this box is checked cells containing comments will be marked by a small "
 "red triangle at the top right corner."
 msgstr ""
-"Si se selecciona, les cel·les que tenen comentaris es marcaran amb un "
-"xicotet triangle roig en el cantó superior dret."
+"Si està marcada, les cel·les que tenen comentaris es marcaran amb un xicotet "
+"triangle roig en el cantó superior dret."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:113
@@ -13625,7 +13625,7 @@ msgid ""
 "Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its "
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
-"Si se selecciona, la cel·la de referència mostrada al final esquerra de la "
+"Si està marcada, la cel·la de referència mostrada al final esquerra de la "
 "barra de fórmula es presentarà en mode LC (per exemple L2C3) en comptes de "
 "la manera normal, B3. Açò no pareix que servisca de gaire, de moment."
 
@@ -13643,9 +13643,9 @@ msgid ""
 "sheet. Per default the page borders are not displayed. It is useful to see "
 "the page borders if you want to print your sheet."
 msgstr ""
-"Si seleccioneu esta opció, es dibuixaran les vores de la pàgina del full "
-"actual. De manera predeterminada, les vores de la pàgina no es mostren. Açò "
-"és útil per a veure les vores de la pàgina si voleu imprimir el vostre full."
+"Si marqueu esta opció, es dibuixaran les vores de la pàgina del full actual. "
+"De manera predeterminada, les vores de la pàgina no es mostren. Açò és útil "
+"per a veure les vores de la pàgina si voleu imprimir el vostre full."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
@@ -13660,8 +13660,8 @@ msgid ""
 "Check this box and the first letter of any text you type in will "
 "automatically be converted to uppercase."
 msgstr ""
-"Seleccioneu esta casella i la primera lletra de qualsevol text que escriviu "
-"es convertirà en majúscula."
+"Marqueu esta casella i la primera lletra de qualsevol text que escriviu es "
+"convertirà en majúscula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:143
@@ -13675,8 +13675,7 @@ msgstr "Con&vertix la primera lletra a majúscula"
 msgid ""
 "If this box is checked any cell containing the value zero will appear blank."
 msgstr ""
-"Si se selecciona, qualsevol cel·la que continga el valor zero eixirà en "
-"blanc."
+"Si està marcada, qualsevol cel·la que continga el valor zero eixirà en blanc."
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:153
@@ -13691,7 +13690,7 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
-"Si se selecciona, Sheets de Calligra mostrarà la fórmula real en les cel·les "
+"Si està marcada, Sheets de Calligra mostrarà la fórmula real en les cel·les "
 "en comptes dels resultats."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
@@ -13707,7 +13706,7 @@ msgid ""
 "If this box is checked the column headings will show as numbers rather than "
 "as letters. Letters are default."
 msgstr ""
-"Si se selecciona, les capçaleres de les columnes es mostraran com a números. "
+"Si està marcada, les capçaleres de les columnes es mostraran com a números. "
 "De manera predeterminada, són lletres."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showColumnAsNumbersCheckBox)
@@ -13724,7 +13723,7 @@ msgid ""
 "the bottom left corner of cells containing formulae. This is useful if you "
 "want to protect cells with formulae."
 msgstr ""
-"Si se selecciona, Sheets de Calligra mostrarà un xicotet triangle blau en el "
+"Si està marcada, Sheets de Calligra mostrarà un xicotet triangle blau en el "
 "cantó inferior esquerre de les cel·les que continguen una fórmula. Açò és "
 "útil si voleu protegir les cel·les amb fórmules."
 
@@ -13741,9 +13740,9 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
-"Si se selecciona, es mostraran els límits de la quadrícula (els límits de "
-"les cel·les). Este és el valor predeterminat. Si la desmarqueu, s'ocultarà "
-"la quadrícula."
+"Si està marcada, es mostraran els límits de la quadrícula (els límits de les "
+"cel·les). Este és el valor predeterminat. Si la desmarqueu, s'ocultarà la "
+"quadrícula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
@@ -14883,12 +14882,12 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Podeu seleccionar ací l'estil del tipus de lletra, la mida i el color, "
-"incloent-hi algunes opcions addicionals com el subratllat o el text barrat "
-"per a la cel·la de text actual. La part baixa de la pàgina vos dona una "
-"vista prèvia del format del text seleccionat.\n"
-"El tipus de lletra predeterminat se selecciona per a totes les cel·les en el "
-"menú «Format -> Gestor d'estils» amb l'estil utilitzat actualment."
+"Podeu seleccionar ací l'estil de la lletra, la mida i el color, incloent-hi "
+"algunes opcions addicionals com el subratllat o el text barrat per a la "
+"cel·la de text actual. La part baixa de la pàgina vos dona una vista prèvia "
+"del format del text seleccionat.\n"
+"La lletra predeterminada se selecciona per a totes les cel·les en el menú "
+"«Format -> Gestor d'estils» amb l'estil utilitzat actualment."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -14900,7 +14899,7 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Trieu l'estil dels tipus de lletra per a les cel·les seleccionades. Quan "
+"Trieu l'estil de les lletres per a les cel·les seleccionades. Quan "
 "seleccioneu diferents cel·les amb diferents estils, l'estil mostrat està "
 "configurat com a Divers (sense canvi) i, si el deixeu així, es deixarà la "
 "configuració de l'estil actual per a cada cel·la. Si canvieu a Roman, per "
@@ -14937,12 +14936,11 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
-"Trieu l'estil dels tipus de lletra per a les cel·les seleccionades. Quan "
-"seleccioneu diferents cel·les amb diferents estils del tipus de lletra, "
-"l'estil mostrat està configurat com a Divers (sense canvi) i, si el deixeu "
-"així, es deixarà la configuració de l'estil actual per a cada cel·la. Si "
-"canvieu a Negreta, per exemple, canviaran tots els estils de les cel·les a "
-"Negreta."
+"Trieu l'estil de la lletra per a les cel·les seleccionades. Quan seleccioneu "
+"diferents cel·les amb diferents estils de lletra, l'estil mostrat està "
+"configurat com a Divers (sense canvi) i, si el deixeu així, es deixarà la "
+"configuració de l'estil actual per a cada cel·la. Si canvieu a Negreta, per "
+"exemple, canviaran tots els estils de les cel·les a Negreta."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:78
@@ -14967,7 +14965,7 @@ msgstr "Color:"
 #: ui/dialogs/FontWidget.ui:98
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
-msgstr "Si se selecciona, se subratllarà el text de la cel·la actual."
+msgstr "Si està marcada, se subratllarà el text de la cel·la actual."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
 #: ui/dialogs/FontWidget.ui:101
@@ -15009,7 +15007,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
-msgstr "Si se selecciona, es barrarà el text de la cel·la actual."
+msgstr "Si està marcada, es barrarà el text de la cel·la actual."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:142
@@ -15021,7 +15019,7 @@ msgstr "Barrat"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr "Seleccioneu la mida del tipus de lletra."
+msgstr "Seleccioneu la mida de la lletra."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -15030,8 +15028,8 @@ msgid ""
 "This box lists all your available font families. Click on one family to set "
 "it in the current cell."
 msgstr ""
-"Este quadro llista totes les famílies de tipus de lletra disponibles. "
-"Cliqueu en una família per a establir-la en la cel·la actual."
+"Este quadro llista totes les famílies de lletres disponibles. Cliqueu en una "
+"família per a establir-la en la cel·la actual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
@@ -15046,8 +15044,8 @@ msgstr "Vista prèvia"
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-"Podeu veure una vista prèvia del tipus de lletra que escolliu per a la "
-"cel·la actual."
+"Podeu veure una vista prèvia de la lletra que escolliu per a la cel·la "
+"actual."
 
 #: ui/dialogs/LayoutDialog.cpp:117
 #, kde-format
@@ -15595,7 +15593,7 @@ msgid ""
 msgstr ""
 "Només estarà disponible si la rotació és de 0°.\n"
 "Ajusta el text, l'ajusta de manera que encaixe en la mida prèvia de cel·la. "
-"Si no se selecciona, el text es quedarà en una línia i s'ajustarà la mida de "
+"Si no està marcada, el text es quedarà en una línia i s'ajustarà la mida de "
 "la cel·la per a encabir el text.\n"
 "Text vertical disposa el vostre text verticalment."
 
@@ -15666,8 +15664,8 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
-"Si se selecciona, no s'imprimirà el contingut de la cel·la. Si no se "
-"selecciona (predeterminat), el contingut de la cel·la s'imprimirà.\n"
+"Si està marcada, no s'imprimirà el contingut de la cel·la. Si no està "
+"marcada (predeterminat), el contingut de la cel·la s'imprimirà.\n"
 "Cal tindre present que podeu imprimir encara que la cel·la estiga protegida."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
@@ -15708,7 +15706,7 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"Si se selecciona, es protegirà el contingut. Este és el comportament "
+"Si està marcada, es protegirà el contingut. Este és el comportament "
 "predeterminat. Heu de protegir tot el full amb el menú «Eines -> Protegix el "
 "full...» per tal que funcione la protecció de la cel·la individual. Per a "
 "més detalls, vegeu el manual, en el capítol Calligra Sheets avançat. Quan "
@@ -15729,10 +15727,10 @@ msgid ""
 "contain formulae so the user cannot view the formula. And the sheet must be "
 "protected for this to work."
 msgstr ""
-"Quan se selecciona, la cel·la encara serà visible. En canvi, els seus "
-"continguts no apareixeran en la barra de fórmula. Oculta fórmula només "
-"funciona amb cel·les que contenen fórmules, de manera que l'usuari no pot "
-"veure-la. I el full ha d'estar protegit perquè açò funcione."
+"Quan es marca, la cel·la encara serà visible. En canvi, els seus continguts "
+"no apareixeran en la barra de fórmula. Oculta fórmula només funciona amb "
+"cel·les que contenen fórmules, de manera que l'usuari no pot veure-la. I el "
+"full ha d'estar protegit perquè açò funcione."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
 #: ui/dialogs/ProtectionWidget.ui:133
@@ -15807,25 +15805,3 @@ msgstr "Selecciona múltiples cel·les"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "L'enllaç %1 està activat"
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr ""
-#~ "No és possible processar perquè algunes cel·les estan bloquejades com a "
-#~ "elements d'una matriu."
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "No és possible processar perquè algunes cel·les estan protegides."
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Este enllaç apunta cap al programa o script «%1».\n"
-#~ "Els programes maliciosos poden malmetre el vostre ordinador. Segur que "
-#~ "voleu iniciar este programa?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Voleu obrir l'enllaç?"

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-01-17 21:00+0100\n"
+"PO-Revision-Date: 2024-04-29 10:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -83,7 +83,7 @@ msgstr "Mostra les etiquetes"
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
@@ -484,17 +484,17 @@ msgstr "Creixement en %"
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr "Compartició A"
+msgstr "Compartiu A"
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr "Compartició B"
+msgstr "Compartiu B"
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr "Compartició C"
+msgstr "Compartiu C"
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
@@ -665,7 +665,7 @@ msgstr "Amplària manual de subpas"
 #: commands/AxisCommand.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "Establix el tipus de lletra de l'etiqueta de l'eix"
+msgstr "Establix la lletra de l'etiqueta de l'eix"
 
 #: commands/AxisCommand.cpp:236
 msgctxt "(qtundo-format)"
@@ -865,12 +865,12 @@ msgstr "Establix el títol de la llegenda"
 #: commands/LegendCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "Establix el tipus de lletra de la llegenda"
+msgstr "Establix la lletra de la llegenda"
 
 #: commands/LegendCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Establix la mida del tipus de lletra de la llegenda"
+msgstr "Establix la mida de la lletra de la llegenda"
 
 #: commands/LegendCommand.cpp:97
 msgctxt "(qtundo-format)"
@@ -1368,7 +1368,7 @@ msgstr "Conjunts de dades en &columnes"
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
-msgstr "Seleccioneu el tipus de lletra"
+msgstr "Seleccioneu la lletra"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
@@ -1700,7 +1700,7 @@ msgstr "Orientació"
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr "Tipus de lletra..."
+msgstr "Lletres..."
 
 #: PieConfigWidget.cpp:100
 #, kde-format

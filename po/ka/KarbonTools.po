@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 17:10+0200\n"
+"PO-Revision-Date: 2024-04-30 08:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -46,7 +46,7 @@ msgstr "მითითებული ბილიკის გაყოლა"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr ""
+msgstr "ტაბლეტის &წნევის გამოყენება"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
 #, kde-format
@@ -56,12 +56,12 @@ msgstr "სიგანე:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
 #, kde-format
 msgid "Thinning:"
-msgstr ""
+msgstr "დათხელება:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
 #, kde-format
 msgid "Use tablet &angle"
-msgstr ""
+msgstr "&ტაბლეტის კუთხის გამოყენება"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
 #, kde-format
@@ -71,12 +71,12 @@ msgstr "კუთხე:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
 #, kde-format
 msgid "Fixation:"
-msgstr ""
+msgstr "ფიქსაცია:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
 #, kde-format
 msgid "Caps:"
-msgstr ""
+msgstr "ბოლოები:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
 #, kde-format
@@ -86,7 +86,7 @@ msgstr "მასა:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
 #, kde-format
 msgid "Drag:"
-msgstr ""
+msgstr "ინერცია:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
@@ -103,7 +103,7 @@ msgstr "პროფილის სახელი"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr ""
+msgstr "შეიყვანეთ სახელი, რომლითაც გნებავთ, ეს პროფილი შეინახოთ:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
@@ -122,6 +122,8 @@ msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
+"პროფილი ამ სახლით უკვე არსებობს.\n"
+"გნებავთ, თავზე გადააწეროთ მას?"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
@@ -174,7 +176,7 @@ msgstr "ფილტრის ეფექტის დამატება"
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
-msgstr ""
+msgstr "ეფექტის დამატება მიმდინარე ფილტრების სტეკისთვის"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
@@ -301,22 +303,26 @@ msgstr "ფილტრის ეფექტის ჩასწორება"
 #: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
-msgstr ""
+msgstr "გადაათრიეთ გრადიენტის მდებარეობის შესაცვლელად."
 
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
+"გადაათრიეთ ფერის გაჩერების გადასატანად. ორმაგი წაპი ფერის გაჩერების "
+"წასაშლელად."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
-msgstr ""
+msgstr "გადაათრიეთ ფერის გაჩერების გადასატანად."
 
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
+"გადაათრიეთ გრადიენტის მდებარეობს შესაცვლელად. ორმაგი წკაპი ფერის გაჩერების "
+"ჩასასმელად."
 
 #: KarbonGradientTool.cpp:493
 #, kde-format
@@ -346,7 +352,7 @@ msgstr "გადახურული"
 #: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
 msgid "Stretched"
-msgstr ""
+msgstr "გაწელილია"
 
 #: KarbonPatternOptionsWidget.cpp:26
 #, kde-format

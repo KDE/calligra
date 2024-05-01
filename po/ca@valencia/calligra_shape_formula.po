@@ -1,15 +1,15 @@
 # Translation of calligra_shape_formula.po to Catalan (Valencian)
-# Copyright (C) 2008-2016 This_file_is_part_of_KDE
+# Copyright (C) 2008-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the FormulaShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2013, 2014, 2015, 2016.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2013, 2014, 2015, 2016, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-20 22:36+0100\n"
+"PO-Revision-Date: 2024-04-29 10:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -154,7 +154,7 @@ msgstr "Opcions generals"
 #: FormulaToolWidget.ui:325
 #, kde-format
 msgid "Font:"
-msgstr "Tipus de lletra:"
+msgstr "Lletra:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColors)
 #: FormulaToolWidget.ui:341

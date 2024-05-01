@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-04-16 11:41+0200\n"
+"PO-Revision-Date: 2024-04-29 10:27+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2917,7 +2917,7 @@ msgstr "Lluminositat"
 #: pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgid "Increase Luminosity"
-msgstr "Augmenta la lluminositat"
+msgstr "Augmenta la brillantor"
 
 #: pigment/compositeops/KoCompositeOps.h:188
 #: pigment/KoCompositeOpRegistry.cpp:87
@@ -4003,22 +4003,22 @@ msgstr "Augmenta el sagnat"
 #: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
-msgstr "Disminuïx la mida del tipus de lletra"
+msgstr "Disminuïx la mida de la lletra"
 
 #: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
-msgstr "Augmenta la mida del tipus de lletra"
+msgstr "Augmenta la mida de la lletra"
 
 #: text/KoTextEditor_format.cpp:294
 msgctxt "(qtundo-format)"
 msgid "Set Font"
-msgstr "Establix el tipus de lletra"
+msgstr "Establix la lletra"
 
 #: text/KoTextEditor_format.cpp:307
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
-msgstr "Establix la mida del tipus de lletra"
+msgstr "Establix la mida de la lletra"
 
 #: text/KoTextEditor_format.cpp:320
 msgctxt "(qtundo-format)"
@@ -5330,28 +5330,3 @@ msgstr "Tots els formats acceptats"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid ""
-#~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
-#~ "can not be opened."
-#~ msgstr ""
-#~ "QCA no té suport actualment per a SHA1 o PBKDF2 utilitzant SHA1. El "
-#~ "document no es pot obrir."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "(%1) Recomanat"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Configuració regional (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Altres (%1)"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "No s'ha pogut trobar la codificació: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "Co&dificació:"
