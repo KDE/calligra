@@ -20,6 +20,7 @@ Comment[fy]=In útwreiding dy't in folslein kleurgebiet ymplementearret dat brû
 Comment[gl]=Un módulo que codifica unha extensión dun espazo de cores do sistema de manipulación dos pigmentos das cores (PCMS).
 Comment[hu]=Egy színtér kiterjesztést megvalósító modul a pigmentszín manipulációs rendszer használatához
 Comment[it]=Un modulo che implementa un'estensione a uno spazio di colori da usare con il sistema di manipolazione dei colori di Pigment
+Comment[ka]=მოდული, რომელიც პიგმენტის ფერების მანიპულაციის სისტემის ფერების სივრცის გაფართოების განხორციელებას ახდენს
 Comment[kk]=Пигмент түсімен айналасу жүйесінің түстер кеңістігінің кеңейтуін іске асыратын модулі
 Comment[ko]=Pigment 색 처리 시스템에 사용할 수 있는 색 공간을 확장하는 모듈
 Comment[nb]=En modul som implementerer en utvidelse til et fargerom for Pigment Color Manipulation System
