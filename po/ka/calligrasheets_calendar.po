@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-10-01 16:35+0200\n"
+"PO-Revision-Date: 2024-05-01 06:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: CalendarTool.cpp:62
 #, kde-format
@@ -24,6 +24,8 @@ msgid ""
 "End date is before start date! Please make sure that end date comes after "
 "start date."
 msgstr ""
+"დასასრულის თარიღი დასაწყისის თარიღამდეა! დარწმუნდით, რომ დასასრულის თარიღი "
+"დასაწყისის თარიღის შემდეგაა."
 
 #: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
@@ -36,6 +38,8 @@ msgid ""
 "Calendars should not be longer than 10 years. If you really need such long "
 "periods you need to split them up."
 msgstr ""
+"კალენდრები 10 წელზე გრძელი არ უნდა იყოს. თუ მართლა გნებავთ ამხელა პერიოდები, "
+"დაყავით ისინი."
 
 #: CalendarTool.cpp:76
 #, kde-format
@@ -43,6 +47,8 @@ msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
 msgstr ""
+"საწყისი და საბოლოო თარიღები ტოლია! ჩაისმება, მხოლოდ, ერთი დღე. გნებავთ, "
+"გააგრძელოთ?"
 
 #: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
@@ -55,6 +61,8 @@ msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
 msgstr ""
+"უფრო გრძელი პერიოდის მქონე კალენდრის შექმნას ძალიან ბევრი ადგილი დასჭირდება. "
+"გნებავთ, გააგრძელოთ?"
 
 #: CalendarTool.cpp:109
 #, kde-format
@@ -64,6 +72,10 @@ msgid ""
 "be required for the desired calendar will be selected so you can see what "
 "data would be overwritten."
 msgstr ""
+"ალაგი, სადაც კალენდარს სვამთ, ცარიელი *არ* იყო. მართლა გნებავთ გაგრძელება, "
+"რითიც არსებულ მონაცემებს თავზე გადააწერთ? თუ აირჩევთ არას, ალაგი, რომელიც "
+"საჭიროა სასურველი კალენდრისთვის, მოინიშნება, რომ დაინახოთ, რომელ მონაცემებს "
+"აწერთ თავზე."
 
 #: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"

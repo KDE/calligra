@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 16:53+0200\n"
+"PO-Revision-Date: 2024-05-01 06:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -31,12 +31,12 @@ msgstr "ArtisticTextShape"
 #: ArtisticTextShapeFactory.cpp:19
 #, kde-format
 msgid "A shape which shows a single text line"
-msgstr ""
+msgstr "ფორმა, რომელიც ერთ ტექსტის ხაზს აჩვენებს"
 
 #: ArtisticTextShapeFactory.cpp:29
 #, kde-format
 msgid "Artistic Text"
-msgstr ""
+msgstr "მხატვრული ტექსტი"
 
 #: ArtisticTextTool.cpp:72
 #, kde-format
@@ -71,47 +71,47 @@ msgstr "ქვედა ხაზზე"
 #: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
-msgstr ""
+msgstr "მიმაგრება დასაწყისში"
 
 #: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
-msgstr ""
+msgstr "მიმაგრება შუაში"
 
 #: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
-msgstr ""
+msgstr "მიმაგრება ბოლოში"
 
 #: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
-msgstr ""
+msgstr "წკაპი კურსორის მდებარეობის შესაცვლელად."
 
 #: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
-msgstr ""
+msgstr "წკაპი ტექსტური ფორმის მოსანიშნად."
 
 #: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
-msgstr ""
+msgstr "ორმაგი წკაპი კონტურზე ტექსტის დასადებად."
 
 #: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
-msgstr ""
+msgstr "გადაათრიეთ ხელი დაწყების წანაცვლების შესაცვლელად."
 
 #: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
-msgstr ""
+msgstr "ჩასწორების დასასრულებლად Escape ღილაკს დააწექით."
 
 #: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
-msgstr ""
+msgstr "ჩასწორების დასასრულებლად Enter ღილაკს დააწექით."
 
 #: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
@@ -131,7 +131,7 @@ msgstr "ტექსტი ბილიკზე"
 #: ArtisticTextToolFactory.cpp:17
 #, kde-format
 msgid "Artistic text editing"
-msgstr ""
+msgstr "მხატვრული ტექსტის ჩასწორება"
 
 #: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -141,7 +141,7 @@ msgstr "ბილიკის მიმაგრება"
 #: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr ""
+msgstr "ტექსტის მიმაგრების შეცვლა"
 
 #: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"

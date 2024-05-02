@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-12-04 06:53+0100\n"
+"PO-Revision-Date: 2024-05-01 08:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:30
@@ -28,7 +28,7 @@ msgstr "ჩასწორების რეჟიმი"
 #: connectionTool/ConnectionPointWidget.ui:37
 #, kde-format
 msgid "Escape Direction"
-msgstr ""
+msgstr "შემოვლის მიმართულება"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:97
@@ -84,37 +84,37 @@ msgstr "ქვედა ნაპირზე სწორება"
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "შემოვლა ყველა მიმართულებით"
 
 #: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "შემოვლა ჰორიზონტალური მიმართულებებით"
 
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "შემოვლა ვერტიკალური მიმართულებებით"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "შემოვლა მარცხენა მიმართუებით"
 
 #: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "შემოვლა მარჯვენა მიმართულებით"
 
 #: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "შემოვლა ზედა მიმართულებით"
 
 #: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "შემოვლა ქვედა მიმართულებით"
 
 #: connectionTool/ConnectionTool.cpp:429
 msgctxt "(qtundo-format)"
@@ -124,17 +124,18 @@ msgstr "შეერთების შექმნა"
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Drag to edit connection."
-msgstr ""
+msgstr "გადაათრიეთ მიერთების ჩასასწორებლად."
 
 #: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr ""
+"ორმაგი წკაპი მიერთებისთვის ან დააწექით ღილაკს 'Delete', რომ წაშალოთ ის."
 
 #: connectionTool/ConnectionTool.cpp:774
 #, kde-format
 msgid "Click to edit connection points."
-msgstr ""
+msgstr "დააწკაპუნეთ მიერთები წერტილების ჩასასწორებლად."
 
 #: connectionTool/ConnectionTool.cpp:788
 #, kde-format
@@ -142,21 +143,24 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
+"გადაათრიეთ მიერთების წერტილის გადასატანად. ორმაგი წკაპი მიერთებაზე ან ღილაკი "
+"'Delete' მის წასაშლელად."
 
 #: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
+"ორმაგი წკაპი მიერთების წერტილზე ან დააწექით ღილაკს 'Delete', რომ წაშალოთ ის."
 
 #: connectionTool/ConnectionTool.cpp:792
 #, kde-format
 msgid "Double click to add connection point."
-msgstr ""
+msgstr "ორმაგი წკაპი მიერთების წერტილის დასამატებლად."
 
 #: connectionTool/ConnectionTool.cpp:795
 #, kde-format
 msgid "Drag to create new connection."
-msgstr ""
+msgstr "გადაათრიეთ ახალი მიერთების შესაქმნელად."
 
 #: connectionTool/ConnectionTool.cpp:823
 #, kde-format
@@ -171,12 +175,12 @@ msgstr "ხაზი"
 #: connectionTool/ConnectionTool.cpp:833
 #, kde-format
 msgid "Connection Point"
-msgstr ""
+msgstr "მიერთების წერტილი"
 
 #: connectionTool/ConnectionToolFactory.cpp:18
 #, kde-format
 msgid "Connect shapes"
-msgstr ""
+msgstr "ფორმების მიერთება"
 
 #: defaulttool/DefaultTool.cpp:219
 #, kde-format
@@ -206,7 +210,7 @@ msgstr "მარცხნივ სწორება"
 #: defaulttool/DefaultTool.cpp:243
 #, kde-format
 msgid "Horizontally Center"
-msgstr ""
+msgstr "ჰორიზონტალურად დაცენტრება"
 
 #: defaulttool/DefaultTool.cpp:247
 #, kde-format
@@ -221,7 +225,7 @@ msgstr "ზემოთ სწორება"
 #: defaulttool/DefaultTool.cpp:255
 #, kde-format
 msgid "Vertically Center"
-msgstr ""
+msgstr "ვერტიკალურად დაცენტრება"
 
 #: defaulttool/DefaultTool.cpp:259
 #, kde-format
@@ -241,34 +245,38 @@ msgstr "განჯგუფება"
 #: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
 #, kde-format
 msgid "Click and drag to move guide line."
-msgstr ""
+msgstr "წკაპი და გადათრევა მიმმართველის გადასატანად."
 
 #: defaulttool/DefaultTool.cpp:467
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
+"მარცხენა წკაპი შემოატრიალებს ცენტრის გარშემო, მარჯვენა კი გამოკვეთილი "
+"მდებარეობის გარშემო."
 
 #: defaulttool/DefaultTool.cpp:469
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr ""
+msgstr "წკაპი და გადათრევა მონიშნულის გასანძრევად."
 
 #: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "წკაპი და გადათრევა მონიშნულის ზომის შესაცვლელად."
 
 #: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "წკაპი და გადათრევა მონიშნულის გადასატანად."
 
 #: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"წკაპი და გადათრევა მონიშნულის ზომის შესაცვლელად. შუა წკაპი გამოკვეთილი "
+"მდებარეობის დასაყენებლად."
 
 #: defaulttool/DefaultTool.cpp:1043
 msgctxt "(qtundo-format)"
@@ -303,7 +311,7 @@ msgstr "ჩრდილი"
 #: defaulttool/DefaultToolFactory.cpp:17
 #, kde-format
 msgid "Shape handling"
-msgstr ""
+msgstr "ფორმების დამუშავება"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:97
 #: defaulttool/ShapeRotateStrategy.cpp:140
@@ -330,7 +338,7 @@ msgstr "მასშტაბირება"
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
-msgstr ""
+msgstr "გარდაქმნების ჩამოყრა"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
 #: defaulttool/DefaultToolTransformWidget.ui:25
@@ -378,7 +386,7 @@ msgstr "საწყისი ფარდობის შენარჩუნ�
 #: defaulttool/DefaultToolTransformWidget.ui:174
 #, kde-format
 msgid "Reset Transformations"
-msgstr ""
+msgstr "გარდაქმნების ჩამოყრა"
 
 #: defaulttool/DefaultToolWidget.cpp:217
 #: defaulttool/ShapeResizeStrategy.cpp:332
@@ -401,17 +409,17 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr ""
+msgstr "დააჭირეთ ALT-ს X ან Y მდებარეობის შესანარჩუნებლად."
 
 #: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "დააჭირეთ CTRL-ს ზომის ცენტრიდან შესაცვლელად."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "დააჭირეთ ALT-ს 45 გრადუსიანი ნაბიჯებით შესაბრუნებლად."
 
 #: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
@@ -421,27 +429,29 @@ msgstr "დახრა"
 #: guidestool/GuidesTool.cpp:133
 #, kde-format
 msgid "Double click to add guide line."
-msgstr ""
+msgstr "ორმაგი წკაპი მიმმართველი ხაზის დასამატებლად."
 
 #: guidestool/GuidesTool.cpp:136
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
+"წკაპი და გადათრევა მიმმართველი ხაზის გადასატანად. ორმაგი წკაპი მიმმართველი "
+"ხაზის წასაშლელად."
 
 #: guidestool/GuidesTool.cpp:373
 #, kde-format
 msgid "Guides Editor"
-msgstr ""
+msgstr "მიმმართველების რედაქტორი"
 
 #: guidestool/GuidesTool.cpp:379
 #, kde-format
 msgid "Guides Insertor"
-msgstr ""
+msgstr "მიმმართველების ჩამსმელი"
 
 #: guidestool/GuidesToolFactory.cpp:14
 #, kde-format
 msgid "Edit guidelines"
-msgstr ""
+msgstr "მიმმართველების რედაქტორი"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: guidestool/GuidesToolOptionWidget.cpp:18
@@ -485,31 +495,31 @@ msgstr "წაშლა"
 #: guidestool/InsertGuidesToolOptionWidget.ui:38
 #, kde-format
 msgid "Insert this number of horizontal equally spaced guides."
-msgstr ""
+msgstr "ამ რაოდენობის ჰორიზონტალურად ტოლად განაწილებული მიმმართველების ჩასმა."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:51
 #, kde-format
 msgid "Insert guides at the horizontal edges."
-msgstr ""
+msgstr "მიმმართველების ჩასმა ჰორიზონტალურ წიბოებთან."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:78
 #, kde-format
 msgid "Insert this number of vertical equally spaced guides."
-msgstr ""
+msgstr "ამ რაოდენობის ვერტიკალურად ტოლად განაწილებული მიმმართველების ჩასმა."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:91
 #, kde-format
 msgid "Insert guides at the vertical edges."
-msgstr ""
+msgstr "მიმმართველების ჩასმა ვერტიკალურ წიბოებთან."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:105
 #, kde-format
 msgid "Erase previous guides"
-msgstr ""
+msgstr "წინა მიმმართველების წაშლა"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_createButton)
 #: guidestool/InsertGuidesToolOptionWidget.ui:112

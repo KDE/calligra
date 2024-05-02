@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-09-23 16:31+0200\n"
+"PO-Revision-Date: 2024-05-01 06:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: Thesaurus.cpp:81
 #, kde-format
 msgid "(No match)"
-msgstr ""
+msgstr "(დამთხვევის გარეშე)"
 
 #: Thesaurus.cpp:91
 #, kde-format
@@ -94,7 +94,7 @@ msgstr "სიტყვის ჩანაცვლება"
 #: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
-msgstr ""
+msgstr "შესაბამისი სიტყვები - %1"
 
 #: Thesaurus.cpp:406
 #, kde-format
@@ -102,41 +102,43 @@ msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr ""
+"სინონიმების ლექსიკონის ფაილი '%1' ვერ ვიპოვე. გამოიყენეთ 'ენის შეცვლა...' "
+"სინონიმების ლექსიკონის ფაილის ასარჩევად."
 
 #: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr ""
+msgstr "<b>შეცდომა:</b> grep-ის შესრულება ჩავარდა."
 
 #: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
-msgstr ""
+msgstr "სინონიმები/ჰიპერნიმები - დალაგებულია სიხშირით"
 
 #: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-msgstr ""
+msgstr "სინონიმები - დალაგებულია მნიშვნელობის მსგავსებით (მხოლოდ, ზმნები)"
 
 #: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
-msgstr ""
+msgstr "ანტონიმები - საპირისპირო მნიშვნელობის მქონე სიტყვები"
 
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr ""
+msgstr "ჰიპონიმები - ...არის (დაახლ) %1"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr ""
+msgstr "მერონიმები - %1-ს აქვს ..."
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr ""
+msgstr "ჰოლონიმები - აქვს %1"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -146,32 +148,32 @@ msgstr "ატრიბუტები"
 #: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
-msgstr ""
+msgstr "იძულება (მხოლოდ, ზოგიერთი ზმნისთვის)"
 
 #: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
-msgstr ""
+msgstr "ზმნის ფორმები (მხოლოდ, ზოგიერთი ზმნებისთვის)"
 
 #: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
-msgstr ""
+msgstr "ზრდილობის & პოლისემების რაოდენობა"
 
 #: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
-msgstr ""
+msgstr "ზმნის ჯგუფები (გამოყენების მაგალითები)"
 
 #: Thesaurus.cpp:591
 #, kde-format
 msgid "List of Compound Words"
-msgstr ""
+msgstr "შედგენილი სიტყვების სია"
 
 #: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
-msgstr ""
+msgstr "გრძნობების მიმოხილვა"
 
 #: Thesaurus.cpp:621
 #, kde-format
@@ -182,8 +184,13 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
+"<b>შეცდომა:</b> ჩავარდა შესრულება WordNet-ის პროგრამისთვის 'wn'. თუ გნებავთ, "
+"WordNet გამოიყენოთ, ის ჯერ უნდა დააყენოთ თქვენს კომპიუტერზე და 'wn' თქვენს "
+"PATH-ში უნდა იყოს. WordNet-ის მიღება შეგიძლიათ ბმულიდან <a href=\"http://"
+"wordnet.princeton.edu/\">http://wordnet.princeton.edu/</a>. გახსოვდეთ, რომ "
+"WordNet-ს, მხოლოდ, ინგლისური ენის მხარდაჭერა გააჩნია."
 
 #: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
-msgstr ""
+msgstr "'%1'-სთვის დამთხვევის გარეშე."
