@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-04-30 16:40+0200\n"
+"PO-Revision-Date: 2024-05-02 09:37+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -266,7 +266,7 @@ msgstr "ფორმების გადალაგება"
 #: flake/commands/KoShapeRunAroundCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr ""
+msgstr "ფორმის შემოხვევის შეცვლა"
 
 #: flake/commands/KoShapeShadowCommand.cpp:57
 #: flake/commands/KoShapeShadowCommand.cpp:74
@@ -552,6 +552,7 @@ msgstr "კონტროლის წერტილის გადასა�
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
+"გადაათრიეთ წერტილის გადასატანად. Shift+ წკაპი წერტილის ტიპის შესაცვლელად."
 
 #: flake/tools/KoPathTool.cpp:588
 #, kde-format
@@ -839,7 +840,7 @@ msgstr ""
 #: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename to write profiling information into."
-msgstr ""
+msgstr "ფაილის სახელი პროფილირების ინფორმაციის ჩასაწერად."
 
 #: main/KoApplication.cpp:203
 #, kde-format
@@ -912,7 +913,7 @@ msgstr "შემდეგი ავტომატურად შენახ�
 #: main/KoDetailsPaneBase.ui:94
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr ""
+msgstr "ამ ნიმუშის ყოველთვის გამოყენება აპლიკაციის გაშვებისას"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1143,7 +1144,7 @@ msgstr ""
 #: main/KoDocument.cpp:1699
 #, kde-format
 msgid "Could not read the beginning of the file."
-msgstr ""
+msgstr "ფაილის დასაწყისის წაკითხვა შეუძლებელია."
 
 #: main/KoDocument.cpp:1730
 #, kde-format
