@@ -2,7 +2,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Mickael Sibelle <kimael@gmail.com>, 2009, 2010.
-# Xavier Besnard <xavier.besnard@kde.org>, 2013.
+# SPDX-FileCopyrightText: 2013, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Sebastien Renard <renard@kde.org>, 2015.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 #
@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: kocolorspaces\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2018-07-13 14:59+0800\n"
-"Last-Translator: Simon Depiets <sdepiets@gmail.com>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-04-26 16:57+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -260,17 +260,17 @@ msgstr "Cr"
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:74
 #, kde-format
 msgid "YCBCR (32-bit float/channel)"
-msgstr "YCBCR (flottant sur 32 bits / canal)"
+msgstr "YCbCr (flottant sur 32 bits / canal)"
 
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:68
 #, kde-format
 msgid "YCBCR (16-bit integer/channel)"
-msgstr "YCBCR (entier sur 16 bits / canal)"
+msgstr "YCbCr (entier sur 16 bits / canal)"
 
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:68
 #, kde-format
 msgid "YCBCR (8-bit integer/channel)"
-msgstr "YCBCR (entier sur 8 bits / canal)"
+msgstr "YCbCr (entier sur 8 bits / canal)"
 
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:21
 #, kde-format
@@ -421,17 +421,17 @@ msgstr "Histogramme « XYZF32 »"
 #: lcms2/LcmsEnginePlugin.cpp:263
 #, kde-format
 msgid "YCBCR8 Histogram"
-msgstr "Histogramme « YCBCR8 »"
+msgstr "Histogramme « YCbCr8 »"
 
 #: lcms2/LcmsEnginePlugin.cpp:267
 #, kde-format
 msgid "YCBCR16 Histogram"
-msgstr "Histogramme « YCBCR16 »"
+msgstr "Histogramme « YCbCr16 »"
 
 #: lcms2/LcmsEnginePlugin.cpp:271
 #, kde-format
 msgid "YCBCRF32 Histogram"
-msgstr "Histogramme « YCBCRF32 »"
+msgstr "Histogramme « YCbCrF32 »"
 
 #, fuzzy
 #~| msgid "Cyan"

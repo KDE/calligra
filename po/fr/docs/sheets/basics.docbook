@@ -577,15 +577,15 @@
 > 
 <para
 >Le tri est fait d'une manière alphanumérique et est sensible à la casse, les nombres venant avant les majuscules, qui viennent avant les lettres minuscules, de telle manière que les cellules qui contiennent les entrées <userinput
->Cat</userinput
+>Col</userinput
 >, <userinput
->bar</userinput
+>barre</userinput
 >, <userinput
 >77</userinput
 > et <userinput
 >Bat</userinput
 > seront triées dans l'ordre suivant : <emphasis
->77 Bat Cat bar</emphasis
+>77 Bat Col barre</emphasis
 >.</para>
 <!-- Obsolete, AFAICT (Phil)
 <para
@@ -693,7 +693,7 @@ selected area. For more complex sorting select <menuchoice
 <varlistentry>
 <term
 ><guilabel
->CountA</guilabel
+>COUNTA</guilabel
 ></term>
 <listitem
 ><para

@@ -1626,7 +1626,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DAVERAGE(Base_de_données; "en-tête"; Conditions)</para
+>DAVERAGE(Base-de-données; « En-tête »; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -1666,7 +1666,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->DAVERAGE(A1:C5; "Salaire"; A9:A11)</para
+>DAVERAGE(A1:C5; « Salaire »; A9:A11)</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -1693,7 +1693,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DCOUNT(Base_de_données; "en-tête"; Conditions)</para
+>DCOUNT(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -1772,7 +1772,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DCOUNTA(Base_de_données; "en-tête"; Conditions)</para
+>DCOUNTA(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -1851,7 +1851,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DGET(Base_de_données; "en-tête"; Conditions)</para
+>DGET(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -1918,7 +1918,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DMAX(Base_de_données; "en-tête"; Conditions)</para
+>DMAX(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -1997,7 +1997,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DMIN(Base_de_données; "en-tête"; Conditions)</para
+>DMIN(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2076,7 +2076,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DPRODUCT(Base_de_données; "en-tête"; Conditions)</para
+>DPRODUCT(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2143,7 +2143,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DSTDEV(Base_de_données; "en-tête"; Conditions)</para
+>DSTDEV(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2222,7 +2222,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DSTDEVP(Base_de_données; "en-tête"; Conditions)</para
+>DSTDEVP(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2301,7 +2301,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DSUM(Base_de_données; "en-tête"; Conditions)</para
+>DSUM(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2368,7 +2368,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DVAR(Base_de_données; "en-tête"; Conditions)</para
+>DVAR(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -2447,7 +2447,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DVARP(Base_de_données; "en-tête"; Conditions)</para
+>DVARP(Base-de-données; "en-tête"; Conditions)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -4971,7 +4971,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->WEEKNUM(A1; 2) renvoie 10 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Monday (10)</para
+>WEEKNUM(A1; 2) renvoie 10 lorsque A1 est « 9 mars 2008 ». Nombre de la semaine dans l’année, avec une semaine commençant le Lundi (10)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -5273,7 +5273,7 @@ all changes will be overwritten on the next script run
 <para
 >La fonction YEARFRAC() renvoie le nombre de jours complets entre la date de début et la date de fin en fonction de la base.</para>
 <para
->Base doit être une des valeurs suivantes : 0 = 30/360 US, 1 = Actual/actual, 2 = Actual/360, 3 = Actual/365, 4 = European 30/360</para>
+>Base doit être une des valeurs suivantes : 0 = 30 / 360 US, 1 = Actuel / actuel, 2 = Actuel / 360, 3 = Actuel / 365, 4 = Européen 30 / 360</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -5290,7 +5290,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->FRACTION.ANNEE (date début ; date fin ; base)	</para
+>YEARFRAC (date début ; date fin ; base)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -5332,7 +5332,7 @@ all changes will be overwritten on the next script run
 <title
 >YEARS</title>
 <para
->La fonction YEARS() renvoie la différence entre deux dates en années. Le troisième paramètre indique le mode de calcul : si le mode est 0, YEARS() renvoie le nombre maximal possible d'années entre ces jours. Si le mode est 1, elle ne renvoie que les années entières, en commençant par le 1er janvier et en terminant par le 31 décembre.</para>
+>La fonction YEARS() renvoie la différence entre deux dates en années. Le troisième paramètre indique le mode de calcul : si le mode est 0, YEARS() renvoie le nombre maximal possible d'années entre ces jours. Si le mode est 1, elle ne renvoie que les années entières, en commençant par le 1er Janvier et en terminant par le 31 Décembre.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -5429,7 +5429,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->BASE(nombre;base;prec)</para
+>BASE(nombre ; base ; précision)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -5456,7 +5456,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->LongueurMini</seg
+>Longueur-Mini</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -5905,7 +5905,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -5974,7 +5974,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -6005,7 +6005,7 @@ all changes will be overwritten on the next script run
 <title
 >COMPLEX</title>
 <para
->COMPLEX(réel,imag) renvoie un nombre complexe de la forme x+yi.</para>
+>COMPLEX (réel, imaginaire) renvoie un nombre complexe de la forme x + i* y.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -6022,7 +6022,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->COMPLEX(réel;imag)</para
+>COMPLEX(réel ; imaginaire)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -6056,7 +6056,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->COMPLEX(1,2;3,4) renvoie "1,2+3,4i"</para
+>COMPLEX(1,2 ; 3,4) renvoie « 1,2 +i*3,4 »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -6064,7 +6064,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->COMPLEX(0;-1) renvoie "-i"</para
+>COMPLEX(0;-1) renvoie « -i »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -6078,7 +6078,7 @@ all changes will be overwritten on the next script run
 <para
 >Unités de masse gérées : g (gramme), sg (pieces), lbm (pound=livre), u (masse atomique), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</para>
 <para
->Unités de distance gérées : m (mètre), in (inch=pouce), ft (feet=pied), mi (mile), Nmi (mile nautique), ang (Angstrom), parse, lightyear (année lumière).</para>
+>Unités de distance gérées : m (mètre), in (inch=pouce), ft (feet=pied), mi (mile), Nmi (mile nautique), Ang (Angstrom), parse, lightyear (année lumière).</para>
 <para
 >Unités de pression gérées : Pa (Pascal), atm (atmosphère), mmHg (mm de mercure), psi, Torr.</para>
 <para
@@ -6088,7 +6088,7 @@ all changes will be overwritten on the next script run
 <para
 >Unités de puissance gérées : W (Watt), HP (horsepower=cheval-vapeur), PS (Pferdestaerke=cheval-vapeur).</para>
 <para
->Unités de magnétisme gérées : T (Tesla), ga (Gauss).</para>
+>Unités de magnétisme gérées : T (Tesla), Ga (Gauss).</para>
 <para
 >Unités de température gérées : C (Celsius), F (Fahrenheit), K (Kelvin).</para>
 <para
@@ -6219,7 +6219,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -6288,7 +6288,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -6357,7 +6357,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -6885,7 +6885,7 @@ all changes will be overwritten on the next script run
 <title
 >IMABS</title>
 <para
->IMABS(nombre complexe) renvoie la norme d'un nombre complexe de forme x+yi.</para>
+>IMABS(nombre complexe) renvoie la norme d'un nombre complexe de forme x + i*y.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -6930,7 +6930,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMABS("1,2+5i") renvoie 5,1419</para
+>IMABS(« 1,2 + i*5 ») renvoie 5,1419</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -6938,7 +6938,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMABS("-i") renvoie 1</para
+>IMABS(« -i ») renvoie 1</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -6946,7 +6946,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMABS("12") renvoie 12</para
+>IMABS(« 12 ») renvoie 12</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7001,7 +7001,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMAGINARY("1,2+3,4i") renvoie 3,4</para
+>IMAGINARY(« 1,2 + i*3,4 ») renvoie 3,4</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7009,7 +7009,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMAGINARY("1,2") renvoie 0 </para
+>IMAGINARY(« 1,2 ») renvoie 0 </para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7019,7 +7019,7 @@ all changes will be overwritten on the next script run
 <title
 >IMARGUMENT</title>
 <para
->IMARGUMENT(nombre complexe) renvoie l'argument d'un nombre complexe de forme x+yi.</para>
+>IMARGUMENT(nombre complexe) renvoie l'argument d'un nombre complexe de forme x + i*y.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7064,7 +7064,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMARGUMENT("1,2+5i") renvoie 0,6072</para
+>IMARGUMENT(« 1,2 + i*5 ») renvoie 0,6072</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7072,7 +7072,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMARGUMENT("-i") renvoie -1.57079633 </para
+>IMARGUMENT(« -i ») renvoie -1.57079633 </para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7080,7 +7080,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMARGUMENT("12") renvoie "#Div/0"</para
+>IMARGUMENT(« 12 ») renvoie « #Div / 0 »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7090,7 +7090,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCONJUGATE</title>
 <para
->IMCONJUGATE(nombre complexe) renvoie le conjugué d'un nombre complexe de forme x+yi.</para>
+>IMCONJUGATE(nombre complexe) renvoie le conjugué d'un nombre complexe de forme x + i*y.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7135,7 +7135,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCONJUGATE("1,2+5i") renvoie "1,2-5i"</para
+>IMCONJUGATE(« 1,2 + i*5 ») renvoie « i*1,2-5 »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7143,7 +7143,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCONJUGATE("-i") renvoie "i"</para
+>IMCONJUGATE(« -i ») renvoie « i »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7151,7 +7151,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCONJUGATE("12") renvoie "12"</para
+>IMCONJUGATE(« 12 ») renvoie « 12 »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7206,7 +7206,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCOS("1+i") renvoie "0,83373-0,988898i"</para
+>IMCOS(« 1 + i ») renvoie « 0,83373-0,988898i »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7214,7 +7214,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCOS("12i") renvoie 81 377.4 </para
+>IMCOS(« i*12 ») renvoie 81 377.4 </para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7224,7 +7224,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCOSH</title>
 <para
->IMCOSh(chaîne) renvoie le cosinus hyperbolique d'un nombre complexe.</para>
+>IMCOSH(chaîne) renvoie le cosinus hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7270,7 +7270,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCOSH("1+i") renvoie "0.83373+0.988898i"</para
+>IMCOSH(« 1 + i ») renvoie « 0.83373 + i*0.988898 »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7278,7 +7278,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCOSH("12i") renvoie 0.84358 </para
+>IMCOSH(« i*12 ») renvoie 0.84358 </para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7333,7 +7333,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCOT("1+i") renvoie « 0.21762-0.86801i »</para
+>IMCOT(« 1 + i ») renvoie « 0.21762-0.86801i »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7388,7 +7388,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCSC("1+i") renvoie « 0.62151-0.30393i »</para
+>IMCSC(« 1+i ») renvoie « 0.62151-0.30393i »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7443,7 +7443,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMCSCH("1+i") renvoie « 0.30393-i0.62151 »</para
+>IMCSCH(« 1 + i ») renvoie « 0.30393-i0.62151 »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -7453,7 +7453,7 @@ all changes will be overwritten on the next script run
 <title
 >IMDIV</title>
 <para
->IMDIV() renvoie la division de plusieurs nombres complexes de forme x+iy.</para>
+>IMDIV() renvoie la division de plusieurs nombres complexes de forme x + i*y.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7470,7 +7470,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMDIV(valeur;valeur;...)</para
+>IMDIV(valeur ; valeur ; ...)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7522,7 +7522,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->IMDIV(1,2;"3,4+5i") renvoie "0,111597-0,164114i"</para
+>IMDIV(1,2 ; « 3,4 + i*5 ») renvoie « 0,111597 - i*0,164114 »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8632,7 +8632,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -8765,7 +8765,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->La longueur minimun de la sortie</seg
+>La longueur minimale de la sortie</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem
@@ -9012,7 +9012,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->AMORDEGRC( Coût; DateAchat; DatefinPremièrePériode; résidu; période; taux; base)</para
+>AMORDEGRC( Coût; Date-Achat; Date-fin-Première-Période; résidu; période; taux; base)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -9103,7 +9103,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->AMORLINC( Coût; DateAchat; DatefinPremièrePériode; résidu; période; taux; base)</para
+>AMORLINC( Coût; Date-Achat; Date-fin-Première-Période; résidu; période; taux; base)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -9194,7 +9194,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->COMPOUND(initial ; intérêt ; périodes ; périodes_par_année)</para
+>COMPOUND(initial ; intérêt ; périodes ; périodes-par-année)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -10131,7 +10131,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->DURATION_ADD(réglement; début, coupon; échéance, rendement; fréquence; base)</para
+>DURATION_ADD(règlement; début, coupon; échéance, rendement; fréquence; base)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -11047,7 +11047,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->LEVEL_COUPON(valeur faciale;taux annueldu coupon;années;taux du marché)</para
+>LEVEL_COUPON(valeur faciale;taux annuel du coupon;années;taux du marché)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -11577,7 +11577,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->ODDLPRICE( règlement; échéance; dernier; taux ; rendementannuel; remise; fréquence [; Base = 0 ] )</para
+>ODDLPRICE( règlement; échéance; dernier; taux ; rendement-annuel; remise; fréquence [; Base = 0 ] )</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -11783,7 +11783,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->PMT(taux ; nper ; pv [; fv = 0 [; type = 0 ]] )</para
+>PMT(taux ; NPer ; pv [; fv = 0 [; type = 0 ]] )</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -12101,7 +12101,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->PV(valeur_future ; intérêt ; périodes)</para
+>PV(valeur-future ; intérêt ; périodes)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -12151,7 +12151,7 @@ all changes will be overwritten on the next script run
 <title
 >PV_ANNUITY</title>
 <para
->La fonction PV_ANNUITY() renvoie la valeur présente d'une annuité ou flux de paiements. Par exemple : un ticket de loterie d'un million d'euros qui paie 50 000 € par an pendant 20 ans, avec un intérêt de 5 %, vaut actuellement PV_annuity(50000 ; 0,05 ; 20), soit 623 111 €. Cette fonction suppose que les paiements sont effectués à la fin de chaque période.</para>
+>La fonction PV_ANNUITY() renvoie la valeur présente d'une annuité ou flux de paiements. Par exemple : un ticket de loterie d'un million d'euros qui paie 50 000 € par an pendant 20 ans, avec un intérêt de 5 %, vaut actuellement PV_ANNUITY(50000 ; 0,05 ; 20), soit 623 111 €. Cette fonction suppose que les paiements sont effectués à la fin de chaque période.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -12235,7 +12235,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->RATE(nper;pmt;pv;fv;type;guess)</para
+>RATE(NPer ; pmt ; pv ; fv ; type ; guess)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -13034,7 +13034,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->XIRR(B1:B4;C1:C4) suppose que B1:B4 contienne -20000, 4000, 12000, 8000 pendant que C1:C4 contien "=DATE(2000;1;1)", "=DATE(2000;6;1)", "=DATE(2000;12;30)", "=DATE(2001;3;1)" renvoie 0.2115964</para
+>XIRR(B1:B4;C1:C4) suppose que B1:B4 contienne -20000, 4000, 12000, 8000 pendant que C1:C4 contient "=DATE(2000;1;1)", "=DATE(2000;6;1)", "=DATE(2000;12;30)", "=DATE(2001;3;1)" renvoie 0.2115964</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -13537,7 +13537,7 @@ all changes will be overwritten on the next script run
 <title
 >INFO</title>
 <para
->La fonction INFO() renvoie des informations sur l'environnement courant. Le type de paramètre spécifie quel type d'information vous voulez recevoir. C'est l'un parmi les suivants : "directory" renvoie l'emplacement du dossier courant, "numfile" renvoie le nombre de documents actifs, "release" renvoie la version de &sheets; sous forme de texte, "recalc" renvoie le mode courant de recalcul : "Automatic" ou "Manual", "system » renvoie le nom de l'environnement d'exploitation, "osversion" renvoie le système d'exploitation courant.</para>
+>La fonction INFO() renvoie des informations sur l'environnement courant. Le type de paramètre spécifie quel type d'information vous voulez recevoir. C'est l'un parmi les suivants : « directory » renvoie l'emplacement du dossier courant, « numfile » renvoie le nombre de documents actifs, « release » renvoie la version de &sheets; sous forme de texte, « recalc » renvoie le mode courant de recalcul : « Automatique » ou « Manuel », « Système » renvoie le nom de l'environnement d'exploitation, « osversion » renvoie le système d'exploitation courant.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -14967,7 +14967,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IF(condition;si_vrai;si_faux)</para
+>IF(condition;si-vrai;si-faux)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -14988,13 +14988,13 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Si_vrai</seg
+>Si Vrai</seg
 ><seg
 >N'importe quel type de valeur</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Si_faux</seg
+>Si Faux</seg
 ><seg
 >N'importe quel type de valeur</seg
 ></seglistitem
@@ -15622,7 +15622,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->ADDRESS(ligne; col; absolue; style; nom_de_feuille)</para
+>ADDRESS(ligne; col; absolue; style; nom-de-feuille)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -16129,13 +16129,13 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Row</seg
+>Ligne</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Méthode de tri(optionnel)</seg
+>Méthode de tri (Optionnel)</seg
 ><seg
 >Une valeur de vérité (VRAI ou FAUX)</seg
 ></seglistitem
@@ -16188,7 +16188,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Row</seg
+>Ligne</seg
 ><seg
 >Un nombre entier (comme 1, 132, 2344)</seg
 ></seglistitem>
@@ -16510,7 +16510,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->OFFSET(Référence reference; entier offsetLigne; entier offsetColonne; entier nouvelleHauteur; entier nouvelleLargeur)</para
+>OFFSET(Référence reference; entier offsetLigne; entier offsetColonne; entier nouvelle-Hauteur; entier nouvelle-Largeur)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -16767,7 +16767,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SHEET(Sheet1!C7) renvoie 1</para
+>SHEET(Feuille1!C7) renvoie 1</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -16775,7 +16775,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SHEET(Sheet2!C7) renvoie 2</para
+>SHEET(Feuille2!C7) renvoie 2</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -16884,7 +16884,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Méthode de tri(optionnel)</seg
+>Méthode de tri (Optionnel)</seg
 ><seg
 >Une valeur de vérité (VRAI ou FAUX)</seg
 ></seglistitem
@@ -17678,7 +17678,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->EPS() est si petit que &sheets; affiche 1+eps() comme 1</para
+>EPS() est si petit que &sheets; affiche 1 + EPS() comme 1</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -18005,7 +18005,7 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Nième terme</seg
+>N-ième terme</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -18315,7 +18315,7 @@ all changes will be overwritten on the next script run
 <title
 >G_PRODUCT</title>
 <para
->La fonction G_PRODUCT() est identique à KPRODUCT. Elle est fournie pour la compatibilité avec Gnumeric.</para>
+>La fonction G_PRODUCT() est identique à KPRODUCT. Elle est fournie pour la compatibilité avec GNUmeric.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -21082,7 +21082,7 @@ all changes will be overwritten on the next script run
 <title
 >ROOTN</title>
 <para
->La fonction ROOTN() renvoie la racine nième positive de x.</para>
+>La fonction ROOTN() renvoie la racine n-ième positive de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -21514,7 +21514,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->M l'incrément avec lequel augmenter N pour chaque terme ddans les séries</seg
+>M, l'incrément avec lequel augmenter N pour chaque terme dans les séries</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
@@ -22069,7 +22069,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SUMIF(rang_vérification ; critère ; rang_addition)</para
+>SUMIF(rang-vérification ; critère ; rang-addition)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22593,7 +22593,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->AVERAGEA(11,4;17,3;"dutexte";25,9;40,1) vaut 18,94</para
+>AVERAGEA(11,4 ; 17,3 ; « du-texte » ; 25,9 ; 40,1) vaut 18,94</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -22605,7 +22605,7 @@ all changes will be overwritten on the next script run
 <para
 >La fonction BETADIST() renvoie la fonction de densité de probabilité cumulative beta.</para>
 <para
->Les troisième et quatrièmeparamètres sont optionnels. Ils précisent les limites basse et haute, sinon, les valeurs par défaut sont respectivement 0,0 et 1,0.</para>
+>Les troisième et quatrième paramètres sont optionnels. Ils précisent les limites basse et haute, sinon, les valeurs par défaut sont respectivement 0,0 et 1,0.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -22661,7 +22661,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->End</seg
+>Fin</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
@@ -22756,7 +22756,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->End</seg
+>Fin</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -22806,7 +22806,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->BINO(essais;succès;prob_de_succès)</para
+>BINO(essais ; succès ; probabilité-de-succès)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22875,7 +22875,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->CHIDIST(nombre;degrés_liberté)</para
+>CHIDIST(nombre ; degrés-liberté)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22909,7 +22909,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->CHIDIST(13,27;5) renvoie 0,021</para
+>CHIDIST(13,27 ; 5) renvoie 0,021</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -22988,7 +22988,7 @@ all changes will be overwritten on the next script run
 <title
 >COMBINA</title>
 <para
->La fonction COMBINA() calcule le nombre de combinaisonspossibles. Le premier paramètre est le nombre total d'éléments. Le deuxième est le nombre d'éléments à choisir. Ces deux paramètres doivent être positifs, et le premier paramètre ne doit pas être plus petit que le second, sinon la fonction renvoie une erreur.</para>
+>La fonction COMBINA() calcule le nombre de combinaisons possibles. Le premier paramètre est le nombre total d'éléments. Le deuxième est le nombre d'éléments à choisir. Ces deux paramètres doivent être positifs, et le premier paramètre ne doit pas être plus petit que le second, sinon la fonction renvoie une erreur.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -23059,7 +23059,7 @@ all changes will be overwritten on the next script run
 <para
 >La fonction CONFIDENCE() renvoie l'intervalle de confiance pour une population moyenne.</para>
 <para
->Le paramètre alpha doit se situer entre 0 et 1 (non inclus), "stddev" doit être positif et "taille" doit être supérieur ou égal à 1.</para>
+>Le paramètre « alpha » doit se situer entre 0 et 1 (non inclus), « stddev » doit être positif et « taille » doit être supérieur ou égal à 1.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -23076,7 +23076,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->CONFIDENCE(alpha;stddev;taille)</para
+>CONFIDENCE(alpha ; stddev ; taille)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -23116,7 +23116,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->CONFIDENCE(0,05;1,5;100) vaut 0,294 059</para
+>CONFIDENCE(0,05 ; 1,5 ; 100) vaut 0,294 059</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -24013,7 +24013,7 @@ all changes will be overwritten on the next script run
 <title
 >GEOMEAN</title>
 <para
->La fonction GEOMEAN() renvoie la moyenne géométrique des arguments donnés. C'est égal à la racine nième du produit des termes.</para>
+>La fonction GEOMEAN() renvoie la moyenne géométrique des arguments donnés. C'est égal à la racine n-ième du produit des termes.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -24503,7 +24503,7 @@ all changes will be overwritten on the next script run
 <title
 >KURTP</title>
 <para
->La fonction KURTP() calcule une population kurtosis d'un lot de données. Vous devez fournir au moins 4 valeurs, sinon, une erreur sera retournée.</para>
+>La fonction KURTP() calcule une population de Kurtosis sur un lot de données. Vous devez fournir au moins 4 valeurs, sinon, une erreur sera retournée.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -24602,7 +24602,7 @@ all changes will be overwritten on the next script run
 <title
 >gros</title>
 <para
->La fonction LARGE() renvoie la k-ème plus grande valeur d'un lot de données.</para>
+>La fonction LARGE() renvoie la k-ième plus grande valeur d'un lot de données.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -24731,7 +24731,7 @@ all changes will be overwritten on the next script run
 <title
 >LOGINV</title>
 <para
->La fonction LOGINV() renvoie l'inverse de la distribution cumulative lognormale.</para>
+>La fonction LOGINV() renvoie l'inverse de la distribution cumulative « Lognormal ».</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -24798,7 +24798,7 @@ all changes will be overwritten on the next script run
 <title
 >LOGNORMDIST</title>
 <para
->La fonction LOGNORMDIST() renvoie la distribution cumulative lognormale.</para>
+>La fonction LOGNORMDIST() renvoie la distribution cumulative « Lognormal ».</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -24815,7 +24815,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->LOGNORMDIST(Nombre;MV;STD)</para
+>LOGNORMDIST(Nombre ; MV ; STD)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -25042,7 +25042,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->NEGBINOMDIST(essais;succès;prob_de_succès)</para
+>NEGBINOMDIST(essais ; succès ; probabilité-de-succès)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -25432,7 +25432,7 @@ all changes will be overwritten on the next script run
 <title
 >PERCENTILE</title>
 <para
->La fonction PERCENTILE() renvoie le simple pourcentage x-e de la valeur des données. Un pourcentage renvoie la valeur complète pour une série de données qui vont de la plus petite (alpha=0) à la plus grande (alpha=1) d'une série de données. Pour alpha=25 %, le pourcentage signifie le premier quart ; alpha=50 % est le MEDIAN. Les ccellules vides sont considérées comme 0, et les cellules avec un texte sont ignorées.</para>
+>La fonction PERCENTILE() renvoie le simple pourcentage x-e de la valeur des données. Un pourcentage renvoie la valeur complète pour une série de données qui vont de la plus petite (alpha=0) à la plus grande (alpha=1) d'une série de données. Pour alpha=25 %, le pourcentage signifie le premier quart ; alpha=50 % est le MEDIAN. Les cellules vides sont considérées comme valant 0, et les cellules avec un texte sont ignorées.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -25842,9 +25842,9 @@ all changes will be overwritten on the next script run
 <title
 >RSQ</title>
 <para
->La fonction RSQ() renvoie le carré du coefficient de corrélation du moment de production Pearson au travers des points de données dans yConnu et xConnu. </para>
+>La fonction RSQ() renvoie le carré du coefficient de corrélation du moment de production de Pearson au travers des points de données dans les x et y connus. </para>
 <para
->Si "arrayY" et "arrayX" sont vides ou ont un nombre différent de points de données, alors #N/A est renvoyé.</para>
+>Si « arrayY » et « arrayX » sont vides ou ont un nombre différent de points de données, alors la valeur « #N / A » est renvoyée.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -26067,7 +26067,7 @@ all changes will be overwritten on the next script run
 <title
 >SLOPE</title>
 <para
->La fonction SLOPE() calcule le slope d'une ligne de régression linéaire.</para>
+>La fonction SLOPE() calcule la pente d'une ligne de régression linéaire.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -26120,7 +26120,7 @@ all changes will be overwritten on the next script run
 <title
 >SMALL</title>
 <para
->La fonction SMALL() renvoie la k-ème plus petite valeur d'un lot de données.</para>
+>La fonction SMALL() renvoie la k-ième plus petite valeur d'un lot de données.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -26995,7 +26995,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->TDIST(nombre;degrés_liberté;mode)</para
+>TDIST(nombre ; degrés-liberté ; mode)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27047,7 +27047,7 @@ all changes will be overwritten on the next script run
 <para
 >La fonction TREND() calcule une séquence de valeurs fondées sur une régression linéaire de valeurs connues paires.</para>
 <para
->Contraintes: COUNT(YConnu) = COUNT(XConnu).</para>
+>Contraintes: COUNT(Y-Connu) = COUNT(X-Connu).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -27064,7 +27064,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->TREND(YConnu[;knownX[;nouveauX[;allowOffset = VRAI]]])</para
+>TREND(Y-Connu [ ;X-connu[ ; nouveau-X[ ; allowOffset = VRAI]]])</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27079,25 +27079,25 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->YConnu</seg
+>Y-Connu</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
 <seglistitem
 ><seg
->XConnu</seg
+>X-Connu</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Nombreséquence du nouveauX</seg
+>Séquence de nombres du nouveau X</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Offsetpermis</seg
+>allowOffset</seg
 ><seg
 >Une valeur de vérité (VRAI ou FAUX)</seg
 ></seglistitem
@@ -27129,7 +27129,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->TRIMMEAN(dataSet; cutOffFraction)</para
+>TRIMMEAN(dataSet ;  cutOffFraction)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27144,13 +27144,13 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->SetDonnées</seg
+>Ensemble de données</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem>
 <seglistitem
 ><seg
->ArrêtFraction</seg
+>cutOffFraction</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -27917,7 +27917,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->ZTEST(x; moyenne; ÉcartType)</para
+>ZTEST(x ; moyenne ; Écart-Type)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27944,7 +27944,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->ÉcartType</seg
+>Écart-Type</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -28068,7 +28068,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->BAHTTEXT(23) renvoie "ยสบสามบาทถวน"</para
+>BAHTTEXT(23) renvoie « ยสบสามบาทถวน »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -28191,7 +28191,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->CLEAN(AsciiToChar(7) + "HELLO") renvoie "HELLO"</para
+>CLEAN(ASCIITOCHAR (7) + « HELLO ») renvoie « HELLO »</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -28325,7 +28325,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->COMPARE("Calligra";"Calligra";true) renvoie 0</para
+>COMPARE(« Calligra »;« Calligra » ; True) renvoie 0</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28592,9 +28592,9 @@ all changes will be overwritten on the next script run
 <title
 >FIND</title>
 <para
->La fonction FIND() cherche une chaîne de texte (texte_cherché) dans une autre chaîne de texte (dans_le_texte) et renvoie le numéro du point de départ du "texte_cherché", depuis le caractère le plus à gauche de "dans_le_texte".</para>
+>La fonction FIND() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le numéro du point de départ du "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
 <para
->Le paramètre "num_départ" spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 1. Si "num_départ » est omis, on suppose qu'il vaut 1.</para>
+>Le paramètre « numéro-départ » spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 1. Si « numéro-départ »» est omis, on suppose qu'il vaut 1.</para>
 <para
 >Vous pouvez aussi utiliser la fonction "SEARCH", mais contrairement à elle, "FIND" tient compte de la casse et n'autorise pas de jokers.</para>
 <para
@@ -28613,7 +28613,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->FIND(texte_cherché;dans_le_texte;num_départ)</para
+>FIND(texte-cherché ; dans-le-texte ; numéro-départ)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28634,7 +28634,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Le texte qui peut contenir "texte_cherché"</seg
+>Le texte qui peut contenir « texte-cherché »</seg
 ><seg
 >Texte</seg
 ></seglistitem>
@@ -28669,7 +28669,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->FIND("a";"Sheets in Calligra";4) renvoie 12</para
+>FIND("a";"Feuille de Calligra";4) renvoie 12</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28707,9 +28707,9 @@ all changes will be overwritten on the next script run
 <title
 >FINDB</title>
 <para
->La fonction FINDB() cherche une chaîne de texte (texte_cherché) dans une autre chaîne de texte (dans_le_texte) et renvoie le numéro du point de départ du « texte_cherché », depuis le caractère le plus à gauche de « dans_le_texte » en utilisant la position des octets.</para>
+>La fonction FINDB() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le numéro du point de départ du « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant la position des octets.</para>
 <para
->Le paramètre PositionOctet spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 2. Si « num_départ » est omis, on suppose qu'il vaut 2.</para>
+>Le paramètre Position-Octet spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 2. Si « numéro-départ » est omis, on suppose qu'il vaut 2.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28726,7 +28726,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->FINDB(texte_cherché;dans_le_texte;départ PositionOctet)</para
+>FINDB(texte-cherché;dans-le-texte;départ Position-Octet)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28747,7 +28747,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Le texte qui peut contenir "texte_cherché"</seg
+>Le texte qui peut contenir « texte-cherché »</seg
 ><seg
 >Texte</seg
 ></seglistitem>
@@ -28796,7 +28796,7 @@ all changes will be overwritten on the next script run
 <title
 >FIXED</title>
 <para
->La fonction FIXED() arrondit un nombre au nombre spécifié de décimales, formate le nombre en chaîne de format décimal et renvoie le résultat en texte. Si "Décimales" est négatif, le nombre est arrondi à gauche du séparateur décimal. Si vous omettez "Décimales", il est supposé valoir 2. Si le paramètre optionnel "Pas_de_séparateur" est "Vrai", le séparateur des milliers ne sera pas affiché.</para>
+>La fonction FIXED() arrondit un nombre au nombre spécifié de décimales, formate le nombre en chaîne de format décimal et renvoie le résultat en texte. Si « Décimales » est négatif, le nombre est arrondi à gauche du séparateur décimal. Si vous omettez « Décimales », il est supposé valoir 2. Si le paramètre optionnel « Aucun-séparateur » est « Vrai », le séparateur des milliers ne sera pas affiché.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28813,7 +28813,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->FIXED(nombre;décimales;pas_de_séparateur)</para
+>FIXED(nombre ; décimales ; Aucun-séparateur)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28840,7 +28840,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Pas_de_séparateur</seg
+>Aucun-séparateur</seg
 ><seg
 >Une valeur de vérité (VRAI ou FAUX)</seg
 ></seglistitem
@@ -29583,7 +29583,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->REGEXP(texte; exp_rationnelle; défaut; réf_arrière)</para
+>REGEXP(texte; expression-rationnelle; défaut; référence-arrière)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -29665,7 +29665,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->REGEXPRE(texte; exp_rationnelle; remplacement)</para
+>REGEXPRE(texte; expression-rationnelle; remplacement)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -29732,7 +29732,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->REPLACE(texte;position;longueur;nouveau_texte)</para
+>REPLACE(texte;position;longueur;nouveau-texte)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30029,7 +30029,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->RIGHT("HELLO";2) renvoie "lo"</para
+>RIGHT(« Référence » ;2) renvoie « ce »</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30156,7 +30156,7 @@ all changes will be overwritten on the next script run
 <title
 >ROT13</title>
 <para
->La fonction ROT13() chiffre le texte en remplaçant chaque lettre par celle qui se trouve 13 places plus loin dans l'alphabet. Si la 13ème position est au-delà de la lettre Z, on recommence à A (rotation).</para>
+>La fonction ROT13() chiffre le texte en remplaçant chaque lettre par celle qui se trouve 13 places plus loin dans l'alphabet. Si la 13-ième position est au-delà de la lettre Z, on recommence à A (rotation).</para>
 <para
 >En appliquant la fonction de chiffrement à nouveau, le texte résultant est le texte déchiffré.</para>
 <para
@@ -30221,11 +30221,11 @@ all changes will be overwritten on the next script run
 <title
 >SEARCH</title>
 <para
->La fonction SEARCH() cherche une chaîne de texte (texte_cherché) dans une autre chaîne de texte (dans_le_texte) et renvoie le nombre du point de démarrage de "texte_cherché", depuis le caractère le plus à gauche de "dans_le_texte".</para>
+>La fonction SEARCH() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le nombre du point de démarrage de "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
 <para
 >Vous pouvez utiliser les jokers, points d'interrogation (?) et astérisque (*). Un point d'interrogation correspond à un seul caractère, un astérisque à n'importe quelle séquence de caractères.</para>
 <para
->Le paramètre "num_début" spécifie le caractère où commencer la recherche. Le premier caractère est le numéro 1. Si "num_début" manque, il est supposé valoir 1. "SEARCH" ne distingue pas les majuscules des minuscules.</para>
+>Le paramètre "numéro-début" spécifie le caractère où commencer la recherche. Le premier caractère est le numéro 1. Si « numéro-début » manque, il est supposé valoir 1. "SEARCH" ne distingue pas les majuscules des minuscules.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30242,7 +30242,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SEARCH(texte_cherché;dans_le_texte;num_début)</para
+>SEARCH(texte-cherché;dans-le-texte;numéro-début)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30263,7 +30263,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Le texte qui peut contenir "texte_cherché"</seg
+>Le texte qui peut contenir « texte-cherché »</seg
 ><seg
 >Texte</seg
 ></seglistitem>
@@ -30282,7 +30282,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SEARCH("e";"Statements";6) renvoie 7</para
+>SEARCH("e";"Référence";5) renvoie 6</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30290,7 +30290,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SEARCH("margin";"Profit Margin") renvoie 8</para
+>SEARCH("marge" ; "Profit marge") renvoie 8</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30320,11 +30320,11 @@ all changes will be overwritten on the next script run
 <title
 >SEARCHB</title>
 <para
->La fonction SEARCHB() cherche une chaîne de texte (texte_cherché) dans une autre chaîne de texte (dans_le_texte) et renvoie le nombre du point de démarrage de « texte_cherché », depuis le caractère le plus à gauche de « dans_le_texte » en utilisant les positions des octets.</para>
+>La fonction SEARCHB() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le nombre du point de démarrage de « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant les positions des octets.</para>
 <para
 >Vous pouvez utiliser les jokers, points d'interrogation (?) et astérisque (*). Un point d'interrogation correspond à un seul caractère, un astérisque à n'importe quelle séquence de caractères.</para>
 <para
->Le paramètre PositionOctet spécifie le caractère où commencer la recherche. Le premier caractère est le numéro 2. Si PositionOctet manque, il est supposé valoir 2. SEARCHB ne distingue pas les majuscules des minuscules.</para>
+>Le paramètre Position-Octet spécifie le caractère où commencer la recherche. Le premier caractère est le numéro 2. Si Position-Octet manque, il est supposé valoir 2. SEARCHB ne distingue pas les majuscules des minuscules.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30341,7 +30341,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SEARCHB(texte_cherché;dans_le_texte;départ PositionOctet)</para
+>SEARCHB(texte-cherché;dans-le-texte;départ Position-Octet)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30362,7 +30362,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Le texte qui peut contenir "texte_cherché"</seg
+>Le texte qui peut contenir « texte-cherché »</seg
 ><seg
 >Texte</seg
 ></seglistitem>
@@ -30470,7 +30470,7 @@ all changes will be overwritten on the next script run
 <title
 >SUBSTITUTE</title>
 <para
->La fonction SUBSTITUTE() substitue « nouveau_texte » à « ancien_texte » dans une chaîne de texte. Si « num_d_instance » est spécifié, seule cette instance de l'ancien texte sera remplacée. Sinon, chaque occurrence d'« ancien_texte » sera changée en « nouveau_texte ». Utilisez « SUBSTITUTE » quand vous voulez remplacer du texte spécifique, utilisez « REPLACE » quand vous voulez remplacer du texte qui se trouve à un endroit précis.</para>
+>La fonction SUBSTITUTE() substitue « nouveau-texte » à « ancien-texte » dans une chaîne de texte. Si « numéro-instance » est spécifié, seule cette instance de l'ancien texte sera remplacée. Sinon, chaque occurrence d'« ancien-texte » sera changée en « nouveau-texte ». Utilisez « SUBSTITUTE » quand vous voulez remplacer du texte spécifique, utilisez « REPLACE » quand vous voulez remplacer du texte qui se trouve à un endroit précis.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30487,7 +30487,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SUBSTITUTE(texte;ancien_texte; nouveau_texte; num_d_instance)</para
+>SUBSTITUTE(texte;ancien-texte; nouveau-texte; numéro-instance)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30541,7 +30541,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SUBSTITUTE("Qtr 1, 2001";"1";"3";1) renvoie "Qtr 3, 2001"</para
+>SUBSTITUTE("Tri 1, 2001";"1";"3";1) renvoie "Tri 3, 2001"</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30549,7 +30549,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->SUBSTITUTE("Qtr 1, 2001";"1";"3";4) renvoie "Qtr 3, 2003"</para
+>SUBSTITUTE("Tri 1, 2001";"1";"3";4) renvoie "Tri 3, 2003"</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -32197,7 +32197,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SEC(Float)</para
+>SEC(Flottant)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -32252,7 +32252,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->SECH(Float)</para
+>SECH(Flottant)</para
 ></listitem>
 </varlistentry>
 <varlistentry

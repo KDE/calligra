@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2024-01-18 18:14+0100\n"
+"PO-Revision-Date: 2024-04-29 15:24+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -2039,7 +2039,7 @@ msgstr "US Folio"
 #, kde-format
 msgctxt "Page size"
 msgid "US Ledger"
-msgstr "US Ledger"
+msgstr "Comptabilité US"
 
 #: odf/KoPageFormat.cpp:81
 #, kde-format
@@ -2819,7 +2819,7 @@ msgstr "Dur Moyen"
 #: pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
 msgid "Geometric Mean"
-msgstr "Signification Géométrique"
+msgstr "Moyenne géométrique"
 
 #: pigment/compositeops/KoCompositeOps.h:106
 #: pigment/KoCompositeOpRegistry.cpp:77

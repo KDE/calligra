@@ -2334,7 +2334,7 @@ it would be autocorrected to <userinput
 <menuchoice
 ><shortcut
 ><keycap
->Page préc.</keycap
+>Page précédente.</keycap
 ></shortcut
 > <guimenu
 >Diapositive</guimenu
@@ -2353,7 +2353,7 @@ it would be autocorrected to <userinput
 <menuchoice
 ><shortcut
 ><keycap
->Page suiv.</keycap
+>Page suivante.</keycap
 ></shortcut
 > <guimenu
 >Diapositive</guimenu
