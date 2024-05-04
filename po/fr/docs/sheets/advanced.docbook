@@ -563,11 +563,11 @@
 <para
 >Vous pouvez aussi basculer entre les feuilles en utilisant <keycombo action="simul"
 >&Ctrl;<keysym
->Page suiv.</keysym
+>Page suivante.</keysym
 ></keycombo
 > pour vous déplacer à la prochaine feuille, <keycombo action="simul"
 >&Ctrl;<keysym
->Page préc.</keysym
+>Page précédente.</keysym
 ></keycombo
 > pour vous déplacer à la précédente.</para>
 <para

@@ -12,7 +12,7 @@
 # Daniel Durand <durand.d@9online.fr>, 2007, 2008.
 # Durand Daniel <daniel@durand-amd.net>, 2010.
 # Durand Daniel <durand.d@9online.fr>, 2010.
-# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
+# SPDX-FileCopyrightText: 2012, 2013, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Vincent PINON <vpinon@kde.org>, 2013, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
@@ -24,15 +24,15 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-11-03 17:54+0100\n"
+"PO-Revision-Date: 2024-05-01 10:22+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -2384,7 +2384,7 @@ msgstr ""
 #: functions/engineering.xml:24
 #, kde-format
 msgid "BASE(number;base;prec)"
-msgstr "BASE (nombre ; base ; préc)"
+msgstr "BASE (nombre ; base ; précision)"
 
 #: functions/engineering.xml:25
 #, kde-format
@@ -2980,7 +2980,7 @@ msgstr "Coefficient imaginaire"
 #, kde-format
 msgid "The COMPLEX(real;imag) returns a complex number of form x+yi."
 msgstr ""
-"COMPLEX (réel  ; imaginaire) renvoie un nombre complexe de la forme x+yi."
+"COMPLEX (réel  ; imaginaire) renvoie un nombre complexe de la forme x+i*y."
 
 #: functions/engineering.xml:408
 #, kde-format
@@ -2990,7 +2990,7 @@ msgstr "COMPLEX (réel ; imaginaire)"
 #: functions/engineering.xml:409
 #, kde-format
 msgid "COMPLEX(1.2;3.4) returns \"1.2+3.4i\""
-msgstr "COMPLEX (1,2 ; 3,4) renvoie « 1,2 + 3,4i »"
+msgstr "COMPLEX (1,2 ; 3,4) renvoie « 1,2 + i*3,4 »"
 
 #: functions/engineering.xml:410
 #, kde-format
@@ -3402,7 +3402,7 @@ msgstr "La fonction IMPOWER (« 1,2 » ; 2) renvoie 1,44 "
 msgid "The IMSUM() returns the sum of several complex numbers of form x+yi."
 msgstr ""
 "La fonction IMSUM () renvoie la somme de plusieurs nombres complexes de "
-"forme x+yi."
+"forme x + i*y."
 
 #: functions/engineering.xml:722
 #, kde-format
@@ -3412,12 +3412,12 @@ msgstr "IMSUM (valeur, valeur...)"
 #: functions/engineering.xml:723
 #, kde-format
 msgid "IMSUM(1.2;\"3.4+5i\") returns \"4.6+5i\""
-msgstr "La fonction IMSUM (1,2 ; « 3,4+5i ») renvoie « 4,6+5i »"
+msgstr "La fonction IMSUM (1,2 ; « 3,4 + i*5 ») renvoie « 4,6 + i*5 »"
 
 #: functions/engineering.xml:724
 #, kde-format
 msgid "IMSUM(1.2;\"1i\") returns \"1.2+i\""
-msgstr "La fonction IMSUM (1,2 ; « 1i ») renvoie « 1,2+i »"
+msgstr "La fonction IMSUM (1,2 ; « i*1 ») renvoie « 1,2+i »"
 
 #: functions/engineering.xml:752
 #, kde-format
@@ -3425,7 +3425,7 @@ msgid ""
 "The IMDIV() returns the division of several complex numbers of form x+yi."
 msgstr ""
 "La fonction IMDIV () renvoie la division de plusieurs nombres complexes de "
-"forme x+iy."
+"forme x + i*y."
 
 #: functions/engineering.xml:753
 #, kde-format
@@ -3435,12 +3435,14 @@ msgstr "IMDIV (valeur ; valeur ; etc.)"
 #: functions/engineering.xml:754
 #, kde-format
 msgid "IMDIV(1.2;\"3.4+5i\") returns \"0.111597-0.164114i\""
-msgstr "La fonction IMDIV (1,2 ; « 3,4+5i ») renvoie « 0,111597-0,164114i »"
+msgstr ""
+"La fonction IMDIV (1,2 ; « 3,4 + i*5 ») renvoie « 0,111597-i*0,164114 »"
 
 #: functions/engineering.xml:755
 #, kde-format
 msgid "IMDIV(\"12+i\";\"12-i\") returns \"0.986207+0.16551i\""
-msgstr "La fonction IMDIV (« 12+i » ; « 12-i ») renvoie « 0,986207+0,16551i »"
+msgstr ""
+"La fonction IMDIV (« 12+i » ; « 12 - i ») renvoie « 0,986207 + i*0,16551 »"
 
 #: functions/engineering.xml:784
 #, kde-format
@@ -3448,7 +3450,7 @@ msgid ""
 "The IMSUB() returns the difference of several complex numbers of form x+yi."
 msgstr ""
 "La fonction IMSUB () renvoie la différence entre plusieurs nombres complexes "
-"de forme x+yi."
+"de forme x + i*y."
 
 #: functions/engineering.xml:785
 #, kde-format
@@ -3458,12 +3460,12 @@ msgstr "IMSUB (valeur ; valeur ; etc.)"
 #: functions/engineering.xml:786
 #, kde-format
 msgid "IMSUB(1.2;\"3.4+5i\") returns \"-2.2-5i\""
-msgstr "La fonction IMSUB (1,2 ; « 3,4+5i ») renvoie « -2,2-5i »"
+msgstr "La fonction IMSUB (1,2 ; « 3,4 + i*5 ») renvoie « 2,2-i*5 »"
 
 #: functions/engineering.xml:787
 #, kde-format
 msgid "IMSUB(1.2;\"1i\") returns \"1.2-i\""
-msgstr "La fonction IMSUB (1,2 ; « 1i ») renvoie « 1,2-i »"
+msgstr "La fonction IMSUB (1,2 ; « i*1 ») renvoie « 1,2-i »"
 
 #: functions/engineering.xml:815
 #, kde-format
@@ -3471,7 +3473,7 @@ msgid ""
 "The IMPRODUCT() returns the product of several complex numbers of form x+yi."
 msgstr ""
 "La fonction IMPRODUCT () renvoie le produit de plusieurs nombres complexes "
-"de forme x+yi."
+"de forme x + i*y."
 
 #: functions/engineering.xml:816
 #, kde-format
@@ -3481,12 +3483,12 @@ msgstr "IMPRODUCT (valeur ; valeur ; etc.)"
 #: functions/engineering.xml:817
 #, kde-format
 msgid "IMPRODUCT(1.2;\"3.4+5i\") returns \"4.08+6i\""
-msgstr "La fonction IMPRODUCT (1,2 ; « 3,4+5i ») renvoie « 4,08+6i »"
+msgstr "La fonction IMPRODUCT (1,2 ; « 3,4 + i*5 ») renvoie « 4,08 + i*6 »"
 
 #: functions/engineering.xml:818
 #, kde-format
 msgid "IMPRODUCT(1.2;\"1i\") returns \"+1.2i\""
-msgstr "La fonction IMPRODUCT (1,2 ; « 1i ») renvoie « +1,2i »"
+msgstr "La fonction IMPRODUCT (1,2 ; « 1*i ») renvoie « +i*1,2 »"
 
 #: functions/engineering.xml:830
 #, kde-format
@@ -3495,7 +3497,7 @@ msgid ""
 "form x+yi."
 msgstr ""
 "La fonction IMCONJUGATE (nombre complexe) renvoie le conjugué d'un nombre "
-"complexe de forme x+yi."
+"complexe de forme x + i*y."
 
 #: functions/engineering.xml:831
 #, kde-format
@@ -3505,7 +3507,7 @@ msgstr "IMCONJUGATE (nombre complexe)"
 #: functions/engineering.xml:832
 #, kde-format
 msgid "IMCONJUGATE(\"1.2+5i\") returns \"1.2-5i\""
-msgstr "La fonction IMCONJUGATE (« 1,2+5i ») renvoie « 1,2-5i »"
+msgstr "La fonction IMCONJUGATE (« 1,2 + i*5 ») renvoie « 1,2-i*5 »"
 
 #: functions/engineering.xml:833
 #, kde-format
@@ -3524,7 +3526,7 @@ msgid ""
 "form x+yi."
 msgstr ""
 "La fonction IMARGUMENT (nombre complexe) renvoie l'argument d'un nombre "
-"complexe de forme x+yi."
+"complexe de forme x + i*y."
 
 #: functions/engineering.xml:847
 #, kde-format
@@ -3534,7 +3536,7 @@ msgstr "IMARGUMENT (nombre complexe)"
 #: functions/engineering.xml:848
 #, kde-format
 msgid "IMARGUMENT(\"1.2+5i\") returns 0.6072"
-msgstr "La fonction IMARGUMENT (« 1,2+5i ») renvoie 0,6072"
+msgstr "La fonction IMARGUMENT (« 1,2+i*5 ») renvoie 0,6072"
 
 #: functions/engineering.xml:849
 #, kde-format
@@ -3552,7 +3554,7 @@ msgid ""
 "The IMABS(complex number) returns the norm of a complex number of form x+yi."
 msgstr ""
 "La fonction IMABS (nombre complexe) renvoie la norme d'un nombre complexe de "
-"forme x+yi."
+"forme x + i*y."
 
 #: functions/engineering.xml:863
 #, kde-format
@@ -3562,7 +3564,7 @@ msgstr "IMABS (nombre complexe)"
 #: functions/engineering.xml:864
 #, kde-format
 msgid "IMABS(\"1.2+5i\") returns 5.1419"
-msgstr "La fonction IMABS (« 1,2+5i ») renvoie 5,1419"
+msgstr "La fonction IMABS (« 1,2+i*5 ») renvoie 5,1419"
 
 #: functions/engineering.xml:865
 #, kde-format
@@ -6997,7 +6999,7 @@ msgid ""
 "Gnumeric compatibility."
 msgstr ""
 "La fonction G_PRODUCT () est identique à KPRODUCT. Elle est fournie pour la "
-"compatibilité avec Gnumeric."
+"compatibilité avec GNUmeric."
 
 #: functions/math.xml:494
 #, kde-format
@@ -8498,12 +8500,12 @@ msgstr "SHEET (référence)"
 #: functions/reference.xml:215
 #, kde-format
 msgid "SHEET(Sheet1!C7) returns 1"
-msgstr "La fonction SHEET(Sheet1!C7) renvoie 1"
+msgstr "La fonction SHEET(Feuille1!C7) renvoie 1"
 
 #: functions/reference.xml:216
 #, kde-format
 msgid "SHEET(Sheet2!C7) returns 2"
-msgstr "La fonction SHEET (Sheet2!C7) renvoie 2"
+msgstr "La fonction SHEET (Feuille2!C7) renvoie 2"
 
 #: functions/reference.xml:228
 #, kde-format
@@ -9666,7 +9668,7 @@ msgid ""
 "The KURTP() function calculates an population kurtosis of a data set. You "
 "have to provide at least 4 values, otherwise an error is returned."
 msgstr ""
-"La fonction KURTP () calcule une kurtosis de population pour un lot de "
+"La fonction KURTP () calcule une Kurtosis de population pour un lot de "
 "données. Vous devez fournir au moins 4 valeurs, sinon une erreur est "
 "retournée."
 
@@ -11516,7 +11518,7 @@ msgstr "La fonction COMPARE (« Calligra » ; « Calligra » ; vrai) renvo
 #: functions/text.xml:199
 #, kde-format
 msgid "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
-msgstr "La fonction COMPARE (« calligra » ; « Calligra » ; vrai) renvoie 1"
+msgstr "La fonction COMPARE (« temps » ; « Temps » ; vrai) renvoie 1"
 
 #: functions/text.xml:200
 #, kde-format
