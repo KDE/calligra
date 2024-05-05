@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-04-23 21:12+0100\n"
+"PO-Revision-Date: 2024-05-04 23:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -562,7 +562,7 @@ msgstr "Trenu por movi punkton. Shift klako por ŝanĝi punktotipo."
 #: flake/tools/KoPathTool.cpp:588
 #, kde-format
 msgid "Drag to move control point."
-msgstr "Trenu por movi kontrolpunkton."
+msgstr "Trenu por movi regopunkton."
 
 #: flake/tools/KoPathTool.cpp:613
 #, kde-format
@@ -1138,7 +1138,7 @@ msgstr ""
 #: main/KoDocument.cpp:1581
 #, kde-format
 msgid "Document <i>%1</i> loaded"
-msgstr "Dokumento <i>%1</i> ŝarĝita"
+msgstr "Dokumento <i>%1</i> ŝargita"
 
 #: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
 #, kde-format
@@ -3590,8 +3590,8 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
-"Ĉi tiu dokumento enhavas nekonatan ĉeksumon. Kiam vi donas pasvorton, ĝi "
-"eble ne estas kontrolita."
+"Ĉi tiu dokumento enhavas nekonatan kontrolsumon. Kiam vi donas pasvorton, ĝi "
+"eble ne estas konfirmita."
 
 #: store/KoEncryptedStore.cpp:245
 #, kde-format

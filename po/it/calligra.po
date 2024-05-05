@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-04-17 14:19+0200\n"
+"PO-Revision-Date: 2024-05-01 13:50+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5094,7 +5094,7 @@ msgstr "Estremità quadrata"
 #: widgets/KoStrokeConfigWidget.cpp:108
 #, kde-format
 msgid "Miter join"
-msgstr "Unione rettangolare"
+msgstr "Quartabuono"
 
 #: widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format

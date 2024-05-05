@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-05-29 21:25+0100\n"
+"PO-Revision-Date: 2024-05-04 23:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -265,7 +265,7 @@ msgstr "&UNIX-stilo (rekomendita; nur liniofluo)"
 #: sheets/csv/exportdialogui.ui:49
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
-msgstr "&Vindoza stilo (ĉareveno kaj liniofluo)"
+msgstr "&Vindoza stilo (ĉaretreveno kaj liniofluo)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
 #: sheets/csv/exportdialogui.ui:59
@@ -507,7 +507,7 @@ msgid ""
 "This effect is better visible if you check <b>Use borders</b> too."
 msgstr ""
 "Uzu ĉi tiun opcion por difini kiom da rastrumeroj estu inter la ĉeloj. Ĉi "
-"tiu efiko estas pli bone videbla se vi ankaŭ kontrolas <b>Uzi randojn</b>."
+"tiu efiko estas pli bone videbla se vi ankaŭ markas <b>Uzi randojn</b>."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: sheets/html/exportwidget.ui:149

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-05-03 06:40+0100\n"
+"PO-Revision-Date: 2024-05-04 23:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -37,7 +37,7 @@ msgstr "Formoj"
 #: data/states/states/states.xml:3
 #, kde-format
 msgid "Todo"
-msgstr "Fari"
+msgstr "Farota"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:4
@@ -49,7 +49,7 @@ msgstr "Nemarkita"
 #: data/states/states/states.xml:5
 #, kde-format
 msgid "Checked"
-msgstr "Kontrolita"
+msgstr "Markita"
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:7
@@ -90,33 +90,33 @@ msgstr "100 %"
 #: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
 #, kde-format
 msgid "States"
-msgstr "ŝtatoj"
+msgstr "Statoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/stateshape/StateShapeConfigWidget.ui:17
 #, kde-format
 msgid "State:"
-msgstr "Ŝtato:"
+msgstr "Stato:"
 
 #: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
-msgstr "Ŝtata Formo"
+msgstr "Stata Formo"
 
 #: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
-msgstr "Ŝtata formo"
+msgstr "Stata formo"
 
 #: plugins/stateshape/StateTool.cpp:109
 #, kde-format
 msgid "State tool options"
-msgstr "Ŝtata ilo-opcioj"
+msgstr "Elektebloj de stata ilo"
 
 #: plugins/stateshape/StateToolFactory.cpp:32
 #, kde-format
 msgid "State editing"
-msgstr "Ŝtata redaktado"
+msgstr "Stata redaktado"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/webshape/WebShapeConfigWidget.ui:17
