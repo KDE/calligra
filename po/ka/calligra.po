@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-05-04 05:50+0200\n"
+"PO-Revision-Date: 2024-05-05 05:36+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -290,7 +290,7 @@ msgstr "ფორმების ზომის შეცვლა"
 #: flake/commands/KoShapeStrokeCommand.cpp:89
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
-msgstr ""
+msgstr "საზღვრის დაყენება"
 
 #: flake/commands/KoShapeTransparencyCommand.cpp:37
 #: flake/commands/KoShapeTransparencyCommand.cpp:48
@@ -563,16 +563,18 @@ msgstr "საკონტროლო წერტილის გადატ�
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
+"გადაათრიეთ რკალის პირდაპირ შესაცვლელად. ორმაგი წკაპი ახალი ბილიკის წერტილის "
+"დასამატებლად."
 
 #: flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr ""
+msgstr "დააწექით ღილაკს B, რომ ბილიკი მონიშნულ წერტილზე გაწყვიტოთ."
 
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr ""
+msgstr "დააწექით ღილაკს B, რომ ბილიკი მონიშნულ სეგმენტებზე გაწყვიტოთ."
 
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
@@ -806,11 +808,13 @@ msgstr "მხოლოდ დაბეჭდვა და ჩასმა"
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
+"ახალი დოკუმენტის გახსნა მითითებული ნიმუშის გამოყენებით (desktopfile-ის "
+"სახელი)"
 
 #: main/KoApplication.cpp:192
 #, kde-format
 msgid "Open a new document based on the given template file"
-msgstr ""
+msgstr "ახალი დოკუმენტის გახსნა მითითებული შაბლონის ფაილის გამოყენებით"
 
 #: main/KoApplication.cpp:193
 #, kde-format
@@ -835,7 +839,7 @@ msgstr "უბრალოდ ჩატვირთე ფაილი და �
 #: main/KoApplication.cpp:198
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr ""
+msgstr "ფაილის ჩატვირთვა, ფანჯრის და მიმდინარეობის პანელის ჩვენება და გასვლა"
 
 #: main/KoApplication.cpp:200
 #, kde-format
@@ -846,6 +850,7 @@ msgstr "ფაილის სახელი პროფილირები�
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
+"ფაილის ჩატვირთვა და მისი ODF ფაილად შენახვა. განკუთვნილია გამართვისთვის."
 
 #: main/KoApplication.cpp:205
 #, kde-format
@@ -859,6 +864,9 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"გაშვებული გაქვთ 32-ბიტიანი აგება 64-ბიტიან Windows-ზე.\n"
+"ეს რეკომენდებული არააა.\n"
+"გადმოწერეთ და დააყენეთ x64 ვარიანტი."
 
 #: main/KoApplication.cpp:255
 #, kde-format

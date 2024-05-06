@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 10:30+0200\n"
+"PO-Revision-Date: 2024-05-05 11:59+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -355,7 +355,7 @@ msgstr "Color de fons"
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
 #: dialogs/ChangeConfigureDialog.ui:158
@@ -1435,7 +1435,7 @@ msgstr "Imatge"
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr "Carrega una imatge..."
+msgstr "Carrega una imatge…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
@@ -1547,43 +1547,43 @@ msgstr "Document"
 #: dialogs/NotesConfigurationDialog.ui:233
 #, kde-format
 msgid "1, 2, 3, ..."
-msgstr "1, 2, 3,..."
+msgstr "1, 2, 3…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr "a, b, c,..., aa, ab,..., ba, bb,..."
+msgstr "a, b, c…, aa, ab…, ba, bb…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr "A, B, C,..., AA, AB,..., BA, BB,..."
+msgstr "A, B, C…, AA, AB…, BA, BB…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr "a, b, c,..., aa, bb,..., aaa, bbb,..."
+msgstr "a, b, c…, aa, bb…, aaa, bbb…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr "A, B, C,..., AA, BB,..., AAA, BBB,..."
+msgstr "A, B, C…, AA, BB…, AAA, BBB…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr "i, ii, iii,..."
+msgstr "i, ii, iii…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr "I,II,III,..."
+msgstr "I,II,III…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1748,7 +1748,7 @@ msgstr "Alçària"
 #: dialogs/ParagraphBulletsNumbers.ui:284
 #, kde-format
 msgid "Browse..."
-msgstr "Navega..."
+msgstr "Navega…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
@@ -2007,7 +2007,7 @@ msgstr "Dividix les seccions"
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr "Inserix un paràgraf..."
+msgstr "Inserix un paràgraf…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
@@ -2128,12 +2128,12 @@ msgstr "Elimina"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
 msgid "Define New Level Format..."
-msgstr "Definix un format de nivell nou..."
+msgstr "Definix un format de nivell nou…"
 
 #: dialogs/SimpleParagraphWidget.cpp:313
 #, kde-format
@@ -2160,7 +2160,7 @@ msgstr "Contingut"
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr "Establir el color de vora..."
+msgstr "Establir el color de vora…"
 
 #: dialogs/SimpleTableWidget.cpp:169
 #, kde-format
@@ -2443,7 +2443,7 @@ msgstr "Inserix una taula de contingut en el document."
 #: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
-msgstr "Inserix una personalització..."
+msgstr "Inserix una personalització…"
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2453,7 +2453,7 @@ msgstr "Inserix una taula de contingut personalitzada en el document."
 #: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #: ReferencesTool.cpp:126
 #, kde-format
@@ -2488,7 +2488,7 @@ msgstr "Inserix una nota final amb etiqueta"
 #: ReferencesTool.cpp:151 ReferencesTool.cpp:155
 #, kde-format
 msgid "Settings..."
-msgstr "Configuració..."
+msgstr "Configuració…"
 
 #: ReferencesTool.cpp:161
 #, kde-format
@@ -2787,7 +2787,7 @@ msgstr "Tot el text després d'este punt es trasllada a la pàgina següent."
 #: TextTool.cpp:360
 #, kde-format
 msgid "Font..."
-msgstr "Lletra..."
+msgstr "Lletra…"
 
 #: TextTool.cpp:363
 #, kde-format
@@ -2807,7 +2807,7 @@ msgstr "Mida de la lletra"
 #: TextTool.cpp:373
 #, kde-format
 msgid "Text Color..."
-msgstr "Color de text..."
+msgstr "Color de text…"
 
 #: TextTool.cpp:374
 #, kde-format
@@ -2817,7 +2817,7 @@ msgstr "Color de text"
 #: TextTool.cpp:380
 #, kde-format
 msgid "Background Color..."
-msgstr "Color de fons..."
+msgstr "Color de fons…"
 
 #: TextTool.cpp:385
 #, kde-format
@@ -2847,7 +2847,7 @@ msgstr "Inserix una taula en el document."
 #: TextTool.cpp:411
 #, kde-format
 msgid "Row Above"
-msgstr "Fila amunt"
+msgstr "Fila a dalt"
 
 #: TextTool.cpp:412
 #, kde-format
@@ -2922,7 +2922,7 @@ msgstr "Seleccioneu un estil de vora i dibuixa este estil en una taula"
 #: TextTool.cpp:454
 #, kde-format
 msgid "Paragraph..."
-msgstr "Paràgraf..."
+msgstr "Paràgraf…"
 
 #: TextTool.cpp:457
 #, kde-format
@@ -2946,7 +2946,7 @@ msgstr ""
 #: TextTool.cpp:463
 #, kde-format
 msgid "Style Manager..."
-msgstr "Gestor d'estils..."
+msgstr "Gestor d'estils…"
 
 #: TextTool.cpp:465
 #, kde-format
@@ -2965,7 +2965,7 @@ msgstr ""
 #: TextTool.cpp:473
 #, kde-format
 msgid "Special Character..."
-msgstr "Caràcter especial..."
+msgstr "Caràcter especial…"
 
 #: TextTool.cpp:477
 #, kde-format
