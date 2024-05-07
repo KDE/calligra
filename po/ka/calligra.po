@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-05-05 05:36+0200\n"
+"PO-Revision-Date: 2024-05-06 05:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -880,6 +880,9 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
+"ძირითადი აპლიკაციის კომპონენტები აღმოჩენილი არაა.\n"
+"ეს, შეიძლება, დაყენების პრობლემაა.\n"
+"სცადეთ გადატვირთვა ან თავიდან დაყენება."
 
 #: main/KoApplication.cpp:493
 #, kde-format
@@ -968,6 +971,8 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
+"ამ დაშიფრული დოკუმენტისთვის პაროლი ცნობილი არაა. ავტოშენახვა გაუქმდა. "
+"შეინახეთ სამუშაო ხელით."
 
 #: main/KoDocument.cpp:708
 #, kde-format
@@ -1015,6 +1020,8 @@ msgid ""
 "An autosaved file exists for this document.\n"
 "Do you want to open it instead?"
 msgstr ""
+"ამ დოკუმენტისთვის ავტოშენახვის ფაილი არსებობს.\n"
+"გნებავთ, ის ფაილი გახსნათ?"
 
 #: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
 #, kde-format
@@ -1099,7 +1106,7 @@ msgstr "არასწორი ფილტრის დამატება"
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
-msgstr ""
+msgstr "ცდილობთ ჩატვირთოთ არასწორი ტიპის დოკუმენტი"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
@@ -1138,6 +1145,8 @@ msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
+"დამუშავების შეცდომა %1-ში ხაზზე %2, სვეტი %3\n"
+"შეცდომის შეტყობინება: %4"
 
 #: main/KoDocument.cpp:1673
 #, kde-format
@@ -1147,7 +1156,7 @@ msgstr "%1 ფაილი არაა."
 #: main/KoDocument.cpp:1688
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
-msgstr ""
+msgstr "ფაილის წასაკითხად გახსნის შეცდომა (გადაამოწმეთ წაკითხვის უფლებები)."
 
 #: main/KoDocument.cpp:1699
 #, kde-format
@@ -1160,6 +1169,8 @@ msgid ""
 "parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
+"დამუშავების შეცდომა მთავარ დოკუმენტში ხაზე %1, სვეტი %2\n"
+"შეცდომის შეტყობინება: %3"
 
 #: main/KoDocument.cpp:1751
 #, kde-format
@@ -1177,6 +1188,8 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
+"დოკუმენტი <i>%1</i> რამდენიმე ვერსიას შეიცავს. გადადით ფაილი -> ვერსიები, "
+"რომ ძველი ვერსია გახსნათ."
 
 #: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
 #: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
@@ -1189,7 +1202,7 @@ msgstr "უსათაურო"
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
-msgstr ""
+msgstr "<p>დოკუმენტი <b>'%1'</b> შეიცვალა.</p><p>გნებავთ, შეინახოთ ის?</p>"
 
 #: main/KoDocument.cpp:2143
 #, kde-format
@@ -1483,6 +1496,8 @@ msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
+"დაკარგავთ ყველა ცვლილებას, რომელიც ბოლო შენახვის შემდეგ შეიტანეთ.\n"
+"გნებავთ, გააგრძელოთ?"
 
 #: main/KoMainWindow.cpp:1664
 #, kde-format
@@ -1750,6 +1765,8 @@ msgid ""
 "Parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
+"მთავარი დოკუმენტის დამუშავების შეცდომა ხაზზე %1, სვეტი %2,\n"
+"შეცდომის შეტყობინება: %3"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -2521,7 +2538,7 @@ msgstr "ალფა-არხის ფერების სივრცის
 #: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "L*a*b* (16-ბიტიანი მთელი/არხი, უმართავი)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:28
 #: pigment/compositeops/KoCompositeOps.h:207
@@ -2546,13 +2563,13 @@ msgstr "b*"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (16-ბიტიანი მთელი/არხი, უმართავი)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (8-ბიტიანი მთელი/არხი, უმართავი)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
@@ -2573,7 +2590,7 @@ msgstr "წითელი"
 #: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr ""
+msgstr "აღუწერელი ოპერაცია %1 სივრცეში"
 
 #: pigment/colorspaces/KoSimpleColorSpace.h:91
 #: pigment/colorspaces/KoSimpleColorSpace.h:97
@@ -2588,7 +2605,7 @@ msgstr ""
 #: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
-msgstr ""
+msgstr "აღუწერელი ოპერაცია %1 ფერის სივრცეში"
 
 #: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
 #, kde-format
@@ -3232,7 +3249,7 @@ msgstr[1] ""
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
-msgstr ""
+msgstr "მოვაცილო არასწორი ინსტრუქციები?"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:338
 #, kde-format
@@ -3983,7 +4000,7 @@ msgstr "ავტორის პროფილის წაშლა"
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name (not duplicate or blank name):"
-msgstr ""
+msgstr "სახელი (არა გამეორებული, ან ცარიელი სახელი):"
 
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
@@ -4108,6 +4125,7 @@ msgid ""
 "Please check the ranges you specified. The start value must be lower than "
 "the end value."
 msgstr ""
+"შეამოწმეთ შეყვანილი შუალედები. საწყისი მნიშვნელობა საბოლოოზე მცირე უნდა იყოს."
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
 #: widgets/KoCsvImportDialog.ui:52
@@ -4545,7 +4563,7 @@ msgstr "Gimp-ის ფერების პალიტრა (*.gpl)"
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
+msgstr "ვერ ჩავწერე პალიტრის ფაილი %1. შეიძლება, ის მხოლოდ-წაკითხვადია. "
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -4747,7 +4765,7 @@ msgstr "გვერდის განლაგება:"
 #: widgets/KoPageLayoutWidget.cpp:284
 #, kde-format
 msgid "Page spread"
-msgstr ""
+msgstr "გვერდის გაწელვა"
 
 #. i18n: ectx: property (text), widget (QLabel, unitsLabel)
 #: widgets/KoPageLayoutWidget.ui:25
