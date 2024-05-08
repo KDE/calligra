@@ -900,37 +900,3 @@ msgstr "Importní filtr aplikace Words do RTF"
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Soubor nelze načíst."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Doporučené (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Místní (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Jiné (%1)"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Nelze najít kódování: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "Kódová&ní:"
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "Doporučeno: UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "Místní (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "Kó&dování:"
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr ""
-#~ "Pomocí této volby můžete nastavit kódování HTML souboru. Jako výchozí je "
-#~ "nastavené doporučené kódování (UTF-8)."

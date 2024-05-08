@@ -15481,25 +15481,3 @@ msgstr "Velg flere celler"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "Lenke %1 aktivert"
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr ""
-#~ "Behandling er ikke mulig, fordi noen celler er låste som elementer i en "
-#~ "matrise."
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "Behandling er ikke mulig, fordi noen celler er beskyttet."
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Denne lenka peker til programmet eller skriptet «%1».\n"
-#~ "Trollete og ondskapsfulle programmer kan skade din datamaskin. Er du "
-#~ "sikker på at du vil kjøre dette programmet?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Åpne lenke?"

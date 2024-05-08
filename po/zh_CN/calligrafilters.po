@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/calligra/calligrafilters.pot\n"
-"X-Crowdin-File-ID: 5513\n"
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligrafilters.pot\n"
+"X-Crowdin-File-ID: 53536\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
@@ -889,35 +889,3 @@ msgstr "Words RTF 导入过滤器"
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "无法加载文件。"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "推荐( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "语系( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "其他 ( %1 )"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "找不到编码：%1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "编码(&N)："
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "推荐：UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "语系 (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "编码(&C)："
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr "您可通过此选项定义 HTML 文件的编码。推荐编码(UTF-8)已经选为默认值。"

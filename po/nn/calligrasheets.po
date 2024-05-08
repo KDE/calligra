@@ -14898,6 +14898,3 @@ msgstr ""
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
-
-#~ msgid "Open Link?"
-#~ msgstr "Opna lenkje?"

@@ -898,25 +898,3 @@ msgstr ""
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr ""
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Finn ikkje teiknkodinga: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "&Teiknkoding:"
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "Tilrådd: UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "Lokale (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "&Teiknkoding:"
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr ""
-#~ "Her kan du velja teiknkodinga til HTML-fila. Den tilrådde teiknkodinga "
-#~ "(UTF-8) er vald som standard."

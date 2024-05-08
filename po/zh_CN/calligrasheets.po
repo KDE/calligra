@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/calligra/calligrasheets.pot\n"
-"X-Crowdin-File-ID: 5468\n"
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligrasheets.pot\n"
+"X-Crowdin-File-ID: 53658\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14704,22 +14704,3 @@ msgstr "选择多个单元格"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "链接 %1 已激活"
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr "无法处理，因为某些单元格已锁定为矩阵的元素。"
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "无法处理，因为某些单元格是受保护的。"
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "此链接指向程序或脚本“%1”。\n"
-#~ "恶意程序可能对您的计算机造成伤害。您确定要运行此程序吗？"
-
-#~ msgid "Open Link?"
-#~ msgstr "打开链接？"

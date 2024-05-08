@@ -5322,28 +5322,3 @@ msgstr "Alle støttede formater"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid ""
-#~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
-#~ "can not be opened."
-#~ msgstr ""
-#~ "QCA har nå ingen støtte for SHA 1 eller PBKDF2 som bruker SHA1. "
-#~ "Dokumentet kan ikke åpnes."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Anbefalt ( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Lokale ( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Andre ( %1 )"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Finner ikke tegnkodingen: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "&Tegnkoding:"

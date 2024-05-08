@@ -14,9 +14,9 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/calligra/calligra_textediting_changecase."
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra_textediting_changecase."
 "pot\n"
-"X-Crowdin-File-ID: 5510\n"
+"X-Crowdin-File-ID: 53524\n"
 
 #: Changecase.cpp:51 Changecase.cpp:79
 #, kde-format

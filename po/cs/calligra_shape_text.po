@@ -3030,6 +3030,3 @@ msgstr "Stisk klávesy"
 #, kde-format
 msgid "Text editing"
 msgstr "Úprava textu"
-
-#~ msgid "Open Link?"
-#~ msgstr "Otevřít odkaz?"

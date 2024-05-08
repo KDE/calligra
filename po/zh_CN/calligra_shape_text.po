@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/calligra/calligra_shape_text.pot\n"
-"X-Crowdin-File-ID: 5472\n"
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra_shape_text.pot\n"
+"X-Crowdin-File-ID: 53584\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -3036,14 +3036,3 @@ msgstr "按键"
 #, kde-format
 msgid "Text editing"
 msgstr "文本编辑"
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "此链接指向程序或脚本“%1”。\n"
-#~ "恶意的程序会危害您的计算机。您确定您想要运行该程序吗？"
-
-#~ msgid "Open Link?"
-#~ msgstr "打开链接吗？"

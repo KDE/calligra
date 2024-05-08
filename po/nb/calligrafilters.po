@@ -899,37 +899,3 @@ msgstr "RTF-importfilteret i Words"
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Fila kan ikke lastes inn."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Anbefalt (%1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Lokal (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Annet ( %1 )"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Finner ikke tegnkodinga: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "&Tegnkoding:"
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "Anbefalt: UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "Lokale (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "&Tegnkoding:"
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr ""
-#~ "Med dette valget kan du angi tegnkodingen til HTML-fila. Den anbefalte "
-#~ "tegnkodingen (UTF-8) er valgt som standard."

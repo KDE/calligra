@@ -14687,16 +14687,3 @@ msgstr "Přepočítat několik buněk"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "Odkaz %1 aktivován"
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr ""
-#~ "Zpracování není možné, jelikož některé buňky jsou uzamčeny jako prvky "
-#~ "matice."
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "Zpracování není možné, jelikož některé buňky jsou chráněny."
-
-#~ msgid "Open Link?"
-#~ msgstr "Otevřít odkaz?"

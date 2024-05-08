@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/calligra/calligra.pot\n"
-"X-Crowdin-File-ID: 5479\n"
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra.pot\n"
+"X-Crowdin-File-ID: 53566\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5261,28 +5261,3 @@ msgstr "所有支持的格式"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1|/|$[~stripAccel %1]"
-
-#~ msgid ""
-#~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
-#~ "can not be opened."
-#~ msgstr ""
-#~ "当前的 QCA 类库不支持 SHA1 或使用了 SHA1 的 PBKDF2 加密方法。因此无法打开"
-#~ "此文档。"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "推荐(%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "语系(%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "其他 (%1)"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "找不到编码：%1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "编码(&N)："

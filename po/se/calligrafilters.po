@@ -877,7 +877,3 @@ msgstr ""
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr ""
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Eará ( %1 )"
