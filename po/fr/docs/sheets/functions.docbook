@@ -4971,7 +4971,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->WEEKNUM(A1; 2) renvoie 10 lorsque A1 est « 9 mars 2008 ». Nombre de la semaine dans l’année, avec une semaine commençant le Lundi (10)</para
+>WEEKNUM(A1; 2) renvoie 10 lorsque A1 est « 9 mars 2008 ». Nombre de la semaine dans l'année, avec une semaine commençant le Lundi (10)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27129,7 +27129,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->TRIMMEAN(dataSet ;  cutOffFraction)</para
+>TRIMMEAN(dataSet ; cutOffFraction)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28325,7 +28325,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->COMPARE(« Calligra »;« Calligra » ; True) renvoie 0</para
+>COMPARE(« Calligra » ; « Calligra » ; True) renvoie 0</para
 ></listitem>
 </varlistentry>
 <varlistentry
