@@ -50,7 +50,7 @@ msgstr "Elimina el contorn de la imatge"
 #: forms/wdgPictureTool.ui:20
 #, kde-format
 msgid "Replace image..."
-msgstr "Substituïx la imatge..."
+msgstr "Substituïx la imatge…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
 #: forms/wdgPictureTool.ui:32

@@ -130,13 +130,13 @@ msgstr "Accions"
 #, kde-format
 msgctxt "This button opens a file dialog to load a MathML file"
 msgid "Load..."
-msgstr "Carrega..."
+msgstr "Carrega…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSave)
 #: FormulaToolWidget.ui:286
 #, kde-format
 msgid "Save..."
-msgstr "Guarda..."
+msgstr "Guarda…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: FormulaToolWidget.ui:294

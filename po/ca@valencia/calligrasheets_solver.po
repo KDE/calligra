@@ -27,7 +27,7 @@ msgstr ""
 #: Solver.cpp:64
 #, kde-format
 msgid "Function Optimizer..."
-msgstr "Optimitzador de la funció..."
+msgstr "Optimitzador de la funció…"
 
 #: Solver.cpp:101
 msgctxt "(qtundo-format)"

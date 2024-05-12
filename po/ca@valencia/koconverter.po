@@ -98,7 +98,7 @@ msgstr "L'orientació de la impressió. Pot ser vertical o apaïsada."
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr "La mida del paper. A4, legal, carta,..."
+msgstr "La mida del paper. A4, legal, carta…"
 
 #: calligraconverter.cpp:207
 #, kde-format

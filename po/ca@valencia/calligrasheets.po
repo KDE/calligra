@@ -1282,8 +1282,8 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "La funció WEEKDAY() retorna el dia de la setmana de la data donada. Si el "
-"mètode és 1 (predeterminat), retorna 1 per a diumenge, 2 per a dilluns... si "
-"el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts..."
+"mètode és 1 (predeterminat), retorna 1 per a diumenge, 2 per a dilluns… si "
+"el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts…"
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1748,7 +1748,7 @@ msgstr "Dia"
 #, kde-format
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
-msgstr "La funció DAYOFYEAR() retorna el nombre del dia de l'any (1...365)."
+msgstr "La funció DAYOFYEAR() retorna el nombre del dia de l'any (1…365)."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -1954,7 +1954,7 @@ msgstr "Número del mes (1..12)"
 #: functions/datetime.xml:508
 #, kde-format
 msgid "The MONTHNAME() function returns the name of the month (1...12)."
-msgstr "La funció MONTHNAME() retorna el nom del mes (1...12)."
+msgstr "La funció MONTHNAME() retorna el nom del mes (1…12)."
 
 #: functions/datetime.xml:509
 #, kde-format
@@ -3362,7 +3362,7 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr "IMSUM(valor;valor;...)"
+msgstr "IMSUM(valor;valor;…)"
 
 #: functions/engineering.xml:723
 #, kde-format
@@ -3385,7 +3385,7 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr "IMDIV(valor;valor;...)"
+msgstr "IMDIV(valor;valor;…)"
 
 #: functions/engineering.xml:754
 #, kde-format
@@ -3408,7 +3408,7 @@ msgstr ""
 #: functions/engineering.xml:785
 #, kde-format
 msgid "IMSUB(value;value;...)"
-msgstr "IMSUB(valor;valor;...)"
+msgstr "IMSUB(valor;valor;…)"
 
 #: functions/engineering.xml:786
 #, kde-format
@@ -3431,7 +3431,7 @@ msgstr ""
 #: functions/engineering.xml:816
 #, kde-format
 msgid "IMPRODUCT(value;value;...)"
-msgstr "IMPRODUCT(valor;valor;...)"
+msgstr "IMPRODUCT(valor;valor;…)"
 
 #: functions/engineering.xml:817
 #, kde-format
@@ -5927,7 +5927,7 @@ msgstr ""
 #: functions/logic.xml:52
 #, kde-format
 msgid "AND(value;value;...)"
-msgstr "AND(valor;valor;...)"
+msgstr "AND(valor;valor;…)"
 
 #: functions/logic.xml:53
 #, kde-format
@@ -5953,7 +5953,7 @@ msgstr ""
 #: functions/logic.xml:83
 #, kde-format
 msgid "OR(value;value;...)"
-msgstr "OR(valor;valor;...)"
+msgstr "OR(valor;valor;…)"
 
 #: functions/logic.xml:84
 #, kde-format
@@ -5977,7 +5977,7 @@ msgstr ""
 #: functions/logic.xml:114
 #, kde-format
 msgid "NAND(value;value;...)"
-msgstr "NAND(valor;valor;...)"
+msgstr "NAND(valor;valor;…)"
 
 #: functions/logic.xml:115
 #, kde-format
@@ -6001,7 +6001,7 @@ msgstr ""
 #: functions/logic.xml:145
 #, kde-format
 msgid "NOR(value;value;...)"
-msgstr "NOR(valor;valor;...)"
+msgstr "NOR(valor;valor;…)"
 
 #: functions/logic.xml:146
 #, kde-format
@@ -6025,7 +6025,7 @@ msgstr ""
 #: functions/logic.xml:176
 #, kde-format
 msgid "XOR(value;value;...)"
-msgstr "XOR(valor;valor;...)"
+msgstr "XOR(valor;valor;…)"
 
 #: functions/logic.xml:177
 #, kde-format
@@ -6584,7 +6584,7 @@ msgstr ""
 #: functions/math.xml:297
 #, kde-format
 msgid "COUNT(value;value;value...)"
-msgstr "COUNT(valor;valor;valor...)"
+msgstr "COUNT(valor;valor;valor…)"
 
 #: functions/math.xml:298
 #, kde-format
@@ -6610,7 +6610,7 @@ msgstr ""
 #: functions/math.xml:315
 #, kde-format
 msgid "COUNTA(value;value;value...)"
-msgstr "COUNTA(valor;valor;valor...)"
+msgstr "COUNTA(valor;valor;valor…)"
 
 #: functions/math.xml:316
 #, kde-format
@@ -6746,7 +6746,7 @@ msgstr ""
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
 msgid "SUM(value;value;...)"
-msgstr "SUM(valor;valor;...)"
+msgstr "SUM(valor;valor;…)"
 
 #: functions/math.xml:400
 #, kde-format
@@ -6841,7 +6841,7 @@ msgstr ""
 #: functions/math.xml:459
 #, kde-format
 msgid "PRODUCT(value;value;...)"
-msgstr "PRODUCT(valor;valor;...)"
+msgstr "PRODUCT(valor;valor;…)"
 
 #: functions/math.xml:460
 #, kde-format
@@ -6868,7 +6868,7 @@ msgstr ""
 #: functions/math.xml:476
 #, kde-format
 msgid "KPRODUCT(value;value;...)"
-msgstr "KPRODUCT(valor;valor;...)"
+msgstr "KPRODUCT(valor;valor;…)"
 
 #: functions/math.xml:477
 #, kde-format
@@ -6892,7 +6892,7 @@ msgstr ""
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr "G_PRODUCT(valor;valor;...)"
+msgstr "G_PRODUCT(valor;valor;…)"
 
 #: functions/math.xml:507
 #, kde-format
@@ -6902,7 +6902,7 @@ msgstr "La funció DIV() dividix el primer valor pels altres valors en torn."
 #: functions/math.xml:508
 #, kde-format
 msgid "DIV(value;value;...)"
-msgstr "DIV(valor;valor;...)"
+msgstr "DIV(valor;valor;…)"
 
 #: functions/math.xml:509
 #, kde-format
@@ -6928,7 +6928,7 @@ msgstr ""
 #: functions/math.xml:525
 #, kde-format
 msgid "SUMSQ(value;value;...)"
-msgstr "SUMSQ(valor;valor;...)"
+msgstr "SUMSQ(valor;valor;…)"
 
 #: functions/math.xml:526
 #, kde-format
@@ -6952,7 +6952,7 @@ msgstr ""
 #: functions/math.xml:542
 #, kde-format
 msgid "MAX(value;value;...)"
-msgstr "MAX(valor;valor;...)"
+msgstr "MAX(valor;valor;…)"
 
 #: functions/math.xml:543
 #, kde-format
@@ -6981,7 +6981,7 @@ msgstr ""
 #: functions/math.xml:563
 #, kde-format
 msgid "MAXA(value;value;...)"
-msgstr "MAXA(valor;valor;...)"
+msgstr "MAXA(valor;valor;…)"
 
 #: functions/math.xml:564
 #, kde-format
@@ -7010,7 +7010,7 @@ msgstr ""
 #: functions/math.xml:584
 #, kde-format
 msgid "MIN(value;value;...)"
-msgstr "MIN(valor;valor;...)"
+msgstr "MIN(valor;valor;…)"
 
 #: functions/math.xml:585
 #, kde-format
@@ -7039,7 +7039,7 @@ msgstr ""
 #: functions/math.xml:605
 #, kde-format
 msgid "MINA(value;value;...)"
-msgstr "MINA(valor;valor;...)"
+msgstr "MINA(valor;valor;…)"
 
 #: functions/math.xml:606
 #, kde-format
@@ -7070,7 +7070,7 @@ msgstr ""
 #: functions/math.xml:626
 #, kde-format
 msgid "MULTIPLY(value;value;...)"
-msgstr "MULTIPLY(valor;valor;...)"
+msgstr "MULTIPLY(valor;valor;…)"
 
 #: functions/math.xml:627
 #, kde-format
@@ -7099,7 +7099,7 @@ msgstr "(a+b+c)! / a!b!c!"
 #: functions/math.xml:645
 #, kde-format
 msgid "MULTINOMIAL(value;value;...)"
-msgstr "MULTINOMIAL(valor;valor;...)"
+msgstr "MULTINOMIAL(valor;valor;…)"
 
 #: functions/math.xml:646
 #, kde-format
@@ -7505,7 +7505,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() dona, per exemple, 0,78309922..."
+msgstr "RAND() dona, per exemple, 0,78309922…"
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -7679,7 +7679,7 @@ msgstr "RANDBETWEEN(inferior;superior)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78) dona, per exemple, 61,0811..."
+msgstr "RANDBETWEEN(12;78) dona, per exemple, 61,0811…"
 
 #: functions/math.xml:1094
 #, kde-format
@@ -7848,8 +7848,8 @@ msgid ""
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
 "La funció FIB calcula el terme enèsim de la successió de Fibonacci (1, 1, 2, "
-"3, 5, 8, 13, 21...), en què cada nombre, després dels dos primers, és la "
-"suma dels dos anteriors. FIB(0) és 0 per definició."
+"3, 5, 8, 13, 21…), en què cada nombre, després dels dos primers, és la suma "
+"dels dos anteriors. FIB(0) és 0 per definició."
 
 #: functions/math.xml:1186
 #, kde-format
@@ -8191,7 +8191,7 @@ msgstr "Retorna el paràmetre especificat per l'índex."
 #: functions/reference.xml:90
 #, kde-format
 msgid "CHOOSE(index; parameter1; parameter2;...)"
-msgstr "CHOOSE(índex; paràmetre1; paràmetre2;...)"
+msgstr "CHOOSE(índex; paràmetre1; paràmetre2;…)"
 
 #: functions/reference.xml:91
 #, kde-format
@@ -8702,7 +8702,7 @@ msgstr ""
 #: functions/statistical.xml:32
 #, kde-format
 msgid "AVEDEV(value;value;...)"
-msgstr "AVEDEV(valor;valor;...)"
+msgstr "AVEDEV(valor;valor;…)"
 
 #: functions/statistical.xml:33
 #, kde-format
@@ -8712,7 +8712,7 @@ msgstr "AVEDEV(11,4;17,3;21,3;25,9;40,1) retorna 7,84"
 #: functions/statistical.xml:34
 #, kde-format
 msgid "AVEDEV(A1:A5) ..."
-msgstr "AVEDEV(A1:A5)..."
+msgstr "AVEDEV(A1:A5)…"
 
 #: functions/statistical.xml:62
 #, kde-format
@@ -8728,7 +8728,7 @@ msgstr ""
 #: functions/statistical.xml:63
 #, kde-format
 msgid "AVERAGE(value;value;...)"
-msgstr "AVERAGE(valor;valor;...)"
+msgstr "AVERAGE(valor;valor;…)"
 
 #: functions/statistical.xml:64
 #, kde-format
@@ -8763,7 +8763,7 @@ msgstr ""
 #: functions/statistical.xml:82
 #, kde-format
 msgid "AVERAGEA(value;value;...)"
-msgstr "AVERAGEA(valor;valor;...)"
+msgstr "AVERAGEA(valor;valor;…)"
 
 #: functions/statistical.xml:83
 #, kde-format
@@ -9074,7 +9074,7 @@ msgstr "La funció DEVSQ() calcula el sumatori del quadrat de les desviacions."
 #: functions/statistical.xml:298
 #, kde-format
 msgid "DEVSQ(value; value;...)"
-msgstr "DEVSQ(valor; valor;...)"
+msgstr "DEVSQ(valor; valor;…)"
 
 #: functions/statistical.xml:299
 #, kde-format
@@ -9398,7 +9398,7 @@ msgstr ""
 #: functions/statistical.xml:518
 #, kde-format
 msgid "GEOMEAN(value; value;...)"
-msgstr "GEOMEAN(valor; valor;...)"
+msgstr "GEOMEAN(valor; valor;…)"
 
 #: functions/statistical.xml:519
 #, kde-format
@@ -9422,7 +9422,7 @@ msgstr ""
 #: functions/statistical.xml:550
 #, kde-format
 msgid "HARMEAN(value; value;...)"
-msgstr "HARMEAN(valor; valor;...)"
+msgstr "HARMEAN(valor; valor;…)"
 
 #: functions/statistical.xml:551
 #, kde-format
@@ -9509,7 +9509,7 @@ msgstr ""
 #: functions/statistical.xml:625
 #, kde-format
 msgid "KURT(value; value;...)"
-msgstr "KURT(valor; valor;...)"
+msgstr "KURT(valor; valor;…)"
 
 #: functions/statistical.xml:626
 #, kde-format
@@ -9533,7 +9533,7 @@ msgstr ""
 #: functions/statistical.xml:657
 #, kde-format
 msgid "KURTP(value; value;...)"
-msgstr "KURTP(valor; valor;...)"
+msgstr "KURTP(valor; valor;…)"
 
 #: functions/statistical.xml:658
 #, kde-format
@@ -9667,7 +9667,7 @@ msgstr ""
 #: functions/statistical.xml:773
 #, kde-format
 msgid "MEDIAN(value;value;...)"
-msgstr "MEDIAN(valor;valor;...)"
+msgstr "MEDIAN(valor;valor;…)"
 
 #: functions/statistical.xml:774
 #, kde-format
@@ -9699,7 +9699,7 @@ msgstr "La funció MODE() retorna el valor més freqüent d'un conjunt de dades.
 #: functions/statistical.xml:800
 #, kde-format
 msgid "MODE(number; number2; ...)"
-msgstr "MODE(número1; número2;...)"
+msgstr "MODE(número1; número2;…)"
 
 #: functions/statistical.xml:801
 #, kde-format
@@ -10114,7 +10114,7 @@ msgstr "La funció SKEW() retorna una estimació del biaix d'una distribució"
 #: functions/statistical.xml:1088
 #, kde-format
 msgid "SKEW(number; number2; ...)"
-msgstr "SKEW(número1; número2;...)"
+msgstr "SKEW(número1; número2;…)"
 
 #: functions/statistical.xml:1089
 #, kde-format
@@ -10134,7 +10134,7 @@ msgstr "La funció SKEWP() retorna el biaix poblacional d'una distribució"
 #: functions/statistical.xml:1116
 #, kde-format
 msgid "SKEWP(number; number2; ...)"
-msgstr "SKEWP(número1; número2;...)"
+msgstr "SKEWP(número1; número2;…)"
 
 #: functions/statistical.xml:1117
 #, kde-format
@@ -10222,7 +10222,7 @@ msgstr ""
 #: functions/statistical.xml:1205
 #, kde-format
 msgid "STDEV(value;value;...)"
-msgstr "STDEV(valor;valor;...)"
+msgstr "STDEV(valor;valor;…)"
 
 #: functions/statistical.xml:1206
 #, kde-format
@@ -10246,7 +10246,7 @@ msgstr ""
 #: functions/statistical.xml:1236
 #, kde-format
 msgid "STDEVA(value;value;...)"
-msgstr "STDEVA(valor;valor;...)"
+msgstr "STDEVA(valor;valor;…)"
 
 #: functions/statistical.xml:1237
 #, kde-format
@@ -10270,12 +10270,12 @@ msgstr ""
 #: functions/statistical.xml:1269
 #, kde-format
 msgid "STDEVP(value;value;...)"
-msgstr "STDEVP(valor;valor;...)"
+msgstr "STDEVP(valor;valor;…)"
 
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr "STDEVP(6;7;8) fa 0,816497..."
+msgstr "STDEVP(6;7;8) fa 0,816497…"
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -10291,22 +10291,22 @@ msgstr ""
 #: functions/statistical.xml:1300
 #, kde-format
 msgid "STDEVPA(value;value;...)"
-msgstr "STDEVPA(valor;valor;...)"
+msgstr "STDEVPA(valor;valor;…)"
 
 #: functions/statistical.xml:1301
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty"
-msgstr "STDEVPA(6; 7; A1; 8) fa 0,816497..., si A1 està buida"
+msgstr "STDEVPA(6; 7; A1; 8) fa 0,816497…, si A1 està buida"
 
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) fa 2,69..., si A1 és CERT"
+msgstr "STDEVPA(6; 7; A1; 8) fa 2,69…, si A1 és CERT"
 
 #: functions/statistical.xml:1303
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE"
-msgstr "STDEVPA(6; 7; A1; 8) fa 3,11..., si A1 és FALS"
+msgstr "STDEVPA(6; 7; A1; 8) fa 3,11…, si A1 és FALS"
 
 #: functions/statistical.xml:1321
 #, kde-format
@@ -10677,7 +10677,7 @@ msgstr "La funció VAR() calcula la variància basada en una mostra."
 #: functions/statistical.xml:1519
 #, kde-format
 msgid "VAR(value;value;...)"
-msgstr "VAR(valor;valor;...)"
+msgstr "VAR(valor;valor;…)"
 
 #: functions/statistical.xml:1520
 #, kde-format
@@ -10687,7 +10687,7 @@ msgstr "VAR(12;5;7) fa 13"
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr "VAR(15;80;3) fa 1716,333..."
+msgstr "VAR(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1522
 #, kde-format
@@ -10712,7 +10712,7 @@ msgstr ""
 #: functions/statistical.xml:1555
 #, kde-format
 msgid "VARA(value;value;...)"
-msgstr "VARA(valor;valor;...)"
+msgstr "VARA(valor;valor;…)"
 
 #: functions/statistical.xml:1556
 #, kde-format
@@ -10722,7 +10722,7 @@ msgstr "VARA(12;5;7) fa 13"
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr "VARA(15;80;3) fa 1716,333..."
+msgstr "VARA(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1558
 #, kde-format
@@ -10741,7 +10741,7 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr "VARIANCE(valor;valor;...)"
+msgstr "VARIANCE(valor;valor;…)"
 
 #: functions/statistical.xml:1591
 #, kde-format
@@ -10751,7 +10751,7 @@ msgstr "VARIANCE(12;5;7) fa 13"
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "VARIANCE(15;80;3) fa 1716,333..."
+msgstr "VARIANCE(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1593
 #, kde-format
@@ -10767,22 +10767,22 @@ msgstr "La funció VARP() calcula la variància basada en una població sencera.
 #: functions/statistical.xml:1626
 #, kde-format
 msgid "VARP(value;value;...)"
-msgstr "VARP(valor;valor;...)"
+msgstr "VARP(valor;valor;…)"
 
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr "VARP(12;5;7) fa 8,666..."
+msgstr "VARP(12;5;7) fa 8,666…"
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr "VARP(15;80;3) fa 1144,22..."
+msgstr "VARP(15;80;3) fa 1144,22…"
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr "VARP(6;7;8) fa 0,6666667..."
+msgstr "VARP(6;7;8) fa 0,6666667…"
 
 #: functions/statistical.xml:1660
 #, kde-format
@@ -10798,22 +10798,22 @@ msgstr ""
 #: functions/statistical.xml:1661
 #, kde-format
 msgid "VARPA(value;value;...)"
-msgstr "VARPA(valor;valor;...)"
+msgstr "VARPA(valor;valor;…)"
 
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr "VARPA(12;5;7) fa 8,666..."
+msgstr "VARPA(12;5;7) fa 8,666…"
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr "VARPA(15;80;3) fa 1144,22..."
+msgstr "VARPA(15;80;3) fa 1144,22…"
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr "VARPA(6;7;8) fa 0,6666667..."
+msgstr "VARPA(6;7;8) fa 0,6666667…"
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -11653,7 +11653,7 @@ msgstr ""
 #: functions/text.xml:468
 #, kde-format
 msgid "CONCATENATE(value;value;...)"
-msgstr "CONCATENATE(valor;valor;...)"
+msgstr "CONCATENATE(valor;valor;…)"
 
 #: functions/text.xml:469
 #, kde-format
@@ -12557,7 +12557,7 @@ msgstr "PI()"
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr "PI() fa 3,141592654..."
+msgstr "PI() fa 3,141592654…"
 
 #: functions/trig.xml:286
 #, kde-format
@@ -12592,7 +12592,7 @@ msgstr "CSCH(decimals)"
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "CSCH(PI()/2) fa 0,434537208..."
+msgstr "CSCH(PI()/2) fa 0,434537208…"
 
 #: functions/trig.xml:314
 #, kde-format
@@ -13229,7 +13229,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:212
 #, kde-format
 msgid "Custom..."
-msgstr "A mida..."
+msgstr "A mida…"
 
 # msgid "Border Outline"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -13943,7 +13943,7 @@ msgstr "No hi ha res per a imprimir pels fulls %1."
 #: part/View.cpp:225
 #, kde-format
 msgid "Sheet Properties..."
-msgstr "Propietats del full..."
+msgstr "Propietats del full…"
 
 #: part/View.cpp:228
 #, kde-format
@@ -13984,7 +13984,7 @@ msgstr "Elimina el full seleccionat"
 #: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Canvia el nom del full..."
+msgstr "Canvia el nom del full…"
 
 #: part/View.cpp:250
 #, kde-format
@@ -13994,7 +13994,7 @@ msgstr "Canvia el nom del full actiu"
 #: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Mostra el full..."
+msgstr "Mostra el full…"
 
 #: part/View.cpp:255
 #, kde-format
@@ -14014,7 +14014,7 @@ msgstr "Oculta el full actiu"
 #: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
-msgstr "Disposició de la pàgina..."
+msgstr "Disposició de la pàgina…"
 
 #: part/View.cpp:265
 #, kde-format
@@ -14071,7 +14071,7 @@ msgstr "Recalcula el valor de totes les cel·les de tots els fulls de càlcul"
 #: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "Protegix el &full..."
+msgstr "Protegix el &full…"
 
 #: part/View.cpp:295
 #, kde-format
@@ -14081,7 +14081,7 @@ msgstr "Protegix el full contra les modificacions"
 #: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
-msgstr "Protegix el &document..."
+msgstr "Protegix el &document…"
 
 #: part/View.cpp:300
 #, kde-format
@@ -14091,7 +14091,7 @@ msgstr "Protegix el document contra les modificacions"
 #: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "Crea &una plantilla a partir d'un document..."
+msgstr "Crea &una plantilla a partir d'un document…"
 
 #: part/View.cpp:309
 #, kde-format
@@ -15639,8 +15639,8 @@ msgstr ""
 "Esta pestanya us permet establir la protecció de cel·les. De manera "
 "predeterminada, totes les cel·les es protegixen (açò vol dir que el "
 "contingut d'estes no es pot canviar) i, per a activar la protecció, també "
-"heu de protegir el full amb el menú «Eines -> Protegix el full...» i posant-"
-"hi una contrasenya.\n"
+"heu de protegir el full amb el menú «Eines -> Protegix el full…» i posant-hi "
+"una contrasenya.\n"
 "També podeu ocultar la fórmula de la cel·la per tal de protegir la manera en "
 "què calculeu la fórmula. Per a açò també cal que establiu la protecció del "
 "full.\n"
@@ -15708,9 +15708,9 @@ msgid ""
 msgstr ""
 "Si està marcada, es protegirà el contingut. Este és el comportament "
 "predeterminat. Heu de protegir tot el full amb el menú «Eines -> Protegix el "
-"full...» per tal que funcione la protecció de la cel·la individual. Per a "
-"més detalls, vegeu el manual, en el capítol Calligra Sheets avançat. Quan "
-"una cel·la està protegida, el seu contingut no es pot canviar."
+"full…» per tal que funcione la protecció de la cel·la individual. Per a més "
+"detalls, vegeu el manual, en el capítol Calligra Sheets avançat. Quan una "
+"cel·la està protegida, el seu contingut no es pot canviar."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100

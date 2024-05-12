@@ -104,7 +104,7 @@ msgstr "Esdeveniment de calendari"
 #: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
@@ -114,4 +114,4 @@ msgstr "Importa l'esdeveniment al calendari"
 #: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
-msgstr "Exporta l'esdeveniment a un fitxer iCal..."
+msgstr "Exporta l'esdeveniment a un fitxer iCal…"

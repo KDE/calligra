@@ -10,36 +10,37 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textediting_thesaurus\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:38-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 06:38+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
 #: Thesaurus.cpp:81
 #, kde-format
 msgid "(No match)"
-msgstr "(אין התאמה)"
+msgstr "(אין תוצאות)"
 
 #: Thesaurus.cpp:91
 #, kde-format
 msgid "&Search for:"
-msgstr "&חפש את:"
+msgstr "&חיפוש אחר:"
 
 #: Thesaurus.cpp:94
 #, kde-format
 msgid "S&earch"
-msgstr "ח&פש"
+msgstr "חי&פוש"
 
 #: Thesaurus.cpp:103
 #, kde-format
@@ -56,7 +57,7 @@ msgstr "קדימה"
 #: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
-msgstr "שינוי שפה..."
+msgstr "החלפת שפה…"
 
 #: Thesaurus.cpp:124
 #, kde-format
@@ -76,7 +77,7 @@ msgstr "מילים כלליות יותר"
 #: Thesaurus.cpp:142
 #, kde-format
 msgid "More Specific Words"
-msgstr "מילים מסויימות יותר"
+msgstr "מילים נקודתיות יותר"
 
 #: Thesaurus.cpp:166
 #, kde-format
@@ -86,17 +87,17 @@ msgstr "&WordNet"
 #: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
-msgstr "&החלף ב:"
+msgstr "ה&חלפה ב־:"
 
 #: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
-msgstr "ה&חלף"
+msgstr "הח&לפה"
 
 #: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
-msgstr "החלף מלה"
+msgstr "החלפת מילה"
 
 #: Thesaurus.cpp:292
 #, kde-format
@@ -109,22 +110,22 @@ msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr ""
-"קובץ האגרון \"%1\" לא נמצא. השתמש ב\"שינוי שפה...\" כדי לבחור קובץ אגרון."
+"קובץ האגרון „%1” לא נמצא. נא להשתמש ב„החלפת שפה…” כדי לבחור קובץ אגרון."
 
 #: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr "<b>שגיאה:</b> אין אפשרות להפעיל את grep."
+msgstr "<b>שגיאה:</b> אי אפשר להפעיל את grep."
 
 #: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
-msgstr "מילים נרדפות/מקבילות - ממויינות לפי שכיחות"
+msgstr "מילים נרדפות/מקבילות - ממוינות לפי שכיחות"
 
 #: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-msgstr "מילים נרדפות - ממויינות לפי דימיון במשמעות (פעלים בלבד)"
+msgstr "מילים נרדפות - ממוינות לפי דימיון במשמעות (פעלים בלבד)"
 
 #: Thesaurus.cpp:580
 #, kde-format
@@ -134,17 +135,17 @@ msgstr "הפכים - מילים בעלות משמעויות הפוכות"
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "היפונימים - ... הוא (סוג של) %1"
+msgstr "היפונימים - … הוא (סוג של) %1"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "מרונימים - ל־%1 יש ..."
+msgstr "מרונימים - ל־%1 יש …"
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "הולונימים - ל־... יש %1"
+msgstr "הולונימים - ל־… יש %1"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -154,12 +155,12 @@ msgstr "מאפיינים"
 #: Thesaurus.cpp:586
 #, kde-format
 msgid "Cause To (for some verbs only)"
-msgstr "גרימה (עבור פעלים מסויימים בלבד)"
+msgstr "גרימה (עבור פעלים מסוימים בלבד)"
 
 #: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
-msgstr "הצרכה של פעלים (עבור פעלים מסויימים בלבד)"
+msgstr "הצרכה של פעלים (עבור פעלים מסוימים בלבד)"
 
 #: Thesaurus.cpp:588
 #, kde-format
@@ -179,10 +180,10 @@ msgstr "רשימת מילים מורכבות"
 #: Thesaurus.cpp:592
 #, kde-format
 msgid "Overview of Senses"
-msgstr "סקירת מובנים"
+msgstr "סקירת משמעויות"
 
 #: Thesaurus.cpp:621
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
 "installed on your computer if you want to use it, and 'wn' has to be in your "
@@ -190,13 +191,12 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
-"<b>שגיאה:</b> אין אפשרות להפעיל את התוכנית \"wn\" של WordNet. אם ברצונך "
-"להשתמש בתוכנה, עליך לוודא שהיא מותקנת במחשב שלך. בנוסף, התוכנית \"wn\" צריכה "
-"להימצא בנתיב (PATH) שלך. את WordNet ניתן להשיג בכתובת <a href=\"http://www."
-"cogsci.princeton.edu/~wn/\">http://www.cogsci.princeton.edu/~wn/‎</a>. שים "
-"לב: WordNet תומכת רק בשפה האנגלית."
+"<b>שגיאה:</b> הפעלת התוכנית של WordNet בשם ‚wn’ נכשלה. WordNet חייבת חייבת "
+"להיות מותקנת במחשב כדי להשתמש בה, ועל ‚wn’ להיות חלק מה־PATH שלך. אפשר "
+"להוריד את WordNet דרך <a href=\"http://wordnet.princeton.edu/\">http://"
+"wordnet.princeton.edu/</a>. נא לשים לב שב־WordNet יש תמיכה רק בשפה אנגלית."
 
 #: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
-msgstr "אין תוצאות עבור \"%1\"."
+msgstr "אין תוצאות עבור „%1”."

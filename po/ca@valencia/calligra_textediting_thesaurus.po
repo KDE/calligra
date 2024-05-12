@@ -53,7 +53,7 @@ msgstr "Avant"
 #: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
-msgstr "Canvia l'idioma..."
+msgstr "Canvia l'idioma…"
 
 #: Thesaurus.cpp:124
 #, kde-format
@@ -106,7 +106,7 @@ msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr ""
-"No s'ha trobat el fitxer tesaurus «%1». Utilitzeu «Canvia idioma...» per a "
+"No s'ha trobat el fitxer tesaurus «%1». Utilitzeu «Canvia idioma…» per a "
 "escollir un fitxer tesaurus."
 
 #: Thesaurus.cpp:428
@@ -133,18 +133,18 @@ msgstr "Antònims - Paraules que signifiquen el contrari"
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "Hipònims - ...són un (tipus de) %1"
+msgstr "Hipònims - …són un (tipus de) %1"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "Merònims - %1 té un..."
+msgstr "Merònims - %1 té un…"
 
 # skip-rule: t-sp_pu
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "Holònims - ... té un %1"
+msgstr "Holònims - … té un %1"
 
 #: Thesaurus.cpp:585
 #, kde-format

@@ -64,7 +64,7 @@ msgstr "Informació de contacte"
 #: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
@@ -74,4 +74,4 @@ msgstr "Importa el contacte"
 #: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
-msgstr "Exporta com a vCard..."
+msgstr "Exporta com a vCard…"

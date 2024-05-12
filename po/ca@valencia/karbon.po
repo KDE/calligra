@@ -127,7 +127,7 @@ msgstr "Visualitza"
 #: plugins/flattenpath/FlattenPathPlugin.cpp:49
 #, kde-format
 msgid "&Flatten Path..."
-msgstr "&Camí aplanat..."
+msgstr "&Camí aplanat…"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:86
 #, kde-format
@@ -160,7 +160,7 @@ msgstr "Refina el camí"
 #: plugins/refinepath/RefinePathPlugin.cpp:49
 #, kde-format
 msgid "&Refine Path..."
-msgstr "&Refina el camí..."
+msgstr "&Refina el camí…"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:85
 #, kde-format
@@ -181,7 +181,7 @@ msgstr "Cantons arredonits"
 #: plugins/roundcorners/RoundCornersPlugin.cpp:52
 #, kde-format
 msgid "&Round Corners..."
-msgstr "Cantons a&rredonits..."
+msgstr "Cantons a&rredonits…"
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:97
 #, kde-format
@@ -202,7 +202,7 @@ msgstr "Gira i pessiga"
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
 #, kde-format
 msgid "&Whirl/Pinch..."
-msgstr "&Gira/Pessiga..."
+msgstr "&Gira i pessiga…"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
@@ -448,7 +448,7 @@ msgstr "&Mode de contorn"
 #: ui/KarbonView.cpp:882
 #, kde-format
 msgid "&Import Graphic..."
-msgstr "&Importa un gràfic..."
+msgstr "&Importa un gràfic…"
 
 #: ui/KarbonView.cpp:886
 #, kde-format

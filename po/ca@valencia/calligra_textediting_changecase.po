@@ -55,4 +55,4 @@ msgstr "pERMUTA lES mAJÚSCULES/mINÚSCULES"
 #: ChangecaseFactory.cpp:16
 #, kde-format
 msgid "Change Case..."
-msgstr "Canvia les majúscules/minúscules..."
+msgstr "Canvia les majúscules/minúscules…"

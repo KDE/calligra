@@ -3,141 +3,139 @@
 #
 # Adi Spivak, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_picture\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:38-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 07:24+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: ChangeImageCommand.cpp:26
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr "החלף צלמית"
+msgstr "החלפת תמונה"
 
 #: ChangeImageCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop image"
-msgstr "החלף צלמית"
+msgstr "חיתוך תמונה"
 
 #: ChangeImageCommand.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change image color mode"
-msgstr "החלף צלמית"
+msgstr "החלפת מצב צבע של תמונה"
 
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Contour image (by image analysis)"
-msgstr ""
+msgstr "מתאר תמונה (לפי ניתוח תמונה)"
 
 #: ClipCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove image contour"
-msgstr ""
+msgstr "הסרת מתאר תמונה"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
 #: forms/wdgPictureTool.ui:20
 #, kde-format
 msgid "Replace image..."
-msgstr ""
+msgstr "החלפת תמונה…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
 #: forms/wdgPictureTool.ui:32
 #, kde-format
 msgid "Keep proportions"
-msgstr ""
+msgstr "שמירה על יחס גובה־רוחב"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: forms/wdgPictureTool.ui:58
 #, kde-format
 msgid "Left:"
-msgstr ""
+msgstr "שמאל:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: forms/wdgPictureTool.ui:68
 #, kde-format
 msgid "Right:"
-msgstr ""
+msgstr "ימין:"
 
 #. i18n: ectx: property (text), widget (QLabel, bottomLabel)
 #: forms/wdgPictureTool.ui:91
 #, kde-format
 msgid "Bottom:"
-msgstr ""
+msgstr "תחתון:"
 
 #. i18n: ectx: property (text), widget (QLabel, topLabel)
 #: forms/wdgPictureTool.ui:111
 #, kde-format
 msgid "Top:"
-msgstr ""
+msgstr "עליון:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnFill)
 #: forms/wdgPictureTool.ui:131
 #, kde-format
 msgid "Reset"
-msgstr ""
+msgstr "איפוס:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbContour)
 #: forms/wdgPictureTool.ui:148
 #, kde-format
 msgid "Contour (by image analysis)"
-msgstr ""
+msgstr "מתאר (לפי ניתוח תמונה)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
 #, kde-format
 msgid "Color mode:"
-msgstr ""
+msgstr "מצב צבע:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: forms/wdgPictureTool.ui:193
 #, kde-format
 msgid "Crop"
-msgstr ""
+msgstr "חיתוך"
 
 #: PictureShapeFactory.cpp:31
 #, kde-format
 msgid "Image"
-msgstr "צלמית"
+msgstr "תמונה"
 
 #: PictureShapeFactory.cpp:33
 #, kde-format
 msgid "Image shape that can display jpg, png etc."
-msgstr "צורת צלמית שיכולה להציג jpg, png וכדומה."
+msgstr "צורת תמונה שיכולה להציג jpg,‏ png וכדומה."
 
 #: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "רגיל"
 
 #: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
-msgstr ""
+msgstr "גווני אפור"
 
 #: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
-msgstr ""
+msgstr "צבע אחיד"
 
 #: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
-msgstr ""
+msgstr "סימן מים"
 
 #: PictureToolFactory.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Picture editing"
-msgstr "כלי עריכת תמונה"
+msgstr "עריכת צילום"

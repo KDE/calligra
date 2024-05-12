@@ -4,43 +4,44 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textediting_spellcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2017-05-16 06:38-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 06:39+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
 #: SpellCheck.cpp:45
 #, kde-format
 msgid "Configure &Spell Checking..."
-msgstr "הגדר &בדיקת איות..."
+msgstr "הגדרת &בדיקת איות…"
 
 #: SpellCheck.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto Spell Check"
-msgstr "הגדרת בדיקת איות"
+msgstr "בדיקת איות אוטומטית"
 
 #: SpellCheckFactory.cpp:16
 #, kde-format
 msgid "Check Spelling"
-msgstr ""
+msgstr "בדיקת איות"
 
 #: SpellCheckMenu.cpp:28
 #, kde-format
 msgid "Spelling"
-msgstr ""
+msgstr "איות"
 
 #: SpellCheckMenu.cpp:32
 #, kde-format
 msgid "Add to Dictionary"
-msgstr ""
+msgstr "הוספה למילון"

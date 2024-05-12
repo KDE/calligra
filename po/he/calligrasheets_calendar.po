@@ -8,19 +8,20 @@
 # This translation is subject to the same Open Source
 # license as the program which it accompanies.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets_calendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:38-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 06:45+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -30,11 +31,12 @@ msgid ""
 "End date is before start date! Please make sure that end date comes after "
 "start date."
 msgstr ""
+"תאריך הסיום קודם לתאריך ההתחלה! נא לוודא שתאריך הסיום מאוחר לתאריך ההתחלה."
 
 #: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: CalendarTool.cpp:68
 #, kde-format
@@ -42,25 +44,27 @@ msgid ""
 "Calendars should not be longer than 10 years. If you really need such long "
 "periods you need to split them up."
 msgstr ""
+"לוחות שנה לא יכולים להיות מעבר ל־10 שנים. אם נחוצות לך תקופות זמן כל כך "
+"ארוכות עדיף לפצל אותם."
 
 #: CalendarTool.cpp:76
 #, kde-format
 msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
-msgstr ""
+msgstr "תאריך ההתחלה והסיום זהים! יתווסף רק יום אחד, להמשיך?"
 
 #: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
 msgid "Warning"
-msgstr ""
+msgstr "אזהרה"
 
 #: CalendarTool.cpp:86
 #, kde-format
 msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
-msgstr ""
+msgstr "יצירת לוח שנה לטווח של מעבר לשנה יכול לתפוס מקום רב, להמשיך?"
 
 #: CalendarTool.cpp:109
 #, kde-format
@@ -70,9 +74,11 @@ msgid ""
 "be required for the desired calendar will be selected so you can see what "
 "data would be overwritten."
 msgstr ""
+"האזור שאליו אמור להתווסף לוח השנה לא ריק, להמשיך ולדרוס את הנתונים הקיימים? "
+"בחירה באפשרות לא תבחר את האזור הנחוץ ללוח השנה המבוקש כדי לאפשר לך לראות "
+"אילו נתונים יוחלפו."
 
 #: CalendarTool.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "הוספת לוח שנה"
@@ -80,7 +86,7 @@ msgstr "הוספת לוח שנה"
 #: CalendarTool.cpp:126
 #, kde-format
 msgid "Calendar from %1 to %2"
-msgstr ""
+msgstr "לוח שנה מ־%1 עד %2"
 
 #: CalendarTool.cpp:166
 #, kde-format
@@ -88,30 +94,30 @@ msgid "week"
 msgstr "שבוע"
 
 #: CalendarToolFactory.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calendar"
-msgstr "הוספת לוח שנה"
+msgstr "לוח שנה"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
 #: CalendarToolWidget.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calendar Tool"
-msgstr "הוספת לוח שנה"
+msgstr "כלי לוח שנה"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
 #: CalendarToolWidget.ui:20
 #, kde-format
 msgid "Insert"
-msgstr ""
+msgstr "הוספה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: CalendarToolWidget.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "End date:"
-msgstr "תאריך סיום"
+msgstr "תאריך סיום:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: CalendarToolWidget.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start date:"
-msgstr "תאריך התחלה"
+msgstr "תאריך התחלה:"

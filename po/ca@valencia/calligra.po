@@ -640,7 +640,7 @@ msgstr "Allunya"
 #: widgets/KoEditColorSet.ui:78
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: flake/tools/PathToolOptionWidgetBase.ui:186
@@ -943,12 +943,12 @@ msgstr "Utilitza sempre esta plantilla"
 #: main/KoDocument.cpp:544
 #, kde-format
 msgid "Making backup..."
-msgstr "S'està fent la còpia de seguretat..."
+msgstr "S'està fent la còpia de seguretat…"
 
 #: main/KoDocument.cpp:559
 #, kde-format
 msgid "Saving..."
-msgstr "S'està guardant..."
+msgstr "S'està guardant…"
 
 #: main/KoDocument.cpp:587
 #, kde-format
@@ -985,7 +985,7 @@ msgstr ""
 #: main/KoDocument.cpp:708
 #, kde-format
 msgid "Autosaving..."
-msgstr "S'està autodesant..."
+msgstr "S'està autodesant…"
 
 #: main/KoDocument.cpp:720
 #, kde-format
@@ -1356,7 +1356,7 @@ msgstr "%1 document sense guardar (%2)"
 #: main/KoMainWindow.cpp:263
 #, kde-format
 msgid "Export as PDF..."
-msgstr "Exporta com a PDF..."
+msgstr "Exporta com a PDF…"
 
 #: main/KoMainWindow.cpp:275
 #, kde-format
@@ -1366,17 +1366,17 @@ msgstr "Torna a carregar"
 #: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Versions..."
-msgstr "Versions..."
+msgstr "Versions…"
 
 #: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Obri un document ex&istent com a document sense títol..."
+msgstr "Obri un document ex&istent com a document sense títol…"
 
 #: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "E&xport..."
-msgstr "E&xporta..."
+msgstr "E&xporta…"
 
 #: main/KoMainWindow.cpp:291
 #, kde-format
@@ -1618,7 +1618,7 @@ msgstr "Grup:"
 #: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
-msgstr "Afi&g grup..."
+msgstr "Afi&g un grup…"
 
 #: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, kde-format
@@ -1643,7 +1643,7 @@ msgstr "Personalitzada:"
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
-msgstr "&Selecciona..."
+msgstr "&Selecciona…"
 
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
@@ -2388,12 +2388,12 @@ msgstr "Elimina la pàgina actual"
 #: pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Master Page..."
-msgstr "Pàgina mestra..."
+msgstr "Pàgina mestra…"
 
 #: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Page Layout..."
-msgstr "Disposició de pàgina..."
+msgstr "Disposició de pàgina…"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
@@ -2404,12 +2404,12 @@ msgstr "Variable"
 #: pageapp/KoPAView.cpp:419
 #, kde-format
 msgid "Import Document..."
-msgstr "Importa el document..."
+msgstr "Importa el document…"
 
 #: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #: pageapp/KoPAView.cpp:513
 #, kde-format
@@ -2434,7 +2434,7 @@ msgstr "Canvia la disposició de la pàgina"
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
 #, kde-format
 msgid "Set image ..."
-msgstr "Definix una imatge..."
+msgstr "Definix una imatge…"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
@@ -4068,7 +4068,7 @@ msgstr "Recent:"
 #: widgets/KoColorSetWidget.cpp:163
 #, kde-format
 msgid "Add / Remove Colors..."
-msgstr "Afig / Elimina colors..."
+msgstr "Afig / Elimina colors…"
 
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
@@ -4369,7 +4369,7 @@ msgstr "&Detalls"
 #: widgets/KoDialog.cpp:961
 #, kde-format
 msgid "Get help..."
-msgstr "Obtín ajuda..."
+msgstr "Obtín ajuda…"
 
 #: widgets/KoDockWidgetTitleBar.cpp:54
 #, kde-format

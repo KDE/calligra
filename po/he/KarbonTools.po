@@ -10,66 +10,67 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:37-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 23:58+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
 msgid "A calligraphic shape"
-msgstr ""
+msgstr "צורה קליגרפית"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
 #, kde-format
 msgid "Calligraphic Shape"
-msgstr ""
+msgstr "צורה קליגרפית"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
 #, kde-format
 msgid "Save profile as..."
-msgstr ""
+msgstr "שמירת פרופיל בשם…"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
 msgid "Remove profile"
-msgstr ""
+msgstr "הסרת פרופיל"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
 #, kde-format
 msgid "&Follow selected path"
-msgstr ""
+msgstr "מ&עקב אחר הנתיב הנבחר"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr ""
+msgstr "להשתמש ב&לחץ לוח ציור"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
 #, kde-format
 msgid "Width:"
-msgstr ""
+msgstr "עובי:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
 #, kde-format
 msgid "Thinning:"
-msgstr ""
+msgstr "הצרה:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
 #, kde-format
 msgid "Use tablet &angle"
-msgstr ""
+msgstr "להשתמש ב&זווית לוח הציור"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
 #, kde-format
@@ -79,50 +80,50 @@ msgstr "זווית:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
 #, kde-format
 msgid "Fixation:"
-msgstr ""
+msgstr "קיבוע:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
 #, kde-format
 msgid "Caps:"
-msgstr ""
+msgstr "קצוות:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
 #, kde-format
 msgid "Mass:"
-msgstr ""
+msgstr "נפח:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
 #, kde-format
 msgid "Drag:"
-msgstr ""
+msgstr "גרירה:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current"
-msgstr "עקומה"
+msgstr "נוכחי"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Profile name"
-msgstr "אפקטים"
+msgstr "שם פרופיל"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr ""
+msgstr "נא למלא את השם שהפרופיל יישמר תחתיו:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
-msgstr ""
+msgstr "שם שגוי."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgid "Sorry, the name you entered is invalid."
-msgstr ""
+msgstr "השם שמילאת שגוי, עמך הסליחה."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
@@ -130,17 +131,19 @@ msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
+"כבר קיים פרופיל בשם הזה.\n"
+"להחליף אותו?"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
 #, kde-format
 msgid "Mouse"
-msgstr ""
+msgstr "עכבר"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
-#, fuzzy, kde-format
+#, kde-format
 msgid "Graphics Pen"
-msgstr "עירוב"
+msgstr "עט גרפי"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:332
 #, kde-format
@@ -150,72 +153,72 @@ msgstr "מלא"
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:360
 #, kde-format
 msgid "Calligraphy: increase width"
-msgstr ""
+msgstr "קליגרפיה: הרחבה"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:365
 #, kde-format
 msgid "Calligraphy: decrease width"
-msgstr ""
+msgstr "קליגרפיה: הצרה"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:370
 #, kde-format
 msgid "Calligraphy: increase angle"
-msgstr ""
+msgstr "קליגרפיה: הגדלת זווית"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:375
 #, kde-format
 msgid "Calligraphy: decrease angle"
-msgstr ""
+msgstr "קליגרפיה: הקטנת זווית"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:382
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:383
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
-msgstr ""
+msgstr "קליגרפיה"
 
 #: filterEffectTool/FilterAddCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
-msgstr ""
+msgstr "הוספת אפקט מסנן"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
-msgstr ""
+msgstr "הוספת אפקט לערימת האפקטים הנוכחית"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
 msgid "Add to filter presets"
-msgstr ""
+msgstr "הוספה לערכות מסננים"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, kde-format
 msgid "Remove filter preset"
-msgstr ""
+msgstr "הסרת ערכת מסננים"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effect name"
-msgstr "אפקטים"
+msgstr "שם אפקט"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
-msgstr ""
+msgstr "נא למלא שם לאפקט המסנן"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:320
 #, kde-format
 msgid "Filter Effect Editor"
-msgstr ""
+msgstr "עורך אפקט מסנן"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: filterEffectTool/FilterEffectEditWidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effects and Connections"
-msgstr "מאפיינים"
+msgstr "אפקטים וחיבורים"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeEffect)
 #. i18n: ectx: property (text), widget (QToolButton, addEffect)
@@ -231,115 +234,115 @@ msgstr "מאפיינים"
 #: filterEffectTool/FilterEffectEditWidget.ui:109
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: filterEffectTool/FilterEffectEditWidget.ui:92
 #, kde-format
 msgid "Filter Presets"
-msgstr ""
+msgstr "ערכות מסננים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:474
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effect Properties"
-msgstr "מאפיינים"
+msgstr "מאפייני אפקט"
 
 #: filterEffectTool/FilterRemoveCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
-msgstr ""
+msgstr "הסרת אפקט מסנן"
 
 #: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr ""
+msgstr "הגדרת ערימת מסננים"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effects"
-msgstr "אפק&טים"
+msgstr "אפקטים"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
-msgstr ""
+msgstr "הצגת ועריכת מסנן"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, kde-format
 msgid "Remove filter from object"
-msgstr ""
+msgstr "הסרת מסנן מעצם"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
 msgid "Add Filter"
-msgstr ""
+msgstr "הוספת מסנן"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:486
 #, kde-format
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:492
 #, kde-format
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:498
 #, kde-format
 msgid "W:"
-msgstr ""
+msgstr "רוחב:"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:504
 #, kde-format
 msgid "H:"
-msgstr ""
+msgstr "גובה:"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effect Region"
-msgstr "אפקטים"
+msgstr "אזור אפקט"
 
 #: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
 #, kde-format
 msgid "Filter effects editing"
-msgstr ""
+msgstr "עריכת אפקטי מסנן"
 
 #: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
-msgstr ""
+msgstr "גרירה להזזת מקום מדרג."
 
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
-msgstr ""
+msgstr "גרירה להזזת נקודת צבע. לחיצה כפולה להסרת נקודת צבע."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
-msgstr ""
+msgstr "גלילה להזזת נקודת צבע."
 
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
-msgstr ""
+msgstr "גרירה להזזת מקום מדרג. לחיצה כפולה להוספת נקודת צבע."
 
 #: KarbonGradientTool.cpp:493
 #, kde-format
 msgid "Edit Gradient"
-msgstr ""
+msgstr "עריכת מדרג"
 
 #: KarbonGradientTool.cpp:495
 #, kde-format
 msgid "Predefined Gradients"
-msgstr ""
+msgstr "ערכות מדרג מוכנות"
 
 #: KarbonGradientToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gradient editing"
-msgstr "עירוב"
+msgstr "עריכת מדרג"
 
 #: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
@@ -349,7 +352,7 @@ msgstr "מקורי"
 #: KarbonPatternOptionsWidget.cpp:23
 #, kde-format
 msgid "Tiled"
-msgstr ""
+msgstr "מרוצף"
 
 #: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
@@ -404,14 +407,14 @@ msgstr "למטה מימין"
 #: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Pattern Options"
-msgstr ""
+msgstr "אפשרויות תבנית"
 
 #: KarbonPatternTool.cpp:274
 #, kde-format
 msgid "Patterns"
-msgstr ""
+msgstr "תבנית"
 
 #: KarbonPatternToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pattern editing"
-msgstr "עירוב"
+msgstr "עריכת תבנית"

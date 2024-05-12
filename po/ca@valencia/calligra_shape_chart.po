@@ -1163,7 +1163,7 @@ msgstr "Inserix una columna de dades abans de la columna seleccionada"
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
@@ -1700,7 +1700,7 @@ msgstr "Orientació"
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr "Lletres..."
+msgstr "Lletres…"
 
 #: PieConfigWidget.cpp:100
 #, kde-format
@@ -1745,7 +1745,7 @@ msgstr "Barres horitzontals"
 #: PlotAreaConfigWidget.ui:82
 #, kde-format
 msgid "Edit Data..."
-msgstr "Edita les dades..."
+msgstr "Edita les dades…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)

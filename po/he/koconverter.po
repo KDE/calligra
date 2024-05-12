@@ -10,26 +10,27 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:47-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-05-11 06:42+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "צוות התרגום KDE-IL"
+msgstr "צוות התרגום של KDE ישראל"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -37,34 +38,34 @@ msgid "Your emails"
 msgstr "kde-l10n-he@kde.org"
 
 #: calligraconverter.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "CalligraConverter"
-msgstr "ממיר המסמכים של KOffice"
+msgstr "ממיר המסמכים של Calligra"
 
 #: calligraconverter.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calligra Document Converter"
-msgstr "ממיר המסמכים של KOffice"
+msgstr "ממיר המסמכים של Calligra"
 
 #: calligraconverter.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr "(c) 2001-2004, KOffice המפתחים של"
+msgstr "כל הזכויות שמורות ‏2001-%1 למפתחי Calligra"
 
 #: calligraconverter.cpp:184
 #, kde-format
 msgid "David Faure"
-msgstr "David Faure"
+msgstr "דוד פור"
 
 #: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
-msgstr "Nicolas Goutte"
+msgstr "ניקולס גוט"
 
 #: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
-msgstr ""
+msgstr "דן לייניר טורסתרה ג׳נסן"
 
 #: calligraconverter.cpp:193
 #, kde-format
@@ -84,32 +85,32 @@ msgstr "יצירת גיבוי לקובץ היעד"
 #: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
-msgstr "מצב אצווה: ללא הצגת תיבות דו־שיח"
+msgstr "מצב מרוכז: ללא הצגת חלוניות"
 
 #: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr "(מצב אינטראקטיבי: עם תיבות דו־שיח (ברירת המחדל"
+msgstr "מצב תפעולי: עם חלוניות (ברירת המחדל)"
 
 #: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
-msgstr "טיפוס ה־Mime של קובץ הפלט"
+msgstr "סוג תוכן (MIME) קובץ הפלט"
 
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "כיוון ההדפסה. יכול להיות אופקי או אנכי."
 
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "גודל הדף. A4, משפטי, מכתב, …"
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "גודל שולי הדף. 0.2 כברירת מחדל."
 
 #: calligraconverter.cpp:215
 #, kde-format
@@ -119,19 +120,19 @@ msgstr "דרושים שני ארגומנטים"
 #: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr "טיפוס ה־Mime של קובץ הקלט %1 לא נמצא."
+msgstr "סוג תוכן (MIME) קובץ הקלט %1 לא נמצא!"
 
 #: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
-msgstr "טיפוס ה־Mime לא נמצא %1"
+msgstr "סוג התוכן (MIME) לא נמצא %1"
 
 #: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "טיפוס ה־Mime לא נמצא. נסה להשתמש באפשרות mimetype-"
+msgstr "סוג התוכן (MIME) לא נמצא. נא לנסות להשתמש באפשרות mimetype-"
 
 #: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
-msgstr "*** ההמרה לא הצליחה. ***"
+msgstr "*** ההמרה נכשלה! ***"

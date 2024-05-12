@@ -29,7 +29,7 @@ msgstr "Canvia el vídeo"
 #: forms/VideoToolWidget.ui:33
 #, kde-format
 msgid "Replace video..."
-msgstr "Substituïx el vídeo..."
+msgstr "Substituïx el vídeo…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40
