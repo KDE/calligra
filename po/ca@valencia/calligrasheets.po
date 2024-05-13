@@ -4535,12 +4535,12 @@ msgstr "El port ha de ser un número"
 #: dialogs/DatabaseDialog.cpp:605
 #, kde-format
 msgid "Connecting to database..."
-msgstr "S'està connectant amb la base de dades..."
+msgstr "S'està connectant amb la base de dades…"
 
 #: dialogs/DatabaseDialog.cpp:607
 #, kde-format
 msgid "Connected. Retrieving table information..."
-msgstr "Connectat. S'està recuperant la informació de les taules..."
+msgstr "Connectat. S'està recuperant la informació de les taules…"
 
 #: dialogs/DatabaseDialog.cpp:611
 #, kde-format
@@ -4555,7 +4555,7 @@ msgstr "El controlador no s'ha pogut carregar"
 #: dialogs/DatabaseDialog.cpp:657
 #, kde-format
 msgid "Retrieving meta data of tables..."
-msgstr "S'estan recuperant les metadades de les taules..."
+msgstr "S'estan recuperant les metadades de les taules…"
 
 #: dialogs/DatabaseDialog.cpp:670
 #, kde-format
@@ -5083,7 +5083,7 @@ msgstr "La cel·la de destinació ha de contindre una fórmula."
 #: dialogs/GoalSeekDialog.cpp:213
 #, kde-format
 msgid "Starting..."
-msgstr "Iniciant..."
+msgstr "Iniciant…"
 
 #: dialogs/GoalSeekDialog.cpp:214
 #, kde-format
@@ -5848,12 +5848,12 @@ msgstr "Àrea %1"
 #: dialogs/NamedAreaDialog.cpp:77 dialogs/StyleManagerDialog.cpp:62
 #, kde-format
 msgid "&New..."
-msgstr "&Nou..."
+msgstr "&Nou…"
 
 #: dialogs/NamedAreaDialog.cpp:79
 #, kde-format
 msgid "&Edit..."
-msgstr "&Edita..."
+msgstr "&Edita…"
 
 #: dialogs/NamedAreaDialog.cpp:81
 #, kde-format
@@ -6401,8 +6401,8 @@ msgstr ""
 "Esta pestanya us permet d'establir la protecció de cel·les. De manera "
 "predeterminada, es protegixen totes les cel·les (açò vol dir que el "
 "contingut d'estes no es pot canviar) i, per a activar la protecció, també "
-"heu de protegir el full amb el menú Eines -> Protegix full... i posant-hi "
-"una contrasenya.\n"
+"heu de protegir el full amb el menú Eines -> Protegix full… i posant-hi una "
+"contrasenya.\n"
 "També podeu ocultar la fórmula de la cel·la per tal de protegir la manera en "
 "què calculeu la fórmula. Per a açò també cal que establiu la protecció del "
 "full.\n"
@@ -6469,10 +6469,10 @@ msgid ""
 msgstr ""
 "Si està marcada, es protegirà el contingut de la cel·la. Este és el "
 "comportament predeterminat. Heu de protegir tot el full amb el menú Eines-> "
-"Protegix document -> Protegix full... per tal que funcione la protecció de "
-"la cel·la individual. Per a més detalls, vegeu el manual, al capítol Sheets "
-"de Calligra avançat. Quan una cel·la està protegida, el seu contingut no es "
-"pot canviar."
+"Protegix document -> Protegix full… per tal que funcione la protecció de la "
+"cel·la individual. Per a més detalls, vegeu el manual, al capítol Sheets de "
+"Calligra avançat. Quan una cel·la està protegida, el seu contingut no es pot "
+"canviar."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_bIsProtected)
 #: dialogs/ProtectionWidget.ui:99
@@ -6539,7 +6539,7 @@ msgstr "Tipus"
 #: dialogs/SeriesDialog.cpp:61
 #, kde-format
 msgid "Linear (2,4,6,...)"
-msgstr "Lineal (2,4,6,...)"
+msgstr "Lineal (2,4,6…)"
 
 #: dialogs/SeriesDialog.cpp:62
 #, kde-format
@@ -6555,7 +6555,7 @@ msgstr ""
 #: dialogs/SeriesDialog.cpp:65
 #, kde-format
 msgid "Geometric (2,4,8,...)"
-msgstr "Geomètrica (2,4,8,...)"
+msgstr "Geomètrica (2,4,8…)"
 
 #: dialogs/SeriesDialog.cpp:66
 #, kde-format
@@ -6918,12 +6918,12 @@ msgstr "Jeràrquic"
 #: dialogs/StyleManagerDialog.cpp:64
 #, kde-format
 msgid "&Modify..."
-msgstr "&Modifica..."
+msgstr "&Modifica…"
 
 #: dialogs/StyleManagerDialog.cpp:66
 #, kde-format
 msgid "&Delete..."
-msgstr "Sup&rimix..."
+msgstr "Sup&rimix…"
 
 #: dialogs/StyleManagerDialog.cpp:206 dialogs/StyleManagerDialog.cpp:209
 #, kde-format
@@ -8185,7 +8185,7 @@ msgid ""
 msgstr ""
 "La funció WEEKDAY() retorna el dia de la setmana de la data donada. Si el "
 "mètode és 1 (de manera predeterminada), retorna 1 per a diumenge, 2 per a "
-"dilluns... si el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts..."
+"dilluns… si el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts…"
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -8642,7 +8642,7 @@ msgstr "Dia"
 #, kde-format
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
-msgstr "La funció DAYOFYEAR() retorna el nombre del dia de l'any (1...365)."
+msgstr "La funció DAYOFYEAR() retorna el nombre del dia de l'any (1…365)."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -8848,7 +8848,7 @@ msgstr "Número del mes (1..12)"
 #: functions/datetime.xml:508
 #, kde-format
 msgid "The MONTHNAME() function returns the name of the month (1...12)."
-msgstr "La funció MONTHNAME() retorna el nom del mes (1...12)."
+msgstr "La funció MONTHNAME() retorna el nom del mes (1…12)."
 
 #: functions/datetime.xml:509
 #, kde-format
@@ -10255,7 +10255,7 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr "IMSUM(valor;valor;...)"
+msgstr "IMSUM(valor;valor;…)"
 
 #: functions/engineering.xml:723
 #, kde-format
@@ -10278,7 +10278,7 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr "IMDIV(valor;valor;...)"
+msgstr "IMDIV(valor;valor;…)"
 
 #: functions/engineering.xml:754
 #, kde-format
@@ -10301,7 +10301,7 @@ msgstr ""
 #: functions/engineering.xml:785
 #, kde-format
 msgid "IMSUB(value;value;...)"
-msgstr "IMSUB(valor;valor;...)"
+msgstr "IMSUB(valor;valor;…)"
 
 #: functions/engineering.xml:786
 #, kde-format
@@ -10324,7 +10324,7 @@ msgstr ""
 #: functions/engineering.xml:816
 #, kde-format
 msgid "IMPRODUCT(value;value;...)"
-msgstr "IMPRODUCT(valor;valor;...)"
+msgstr "IMPRODUCT(valor;valor;…)"
 
 #: functions/engineering.xml:817
 #, kde-format
@@ -12777,7 +12777,7 @@ msgstr ""
 #: functions/logic.xml:52
 #, kde-format
 msgid "AND(value;value;...)"
-msgstr "AND(valor;valor;...)"
+msgstr "AND(valor;valor;…)"
 
 #: functions/logic.xml:53
 #, kde-format
@@ -12803,7 +12803,7 @@ msgstr ""
 #: functions/logic.xml:83
 #, kde-format
 msgid "OR(value;value;...)"
-msgstr "OR(valor;valor;...)"
+msgstr "OR(valor;valor;…)"
 
 #: functions/logic.xml:84
 #, kde-format
@@ -12827,7 +12827,7 @@ msgstr ""
 #: functions/logic.xml:114
 #, kde-format
 msgid "NAND(value;value;...)"
-msgstr "NAND(valor;valor;...)"
+msgstr "NAND(valor;valor;…)"
 
 #: functions/logic.xml:115
 #, kde-format
@@ -12851,7 +12851,7 @@ msgstr ""
 #: functions/logic.xml:145
 #, kde-format
 msgid "NOR(value;value;...)"
-msgstr "NOR(valor;valor;...)"
+msgstr "NOR(valor;valor;…)"
 
 #: functions/logic.xml:146
 #, kde-format
@@ -12875,7 +12875,7 @@ msgstr ""
 #: functions/logic.xml:176
 #, kde-format
 msgid "XOR(value;value;...)"
-msgstr "XOR(valor;valor;...)"
+msgstr "XOR(valor;valor;…)"
 
 #: functions/logic.xml:177
 #, kde-format
@@ -13424,7 +13424,7 @@ msgstr ""
 #: functions/math.xml:297
 #, kde-format
 msgid "COUNT(value;value;value...)"
-msgstr "COUNT(valor;valor;valor...)"
+msgstr "COUNT(valor;valor;valor…)"
 
 #: functions/math.xml:298
 #, kde-format
@@ -13450,7 +13450,7 @@ msgstr ""
 #: functions/math.xml:315
 #, kde-format
 msgid "COUNTA(value;value;value...)"
-msgstr "COUNTA(valor;valor;valor...)"
+msgstr "COUNTA(valor;valor;valor…)"
 
 #: functions/math.xml:316
 #, kde-format
@@ -13586,7 +13586,7 @@ msgstr ""
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
 msgid "SUM(value;value;...)"
-msgstr "SUM(valor;valor;...)"
+msgstr "SUM(valor;valor;…)"
 
 #: functions/math.xml:400
 #, kde-format
@@ -13681,7 +13681,7 @@ msgstr ""
 #: functions/math.xml:459
 #, kde-format
 msgid "PRODUCT(value;value;...)"
-msgstr "PRODUCT(valor;valor;...)"
+msgstr "PRODUCT(valor;valor;…)"
 
 #: functions/math.xml:460
 #, kde-format
@@ -13708,7 +13708,7 @@ msgstr ""
 #: functions/math.xml:476
 #, kde-format
 msgid "KPRODUCT(value;value;...)"
-msgstr "KPRODUCT(valor;valor;...)"
+msgstr "KPRODUCT(valor;valor;…)"
 
 #: functions/math.xml:477
 #, kde-format
@@ -13732,7 +13732,7 @@ msgstr ""
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr "G_PRODUCT(valor;valor;...)"
+msgstr "G_PRODUCT(valor;valor;…)"
 
 #: functions/math.xml:507
 #, kde-format
@@ -13742,7 +13742,7 @@ msgstr "La funció DIV() dividix el primer valor pels altres valors en torn."
 #: functions/math.xml:508
 #, kde-format
 msgid "DIV(value;value;...)"
-msgstr "DIV(valor;valor;...)"
+msgstr "DIV(valor;valor;…)"
 
 #: functions/math.xml:509
 #, kde-format
@@ -13768,7 +13768,7 @@ msgstr ""
 #: functions/math.xml:525
 #, kde-format
 msgid "SUMSQ(value;value;...)"
-msgstr "SUMSQ(valor;valor;...)"
+msgstr "SUMSQ(valor;valor;…)"
 
 #: functions/math.xml:526
 #, kde-format
@@ -13792,7 +13792,7 @@ msgstr ""
 #: functions/math.xml:542
 #, kde-format
 msgid "MAX(value;value;...)"
-msgstr "MAX(valor;valor;...)"
+msgstr "MAX(valor;valor;…)"
 
 #: functions/math.xml:543
 #, kde-format
@@ -13821,7 +13821,7 @@ msgstr ""
 #: functions/math.xml:563
 #, kde-format
 msgid "MAXA(value;value;...)"
-msgstr "MAXA(valor;valor;...)"
+msgstr "MAXA(valor;valor;…)"
 
 #: functions/math.xml:564
 #, kde-format
@@ -13850,7 +13850,7 @@ msgstr ""
 #: functions/math.xml:584
 #, kde-format
 msgid "MIN(value;value;...)"
-msgstr "MIN(valor;valor;...)"
+msgstr "MIN(valor;valor;…)"
 
 #: functions/math.xml:585
 #, kde-format
@@ -13879,7 +13879,7 @@ msgstr ""
 #: functions/math.xml:605
 #, kde-format
 msgid "MINA(value;value;...)"
-msgstr "MINA(valor;valor;...)"
+msgstr "MINA(valor;valor;…)"
 
 #: functions/math.xml:606
 #, kde-format
@@ -13910,7 +13910,7 @@ msgstr ""
 #: functions/math.xml:626
 #, kde-format
 msgid "MULTIPLY(value;value;...)"
-msgstr "MULTIPLY(valor;valor;...)"
+msgstr "MULTIPLY(valor;valor;…)"
 
 #: functions/math.xml:627
 #, kde-format
@@ -13939,7 +13939,7 @@ msgstr "(a+b+c)! / a!b!c!"
 #: functions/math.xml:645
 #, kde-format
 msgid "MULTINOMIAL(value;value;...)"
-msgstr "MULTINOMIAL(valor;valor;...)"
+msgstr "MULTINOMIAL(valor;valor;…)"
 
 #: functions/math.xml:646
 #, kde-format
@@ -14344,7 +14344,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() dona, per exemple, 0,78309922..."
+msgstr "RAND() dona, per exemple, 0,78309922…"
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -14518,7 +14518,7 @@ msgstr "RANDBETWEEN(inferior;superior)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78) dona, per exemple, 61,0811..."
+msgstr "RANDBETWEEN(12;78) dona, per exemple, 61,0811…"
 
 #: functions/math.xml:1094
 #, kde-format
@@ -14686,8 +14686,8 @@ msgid ""
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
 "La funció FIB calcula el terme enèsim de la successió de Fibonacci (1, 1, 2, "
-"3, 5, 8, 13, 21...), en què cada nombre, després dels dos primers, és la "
-"suma dels dos anteriors. FIB(0) és 0 per definició."
+"3, 5, 8, 13, 21…), en què cada nombre, després dels dos primers, és la suma "
+"dels dos anteriors. FIB(0) és 0 per definició."
 
 #: functions/math.xml:1186
 #, kde-format
@@ -15029,7 +15029,7 @@ msgstr "Retorna el paràmetre especificat per l'índex."
 #: functions/reference.xml:90
 #, kde-format
 msgid "CHOOSE(index; parameter1; parameter2;...)"
-msgstr "CHOOSE(índex; paràmetre1; paràmetre2;...)"
+msgstr "CHOOSE(índex; paràmetre1; paràmetre2;…)"
 
 #: functions/reference.xml:91
 #, kde-format
@@ -15535,7 +15535,7 @@ msgstr ""
 #: functions/statistical.xml:32
 #, kde-format
 msgid "AVEDEV(value;value;...)"
-msgstr "AVEDEV(valor;valor;...)"
+msgstr "AVEDEV(valor;valor;…)"
 
 #: functions/statistical.xml:33
 #, kde-format
@@ -15545,7 +15545,7 @@ msgstr "AVEDEV(11,4;17,3;21,3;25,9;40,1) retorna 7,84"
 #: functions/statistical.xml:34
 #, kde-format
 msgid "AVEDEV(A1:A5) ..."
-msgstr "AVEDEV(A1:A5)..."
+msgstr "AVEDEV(A1:A5)…"
 
 #: functions/statistical.xml:62
 #, kde-format
@@ -15561,7 +15561,7 @@ msgstr ""
 #: functions/statistical.xml:63
 #, kde-format
 msgid "AVERAGE(value;value;...)"
-msgstr "AVERAGE(valor;valor;...)"
+msgstr "AVERAGE(valor;valor;…)"
 
 #: functions/statistical.xml:64
 #, kde-format
@@ -15596,7 +15596,7 @@ msgstr ""
 #: functions/statistical.xml:82
 #, kde-format
 msgid "AVERAGEA(value;value;...)"
-msgstr "AVERAGEA(valor;valor;...)"
+msgstr "AVERAGEA(valor;valor;…)"
 
 #: functions/statistical.xml:83
 #, kde-format
@@ -15907,7 +15907,7 @@ msgstr "La funció DEVSQ() calcula el sumatori del quadrat de les desviacions."
 #: functions/statistical.xml:298
 #, kde-format
 msgid "DEVSQ(value; value;...)"
-msgstr "DEVSQ(valor; valor;...)"
+msgstr "DEVSQ(valor; valor;…)"
 
 #: functions/statistical.xml:299
 #, kde-format
@@ -16230,7 +16230,7 @@ msgstr ""
 #: functions/statistical.xml:518
 #, kde-format
 msgid "GEOMEAN(value; value;...)"
-msgstr "GEOMEAN(valor; valor;...)"
+msgstr "GEOMEAN(valor; valor;…)"
 
 #: functions/statistical.xml:519
 #, kde-format
@@ -16254,7 +16254,7 @@ msgstr ""
 #: functions/statistical.xml:550
 #, kde-format
 msgid "HARMEAN(value; value;...)"
-msgstr "HARMEAN(valor; valor;...)"
+msgstr "HARMEAN(valor; valor;…)"
 
 #: functions/statistical.xml:551
 #, kde-format
@@ -16341,7 +16341,7 @@ msgstr ""
 #: functions/statistical.xml:625
 #, kde-format
 msgid "KURT(value; value;...)"
-msgstr "KURT(valor; valor;...)"
+msgstr "KURT(valor; valor;…)"
 
 #: functions/statistical.xml:626
 #, kde-format
@@ -16365,7 +16365,7 @@ msgstr ""
 #: functions/statistical.xml:657
 #, kde-format
 msgid "KURTP(value; value;...)"
-msgstr "KURTP(valor; valor;...)"
+msgstr "KURTP(valor; valor;…)"
 
 #: functions/statistical.xml:658
 #, kde-format
@@ -16498,7 +16498,7 @@ msgstr ""
 #: functions/statistical.xml:773
 #, kde-format
 msgid "MEDIAN(value;value;...)"
-msgstr "MEDIAN(valor;valor;...)"
+msgstr "MEDIAN(valor;valor;…)"
 
 #: functions/statistical.xml:774
 #, kde-format
@@ -16530,7 +16530,7 @@ msgstr "La funció MODE() retorna el valor més freqüent d'un conjunt de dades.
 #: functions/statistical.xml:800
 #, kde-format
 msgid "MODE(number; number2; ...)"
-msgstr "MODE(número1; número2;...)"
+msgstr "MODE(número1; número2;…)"
 
 #: functions/statistical.xml:801
 #, kde-format
@@ -16944,7 +16944,7 @@ msgstr "La funció SKEW() retorna una estimació del biaix d'una distribució"
 #: functions/statistical.xml:1088
 #, kde-format
 msgid "SKEW(number; number2; ...)"
-msgstr "SKEW(número1; número2;...)"
+msgstr "SKEW(número1; número2;…)"
 
 #: functions/statistical.xml:1089
 #, kde-format
@@ -16964,7 +16964,7 @@ msgstr "La funció SKEWP() retorna el biaix poblacional d'una distribució"
 #: functions/statistical.xml:1116
 #, kde-format
 msgid "SKEWP(number; number2; ...)"
-msgstr "SKEWP(número1; número2;...)"
+msgstr "SKEWP(número1; número2;…)"
 
 #: functions/statistical.xml:1117
 #, kde-format
@@ -17052,7 +17052,7 @@ msgstr ""
 #: functions/statistical.xml:1205
 #, kde-format
 msgid "STDEV(value;value;...)"
-msgstr "STDEV(valor;valor;...)"
+msgstr "STDEV(valor;valor;…)"
 
 #: functions/statistical.xml:1206
 #, kde-format
@@ -17076,7 +17076,7 @@ msgstr ""
 #: functions/statistical.xml:1236
 #, kde-format
 msgid "STDEVA(value;value;...)"
-msgstr "STDEVA(valor;valor;...)"
+msgstr "STDEVA(valor;valor;…)"
 
 #: functions/statistical.xml:1237
 #, kde-format
@@ -17099,12 +17099,12 @@ msgstr ""
 #: functions/statistical.xml:1269
 #, kde-format
 msgid "STDEVP(value;value;...)"
-msgstr "STDEVP(valor;valor;...)"
+msgstr "STDEVP(valor;valor;…)"
 
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr "STDEVP(6;7;8) fa 0,816497..."
+msgstr "STDEVP(6;7;8) fa 0,816497…"
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -17120,22 +17120,22 @@ msgstr ""
 #: functions/statistical.xml:1300
 #, kde-format
 msgid "STDEVPA(value;value;...)"
-msgstr "STDEVPA(valor;valor;...)"
+msgstr "STDEVPA(valor;valor;…)"
 
 #: functions/statistical.xml:1301
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty"
-msgstr "STDEVPA(6; 7; A1; 8) fa 0,816497..., si A1 està buida"
+msgstr "STDEVPA(6; 7; A1; 8) fa 0,816497…, si A1 està buida"
 
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) fa 2,69..., si A1 és CERT"
+msgstr "STDEVPA(6; 7; A1; 8) fa 2,69…, si A1 és CERT"
 
 #: functions/statistical.xml:1303
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE"
-msgstr "STDEVPA(6; 7; A1; 8) fa 3,11..., si A1 és FALS"
+msgstr "STDEVPA(6; 7; A1; 8) fa 3,11…, si A1 és FALS"
 
 #: functions/statistical.xml:1321
 #, kde-format
@@ -17506,7 +17506,7 @@ msgstr "La funció VAR() calcula la variància basada en una mostra."
 #: functions/statistical.xml:1519
 #, kde-format
 msgid "VAR(value;value;...)"
-msgstr "VAR(valor;valor;...)"
+msgstr "VAR(valor;valor;…)"
 
 #: functions/statistical.xml:1520
 #, kde-format
@@ -17516,7 +17516,7 @@ msgstr "VAR(12;5;7) fa 13"
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr "VAR(15;80;3) fa 1716,333..."
+msgstr "VAR(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1522
 #, kde-format
@@ -17541,7 +17541,7 @@ msgstr ""
 #: functions/statistical.xml:1555
 #, kde-format
 msgid "VARA(value;value;...)"
-msgstr "VARA(valor;valor;...)"
+msgstr "VARA(valor;valor;…)"
 
 #: functions/statistical.xml:1556
 #, kde-format
@@ -17551,7 +17551,7 @@ msgstr "VARA(12;5;7) fa 13"
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr "VARA(15;80;3) fa 1716,333..."
+msgstr "VARA(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1558
 #, kde-format
@@ -17570,7 +17570,7 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr "VARIANCE(valor;valor;...)"
+msgstr "VARIANCE(valor;valor;…)"
 
 #: functions/statistical.xml:1591
 #, kde-format
@@ -17580,7 +17580,7 @@ msgstr "VARIANCE(12;5;7) fa 13"
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "VARIANCE(15;80;3) fa 1716,333..."
+msgstr "VARIANCE(15;80;3) fa 1716,333…"
 
 #: functions/statistical.xml:1593
 #, kde-format
@@ -17596,22 +17596,22 @@ msgstr "La funció VARP() calcula la variància basada en una població sencera.
 #: functions/statistical.xml:1626
 #, kde-format
 msgid "VARP(value;value;...)"
-msgstr "VARP(valor;valor;...)"
+msgstr "VARP(valor;valor;…)"
 
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr "VARP(12;5;7) fa 8,666..."
+msgstr "VARP(12;5;7) fa 8,666…"
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr "VARP(15;80;3) fa 1144,22..."
+msgstr "VARP(15;80;3) fa 1144,22…"
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr "VARP(6;7;8) fa 0,6666667..."
+msgstr "VARP(6;7;8) fa 0,6666667…"
 
 #: functions/statistical.xml:1660
 #, kde-format
@@ -17627,22 +17627,22 @@ msgstr ""
 #: functions/statistical.xml:1661
 #, kde-format
 msgid "VARPA(value;value;...)"
-msgstr "VARPA(valor;valor;...)"
+msgstr "VARPA(valor;valor;…)"
 
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr "VARPA(12;5;7) fa 8,666..."
+msgstr "VARPA(12;5;7) fa 8,666…"
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr "VARPA(15;80;3) fa 1144,22..."
+msgstr "VARPA(15;80;3) fa 1144,22…"
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr "VARPA(6;7;8) fa 0,6666667..."
+msgstr "VARPA(6;7;8) fa 0,6666667…"
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -18482,7 +18482,7 @@ msgstr ""
 #: functions/text.xml:468
 #, kde-format
 msgid "CONCATENATE(value;value;...)"
-msgstr "CONCATENATE(valor;valor;...)"
+msgstr "CONCATENATE(valor;valor;…)"
 
 #: functions/text.xml:469
 #, kde-format
@@ -19386,7 +19386,7 @@ msgstr "PI()"
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr "PI() fa 3,141592654..."
+msgstr "PI() fa 3,141592654…"
 
 #: functions/trig.xml:286
 #, kde-format
@@ -19421,7 +19421,7 @@ msgstr "CSCH(decimals)"
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "CSCH(PI()/2) fa 0,434537208..."
+msgstr "CSCH(PI()/2) fa 0,434537208…"
 
 #: functions/trig.xml:314
 #, kde-format
@@ -19913,7 +19913,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:212
 #, kde-format
 msgid "Custom..."
-msgstr "A mida..."
+msgstr "A mida…"
 
 # msgid "Border Outline"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -20599,7 +20599,7 @@ msgstr "No hi ha res per a imprimir pels fulls %1."
 #: part/View.cpp:264
 #, kde-format
 msgid "Sheet Properties..."
-msgstr "Propietats del full..."
+msgstr "Propietats del full…"
 
 #: part/View.cpp:267
 #, kde-format
@@ -20640,7 +20640,7 @@ msgstr "Elimina el full seleccionat"
 #: part/View.cpp:286
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Canvia el nom del full..."
+msgstr "Canvia el nom del full…"
 
 #: part/View.cpp:289
 #, kde-format
@@ -20650,7 +20650,7 @@ msgstr "Canvia el nom del full actiu"
 #: part/View.cpp:291
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Mostra el full..."
+msgstr "Mostra el full…"
 
 #: part/View.cpp:294
 #, kde-format
@@ -20670,7 +20670,7 @@ msgstr "Oculta el full actiu"
 #: part/View.cpp:301
 #, kde-format
 msgid "Page Layout..."
-msgstr "Disposició de la pàgina..."
+msgstr "Disposició de la pàgina…"
 
 #: part/View.cpp:304
 #, kde-format
@@ -20727,7 +20727,7 @@ msgstr "Recalcula el valor de totes les cel·les de tots els fulls de càlcul"
 #: part/View.cpp:332
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "Protegix el &full..."
+msgstr "Protegix el &full…"
 
 #: part/View.cpp:334
 #, kde-format
@@ -20737,7 +20737,7 @@ msgstr "Protegix el full contra les modificacions"
 #: part/View.cpp:338
 #, kde-format
 msgid "Protect &Document..."
-msgstr "Protegix el &document..."
+msgstr "Protegix el &document…"
 
 #: part/View.cpp:340
 #, kde-format
@@ -20747,7 +20747,7 @@ msgstr "Protegix el document contra les modificacions"
 #: part/View.cpp:345
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "Crea &una plantilla a partir d'un document..."
+msgstr "Crea &una plantilla a partir d'un document…"
 
 #: part/View.cpp:349
 #, kde-format
@@ -21089,7 +21089,7 @@ msgstr "Fórmula"
 #: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Cell Format..."
-msgstr "Format de la cel·la..."
+msgstr "Format de la cel·la…"
 
 #: ui/CellToolBase.cpp:174
 #, kde-format
@@ -21104,7 +21104,7 @@ msgstr "Torna al format predeterminat"
 #: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Style Manager..."
-msgstr "Gestor d'estils..."
+msgstr "Gestor d'estils…"
 
 #: ui/CellToolBase.cpp:184
 #, kde-format
@@ -21119,7 +21119,7 @@ msgstr "Aplica un estil predeterminat a les cel·les seleccionades"
 #: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Create Style From Cell..."
-msgstr "Crea un estil a partir de la cel·la..."
+msgstr "Crea un estil a partir de la cel·la…"
 
 # msgid "Style of Cell"
 #: ui/CellToolBase.cpp:192
@@ -21140,7 +21140,7 @@ msgstr "Barrat"
 #: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Select Font..."
-msgstr "Seleccioneu el tipus de lletra..."
+msgstr "Seleccioneu el tipus de lletra…"
 
 #: ui/CellToolBase.cpp:223
 #, kde-format
@@ -21368,7 +21368,7 @@ msgstr "Disminuïx el sagnat"
 #: ui/CellToolBase.cpp:367
 #, kde-format
 msgid "Change Angle..."
-msgstr "Canvia l'angle..."
+msgstr "Canvia l'angle…"
 
 # msgid "Angle:"
 #: ui/CellToolBase.cpp:368
@@ -21517,7 +21517,7 @@ msgstr "Dissocia la regió seleccionada"
 #: ui/CellToolBase.cpp:448
 #, kde-format
 msgid "Resize Column..."
-msgstr "Canvia la mida de la columna..."
+msgstr "Canvia la mida de la columna…"
 
 #: ui/CellToolBase.cpp:451
 #, kde-format
@@ -21557,7 +21557,7 @@ msgstr "Oculta la columna d'ací"
 #: ui/CellToolBase.cpp:470
 #, kde-format
 msgid "Show Columns..."
-msgstr "Mostra les columnes..."
+msgstr "Mostra les columnes…"
 
 #: ui/CellToolBase.cpp:473
 #, kde-format
@@ -21584,7 +21584,7 @@ msgstr "Mostra les columnes ocultes de la selecció"
 #: ui/CellToolBase.cpp:486
 #, kde-format
 msgid "Resize Row..."
-msgstr "Canvia la mida de la fila..."
+msgstr "Canvia la mida de la fila…"
 
 #: ui/CellToolBase.cpp:489
 #, kde-format
@@ -21624,7 +21624,7 @@ msgstr "Oculta una fila d'ací"
 #: ui/CellToolBase.cpp:508
 #, kde-format
 msgid "Show Rows..."
-msgstr "Mostra les files..."
+msgstr "Mostra les files…"
 
 #: ui/CellToolBase.cpp:511
 #, kde-format
@@ -21662,12 +21662,12 @@ msgstr ""
 #: ui/CellToolBase.cpp:531 ui/CellToolBase.cpp:537
 #, kde-format
 msgid "Cells..."
-msgstr "Cel·les..."
+msgstr "Cel·les…"
 
 #: ui/CellToolBase.cpp:532 ui/CellToolBase_p.cpp:1248
 #, kde-format
 msgid "Insert Cells..."
-msgstr "Inserix cel·les..."
+msgstr "Inserix cel·les…"
 
 #: ui/CellToolBase.cpp:533
 #, kde-format
@@ -21677,7 +21677,7 @@ msgstr "Inserix una cel·la buida al full de càlcul"
 #: ui/CellToolBase.cpp:538
 #, kde-format
 msgid "Remove Cells..."
-msgstr "Elimina les cel·les..."
+msgstr "Elimina les cel·les…"
 
 #: ui/CellToolBase.cpp:539
 #, kde-format
@@ -21714,7 +21714,7 @@ msgstr "Elimina els continguts de la cel·la actual"
 #: ui/CellToolBase.cpp:557
 #, kde-format
 msgid "Comment..."
-msgstr "Comentari..."
+msgstr "Comentari…"
 
 #: ui/CellToolBase.cpp:558
 #, kde-format
@@ -21735,7 +21735,7 @@ msgstr "Elimina este comentari de la cel·la"
 #: ui/CellToolBase.cpp:568
 #, kde-format
 msgid "Conditional Styles..."
-msgstr "Estils condicionals..."
+msgstr "Estils condicionals…"
 
 #: ui/CellToolBase.cpp:569
 #, kde-format
@@ -21755,7 +21755,7 @@ msgstr "Elimina els estils condicionals"
 #: ui/CellToolBase.cpp:579
 #, kde-format
 msgid "&Link..."
-msgstr "&Enllaç..."
+msgstr "&Enllaç…"
 
 #: ui/CellToolBase.cpp:582
 #, kde-format
@@ -21782,7 +21782,7 @@ msgstr "Elimina un enllaç"
 #: ui/CellToolBase.cpp:590
 #, kde-format
 msgid "Validity..."
-msgstr "Validesa..."
+msgstr "Validesa…"
 
 #: ui/CellToolBase.cpp:591
 #, kde-format
@@ -21803,7 +21803,7 @@ msgstr "Elimina les proves de validesa en esta cel·la"
 #: ui/CellToolBase.cpp:603
 #, kde-format
 msgid "&Sort..."
-msgstr "&Ordena..."
+msgstr "&Ordena…"
 
 #: ui/CellToolBase.cpp:606
 #, kde-format
@@ -21874,7 +21874,7 @@ msgstr "Inserix la funció sumatori"
 #: ui/CellToolBase.cpp:648
 #, kde-format
 msgid "&Series..."
-msgstr "&Sèries..."
+msgstr "&Sèries…"
 
 #: ui/CellToolBase.cpp:651
 #, kde-format
@@ -21884,7 +21884,7 @@ msgstr "Inserix una sèrie"
 #: ui/CellToolBase.cpp:653
 #, kde-format
 msgid "&Function..."
-msgstr "&Funció..."
+msgstr "&Funció…"
 
 #: ui/CellToolBase.cpp:656
 #, kde-format
@@ -21894,7 +21894,7 @@ msgstr "Inserix una expressió matemàtica"
 #: ui/CellToolBase.cpp:658
 #, kde-format
 msgid "S&pecial Character..."
-msgstr "Caràcter e&special..."
+msgstr "Caràcter e&special…"
 
 #: ui/CellToolBase.cpp:660
 #, kde-format
@@ -21904,7 +21904,7 @@ msgstr "Inserix un o més símbols o lletres que no hi són al teclat"
 #: ui/CellToolBase.cpp:664
 #, kde-format
 msgid "From &Database..."
-msgstr "Des d'una &base de dades..."
+msgstr "Des d'una &base de dades…"
 
 #: ui/CellToolBase.cpp:668
 #, kde-format
@@ -21914,7 +21914,7 @@ msgstr "Inserix dades des d'una base de dades SQL"
 #: ui/CellToolBase.cpp:671
 #, kde-format
 msgid "From &Text File..."
-msgstr "Des d'un fitxer de &text..."
+msgstr "Des d'un fitxer de &text…"
 
 # msgid "From &Text File..."
 #: ui/CellToolBase.cpp:672
@@ -21930,7 +21930,7 @@ msgstr "Inserix dades des d'un fitxer de text a la posició/selecció actual"
 #: ui/CellToolBase.cpp:677
 #, kde-format
 msgid "From &Clipboard..."
-msgstr "Des del &porta-retalls..."
+msgstr "Des del &porta-retalls…"
 
 # msgid "From &Clipboard..."
 #: ui/CellToolBase.cpp:678
@@ -21948,7 +21948,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:683
 #, kde-format
 msgid "&Text to Columns..."
-msgstr "&Text a columnes..."
+msgstr "&Text a columnes…"
 
 #: ui/CellToolBase.cpp:686
 #, kde-format
@@ -21958,7 +21958,7 @@ msgstr "Expandix el contingut de les cel·les a múltiples columnes"
 #: ui/CellToolBase.cpp:688
 #, kde-format
 msgid "Custom Lists..."
-msgstr "Llistes personalitzades..."
+msgstr "Llistes personalitzades…"
 
 #: ui/CellToolBase.cpp:691
 #, kde-format
@@ -21969,7 +21969,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:693
 #, kde-format
 msgid "&Consolidate..."
-msgstr "&Consolida..."
+msgstr "&Consolida…"
 
 #: ui/CellToolBase.cpp:696
 #, kde-format
@@ -21980,7 +21980,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:698
 #, kde-format
 msgid "&Goal Seek..."
-msgstr "Bu&sca objectiu..."
+msgstr "Bu&sca objectiu…"
 
 #: ui/CellToolBase.cpp:701
 #, kde-format
@@ -21990,7 +21990,7 @@ msgstr "Repetix càlculs per a trobar un valor específic"
 #: ui/CellToolBase.cpp:703
 #, kde-format
 msgid "&Subtotals..."
-msgstr "&Subtotals..."
+msgstr "&Subtotals…"
 
 #: ui/CellToolBase.cpp:706
 #, kde-format
@@ -22000,7 +22000,7 @@ msgstr "Crea diferents menes de subtotals d'una llista o base de dades"
 #: ui/CellToolBase.cpp:708
 #, kde-format
 msgid "&Pivot Tables..."
-msgstr "&Taules pivot..."
+msgstr "&Taules pivot…"
 
 #: ui/CellToolBase.cpp:711
 #, kde-format
@@ -22010,7 +22010,7 @@ msgstr "Crea taules pivot"
 #: ui/CellToolBase.cpp:713
 #, kde-format
 msgid "Area Name..."
-msgstr "Nom d'àrea..."
+msgstr "Nom d'àrea…"
 
 #: ui/CellToolBase.cpp:716
 #, kde-format
@@ -22021,7 +22021,7 @@ msgstr "Posa un nom a una regió del full de càlcul"
 #: ui/CellToolBase.cpp:718
 #, kde-format
 msgid "Named Areas..."
-msgstr "Àrees amb nom..."
+msgstr "Àrees amb nom…"
 
 #: ui/CellToolBase.cpp:722
 #, kde-format
@@ -22041,7 +22041,7 @@ msgstr "Inserix una funció"
 #: ui/CellToolBase.cpp:729 ui/CellToolBase.cpp:2924
 #, kde-format
 msgid "Others..."
-msgstr "Altres..."
+msgstr "Altres…"
 
 #: ui/CellToolBase.cpp:737
 #, kde-format
@@ -22071,7 +22071,7 @@ msgstr "Apega el contingut del porta-retalls a la posició actual"
 #: ui/CellToolBase.cpp:755
 #, kde-format
 msgid "Special Paste..."
-msgstr "Apegat especial..."
+msgstr "Apegat especial…"
 
 #: ui/CellToolBase.cpp:758
 #, kde-format
@@ -22096,7 +22096,7 @@ msgstr "Selecciona totes les cel·les del full actual"
 #: ui/CellToolBase.cpp:783
 #, kde-format
 msgid "Goto Cell..."
-msgstr "Ves fins a la cel·la..."
+msgstr "Ves fins a la cel·la…"
 
 # msgid "Goto Cell"
 #: ui/CellToolBase.cpp:784
@@ -22117,18 +22117,18 @@ msgstr "Comprova l'ortografia"
 #: ui/CellToolBase.cpp:794
 #, kde-format
 msgid "Run Inspector..."
-msgstr "Inspector d'execució..."
+msgstr "Inspector d'execució…"
 
 #: ui/CellToolBase.cpp:800
 #, kde-format
 msgid "Show QTableView..."
-msgstr "Mostra la QTableView..."
+msgstr "Mostra la QTableView…"
 
 # msgid "AutoFormat..."
 #: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Auto-Format..."
-msgstr "Format automàtic..."
+msgstr "Format automàtic…"
 
 #: ui/CellToolBase.cpp:809
 #, kde-format
@@ -22138,7 +22138,7 @@ msgstr "Establix el format del full de treball"
 #: ui/CellToolBase.cpp:811
 #, kde-format
 msgid "Document Settings..."
-msgstr "Configuracions del document..."
+msgstr "Configuracions del document…"
 
 #: ui/CellToolBase.cpp:814
 #, kde-format
@@ -22339,7 +22339,7 @@ msgstr "Format científic"
 #: ui/CellToolBase_p.cpp:1252
 #, kde-format
 msgid "Delete Cells..."
-msgstr "Elimina les cel·les..."
+msgstr "Elimina les cel·les…"
 
 #: ui/CellToolBase_p.cpp:1256
 #, kde-format
@@ -22364,7 +22364,7 @@ msgstr "Elimina les files"
 #: ui/CellToolBase_p.cpp:1280
 #, kde-format
 msgid "Selection List..."
-msgstr "Llista de selecció..."
+msgstr "Llista de selecció…"
 
 #: ui/CellToolBase_p.cpp:1288
 #, kde-format

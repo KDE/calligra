@@ -189,7 +189,7 @@ msgstr "Variables de scripts per a Words"
 #: scripts/scripts.rc:62
 #, kde-format
 msgid "Read From File..."
-msgstr "Llig des de fi&txer..."
+msgstr "Llig des de fi&txer…"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:62
@@ -213,7 +213,7 @@ msgstr "Exemples per a explicar la creació de scripts amb Words"
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Insert Shape..."
-msgstr "Inserix una forma..."
+msgstr "Inserix una forma…"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:81
@@ -225,7 +225,7 @@ msgstr "Script en Python per a inserir una forma"
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Control Cursor..."
-msgstr "Controla el cursor..."
+msgstr "Controla el cursor…"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:85
@@ -237,7 +237,7 @@ msgstr "Script en Python que mostra com controlar el cursor"
 #: scripts/scripts.rc:89
 #, kde-format
 msgid "Execute Action..."
-msgstr "Executa una acció..."
+msgstr "Executa una acció…"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:89
@@ -249,7 +249,7 @@ msgstr "Script en Python que mostra l'ús de les accions"
 #: scripts/scripts.rc:93
 #, kde-format
 msgid "Tool Actions..."
-msgstr "Accions d'eines..."
+msgstr "Accions d'eines…"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:93

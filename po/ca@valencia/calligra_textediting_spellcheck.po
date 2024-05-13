@@ -25,7 +25,7 @@ msgstr ""
 #: SpellCheck.cpp:45
 #, kde-format
 msgid "Configure &Spell Checking..."
-msgstr "Configura la &verificació ortogràfica..."
+msgstr "Configura la &verificació ortogràfica…"
 
 #: SpellCheck.cpp:49
 #, kde-format

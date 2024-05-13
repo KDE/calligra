@@ -110,7 +110,7 @@ msgstr "Nou"
 
 #: scripts/consoledocker.py:66
 msgid "Open..."
-msgstr "Obri..."
+msgstr "Obri…"
 
 #: scripts/consoledocker.py:67
 msgid "Save"
@@ -118,7 +118,7 @@ msgstr "Guarda"
 
 #: scripts/consoledocker.py:68
 msgid "Save As..."
-msgstr "Anomena i guarda..."
+msgstr "Anomena i guarda…"
 
 #: scripts/consoledocker.py:70
 msgctxt "Menu"
@@ -384,11 +384,11 @@ msgstr "Exportació interrompuda."
 
 #: scripts/htmlexport.py:447
 msgid "Exporting..."
-msgstr "Exportació..."
+msgstr "Exportació…"
 
 #: scripts/htmlexport.py:447
 msgid "Initialize..."
-msgstr "Restablix..."
+msgstr "Restablix…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: scripts/htmlexportinfos.ui:26
@@ -1449,7 +1449,7 @@ msgstr "<qt>No s'ha pogut executar el programa:<br><br>%1 «%2»</qt>"
 
 #: scripts/xmlviewer.py:187
 msgid "Open with..."
-msgstr "Obri amb..."
+msgstr "Obri amb…"
 
 #: scripts/xmlviewer.py:192
 msgid "Filter"
@@ -1461,7 +1461,7 @@ msgstr "No s'ha definit cap programa."
 
 #: scripts/xmlviewer.py:214
 msgid "Compare..."
-msgstr "Compara..."
+msgstr "Compara…"
 
 #: scripts/xmlviewer.py:225
 msgid "Compare with OpenDocument file:"

@@ -400,7 +400,7 @@ msgstr "Canvi de les propietats de la forma"
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr "Àncora a..."
+msgstr "Àncora a…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -675,7 +675,7 @@ msgstr "Depuració"
 #: part/dockers/KWNavigationDocker.cpp:20
 #, kde-format
 msgid "Navigation"
-msgstr "Navegació"
+msgstr "Navegueu"
 
 #: part/dockers/KWNavigationWidget.cpp:95
 #, kde-format
@@ -1512,7 +1512,7 @@ msgstr "Ix del mode de pantalla completa"
 #: part/KWView.cpp:260
 #, kde-format
 msgid "Shape Properties..."
-msgstr "Propietats de la forma..."
+msgstr "Propietats de la forma…"
 
 #: part/KWView.cpp:262
 #, kde-format
@@ -1522,7 +1522,7 @@ msgstr "Canvia com es comporta la forma"
 #: part/KWView.cpp:271
 #, kde-format
 msgid "Create Template From Document..."
-msgstr "Crea una plantilla a partir d'un document..."
+msgstr "Crea una plantilla a partir d'un document…"
 
 #: part/KWView.cpp:272
 #, kde-format
@@ -1556,8 +1556,8 @@ msgid ""
 "printing characters."
 msgstr ""
 "Activa o desactiva la visualització dels caràcters no imprimibles. <br/><br/"
-">Quan se selecciona, Words mostrarà les tabulacions, els espais, els salts "
-"de línia i altres caràcters no imprimibles."
+">Quan es marca, Words mostrarà les tabulacions, els espais, els salts de "
+"línia i altres caràcters no imprimibles."
 
 #: part/KWView.cpp:301
 #, kde-format
@@ -1616,8 +1616,8 @@ msgid ""
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
 "Activa o desactiva la visualització de les vores de la taula. <br/><br/>Quan "
-"se selecciona, Words mostrarà totes les vores invisibles de la taula amb una "
-"fina línia grisa."
+"es marca, Words mostrarà totes les vores invisibles de la taula amb una fina "
+"línia grisa."
 
 #: part/KWView.cpp:328
 #, kde-format
@@ -1635,8 +1635,8 @@ msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"Alterna la visualització dels límits de les seccions. <br/><br/>Quan se "
-"selecciona, qualsevol límit de secció s'indicarà amb parèntesis horitzontals "
+"Alterna la visualització dels límits de les seccions. <br/><br/>Quan es "
+"marca, qualsevol límit de secció s'indicarà amb parèntesis horitzontals "
 "grisos i fins."
 
 #: part/KWView.cpp:337
@@ -1690,7 +1690,7 @@ msgstr "Establix la vista en el mode de pantalla completa"
 #: part/KWView.cpp:374
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr "Fulls d'estils semàntics..."
+msgstr "Fulls d'estils semàntics…"
 
 #: part/KWView.cpp:376
 #, kde-format
@@ -1709,12 +1709,12 @@ msgstr ""
 #: part/KWView.cpp:392
 #, kde-format
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #: part/KWView.cpp:401
 #, kde-format
 msgid "Page Layout..."
-msgstr "Disposició de pàgina..."
+msgstr "Disposició de pàgina…"
 
 #: part/KWView.cpp:403
 #, kde-format
@@ -1784,7 +1784,7 @@ msgstr "Disposició de pàgina"
 #: part/pagetool/SimpleSetupWidget.ui:17
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: part/widgets/KoFindToolbar.cpp:55
 #, kde-format

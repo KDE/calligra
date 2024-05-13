@@ -495,7 +495,7 @@ msgstr "Mostra les diapositives mestres"
 #: part/KPrView.cpp:79
 #, kde-format
 msgid "Import Slideshow..."
-msgstr "Importa una presentació de diapositives..."
+msgstr "Importa una presentació de diapositives…"
 
 #: part/KPrView.cpp:80
 #, kde-format
@@ -531,7 +531,7 @@ msgstr "Elimina la diapositiva actual"
 #: part/KPrView.cpp:89
 #, kde-format
 msgid "Master Slide..."
-msgstr "Diapositiva mestra..."
+msgstr "Diapositiva mestra…"
 
 #: part/KPrView.cpp:90
 #, kde-format
@@ -571,17 +571,17 @@ msgstr "Ves fins a l'última diapositiva"
 #: part/KPrView.cpp:102
 #, kde-format
 msgid "Configure Stage..."
-msgstr "Configura Stage..."
+msgstr "Configura Stage…"
 
 #: part/KPrView.cpp:225
 #, kde-format
 msgid "Export as HTML..."
-msgstr "Exporta com a HTML..."
+msgstr "Exporta com a HTML…"
 
 #: part/KPrView.cpp:251
 #, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "Inserix imatges com a diapositives..."
+msgstr "Inserix imatges com a diapositives…"
 
 # msgid "Create shape animation"
 #: part/KPrView.cpp:260
@@ -592,7 +592,7 @@ msgstr "Crea una animació d'aparició"
 #: part/KPrView.cpp:264
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "Edita les presentacions personalitzades..."
+msgstr "Edita les presentacions personalitzades…"
 
 #: part/KPrView.cpp:268
 #, kde-format
@@ -632,27 +632,27 @@ msgstr "Mostra o oculta la barra d'estat"
 #: part/KPrView.cpp:297
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr "Configura la presentació..."
+msgstr "Configura la presentació…"
 
 #: part/KPrView.cpp:301
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr "Configura la visualització del presentador..."
+msgstr "Configura la visualització del presentador…"
 
 #: part/KPrView.cpp:305
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr "Dibuix en la presentació..."
+msgstr "Dibuix en la presentació…"
 
 #: part/KPrView.cpp:312
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr "Ressalta la presentació..."
+msgstr "Ressalta la presentació…"
 
 #: part/KPrView.cpp:319
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "Pantalla negra en la presentació..."
+msgstr "Pantalla negra en la presentació…"
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -1077,7 +1077,7 @@ msgstr "Diapositives de la presentació:"
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "Edita les presentacions personalitzades..."
+msgstr "Edita les presentacions personalitzades…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
@@ -1126,7 +1126,7 @@ msgstr "Vista prèvia de l'eixida"
 #: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
 #: part/ui/KPrHtmlExport.ui:227
@@ -1215,7 +1215,7 @@ msgstr "Sense so"
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, kde-format
 msgid "Import..."
-msgstr "Importa..."
+msgstr "Importa…"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
 #, kde-format

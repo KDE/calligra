@@ -126,7 +126,7 @@ msgstr "Visualitza"
 #: plugins/flattenpath/FlattenPathPlugin.cpp:52
 #, kde-format
 msgid "&Flatten Path..."
-msgstr "&Camí aplanat..."
+msgstr "&Camí aplanat…"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:90
 #, kde-format
@@ -159,7 +159,7 @@ msgstr "Refina el camí"
 #: plugins/refinepath/RefinePathPlugin.cpp:51
 #, kde-format
 msgid "&Refine Path..."
-msgstr "&Refina el camí..."
+msgstr "&Refina el camí…"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:87
 #, kde-format
@@ -180,7 +180,7 @@ msgstr "Cantons arredonits"
 #: plugins/roundcorners/RoundCornersPlugin.cpp:53
 #, kde-format
 msgid "&Round Corners..."
-msgstr "Cantons a&rredonits..."
+msgstr "Cantons a&rredonits…"
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:99
 #, kde-format
@@ -201,7 +201,7 @@ msgstr "Gira i pessiga"
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
 #, kde-format
 msgid "&Whirl/Pinch..."
-msgstr "&Gira/Pessiga..."
+msgstr "&Gira i pessiga…"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
 #, kde-format
@@ -339,7 +339,7 @@ msgstr "Jan Hambrecht"
 #: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
 #, kde-format
 msgid "Bug fixes and improvements"
-msgstr "Correcció d'errors i millores generals"
+msgstr "Esmena d'errors i millores generals"
 
 #: ui/KarbonAboutData.h:54
 #, kde-format
@@ -369,7 +369,7 @@ msgstr "Inge Wallin"
 #: ui/KarbonAboutData.h:71
 #, kde-format
 msgid "Bug fixes"
-msgstr "Correcció d'errors"
+msgstr "Esmena d'errors"
 
 #: ui/KarbonAboutData.h:74
 #, kde-format
@@ -447,7 +447,7 @@ msgstr "&Mode de contorn"
 #: ui/KarbonView.cpp:860
 #, kde-format
 msgid "&Import Graphic..."
-msgstr "&Importa un gràfic..."
+msgstr "&Importa un gràfic…"
 
 #: ui/KarbonView.cpp:864
 #, kde-format

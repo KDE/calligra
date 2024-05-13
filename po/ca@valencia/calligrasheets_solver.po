@@ -27,7 +27,7 @@ msgstr ""
 #: Solver.cpp:59
 #, kde-format
 msgid "Function Optimizer..."
-msgstr "Optimitzador de la funció..."
+msgstr "Optimitzador de la funció…"
 
 #. i18n: ectx: Menu (tools)
 #: solver.rc:4

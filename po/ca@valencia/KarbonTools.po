@@ -36,7 +36,7 @@ msgstr "Forma cal·ligràfica"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
 #, kde-format
 msgid "Save profile as..."
-msgstr "Anomena i guarda el perfil..."
+msgstr "Anomena i guarda el perfil…"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
@@ -230,7 +230,7 @@ msgstr "Efectes i connexions"
 #: filterEffectTool/FilterEffectEditWidget.ui:109
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: filterEffectTool/FilterEffectEditWidget.ui:92

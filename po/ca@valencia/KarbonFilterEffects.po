@@ -257,7 +257,7 @@ msgstr "Imatge"
 #: ImageEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Select image..."
-msgstr "Seleccioneu la imatge..."
+msgstr "Seleccioneu la imatge…"
 
 #: ImageEffectConfigWidget.cpp:54
 #, kde-format

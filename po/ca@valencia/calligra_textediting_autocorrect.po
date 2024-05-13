@@ -26,7 +26,7 @@ msgstr ""
 #: Autocorrect.cpp:25
 #, kde-format
 msgid "Configure &Autocorrection..."
-msgstr "Configura la correcció &automàtica..."
+msgstr "Configura la correcció &automàtica…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
 #: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
@@ -161,7 +161,7 @@ msgstr ""
 #: AutocorrectConfig.ui:98
 #, kde-format
 msgid "Re&place 1/2... with ½..."
-msgstr "Su&bstituïx 1/2... per ½..."
+msgstr "Su&bstituïx 1/2… per ½…"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
 #: AutocorrectConfig.ui:108
@@ -186,7 +186,7 @@ msgstr "Utilitza la numeració &automàtica per a paràgrafs numerats"
 #: AutocorrectConfig.ui:121
 #, kde-format
 msgid "Rep&lace 1st... with 1^st..."
-msgstr "Su&bstituïx 1r... per 1^r..."
+msgstr "Su&bstituïx 1r… per 1^r…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
 #: AutocorrectConfig.ui:128
@@ -281,7 +281,7 @@ msgstr "Bu&sca"
 #: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, replaceLabel)
 #: AutocorrectConfig.ui:414
@@ -308,7 +308,7 @@ msgstr "Elimina"
 #: AutocorrectConfig.ui:455
 #, kde-format
 msgid "C&hange Format..."
-msgstr "Ca&nvia el format..."
+msgstr "Ca&nvia el format…"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearFormat)
 #: AutocorrectConfig.ui:465

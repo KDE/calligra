@@ -355,7 +355,7 @@ msgstr "Color de fons"
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
 #: dialogs/ChangeConfigureDialog.ui:158
@@ -1417,7 +1417,7 @@ msgstr "Nivells de visualització anteriors:"
 #: dialogs/ListLevelWidget.ui:436
 #, kde-format
 msgid "Letter synchronization"
-msgstr "Sincronització de les lletres"
+msgstr "Sincronitzeu les lletres"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
@@ -1435,7 +1435,7 @@ msgstr "Imatge"
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr "Carrega una imatge..."
+msgstr "Carrega una imatge…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
@@ -1547,43 +1547,43 @@ msgstr "Document"
 #: dialogs/NotesConfigurationDialog.ui:233
 #, kde-format
 msgid "1, 2, 3, ..."
-msgstr "1, 2, 3,..."
+msgstr "1, 2, 3…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr "a, b, c,..., aa, ab,..., ba, bb,..."
+msgstr "a, b, c…, aa, ab…, ba, bb…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr "A, B, C,..., AA, AB,..., BA, BB,..."
+msgstr "A, B, C…, AA, AB…, BA, BB…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr "a, b, c,..., aa, bb,..., aaa, bbb,..."
+msgstr "a, b, c…, aa, bb…, aaa, bbb…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr "A, B, C,..., AA, BB,..., AAA, BBB,..."
+msgstr "A, B, C…, AA, BB…, AAA, BBB…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr "i, ii, iii,..."
+msgstr "i, ii, iii…"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr "I,II,III,..."
+msgstr "I,II,III…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1724,7 +1724,7 @@ msgstr "Reinicia la numeració en este paràgraf"
 #: dialogs/ParagraphBulletsNumbers.ui:248
 #, kde-format
 msgid "Letter Synchronization"
-msgstr "Sincronització de lletres"
+msgstr "Sincronitzeu les lletres"
 
 #. i18n: ectx: property (text), widget (QLabel, widthLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:257
@@ -1748,7 +1748,7 @@ msgstr "Alçària"
 #: dialogs/ParagraphBulletsNumbers.ui:284
 #, kde-format
 msgid "Browse..."
-msgstr "Navega..."
+msgstr "Navega…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
@@ -2007,7 +2007,7 @@ msgstr "Dividix les seccions"
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr "Inserix un paràgraf..."
+msgstr "Inserix un paràgraf…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
@@ -2128,12 +2128,12 @@ msgstr "Elimina"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
 msgid "Define New Level Format..."
-msgstr "Definix un format de nivell nou..."
+msgstr "Definix un format de nivell nou…"
 
 #: dialogs/SimpleParagraphWidget.cpp:313
 #, kde-format
@@ -2160,7 +2160,7 @@ msgstr "Contingut"
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr "Establir el color de vora..."
+msgstr "Establir el color de vora…"
 
 #: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
@@ -2443,7 +2443,7 @@ msgstr "Inserix una taula de contingut en el document."
 #: ReferencesTool.cpp:118 TextTool.cpp:410
 #, kde-format
 msgid "Insert Custom..."
-msgstr "Inserix una personalització..."
+msgstr "Inserix una personalització…"
 
 #: ReferencesTool.cpp:120
 #, kde-format
@@ -2453,7 +2453,7 @@ msgstr "Inserix una taula de contingut personalitzada en el document."
 #: ReferencesTool.cpp:122
 #, kde-format
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #: ReferencesTool.cpp:124
 #, kde-format
@@ -2488,7 +2488,7 @@ msgstr "Inserix una nota final amb etiqueta"
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
-msgstr "Configuració..."
+msgstr "Configuració…"
 
 #: ReferencesTool.cpp:159
 #, kde-format
@@ -2787,7 +2787,7 @@ msgstr "Tot el text després d'este punt es trasllada a la pàgina següent."
 #: TextTool.cpp:364
 #, kde-format
 msgid "Font..."
-msgstr "Tipus de lletra..."
+msgstr "Tipus de lletra…"
 
 #: TextTool.cpp:367
 #, kde-format
@@ -2807,7 +2807,7 @@ msgstr "Mida del tipus de lletra"
 #: TextTool.cpp:377
 #, kde-format
 msgid "Text Color..."
-msgstr "Color de text..."
+msgstr "Color de text…"
 
 #: TextTool.cpp:378
 #, kde-format
@@ -2817,7 +2817,7 @@ msgstr "Color de text"
 #: TextTool.cpp:384
 #, kde-format
 msgid "Background Color..."
-msgstr "Color de fons..."
+msgstr "Color de fons…"
 
 #: TextTool.cpp:389
 #, kde-format
@@ -2922,7 +2922,7 @@ msgstr "Seleccioneu un estil de vora i dibuixa este estil en una taula"
 #: TextTool.cpp:458
 #, kde-format
 msgid "Paragraph..."
-msgstr "Paràgraf..."
+msgstr "Paràgraf…"
 
 #: TextTool.cpp:461
 #, kde-format
@@ -2946,7 +2946,7 @@ msgstr ""
 #: TextTool.cpp:465
 #, kde-format
 msgid "Style Manager..."
-msgstr "Gestor d'estils..."
+msgstr "Gestor d'estils…"
 
 #: TextTool.cpp:467
 #, kde-format
@@ -2965,7 +2965,7 @@ msgstr ""
 #: TextTool.cpp:475
 #, kde-format
 msgid "Special Character..."
-msgstr "Caràcter especial..."
+msgstr "Caràcter especial…"
 
 #: TextTool.cpp:479
 #, kde-format
@@ -2995,7 +2995,7 @@ msgstr "Inserció"
 #: TextTool.cpp:576
 #, kde-format
 msgid "Deletion"
-msgstr "Supressió"
+msgstr "Suprimiu"
 
 #: TextTool.cpp:578
 #, kde-format

@@ -226,7 +226,7 @@ msgstr "Format a mida"
 #: FixedDateFormat.ui:101
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: InfoVariableFactory.cpp:25
 #, kde-format
