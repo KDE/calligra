@@ -3,19 +3,20 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2011, 2012, 2013.
+# SPDX-FileCopyrightText: 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2013-07-23 01:36+0300\n"
-"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
-"Language-Team: Bulgarian <dict@ludost.net>\n"
+"PO-Revision-Date: 2024-05-13 22:08+0200\n"
+"Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
+"Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
@@ -31,7 +32,7 @@ msgstr "Калиграфски обект"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
 #, kde-format
 msgid "Save profile as..."
-msgstr "Записване на профила като..."
+msgstr "Записване на профила като…"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
@@ -225,7 +226,7 @@ msgstr "Ефекти и връзки"
 #: filterEffectTool/FilterEffectEditWidget.ui:109
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: filterEffectTool/FilterEffectEditWidget.ui:92

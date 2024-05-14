@@ -3,19 +3,20 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007, 2008.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011.
+# SPDX-FileCopyrightText: 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2011-07-25 20:04+0300\n"
-"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
-"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"PO-Revision-Date: 2024-05-13 23:14+0200\n"
+"Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
+"Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n:
@@ -456,7 +457,7 @@ msgstr ""
 #: functions/bitops.xml:96
 #, fuzzy, kde-format
 msgid "BITXOR(value; value)"
-msgstr "XOR(стойност;стойност;...)"
+msgstr "XOR(стойност;стойност;…)"
 
 #: functions/bitops.xml:97
 #, kde-format
@@ -1246,9 +1247,9 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "Функцията WEEKDAY() връща деня от седмицата за зададена дата. Ако метода е 1 "
-"(по подразбиране) WEEKDAY() връща 1 за неделя, 2 за понеделник,... Ако "
-"метода е 2, понеделник е 1, вторник 2,.... и ако метода е 3 WEEKDAY() връща "
-"0 за понеделник, 1 за вторник,..."
+"(по подразбиране) WEEKDAY() връща 1 за неделя, 2 за понеделник,… Ако метода "
+"е 2, понеделник е 1, вторник 2,…. и ако метода е 3 WEEKDAY() връща 0 за "
+"понеделник, 1 за вторник,…"
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1711,7 +1712,7 @@ msgstr "Ден"
 #, kde-format
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
-msgstr "Функцията DAYOFYEAR() връща числото на деня в годината (1...365)."
+msgstr "Функцията DAYOFYEAR() връща числото на деня в годината (1…365)."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -3270,7 +3271,7 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr "IMSUM(число1;число2;...)"
+msgstr "IMSUM(число1;число2;…)"
 
 #: functions/engineering.xml:723
 #, kde-format
@@ -3293,7 +3294,7 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr "IMDIV(число1;число2;...)"
+msgstr "IMDIV(число1;число2;…)"
 
 #: functions/engineering.xml:754
 #, kde-format
@@ -3315,7 +3316,7 @@ msgstr ""
 #: functions/engineering.xml:785
 #, kde-format
 msgid "IMSUB(value;value;...)"
-msgstr "IMSUB( значение1; значение2; ... )"
+msgstr "IMSUB( значение1; значение2;… )"
 
 #: functions/engineering.xml:786
 #, kde-format
@@ -3338,7 +3339,7 @@ msgstr ""
 #: functions/engineering.xml:816
 #, kde-format
 msgid "IMPRODUCT(value;value;...)"
-msgstr "IMPRODUCT(число1;число2;...)"
+msgstr "IMPRODUCT(число1;число2;…)"
 
 #: functions/engineering.xml:817
 #, kde-format
@@ -5746,7 +5747,7 @@ msgstr ""
 #: functions/logic.xml:52
 #, kde-format
 msgid "AND(value;value;...)"
-msgstr "AND(стойност1; стойност2; ... )"
+msgstr "AND(стойност1; стойност2;… )"
 
 #: functions/logic.xml:53
 #, kde-format
@@ -5771,7 +5772,7 @@ msgstr ""
 #: functions/logic.xml:83
 #, kde-format
 msgid "OR(value;value;...)"
-msgstr "OR(стойност1;стойност2;...)"
+msgstr "OR(стойност1;стойност2;…)"
 
 #: functions/logic.xml:84
 #, kde-format
@@ -5795,7 +5796,7 @@ msgstr ""
 #: functions/logic.xml:114
 #, kde-format
 msgid "NAND(value;value;...)"
-msgstr "NAND(стойност1;стойност2;...)"
+msgstr "NAND(стойност1;стойност2;…)"
 
 #: functions/logic.xml:115
 #, kde-format
@@ -5819,7 +5820,7 @@ msgstr ""
 #: functions/logic.xml:145
 #, kde-format
 msgid "NOR(value;value;...)"
-msgstr "NOR(стойност1;стойност2;...)"
+msgstr "NOR(стойност1;стойност2;…)"
 
 #: functions/logic.xml:146
 #, kde-format
@@ -5843,7 +5844,7 @@ msgstr ""
 #: functions/logic.xml:176
 #, kde-format
 msgid "XOR(value;value;...)"
-msgstr "XOR(стойност;стойност;...)"
+msgstr "XOR(стойност;стойност;…)"
 
 #: functions/logic.xml:177
 #, kde-format
@@ -6391,7 +6392,7 @@ msgstr ""
 #: functions/math.xml:297
 #, kde-format
 msgid "COUNT(value;value;value...)"
-msgstr "COUNT(стойност;стойност;стойност....)"
+msgstr "COUNT(стойност;стойност;стойност….)"
 
 #: functions/math.xml:298
 #, kde-format
@@ -6417,7 +6418,7 @@ msgstr ""
 #: functions/math.xml:315
 #, kde-format
 msgid "COUNTA(value;value;value...)"
-msgstr "COUNTA(стойност;стойност;стойност...)"
+msgstr "COUNTA(стойност;стойност;стойност…)"
 
 #: functions/math.xml:316
 #, kde-format
@@ -6548,7 +6549,7 @@ msgstr ""
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
 msgid "SUM(value;value;...)"
-msgstr "SUM(стойност;стойност;...)"
+msgstr "SUM(стойност;стойност;…)"
 
 #: functions/math.xml:400
 #, kde-format
@@ -6645,7 +6646,7 @@ msgstr ""
 #: functions/math.xml:459
 #, kde-format
 msgid "PRODUCT(value;value;...)"
-msgstr "PRODUCT(стойност;стойност;...)"
+msgstr "PRODUCT(стойност;стойност;…)"
 
 #: functions/math.xml:460
 #, kde-format
@@ -6673,7 +6674,7 @@ msgstr ""
 #: functions/math.xml:476
 #, kde-format
 msgid "KPRODUCT(value;value;...)"
-msgstr "KPRODUCT(стойност;стойност;...)"
+msgstr "KPRODUCT(стойност;стойност;…)"
 
 #: functions/math.xml:477
 #, kde-format
@@ -6697,7 +6698,7 @@ msgstr ""
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr "G_PRODUCT(стойност;стойност;...)"
+msgstr "G_PRODUCT(стойност;стойност;…)"
 
 #: functions/math.xml:507
 #, kde-format
@@ -6707,7 +6708,7 @@ msgstr "Функцията DIV() разделя първата стойност 
 #: functions/math.xml:508
 #, kde-format
 msgid "DIV(value;value;...)"
-msgstr "DIV(стойност;стойност;...)"
+msgstr "DIV(стойност;стойност;…)"
 
 #: functions/math.xml:509
 #, kde-format
@@ -6733,7 +6734,7 @@ msgstr ""
 #: functions/math.xml:525
 #, kde-format
 msgid "SUMSQ(value;value;...)"
-msgstr "SUMSQ(стойност;стойност;...)"
+msgstr "SUMSQ(стойност;стойност;…)"
 
 #: functions/math.xml:526
 #, kde-format
@@ -6757,7 +6758,7 @@ msgstr ""
 #: functions/math.xml:542
 #, kde-format
 msgid "MAX(value;value;...)"
-msgstr "MAX(стойност;стойност;...)"
+msgstr "MAX(стойност;стойност;…)"
 
 #: functions/math.xml:543
 #, kde-format
@@ -6786,7 +6787,7 @@ msgstr ""
 #: functions/math.xml:563
 #, kde-format
 msgid "MAXA(value;value;...)"
-msgstr "MAXA(стойност;стойност;...)"
+msgstr "MAXA(стойност;стойност;…)"
 
 #: functions/math.xml:564
 #, kde-format
@@ -6815,7 +6816,7 @@ msgstr ""
 #: functions/math.xml:584
 #, kde-format
 msgid "MIN(value;value;...)"
-msgstr "MIN(стойност;стойност;...)"
+msgstr "MIN(стойност;стойност;…)"
 
 #: functions/math.xml:585
 #, kde-format
@@ -6844,7 +6845,7 @@ msgstr ""
 #: functions/math.xml:605
 #, kde-format
 msgid "MINA(value;value;...)"
-msgstr "MINA(стойност;стойност;...)"
+msgstr "MINA(стойност;стойност;…)"
 
 #: functions/math.xml:606
 #, kde-format
@@ -6875,7 +6876,7 @@ msgstr ""
 #: functions/math.xml:626
 #, kde-format
 msgid "MULTIPLY(value;value;...)"
-msgstr "MULTIPLY(стойност;стойност;...)"
+msgstr "MULTIPLY(стойност;стойност;…)"
 
 #: functions/math.xml:627
 #, kde-format
@@ -6902,7 +6903,7 @@ msgstr "(a+b+c)! / a!b!c!"
 #: functions/math.xml:645
 #, kde-format
 msgid "MULTINOMIAL(value;value;...)"
-msgstr "MULTINOMIAL(стойност;стойност;...)"
+msgstr "MULTINOMIAL(стойност;стойност;…)"
 
 #: functions/math.xml:646
 #, kde-format
@@ -7286,7 +7287,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() е равно на пример на 0.78309922..."
+msgstr "RAND() е равно на пример на 0.78309922…"
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -7457,7 +7458,7 @@ msgstr "RANDBETWEEN(минимум;максимум)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78) може да върне 61.0811..."
+msgstr "RANDBETWEEN(12;78) може да върне 61.0811…"
 
 #: functions/math.xml:1094
 #, kde-format
@@ -7625,7 +7626,7 @@ msgid ""
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
 "Функцията FIB изчислява Nth term на Фибоначи редица (1, 1, 2, 3, 5, 8, 13, "
-"21...), в която всяко число след първите две, е сума от двете числа, "
+"21…), в която всяко число след първите две, е сума от двете числа, "
 "непосредствено предхождащи го. @FIB(0) е дефинирано да е 0."
 
 #: functions/math.xml:1186
@@ -7958,7 +7959,7 @@ msgstr "Връщане параметъра указан в индекса."
 #: functions/reference.xml:90
 #, kde-format
 msgid "CHOOSE(index; parameter1; parameter2;...)"
-msgstr "CHOOSE(индекс; параметър1; параметър2;...)"
+msgstr "CHOOSE(индекс; параметър1; параметър2;…)"
 
 #: functions/reference.xml:91
 #, kde-format
@@ -8434,7 +8435,7 @@ msgstr ""
 #: functions/statistical.xml:32
 #, kde-format
 msgid "AVEDEV(value;value;...)"
-msgstr "AVEDEV(стойност;стойност;...)"
+msgstr "AVEDEV(стойност;стойност;…)"
 
 #: functions/statistical.xml:33
 #, kde-format
@@ -8444,7 +8445,7 @@ msgstr "AVEDEV(11.4;17.3;21.3;25.9;40.1) връща 7.84"
 #: functions/statistical.xml:34
 #, kde-format
 msgid "AVEDEV(A1:A5) ..."
-msgstr "AVEDEV(A1:A5) ..."
+msgstr "AVEDEV(A1:A5)…"
 
 #: functions/statistical.xml:62
 #, kde-format
@@ -8460,7 +8461,7 @@ msgstr ""
 #: functions/statistical.xml:63
 #, kde-format
 msgid "AVERAGE(value;value;...)"
-msgstr "AVERAGE(стойност;стойност;...)"
+msgstr "AVERAGE(стойност;стойност;…)"
 
 #: functions/statistical.xml:64
 #, kde-format
@@ -8496,7 +8497,7 @@ msgstr ""
 #: functions/statistical.xml:82
 #, kde-format
 msgid "AVERAGEA(value;value;...)"
-msgstr "AVERAGEA(стойност;стойност;...)"
+msgstr "AVERAGEA(стойност;стойност;…)"
 
 #: functions/statistical.xml:83
 #, kde-format
@@ -8800,7 +8801,7 @@ msgstr "Функцията DEVSQ() изчислява сумата от квад
 #: functions/statistical.xml:298
 #, kde-format
 msgid "DEVSQ(value; value;...)"
-msgstr "DEVSQ(стойност;стойност;...)"
+msgstr "DEVSQ(стойност;стойност;…)"
 
 #: functions/statistical.xml:299
 #, kde-format
@@ -9104,7 +9105,7 @@ msgstr ""
 #: functions/statistical.xml:518
 #, kde-format
 msgid "GEOMEAN(value; value;...)"
-msgstr "GEOMEAN(стойност;стойност;...)"
+msgstr "GEOMEAN(стойност;стойност;…)"
 
 #: functions/statistical.xml:519
 #, kde-format
@@ -9128,7 +9129,7 @@ msgstr ""
 #: functions/statistical.xml:550
 #, kde-format
 msgid "HARMEAN(value; value;...)"
-msgstr "HARMEAN(стойност;стойност;...)"
+msgstr "HARMEAN(стойност;стойност;…)"
 
 #: functions/statistical.xml:551
 #, kde-format
@@ -9213,7 +9214,7 @@ msgstr "Функцията KURT() изчислява."
 #: functions/statistical.xml:625
 #, kde-format
 msgid "KURT(value; value;...)"
-msgstr "KURT(стойност;стойност;...)"
+msgstr "KURT(стойност;стойност;…)"
 
 #: functions/statistical.xml:626
 #, kde-format
@@ -9235,7 +9236,7 @@ msgstr "Функцията KURT() изчислява."
 #: functions/statistical.xml:657
 #, kde-format
 msgid "KURTP(value; value;...)"
-msgstr "KURTP(стойност;стойност;...)"
+msgstr "KURTP(стойност;стойност;…)"
 
 #: functions/statistical.xml:658
 #, kde-format
@@ -9370,7 +9371,7 @@ msgstr ""
 #: functions/statistical.xml:773
 #, kde-format
 msgid "MEDIAN(value;value;...)"
-msgstr "MEDIAN(стойност;стойност;...)"
+msgstr "MEDIAN(стойност;стойност;…)"
 
 #: functions/statistical.xml:774
 #, kde-format
@@ -9403,7 +9404,7 @@ msgstr ""
 #: functions/statistical.xml:800
 #, kde-format
 msgid "MODE(number; number2; ...)"
-msgstr "MODE(число; число2; ...)"
+msgstr "MODE(число; число2;…)"
 
 #: functions/statistical.xml:801
 #, kde-format
@@ -9806,7 +9807,7 @@ msgstr ""
 #: functions/statistical.xml:1088
 #, kde-format
 msgid "SKEW(number; number2; ...)"
-msgstr "SKEW(число; число2; ...)"
+msgstr "SKEW(число; число2;…)"
 
 #: functions/statistical.xml:1089
 #, kde-format
@@ -9826,7 +9827,7 @@ msgstr "Функцията SKEWP() изчислява силата на разп
 #: functions/statistical.xml:1116
 #, kde-format
 msgid "SKEWP(number; number2; ...)"
-msgstr "SKEWP(число; число2; ...)"
+msgstr "SKEWP(число; число2;…)"
 
 #: functions/statistical.xml:1117
 #, kde-format
@@ -9913,7 +9914,7 @@ msgstr ""
 #: functions/statistical.xml:1205
 #, kde-format
 msgid "STDEV(value;value;...)"
-msgstr "STDEV(стойност;стойност;...)"
+msgstr "STDEV(стойност;стойност;…)"
 
 #: functions/statistical.xml:1206
 #, kde-format
@@ -9938,7 +9939,7 @@ msgstr ""
 #: functions/statistical.xml:1236
 #, kde-format
 msgid "STDEVA(value;value;...)"
-msgstr "STDEVA(стойност;стойност;...)"
+msgstr "STDEVA(стойност;стойност;…)"
 
 #: functions/statistical.xml:1237
 #, kde-format
@@ -9962,12 +9963,12 @@ msgstr ""
 #: functions/statistical.xml:1269
 #, kde-format
 msgid "STDEVP(value;value;...)"
-msgstr "STDEVP(стойност;стойност;...)"
+msgstr "STDEVP(стойност;стойност;…)"
 
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr "STDEVP(6;7;8) е равно на 0.816497..."
+msgstr "STDEVP(6;7;8) е равно на 0.816497…"
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -9984,22 +9985,22 @@ msgstr ""
 #: functions/statistical.xml:1300
 #, kde-format
 msgid "STDEVPA(value;value;...)"
-msgstr "STDEVPA(стойност;стойност;...)"
+msgstr "STDEVPA(стойност;стойност;…)"
 
 #: functions/statistical.xml:1301
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty"
-msgstr "STDEVPA(6; 7; A1; 8) е равно на 0.816497..., ако A1 е празна"
+msgstr "STDEVPA(6; 7; A1; 8) е равно на 0.816497…, ако A1 е празна"
 
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) е равно на 2.69..., ако A1 е \"вярно\""
+msgstr "STDEVPA(6; 7; A1; 8) е равно на 2.69…, ако A1 е \"вярно\""
 
 #: functions/statistical.xml:1303
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE"
-msgstr "STDEVPA(6; 7; A1; 8) е равно на 3.11..., ако A1 е \"невярно\""
+msgstr "STDEVPA(6; 7; A1; 8) е равно на 3.11…, ако A1 е \"невярно\""
 
 #: functions/statistical.xml:1321
 #, fuzzy, kde-format
@@ -10308,7 +10309,7 @@ msgstr "Функцията VARA() изчислява вариацията баз
 #: functions/statistical.xml:1519
 #, kde-format
 msgid "VAR(value;value;...)"
-msgstr "VAR(стойност;стойност;...)"
+msgstr "VAR(стойност;стойност;…)"
 
 #: functions/statistical.xml:1520
 #, kde-format
@@ -10318,7 +10319,7 @@ msgstr "VAR(12;5;7) е равно на 13"
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr "VAR(15;80;3) е равно на 1716.333..."
+msgstr "VAR(15;80;3) е равно на 1716.333…"
 
 #: functions/statistical.xml:1522
 #, kde-format
@@ -10343,7 +10344,7 @@ msgstr ""
 #: functions/statistical.xml:1555
 #, kde-format
 msgid "VARA(value;value;...)"
-msgstr "VARA(стойност;стойност;...)"
+msgstr "VARA(стойност;стойност;…)"
 
 #: functions/statistical.xml:1556
 #, kde-format
@@ -10353,7 +10354,7 @@ msgstr "VARA(12;5;7) е равно на 13"
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr "VARA(15;80;3) е равно на 1716.333..."
+msgstr "VARA(15;80;3) е равно на 1716.333…"
 
 #: functions/statistical.xml:1558
 #, kde-format
@@ -10372,7 +10373,7 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr "VARIANCE(стойност;стойност;...)"
+msgstr "VARIANCE(стойност;стойност;…)"
 
 #: functions/statistical.xml:1591
 #, kde-format
@@ -10382,7 +10383,7 @@ msgstr "VARIANCE(12;5;7) е равно на 13"
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "VARIANCE(15;80;3) е равно на 1716.333..."
+msgstr "VARIANCE(15;80;3) е равно на 1716.333…"
 
 #: functions/statistical.xml:1593
 #, kde-format
@@ -10400,22 +10401,22 @@ msgstr ""
 #: functions/statistical.xml:1626
 #, kde-format
 msgid "VARP(value;value;...)"
-msgstr "VARP(стойност;стойност;...)"
+msgstr "VARP(стойност;стойност;…)"
 
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr "VARP(12;5;7) е равно на 8.666..."
+msgstr "VARP(12;5;7) е равно на 8.666…"
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr "VARP(15;80;3) е равно на 1144.22..."
+msgstr "VARP(15;80;3) е равно на 1144.22…"
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr "VARP(6;7;8) е равно на 0.6666667..."
+msgstr "VARP(6;7;8) е равно на 0.6666667…"
 
 #: functions/statistical.xml:1660
 #, fuzzy, kde-format
@@ -10431,22 +10432,22 @@ msgstr ""
 #: functions/statistical.xml:1661
 #, kde-format
 msgid "VARPA(value;value;...)"
-msgstr "VARPA(стойност;стойност;...)"
+msgstr "VARPA(стойност;стойност;…)"
 
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr "VARPA(12;5;7) е равно на 8.666..."
+msgstr "VARPA(12;5;7) е равно на 8.666…"
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr "VARPA(15;80;3) е равно на 1144.22..."
+msgstr "VARPA(15;80;3) е равно на 1144.22…"
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr "VARPA(6;7;8) е равно на 0.6666667..."
+msgstr "VARPA(6;7;8) е равно на 0.6666667…"
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -11268,7 +11269,7 @@ msgstr ""
 #: functions/text.xml:468
 #, kde-format
 msgid "CONCATENATE(value;value;...)"
-msgstr "CONCATENATE(стойност;стойност;...)"
+msgstr "CONCATENATE(стойност;стойност;…)"
 
 #: functions/text.xml:469
 #, fuzzy, kde-format
@@ -12144,7 +12145,7 @@ msgstr "PI()"
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr "PI() е равно 3.141592654..."
+msgstr "PI() е равно 3.141592654…"
 
 #: functions/trig.xml:286
 #, fuzzy, kde-format
@@ -12801,7 +12802,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:212
 #, kde-format
 msgid "Custom..."
-msgstr "Потребителски..."
+msgstr "Потребителски…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:198
@@ -13548,7 +13549,7 @@ msgstr "Изтриване на активния лист."
 #: part/View.cpp:247
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Преименуване на лист..."
+msgstr "Преименуване на лист…"
 
 #: part/View.cpp:250
 #, fuzzy, kde-format
@@ -13558,7 +13559,7 @@ msgstr "Преименуване на активния лист."
 #: part/View.cpp:252
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Показване на лист..."
+msgstr "Показване на лист…"
 
 #: part/View.cpp:255
 #, fuzzy, kde-format
@@ -13578,7 +13579,7 @@ msgstr "Скриване на активния лист."
 #: part/View.cpp:262
 #, kde-format
 msgid "Page Layout..."
-msgstr "Подредба на страница..."
+msgstr "Подредба на страница…"
 
 #: part/View.cpp:265
 #, fuzzy, kde-format
@@ -13633,7 +13634,7 @@ msgstr "Преизчисляване стойността на всяка кле
 #: part/View.cpp:293
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "Защита на &лист..."
+msgstr "Защита на &лист…"
 
 #: part/View.cpp:295
 #, fuzzy, kde-format
@@ -13643,7 +13644,7 @@ msgstr "Защита на листа срещу промени."
 #: part/View.cpp:298
 #, kde-format
 msgid "Protect &Document..."
-msgstr "Защита на &документ..."
+msgstr "Защита на &документ…"
 
 #: part/View.cpp:300
 #, fuzzy, kde-format
@@ -13653,7 +13654,7 @@ msgstr "Защита на документа срещу промени."
 #: part/View.cpp:305
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "&Създаване на шаблон от документ..."
+msgstr "&Създаване на шаблон от документ…"
 
 #: part/View.cpp:309
 #, fuzzy, kde-format
@@ -15177,7 +15178,7 @@ msgstr ""
 "Всички клетки са защитени по подразбиране (това означава, че съдържанието им "
 "не може да се променя) и за да бъде включена защитата, трябва също така да "
 "зашитите с парола и листа от \"Инструменти -> Защита на документ -> Защита "
-"на лист...\".\n"
+"на лист…\".\n"
 "Можете и да скриете формулата ма клетката с цел да защитите начина на "
 "изчисление на формулата. Това изиска включване защитата на листове.\n"
 "Можете да скриете съдържанието на клетката с \"Скриване на всичко\". Това "
@@ -15244,7 +15245,7 @@ msgid ""
 msgstr ""
 "Ако е включено, съдържанието на клетката ще бъде защитено. Това е по "
 "подразбиране. За да работи защитата на отделни клетки, трябва да защитите "
-"целия лист чрез \"Инструменти->Защита на документ->Защита на лист...\" от "
+"целия лист чрез \"Инструменти->Защита на документ->Защита на лист…\" от "
 "менюто. За повече подробности вижте главата \"Advanced\" в упътването на "
 "KSpread."
 
