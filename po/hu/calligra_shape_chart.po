@@ -4,19 +4,20 @@
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
 # Kiszel Kristóf <kiszel.kristof@gmail.com>, 2017.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-02-14 23:27+0100\n"
-"Last-Translator: Kiszel Kristóf <kiszel.kristof@gmail.com>\n"
+"PO-Revision-Date: 2024-05-14 14:40+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 24.07.70\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -27,80 +28,71 @@ msgstr "Kiszel Kristóf"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "ulysses@kubuntu.org"
+msgstr "ulysses@fsf.hu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
-msgstr ""
+msgstr "Kezdés"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
-msgstr ""
+msgstr "Végződés"
 
 #: AxesConfigWidget.cpp:80
 #, kde-format
 msgid "Near-axis"
-msgstr ""
+msgstr "Tengelyközeli"
 
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "Túloldali"
 
 #: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
 #: DataSetConfigWidget.cpp:347
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Axis Title"
+#, kde-format
 msgid "Axistitle"
-msgstr "Tengelyfelirat beállítása"
+msgstr "Tengelyfelirat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Title"
+#, kde-format
 msgid "Show Axis"
-msgstr "Tengelyfelirat megjelenítése"
+msgstr "Tengely megjelenítése"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
 #, kde-format
 msgid "Scale"
-msgstr ""
+msgstr "Méretezés"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
-#, fuzzy, kde-format
-#| msgid "Labels"
+#, kde-format
 msgid "Show Labels"
-msgstr "Címkék"
+msgstr "Címkék megjelenítése"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
-#, fuzzy, kde-format
-#| msgid "Edit Fonts..."
+#, kde-format
 msgid "Font"
-msgstr "Betűtípusok szerkesztése…"
+msgstr "Betűtípus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Show Major Grid"
-msgstr "Rács sorok megjelenítése"
+msgstr "Főrács megjelenítése"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Gridlines"
+#, kde-format
 msgid "Show Minor Grid"
-msgstr "Tengely rácsvonalak megjelenítése"
+msgstr "Segédrács megjelenítése"
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -151,49 +143,46 @@ msgstr "Sávok közti rés"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Title"
+#, kde-format
 msgid "Show Title"
-msgstr "Tengelyfelirat megjelenítése"
+msgstr "Felirat megjelenítése"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr ""
+msgstr "Elsődleges x tengely"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr ""
+msgstr "Elsődleges y tengely"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr ""
+msgstr "Másodlagos x tengely"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr ""
+msgstr "Másodlagos y tengely"
 
 #: ChartShape.cpp:301
 #, kde-format
 msgid "Plugin Missing"
-msgstr "Hiányzó plugin"
+msgstr "Hiányzó bővítmény"
 
 #: ChartShape.cpp:301
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
-msgstr ""
-"A szükséges plugin nem elérhetp a szöveg címkék kijelzésére egy grafikonon."
+msgstr "A diagramfeliratok megjelenítéséhez szükséges bővítmény nem érhető el."
 
 #: ChartShape.cpp:305
 #, kde-format
@@ -201,13 +190,13 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
-"A szükséges plugin a szöveg kijelzésére nem kompatibilis a Flake alakzat "
-"grafikon jelenlegi verziójával."
+"A diagramfeliratok megjelenítéséhez szükséges bővítmény nem kompatibilis a "
+"diagram Pehely alakzatának jelenlegi verziójával."
 
 #: ChartShape.cpp:306
 #, kde-format
 msgid "Plugin Incompatible"
-msgstr "Inkompatibilis plugin"
+msgstr "Nem kompatibilis bővítmény"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
@@ -234,7 +223,7 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
-"Ez a dokumentum egy külső linket tartalmaz egy távoli dokumentumra\n"
+"Ez a dokumentum egy távoli dokumentumra mutató külső hivatkozást tartalmaz:\n"
 "%1"
 
 #: ChartShape.cpp:755
@@ -266,81 +255,61 @@ msgstr "Üzleti diagram"
 #: PlotAreaConfigWidget.cpp:232
 #, kde-format
 msgid "Bar Chart"
-msgstr "Sávdiagram"
+msgstr "Oszlopdiagram"
 
 #: ChartShapeFactory.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Normal Bar Chart"
+#, kde-format
 msgid "Normal bar chart"
-msgstr "Normál sávdiagram"
+msgstr "Normál oszlopdiagram"
 
 #: ChartShapeFactory.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Bar Chart"
+#, kde-format
 msgid "Stacked Bar Chart"
-msgstr "Halmozott sávdiagram"
+msgstr "Halmozott oszlopdiagram"
 
 #: ChartShapeFactory.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Bar Chart"
+#, kde-format
 msgid "Stacked bar chart"
-msgstr "Halmozott sávdiagram"
+msgstr "Halmozott oszlopdiagram"
 
 #: ChartShapeFactory.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Bar Chart"
+#, kde-format
 msgid "Percent Bar Chart"
-msgstr "Százalékos sávdiagram"
+msgstr "Százalékos oszlopdiagram"
 
 #: ChartShapeFactory.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Bar Chart"
+#, kde-format
 msgid "Percent bar chart"
-msgstr "Százalékos sávdiagram"
+msgstr "Százalékos oszlopdiagram"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:238
 #, kde-format
 msgid "Line Chart"
-msgstr "Sordiagram"
+msgstr "Vonaldiagram"
 
 #: ChartShapeFactory.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Normal Line Chart"
+#, kde-format
 msgid "Normal line chart"
 msgstr "Normál vonaldiagram"
 
 #: ChartShapeFactory.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Line Chart"
+#, kde-format
 msgid "Stacked Line Chart"
 msgstr "Halmozott vonaldiagram"
 
 #: ChartShapeFactory.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Line Chart"
+#, kde-format
 msgid "Stacked line chart"
 msgstr "Halmozott vonaldiagram"
 
 #: ChartShapeFactory.cpp:132
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Line Chart"
+#, kde-format
 msgid "Percent Line Chart"
 msgstr "Százalékos vonaldiagram"
 
 #: ChartShapeFactory.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Line Chart"
+#, kde-format
 msgid "Percent line chart"
 msgstr "Százalékos vonaldiagram"
 
@@ -348,40 +317,30 @@ msgstr "Százalékos vonaldiagram"
 #: PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Area Chart"
-msgstr "Meződiagram"
+msgstr "Területdiagram"
 
 #: ChartShapeFactory.cpp:144
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Normal Area Chart"
+#, kde-format
 msgid "Normal area chart"
 msgstr "Normál területdiagram"
 
 #: ChartShapeFactory.cpp:154
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Area Chart"
+#, kde-format
 msgid "Stacked Area Chart"
 msgstr "Halmozott területdiagram"
 
 #: ChartShapeFactory.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stacked Area Chart"
+#, kde-format
 msgid "Stacked area chart"
 msgstr "Halmozott területdiagram"
 
 #: ChartShapeFactory.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Area Chart"
+#, kde-format
 msgid "Percent Area Chart"
 msgstr "Százalékos területdiagram"
 
 #: ChartShapeFactory.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Percent Area Chart"
+#, kde-format
 msgid "Percent area chart"
 msgstr "Százalékos területdiagram"
 
@@ -389,13 +348,12 @@ msgstr "Százalékos területdiagram"
 #: PlotAreaConfigWidget.cpp:252
 #, kde-format
 msgid "Pie Chart"
-msgstr "Pie-diagram"
+msgstr "Tortadiagram"
 
 #: ChartShapeFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Pie Chart"
+#, kde-format
 msgid "Pie chart"
-msgstr "Pie-diagram"
+msgstr "Tortadiagram"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:253
@@ -404,8 +362,7 @@ msgid "Ring Chart"
 msgstr "Gyűrűdiagram"
 
 #: ChartShapeFactory.cpp:188
-#, fuzzy, kde-format
-#| msgid "Ring Chart"
+#, kde-format
 msgid "Ring chart"
 msgstr "Gyűrűdiagram"
 
@@ -416,8 +373,7 @@ msgid "Bubble Chart"
 msgstr "Buborékdiagram"
 
 #: ChartShapeFactory.cpp:199
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble chart"
 msgstr "Buborékdiagram"
 
@@ -425,77 +381,62 @@ msgstr "Buborékdiagram"
 #: PlotAreaConfigWidget.cpp:265
 #, kde-format
 msgid "Scatter Chart"
-msgstr "Szórási diagram"
+msgstr "Pontdiagram"
 
 #: ChartShapeFactory.cpp:210
-#, fuzzy, kde-format
-#| msgid "Scatter Chart"
+#, kde-format
 msgid "Scatter chart"
-msgstr "Szórási diagram"
+msgstr "Pontdiagram"
 
 #: ChartShapeFactory.cpp:220
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Radar Chart"
+#, kde-format
 msgid "Radar Chart"
-msgstr "Radardiagram"
+msgstr "Sugárdiagram"
 
 #: ChartShapeFactory.cpp:221
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Radar Chart"
+#, kde-format
 msgid "Radar chart"
-msgstr "Radardiagram"
+msgstr "Sugárdiagram"
 
 #: ChartShapeFactory.cpp:231
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Filled Radar Chart"
+#, kde-format
 msgid "Filled Radar Chart"
-msgstr "Kitöltött radardiagram"
+msgstr "Kitöltött sugárdiagram"
 
 #: ChartShapeFactory.cpp:232
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Filled Radar Chart"
+#, kde-format
 msgid "Filled radar chart"
-msgstr "Kitöltött radardiagram"
+msgstr "Kitöltött sugárdiagram"
 
 #: ChartShapeFactory.cpp:242
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr "Raktárdiagram"
+msgstr "Gyertyatartó árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:243
-#, fuzzy, kde-format
-#| msgid "Candlestick"
+#, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr "Gyertyatartó"
+msgstr "Japán gyertyatartó árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:253
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "OHLC Stock Chart"
-msgstr "Raktárdiagram"
+msgstr "OHLC árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:254
-#, fuzzy, kde-format
-#| msgid "OpenHighLowClose"
+#, kde-format
 msgid "Open High Low Close stock chart"
-msgstr "MegnyitásMagasAlacsonyBezárás"
+msgstr "Magas nyitás, alacsony zárás árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:264
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "HLC Stock Chart"
-msgstr "Raktárdiagram"
+msgstr "HLC árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:265
-#, fuzzy, kde-format
-#| msgid "HighLowClose"
+#, kde-format
 msgid "High Low Close stock chart"
-msgstr "MagasAlacsonyBezárás"
+msgstr "Magas-alacsony zárás árfolyamdiagram"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -523,7 +464,7 @@ msgstr "December"
 #: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
 #, kde-format
 msgid "Column %1"
-msgstr "%1 oszlop"
+msgstr "%1. oszlop"
 
 #: ChartShapeFactory.cpp:390
 #, kde-format
@@ -533,48 +474,47 @@ msgstr "Hónap"
 #: ChartShapeFactory.cpp:392
 #, kde-format
 msgid "Growth in %"
-msgstr "Növekedés %-ban"
+msgstr "Növekedés (%)"
 
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "A részvény"
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "B részvény"
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "C részvény"
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
 msgid "Open"
-msgstr ""
+msgstr "Nyitás"
 
 #: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "High"
-msgstr ""
+msgstr "Magas"
 
 #: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Low"
-msgstr ""
+msgstr "Alacsony"
 
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "Zárás"
 
 #: ChartShapeFactory.cpp:581
-#, fuzzy, kde-format
-#| msgid "Growth in %"
+#, kde-format
 msgid "Growth"
-msgstr "Növekedés %-ban"
+msgstr "Növekedés"
 
 #: ChartTool.cpp:99
 #, kde-format
@@ -587,10 +527,9 @@ msgid "Do something else"
 msgstr "Csináljon valami mást"
 
 #: ChartTool.cpp:271
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgid "Titles"
-msgstr "Cím"
+msgstr "Címek"
 
 #: ChartTool.cpp:286
 #, kde-format
@@ -603,38 +542,29 @@ msgid "Plot Area"
 msgstr "Rajzterület"
 
 #: ChartTool.cpp:1063
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "Jelmagyarázat megjelenítése"
 
 #: ChartTool.cpp:1065
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Legend Frame"
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr "Jelmagyarázat keret elrejtése"
+msgstr "Jelmagyarázat elrejtése"
 
 #: ChartToolFactory.cpp:26
 #, kde-format
 msgid "Chart editing"
-msgstr "Diagram szerkesztés"
+msgstr "Diagramszerkesztés"
 
 #: commands/AddRemoveAxisCommand.cpp:37
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Tengely hozzáadása"
 
 #: commands/AddRemoveAxisCommand.cpp:40
-#, fuzzy
-#| msgid "New Axis"
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr "Új tengelyek"
+msgstr "Tengely eltávolítása"
 
 #: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
@@ -647,77 +577,54 @@ msgid "Hide Axis Title"
 msgstr "Tengelyfelirat elrejtése"
 
 #: commands/AxisCommand.cpp:140
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Title"
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "Tengelyfelirat megjelenítése"
+msgstr "Tengely megjelenítése"
 
 #: commands/AxisCommand.cpp:142
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Axis Title"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr "Tengelyfelirat elrejtése"
+msgstr "Tengely elrejtése"
 
 #: commands/AxisCommand.cpp:151
-#, fuzzy
-#| msgid "Labels"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "Címkék"
+msgstr "Tengelycímkék megjelenítése"
 
 #: commands/AxisCommand.cpp:153
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Axis Title"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr "Tengelyfelirat elrejtése"
+msgstr "Tengelycímkék megjelenítése"
 
 #: commands/AxisCommand.cpp:162
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Gridlines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "Tengely rácsvonalak megjelenítése"
+msgstr "Tengely fő rácsvonalainak megjelenítése"
 
 #: commands/AxisCommand.cpp:164
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Axis Gridlines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr "Tengely rácsvonalak elrejtése"
+msgstr "Tengely fő rácsvonalainak elrejtése"
 
 #: commands/AxisCommand.cpp:173
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Show Axis Gridlines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "Tengely rácsvonalak megjelenítése"
+msgstr "Tengely segédrácsvonalainak megjelenítése"
 
 #: commands/AxisCommand.cpp:175
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Axis Gridlines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr "Tengely rácsvonalak elrejtése"
+msgstr "Tengely segédrácsvonalainak elrejtése"
 
 #: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
-msgstr "Logaritmikus skálázás"
+msgstr "Logaritmikus méretezés"
 
 #: commands/AxisCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr "Lineáris skálázás"
+msgstr "Lineáris méretezés"
 
 #: commands/AxisCommand.cpp:194
 msgctxt "(qtundo-format)"
@@ -732,12 +639,12 @@ msgstr "Tengely allépésköz beállítása"
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr "Automatikus lépésköz beállítás"
+msgstr "Automatikus lépésköz-beállítás"
 
 #: commands/AxisCommand.cpp:211
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr "Kézi lépésköz beállítás"
+msgstr "Kézi lépésköz-beállítás"
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
@@ -752,23 +659,17 @@ msgstr "Kézi allépésköz"
 #: commands/AxisCommand.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "Tengelycímke betűkészlet beállítása"
+msgstr "Tengelycímke betűtípusának beállítása"
 
 #: commands/AxisCommand.cpp:236
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Axis Title"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr "Tengelyfelirat beállítása"
+msgstr "Tengelypozíció beállítása"
 
 #: commands/AxisCommand.cpp:257
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Axis Label Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr "Tengelycímke betűkészlet beállítása"
+msgstr "Tengelycímkék pozíciójának beállítása"
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -778,22 +679,22 @@ msgstr "Szövegalakzat megjelenítése"
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr "Szöveg alakzat elrejtése"
+msgstr "Szövegalakzat elrejtése"
 
 #: commands/ChartTypeCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr "Normál sávdiagram"
+msgstr "Normál oszlopdiagram"
 
 #: commands/ChartTypeCommand.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "Halmozott sávdiagram"
+msgstr "Halmozott oszlopdiagram"
 
 #: commands/ChartTypeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr "Százalékos sávdiagram"
+msgstr "Százalékos oszlopdiagram"
 
 #: commands/ChartTypeCommand.cpp:92
 msgctxt "(qtundo-format)"
@@ -843,12 +744,12 @@ msgstr "Pontdiagram"
 #: commands/ChartTypeCommand.cpp:129
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr "Radardiagram"
+msgstr "Sugárdiagram"
 
 #: commands/ChartTypeCommand.cpp:132
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr "Kitöltött radardiagram"
+msgstr "Kitöltött sugárdiagram"
 
 #: commands/ChartTypeCommand.cpp:135
 msgctxt "(qtundo-format)"
@@ -871,141 +772,124 @@ msgid "Gantt Chart"
 msgstr "Gantt-diagram"
 
 #: commands/DatasetCommand.cpp:137
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaz-diagram típusának beállítása"
 
 #: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr ""
+msgstr "Adathalmaz-kategória megjelenítése"
 
 #: commands/DatasetCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr ""
+msgstr "Adathalmaz-kategória elrejtése"
 
 #: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr ""
+msgstr "Adathalmazszám megjelenítése"
 
 #: commands/DatasetCommand.cpp:158
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr ""
+msgstr "Adathalmazszám elrejtése"
 
 #: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr ""
+msgstr "Adathalmaz-százalék megjelenítése"
 
 #: commands/DatasetCommand.cpp:169
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr ""
+msgstr "Adathalmaz-százalék elrejtése"
 
 #: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr ""
+msgstr "Adathalmaz szimbólum megjelenítése"
 
 #: commands/DatasetCommand.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr ""
+msgstr "Adathalmaz szimbólum elrejtése"
 
 #: commands/DatasetCommand.cpp:188
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaz ecsetszínének beállítása"
 
 #: commands/DatasetCommand.cpp:195
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaz tollszínének beállítása"
 
 #: commands/DatasetCommand.cpp:204
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaz-jelölő elrejtése"
 
 #: commands/DatasetCommand.cpp:206
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaz jelölőszimbólumának megjelenítése"
 
 #: commands/DatasetCommand.cpp:214
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Adathalmaztengely beállítása"
 
 #: commands/GapCommand.cpp:60
-#, fuzzy
-#| msgid "Gap Between Bars"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr "Sávok közti rés"
+msgstr "Oszlopok közti rés beállítása"
 
 #: commands/GapCommand.cpp:67
-#, fuzzy
-#| msgid "Gap Between Sets"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr "Halmazok közti rés"
+msgstr "Halmazok közti rés beállítása"
 
 #: commands/LegendCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr "Jelmagyarázat cím beállítása"
+msgstr "Jelmagyarázatcím beállítása"
 
 #: commands/LegendCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "Jelmagyarázat betűkészlet beállítása"
+msgstr "Jelmagyarázat betűtípusának beállítása"
 
 #: commands/LegendCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Jelmagyarázat betűméret beállítása"
+msgstr "Jelmagyarázat betűméretének beállítása"
 
 #: commands/LegendCommand.cpp:97
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr "Jelmagyarázat tájolás beállítása"
+msgstr "Jelmagyarázat tájolásának beállítása"
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "Vízszintes oszlopok beállítása"
 
 #: commands/PlotAreaCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "Függőleges oszlopok beállítása"
 
 #: DataSet.cpp:274
 #, kde-format
 msgid "Series %1"
-msgstr "%1 sor"
+msgstr "%1. sor"
 
 #: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Chart Type"
-msgstr "Diagram"
+msgstr "Diagramtípus"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
@@ -1013,14 +897,14 @@ msgstr "Diagram"
 #: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
 #, kde-format
 msgid "Normal"
-msgstr "Normális"
+msgstr "Normál"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
 #: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
 #: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
 #, kde-format
 msgid "Stacked"
-msgstr "Jó alakú"
+msgstr "Halmozott"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
@@ -1032,7 +916,7 @@ msgstr "Jó alakú"
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
-msgstr "Százalék"
+msgstr "Százalékos"
 
 #: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
 #, kde-format
@@ -1047,7 +931,7 @@ msgstr "Kitöltött"
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "Stock Chart"
-msgstr "Raktárdiagram"
+msgstr "Árfolyamdiagram"
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
 #, kde-format
@@ -1057,12 +941,12 @@ msgstr "Gyertyatartó"
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr "MegnyitásMagasAlacsonyBezárás"
+msgstr "OpenHighLowClose"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
 #, kde-format
 msgid "HighLowClose"
-msgstr "MagasAlacsonyBezárás"
+msgstr "HighLowClose"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
@@ -1083,7 +967,7 @@ msgstr "Automatikus"
 #: DataSetConfigWidget.cpp:245 widgets/RadarDataSetConfigWidget.cpp:85
 #, kde-format
 msgid "Select"
-msgstr "Kijelölés"
+msgstr "Kiválasztás"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1095,8 +979,7 @@ msgstr "Kijelölés"
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
 #: widgets/RadarDataSetConfigWidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Auto"
 msgstr "Automatikus"
 
@@ -1105,7 +988,7 @@ msgstr "Automatikus"
 #: widgets/RadarDataSetConfigWidget.cpp:297
 #, kde-format
 msgid "Data Set %1"
-msgstr "%1 adathalmaz"
+msgstr "%1. adathalmaz"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
@@ -1117,14 +1000,13 @@ msgstr "Adathalmaz kiválasztása"
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr ""
+msgstr "Abrázolástípus használata"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Attach To Axis"
-msgstr "Hozzácsatolt tengelyek"
+msgstr "Tengelyhez rögzítés"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1184,73 +1066,66 @@ msgstr "Beszúrás"
 #: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Párbeszéd"
+msgstr "Párbeszédablak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
 #: dialogs/AxisScalingDialog.ui:19
 #, kde-format
 msgid "Logarithmic Scaling"
-msgstr "Logaritmikus skálázás"
+msgstr "Logaritmikus méretezés"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr "Lépés szélesség:"
+msgstr "Lépésköz:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr "Allépés szélesség:"
+msgstr "Allépésköz:"
 
 #: dialogs/BubbleDataEditor.cpp:108
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble Data Editor"
-msgstr "Buborékdiagram"
+msgstr "Buborékdiagram-szerkesztő"
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column Before"
-msgstr "Oszlopok beszúrása"
+msgstr "Oszlop beszúrása elé"
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column After"
-msgstr "Oszlopok beszúrása"
+msgstr "Oszlop beszúrása mögé"
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Above"
-msgstr "Sorok beszúrása"
+msgstr "Sor beszúrása fölé"
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Below"
-msgstr "Sorok beszúrása"
+msgstr "Sor beszúrása alá"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete"
-msgstr "Sorok törlése"
+msgstr "Törlés"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubbles Editor"
-msgstr "Buborékdiagram"
+msgstr "Buborékszerkesztő"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1258,7 +1133,7 @@ msgstr "Buborékdiagram"
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr ""
+msgstr "Adatoszlop beszúrása a kijelölt oszlop elé"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1282,21 +1157,21 @@ msgstr ""
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr ""
+msgstr "Adatsor beszúrása a kijelölt sor alá"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr ""
+msgstr "Adatsor beszúrása a kijelölt sor fölé"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1304,21 +1179,20 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr ""
+msgstr "Adatoszlop beszúrása a kijelölt oszlop után"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
-#, fuzzy, kde-format
-#| msgid "Delete Columns"
+#, kde-format
 msgid "Delete selection"
-msgstr "Oszlopok törlése"
+msgstr "Kijelölés törlése"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "Adathalmazok kézi kezelése"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1332,17 +1206,15 @@ msgstr ""
 #: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
 #: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
 #: TitlesConfigWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "January"
+#, kde-format
 msgid "Manual"
-msgstr "Január"
+msgstr "Kézi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
-#, fuzzy, kde-format
-#| msgid "Select a data set"
+#, kde-format
 msgid "Remove data set"
-msgstr "Adathalmaz kiválasztása"
+msgstr "Adathalmaz eltávolítása"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1350,56 +1222,51 @@ msgstr "Adathalmaz kiválasztása"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr ""
+msgstr "Adathalmaz hozzáadáa a kijelölt adathalmaz után"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
-#, fuzzy, kde-format
-#| msgid "Data Set %1"
+#, kde-format
 msgid "Dataset Name"
-msgstr "%1 adathalmaz"
+msgstr "Adathalmaz neve"
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
-#, fuzzy, kde-format
-#| msgid "X Values:"
+#, kde-format
 msgid "X-Values"
-msgstr "X értékek:"
+msgstr "X értékek"
 
 #: dialogs/BubbleDataSetTableModel.cpp:107
 #: dialogs/ScatterDataSetTableModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Y Values:"
+#, kde-format
 msgid "Y-Values"
-msgstr "Y értékek:"
+msgstr "Y értékek"
 
 #: dialogs/BubbleDataSetTableModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble Size"
-msgstr "Buborékdiagram"
+msgstr "Buborékméret"
 
 #: dialogs/BubbleDataSetTableModel.cpp:149
 #: dialogs/ScatterDataSetTableModel.cpp:144
-#, fuzzy, kde-format
-#| msgid "Label"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr "Címke"
+msgstr "Címke: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:151
 #: dialogs/ScatterDataSetTableModel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr ""
+msgstr "Alapértelmezett címke: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:156
 #: dialogs/ScatterDataSetTableModel.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "X értékek cellatartománya: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1409,20 +1276,20 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "Alapértelmezett értékek"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "Y értékek cellatartománya: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "Buborékméret cellatartománya: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
@@ -1476,24 +1343,21 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Data Editor"
-msgstr "Buborékdiagram"
+msgstr "Adatszerkesztő"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "&Data sets in rows"
-msgstr "Adathalmazok sorokban"
+msgstr "A&dathalmazok sorokban"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
-#, fuzzy, kde-format
-#| msgid "Data sets in columns"
+#, kde-format
 msgid "Data sets in &columns"
-msgstr "Adathalmazok oszlopokban"
+msgstr "Adathalmazok o&szlopokban"
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1504,7 +1368,7 @@ msgstr "Betűtípus kiválasztása"
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr "Formátumhiba sávok"
+msgstr "Hibasávok formázása"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1542,7 +1406,7 @@ msgstr ""
 #: dialogs/FormatErrorBarDialog.ui:94
 #, kde-format
 msgid "Constant"
-msgstr "Állandó"
+msgstr "Konstans"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:99
@@ -1654,14 +1518,14 @@ msgstr "Új tengelyek"
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&X"
-msgstr ""
+msgstr "&X"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
 #: dialogs/NewAxisDialog.ui:56
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&Y"
-msgstr ""
+msgstr "&Y"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/NewAxisDialog.ui:72
@@ -1670,107 +1534,95 @@ msgid "Title:"
 msgstr "Cím:"
 
 #: dialogs/PieDataEditor.cpp:58
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Pie Data Editor"
-msgstr "Buborékdiagram"
+msgstr "Tortaadat-szerkesztő"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Del"
-msgstr "Sorok törlése"
+msgstr "Törlés"
 
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
 #, kde-format
 msgid "Row %1"
-msgstr ""
+msgstr "%1. sor"
 
 #: dialogs/ScatterDataEditor.cpp:115
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Scatter Data Editor"
-msgstr "Buborékdiagram"
+msgstr "Pontadatszerkesztő"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Stock Data Editor"
-msgstr "Buborékdiagram"
+msgstr "Árfolyamadat-szerkesztő"
 
 #: dialogs/StockDataEditor.cpp:100
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete Row"
-msgstr "Sorok törlése"
+msgstr "Sor törlése"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete row"
-msgstr "Sorok törlése"
+msgstr "Sor törlése"
 
 #: dialogs/TableEditorDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Above"
-msgstr "Sorok beszúrása"
+msgstr "Beszúrás fölé"
 
 #: dialogs/TableEditorDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Below"
-msgstr "Sorok beszúrása"
+msgstr "Beszúrás alá"
 
 #: dialogs/TableEditorDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Before"
-msgstr "Oszlopok beszúrása"
+msgstr "Beszúrás elé"
 
 #: dialogs/TableEditorDialog.cpp:59
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert After"
-msgstr "Oszlopok beszúrása"
+msgstr "Beszúrás mögé"
 
 #: dialogs/TableEditorDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Delete Columns"
+#, kde-format
 msgid "Delete Selection"
-msgstr "Oszlopok törlése"
+msgstr "Kijelölés törlése"
 
 #: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
 msgid "New Row"
-msgstr ""
+msgstr "Új sor"
 
 #: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "New Column"
-msgstr "Oszlopok beszúrása"
+msgstr "Új oszlop"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
 #, kde-format
 msgid "Vertical"
-msgstr ""
+msgstr "Függőleges"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:24
 #, kde-format
 msgid "Horizontal"
-msgstr ""
+msgstr "Vízszintes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: LegendConfigWidget.ui:38
 #, kde-format
 msgid "Center"
-msgstr ""
+msgstr "Középen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:52
@@ -1798,38 +1650,33 @@ msgstr "Bal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-left"
-msgstr "Alsó"
+msgstr "Bal felső"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-right"
-msgstr "Alsó"
+msgstr "Jobb felső"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-left"
-msgstr "Alsó"
+msgstr "Bal alsó"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-right"
-msgstr "Alsó"
+msgstr "Jobb alsó"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
-#, fuzzy, kde-format
-#| msgid "Positive"
+#, kde-format
 msgid "Position"
-msgstr "Pozitív"
+msgstr "Pozíció"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLegend)
 #: LegendConfigWidget.ui:107
@@ -1845,28 +1692,25 @@ msgstr "Tájolás"
 
 #. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
 #: LegendConfigWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Edit Fonts..."
+#, kde-format
 msgid "Fonts..."
-msgstr "Betűtípusok szerkesztése…"
+msgstr "Betűtípusok…"
 
 #: PieConfigWidget.cpp:100
-#, fuzzy, kde-format
-#| msgid "Data Set %1"
+#, kde-format
 msgid "Data Point %1"
-msgstr "%1 adathalmaz"
+msgstr "%1. adatpont"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
-#, fuzzy, kde-format
-#| msgid "Explode Factor"
+#, kde-format
 msgid "E&xplode Factor"
-msgstr "Kihúzási tényező"
+msgstr "Ro&bbantási tényező"
 
 #: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Surface Chart"
-msgstr "Felszíndiagram"
+msgstr "Felületdiagram"
 
 #: PlotAreaConfigWidget.cpp:279
 #, kde-format
@@ -1883,13 +1727,13 @@ msgstr "3D"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "Függőleges oszlopok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
 #, kde-format
 msgid "Horizontal Bars"
-msgstr ""
+msgstr "Vízszintes oszlopok"
 
 #. i18n: ectx: property (text), widget (QPushButton, editData)
 #: PlotAreaConfigWidget.ui:82
@@ -1902,7 +1746,7 @@ msgstr "Adat szerkesztése…"
 #: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
 #, kde-format
 msgid "Axes"
-msgstr ""
+msgstr "Tengelyek"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -1915,93 +1759,90 @@ msgstr "Adathalmazok"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Data Sets"
+#, kde-format
 msgid "Data Points"
-msgstr "Adathalmazok"
+msgstr "Adatpontok"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "Tartományvonal"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "Nyereségjelölő"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "Veszteségjelölő"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Positive"
+#, kde-format
 msgid "Positioning"
-msgstr "Pozitív"
+msgstr "Pozícionálás"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
 #, kde-format
 msgid "Resize"
-msgstr ""
+msgstr "Átméretezés"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Categories:"
+#, kde-format
 msgid "Categories"
-msgstr "Kategóriák:"
+msgstr "Kategóriák"
 
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Tompa kezdet"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "Kerek kezdet"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "Négyzetes kezdet"
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "Gérvágott kapcsolódás"
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "Kerek kapcsolódás"
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "Fazetta kapcsolódás"
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "Gérvágott korlát"
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "A tényleges kijelölés vonalszélességének beállítása"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "A vonalszín módosítása"
 
 #~ msgid "Symbol"
 #~ msgstr "Szimbólum"
