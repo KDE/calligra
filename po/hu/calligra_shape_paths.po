@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2011.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2011-11-20 12:57+0100\n"
-"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"PO-Revision-Date: 2024-05-15 10:25+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 24.07.70\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
@@ -30,7 +31,7 @@ msgstr "Ív"
 #: ellipse/EllipseShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Pie"
-msgstr "Pite"
+msgstr "Torta"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:18
 #, kde-format
@@ -41,7 +42,7 @@ msgstr "Húr"
 #: ellipse/EllipseShapeConfigWidget.ui:13
 #, kde-format
 msgid "Ellipse Shape"
-msgstr "Ellipszis alak"
+msgstr "Ellipszis alakzat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
@@ -53,7 +54,7 @@ msgstr "Típus:"
 #: ellipse/EllipseShapeConfigWidget.ui:29
 #, kde-format
 msgid "Start angle:"
-msgstr "Kezdő szög:"
+msgstr "Kezdőszög:"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
@@ -67,7 +68,7 @@ msgstr "°"
 #: ellipse/EllipseShapeConfigWidget.ui:46
 #, kde-format
 msgid "End angle:"
-msgstr "Végző szög:"
+msgstr "Végszög:"
 
 #. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
 #: ellipse/EllipseShapeConfigWidget.ui:63
@@ -87,49 +88,44 @@ msgstr "Egy ellipszis"
 
 #: enhancedpath/CalloutShapeFactory.cpp:31
 #: enhancedpath/CalloutShapeFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "A callout"
+#, kde-format
 msgid "A callout shape"
-msgstr "Egy kihívás"
+msgstr "Egy felirat alakzat"
 
 #: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
-msgstr ""
+msgstr "Téglalap alakú felirat"
 
 #: enhancedpath/CalloutShapeFactory.cpp:150
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "A rectangular callout"
-msgstr "Egy téglalap"
+msgstr "Egy téglalap alakú felirat"
 
 #: enhancedpath/CalloutShapeFactory.cpp:229
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "Rounded Callout"
-msgstr "Kihívás"
+msgstr "Lekerekített felirat"
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "A rounded rectangular callout"
-msgstr "Egy téglalap"
+msgstr "Egy lekerekített téglalap alakú felirat"
 
 #: enhancedpath/CalloutToolFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "Callout editing"
-msgstr "Kihívás"
+msgstr "Felirat szerkesztése"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
 msgid "An enhanced path shape"
-msgstr "Egy kiterjesztett útvonal alakzat"
+msgstr "Egy kibővített útvonal alakzat"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:28
 #, kde-format
 msgid "An enhanced path"
-msgstr "Egy kiterjesztett útvonal"
+msgstr "Egy kibővített útvonal"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
@@ -166,22 +162,22 @@ msgstr "Mosoly"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
-msgstr "Körkörös nyíl"
+msgstr "Kanyargó nyíl"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
-msgstr "Egy körkörös-nyíl"
+msgstr "Egy kanyargó nyíl"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
 msgid "Gearhead"
-msgstr "Sebességfej"
+msgstr "Fogaskerék"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:448
 #, kde-format
 msgid "A gearhead"
-msgstr "Egy sebességfej"
+msgstr "Egy fogaskerék"
 
 #: rectangle/RectangleShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -192,19 +188,19 @@ msgstr "Téglalap megváltoztatása"
 #: rectangle/RectangleShapeConfigWidget.ui:13
 #, kde-format
 msgid "Rectangle Shape"
-msgstr "Téglalap alak"
+msgstr "Téglalap alakzat"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rectangle/RectangleShapeConfigWidget.ui:19
 #, kde-format
 msgid "Corner radius x:"
-msgstr "Sarok sugár x:"
+msgstr "Sarok sugara x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: rectangle/RectangleShapeConfigWidget.ui:29
 #, kde-format
 msgid "Corner radius y:"
-msgstr "Sarok sugár y:"
+msgstr "Sarok sugara y:"
 
 #: rectangle/RectangleShapeFactory.cpp:20
 #, kde-format
@@ -229,29 +225,29 @@ msgstr "Görbe"
 #: spiral/SpiralShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Line"
-msgstr "Sor"
+msgstr "Vonal"
 
 #: spiral/SpiralShapeConfigWidget.cpp:23
 #, kde-format
 msgid "Clockwise"
-msgstr ""
+msgstr "Óramutató járásával megegyező"
 
 #: spiral/SpiralShapeConfigWidget.cpp:24
 #, kde-format
 msgid "Anticlockwise"
-msgstr ""
+msgstr "Óramutató járásával ellentétes"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: spiral/SpiralShapeConfigWidget.ui:13
 #, kde-format
 msgid "Spiral Shape"
-msgstr "Spirál alak"
+msgstr "Spirál alakzat"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: spiral/SpiralShapeConfigWidget.ui:29
 #, kde-format
 msgid "Fade:"
-msgstr "Fakulás:"
+msgstr "Elhalványulás"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: spiral/SpiralShapeConfigWidget.ui:55
@@ -267,7 +263,7 @@ msgstr "Spirál"
 #: spiral/SpiralShapeFactory.cpp:19
 #, kde-format
 msgid "A spiral shape"
-msgstr "Egy spirál forma"
+msgstr "Egy spirál alakzat"
 
 #: star/StarShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -278,13 +274,13 @@ msgstr "Csillag megváltoztatása"
 #: star/StarShapeConfigWidget.ui:13
 #, kde-format
 msgid "Star shape"
-msgstr "Csillag forma"
+msgstr "Csillag alakzat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: star/StarShapeConfigWidget.ui:19
 #, kde-format
 msgid "Polygon:"
-msgstr "Poligon:"
+msgstr "Sokszög:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: star/StarShapeConfigWidget.ui:36
@@ -307,7 +303,7 @@ msgstr "Külső sugár:"
 #: star/StarShapeFactory.cpp:24
 #, kde-format
 msgid "A star shape"
-msgstr "Egy csillag forma"
+msgstr "Egy csillag alakzat"
 
 #: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
@@ -332,22 +328,22 @@ msgstr "Egy virág"
 #: star/StarShapeFactory.cpp:68
 #, kde-format
 msgid "Pentagon"
-msgstr "Pentagon"
+msgstr "Ötszög"
 
 #: star/StarShapeFactory.cpp:70
 #, kde-format
 msgid "A pentagon"
-msgstr "Egy pentagon"
+msgstr "Egy ötszög"
 
 #: star/StarShapeFactory.cpp:84
 #, kde-format
 msgid "Hexagon"
-msgstr "Hexagon"
+msgstr "Hatszög"
 
 #: star/StarShapeFactory.cpp:86
 #, kde-format
 msgid "A hexagon"
-msgstr "Egy hexagon"
+msgstr "Egy hatszög"
 
 #, fuzzy
 #~| msgid "Ellipse Shape"

@@ -3,30 +3,31 @@
 #
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011.
 # Balázs Úr <urbalazs@gmail.com>, 2014.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2014-05-04 15:48+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-05-15 10:28+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.07.70\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Kiszel Kristóf"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "ulysses@fsf.hu"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
@@ -46,7 +47,7 @@ msgstr "Eltávolítás"
 #: SheetsEditor.cpp:124
 #, kde-format
 msgid "Enter Name:"
-msgstr "Név bevitele:"
+msgstr "Adja meg a nevet:"
 
 #: TableShape.cpp:300
 #, kde-format
@@ -54,21 +55,23 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"Ez a dokumentum egy távoli dokumentumra mutató külső hivatkozást tartalmaz:\n"
+"%1"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Megerősítés szükséges"
 
 #: TableShape.cpp:302
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "Letöltés"
 
 #: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "Kihagyás"
 
 #: TableShapeFactory.cpp:35
 #, kde-format
@@ -113,44 +116,42 @@ msgstr "Munkalap:"
 #: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
-msgstr "Kiválasztott munkalap:"
+msgstr "Kiválasztott munkalap"
 
 #: TableTool.cpp:754
-#, fuzzy, kde-format
-#| msgid "Table Options"
+#, kde-format
 msgid "View Options"
-msgstr "Táblázatbeállítások"
+msgstr "Nézetbeállítások"
 
 #: TableToolFactory.cpp:21
 #, kde-format
 msgid "Table editing"
-msgstr "Táblaszerkesztés"
+msgstr "Táblázatszerkesztés"
 
 #: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "A terület túl nagy."
 
 #: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
-msgstr ""
+msgstr "Sor elrejtése"
 
 #: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
-msgstr ""
+msgstr "Magasság: %1 %2"
 
 #: ToolHeaders.cpp:1031
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Column"
-msgstr "Oszlopok:"
+msgstr "Oszlop elrejtése"
 
 #: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
-msgstr ""
+msgstr "Szélesség: %1 %2"
 
 #~ msgid "Number of columns"
 #~ msgstr "Oszlopok száma"
