@@ -106,7 +106,7 @@ void Graph::buildGraph()
 
     foreach (const KoDocumentEntry &part, parts) {
         QJsonObject metaData = part.metaData();
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
 
         foreach (const QString &nativeMimeType, nativeMimeTypes) {
@@ -191,7 +191,7 @@ QByteArray Graph::findCalligraPart() const
     // Be sure that v gets initialized correctly
     while (!v && partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
@@ -206,7 +206,7 @@ QByteArray Graph::findCalligraPart() const
     // Now we try to find the "cheapest" Calligra vertex
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();

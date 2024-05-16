@@ -84,13 +84,13 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
     QMap<QString, KPluginMetaData> serviceNames;
     for (KPluginMetaData loader : plugins) {
         if (serviceNames.contains(loader.fileName())) { // duplicate
-            const QJsonObject json2 = loader.rawData().value(QLatin1StringView("MetaData")).toObject();
+            const QJsonObject json2 = loader.rawData();
             const QVariant pluginVersion2 = json2.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
             const KPluginMetaData currentLoader = serviceNames.value(loader.fileName());
-            const QJsonObject json = currentLoader.rawData().value(QLatin1StringView("MetaData")).toObject();
+            const QJsonObject json = currentLoader.rawData();
             const QVariant pluginVersion = json.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
@@ -153,7 +153,7 @@ QVector<KPluginMetaData> KoPluginLoader::pluginLoaders(const QString &directory,
 
         if (!mimeType.isEmpty()) {
             QStringList mimeTypes = metaData.mimeTypes();
-            mimeTypes += metaData.rawData().value(QLatin1StringView("X-KDE-ExtraNativeMimeTypes")).toVariant().toStringList();
+            mimeTypes += metaData.rawData().value(QLatin1StringView("X-KDE-ExtraNativeMimeTypes")).toString().split(',');
             mimeTypes += metaData.rawData().value(QLatin1StringView("X-KDE-NativeMimeType")).toString();
             if (!mimeTypes.contains(mimeType)) {
                 return false;

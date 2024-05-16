@@ -21,9 +21,9 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 KoFilterEntry::KoFilterEntry(const KPluginMetaData &metaData)
     : m_metaData(metaData)
 {
-    QJsonObject metadata = metaData.rawData().value("MetaData").toObject();
-    import = metadata.value("X-KDE-Import").toVariant().toStringList();
-    export_ = metadata.value("X-KDE-Export").toVariant().toStringList();
+    QJsonObject metadata = metaData.rawData();
+    import = metadata.value("X-KDE-Import").toString().split(',');
+    export_ = metadata.value("X-KDE-Export").toString().split(',');
     int w = metadata.value("X-KDE-Weight").toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
     available = metadata.value("X-KDE-Available").toString();

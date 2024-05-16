@@ -52,7 +52,7 @@ void ToolRegistry::loadTools()
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
     for (const auto &metaData : metaDatas) {
-        QJsonObject data = metaData.rawData().value("MetaData").toObject();
+        QJsonObject data = metaData.rawData();
         int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
             debugSheetsFormula << "Skipping" << metaData.fileName() << ", because interface version is" << version;

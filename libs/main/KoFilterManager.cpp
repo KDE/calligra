@@ -292,7 +292,7 @@ void buildGraph(QHash<QByteArray, Vertex *> &vertices, KoFilterManager::Directio
 
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
@@ -464,7 +464,7 @@ QStringList KoFilterManager::mimeFilter()
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();

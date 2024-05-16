@@ -35,7 +35,7 @@ KoDocumentEntry::~KoDocumentEntry()
 
 QJsonObject KoDocumentEntry::metaData() const
 {
-    return m_metaData.isValid() ? m_metaData.rawData().value("MetaData").toObject() : QJsonObject();
+    return m_metaData.isValid() ? m_metaData.rawData() : QJsonObject();
 }
 
 QString KoDocumentEntry::fileName() const

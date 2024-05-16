@@ -615,7 +615,7 @@ QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) cons
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     QJsonObject json = entry.metaData();
-    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
     return KoFilterManager::mimeFilter(d->nativeMimeType, direction, mimeTypes);
 }
 

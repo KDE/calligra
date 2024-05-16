@@ -101,7 +101,7 @@ void DesktopViewProxy::fileOpen()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1());
     if (!entry.isEmpty()) {
         QJsonObject json = entry.metaData();
-        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         mimeFilter << KoFilterManager::mimeFilter(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1(),
                                                   KoFilterManager::Import,
                                                   mimeTypes);
