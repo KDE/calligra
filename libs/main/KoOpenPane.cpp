@@ -93,7 +93,7 @@ public:
     {
         QStyledItemDelegate::paint(painter, option, index);
 
-        if (!(option.state & (int)(QStyle::State_Active & QStyle::State_Enabled))) {
+        if (!(option.state & (int)!(QStyle::State_Sibling & QStyle::State_Enabled))) {
             int ypos = option.rect.y() + ((option.rect.height() - 2) / 2);
             QRect lineRect(option.rect.left(), ypos, option.rect.width(), 2);
             QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomRight());
@@ -288,7 +288,11 @@ void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString &title, 
     if (realtitle.isEmpty())
         realtitle = i18n("Custom Document");
 
-    QTreeWidgetItem *item = addPane(realtitle, icon, widget, d->m_freeCustomWidgetIndex);
+    QString realicon = icon;
+    if (realicon.isEmpty())
+        realicon = koIconName("document-new");
+
+    QTreeWidgetItem *item = addPane(realtitle, realicon, widget, d->m_freeCustomWidgetIndex);
     ++d->m_freeCustomWidgetIndex;
     KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
 
