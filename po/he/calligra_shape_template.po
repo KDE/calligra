@@ -1,0 +1,43 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-17 14:24+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: ChangeSomethingCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "לשנות משהו"
+
+#: TemplateShapeFactory.cpp:31
+#, kde-format
+msgid "Template shape"
+msgstr "צורת תבנית"
+
+#: TemplateShapeFactory.cpp:33
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr "צורה פשוטה שמשמשת כתבנית לפיתוח צורות אחרות."
+
+#: TemplateTool.cpp:76
+#, kde-format
+msgid "Open"
+msgstr "פתוחה"
+
+#: TemplateToolFactory.cpp:24
+#, kde-format
+msgid "Template shape editing"
+msgstr "עריכת צורת תבנית"

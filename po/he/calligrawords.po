@@ -13,19 +13,20 @@
 # tahmar1900 <tahmar1900@gmail.com>, 2008, 2009.
 # Diego Iastrubni <elcuco@kde.org>, 2012, 2013.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2017-05-16 06:38-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2024-05-17 15:01+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -52,25 +53,25 @@ msgstr "&תצוגה"
 #: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
 #, kde-format
 msgid "&Display Mode"
-msgstr "&מצב תצוגה"
+msgstr "מ&צב תצוגה"
 
 #. i18n: ectx: Menu (semantic)
 #: part/calligrawords.rc:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Semantics"
-msgstr "סטטיסטיקה"
+msgstr "סמנטיקה"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
 #, kde-format
 msgid "S&tyles"
-msgstr ""
+msgstr "&סגנונות"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrawords.rc:78
 #, kde-format
 msgid "&Settings"
-msgstr "&הגדרות"
+msgstr "ה&גדרות"
 
 #. i18n: ectx: Menu (SpellCheck)
 #: part/calligrawords.rc:79
@@ -82,13 +83,13 @@ msgstr "בדיקת איות"
 #: part/calligrawords.rc:83
 #, kde-format
 msgid "AutoCorrection"
-msgstr ""
+msgstr "תיקון אוטומטי"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
-msgstr "ערוך"
+msgstr "עריכה"
 
 #. i18n: ectx: Menu (check_spell_list)
 #: part/calligrawords.rc:150
@@ -100,7 +101,7 @@ msgstr "תוצאות בדיקת איות"
 #: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
-msgstr "שנה מישתנה"
+msgstr "שינוי משתנה לכדי"
 
 #. i18n: ectx: Menu (tools)
 #: part/calligrawords_readonly.rc:30
@@ -109,39 +110,35 @@ msgid "&Tools"
 msgstr "&כלים"
 
 #: part/commands/KWChangePageStyleCommand.cpp:11
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "עמודים"
+msgstr "הגדרת סגנון עמוד"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr "הוסף עמוד"
+msgstr "הוספת סגנון עמוד"
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "מאפייני עמוד"
 
 #: part/commands/KWShapeCreateCommand.cpp:42
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "צור מסגרת"
+msgstr "יצירת צורה"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
-msgstr ""
+msgstr "קו בסיס"
 
 #: part/dialogs/KWAnchoringProperties.cpp:413
 #: part/dialogs/KWAnchoringProperties.cpp:424
-#, fuzzy, kde-format
+#, kde-format
 msgid "Character"
-msgstr "צור"
+msgstr "תו"
 
 #: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
@@ -150,53 +147,53 @@ msgstr "שורה"
 
 #: part/dialogs/KWAnchoringProperties.cpp:417
 #: part/dialogs/KWAnchoringProperties.cpp:425
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page (entire) area"
-msgstr "ספק איזור טקסט ראשי"
+msgstr "אזור (כל) העמוד"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page text area"
-msgstr "ספק איזור טקסט ראשי"
+msgstr "אזור טקסט בעמוד"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph area"
-msgstr "פסקה"
+msgstr "אזור פסקאות"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph text area"
-msgstr "ספק איזור טקסט ראשי"
+msgstr "אזור טקסט פסקאות"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left page border"
-msgstr "גבולות מסגרות"
+msgstr "שול עמוד שמאלי"
 
 #: part/dialogs/KWAnchoringProperties.cpp:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right page border"
-msgstr "גבולות מסגרות"
+msgstr "שול עמוד ימני"
 
 #: part/dialogs/KWAnchoringProperties.cpp:435
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right paragraph border"
-msgstr "גבולות מסגרות"
+msgstr "גבול פסקה ימני"
 
 #: part/dialogs/KWAnchoringProperties.cpp:436
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left paragraph border"
-msgstr "גבולות מסגרות"
+msgstr "גבול פסקה שמאלי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "יחס הצורה לטקסט הוא:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
@@ -224,9 +221,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Positioning"
-msgstr "מיקום"
+msgstr "מקום אנכי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
@@ -254,7 +251,7 @@ msgstr ""
 #: part/dialogs/KWAnchoringProperties.ui:206
 #, kde-format
 msgid "Offset"
-msgstr ""
+msgstr "היסט"
 
 #. i18n: ectx: property (text), widget (QLabel, lVOffset)
 #. i18n: ectx: property (text), widget (QLabel, lHOffset)
@@ -266,9 +263,9 @@ msgstr "מאת:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Positioning"
-msgstr "מיקום"
+msgstr "מקום אופקי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
@@ -283,30 +280,30 @@ msgid "Right align with:"
 msgstr ""
 
 #: part/dialogs/KWConfigureDialog.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure"
-msgstr "הוסף עמוד"
+msgstr "הגדרה"
 
 #: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
 #, kde-format
 msgid "Misc"
-msgstr ""
+msgstr "שונות"
 
 #: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
-msgstr "רשת 1"
+msgstr "רשת"
 
 #: part/dialogs/KWConfigureDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "מסמך"
 
 #: part/dialogs/KWConfigureDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Settings"
-msgstr "שמירת הגדרות"
+msgstr "הגדרות מסמך"
 
 #: part/dialogs/KWConfigureDialog.cpp:49
 #, kde-format
@@ -324,7 +321,7 @@ msgstr ""
 #: part/dialogs/KWCreateBookmarkDialog.cpp:37
 #, kde-format
 msgid "Create New Bookmark"
-msgstr "יצירת סימניה חדשה"
+msgstr "יצירת סימנייה חדשה"
 
 #. i18n: ectx: property (text), widget (QLabel, lExplain)
 #: part/dialogs/KWCreateBookmark.ui:20
@@ -334,7 +331,7 @@ msgid ""
 "Please provide the name of your bookmark."
 msgstr ""
 "סימניות מאפשרות לך לדלג בין חלקים שונים של המסמך שלך.\n"
-"תן שם עבור הסימניה שלך."
+"נא לספק שם לסימנייה שלך."
 
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #: part/dialogs/KWCreateBookmark.ui:38
@@ -357,12 +354,12 @@ msgstr "מרווח בין עמודות:"
 #: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
 msgid "frameset"
-msgstr "מסגרות"
+msgstr "מערך מסגרות"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
-msgstr "אין מסגרות במסמך"
+msgstr "אין מערכי מסגרות במסמך"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/KWFrameConnectSelector.ui:67
@@ -374,13 +371,13 @@ msgstr "שם מערך המסגרות:"
 #: part/dialogs/KWFrameConnectSelector.ui:82
 #, kde-format
 msgid "Create a new frameset:"
-msgstr "צור מערך מסגרות חדש:"
+msgstr "יצירת מערך מסגרות חדש:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:89
 #, kde-format
 msgid "Select existing frameset to connect to:"
-msgstr "בחר את מערך המסגרות הקיים שאליו יש לחבר מסגרת זו:"
+msgstr "בחירת מערך המסגרות הקיים שאליו יש לחבר מסגרת זו:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, framesList)
 #: part/dialogs/KWFrameConnectSelector.ui:122
@@ -389,9 +386,9 @@ msgid "Frameset Name"
 msgstr "שם מערך המסגרות"
 
 #: part/dialogs/KWFrameDialog.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smart Positioning"
-msgstr "מיקום"
+msgstr "הצבה חכמה"
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
@@ -404,10 +401,9 @@ msgid "Connect Text Frames"
 msgstr "חיבור מסגרות טקסט"
 
 #: part/dialogs/KWFrameDialog.cpp:66
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr "מאפייני עמוד"
+msgstr "החלפת מאפייני צורה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
@@ -417,39 +413,39 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Page"
-msgstr "הסר עמוד"
+msgstr "&עמוד"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWInsertImage.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Para&graph"
-msgstr "פסקה"
+msgstr "פ&סקה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "&To Character"
-msgstr "צור"
+msgstr "&לתו"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "&As Character"
-msgstr "צור"
+msgstr "&כתו"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Alignment"
-msgstr "מיקום"
+msgstr "יישור אופקי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
 #: part/dialogs/KWInsertImage.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Left"
-msgstr "שמאל"
+msgstr "&שמאל"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
 #: part/dialogs/KWInsertImage.ui:75
@@ -459,15 +455,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Right"
-msgstr "ימין"
+msgstr "&ימין"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
 #: part/dialogs/KWInsertImage.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Alignment"
-msgstr "מיקום"
+msgstr "יישור אנכי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
 #: part/dialogs/KWInsertImage.ui:98
@@ -537,9 +533,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr "מרחק בין מסגרת לטקסט:"
+msgstr "מרחק בין צורה לטקסט:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
@@ -548,30 +544,29 @@ msgid "Columns"
 msgstr "עמודות"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style"
-msgstr "עמודים"
+msgstr "סגנון"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clone"
-msgstr "סיום"
+msgstr "שכפול"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete"
-msgstr "&מחק"
+msgstr "מחיקה"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:136
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr "עמודים"
+msgstr "החלפת סגנון עמוד"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clone Page Style"
-msgstr "עמודים"
+msgstr "שכפול סגנון עמוד"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:218
 #, kde-format
@@ -594,13 +589,13 @@ msgstr ""
 #: part/dialogs/KWRunAroundProperties.ui:114
 #, kde-format
 msgid "Bounding box"
-msgstr ""
+msgstr "תיבה תוחמת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:121
 #, kde-format
 msgid "Contour"
-msgstr ""
+msgstr "מתאר"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/dialogs/KWRunAroundProperties.ui:131
@@ -610,9 +605,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWRunAroundProperties.ui:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left by:"
-msgstr "משמאל:"
+msgstr "שמאלה ב־:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/KWRunAroundProperties.ui:169
@@ -628,52 +623,52 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: part/dialogs/KWRunAroundProperties.ui:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right by:"
-msgstr "ימינה:"
+msgstr "ימינה ב־:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
 #, kde-format
 msgid "&Rename"
-msgstr "&שנה שם"
+msgstr "&שינוי שם"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: part/dialogs/KWSelectBookmark.ui:27
 #, kde-format
 msgid "&Delete"
-msgstr "&מחק"
+msgstr "מ&חיקה"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr "יש להכניס שם חדש לסימניה"
+msgstr "יש למלא שם חדש לסימנייה"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Rename Bookmark"
-msgstr "שנה שם סימניה"
+msgstr "שינוי שם סימנייה"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "קיימת סימניה עם השם \"%1\"."
+msgstr "כבר קיימת סימנייה בשם „%1”."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
-msgstr "בחירת סימניה"
+msgstr "בחירת סימנייה"
 
 #: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
 msgid "Geometry"
-msgstr "גודל ומיקום"
+msgstr "גודל ומקום"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
 #: part/dialogs/KWStartupWidget.ui:24
 #, kde-format
 msgid "Page Size && Margins"
-msgstr "גודל עמוד && שוליים"
+msgstr "גודל עמוד ושוליים"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
 #: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
@@ -684,27 +679,27 @@ msgstr "צור"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "ניפוי שגיאות"
 
 #: part/dockers/KWNavigationDocker.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Navigation"
-msgstr "ברכה"
+msgstr "ניווט"
 
 #: part/dockers/KWNavigationWidget.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page #"
-msgstr "הסר עמוד"
+msgstr "עמוד מס׳"
 
 #: part/dockers/KWNavigationWidget.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Section"
-msgstr "פונקציות"
+msgstr "סעיף"
 
 #: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
-msgstr ""
+msgstr "RDF"
 
 #: part/dockers/KWStatisticsDocker.cpp:20
 #, kde-format
@@ -727,14 +722,14 @@ msgid "Syllables:"
 msgstr "הברות:"
 
 #: part/dockers/KWStatisticsWidget.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters (spaces):"
-msgstr "תווים כולל רווחים:"
+msgstr "תווים (רווחים):"
 
 #: part/dockers/KWStatisticsWidget.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters (no spaces):"
-msgstr "תווים כולל רווחים:"
+msgstr "תווים (ללא רווחים):"
 
 #: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
@@ -744,7 +739,7 @@ msgstr "שורות:"
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
-msgstr ""
+msgstr "קריאות:"
 
 #: part/dockers/KWStatisticsWidget.cpp:147
 #, fuzzy, kde-format
@@ -752,13 +747,13 @@ msgid "Flesch reading ease"
 msgstr "נקודות נוחות קריאה"
 
 #: part/dockers/KWStatisticsWidget.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "East asian characters:"
-msgstr "תווי עיצוב"
+msgstr "תווים מזרח אסייתיים:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Words"
 msgstr "מילים"
 
@@ -782,9 +777,9 @@ msgstr "שורות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
 #: part/dockers/StatisticsPreferencesPopup.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters With Spaces"
-msgstr "תווים לא כולל רווחים"
+msgstr "תווים עם רווחים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
@@ -794,9 +789,9 @@ msgstr "תווים לא כולל רווחים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "East Asian characters"
-msgstr "תווי עיצוב"
+msgstr "תווים מזרח אסייתיים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
@@ -844,7 +839,7 @@ msgstr "רשימה אלפביתית"
 #, kde-format
 msgctxt "Style name"
 msgid "Bullet List"
-msgstr "רשימת מתובלטת"
+msgstr "רשימת תבליטים"
 
 #: part/i18n/stylenames.cpp:15
 #, kde-format
@@ -1087,30 +1082,30 @@ msgid "Gray Top and Bottom"
 msgstr "אפור למעלה ולמטה"
 
 #: part/KWAboutData.h:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "מעבד התמלילים של KOffice"
+msgstr "Words של Calligra"
 
 #: part/KWAboutData.h:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Word processor"
-msgstr "מעבד התמלילים של KOffice"
+msgstr "מעבד תמלילים"
 
 #: part/KWAboutData.h:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "(c) 1998-2008, KWord הצוות של"
+msgstr "כל הזכויות שמורות 1998‏-%1, צוות Words "
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
 msgid "Co maintainer"
-msgstr ""
+msgstr "מתחזק משנה"
 
 #: part/KWAboutData.h:31
 #, kde-format
 msgid "Pierre Ducroquet"
-msgstr ""
+msgstr "פייר דוקרוקט"
 
 #: part/KWAboutData.h:32
 #, kde-format
@@ -1121,17 +1116,17 @@ msgstr ""
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
-msgstr ""
+msgstr "הכול"
 
 #: part/KWAboutData.h:33
 #, kde-format
 msgid "Sebastian Sauer"
-msgstr ""
+msgstr "סבסטיאן סוייר"
 
 #: part/KWAboutData.h:34
 #, kde-format
 msgid "Boudewijn Rempt"
-msgstr ""
+msgstr "בודווין רמפט"
 
 #: part/KWAboutData.h:35
 #, kde-format
@@ -1146,7 +1141,7 @@ msgstr "תווי עיצוב"
 #: part/KWAboutData.h:36
 #, kde-format
 msgid "Inge Wallin"
-msgstr ""
+msgstr "אינגה וולין"
 
 #: part/KWAboutData.h:37
 #, kde-format
@@ -1158,9 +1153,9 @@ msgstr ""
 #: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
 #: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
 #: part/KWAboutData.h:66 part/KWAboutData.h:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter"
-msgstr "&קובץ"
+msgstr "מסנן"
 
 #: part/KWAboutData.h:38
 #, kde-format
@@ -1170,7 +1165,7 @@ msgstr ""
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "פריסה וצביעה"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1200,7 +1195,7 @@ msgstr "כותרת תחתונה"
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Bibliography"
-msgstr ""
+msgstr "ביבליוגרפיה"
 
 #: part/KWAboutData.h:42
 #, kde-format
@@ -1215,7 +1210,7 @@ msgstr ""
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "מנהל סגנונות"
 
 #: part/KWAboutData.h:44
 #, kde-format
@@ -1235,12 +1230,12 @@ msgstr ""
 #: part/KWAboutData.h:47
 #, kde-format
 msgid "Thomas Zander"
-msgstr "Thomas Zander"
+msgstr "תומס זנדר"
 
 #: part/KWAboutData.h:48
 #, kde-format
 msgid "Girish Ramakrishnan"
-msgstr "Girish Ramakrishnan"
+msgstr "גיריש רמאקרשינן"
 
 #: part/KWAboutData.h:48 part/KWAboutData.h:49
 #, kde-format
@@ -1255,17 +1250,17 @@ msgstr ""
 #: part/KWAboutData.h:50
 #, kde-format
 msgid "David Faure"
-msgstr "David Faure"
+msgstr "דוד פור"
 
 #: part/KWAboutData.h:51
 #, kde-format
 msgid "Laurent Montel"
-msgstr "Laurent Montel"
+msgstr "לורנט מונטל"
 
 #: part/KWAboutData.h:52
 #, kde-format
 msgid "Sven Lüppken"
-msgstr "Sven Lüppken"
+msgstr "סוון לופקן"
 
 #: part/KWAboutData.h:53
 #, kde-format
@@ -1310,7 +1305,7 @@ msgstr "Werner Trobin"
 #: part/KWAboutData.h:60
 #, kde-format
 msgid "Nicolas Goutte"
-msgstr "Nicolas Goutte"
+msgstr "ניקולס גוט"
 
 #: part/KWAboutData.h:61
 #, kde-format
@@ -1320,7 +1315,7 @@ msgstr "Ariya Hidayat"
 #: part/KWAboutData.h:62
 #, kde-format
 msgid "Clarence Dang"
-msgstr "Clarence Dang"
+msgstr "קלרנס דנג"
 
 #: part/KWAboutData.h:63
 #, kde-format
@@ -1340,22 +1335,22 @@ msgstr "Ewald Snel"
 #: part/KWAboutData.h:66
 #, kde-format
 msgid "Tomasz Grobelny"
-msgstr "Tomasz Grobelny"
+msgstr "תומש גרובלני"
 
 #: part/KWAboutData.h:67
 #, kde-format
 msgid "Michael Johnson"
-msgstr "Michael Johnson"
+msgstr "מייקל ג׳ונסון"
 
 #: part/KWAboutData.h:68
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "אירוח האתרים Fatcow"
 
 #: part/KWAboutData.h:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page break icon"
-msgstr "מעבר עמוד"
+msgstr "סמל מעבר עמוד"
 
 #: part/KWAboutData.h:70
 #, kde-format
@@ -1376,12 +1371,12 @@ msgid "Copy"
 msgstr "העתק"
 
 #: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Standard"
 msgstr "רגיל"
 
 #: part/KWDocument.cpp:544
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Title"
 msgstr "כותרת מסמך"
 
@@ -1401,14 +1396,14 @@ msgid "Head 3"
 msgstr "כותרת 3"
 
 #: part/KWDocument.cpp:569
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bullet List"
-msgstr "רשימת מתובלטת"
+msgstr "רשימת תבליטים"
 
 #: part/KWGui.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tools"
-msgstr "&כלים"
+msgstr "כלים"
 
 #: part/KWOdfLoader.cpp:83
 #, kde-format
@@ -1428,13 +1423,13 @@ msgid ""
 msgstr "זה אינו מסמך לעיבוד תמלילים אלא %1. יש לנסות לפותחו בעזרת תוכנה מתאימ"
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "רגיל"
 
 #: part/KWPart.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, KWord ייצא כעת"
 
@@ -1454,74 +1449,74 @@ msgid "Saved"
 msgstr "נשמר"
 
 #: part/KWStatusBar.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1 of %2"
-msgstr "עמוד: %1/%2"
+msgstr "עמוד %1 מתוך %2"
 
 #: part/KWStatusBar.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "עמוד: %1/%2"
+msgstr "עמוד %1‏-%2 מתוך %3"
 
 #: part/KWStatusBar.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line %1"
-msgstr "שורות"
+msgstr "שורה %1"
 
 #: part/KWStatusBar.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Number"
-msgstr "מספר עמוד:"
+msgstr "מספר עמוד"
 
 #: part/KWStatusBar.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Number"
-msgstr "מספר עמוד:"
+msgstr "מספר שורה"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change the page style"
-msgstr "עמודים"
+msgstr "החלפת סגנון העמוד"
 
 #: part/KWStatusBar.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Style"
-msgstr "עמודים"
+msgstr "סגנון עמוד"
 
 #: part/KWStatusBar.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Size"
-msgstr "מעבר עמוד"
+msgstr "גודל עמוד"
 
 #: part/KWStatusBar.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saved/Modified"
-msgstr "מצב: נשמר/ערוך"
+msgstr "נשמר/ערוך"
 
 #: part/KWStatusBar.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr "מיקום העכבר: X:Y"
+msgstr "סמן העכבר X:Y"
 
 #: part/KWStatusBar.cpp:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom Controller"
-msgstr "בקר השליטה של התקריב"
+msgstr "בקר תקריב"
 
 #: part/KWView.cpp:184
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "יציאה ממצב מסך מלא"
 
 #: part/KWView.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Properties..."
-msgstr "מאפייני עמוד"
+msgstr "מאפייני צורה…"
 
 #: part/KWView.cpp:278
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "שינוי אופן התנהגות הצורה"
 
 #: part/KWView.cpp:287
 #, kde-format
@@ -1541,9 +1536,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Formatting Characters"
-msgstr "תווי עיצוב"
+msgstr "הצגת תווי עיצוב"
 
 #: part/KWView.cpp:315
 #, kde-format
@@ -1551,14 +1546,14 @@ msgid "Toggle the display of non-printing characters"
 msgstr "הצגה או הסתרה של תווים שאינם מודפסים"
 
 #: part/KWView.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
-"הצגה או הסתרה של תווים שאינם מודפסים.<br/><br/>כאשר אפשרות זו נבחרת, KWord "
-"יציג טאבים, רווחים, מעברי שורה ותווים אחרים שאינם מודפסים."
+"החלפת מצב הצגה של תווים שלא מיועדים להדפסה.<br/><br/>כשהאפשרות פעילה, Words "
+"יציג טאבים, רווחים, ירידות שורה ועוד תווים שאינם להדפסה."
 
 #: part/KWView.cpp:320
 #, kde-format
@@ -1578,9 +1573,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Text Shape Borders"
-msgstr "הגדרות גבולות טבלה"
+msgstr "הצגת מסגרת צורת טקסט"
 
 #: part/KWView.cpp:330
 #, kde-format
@@ -1598,9 +1593,9 @@ msgstr ""
 "להיות שימושית אם ברצונך לראות כיצד ייראה המסמך על גבי העמוד המודפס."
 
 #: part/KWView.cpp:340
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Table Borders"
-msgstr "הגדרות גבולות טבלה"
+msgstr "הצגת מסגרת טבלה"
 
 #: part/KWView.cpp:346
 #, fuzzy, kde-format
@@ -1663,9 +1658,9 @@ msgid "Snap to Grid"
 msgstr ""
 
 #: part/KWView.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Status Bar"
-msgstr "שורת מצב"
+msgstr "הצגת שורת מצב"
 
 #: part/KWView.cpp:384
 #, kde-format
@@ -1700,9 +1695,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:416
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure..."
-msgstr "הוסף עמוד"
+msgstr "הגדרה…"
 
 #: part/KWView.cpp:425
 #, kde-format
@@ -1724,14 +1719,14 @@ msgstr ""
 "הדף, את גדלי הכותרת העליונה והכותרת התחתונה ואת הגדרות הטורים.</p>"
 
 #: part/KWView.cpp:432
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Header"
-msgstr "צור שכבה"
+msgstr "יצירת כותרת עליונה"
 
 #: part/KWView.cpp:438
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Footer"
-msgstr "צור שכבה"
+msgstr "יצירת כותרת תחתונה"
 
 #: part/KWView.cpp:445
 #, kde-format
@@ -1739,9 +1734,9 @@ msgid "Show Comments"
 msgstr ""
 
 #: part/KWView.cpp:446
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows comments in the document"
-msgstr "אין מסגרות במסמך"
+msgstr "הצגת הערות במסמך"
 
 #: part/KWView.cpp:452
 #, kde-format
@@ -1749,24 +1744,24 @@ msgid "Word Count"
 msgstr ""
 
 #: part/KWView.cpp:453
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "הצגה או הסתרת שורת המצב"
+msgstr "הצגת או הסתרת כמות המילים בשורת המצב"
 
 #: part/pagetool/KWPageTool.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Setup"
-msgstr "מעבר עמוד"
+msgstr "הגדרת עמוד"
 
 #: part/pagetool/KWPageTool.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Header & Footer"
-msgstr "כותרת תחתונה לעמודים זוגיים"
+msgstr "כותרות עליונה ותחתונה"
 
 #: part/pagetool/KWPageToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page layout"
-msgstr "הגדרות עמוד..."
+msgstr "פריסת עמוד"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
 #. i18n: ectx: property (text), widget (QToolButton, insertHeader)
@@ -1785,10 +1780,10 @@ msgid "Find:"
 msgstr ""
 
 #: part/widgets/KoFindToolbar.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "עמוד ראשי"
+msgstr "הבא"
 
 #: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
@@ -1797,7 +1792,7 @@ msgid "Previous"
 msgstr ""
 
 #: part/widgets/KoFindToolbar.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr "אפשרויות"
@@ -1876,6 +1871,6 @@ msgid "Main text"
 msgstr "טקסט ראש"
 
 #: part/Words.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other text"
-msgstr "שאר העמודים"
+msgstr "שאר הטקסט"
