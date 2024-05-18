@@ -37,16 +37,18 @@ int KPrDurationParser::durationMs(const QString &duration)
         ms = qreal(result[1].toInt(&ok, 10) * 3600 + result[2].toInt(&ok, 10) * 60 + result[3].toDouble(&ok)) * 1000;
     } else if (duration.indexOf(timecountRegEx, 0, &match) != -1) {
         QStringList result(match.capturedTexts());
-        QString metric(result[2]);
-        // the default (no metric) is s
         qreal factor = 1000;
-        if (metric != "s") {
-            if (metric == "min") {
-                factor = 60 * 1000;
-            } else if (metric == "ms") {
-                factor = 1;
-            } else if (metric == "h") {
-                factor = 3600 * 1000;
+        // the default (no metric) is s
+        if (result.length() > 2) {
+            QString metric(result[2]);
+            if (metric != "s") {
+                if (metric == "min") {
+                    factor = 60 * 1000;
+                } else if (metric == "ms") {
+                    factor = 1;
+                } else if (metric == "h") {
+                    factor = 3600 * 1000;
+                }
             }
         }
         bool ok = true;
