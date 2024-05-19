@@ -145,8 +145,8 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for ECM, Qt, KF6 ##
 ###########################
 ##########################
-set(REQUIRED_KF6_VERSION "5.76.0")
-set(REQUIRED_QT_VERSION "6.0.0")
+set(REQUIRED_KF6_VERSION "6.0.0")
+set(REQUIRED_QT_VERSION "6.5.0")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -158,6 +158,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 # ECM KDE macros (include first, to have their policies and settings effect all other macros)
 include(KDEInstallDirs)
 include(KDECMakeSettings NO_POLICY_SCOPE)
+set(KDE_COMPILERSETTINGS_LEVEL 5.84.0) # set before including
 include(KDECompilerSettings NO_POLICY_SCOPE)
 # CMake macros
 include(CMakePackageConfigHelpers)
