@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-03-27 14:35+0300\n"
+"PO-Revision-Date: 2024-05-20 00:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.07.70\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1083,12 +1083,12 @@ msgstr "Calligra Sözcükler"
 #: part/KWAboutData.h:21
 #, kde-format
 msgid "Word processor"
-msgstr "Sözcük işlemci"
+msgstr "Sözcük İşlemcisi"
 
 #: part/KWAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "Telif hakkı 1998-%1, Sözcükler Takımı"
+msgstr "Telif hakkı 1998–%1, Sözcükler Takımı"
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
@@ -1417,7 +1417,7 @@ msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
 msgstr ""
-"Bu bir sözcük işlemci belgesi değil, bu belge bir %1. Lütfen belgeyi uygun "
+"Bu bir sözcük işlemcisi belgesi değil, bu belge bir %1. Lütfen belgeyi uygun "
 "bir uygulama ile açın."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
