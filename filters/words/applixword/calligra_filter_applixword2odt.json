@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació Applixword de Words",
         "Name[ca]": "Filtre d'importació Applixword del Words",
         "Name[cs]": "Importní filtr Applixword pro Words",
+        "Name[en_GB]": "Words Applixword Import Filter",
         "Name[eo]": "Words Applixword Importfiltrilo",
         "Name[es]": "Filtro de importación Applixword de Words",
         "Name[fr]": "Filtre d'importation « Applix Word » de Words",
@@ -16,6 +17,7 @@
         "Name[tr]": "Sözcükler Applixword İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Applixword для Words",
         "Name[x-test]": "xxWords Applixword Import Filterxx",
+        "Name[zh_TW]": "Words Applixword 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

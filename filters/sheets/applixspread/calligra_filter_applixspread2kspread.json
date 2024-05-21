@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació de fulls de càlcul Applix de KSpread",
         "Name[ca]": "Filtre d'importació de fulls de càlcul Applix del KSpread",
         "Name[cs]": "Importní filtr tabulek KSpread Applix",
+        "Name[en_GB]": "KSpread Applix Spreadsheet Import Filter",
         "Name[eo]": "Importa Filtrilo de KSpread Applix Spreadsheet",
         "Name[es]": "Filtro de importación de hoja de cálculo Applix de KSpread",
         "Name[fr]": "Filtre d'importation de tableur « Applix » pour KSpread",
@@ -16,6 +17,7 @@
         "Name[tr]": "KSpread Applix Hesap Tablosu İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування Applix Spreadsheet для KSpread",
         "Name[x-test]": "xxKSpread Applix Spreadsheet Import Filterxx",
+        "Name[zh_TW]": "KSpread Applix 電子表單匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Connector d'ortografia",
         "Name[ca]": "Connector d'ortografia",
         "Name[cs]": "Modul pro kontrolu pravopisu",
+        "Name[en_GB]": "SpellCheck plugin",
         "Name[eo]": "SpellCheck kromaĵo",
         "Name[es]": "Complemento de comprobación ortográfica",
         "Name[fr]": "Module externe de vérification orthographique",
@@ -17,6 +18,7 @@
         "Name[tr]": "Yazım Denetimi Eklentisi",
         "Name[uk]": "Додаток перевірки правопису",
         "Name[x-test]": "xxSpellCheck pluginxx",
+        "Name[zh_TW]": "SpellCheck 外掛程式",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

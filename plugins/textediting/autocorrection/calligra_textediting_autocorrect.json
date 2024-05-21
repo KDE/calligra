@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Connector de correcció automàtica",
         "Name[ca]": "Connector de correcció automàtica",
         "Name[cs]": "Modul pro automatické opravy",
+        "Name[en_GB]": "Autocorrection plugin",
         "Name[eo]": "Aŭtokorekta kromaĵo",
         "Name[es]": "Complemento de corrección automática",
         "Name[fr]": "Module externe de correction automatique",
@@ -17,6 +18,7 @@
         "Name[tr]": "Kendiliğinden Düzeltme Eklentisi",
         "Name[uk]": "Додаток автовиправлення",
         "Name[x-test]": "xxAutocorrection pluginxx",
+        "Name[zh_TW]": "Autocorrection 外掛程式",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[ca@valencia]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[ca]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[en_GB]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[eo]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[es]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[fr]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
@@ -36,6 +39,7 @@
         "Description[tr]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[uk]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[x-test]": "xxBITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFTxx",
+        "Description[zh_TW]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "BitOpsModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions d'operació de bit",
         "Name[ca]": "Funcions d'operació de bit",
         "Name[cs]": "Funkce pro bitové operace",
+        "Name[en_GB]": "Bit Operation Functions",
         "Name[eo]": "Bit-Operaciaj Funkcioj",
         "Name[es]": "Funciones de operaciones con bits",
         "Name[fr]": "Fonctions d'opérations de bit",
@@ -56,6 +61,7 @@
         "Name[tr]": "Bit İşlemi İşlevleri",
         "Name[uk]": "Бітові дії",
         "Name[x-test]": "xxBit Operation Functionsxx",
+        "Name[zh_TW]": "位元操作函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

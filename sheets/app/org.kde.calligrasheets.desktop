@@ -38,6 +38,7 @@ Name[ug]=Calligra ۋاراقلار
 Name[uk]=Calligra Sheets
 Name[x-test]=xxCalligra Sheetsxx
 Name[zh_CN]=Calligra Sheets
+Name[zh_TW]=Calligra Sheets
 Exec=calligrasheets %U
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици

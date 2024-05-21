@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Connector de canvi de caixa",
         "Name[ca]": "Connector de canvi de caixa",
         "Name[cs]": "Modul pro změnu velikosti písmen",
+        "Name[en_GB]": "Change case plugin",
         "Name[eo]": "Kromprogramo po ŝanĝi usklecon",
         "Name[es]": "Complemento de cambio de mayúsculas y minúsculas",
         "Name[fr]": "Module externe de changement de casse",
@@ -17,6 +18,7 @@
         "Name[tr]": "Harf Biçimini Değiştir Eklentisi",
         "Name[uk]": "Додаток зміни регістру",
         "Name[x-test]": "xxChange case pluginxx",
+        "Name[zh_TW]": "Change case 外掛程式",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

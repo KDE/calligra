@@ -3,6 +3,7 @@
         "Name": "ODT to Epub2 Export Filter",
         "Name[ca@valencia]": "Filtre d'exportació ODT a Epub2",
         "Name[ca]": "Filtre d'exportació ODT a Epub2",
+        "Name[en_GB]": "ODT to Epub2 Export Filter",
         "Name[eo]": "ODT al Epub2 Eksporta Filtrilo",
         "Name[es]": "Filtro de exportación ODT a Epub2",
         "Name[fr]": "Filtre d'exportation du format « ODT » vers « ePub2 »",
@@ -15,6 +16,7 @@
         "Name[tr]": "ODT-Epub2 Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту ODT до Epub2",
         "Name[x-test]": "xxODT to Epub2 Export Filterxx",
+        "Name[zh_TW]": "ODT 到 Epub2 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de text",
         "Name[ca]": "Forma de text",
         "Name[cs]": "Tvar textu",
+        "Name[en_GB]": "Text Shape",
         "Name[eo]": "Teksta Formo",
         "Name[es]": "Forma de texto",
         "Name[fr]": "Forme de texte",
@@ -17,6 +18,7 @@
         "Name[tr]": "Metin Şekli",
         "Name[uk]": "Форма-текст",
         "Name[x-test]": "xxText Shapexx",
+        "Name[zh_TW]": "文字元件",
         "ServiceTypes": [
             "Calligra/Flake"
         ]

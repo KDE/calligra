@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[ca@valencia]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[ca]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[en_GB]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[eo]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[es]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[fr]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
@@ -36,6 +39,7 @@
         "Description[tr]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[uk]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[x-test]": "xxASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUExx",
+        "Description[zh_TW]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "TextModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions de text",
         "Name[ca]": "Funcions de text",
         "Name[cs]": "Funkce textu",
+        "Name[en_GB]": "Text Functions",
         "Name[eo]": "Tekstaj Funkcioj",
         "Name[es]": "Funciones de texto",
         "Name[fr]": "Fonctions de texte",
@@ -56,6 +61,7 @@
         "Name[tr]": "Metin İşlevleri",
         "Name[uk]": "Текстові функції",
         "Name[x-test]": "xxText Functionsxx",
+        "Name[zh_TW]": "文字函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

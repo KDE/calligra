@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació CSV per a KSpread",
         "Name[ca]": "Filtre d'importació CSV per al KSpread",
         "Name[cs]": "Exportní filtr CSV pro KSpread",
+        "Name[en_GB]": "CSV Import Filter for KSpread",
         "Name[eo]": "CSV-Importa Filtrilo por KSpread",
         "Name[es]": "Filtro de importación CSV para KSpread",
         "Name[fr]": "Filtre d'importation « CSV » de KSpread",
@@ -16,6 +17,7 @@
         "Name[tr]": "KSpread için CSV İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування CSV для KSpread",
         "Name[x-test]": "xxCSV Import Filter for KSpreadxx",
+        "Name[zh_TW]": "KSpread 的 CSV 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

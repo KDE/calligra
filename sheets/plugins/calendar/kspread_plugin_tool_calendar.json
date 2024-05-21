@@ -6,6 +6,7 @@
                 "Name": "Raphael Langerhorst",
                 "Name[ca@valencia]": "Raphael Langerhorst",
                 "Name[ca]": "Raphael Langerhorst",
+                "Name[en_GB]": "Raphæl Langerhorst",
                 "Name[eo]": "Raphael Langerhorst",
                 "Name[es]": "Raphael Langerhorst",
                 "Name[fr]": "Raphael Langerhorst",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Raphael Langerhorst",
                 "Name[tr]": "Raphael Langerhorst",
                 "Name[uk]": "Raphael Langerhorst",
-                "Name[x-test]": "xxRaphael Langerhorstxx"
+                "Name[x-test]": "xxRaphael Langerhorstxx",
+                "Name[zh_TW]": "Raphael Langerhorst"
             }
         ],
         "Category": "Tool",
         "Description": "Inserts a calendar into a cell range.",
         "Description[ca@valencia]": "Inserix un calendari a un interval de cel·la.",
         "Description[ca]": "Insereix un calendari a un interval de cel·la.",
+        "Description[en_GB]": "Inserts a calendar into a cell range.",
         "Description[eo]": "Enmetas kalendaron en ĉela gamo.",
         "Description[es]": "Inserta un calendario en un intervalo de celdas.",
         "Description[fr]": "Insère un calendrier dans une plage de cellules.",
@@ -36,6 +39,7 @@
         "Description[tr]": "Bir hücre erimine bir takvim ekler.",
         "Description[uk]": "Вставляє календар у діапазон комірок.",
         "Description[x-test]": "xxInserts a calendar into a cell range.xx",
+        "Description[zh_TW]": "將行事曆插入一塊儲存格範圍。",
         "EnabledByDefault": true,
         "Icon": "x-office-calendar",
         "Id": "CalendarTool",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Eina de calendari",
         "Name[ca]": "Eina de calendari",
         "Name[cs]": "Nástroj kalendáře",
+        "Name[en_GB]": "Calendar Tool",
         "Name[eo]": "Kalendara Ilo",
         "Name[es]": "Herramienta de calendario",
         "Name[fr]": "Outil d'agenda",
@@ -56,6 +61,7 @@
         "Name[tr]": "Takvim Aracı",
         "Name[uk]": "Інструмент календаря",
         "Name[x-test]": "xxCalendar Toolxx",
+        "Name[zh_TW]": "行事曆工具",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

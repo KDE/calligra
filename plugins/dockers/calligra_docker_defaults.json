@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Connector d'acobladors de Calligra",
         "Name[ca]": "Connector d'acobladors del Calligra",
         "Name[cs]": "Modul doků Calligra",
+        "Name[en_GB]": "Calligra Dockers plugin",
         "Name[eo]": "Calligra Dockers kromaĵo",
         "Name[es]": "Complemento de paneles de Calligra",
         "Name[fr]": "Module externe pour panneaux de Calligra",
@@ -17,6 +18,7 @@
         "Name[tr]": "Calligra Dockers Eklentisi",
         "Name[uk]": "Додаток панелей для Calligra",
         "Name[x-test]": "xxCalligra Dockers pluginxx",
+        "Name[zh_TW]": "Calligra Dockers 外掛程式",
         "ServiceTypes": [
             "Calligra/Dock"
         ]

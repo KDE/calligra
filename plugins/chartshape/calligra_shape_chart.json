@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma del diagrama",
         "Name[ca]": "Forma del diagrama",
         "Name[cs]": "Tvar grafu",
+        "Name[en_GB]": "Chart Shape",
         "Name[eo]": "Chart Formo",
         "Name[es]": "Forma de mapa",
         "Name[fr]": "Forme de graphique",
@@ -17,6 +18,7 @@
         "Name[tr]": "Çizelge Şekli",
         "Name[uk]": "Форма діаграми",
         "Name[x-test]": "xxChart Shapexx",
+        "Name[zh_TW]": "圖表元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

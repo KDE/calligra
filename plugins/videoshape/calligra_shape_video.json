@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de vídeo",
         "Name[ca]": "Forma de vídeo",
         "Name[cs]": "Tvar Video",
+        "Name[en_GB]": "Video Shape",
         "Name[eo]": "Filmeta Formo",
         "Name[es]": "Forma de vídeo",
         "Name[fr]": "Forme de vidéo",
@@ -17,6 +18,7 @@
         "Name[tr]": "Video Şekli",
         "Name[uk]": "Форма-відео",
         "Name[x-test]": "xxVideo Shapexx",
+        "Name[zh_TW]": "影片元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

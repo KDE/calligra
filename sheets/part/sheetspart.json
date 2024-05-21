@@ -15,6 +15,7 @@
         "Name[ca@valencia]": "Component de full de càlcul de Calligra",
         "Name[ca]": "Component de full de càlcul del Calligra",
         "Name[cs]": "Komponenta Calligra pro tabulky",
+        "Name[en_GB]": "Calligra Spreadsheet Component",
         "Name[eo]": "Calligra Spreadsheet-Komponanto",
         "Name[es]": "Componente de hoja de cálculo de Calligra",
         "Name[fr]": "Composant de feuille de calcul de Calligra",
@@ -27,6 +28,7 @@
         "Name[tr]": "Calligra Hesap Tablosu Bileşeni",
         "Name[uk]": "Компонент електронних таблиць Calligra",
         "Name[x-test]": "xxCalligra Spreadsheet Componentxx",
+        "Name[zh_TW]": "Calligra 工作表組件",
         "ServiceTypes": [
             "Calligra/Part"
         ]

@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de connector",
         "Name[ca]": "Forma de connector",
         "Name[cs]": "Tvar modulu",
+        "Name[en_GB]": "Plugin Shape",
         "Name[eo]": "Kromprograma Formo",
         "Name[es]": "Forma de complemento",
         "Name[fr]": "Forme de prise",
@@ -17,6 +18,7 @@
         "Name[tr]": "Eklenti Şekli",
         "Name[uk]": "Форма додатка",
         "Name[x-test]": "xxPlugin Shapexx",
+        "Name[zh_TW]": "外掛程式元件 ",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

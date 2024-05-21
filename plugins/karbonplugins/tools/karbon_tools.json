@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Eines de Karbon",
         "Name[ca]": "Eines del Karbon",
         "Name[cs]": "Nástroje Karbonu",
+        "Name[en_GB]": "Karbon Tools",
         "Name[eo]": "Karbonaj Iloj",
         "Name[es]": "Herramientas de Karbon",
         "Name[fr]": "Outil pour Karbon",
@@ -17,6 +18,7 @@
         "Name[tr]": "Karbon Araçları",
         "Name[uk]": "Засоби Karbon",
         "Name[x-test]": "xxKarbon Toolsxx",
+        "Name[zh_TW]": "Karbon 工具",
         "ServiceTypes": [
             "Calligra/Tool"
         ]

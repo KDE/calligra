@@ -3,6 +3,7 @@
         "Description": "Exploding Page Page Effect",
         "Description[ca@valencia]": "Efecte d'explosió de la pàgina",
         "Description[ca]": "Efecte d'explosió de la pàgina",
+        "Description[en_GB]": "Exploding Page Page Effect",
         "Description[eo]": "Paĝefekto de Eksplodante Paĝo",
         "Description[es]": "Efecto de página de explosión de página",
         "Description[fr]": "Effet de page avec une page d'explosion",
@@ -15,10 +16,12 @@
         "Description[tr]": "Patlayan Sayfa Sayfa Efekti",
         "Description[uk]": "Ефект вибуху сторінки",
         "Description[x-test]": "xxExploding Page Page Effectxx",
+        "Description[zh_TW]": "爆炸頁面效果",
         "Id": "kpr_pageeffect_example",
         "Name": "Exploding Page",
         "Name[ca@valencia]": "Explosió de pàgina",
         "Name[ca]": "Explosió de pàgina",
+        "Name[en_GB]": "Exploding Page",
         "Name[eo]": "Eksplodanta Paĝo",
         "Name[es]": "Explosión de página",
         "Name[fr]": "Page explosant",
@@ -31,6 +34,7 @@
         "Name[tr]": "Patlayan Sayfa",
         "Name[uk]": "Вибух сторінки",
         "Name[x-test]": "xxExploding Pagexx",
+        "Name[zh_TW]": "爆炸頁面",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

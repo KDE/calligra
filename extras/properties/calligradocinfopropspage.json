@@ -44,7 +44,8 @@
         "Name[sv]": "Calligra-sida med dokumentinformation",
         "Name[tr]": "Calligra Belge Bilgisi Özellikleri Sayfası",
         "Name[uk]": "Сторінка даних щодо властивостей документа Calligra",
-        "Name[x-test]": "xxCalligra Document Info Properties Pagexx"
+        "Name[x-test]": "xxCalligra Document Info Properties Pagexx",
+        "Name[zh_TW]": "Calligra 文件資訊和屬性"
     },
     "MimeType": "application/x-kspread;application/x-kpresenter;application/x-karbon;application/x-kchart;application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;image/openraster;",
     "X-KDE-Protocol": "file"

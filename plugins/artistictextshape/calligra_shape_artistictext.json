@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de text artístic",
         "Name[ca]": "Forma de text artístic",
         "Name[cs]": "Tvar Umělecký text",
+        "Name[en_GB]": "Artistic Text Shape",
         "Name[eo]": "Arta Teksto Formo",
         "Name[es]": "Forma de texto artístico",
         "Name[fr]": "Forme de texte artistique",
@@ -17,6 +18,7 @@
         "Name[tr]": "Sanatsal Metin Şekli",
         "Name[uk]": "Художній текст",
         "Name[x-test]": "xxArtistic Text Shapexx",
+        "Name[zh_TW]": "藝術文字元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

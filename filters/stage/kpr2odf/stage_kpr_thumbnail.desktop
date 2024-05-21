@@ -37,6 +37,7 @@ Name[tr]=KPresenter Sunumları
 Name[uk]=Презентації KPresenter
 Name[x-test]=xxKPresenter Presentationsxx
 Name[zh_CN]=KPresenter 演示文稿
+Name[zh_TW]=KPresenter 簡報
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-kpresenter;

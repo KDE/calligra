@@ -5,6 +5,7 @@
         "Name": "Presentation Event Actions",
         "Name[ca@valencia]": "Accions de presentació d'esdeveniments",
         "Name[ca]": "Accions de presentació d'esdeveniments",
+        "Name[en_GB]": "Presentation Event Actions",
         "Name[eo]": "Prezentad-Eventaj Agoj",
         "Name[es]": "Acciones de eventos de presentaciones",
         "Name[fr]": "Actions d'évènement de présentation",
@@ -17,6 +18,7 @@
         "Name[tr]": "Sunum Olayı Eylemi",
         "Name[uk]": "Реакція на події у презентації",
         "Name[x-test]": "xxPresentation Event Actionsxx",
+        "Name[zh_TW]": "展示事件動作",
         "ServiceTypes": [
             "Calligra/PresentationEventAction"
         ]

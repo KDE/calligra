@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'exportació ODT a Mobi",
         "Name[ca]": "Filtre d'exportació ODT a Mobi",
         "Name[cs]": "Exportní filtr ODT do Mobi",
+        "Name[en_GB]": "ODT to Mobi Export Filter",
         "Name[eo]": "ODT al Mobi Eksporta Filtrilo",
         "Name[es]": "Filtro de exportación ODT a Mobi",
         "Name[fr]": "Filtre d'exportation du format « ODT » vers « Mobi »",
@@ -16,6 +17,7 @@
         "Name[tr]": "ODT-Mobi Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту ODT до Mobi",
         "Name[x-test]": "xxODT to Mobi Export Filterxx",
+        "Name[zh_TW]": "ODT 到 Mobi 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

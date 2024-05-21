@@ -6,6 +6,7 @@
         "Name[ca@valencia]": "Filtre d'exportació SVG de Karbon",
         "Name[ca]": "Filtre d'exportació SVG del Karbon",
         "Name[cs]": "Exportní filtr do formátu SVG pro Karbon",
+        "Name[en_GB]": "Karbon SVG Export Filter",
         "Name[eo]": "Karbon SVG Eksporta Filtrilo",
         "Name[es]": "Filtro de exportación SVG de Karbon",
         "Name[fr]": "Filtre d'exportation « SVG » de Karbon",
@@ -18,6 +19,7 @@
         "Name[tr]": "Karbon SVG Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту SVG для Karbon",
         "Name[x-test]": "xxKarbon SVG Export Filterxx",
+        "Name[zh_TW]": "Karbon SVG 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

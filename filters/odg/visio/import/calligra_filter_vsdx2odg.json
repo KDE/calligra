@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'exportació Visio de Flow",
         "Name[ca]": "Filtre d'exportació Visio del Flow",
         "Name[cs]": "Importní filtr formátu Flow Visio",
+        "Name[en_GB]": "Flow Visio Import Filter",
         "Name[eo]": "Flow Visio Importfiltrilo",
         "Name[es]": "Filtro de importación de Flow Visio",
         "Name[fr]": "Filtre d'importation de Visio pour Flow",
@@ -16,6 +17,7 @@
         "Name[tr]": "Flow Visio İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Visio для Flow",
         "Name[x-test]": "xxFlow Visio Import Filterxx",
+        "Name[zh_TW]": "Flow Visio 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

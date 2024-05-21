@@ -5,6 +5,7 @@
         "Name": "Path Shapes",
         "Name[ca@valencia]": "Formes de camí",
         "Name[ca]": "Formes de camí",
+        "Name[en_GB]": "Path Shapes",
         "Name[eo]": "Padaj Formoj",
         "Name[es]": "Formas de rutas",
         "Name[fr]": "Formes d'emplacements",
@@ -17,6 +18,7 @@
         "Name[tr]": "Yol Şekilleri",
         "Name[uk]": "Форми контурів",
         "Name[x-test]": "xxPath Shapesxx",
+        "Name[zh_TW]": "路徑元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

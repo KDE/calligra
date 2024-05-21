@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de comentaris",
         "Name[ca]": "Forma de comentaris",
         "Name[cs]": "Tvar komentáře",
+        "Name[en_GB]": "Comment Shape",
         "Name[eo]": "Komento Formo",
         "Name[es]": "Forma de comentario",
         "Name[fr]": "Forme de commentaire",
@@ -17,6 +18,7 @@
         "Name[tr]": "Yorum Şekli",
         "Name[uk]": "Форма-коментар",
         "Name[x-test]": "xxComment Shapexx",
+        "Name[zh_TW]": "註解元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

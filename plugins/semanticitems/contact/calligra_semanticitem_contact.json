@@ -3,6 +3,7 @@
         "Description": "A plugin to map contact items between document and RDF database",
         "Description[ca@valencia]": "Un connector per a relacionar elements de contacte entre documents i una base de dades RDF",
         "Description[ca]": "Un connector per a relacionar elements de contacte entre documents i una base de dades RDF",
+        "Description[en_GB]": "A plugin to map contact items between document and RDF database",
         "Description[eo]": "Kromaĵo por mapi kontaktaĵojn inter dokumento kaj RDF-datumbazo",
         "Description[es]": "Complemento para asignar elementos de contactos entre el documento y la base de datos RDF",
         "Description[fr]": "Un module externe pour faire correspondre les éléments de contacts entre un document et une base de données « RDF »",
@@ -15,10 +16,12 @@
         "Description[tr]": "Belge ve RDF veritabanı arasında kişi ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map contact items between document and RDF databasexx",
+        "Description[zh_TW]": "讓文件與 RDF 資料庫聯絡人項目對應的外掛程式",
         "Id": "calligra_semanticitem_contact",
         "Name": "RDF Contact Plugin",
         "Name[ca@valencia]": "Connector de contacte RDF",
         "Name[ca]": "Connector de contacte RDF",
+        "Name[en_GB]": "RDF Contact Plugin",
         "Name[eo]": "RDF Kontakta Kromaĵo",
         "Name[es]": "Complemento de contacto RDF",
         "Name[fr]": "Module externe de contact « RDF »",
@@ -31,6 +34,7 @@
         "Name[tr]": "RDF Kişi Eklentisi",
         "Name[uk]": "Додаток контактів RDF",
         "Name[x-test]": "xxRDF Contact Pluginxx",
+        "Name[zh_TW]": "RDF 聯絡人外掛程式",
         "ServiceTypes": [
             "Calligra/SemanticItem"
         ]

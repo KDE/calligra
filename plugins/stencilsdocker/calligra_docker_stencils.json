@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Connector d'acobladors de plantilles de Calligra",
         "Name[ca]": "Connector d'acobladors de plantilles del Calligra",
         "Name[cs]": "Modul doků Calligra Stencils",
+        "Name[en_GB]": "Calligra Stencils Docker plugin",
         "Name[eo]": "Calligra Stencils Docker kromaĵo",
         "Name[es]": "Complemento de panel de plantillas de Calligra",
         "Name[fr]": "Module externe de panneau pour Calligra Stencils",
@@ -17,6 +18,7 @@
         "Name[tr]": "Calligra Stensil Docker Eklentisi",
         "Name[uk]": "Додаток панелі шаблонів для Calligra",
         "Name[x-test]": "xxCalligra Stencils Docker pluginxx",
+        "Name[zh_TW]": "Calligra Stencils Docker 外掛程式",
         "ServiceTypes": [
             "Calligra/Dock"
         ]

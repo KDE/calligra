@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Eina d'animació",
         "Name[ca]": "Eina d'animació",
         "Name[cs]": "Nástroj pro animaci",
+        "Name[en_GB]": "Animation Tool",
         "Name[eo]": "Animacia Ilo",
         "Name[es]": "Herramienta de animación",
         "Name[fr]": "Outils d'animation",
@@ -17,6 +18,7 @@
         "Name[tr]": "Canlandırma Aracı",
         "Name[uk]": "Засіб для анімації",
         "Name[x-test]": "xxAnimation Toolxx",
+        "Name[zh_TW]": "動畫工具",
         "ServiceTypes": [
             "CalligraStage/Tool"
         ]

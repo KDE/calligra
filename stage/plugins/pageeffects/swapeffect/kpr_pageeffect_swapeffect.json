@@ -3,6 +3,7 @@
         "Description": "Swap Page Effect",
         "Description[ca@valencia]": "Efecte d'agranat de pàgina",
         "Description[ca]": "Efecte d'escombrat de pàgina",
+        "Description[en_GB]": "Swap Page Effect",
         "Description[eo]": "Paĝ-Interŝanĝa Efekto",
         "Description[es]": "Efecto de página de intercambio",
         "Description[fr]": "Effet de permutation de pages",
@@ -15,10 +16,12 @@
         "Description[tr]": "Sayfa Takası Efekti",
         "Description[uk]": "Ефект перегортання сторінки",
         "Description[x-test]": "xxSwap Page Effectxx",
+        "Description[zh_TW]": "變換頁面效果",
         "Id": "kpr_pageeffect_swapeffect",
         "Name": "Swap Effect",
         "Name[ca@valencia]": "Efecte d'agranat",
         "Name[ca]": "Efecte d'escombrat",
+        "Name[en_GB]": "Swap Effect",
         "Name[eo]": "Interŝanĝa Efekto",
         "Name[es]": "Efecto de intercambio",
         "Name[fr]": "Effet de permutation",
@@ -31,6 +34,7 @@
         "Name[tr]": "Takas Efekti",
         "Name[uk]": "Ефект перегортання",
         "Name[x-test]": "xxSwap Effectxx",
+        "Name[zh_TW]": "變換效果",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

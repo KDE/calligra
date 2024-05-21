@@ -3,6 +3,7 @@
         "Description": "Space Rotation Page Effect",
         "Description[ca@valencia]": "Efecte de pàgina de gir de l'espai",
         "Description[ca]": "Efecte de pàgina de gir de l'espai",
+        "Description[en_GB]": "Space Rotation Page Effect",
         "Description[eo]": "Spac-Rotacia Paĝ-Efekto",
         "Description[es]": "Efecto de página de rotación espacial",
         "Description[fr]": "Effet de page de rotation dans l'espace",
@@ -15,10 +16,12 @@
         "Description[tr]": "Uzay Döndür Sayfa Efekti",
         "Description[uk]": "Ефект обертання сторінки у просторі",
         "Description[x-test]": "xxSpace Rotation Page Effectxx",
+        "Description[zh_TW]": "空間旋轉頁面效果",
         "Id": "kpr_pageeffect_spacerotation",
         "Name": "Space Rotation",
         "Name[ca@valencia]": "Gir de l'espai",
         "Name[ca]": "Gir de l'espai",
+        "Name[en_GB]": "Space Rotation",
         "Name[eo]": "Spaca Rotacio",
         "Name[es]": "Rotación espacial",
         "Name[fr]": "Rotation dans l'espace",
@@ -31,6 +34,7 @@
         "Name[tr]": "Uzay Dönüşü",
         "Name[uk]": "Обертання у просторі",
         "Name[x-test]": "xxSpace Rotationxx",
+        "Name[zh_TW]": "空間旋轉",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

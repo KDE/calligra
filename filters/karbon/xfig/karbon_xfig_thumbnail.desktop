@@ -36,6 +36,7 @@ Name[tr]=XFig Görselleri
 Name[uk]=Зображення XFig
 Name[x-test]=xxXFig Imagesxx
 Name[zh_CN]=XFig 图像
+Name[zh_TW]=XFig 影像
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-xfig;

@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma d'estat",
         "Name[ca]": "Forma d'estat",
         "Name[cs]": "Stavový tvar",
+        "Name[en_GB]": "State Shape",
         "Name[eo]": "Stata Formo",
         "Name[es]": "Forma de estado",
         "Name[fr]": "Forme d'état",
@@ -17,6 +18,7 @@
         "Name[tr]": "Şekil Durumu",
         "Name[uk]": "Форма стану",
         "Name[x-test]": "xxState Shapexx",
+        "Name[zh_TW]": "狀態元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

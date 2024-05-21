@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació OpenOffice.org Calc per a KSpread",
         "Name[ca]": "Filtre d'importació OpenOffice.org Calc per al KSpread",
         "Name[cs]": "OpenOffice.org Calc importní filtr pro KSpread",
+        "Name[en_GB]": "OpenOffice.org Calc Import Filter for KSpread",
         "Name[eo]": "OpenOffice.org Calc Importfiltrilo por KSpread",
         "Name[es]": "Filtro de importación OpenOffice.org Calc para KSpread",
         "Name[fr]": "Filtre d'importation « OpenOffice.org Calc » pour KSpread",
@@ -16,6 +17,7 @@
         "Name[tr]": "KSpread için Apache OpenOffice Calc İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних OpenOffice.org Calc для KSpread",
         "Name[x-test]": "xxOpenOffice.org Calc Import Filter for KSpreadxx",
+        "Name[zh_TW]": "KSpread 的 OpenOffice.org Calc 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

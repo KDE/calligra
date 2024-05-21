@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació PDF de Karbon",
         "Name[ca]": "Filtre d'importació PDF del Karbon",
         "Name[cs]": "Importní filtr PDF pro Karbon",
+        "Name[en_GB]": "Karbon PDF Import Filter",
         "Name[eo]": "Karbon PDF-Importfiltrilo",
         "Name[es]": "Filtro de importación PDF de Karbon",
         "Name[fr]": "Filtre d'importation « PDF » de Karbon",
@@ -16,6 +17,7 @@
         "Name[tr]": "Karbon PDF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування PDF до Karbon",
         "Name[x-test]": "xxKarbon PDF Import Filterxx",
+        "Name[zh_TW]": "Karbon PDF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

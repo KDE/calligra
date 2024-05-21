@@ -37,6 +37,7 @@ Name[tr]=WordPerfect Belgeleri
 Name[uk]=Документи WordPerfect
 Name[x-test]=xxWordPerfect Documentsxx
 Name[zh_CN]=WordPerfect 文本文档
+Name[zh_TW]=WordPerfect 文件
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.wordperfect;

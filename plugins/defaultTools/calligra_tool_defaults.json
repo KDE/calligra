@@ -4,6 +4,7 @@
         "Name": "Default Flake Tools",
         "Name[ca@valencia]": "Eines de floc per defecte",
         "Name[ca]": "Eines de floc per defecte",
+        "Name[en_GB]": "Default Flake Tools",
         "Name[eo]": "Defaŭltaj Flakaj Iloj",
         "Name[es]": "Herramientas de láminas predeterminadas",
         "Name[fr]": "Outils de flocons par défaut",
@@ -16,6 +17,7 @@
         "Name[tr]": "Öntanımlı Tanecik Araçları",
         "Name[uk]": "Типові інструменти Flake",
         "Name[x-test]": "xxDefault Flake Toolsxx",
+        "Name[zh_TW]": "預設 Flake 工具",
         "ServiceTypes": [
             "Calligra/Tool"
         ]

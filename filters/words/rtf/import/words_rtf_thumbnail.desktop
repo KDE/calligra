@@ -38,6 +38,7 @@ Name[tr]=RTF Belgeleri
 Name[uk]=Документи RTF
 Name[x-test]=xxRTF Documentsxx
 Name[zh_CN]=RTF 文本文档
+Name[zh_TW]=RTF 文件
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/rtf;

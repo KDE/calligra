@@ -34,6 +34,7 @@ Name[tr]=Apple Keynote Belgeleri
 Name[uk]=Документи Apple Keynote
 Name[x-test]=xxApple Keynote Documentsxx
 Name[zh_CN]=Apple Keynote 文档
+Name[zh_TW]=Apple Keynote 簡報
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-iwork-keynote-sffkey;

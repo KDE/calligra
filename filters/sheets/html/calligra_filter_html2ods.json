@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació HTML per a KSpread",
         "Name[ca]": "Filtre d'importació HTML per al KSpread",
         "Name[cs]": "HTML importní filtr pro KSpread",
+        "Name[en_GB]": "HTML Import Filter for KSpread",
         "Name[eo]": "HTML Importfiltrilo por KSpread",
         "Name[es]": "Filtro de importación HTML para KSpread",
         "Name[fr]": "Filtre d'importation « HTML » pour KSpread",
@@ -16,6 +17,7 @@
         "Name[tr]": "KSpread için HTML İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних HTML для KSpread",
         "Name[x-test]": "xxHTML Import Filter for KSpreadxx",
+        "Name[zh_TW]": "KSpread 的 HTML 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

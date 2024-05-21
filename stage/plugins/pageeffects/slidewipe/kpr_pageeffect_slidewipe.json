@@ -3,6 +3,7 @@
         "Description": "Slide Wipe Page Effect",
         "Description[ca@valencia]": "Efectes d'esborrat de diapositiva de la pàgina",
         "Description[ca]": "Efectes d'esborrat de diapositiva de la pàgina",
+        "Description[en_GB]": "Slide Wipe Page Effect",
         "Description[eo]": "Glit-Viŝa Paĝ-Efekto",
         "Description[es]": "Efecto de página de borrado deslizante",
         "Description[fr]": "Effet de page pour l'effaceur de diapositives",
@@ -15,10 +16,12 @@
         "Description[tr]": "Slayt Sil Sayfa Efekti",
         "Description[uk]": "Ефект ковзного витирання сторінки",
         "Description[x-test]": "xxSlide Wipe Page Effectxx",
+        "Description[zh_TW]": "滑動掃描頁面效果",
         "Id": "kpr_pageeffect_slidewipe",
         "Name": "Slide Wipe",
         "Name[ca@valencia]": "Esborrat de diapositiva",
         "Name[ca]": "Esborrat de diapositiva",
+        "Name[en_GB]": "Slide Wipe",
         "Name[eo]": "Glit-Viŝo",
         "Name[es]": "Borrado deslizante",
         "Name[fr]": "Effaceur de diapositives",
@@ -31,6 +34,7 @@
         "Name[tr]": "Slayt Sil",
         "Name[uk]": "Ковзне витирання",
         "Name[x-test]": "xxSlide Wipexx",
+        "Name[zh_TW]": "滑動掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

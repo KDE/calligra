@@ -3,6 +3,7 @@
         "Description": "Matrix wipe Page Effects",
         "Description[ca@valencia]": "Efectes d'esborrat de matriu de la pàgina",
         "Description[ca]": "Efectes d'esborrat de matriu de la pàgina",
+        "Description[en_GB]": "Matrix wipe Page Effects",
         "Description[eo]": "Matric-viŝaj Paĝ-Efektoj",
         "Description[es]": "Efectos de página de borrado de Matrix",
         "Description[fr]": "Effets de page de l'effaceur de matrice",
@@ -15,10 +16,12 @@
         "Description[tr]": "Matrix Sil Sayfa Efektleri",
         "Description[uk]": "Ефект матричного витирання сторінки",
         "Description[x-test]": "xxMatrix wipe Page Effectsxx",
+        "Description[zh_TW]": "矩陣掃描頁面效果",
         "Id": "kpr_pageeffect_matrixwipe",
         "Name": "Matrix wipe",
         "Name[ca@valencia]": "Esborrat de matriu",
         "Name[ca]": "Esborrat de matriu",
+        "Name[en_GB]": "Matrix wipe",
         "Name[eo]": "Matrica viŝo",
         "Name[es]": "Borrado de Matrix",
         "Name[fr]": "Effaceur de matrice",
@@ -31,6 +34,7 @@
         "Name[tr]": "Matrix Sil",
         "Name[uk]": "Матричне витирання",
         "Name[x-test]": "xxMatrix wipexx",
+        "Name[zh_TW]": "矩陣掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

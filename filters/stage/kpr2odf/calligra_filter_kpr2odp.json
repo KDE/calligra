@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre per a exportar fitxers KPR a ODP",
         "Name[ca]": "Filtre per a exportar fitxers KPR a ODP",
         "Name[cs]": "Filtr pro export souborů KPR do ODP",
+        "Name[en_GB]": "Filter to export KPR files to ODP",
         "Name[eo]": "Filtrilo por eksporti KPR-dosierojn al ODP",
         "Name[es]": "Filtro para exportar archivos KPR a ODP",
         "Name[fr]": "Filtre pour exporter des fichiers du format « KPR » vers « ODP »",
@@ -16,6 +17,7 @@
         "Name[tr]": "KPR Dosyalarını ODP Olarak Dışa Aktarmak için Süzgeç",
         "Name[uk]": "Фільтр для експорту файлів KPR у ODP",
         "Name[x-test]": "xxFilter to export KPR files to ODPxx",
+        "Name[zh_TW]": "將 KPR 檔匯出成 ODP 檔的過濾器",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

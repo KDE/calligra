@@ -96,6 +96,7 @@ Comment[tr]=Yeni Sahne sunum belgesi:
 Comment[uk]=Новий документ презентації Stage:
 Comment[x-test]=xxNew Stage presentation document:xx
 Comment[zh_CN]=新建 Stage 演示文档：
+Comment[zh_TW]=新增 Stage 簡報文件：
 Type=Link
 URL=.source/Presentation.odp
 Icon=application-vnd.oasis.opendocument.presentation

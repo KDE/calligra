@@ -4,6 +4,7 @@
         "Name": "Picture Shape",
         "Name[ca@valencia]": "Forma d'imatge",
         "Name[ca]": "Forma d'imatge",
+        "Name[en_GB]": "Picture Shape",
         "Name[eo]": "Bildo Formo",
         "Name[es]": "Forma de imagen",
         "Name[fr]": "Forme d'image",
@@ -16,6 +17,7 @@
         "Name[tr]": "Resim Şekli",
         "Name[uk]": "Форма-зображення",
         "Name[x-test]": "xxPicture Shapexx",
+        "Name[zh_TW]": "圖片元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]

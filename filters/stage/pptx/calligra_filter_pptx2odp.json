@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació Microsoft PowerPoint 2007 per a Stage",
         "Name[ca]": "Filtre d'importació Microsoft PowerPoint 2007 per a l'Stage",
         "Name[cs]": "Importní filtr MS PowerPoint 2007 pro Stage",
+        "Name[en_GB]": "MS PowerPoint 2007 Import Filter for Stage",
         "Name[eo]": "MS PowerPoint 2007 Importfiltrilo por Scenejo",
         "Name[es]": "Filtro de importación MS PowerPoint 2007 para Stage",
         "Name[fr]": "Filtre d'importation « Microsoft PowerPoint 2007 » pour Stage",
@@ -16,6 +17,7 @@
         "Name[tr]": "Sahne için MS PowerPoint 2007 İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних MS PowerPoint 2007 для Stage",
         "Name[x-test]": "xxMS PowerPoint 2007 Import Filter for Stagexx",
+        "Name[zh_TW]": "Stage 的 Microsoft PowerPoint 2007 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

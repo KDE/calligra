@@ -4,6 +4,7 @@
         "Name": "LCMS Color Management Engine for Pigment",
         "Name[ca@valencia]": "Motor de gestió de color LCMS per al Pigment",
         "Name[ca]": "Motor de gestió de color LCMS per al Pigment",
+        "Name[en_GB]": "LCMS Colour Management Engine for Pigment",
         "Name[eo]": "LCMS Kolora Administra Motoro por Pigmento",
         "Name[es]": "Motor de gestión de color LCMS para Pigment",
         "Name[fr]": "Moteur de gestion des couleurs « LCMS » pour Pigment",
@@ -16,6 +17,7 @@
         "Name[tr]": "Pigment için LCMS Renk Yönetimi İşletkesi",
         "Name[uk]": "Рушій керування кольорами LCMS для Pigment",
         "Name[x-test]": "xxLCMS Color Management Engine for Pigmentxx",
+        "Name[zh_TW]": "Pigment 的 LCMS 色彩管理引擎",
         "ServiceTypes": [
             "Calligra/ColorSpace"
         ]

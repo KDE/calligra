@@ -3,6 +3,7 @@
         "Description": "Bar Wipe Page Effect",
         "Description[ca@valencia]": "Efecte d'esborrat de barra de la pàgina",
         "Description[ca]": "Efecte d'esborrat de barra de la pàgina",
+        "Description[en_GB]": "Bar Wipe Page Effect",
         "Description[eo]": "Bret-Viŝa Paĝ-Efekto",
         "Description[es]": "Efecto de página de borrado de barras",
         "Description[fr]": "Effet de page de l'effaceur de barres",
@@ -15,10 +16,12 @@
         "Description[tr]": "Çubuk Sil Sayfa Efekti",
         "Description[uk]": "Ефект пластинчастого витирання",
         "Description[x-test]": "xxBar Wipe Page Effectxx",
+        "Description[zh_TW]": "條狀掃描頁面效果",
         "Id": "kpr_pageeffect_barwipe",
         "Name": "Bar Wipe",
         "Name[ca@valencia]": "Esborrat de barra",
         "Name[ca]": "Esborrat de barra",
+        "Name[en_GB]": "Bar Wipe",
         "Name[eo]": "Bretviŝo",
         "Name[es]": "Borrado de barras",
         "Name[fr]": "Effaceur de barres",
@@ -31,6 +34,7 @@
         "Name[tr]": "Çubuk Sil",
         "Name[uk]": "Пластинчасте витирання",
         "Name[x-test]": "xxBar Wipexx",
+        "Name[zh_TW]": "條狀掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

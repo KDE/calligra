@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[ca@valencia]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[ca]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+        "Description[en_GB]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[eo]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[es]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[fr]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
@@ -36,6 +39,7 @@
         "Description[tr]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[uk]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "Description[x-test]": "xxDAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATAxx",
+        "Description[zh_TW]": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "DatabaseModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions de base de dades",
         "Name[ca]": "Funcions de base de dades",
         "Name[cs]": "Funkce databází",
+        "Name[en_GB]": "Database Functions",
         "Name[eo]": "Datumbazaj Funkcioj",
         "Name[es]": "Funciones de bases de datos",
         "Name[fr]": "Fonctions de base de données",
@@ -56,6 +61,7 @@
         "Name[tr]": "Veritabanı İşlevleri",
         "Name[uk]": "Функції баз даних",
         "Name[x-test]": "xxDatabase Functionsxx",
+        "Name[zh_TW]": "資料庫函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

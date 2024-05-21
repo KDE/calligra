@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació Quattro Pro per a KSpread",
         "Name[ca]": "Filtre d'importació Quattro Pro per al KSpread",
         "Name[cs]": "Quattro Pro importní filtr pro KSpread",
+        "Name[en_GB]": "Quattro Pro Import Filter for KSpread",
         "Name[eo]": "Quattro Pro Importfiltrilo por KSpread",
         "Name[es]": "Filtro de importación Quattro Pro para KSpread",
         "Name[fr]": "Filtre d'importation « Quattro Pro » pour KSpread",
@@ -16,6 +17,7 @@
         "Name[tr]": "KSpread için Quattro Pro İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Quattro Pro для KSpread",
         "Name[x-test]": "xxQuattro Pro Import Filter for KSpreadxx",
+        "Name[zh_TW]": "KSpread 的 Quattro Pro 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

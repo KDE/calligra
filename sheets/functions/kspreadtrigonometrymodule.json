@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[ca@valencia]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[ca]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
+        "Description[en_GB]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[eo]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[es]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[fr]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
@@ -36,6 +39,7 @@
         "Description[tr]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[uk]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "Description[x-test]": "xxACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANHxx",
+        "Description[zh_TW]": "ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "TrigonometryModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions trigonomètriques",
         "Name[ca]": "Funcions trigonomètriques",
         "Name[cs]": "Trigonometrické funkce",
+        "Name[en_GB]": "Trigonometry Functions",
         "Name[eo]": "Trigonometriaj Funkcioj",
         "Name[es]": "Funciones trigonométricas",
         "Name[fr]": "Fonctions trigonométriques",
@@ -56,6 +61,7 @@
         "Name[tr]": "Trigonometri İşlevleri",
         "Name[uk]": "Тригонометричні функції",
         "Name[x-test]": "xxTrigonometry Functionsxx",
+        "Name[zh_TW]": "三角函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

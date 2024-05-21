@@ -36,6 +36,7 @@ Name[tr]=WordPerfect/DrawPerfect Görselleri
 Name[uk]=Зображення WordPerfect/DrawPerfect
 Name[x-test]=xxWordPerfect/DrawPerfect Imagesxx
 Name[zh_CN]=WordPerfect/DrawPerfect 图像
+Name[zh_TW]=WordPerfect/DrawPerfect 影像
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-wpg;

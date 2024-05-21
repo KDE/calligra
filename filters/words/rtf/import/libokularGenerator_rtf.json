@@ -33,7 +33,8 @@
                 "Name[tr]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
                 "Name[x-test]": "xxSven Langkampxx",
-                "Name[zh_CN]": "Sven Langkamp"
+                "Name[zh_CN]": "Sven Langkamp",
+                "Name[zh_TW]": "Sven Langkamp"
             },
             {
                 "Email": "kossebau@kde.org",
@@ -67,7 +68,8 @@
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
                 "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
-                "Name[zh_CN]": "Friedrich W. H. Kossebau"
+                "Name[zh_CN]": "Friedrich W. H. Kossebau",
+                "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
         ],
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
@@ -101,6 +103,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016",
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Copyright[zh_TW]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "RTF file renderer",
         "Description[ca@valencia]": "Representació de fitxers RTF",
         "Description[ca]": "Representació de fitxers RTF",
@@ -131,6 +134,7 @@
         "Description[uk]": "Засіб показу вмісту файлів RTF",
         "Description[x-test]": "xxRTF file rendererxx",
         "Description[zh_CN]": "RTF 文件渲染器",
+        "Description[zh_TW]": "RTF 檔案繪製器",
         "Id": "okularGenerator_docx_calligra",
         "License": "GPL",
         "MimeTypes": [
@@ -168,6 +172,7 @@
         "Name[uk]": "Модуль обробки RTF",
         "Name[x-test]": "xxRTF Backendxx",
         "Name[zh_CN]": "RTF 后端",
+        "Name[zh_TW]": "RTF 後端",
         "ServiceTypes": [
             "okular/Generator"
         ],

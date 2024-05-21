@@ -36,6 +36,7 @@ Name[tr]=Microsoft Works Belgesi
 Name[uk]=Документ Microsoft Works
 Name[x-test]=xxMicrosoft Works Documentxx
 Name[zh_CN]=Microsoft Works 文档
+Name[zh_TW]=Microsoft Works 文件
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.ms-works;

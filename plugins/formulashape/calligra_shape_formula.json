@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de la fórmula",
         "Name[ca]": "Forma de la fórmula",
         "Name[cs]": "Tvar vzorce",
+        "Name[en_GB]": "Formula Shape",
         "Name[eo]": "Formulo Formo",
         "Name[es]": "Forma de fórmula",
         "Name[fr]": "Forme de formule",
@@ -17,6 +18,7 @@
         "Name[tr]": "Formül Şekli",
         "Name[uk]": "Форма формули",
         "Name[x-test]": "xxFormula Shapexx",
+        "Name[zh_TW]": "公式元件",
         "ServiceTypes": [
             "Calligra/Flake"
         ]

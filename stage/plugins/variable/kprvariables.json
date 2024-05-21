@@ -6,6 +6,7 @@
         "Name[ca@valencia]": "Variables de presentació",
         "Name[ca]": "Variables de presentació",
         "Name[cs]": "Proměnné prezentace",
+        "Name[en_GB]": "Presentation Variables",
         "Name[eo]": "Prezentovariabloj",
         "Name[es]": "Variables de presentaciones",
         "Name[fr]": "Variables de présentation",
@@ -18,6 +19,7 @@
         "Name[tr]": "Sunum Değişkenleri",
         "Name[uk]": "Змінні презентації",
         "Name[x-test]": "xxPresentation Variablesxx",
+        "Name[zh_TW]": "簡報變數",
         "ServiceTypes": [
             "Calligra/Text-InlineObject"
         ]

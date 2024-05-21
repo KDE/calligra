@@ -37,6 +37,7 @@ Name[tr]=Microsoft Word Belgeleri
 Name[uk]=Документи Microsoft Word
 Name[x-test]=xxMicrosoft Word Documentsxx
 Name[zh_CN]=Microsoft Word 文本文档
+Name[zh_TW]=Microsoft Word 文件
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/msword;

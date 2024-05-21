@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació WordPerfect de Words",
         "Name[ca]": "Filtre d'importació WordPerfect del Words",
         "Name[cs]": "Importní filtr WordPerfect pro Words",
+        "Name[en_GB]": "Words WordPerfect Import Filter",
         "Name[eo]": "Words WordPerfect Importfiltrilo",
         "Name[es]": "Filtro de importación WordPerfect de Words",
         "Name[fr]": "Filtre d'importation « WordPerfect » pour Words",
@@ -16,6 +17,7 @@
         "Name[tr]": "Sözcükler WordPerfect İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних WordPerfect для Words",
         "Name[x-test]": "xxWords WordPerfect Import Filterxx",
+        "Name[zh_TW]": "Words WordPerfect 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

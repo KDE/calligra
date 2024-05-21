@@ -3,6 +3,7 @@
         "Description": "Show Related Words",
         "Description[ca@valencia]": "Mostra paraules relacionades",
         "Description[ca]": "Mostra paraules relacionades",
+        "Description[en_GB]": "Show Related Words",
         "Description[eo]": "Montri Rilatajn Vortojn",
         "Description[es]": "Mostrar palabras relacionadas",
         "Description[fr]": "Afficher les mots en relation",
@@ -15,12 +16,14 @@
         "Description[tr]": "İlgili sözcükleri göster",
         "Description[uk]": "Показати пов’язані слова",
         "Description[x-test]": "xxShow Related Wordsxx",
+        "Description[zh_TW]": "顯示相關單字",
         "Icon": "",
         "Id": "thesaurustool",
         "Name": "Thesaurus Tool",
         "Name[ca@valencia]": "Eina Tesaurus",
         "Name[ca]": "Eina Tesaurus",
         "Name[cs]": "Tezaurus",
+        "Name[en_GB]": "Thesaurus Tool",
         "Name[eo]": "Tezaŭro-Ilo",
         "Name[es]": "Herramienta de tesauro",
         "Name[fr]": "Outil de Thésaurus",
@@ -33,6 +36,7 @@
         "Name[tr]": "Eşanlamlılar Sözlüğü Aracı",
         "Name[uk]": "Засіб синонімів",
         "Name[x-test]": "xxThesaurus Toolxx",
+        "Name[zh_TW]": "同義字工具",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
         ]

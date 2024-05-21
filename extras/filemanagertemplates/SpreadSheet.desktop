@@ -97,6 +97,7 @@ Comment[tr]=Yeni Tablolar belgesi
 Comment[uk]=Новий документ Sheets:
 Comment[x-test]=xxNew Sheets document:xx
 Comment[zh_CN]=新建表格文档：
+Comment[zh_TW]=新增 Sheets 文件：
 Type=Link
 URL=.source/SpreadSheet.ods
 Icon=application-vnd.oasis.opendocument.spreadsheet

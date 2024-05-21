@@ -36,5 +36,6 @@ Comment[sv]=Insticksprogram för Calligra Sheets
 Comment[tr]=Calligra Tablolar için eklenti
 Comment[uk]=Додаток до Calligra Sheets
 Comment[x-test]=xxPlugin for Calligra Sheetsxx
+Comment[zh_TW]=Calligra Sheets 的外掛程式
 [PropertyDef::X-CalligraSheets-InterfaceVersion]
 Type=int

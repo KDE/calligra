@@ -3,6 +3,7 @@
         "Description": "A plugin to map calendar event items between document and RDF database",
         "Description[ca@valencia]": "Un connector per a relacionar elements de calendari entre documents i una base de dades RDF",
         "Description[ca]": "Un connector per a relacionar elements de calendari entre documents i una base de dades RDF",
+        "Description[en_GB]": "A plugin to map calendar event items between document and RDF database",
         "Description[eo]": "Kromprogramo por mapi kalendarajn eventojn inter dokumento kaj RDF-datumbazo",
         "Description[es]": "Complemento para asignar elementos de eventos de calendario entre el documento y la base de datos RDF",
         "Description[fr]": "Un module externe pour faire correspondre les éléments d'événements de calendrier entre le document et la base de données « RDF »",
@@ -15,10 +16,12 @@
         "Description[tr]": "Belge ve RDF veritabanı arasında takvim etkinliği ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map calendar event items between document and RDF databasexx",
+        "Description[zh_TW]": "讓文件與 RDF 資料庫行事曆事件項目對應的外掛程式",
         "Id": "calligra_semanticitem_event",
         "Name": "RDF Calendar Event Plugin",
         "Name[ca@valencia]": "Connector d'esdeveniments de calendari RDF",
         "Name[ca]": "Connector d'esdeveniments de calendari RDF",
+        "Name[en_GB]": "RDF Calendar Event Plugin",
         "Name[eo]": "RDF Kalendaro Eventa Kromaĵo",
         "Name[es]": "Complemento de evento de calendario RDF",
         "Name[fr]": "Module externe d'événement de calendrier « RDF »",
@@ -31,6 +34,7 @@
         "Name[tr]": "RDF Takvim Etkinliği Eklentisi",
         "Name[uk]": "Додаток подій календаря RDF",
         "Name[x-test]": "xxRDF Calendar Event Pluginxx",
+        "Name[zh_TW]": "RDF 行事曆事件外掛程式",
         "ServiceTypes": [
             "Calligra/SemanticItem"
         ]

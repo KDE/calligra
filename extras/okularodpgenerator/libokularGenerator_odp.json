@@ -33,7 +33,8 @@
                 "Name[tr]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
                 "Name[x-test]": "xxSven Langkampxx",
-                "Name[zh_CN]": "Sven Langkamp"
+                "Name[zh_CN]": "Sven Langkamp",
+                "Name[zh_TW]": "Sven Langkamp"
             },
             {
                 "Email": "kossebau@kde.org",
@@ -67,7 +68,8 @@
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
                 "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
-                "Name[zh_CN]": "Friedrich W. H. Kossebau"
+                "Name[zh_CN]": "Friedrich W. H. Kossebau",
+                "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
         ],
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
@@ -101,6 +103,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016",
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Copyright[zh_TW]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "OpenDocument Presentation file renderer",
         "Description[ca@valencia]": "Representació de fitxers de presentacions en OpenDocument",
         "Description[ca]": "Representació de fitxers de presentacions en OpenDocument",
@@ -131,6 +134,7 @@
         "Description[uk]": "Засіб показу вмісту файлів ODP",
         "Description[x-test]": "xxOpenDocument Presentation file rendererxx",
         "Description[zh_CN]": "OpenDocument 演示文件渲染器",
+        "Description[zh_TW]": "OpenDocument 簡報檔案繪製器",
         "Id": "okularGenerator_odp_calligra",
         "License": "GPL",
         "MimeTypes": [
@@ -168,6 +172,7 @@
         "Name[uk]": "Модуль обробки ODP",
         "Name[x-test]": "xxODP Backendxx",
         "Name[zh_CN]": "ODP 后端",
+        "Name[zh_TW]": "ODP 後端",
         "ServiceTypes": [
             "okular/Generator"
         ],

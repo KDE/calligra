@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[ca@valencia]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[ca]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
+        "Description[en_GB]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[eo]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[es]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[fr]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
@@ -36,6 +39,7 @@
         "Description[tr]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[uk]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[x-test]": "xxARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRINGxx",
+        "Description[zh_TW]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "ConversionModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions de conversió",
         "Name[ca]": "Funcions de conversió",
         "Name[cs]": "Převodní funkce",
+        "Name[en_GB]": "Conversion Functions",
         "Name[eo]": "Konvertaj Funkcioj",
         "Name[es]": "Funciones de conversión",
         "Name[fr]": "Fonctions de conversion",
@@ -56,6 +61,7 @@
         "Name[tr]": "Dönüştürme İşlevleri",
         "Name[uk]": "Функції перетворення",
         "Name[x-test]": "xxConversion Functionsxx",
+        "Name[zh_TW]": "轉換函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

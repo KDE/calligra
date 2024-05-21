@@ -6,6 +6,7 @@
                 "Name": "The KSpread Team",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
+                "Name[en_GB]": "The KSpread Team",
                 "Name[eo]": "La KSpread-Teamo",
                 "Name[es]": "El equipo de KSpread",
                 "Name[fr]": "L'équipe de KSpread",
@@ -17,13 +18,15 @@
                 "Name[sl]": "Ekipa KSpread",
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
-                "Name[x-test]": "xxThe KSpread Teamxx"
+                "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_TW]": "KSpread 團隊"
             }
         ],
         "Category": "FunctionModule",
         "Description": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[ca@valencia]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[ca]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
+        "Description[en_GB]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[eo]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[es]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[fr]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
@@ -36,6 +39,7 @@
         "Description[tr]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[uk]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "Description[x-test]": "xxADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUPxx",
+        "Description[zh_TW]": "ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUP",
         "EnabledByDefault": true,
         "Icon": "funct",
         "Id": "ReferenceModule",
@@ -44,6 +48,7 @@
         "Name[ca@valencia]": "Funcions de referència",
         "Name[ca]": "Funcions de referència",
         "Name[cs]": "Referenční funkce",
+        "Name[en_GB]": "Reference Functions",
         "Name[eo]": "Referencaj Funkcioj",
         "Name[es]": "Funciones de referencia",
         "Name[fr]": "Fonctions de référence",
@@ -56,6 +61,7 @@
         "Name[tr]": "Başvuru İşlevleri",
         "Name[uk]": "Еталонні функції",
         "Name[x-test]": "xxReference Functionsxx",
+        "Name[zh_TW]": "參考函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",
             "KPluginInfo"

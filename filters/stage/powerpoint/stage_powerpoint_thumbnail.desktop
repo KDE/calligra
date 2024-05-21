@@ -37,6 +37,7 @@ Name[tr]=Microsoft Powerpoint Sunuları
 Name[uk]=Презентації Microsoft Powerpoint
 Name[x-test]=xxMicrosoft Powerpoint Presentationsxx
 Name[zh_CN]=Microsoft PowerPoint 演示文稿
+Name[zh_TW]=Microsoft Powerpoint 簡報
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.ms-powerpoint;

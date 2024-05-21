@@ -3,6 +3,7 @@
         "Description": "Jiggle and Wiggle that Shape!",
         "Description[ca@valencia]": "Sacsa esta imatge!",
         "Description[ca]": "Sacseja aquesta imatge!",
+        "Description[en_GB]": "Jiggle and Wiggle that Shape!",
         "Description[eo]": "Movu kaj skuu tiun Formon!",
         "Description[es]": "Sacudir esta forma.",
         "Description[fr]": "Secouez et modifiez cette forme !",
@@ -15,10 +16,12 @@
         "Description[tr]": "Şekli sallayın ve kıpırdatın!",
         "Description[uk]": "Похитайте і потрусіть цю форму!",
         "Description[x-test]": "xxJiggle and Wiggle that Shape!xx",
+        "Description[zh_TW]": "讓元件動起來！",
         "Id": "kpr_shapeanimation_example",
         "Name": "Jiggle and Wiggle",
         "Name[ca@valencia]": "Sacsa",
         "Name[ca]": "Sacseja",
+        "Name[en_GB]": "Jiggle and Wiggle",
         "Name[eo]": "Skueti kaj Tordeti",
         "Name[es]": "Sacudir",
         "Name[fr]": "Secouez et modifiez",
@@ -31,6 +34,7 @@
         "Name[tr]": "Salla ve Kıpırdat",
         "Name[uk]": "Похитати і потрусити",
         "Name[x-test]": "xxJiggle and Wigglexx",
+        "Name[zh_TW]": "搖搖擺擺",
         "ServiceTypes": [
             "CalligraStage/ShapeAnimation"
         ]

@@ -3,6 +3,7 @@
         "Description": "Clock wipe Page Effects",
         "Description[ca@valencia]": "Efectes d'esborrat de rellotge de la pàgina",
         "Description[ca]": "Efectes d'esborrat de rellotge de la pàgina",
+        "Description[en_GB]": "Clock wipe Page Effects",
         "Description[eo]": "Horloĝ-viŝaj Paĝ-Efektoj",
         "Description[es]": "Efectos de página de borrado de reloj",
         "Description[fr]": "Effets de page de l'effaceur d'horloge",
@@ -15,10 +16,12 @@
         "Description[tr]": "Saat Sil Sayfa Efektleri",
         "Description[uk]": "Ефект витирання по колу",
         "Description[x-test]": "xxClock wipe Page Effectsxx",
+        "Description[zh_TW]": "時鐘掃描頁面效果",
         "Id": "kpr_pageeffect_clockwipe",
         "Name": "Clock wipe",
         "Name[ca@valencia]": "Esborrat de rellotge",
         "Name[ca]": "Esborrat de rellotge",
+        "Name[en_GB]": "Clock wipe",
         "Name[eo]": "Horloĝ-viŝo",
         "Name[es]": "Borrado de reloj",
         "Name[fr]": "Effaceur d'horloge",
@@ -31,6 +34,7 @@
         "Name[tr]": "Saat Sil",
         "Name[uk]": "Витирання по колу",
         "Name[x-test]": "xxClock wipexx",
+        "Name[zh_TW]": "時鐘掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

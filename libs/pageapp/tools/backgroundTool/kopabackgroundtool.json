@@ -4,6 +4,7 @@
         "Name": "Page Application Background Tool",
         "Name[ca@valencia]": "Eina d'aplicació de fons de pàgina",
         "Name[ca]": "Eina d'aplicació de fons de pàgina",
+        "Name[en_GB]": "Page Application Background Tool",
         "Name[eo]": "Paĝa Apliko Fona Ilo",
         "Name[es]": "Herramienta de aplicación de fondo a página",
         "Name[fr]": "Outil d'arrière-plan de page d'application",
@@ -16,6 +17,7 @@
         "Name[tr]": "Sayfa Uygulaması Arka Plan Aracı",
         "Name[uk]": "Програма для роботи з тлом сторінки",
         "Name[x-test]": "xxPage Application Background Toolxx",
+        "Name[zh_TW]": "頁面應用程式背景工具",
         "ServiceTypes": [
             "CalligraPageApp/Tool"
         ]

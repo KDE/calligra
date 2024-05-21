@@ -4,6 +4,7 @@
         "Name[ca@valencia]": "Filtre d'importació WMF de Karbon",
         "Name[ca]": "Filtre d'importació WMF del Karbon",
         "Name[cs]": "Importní filtr WMF pro Karbon14",
+        "Name[en_GB]": "Karbon WMF Import Filter",
         "Name[eo]": "Karbon WMF Importfiltrilo",
         "Name[es]": "Filtro de importación WMF de Karbon",
         "Name[fr]": "Filtre d'importation « WMF » de Karbon",
@@ -16,6 +17,7 @@
         "Name[tr]": "Karbon WMF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування WMF до Karbon",
         "Name[x-test]": "xxKarbon WMF Import Filterxx",
+        "Name[zh_TW]": "Karbon WMF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

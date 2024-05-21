@@ -5,6 +5,7 @@
         "Name[ca@valencia]": "Forma de web",
         "Name[ca]": "Forma de web",
         "Name[cs]": "Tvar webu",
+        "Name[en_GB]": "Web Shape",
         "Name[eo]": "TTT-Formo",
         "Name[es]": "Forma web",
         "Name[fr]": "Forme Internet",
@@ -17,6 +18,7 @@
         "Name[tr]": "Web Şekli",
         "Name[uk]": "Форма мережі",
         "Name[x-test]": "xxWeb Shapexx",
+        "Name[zh_TW]": "網頁元件",
         "ServiceTypes": [
             "Calligra/Shape"
         ]
