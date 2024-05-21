@@ -170,7 +170,7 @@ DrawingMLColorScheme::DrawingMLColorScheme()
 
 DrawingMLColorScheme::~DrawingMLColorScheme()
 {
-    QSet<DrawingMLColorSchemeItemBase *> set(values().cbegin(), values().cend()); // use set because values can be duplicated
+    QSet<DrawingMLColorSchemeItemBase *> set(cbegin(), cend()); // use set because values can be duplicated
     qDeleteAll(set);
 }
 
