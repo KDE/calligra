@@ -8,19 +8,20 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
 # pan93412 <pan93412@gmail.com>, 2020.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2020-01-16 14:40+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-05-21 01:23+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.1\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
@@ -92,7 +93,7 @@ msgstr "設定(&S)"
 #: data/karbon.rc:137
 #, kde-format
 msgid "&Page"
-msgstr ""
+msgstr "頁面(&P)"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: data/karbon.rc:150
@@ -300,20 +301,19 @@ msgid "A Vector Graphics Drawing Application."
 msgstr "一個向量式的繪圖程式。"
 
 #: ui/KarbonAboutData.h:24
-#, fuzzy, kde-format
-#| msgid "(c) 2001-2013, The Karbon Developers"
+#, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
-msgstr "(c) 2001-2013, Karbon 開發團隊"
+msgstr "(c) 2001-%1, Karbon 開發團隊"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Anthony Fieroni"
-msgstr ""
+msgstr "Anthony Fieroni"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Maintainer"
-msgstr ""
+msgstr "維護者"
 
 #: ui/KarbonAboutData.h:32
 #, kde-format

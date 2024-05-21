@@ -10,19 +10,20 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2012-06-14 09:02+0800\n"
-"Last-Translator: Franklin Weng <franklin@goodhorse.idv.tw>\n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-05-21 01:58+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n: ectx: Menu (edit)
@@ -166,10 +167,9 @@ msgid "Calligra Stage"
 msgstr "設定 Stage..."
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Presentation Tool"
-msgstr "簡報"
+msgstr "簡報工具"
 
 #: part/KPrAboutData.h:23
 #, fuzzy, kde-format
@@ -595,10 +595,9 @@ msgid "Export as HTML..."
 msgstr "匯出為 HTML..."
 
 #: part/KPrView.cpp:263
-#, fuzzy, kde-format
-#| msgid "Insert Pictures..."
+#, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "插入圖片..."
+msgstr "將圖片插入成為投影片..."
 
 #: part/KPrView.cpp:272
 #, kde-format
@@ -626,10 +625,9 @@ msgid "From First Slide"
 msgstr "從第一張投影片"
 
 #: part/KPrView.cpp:292
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Stop presentation"
-msgstr "開始展示"
+msgstr "停止展示"
 
 #: part/KPrView.cpp:298
 #, kde-format

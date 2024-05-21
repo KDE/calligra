@@ -7,19 +7,20 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011, 2012.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2012-06-14 09:06+0800\n"
-"Last-Translator: Franklin Weng <franklin@goodhorse.idv.tw>\n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-05-21 01:52+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n: ectx: Menu (file)
@@ -49,10 +50,9 @@ msgstr "顯示模式(&D)"
 
 #. i18n: ectx: Menu (semantic)
 #: part/calligrawords.rc:62
-#, fuzzy, kde-format
-#| msgid "Semantic Object"
+#, kde-format
 msgid "Semantics"
-msgstr "語意物件"
+msgstr "語意"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
@@ -76,7 +76,7 @@ msgstr "拼字檢查"
 #: part/calligrawords.rc:83
 #, kde-format
 msgid "AutoCorrection"
-msgstr ""
+msgstr "自動修正"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -598,8 +598,7 @@ msgstr "元件與文字的區隔："
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWRunAroundProperties.ui:140
-#, fuzzy, kde-format
-#| msgid "Left:"
+#, kde-format
 msgid "Left by:"
 msgstr "左側："
 
@@ -607,18 +606,17 @@ msgstr "左側："
 #: part/dialogs/KWRunAroundProperties.ui:169
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "上方："
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: part/dialogs/KWRunAroundProperties.ui:198
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "下方："
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: part/dialogs/KWRunAroundProperties.ui:227
-#, fuzzy, kde-format
-#| msgid "Right:"
+#, kde-format
 msgid "Right by:"
 msgstr "右側："
 
@@ -674,25 +672,22 @@ msgstr "建立"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "除錯"
 
 #: part/dockers/KWNavigationDocker.cpp:20
-#, fuzzy, kde-format
-#| msgid "Salutation"
+#, kde-format
 msgid "Navigation"
-msgstr "稱呼語"
+msgstr "導覽"
 
 #: part/dockers/KWNavigationWidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "&Page"
+#, kde-format
 msgid "Page #"
-msgstr "頁面(&P)"
+msgstr "頁面 #"
 
 #: part/dockers/KWNavigationWidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Section"
-msgstr "函式"
+msgstr "小節"
 
 #: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
@@ -720,36 +715,32 @@ msgid "Syllables:"
 msgstr "音節："
 
 #: part/dockers/KWStatisticsWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Characters (including spaces):"
+#, kde-format
 msgid "Characters (spaces):"
-msgstr "包含空白的字元數："
+msgstr "字元數（包含空格）："
 
 #: part/dockers/KWStatisticsWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Characters (including spaces):"
+#, kde-format
 msgid "Characters (no spaces):"
-msgstr "包含空白的字元數："
+msgstr "字元數（不含空格）："
 
 #: part/dockers/KWStatisticsWidget.cpp:142
 #, kde-format
 msgid "Lines:"
-msgstr "行："
+msgstr "行數："
 
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
-msgstr ""
+msgstr "可讀性："
 
 #: part/dockers/KWStatisticsWidget.cpp:147
-#, fuzzy, kde-format
-#| msgid "Flesch Reading Ease"
+#, kde-format
 msgid "Flesch reading ease"
-msgstr "Flesch 閱讀指數"
+msgstr "Flesch 易讀性指數"
 
 #: part/dockers/KWStatisticsWidget.cpp:149
-#, fuzzy, kde-format
-#| msgid "East Asian characters:"
+#, kde-format
 msgid "East asian characters:"
 msgstr "東亞字元："
 
@@ -1095,10 +1086,9 @@ msgid "Word processor"
 msgstr "文書處理器"
 
 #: part/KWAboutData.h:23
-#, fuzzy, kde-format
-#| msgid "© 1998-2012, The Words Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "(c) 1998-2012，Words 開發團隊"
+msgstr "Copyright 1998-%1, Words 團隊"
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
@@ -1119,7 +1109,7 @@ msgstr "C. Boemann"
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Everything"
-msgstr "任何東西"
+msgstr "一切"
 
 #: part/KWAboutData.h:33
 #, kde-format
@@ -1360,14 +1350,15 @@ msgstr "頁面中斷圖示"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"ericc@shinewave.com.tw,pesder.liao@msa.hinet.net, franklin@goodhorse.idv.tw"
+"ericc@shinewave.com.tw,pesder.liao@msa.hinet.net, franklin@goodhorse.idv.tw, "
+"mail@kisaragi-hiu.com"
 
 #. i18n translator strings
 #: part/KWAboutData.h:70
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Eric Cheng,ChaoHsiung Liao,Frank Weng"
+msgstr "Eric Cheng,ChaoHsiung Liao,Frank Weng, Kisaragi Hiu"
 
 #: part/KWDocument.cpp:492
 #, kde-format
@@ -1412,12 +1403,12 @@ msgstr "工具"
 #: part/KWOdfLoader.cpp:83
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-msgstr "不合法的 OASIS OpenDocument 檔。找不到 office:body 標籤。"
+msgstr "無效的 OASIS OpenDocument 檔。沒有找到 office:body 標籤。"
 
 #: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-msgstr "不合法的 OASIS OpenDocument 檔。office:body 中找不到標籤。"
+msgstr "無效的 OASIS OpenDocument 檔。office:body 中沒有找到標籤。"
 
 #: part/KWOdfLoader.cpp:96
 #, kde-format
@@ -1427,8 +1418,7 @@ msgid ""
 msgstr "這不是一個文字處理文件，而是 %1。請試著用適當的應用程式來開啟。"
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "標準"
@@ -1454,16 +1444,14 @@ msgid "Saved"
 msgstr "已儲存"
 
 #: part/KWStatusBar.cpp:37
-#, fuzzy, kde-format
-#| msgid "Page %1/%2"
+#, kde-format
 msgid "Page %1 of %2"
-msgstr "頁面 %1/%2"
+msgstr "頁面 %1 / %2"
 
 #: part/KWStatusBar.cpp:38
-#, fuzzy, kde-format
-#| msgid "Page %1/%2"
+#, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "頁面 %1/%2"
+msgstr "頁面 %1-%2 / %3"
 
 #: part/KWStatusBar.cpp:39
 #, kde-format
@@ -1481,9 +1469,7 @@ msgid "Line Number"
 msgstr "行號"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Page Style"
+#, kde-format
 msgid "Change the page style"
 msgstr "變更頁面樣式"
 
@@ -1515,7 +1501,7 @@ msgstr "縮放控制器"
 #: part/KWView.cpp:184
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "離開全螢幕模式"
 
 #: part/KWView.cpp:276
 #, kde-format
@@ -1683,12 +1669,12 @@ msgstr "顯示或隱藏狀態列"
 #: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "全螢幕模式"
 
 #: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "進入全螢幕模式檢視"
 
 #: part/KWView.cpp:398
 #, kde-format
@@ -1701,14 +1687,11 @@ msgid "Modify and add semantic stylesheets"
 msgstr "變更與新增語意樣式表單"
 
 #: part/KWView.cpp:401
-#, fuzzy, kde-format
-#| msgid ""
-#| "Stylesheets are used to format contact, event, and location information "
-#| "which is stored in Rdf"
+#, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
-msgstr "表單用於格式化存在 Rdf 中的聯絡人、事件與位置資訊"
+msgstr "樣式表用來格式化儲存於 RDF 當中的資訊的顯示。"
 
 #: part/KWView.cpp:416
 #, kde-format
@@ -1747,24 +1730,22 @@ msgstr "建立註腳"
 #: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
-msgstr ""
+msgstr "顯示註解"
 
 #: part/KWView.cpp:446
-#, fuzzy, kde-format
-#| msgid "No framesets in document"
+#, kde-format
 msgid "Shows comments in the document"
-msgstr "文件中沒有框架集"
+msgstr "顯示文件中的註解"
 
 #: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
-msgstr ""
+msgstr "單字計數"
 
 #: part/KWView.cpp:453
-#, fuzzy, kde-format
-#| msgid "Shows or hides the status bar"
+#, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "顯示或隱藏狀態列"
+msgstr "顯示或隱藏狀態列中的單字計數"
 
 #: part/pagetool/KWPageTool.cpp:85
 #, kde-format
@@ -1795,21 +1776,19 @@ msgstr "..."
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "尋找："
 
 #: part/widgets/KoFindToolbar.cpp:81
-#, fuzzy, kde-format
-#| msgid "Next Page"
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "下一頁"
+msgstr "下一個"
 
 #: part/widgets/KoFindToolbar.cpp:93
-#, fuzzy, kde-format
-#| msgid "Previous Page"
+#, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr "上一頁"
+msgstr "上一個"
 
 #: part/widgets/KoFindToolbar.cpp:104
 #, kde-format
@@ -1821,36 +1800,36 @@ msgstr "選項"
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "取代："
 
 #: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "取代"
 
 #: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "全部取代"
 
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "取代"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
+msgstr[0] "找到了 %1 個相符項目"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "沒有相符項目"
 
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format

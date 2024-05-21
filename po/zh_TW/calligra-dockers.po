@@ -5,19 +5,20 @@
 #
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2015-09-21 14:49+0800\n"
-"Last-Translator: \n"
-"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"PO-Revision-Date: 2024-05-21 01:22+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: shapecollection/OdfCollectionLoader.cpp:60
@@ -28,7 +29,7 @@ msgstr "在收藏中找不到物件！%1"
 #: shapecollection/OdfCollectionLoader.cpp:120
 #, kde-format
 msgid "Not a valid Calligra file: %1"
-msgstr "不是合法的 Calligra 檔案：%1"
+msgstr "不是有效的 Calligra 檔案：%1"
 
 #: shapecollection/OdfCollectionLoader.cpp:143
 #, kde-format
