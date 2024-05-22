@@ -17,9 +17,16 @@
 #include <QMimeType>
 #include <QPainter>
 #include <QTimer>
+#include <KPluginFactory>
 
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
+
+#if TARGETTYPES == DOCS
+K_PLUGIN_CLASS_WITH_JSON(CalligraCreator, "ooxml_odf_thumbnail.json")
+#elif TARGETTYPES == IMAGES
+K_PLUGIN_CLASS_WITH_JSON(CalligraCreator, "images_thumbnail.json")
+#endif
 
 CalligraCreator::CalligraCreator(QObject *parent, const QVariantList &args)
     : KIO::ThumbnailCreator(parent, args)
@@ -85,6 +92,7 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
 
     if (!m_doc->openUrl(request.url())) {
         delete m_doc;
+        m_doc = nullptr;
         return KIO::ThumbnailResult::fail();
     }
 
@@ -106,10 +114,10 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
 
     m_doc->closeUrl();
     delete m_doc;
-    m_doc = 0;
+    m_doc = nullptr;
 
     if (m_loadingCompleted) {
-        KIO::ThumbnailResult::pass(image);
+        return KIO::ThumbnailResult::pass(image);
     }
     return KIO::ThumbnailResult::fail();
 }
@@ -119,3 +127,5 @@ void CalligraCreator::onLoadingCompleted()
     m_loadingCompleted = true;
     m_eventLoop.quit();
 }
+
+#include "calligracreator.moc"
