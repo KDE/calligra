@@ -19,6 +19,6 @@ target_link_libraries(calligra_filter_vsdx2odg komain ${LIBODFGEN_LIBRARIES} ${L
 
 install(TARGETS calligra_filter_vsdx2odg DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES flow_vsdx_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()
+endif()]]

@@ -19,6 +19,6 @@ target_link_libraries(calligra_filter_key2odp komain ${LIBREVENGE_LIBRARIES} ${L
 
 install(TARGETS calligra_filter_key2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES stage_key_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()
+endif()]]

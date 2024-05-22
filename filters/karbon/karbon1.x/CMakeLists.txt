@@ -17,6 +17,6 @@ install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${KDE_INSTALL_PLUGIN
 
 ########### install files ###############
 
-if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()
+endif()]]

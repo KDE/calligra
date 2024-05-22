@@ -34,9 +34,9 @@ install(TARGETS calligra_filter_pptx2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/ca
 
 ########### install files ###############
 
-if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()
+endif()]]
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
     kcoreaddons_add_plugin(okularGenerator_pptx_calligra

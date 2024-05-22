@@ -61,7 +61,7 @@ install(TARGETS calligra_filter_xls2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/cal
 
 ########### install files ###############
 
-if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_excel_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()
+endif()]]
 
