@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 10:34+0200\n"
+"PO-Revision-Date: 2024-05-22 12:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -12849,7 +12849,7 @@ msgstr "Neteja"
 #: part/calligrasheets.rc:44 part/View.cpp:430
 #, kde-format
 msgid "Delete"
-msgstr "Elimina"
+msgstr "Suprimeix"
 
 #. i18n: ectx: Menu (View)
 #. i18n: ectx: Menu (view)
@@ -14328,7 +14328,7 @@ msgstr "Reinicia l'interval de la impressió"
 #: part/View.cpp:1813
 #, kde-format
 msgid "You cannot delete the only sheet."
-msgstr "No podeu eliminar un full si és l'únic que hi ha."
+msgstr "No podeu suprimir un full si és l'únic que hi ha."
 
 #: part/View.cpp:1817
 #, kde-format
@@ -14682,7 +14682,7 @@ msgstr "Elimina les cel·les"
 #: ui/commands/DeleteCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Delete"
-msgstr "Elimina"
+msgstr "Suprimeix"
 
 #: ui/commands/MergeCommand.cpp:83
 msgctxt "(qtundo-format)"

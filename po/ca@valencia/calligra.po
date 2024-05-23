@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2024-04-29 10:27+0200\n"
+"PO-Revision-Date: 2024-05-22 12:28+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2030,15 +2030,15 @@ msgstr "Suprimix la pàgina"
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "Elimina la diapositiva"
-msgstr[1] "Elimina les diapositives"
+msgstr[0] "Suprimix la diapositiva"
+msgstr[1] "Suprimix les diapositives"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
-msgstr[0] "Elimina la pàgina"
-msgstr[1] "Elimina les pàgines"
+msgstr[0] "Suprimix la pàgina"
+msgstr[1] "Suprimix les pàgines"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -2256,12 +2256,12 @@ msgstr "Crea una capa"
 #: pageapp/KoPADocumentStructureDocker.cpp:327
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
-msgstr "Elimina la capa"
+msgstr "Suprimix la capa"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
-msgstr "No es poden eliminar totes les capes. Cal almenys una capa."
+msgstr "No es poden suprimir totes les capes. Cal almenys una capa."
 
 #: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
@@ -2383,7 +2383,7 @@ msgstr "Suprimix la pàgina"
 #: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete the current page"
-msgstr "Elimina la pàgina actual"
+msgstr "Suprimix la pàgina actual"
 
 #: pageapp/KoPAView.cpp:400
 #, kde-format
@@ -3691,7 +3691,7 @@ msgstr "Canvia els estils"
 #: text/commands/ChangeTrackedDeleteCommand.cpp:263
 #, kde-format
 msgid "Delete"
-msgstr "Elimina"
+msgstr "Suprimix"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
 #: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
@@ -4078,7 +4078,7 @@ msgstr "Afig un perfil nou d'autor (comença com una còpia de l'actual)"
 #: widgets/KoConfigAuthorPage.cpp:54
 #, kde-format
 msgid "Delete the author profile"
-msgstr "Elimina el perfil de l'autor"
+msgstr "Suprimix el perfil de l'autor"
 
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format

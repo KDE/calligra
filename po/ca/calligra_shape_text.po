@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-05 11:59+0200\n"
+"PO-Revision-Date: 2024-05-22 12:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2123,7 +2123,7 @@ msgstr "Biblioteca dels formats de nivell"
 #: dialogs/StyleManager.ui:75 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
-msgstr "Elimina"
+msgstr "Suprimeix"
 
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
@@ -2893,7 +2893,7 @@ msgstr "Columna"
 #: TextTool.cpp:432
 #, kde-format
 msgid "Delete Column"
-msgstr "Elimina la columna"
+msgstr "Suprimeix la columna"
 
 #: TextTool.cpp:436
 #, kde-format
@@ -2903,7 +2903,7 @@ msgstr "Fila"
 #: TextTool.cpp:437
 #, kde-format
 msgid "Delete Row"
-msgstr "Elimina la fila"
+msgstr "Suprimeix la fila"
 
 #: TextTool.cpp:441
 #, kde-format
