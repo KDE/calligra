@@ -130,7 +130,7 @@ typedef uint32_t lut_uint32;
     class LutKey<_INT_TYPE_>                                                                                                                                   \
     {                                                                                                                                                          \
     public:                                                                                                                                                    \
-        LutKey<_INT_TYPE_>(_INT_TYPE_ min, _INT_TYPE_ max)                                                                                                     \
+        LutKey(_INT_TYPE_ min, _INT_TYPE_ max)                                                                                                                 \
             : m_min(min)                                                                                                                                       \
             , m_max(max)                                                                                                                                       \
         {                                                                                                                                                      \
@@ -175,7 +175,7 @@ PARTIAL_LUT_INT_SPECIALIZATION(lut_uint32)
     class FullLutKey<_INT_TYPE_>                                                                                                                               \
     {                                                                                                                                                          \
     public:                                                                                                                                                    \
-        FullLutKey<_INT_TYPE_>()                                                                                                                               \
+        FullLutKey()                                                                                                                                           \
         {                                                                                                                                                      \
         }                                                                                                                                                      \
                                                                                                                                                                \
@@ -229,7 +229,7 @@ public:
     };
 
 public:
-    LutKey<float>(float min, float max, float precision)
+    LutKey(float min, float max, float precision)
         : m_min(min)
         , m_max(max)
         , m_precision(precision)
