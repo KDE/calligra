@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-01-05 19:48+0900\n"
+"PO-Revision-Date: 2024-05-23 17:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1070,7 +1070,7 @@ msgstr "插入"
 #: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "對話盒"
+msgstr "對話框"
 
 #. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
 #: dialogs/AxisScalingDialog.ui:19
