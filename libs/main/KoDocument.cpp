@@ -47,7 +47,9 @@
 #include <KLocalizedString>
 #include <KoNetAccess.h>
 #include <MainDebug.h>
+#ifndef Q_OS_WIN
 #include <kdirnotify.h>
+#endif
 
 #include <QApplication>
 #include <QBuffer>
@@ -410,7 +412,9 @@ public:
                 m_file = m_originalFilePath;
             }
         } else {
+#ifndef Q_OS_WIN
             ::org::kde::KDirNotify::emitFilesAdded(QUrl::fromLocalFile(m_url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).path()));
+#endif
 
             m_uploadJob = 0;
             document->setModified(false);
