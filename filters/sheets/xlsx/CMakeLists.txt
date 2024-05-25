@@ -39,12 +39,6 @@ target_link_libraries(
 
 install(TARGETS calligra_filter_xlsx2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-########### install files ###############
-
-#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()]]
-
 ########## unit tests ###################
 
 set(TestFormulaParser_SRCS

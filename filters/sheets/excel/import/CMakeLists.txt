@@ -59,9 +59,4 @@ target_link_libraries(calligra_filter_xls2ods
 
 install(TARGETS calligra_filter_xls2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-########### install files ###############
-
-#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES sheets_excel_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()]]
 

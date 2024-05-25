@@ -64,10 +64,6 @@ endif()
 
 ########### install files ###############
 
-#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES words_docx_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()]]
-
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
     kcoreaddons_add_plugin(okularGenerator_docx_calligra
         INSTALL_NAMESPACE "okular/generators"

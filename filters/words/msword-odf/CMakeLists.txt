@@ -28,10 +28,6 @@ target_link_libraries(calligra_filter_doc2odt mso kowv2 komain)
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  words_msword_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()]]
-
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     kcoreaddons_add_plugin(okularGenerator_doc_calligra
         INSTALL_NAMESPACE "okular/generators"

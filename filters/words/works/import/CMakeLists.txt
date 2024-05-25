@@ -19,6 +19,3 @@ target_link_libraries(calligra_filter_wps2odt komain ${LIBODFGEN_LIBRARIES} ${LI
 
 install(TARGETS calligra_filter_wps2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-#[[if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install(FILES words_wps_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
-endif()]]
