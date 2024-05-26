@@ -22,6 +22,7 @@
   <name xml:lang="it">Calligra Words</name>
   <name xml:lang="ka">Calligra Words</name>
   <name xml:lang="ko">Calligra Words</name>
+  <name xml:lang="lv">Calligra Words</name>
   <name xml:lang="nl">Calligra Words</name>
   <name xml:lang="pl">Słowa Calligra</name>
   <name xml:lang="pt">Calligra Words</name>
@@ -56,6 +57,7 @@
   <summary xml:lang="ja">ワードプロセッサ</summary>
   <summary xml:lang="ka">რედაქტორი</summary>
   <summary xml:lang="ko">워드 프로세서</summary>
+  <summary xml:lang="lv">Teksta apstrādes programma</summary>
   <summary xml:lang="nb">Tekstbehandler</summary>
   <summary xml:lang="nl">Tekstverwerker</summary>
   <summary xml:lang="pl">Edytor tekstu</summary>
@@ -93,6 +95,7 @@
     <p xml:lang="ja">Words はワードプロセッサおよびデスクトップ出版のためのアプリケーションです。直感的な操作で有益かつ魅力的な文書が簡単に作成できます</p>
     <p xml:lang="ka">Words ინტუიტიური ტექსტის პროცესორი და ამუშაო მაგიის გამომცემლის აპლიკაციაა. მასთან ერთად შეგიძლიათ ინფორმატიული და მიმზიდველი დოკუმენტები სიამოვნებითა და ადვილად შექმნათ.</p>
     <p xml:lang="ko">Words는 직관적인 워드 프로세서 및 데스크톱 출판 앱입니다. 이를 통해 정보를 제공하고 매력적인 문서를 쉽고 재미있게 작성할 수 있습니다.</p>
+    <p xml:lang="lv">„Words“ ir intuitīva teksta apstrādes un datorizdevniecības programma. Ar to varat patīkami un ērti veidot informatīvus un pievilcīgus dokumentus.</p>
     <p xml:lang="nb">Words er en intuitiv tekstbehandler, som kan brrukes til skrivebordspublisering. Du kan lett lage informative og attraktive dokumenter med glede.</p>
     <p xml:lang="nl">Words is een intuïtieve toepassing voor tekstverwerken en weergeven op het bureaublad. Hiermee kunt u informatieve en attractieve documenten met plezier en gemak maken.</p>
     <p xml:lang="pl">Słowa jest intuicyjnym edytorem tekstu i biurkowym programem do publikowania. Dzięki niemu można tworzyć informacyjne i atrakcyjne dokumenty z łatwością użycia.</p>
@@ -128,6 +131,7 @@
     <p xml:lang="ja">機能:</p>
     <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
+    <p xml:lang="lv">Iespējas:</p>
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
@@ -163,6 +167,7 @@
       <li xml:lang="ja">フレームベースの編集</li>
       <li xml:lang="ka">კადრებზე დაფუძნებული ჩასწორება</li>
       <li xml:lang="ko">프레임 기반 편집</li>
+      <li xml:lang="lv">Rāmjos balstīta rediģēšana</li>
       <li xml:lang="nb">Ramme-basert redigering</li>
       <li xml:lang="nl">Bewerken op basis van frames</li>
       <li xml:lang="pl">Edytowanie oparte na ramkach</li>
@@ -197,6 +202,7 @@
       <li xml:lang="ja">文書への埋め込みを許可</li>
       <li xml:lang="ka">დოკუმენტების ჩადგმის უფლება</li>
       <li xml:lang="ko">문서 포함 허용</li>
+      <li xml:lang="lv">Ļauj iegult dokumentus</li>
       <li xml:lang="nb">Tillater innebygde dokumenter</li>
       <li xml:lang="nl">Staat inbedden van documenten toe</li>
       <li xml:lang="pl">Umożliwia osadzanie dokumentów</li>
@@ -231,6 +237,7 @@
       <li xml:lang="ja">ユーザインターフェースのカスタマイズ</li>
       <li xml:lang="ka">მომხმარებლის ინტერფეისის მორგება</li>
       <li xml:lang="ko">사용자 인터페이스 사용자 정의</li>
+      <li xml:lang="lv">Pielāgojama lietotāja saskarne</li>
       <li xml:lang="nb">Tilpassing av brukerflaten</li>
       <li xml:lang="nl">Aanpassen naar behoefte van het gebruikersinterface</li>
       <li xml:lang="pl">Dostosowywanie układu sterowania</li>
@@ -265,6 +272,7 @@
       <li xml:lang="ja">現在のワードプロセッサに求められるすべての機能を含む</li>
       <li xml:lang="ka">შეიცავს ყველა ფუნქციას, რომელსაც თანამედროვე ტექსტური რედაქტორისგან მოელით</li>
       <li xml:lang="ko">최신 워드 프로세서에서 기대되는 모든 기능 포함</li>
+      <li xml:lang="lv">Iekļauj visas iespējas, ko sagaidāt no modernas teksta apstrādes programmas</li>
       <li xml:lang="nb">Har alle egenskaper forventet av en moderne tekstbehandler</li>
       <li xml:lang="nl">Bevat alle functies die verwacht worden van een moderne tekstverwerker</li>
       <li xml:lang="pl">Zawiera wszystkie cechy oczekiwane od nowoczesnego edytora tekstu</li>
@@ -299,6 +307,7 @@
       <li xml:lang="ja">ODT (Open Document Text) サポート</li>
       <li xml:lang="ka">ODT (Open Document Text) -ის მხარდაჭერა</li>
       <li xml:lang="ko">ODT(Open Document Text) 지원</li>
+      <li xml:lang="lv">ODT („OpenDocument Text“) atbalsts</li>
       <li xml:lang="nb">Støtte for ODT (Open Document Text)</li>
       <li xml:lang="nl">Ondersteuning van ODT (Open Document Text)</li>
       <li xml:lang="pl">Obsługa ODT (Open Document Text)</li>
