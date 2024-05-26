@@ -3949,8 +3949,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR(val)
-    val = val.toLower();
+    TRY_READ_ATTR(val)
+    if (val.isEmpty()) {
+        val = "nil";
+    } else {
+        val = val.toLower();
+    }
     TRY_READ_ATTR(color)
     // debugDocx << m_callsNames;
     if (!color.isEmpty() && color != MsooXmlReader::constAuto) {
