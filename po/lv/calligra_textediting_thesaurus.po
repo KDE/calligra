@@ -2,19 +2,20 @@
 # Copyright (C) 2006, 2008 Free Software Foundation, Inc.
 #
 # Maris Nartiss <maris.kde@gmail.com>, 2008.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2008-12-29 11:15+0200\n"
-"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
-"Language-Team: Latvian <locale@laka.lv>\n"
+"PO-Revision-Date: 2024-04-30 22:25+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -73,27 +74,27 @@ msgstr "Vairāk specifisku vārdu"
 #: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
-msgstr "&Wordnet"
+msgstr "„&Wordnet“"
 
 #: Thesaurus.cpp:190
 #, kde-format
 msgid "&Replace with:"
-msgstr "&Aizvietot ar:"
+msgstr "&Aizstāt ar:"
 
 #: Thesaurus.cpp:251
 #, kde-format
 msgid "&Replace"
-msgstr "&Aizvietot"
+msgstr "&Aizstāt"
 
 #: Thesaurus.cpp:264
 #, kde-format
 msgid "Replace Word"
-msgstr "Aizvietot vārdu"
+msgstr "Aizstāt vārdu"
 
 #: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
-msgstr "Saistīti vārdi - %1"
+msgstr "Saistīti vārdi — %1"
 
 #: Thesaurus.cpp:406
 #, kde-format
@@ -101,43 +102,43 @@ msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr ""
-"Tēzaura fails '%1' netika atrasts. Izmantojiet 'Mainīt valodu...' un "
-"izvēlieties citu tēzaura failu."
+"Tēzaura datne „%1“ nav atrasta. Izmantojiet „Mainīt valodu...“ un "
+"izvēlieties citu tēzaura datni."
 
 #: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr "<b>Kļūda:</b> Neizdevās darbināt grep."
+msgstr "<b>Kļūda:</b> neizdevās izpildīt „grep“."
 
 #: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
-msgstr "Sinonīmi/Hipernīmi - sakārtoti pēc biežuma"
+msgstr "Sinonīmi/hiperonīmi — sakārtoti pēc biežuma"
 
 #: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-msgstr "Sinonīmi - sakārtoti pēc līdzības (tikai darbības vārdi)"
+msgstr "Sinonīmi — sakārtoti pēc nozīmes līdzības (tikai darbības vārdi)"
 
 #: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
-msgstr "Antonīmi - vārdi ar pretēju nozīmi"
+msgstr "Antonīmi — vārdi ar pretēju nozīmi"
 
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "Hiponīmi - ... ir (veida) %1"
+msgstr "Hiponīmi — ... ir %1 paveids"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "Meronīmi - %1 pieder ..."
+msgstr "Meronīmi — ... ir daļa no %1"
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "Holonīmi - ... pieder %1"
+msgstr "Holonīmi —  ... pieder %1"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -152,17 +153,17 @@ msgstr "Rezultāts ir (tikai dažiem darbības vārdiem)"
 #: Thesaurus.cpp:587
 #, kde-format
 msgid "Verb Entailment (for some verbs only)"
-msgstr "Darbības vārda piederība (dažiem darbības vārdiem)"
+msgstr "Darbības vārda saistība (dažiem darbības vārdiem)"
 
 #: Thesaurus.cpp:588
 #, kde-format
 msgid "Familiarity & Polysemy Count"
-msgstr "Līdzības un polēmijas skaitītājs"
+msgstr "Līdzības un polisēmijas skaitītājs"
 
 #: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
-msgstr "Darbības vārdu rāmji (lietošanas piemēri)"
+msgstr "Verbu ietvari (lietošanas piemēri)"
 
 #: Thesaurus.cpp:591
 #, kde-format
@@ -175,13 +176,7 @@ msgid "Overview of Senses"
 msgstr "Nozīmju pārskats"
 
 #: Thesaurus.cpp:621
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
-#| "installed on your computer if you want to use it, and 'wn' has to be in "
-#| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
-#| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
-#| "only supports the English language."
+#, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
 "installed on your computer if you want to use it, and 'wn' has to be in your "
@@ -189,16 +184,16 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
-"<b>Kļūda:</b> Neizdevās palaist WordNet programmu 'wn'. Jūsu datorā ir jābūt "
-"uzinstalētam WordNet ja vēlaties to lietot, un 'wn' ir jābūt jūsu PATH. Jūs "
-"variet iegūt WordNet no <a href=\"http://www.cogsci.princeton.edu/~wn/"
-"\">http://www.cogsci.princeton.edu/~wn/</a>. Ņemiet vērā, ka WordNet "
-"atbalsta tikai Angļu valodu."
+"<b>Kļūda:</b> neizdevās palaist „WordNet“ programmu „wn“. Jūsu datorā ir "
+"jābūt ieinstalētam „WordNet“, ja vēlaties to lietot, bet „wn“ ir jābūt jūsu "
+"ceļā (PATH). Varat iegūt „WordNet“ no <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Ņemiet vērā, ka „WordNet“ atbalsta "
+"tikai angļu valodu."
 
 #: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
-msgstr "Nav atbilstību vārdam '%1'."
+msgstr "Nav atbilstību vārdam „%1“."
 
 #~ msgctxt "@action:button Close thesaurus dialog"
 #~ msgid "&Close"

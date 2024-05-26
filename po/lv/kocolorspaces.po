@@ -1,0 +1,429 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:10+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:21
+#, kde-format
+msgid "Cyan"
+msgstr "Ciāna"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:26
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:21
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:22
+#, kde-format
+msgid "Magenta"
+msgstr "Fuksīns"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:27
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:22
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:23
+#, kde-format
+msgid "Yellow"
+msgstr "Dzeltena"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:28
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:23
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:24
+#, kde-format
+msgid "Black"
+msgstr "Melna"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:29
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:24
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:25
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:26
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:29
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.cpp:24
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.cpp:23
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:37
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:24
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:26
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:29
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:56
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:32
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:49
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:41
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:41
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:49
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:41
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:42
+#, kde-format
+msgid "Alpha"
+msgstr "Alfa"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.h:77
+#, kde-format
+msgid "CMYK (32 bits floating/channel)"
+msgstr "CMYK (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:72
+#, kde-format
+msgid "CMYK (16-bit integer/channel)"
+msgstr "CMYK (16 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.h:70
+#, kde-format
+msgid "CMYK (8-bit integer/channel)"
+msgstr "CMYK (8 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:25
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:28
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.cpp:23
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.cpp:22
+#, kde-format
+msgid "Gray"
+msgstr "Pelēks"
+
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
+#, kde-format
+msgid "Grayscale/Alpha (16-bit float/channel)"
+msgstr "Pelēktoņu/alfa (16 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
+#, kde-format
+msgid "Grayscale/Alpha (32-bit float/channel)"
+msgstr "Pelēktoņu/alfa (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
+#, kde-format
+msgid "Grayscale (16-bit integer/channel)"
+msgstr "Pelēktoņu (16 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.h:68
+#, kde-format
+msgid "Grayscale (8-bit integer/channel)"
+msgstr "Pelēktoņu (8 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:25
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:21
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:20
+#, kde-format
+msgid "Lightness"
+msgstr "Gaišums"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:34
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:22
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:21
+#, kde-format
+msgid "a*"
+msgstr "a*"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:36
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:23
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:22
+#, kde-format
+msgid "b*"
+msgstr "b*"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
+#, kde-format
+msgid "L*a*b* (32-bit float/channel)"
+msgstr "L*a*b* (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/lab_u16/LabColorSpace.h:77
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel)"
+msgstr "L*a*b* (16 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:73
+#, kde-format
+msgid "L*a*b* (8-bit integer/channel)"
+msgstr "L*a*b* (8 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:22
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:55
+#, kde-format
+msgid "Red"
+msgstr "Sarkans"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:24
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:27
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:21
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:54
+#, kde-format
+msgid "Green"
+msgstr "Zaļš"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:25
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:28
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:20
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:53
+#, kde-format
+msgid "Blue"
+msgstr "Zils"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
+#, kde-format
+msgid "RGBA (16-bit floating/channel)"
+msgstr "RGBA (16 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
+#, kde-format
+msgid "RGBA (32-bit floating/channel)"
+msgstr "RGBA (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
+#, kde-format
+msgid "RGB (16-bit integer/channel)"
+msgstr "RGB (16 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.h:76
+#, kde-format
+msgid "RGB (8-bit integer/channel)"
+msgstr "RGB (8 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:21
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:25
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:20
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:20
+#, kde-format
+msgid "X"
+msgstr "X"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:33
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:27
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:27
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:25
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:20
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:21
+#, kde-format
+msgid "Y"
+msgstr "Y"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:30
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:41
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:34
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:34
+#, kde-format
+msgid "Z"
+msgstr "Z"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.h:71
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71
+#, kde-format
+msgid "XYZ (32-bit float/channel)"
+msgstr "XYZ (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
+#, kde-format
+msgid "XYZ (16-bit integer/channel)"
+msgstr "XYZ (16 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:66
+#, kde-format
+msgid "XYZ (8-bit integer/channel)"
+msgstr "XYZ (8 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:33
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:27
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:28
+#, kde-format
+msgid "Cb"
+msgstr "Cb"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:41
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:34
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:35
+#, kde-format
+msgid "Cr"
+msgstr "Cr"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:71
+#, kde-format
+msgid "YCBCR (32-bit float/channel)"
+msgstr "YCBCR (32 bitu peldošs/kanāls)"
+
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:66
+#, kde-format
+msgid "YCBCR (16-bit integer/channel)"
+msgstr "YCBCR (16 bitu vesels/kanāls)"
+
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:66
+#, kde-format
+msgid "YCBCR (8-bit integer/channel)"
+msgstr "YCBCR (8 bitu vesels/kanāls)"
+
+#: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
+#, kde-format
+msgid "Bumpmap"
+msgstr "Reljefa karte"
+
+#: lcms2/compositeops/RgbCompositeOpClear.h:20
+#, kde-format
+msgid "Clear"
+msgstr "Notīrīt"
+
+#: lcms2/compositeops/RgbCompositeOpColor.h:25
+#, kde-format
+msgid "Color"
+msgstr "Krāsa"
+
+#: lcms2/compositeops/RgbCompositeOpDarken.h:20
+#, kde-format
+msgid "Darken"
+msgstr "Aptumšot"
+
+#: lcms2/compositeops/RgbCompositeOpDiff.h:22
+#, kde-format
+msgid "Diff"
+msgstr "Atšķ."
+
+#: lcms2/compositeops/RgbCompositeOpDissolve.h:20
+#, kde-format
+msgid "Dissolve"
+msgstr "Izjaukt"
+
+#: lcms2/compositeops/RgbCompositeOpHue.h:24
+#, kde-format
+msgid "Hue"
+msgstr "Nokrāsa"
+
+#: lcms2/compositeops/RgbCompositeOpIn.h:23
+#, kde-format
+msgid "In"
+msgstr "Ievade"
+
+#: lcms2/compositeops/RgbCompositeOpLighten.h:20
+#, kde-format
+msgid "Lighten"
+msgstr "Padarīt gaišāku"
+
+#: lcms2/compositeops/RgbCompositeOpOut.h:23
+#, kde-format
+msgid "Out"
+msgstr "Izvade"
+
+#: lcms2/compositeops/RgbCompositeOpSaturation.h:24
+#, kde-format
+msgid "Saturation"
+msgstr "Piesātinājums"
+
+#: lcms2/compositeops/RgbCompositeOpValue.h:24
+#, kde-format
+msgid "Value"
+msgstr "Vērtība"
+
+#: lcms2/IccColorSpaceEngine.cpp:86
+#, kde-format
+msgid "ICC Engine"
+msgstr "ICC dzinis"
+
+#: lcms2/LcmsEnginePlugin.cpp:116 lcms2/LcmsEnginePlugin.cpp:121
+#: lcms2/LcmsEnginePlugin.cpp:126
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr "L*a*b* histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:143
+#, kde-format
+msgid "RGB8 Histogram"
+msgstr "RGB8 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:148
+#, kde-format
+msgid "RGB16 Histogram"
+msgstr "RGB16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:154
+#, kde-format
+msgid "RGBF16 Histogram"
+msgstr "RGBF16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:160
+#, kde-format
+msgid "RGBF32 Histogram"
+msgstr "RGBF32 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:180
+#, kde-format
+msgid "GRAY/Alpha8 Histogram"
+msgstr "GRAY/Alpha8 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:185
+#, kde-format
+msgid "GRAY/Alpha16 Histogram"
+msgstr "GRAY/Alpha16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:190
+#, kde-format
+msgid "GRAYF16 Histogram"
+msgstr "GRAYF16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:196
+#, kde-format
+msgid "GRAY/Alpha 32 float Histogram"
+msgstr "GRAY/Alpha 32 peldoša punkta histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:207
+#, kde-format
+msgid "CMYK8 Histogram"
+msgstr "CMYK8 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:212
+#, kde-format
+msgid "CMYK16 Histogram"
+msgstr "CMYK16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:217
+#, kde-format
+msgid "CMYK F32 Histogram"
+msgstr "CMYK F32 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:234
+#, kde-format
+msgid "XYZ8 Histogram"
+msgstr "XYZ8 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:239
+#, kde-format
+msgid "XYZ16 Histogram"
+msgstr "XYZ16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:245
+#, kde-format
+msgid "XYZF16 Histogram"
+msgstr "XYZF16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:251
+#, kde-format
+msgid "XYZF32 Histogram"
+msgstr "XYZF32 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:265
+#, kde-format
+msgid "YCBCR8 Histogram"
+msgstr "YCBCR8 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:270
+#, kde-format
+msgid "YCBCR16 Histogram"
+msgstr "YCBCR16 histogramma"
+
+#: lcms2/LcmsEnginePlugin.cpp:275
+#, kde-format
+msgid "YCBCRF32 Histogram"
+msgstr "YCBCRF32 histogramma"

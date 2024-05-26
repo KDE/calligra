@@ -1,0 +1,115 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-04-30 16:41+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Notikums"
+
+#: KoRdfCalendarEvent.cpp:147
+#, kde-format
+msgid "Area"
+msgstr "Rajons"
+
+#: KoRdfCalendarEvent.cpp:148
+#, kde-format
+msgid "Region"
+msgstr "Reģions"
+
+#: KoRdfCalendarEvent.cpp:359
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Atlasiet kalendāru saglabāšanai:"
+
+#: KoRdfCalendarEvent.cpp:379
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"Nevarēja pievienot ierakstu\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:402
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"Nevarēja saglabāt „iCal“ datni\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&Kopsavilkums"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Vieta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&Sākas:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&Beidzas:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Laiks un datums"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Laika josla"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
+#, kde-format
+msgid "Calendar Event"
+msgstr "Kalendāra notikums"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
+#, kde-format
+msgid "Edit..."
+msgstr "Rediģēt..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Importēt notikumu kalendārā"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Eksportēt kalendāru „iCal“ datnē..."

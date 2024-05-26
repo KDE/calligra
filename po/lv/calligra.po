@@ -1,392 +1,346 @@
 # translation of koffice.po to Lavtian
 # Copyright (C) 2006, 2008 Free Software Foundation, Inc.
 #
-# Maris Nartiss <maris.kde@gmail.com>, 2006.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+# Maris Nartiss <maris.kde@gmail.com>, 2006, 2024.
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 00:38+0000\n"
-"PO-Revision-Date: 2008-12-27 19:10+0200\n"
-"Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
-"Language-Team: Lavtian <locale@laka.lv>\n"
+"PO-Revision-Date: 2024-05-25 11:14+0300\n"
+"Last-Translator: Māris Nartišs <maris.kde@gmail.com>\n"
+"Language-Team: \n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Māris Nartišs"
+msgstr "Māris Nartišs, Toms Trasūns"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "maris.kde@gmail.com"
+msgstr "maris.kde@gmail.com, toms.trasuns@posteo.net"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Draw path"
-msgstr "Noņemt grupu"
+msgstr "Ceļa zīmēšana"
 
 #: basicflakes/plugin/KoPencilToolFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Freehand path"
-msgstr "Noņemt grupu"
+msgstr "Brīvs ceļš"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:443
 #, kde-format
 msgid "Angle snapping delta:"
-msgstr ""
+msgstr "Leņķa pielipšanas delta:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:450
 #, kde-format
 msgid "Activate angle snap:"
-msgstr ""
+msgstr "Ieslēgt leņķa pielipšanu:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:458
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Angle Constraints"
-msgstr "Mainīt atkāpi"
+msgstr "Leņķa ierobežojumi"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:462
 #: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line"
-msgstr "Lini"
+msgstr "Līnija"
 
 #: basicflakes/tools/KoPencilTool.cpp:278
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "Precision:"
-msgstr "Novietojums:"
+msgstr "Precizitāte:"
 
 #: basicflakes/tools/KoPencilTool.cpp:280
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr ""
+msgstr "Neapstrādāta"
 
 #: basicflakes/tools/KoPencilTool.cpp:281
 #: flake/KoConnectionShapeConfigWidget.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curve"
-msgstr "Pašreizējā sekcija"
+msgstr "Līkne"
 
 #: basicflakes/tools/KoPencilTool.cpp:282
 #: flake/KoConnectionShapeConfigWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "String:"
+#, kde-format
 msgid "Straight"
-msgstr "Virkne:"
+msgstr "Taisne"
 
 #: basicflakes/tools/KoPencilTool.cpp:291
 #: basicflakes/tools/KoPencilTool.cpp:297
 #, kde-format
 msgid "Optimize"
-msgstr ""
+msgstr "Optimizēt"
 
 #: basicflakes/tools/KoPencilTool.cpp:303
 #, kde-format
 msgid "Exactness:"
-msgstr ""
+msgstr "Precizitāte:"
 
 #: basicflakes/tools/KoPencilTool.cpp:336
 #: basicflakes/tools/KoPencilTool.cpp:337
 #, kde-format
 msgid "Pencil"
-msgstr ""
+msgstr "Zīmulis"
 
 #: flake/commands/KoConnectionShapeTypeCommand.cpp:17
-#, fuzzy
-#| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Change Connection"
-msgstr "Mainīt atkāpi"
+msgstr "Mainīt savienojumu"
 
 #: flake/commands/KoParameterHandleMoveCommand.cpp:26
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change parameter"
-msgstr "Mainīt tabulatoru"
+msgstr "Mainīt parametru"
 
 #: flake/commands/KoParameterToPathCommand.cpp:32
 #: flake/commands/KoParameterToPathCommand.cpp:41
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
-msgstr "Pārvērst par grieķu"
+msgstr "Pārvērst par ceļu"
 
 #: flake/commands/KoPathBreakAtPointCommand.cpp:29
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "Maliņas"
+msgstr "Lauzt apakšceļu pie punktiem"
 
 #: flake/commands/KoPathCombineCommand.cpp:47
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Combine paths"
-msgstr "Pielāgots līniju platums"
+msgstr "Kombinēt ceļus"
 
 #: flake/commands/KoPathControlPointMoveCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move control point"
-msgstr "Maliņas"
+msgstr "Pārvietot kontroles punktu"
 
 #: flake/commands/KoPathFillRuleCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr ""
+msgstr "Noteikt aizpildījuma noteikumu"
 
 #: flake/commands/KoPathPointInsertCommand.cpp:70
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert points"
-msgstr "Ievietot saiti"
+msgstr "Ievietot punktus"
 
 #: flake/commands/KoPathPointMergeCommand.cpp:134
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge points"
-msgstr "Maliņas"
+msgstr "Apvienot punktus"
 
 #: flake/commands/KoPathPointMoveCommand.cpp:31
 #: flake/commands/KoPathPointMoveCommand.cpp:47
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move points"
-msgstr "Noņemt saiti"
+msgstr "Pārvietot punktus"
 
 #: flake/commands/KoPathPointRemoveCommand.cpp:92
 #: flake/commands/KoPathPointRemoveCommand.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove points"
-msgstr "Noņemt saiti"
+msgstr "Noņemt punktus"
 
 #: flake/commands/KoPathPointTypeCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set point type"
-msgstr "Ievietot saiti"
+msgstr "Iestatīt punkta tipu"
 
 #: flake/commands/KoPathReverseCommand.cpp:41
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
-msgstr "Noņemt grupu"
+msgstr "Apgriezt ceļu virzienu"
 
 #: flake/commands/KoPathSegmentBreakCommand.cpp:28
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "Noņemt grupu"
+msgstr "Lauzt apakšceļu"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr "Mainīt fonta stilu?"
+msgstr "Mainīt segmentus uz līknēm"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:122
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr "Mainīt fonta stilu?"
+msgstr "Mainīt segmentus uz līnijām"
 
 #: flake/commands/KoPathShapeMarkerCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set marker"
-msgstr "Sekunde"
+msgstr "Iestatīt marķieri"
 
 #: flake/commands/KoShapeAlignCommand.cpp:78
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Align shapes"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Izlīdzināt laukus"
 
 #: flake/commands/KoShapeBackgroundCommand.cpp:51
 #: flake/commands/KoShapeBackgroundCommand.cpp:62
 #: flake/commands/KoShapeBackgroundCommand.cpp:77
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set background"
-msgstr "Sekunde"
+msgstr "Iestatīt fonu"
 
 #: flake/commands/KoShapeClipCommand.cpp:64
 #: flake/commands/KoShapeClipCommand.cpp:81
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr "Vilnītis"
+msgstr "Piespraust objektu"
 
 #: flake/commands/KoShapeCreateCommand.cpp:41
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "Izveidot sagatavi"
+msgstr "Izveidot objektu"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:44
-#, fuzzy
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst objektu"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:56
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
-msgstr[0] "Dzēst tekstu"
-msgstr[1] "Dzēst tekstu"
-msgstr[2] "Dzēst tekstu"
+msgstr[0] "Dzēst objektu"
+msgstr[1] "Dzēst objektus"
+msgstr[2] "Dzēst objektus"
 
 #: flake/commands/KoShapeDistributeCommand.cpp:121
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr "Dzēst tekstu"
+msgstr "Sadalīt objektus"
 
 #: flake/commands/KoShapeGroupCommand.cpp:85
-#, fuzzy
-#| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "Pabeigšana"
+msgstr "Grupēt objektus"
 
 #: flake/commands/KoShapeGroupCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr ""
+msgstr "Pievienot objektus grupai"
 
 #: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
-msgstr "Saglabāt &attiecību"
+msgstr "Paturēt malu attiecību"
 
 #: flake/commands/KoShapeLockCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Slēgt objektus"
 
 #: flake/commands/KoShapeMoveCommand.cpp:37
 #: flake/commands/KoShapeMoveCommand.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
-msgstr "Dzēst tekstu"
+msgstr "Pārvietot objektus"
 
 #: flake/commands/KoShapeRenameCommand.cpp:29
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr "Izveidot sagatavi"
+msgstr "Pārdēvēt objektu"
 
 #: flake/commands/KoShapeReorderCommand.cpp:40
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
-msgstr "Izmainīt Panelis Reverss"
+msgstr "Pārkārtot objektus"
 
 #: flake/commands/KoShapeRunAroundCommand.cpp:77
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr "Mainīt tabulatoru"
+msgstr "Mainīt objektu izkārtojumu"
 
 #: flake/commands/KoShapeShadowCommand.cpp:57
 #: flake/commands/KoShapeShadowCommand.cpp:74
 #: flake/commands/KoShapeShadowCommand.cpp:85
-#, fuzzy
-#| msgid "Text Shadow"
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
-msgstr "Teksta ēnojums"
+msgstr "Iestatīt ēnu"
 
 #: flake/commands/KoShapeShearCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "Izmainīt Panelis Reverss"
+msgstr "Šķelt objektus"
 
 #: flake/commands/KoShapeSizeCommand.cpp:33
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
-msgstr "Izmainīt Panelis Reverss"
+msgstr "Mainīt objektu izmēru"
 
 #: flake/commands/KoShapeStrokeCommand.cpp:61
 #: flake/commands/KoShapeStrokeCommand.cpp:78
 #: flake/commands/KoShapeStrokeCommand.cpp:89
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
-msgstr "Sekunde"
+msgstr "Noteikt līniju"
 
 #: flake/commands/KoShapeTransparencyCommand.cpp:37
 #: flake/commands/KoShapeTransparencyCommand.cpp:48
 #: flake/commands/KoShapeTransparencyCommand.cpp:61
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
-msgstr "Ievietot saiti"
+msgstr "Noteikt caurspīdīgumu"
 
 #: flake/commands/KoShapeUnclipCommand.cpp:114
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Atspraust objektu"
 
 #: flake/commands/KoShapeUnclipCommand.cpp:124
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Atspraust objektus"
 
 #: flake/commands/KoShapeUngroupCommand.cpp:48
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Atgrupēt objektus"
 
 #: flake/commands/KoSubpathJoinCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr "Noņemt grupu"
+msgstr "Aizvērt apakšceļu"
 
 #: flake/commands/KoSubpathJoinCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr "Pielāgots līniju platums"
+msgstr "Apvienot apakšceļus"
 
 #: flake/commands/KoSubpathRemoveCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr "Noņemt grupu"
+msgstr "Noņemt apakšceļu"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "Standarta"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lines"
-msgstr "Lini"
+msgstr "Līnijas"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
@@ -398,261 +352,255 @@ msgid "Type:"
 msgstr "Tips:"
 
 #: flake/KoConnectionShapeFactory.cpp:22
-#, fuzzy, kde-format
-#| msgid "Time:"
+#, kde-format
 msgid "Tie"
-msgstr "Laiks:"
+msgstr "Saite"
 
 #: flake/KoConnectionShapeFactory.cpp:24
 #, kde-format
 msgid "A connection between two other shapes"
-msgstr ""
+msgstr "Savienojums starp diviem citiem objektiem"
 
 #: flake/KoGridData.cpp:206
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Show Grid"
-msgstr "Mainīt ēnojumu"
+msgstr "Rādīt režģi"
 
 #: flake/KoGridData.cpp:207
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Shows or hides grid"
-msgstr "Mainīt ēnojumu"
+msgstr "Parāda vai paslēpj režģi"
 
 #: flake/KoPathShapeFactory.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple path shape"
-msgstr "Izveidot sagatavi"
+msgstr "Vienkārša ceļa objekts"
 
 #: flake/KoPathShapeFactory.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "A simple path shape"
-msgstr "Izveidot sagatavi"
+msgstr "Vienkārša ceļa objekts"
 
 #: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:42
 #: rdf/InsertSemanticObjectReferenceAction.cpp:48
 #: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 Options"
-msgstr "Izņēmumi"
+msgstr "%1 opcijas"
 
 #: flake/KoShapePaste.cpp:163
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Shapes"
-msgstr "Izveidot sagatavi"
+msgstr "Ielīmēt objektus"
 
 #: flake/KoToolManager.cpp:442
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active tool: %1"
-msgstr "Dzēst tekstu"
+msgstr "Aktīvais rīks: %1"
 
 #: flake/KoToolProxy.cpp:589
-#, fuzzy
-#| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
-msgstr "Ielīmēt tekstu"
+msgstr "Ielīmēt attēlu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:30
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgid "Nodes"
-msgstr "Nav"
+msgstr "Mezgli"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:43
 #, kde-format
 msgid "Extension of lines"
-msgstr ""
+msgstr "Līniju pagarinājums"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:56
 #, kde-format
 msgid "Bounding box of shape"
-msgstr ""
+msgstr "Objektus ietverošā apmale"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:72
 #, kde-format
 msgid "Proximity distance where snapping happens"
-msgstr ""
+msgstr "Tuvinājuma attālums pielipšanai"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:75
 #, kde-format
 msgid " px"
-msgstr ""
+msgstr " px"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:85
 #, kde-format
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonāls"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:98
 #, kde-format
 msgid "Intersection of lines"
-msgstr ""
+msgstr "Līniju krustpunkts"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Guide lines"
-msgstr "Ceļvedis Līnijas"
+msgstr "Vadlīnijas"
 
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
 msgid "Embedded svg shape"
-msgstr ""
+msgstr "Iegults SVG objekts"
 
 #: flake/tools/KoCreateShapesToolFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create object"
-msgstr "Izveidot dokumentu"
+msgstr "Izveidot objektu"
 
 #: flake/tools/KoPanToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pan"
-msgstr "Tan"
+msgstr "Panorāma"
 
 #: flake/tools/KoPathSegmentChangeStrategy.cpp:129
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
-msgstr "Mainīt fonta stilu?"
+msgstr "Mainīt segmentu"
 
 #: flake/tools/KoPathTool.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Corner point"
-msgstr "Apstiprināt eksportēšanu"
+msgstr "Stūra punkts"
 
 #: flake/tools/KoPathTool.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smooth point"
-msgstr "Noņemt saiti"
+msgstr "Līdzens punkts"
 
 #: flake/tools/KoPathTool.cpp:105
 #, kde-format
 msgid "Symmetric Point"
-msgstr ""
+msgstr "Simetrisks punkts"
 
 #: flake/tools/KoPathTool.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Make curve point"
-msgstr "Maliņas"
+msgstr "Izveidot līknes punktu"
 
 #: flake/tools/KoPathTool.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Make line point"
-msgstr "Maliņas"
+msgstr "Izveidot līnijas punktu"
 
 #: flake/tools/KoPathTool.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Segment to Line"
-msgstr "Mainīt fonta stilu?"
+msgstr "Segmentu par līniju"
 
 #: flake/tools/KoPathTool.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgid "Segment to Curve"
-msgstr "Mainīt fonta stilu?"
+msgstr "Segmentu par līkni"
 
 #: flake/tools/KoPathTool.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert point"
-msgstr "Ievietot saiti"
+msgstr "Ievietot punktu"
 
 #: flake/tools/KoPathTool.cpp:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove point"
-msgstr "Noņemt saiti"
+msgstr "Noņemt punktu"
 
 #: flake/tools/KoPathTool.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgid "Break at point"
-msgstr "Maliņas"
+msgstr "Lauzt pie punkta"
 
 #: flake/tools/KoPathTool.cpp:142
 #, kde-format
 msgid "Break at segment"
-msgstr ""
+msgstr "Lauzt pie segmenta"
 
 #: flake/tools/KoPathTool.cpp:146
 #, kde-format
 msgid "Join with segment"
-msgstr ""
+msgstr "Apvienot ar segmentu"
 
 #: flake/tools/KoPathTool.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge points"
-msgstr "Maliņas"
+msgstr "Apvienot punktus"
 
 #: flake/tools/KoPathTool.cpp:155
-#, fuzzy, kde-format
-#| msgid "Edit Path"
+#, kde-format
 msgid "To Path"
-msgstr "Rediģēt ceļu"
+msgstr "Par ceļu"
 
 #: flake/tools/KoPathTool.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line/Curve"
-msgstr "Pašreizējā sekcija"
+msgstr "Līnija/līkne"
 
 #: flake/tools/KoPathTool.cpp:522
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drag to move handle."
-msgstr "Maliņas"
+msgstr "Vilkt, lai pārvietotu turi"
 
 #: flake/tools/KoPathTool.cpp:586
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
+"Vilkt, lai pārvietotu punktu. „Shift“ un vilkt, lai mainītu punkta tipu."
 
 #: flake/tools/KoPathTool.cpp:588
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drag to move control point."
-msgstr "Maliņas"
+msgstr "Vilkt, lai pārvietotu kontrolpunktu."
 
 #: flake/tools/KoPathTool.cpp:613
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
+"Vilkt, lai līkni mainītu tieši. Dubultklikšķis, lai ievietotu jaunu ceļa "
+"punktu."
 
 #: flake/tools/KoPathTool.cpp:620
-#, fuzzy, kde-format
+#, kde-format
 msgid "Press B to break path at selected point."
-msgstr "Maliņas"
+msgstr "Spiediet „B“, lai lauztu ceļu pie atlasītā punkta."
 
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr ""
+msgstr "Spiediet „B“, lai lauztu ceļu pie atlasītajiem segmentiem."
 
 #: flake/tools/KoPathToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Path editing"
-msgstr "Kopējas labošanas laiks:"
+msgstr "Ceļa rediģēšana"
 
 #: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:34
 #: widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr ""
+msgstr "Tālummaiņa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: flake/tools/KoZoomToolWidget.ui:20
 #, kde-format
 msgid "Zoom In"
-msgstr ""
+msgstr "Tuvināt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: flake/tools/KoZoomToolWidget.ui:30
 #, kde-format
 msgid "Zoom Out"
-msgstr ""
+msgstr "Tālināt"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -686,155 +634,140 @@ msgstr ""
 #: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
 #: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
 #: widgets/KoEditColorSet.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "..."
-msgstr "Pievienot..."
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: flake/tools/PathToolOptionWidgetBase.ui:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert To Path"
-msgstr "Pārvērst par grieķu"
+msgstr "Pārveidot par ceļu"
 
 #: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
-msgstr "Sarkans"
+msgstr "Atsaukt"
 
 #: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
 #: main/KoUndoStackAction.cpp:41
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgid "Undo %1"
-msgstr "Sarkans"
+msgstr "Atsaukt „%1“"
 
 #: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
-msgstr "Sarkans"
+msgstr "Atatsaukt"
 
 #: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
 #: main/KoUndoStackAction.cpp:41
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgid "Redo %1"
-msgstr "Sarkans"
+msgstr "Atatsaukt „%1“"
 
 #: kundo2/kundo2model.cpp:54
 #, kde-format
 msgid "<empty>"
-msgstr ""
+msgstr "<tukšs>"
 
 #: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
 #: main/KoUndoStackAction.cpp:33
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgid "Redo"
-msgstr "Sarkans"
+msgstr "Atatsaukt"
 
 #: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
 #: main/KoUndoStackAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgid "Undo"
-msgstr "Sarkans"
+msgstr "Atsaukt"
 
 #. i18n: ectx: Menu (file)
 #: main/calligra_shell.rc:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "&File"
-msgstr "Faila nosaukums"
+msgstr "&Datne"
 
 #. i18n: ectx: Menu (settings)
 #: main/calligra_shell.rc:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Settings"
-msgstr "Virkne:"
+msgstr "&Iestatījumi"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: main/calligra_shell.rc:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "File"
-msgstr "Faila nosaukums"
+msgstr "Datne"
 
 #: main/config/KoConfigDocumentPage.cpp:47
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Document Settings"
-msgstr "Dokumenta informācija"
+msgstr "Dokumenta iestatījumi"
 
 #: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgid "No autosave"
-msgstr ""
+msgstr "Bez automātiskas saglabāšanas"
 
 #: main/config/KoConfigDocumentPage.cpp:64
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr ""
+msgstr " min."
 
 #: main/config/KoConfigDocumentPage.cpp:66
-#, fuzzy, kde-format
-#| msgid "Autosaving..."
+#, kde-format
 msgid "Autosave interval:"
-msgstr "Autosaglabāšana..."
+msgstr "Automātiskās saglabāšanas intervāls:"
 
 #: main/config/KoConfigDocumentPage.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create backup file:"
-msgstr "Izveidot sagatavi"
+msgstr "Izveidot dublējumu:"
 
 #: main/config/KoConfigGridPage.cpp:56
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:37
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Grid"
-msgstr "Mainīt ēnojumu"
+msgstr "Režģis"
 
 #: main/config/KoConfigGridPage.cpp:64
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Show grid:"
-msgstr "Mainīt ēnojumu"
+msgstr "Rādīt režģi:"
 
 #: main/config/KoConfigGridPage.cpp:65
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Snap to grid:"
-msgstr "Mainīt ēnojumu"
+msgstr "Pielipt pie režģa:"
 
 #: main/config/KoConfigGridPage.cpp:66
-#, fuzzy, kde-format
-#| msgid "&Background color:"
+#, kde-format
 msgid "Grid color:"
-msgstr "&Fona krāsa:"
+msgstr "Režģa krāsa:"
 
 #: main/config/KoConfigGridPage.cpp:68
-#, fuzzy, kde-format
-#| msgid "Space"
+#, kde-format
 msgid "Spacing"
-msgstr "Space"
+msgstr "Atstarpes"
 
 #: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "&Horizontal:"
-msgstr "&Horizontāls"
+msgstr "&Horizontāli:"
 
 #: main/config/KoConfigGridPage.cpp:80
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "&Vertical:"
-msgstr "&Vertikāls"
+msgstr "&Vertikāli:"
 
 #: main/config/KoConfigMiscPage.cpp:68
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:32
@@ -842,51 +775,48 @@ msgstr "&Vertikāls"
 #: pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Misc"
-msgstr ""
+msgstr "Dažādi"
 
 #: main/config/KoConfigMiscPage.cpp:78
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Units:"
-msgstr "Vienība:"
+msgstr "Vienības:"
 
 #: main/config/KoConfigMiscPage.cpp:87
 #, kde-format
 msgid "Handle radius:"
-msgstr ""
+msgstr "Tura rādiuss:"
 
 #: main/config/KoConfigMiscPage.cpp:94
 #, kde-format
 msgid "Grab sensitivity:"
-msgstr ""
+msgstr "Satveršanas jutība:"
 
 #: main/config/KoConfigMiscPage.cpp:101
-#, fuzzy, kde-format
-#| msgid "Shadow:"
+#, kde-format
 msgid "Paste offset:"
-msgstr "Ēnojums:"
+msgstr "Ielīmēšanas nobīde:"
 
 #: main/config/KoConfigMiscPage.cpp:105
 #, kde-format
 msgid "Paste at Cursor:"
-msgstr ""
+msgstr "Ielīmēt pie kursora:"
 
 #: main/KoApplication.cpp:189
 #, kde-format
 msgid "Only print and exit"
-msgstr "Tikai drukāt un iziet"
+msgstr "Tikai izdrukāt un iziet"
 
 #: main/KoApplication.cpp:191
-#, fuzzy, kde-format
-#| msgid "Open a new document with a template"
+#, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
-msgstr "Atvērt jaunu dokumentu ar šablonu"
+msgstr ""
+"Atvērt jaunu dokumentu pēc norādītās veidnes (darbvirsmas datnes nosaukuma)"
 
 #: main/KoApplication.cpp:192
-#, fuzzy, kde-format
-#| msgid "Open a new document with a template"
+#, kde-format
 msgid "Open a new document based on the given template file"
-msgstr "Atvērt jaunu dokumentu ar šablonu"
+msgstr "Atvērt jaunu dokumentu pēc dotās veidnes datnes"
 
 #: main/KoApplication.cpp:193
 #, kde-format
@@ -894,40 +824,39 @@ msgid "Override display DPI"
 msgstr "Aizstāt ekrāna DPI"
 
 #: main/KoApplication.cpp:194
-#, fuzzy, kde-format
-#| msgid "Only print and exit"
+#, kde-format
 msgid "Only export to PDF and exit"
-msgstr "Tikai drukāt un iziet"
+msgstr "Tikai eksportēt uz PDF un iziet"
 
 #: main/KoApplication.cpp:195
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr ""
+msgstr "Datnes nosaukums PDF eksportam"
 
 #: main/KoApplication.cpp:196
 #, kde-format
 msgid "just load the file and then exit"
-msgstr ""
+msgstr "tikai ielādēt datni un pēc tam iziet"
 
 #: main/KoApplication.cpp:198
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr ""
+msgstr "ielādēt datni, parādīt logu un progresa joslu un pēc tam iziet"
 
 #: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename to write profiling information into."
-msgstr ""
+msgstr "Datnes nosaukums informācijas profilēšanai."
 
 #: main/KoApplication.cpp:203
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
-msgstr ""
+msgstr "Ielādēt datni un to saglabāt kā ODF datni. Paredzēts atkļūdošanai."
 
 #: main/KoApplication.cpp:205
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "Atveramā(-ās) datne(-es) vai adrese(-es)"
 
 #: main/KoApplication.cpp:215
 #, kde-format
@@ -936,12 +865,15 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"Jūs ieslēdzāt programmas 32 bitu būvējumu 64 bitu „Windows“ "
+"operētājsistēmā.\n"
+"To neiesakām.\n"
+"Lūdzu, lejupielādējiet un šīs instalācijas vietā instalējiet x64 būvējumu."
 
 #: main/KoApplication.cpp:255
-#, fuzzy, kde-format
-#| msgid "Creation error"
+#, kde-format
 msgid "%1: Critical Error"
-msgstr "Izveides kļūda"
+msgstr "%1: kritiska kļūda"
 
 #: main/KoApplication.cpp:256
 #, kde-format
@@ -950,67 +882,67 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
+"Nav atrasta programmas būtiska sastāvdaļa.\n"
+"Iespējams, ir problēma ar instalāciju.\n"
+"Mēģiniet pārstartēt ierīci vai pārinstalēt programmu."
 
 #: main/KoApplication.cpp:493
-#, fuzzy, kde-format
-#| msgid "No template found for: %1 "
+#, kde-format
 msgid "No template found for: %1"
-msgstr "Šablons priekš %1 nav atrasts"
+msgstr "Nav atrasta %1 veidne"
 
 #: main/KoApplication.cpp:496
 #, kde-format
 msgid "Too many templates found for: %1"
-msgstr "Priekš %1 ir atrasti pārāk daudzi šabloni"
+msgstr "%1 atrastas pārāk daudzas veidnes"
 
 #: main/KoApplication.cpp:518 main/KoApplication.cpp:535
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "Neizdevās ielādēt šablonu %1."
+msgstr "Problēma ar veidnes „%1“ ielādēšanu."
 
 #: main/KoApplication.cpp:525
-#, fuzzy, kde-format
-#| msgid "No template found for: %1 "
+#, kde-format
 msgid "No template found at: %1"
-msgstr "Šablons priekš %1 nav atrasts"
+msgstr "Nav atrasta veidne: %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:166
-#, fuzzy, kde-format
-#| msgid "Palettes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
-msgstr "Paletes"
+msgstr "Atgūt datnes"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:171
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "Iespējams atgūt šo automātiski saglabāto datni:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "Iespējams atgūt šīs automātiski saglabātās datnes:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr "Startējot aplikāciju vienmēr izmantot šo šablonu"
+msgstr "Ieslēdzot programmu, vienmēr atvērt šo veidni"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template"
-msgstr "Vienmēr izmantot šo šablonu"
+msgstr "Vienmēr lietot šo veidni"
 
 #: main/KoDocument.cpp:544
 #, kde-format
 msgid "Making backup..."
-msgstr "Rezerves kopijas veidošana..."
+msgstr "Veido dublējumu..."
 
 #: main/KoDocument.cpp:559
 #, kde-format
 msgid "Saving..."
-msgstr "Saglabāšana..."
+msgstr "Saglabā..."
 
 #: main/KoDocument.cpp:587
 #, kde-format
@@ -1031,10 +963,9 @@ msgstr ""
 "Iemesls: %2"
 
 #: main/KoDocument.cpp:617
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgid "Document <i>%1</i> saved"
-msgstr "Dokumenta nosaukums"
+msgstr "Dokuments <i>%1</i> ir saglabāts"
 
 #: main/KoDocument.cpp:705
 #, kde-format
@@ -1042,38 +973,42 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
+"Šī šifrētā dokumenta parole nav zināma. Automātiskā saglabāšana ir atcelta! "
+"Saglabājiet savu iesākto darbu manuāli."
 
 #: main/KoDocument.cpp:708
 #, kde-format
 msgid "Autosaving..."
-msgstr "Autosaglabāšana..."
+msgstr "Automātiski saglabā..."
 
 #: main/KoDocument.cpp:720
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr "Kļūda autosaglabāšanas laikā! Pilns disks?"
+msgstr ""
+"Kļūda automātiskās saglabāšanas laikā! Iespējams, diskā trūkst brīvas vietas."
 
 #: main/KoDocument.cpp:808
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "Neizdevās izveidot failu saglabāšanai"
+msgstr "Neizdevās izveidot datni saglabāšanai"
 
 #: main/KoDocument.cpp:852 main/KoDocument.cpp:874 main/KoDocument.cpp:904
 #: main/KoDocument.cpp:938
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "Nav iespējams rakstīt '%1'. Pilns disks?"
+msgstr "Neizdevās rakstīt datnē „%1“. Iespējams, diskā trūkst brīvas vietas."
 
 #: main/KoDocument.cpp:859
-#, fuzzy, kde-format
-#| msgid "Not able to write '%1'. Partition full?"
+#, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
-msgstr "Nav iespējams rakstīt '%1'. Pilns disks?"
+msgstr ""
+"Neizdevās rakstīt RDF metadatus. Iespējams, diskā trūkst brīvas vietas."
 
 #: main/KoDocument.cpp:867 main/KoDocument.cpp:913 main/KoDocument.cpp:1971
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
-msgstr "Kļūda mēģinot rakstīt '%1'. Pilns disks?"
+msgstr ""
+"Kļūda, mēģinot rakstīt datnē „%1“. Iespējams, diskā trūkst brīvas vietas."
 
 #: main/KoDocument.cpp:1213
 #, kde-format
@@ -1090,41 +1025,38 @@ msgid ""
 "An autosaved file exists for this document.\n"
 "Do you want to open it instead?"
 msgstr ""
-"Šim dokumentam eksistē autosaglabāšanas fails.\n"
-"Varbūt labāk atvērt to?"
+"Šim dokumentam pastāv automātiskās saglabāšanas datne.\n"
+"Vai varbūt vēlaties atvērt to?"
 
 #: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
 #, kde-format
 msgid "The file %1 does not exist."
-msgstr "Fails %1 neeksistē."
+msgstr "Datne „%1“ nepastāv."
 
 #: main/KoDocument.cpp:1429
-#, fuzzy, kde-format
-#| msgid "Open Document"
+#, kde-format
 msgid "Opening Document"
-msgstr "Atvērt dokumentu"
+msgstr "Atver dokumentu"
 
 #: main/KoDocument.cpp:1445
-#, fuzzy, kde-format
-#| msgid "Could not create the file for saving"
+#, kde-format
 msgid "Could not create the filter plugin"
-msgstr "Neizdevās izveidot failu saglabāšanai"
+msgstr "Neizdevās izveidot filtra spraudni"
 
 #: main/KoDocument.cpp:1449
-#, fuzzy, kde-format
-#| msgid "Could not create the file for saving"
+#, kde-format
 msgid "Could not create the output document"
-msgstr "Neizdevās izveidot failu saglabāšanai"
+msgstr "Neizdevās izveidot izvades dokumentu"
 
 #: main/KoDocument.cpp:1453
 #, kde-format
 msgid "File not found"
-msgstr "Fails nav atrasts"
+msgstr "Datne nav atrasta"
 
 #: main/KoDocument.cpp:1457
 #, kde-format
 msgid "Cannot create storage"
-msgstr "Nevar izveidot glabātuvi"
+msgstr "Neizdevās izveidot krātuvi"
 
 #: main/KoDocument.cpp:1461
 #, kde-format
@@ -1159,7 +1091,7 @@ msgstr "Dokuments ir aizsargāts ar paroli"
 #: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Invalid file format"
-msgstr ""
+msgstr "Nederīgs datnes formāts"
 
 #: main/KoDocument.cpp:1493
 #, kde-format
@@ -1174,17 +1106,17 @@ msgstr "Nepietiek operatīvās atmiņas"
 #: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Empty Filter Plugin"
-msgstr ""
+msgstr "Tukšs filtra spraudnis"
 
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
-msgstr ""
+msgstr "Mēģina ielādēt nepareiza tipa dokumentā"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Failed to download remote file"
-msgstr ""
+msgstr "Neizdevās lejupielādēt attālinātu datni"
 
 #: main/KoDocument.cpp:1518
 #, kde-format
@@ -1192,30 +1124,25 @@ msgid "Unknown error"
 msgstr "Nezināma kļūda"
 
 #: main/KoDocument.cpp:1523
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%2.\n"
-#| "Reason: %1"
+#, kde-format
 msgid ""
 "Could not open %2.\n"
 "Reason: %1.\n"
 "%3"
 msgstr ""
-"Nevar atvērt\n"
-"%2.\n"
-"Iemesls: %1"
+"Neizdevās atvērt „%2“\n"
+"Iemesls: %1.\n"
+"%3"
 
 #: main/KoDocument.cpp:1581
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgid "Document <i>%1</i> loaded"
-msgstr "Dokumenta nosaukums"
+msgstr "Dokuments <i>%1</i> ir ielādēts"
 
 #: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
-msgstr "Nevar atrast %1"
+msgstr "Nevar atrast „%1“"
 
 #: main/KoDocument.cpp:1650
 #, kde-format
@@ -1229,17 +1156,17 @@ msgstr ""
 #: main/KoDocument.cpp:1673
 #, kde-format
 msgid "%1 is not a file."
-msgstr "%1 nav fails."
+msgstr "%1 nav datne."
 
 #: main/KoDocument.cpp:1688
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
-msgstr "Nevar atvērt failu lasīšanai (pārbaudiet lasīšanas tiesības)."
+msgstr "Nevar atvērt datni lasīšanai (pārbaudiet lasīšanas tiesības)."
 
 #: main/KoDocument.cpp:1699
 #, kde-format
 msgid "Could not read the beginning of the file."
-msgstr "Nevar nolasīt faila sākumu."
+msgstr "Nevar nolasīt datnes sākumu."
 
 #: main/KoDocument.cpp:1730
 #, kde-format
@@ -1251,15 +1178,14 @@ msgstr ""
 "Kļūdas paziņojums: %3"
 
 #: main/KoDocument.cpp:1751
-#, fuzzy, kde-format
-#| msgid "Not a valid KOffice file: %1"
+#, kde-format
 msgid "Not a valid Calligra file: %1"
-msgstr "Nekorekts KOffice fails: %1"
+msgstr "Nekorekta „Calligra“ datne: %1"
 
 #: main/KoDocument.cpp:1832
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr "Nepareizs dokuments: nav faila 'maindoc.xml'."
+msgstr "Nederīgs dokuments: trūkst datnes „maindoc.xml“."
 
 #: main/KoDocument.cpp:1856
 #, kde-format
@@ -1267,12 +1193,14 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
+"Dokuments <i>%1</i> satur vairākas versijas. Ejiet uz „Datne“ —> „Versijas“, "
+"lai atvērtu vecāku versiju."
 
 #: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
 #: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
-#, fuzzy, kde-format
+#, kde-format
 msgid "Untitled"
-msgstr "Virsraksts"
+msgstr "Bez nosaukuma"
 
 #: main/KoDocument.cpp:2060 main/KoMainWindow.cpp:1138
 #, kde-format
@@ -1280,13 +1208,12 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p>Dokuments <b>'%1'</b> ticis modificēts.</p><p>Vai vēlaties to saglabāt ?</"
-"p>"
+"<p>Dokuments <b>„%1“</b> ir izmainīts.</p><p>Vai vēlaties to saglabāt?</p>"
 
 #: main/KoDocument.cpp:2143
 #, kde-format
 msgid "Internal error: saveXML not implemented"
-msgstr "Iekšēja kļūda: saveXML nav implementēts"
+msgstr "Iekšēja kļūda: „saveXML“ nav realizēts"
 
 #: main/KoDocument.cpp:2176
 #, kde-format
@@ -1308,11 +1235,11 @@ msgstr ""
 
 #: main/KoDocument.cpp:2231
 msgid "a word processing"
-msgstr "teksta apstrādes"
+msgstr "teksta apstrāde"
 
 #: main/KoDocument.cpp:2232
 msgid "a spreadsheet"
-msgstr "tabullapa"
+msgstr "izklājlapa"
 
 #: main/KoDocument.cpp:2233
 msgid "a presentation"
@@ -1327,48 +1254,43 @@ msgid "a drawing"
 msgstr "zīmējums"
 
 #: main/KoDocument.cpp:2543
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
-#| "it?</p>"
+#, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
 "Do you want to save your changes or discard them?"
 msgstr ""
-"<p>Dokuments <b>'%1'</b> ticis modificēts.</p><p>Vai vēlaties to saglabāt ?</"
-"p>"
+"Dokuments „%1“ ir izmainīts.\n"
+"Vai vēlaties saglabāt izmaiņās vai tās izmest?"
 
 #: main/KoDocument.cpp:2546
-#, fuzzy, kde-format
-#| msgid "Custom Document"
+#, kde-format
 msgid "Close Document"
-msgstr "Pielāgots dokuments"
+msgstr "Aizvērt dokumentu"
 
 #: main/KoDocumentSectionDelegate.cpp:506
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgid "%1 %"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: main/KoDocumentSectionToolTip.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "No"
-msgstr "Piezīme"
+msgstr "Nē"
 
 #: main/KoDocumentSectionToolTip.cpp:37
 #, kde-format
 msgid "Yes"
-msgstr ""
+msgstr "Jā"
 
 #: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Could not export file."
-msgstr "Nevar eksportēt failu."
+msgstr "Neizdevās eksportēt datni."
 
 #: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Missing Export Filter"
-msgstr "Trūkst eksporta filtrs"
+msgstr "Trūkst eksporta filtra"
 
 #: main/KoFilterManager.cpp:530
 #, kde-format
@@ -1376,64 +1298,63 @@ msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr ""
-"Nevar importēt failu ar tipu\n"
+"Neizdevās importēt datni ar tipu\n"
 "%1"
 
 #: main/KoFilterManager.cpp:533
 #, kde-format
 msgid "Missing Import Filter"
-msgstr "Trūkst importa filtrs"
+msgstr "Trūkst importa filtra"
 
 #: main/KoFilterManager_p.cpp:30
 #, kde-format
 msgid "Choose Filter"
-msgstr "Filtra izvēle"
+msgstr "Izvēlieties filtru"
 
 #: main/KoFindText.cpp:47
 #, kde-format
 msgid "Case Sensitive"
-msgstr ""
+msgstr "Reģistrjutīgs"
 
 #: main/KoFindText.cpp:47
 #, kde-format
 msgid "Match cases when searching"
-msgstr ""
+msgstr "Meklējot ievērot lielos un mazos burtus"
 
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Match only whole words"
-msgstr ""
+msgstr "Meklēt tikai kā pilnus vārdus"
 
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Whole Words Only"
-msgstr ""
+msgstr "Tikai pilnus vārdus"
 
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
-msgstr ""
+msgstr "Meklēt no kursora"
 
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
-msgstr ""
+msgstr "Sākt meklēšanu no kursora pozīcijas"
 
 #: main/KoMainWindow.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 unsaved document (%2)"
-msgstr "Saglabāt dokumentu kā"
+msgstr "„%1“ nesaglabāts dokuments („%2“)"
 
 #: main/KoMainWindow.cpp:263
-#, fuzzy, kde-format
-#| msgid "E&xport..."
+#, kde-format
 msgid "Export as PDF..."
-msgstr "E&ksportēt..."
+msgstr "Eksportēt kā PDF..."
 
 #: main/KoMainWindow.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reload"
-msgstr "Izlādēt"
+msgstr "Pārlādēt"
 
 #: main/KoMainWindow.cpp:279
 #, kde-format
@@ -1441,10 +1362,9 @@ msgid "Versions..."
 msgstr "Versijas..."
 
 #: main/KoMainWindow.cpp:283
-#, fuzzy, kde-format
-#| msgid "Open This Document"
+#, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Atvērt šo dokumentu"
+msgstr "&Atvērt šo dokumentu kā nenosauktu dokumentu..."
 
 #: main/KoMainWindow.cpp:287
 #, kde-format
@@ -1452,21 +1372,19 @@ msgid "E&xport..."
 msgstr "E&ksportēt..."
 
 #: main/KoMainWindow.cpp:291
-#, fuzzy, kde-format
-#| msgid "Import Document"
+#, kde-format
 msgid "En&crypt Document"
-msgstr "Importēt dokumentu"
+msgstr "Š&ifrēt dokumentu"
 
 #: main/KoMainWindow.cpp:296
-#, fuzzy, kde-format
-#| msgid "Import Document"
+#, kde-format
 msgid "&Uncompress to Directory"
-msgstr "Importēt dokumentu"
+msgstr "&Atspiest uz mapi"
 
 #: main/KoMainWindow.cpp:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "&New View"
-msgstr "A&izvākt skatu"
+msgstr "&Jauns skats"
 
 #: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
@@ -1476,45 +1394,43 @@ msgstr "Dokumenta informācija"
 #: main/KoMainWindow.cpp:331
 #, kde-format
 msgid "Full Screen Mode"
-msgstr ""
+msgstr "Pilnekrāna režīms"
 
 #: main/KoMainWindow.cpp:336
-#, fuzzy, kde-format
-#| msgid "Show %1 Toolbar"
+#, kde-format
 msgid "Show Dockers"
-msgstr "Rādīt %1 rīkjoslu"
+msgstr "Rādīt dokerus"
 
 #: main/KoMainWindow.cpp:341
-#, fuzzy, kde-format
-#| msgid "Show %1 Toolbar"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
-msgstr "Rādīt %1 rīkjoslu"
+msgstr "Rādīt dokeru virsrakstu joslas"
 
 #: main/KoMainWindow.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dockers"
-msgstr "Ceļvedis Līnijas"
+msgstr "Dokeri"
 
 #: main/KoMainWindow.cpp:632
-#, fuzzy, kde-format
+#, kde-format
 msgid "(write protected)"
-msgstr "ieraksta aizsardzība"
+msgstr "(rakstīšanas aizsargāts)"
 
 #: main/KoMainWindow.cpp:637
 #, kde-format
 msgid "Save as %1"
-msgstr "Saglabāt kā %1"
+msgstr "Saglabāt kā „%1“"
 
 #: main/KoMainWindow.cpp:639
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save"
-msgstr "Vilnītis"
+msgstr "Saglabāt"
 
 #: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
-msgstr "%1 (Nezināms faila tips)"
+msgstr "%1 (nezināms datnes tips)"
 
 #: main/KoMainWindow.cpp:825
 #, kde-format
@@ -1522,8 +1438,8 @@ msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
-"<qt>Saglabājot kā %1 var pazaudēt daļu formatējuma.<p>Vai joprojām vēlaties "
-"saglabāt šajā formātā?</qt>"
+"<qt>Saglabājot kā %1 varat pazaudēt daļu formatējuma.<p>Vai tik un tā "
+"vēlaties saglabāt šajā formātā?</qt>"
 
 #: main/KoMainWindow.cpp:828
 #, kde-format
@@ -1536,7 +1452,7 @@ msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
-"<qt>Eksportējot kā %1 var tikt zaudēta daļa formatējuma.<p>Vai joprojām "
+"<qt>Eksportējot kā %1 varat pazaudēt daļu formatējuma.<p>Vai tik un tā "
 "vēlaties eksportēt?</qt>"
 
 #: main/KoMainWindow.cpp:837
@@ -1545,14 +1461,14 @@ msgid "Confirm Export"
 msgstr "Apstiprināt eksportēšanu"
 
 #: main/KoMainWindow.cpp:838
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export"
-msgstr "E&ksportēt..."
+msgstr "Eksportēt"
 
 #: main/KoMainWindow.cpp:936
-#, fuzzy, kde-format
+#, kde-format
 msgid "untitled"
-msgstr "Virsraksts"
+msgstr "nenosaukts"
 
 #: main/KoMainWindow.cpp:1200
 #, kde-format
@@ -1565,15 +1481,14 @@ msgid "Import Document"
 msgstr "Importēt dokumentu"
 
 #: main/KoMainWindow.cpp:1374
-#, fuzzy, kde-format
-#| msgid "E&xport..."
+#, kde-format
 msgid "Export as PDF"
-msgstr "E&ksportēt..."
+msgstr "Eksportēt kā PDF"
 
 #: main/KoMainWindow.cpp:1416
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr ""
+msgstr "Neizdevās eksportēt uz attiecīgo datni"
 
 #: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
@@ -1583,24 +1498,21 @@ msgstr "Dokuments"
 #: main/KoMainWindow.cpp:1622
 #, kde-format
 msgid "Document - %1"
-msgstr "Dokuments - %1"
+msgstr "Dokuments — „%1“"
 
 #: main/KoMainWindow.cpp:1662
-#, fuzzy, kde-format
-#| msgid ""
-#| "You will lose all your changes!\n"
-#| "Do you want to continue?"
+#, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
-"Jūs zaudēsiet visas veiktās izmaiņas!\n"
+"Zaudēsiet visas veiktās izmaiņas kopš pēdējās saglabāšanas!\n"
 "Vai tiešām vēlaties turpināt?"
 
 #: main/KoMainWindow.cpp:1664
-#, fuzzy, kde-format
+#, kde-format
 msgid "Warning"
-msgstr "zīmējums"
+msgstr "Uzmanību"
 
 #: main/KoMainWindow.cpp:2030
 #, kde-format
@@ -1614,10 +1526,9 @@ msgstr "Slēpt %1 rīkjoslu"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
-#, fuzzy, kde-format
-#| msgid "Open This Document"
+#, kde-format
 msgid "Open Existing Document"
-msgstr "Atvērt šo dokumentu"
+msgstr "Atvērt esošu dokumentu"
 
 #: main/KoOpenPane.cpp:198
 #, kde-format
@@ -1632,30 +1543,27 @@ msgstr "Pielāgots dokuments"
 #: main/KoPrintingDialog.cpp:44
 #, kde-format
 msgid "Stop"
-msgstr ""
+msgstr "Apturēt"
 
 #: main/KoPrintingDialog.cpp:134
-#, fuzzy, kde-format
-#| msgid "Last Printing"
+#, kde-format
 msgid "Printing"
-msgstr "Pēdējo reizi drukāts"
+msgstr "Drukāšana"
 
 #: main/KoPrintingDialog_p.h:140
-#, fuzzy, kde-format
-#| msgid "Last Printing"
+#, kde-format
 msgid "Printing done"
-msgstr "Pēdējo reizi drukāts"
+msgstr "Drukāšana ir pabeigta"
 
 #: main/KoPrintingDialog_p.h:141
-#, fuzzy, kde-format
-#| msgid "Colors"
+#, kde-format
 msgid "Close"
-msgstr "Krāsas"
+msgstr "Aizvērt"
 
 #: main/KoPrintingDialog_p.h:160
 #, kde-format
 msgid "Stopped"
-msgstr ""
+msgstr "Apturēts"
 
 #: main/KoRecentDocumentsPane.cpp:68
 #, kde-format
@@ -1666,34 +1574,31 @@ msgstr "Atvērt šo dokumentu"
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
-msgstr "<tr><td><b>Modificēts:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Izmainīts:</b></td><td>%1</td></tr>"
 
 #: main/KoRecentDocumentsPane.cpp:170
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
-msgstr "<tr><td><b>Piekļuves laiks:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Piekļūts:</b></td><td>%1</td></tr>"
 
 #: main/KoStandardAction.cpp:19
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Show Guides"
-msgstr "Mainīt ēnojumu"
+msgstr "Rādīt palīglīnijas"
 
 #: main/KoStandardAction.cpp:20
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Shows or hides guides"
-msgstr "Mainīt ēnojumu"
+msgstr "Parāda vai paslēpj palīglīnijas"
 
 #: main/KoTemplateCreateDia.cpp:103
 #, kde-format
 msgid "Create Template"
-msgstr "Izveidot sagatavi"
+msgstr "Izveidot veidni"
 
 #: main/KoTemplateCreateDia.cpp:112
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "Nosaukums:"
@@ -1706,12 +1611,12 @@ msgstr "Grupa:"
 #: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
-msgstr "Pievienot grup&u..."
+msgstr "Pievienot &grupu..."
 
 #: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Remove"
-msgstr "A&izvākt skatu"
+msgstr "&Noņemt"
 
 #: main/KoTemplateCreateDia.cpp:145
 #, kde-format
@@ -1719,31 +1624,29 @@ msgid "Picture"
 msgstr "Attēls"
 
 #: main/KoTemplateCreateDia.cpp:148
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgid "&Preview"
-msgstr "Priekšskatījums:"
+msgstr "&Priekšskatījums"
 
 #: main/KoTemplateCreateDia.cpp:153
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgid "Custom:"
-msgstr "Pielāgots"
+msgstr "Pielāgots:"
 
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
-msgstr "&Izvēlēties..."
+msgstr "&Atlasīt..."
 
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
-msgstr "Izmantot jauno sagatavi kā noklusējuma sagatavi"
+msgstr "Izmantot jauno veidni kā noklusējuma veidni"
 
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Vai tiešām vēlaties pārrakstīt eksistējošo sagatavi ’%1’?"
+msgstr "Vai tiešām vēlaties pārrakstīt pastāvošo veidni „%1“?"
 
 #: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -1753,7 +1656,7 @@ msgstr "Pievienot grupu"
 #: main/KoTemplateCreateDia.cpp:416
 #, kde-format
 msgid "Enter group name:"
-msgstr "Ievadiet grupas nosaukumu:"
+msgstr "Ierakstiet grupas nosaukumu:"
 
 #: main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -1763,7 +1666,7 @@ msgstr "Nosaukums jau ir izmantots."
 #: main/KoTemplateCreateDia.cpp:445
 #, kde-format
 msgid "Do you really want to remove that group?"
-msgstr "Vai tiešām jūs vēlaties dzēst šo grupu?"
+msgstr "Vai tiešām vēlaties dzēst šo grupu?"
 
 #: main/KoTemplateCreateDia.cpp:446
 #, kde-format
@@ -1773,12 +1676,12 @@ msgstr "Noņemt grupu"
 #: main/KoTemplateCreateDia.cpp:448
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "Vai tiešām vēlaties dzēst šo sagatavi?"
+msgstr "Vai tiešām vēlaties dzēst šo veidni?"
 
 #: main/KoTemplateCreateDia.cpp:449
 #, kde-format
 msgid "Remove Template"
-msgstr "Noņemt sagatavi"
+msgstr "Noņemt veidni"
 
 #: main/KoTemplateCreateDia.cpp:497
 #, kde-format
@@ -1793,7 +1696,7 @@ msgstr "Attēls nav pieejams."
 #: main/KoTemplatesPane.cpp:36
 #, kde-format
 msgid "Use This Template"
-msgstr "izmantot šo šablonu"
+msgstr "Izmantot šo veidni"
 
 #: main/KoVersionDialog.cpp:34
 #, kde-format
@@ -1808,7 +1711,7 @@ msgstr "Datums un laiks"
 #: main/KoVersionDialog.cpp:49
 #, kde-format
 msgid "Saved By"
-msgstr "Saglabājis"
+msgstr "Saglabāja"
 
 #: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
 #, kde-format
@@ -1821,9 +1724,9 @@ msgid "&Add"
 msgstr "&Pievienot"
 
 #: main/KoVersionDialog.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Modify"
-msgstr "Modificēts:"
+msgstr "&Izmainīt"
 
 #: main/KoVersionDialog.cpp:66
 #, kde-format
@@ -1833,28 +1736,28 @@ msgstr "&Atvērt"
 #: main/KoVersionDialog.cpp:116
 #, kde-format
 msgid "A new version could not be added"
-msgstr ""
+msgstr "Nevar pievienot jaunu versiju"
 
 #: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date: %1"
-msgstr "Datums:"
+msgstr "Datums: %1"
 
 #: main/KoView.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Author Profile"
-msgstr "Dzēst tekstu"
+msgstr "Aktīvā autora profils"
 
 #: main/KoView.cpp:347 main/KoView.cpp:401
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonīms"
 
 #: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default Author Profile"
-msgstr "Dzēst tekstu"
+msgstr "Noklusējuma autora profils"
 
 #: odf/KoDocumentInfo.cpp:56
 #, kde-format
@@ -1864,7 +1767,7 @@ msgstr "Nezināms"
 #: odf/KoOdfReadStore.cpp:91
 #, kde-format
 msgid "No store backend"
-msgstr ""
+msgstr "Nav veikala aizmugursistēmas"
 
 #: odf/KoOdfReadStore.cpp:126
 #, kde-format
@@ -1872,209 +1775,158 @@ msgid ""
 "Parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"Parsēšanas kļūda galvenajā dokumentā. Rinda: %1 Kolonna:%2\n"
+"Parsēšanas kļūda galvenajā dokumentā. Rinda: %1, kolonna:%2\n"
 "Kļūdas paziņojums: %3"
 
 #: odf/KoPageFormat.cpp:48
-#, fuzzy
-#| msgid "ISO A3"
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "ISO A3"
 
 #: odf/KoPageFormat.cpp:49
-#, fuzzy
-#| msgid "ISO A4"
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "ISO A4"
 
 #: odf/KoPageFormat.cpp:50
-#, fuzzy
-#| msgid "ISO A5"
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "ISO A5"
 
 #: odf/KoPageFormat.cpp:51
-#, fuzzy
 msgctxt "Page size"
 msgid "US Letter"
-msgstr "Iespiedzīme"
+msgstr "ASV vēstule"
 
 #: odf/KoPageFormat.cpp:52
-#, fuzzy
 msgctxt "Page size"
 msgid "US Legal"
-msgstr "Legāls"
+msgstr "ASV juridisks"
 
 #: odf/KoPageFormat.cpp:53
-#, fuzzy
-#| msgid "Screen"
 msgctxt "Page size"
 msgid "Screen"
 msgstr "Ekrāns"
 
 #: odf/KoPageFormat.cpp:54
-#, fuzzy
-#| msgid "Custom"
 msgctxt "Page size"
 msgid "Custom"
 msgstr "Pielāgots"
 
 #: odf/KoPageFormat.cpp:55
-#, fuzzy
-#| msgid "ISO B5"
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "ISO B5"
 
 #: odf/KoPageFormat.cpp:56
-#, fuzzy
 msgctxt "Page size"
 msgid "US Executive"
-msgstr "Izpildu-"
+msgstr "ASV izpildu"
 
 #: odf/KoPageFormat.cpp:57
-#, fuzzy
-#| msgid "ISO A0"
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "ISO A0"
 
 #: odf/KoPageFormat.cpp:58
-#, fuzzy
-#| msgid "ISO A1"
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "ISO A1"
 
 #: odf/KoPageFormat.cpp:59
-#, fuzzy
-#| msgid "ISO A2"
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "ISO A2"
 
 #: odf/KoPageFormat.cpp:60
-#, fuzzy
-#| msgid "ISO A6"
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "ISO A6"
 
 #: odf/KoPageFormat.cpp:61
-#, fuzzy
-#| msgid "ISO A7"
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "ISO A7"
 
 #: odf/KoPageFormat.cpp:62
-#, fuzzy
-#| msgid "ISO A8"
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "ISO A8"
 
 #: odf/KoPageFormat.cpp:63
-#, fuzzy
-#| msgid "ISO A9"
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "ISO A9"
 
 #: odf/KoPageFormat.cpp:64
-#, fuzzy
-#| msgid "ISO B0"
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "ISO B0"
 
 #: odf/KoPageFormat.cpp:65
-#, fuzzy
-#| msgid "ISO B1"
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "ISO B1"
 
 #: odf/KoPageFormat.cpp:66
-#, fuzzy
-#| msgid "ISO B10"
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "ISO B10"
 
 #: odf/KoPageFormat.cpp:67
-#, fuzzy
-#| msgid "ISO B2"
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "ISO B2"
 
 #: odf/KoPageFormat.cpp:68
-#, fuzzy
-#| msgid "ISO B3"
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "ISO B3"
 
 #: odf/KoPageFormat.cpp:69
-#, fuzzy
-#| msgid "ISO B4"
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "ISO B4"
 
 #: odf/KoPageFormat.cpp:70
-#, fuzzy
-#| msgid "ISO B6"
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "ISO B6"
 
 #: odf/KoPageFormat.cpp:71
-#, fuzzy
-#| msgid "ISO C5"
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "ISO C5"
 
 #: odf/KoPageFormat.cpp:72
-#, fuzzy
 msgctxt "Page size"
 msgid "US Common 10"
-msgstr "Sabiedrisks"
+msgstr "ASV parasts 10"
 
 #: odf/KoPageFormat.cpp:73
-#, fuzzy
-#| msgid "ISO DL"
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "ISO DL"
 
 #: odf/KoPageFormat.cpp:74
-#, fuzzy
 msgctxt "Page size"
 msgid "US Folio"
-msgstr "Pastāvīgs kolumntituls"
+msgstr "ASV folio"
 
 #: odf/KoPageFormat.cpp:75
-#, fuzzy
 msgctxt "Page size"
 msgid "US Ledger"
-msgstr "Virsgrāmata"
+msgstr "ASV virsgrāmatas"
 
 #: odf/KoPageFormat.cpp:76
-#, fuzzy
 msgctxt "Page size"
 msgid "US Tabloid"
-msgstr "Tabloīds"
+msgstr "ASV tabloīda"
 
 #: odf/KoUnit.cpp:27
 #, kde-format
 msgid "Millimeters (mm)"
-msgstr "Millimetri (mm)"
+msgstr "Milimetri (mm)"
 
 #: odf/KoUnit.cpp:29
 #, kde-format
@@ -2094,7 +1946,7 @@ msgstr "Collas (in)"
 #: odf/KoUnit.cpp:35
 #, kde-format
 msgid "Pica (pi)"
-msgstr "Pica (pi)"
+msgstr "Cicero (pi)"
 
 #: odf/KoUnit.cpp:37
 #, kde-format
@@ -2107,144 +1959,120 @@ msgid "Points (pt)"
 msgstr "Punkti (pt)"
 
 #: odf/KoUnit.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixels (px)"
-msgstr "Punkti (pt)"
+msgstr "Pikseļi (px)"
 
 #: odf/KoUnit.cpp:43
 #, kde-format
 msgid "Unsupported unit"
-msgstr ""
+msgstr "Neatbalstīta vienība"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
-#, fuzzy
-#| msgid "Change Case"
 msgctxt "(qtundo-format)"
 msgid "Change master slide"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt šablona slaidu"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
-#, fuzzy
-#| msgid "Change Case"
 msgctxt "(qtundo-format)"
 msgid "Change master page"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt parauga lapu"
 
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
-#, fuzzy
-#| msgid "Page Layout"
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr "Lappuses izkārtojums"
+msgstr "Iestatīt lapas izkārtojumu"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Display master background"
-msgstr "Sekunde"
+msgstr "Parādīt parauga fonu"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Display slide background"
-msgstr "Sekunde"
+msgstr "Parādīt slaida fonu"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Display page background"
-msgstr "Sekunde"
+msgstr "Parādīt lapas fonu"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show master shapes"
-msgstr "Izveidot sagatavi"
+msgstr "Parādīt parauga objektus"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide master shapes"
-msgstr "Izveidot sagatavi"
+msgstr "Slēpt parauga objektus"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
-#, fuzzy
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst slaidu"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:28
-#, fuzzy
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst lapu"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:49
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "Dzēst tekstu"
-msgstr[1] "Dzēst tekstu"
-msgstr[2] "Dzēst tekstu"
+msgstr[0] "Dzēst slaidu"
+msgstr[1] "Dzēst slaidus"
+msgstr[2] "Dzēst slaidus"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:51
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
-msgstr[0] "Dzēst tekstu"
-msgstr[1] "Dzēst tekstu"
-msgstr[2] "Dzēst tekstu"
+msgstr[0] "Dzēst lapu"
+msgstr[1] "Dzēst lapas"
+msgstr[2] "Dzēst lapas"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
-#, fuzzy
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert slide"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot slaidu"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:26
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert page"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot lapu"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:45
-#, fuzzy
-#| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
-msgstr[0] "Ielīmēt tekstu"
-msgstr[1] "Ielīmēt tekstu"
-msgstr[2] "Ielīmēt tekstu"
+msgstr[0] "Pārvietot slaidu"
+msgstr[1] "Pārvietot slaidus"
+msgstr[2] "Pārvietot slaidus"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:47
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
-msgstr[0] "Dzēst tekstu"
-msgstr[1] "Dzēst tekstu"
-msgstr[2] "Dzēst tekstu"
+msgstr[0] "Pārvietot lapu"
+msgstr[1] "Pārvietot lapas"
+msgstr[2] "Pārvietot lapas"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Confirm Save"
+#, kde-format
 msgid "Configure"
-msgstr "Apstiprināt saglabāšanu"
+msgstr "Konfigurēt"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:44
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokuments"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:49
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autors"
@@ -2257,510 +2085,458 @@ msgstr "Autors"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
 #, kde-format
 msgid "Select a master slide design:"
-msgstr ""
+msgstr "Atlasīt šablona slaida dizainu:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Master Slide"
-msgstr "Ielīmēt tekstu"
+msgstr "Šablona slaids"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
 msgid "Select a master page design:"
-msgstr ""
+msgstr "Atlasīt parauga lapas dizainu:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Master Page"
-msgstr "Ielīmēt tekstu"
+msgstr "Parauga lapa"
 
 #: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
-#, fuzzy, kde-format
-#| msgid "Size:"
+#, kde-format
 msgid "Slide %1"
-msgstr "Izmērs:"
+msgstr "%1. slaids"
 
 #: pageapp/KoPADocumentModel.cpp:172
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page  %1"
-msgstr "Pielāgot lappusei"
+msgstr "%1. lapa"
 
 #: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer"
-msgstr "Lavanda"
+msgstr "Slānis"
 
 #: pageapp/KoPADocumentModel.cpp:177
-#, fuzzy, kde-format
-#| msgid "Group:"
+#, kde-format
 msgid "Group"
-msgstr "Grupa:"
+msgstr "Grupa"
 
 #: pageapp/KoPADocumentModel.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape"
-msgstr "Vilnītis"
+msgstr "Objekts"
 
 #: pageapp/KoPADocumentModel.cpp:267
-#, fuzzy
-#| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Ielīmēt tekstu"
+msgstr "Pārdēvēt slaidu"
 
 #: pageapp/KoPADocumentModel.cpp:269
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
-msgstr "Dzēst tekstu"
+msgstr "Pārdēvēt lapu"
 
 #: pageapp/KoPADocumentModel.cpp:272
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
-msgstr "Izveidot sagatavi"
+msgstr "Pārdēvēt slāni"
 
 #: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
-#, fuzzy, kde-format
-#| msgid "Size:"
+#, kde-format
 msgid "Slide"
-msgstr "Izmērs:"
+msgstr "Slaids"
 
 #: pageapp/KoPADocumentModel.cpp:311
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgid "Visible"
-msgstr "Mainīgs"
+msgstr "Redzams"
 
 #: pageapp/KoPADocumentModel.cpp:312
-#, fuzzy, kde-format
-#| msgid "Loaded"
+#, kde-format
 msgid "Locked"
-msgstr "Ielādēts"
+msgstr "Slēgts"
 
 #: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
-msgstr "Izmainīt Panelis Reverss"
+msgstr "Mainīt objekta vecākobjektu"
 
 #: pageapp/KoPADocumentModel.cpp:675
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move Here"
-msgstr "Dzēst tekstu"
+msgstr "&Pārvietot te"
 
 #: pageapp/KoPADocumentModel.cpp:679
-#, fuzzy, kde-format
-#| msgid "Green"
+#, kde-format
 msgid "&Copy Here"
-msgstr "Zaļš"
+msgstr "&Kopēt te"
 
 #: pageapp/KoPADocumentModel.cpp:683
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "Mainīt reģistru"
+msgstr "&Atcelt"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:85
-#, fuzzy, kde-format
-#| msgid "Add Newline"
+#, kde-format
 msgid "Add a new slide or layer"
-msgstr "Pievienot jaunu rindiņu"
+msgstr "Pievienot jaunu slaidu vai slāni"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:87
-#, fuzzy, kde-format
-#| msgid "Add Newline"
+#, kde-format
 msgid "Add a new page or layer"
-msgstr "Pievienot jaunu rindiņu"
+msgstr "Pievienot jaunu lapu vai slāni"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page"
-msgstr "Pielāgot lappusei"
+msgstr "Lapa"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:102
 #: pageapp/KoPADocumentStructureDocker.cpp:590
-#, fuzzy, kde-format
-#| msgid "Remove Selected Text"
+#, kde-format
 msgid "Delete selected objects"
-msgstr "Aizvākt iezīmēto tekstu"
+msgstr "Dzēst atlasītos objektus"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:108
-#, fuzzy, kde-format
-#| msgid "Remove Selected Text"
+#, kde-format
 msgid "Raise selected objects"
-msgstr "Aizvākt iezīmēto tekstu"
+msgstr "Pacelt atlasītos objektus"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lower selected objects"
-msgstr "Izveidot dokumentu"
+msgstr "Nolaist atlasītos objektus"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:123
 #, kde-format
 msgid "Minimal View"
-msgstr ""
+msgstr "Minimālais skats"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Detailed View"
-msgstr ""
+msgstr "Informatīvais skats"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Thumbnail View"
-msgstr ""
+msgstr "Sīktēlu skats"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Change Borders"
+#, kde-format
 msgid "View mode"
-msgstr "Mainīt apmales"
+msgstr "Skata režīms"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:288
 #, kde-format
 msgid "Enter the name of the new layer:"
-msgstr ""
+msgstr "Ierakstiet jaunā slāņa nosaukumu:"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Layer"
-msgstr "Lavanda"
+msgstr "Jauns slānis"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "New layer"
-msgstr "Lavanda"
+msgstr "Jauns slānis"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:301
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
-msgstr "Izveidot sagatavi"
+msgstr "Izveidot slāni"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:327
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst slāni"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
-msgstr ""
+msgstr "Nevar izdzēst visus slāņus. Ir jāatstāj vismaz viens slānis."
 
 #: pageapp/KoPADocumentStructureDocker.cpp:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "Error deleting layers"
-msgstr "Izveidot sagatavi"
+msgstr "Kļūda, dzēšot slāņus"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:586
-#, fuzzy, kde-format
-#| msgid "Add Newline"
+#, kde-format
 msgid "Add a new slide"
-msgstr "Pievienot jaunu rindiņu"
+msgstr "Pievienot jaunu slaidu"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:588
-#, fuzzy, kde-format
-#| msgid "Add Newline"
+#, kde-format
 msgid "Add a new page"
-msgstr "Pievienot jaunu rindiņu"
+msgstr "Pievienot jaunu lapu"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:592
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgid "Cut"
-msgstr "Pielāgots"
+msgstr "Izgriezt"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:593
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "Copy"
-msgstr "Kompānija:"
+msgstr "Kopēt"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:594
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Paste"
-msgstr "Datums"
+msgstr "Ielīmēt"
 
 #: pageapp/KoPAPageThumbnailModel.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1"
-msgstr "Pielāgot lappusei"
+msgstr "%1. lapa"
 
 #: pageapp/KoPAPastePage.cpp:112
-#, fuzzy
-#| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Paste Slide"
 msgid_plural "Paste Slides"
-msgstr[0] "Ielīmēt tekstu"
-msgstr[1] "Ielīmēt tekstu"
-msgstr[2] "Ielīmēt tekstu"
+msgstr[0] "Ielīmēt slaidu"
+msgstr[1] "Ielīmēt slaidus"
+msgstr[2] "Ielīmēt slaidus"
 
 #: pageapp/KoPAPastePage.cpp:114
-#, fuzzy
-#| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Paste Page"
 msgid_plural "Paste Pages"
-msgstr[0] "Ielīmēt tekstu"
-msgstr[1] "Ielīmēt tekstu"
-msgstr[2] "Ielīmēt tekstu"
+msgstr[0] "Ielīmēt lapu"
+msgstr[1] "Ielīmēt lapas"
+msgstr[2] "Ielīmēt lapas"
 
 #: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tools"
-msgstr "Noklusējuma krāsa"
+msgstr "Rīki"
 
 #: pageapp/KoPAView.cpp:346
-#, fuzzy, kde-format
+#, kde-format
 msgid "D&elete"
-msgstr "Dzēst tekstu"
+msgstr "&Dzēst"
 
 #: pageapp/KoPAView.cpp:356
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Snap to Grid"
-msgstr "Mainīt ēnojumu"
+msgstr "Pielipt pie režģa"
 
 #: pageapp/KoPAView.cpp:365
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Master Pages"
-msgstr "Izveidot sagatavi"
+msgstr "Rādīt parauga lapas"
 
 #: pageapp/KoPAView.cpp:369
-#, fuzzy, kde-format
-#| msgid "Change Shadow"
+#, kde-format
 msgid "Show Rulers"
-msgstr "Mainīt ēnojumu"
+msgstr "Rādīt lineālus"
 
 #: pageapp/KoPAView.cpp:371
 #, kde-format
 msgid "Show/hide the view's rulers"
-msgstr ""
+msgstr "Rādīt/slēpt skata lineālus"
 
 #: pageapp/KoPAView.cpp:375
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Page Margins"
-msgstr "Izveidot sagatavi"
+msgstr "Rādīt lapas apmales"
 
 #: pageapp/KoPAView.cpp:377
 #, kde-format
 msgid "Show/hide the page margins"
-msgstr ""
+msgstr "Rādīt/slēpt lapas apmales"
 
 #: pageapp/KoPAView.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Page"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot lapu"
 
 #: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert a new page after the current one"
-msgstr ""
+msgstr "Ievietot jaunu lapu pēc pašreizējās"
 
 #: pageapp/KoPAView.cpp:387
-#, fuzzy, kde-format
-#| msgid "Company Name"
+#, kde-format
 msgid "Copy Page"
-msgstr "Kompānijas nosaukums"
+msgstr "Kopēt lapu"
 
 #: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy the current page"
-msgstr "Dzēst tekstu"
+msgstr "Kopēt pašreizējo lapu"
 
 #: pageapp/KoPAView.cpp:393
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Page"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst lapu"
 
 #: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the current page"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst pašreizējo lapu"
 
 #: pageapp/KoPAView.cpp:400
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Master Page..."
-msgstr "Ielīmēt tekstu"
+msgstr "Parauga lapa..."
 
 #: pageapp/KoPAView.cpp:404
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgid "Page Layout..."
-msgstr "Lappuses izkārtojums"
+msgstr "Lapas izkārtojumus..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
-msgstr "Mainīgs"
+msgstr "Mainīgais"
 
 #: pageapp/KoPAView.cpp:419
-#, fuzzy, kde-format
-#| msgid "Import Document"
+#, kde-format
 msgid "Import Document..."
-msgstr "Importēt dokumentu"
+msgstr "Importēt dokumentu..."
 
 #: pageapp/KoPAView.cpp:423
-#, fuzzy, kde-format
-#| msgid "Confirm Save"
+#, kde-format
 msgid "Configure..."
-msgstr "Apstiprināt saglabāšanu"
+msgstr "Konfigurēt..."
 
 #: pageapp/KoPAView.cpp:513
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Slideshow"
-msgstr "Importēt stilu"
+msgstr "Importēt slīdrādi"
 
 #: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid ""
 "Could not import\n"
 "%1"
 msgstr ""
-"Nevar atvērt\n"
+"Nevar importēt\n"
 "%1"
 
 #: pageapp/KoPAView.cpp:655
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
-msgstr "Mainīt tabulatoru"
+msgstr "Mainīt lapas izkārtojumu"
 
 #. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set image ..."
-msgstr "Sekunde"
+msgstr "Uzlikt attēlu..."
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
-msgstr "Sekunde"
+msgstr "Fons"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Background"
-msgstr "Sekunde"
+msgstr "Lapas fons"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
-#, fuzzy, kde-format
-#| msgid "Page Preview"
+#, kde-format
 msgid "Page Design"
-msgstr "Lappuses priekšskatījums"
+msgstr "Lapas dizains"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
-#, fuzzy, kde-format
-#| msgid "Page Preview"
+#, kde-format
 msgid "Slide Design"
-msgstr "Lappuses priekšskatījums"
+msgstr "Slaida dizains"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master page"
-msgstr "Sekunde"
+msgstr "Izmantot parauga lapas fonu"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master slide"
-msgstr "Sekunde"
+msgstr "Izmantot šablona slaida fonu"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "Change Case"
+#, kde-format
 msgid "Display shapes of master page"
-msgstr "Mainīt reģistru"
+msgstr "Rādīt parauga lapas objektus"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "Change Case"
+#, kde-format
 msgid "Display shapes of master slide"
-msgstr "Mainīt reģistru"
+msgstr "Rādīt šablona slaida objektus"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
-msgstr "Sekunde"
+msgstr "Mainīt lapas fona attēlu"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
-msgstr "Sekunde"
+msgstr "Mainīt slaida fona attēlu"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Master Slide %1/%2"
-msgstr "Ielīmēt tekstu"
+msgstr "Šablona slaids %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
-#, fuzzy, kde-format
-#| msgid "Size:"
+#, kde-format
 msgid "Slide %1/%2"
-msgstr "Izmērs:"
+msgstr "%1. slaids no %2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:54
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Master Page %1/%2"
-msgstr "Ielīmēt tekstu"
+msgstr "%1. parauga lapa no %2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1/%2"
-msgstr "Pielāgot lappusei"
+msgstr "%1. lapa no %2"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:35
 #, kde-format
 msgid "Clear"
-msgstr ""
+msgstr "Notīrīt"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:102
 #: pigment/compositeops/KoCompositeOps.h:135
 #: pigment/KoCompositeOpRegistry.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subtract"
-msgstr "Kopsavilkums"
+msgstr "Atņemt"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:167
 #: pigment/compositeops/KoCompositeOps.h:137
 #: pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
 msgid "Multiply"
-msgstr ""
+msgstr "Reizināt"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:227
 #: pigment/colorspaces/KoAlphaColorSpace.h:205
 #: pigment/KoColorModelStandardIds.cpp:11
-#, fuzzy, kde-format
-#| msgctxt "color"
-#| msgid "DarkGreen"
+#, kde-format
 msgid "Alpha mask"
-msgstr "Tumši zaļa"
+msgstr "Alfa maska"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:229
 #: pigment/colorspaces/KoLabColorSpace.cpp:49
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:32
-#, fuzzy, kde-format
-#| msgid "Company Name"
+#, kde-format
 msgid "Alpha"
-msgstr "Kompānijas nosaukums"
+msgstr "Alfa"
 
 #: pigment/colorspaces/KoAlphaColorSpace.h:145
 #: pigment/colorspaces/KoAlphaColorSpace.h:151
@@ -2774,44 +2550,44 @@ msgstr "Kompānijas nosaukums"
 #: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "Nedefinēta operācija alfa krāstelpā"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:26
 #: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "L*a*b* (16 bitu vesels skaitlis/kanāls, nav pārvaldīts)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:28
 #: pigment/compositeops/KoCompositeOps.h:207
 #: pigment/KoCompositeOpRegistry.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness"
-msgstr "Gaiši ciāna"
+msgstr "Gaišums"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:35
 #: pigment/KoBasicHistogramProducers.cpp:416
 #, kde-format
 msgid "a*"
-msgstr ""
+msgstr "a*"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:42
 #: pigment/KoBasicHistogramProducers.cpp:417
 #, kde-format
 msgid "b*"
-msgstr ""
+msgstr "b*"
 
 #: pigment/colorspaces/KoRgbU16ColorSpace.cpp:25
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (16 bitu vesels skaitlis/kanāls, nav pārvaldīts)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (8 bitu vesels skaitlis/kanāls, nav pārvaldīts)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
@@ -2832,7 +2608,7 @@ msgstr "Sarkans"
 #: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr ""
+msgstr "Nedefinēta operācija %1 telpā"
 
 #: pigment/colorspaces/KoSimpleColorSpace.h:91
 #: pigment/colorspaces/KoSimpleColorSpace.h:97
@@ -2847,46 +2623,43 @@ msgstr ""
 #: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
-msgstr ""
+msgstr "Nedefinēta operācija %1 krāstelpā"
 
 #: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
 #, kde-format
 msgid "Simple Color Conversion Engine"
-msgstr ""
+msgstr "Vienkāršs krāsu pārveidošanas dzinis"
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:233
-#, fuzzy, kde-format
-#| msgctxt "color"
-#| msgid "DarkGreen"
+#, kde-format
 msgid "Alpha darken"
-msgstr "Tumši zaļa"
+msgstr "Alfa aptumšot"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
 #: pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgid "Behind"
-msgstr ""
+msgstr "Aiz"
 
 #: pigment/compositeops/KoCompositeOpDissolve.h:42
 #: pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgid "Dissolve"
-msgstr ""
+msgstr "Izšķīdināt"
 
 #: pigment/compositeops/KoCompositeOpErase.h:26
 #: pigment/KoCompositeOpRegistry.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Erase"
-msgstr "Reģistrs"
+msgstr "Izdzēst"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
 #: pigment/KoCompositeOpRegistry.cpp:61
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Greater"
-msgstr "Izveidots:"
+msgstr "Lielāks"
 
 #: pigment/compositeops/KoCompositeOpOver.h:48
 #: pigment/compositeops/KoOptimizedCompositeOpOver128.h:244
@@ -2898,46 +2671,45 @@ msgstr "Normāls"
 
 #: pigment/compositeops/KoCompositeOps.h:109
 #: pigment/KoCompositeOpRegistry.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overlay"
-msgstr "Pilsēta:"
+msgstr "Pārklāt"
 
 #: pigment/compositeops/KoCompositeOps.h:110
 #: pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgid "Grain Merge"
-msgstr ""
+msgstr "Graudu apvienošana"
 
 #: pigment/compositeops/KoCompositeOps.h:111
 #: pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgid "Grain Extract"
-msgstr ""
+msgstr "Graudu izvilkšana"
 
 #: pigment/compositeops/KoCompositeOps.h:112
 #: pigment/KoCompositeOpRegistry.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hard Mix"
-msgstr "&Augstums:"
+msgstr "Ciets sajaukums"
 
 #: pigment/compositeops/KoCompositeOps.h:113
 #: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
-msgstr ""
+msgstr "Ģeometriskais vidējais"
 
 #: pigment/compositeops/KoCompositeOps.h:114
 #: pigment/KoCompositeOpRegistry.cpp:68
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgid "Parallel"
-msgstr "Mainīgs"
+msgstr "Paralēls"
 
 #: pigment/compositeops/KoCompositeOps.h:115
 #: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Allanon"
-msgstr ""
+msgstr "Allanons"
 
 #: pigment/compositeops/KoCompositeOps.h:117
 #: pigment/KoCompositeOpRegistry.cpp:44
@@ -2947,179 +2719,167 @@ msgstr "Ekrāns"
 
 #: pigment/compositeops/KoCompositeOps.h:118
 #: pigment/KoCompositeOpRegistry.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Dodge"
-msgstr "Krāsas"
+msgstr "Krāsu izvairīšanās"
 
 #: pigment/compositeops/KoCompositeOps.h:119
 #: pigment/KoCompositeOpRegistry.cpp:41
-#, fuzzy, kde-format
-#| msgid "Change Borders"
+#, kde-format
 msgid "Linear Dodge"
-msgstr "Mainīt apmales"
+msgstr "Lineāra izvairīšanās"
 
 #: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lighten"
-msgstr "Viegli Zaļa"
+msgstr "Padarīt gaišāku"
 
 #: pigment/compositeops/KoCompositeOps.h:121
 #: pigment/KoCompositeOpRegistry.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hard Light"
-msgstr "&Augstums:"
+msgstr "Cieta gaisma"
 
 #: pigment/compositeops/KoCompositeOps.h:122
 #: pigment/KoCompositeOpRegistry.cpp:49
-#, fuzzy, kde-format
-#| msgid "String:"
+#, kde-format
 msgid "Soft Light (SVG)"
-msgstr "Virkne:"
+msgstr "Mīksta gaisma (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:123
 #: pigment/KoCompositeOpRegistry.cpp:48
-#, fuzzy, kde-format
-#| msgid "String:"
+#, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr "Virkne:"
+msgstr "Mīksta gaisma („Photoshop“)"
 
 #: pigment/compositeops/KoCompositeOps.h:124
 #: pigment/KoCompositeOpRegistry.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamma Light"
-msgstr "Viegli Zaļa"
+msgstr "Gamma gaišs"
 
 #: pigment/compositeops/KoCompositeOps.h:125
 #: pigment/KoCompositeOpRegistry.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vivid Light"
-msgstr "Viegli Zaļa"
+msgstr "Dzīvīgi gaišs"
 
 #: pigment/compositeops/KoCompositeOps.h:126
 #: pigment/KoCompositeOpRegistry.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pin Light"
-msgstr "Viegli Zaļa"
+msgstr "Piespraust gaišumu"
 
 #: pigment/compositeops/KoCompositeOps.h:127
 #: pigment/KoCompositeOpRegistry.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear Light"
-msgstr "Viegli Zaļa"
+msgstr "Lineāra gaisma"
 
 #: pigment/compositeops/KoCompositeOps.h:129
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color Burn"
-msgstr "Krāsa:"
+msgstr "Krāsu iededzināšana"
 
 #: pigment/compositeops/KoCompositeOps.h:130
 #: pigment/KoCompositeOpRegistry.cpp:35
-#, fuzzy, kde-format
-#| msgid "Change Borders"
+#, kde-format
 msgid "Linear Burn"
-msgstr "Mainīt apmales"
+msgstr "Lineārā iededzināšana"
 
 #: pigment/compositeops/KoCompositeOps.h:131 pigment/KoCompositeOp.cpp:35
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "color"
-#| msgid "DarkGreen"
+#, kde-format
 msgid "Darken"
-msgstr "Tumši zaļa"
+msgstr "Aptumšot"
 
 #: pigment/compositeops/KoCompositeOps.h:132
 #: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
-msgstr ""
+msgstr "Gamma aptumšot"
 
 #: pigment/compositeops/KoCompositeOps.h:134
 #: pigment/KoCompositeOpRegistry.cpp:28
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Addition"
-msgstr "Amats"
+msgstr "Saskaitīšana"
 
 #: pigment/compositeops/KoCompositeOps.h:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inversed-Subtract"
-msgstr "Kopsavilkums"
+msgstr "Invertēta atņemšana"
 
 #: pigment/compositeops/KoCompositeOps.h:138
 #: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
-msgstr ""
+msgstr "Dalīt"
 
 #: pigment/compositeops/KoCompositeOps.h:140
 #: pigment/KoCompositeOpRegistry.cpp:57
 #, kde-format
 msgid "Arcus Tangent"
-msgstr ""
+msgstr "Arktangenss"
 
 #: pigment/compositeops/KoCompositeOps.h:141
 #: pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
 msgid "Difference"
-msgstr ""
+msgstr "Atšķirība"
 
 #: pigment/compositeops/KoCompositeOps.h:142
 #: pigment/KoCompositeOpRegistry.cpp:56
 #, kde-format
 msgid "Exclusion"
-msgstr ""
+msgstr "Izslēgšana"
 
 #: pigment/compositeops/KoCompositeOps.h:143
 #: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Equivalence"
-msgstr ""
+msgstr "Ekvivalence"
 
 #: pigment/compositeops/KoCompositeOps.h:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Additive-Subtractive"
-msgstr "Kopsavilkums"
+msgstr "Pievienošana un atņemšana"
 
 #: pigment/compositeops/KoCompositeOps.h:175
 #: pigment/KoCompositeOpRegistry.cpp:75
-#, fuzzy, kde-format
-#| msgid "Company Name"
+#, kde-format
 msgid "Copy Red"
-msgstr "Kompānijas nosaukums"
+msgstr "Kopēt sarkano"
 
 #: pigment/compositeops/KoCompositeOps.h:176
 #: pigment/KoCompositeOpRegistry.cpp:76
-#, fuzzy, kde-format
-#| msgid "Green"
+#, kde-format
 msgid "Copy Green"
-msgstr "Zaļš"
+msgstr "Kopēt zaļo"
 
 #: pigment/compositeops/KoCompositeOps.h:177
 #: pigment/KoCompositeOpRegistry.cpp:77
-#, fuzzy, kde-format
-#| msgid "Company Name"
+#, kde-format
 msgid "Copy Blue"
-msgstr "Kompānijas nosaukums"
+msgstr "Kopēt zilo"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tangent Normalmap"
-msgstr "Pielāgots līniju platums"
+msgstr "Pieskares normālkarte"
 
 #: pigment/compositeops/KoCompositeOps.h:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Combine Normal Maps"
-msgstr "Pielāgots līniju platums"
+msgstr "Kombinēt normālkartes"
 
 #: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:81
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color"
-msgstr "Krāsa:"
+msgstr "Krāsa"
 
 #: pigment/compositeops/KoCompositeOps.h:182
 #: pigment/KoCompositeOpRegistry.cpp:82
@@ -3135,191 +2895,165 @@ msgstr "Piesātinājums"
 
 #: pigment/compositeops/KoCompositeOps.h:184
 #: pigment/KoCompositeOpRegistry.cpp:86
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Increase Saturation"
-msgstr "Piesātinājums"
+msgstr "Palielināt piesātinājumu"
 
 #: pigment/compositeops/KoCompositeOps.h:185
 #: pigment/KoCompositeOpRegistry.cpp:85
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Decrease Saturation"
-msgstr "Piesātinājums"
+msgstr "Samazināt piesātinājumu"
 
 #: pigment/compositeops/KoCompositeOps.h:186
 #: pigment/KoCompositeOpRegistry.cpp:84
-#, fuzzy, kde-format
-#| msgid "Change font size?"
+#, kde-format
 msgid "Luminosity"
-msgstr "Mainīt fonta izmēru?"
+msgstr "Spožums"
 
 #: pigment/compositeops/KoCompositeOps.h:187
 #: pigment/KoCompositeOpRegistry.cpp:88
-#, fuzzy, kde-format
-#| msgid "Change font size?"
+#, kde-format
 msgid "Increase Luminosity"
-msgstr "Mainīt fonta izmēru?"
+msgstr "Palielināt spožumu"
 
 #: pigment/compositeops/KoCompositeOps.h:188
 #: pigment/KoCompositeOpRegistry.cpp:87
-#, fuzzy, kde-format
-#| msgid "Change font size?"
+#, kde-format
 msgid "Decrease Luminosity"
-msgstr "Mainīt fonta izmēru?"
+msgstr "Samazināt spožumu"
 
 #: pigment/compositeops/KoCompositeOps.h:189
 #: pigment/KoCompositeOpRegistry.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Darker Color"
-msgstr "Sekunde"
+msgstr "Tumšāka krāsa"
 
 #: pigment/compositeops/KoCompositeOps.h:190
 #: pigment/KoCompositeOpRegistry.cpp:51
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Lighter Color"
-msgstr "Krāsa:"
+msgstr "Gaišāka krāsa"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:90
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color HSI"
-msgstr "Krāsa:"
+msgstr "Krāsas HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:194
 #: pigment/KoCompositeOpRegistry.cpp:91
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "Hue HSI"
-msgstr "Nokrāsa"
+msgstr "Nokrāsas HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:195
 #: pigment/KoCompositeOpRegistry.cpp:92
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Saturation HSI"
-msgstr "Piesātinājums"
+msgstr "Piesātinājuma HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:196
 #: pigment/KoCompositeOpRegistry.cpp:95
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Increase Saturation HSI"
-msgstr "Piesātinājums"
+msgstr "Palielināt piesātinājuma HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:197
 #: pigment/KoCompositeOpRegistry.cpp:94
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Decrease Saturation HSI"
-msgstr "Piesātinājums"
+msgstr "Samazināt piesātinājuma HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:198
 #: pigment/KoCompositeOpRegistry.cpp:93
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Intensity"
-msgstr "Mainīt atkāpi"
+msgstr "Intensitāte"
 
 #: pigment/compositeops/KoCompositeOps.h:199
 #: pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Increase Intensity"
-msgstr "Mainīt atkāpi"
+msgstr "Palielināt intensitāti"
 
 #: pigment/compositeops/KoCompositeOps.h:200
 #: pigment/KoCompositeOpRegistry.cpp:96
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Decrease Intensity"
-msgstr "Mainīt atkāpi"
+msgstr "Samazināt intensitāti"
 
 #: pigment/compositeops/KoCompositeOps.h:202
 #: pigment/KoCompositeOpRegistry.cpp:99
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color HSL"
-msgstr "Krāsa:"
+msgstr "Krāsas HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:203
 #: pigment/KoCompositeOpRegistry.cpp:100
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "Hue HSL"
-msgstr "Nokrāsa"
+msgstr "Nokrāsas HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:204
 #: pigment/KoCompositeOpRegistry.cpp:101
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Saturation HSL"
-msgstr "Piesātinājums"
+msgstr "Piesātinājuma HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:205
 #: pigment/KoCompositeOpRegistry.cpp:104
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Increase Saturation HSL"
-msgstr "Piesātinājums"
+msgstr "Palielināt piesātinājuma HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:206
 #: pigment/KoCompositeOpRegistry.cpp:103
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Decrease Saturation HSL"
-msgstr "Piesātinājums"
+msgstr "Samazināt piesātinājuma HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:208
 #: pigment/KoCompositeOpRegistry.cpp:106
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Increase Lightness"
-msgstr "Mainīt atkāpi"
+msgstr "Palielināt gaišumu"
 
 #: pigment/compositeops/KoCompositeOps.h:209
 #: pigment/KoCompositeOpRegistry.cpp:105
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Decrease Lightness"
-msgstr "Mainīt atkāpi"
+msgstr "Samazināt gaišumu"
 
 #: pigment/compositeops/KoCompositeOps.h:211
 #: pigment/KoCompositeOpRegistry.cpp:108
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color HSV"
-msgstr "Krāsa:"
+msgstr "Krāsas HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:212
 #: pigment/KoCompositeOpRegistry.cpp:109
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "Hue HSV"
-msgstr "Nokrāsa"
+msgstr "Nokrāsas HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:213
 #: pigment/KoCompositeOpRegistry.cpp:110
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Saturation HSV"
-msgstr "Piesātinājums"
+msgstr "Piesātinājuma HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:214
 #: pigment/KoCompositeOpRegistry.cpp:113
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Increase Saturation HSV"
-msgstr "Piesātinājums"
+msgstr "Palielināt piesātinājuma HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:215
 #: pigment/KoCompositeOpRegistry.cpp:112
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Decrease Saturation HSV"
-msgstr "Piesātinājums"
+msgstr "Samazināt piesātinājuma HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:216
 #: pigment/KoCompositeOpRegistry.cpp:111
@@ -3329,208 +3063,196 @@ msgstr "Vērtība"
 
 #: pigment/compositeops/KoCompositeOps.h:217
 #: pigment/KoCompositeOpRegistry.cpp:115
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Increase Value"
-msgstr "Mainīt atkāpi"
+msgstr "Palielināt vērtību"
 
 #: pigment/compositeops/KoCompositeOps.h:218
 #: pigment/KoCompositeOpRegistry.cpp:114
-#, fuzzy, kde-format
-#| msgid "Change Indent"
+#, kde-format
 msgid "Decrease Value"
-msgstr "Mainīt atkāpi"
+msgstr "Samazināt vērtību"
 
 #: pigment/KoBasicHistogramProducers.cpp:340
 #: pigment/KoBasicHistogramProducers.cpp:405
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr ""
+msgstr "Vispārīga RGB histogramma"
 
 #: pigment/KoBasicHistogramProducers.cpp:344
 #, kde-format
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: pigment/KoBasicHistogramProducers.cpp:345
 #, kde-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: pigment/KoBasicHistogramProducers.cpp:346
 #, kde-format
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: pigment/KoBasicHistogramProducers.cpp:411
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr ""
+msgstr "L*a*b* histogramma"
 
 #: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
 msgid "L*"
-msgstr ""
+msgstr "L*"
 
 #: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "Vispārīga L*a*b* histogramma"
 
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "XYZ"
-msgstr ""
+msgstr "XYZ"
 
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
-msgstr ""
+msgstr "L*a*b*"
 
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
-msgstr ""
+msgstr "CMYK"
 
 #: pigment/KoColorModelStandardIds.cpp:16
-#, fuzzy, kde-format
-#| msgid "Gray"
+#, kde-format
 msgid "Grayscale"
-msgstr "Pelēks"
+msgstr "Pelēktoņu"
 
 #: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
-msgstr ""
+msgstr "Pelēktoņu (bez caurspīdības)"
 
 #: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
 msgid "YCbCr"
-msgstr ""
+msgstr "YCbCr"
 
 #: pigment/KoColorModelStandardIds.cpp:20
-#, fuzzy, kde-format
-#| msgid " pts"
+#, kde-format
 msgid "8 Bits"
-msgstr " pts"
+msgstr "8 bitu"
 
 #: pigment/KoColorModelStandardIds.cpp:21
-#, fuzzy, kde-format
-#| msgid " pts"
+#, kde-format
 msgid "16 Bits"
-msgstr " pts"
+msgstr "16 bitu"
 
 #: pigment/KoColorModelStandardIds.cpp:22
-#, fuzzy, kde-format
-#| msgid " pts"
+#, kde-format
 msgid "16 Bits Float"
-msgstr " pts"
+msgstr "16 bitu ar peldošo komatu"
 
 #: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "32 Bits Float"
-msgstr ""
+msgstr "32 bitu ar peldošo komatu"
 
 #: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
 msgid "64 Bits Float"
-msgstr ""
+msgstr "64 bitu ar peldošo komatu"
 
 #: pigment/KoCompositeOp.cpp:23 pigment/KoCompositeOpRegistry.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Arithmetic"
-msgstr "Autoietvērējs"
+msgstr "Aritmētisks"
 
 #: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Negative"
-msgstr ""
+msgstr "Negatīvs"
 
 #: pigment/KoCompositeOp.cpp:39 pigment/KoCompositeOpRegistry.cpp:25
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "HSY"
-msgstr "Nokrāsa"
+msgstr "HSY"
 
 #: pigment/KoCompositeOp.cpp:43 pigment/KoCompositeOpRegistry.cpp:26
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "HSI"
-msgstr "Nokrāsa"
+msgstr "HSI"
 
 #: pigment/KoCompositeOp.cpp:47 pigment/KoCompositeOpRegistry.cpp:26
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "HSL"
-msgstr "Nokrāsa"
+msgstr "HSL"
 
 #: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "HSV"
-msgstr "Nokrāsa"
+msgstr "HSV"
 
 #: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Mix"
-msgstr ""
+msgstr "Jaukts"
 
 #: pigment/KoCompositeOpRegistry.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inverse Subtract"
-msgstr "Kopsavilkums"
+msgstr "Inversā atņemšana"
 
 #: pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
 msgid "Burn"
-msgstr ""
+msgstr "Iededzināšana"
 
 #: pigment/KoCompositeOpRegistry.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Additive Subtractive"
-msgstr "Kopsavilkums"
+msgstr "Pievienošana un atņemšana"
 
 #: pigment/KoCompositeOpRegistry.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "color"
-#| msgid "DarkGreen"
+#, kde-format
 msgid "Alpha Darken"
-msgstr "Tumši zaļa"
+msgstr "Alfa tumšāks"
 
 #: pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgid "Bumpmap"
-msgstr ""
+msgstr "Reljefa karte"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Combine Normal Map"
-msgstr "Pielāgots līniju platums"
+msgstr "Kombinēt normālkarti"
 
 #: pigment/resources/KoStopGradient.cpp:419
 #, kde-format
 msgid "SVG Gradient"
-msgstr ""
+msgstr "SVG gradients"
 
 #: rdf/InsertSemanticObjectReferenceAction.cpp:40
 #, kde-format
 msgid "Select the object you want to reference"
-msgstr ""
+msgstr "Atlasiet atsauces objektu"
 
 #: rdf/KoDocumentRdf.cpp:594
 #, kde-format
 msgid "Reference"
-msgstr ""
+msgstr "Atsauce"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:234
 #, kde-format
 msgid "Set For All Existing"
-msgstr ""
+msgstr "Iestatīt visiem pastāvošajiem"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:296
 #, kde-format
@@ -3538,28 +3260,26 @@ msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "<qt>Rediģējumi būs zuduši.<p>Pastāv %1 nederīgs nosacījums.</qt>"
+msgstr[1] "<qt>Rediģējumi būs zuduši.<p>Pastāv %1 nederīgi nosacījumi.</qt>"
+msgstr[2] "<qt>Rediģējumi būs zuduši.<p>Pastāv %1 nederīgu nosacījumi.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:299
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
-msgstr ""
+msgstr "Vai noraidīt nederīgos nosacījumus?"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:338
-#, fuzzy, kde-format
-#| msgid "Red"
+#, kde-format
 msgid "Rdf"
-msgstr "Sarkans"
+msgstr "Rdf"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: rdf/KoDocumentRdfEditWidget.ui:21
-#, fuzzy, kde-format
-#| msgid "Title:"
+#, kde-format
 msgid "Triples"
-msgstr "Nosaukums:"
+msgstr "Trīskārši"
 
 #. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
 #. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
@@ -3568,53 +3288,52 @@ msgstr "Nosaukums:"
 #: rdf/KoSemanticStylesheetsEditor.ui:77
 #, kde-format
 msgid "new"
-msgstr ""
+msgstr "jauns"
 
 #. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
 #: rdf/KoDocumentRdfEditWidget.ui:46
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "copy"
-msgstr "Kompānija:"
+msgstr "kopēt"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
 #. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
 #. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
 #: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
 #: rdf/KoSemanticStylesheetsEditor.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "delete"
-msgstr "Dzēst tekstu"
+msgstr "dzēst"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: rdf/KoDocumentRdfEditWidget.ui:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "Namespaces"
-msgstr "&Aizvietot:"
+msgstr "Nosaukumvietas"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
 #: rdf/KoDocumentRdfEditWidget.ui:123
 #, kde-format
 msgid "Prefix"
-msgstr ""
+msgstr "Prefikss"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
 #: rdf/KoDocumentRdfEditWidget.ui:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Namespace"
-msgstr "&Aizvietot:"
+msgstr "Nosaukumvieta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: rdf/KoDocumentRdfEditWidget.ui:137
 #, kde-format
 msgid "Semantic"
-msgstr ""
+msgstr "Semantika"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: rdf/KoDocumentRdfEditWidget.ui:156
 #, kde-format
 msgid "SPARQL"
-msgstr ""
+msgstr "SPARQL"
 
 #. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
 #: rdf/KoDocumentRdfEditWidget.ui:182
@@ -3675,19 +3394,72 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "family:'Verdana'; font-size:13pt;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Ievadiet te savu SPARQL vaicājumu<br /"
+"># Rezultāti ir redzami zemāk.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefikss „foaf“: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefikss „pkg“:  &lt;http://docs.oasis-"
+"open.org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefikss „geo84“: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">atlasiet ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">kur { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:191
-#, fuzzy, kde-format
+#, kde-format
 msgid "Execute"
-msgstr "Izpildu-"
+msgstr "Izpildīt"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: rdf/KoDocumentRdfEditWidget.ui:221
-#, fuzzy, kde-format
-#| msgid "&Style:"
+#, kde-format
 msgid "Stylesheets"
-msgstr "&Stils:"
+msgstr "Stilu lapas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: rdf/KoDocumentRdfEditWidget.ui:227
@@ -3698,105 +3470,101 @@ msgid ""
 "the stylesheet for all existing semantic objects to the new default "
 "stylesheet as well."
 msgstr ""
+"Iestatīt noklusējuma stilu lapu šī dokumenta semantiskajiem objektiem. "
+"Jaunie RDF objekti automātiski izmantos šo stilu lapu. Tāpat pogas ļauj "
+"iestatīt stilu lapu visiem pastāvošajiem semantiskajiem objektiem uz jaunu "
+"noklusējuma stilu lapu."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
-#, fuzzy, kde-format
-#| msgid "&Style:"
+#, kde-format
 msgid "Apply Stylesheet"
-msgstr "&Stils:"
+msgstr "Pielietot stilu lapu"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
 #: rdf/KoSemanticStylesheetsEditor.cpp:96
 #, kde-format
 msgid "System"
-msgstr ""
+msgstr "Sistēmas"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
 #: rdf/KoSemanticStylesheetsEditor.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "User"
-msgstr "&Ievietot:"
+msgstr "Lietotāja"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:121
 #, kde-format
 msgid "Reapply Current"
-msgstr ""
+msgstr "No jauna pielietot pašreizējo"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:124
 #, kde-format
 msgid "Disassociate"
-msgstr ""
+msgstr "Noņemt asociāciju"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:143
-#, fuzzy, kde-format
-#| msgid "Add..."
+#, kde-format
 msgid "Edit %1"
-msgstr "Pievienot..."
+msgstr "Rediģēt „%1“"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: rdf/KoSemanticStylesheetsEditor.ui:17
-#, fuzzy, kde-format
-#| msgid "&Style:"
+#, kde-format
 msgid "Stylesheet Definition"
-msgstr "&Stils:"
+msgstr "Stilu lapas definīcija"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rdf/KoSemanticStylesheetsEditor.ui:29
 #, kde-format
 msgid "Variables Available"
-msgstr ""
+msgstr "Pieejamie mainīgie"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: rdf/KoSemanticStylesheetsEditor.ui:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Description"
-msgstr "Apraksts:"
+msgstr "Apraksts"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
 #: rdf/KoSemanticStylesheetsEditor.ui:107
-#, fuzzy, kde-format
-#| msgid "&Style:"
+#, kde-format
 msgid "Stylesheet Name"
-msgstr "&Stils:"
+msgstr "Stilu lapas nosaukums"
 
 #: rdf/KoSopranoTableModel.cpp:71
 #, kde-format
 msgid "Empty"
-msgstr ""
+msgstr "Tukšs"
 
 #: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:28
 #, kde-format
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:29
 #, kde-format
 msgid "Literal"
-msgstr ""
+msgstr "Literālis"
 
 #: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:30
-#, fuzzy, kde-format
-#| msgid "Black"
+#, kde-format
 msgid "Blank"
-msgstr "Melns"
+msgstr "Tukšs"
 
 #: rdf/KoSopranoTableModel.cpp:119
-#, fuzzy, kde-format
-#| msgid "Size:"
+#, kde-format
 msgid "Valid"
-msgstr "Izmērs:"
+msgstr "Derīgs"
 
 #: rdf/KoSopranoTableModel.cpp:121
-#, fuzzy, kde-format
-#| msgid "Subject:"
+#, kde-format
 msgid "Subject"
-msgstr "Temats:"
+msgstr "Temats"
 
 #: rdf/KoSopranoTableModel.cpp:123
-#, fuzzy, kde-format
-#| msgid "Picture"
+#, kde-format
 msgid "Predicate"
-msgstr "Attēls"
+msgstr "Predikāts"
 
 #: rdf/KoSopranoTableModel.cpp:125
 #, kde-format
@@ -3804,20 +3572,19 @@ msgid "Object"
 msgstr "Objekts"
 
 #: rdf/KoSopranoTableModel.cpp:127
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgid "Obj Type"
-msgstr "Tips"
+msgstr "Objekta tips"
 
 #: rdf/KoSopranoTableModel.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "DataType"
-msgstr "Datums"
+msgstr "Datu tips"
 
 #: rdf/KoSopranoTableModel.cpp:131
 #, kde-format
 msgid "Stored In"
-msgstr ""
+msgstr "Saglabāts"
 
 #: store/KoEncryptedStore.cpp:244
 #, kde-format
@@ -3825,12 +3592,14 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
+"Šis dokuments satur nezināmu kontrolsummu. Ievadot paroli, tā var netikt "
+"pārbaudīta."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
-msgstr "zīmējums"
+msgstr "Uzmanību"
 
 #: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
 #, kde-format
@@ -3838,13 +3607,15 @@ msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
+"Dokuments satur nezināmu šifrēšanas metodi. Atsevišķas daļas var nebūt "
+"nolasāmas."
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
-msgstr "zīmējums"
+msgstr "Uzmanību"
 
 #: store/KoEncryptedStore.cpp:308
 #, kde-format
@@ -3852,6 +3623,8 @@ msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
+"Šis dokuments satur nederīgus šifrēšanas datus. Dažas daļas var nebūt "
+"nolasāmas."
 
 #: store/KoEncryptedStore.cpp:349
 #, kde-format
@@ -3860,6 +3633,8 @@ msgid ""
 "document will remain unreadable. Please try and save the document again to "
 "prevent losing your work."
 msgstr ""
+"Manifesta datne izskatās bojāta. To nevar modificēt un dokuments nebūs "
+"nolasāms. Mēģiniet vēlreiz saglabāt dokumentu, lai novērstu darba zaudēšanu."
 
 #: store/KoEncryptedStore.cpp:447
 #, kde-format
@@ -3867,222 +3642,196 @@ msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
+"Manifesta datnē nevar rakstīt. Dokuments paliks nenolasāms. Mēģiniet vēlreiz "
+"saglabāt dokumentu, lai novērstu datu zudumu."
 
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
-msgstr ""
+msgstr "Ievadiet paroli datnes atvēršanai."
 
 #: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
-msgstr ""
+msgstr "Ierakstiet paroli, ar kuru šifrēt dokumentu."
 
 #: store/KoEncryptedStore.cpp:783
-#, fuzzy, kde-format
+#, kde-format
 msgid "Do you want to save the password?"
-msgstr "Vai tiešām vēlaties dzēst šo sagatavi?"
+msgstr "Vai vēlaties saglabāt paroli?"
 
 #: store/KoNetAccess.cpp:89
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgid "File '%1' is not readable"
-msgstr "Fails %1 neeksistē."
+msgstr "Datne „%1“ nav nolasāma"
 
 #: store/KoNetAccess.cpp:370
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
-msgstr ""
+msgstr "KĻŪDA: nezināms protokols „%1“"
 
 #: store/KoStore.cpp:152
 #, kde-format
 msgid "Calligra Storage"
-msgstr ""
+msgstr "„Calligra“ krātuve"
 
 #: store/KoStore.cpp:152
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
-msgstr ""
+msgstr "Direktorija režīms nav atbalstīt attālinātām vietām."
 
 #: text/commands/ChangeListCommand.cpp:30
 #: text/commands/ChangeListCommand.cpp:78
 #: text/commands/ChangeListCommand.cpp:90
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change List"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt sarakstu"
 
 #: text/commands/ChangeStylesMacroCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
-msgstr "Mainīt mainīgā apakštipu"
+msgstr "Mainīt stilus"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
 #: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
 #: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
-#, fuzzy
-#| msgid "Text"
 msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr "Teksts"
 
 #: text/commands/DeleteCommand.cpp:56
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst"
 
 #: text/commands/DeleteTableColumnCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Column"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst kolonnu"
 
 #: text/commands/DeleteTableRowCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Row"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst rindu"
 
 #: text/commands/InsertNoteCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
-msgstr "Ievietot saiti"
+msgstr "Ievietot vēri"
 
 #: text/commands/InsertNoteCommand.cpp:22
-#, fuzzy
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Endnote"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot beigu vēri"
 
 #: text/commands/InsertTableColumnCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Column Right"
-msgstr "Ievietot saiti"
+msgstr "Ievietot kolonnu pa labi"
 
 #: text/commands/InsertTableColumnCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Column Left"
-msgstr "Ievietot saiti"
+msgstr "Ievietot kolonnu pa kreisi"
 
 #: text/commands/InsertTableRowCommand.cpp:25
-#, fuzzy
-#| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Row Below"
-msgstr "Ievietot līnijas pārtraukumu"
+msgstr "Ievietot rindu zemāk"
 
 #: text/commands/InsertTableRowCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Row Above"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot rindu augstāk"
 
 #: text/commands/ListItemNumberingCommand.cpp:22
-#, fuzzy
-#| msgid "Change Case"
 msgctxt "(qtundo-format)"
 msgid "Change List Numbering"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt saraksta numurēšanu"
 
 #: text/commands/NewSectionCommand.cpp:22
-#, fuzzy
-#| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "New Section"
-msgstr "Pabeigšana"
+msgstr "Jauna atlase"
 
 #: text/commands/ParagraphFormattingCommand.cpp:82
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr "Normāls rindkopas teksts"
+msgstr "Tiešs rindkopas formatējums"
 
 #: text/commands/RenameSectionCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Section"
-msgstr "Izveidot sagatavi"
+msgstr "Pārdēvēt sadaļu"
 
 #: text/commands/ResizeTableCommand.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr "Ievietot saiti"
+msgstr "Mainīt kolonnas platumu"
 
 #: text/commands/ResizeTableCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr "Ievietot saiti"
+msgstr "Mainīt rindas augstumu"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "Sadalīt sadaļu sākumus"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "Sadalīt sadaļu beigas"
 
 #: text/commands/TextPasteCommand.cpp:53
-#, fuzzy
-#| msgid "Shadow:"
 msgctxt "(qtundo-format)"
 msgid "Paste As Text"
-msgstr "Ēnojums:"
+msgstr "Ielīmēt kā tekstu"
 
 #: text/commands/TextPasteCommand.cpp:55
-#, fuzzy
-#| msgid "Date"
 msgctxt "(qtundo-format)"
 msgid "Paste"
-msgstr "Datums"
+msgstr "Ielīmēt"
 
 #: text/InsertTextLocator.cpp:13
 #, kde-format
 msgid "Index Reference"
-msgstr ""
+msgstr "Indeksa atsauce"
 
 #: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
 #, kde-format
 msgid "Text Reference"
-msgstr ""
+msgstr "Teksta atsauce"
 
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr ""
+msgstr "Vispirms izveidojiet atsauces indeksu."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
 msgid "Select the index you want to reference"
-msgstr ""
+msgstr "Atlasiet indeksu, uz kuru vēlaties atsaukties"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Atrasta %1 atbilstība"
+msgstr[1] "Atrastas %1 atbilstības"
+msgstr[2] "Atrasts %1 atbilstību"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found no match"
-msgstr ""
+msgstr "Atbilstības nav atrastas"
 
 #: text/KoReplaceStrategy.cpp:43
 #, kde-format
@@ -4091,28 +3840,28 @@ msgid ""
 "\n"
 "No text was replaced"
 msgstr ""
+"Atbilstība nav atrasta\n"
+"\n"
+"Nekāds teksts nav aizstāts"
 
 #: text/KoReplaceStrategy.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "Aizvietot tekstu"
-msgstr[1] "Aizvietot tekstu"
-msgstr[2] "Aizvietot tekstu"
+msgstr[0] "Veikta %1 aizstāšana"
+msgstr[1] "Veiktas %1 aizstāšanas"
+msgstr[2] "Veikts %1 aizstāšanu"
 
 #: text/KoReplaceStrategy.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "We add the 1/2 char at the %1"
-#| msgid "Re&place 1/2... with %1..."
+#, kde-format
 msgid "Replace %1 with %2?"
-msgstr "Ai&zvietot 1/2... ar %1..."
+msgstr "Vai aizvietot „%1“ ar „%2“?"
 
 #: text/KoSectionModel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Completion"
+#, kde-format
 msgctxt "new numbered section name"
 msgid "New section %1"
-msgstr "Pabeigšana"
+msgstr "Jauna sadaļa %1"
 
 #: text/KoText.cpp:19
 #, kde-format
@@ -4121,286 +3870,237 @@ msgid "None"
 msgstr "Nav"
 
 #: text/KoText.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Underline Style"
 msgid "Single"
 msgstr "Viena"
 
 #: text/KoText.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Underline Style"
 msgid "Double"
 msgstr "Dubulta"
 
 #: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
 #: text/KoTextEditor.cpp:1483
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
-msgstr "Normāls rindkopas teksts"
+msgstr "Jauna rindkopa"
 
 #: text/KoTextEditor.cpp:473
-#, fuzzy
-#| msgid "Bookmark"
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
-msgstr "Grāmatzīme"
+msgstr "Pievienot grāmatzīmi"
 
 #: text/KoTextEditor.cpp:488
-#, fuzzy
-#| msgid "Position"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr "Amats"
+msgstr "Pievienot anotāciju"
 
 #: text/KoTextEditor.cpp:512
-#, fuzzy
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot indeksu"
 
 #: text/KoTextEditor.cpp:538
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot mainīgo"
 
 #: text/KoTextEditor.cpp:603
-#, fuzzy
-#| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
-msgstr "Ievietot līnijas pārtraukumu"
+msgstr "Ievietot atdalītāju"
 
 #: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
 #: text/KoTextEditor.cpp:928
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot tabulu"
 
 #: text/KoTextEditor.cpp:1068
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
-msgstr "Maliņas"
+msgstr "Apvienot šūnas"
 
 #: text/KoTextEditor.cpp:1085
-#, fuzzy
-#| msgid "&Split View"
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
-msgstr "&Sadalīt skatu"
+msgstr "Sadalīt šūnas"
 
 #: text/KoTextEditor.cpp:1113
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
-msgstr "Pielāgot platumam"
+msgstr "Mainīt tabulas platumu"
 
 #: text/KoTextEditor.cpp:1129
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr ""
+msgstr "Mainīt apmales formatējumu"
 
 #: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
 #: text/KoTextEditor.cpp:1196
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
-msgstr "Ievietot tekstu"
+msgstr "Ievietot satura rādītāju"
 
 #: text/KoTextEditor.cpp:1235
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
-msgstr "Ievietot tekstu"
+msgstr "Mainīt satura rādītāju"
 
 #: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
 #: text/KoTextEditor.cpp:1273
-#, fuzzy
-#| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
-msgstr "Ievietot līnijas pārtraukumu"
+msgstr "Ievietot bibliogrāfiju"
 
 #: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
-#, fuzzy
-#| msgid "Position"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
-msgstr "Amats"
+msgstr "Pievienot citātus"
 
 #: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
 #: text/KoTextEditor.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Typing"
-msgstr ""
+msgstr "Rakstīšana"
 
 #: text/KoTextEditor_format.cpp:57
-#, fuzzy
-#| msgid "Bold"
 msgctxt "(qtundo-format)"
 msgid "Bold"
 msgstr "Treknraksts"
 
 #: text/KoTextEditor_format.cpp:70
-#, fuzzy
-#| msgid "Italic:"
 msgctxt "(qtundo-format)"
 msgid "Italic"
-msgstr "Slīpraksts:"
+msgstr "Kursīvs"
 
 #: text/KoTextEditor_format.cpp:83
-#, fuzzy
-#| msgid "Underline"
 msgctxt "(qtundo-format)"
 msgid "Underline"
-msgstr "Pasvītrot"
+msgstr "Pasvītrots"
 
 #: text/KoTextEditor_format.cpp:102
-#, fuzzy
-#| msgid "Strikeout:"
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
-msgstr "Pārstrīpots:"
+msgstr "Pārsvītrots"
 
 #: text/KoTextEditor_format.cpp:139 text/KoTextEditor_format.cpp:140
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Alignment"
-msgstr "Mainīt fonta stilu?"
+msgstr "Mainīt izlīdzinājumu"
 
 #: text/KoTextEditor_format.cpp:157
-#, fuzzy
-#| msgid "Vertical alignment:"
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Alignment"
-msgstr "Vertikālā izlīdzināšana :"
+msgstr "Iestatīt vertikālo izlīdzinājumu"
 
 #: text/KoTextEditor_format.cpp:192 text/KoTextEditor_format.cpp:193
-#, fuzzy
-#| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
-msgstr "Mainīt atkāpi"
+msgstr "Samazināt atkāpi"
 
 #: text/KoTextEditor_format.cpp:229 text/KoTextEditor_format.cpp:230
-#, fuzzy
-#| msgid "Change Indent"
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
-msgstr "Mainīt atkāpi"
+msgstr "Palielināt atkāpi"
 
 #: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
-#, fuzzy
-#| msgid "Change font size?"
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
-msgstr "Mainīt fonta izmēru?"
+msgstr "Samazināt fonta izmēru"
 
 #: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
-#, fuzzy
-#| msgid "Change font size?"
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
-msgstr "Mainīt fonta izmēru?"
+msgstr "Palielināt fonta izmēru"
 
 #: text/KoTextEditor_format.cpp:294
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Font"
-msgstr "Ievietot saiti"
+msgstr "Norādīt fontu"
 
 #: text/KoTextEditor_format.cpp:307
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
-msgstr "Ievietot saiti"
+msgstr "Norādīt fonta izmēru"
 
 #: text/KoTextEditor_format.cpp:320
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
-msgstr "Sekunde"
+msgstr "Norādīt fona krāsu"
 
 #: text/KoTextEditor_format.cpp:333
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
-msgstr ""
+msgstr "Norādīt teksta krāsu"
 
 #: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
-msgstr "Izveidot jaunu stilu"
+msgstr "Norādīt rakstzīmes stilu"
 
 #: text/KoTextEditor_format.cpp:466
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
-msgstr "Normāls rindkopas teksts"
+msgstr "Norādīt rindkopas stilu"
 
 #: text/KoTextEditor_format.cpp:528
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"
-msgstr "Datuma formāts"
+msgstr "Formatējums"
 
 #: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format"
-msgstr "Datuma formāts"
+msgstr "Formatēt"
 
 #: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default"
-msgstr "&Noklusētais"
+msgstr "Noklusējums"
 
 #: widgets/KoColorPopupAction.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity"
-msgstr "Ievietot saiti"
+msgstr "Necaurspīdība"
 
 #: widgets/KoColorSetWidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "Recent file:"
+#, kde-format
 msgid "Recent:"
-msgstr "Nesens fails:"
+msgstr "Nesenās"
 
 #: widgets/KoColorSetWidget.cpp:163
-#, fuzzy, kde-format
-#| msgid "More Colors..."
+#, kde-format
 msgid "Add / Remove Colors..."
-msgstr "Vairāk krāsu..."
+msgstr "Pievienot / noņemt krāsas..."
 
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "Pievienot jaunu autora profilu (sākas kā pašreizējā kopija)"
 
 #: widgets/KoConfigAuthorPage.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the author profile"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst autora profilu"
 
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name (not duplicate or blank name):"
-msgstr ""
+msgstr "Nosaukums (nedrīkst atkārtoties vai būt tukšs):"
 
 #: widgets/KoConfigAuthorPage.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name of Profile"
-msgstr "Dzēst tekstu"
+msgstr "Profila nosaukums"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
 #, kde-format
 msgid "Name:"
-msgstr "Nosaukums:"
+msgstr "Vārds:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
 #: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
@@ -4412,19 +4112,19 @@ msgstr "Iniciāļi:"
 #: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
 #, kde-format
 msgid "Title:"
-msgstr "Nosaukums:"
+msgstr "Uzruna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
 #: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
 #, kde-format
 msgid "Position:"
-msgstr "Novietojums:"
+msgstr "Amats:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
 #: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
 #, kde-format
 msgid "Company:"
-msgstr "Kompānija:"
+msgstr "Uzņēmums:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
 #: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
@@ -4475,9 +4175,9 @@ msgid "Country:"
 msgstr "Valsts:"
 
 #: widgets/KoCsvImportDialog.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Data"
-msgstr "Importēt dokumentu"
+msgstr "Importēt datus"
 
 #: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
 #: widgets/KoCsvImportDialog.cpp:483
@@ -4497,9 +4197,9 @@ msgid "Date"
 msgstr "Datums"
 
 #: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
-#, fuzzy, kde-format
+#, kde-format
 msgid "Currency"
-msgstr "Pašreizējā sekcija"
+msgstr "Valūta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
@@ -4514,10 +4214,12 @@ msgid ""
 "Please check the ranges you specified. The start value must be lower than "
 "the end value."
 msgstr ""
+"Pārbaudiet norādītos diapazonus. Sākuma vērtībai ir jābūt zemākai par beigu "
+"vērtību."
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
 #: widgets/KoCsvImportDialog.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data"
 msgstr "Datums"
 
@@ -4525,190 +4227,185 @@ msgstr "Datums"
 #: widgets/KoCsvImportDialog.ui:64
 #, kde-format
 msgid "First row contains headers"
-msgstr ""
+msgstr "Pirmā rinda satur virsrakstus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
 #: widgets/KoCsvImportDialog.ui:77
 #, kde-format
 msgid "First column contains headers"
-msgstr ""
+msgstr "Pirmā kolonna satur virsrakstus"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
 #: widgets/KoCsvImportDialog.ui:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format"
-msgstr "Datuma formāts"
+msgstr "Formāts"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
 #: widgets/KoCsvImportDialog.ui:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delimiter"
-msgstr "Kreisais atdalītājs"
+msgstr "Atdalītājs"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: widgets/KoCsvImportDialog.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comma"
-msgstr "Kompānija"
+msgstr "Komats"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
 #: widgets/KoCsvImportDialog.ui:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Semicolon"
-msgstr "Sekunde"
+msgstr "Semikols"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
 #: widgets/KoCsvImportDialog.ui:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other"
-msgstr "Enter"
+msgstr "Cits"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
 #: widgets/KoCsvImportDialog.ui:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tabulator"
-msgstr "&Tabulators"
+msgstr "Tabulators"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
 #: widgets/KoCsvImportDialog.ui:150
 #, kde-format
 msgid "Space"
-msgstr "Space"
+msgstr "Atstarpe"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: widgets/KoCsvImportDialog.ui:195
 #, kde-format
 msgid "Text&quote:"
-msgstr ""
+msgstr "Tekstacitāts:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.ui:212
 #, kde-format
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.ui:217
 #, kde-format
 msgid "'"
-msgstr ""
+msgstr "'"
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
 #: widgets/KoCsvImportDialog.ui:246
 #, kde-format
 msgid "Decimal symbol:"
-msgstr ""
+msgstr "Decimālais simbols"
 
 #. i18n: ectx: property (text), widget (QLabel, label4)
 #: widgets/KoCsvImportDialog.ui:275
 #, kde-format
 msgid "Thousands separator:"
-msgstr ""
+msgstr "Tūkstošu atdalītājs"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
 #: widgets/KoCsvImportDialog.ui:320
 #, kde-format
 msgid "Ignore duplicate delimiters"
-msgstr ""
+msgstr "Ignorēt dublējošos atdalītājus"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: widgets/KoCsvImportDialog.ui:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Format:"
-msgstr "Datuma formāts"
+msgstr "&Formāts:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
 #: widgets/KoCsvImportDialog.ui:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ranges"
-msgstr "Oranža"
+msgstr "Diapazoni"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
 #: widgets/KoCsvImportDialog.ui:347
-#, fuzzy, kde-format
+#, kde-format
 msgid "Update"
-msgstr "Datums"
+msgstr "Atjaunināt"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: widgets/KoCsvImportDialog.ui:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import columns:"
-msgstr "Importēt dokumentu"
+msgstr "Importēt kolonnas:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: widgets/KoCsvImportDialog.ui:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import lines:"
-msgstr "Importēt stilu"
+msgstr "Importēt rindas:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: widgets/KoCsvImportDialog.ui:443 widgets/KoCsvImportDialog.ui:466
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "to"
-msgstr "Autors"
+msgstr "līdz"
 
 #: widgets/KoDialog.cpp:246
 #, kde-format
 msgid "&Try"
-msgstr ""
+msgstr "&Mēģināt"
 
 #: widgets/KoDialog.cpp:449
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgid "modified"
-msgstr "Modificēts:"
+msgstr "modificēts"
 
 #: widgets/KoDialog.cpp:458
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
-msgstr ""
+msgstr " — "
 
 #: widgets/KoDialog.cpp:813
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Details"
-msgstr "&Noklusētais"
+msgstr "&Informācija"
 
 #: widgets/KoDialog.cpp:961
 #, kde-format
 msgid "Get help..."
-msgstr ""
+msgstr "Iegūt palīdzību..."
 
 #: widgets/KoDockWidgetTitleBar.cpp:54
-#, fuzzy, kde-format
-#| msgid "Custom Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Pielāgots dokuments"
+msgstr "Peldošs dokers"
 
 #: widgets/KoDockWidgetTitleBar.cpp:61
-#, fuzzy, kde-format
-#| msgid "Custom Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Pielāgots dokuments"
+msgstr "Aizvērt dokeru"
 
 #: widgets/KoDockWidgetTitleBar.cpp:71
-#, fuzzy, kde-format
-#| msgid "Custom Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
-msgstr "Pielāgots dokuments"
+msgstr "Sakļaut dokeru"
 
 #: widgets/KoDockWidgetTitleBar.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Ceļvedis Līnijas"
+msgstr "Slēgt dokeru"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
 #: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
 #: widgets/KoDocumentInfoDlg.cpp:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Encrypt"
-msgstr "Apraksts:"
+msgstr "Š&ifrēt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:64
@@ -4732,18 +4429,17 @@ msgstr "Pēdējo reizi drukāts:"
 #: widgets/koDocumentInfoAboutWidget.ui:158
 #, kde-format
 msgid "Total editing time:"
-msgstr "Kopējas labošanas laiks:"
+msgstr "Kopējas rediģēšanas laiks:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Encryption:"
-msgstr "Apraksts:"
+msgstr "Šifrējums:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:188
-#, fuzzy, kde-format
-#| msgid "Title:"
+#, kde-format
 msgctxt "Document title"
 msgid "Title:"
 msgstr "Nosaukums:"
@@ -4762,9 +4458,9 @@ msgstr "Modificēts:"
 
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:231
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comments:"
-msgstr "Komentārs"
+msgstr "Komentāri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:251
@@ -4774,23 +4470,21 @@ msgstr "Izveidots:"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
 #: widgets/koDocumentInfoAboutWidget.ui:261
-#, fuzzy, kde-format
-#| msgid "Edit Path"
+#, kde-format
 msgid "Path:"
-msgstr "Rediģēt ceļu"
+msgstr "Ceļš:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbReset)
 #: widgets/koDocumentInfoAboutWidget.ui:280
 #, kde-format
 msgid "&Reset"
-msgstr "&Atstatīt"
+msgstr "&Atiestatīt"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Language:"
-msgstr "Ielīmēt tekstu"
+msgstr "Valoda:"
 
 #: widgets/KoDocumentInfoDlg.cpp:108 widgets/KoDocumentInfoDlg.cpp:109
 #, kde-format
@@ -4798,55 +4492,54 @@ msgid "General"
 msgstr "Pamata"
 
 #: widgets/KoDocumentInfoDlg.cpp:136
-#, fuzzy, kde-format
-#| msgid "Paste Text"
+#, kde-format
 msgid "Last saved by"
-msgstr "Ielīmēt tekstu"
+msgstr "Pēdējo reizi saglabāja"
 
 #: widgets/KoDocumentInfoDlg.cpp:193
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr ""
+msgstr "Izmantojiet ';' (Piemērs: Office;KDE;Calligra)"
 
 #: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:313
-#, fuzzy, kde-format
+#, kde-format
 msgid "This document will be decrypted"
-msgstr "Šis neizskatās pēc MathML dokumenta."
+msgstr "Dokuments tiks atšifrēts"
 
 #: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:315
-#, fuzzy, kde-format
+#, kde-format
 msgid "Do not decrypt"
-msgstr "Apraksts:"
+msgstr "Neatšifrēt"
 
 #: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgid "This document is encrypted"
-msgstr "Šis neizskatās pēc MathML dokumenta."
+msgstr "Šis dokuments ir šifrēts"
 
 #: widgets/KoDocumentInfoDlg.cpp:227 widgets/KoDocumentInfoDlg.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgid "D&ecrypt"
-msgstr "Apraksts:"
+msgstr "A&tšifrēt"
 
 #: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgid "This document will be encrypted."
-msgstr "Šis neizskatās pēc MathML dokumenta."
+msgstr "Šis dokuments tiks šifrēts."
 
 #: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:325
-#, fuzzy, kde-format
+#, kde-format
 msgid "Do not encrypt"
-msgstr "Apraksts:"
+msgstr "Nešifrēt"
 
 #: widgets/KoDocumentInfoDlg.cpp:235 widgets/KoDocumentInfoDlg.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "This document is not encrypted"
-msgstr "Šis neizskatās pēc MathML dokumenta."
+msgstr "Šis dokuments nav šifrēts"
 
 #: widgets/KoDocumentInfoDlg.cpp:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "This document does not support encryption"
-msgstr "Šis neizskatās pēc MathML dokumenta."
+msgstr "Šis dokuments neatbalsta šifrēšanu"
 
 #: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
@@ -4854,16 +4547,18 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
+"<qt>Šī dokumenta atšifrēšana tam noņems paroles aizsardzību.<p>Vai tik un tā "
+"vēlaties atšifrēt šo datni?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:351
-#, fuzzy, kde-format
+#, kde-format
 msgid "Confirm Decrypt"
-msgstr "Apstiprināt eksportēšanu"
+msgstr "Apstiprināt atšifrēšanu"
 
 #: widgets/KoDocumentInfoDlg.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrypt"
-msgstr "Apraksts:"
+msgstr "Atšifrēt"
 
 #: widgets/KoDocumentInfoDlg.cpp:361
 #, kde-format
@@ -4871,12 +4566,14 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
+"<qt>Dokumentu nevar automātiski saglabāt.<p>Lai pabeigtu atšifrēšanu, "
+"saglabājiet šo dokumentu.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
 #: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Document"
-msgstr "Saglabāt dokumentu kā"
+msgstr "Saglabāt dokumentu"
 
 #: widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
@@ -4884,6 +4581,8 @@ msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
+"<qt>Lai pabeigtu atšifrēšanu, dokuments ir jāsaglabā.<p>Vai vēlaties "
+"dokumentu saglabāt tagad?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
@@ -4892,16 +4591,19 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
+"<qt>Šobrīd dokuments ir saglabāts kā %1. Dokuments ir jāmaina uz <b>OASIS "
+"OpenDocument</b>, lai to varētu šifrēt.<p>Vai vēlaties datnes formātu mainīt "
+"uz„OASIS OpenDocument“?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:391
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Filetype"
-msgstr "Mainīt mainīgā apakštipu"
+msgstr "Mainīt datnes tipu"
 
 #: widgets/KoDocumentInfoDlg.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt"
 
 #: widgets/KoDocumentInfoDlg.cpp:404
 #, kde-format
@@ -4909,6 +4611,8 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
+"<qt>Dokumentu nevar automātiski saglabāt.<p>Lai pabeigtu šifrēšanu, "
+"saglabājiet dokumentu.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:412
 #, kde-format
@@ -4917,69 +4621,65 @@ msgid ""
 "encryption the document needs to be saved.<p>Do you want to save the "
 "document now?</qt>"
 msgstr ""
+"<qt>Kopš atvēršanas dokuments ir izmainīts. Lai pabeigtu šifrēšanu, "
+"dokuments ir jāsaglabā.<p>Vai vēlaties dokumentu saglabāt tagad?</qt>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, add)
 #: widgets/KoEditColorSet.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
-msgstr "&Pievienot"
+msgstr "Pievienot"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove"
-msgstr "Aizvākt rindu"
+msgstr "Noņemt"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, open)
 #: widgets/KoEditColorSet.ui:65
-#, fuzzy, kde-format
-#| msgid "Palettes"
+#, kde-format
 msgid "Open palette"
-msgstr "Paletes"
+msgstr "Atvērt paleti"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, save)
 #: widgets/KoEditColorSet.ui:75
-#, fuzzy, kde-format
-#| msgid "Palettes"
+#, kde-format
 msgid "Save palette"
-msgstr "Paletes"
+msgstr "Saglabāt paleti"
 
 #: widgets/KoEditColorSetDialog.cpp:146
 #, kde-format
 msgid "Add Color To Palette"
-msgstr ""
+msgstr "Pievienot Paletei krāsu"
 
 #: widgets/KoEditColorSetDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Bookmark name:"
+#, kde-format
 msgid "Color name:"
-msgstr "Grāmatzīmes nosaukums:"
+msgstr "Krāsas nosaukums:"
 
 #: widgets/KoEditColorSetDialog.cpp:174
 #, kde-format
 msgid "Gimp Color Palette (*.gpl)"
-msgstr ""
+msgstr "„Gimp“ krāsu palete (*.gpl)"
 
 #: widgets/KoEditColorSetDialog.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "Vai tiešām vēlaties dzēst šo sagatavi?"
+msgstr "Nevar rakstīt paletes datnē %1. Iespējams, tā ir tikai lasāma. "
 
 #: widgets/KoEditColorSetDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Palettes"
+#, kde-format
 msgid "Palette"
-msgstr "Paletes"
+msgstr "Palete"
 
 #: widgets/KoEditColorSetDialog.cpp:201
-#, fuzzy, kde-format
-#| msgid "Remove Column"
+#, kde-format
 msgid "Add/Remove Colors"
-msgstr "Aizvākt kolonnu"
+msgstr "Pievienot/noņemt krāsas"
 
 #: widgets/KoFillConfigWidget.cpp:146
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "Nav"
@@ -4988,72 +4688,68 @@ msgstr "Nav"
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
-msgstr ""
+msgstr "Tīrtoņa"
 
 #: widgets/KoFillConfigWidget.cpp:162
 #, kde-format
 msgid "Gradient"
-msgstr ""
+msgstr "Gradients"
 
 #: widgets/KoFillConfigWidget.cpp:170
 #, kde-format
 msgid "Pattern"
-msgstr ""
+msgstr "Raksts"
 
 #: widgets/KoFillConfigWidget.cpp:184
-#, fuzzy, kde-format
-#| msgid "Change Case"
+#, kde-format
 msgid "Change the filling color"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt aizpildījuma krāsu"
 
 #: widgets/KoFillConfigWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Change Case"
+#, kde-format
 msgid "Change the filling gradient"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt aizpildījuma gradientu"
 
 #: widgets/KoFillConfigWidget.cpp:202
-#, fuzzy, kde-format
-#| msgid "Change Case"
+#, kde-format
 msgid "Change the filling pattern"
-msgstr "Mainīt reģistru"
+msgstr "Mainīt aizpildījuma rakstu"
 
 #: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Target:"
-msgstr ""
+msgstr "Mērķis:"
 
 #: widgets/KoGradientEditWidget.cpp:151
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "Aizpildīt"
 
 #: widgets/KoGradientEditWidget.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
-msgstr "Lini"
+msgstr "Lineārs"
 
 #: widgets/KoGradientEditWidget.cpp:158
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
-msgstr ""
+msgstr "Radiāls"
 
 #: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "Konisks"
 
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Repeat:"
-msgstr ""
+msgstr "Atkārtot:"
 
 #: widgets/KoGradientEditWidget.cpp:164
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "No gradient spread"
 msgid "None"
 msgstr "Nav"
@@ -5061,74 +4757,67 @@ msgstr "Nav"
 #: widgets/KoGradientEditWidget.cpp:165
 #, kde-format
 msgid "Reflect"
-msgstr ""
+msgstr "Atspoguļot"
 
 #: widgets/KoGradientEditWidget.cpp:166
 #, kde-format
 msgid "Repeat"
-msgstr ""
+msgstr "Atkārtot"
 
 #: widgets/KoGradientEditWidget.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overall opacity:"
-msgstr "Pilsēta:"
+msgstr "Kopējā necaurspīdība:"
 
 #: widgets/KoGradientEditWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "&Color:"
+#, kde-format
 msgid "Color stop:"
-msgstr "&Krāsa:"
+msgstr "Krāsu apturēšana:"
 
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
-msgstr ""
+msgstr "Apturēt krāsu."
 
 #: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr ""
+msgstr "&Pievienot iepriekš noteiktus gradientus"
 
 #: widgets/KoModeBox.cpp:566
-#, fuzzy, kde-format
-#| msgid "Text"
+#, kde-format
 msgid "Icon and Text"
-msgstr "Teksts"
+msgstr "Ikona un teksts"
 
 #: widgets/KoModeBox.cpp:567
 #, kde-format
 msgid "Icon only"
-msgstr ""
+msgstr "Tikai ikona"
 
 #: widgets/KoModeBox.cpp:570
-#, fuzzy, kde-format
-#| msgid "Align Auto"
+#, kde-format
 msgid "Tabs side"
-msgstr "Automātiska izlīdzināšana"
+msgstr "Cilnes malā"
 
 #: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Align Auto"
+#, kde-format
 msgid "Top side"
-msgstr "Automātiska izlīdzināšana"
+msgstr "Augšpuse"
 
 #: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Align Auto"
+#, kde-format
 msgid "Bottom side"
-msgstr "Automātiska izlīdzināšana"
+msgstr "Apakšpuse"
 
 #: widgets/KoModeBox.cpp:578
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgid "Left side"
-msgstr "Kreisā atkāpe"
+msgstr "Kreisā puse"
 
 #: widgets/KoModeBox.cpp:579
-#, fuzzy, kde-format
-#| msgid "Right indent"
+#, kde-format
 msgid "Right side"
-msgstr "Labā atkāpe"
+msgstr "Labā puse"
 
 #: widgets/KoPageLayoutDialog.cpp:36
 #, kde-format
@@ -5136,57 +4825,50 @@ msgid "Page Layout"
 msgstr "Lappuses izkārtojums"
 
 #: widgets/KoPageLayoutDialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "Empty Document"
+#, kde-format
 msgid "Apply to document"
-msgstr "Tukšs dokuments"
+msgstr "Pielietot dokumentam"
 
 #: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "Left:"
+#, kde-format
 msgid "Left Edge:"
-msgstr "Kreisais:"
+msgstr "Kreisā mala:"
 
 #: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Right:"
+#, kde-format
 msgid "Right Edge:"
-msgstr "Labais:"
+msgstr "Labā mala:"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Last Printing"
+#, kde-format
 msgid "Binding Edge:"
-msgstr "Pēdējo reizi drukāts"
+msgstr "Iesējuma mala:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Page Size"
+#, kde-format
 msgid "Page Edge:"
-msgstr "Lappuses izmērs"
+msgstr "Lappuses mala:"
 
 #: widgets/KoPageLayoutWidget.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Facing Pages:"
-msgstr "Pielāgot lappusei"
+msgstr "Pretējās lappuses:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
 #: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "Facing pages"
-msgstr "Pielāgot lappusei"
+msgstr "Pretējās lappuses"
 
 #: widgets/KoPageLayoutWidget.cpp:283
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgid "Page Layout:"
-msgstr "Lappuses izkārtojums"
+msgstr "Lappuses izkārtojums:"
 
 #: widgets/KoPageLayoutWidget.cpp:284
-#, fuzzy, kde-format
-#| msgid "a spreadsheet"
+#, kde-format
 msgid "Page spread"
-msgstr "tabullapa"
+msgstr "Atvērums"
 
 #. i18n: ectx: property (text), widget (QLabel, unitsLabel)
 #: widgets/KoPageLayoutWidget.ui:25
@@ -5198,7 +4880,7 @@ msgstr "Vienība:"
 #: widgets/KoPageLayoutWidget.ui:45
 #, kde-format
 msgid "Follow style:"
-msgstr ""
+msgstr "Ievērot stilu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoPageLayoutWidget.ui:61
@@ -5208,159 +4890,148 @@ msgstr "Izmērs:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/KoPageLayoutWidget.ui:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Width:"
-msgstr "&Platums:"
+msgstr "Platums:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height:"
-msgstr "&Augstums:"
+msgstr "Augstums:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Orientation:"
-msgstr "prezentācija"
+msgstr "Orientācija:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, portrait)
 #: widgets/KoPageLayoutWidget.ui:129
-#, fuzzy, kde-format
-#| msgid "&Portrait"
+#, kde-format
 msgid "Portrait"
-msgstr "&Portrets"
+msgstr "Portrets"
 
 #. i18n: ectx: property (text), widget (QRadioButton, landscape)
 #: widgets/KoPageLayoutWidget.ui:136
-#, fuzzy, kde-format
-#| msgid "La&ndscape"
+#, kde-format
 msgid "Landscape"
-msgstr "Ai&nava"
+msgstr "Ainava"
 
 #. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
 #: widgets/KoPageLayoutWidget.ui:143
-#, fuzzy, kde-format
-#| msgid "Language:"
+#, kde-format
 msgid "Facing pages:"
-msgstr "Valoda:"
+msgstr "Pretējās lappuses:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, singleSided)
 #: widgets/KoPageLayoutWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "Single"
+#, kde-format
 msgid "Single sided"
-msgstr "Viena"
+msgstr "Vienas puses"
 
 #. i18n: ectx: property (text), widget (QLabel, directionLabel)
 #: widgets/KoPageLayoutWidget.ui:167
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text direction:"
-msgstr "&Teksta krāsa:"
+msgstr "Teksta virziens:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
 #: widgets/KoPageLayoutWidget.ui:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic"
-msgstr "Autoietvērējs"
+msgstr "Automātisks"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
 #: widgets/KoPageLayoutWidget.ui:189
-#, fuzzy, kde-format
-#| msgid "String:"
+#, kde-format
 msgid "Left to right"
-msgstr "Virkne:"
+msgstr "No kreisās uz labo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
 #: widgets/KoPageLayoutWidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Right indent"
+#, kde-format
 msgid "Right to left"
-msgstr "Labā atkāpe"
+msgstr "No labās uz kreiso"
 
 #. i18n: ectx: property (title), widget (QGroupBox, margins)
 #: widgets/KoPageLayoutWidget.ui:204
 #, kde-format
 msgid "Margins"
-msgstr "Maliņas"
+msgstr "Piemales"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Top:"
-msgstr "&Augšā:"
+msgstr "Augšā:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-#| msgid "Last Printing"
+#, kde-format
 msgid "Binding edge:"
-msgstr "Pēdējo reizi drukāts"
+msgstr "Iesējuma mala:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Preview"
+#, kde-format
 msgid "Page edge:"
-msgstr "Lappuses priekšskatījums"
+msgstr "Lapas mala:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:270
-#, fuzzy, kde-format
-#| msgid "Align Auto"
+#, kde-format
 msgid "Bottom:"
-msgstr "Automātiska izlīdzināšana"
+msgstr "Apakša:"
 
 #: widgets/KoResourceItemChooser.cpp:138
-#, fuzzy, kde-format
-#| msgid "Import Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
-msgstr "Importēt dokumentu"
+msgstr "Importēt resursu"
 
 #: widgets/KoResourceItemChooser.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst resursu"
 
 #: widgets/KoResourceItemChooser.cpp:191
-#, fuzzy, kde-format
-#| msgid "Choose Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
-msgstr "Filtra izvēle"
+msgstr "Atlasiet pievienojamo datni"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:105
 #: widgets/KoTagToolButton.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "New tag"
-msgstr "Normāls rindkopas teksts"
+msgstr "Jauna birka"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:140
 #, kde-format
 msgid "Assign to tag"
-msgstr ""
+msgstr "Piešķirt birkai"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove from this tag"
-msgstr "Noņemt saiti"
+msgstr "Noņemt no šīs birkas"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove from other tag"
-msgstr "Noņemt saiti"
+msgstr "Noņemt no citām birkām"
 
 #: widgets/KoResourceModel.cpp:69
 #, kde-format
 msgid "Tags"
-msgstr ""
+msgstr "Birkas"
 
 #: widgets/KoResourceTaggingManager.cpp:133
 #, kde-format
 msgid "Unable to undelete tag"
-msgstr ""
+msgstr "Neizdodas atsaukt birkas dzēšanu"
 
 #: widgets/KoResourceTaggingManager.cpp:134
 #, kde-format
@@ -5368,16 +5039,18 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
+"<qt>Birka, kuras dzēšanu mēģināt atsaukt, jau eksistē birku sarakstā."
+"<br>Ievadiet tai jaunu un unikālu nosaukumu.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:142
 #, kde-format
 msgid "Tag was not undeleted."
-msgstr ""
+msgstr "Birkas dzēšana nav atsaukta"
 
 #: widgets/KoRuler.cpp:1174
 #, kde-format
 msgid "First line indent"
-msgstr "Pirmās līnijas atkāpe"
+msgstr "Pirmās rindas atkāpe"
 
 #: widgets/KoRuler.cpp:1177
 #, kde-format
@@ -5392,74 +5065,74 @@ msgstr "Labā atkāpe"
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
 msgid "Change the color of the shadow"
-msgstr ""
+msgstr "Mainīt ēnas krāsu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "Aizmiglojums:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84
 #, kde-format
 msgid "Distance:"
-msgstr ""
+msgstr "Attālums:"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Gala vāciņš"
 
 #: widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "Apaļš vāciņš"
 
 #: widgets/KoStrokeConfigWidget.cpp:97
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "Kvadrātains vāciņš"
 
 #: widgets/KoStrokeConfigWidget.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Miter join"
-msgstr "Maliņas"
+msgstr "Stūra savienojums"
 
 #: widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "Apaļš savienojums"
 
 #: widgets/KoStrokeConfigWidget.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bevel join"
-msgstr "Noņemt saiti"
+msgstr "Slīps savienojums"
 
 #: widgets/KoStrokeConfigWidget.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Miter limit"
-msgstr "Maliņas"
+msgstr "Stūra robeža"
 
 #: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
 msgid "Thickness:"
-msgstr ""
+msgstr "Biezums:"
 
 #: widgets/KoStrokeConfigWidget.cpp:212
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "Iestatiet faktiskās atlases līnijas platumu"
 
 #: widgets/KoStrokeConfigWidget.cpp:228
 #, kde-format
 msgid "Change the color of the line/border"
-msgstr ""
+msgstr "Mainīt rindas/malas krāsu"
 
 #: widgets/KoTagChooserWidget.cpp:42
 #, kde-format
 msgid "Tag"
-msgstr ""
+msgstr "Birka"
 
 #: widgets/KoTagFilterWidget.cpp:39
 #, kde-format
@@ -5476,6 +5149,18 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>Meklēšanas tekst ierakstīšana pievienos vai noņems resursus no "
+"pašreizējā birku skata.<para>Lai filtrētu pēc daļēja, reģistrnejutīgu "
+"resursa nosaukumu:<br><icode>nosaukumadaļa</icode> vai <icode>!"
+"nosaukumadaļa</icode>.</para><para>Citu birku kopu iekļaušana/izņemšana:"
+"<br><icode>[BirkasNosaukums]</icode> vai <icode>![Birkas nosaukums]</icode>."
+"</para><para>Reģistrjutīga un pilna nosaukuma atbilsmes iekļaušana/izņemšana:"
+"<br><icode>\"PrecīzaAtbilsme\"</icode> vai <icode>!\"PrecīzaAtbilsme\"</"
+"icode>.</para>Filtra rezultātus nevar saglabāt <interface>Visu "
+"priekšiestatījumu</interface> skatā.<br>Šajā skatā <interface>„Enter“</"
+"interface> taustiņa nospiešana vai filtra kastes attīrīšana atjaunos visus "
+"vienumus.<br>Izveidojiet un/vai pārslēdzieties uz jaunu birku, ja vēlaties "
+"saglabāt filtrētos resursus nosaukumu kopā.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5490,11 +5175,21 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>Meklēšanas tekst ierakstīšana pievienos vai noņems resursus no "
+"pašreizējā birku skata.<para>Lai filtrētu pēc daļēja, reģistrnejutīgu "
+"resursa nosaukumu:<br><icode>nosaukumadaļa</icode> vai <icode>!"
+"nosaukumadaļa</icode>.</para><para>Citu birku kopu iekļaušana/izņemšana:"
+"<br><icode>[BirkasNosaukums]</icode> vai <icode>![Birkas nosaukums]</icode>."
+"</para><para>Reģistrjutīga un pilna nosaukuma atbilsmes iekļaušana/izņemšana:"
+"<br><icode>\"PrecīzaAtbilsme\"</icode> vai <icode>!\"PrecīzaAtbilsme\"</"
+"icode>.</para> <interface>„Enter“</interface> taustiņa nospiešana vai "
+"noklikšķināšana uz <interface>„Saglabāt“</interface> pogu saglabās izmaiņas."
+"</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
-msgstr ""
+msgstr "Ierakstiet resursa filtrus"
 
 #: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
@@ -5503,147 +5198,139 @@ msgid ""
 "<qt>Save the currently filtered set as the new members of the current tag.</"
 "qt>"
 msgstr ""
+"<qt>Saglabājiet filtrēto kopu kā jaunu pašreizējās birkas locekli.</qt>"
 
 #: widgets/KoTagToolButton.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr ""
+msgstr "<qt>Rādīt birkas kastes opcijas.</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename tag"
-msgstr "Dzēst tekstu"
+msgstr "Pārdēvēt birku"
 
 #: widgets/KoTagToolButton.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete this tag"
-msgstr "Dzēst tekstu"
+msgstr "Dzēst šo birku"
 
 #: widgets/KoTagToolButton.cpp:86
 #, kde-format
 msgid "Clear undelete list"
-msgstr ""
+msgstr "Notīrīt dzēšanas atsaukšanas sarakstu"
 
 #: widgets/KoTagToolButton.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undelete"
-msgstr "Dzēst tekstu"
+msgstr "Atsaukt dzēšanu"
 
 #: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "Icon Size"
-msgstr "Ievietot saiti"
+msgstr "Ikonas izmērs"
 
 #: widgets/KoToolBox.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
-msgstr "&Noklusētais"
+msgstr "Noklusējums"
 
 #: widgets/KoToolBox.cpp:277
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1×%2"
 
 #: widgets/KoToolBoxButton.cpp:53
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toolbox"
-msgstr "Noklusējuma krāsa"
+msgstr "Rīkkopa"
 
 #: widgets/KoToolDocker.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tool Options"
-msgstr "Pabeigšanas opcijas"
+msgstr "Rīka opcijas"
 
 #: widgets/KoToolDocker.cpp:217
 #, kde-format
 msgid "Toggles organizing the options in tabs or not"
-msgstr ""
+msgstr "Ieslēdz/izslēdz opciju izkārtojumu cilnēs"
 
 #: widgets/KoViewItemContextBar.cpp:176
-#, fuzzy, kde-format
-#| msgid "Select Character"
+#, kde-format
 msgid "deselect item"
-msgstr "Izvēlēties rakstzīmi"
+msgstr "noņemt vienuma atlasi"
 
 #: widgets/KoViewItemContextBar.cpp:176
-#, fuzzy, kde-format
-#| msgid "Select Character"
+#, kde-format
 msgid "select item"
-msgstr "Izvēlēties rakstzīmi"
+msgstr "atlasīt vienumu"
 
 #: widgets/KoZoomAction.cpp:189 widgets/KoZoomAction.cpp:201
 #: widgets/KoZoomMode.cpp:11
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: widgets/KoZoomMode.cpp:12
-#, fuzzy
 msgid "Fit Page Width"
-msgstr "Pielāgot platumam"
+msgstr "Ietilpināt lapu platumā"
 
 #: widgets/KoZoomMode.cpp:13
-#, fuzzy
 msgid "Fit Page"
-msgstr "Pielāgot lappusei"
+msgstr "Ietilpināt lapu"
 
 #: widgets/KoZoomMode.cpp:15
 msgid "Actual Pixels"
-msgstr ""
+msgstr "Faktiskie pikseļi"
 
 #: widgets/KoZoomMode.cpp:19
-#, fuzzy
 msgid "Fit Text Width"
-msgstr "Pielāgot platumam"
+msgstr "Ietilpināt tekstu platumā"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format
 msgid "Use same aspect as pixels"
-msgstr ""
+msgstr "Izmantot to pašu aspektu, ko pikseļi"
 
 #: widgets/KoZoomWidget.cpp:78
-#, fuzzy, kde-format
-#| msgid "Completion"
+#, kde-format
 msgid "Zoom to Selection"
-msgstr "Pabeigšana"
+msgstr "Tuvināt uz atlasi"
 
 #: widgets/KoZoomWidget.cpp:87
-#, fuzzy, kde-format
-#| msgid "Completion"
+#, kde-format
 msgid "Zoom to All"
-msgstr "Pabeigšana"
+msgstr "Tuvināt uz visu"
 
 #: widgetutils/KoFileDialog.cpp:394
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Visas datnes"
 
 #: widgetutils/KoFileDialog.cpp:397
 #, kde-format
 msgid "All supported formats"
-msgstr ""
+msgstr "Visi atbalstītie formāti"
 
 #: widgetutils/KoGroupButton.cpp:134
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #, fuzzy
 #~ msgid "E&ncoding:"

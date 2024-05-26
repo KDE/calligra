@@ -2,20 +2,21 @@
 # Copyright (C) 2006, 2007 Free Software Foundation, Inc.
 #
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2007.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2007-12-30 01:41+0200\n"
-"Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
-"Language-Team: Latvian <locale@laka.lv>\n"
+"PO-Revision-Date: 2024-05-13 21:56+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "#-#-#-#-#  csvfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 "#-#-#-#-#  kformulalatexfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "X-Generator: KBabel 1.11.4\n"
 "#-#-#-#-#  kformulamathmlfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
@@ -54,16 +55,14 @@ msgstr ""
 "2);\n"
 
 #: karbon/image/ImageExport.cpp:88
-#, fuzzy, kde-format
-#| msgid "PNG Export Options"
+#, kde-format
 msgid "%1 Export Options"
-msgstr "PNG eksportēšanas opcijas"
+msgstr "%1 eksporta opcijas"
 
 #: karbon/image/ImageExportOptionsWidget.cpp:48
-#, fuzzy, kde-format
-#| msgid "Page %1"
+#, kde-format
 msgid "Page %1"
-msgstr "Lapa %1"
+msgstr "%1. lapa"
 
 #. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
 #: karbon/image/ImageExportOptionsWidget.ui:19
@@ -75,7 +74,7 @@ msgstr "Lapa:"
 #: karbon/image/ImageExportOptionsWidget.ui:34
 #, kde-format
 msgid "Size in Pixels"
-msgstr ""
+msgstr "Izmērs pikseļos"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -83,22 +82,21 @@ msgstr ""
 #: karbon/image/ImageExportOptionsWidget.ui:78
 #, kde-format
 msgid "Image width:"
-msgstr ""
+msgstr "Attēla platums:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: karbon/image/ImageExportOptionsWidget.ui:53
 #: karbon/image/ImageExportOptionsWidget.ui:88
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgid "Image height:"
-msgstr "Augstums:"
+msgstr "Attēla augstums:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: karbon/image/ImageExportOptionsWidget.ui:69
 #, kde-format
 msgid "Size in Units"
-msgstr ""
+msgstr "Izmērs vienībās"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: karbon/image/ImageExportOptionsWidget.ui:98
@@ -110,25 +108,25 @@ msgstr "Izšķirtspēja:"
 #: karbon/image/ImageExportOptionsWidget.ui:108
 #, kde-format
 msgid "Unit:"
-msgstr ""
+msgstr "Vienība:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: karbon/image/ImageExportOptionsWidget.ui:124
 #, kde-format
 msgid "Background Color"
-msgstr ""
+msgstr "Fona krāsa"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColor)
 #: karbon/image/ImageExportOptionsWidget.ui:133
 #, kde-format
 msgid "Color"
-msgstr ""
+msgstr "Krāsa"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOpacity)
 #: karbon/image/ImageExportOptionsWidget.ui:143
 #, kde-format
 msgid "Opacity"
-msgstr ""
+msgstr "Necaurspīdība"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
 #: libmsooxml/MsooXmlReader.cpp:164 libmsooxml/MsooXmlThemesReader.cpp:356
@@ -151,141 +149,134 @@ msgstr ""
 #: words/docx/import/DocxXmlSettingsReader.cpp:79
 #, kde-format
 msgid "Namespace \"%1\" not found"
-msgstr ""
+msgstr "Nosaukumvieta „%1“ nav atrasta"
 
 #: libmsooxml/MsooXmlImport.cpp:92
 #, kde-format
 msgid "Could not open the requested file %1"
-msgstr ""
+msgstr "Neizdevās atvērt pieprasīto datni %1"
 
 #: libmsooxml/MsooXmlImport.cpp:115
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
-msgstr ""
+msgstr "Neizdevās nolasīt pieprasītās datnes „%1“ ZIP direktoriju"
 
 #: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
-#, fuzzy, kde-format
-#| msgid "Passwords"
+#, kde-format
 msgid "Enter password"
-msgstr "Paroles"
+msgstr "Ierakstiet paroli"
 
 #: libmsooxml/MsooXmlImport.cpp:328 libmsooxml/MsooXmlImport.cpp:447
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
-msgstr ""
+msgstr "Dokuments ir šifrēts. Ierakstiet paroli, lai to atšifrētu."
 
 #: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
-msgstr ""
+msgstr "Nepareiza parole, ierakstiet paroli, lai dokumentu atšifrētu:"
 
 #: libmsooxml/MsooXmlImport.cpp:622
 #, kde-format
 msgid "Could not find path for type %1"
-msgstr ""
+msgstr "Neizdevās atrast ceļu tipam %1"
 
 #: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (line %2, column %3)"
-msgstr ""
+msgstr "%1 (%2. rinda, %3. kolonna)"
 
 #: libmsooxml/MsooXmlReader.cpp:132
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
-msgstr ""
+msgstr "%1 (%2, %3. rinda, %4. kolonna)"
 
 #: libmsooxml/MsooXmlReader.cpp:154
 #, kde-format
 msgid "Element \"%1\" not found"
-msgstr ""
+msgstr "Elements „%1“ nav atrasts"
 
 #: libmsooxml/MsooXmlReader.cpp:159
-#, fuzzy, kde-format
-#| msgid "Footnote %1"
+#, kde-format
 msgid "Attribute \"%1\" not found"
-msgstr "Vēre %1"
+msgstr "Atribūts „%1“ nav atrasts"
 
 #: libmsooxml/MsooXmlReader.cpp:169
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
-msgstr ""
+msgstr "Negaidīta atribūta „%2“ vērtība „%1“"
 
 #: libmsooxml/MsooXmlReader.cpp:174
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
-msgstr ""
+msgstr "Negaidīts otrs „%1“ elements"
 
 #: libmsooxml/MsooXmlReader.cpp:191 libmsooxml/MsooXmlReader.cpp:242
 #, kde-format
 msgid "Expected closing of element \"%1\""
-msgstr ""
+msgstr "Negaidīta „%1“ elementa aizvēršana"
 
 #: libmsooxml/MsooXmlReader.cpp:233
 #, kde-format
 msgid "None of expected elements found: %1"
-msgstr ""
+msgstr "Nav atrasts neviens no gaidītajiem elementiem: %1"
 
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr ""
+msgstr "„%2“ datnē nevarēja atrast mērķi identifikatoram „%1“"
 
 #: libmsooxml/MsooXmlRelationships.cpp:93
 #: libmsooxml/MsooXmlRelationships.cpp:112
 #, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr ""
+msgstr "Nevarēja atrast attiecību datni „%1“"
 
 #: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr ""
+msgstr "„%2“ datnē nevarēja atrast attiecības „%1“ mērķi"
 
 #: libmsooxml/MsooXmlUtils.cpp:165
-#, fuzzy, kde-format
-#| msgid ""
-#| "An error has occurred while parsing the KWord file.\n"
-#| "At line: %1, column %2\n"
-#| "Error message: %3"
+#, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
 "Error message: %3"
 msgstr ""
-"Gadījusies kļūda apstrādājot KWord failu.\n"
-"Rinda: %1, kolonna %2\n"
-"Kļūdas paziņojums: %3"
+"Parsēšanas kļūda pamatdokumenta %1. rindas, %2. kolonnā.\n"
+"Kļūda ziņojums: %3"
 
 #: libmsooxml/MsooXmlUtils.cpp:212
 #, kde-format
 msgid "Entry '%1' not found."
-msgstr ""
+msgstr "Ieraksts „%1“ nav atrasts."
 
 #: libmsooxml/MsooXmlUtils.cpp:218
 #, kde-format
 msgid "Entry '%1' is not a file."
-msgstr ""
+msgstr "Ieraksts „%1“ nav datne."
 
 #: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
 #: libmsooxml/MsooXmlUtils.cpp:378
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr ""
+msgstr "Nevarēja rakstīšanai atvērt ierakstu „%1“."
 
 #: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
 #: libmsooxml/MsooXmlUtils.cpp:389
 #, kde-format
 msgid "Could not write block"
-msgstr ""
+msgstr "Nevarēja rakstīt blokā"
 
 #: sheets/csv/csvexport.cc:253
 #, kde-format
 msgid "<SHEETNAME>"
-msgstr "<LAPAS NOSAUKUMS>"
+msgstr "<LOKSNES NOSAUKUMS>"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
-msgstr "CSV filtrs nevar atvērt ievades failu - lūdzu ziņot."
+msgstr "CSV filtrs nevar atvērt ievades datni — lūdzu, ziņojiet."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
@@ -298,55 +289,55 @@ msgstr "Rindas beigas"
 #: sheets/csv/exportdialogui.ui:39
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
-msgstr "&UNIX stils (rekomendējams; tikai rindas pārnesums)"
+msgstr "&UNIX stils (ieteicams; tikai rindpadeve)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
 #: sheets/csv/exportdialogui.ui:49
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
-msgstr "&Windows stils (Karietes atgriešana un rindas pārnesums)"
+msgstr "„&Windows“ stils (rakstatgrieze un rindpadeve)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
 #: sheets/csv/exportdialogui.ui:59
 #, kde-format
 msgid "&MacOS style (carriage return only)"
-msgstr "&MacOS stils (tikai karietes atgriešana)"
+msgstr "„&MacOS“ stils (tikai rakstatgrieze)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: sheets/csv/exportdialogui.ui:89
 #, kde-format
 msgid "Sheets"
-msgstr "Lapas"
+msgstr "Loksnes"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: sheets/csv/exportdialogui.ui:102
 #, kde-format
 msgid "Select sheets to export:"
-msgstr ""
+msgstr "Atlasiet eksportējamās loksnes:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
 #: sheets/csv/exportdialogui.ui:118
 #, kde-format
 msgid "Delimiter Line"
-msgstr "Atdalītāja Līnija"
+msgstr "Atdalītāja līnija"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
 #: sheets/csv/exportdialogui.ui:124
 #, kde-format
 msgid "********<SHEETNAME>********"
-msgstr "********<LAPAS VĀRDS>********"
+msgstr "********<LOKSNES NOSAUKUMS>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: sheets/csv/exportdialogui.ui:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
-msgstr "<TABULAS VĀRDS> tiks aizvietots ar nākamās tabulas vārdu."
+msgstr "<LOKSNES NOSAUKUMS> tiks aizvietots ar nākamās loksnes nosaukumu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
 #: sheets/csv/exportdialogui.ui:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print delimiter line above every sheet"
-msgstr "Drukāt norobežotājlīniju zem katras tabulas"
+msgstr "Drukāt atdalītāja līniju pirms katras loksnes"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
@@ -383,7 +374,7 @@ msgstr "Tabulators"
 #: sheets/csv/exportdialogui.ui:209
 #, kde-format
 msgid "Space"
-msgstr "Tukšums"
+msgstr "Atstarpe"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
 #: sheets/csv/exportdialogui.ui:216
@@ -413,47 +404,47 @@ msgstr "'"
 #: sheets/csv/exportdialogui.ui:322
 #, kde-format
 msgid "Export selection only"
-msgstr "Eksportēt tikai iezīmēto"
+msgstr "Eksportēt tikai atlasīto"
 
 #: sheets/dbase/dbaseimport.cc:44
 #, kde-format
 msgid "File format is not supported."
-msgstr ""
+msgstr "Neatbalstīts datņu formāts."
 
 #: sheets/dbase/dbaseimport.cc:49
 #, kde-format
 msgid "Could not read from file."
-msgstr ""
+msgstr "Datni nevarēja nolasīt."
 
 #: sheets/html/exportdialog.cc:20
 #, kde-format
 msgid "Export Sheet to HTML"
-msgstr "Eksportēt lapu kā HTML"
+msgstr "Eksportēt loksni kā HTML"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: sheets/html/exportwidget.ui:17
 #, kde-format
 msgid "Sheet Selection"
-msgstr ""
+msgstr "Loksnes atlase"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
 #: sheets/html/exportwidget.ui:32 sheets/html/exportwidget.ui:42
 #, kde-format
 msgid "Click here to select all sheets in the list."
-msgstr ""
+msgstr "Klikšķiniet te, lai atlasītu visas loksnes sarakstā."
 
 #. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
 #: sheets/html/exportwidget.ui:35
 #, kde-format
 msgid "Select &All"
-msgstr ""
+msgstr "&Atlasīt visas"
 
 #. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
 #: sheets/html/exportwidget.ui:45
 #, kde-format
 msgid "Desele&ct All"
-msgstr ""
+msgstr "&Noņemt atlasi visām"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
 #: sheets/html/exportwidget.ui:70
@@ -462,12 +453,14 @@ msgid ""
 "This option will make the HTML export filter generate a new page for each "
 "sheet. If you disable this option, all sheets are written on one page."
 msgstr ""
+"Šī opcija liks HTML eksporta filtram ģenerēt jaunu lapu katrai izklājlapas "
+"loksnei. Šo opciju izslēdzot, visas loksnes tiks ģenerētas vienā HTML lapā."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
 #: sheets/html/exportwidget.ui:73
 #, kde-format
 msgid "Use &separate files for each table"
-msgstr ""
+msgstr "&Izmantot atsevišķu datni katrai loksnei"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
 #: sheets/html/exportwidget.ui:83
@@ -481,12 +474,13 @@ msgstr "Stils"
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
 msgstr ""
+"Atlasiet šo opciju, lai HTML lapai izmantotu noklusējuma fontus un krāsas."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:92
 #, kde-format
 msgid "Use &default style"
-msgstr ""
+msgstr "Izmantot &noklusējuma stilu"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:102
@@ -495,12 +489,14 @@ msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
 "can select or type on in the field below."
 msgstr ""
+"Atlasiet šo opciju, lai norādītu atsevišķu HTML lapas stila lapu. Varat to "
+"atlasīt vai ierakstīt lauciņā zemāk."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:105
 #, kde-format
 msgid "Use &external stylesheet:"
-msgstr ""
+msgstr "Izmantot ā&rēju stila lapu:"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
 #: sheets/html/exportwidget.ui:115
@@ -509,6 +505,8 @@ msgid ""
 "In this field you can enter an URL for your stylesheet. It is possible to "
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
+"Šajā laukā varat ievadīt stilu lapas URL. Varat norādīt uz stilu lapu diskā "
+"vai internetā."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:125
@@ -520,13 +518,13 @@ msgstr "Izkārtojums"
 #: sheets/html/exportwidget.ui:131
 #, kde-format
 msgid "Use this option to enable or disable borders around the cells."
-msgstr ""
+msgstr "Izmantojiet šo opciju, lai ieslēgtu vai izslēgt malas ap šūnām."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:134
 #, kde-format
 msgid "Use &borders"
-msgstr ""
+msgstr "Izmantot &malas"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
@@ -536,22 +534,25 @@ msgid ""
 "Use this option to define how many pixels there should be between the cells. "
 "This effect is better visible if you check <b>Use borders</b> too."
 msgstr ""
+"Izmantojiet šo opciju, lai definētu, cik daudz pikseļiem ir jābūt starp "
+"šūnām. Šis efekts ir pamanāmāks, ja vienlaikus ieslēdzat <b>Izmantot malas</"
+"b> opciju."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: sheets/html/exportwidget.ui:149
 #, kde-format
 msgid "Pi&xels between cells:"
-msgstr ""
+msgstr "&Pikseļi starp šūnām:"
 
 #: sheets/html/htmlexport.cc:198 sheets/html/htmlexport.cc:373
 #, kde-format
 msgid "Top"
-msgstr ""
+msgstr "Augšā"
 
 #: sheets/latex/export/latexexportdialog.cc:139
 #, kde-format
 msgid "Latex Export Filter Configuration"
-msgstr "Latex eksporta filtra konfigurācija"
+msgstr "„Latex“ eksporta filtra konfigurācija"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
 #: sheets/latex/export/latexexportwidget.ui:24
@@ -569,14 +570,13 @@ msgstr "Dokumenta stils"
 #: sheets/latex/export/latexexportwidget.ui:38
 #, kde-format
 msgid "Latex style"
-msgstr "Latex stils"
+msgstr "„Latex“ stils"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:45
-#, fuzzy, kde-format
-#| msgid "KWord style"
+#, kde-format
 msgid "Words style"
-msgstr "KWord stils"
+msgstr "„Words“ stils"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: sheets/latex/export/latexexportwidget.ui:58
@@ -588,7 +588,7 @@ msgstr "Dokumenta tips"
 #: sheets/latex/export/latexexportwidget.ui:64
 #, kde-format
 msgid "The document will be able to be compiled alone"
-msgstr ""
+msgstr "Dokumentu varēs kompilēt vienu"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:67
@@ -598,6 +598,8 @@ msgid ""
 "include will be generated before the \\begin{document} and \\end{document} "
 "commands."
 msgstr ""
+"Dokuments tiks ģenerēts kā pilns „latex“ dokuments, jo programma visu "
+"„include“ ģenerēs pirms „\\begin{document}“ un „\\end{document}“ komandas."
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:70
@@ -609,7 +611,7 @@ msgstr "Neatkarīgs dokuments"
 #: sheets/latex/export/latexexportwidget.ui:80
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
-msgstr ""
+msgstr "Neģenerēt „latex“ galveni vai dokumenta vidi"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:83
@@ -619,6 +621,9 @@ msgid ""
 "included in a main latex document. It will allow you to generate several "
 "little files for each chapter of your document."
 msgstr ""
+"Dokumentu programma ģenerēs kā „latex“ dokumentu, kas būs iekļaujams pamata "
+"„latex“ dokumentā. Tas ļaus arī ģenerēt vairākas mazas datnes katrai "
+"dokumenta nodaļai."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:86
@@ -664,10 +669,9 @@ msgstr "Attēli"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: sheets/latex/export/latexexportwidget.ui:182
-#, fuzzy, kde-format
-#| msgid "Convert the pictures"
+#, kde-format
 msgid "Convert the pictures:"
-msgstr "Pārveidot attēlus"
+msgstr "Pārveidot attēlus:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: sheets/latex/export/latexexportwidget.ui:199
@@ -693,33 +697,31 @@ msgstr "Kodējums"
 #: sheets/latex/export/latexexportwidget.ui:261
 #, kde-format
 msgid "Add"
-msgstr ""
+msgstr "Pievienot"
 
 #. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:268
 #, kde-format
 msgid "Remove"
-msgstr ""
+msgstr "Noņemt"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: sheets/latex/export/latexexportwidget.ui:293
-#, fuzzy, kde-format
+#, kde-format
 msgid "Contents"
-msgstr "Piezīmes"
+msgstr "Saturs"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: sheets/latex/export/latexexportwidget.ui:301
-#, fuzzy, kde-format
-#| msgid "Export informations about author"
+#, kde-format
 msgid "Export information about author:"
-msgstr "Eksportēt informāciju par autoru"
+msgstr "Eksportēt informāciju par autoru:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: sheets/latex/export/latexexportwidget.ui:321
-#, fuzzy, kde-format
-#| msgid "Add a table of content"
+#, kde-format
 msgid "Add a table of content:"
-msgstr "Pievienot satura rādītāju"
+msgstr "Pievienot satura rādītāju:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:340
@@ -737,7 +739,7 @@ msgstr "Neeksportēt"
 #: sheets/latex/export/latexexportwidget.ui:353
 #, kde-format
 msgid "Export notes in margin notes"
-msgstr ""
+msgstr "Eksportēt malu piezīmes"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
 #: sheets/latex/export/latexexportwidget.ui:360
@@ -748,17 +750,17 @@ msgstr "Eksportēt piezīmes komentāros"
 #: sheets/opencalc/opencalcexport.cc:889
 #, kde-format
 msgid "Page "
-msgstr ""
+msgstr "Lapa "
 
 #: sheets/opencalc/opencalcimport.cc:1198
 #, kde-format
 msgid "The file seems to be corrupt. Skipping a table."
-msgstr ""
+msgstr "Datne izskatās bojāta. Izlaiž tabulu."
 
 #: sheets/opencalc/opencalcimport.cc:1210
 #, kde-format
 msgid "Skipping a table."
-msgstr ""
+msgstr "Izlaiž tabulu."
 
 #: sheets/opencalc/opencalcimport.cc:1909
 #, kde-format
@@ -768,6 +770,10 @@ msgid ""
 "crashes or incorrect display of the data. Do you want to continue converting "
 "the document?"
 msgstr ""
+"Šis dokuments ir veidots ar „OpenOffice.org“ versiju %1. Filtrs ir rakstīts "
+"1.0 versijai. Datnes lasīšana var novest pie neparedzētas uzvedības, "
+"programmas avārijas vai kļūdainas datu atveides. Vai vēlaties turpināt "
+"dokumenta pārveidošanu?"
 
 #: sheets/opencalc/opencalcimport.cc:1910
 #, kde-format
@@ -775,9 +781,9 @@ msgid "Unsupported document version"
 msgstr "Neatbalstīta dokumenta versija"
 
 #: sheets/qpro/qproimport.cc:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "QPRO filter cannot open input file - please report."
-msgstr "QPRO filtrs nevar atvērt ievades failu - lūdzu ziņojiet."
+msgstr "QPRO filtrs nevar atvērt ievades datni — lūdzu, ziņojiet."
 
 #: sheets/qpro/qproimport.cc:219
 #, kde-format
@@ -785,35 +791,35 @@ msgid ""
 "Unable to open password protected files.\n"
 "The password algorithm has not been published"
 msgstr ""
-"Atvainojiet, nevar atvērt ar paroli aizsargātus failus.\n"
+"Šīs ar paroli aizsargātas datnes nevar atvērt.\n"
 "Paroles algoritms nav publicēts"
 
 #: sheets/xlsx/XlsxImport.cpp:573 stage/pptx/PptxImport.cpp:1310
 #: words/docx/import/DocxImport.cpp:143
 #, kde-format
 msgid "Unable to find part for type %1"
-msgstr ""
+msgstr "Nevar atrast daļu tipam %1"
 
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:175
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
-msgstr ""
+msgstr "Deklarētais kopīgoto virkņu skaits ir par mazu (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:570
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
-msgstr ""
+msgstr "Deklarētais fontu stilu skaits ir par mazu (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:926
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
-msgstr ""
+msgstr "Deklarētais šūnu formātu skaits ir par mazu (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1053
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1374
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
-msgstr ""
+msgstr "Deklarētais aizpildījuma stilu skaits ir par mazu (%1)"
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:341
 #, kde-format
@@ -821,35 +827,33 @@ msgid ""
 "The data could not be loaded completely because the maximum size of sheet "
 "was exceeded."
 msgstr ""
+"Datus nevar pilnībā ielādēt, jo ir pārsniegts maksimālais loksnes lielums."
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1403
 #, kde-format
 msgid "Expected integer or floating point number"
-msgstr ""
+msgstr "Gaidīts vesels skaitlis vai daļskaitlis"
 
 #: stage/pptx/PptxXmlDocumentReader.cpp:291
-#, fuzzy, kde-format
-#| msgid "Endnote %1"
+#, kde-format
 msgid "Slide layout \"%1\" not found"
-msgstr "Beigu vēre %1"
+msgstr "Slaida izkārtojums „%1“ nav atrasts"
 
 #: stage/pptx/PptxXmlSlideReader.cpp:603
-#, fuzzy, kde-format
-#| msgid "Slide Title"
+#, kde-format
 msgid "Slide %1"
-msgstr "Slaida virsraksts"
+msgstr "%1. slaids"
 
 #: words/ascii/ImportDialog.cc:30
-#, fuzzy, kde-format
-#| msgid "KWord's Plain Text Import Filter"
+#, kde-format
 msgid "Words's Plain Text Import Filter"
-msgstr "KWord atklāta teksta importa filtrs"
+msgstr "„Words“ vienkāršā teksta importa filtrs"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
 #: words/ascii/ImportDialogUI.ui:16
 #, kde-format
 msgid "Plain Text Import Dialog"
-msgstr "Atklāta teksta importa dialogs"
+msgstr "Vienkāršā teksta importa logs"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
 #: words/ascii/ImportDialogUI.ui:22
@@ -867,19 +871,18 @@ msgstr "&Kā ir: rindas beigās"
 #: words/ascii/ImportDialogUI.ui:38
 #, kde-format
 msgid "&Sentence: If the end of line is the end of a sentence"
-msgstr "&Teikums: ja rindas beigas ir teikuma beigas."
+msgstr "&Teikums: ja rindas beigas ir teikuma beigas"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
 #: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
-msgstr ""
+msgstr "T&ukša rinda: ja rinda ir tukša"
 
 #: words/epub/OdtHtmlConverter.cpp:258 words/mobi/OdtMobiHtmlConverter.cpp:285
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End notes"
-msgstr "Rindas beigas"
+msgstr "Beigu piezīmes"
 
 #: words/msword-odf/conversion.cpp:783
 #, kde-format
@@ -914,24 +917,23 @@ msgstr "Pirmās lapas kājene"
 #: words/msword-odf/texthandler.cpp:623
 #, kde-format
 msgid "Table %1"
-msgstr "Tabula %1"
+msgstr "%1. tabula"
 
 #: words/rtf/import/rtfimport.cpp:54
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
-msgstr ""
+msgstr "Datni nevar ielādēt, jo izskatās, ka tā nav RTF dokuments."
 
 #: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
 #: words/rtf/import/rtfimport.cpp:76
-#, fuzzy, kde-format
-#| msgid "KWord's RTF Import Filter"
+#, kde-format
 msgid "Words's RTF Import Filter"
-msgstr "KWord RTF importa filtrs"
+msgstr "„Words“ RTF importa filtrs"
 
 #: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "The file cannot be loaded."
-msgstr ""
+msgstr "Datni nevar ielādēt"
 
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"

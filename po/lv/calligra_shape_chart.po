@@ -1,0 +1,1843 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:12+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Toms Trasūns"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "toms.trasuns@posteo.net"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
+#, kde-format
+msgid "Start"
+msgstr "Sākums"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
+#, kde-format
+msgid "End"
+msgstr "Beigas"
+
+#: AxesConfigWidget.cpp:80
+#, kde-format
+msgid "Near-axis"
+msgstr "Tuvā ass"
+
+#: AxesConfigWidget.cpp:81
+#, kde-format
+msgid "Other-side"
+msgstr "Otra puse"
+
+#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
+#: DataSetConfigWidget.cpp:347
+#, kde-format
+msgid "Axistitle"
+msgstr "Ass nosaukums"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShow)
+#: AxesConfigWidget.ui:45
+#, kde-format
+msgid "Show Axis"
+msgstr "Rādīt asi"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
+#: AxesConfigWidget.ui:58
+#, kde-format
+msgid "Scale"
+msgstr "Mērogs"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
+#: AxesConfigWidget.ui:65
+#, kde-format
+msgid "Show Labels"
+msgstr "Rādīt etiķetes"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
+#: AxesConfigWidget.ui:72
+#, kde-format
+msgid "Font"
+msgstr "Fonts"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
+#: AxesConfigWidget.ui:81
+#, kde-format
+msgid "Show Major Grid"
+msgstr "Rādīt lielo režģi"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
+#: AxesConfigWidget.ui:88
+#, kde-format
+msgid "Show Minor Grid"
+msgstr "Rādīt mazo režģi"
+
+#. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
+#: AxesConfigWidget.ui:119
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Joslas īpašības</span></p></body></html>"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenSets)
+#: AxesConfigWidget.ui:132 AxesConfigWidget.ui:174 PieConfigWidget.ui:39
+#: widgets/RingConfigWidget.ui:147
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
+#: AxesConfigWidget.ui:154
+#, kde-format
+msgid "Gap Between Sets"
+msgstr "Sprauga starp komplektiem"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
+#: AxesConfigWidget.ui:167
+#, kde-format
+msgid "Gap Between Bars"
+msgstr "Sprauga starp joslām"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
+#: AxesConfigWidget.ui:193
+#, kde-format
+msgid "Show Title"
+msgstr "Rādīt nosaukumu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:201
+#, kde-format
+msgid "Primary X Axis"
+msgstr "Primārā X ass"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
+#, kde-format
+msgid "Primary Y Axis"
+msgstr "Primārā Y ass"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:211
+#, kde-format
+msgid "Secondary X Axis"
+msgstr "Sekundārā X ass"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
+#, kde-format
+msgid "Secondary Y Axis"
+msgstr "Sekundārā Y ass"
+
+#: ChartShape.cpp:301
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Trūkst spraudņa"
+
+#: ChartShape.cpp:301
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels in a chart is not available."
+msgstr "Trūkst teksta etiķešu parādīšanai nepieciešamais spraudnis."
+
+#: ChartShape.cpp:305
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels is not compatible with the "
+"current version of the chart Flake shape."
+msgstr ""
+"Teksta etiķešu parādīšanai nepieciešamais spraudnis nav saderīgs ar "
+"pašreizējo „Flake“ objekta versiju."
+
+#: ChartShape.cpp:306
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Nesaderīgs spraudnis"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showTitle)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#, kde-format
+msgid "Title"
+msgstr "Virsraksts"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
+#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
+#, kde-format
+msgid "Subtitle"
+msgstr "Apakšvirsraksts"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showFooter)
+#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
+#, kde-format
+msgid "Footer"
+msgstr "Kājene"
+
+#: ChartShape.cpp:754
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Šis dokuments satur ārēju saiti uz attālinātu dokumentu\n"
+"%1"
+
+#: ChartShape.cpp:755
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Nepieciešama apstiprināšana"
+
+#: ChartShape.cpp:756
+#, kde-format
+msgid "Download"
+msgstr "Lejupielādēt"
+
+#: ChartShape.cpp:757
+#, kde-format
+msgid "Skip"
+msgstr "Izlaist"
+
+#: ChartShapeFactory.cpp:55
+#, kde-format
+msgid "Chart"
+msgstr "Diagramma"
+
+#: ChartShapeFactory.cpp:58
+#, kde-format
+msgid "Business charts"
+msgstr "Darījumu diagrammas"
+
+#: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
+#: PlotAreaConfigWidget.cpp:232
+#, kde-format
+msgid "Bar Chart"
+msgstr "Joslu diagramma"
+
+#: ChartShapeFactory.cpp:78
+#, kde-format
+msgid "Normal bar chart"
+msgstr "Parasta joslu diagramma"
+
+#: ChartShapeFactory.cpp:88
+#, kde-format
+msgid "Stacked Bar Chart"
+msgstr "Grēdota joslu diagramma"
+
+#: ChartShapeFactory.cpp:89
+#, kde-format
+msgid "Stacked bar chart"
+msgstr "Grēdota joslu diagramma"
+
+#: ChartShapeFactory.cpp:99
+#, kde-format
+msgid "Percent Bar Chart"
+msgstr "Procentuāli grēdota joslu diagramma"
+
+#: ChartShapeFactory.cpp:100
+#, kde-format
+msgid "Percent bar chart"
+msgstr "Procentuāli grēdota joslu diagramma"
+
+#: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
+#: PlotAreaConfigWidget.cpp:238
+#, kde-format
+msgid "Line Chart"
+msgstr "Līniju diagramma"
+
+#: ChartShapeFactory.cpp:111
+#, kde-format
+msgid "Normal line chart"
+msgstr "Parasta līniju diagramma"
+
+#: ChartShapeFactory.cpp:121
+#, kde-format
+msgid "Stacked Line Chart"
+msgstr "Grēdota līniju diagramma"
+
+#: ChartShapeFactory.cpp:122
+#, kde-format
+msgid "Stacked line chart"
+msgstr "Grēdota līniju diagramma"
+
+#: ChartShapeFactory.cpp:132
+#, kde-format
+msgid "Percent Line Chart"
+msgstr "Procentuāli grēdota līniju diagramma"
+
+#: ChartShapeFactory.cpp:133
+#, kde-format
+msgid "Percent line chart"
+msgstr "Procentuāli grēdota līniju diagramma"
+
+#: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
+#: PlotAreaConfigWidget.cpp:244
+#, kde-format
+msgid "Area Chart"
+msgstr "Laukuma diagramma"
+
+#: ChartShapeFactory.cpp:144
+#, kde-format
+msgid "Normal area chart"
+msgstr "Parasta laukuma diagramma"
+
+#: ChartShapeFactory.cpp:154
+#, kde-format
+msgid "Stacked Area Chart"
+msgstr "Grēdota laukuma diagramma"
+
+#: ChartShapeFactory.cpp:155
+#, kde-format
+msgid "Stacked area chart"
+msgstr "Grēdota laukuma diagramma"
+
+#: ChartShapeFactory.cpp:165
+#, kde-format
+msgid "Percent Area Chart"
+msgstr "Procentuāli grēdota zonas diagramma"
+
+#: ChartShapeFactory.cpp:166
+#, kde-format
+msgid "Percent area chart"
+msgstr "Procentuāli grēdota zonas diagramma"
+
+#: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
+#: PlotAreaConfigWidget.cpp:252
+#, kde-format
+msgid "Pie Chart"
+msgstr "Pīrāga diagramma"
+
+#: ChartShapeFactory.cpp:177
+#, kde-format
+msgid "Pie chart"
+msgstr "Pīrāga diagramma"
+
+#: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
+#: PlotAreaConfigWidget.cpp:253
+#, kde-format
+msgid "Ring Chart"
+msgstr "Gredzena diagramma"
+
+#: ChartShapeFactory.cpp:188
+#, kde-format
+msgid "Ring chart"
+msgstr "Gredzena diagramma"
+
+#: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
+#: PlotAreaConfigWidget.cpp:266
+#, kde-format
+msgid "Bubble Chart"
+msgstr "Burbuļu diagramma"
+
+#: ChartShapeFactory.cpp:199
+#, kde-format
+msgid "Bubble chart"
+msgstr "Burbuļu diagramma"
+
+#: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
+#: PlotAreaConfigWidget.cpp:265
+#, kde-format
+msgid "Scatter Chart"
+msgstr "Izkaisīta diagramma"
+
+#: ChartShapeFactory.cpp:210
+#, kde-format
+msgid "Scatter chart"
+msgstr "Izkaisīta diagramma"
+
+#: ChartShapeFactory.cpp:220
+#, kde-format
+msgid "Radar Chart"
+msgstr "Radara diagramma"
+
+#: ChartShapeFactory.cpp:221
+#, kde-format
+msgid "Radar chart"
+msgstr "Radara diagramma"
+
+#: ChartShapeFactory.cpp:231
+#, kde-format
+msgid "Filled Radar Chart"
+msgstr "Aizpildīta radara diagramma"
+
+#: ChartShapeFactory.cpp:232
+#, kde-format
+msgid "Filled radar chart"
+msgstr "Aizpildīta radara diagramma"
+
+#: ChartShapeFactory.cpp:242
+#, kde-format
+msgid "Candle Stick Stock Chart"
+msgstr "Sveces biržas diagramma"
+
+#: ChartShapeFactory.cpp:243
+#, kde-format
+msgid "Japanese candle stick stock chart"
+msgstr "Japāņu sveces biržas diagramma"
+
+#: ChartShapeFactory.cpp:253
+#, kde-format
+msgid "OHLC Stock Chart"
+msgstr "OHLC biržas diagramma"
+
+#: ChartShapeFactory.cpp:254
+#, kde-format
+msgid "Open High Low Close stock chart"
+msgstr "Sākuma, augstā, zemā, beigu biržas diagramma"
+
+#: ChartShapeFactory.cpp:264
+#, kde-format
+msgid "HLC Stock Chart"
+msgstr "HLC biržas diagramma"
+
+#: ChartShapeFactory.cpp:265
+#, kde-format
+msgid "High Low Close stock chart"
+msgstr "Augstā, zemā, beigu biržas diagramma"
+
+#: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
+#: ChartShapeFactory.cpp:631
+#, kde-format
+msgid "January"
+msgstr "Janvāris"
+
+#: ChartShapeFactory.cpp:359 ChartShapeFactory.cpp:549
+#: ChartShapeFactory.cpp:632
+#, kde-format
+msgid "July"
+msgstr "Jūlijs"
+
+#: ChartShapeFactory.cpp:360 ChartShapeFactory.cpp:550
+#: ChartShapeFactory.cpp:633
+#, kde-format
+msgid "December"
+msgstr "Decembris"
+
+#: ChartShapeFactory.cpp:363 ChartShapeFactory.cpp:364
+#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:366
+#: ChartShapeFactory.cpp:553 ChartShapeFactory.cpp:554
+#: ChartShapeFactory.cpp:555 ChartShapeFactory.cpp:556
+#: ChartShapeFactory.cpp:636 ChartShapeFactory.cpp:637
+#: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
+#, kde-format
+msgid "Column %1"
+msgstr "Kolonna %1"
+
+#: ChartShapeFactory.cpp:390
+#, kde-format
+msgid "Month"
+msgstr "Mēnesis"
+
+#: ChartShapeFactory.cpp:392
+#, kde-format
+msgid "Growth in %"
+msgstr "Pieaugums %"
+
+#: ChartShapeFactory.cpp:454
+#, kde-format
+msgid "Share A"
+msgstr "A daļa"
+
+#: ChartShapeFactory.cpp:455
+#, kde-format
+msgid "Share B"
+msgstr "B daļa"
+
+#: ChartShapeFactory.cpp:456
+#, kde-format
+msgid "Share C"
+msgstr "C daļa"
+
+#: ChartShapeFactory.cpp:459
+#, kde-format
+msgid "Open"
+msgstr "Sākuma"
+
+#: ChartShapeFactory.cpp:460
+#, kde-format
+msgid "High"
+msgstr "Augstākā"
+
+#: ChartShapeFactory.cpp:461
+#, kde-format
+msgid "Low"
+msgstr "Zemākā"
+
+#: ChartShapeFactory.cpp:462
+#, kde-format
+msgid "Close"
+msgstr "Beigu"
+
+#: ChartShapeFactory.cpp:581
+#, kde-format
+msgid "Growth"
+msgstr "Pieaugums"
+
+#: ChartTool.cpp:99
+#, kde-format
+msgid "Do something"
+msgstr "Kaut ko darīt"
+
+#: ChartTool.cpp:104
+#, kde-format
+msgid "Do something else"
+msgstr "Darīt kaut ko citu"
+
+#: ChartTool.cpp:271
+#, kde-format
+msgid "Titles"
+msgstr "Virsraksti"
+
+#: ChartTool.cpp:286
+#, kde-format
+msgid "Legend"
+msgstr "Apzīmējumi"
+
+#: ChartTool.cpp:299
+#, kde-format
+msgid "Plot Area"
+msgstr "Datu diapazons"
+
+#: ChartTool.cpp:1063
+msgctxt "(qtundo-format)"
+msgid "Show Legend"
+msgstr "Rādīt apzīmējumus"
+
+#: ChartTool.cpp:1065
+msgctxt "(qtundo-format)"
+msgid "Hide Legend"
+msgstr "Slēpt apzīmējumus"
+
+#: ChartToolFactory.cpp:26
+#, kde-format
+msgid "Chart editing"
+msgstr "Diagrammas rediģēšana"
+
+#: commands/AddRemoveAxisCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Add Axis"
+msgstr "Pievienot asi"
+
+#: commands/AddRemoveAxisCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Remove Axis"
+msgstr "Noņemt asi"
+
+#: commands/AxisCommand.cpp:113
+msgctxt "(qtundo-format)"
+msgid "Show Axis Title"
+msgstr "Rādīt ass nosaukumu"
+
+#: commands/AxisCommand.cpp:115
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Title"
+msgstr "Slēpt ass nosaukumu"
+
+#: commands/AxisCommand.cpp:140
+msgctxt "(qtundo-format)"
+msgid "Show Axis"
+msgstr "Rādīt asi"
+
+#: commands/AxisCommand.cpp:142
+msgctxt "(qtundo-format)"
+msgid "Hide Axis"
+msgstr "Slēpt asi"
+
+#: commands/AxisCommand.cpp:151
+msgctxt "(qtundo-format)"
+msgid "Show Axis Labels"
+msgstr "Rādīt ass etiķetes"
+
+#: commands/AxisCommand.cpp:153
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Labels"
+msgstr "Slēpt ass etiķetes"
+
+#: commands/AxisCommand.cpp:162
+msgctxt "(qtundo-format)"
+msgid "Show Axis Major Gridlines"
+msgstr "Rādīt ass lielo režģi"
+
+#: commands/AxisCommand.cpp:164
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Major Gridlines"
+msgstr "Slēpt ass lielo režģi"
+
+#: commands/AxisCommand.cpp:173
+msgctxt "(qtundo-format)"
+msgid "Show Axis Minor Gridlines"
+msgstr "Rādīt ass mazo režģi"
+
+#: commands/AxisCommand.cpp:175
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Minor Gridlines"
+msgstr "Slēpt ass mazo režģi"
+
+#: commands/AxisCommand.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Logarithmic Scaling"
+msgstr "Logaritmiskā mērogošana"
+
+#: commands/AxisCommand.cpp:186
+msgctxt "(qtundo-format)"
+msgid "Linear Scaling"
+msgstr "Lineārā mērogošana"
+
+#: commands/AxisCommand.cpp:194
+msgctxt "(qtundo-format)"
+msgid "Set Axis Step Width"
+msgstr "Iestatīt ass soļa lielumu"
+
+#: commands/AxisCommand.cpp:201
+msgctxt "(qtundo-format)"
+msgid "Set Axis Substep Width"
+msgstr "Noteikt ass apakšsoļa lielumu"
+
+#: commands/AxisCommand.cpp:209
+msgctxt "(qtundo-format)"
+msgid "Set Automatic Step Width"
+msgstr "Noteikt automātisku soļa lielumu"
+
+#: commands/AxisCommand.cpp:211
+msgctxt "(qtundo-format)"
+msgid "Set Manual Step Width"
+msgstr "Iestatīt manuālu soļa lielumu"
+
+#: commands/AxisCommand.cpp:220
+msgctxt "(qtundo-format)"
+msgid "Automatic Substep Width"
+msgstr "Automātisks apakšsoļa lielums"
+
+#: commands/AxisCommand.cpp:222
+msgctxt "(qtundo-format)"
+msgid "Manual Substep Width"
+msgstr "Manuāls apakšsoļa lielums"
+
+#: commands/AxisCommand.cpp:230
+msgctxt "(qtundo-format)"
+msgid "Set Axis Label Font"
+msgstr "Iestatīt ass etiķetes fontu"
+
+#: commands/AxisCommand.cpp:236
+msgctxt "(qtundo-format)"
+msgid "Set Axis Position"
+msgstr "Iestatīt ass novietojumu"
+
+#: commands/AxisCommand.cpp:257
+msgctxt "(qtundo-format)"
+msgid "Set Axis Labels Position"
+msgstr "Iestatīt ass etiķešu novietojumu"
+
+#: commands/ChartTextShapeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Show Text Shape"
+msgstr "Rādīt teksta objektu"
+
+#: commands/ChartTextShapeCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Hide Text Shape"
+msgstr "Slēpt teksta objektu"
+
+#: commands/ChartTypeCommand.cpp:77
+msgctxt "(qtundo-format)"
+msgid "Normal Bar Chart"
+msgstr "Parasta joslu diagramma"
+
+#: commands/ChartTypeCommand.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Stacked Bar Chart"
+msgstr "Grēdota joslu diagramma"
+
+#: commands/ChartTypeCommand.cpp:83
+msgctxt "(qtundo-format)"
+msgid "Percent Bar Chart"
+msgstr "Procentuāli grēdota joslu diagramma"
+
+#: commands/ChartTypeCommand.cpp:92
+msgctxt "(qtundo-format)"
+msgid "Normal Line Chart"
+msgstr "Parasta līniju diagramma"
+
+#: commands/ChartTypeCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Stacked Line Chart"
+msgstr "Grēdota līniju diagramma"
+
+#: commands/ChartTypeCommand.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Percent Line Chart"
+msgstr "Procentuāli grēdota līniju diagramma"
+
+#: commands/ChartTypeCommand.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Normal Area Chart"
+msgstr "Parasta zonas diagramma"
+
+#: commands/ChartTypeCommand.cpp:110
+msgctxt "(qtundo-format)"
+msgid "Stacked Area Chart"
+msgstr "Grēdota laukuma diagramma"
+
+#: commands/ChartTypeCommand.cpp:113
+msgctxt "(qtundo-format)"
+msgid "Percent Area Chart"
+msgstr "Procentuāli grēdota zonas diagramma"
+
+#: commands/ChartTypeCommand.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Circle Chart"
+msgstr "Apļa diagramma"
+
+#: commands/ChartTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Ring Chart"
+msgstr "Gredzena diagramma"
+
+#: commands/ChartTypeCommand.cpp:126
+msgctxt "(qtundo-format)"
+msgid "Scatter Chart"
+msgstr "Izkaisīta diagramma"
+
+#: commands/ChartTypeCommand.cpp:129
+msgctxt "(qtundo-format)"
+msgid "Radar Chart"
+msgstr "Radara diagramma"
+
+#: commands/ChartTypeCommand.cpp:132
+msgctxt "(qtundo-format)"
+msgid "Filled Radar Chart"
+msgstr "Aizpildīta radara diagramma"
+
+#: commands/ChartTypeCommand.cpp:135
+msgctxt "(qtundo-format)"
+msgid "Stock Chart"
+msgstr "Biržas diagramma"
+
+#: commands/ChartTypeCommand.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Bubble Chart"
+msgstr "Burbuļu diagramma"
+
+#: commands/ChartTypeCommand.cpp:141
+msgctxt "(qtundo-format)"
+msgid "Surface Chart"
+msgstr "Virsmas diagramma"
+
+#: commands/ChartTypeCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Gantt Chart"
+msgstr "Ganta diagramma"
+
+#: commands/DatasetCommand.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Chart Type"
+msgstr "Noteikt datu kopas diagrammas tipu"
+
+#: commands/DatasetCommand.cpp:145
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Category"
+msgstr "Parādīt datu kopas kategoriju"
+
+#: commands/DatasetCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Category"
+msgstr "Slēpt datu kopas kategoriju"
+
+#: commands/DatasetCommand.cpp:156
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Number"
+msgstr "Rādīt datu kopas numuru"
+
+#: commands/DatasetCommand.cpp:158
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Number"
+msgstr "Slēpt datu kopas numuru"
+
+#: commands/DatasetCommand.cpp:167
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Percent"
+msgstr "Rādīt datu kopas procentus"
+
+#: commands/DatasetCommand.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Percent"
+msgstr "Slēpt datu kopas procentus"
+
+#: commands/DatasetCommand.cpp:178
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Symbol"
+msgstr "Rādīt datu kopas simbolu"
+
+#: commands/DatasetCommand.cpp:180
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Symbol"
+msgstr "Slēpt datu kopas simbolu"
+
+#: commands/DatasetCommand.cpp:188
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Brush Color"
+msgstr "Norādīt datu kopas otas krāsu"
+
+#: commands/DatasetCommand.cpp:195
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Pen Color"
+msgstr "Norādīt datu kopas pildspalvas krāsu"
+
+#: commands/DatasetCommand.cpp:204
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Marker"
+msgstr "Slēpt datu kopas marķieri"
+
+#: commands/DatasetCommand.cpp:206
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Marker Symbol"
+msgstr "Rādīt datu kopas marķiera simbolu"
+
+#: commands/DatasetCommand.cpp:214
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Axis"
+msgstr "Norādīt datu kopas asi"
+
+#: commands/GapCommand.cpp:60
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Bars"
+msgstr "Norādīt spraugas starp joslām"
+
+#: commands/GapCommand.cpp:67
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Sets"
+msgstr "Norādīt spraugas starp kopām"
+
+#: commands/LegendCommand.cpp:75
+msgctxt "(qtundo-format)"
+msgid "Set Legend Title"
+msgstr "Norādīt apzīmējumu nosaukumu"
+
+#: commands/LegendCommand.cpp:83
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font"
+msgstr "Norādīt apzīmējumu fontu"
+
+#: commands/LegendCommand.cpp:90
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font size"
+msgstr "Norādīt apzīmējumu fonta izmēru"
+
+#: commands/LegendCommand.cpp:97
+msgctxt "(qtundo-format)"
+msgid "Set Legend Orientation"
+msgstr "Norādīt apzīmējumu orientāciju"
+
+#: commands/PlotAreaCommand.cpp:58
+msgctxt "(qtundo-format)"
+msgid "Set Horizontal Bars"
+msgstr "Norādīt horizontālās joslas"
+
+#: commands/PlotAreaCommand.cpp:60
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Bars"
+msgstr "Norādīt vertikālās joslas"
+
+#: DataSet.cpp:274
+#, kde-format
+msgid "Series %1"
+msgstr "Sērijas %1"
+
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
+#, kde-format
+msgid "Chart Type"
+msgstr "Diagrammas tips"
+
+#: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
+#: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
+#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
+#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
+#, kde-format
+msgid "Normal"
+msgstr "Parasts"
+
+#: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
+#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
+#, kde-format
+msgid "Stacked"
+msgstr "Grēdots"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
+#: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
+#: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
+#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
+#: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
+#, kde-format
+msgid "Percent"
+msgstr "Procentuāls"
+
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
+#, kde-format
+msgid "Polar Chart"
+msgstr "Polārā diagramma"
+
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
+#, kde-format
+msgid "Filled"
+msgstr "Aizpildīta"
+
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
+#, kde-format
+msgid "Stock Chart"
+msgstr "Grēdota diagramma"
+
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
+#, kde-format
+msgid "Candlestick"
+msgstr "Sveces"
+
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
+#, kde-format
+msgid "OpenHighLowClose"
+msgstr "OHLC"
+
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
+#, kde-format
+msgid "HighLowClose"
+msgstr "HLC"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
+#: widgets/RadarDataSetConfigWidget.cpp:182
+#, kde-format
+msgid "None"
+msgstr "Nav"
+
+#. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
+#. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
+#: DataSetConfigWidget.cpp:243 dialogs/AxisScalingDialog.ui:49
+#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:83
+#, kde-format
+msgid "Automatic"
+msgstr "Automātiska"
+
+#: DataSetConfigWidget.cpp:245 widgets/RadarDataSetConfigWidget.cpp:85
+#, kde-format
+msgid "Select"
+msgstr "Atlasīt"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
+#: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
+#: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
+#: widgets/RadarDataSetConfigWidget.cpp:191
+#, kde-format
+msgid "Auto"
+msgstr "Automātiska"
+
+#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
+#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
+#: widgets/RadarDataSetConfigWidget.cpp:297
+#, kde-format
+msgid "Data Set %1"
+msgstr "Datu kopa %1"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
+#: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
+#, kde-format
+msgid "Select a data set"
+msgstr "Atlasīt datu kopu"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
+#: DataSetConfigWidget.ui:33
+#, kde-format
+msgid "Use Plot Type"
+msgstr "Izmantot apgabala tipu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: DataSetConfigWidget.ui:78
+#, kde-format
+msgid "Attach To Axis"
+msgstr "Pievienot asij"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
+#: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
+#, kde-format
+msgid "Stroke"
+msgstr "Līnija"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
+#: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
+#, kde-format
+msgid "Fill"
+msgstr "Aizpildījums"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
+#: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
+#: widgets/RadarDataSetConfigWidget.ui:122
+#, kde-format
+msgid "Marker"
+msgstr "Marķieris"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowCategory)
+#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:35
+#: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
+#: widgets/RingConfigWidget.ui:106
+#, kde-format
+msgid "Category"
+msgstr "Kategorija"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
+#: DataSetConfigWidget.ui:238 PieConfigWidget.ui:182
+#: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
+#, kde-format
+msgid "Number"
+msgstr "Skaitlis"
+
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
+#: DataSetConfigWidget.ui:287
+#, kde-format
+msgid "Error Bars"
+msgstr "Kļūdu joslas"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertRow)
+#. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
+#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:64
+#: dialogs/PieDataEditor.ui:33
+#, kde-format
+msgid "Insert"
+msgstr "Ievietot"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
+#: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Lodziņš"
+
+#. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
+#: dialogs/AxisScalingDialog.ui:19
+#, kde-format
+msgid "Logarithmic Scaling"
+msgstr "Logaritmiskā mērogošana"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AxisScalingDialog.ui:32
+#, kde-format
+msgid "Step Width:"
+msgstr "Soļa lielums:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AxisScalingDialog.ui:65
+#, kde-format
+msgid "Substep Width:"
+msgstr "Apakšsoļa lielums:"
+
+#: dialogs/BubbleDataEditor.cpp:108
+#, kde-format
+msgid "Bubble Data Editor"
+msgstr "Burbuļu datu redaktors"
+
+#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
+#, kde-format
+msgid "Insert Column Before"
+msgstr "Ievietot kolonnu pirms"
+
+#: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
+#, kde-format
+msgid "Insert Column After"
+msgstr "Ievietot kolonnu pēc"
+
+#: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
+#: dialogs/StockDataEditor.cpp:98
+#, kde-format
+msgid "Insert Row Above"
+msgstr "Ievietot rindu virs"
+
+#: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
+#: dialogs/StockDataEditor.cpp:99
+#, kde-format
+msgid "Insert Row Below"
+msgstr "Ievietot rindu zem"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
+#: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
+#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
+#, kde-format
+msgid "Delete"
+msgstr "Dzēst"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
+#. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
+#: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
+#, kde-format
+msgid "Bubbles Editor"
+msgstr "Burbuļu redaktors"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
+#: dialogs/BubbleDataEditor.ui:39 dialogs/ChartTableEditor.ui:78
+#: dialogs/ScatterDataEditor.ui:39
+#, kde-format
+msgid "Insert data column before selected column"
+msgstr "Ievietot datu kolonnu pirms atlasītās kolonnas"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowAbove)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (text), widget (QToolButton, deleteSelection)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnLeft)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:42 dialogs/BubbleDataEditor.ui:62
+#: dialogs/BubbleDataEditor.ui:82 dialogs/BubbleDataEditor.ui:102
+#: dialogs/BubbleDataEditor.ui:122 dialogs/BubbleDataEditor.ui:215
+#: dialogs/BubbleDataEditor.ui:235 dialogs/ChartTableEditor.ui:55
+#: dialogs/ChartTableEditor.ui:68 dialogs/ChartTableEditor.ui:81
+#: dialogs/ChartTableEditor.ui:94 dialogs/ChartTableEditor.ui:107
+#: dialogs/ScatterDataEditor.ui:42 dialogs/ScatterDataEditor.ui:62
+#: dialogs/ScatterDataEditor.ui:82 dialogs/ScatterDataEditor.ui:102
+#: dialogs/ScatterDataEditor.ui:122 dialogs/ScatterDataEditor.ui:215
+#: dialogs/ScatterDataEditor.ui:235 dialogs/StockDataEditor.ui:42
+#: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
+#: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
+#: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
+#, kde-format
+msgid "Insert data row below selected row"
+msgstr "Ievietot datu rindu zem atlasītās rindas"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
+#: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
+#: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
+#, kde-format
+msgid "Insert data row above selected row"
+msgstr "Ievietot datu rindu virs atlasītās rindas"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:99 dialogs/ChartTableEditor.ui:91
+#: dialogs/ScatterDataEditor.ui:99
+#, kde-format
+msgid "Insert data column after selected column"
+msgstr "Ievietot datu kolonnu pēc atlasītās kolonnas"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
+#: dialogs/ScatterDataEditor.ui:119
+#, kde-format
+msgid "Delete selection"
+msgstr "Dzēst atlasi"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
+#: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
+#, kde-format
+msgid "Manual control of data sets"
+msgstr "Manuāli pārvaldīt datu kopas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#. i18n: ectx: property (text), widget (QCheckBox, manualControl)
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: dialogs/BubbleDataEditor.ui:182 dialogs/ScatterDataEditor.ui:182
+#: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
+#: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
+#: TitlesConfigWidget.ui:153
+#, kde-format
+msgid "Manual"
+msgstr "Manuāli"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
+#: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
+#, kde-format
+msgid "Remove data set"
+msgstr "Noņemt datu kopu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
+#: dialogs/BubbleDataEditor.ui:212 dialogs/BubbleDataEditor.ui:232
+#: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
+#, kde-format
+msgid "Add data set after selected data set"
+msgstr "Pievienot datu kopu pēc atlasītās datu kopas"
+
+#: dialogs/BubbleDataSetTableModel.cpp:103
+#: dialogs/ScatterDataSetTableModel.cpp:103
+#, kde-format
+msgid "Dataset Name"
+msgstr "Datu kopas nosaukums"
+
+#: dialogs/BubbleDataSetTableModel.cpp:105
+#: dialogs/ScatterDataSetTableModel.cpp:105
+#, kde-format
+msgid "X-Values"
+msgstr "X vērtības"
+
+#: dialogs/BubbleDataSetTableModel.cpp:107
+#: dialogs/ScatterDataSetTableModel.cpp:107
+#, kde-format
+msgid "Y-Values"
+msgstr "Y vērtības"
+
+#: dialogs/BubbleDataSetTableModel.cpp:109
+#, kde-format
+msgid "Bubble Size"
+msgstr "Burbuļu izmērs"
+
+#: dialogs/BubbleDataSetTableModel.cpp:149
+#: dialogs/ScatterDataSetTableModel.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Label: %1"
+msgstr "Etiķete: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:151
+#: dialogs/ScatterDataSetTableModel.cpp:146
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default label: %1"
+msgstr "Noklusējuma etiķete: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:156
+#: dialogs/ScatterDataSetTableModel.cpp:151
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "X-Values cell region: %1"
+msgstr "X vērtību šūnu apgabals: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:158
+#: dialogs/BubbleDataSetTableModel.cpp:165
+#: dialogs/BubbleDataSetTableModel.cpp:172
+#: dialogs/ScatterDataSetTableModel.cpp:153
+#: dialogs/ScatterDataSetTableModel.cpp:160
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default values used"
+msgstr "Izmantotās noklusējuma vērtības"
+
+#: dialogs/BubbleDataSetTableModel.cpp:163
+#: dialogs/ScatterDataSetTableModel.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Y-Values cell region: %1"
+msgstr "Y vērtību šūnu apgabals: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:170
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Bubble size cell region: %1"
+msgstr "Burbuļa izmēra šūnas apgabals: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CellRegionDialog.ui:49
+#, kde-format
+msgid "Y Values:"
+msgstr "Y vērtības:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CellRegionDialog.ui:59
+#, kde-format
+msgid "X Values:"
+msgstr "X vērtības"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CellRegionDialog.ui:72
+#, kde-format
+msgid "<b>Choose a Data Set</b>"
+msgstr "<b>Izvēlēties datu kopu</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/CellRegionDialog.ui:82
+#, kde-format
+msgid "Categories:"
+msgstr "Kategorijas:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/CellRegionDialog.ui:96
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Name:</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Nosaukums:</span></p></body></html>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
+#: dialogs/ChartTableEditor.ui:14
+#, kde-format
+msgid "Data Editor"
+msgstr "Datu redaktors"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
+#: dialogs/ChartTableEditor.ui:29
+#, kde-format
+msgid "&Data sets in rows"
+msgstr "Datu kopas &rindās"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
+#: dialogs/ChartTableEditor.ui:36
+#, kde-format
+msgid "Data sets in &columns"
+msgstr "Datu kopas &kolonnās"
+
+#: dialogs/FontEditorDialog.cpp:18
+#, kde-format
+msgid "Select Font"
+msgstr "Atlasīt fontu"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
+#: dialogs/FormatErrorBarDialog.ui:29
+#, kde-format
+msgid "Format Error Bars"
+msgstr "Formatēt kļūdu joslas"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/FormatErrorBarDialog.ui:69
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Category</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Kļūdas kategorija</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:94
+#, kde-format
+msgid "Constant"
+msgstr "Konstante"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:99
+#, kde-format
+msgid "Percentage"
+msgstr "Procentuāli"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:104
+#, kde-format
+msgid "Error Margin"
+msgstr "Kļūdas robeža"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:109
+#, kde-format
+msgid "Standard Deviation"
+msgstr "Standartnovirze"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:114
+#, kde-format
+msgid "Variance"
+msgstr "Novirze"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:119
+#, kde-format
+msgid "From Data table"
+msgstr "No datu tabulas"
+
+#. i18n: ectx: property (text), widget (QLabel, valueLabel)
+#: dialogs/FormatErrorBarDialog.ui:144
+#, kde-format
+msgid "Positive "
+msgstr "Pozitīva "
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
+#: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
+#, kde-format
+msgid "Negative"
+msgstr "Negatīva"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
+#: dialogs/FormatErrorBarDialog.ui:207
+#, kde-format
+msgid "Same for both"
+msgstr "Vienāda abām"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
+#, kde-format
+msgid "Value"
+msgstr "Vērtība"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
+#: dialogs/FormatErrorBarDialog.ui:233
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/FormatErrorBarDialog.ui:303
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Indicator</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Kļūdas indikators</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
+#: dialogs/FormatErrorBarDialog.ui:325
+#, kde-format
+msgid "Positive"
+msgstr "Pozitīvs"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
+#: dialogs/FormatErrorBarDialog.ui:351
+#, kde-format
+msgid "Both"
+msgstr "Abi"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
+#: dialogs/NewAxisDialog.ui:20
+#, kde-format
+msgid "New Axis"
+msgstr "Jauna ass"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
+#: dialogs/NewAxisDialog.ui:46
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&X"
+msgstr "&X"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
+#: dialogs/NewAxisDialog.ui:56
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&Y"
+msgstr "&Y"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/NewAxisDialog.ui:72
+#, kde-format
+msgid "Title:"
+msgstr "Virsraksts:"
+
+#: dialogs/PieDataEditor.cpp:58
+#, kde-format
+msgid "Pie Data Editor"
+msgstr "Pīrāga datu redaktors"
+
+#. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
+#: dialogs/PieDataEditor.ui:52
+#, kde-format
+msgid "Del"
+msgstr "Del"
+
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
+#, kde-format
+msgid "Row %1"
+msgstr "%1. rinda"
+
+#: dialogs/ScatterDataEditor.cpp:115
+#, kde-format
+msgid "Scatter Data Editor"
+msgstr "Izkaisīto datu redaktors"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
+#: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
+#, kde-format
+msgid "Stock Data Editor"
+msgstr "Biržas datu redaktors"
+
+#: dialogs/StockDataEditor.cpp:100
+#, kde-format
+msgid "Delete Row"
+msgstr "Dzēst rindu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/StockDataEditor.ui:77
+#, kde-format
+msgid "Delete row"
+msgstr "Dzēst rindu"
+
+#: dialogs/TableEditorDialog.cpp:56
+#, kde-format
+msgid "Insert Above"
+msgstr "Ievietot virs"
+
+#: dialogs/TableEditorDialog.cpp:57
+#, kde-format
+msgid "Insert Below"
+msgstr "Ievietot zem"
+
+#: dialogs/TableEditorDialog.cpp:58
+#, kde-format
+msgid "Insert Before"
+msgstr "Ievietot pirms"
+
+#: dialogs/TableEditorDialog.cpp:59
+#, kde-format
+msgid "Insert After"
+msgstr "Ievietot pēc"
+
+#: dialogs/TableEditorDialog.cpp:60
+#, kde-format
+msgid "Delete Selection"
+msgstr "Dzēst atlasi"
+
+#: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
+#, kde-format
+msgid "New Row"
+msgstr "Jauna rinda"
+
+#: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
+#, kde-format
+msgid "New Column"
+msgstr "Jauna kolonna"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:19
+#, kde-format
+msgid "Vertical"
+msgstr "Vertikāli"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:24
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontāli"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: LegendConfigWidget.ui:38
+#, kde-format
+msgid "Center"
+msgstr "Centrā"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:52
+#, kde-format
+msgid "Right"
+msgstr "Pa labi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:57
+#, kde-format
+msgid "Top"
+msgstr "Augšā"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:62
+#, kde-format
+msgid "Bottom"
+msgstr "Apakšā"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:67
+#, kde-format
+msgid "Left"
+msgstr "Pa kreisi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:72
+#, kde-format
+msgid "Top-left"
+msgstr "Augšā pa kreisi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:77
+#, kde-format
+msgid "Top-right"
+msgstr "Augšā pa labi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:82
+#, kde-format
+msgid "Bottom-left"
+msgstr "Apakšā pa kreisi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:87
+#, kde-format
+msgid "Bottom-right"
+msgstr "Apakšā pa labi"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: LegendConfigWidget.ui:100
+#, kde-format
+msgid "Position"
+msgstr "Novietojums"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLegend)
+#: LegendConfigWidget.ui:107
+#, kde-format
+msgid "Show Legend"
+msgstr "Rādīt apzīmējumus"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: LegendConfigWidget.ui:130
+#, kde-format
+msgid "Orientation"
+msgstr "Orientācija"
+
+#. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
+#: LegendConfigWidget.ui:147
+#, kde-format
+msgid "Fonts..."
+msgstr "Fonti..."
+
+#: PieConfigWidget.cpp:100
+#, kde-format
+msgid "Data Point %1"
+msgstr "Datu punkts %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
+#, kde-format
+msgid "E&xplode Factor"
+msgstr "&Eksplodēšanas faktors"
+
+#: PlotAreaConfigWidget.cpp:277
+#, kde-format
+msgid "Surface Chart"
+msgstr "Virsmas diagramma"
+
+#: PlotAreaConfigWidget.cpp:279
+#, kde-format
+msgid "Gantt Chart"
+msgstr "Ganta diagramma"
+
+#. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
+#: PlotAreaConfigWidget.ui:61
+#, kde-format
+msgid "3D"
+msgstr "3D"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:69
+#, kde-format
+msgid "Vertical Bars"
+msgstr "Vertikālas joslas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:74
+#, kde-format
+msgid "Horizontal Bars"
+msgstr "Horizontālas joslas"
+
+#. i18n: ectx: property (text), widget (QPushButton, editData)
+#: PlotAreaConfigWidget.ui:82
+#, kde-format
+msgid "Edit Data..."
+msgstr "Rediģēt datus..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
+#, kde-format
+msgid "Axes"
+msgstr "Asis"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: PlotAreaConfigWidget.ui:111 PlotAreaConfigWidget.ui:218
+#: widgets/RingConfigWidget.ui:171
+#, kde-format
+msgid "Data Sets"
+msgstr "Datu kopas"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: PlotAreaConfigWidget.ui:131
+#, kde-format
+msgid "Data Points"
+msgstr "Datu punkti"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: StockConfigWidget.ui:18
+#, kde-format
+msgid "Range line"
+msgstr "Diapazona līnija"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: StockConfigWidget.ui:47
+#, kde-format
+msgid "Gain marker"
+msgstr "Iegūšanas marķieris"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
+#: StockConfigWidget.ui:73
+#, kde-format
+msgid "Loss marker"
+msgstr "Zaudējumu marķieris"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: TitlesConfigWidget.ui:18
+#, kde-format
+msgid "Positioning"
+msgstr "Novietojums"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: TitlesConfigWidget.ui:28
+#, kde-format
+msgid "Resize"
+msgstr "Mainīt izmēru"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/RingConfigWidget.ui:18
+#, kde-format
+msgid "Categories"
+msgstr "Kategorijas"
+
+#: widgets/StrokeConfigWidget.cpp:91
+#, kde-format
+msgid "Butt cap"
+msgstr "Gala vāciņš"
+
+#: widgets/StrokeConfigWidget.cpp:98
+#, kde-format
+msgid "Round cap"
+msgstr "Apakšā vāciņš"
+
+#: widgets/StrokeConfigWidget.cpp:105
+#, kde-format
+msgid "Square cap"
+msgstr "Kvadrātveida vāciņš"
+
+#: widgets/StrokeConfigWidget.cpp:116
+#, kde-format
+msgid "Miter join"
+msgstr "Stūra savienojums"
+
+#: widgets/StrokeConfigWidget.cpp:123
+#, kde-format
+msgid "Round join"
+msgstr "Apaļš savienojums"
+
+#: widgets/StrokeConfigWidget.cpp:130
+#, kde-format
+msgid "Bevel join"
+msgstr "Slīps savienojums"
+
+#: widgets/StrokeConfigWidget.cpp:140
+#, kde-format
+msgid "Miter limit"
+msgstr "Stūra robeža"
+
+#: widgets/StrokeConfigWidget.cpp:196
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr "Noteikt faktiskās atlases līnijas platumu"
+
+#: widgets/StrokeConfigWidget.cpp:210
+#, kde-format
+msgid "Change the color of the line"
+msgstr "Mainīt līnijas krāsu"

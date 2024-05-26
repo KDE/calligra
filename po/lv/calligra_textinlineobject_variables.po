@@ -1,0 +1,356 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-13 19:16+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#, kde-format
+msgid "Format:"
+msgstr "Formāts:"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number"
+msgstr "Numurs"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Name"
+msgstr "Nosaukums"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number and name"
+msgstr "Numurs un nosaukums"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number without separator"
+msgstr "Numurs bez atdalītāja"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name without separator"
+msgstr "Numurs un nosaukums bez atdalītāja"
+
+#: ChapterVariable.cpp:211
+#, kde-format
+msgid "Level:"
+msgstr "Līmenis:"
+
+#: ChapterVariableFactory.cpp:21
+#, kde-format
+msgid "Chapter"
+msgstr "Nodaļa"
+
+#: DateVariableFactory.cpp:22
+#, kde-format
+msgctxt "date that can not be changed later"
+msgid "Date (Fixed)"
+msgstr "Datums (fiksēts)"
+
+#: FixedDateFormat.cpp:34
+#, kde-format
+msgid "Locale date format"
+msgstr "Lokāles datuma formāts"
+
+#: FixedDateFormat.cpp:35
+#, kde-format
+msgid "Short locale date format"
+msgstr "Īsais lokāles datuma formāts"
+
+#: FixedDateFormat.cpp:36
+#, kde-format
+msgid "Locale date & time format"
+msgstr "Lokāles datuma un laika formāts"
+
+#: FixedDateFormat.cpp:37
+#, kde-format
+msgid "Short locale date & time format"
+msgstr "Īsais lokāles datuma un laika formāts"
+
+#: FixedDateFormat.cpp:116
+#, kde-format
+msgid "Day"
+msgstr "Diena"
+
+#: FixedDateFormat.cpp:117
+#, kde-format
+msgid "Month"
+msgstr "Mēnesis"
+
+#: FixedDateFormat.cpp:118
+#, kde-format
+msgid "Year"
+msgstr "Gads"
+
+#: FixedDateFormat.cpp:119
+#, kde-format
+msgid "Hour"
+msgstr "Stunda"
+
+#: FixedDateFormat.cpp:120
+#, kde-format
+msgid "Minute"
+msgstr "Minūte"
+
+#: FixedDateFormat.cpp:121
+#, kde-format
+msgid "Second"
+msgstr "Sekunde"
+
+#: FixedDateFormat.cpp:129
+#, kde-format
+msgid "Flexible Digits (1-31)"
+msgstr "Ierasti cipari (1—31)"
+
+#: FixedDateFormat.cpp:130
+#, kde-format
+msgid "2 Digits (01-31)"
+msgstr "Divciparu (01—31)"
+
+#: FixedDateFormat.cpp:131 FixedDateFormat.cpp:135
+#, kde-format
+msgid "Abbreviated Name"
+msgstr "Saīsināts nosaukums"
+
+#: FixedDateFormat.cpp:132 FixedDateFormat.cpp:136
+#, kde-format
+msgid "Long Name"
+msgstr "Garais nosaukums"
+
+#: FixedDateFormat.cpp:133
+#, kde-format
+msgid "Flexible Digits (1-12)"
+msgstr "Ierasti cipari (1—12)"
+
+#: FixedDateFormat.cpp:134
+#, kde-format
+msgid "2 Digits (01-12)"
+msgstr "Divciparu (01—12)"
+
+#: FixedDateFormat.cpp:137
+#, kde-format
+msgid "Possessive Abbreviated Name"
+msgstr "Saīsinātā nosaukuma piederības forma"
+
+#: FixedDateFormat.cpp:138
+#, kde-format
+msgid "Possessive Long Name"
+msgstr "Garā nosaukuma piederības forma"
+
+#: FixedDateFormat.cpp:139
+#, kde-format
+msgid "2 Digits (01-99)"
+msgstr "Divciparu (01—99)"
+
+#: FixedDateFormat.cpp:140
+#, kde-format
+msgid "4 Digits"
+msgstr "Četru ciparu"
+
+#: FixedDateFormat.cpp:141
+#, kde-format
+msgid "Flexible Digits (1-23)"
+msgstr "Ierasti cipari (1—23)"
+
+#: FixedDateFormat.cpp:142
+#, kde-format
+msgid "2 Digits (01-23)"
+msgstr "Divciparu (01—23)"
+
+#: FixedDateFormat.cpp:143 FixedDateFormat.cpp:145
+#, kde-format
+msgid "Flexible Digits (1-59)"
+msgstr "Ierasti cipari (1—59)"
+
+#: FixedDateFormat.cpp:144 FixedDateFormat.cpp:146
+#, kde-format
+msgid "2 Digits (01-59)"
+msgstr "Divciparu (01—59)"
+
+#: FixedDateFormat.cpp:147
+#, kde-format
+msgid "am/pm"
+msgstr "am/pm"
+
+#: FixedDateFormat.cpp:148
+#, kde-format
+msgid "AM/PM"
+msgstr "AM/PM"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: FixedDateFormat.ui:21
+#, kde-format
+msgid "Date Correction:"
+msgstr "Datuma korekcija:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, correction)
+#: FixedDateFormat.ui:28
+#, kde-format
+msgid " days"
+msgstr " dienas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FixedDateFormat.ui:53
+#, kde-format
+msgid "Select the way the date should be displayed:"
+msgstr "Izvēlieties datu parādīšanas veidu:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, custom)
+#: FixedDateFormat.ui:60
+#, kde-format
+msgid "Custom format"
+msgstr "Pielāgots formāts"
+
+#. i18n: ectx: property (text), widget (QToolButton, formatButton)
+#: FixedDateFormat.ui:101
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: InfoVariableFactory.cpp:24
+#, kde-format
+msgid "Author Name"
+msgstr "Autora vārds"
+
+#: InfoVariableFactory.cpp:32
+#, kde-format
+msgid "Title"
+msgstr "Virsraksts"
+
+#: InfoVariableFactory.cpp:40
+#, kde-format
+msgid "Subject"
+msgstr "Tēma"
+
+#: InfoVariableFactory.cpp:48
+#, kde-format
+msgid "File Name"
+msgstr "Datnes nosaukums"
+
+#: InfoVariableFactory.cpp:56
+#, kde-format
+msgid "Keywords"
+msgstr "Atslēgas vārdi"
+
+#: InfoVariableFactory.cpp:64
+#, kde-format
+msgid "Comments"
+msgstr "Komentāri"
+
+#: PageVariableFactory.cpp:23
+#, kde-format
+msgid "Page Count"
+msgstr "Lapu skaits"
+
+#: PageVariableFactory.cpp:31
+#, kde-format
+msgid "Page Number"
+msgstr "Lapas numurs"
+
+#: UserVariableFactory.cpp:22
+#, kde-format
+msgid "Custom"
+msgstr "Pielāgots"
+
+#: UserVariableOptionsWidget.cpp:34
+#, kde-format
+msgid "Name:"
+msgstr "Nosaukums:"
+
+#: UserVariableOptionsWidget.cpp:45
+#, kde-format
+msgid "New"
+msgstr "Jauns"
+
+#: UserVariableOptionsWidget.cpp:49
+#, kde-format
+msgid "Delete"
+msgstr "Dzēst"
+
+#: UserVariableOptionsWidget.cpp:62
+#, kde-format
+msgid "String"
+msgstr "Virkne"
+
+#: UserVariableOptionsWidget.cpp:63
+#, kde-format
+msgid "Boolean"
+msgstr "Būla"
+
+#: UserVariableOptionsWidget.cpp:64
+#, kde-format
+msgid "Float"
+msgstr "Peldošs"
+
+#: UserVariableOptionsWidget.cpp:65
+#, kde-format
+msgid "Percentage"
+msgstr "Procenti"
+
+#: UserVariableOptionsWidget.cpp:66
+#, kde-format
+msgid "Currency"
+msgstr "Valūta"
+
+#: UserVariableOptionsWidget.cpp:67
+#, kde-format
+msgid "Date"
+msgstr "Datums"
+
+#: UserVariableOptionsWidget.cpp:68
+#, kde-format
+msgid "Time"
+msgstr "Laiks"
+
+#: UserVariableOptionsWidget.cpp:69
+#, kde-format
+msgid "Formula"
+msgstr "Formula"
+
+#: UserVariableOptionsWidget.cpp:70
+#, kde-format
+msgid "Void"
+msgstr "Nederīgs"
+
+#: UserVariableOptionsWidget.cpp:75
+#, kde-format
+msgid "Value:"
+msgstr "Vērtība:"
+
+#: UserVariableOptionsWidget.cpp:152
+#, kde-format
+msgid "New Variable"
+msgstr "Jauns mainīgais"
+
+#: UserVariableOptionsWidget.cpp:152
+#, kde-format
+msgid "Name for new variable:"
+msgstr "Jaunā mainīgā nosaukums:"
+
+#: UserVariableOptionsWidget.cpp:168
+#, kde-format
+msgid "Delete variable <b>%1</b>?"
+msgstr "Vai dzēst mainīgo <b>%1</b>?"
+
+#: UserVariableOptionsWidget.cpp:169
+#, kde-format
+msgid "Delete Variable"
+msgstr "Dzēst mainīgo"

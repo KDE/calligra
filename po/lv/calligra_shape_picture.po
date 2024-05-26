@@ -1,0 +1,139 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:14+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Mainīt attēlu"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Kadrēt attēlu"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Mainīt attēla krāsu režīmu"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr "Attēla kontūras (pēc attēla analīzes)"
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr "Noņemt attēla kontūras"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr "Aizstāt attēlu..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr "Paturēt proporcijas"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Pa kreisi:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Pa labi:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Apakšā:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Augšā:"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Atiestatīt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr "Kontūras (pēc attēla analīzes)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr "Krāsu režīms:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Kadrēt"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Attēls"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr "Attēla objekts, kas var attēlot jpg, png u.c. formātus"
+
+#: PictureTool.cpp:94
+#, kde-format
+msgid "Standard"
+msgstr "Standarta"
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Greyscale"
+msgstr "Pelēktoņu"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Monochrome"
+msgstr "Melnbalts"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Watermark"
+msgstr "Ūdenszīme"
+
+#: PictureToolFactory.cpp:18
+#, kde-format
+msgid "Picture editing"
+msgstr "Attēla rediģēšana"

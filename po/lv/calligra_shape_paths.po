@@ -1,0 +1,346 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:08+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "Mainīt elipsi"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "Arka"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "Pīrāgs"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "Horda"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "Elipses forma"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "Tips:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "Sākuma leņķis;"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "Beigu leņķis"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "Aizvērt elipsi"
+
+#: ellipse/EllipseShapeFactory.cpp:20
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipse"
+
+#: ellipse/EllipseShapeFactory.cpp:22
+#, kde-format
+msgid "An ellipse"
+msgstr "Elipse"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, kde-format
+msgid "A callout shape"
+msgstr "Remarkas objekts"
+
+#: enhancedpath/CalloutShapeFactory.cpp:148
+#, kde-format
+msgid "Rectangular Callout"
+msgstr "Taisnstūra remarka"
+
+#: enhancedpath/CalloutShapeFactory.cpp:150
+#, kde-format
+msgid "A rectangular callout"
+msgstr "Taisnstūra remarka"
+
+#: enhancedpath/CalloutShapeFactory.cpp:229
+#, kde-format
+msgid "Rounded Callout"
+msgstr "Noapaļota remarka"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, kde-format
+msgid "A rounded rectangular callout"
+msgstr "Noapaļota taisnstūra remarka"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, kde-format
+msgid "Callout editing"
+msgstr "Remarkas rediģēšana"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "Uzlabots ceļa objekts"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "Uzlabots ceļs"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
+#, kde-format
+msgid "Cross"
+msgstr "Krusts"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
+#, kde-format
+msgid "A cross"
+msgstr "Krusts"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
+#, kde-format
+msgid "Arrow"
+msgstr "Bulta"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
+#, kde-format
+msgid "An arrow"
+msgstr "Bulta"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
+#, kde-format
+msgid "Smiley"
+msgstr "Smaidiņš"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
+#, kde-format
+msgid "Circular Arrow"
+msgstr "Riņķveida bulta"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
+#, kde-format
+msgid "A circular-arrow"
+msgstr "Riņķveida bulta"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
+#, kde-format
+msgid "Gearhead"
+msgstr "Zobratgalva"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
+#, kde-format
+msgid "A gearhead"
+msgstr "Zobratgalva"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "Mainīt četrstūri"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "Četrstūra forma"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr "Stūra rādiuss x:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr "Stūra rādiuss y:"
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "Četrstūris"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "Četrstūris"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "Mainīt spirāli"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "Līkne"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "Līnija"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr "Pulksteņrādītāja virzienā"
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr "Pretēji pulksteņrādītāja virzienam"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "Spirāles forma"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "Izgaist:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "Virziens:"
+
+#: spiral/SpiralShapeFactory.cpp:17
+#, kde-format
+msgid "Spiral"
+msgstr "Spirāle"
+
+#: spiral/SpiralShapeFactory.cpp:19
+#, kde-format
+msgid "A spiral shape"
+msgstr "Spirāles forma"
+
+#: star/StarShapeConfigCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "Mainīt zvaigzni"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "Zvaigznes forma"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "Poligons:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "Stūri:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "Iekšējais rādiuss"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "Ārējais rādiuss:"
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "Zvaigznes forma"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
+#, kde-format
+msgid "A star"
+msgstr "Zvaigzne"
+
+#: star/StarShapeFactory.cpp:37
+#, kde-format
+msgid "Star"
+msgstr "Zvaigzne"
+
+#: star/StarShapeFactory.cpp:51
+#, kde-format
+msgid "Flower"
+msgstr "Puķe"
+
+#: star/StarShapeFactory.cpp:53
+#, kde-format
+msgid "A flower"
+msgstr "Puķe"
+
+#: star/StarShapeFactory.cpp:68
+#, kde-format
+msgid "Pentagon"
+msgstr "Piecstūris"
+
+#: star/StarShapeFactory.cpp:70
+#, kde-format
+msgid "A pentagon"
+msgstr "Piecstūris"
+
+#: star/StarShapeFactory.cpp:84
+#, kde-format
+msgid "Hexagon"
+msgstr "Sešstūris"
+
+#: star/StarShapeFactory.cpp:86
+#, kde-format
+msgid "A hexagon"
+msgstr "Sešstūris"

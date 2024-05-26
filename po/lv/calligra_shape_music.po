@@ -1,0 +1,547 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+# Māris Nartišs <maris.kde@gmail.com>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-25 10:37+0300\n"
+"Last-Translator: Māris Nartišs <maris.kde@gmail.com>\n"
+"Language-Team: \n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 22.12.3\n"
+
+#: actions/AccidentalAction.cpp:52
+#, kde-format
+msgid "Double flat"
+msgstr "Dubultais bemols"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Bemols"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Bekars"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Diēzs"
+
+#: actions/AccidentalAction.cpp:60
+#, kde-format
+msgid "Double sharp"
+msgstr "Dubultais diēzs"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:48
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 bemoli"
+
+#: actions/AccidentalAction.cpp:65 actions/KeySignatureAction.cpp:50
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 diēzi"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Punkti"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Dzēšgumija"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Ab Major"
+msgstr "Labemol mažors"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "Eb Major"
+msgstr "Mibemol mažors"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "Bb Major"
+msgstr "Sibemol mažors"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "F Major"
+msgstr "Fa mažors"
+
+#: actions/KeySignatureAction.cpp:37
+#, kde-format
+msgid "C Major"
+msgstr "Do mažors"
+
+#: actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "G Major"
+msgstr "Sol mažors"
+
+#: actions/KeySignatureAction.cpp:41
+#, kde-format
+msgid "D Major"
+msgstr "Re mažors"
+
+#: actions/KeySignatureAction.cpp:43
+#, kde-format
+msgid "A Major"
+msgstr "La mažors"
+
+#: actions/KeySignatureAction.cpp:45
+#, kde-format
+msgid "E Major"
+msgstr "Mi mažors"
+
+#: actions/KeySignatureAction.cpp:62
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Cita"
+
+#: actions/NoteEntryAction.cpp:54
+#, kde-format
+msgid "note"
+msgstr "nots"
+
+#: actions/NoteEntryAction.cpp:54
+#, kde-format
+msgid "rest"
+msgstr "pauze"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Dubulta vesela "
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Whole "
+msgstr "Vesela "
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Half "
+msgstr "Pus"
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "Quarter "
+msgstr "Ceturtdaļ"
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "Eighth "
+msgstr "Astotdaļ"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "16th "
+msgstr "Sešpadsmitdaļ"
+
+#: actions/NoteEntryAction.cpp:69
+#, kde-format
+msgid "32nd "
+msgstr "Trīsdesmitdivdaļ"
+
+#: actions/NoteEntryAction.cpp:71
+#, kde-format
+msgid "64th "
+msgstr "Sešdesmitčetrdaļ"
+
+#: actions/NoteEntryAction.cpp:73
+#, kde-format
+msgid "128th "
+msgstr "Simtdivdesmitastotdaļ"
+
+#: actions/NoteEntryAction.cpp:75
+#, kde-format
+msgid "Unknown note"
+msgstr "Nezināma nots"
+
+#: actions/NoteEntryAction.cpp:75
+#, kde-format
+msgid "Unknown rest"
+msgstr "Nezināma pauze"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Noņemt takti"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Atlasīt"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Vijoles"
+
+#: actions/SetClefAction.cpp:42
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Basa"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Soprāna"
+
+#: actions/SetClefAction.cpp:48
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Alta"
+
+#: actions/SetClefAction.cpp:50
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Tenora"
+
+#: actions/SetClefAction.cpp:52
+#, kde-format
+msgid "C clef on line %1"
+msgstr "Do atslēga uz rindas %1"
+
+#: actions/SetClefAction.cpp:55
+#, kde-format
+msgid "Unknown clef"
+msgstr "Nezināma atslēga"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Savienotas notis"
+
+#: commands/AddBarsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "Pievienot taktis"
+
+#: commands/AddDotCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "Pievienot punktu"
+
+#: commands/AddNoteCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "Noteikt akordu ilgumu"
+
+#: commands/AddNoteCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "Pievienot noti"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "Pievienot partiju"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "%1. partija"
+
+#: commands/ChangePartDetailsCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "Mainīt partijas informāciju"
+
+#: commands/CreateChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "Pievienot akordu"
+
+#: commands/CreateChordCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "Pievienot pauzi"
+
+#: commands/MakeRestCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "Pārveidot akordu par pauzi"
+
+#: commands/RemoveBarCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "Noņemt takti"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "Noņemt pauzi"
+
+#: commands/RemoveChordCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "Noņemt akordu"
+
+#: commands/RemoveNoteCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "Noņemt noti"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "Noņemt partiju"
+
+#: commands/RemoveStaffElementCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "Noņemt atslēgu"
+
+#: commands/RemoveStaffElementCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr "Noņemt nošu līniju"
+
+#: commands/SetAccidentalsCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "Pievienot alterācijas zīmes"
+
+#: commands/SetClefCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "Mainīt nošatslēgu"
+
+#: commands/SetKeySignatureCommand.cpp:26
+#: commands/SetKeySignatureCommand.cpp:76
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "Mainīt atslēgas zīmi"
+
+#: commands/SetTimeSignatureCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "Mainīt taktsmēru"
+
+#: commands/ToggleTiedNoteCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr "Pārslēgt nots līgu"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Norādīt atslēgas zīmi"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Reģions"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Takts"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "līdz"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "līdz skaņdarba beigām"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "līdz nākamajai atslēgas maiņai"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Nošu līnijas"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Atjaunināt visas nošu līnijas"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Atjaunināt tikai atlasīto nošu līniju"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Partijas informācija"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Nosaukums:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Īss nosaukums:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Nošu līnijas:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "1. balss"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "2. balss"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "3. balss"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "4. balss"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
+#: SimpleEntryTool.cpp:681
+#, kde-format
+msgid "Add measures"
+msgstr "Pievienot taktis"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
+#, kde-format
+msgid "Import"
+msgstr "Importēt"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
+#, kde-format
+msgid "Export"
+msgstr "Eksportēt"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "1. partija"
+
+#: MusicShapeFactory.cpp:34
+#, kde-format
+msgid "Music Shape"
+msgstr "Nošu raksta objekts"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Objekts, kas nodrošina nošu rediģēšanu"
+
+#: MusicTool.cpp:83
+#, kde-format
+msgid "Parts"
+msgstr "Partijas"
+
+#: MusicToolFactory.cpp:18
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Nošu rediģēšana, partijas"
+
+#: SimpleEntryTool.cpp:227
+#, kde-format
+msgid "Clef"
+msgstr "Atslēga"
+
+#: SimpleEntryTool.cpp:256
+#, kde-format
+msgid "Time signature"
+msgstr "Takts apzīmējums"
+
+#: SimpleEntryTool.cpp:286
+#, kde-format
+msgid "Key signature"
+msgstr "Atslēgas apzīmējums"
+
+#: SimpleEntryTool.cpp:681
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Cik taktu pievienot?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Importēt"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr "„MusicXML“ datnes (*.xml)"
+
+#: SimpleEntryTool.cpp:761
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Eksportēt"
+
+#: SimpleEntryToolFactory.cpp:17
+#, kde-format
+msgid "Music editing"
+msgstr "Nošu rediģēšana"

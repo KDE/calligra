@@ -1,0 +1,307 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-23 09:39+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Maisīt"
+
+#: BlendEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Blend mode"
+msgstr "Maisīšanas režīms"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Normal"
+msgstr "Normāls"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Multiply"
+msgstr "Reizināt"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Screen"
+msgstr "Ekrāns"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Darken"
+msgstr "Aptumšot"
+
+#: BlendEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Lighten"
+msgstr "Padarīt gaišāku"
+
+#: BlurEffect.cpp:257 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Gausa aizmiglojums"
+
+#: BlurEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Radius"
+msgstr "Rādiuss"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Krāsu matrica"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Pielietot krāsu matricu"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Saturate colors"
+msgstr "Piesātināt krāsas"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Rotate hue"
+msgstr "Rotēt toni"
+
+#: ColorMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Spilgtums uz alfa"
+
+#: ColorMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Saturate value"
+msgstr "Piesātināt vērtību"
+
+#: ColorMatrixEffectConfigWidget.cpp:62
+#, kde-format
+msgid "Angle"
+msgstr "Leņķis"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Krāsu matrica"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Komponenta nodošana"
+
+#: ComponentTransferEffectConfigWidget.cpp:46
+#, kde-format
+msgid "Function"
+msgstr "Funkcija"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Identity"
+msgstr "Identitāte"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Table"
+msgstr "Tabula"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Discrete"
+msgstr "Diskrēts"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Linear"
+msgstr "Lineārs"
+
+#: ComponentTransferEffectConfigWidget.cpp:52
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ComponentTransferEffectConfigWidget.cpp:65
+#: ComponentTransferEffectConfigWidget.cpp:75
+#, kde-format
+msgid "Values"
+msgstr "Vērtības"
+
+#: ComponentTransferEffectConfigWidget.cpp:85
+#, kde-format
+msgid "Slope"
+msgstr "Slīpums"
+
+#: ComponentTransferEffectConfigWidget.cpp:90
+#, kde-format
+msgid "Intercept"
+msgstr "Pārtvert"
+
+#: ComponentTransferEffectConfigWidget.cpp:102
+#, kde-format
+msgid "Amplitude"
+msgstr "Amplitūda"
+
+#: ComponentTransferEffectConfigWidget.cpp:107
+#, kde-format
+msgid "Exponent"
+msgstr "Eksponente"
+
+#: ComponentTransferEffectConfigWidget.cpp:112 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Nobīde"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Kompozīts"
+
+#: CompositeEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Operation"
+msgstr "Darbība"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Konvolvēt matricu"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Duplicate"
+msgstr "Dublēt"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "Wrap"
+msgstr "Aplauzt"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "None"
+msgstr "Nav"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:36
+#, kde-format
+msgid "Edge mode:"
+msgstr "Malu režīms:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:43
+#, kde-format
+msgid "Kernel size:"
+msgstr "Kodola izmērs:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:52
+#, kde-format
+msgid "Target point:"
+msgstr "Mērķa punkts:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:59
+#, kde-format
+msgid "Divisor:"
+msgstr "Dalītājs:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Bias:"
+msgstr "Novirze:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:64
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Paturēt alfa"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:67
+#, kde-format
+msgid "Edit kernel"
+msgstr "Rediģēt kodolu"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Kontūras aizpildījums"
+
+#: FloodEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Flood color"
+msgstr "Aizpildījuma krāsa"
+
+#: ImageEffect.cpp:24 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Attēls"
+
+#: ImageEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Select image..."
+msgstr "Atlasīt attēlu..."
+
+#: ImageEffectConfigWidget.cpp:55
+#, kde-format
+msgid "Select image"
+msgstr "Atlasīt attēlu"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Apvienot"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morfoloģija"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Erode"
+msgstr "Erodēt"
+
+#: MorphologyEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Dilate"
+msgstr "Izplest"
+
+#: MorphologyEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Operator:"
+msgstr "Operators:"
+
+#: MorphologyEffectConfigWidget.cpp:34
+#, kde-format
+msgid "Radius x:"
+msgstr "Rādiuss x:"
+
+#: MorphologyEffectConfigWidget.cpp:40
+#, kde-format
+msgid "Radius y:"
+msgstr "Rādiuss y:"
+
+#: OffsetEffectConfigWidget.cpp:23
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:29
+#, kde-format
+msgid "dy"
+msgstr "dy"

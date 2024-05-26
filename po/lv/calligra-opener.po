@@ -1,0 +1,90 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasūns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-08 18:40+0300\n"
+"Last-Translator: Toms Trasūns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Toms Trasūns"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "toms.trasuns@posteo.net"
+
+#: main.cpp:62
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "„<filename>%1</filename>“ MIME tips nav atrasts!"
+
+#: main.cpp:118
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Atvērt ar „<application>%1</application>“"
+
+#: main.cpp:122
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Neizdodas atvērt „Calligra“ programmu, lai atvērtu „<filename>%1</filename>“."
+"<nl/>Vai vēlaties atvērt šo datni ar noklusējuma programmu „<application>%2</"
+"application>“?"
+
+#: main.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "„Calligra“ programma nav atrasta"
+
+#: main.cpp:156
+#, kde-format
+msgid "Calligra Opener"
+msgstr "„Calligra“ atvērējs"
+
+#: main.cpp:158
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "„Calligra“ dokumentu atvērējs"
+
+#: main.cpp:160
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Autortiesības 2010—%1 „Calligra“ izstrādātāji"
+
+#: main.cpp:161
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:168
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Uzskaita visu pieejamo „Calligra“ programmu nosaukumus"
+
+#: main.cpp:169
+#, kde-format
+msgid "Files to open"
+msgstr "Atveramās datnes"

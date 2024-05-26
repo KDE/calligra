@@ -1,0 +1,75 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-04-30 16:39+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: KoContactSemanticItemFactory.cpp:44
+#, kde-format
+msgctxt "displayname of the semantic item type Contact"
+msgid "Contact"
+msgstr "Kontakts"
+
+#: KoRdfFoaF.cpp:167
+#, kde-format
+msgid "Select an address book for saving:"
+msgstr "Atlasiet adrešu grāmatu saglabāšanai:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfFoaFEditWidget.ui:26
+#, kde-format
+msgid "&Name:"
+msgstr "&Vārds:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfFoaFEditWidget.ui:36
+#, kde-format
+msgid "&Nick:"
+msgstr "&Iesauka:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfFoaFEditWidget.ui:46
+#, kde-format
+msgid "&Phone Number:"
+msgstr "&Tālruņa numurs:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfFoaFEditWidget.ui:59
+#, kde-format
+msgid "&Home Page:"
+msgstr "&Mājaslapa:"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:29
+#, kde-format
+msgid "Contact Information"
+msgstr "Kontaktinformācija"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:47
+#, kde-format
+msgid "Edit..."
+msgstr "Rediģēt..."
+
+#: KoRdfFoaFTreeWidgetItem.cpp:50
+#, kde-format
+msgid "Import contact"
+msgstr "Importēt kontaktu"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:53
+#, kde-format
+msgid "Export as vcard..."
+msgstr "Eksportēt kā „vcard“..."

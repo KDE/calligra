@@ -3,49 +3,49 @@
 #
 # Maris Nartiss <maris.kde@gmail.com>, 2006.
 # Viesturs Zariņš <viesturs.zarins@mii.lu.lv>, 2008.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2008-12-27 20:49+0200\n"
-"Last-Translator: Viesturs Zariņš <viesturs.zarins@mii.lu.lv>\n"
-"Language-Team: Latvian <locale@laka.lv>\n"
+"PO-Revision-Date: 2024-04-30 22:33+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Gints Polis, Māris Nartišs, Viesturs Zariņš"
+msgstr "Gints Polis, Māris Nartišs, Viesturs Zariņš, Toms Trasūns"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "gintam@inbox.lv, maris.kde@gmail.com, viesturs.zarins@mii.lu.lv"
+msgstr ""
+"gintam@inbox.lv, maris.kde@gmail.com, viesturs.zarins@mii.lu.lv, toms."
+"trasuns@posteo.net"
 
 #: calligraconverter.cpp:179
-#, fuzzy, kde-format
-#| msgid "KOffice Document Converter"
+#, kde-format
 msgid "CalligraConverter"
-msgstr "KOffice dokumentu konvertors"
+msgstr "„Calligra“ pārveidotājs"
 
 #: calligraconverter.cpp:181
-#, fuzzy, kde-format
-#| msgid "KOffice Document Converter"
+#, kde-format
 msgid "Calligra Document Converter"
-msgstr "KOffice dokumentu konvertors"
+msgstr "„Calligra“ dokumentu pārveidotājs"
 
 #: calligraconverter.cpp:183
-#, fuzzy, kde-format
-#| msgid "(c) 2001-2004 KOffice developers"
+#, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr "(c) 2001-2004 KOffice izstrādātāji"
+msgstr "Autortiesības 2001—%1 „Calligra“ izstrādātāji"
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -60,22 +60,22 @@ msgstr "Nicolas Goutte"
 #: calligraconverter.cpp:186
 #, kde-format
 msgid "Dan Leinir Turthra Jensen"
-msgstr ""
+msgstr "Dan Leinir Turthra Jensen"
 
 #: calligraconverter.cpp:193
 #, kde-format
 msgid "Input file"
-msgstr "Ievades fails"
+msgstr "Ievades datne"
 
 #: calligraconverter.cpp:194
 #, kde-format
 msgid "Output file"
-msgstr "Izvades fails"
+msgstr "Izvades datne"
 
 #: calligraconverter.cpp:195
 #, kde-format
 msgid "Make a backup of the destination file"
-msgstr "Izveidot rezerves kopiju mērķa failam"
+msgstr "Izveidot mērķa datne dublējumu"
 
 #: calligraconverter.cpp:196
 #, kde-format
@@ -85,27 +85,27 @@ msgstr "Masveida režīms: nerāda logus"
 #: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr "Interaktīvs režīms: rāda logus (noklusētais)"
+msgstr "Interaktīvs režīms: rāda logus (noklusējums)"
 
 #: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
-msgstr "Izvades faila MIME tips"
+msgstr "Izvades datnes MIME tips"
 
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "Drukāšanas orientācija. Tā var būt portreta vai ainavas."
 
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "Papīra izmērs. A4, ASV juridisks, vēstule, ..."
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "Lapas apmales lielums. Pēc noklusējuma tā ir 0,2."
 
 #: calligraconverter.cpp:215
 #, kde-format
@@ -115,22 +115,22 @@ msgstr "Nepieciešami divi argumenti"
 #: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr "Ievades faila %1 MIME tips nav atrasts!"
+msgstr "Nav atrasts ievades datnes „%1“ MIME tips!"
 
 #: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
-msgstr "%1 MIME tips nav atrasts"
+msgstr "„%1“ MIME tips nav atrasts"
 
 #: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "MIME tips nav atrasts, mēģiniet lietot -mimetype opciju"
+msgstr "MIME tips nav atrasts, mēģiniet lietot „-mimetype“ opciju"
 
 #: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
-msgstr "*** Konvertēšana neizdevās! ***"
+msgstr "*** Pārveidošana neizdevās! ***"
 
 #, fuzzy
 #~| msgctxt "NAME OF TRANSLATORS"

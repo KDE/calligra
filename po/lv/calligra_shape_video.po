@@ -1,0 +1,81 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"PO-Revision-Date: 2024-05-11 11:15+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: ChangeVideoCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Change video"
+msgstr "Mainīt video"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnVideoFile)
+#: forms/VideoToolWidget.ui:33
+#, kde-format
+msgid "Replace video..."
+msgstr "Aizstāt video..."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnPlay)
+#: forms/VideoToolWidget.ui:40
+#, kde-format
+msgid "Play Video"
+msgstr "Atskaņot video"
+
+#: FullScreenPlayer.cpp:54 VideoTool.cpp:34
+#, kde-format
+msgid "Play"
+msgstr "Atskaņot"
+
+#: FullScreenPlayer.cpp:59
+#, kde-format
+msgid "Pause"
+msgstr "Pauzēt"
+
+#: FullScreenPlayer.cpp:64
+#, kde-format
+msgid "Stop"
+msgstr "Apturēt"
+
+#: FullScreenPlayer.cpp:69
+#, kde-format
+msgid "Unmute"
+msgstr "Atjaunot skaņu"
+
+#: FullScreenPlayer.cpp:74
+#, kde-format
+msgid "Mute"
+msgstr "Apklusināt"
+
+#: SelectVideoWidget.cpp:27
+#, kde-format
+msgid "Save as part of document"
+msgstr "Saglabāt kā dokumenta daļu"
+
+#: VideoShapeFactory.cpp:24
+#, kde-format
+msgid "Video"
+msgstr "Video"
+
+#: VideoShapeFactory.cpp:26
+#, kde-format
+msgid "Video, embedded or fullscreen"
+msgstr "Video, iegults vai pilnekrāna"
+
+#: VideoToolFactory.cpp:18
+#, kde-format
+msgid "Video handling"
+msgstr "Video apstrāde"

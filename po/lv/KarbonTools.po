@@ -1,0 +1,415 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:40+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "Kaligrāfisks objekts"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "Kaligrāfisks objekts"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "Saglabāt profilu kā..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "Noņemt profilu"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "&Sekot atlasītajam ceļam"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "&Izmantot planšetes spiedienu"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "Platums:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "Sašaurināšana:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "Izmantot planšetes &leņķi"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Leņķis:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "Fiksācija:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "Gali:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "Svars:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "Pretestība:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgid "Current"
+msgstr "Pašreizējais"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "Profila nosaukums"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "Ierakstiet nosaukumu, ar kādu profilu saglabāt:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "Nederīgs nosaukums"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Diemžēl ierakstītais nosaukums nav derīgs."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Profils ar šādu nosaukumu jau pastāv.\n"
+"Vai vēlaties to pārrakstīt?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
+#, kde-format
+msgid "Mouse"
+msgstr "Pele"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
+#, kde-format
+msgid "Graphics Pen"
+msgstr "Grafikas pildspalva"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#, kde-format
+msgid "Fill"
+msgstr "Aizpildījums"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "Kaligrāfija: palielināt platumu"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "Kaligrāfija: samazināt platumu"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "Kaligrāfija: palielināt leņķi"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "Kaligrāfija: samazināt leņķi"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "Kaligrāfija"
+
+#: filterEffectTool/FilterAddCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "Pievienot filtra efektu"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:60
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Pievienot efektu pašreizējai filtru kopai"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:70
+#, kde-format
+msgid "Add to filter presets"
+msgstr "Pievienot filtru sagatavēm"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:74
+#, kde-format
+msgid "Remove filter preset"
+msgstr "Noņemt filtru sagatavi"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "Efekta nosaukums"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "Ierakstiet filtra efekta nosaukumu"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:320
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "Filtra efekta redaktors"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "Efekti un savienojumi"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "Filtru sagataves"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:474
+#, kde-format
+msgid "Effect Properties"
+msgstr "Efekta īpašības"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "Noņemt filtra efektu"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "Iestatīt filtru kopu"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:439
+#, kde-format
+msgid "Effects"
+msgstr "Efekti"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:447
+#, kde-format
+msgid "View and edit filter"
+msgstr "Skatīt un rediģēt filtru"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Remove filter from object"
+msgstr "Noņemt filtru no objekta"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:457
+#, kde-format
+msgid "Add Filter"
+msgstr "Pievienot filtru"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:486
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:492
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:498
+#, kde-format
+msgid "W:"
+msgstr "P:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:504
+#, kde-format
+msgid "H:"
+msgstr "A:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:509
+#, kde-format
+msgid "Effect Region"
+msgstr "Efektu reģions"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "Filtra efektu rediģēšana"
+
+#: KarbonGradientTool.cpp:199
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "Velciet, lai mainītu gradienta novietojumu."
+
+#: KarbonGradientTool.cpp:208
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr ""
+"Velciet, lai pārvietotu krāsas beigas. Veiciet dubultklikšķi, lai noņemtu "
+"krāsas beigas."
+
+#: KarbonGradientTool.cpp:210
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "Velciet, lai pārvietotu krāsas beigas."
+
+#: KarbonGradientTool.cpp:217
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+"Velciet, lai pārvietotu gradienta beigas. Veiciet dubultklikšķi, lai "
+"ievietotu krāsas beigas"
+
+#: KarbonGradientTool.cpp:493
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Rediģēt gradientu"
+
+#: KarbonGradientTool.cpp:495
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Iepriekš definētie gradienti"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "Gradienta rediģēšana"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Original"
+msgstr "Sākotnējais"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Tiled"
+msgstr "Flīzēts"
+
+#: KarbonPatternOptionsWidget.cpp:24
+#, kde-format
+msgid "Stretched"
+msgstr "Izstiepts"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top Left"
+msgstr "Augšā pa kreisi"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top"
+msgstr "Augšā"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Top Right"
+msgstr "Augšā pa labi"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Left"
+msgstr "Pa kreisi"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Center"
+msgstr "Centrā"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Right"
+msgstr "Pa labi"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom Left"
+msgstr "Apakšā pa kreisi"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom"
+msgstr "Apakšā"
+
+#: KarbonPatternOptionsWidget.cpp:34
+#, kde-format
+msgid "Bottom Right"
+msgstr "Apakšā pa labi"
+
+#: KarbonPatternTool.cpp:272
+#, kde-format
+msgid "Pattern Options"
+msgstr "Raksta opcijas"
+
+#: KarbonPatternTool.cpp:274
+#, kde-format
+msgid "Patterns"
+msgstr "Raksti"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "Raksta rediģēšana"

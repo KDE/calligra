@@ -1,0 +1,122 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-05-11 11:53+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.02.2\n"
+
+#: CalendarTool.cpp:62
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Beigu datums ir pirms sākuma datuma! Nodrošiniet, ka beigu datums ir pēc "
+"sākuma datuma."
+
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
+#, kde-format
+msgid "Error"
+msgstr "Kļūda"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalendāriem nevajadzētu būt garākiem par 10 gadiem. Ja tiešām vajadzīgi šādi "
+"gari periodi, ieteicams tos sadalīt."
+
+#: CalendarTool.cpp:76
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Sākuma un beigu datums sakrīt! Kalendārā būt ievietota tikai viena diena. "
+"Vai vēlaties turpināt?"
+
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
+#, kde-format
+msgid "Warning"
+msgstr "Uzmanību"
+
+#: CalendarTool.cpp:86
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Tādu kalendāru veidošana, kas radīs garākus periodus par vienu gadu var "
+"aizņemt daudz vietas. Vai vēlaties turpināt?"
+
+#: CalendarTool.cpp:109
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Apgabals, kurā ir ievietots kalendārs NAV tukša. Vai tiešām vēlaties "
+"turpināt un pārrakstīt esošos datus? Izvēloties „Nē“, apgabals, kas būtu "
+"nepieciešams vēlamajam kalendāram tiks atlasīts, lai Jūs varētu redzēt, kādi "
+"dati tiks pārrakstīti."
+
+#: CalendarTool.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Ievietot kalendāru"
+
+#: CalendarTool.cpp:126
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalendārs no %1 līdz %2"
+
+#: CalendarTool.cpp:166
+#, kde-format
+msgid "week"
+msgstr "nedēļa"
+
+#: CalendarToolFactory.cpp:22
+#, kde-format
+msgid "Calendar"
+msgstr "Kalendārs"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Kalendāra rīks"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Ievietos"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Beigu datums:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Sākuma datums:"

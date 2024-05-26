@@ -2,19 +2,20 @@
 # Copyright (C) 2006, 2009 Free Software Foundation, Inc.
 #
 # Maris Nartiss <maris.kde@gmail.com>, 2006, 2009.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2009-08-18 11:39+0300\n"
-"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
-"Language-Team: Latvian <locale@laka.lv>\n"
+"PO-Revision-Date: 2024-05-23 22:27+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -61,131 +62,98 @@ msgid "&Settings"
 msgstr "&Iestatījumi"
 
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
-#, fuzzy
-#| msgid "Add new slideshow"
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr "Pievienot jaunu slīdrādi"
+msgstr "Pievienot pielāgotu slīdrādi"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
-#, fuzzy
-#| msgid "Create shape animation"
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr "Izveidot formas animāciju"
+msgstr "Izveidot objekta animāciju"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
-#, fuzzy
-#| msgid "Animation tool"
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr "Animācijas rīks"
+msgstr "Rediģēt animāciju palaišanas notikumu"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
-#, fuzzy
-#| msgid "Create shape animation"
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr "Izveidot formas animāciju"
+msgstr "Noņemt objekta animāciju"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
-#, fuzzy
-#| msgid "Delete slideshow"
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "Dzēst slīdrādi"
+msgstr "Dzēst pielāgoto slīdrādi"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
-#| msgid "Delete Slide"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "Dzēst slaidu"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
-#, fuzzy
-#| msgid "Delete Slide"
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
 msgstr[0] "Dzēst slaidu"
-msgstr[1] "Dzēst slaidu"
-msgstr[2] "Dzēst slaidu"
+msgstr[1] "Dzēst slaidus"
+msgstr[2] "Dzēst slaidus"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
-#, fuzzy
-#| msgid "Animation tool"
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr "Animācijas rīks"
+msgstr "Rediģēt animācijas aizturi/ilgumu"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
-#, fuzzy
-#| msgid "Edit Custom Slide Shows..."
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr "Rediģēt pielāgotās slīdrādes..."
+msgstr "Rediģēt pielāgoto slīdrādi"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
-#, fuzzy
-#| msgid "Create page effect"
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr "Lapas izveidošanas efekts"
+msgstr "Izveidot slaidu efektu"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
-#, fuzzy
-#| msgid "Modify page effect"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr "Lapas labošanas efekts"
+msgstr "Mainīt slaida efektu"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
-#, fuzzy
-#| msgid "Delete Slide"
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr "Dzēst slaidu"
+msgstr "Dzēst slaida efektu"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
-#| msgid "Transitions"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "Pārejas"
+msgstr "Mainīt slaida pāreju"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
-#, fuzzy
-#| msgid "Customs Slideshows"
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr "Pielāgotas slīdrādes"
+msgstr "Pārdēvēt pielāgoto slīdrādi"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
-#, fuzzy
-#| msgid "Transitions"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr "Pārejas"
+msgstr "Pārkārtot animācijas"
 
 #: part/KPrAboutData.h:19
-#, fuzzy, kde-format
-#| msgid "Configure Slide Show..."
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "Konfigurēt slīdrādi..."
+msgstr "Calligra Stage"
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Presentation Tool"
-msgstr "Prezentācija"
+msgstr "Prezentāciju rīks"
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
-#| msgid "(c) 1998-2008, The KPresenter Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "(c) 1998-2008, KPresenter komanda"
+msgstr "Autortiesības 1998—%1, „Stage“ komanda"
 
 #: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
@@ -195,12 +163,12 @@ msgstr "Iepriekšējais uzturētājs"
 #: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
-msgstr ""
+msgstr "Thorsten Zachmann"
 
 #: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
-msgstr ""
+msgstr "Laurent Montel"
 
 #: part/KPrAboutData.h:33
 #, kde-format
@@ -210,118 +178,119 @@ msgstr "Sākotnējais autors"
 #: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
-msgstr ""
+msgstr "Reginald Stadlbauer"
 
 #: part/KPrAboutData.h:34
-#, fuzzy, kde-format
-#| msgid "Centered"
+#, kde-format
 msgid "Werner Trobin"
-msgstr "Centrēts"
+msgstr "Werner Trobin"
 
 #: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
-msgstr ""
+msgstr "David Faure"
 
 #: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
-msgstr ""
+msgstr "Toshitaka Fujioka"
 
 #: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
-msgstr ""
+msgstr "Lukáš Tinkl"
 
 #: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
-msgstr ""
+msgstr "Ariya Hidayat"
 
 #: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
-msgstr ""
+msgstr "Percy Leonhardt"
 
 #: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
-msgstr ""
+msgstr "Thomas Zander"
 
 #: part/KPrAboutData.h:41
 #, kde-format
 msgid "Peter Simonsson"
-msgstr ""
+msgstr "Peter Simonsson"
 
 #: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
-msgstr ""
+msgstr "Boudewijn Rempt "
 
 #: part/KPrAboutData.h:43
 #, kde-format
 msgid "Carlos Licea "
-msgstr ""
+msgstr "Carlos Licea "
 
 #: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
-msgstr ""
+msgstr "C. Boemann "
 
 #: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
-msgstr ""
+msgstr "Fredy Yanardi "
 
 #: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
-msgstr ""
+msgstr "Jan Hambrecht "
 
 #: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
-msgstr ""
+msgstr "Marijn Kruisselbrink "
 
 #: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
-msgstr ""
+msgstr "Martin Pfeiffer "
 
 #: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
-msgstr ""
+msgstr "Sven Langkamp "
 
 #: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
-msgstr ""
+msgstr "Timothée Lacroix "
 
 #: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "andris.m@delfi.lv,gintam@inbox.lv,maris.kde@gmail.com"
+msgstr ""
+"andris.m@delfi.lv,gintam@inbox.lv,maris.kde@gmail.com, toms.trasuns@posteo."
+"net"
 
 #. i18n translator strings
 #: part/KPrAboutData.h:52
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Andris Maziks, Gints Polis, Māris Nartišs"
+msgstr "Andris Maziks, Gints Polis, Māris Nartišs, Toms Trasūns"
 
 #: part/KPrCustomSlideShowsModel.cpp:54
 #: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "Nezināms"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
 #: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
-msgstr "Slaids %1"
+msgstr "%1. slaids"
 
 #: part/KPrEndOfSlideShowPage.cpp:69
 #, kde-format
@@ -329,105 +298,104 @@ msgid "End of presentation. Click to exit."
 msgstr "Prezentācijas beigas. Klikšķiniet, lai izietu."
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
-#, fuzzy, kde-format
-#| msgid "Slide Layouts"
+#, kde-format
 msgid "Layout"
-msgstr "Slaida izkārtojumi"
+msgstr "Izkārtojums"
 
 #: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
+"Nevarēja atrast nepieciešamo teksta komponenti. „Calligra Stage“ tagad izies."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
+"Nevarēja atrast nepieciešamu attēlu komponenti. „Calligra Stage“ tagad izies."
 
 #: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
-msgstr ""
+msgstr "Instalācijas kļūda"
 
 #: part/KPrPicturesImport.cpp:61
-#, fuzzy
-#| msgid "Insert Slide"
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
-msgstr "Ievietot slaidu"
+msgstr "Ievietot attēlus"
 
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
 msgid "Placeholder shape"
-msgstr ""
+msgstr "Viettura objekts"
 
 #: part/KPrPlaceholderStrategy.cpp:34
 msgid "Double click to add a title"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu virsrakstu"
 
 #: part/KPrPlaceholderStrategy.cpp:35
 msgid "Double click to add an outline"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu rāmi"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
 msgid "Double click to add a text"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu tekstu"
 
 #: part/KPrPlaceholderStrategy.cpp:38
 msgid "Double click to add notes"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu piezīmes"
 
 #: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu attēlu"
 
 #: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu diagrammu"
 
 #: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
-msgstr ""
+msgstr "Dubultklikšķis, lai pievienotu objektu"
 
 #: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
 msgid "Pen Color"
-msgstr ""
+msgstr "Pildspalvas krāsa"
 
 #: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Pen Size"
-msgstr ""
+msgstr "Pildspalvas izmērs"
 
 #: part/KPrPresentationDrawWidget.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Black"
-msgstr "Krāsa:"
+msgstr "Melna"
 
 #: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "White"
-msgstr ""
+msgstr "Balta"
 
 #: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Green"
-msgstr ""
+msgstr "Zaļa"
 
 #: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Red"
-msgstr ""
+msgstr "Sarkana"
 
 #: part/KPrPresentationDrawWidget.cpp:95
 #, kde-format
 msgid "Blue"
-msgstr ""
+msgstr "Zila"
 
 #: part/KPrPresentationDrawWidget.cpp:96
 #, kde-format
 msgid "Yellow"
-msgstr ""
+msgstr "Dzeltena"
 
 #: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
 #, kde-format
@@ -442,7 +410,7 @@ msgstr "Runātāja piezīmes"
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "Current Slide %1 of %2"
-msgstr "Pašreizējais slaids %1 no %2"
+msgstr "Pašreizējais slaids: %1. no %2"
 
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
@@ -454,57 +422,52 @@ msgstr "Slīdrādes beigas"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "sākt pēc peles klikšķa"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
-#, fuzzy, kde-format
-#| msgid "Create shape animation"
+#, kde-format
 msgid "start after previous animation"
-msgstr "Izveidot formas animāciju"
+msgstr "sākt pēc iepriekšējās animācijas"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
-#, fuzzy, kde-format
-#| msgid "Create shape animation"
+#, kde-format
 msgid "start with previous animation"
-msgstr "Izveidot formas animāciju"
+msgstr "sākt ar iepriekšējo animāciju"
 
 #: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "Sākt pēc %1 sekundēm. Ilgums ir %2 sekundes."
 
 #: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
-#, fuzzy, kde-format
-#| msgid "Animation tool"
+#, kde-format
 msgid "Animation"
-msgstr "Animācijas rīks"
+msgstr "Animācija"
 
 #: part/KPrShapeAnimations.cpp:231
 #, kde-format
 msgid "Shape"
-msgstr "Forma"
+msgstr "Objekts"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:281
-#, fuzzy, kde-format
-#| msgid "Copy Slide"
+#, kde-format
 msgid "&Move Here"
-msgstr "Kopēt slaidu"
+msgstr "&Pārvietot te"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:285
-#, fuzzy, kde-format
-#| msgid "Copy Slide"
+#, kde-format
 msgid "&Copy Here"
-msgstr "Kopēt slaidu"
+msgstr "&Kopēt te"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
-msgstr ""
+msgstr "&Atcelt"
 
 #: part/KPrView.cpp:74
 #, kde-format
@@ -514,11 +477,10 @@ msgstr "Normāls"
 #: part/KPrView.cpp:79
 #, kde-format
 msgid "Show Master Slides"
-msgstr "Rādīt galveno slaidu"
+msgstr "Rādīt šablona slaidus"
 
 #: part/KPrView.cpp:80
-#, fuzzy, kde-format
-#| msgid "Configure Slide Show..."
+#, kde-format
 msgid "Import Slideshow..."
 msgstr "Konfigurēt slīdrādi..."
 
@@ -555,7 +517,7 @@ msgstr "Dzēš aktīvo slaidu"
 #: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
-msgstr "Galvenais slaids..."
+msgstr "Šablona slaids..."
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -563,16 +525,14 @@ msgid "Previous Slide"
 msgstr "Iepriekšējais slaids"
 
 #: part/KPrView.cpp:92 part/KPrView.cpp:93
-#, fuzzy, kde-format
-#| msgid "Previous Slide"
+#, kde-format
 msgid "Go to previous slide"
-msgstr "Iepriekšējais slaids"
+msgstr "Iet uz iepriekšējo slaidu"
 
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
-#, fuzzy, kde-format
-#| msgid "Add new slideshow"
+#, kde-format
 msgid "Go to next slide"
-msgstr "Pievienot jaunu slīdrādi"
+msgstr "Iet uz nākamo slaidu"
 
 #: part/KPrView.cpp:97
 #, kde-format
@@ -580,10 +540,9 @@ msgid "First Slide"
 msgstr "Pirmais slaids"
 
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
-#, fuzzy, kde-format
-#| msgid "From First Slide"
+#, kde-format
 msgid "Go to first slide"
-msgstr "No pirmā slaida"
+msgstr "Iet uz pirmo slaidu"
 
 #: part/KPrView.cpp:100
 #, kde-format
@@ -591,32 +550,29 @@ msgid "Last Slide"
 msgstr "Pēdējais slaids"
 
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
-#, fuzzy, kde-format
-#| msgid "Last Slide"
+#, kde-format
 msgid "Go to last slide"
-msgstr "Pēdējais slaids"
+msgstr "Iet uz pēdējo slaidu"
 
 #: part/KPrView.cpp:103
-#, fuzzy, kde-format
-#| msgid "Configure Slide Show..."
+#, kde-format
 msgid "Configure Stage..."
-msgstr "Konfigurēt slīdrādi..."
+msgstr "Konfigurēt „Stage“..."
 
 #: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
-msgstr ""
+msgstr "Eksportēt kā HTML..."
 
 #: part/KPrView.cpp:263
-#, fuzzy, kde-format
-#| msgid "Insert Slide"
+#, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "Ievietot slaidu"
+msgstr "Ievietot attēlus kā slaidus..."
 
 #: part/KPrView.cpp:272
 #, kde-format
 msgid "Create Appear Animation"
-msgstr "Veidot parādīšanās animāciju"
+msgstr "Izveidot parādīšanās animāciju"
 
 #: part/KPrView.cpp:276
 #, kde-format
@@ -639,25 +595,24 @@ msgid "From First Slide"
 msgstr "No pirmā slaida"
 
 #: part/KPrView.cpp:292
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Stop presentation"
-msgstr "Sākt prezentāciju"
+msgstr "Apturēt prezentāciju"
 
 #: part/KPrView.cpp:298
 #, kde-format
 msgid "Show Status Bar"
-msgstr ""
+msgstr "Rādīt statusa joslu"
 
 #: part/KPrView.cpp:299
 #, kde-format
 msgid "Hide Status Bar"
-msgstr ""
+msgstr "Slēpt statusa joslu"
 
 #: part/KPrView.cpp:300
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr ""
+msgstr "Rādīt vai slēpt statusa joslu"
 
 #: part/KPrView.cpp:309
 #, kde-format
@@ -670,22 +625,19 @@ msgid "Configure Presenter View..."
 msgstr "Konfigurēt prezentācijas skatu..."
 
 #: part/KPrView.cpp:317
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Draw on the presentation..."
-msgstr "Sākt prezentāciju"
+msgstr "Zīmēt uz prezentācijas..."
 
 #: part/KPrView.cpp:324
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Highlight the presentation..."
-msgstr "Sākt prezentāciju"
+msgstr "Izcelt prezentāciju..."
 
 #: part/KPrView.cpp:331
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "Sākt prezentāciju"
+msgstr "Tumšs ekrāns uz prezentācijas..."
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -693,91 +645,79 @@ msgid "Notes"
 msgstr "Piezīmes"
 
 #: part/KPrViewModeSlidesSorter.cpp:64
-#, fuzzy, kde-format
-#| msgid "Slide Show"
+#, kde-format
 msgid "Slides Sorter"
-msgstr "Slīdrāde"
+msgstr "Slaidu kārtotājs"
 
 #: part/KPrViewModeSlidesSorter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Slide Show"
+#, kde-format
 msgid "Slide Show: "
-msgstr "Slīdrāde"
+msgstr "Slīdrāde: "
 
 #: part/KPrViewModeSlidesSorter.cpp:83
-#, fuzzy, kde-format
-#| msgid "Add new slideshow"
+#, kde-format
 msgid "Add a new custom slide show"
-msgstr "Pievienot jaunu slīdrādi"
+msgstr "Pievienot jaunu pielāgotu slīdrādi"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Delete current custom slide show"
-msgstr "Dzēš aktīvo slaidu"
+msgstr "Dzēst aktīvo pielāgoto slīdrādi"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Add slides to current custom slide show"
-msgstr "Dzēš aktīvo slaidu"
+msgstr "Pievienot slaidus aktīvajai pielāgotajai slīdrādei"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr "Dzēš aktīvo slaidu"
+msgstr "Noņemt slaidus no aktīvās pielāgotās slīdrādes"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Duplicate Slide"
-msgstr "Dzēst slaidu"
+msgstr "Dublēt slaidu"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
-#, fuzzy, kde-format
-#| msgid "Current Slideshow:"
+#, kde-format
 msgid "Start Slideshow"
-msgstr "Pašreizējā slīdrāde:"
+msgstr "Sākt slīdrādi"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
-#, fuzzy, kde-format
-#| msgid "Add new slideshow"
+#, kde-format
 msgid "Add a new slide"
-msgstr "Pievienot jaunu slīdrādi"
+msgstr "Pievienot jaunu slaidu"
 
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Delete selected slides"
-msgstr "Dzēš aktīvo slaidu"
+msgstr "Dzēst atlasītos slaidus"
 
 #: part/KPrViewModeSlidesSorter.cpp:537
 #, kde-format
 msgid "Rename"
-msgstr ""
+msgstr "Pārdēvēt"
 
 #: part/KPrViewModeSlidesSorter.cpp:541
 #, kde-format
 msgid "Cut"
-msgstr ""
+msgstr "Izgriezt"
 
 #: part/KPrViewModeSlidesSorter.cpp:542
-#, fuzzy, kde-format
-#| msgid "Crop"
+#, kde-format
 msgid "Copy"
-msgstr "Apcirpt"
+msgstr "Kopēt"
 
 #: part/KPrViewModeSlidesSorter.cpp:543
 #, kde-format
 msgid "Paste"
-msgstr ""
+msgstr "Ielīmēt"
 
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
-#, fuzzy, kde-format
-#| msgid "Slide Show"
+#, kde-format
 msgid "Slide Show %1"
-msgstr "Slīdrāde"
+msgstr "%1 slīdrāde"
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
@@ -792,93 +732,82 @@ msgid "Error"
 msgstr "Kļūda"
 
 #: part/KPrViewModeSlidesSorter.cpp:682
-#, fuzzy, kde-format
-#| msgid "There can not be 2 SlideShows with the same name"
+#, kde-format
 msgid "There cannot be two slideshows with the same name."
-msgstr "Nevar būt divas slīdrādes ar vienādu nosaukumu"
+msgstr "Nevar būt divas slīdrādes ar vienādu nosaukumu."
 
 #: part/pagelayout/KPrPlaceholders.cpp:48
 #: part/pagelayout/KPrPlaceholders.cpp:49
-#, fuzzy
-#| msgid "Slide Layouts"
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr "Slaida izkārtojumi"
+msgstr "Izkārtot"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
-msgstr ""
+msgstr "Automātisks animācijas priekšskatījums"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Preview animation"
-msgstr "Prezentācija"
+msgstr "Priekšskatījuma animācija"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
-#, fuzzy, kde-format
-#| msgid "Transitions"
+#, kde-format
 msgid "Slide Transitions"
-msgstr "Pārejas"
+msgstr "Slaida pārejas"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
-#, fuzzy, kde-format
-#| msgid "Click Actions"
+#, kde-format
 msgid "Shape Click Actions"
-msgstr "Klikšķa darbības"
+msgstr "Objekta klikšķa darbības"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Shape Animations"
-msgstr "Formu animācijas"
+msgstr "Objekta animācijas"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
-#, fuzzy, kde-format
-#| msgid "Animation tool"
+#, kde-format
 msgid "Manage animation delay and duration: "
-msgstr "Animācijas rīks"
+msgstr "Pārvaldīt animācijas aizturi un ilgumu: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start: "
-msgstr "&Iet uz Sākumu"
+msgstr "Sākt: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr ""
+msgstr "noklikšķinot peli"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
-#, fuzzy, kde-format
-#| msgid "Create shape animation"
+#, kde-format
 msgid "after previous animation"
-msgstr "Izveidot formas animāciju"
+msgstr "pēc iepriekšējās animācijas"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "with previous animation"
-msgstr "Formu animācijas"
+msgstr "ar iepriekšējo animāciju"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
 msgid "Delay: "
-msgstr ""
+msgstr "Aizture: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
 #, kde-format
 msgid "Duration: "
-msgstr ""
+msgstr "Ilgums: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Preview Shape Animation"
-msgstr "Formu animācijas"
+msgstr "Priekšskatījuma objekta animācija"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -888,131 +817,120 @@ msgstr "Bez efektiem"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:70
 #, kde-format
 msgid " sec"
-msgstr " sek"
+msgstr " sek."
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "Manuāli"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Automātiski"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
-#, fuzzy, kde-format
-#| msgid "Transitions"
+#, kde-format
 msgid "Slide Transition:"
-msgstr "Pārejas"
+msgstr "Slaida pāreja:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
-#, fuzzy, kde-format
-#| msgid "All slides"
+#, kde-format
 msgid "Apply To All Slides"
-msgstr "Visi slaidi"
+msgstr "Pielietot visiem slaidiem"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
-#, fuzzy
-#| msgid "All slides"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr "Visi slaidi"
+msgstr "Pielietot slaida efektu visiem slaidiem"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "Parādīšanās"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
-msgstr ""
+msgstr "Pazušana"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
-msgstr ""
+msgstr "Uzsvars"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
-msgstr ""
+msgstr "Pielāgots"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "Kustības ceļš"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
 msgid "Ole Action"
-msgstr ""
+msgstr "OLE darbība"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
-msgstr ""
+msgstr "Multivides zvans"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
-#, fuzzy, kde-format
-#| msgid "Animation tool"
+#, kde-format
 msgid "Edit animation"
-msgstr "Animācijas rīks"
+msgstr "Rediģēt animāciju"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Animation tool"
+#, kde-format
 msgid "Add new animation"
-msgstr "Animācijas rīks"
+msgstr "Pievienot jaunu animāciju"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Remove animation"
-msgstr "Formu animācijas"
+msgstr "Noņemt animāciju"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
-msgstr ""
+msgstr "Kārtība: "
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Move animation up"
-msgstr "Formu animācijas"
+msgstr "Pārvietot animāciju augšup"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
-#, fuzzy, kde-format
-#| msgid "Animation Tool"
+#, kde-format
 msgid "Move animation down"
-msgstr "Animācijas rīks"
+msgstr "Pārvietot animāciju lejup"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
-#, fuzzy, kde-format
-#| msgid "Add new slideshow"
+#, kde-format
 msgid "Add a new animation"
-msgstr "Pievienot jaunu slīdrādi"
+msgstr "Pievienot jaunu animāciju"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Delete current animation"
-msgstr "Dzēš aktīvo slaidu"
+msgstr "Dzēst pašreizējo animāciju"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
 msgid "seconds"
-msgstr ""
+msgstr "sekundes"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: part/tools/animationtool/wdg_tool_crop.ui:16
 #, kde-format
 msgid "Crop"
-msgstr "Apcirpt"
+msgstr "Kadrēt"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: part/tools/animationtool/wdg_tool_crop.ui:36
@@ -1030,7 +948,7 @@ msgstr "&Platums:"
 #: part/tools/animationtool/wdg_tool_crop.ui:63
 #, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr ""
+msgstr "Kadrējot platumu paturēs nemainīgu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -1042,7 +960,7 @@ msgstr "&Augstums:"
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr ""
+msgstr "Kadrējot augstumu paturēs nemainīgu"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -1060,7 +978,7 @@ msgstr "&Attiecība:"
 #: part/tools/animationtool/wdg_tool_crop.ui:114
 #, kde-format
 msgid "Will keep the ratio constant"
-msgstr ""
+msgstr "Paturēs nemainīgu malu attiecību"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132
@@ -1078,14 +996,12 @@ msgstr "Attēls"
 #: part/tools/animationtool/wdg_tool_crop.ui:145
 #, kde-format
 msgid "&Crop"
-msgstr "Ap&cirpt"
+msgstr "Ka&drēt"
 
 #: part/tools/KPrPlaceholderTool.cpp:92
-#, fuzzy
-#| msgid "Edit Shape"
 msgctxt "(qtundo-format)"
 msgid "Edit Shape"
-msgstr "Rediģēt formu"
+msgstr "Rediģēt objektu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/ui/KPrConfigurePresenterView.ui:16
@@ -1108,12 +1024,12 @@ msgstr "Ieslēgt prezentācijas skatu"
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
 msgid "Monitor %1 (primary)"
-msgstr "%1 monitors (primārais)"
+msgstr "„%1“ monitors (primārais)"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:29
 #, kde-format
 msgid "Monitor %1"
-msgstr "%1 monitors"
+msgstr "„%1“ monitors"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, kde-format
@@ -1141,8 +1057,7 @@ msgstr "Prezentācijas slaidi:"
 
 #. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
 #: part/ui/KPrConfigureSlideShow.ui:54
-#, fuzzy, kde-format
-#| msgid "Edit Custom Slide Shows..."
+#, kde-format
 msgid "Edit Custom Slide Shows ..."
 msgstr "Rediģēt pielāgotās slīdrādes..."
 
@@ -1150,135 +1065,126 @@ msgstr "Rediģēt pielāgotās slīdrādes..."
 #: part/ui/KPrHtmlExport.ui:20
 #, kde-format
 msgid "HTML Export"
-msgstr ""
+msgstr "HTML eksports"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
 #: part/ui/KPrHtmlExport.ui:29
 #, kde-format
 msgid "Tick the slide should be exported :"
-msgstr ""
+msgstr "Atzīmējiet eksportējamo slaidu:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
 #, kde-format
 msgid "Select all"
-msgstr ""
+msgstr "Atlasīt visus"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_css)
 #: part/ui/KPrHtmlExport.ui:65
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Select template (.css) :"
-msgstr "Dzēst slaidu"
+msgstr "Atlasīt veidni (.css):"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
 #: part/ui/KPrHtmlExport.ui:78
 #, kde-format
 msgid "Deselect all"
-msgstr ""
+msgstr "Noņemt atlasi visam"
 
 #. i18n: ectx: property (text), widget (QLabel, textlable_top)
 #: part/ui/KPrHtmlExport.ui:101
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgid "Title"
-msgstr "Fails"
+msgstr "Nosaukums"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
 #: part/ui/KPrHtmlExport.ui:117
 #, kde-format
 msgid "Output preview"
-msgstr ""
+msgstr "Izvades priekšskatījums"
 
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
 #: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
 #: part/ui/KPrHtmlExport.ui:227
 #, kde-format
 msgid "Browse"
-msgstr ""
+msgstr "Pārlūkot"
 
 #. i18n: ectx: property (text), widget (QLabel, label_author)
 #: part/ui/KPrHtmlExport.ui:243
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "Autors"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
 #: part/ui/KPrHtmlExport.ui:258
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Delete Favorite"
-msgstr "Dzēst slaidu"
+msgstr "Dzēst iecienīto"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
 #: part/ui/KPrHtmlExport.ui:286
 #, kde-format
 msgid "Open in browser"
-msgstr ""
+msgstr "Atvērt pārlūkā"
 
 #: part/ui/KPrHtmlExportDialog.cpp:34
 #, kde-format
 msgid "Html Export"
-msgstr ""
+msgstr "HTML eksports"
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
 msgid "Export"
-msgstr ""
+msgstr "Eksportēt"
 
 #: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
-msgstr ""
+msgstr "Jau pastāv iecienīta datnes ar šādu nosaukumu"
 
 #: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
-msgstr ""
+msgstr "Nepareiza datne. tikai .zip vai bojāts ZIP"
 
 #: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr ""
+msgstr "ZIP datnei ir jāsatur „style.css“"
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Delete Template"
-msgstr "Dzēst slaidu"
+msgstr "Dzēst veidni"
 
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
-msgstr ""
+msgstr "Jūs nevarat noņemt veidni, kas ir piedāvāta kopā ar programmu"
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Add Template"
-msgstr "Dzēst slaidu"
+msgstr "Pievienot veidni"
 
 #: part/ui/KPrHtmlExportDialog.cpp:325
-#, fuzzy, kde-format
-#| msgid "Confirm action"
+#, kde-format
 msgid "Confirm remove"
-msgstr "Darbības apstiprinājums"
+msgstr "Apstiprināt noņemšanu"
 
 #: part/ui/KPrHtmlExportDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to delete the selected slide show?"
+#, kde-format
 msgid "Are you sure you want to remove \"%1\"?"
-msgstr "Vai tiešām vēlaties dzēst izvēlēto slīdrādi?"
+msgstr "Vai tiešām vēlaties noņemt „%1“?"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
-#, fuzzy
-#| msgid "Change sound action"
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Mainīt skaņas darbību"
@@ -1286,7 +1192,7 @@ msgstr "Mainīt skaņas darbību"
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "No sound"
-msgstr "Nav skaņas"
+msgstr "Bez skaņas"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
@@ -1296,7 +1202,7 @@ msgstr "Importēt..."
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
-msgstr ""
+msgstr "Josla"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
@@ -1306,10 +1212,8 @@ msgstr ""
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "From Bottom"
-msgstr "Parādās No Apakšas"
+msgstr "No pogas"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
@@ -1319,10 +1223,8 @@ msgstr "Parādās No Apakšas"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Come From Left"
 msgid "From Left"
-msgstr "Parādās No Kreisās"
+msgstr "No kreisās"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
@@ -1332,10 +1234,8 @@ msgstr "Parādās No Kreisās"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Right"
-msgstr "Parādās No Labās"
+msgstr "No labās"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
@@ -1345,10 +1245,8 @@ msgstr "Parādās No Labās"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Come From Top"
 msgid "From Top"
-msgstr "Parādās No Augšas"
+msgstr "No augšas"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
@@ -1389,450 +1287,324 @@ msgstr "Parādās No Augšas"
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
-msgstr ""
+msgstr "Nezināms apakštips"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clock"
-msgstr "Krāsa:"
+msgstr "Pulkstenis"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Twelve Clockwise"
-msgstr "Parādās No Labās"
+msgstr "No divpadsmitiem pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Three Clockwise"
-msgstr "Parādās No Labās"
+msgstr "No trijiem pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Six Clockwise"
-msgstr "Parādās No Labās"
+msgstr "No sešiem pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Nine Clockwise"
-msgstr "Parādās No Labās"
+msgstr "No deviņiem pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Twelve Counterclockwise"
-msgstr "Parādās No Labās"
+msgstr "No divpadsmitiem pretēji pulksteņrādītāja virzienam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Three Counterclockwise"
-msgstr "Parādās No Labās"
+msgstr "No trijiem pretēji pulksteņrādītāja virzienam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Six Counterclockwise"
-msgstr "Parādās No Labās"
+msgstr "No sešiem pretēji pulksteņrādītāja virzienam"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Nine Counterclockwise"
-msgstr "Parādās No Labās"
+msgstr "No deviņiem pretēji pulksteņrādītāja virzienam"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Double Arrow"
+#, kde-format
 msgid "Double Fan"
-msgstr "Dublut Bulta"
+msgstr "Dubults vēdeklītis"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Fan Out Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Vēdeklītis uz āru vertikāli"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Fan Out Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Vēdeklītis uz āru horizontāli"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Fan In Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Vēdeklītis uz iekšu vertikāli"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Fan In Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Vēdeklītis uz iekšu horizontāli"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Fan In Vertical Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Vēdeklītis uz iekšu vertikāli (reverss)"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Fan In Horizontal Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Vēdeklītis uz iekšu horizontāli (reverss)"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double Sweep"
-msgstr "Bez Efektiem"
+msgstr "Dubulta noslaucīšana"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Parallel Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Paralēli vertikāli"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Parallel Diagonal"
-msgstr "Horizontālas Līnijas"
+msgstr "Paralēli diagonāli"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Opposite Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Pretēji vertikāli"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Opposite Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Pretēji horizontāli"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy
 msgid "Parallel Diagonal Top Left"
-msgstr "Bez Efektiem"
+msgstr "Paralēli diagonāli no augšas pa kreisi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left"
-msgstr "Parādās No Apakšas"
+msgstr "Paralēli diagonāli no apakšas pa kreisi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Parallel Vertical Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Paralēli vertikāli reversi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Parallel Diagonal Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Paralēli diagonāli reversi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Opposite Vertical Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Pretēji vertikāli reversi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Opposite Horizontal Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Pretēji horizontāli reversi"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, fuzzy
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr "Bez Efektiem"
+msgstr "Paralēli diagonāli no augšas pa kreisi (reversi)"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr "Parādās No Apakšas"
+msgstr "Paralēli diagonāli no apakšas pa kreisi (reversi)"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fan"
-msgstr "6% Aizpildīts Raksts"
+msgstr "Vēdeklis"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Uncover Right"
 msgid "Center Right"
-msgstr "Atklāj no Labās"
+msgstr "Centrā no labās"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Centered"
 msgid "Center Top"
-msgstr "Centrēts"
+msgstr "Centrā no augšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Centered"
 msgid "Center Left"
-msgstr "Centrēts"
+msgstr "Centrā no kreisās"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Center Bottom"
-msgstr "Parādās No Apakšas"
+msgstr "Centrā no apakšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Fan Out Top"
-msgstr "Atvērt Horizontāli"
+msgstr "Vēdeklītis uz āru no augšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Fan Out Right"
-msgstr "Atvērt Horizontāli"
+msgstr "Vēdeklītis uz āru no labās"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Fan Out Bottom"
-msgstr "Parādās No Apakšas"
+msgstr "Vēdeklītis uz āru no apakšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Fan Out Left"
-msgstr "Atvērt Vertikāli"
+msgstr "Vēdeklītis uz āru no kreisās"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Fan In Top"
-msgstr "Atvērt Horizontāli"
+msgstr "Vēdeklīti uz iekšu no augšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Fan In Right"
-msgstr "Parādās No Labās"
+msgstr "Vēdeklītis uz iekšu no labās"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Fan In Bottom"
-msgstr "Parādās No Apakšas"
+msgstr "Vēdeklīti uz iekšu no apakšas"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, fuzzy
-#| msgid "Come From Left"
 msgid "Fan In Left"
-msgstr "Parādās No Kreisās"
+msgstr "Vēdeklītis uz iekšu no kreisās"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pin Wheel"
-msgstr "Bez Efektiem"
+msgstr "Dzirnaviņas"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Two Blades Vertical Clockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Divi asmeņi vertikāli pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Two Blades Horizontal Clockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Divi asmeņi horizontāli pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Blades Horizontal Clockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Četri asmeņi horizontāli pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Two Blades Vertical Counterclockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Divi asmeņi vertikāli pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Two Blades Horizontal Counterclockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Divi asmeņi horizontāli pretēji pulksteņrādītāja virzienā"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Blades Horizontal Counterclockwise"
-msgstr "Slēpt Horizontāli"
+msgstr "Četri asmeņi horizontāli pretēji pulksteņrādītāja virzienam"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saloon Door"
-msgstr "Bez Efektiem"
+msgstr "Salona durvis"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Top"
 msgid "To Top"
-msgstr "Parādās No Augšas"
+msgstr "Uz augšu"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Cover Left"
 msgid "To Left"
-msgstr "Pārklāt no kreisās"
+msgstr "Pa kreisi"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
-#, fuzzy
 msgid "To Bottom"
-msgstr "Apakšējais:"
+msgstr "Uz leju"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Cover Right"
 msgid "To Right"
-msgstr "Pārklāj no labās"
+msgstr "Pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Single Sweep"
-msgstr "Bez Efektiem"
+msgstr "Viena noslaucīšana"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Come From Left"
 msgid "Clockwise Top"
-msgstr "Parādās No Kreisās"
+msgstr "Pulksteņrādītāja virzienā augšā"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "Cover Right-Up"
 msgid "Clockwise Right"
-msgstr "Pārklāj no Labās-Augšas"
+msgstr "Pulksteņrādītāja virzienā pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Align Bottom"
 msgid "Clockwise Bottom"
-msgstr "Izkārtot uz Leju"
+msgstr "Pulksteņrādītāja virzienā lejā"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
-#, fuzzy
 msgid "Clockwise Left"
-msgstr "Bez Efektiem"
+msgstr "Pulksteņrādītāja virzienā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Left"
 msgid "Clockwise Top Left"
-msgstr "Parādās No Kreisās"
+msgstr "Pulksteņrādītāja virzienā augšā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Counterclockwise Top Right"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā augšā pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Counterclockwise Top"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā augšā"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Counterclockwise Right"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Left"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā augšā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā pa kreisi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā pa labi"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Clockwise Top Right"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā augšā pa labi"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Windshield"
-msgstr "Bez Efektiem"
+msgstr "Vējstikls"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, fuzzy
 msgid "Right"
-msgstr "Labais:"
+msgstr "Pa labi"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
-msgstr ""
+msgstr "Augšup"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
@@ -1841,9 +1613,8 @@ msgstr ""
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Vertikāli"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
@@ -1853,26 +1624,21 @@ msgstr "Atvērt Vertikāli"
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
-#, fuzzy
 msgid "Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Horizontāli"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Right Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Pa labi reversi"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Up Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Augšup reversi"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
@@ -1880,10 +1646,8 @@ msgstr "Vertikālas Līnijas"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Vertical Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Vertikāli reversi"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
@@ -1891,202 +1655,165 @@ msgstr "Vertikālas Līnijas"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Horizontal Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Horizontāli reversi"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
-#| msgid "Double Arrow"
+#, kde-format
 msgid "Barn Door"
-msgstr "Dublut Bulta"
+msgstr "Šķūņa durvis"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left"
-msgstr "Parādās No Apakšas"
+msgstr "Diagonāli augšup pa kreisi"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left Reverse"
-msgstr "Parādās No Apakšas"
+msgstr "Diagonāli lejup pa labi reversi"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Diagonal Top Left"
-msgstr "Bez Efektiem"
+msgstr "Diagonāli augšup pa kreisi"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, fuzzy
 msgid "Diagonal Top Left Reverse"
-msgstr "Bez Efektiem"
+msgstr "Diagonāli lejup pa kreisi reversi"
 
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Vee"
-msgstr ""
+msgstr "Šķūņa „V“"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Barn Zig Zag"
-msgstr "Bez Efektiem"
+msgstr "Šķūņa zigzags"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Horizontal Reversed"
-msgstr "Horizontālas Līnijas"
+msgstr "Horizontāli reversi"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Vertical Reversed"
-msgstr "Vertikālas Līnijas"
+msgstr "Vertikāli reversi"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
-msgstr ""
+msgstr "Kaste"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Come From Left"
 msgid "From Top Left"
-msgstr "Parādās No Kreisās"
+msgstr "No augšas pa kreisi"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Come From Right"
 msgid "From Top Right"
-msgstr "Parādās No Labās"
+msgstr "No augšas pa labi"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "From Bottom Left"
-msgstr "Parādās No Apakšas"
+msgstr "No apakšas pa kreisi"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "From Bottom Right"
-msgstr "Parādās No Apakšas"
+msgstr "No apakšas pa labi"
 
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Diagonal"
-msgstr "Diagonālā Gradācija 1"
+msgstr "Diagonāli"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Four Box"
-msgstr ""
+msgstr "Četras kastes"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
-#, fuzzy
 msgid "Corners In"
-msgstr "Stūri:"
+msgstr "Stūri uz iekšu"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
-#, fuzzy
 msgid "Corners In Reverse"
-msgstr "Stūri:"
+msgstr "Stūri reversi"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
-#, fuzzy
 msgid "Corners Out"
-msgstr "Stūri:"
+msgstr "Stūri uz āru"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
-#, fuzzy
 msgid "Corners Out Reverse"
-msgstr "Stūri:"
+msgstr "Stūri uz āru reversi"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Misc Diagonal"
-msgstr "Diagonālā Gradācija 1"
+msgstr "Dažādi diagonāli"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, fuzzy
-#| msgid "Double Arrow"
 msgid "Double Barn Door"
-msgstr "Dublut Bulta"
+msgstr "Dubultās šķūņa durvis"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
-#, fuzzy
-#| msgid "Double Arrow"
 msgid "Double Diamond"
-msgstr "Dublut Bulta"
+msgstr "Dubultais dimants"
 
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Vee"
-msgstr ""
+msgstr "V"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zig Zag"
-msgstr "Bez Efektiem"
+msgstr "Zigzags"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Header"
+#, kde-format
 msgid "Fade"
-msgstr "Galvene"
+msgstr "Izgaist"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
-msgstr ""
+msgstr "Izgaist"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
-msgstr ""
+msgstr "Izgaist pāri krāsai"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "ArrowHead"
-msgstr "Bez Efektiem"
+msgstr "Bultas gals"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
-#, fuzzy
-#| msgid "Done"
 msgid "Down"
-msgstr "Pabeigts"
+msgstr "Lejup"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Down Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Lejup reversi"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, fuzzy
 msgid "Left"
-msgstr "Garums:"
+msgstr "Pa kreisi"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Left Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Pa kreisi reversi"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
@@ -2095,53 +1822,42 @@ msgstr "Elipse"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle"
-msgstr "Riņķis"
+msgstr "Aplis"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Circle Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Aplis reversi"
 
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
-msgstr ""
+msgstr "Acs"
 
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Hexagon"
-msgstr "Prezentācija"
+msgstr "Sešstūris"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Iris"
-msgstr ""
+msgstr "Zīlīte"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Double Arrow"
 msgid "Diamond"
-msgstr "Dublut Bulta"
+msgstr "Dimants"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Diamond Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Dimants reversi"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Rectangle"
 msgid "Rectangular"
-msgstr "Taisnstūris"
+msgstr "Četrstūris"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Rectangle"
 msgid "Rectangular Reverse"
-msgstr "Taisnstūris"
+msgstr "Četrstūris reversi"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
@@ -2149,461 +1865,338 @@ msgid "Misc"
 msgstr "Dažādi"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Header"
 msgid "Heart"
-msgstr "Galvene"
+msgstr "Sirds"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Heart Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Sirds reversi"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Keyhole"
-msgstr "Vertikālas Līnijas"
+msgstr "Atslēgas caurums"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Keyhole Reverse"
-msgstr "Vertikālas Līnijas"
+msgstr "Atslēgas caurums reversi"
 
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Pentagon"
-msgstr "Prezentācija"
+msgstr "Piecstūris"
 
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
-#, fuzzy, kde-format
-#| msgid "Sound effect"
+#, kde-format
 msgid "RoundRect"
-msgstr "Skaņas efekts"
+msgstr "Noapaļots četrstūris"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Star"
-msgstr "&Iet uz Sākumu"
+msgstr "Zvaigzne"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Four Point Star"
-msgstr "Horizontālas Līnijas"
+msgstr "Četrstaru zvaigzne"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Four Point Star Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Četrstaru zvaigzne reversi"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Five Point Star"
-msgstr "Horizontālas Līnijas"
+msgstr "Piecstaru zvaigzne"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Five Point Star Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Piecstaru zvaigzne reversi"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Six Point Star"
-msgstr "Horizontālas Līnijas"
+msgstr "Sešstaru zvaigzne"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
-#, fuzzy
-#| msgid "Horizontal Lines"
 msgid "Six Point Star Reverse"
-msgstr "Horizontālas Līnijas"
+msgstr "Sešstaru zvaigzne reversi"
 
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Tiled"
+#, kde-format
 msgid "Triangle"
-msgstr "Noklāts"
+msgstr "Trijstūris"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Box Snakes"
-msgstr "&Asums"
+msgstr "Kvadrātainas čūskas"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
-#, fuzzy
 msgid "Two Box Top In"
-msgstr "Apakšējais:"
+msgstr "Divas kastes viena uz otras"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy
 msgid "Two Box Bottom In"
-msgstr "Apakšējais:"
+msgstr "Divas kastes no apakšas iekšā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Cover Left"
 msgid "Two Box Left In"
-msgstr "Pārklāt no kreisās"
+msgstr "Divas kastes no kreisās iekšā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Cover Right"
 msgid "Two Box Right In"
-msgstr "Pārklāj no labās"
+msgstr "Divas kastes no labās iekšā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Box Vertical In"
-msgstr "Slēpt Horizontāli"
+msgstr "Četras kastes vertikāli iekšā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Box Horizontal In"
-msgstr "Slēpt Horizontāli"
+msgstr "Četras kastes horizontāli iekšā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy
 msgid "Two Box Top Out"
-msgstr "Apakšējais:"
+msgstr "Divas kastes no augšas ārā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy
 msgid "Two Box Bottom Out"
-msgstr "Apakšējais:"
+msgstr "Divas kastes no apakšas ārā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Two Box Left Out"
-msgstr "Parādās No Apakšas"
+msgstr "Divas kastes no kreisās ārā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Two Box Right Out"
-msgstr "Parādās No Apakšas"
+msgstr "Divas kastes no labās ārā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Box Vertical Out"
-msgstr "Slēpt Horizontāli"
+msgstr "Četras kastes vertikāli ārā"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Blinds Horizontal"
 msgid "Four Box Horizontal Out"
-msgstr "Slēpt Horizontāli"
+msgstr "Četras kastes horizontāli ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parallel Snakes"
-msgstr "Bez Efektiem"
+msgstr "Paralēlas čūskas"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Vertical Gradient"
 msgid "Vertical Top Same In"
-msgstr "Vertikāls Gradients"
+msgstr "Vertikāli augša tāpat iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Vertical Gradient"
 msgid "Vertical Top Same Out"
-msgstr "Vertikāls Gradients"
+msgstr "Vertikāli augša tāpat ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "Vertical Gradient"
 msgid "Vertical Bottom Same In"
-msgstr "Vertikāls Gradients"
+msgstr "Vertikāli apakšā tāpat iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "Vertical Gradient"
 msgid "Vertical Bottom Same Out"
-msgstr "Vertikāls Gradients"
+msgstr "Vertikāli apakša tāpat ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
-#, fuzzy
 msgid "Vertical Top Left Opposite In"
-msgstr "Horizontāls Gradients"
+msgstr "Vertikāli augša pa kreisi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
-#, fuzzy
 msgid "Vertical Top Left Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Vertikāli augša pa kreisi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "Vertical Gradient"
 msgid "Vertical Bottom Left Opposite In"
-msgstr "Vertikāls Gradients"
+msgstr "Vertikāli apakša pa kreisi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, fuzzy
 msgid "Vertical Bottom Left Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Vertikāli apakša pa kreisi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, fuzzy
-#| msgid "Horizontal Gradient"
 msgid "Horizontal Left Same In"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli pa kreisi tāpat iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, fuzzy
-#| msgid "Horizontal Gradient"
 msgid "Horizontal Left Same Out"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli pa kreisi tāpat ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, fuzzy
-#| msgid "Horizontal Gradient"
 msgid "Horizontal Right Same In"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli pa labi tāpat iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, fuzzy
-#| msgid "Horizontal Gradient"
 msgid "Horizontal Right Same Out"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli pa labi tāpat ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, fuzzy
 msgid "Horizontal Top Left Opposite In"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli augšā pa kreisi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, fuzzy
 msgid "Horizontal Top Left Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli augšā pa kreisi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, fuzzy
 msgid "Horizontal Top Right Opposite In"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli augšā pa labi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
-#, fuzzy
 msgid "Horizontal Top Right Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Horizontāli augšā pa labi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, fuzzy
 msgid "Diagonal Bottom Left Opposite In"
-msgstr "Horizontāls Gradients"
+msgstr "Diagonāli apakšā pa kreisi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, fuzzy
 msgid "Diagonal Bottom Left Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Diagonāli apakšā pa kreisi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
-#, fuzzy
 msgid "Diagonal Top Left Opposite In"
-msgstr "Horizontāls Gradients"
+msgstr "Diagonāli augšā pa kreisi pretēji iekšā"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
-#, fuzzy
 msgid "Diagonal Top Left Opposite Out"
-msgstr "Horizontāls Gradients"
+msgstr "Diagonāli augšā pa kreisi pretēji ārā"
 
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snake"
-msgstr "&Asums"
+msgstr "Čūska"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spiral"
-msgstr "&Asums"
+msgstr "Spirāle"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Come From Left"
 msgid "Clockwise Top Left In"
-msgstr "Parādās No Kreisās"
+msgstr "Pulksteņrādītāja virzienā augšā pa kreisi iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Come From Left"
 msgid "Clockwise Top Left Out"
-msgstr "Parādās No Kreisās"
+msgstr "Pulksteņrādītāja virzienā augšā pa kreisi ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Clockwise Top Right In"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā augšā no labās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Clockwise Top Right Out"
-msgstr "Parādās No Labās"
+msgstr "Pulksteņrādītāja virzienā augšā no labās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left In"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā augšā no kreisās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left Out"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā augšā no kreisās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right In"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā no labās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right Out"
-msgstr "Parādās No Apakšas"
+msgstr "Pulksteņrādītāja virzienā apakšā no labās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left In"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam augšā no kreisās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left Out"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam augšā no kreisās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Counterclockwise Top Right In"
-msgstr "Parādās No Labās"
+msgstr "Pretēji pulksteņrādītāja virzienam augšā no labās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, fuzzy
-#| msgid "Come From Right"
 msgid "Counterclockwise Top Right Out"
-msgstr "Parādās No Labās"
+msgstr "Pretēji pulksteņrādītāja virzienam augšā no labās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left In"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam apakšā no kreisās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left Out"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam apakšā no kreisās ārā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right In"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam apakšā no labās iekšā"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right Out"
-msgstr "Parādās No Apakšas"
+msgstr "Pretēji pulksteņrādītāja virzienam apakšā no labās ārā"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Waterfall"
-msgstr "Bez Efektiem"
+msgstr "Ūdenskritums"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Top Left Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Augšā no kreisās vertiāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Top Left Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Augšā no kreisās horizontāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Open Vertical"
 msgid "Top Right Vertical"
-msgstr "Atvērt Vertikāli"
+msgstr "Augšā no labās vertikāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Open Horizontal"
 msgid "Top Right Horizontal"
-msgstr "Atvērt Horizontāli"
+msgstr "Augšā no labās horizontāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Close Vertical"
 msgid "Bottom Left Vertical"
-msgstr "Aizvērt Vertikāli"
+msgstr "Apakšā no kreisās vertikāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Close Horizontal"
 msgid "Bottom Left Horizontal"
-msgstr "Aizvērt Horizontāli"
+msgstr "Apakšā no kreisās horizontāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Come From Bottom"
 msgid "Bottom Right Vertical"
-msgstr "Parādās No Apakšas"
+msgstr "Apakšā no labās vertikāli"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "Interlocking Horizontal 1"
 msgid "Bottom Right Horizontal"
-msgstr "Savienošanās Horizontāli 1"
+msgstr "Apakšā no labās horizontāli"
 
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide"
 msgstr "Slaids"
 
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Space Rotation"
-msgstr "Formu animācijas"
+msgstr "Telpas rotācija"
 
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
-#, fuzzy, kde-format
-#| msgid "Create page effect"
+#, kde-format
 msgid "Swap effect"
-msgstr "Lapas izveidošanas efekts"
+msgstr "Samainīšanas efekts"
 
 #: plugins/variable/PresentationVariableFactory.cpp:25
-#, fuzzy, kde-format
-#| msgid "Header"
+#, kde-format
 msgid "Header"
 msgstr "Galvene"
 
 #: plugins/variable/PresentationVariableFactory.cpp:33
 #, kde-format
 msgid "Footer"
-msgstr ""
+msgstr "Kājene"
 
 #, fuzzy
 #~| msgid "&Edit"
