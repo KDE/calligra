@@ -34,6 +34,7 @@
   <name xml:lang="uk">Calligra Sheets</name>
   <name xml:lang="x-test">xxCalligra Sheetsxx</name>
   <name xml:lang="zh-CN">Calligra Sheets</name>
+  <name xml:lang="zh-TW">Calligra Sheets</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
@@ -68,6 +69,7 @@
   <summary xml:lang="uk">Електронні таблиці</summary>
   <summary xml:lang="x-test">xxSpreadsheetxx</summary>
   <summary xml:lang="zh-CN">电子表格处理软件</summary>
+  <summary xml:lang="zh-TW">工作表</summary>
   <description>
     <p>
       Calligra Sheets is a fully-featured calculation and spreadsheet tool.
@@ -104,6 +106,7 @@
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
     <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p xml:lang="zh-CN">Calligra Sheets 是一款全功能的电子表格和计算统计程序。您可以使用它来快速创建电子表格并对数据进行各种计算处理，例如用度、工时等。</p>
+    <p xml:lang="zh-TW">Calligra Sheets 是一個功能完善的計算與工作表工具。您可以使用它來快速建立並計算各種商業用工作表，像是收入與支出、員工工作時間等等。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -138,6 +141,7 @@
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">程序功能：</p>
+    <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
@@ -172,6 +176,7 @@
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
       <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li xml:lang="zh-CN">插入各种图形来进行标记或制作思维导图</li>
+      <li xml:lang="zh-TW">用元件來做備註或是製作心智圖</li>
       <li>Large range of pre-defined templates</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
@@ -204,6 +209,7 @@
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
       <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li xml:lang="zh-CN">种类丰富的预制模板</li>
+      <li xml:lang="zh-TW">種類廣泛的樣本</li>
       <li>Powerful and comprehensive formula list</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
@@ -236,6 +242,7 @@
       <li xml:lang="uk">Потужний і повний список функцій.</li>
       <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
       <li xml:lang="zh-CN">强大的和全面的公式列表</li>
+      <li xml:lang="zh-TW">強大且完整的公式列表</li>
       <li>Work in a familiar environment</li>
       <li xml:lang="bs">Rad u poznatom okruženju</li>
       <li xml:lang="ca">Treball en un entorn familiar</li>
@@ -268,6 +275,7 @@
       <li xml:lang="uk">Робота у знайомому середовищі.</li>
       <li xml:lang="x-test">xxWork in a familiar environmentxx</li>
       <li xml:lang="zh-CN">与现有同类软件操作类似易上手</li>
+      <li xml:lang="zh-TW">在習慣的環境下操作</li>
     </ul>
   </description>
   <url type="homepage">https://www.calligra.org/sheets/</url>
