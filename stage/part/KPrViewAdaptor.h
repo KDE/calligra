@@ -20,7 +20,7 @@
 #ifndef KPRVIEWADAPTOR_H
 #define KPRVIEWADAPTOR_H
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 
 #include <KoViewAdaptor.h>
 #include <QStringList>
@@ -181,6 +181,6 @@ private:
     KPrView *m_view;
 };
 
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif

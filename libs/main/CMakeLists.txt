@@ -66,7 +66,7 @@ set(komain_LIB_SRCS
     MainDebug.cpp
 )
 
-if( Qt6DBus_FOUND )
+if(TARGET Qt6::DBus)
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
@@ -101,8 +101,13 @@ target_link_libraries(komain
         KF6::Completion
         KF6::IconThemes
         KF6::IconWidgets
-        KF6::DBusAddons
 )
+if (TARGET KF6::DBusAddons)
+    target_link_libraries(komain
+        PRIVATE
+            KF6::DBusAddons
+    )
+endif()
 
 if (APPLE)
     target_link_libraries(komain PRIVATE ${FOUNDATION_LIBRARY})
@@ -158,7 +163,7 @@ install( FILES
     komain_export.h
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
-if( Qt6DBus_FOUND )
+if(TARGET Qt6::DBus)
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h

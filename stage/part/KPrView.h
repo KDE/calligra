@@ -15,7 +15,7 @@
 class KPrDocument;
 class KPrPart;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 class KPrViewAdaptor;
 #endif
 
@@ -42,7 +42,7 @@ public:
      */
     KPrDocument *kprDocument() const;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     /**
      * Get the view's dbus adaptor
      */
@@ -165,7 +165,7 @@ private:
     KPrViewModeNotes *m_notesMode;
     KPrViewModeSlidesSorter *m_slidesSorterMode;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     KPrViewAdaptor *m_dbus;
 #endif
 

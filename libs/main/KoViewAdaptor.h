@@ -9,7 +9,7 @@
 #ifndef __KoViewAdaptor_h__
 #define __KoViewAdaptor_h__
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 
 #include <QDBusAbstractAdaptor>
 #include <QMap>
@@ -36,6 +36,6 @@ protected:
     KoView *m_pView;
 };
 
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif

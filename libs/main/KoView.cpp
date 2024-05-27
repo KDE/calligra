@@ -16,7 +16,7 @@
 #include "KoMainWindow.h"
 #include "KoPart.h"
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KoViewAdaptor.h"
 #include <QDBusConnection>
 #endif
@@ -162,7 +162,7 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setObjectName(newObjectName());
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif

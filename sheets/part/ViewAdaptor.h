@@ -13,7 +13,7 @@
 #ifndef CALLIGRA_SHEETS_VIEW_ADAPTOR
 #define CALLIGRA_SHEETS_VIEW_ADAPTOR
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "sheets_part_export.h"
 #include <QColor>
 #include <QDBusAbstractAdaptor>
@@ -108,6 +108,6 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif // CALLIGRA_SHEETS_VIEW_ADAPTOR

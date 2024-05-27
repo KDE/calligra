@@ -33,7 +33,7 @@
 #include <QGraphicsScene>
 #include <QMimeDatabase>
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KoPartAdaptor.h"
 #include <QDBusConnection>
 #endif
@@ -72,7 +72,7 @@ KoPart::KoPart(const KoComponentData &componentData, QObject *parent)
     : QObject(parent)
     , d(new Private(componentData, this))
 {
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     new KoPartAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif

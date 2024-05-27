@@ -10,7 +10,7 @@
 
 #include "KoGlobal.h"
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KoApplicationAdaptor.h"
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
@@ -32,7 +32,9 @@
 #include <KAboutData>
 #include <KConfig>
 #include <KConfigGroup>
+#ifdef WITH_QTDBUS
 #include <KDBusService>
+#endif
 #include <KIconLoader>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -137,7 +139,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType, const QString &wi
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     KDBusService service(KDBusService::Multiple);
 
     new KoApplicationAdaptor(this);
@@ -336,7 +338,7 @@ bool KoApplication::start()
         QString ourPid;
         ourPid.setNum(applicationPid());
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
         QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 

@@ -192,7 +192,6 @@ find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     ConfigWidgets
     CoreAddons
     Crash
-    DBusAddons
     DocTools
     GuiAddons
     I18n
@@ -221,15 +220,15 @@ find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED
     Test
     Widgets
     Xml
-    )
+)
 find_package(Qt6 ${REQUIRED_QT_VERSION} QUIET
     COMPONENTS
-    DBus
     OpenGL
     Quick
     QuickWidgets
     Sql
 )
+
 
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES
@@ -237,13 +236,10 @@ set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Encrypted communications"
 )
 
-set_package_properties(Qt6DBus PROPERTIES
-    TYPE RECOMMENDED
-    )
 set_package_properties(Qt6Declarative PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
-    )
+)
 set_package_properties(Qt6OpenGL PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
@@ -278,6 +274,18 @@ add_definitions(
     -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053000
     -DQT_DISABLE_DEPRECATED_BEFORE=0x050600
     )
+
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    add_definitions(-DWITH_QTDBUS)
+    find_package(Qt6 ${REQUIRED_KF6_VERSION} REQUIRED
+        COMPONENTS
+        DBus
+    )
+    find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
+        COMPONENTS
+        DBusAddons
+    )
+endif()
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,

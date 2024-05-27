@@ -7,7 +7,7 @@
 #ifndef KPRPRESENTATIONTOOLADAPTOR_H
 #define KPRPRESENTATIONTOOLADAPTOR_H
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KPrPresentationTool.h"
 
 #include <QDBusAbstractAdaptor>
@@ -62,6 +62,6 @@ private:
     KPrPresentationTool *m_tool;
     KPrViewModePresentation &m_viewModePresentation;
 };
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif /* KPRPRESENTATIONTOOLADAPTOR_H */

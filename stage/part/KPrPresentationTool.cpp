@@ -12,7 +12,9 @@
 #include "KPrPresentationTool.h"
 
 #include <QAbstractTextDocumentLayout>
+#ifdef WITH_QTDBUS
 #include <QDBusConnection>
+#endif
 #include <QDesktopServices>
 #include <QFrame>
 #include <QKeyEvent>
@@ -37,7 +39,7 @@
 #include "KPrViewModePresentation.h"
 #include "ui/KPrPresentationToolWidget.h"
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KPrPresentationToolAdaptor.h"
 #endif
 
@@ -45,11 +47,11 @@ KPrPresentationTool::KPrPresentationTool(KPrViewModePresentation &viewMode)
     : KoToolBase(viewMode.canvas())
     , m_viewMode(viewMode)
     , m_strategy(new KPrPresentationStrategy(this))
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     , m_bus(new KPrPresentationToolAdaptor(this))
 #endif
 {
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
 #endif
 

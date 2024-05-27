@@ -134,12 +134,12 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(Qt6DBus_FOUND)
-set( calligrastageprivate_LIB_SRCS
-     ${calligrastageprivate_LIB_SRCS}
-     KPrViewAdaptor.cpp
-     KPrPresentationToolAdaptor.cpp
-   )
+if(TARGET Qt6::DBus)
+    set(calligrastageprivate_LIB_SRCS
+        ${calligrastageprivate_LIB_SRCS}
+        KPrViewAdaptor.cpp
+        KPrPresentationToolAdaptor.cpp
+    )
 endif()
 
 ki18n_wrap_ui(calligrastageprivate_LIB_SRCS

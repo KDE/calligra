@@ -8,7 +8,7 @@
 #ifndef KOPARTADAPTOR_H
 #define KOPARTADAPTOR_H
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 
 #include <QMap>
 
@@ -118,6 +118,6 @@ protected:
     KoPart *m_pDoc;
 };
 
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif

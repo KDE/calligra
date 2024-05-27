@@ -8,7 +8,7 @@
 #ifndef CALLIGRA_SHEETS_MAP_ADAPTOR
 #define CALLIGRA_SHEETS_MAP_ADAPTOR
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include <QStringList>
 
 #include "sheets_part_export.h"
@@ -54,6 +54,6 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif

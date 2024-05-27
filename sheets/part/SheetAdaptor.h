@@ -14,7 +14,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_ADAPTOR
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include <QDBusAbstractAdaptor>
 #include <QString>
 

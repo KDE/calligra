@@ -8,7 +8,7 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 
 #include "komain_export.h"
 #include <QDBusAbstractAdaptor>
@@ -72,6 +72,6 @@ private:
     KoApplication *m_application;
 };
 
-#endif // QT_NO_DBUS
+#endif // WITH_QTDBUS
 
 #endif

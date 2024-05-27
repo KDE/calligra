@@ -43,7 +43,7 @@
 #include "ui/SheetView.h"
 
 // D-Bus
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "MapAdaptor.h"
 #include "SheetAdaptor.h"
 #include <QDBusConnection>
@@ -82,7 +82,7 @@ Doc::Doc(KoPart *part)
     connect(map(), &Map::sheetAdded, this, &Doc::sheetAdded);
     dd->configLoadFromFile = false;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     new MapAdaptor(map());
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + map()->objectName(), map());
 #endif
@@ -253,7 +253,7 @@ bool Doc::configLoadFromFile() const
 
 void Doc::sheetAdded(SheetBase *sheet)
 {
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
     if (!fullSheet)
         return;

@@ -21,7 +21,7 @@ class KPrViewModePresentation;
 class KPrPresentationToolWidget;
 class KPrPresentationStrategyBase;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 class KPrPresentationToolAdaptor;
 #endif
 
@@ -82,7 +82,7 @@ private:
     QFrame *m_frame;
     KPrPresentationStrategyBase *m_strategy;
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     KPrPresentationToolAdaptor *m_bus;
 #endif
 

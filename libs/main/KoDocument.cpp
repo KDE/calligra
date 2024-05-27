@@ -60,7 +60,7 @@
 #include <QTemporaryFile>
 #include <QTimer>
 #include <QtGlobal>
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include <KJobWidgets>
 #include <QDBusConnection>
 #endif
@@ -319,7 +319,7 @@ public:
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
         KJobWidgets::setWindow(m_job, 0);
         if (m_job->uiDelegate()) {
             KJobWidgets::setWindow(m_job, parentPart->currentMainwindow());
@@ -2613,7 +2613,7 @@ bool KoDocument::saveToUrl()
             return false;
         }
         d->m_uploadJob = KIO::file_move(uploadUrl, d->m_url, -1, KIO::Overwrite);
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
         KJobWidgets::setWindow(d->m_uploadJob, 0);
 #endif
         connect(d->m_uploadJob, &KIO::FileCopyJob::result, this, [this](KJob *job) {

@@ -99,7 +99,7 @@
 #include "ui/dialogs/ShowDialog.h"
 
 // D-Bus
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "ViewAdaptor.h"
 #include <KNotifyConfigWidget>
 #endif
@@ -597,7 +597,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     new ViewAdaptor(this);
 #endif
 
@@ -1651,7 +1651,7 @@ void View::showTabBar(bool enable)
 
 void View::optionsNotifications()
 {
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     KNotifyConfigWidget::configure(this);
 #endif
 }

@@ -38,7 +38,7 @@
 #include "KPrPageApplicationData.h"
 #include "KPrPart.h"
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 #include "KPrViewAdaptor.h"
 #endif
 
@@ -67,7 +67,7 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
     , m_normalMode(viewMode())
     , m_notesMode(new KPrViewModeNotes(this, kopaCanvas()))
     , m_slidesSorterMode(new KPrViewModeSlidesSorter(this, kopaCanvas()))
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
     , m_dbus(new KPrViewAdaptor(this))
 #endif
 {
@@ -129,7 +129,7 @@ KPrDocument *KPrView::kprDocument() const
     return static_cast<KPrDocument *>(kopaDocument());
 }
 
-#ifndef QT_NO_DBUS
+#ifdef WITH_QTDBUS
 KPrViewAdaptor *KPrView::dbusObject() const
 {
     return m_dbus;

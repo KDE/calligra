@@ -27,7 +27,7 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/SheetSelectWidget.ui
 )
 
-if(Qt6DBus_FOUND)
+if(TARGET Qt6::DBus)
 set (interfaces_DIR_SRCS
     MapAdaptor.cpp
     SheetAdaptor.cpp
@@ -61,7 +61,7 @@ set (calligrasheetspartlib_LIB_SRCS
     ${dialogs_DIR_SRCS}
 )
 
-if(Qt6DBus_FOUND)
+if(TARGET Qt6::DBus)
 set (calligrasheetspartlib_LIB_SRCS
     ${calligrasheetspartlib_LIB_SRCS}
     ${interfaces_DIR_SRCS}
