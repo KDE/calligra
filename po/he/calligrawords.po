@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-17 15:01+0300\n"
+"PO-Revision-Date: 2024-05-26 08:39+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1095,7 +1095,7 @@ msgstr "מעבד תמלילים"
 #: part/KWAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "כל הזכויות שמורות 1998‏-%1, צוות Words "
+msgstr "כל הזכויות שמורות 1998‏-%1, צוות Words"
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
@@ -1275,7 +1275,7 @@ msgstr "Krister Wicksell Eriksson"
 #: part/KWAboutData.h:55
 #, kde-format
 msgid "Dag Andersen"
-msgstr "Dag Andersen"
+msgstr "דאג אנדרסן"
 
 #: part/KWAboutData.h:56
 #, kde-format
@@ -1295,12 +1295,12 @@ msgstr "Ulrich Kuettler"
 #: part/KWAboutData.h:58
 #, kde-format
 msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
+msgstr "שהיד האק"
 
 #: part/KWAboutData.h:59
 #, kde-format
 msgid "Werner Trobin"
-msgstr "Werner Trobin"
+msgstr "ורנר טרובין"
 
 #: part/KWAboutData.h:60
 #, kde-format
@@ -1408,19 +1408,20 @@ msgstr "כלים"
 #: part/KWOdfLoader.cpp:83
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-msgstr "מסמך OASIS OpenDocument לא תקף. לא נמצאה תגית office:body."
+msgstr "מסמך OASIS OpenDocument שגוי. לא נמצאה תגית office:body."
 
 #: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-msgstr "מסמך OASIS OpenDocument לא תקף. לא נמצאה תגית office:body."
+msgstr "מסמך OASIS OpenDocument שגוי. לא נמצאה תגית office:body."
 
 #: part/KWOdfLoader.cpp:96
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
-msgstr "זה אינו מסמך לעיבוד תמלילים אלא %1. יש לנסות לפותחו בעזרת תוכנה מתאימ"
+msgstr ""
+"זה אינו מסמך לעיבוד תמלילים אלא %1. נא לנסות לפתוח אותו עם יישום מתאים."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
 #, kde-format
@@ -1431,7 +1432,7 @@ msgstr "רגיל"
 #: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, KWord ייצא כעת"
+msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, Words ייצא כעת"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1543,7 +1544,7 @@ msgstr "הצגת תווי עיצוב"
 #: part/KWView.cpp:315
 #, kde-format
 msgid "Toggle the display of non-printing characters"
-msgstr "הצגה או הסתרה של תווים שאינם מודפסים"
+msgstr "הצגה או הסתרה של תווים שאינם מוצגים"
 
 #: part/KWView.cpp:317
 #, kde-format
@@ -1552,8 +1553,8 @@ msgid ""
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
-"החלפת מצב הצגה של תווים שלא מיועדים להדפסה.<br/><br/>כשהאפשרות פעילה, Words "
-"יציג טאבים, רווחים, ירידות שורה ועוד תווים שאינם להדפסה."
+"החלפת מצב הצגה של תווים שלא מיועדים להצגה.<br/><br/>כשהאפשרות פעילה, Words "
+"יציג טאבים, רווחים, ירידות שורה ועוד תווים שאינם להצגה."
 
 #: part/KWView.cpp:320
 #, kde-format
@@ -1633,7 +1634,7 @@ msgstr ""
 #: part/KWView.cpp:360
 #, kde-format
 msgid "Show Rulers"
-msgstr "הצג סרגלים"
+msgstr "הצגת סרגלים"
 
 #: part/KWView.cpp:362
 #, kde-format
@@ -1665,7 +1666,7 @@ msgstr "הצגת שורת מצב"
 #: part/KWView.cpp:384
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr "הצגה או הסתרת שורת המצב"
+msgstr "הצגת או הסתרת שורת המצב"
 
 #: part/KWView.cpp:390
 #, kde-format
@@ -1680,7 +1681,7 @@ msgstr ""
 #: part/KWView.cpp:398
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "גיליונות סגנון סמנטיים…"
 
 #: part/KWView.cpp:400
 #, kde-format
@@ -1715,8 +1716,8 @@ msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
-"שינוי מאפייני העמוד כולו.<p>לעת עתה באפשרותך לשנות את גודל הדף, את כיוון "
-"הדף, את גדלי הכותרת העליונה והכותרת התחתונה ואת הגדרות הטורים.</p>"
+"שינוי מאפייני העמוד כולו.<p>לעת עתה אפשר לשנות את גודל הדף, את כיוון הדף, את "
+"גודלי הכותרת העליונה והכותרת התחתונה ואת הגדרות העמודות.</p>"
 
 #: part/KWView.cpp:432
 #, kde-format
@@ -1731,7 +1732,7 @@ msgstr "יצירת כותרת תחתונה"
 #: part/KWView.cpp:445
 #, kde-format
 msgid "Show Comments"
-msgstr ""
+msgstr "הצגת הערות"
 
 #: part/KWView.cpp:446
 #, kde-format
@@ -1741,7 +1742,7 @@ msgstr "הצגת הערות במסמך"
 #: part/KWView.cpp:452
 #, kde-format
 msgid "Word Count"
-msgstr ""
+msgstr "כמות מילים"
 
 #: part/KWView.cpp:453
 #, kde-format
@@ -1777,7 +1778,7 @@ msgstr "..."
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "איתור:"
 
 #: part/widgets/KoFindToolbar.cpp:81
 #, kde-format
@@ -1789,7 +1790,7 @@ msgstr "הבא"
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr ""
+msgstr "הקודם"
 
 #: part/widgets/KoFindToolbar.cpp:104
 #, kde-format
@@ -1801,24 +1802,24 @@ msgstr "אפשרויות"
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "החלפה:"
 
 #: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "החלפה"
 
 #: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "החלפה של הכול"
 
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "החלפה"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
@@ -1833,7 +1834,7 @@ msgstr[3] ""
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "לא נמצאו תוצאות"
 
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format

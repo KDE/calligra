@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-21 01:58+0900\n"
+"PO-Revision-Date: 2024-05-26 23:18+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -79,19 +79,14 @@ msgid "Create shape animation"
 msgstr "建立元件動畫"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
-#, fuzzy
-#| msgid "Animation"
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr "動畫"
+msgstr "編輯動畫觸發事件"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape animation"
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr "建立元件動畫"
+msgstr "移除元件動畫"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -99,10 +94,6 @@ msgid "Delete custom slide show"
 msgstr "刪除自訂投影秀"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "刪除投影片"
@@ -114,11 +105,9 @@ msgid_plural "Delete slides"
 msgstr[0] "刪除投影片"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
-#, fuzzy
-#| msgid "Animation"
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr "動畫"
+msgstr "編輯動畫延遲/持續時間"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -141,11 +130,9 @@ msgid "Delete Slide Effect"
 msgstr "刪除投影片效果"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
-#| msgid "Slide Transitions"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "投影片轉變"
+msgstr "修改投影片轉變"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -153,18 +140,15 @@ msgid "Rename custom slide show"
 msgstr "重新命名自訂投影秀"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
-#, fuzzy
-#| msgid "Slide Transitions"
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr "投影片轉變"
+msgstr "重新排序動畫"
 
 #: part/KPrAboutData.h:19
-#, fuzzy, kde-format
-#| msgid "Configure Stage..."
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "設定 Stage..."
+msgstr "Calligra Stage"
 
 #: part/KPrAboutData.h:21
 #, kde-format
@@ -172,10 +156,9 @@ msgid "Presentation Tool"
 msgstr "簡報工具"
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
-#| msgid "(c) 1998-2011, The Stage Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "(c) 1998-2011, Stage 開發團隊"
+msgstr "Copyright 1998-%1, Stage 開發團隊"
 
 #: part/KPrAboutData.h:31 part/KPrAboutData.h:32
 #, kde-format
@@ -293,7 +276,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "ericc@shinewave.com.tw, cwhuang@linux.org.tw, pesder.liao@msa.hinet.net, "
-"franklin@goodhorse.idv.tw"
+"franklin@goodhorse.idv.tw, mail@kisaragi-hiu.com"
 
 #. i18n translator strings
 #: part/KPrAboutData.h:52
@@ -301,7 +284,8 @@ msgstr ""
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
-"Eric Cheng, Chih-Wei Huang, Chao-Hsiung Liao, Frank Weng (a.k.a. Franklin)"
+"Eric Cheng, Chih-Wei Huang, Chao-Hsiung Liao, Frank Weng (a.k.a. Franklin), "
+"Kisaragi Hiu"
 
 #: part/KPrCustomSlideShowsModel.cpp:54
 #: part/KPrSlidesSorterDocumentModel.cpp:85
@@ -321,10 +305,9 @@ msgid "End of presentation. Click to exit."
 msgstr "展示結束。點擊以離開。"
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
-#, fuzzy, kde-format
-#| msgid "Set Layout"
+#, kde-format
 msgid "Layout"
-msgstr "設定佈局"
+msgstr "佈局"
 
 #: part/KPrPart.cpp:69
 #, kde-format
@@ -444,30 +427,26 @@ msgstr "播放投影結束"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "滑鼠點擊時開始"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape animation"
+#, kde-format
 msgid "start after previous animation"
-msgstr "建立元件動畫"
+msgstr "在前一個動畫之後開始"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape animation"
+#, kde-format
 msgid "start with previous animation"
-msgstr "建立元件動畫"
+msgstr "與前一個動畫一起開始"
 
 #: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "%1 秒後開始。時長 %2 秒。"
 
 #: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
@@ -551,16 +530,14 @@ msgid "Previous Slide"
 msgstr "前一張投影片"
 
 #: part/KPrView.cpp:92 part/KPrView.cpp:93
-#, fuzzy, kde-format
-#| msgid "Previous Slide"
+#, kde-format
 msgid "Go to previous slide"
 msgstr "前一張投影片"
 
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
-#, fuzzy, kde-format
-#| msgid "Add a new slide"
+#, kde-format
 msgid "Go to next slide"
-msgstr "新增投影片"
+msgstr "下一張投影片"
 
 #: part/KPrView.cpp:97
 #, kde-format
@@ -568,8 +545,7 @@ msgid "First Slide"
 msgstr "第一張投影片"
 
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
-#, fuzzy, kde-format
-#| msgid "From First Slide"
+#, kde-format
 msgid "Go to first slide"
 msgstr "從第一張投影片"
 
@@ -579,8 +555,7 @@ msgid "Last Slide"
 msgstr "最後一張投影片"
 
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
-#, fuzzy, kde-format
-#| msgid "Last Slide"
+#, kde-format
 msgid "Go to last slide"
 msgstr "最後一張投影片"
 
@@ -705,16 +680,14 @@ msgid "Remove slides from current custom slide show"
 msgstr "從目前自訂的投影秀移除投影片"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
-#, fuzzy, kde-format
-#| msgid "Delete Slide"
+#, kde-format
 msgid "Duplicate Slide"
-msgstr "刪除投影片"
+msgstr "建立投影片複本"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
-#, fuzzy, kde-format
-#| msgid "Current Slideshow:"
+#, kde-format
 msgid "Start Slideshow"
-msgstr "目前的投影秀："
+msgstr "開始投影播放"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, kde-format
@@ -777,14 +750,13 @@ msgstr "設定佈局"
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
 #, kde-format
 msgid "Automatic animation preview"
-msgstr ""
+msgstr "自動動畫預覽"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Preview animation"
-msgstr "簡報"
+msgstr "預覽動畫"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, kde-format
@@ -797,45 +769,39 @@ msgid "Shape Click Actions"
 msgstr "元件點擊動作"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Shape Animations"
 msgstr "元件動畫"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
-#, fuzzy, kde-format
-#| msgid "Animation"
+#, kde-format
 msgid "Manage animation delay and duration: "
-msgstr "動畫"
+msgstr "管理動畫延遲與持續時間："
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
-#, fuzzy, kde-format
-#| msgid "Star"
+#, kde-format
 msgid "Start: "
-msgstr "星星"
+msgstr "開始："
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr ""
+msgstr "滑鼠點擊時"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape animation"
+#, kde-format
 msgid "after previous animation"
-msgstr "建立元件動畫"
+msgstr "前一個動畫之後"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "with previous animation"
-msgstr "元件動畫"
+msgstr "與前一個動畫一起"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
 msgid "Delay: "
-msgstr ""
+msgstr "延遲："
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
 #, kde-format
@@ -844,10 +810,9 @@ msgstr "期間："
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Preview Shape Animation"
-msgstr "元件動畫"
+msgstr "預覽元件動畫"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -862,56 +827,52 @@ msgstr " 秒"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "手動"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "自動"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
-#, fuzzy, kde-format
-#| msgid "Slide Transitions"
+#, kde-format
 msgid "Slide Transition:"
-msgstr "投影片轉變"
+msgstr "投影片轉變："
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
-#, fuzzy, kde-format
-#| msgid "All slides"
+#, kde-format
 msgid "Apply To All Slides"
-msgstr "所有的投影片"
+msgstr "套用到所有投影片"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
-#, fuzzy
-#| msgid "All slides"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr "所有的投影片"
+msgstr "套用投影片效果到所有投影片"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "進入"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
-msgstr ""
+msgstr "離開"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
-msgstr ""
+msgstr "強調"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, kde-format
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "動作路徑"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, kde-format
@@ -921,61 +882,54 @@ msgstr ""
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
 msgid "Media Call"
-msgstr ""
+msgstr "媒體呼叫"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
-#, fuzzy, kde-format
-#| msgid "Animation"
+#, kde-format
 msgid "Edit animation"
-msgstr "動畫"
+msgstr "編輯動畫"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Animation"
+#, kde-format
 msgid "Add new animation"
-msgstr "動畫"
+msgstr "新增動畫"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Remove animation"
-msgstr "元件動畫"
+msgstr "移除動畫"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
-msgstr ""
+msgstr "順序："
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
-#, fuzzy, kde-format
-#| msgid "Shape Animation"
+#, kde-format
 msgid "Move animation up"
-msgstr "元件動畫"
+msgstr "將動畫上移"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
-#, fuzzy, kde-format
-#| msgid "Animation Tool"
+#, kde-format
 msgid "Move animation down"
-msgstr "動畫工具"
+msgstr "將動畫下移"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
-#, fuzzy, kde-format
-#| msgid "Add a new slide"
+#, kde-format
 msgid "Add a new animation"
-msgstr "新增投影片"
+msgstr "新增動畫"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
-#, fuzzy, kde-format
-#| msgid "Delete the current slide"
+#, kde-format
 msgid "Delete current animation"
-msgstr "刪除目前的投影片"
+msgstr "刪除目前的動畫"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
 msgid "seconds"
-msgstr ""
+msgstr "秒"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: part/tools/animationtool/wdg_tool_crop.ui:16

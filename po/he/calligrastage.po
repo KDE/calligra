@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-17 14:14+0300\n"
+"PO-Revision-Date: 2024-05-26 08:48+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -953,9 +953,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: part/tools/animationtool/wdg_tool_crop.ui:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Crop"
-msgstr "הע&תק"
+msgstr "חיתוך"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: part/tools/animationtool/wdg_tool_crop.ui:36
@@ -965,9 +965,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "W&idth:"
-msgstr "רוחב:"
+msgstr "&רוחב"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:63
@@ -995,15 +995,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
 #: part/tools/animationtool/wdg_tool_crop.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "R&atio:"
-msgstr "&מיקום:"
+msgstr "י&חס:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
 #: part/tools/animationtool/wdg_tool_crop.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Will keep the ratio constant"
-msgstr "קבע את רוחב הקו."
+msgstr "קיבוע היחס"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132
@@ -1013,21 +1013,20 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image"
-msgstr "&עמוד"
+msgstr "תמונה"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnCrop)
 #: part/tools/animationtool/wdg_tool_crop.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Crop"
-msgstr "מלמ&עלה:"
+msgstr "&חיתוך"
 
 #: part/tools/KPrPlaceholderTool.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit Shape"
-msgstr "צורה"
+msgstr "עריכת צורה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/ui/KPrConfigurePresenterView.ui:16
@@ -1037,15 +1036,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigurePresenterView.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Presentation monitor:"
-msgstr "עט מצגת"
+msgstr "צג מציג:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable presenter view"
-msgstr "הגדרות KPresenter"
+msgstr "הפעלת תצוגת מציג"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
@@ -1058,9 +1057,9 @@ msgid "Monitor %1"
 msgstr ""
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Presenter View"
-msgstr "הגדרות KPresenter"
+msgstr "הגדרת תצוגת מציג"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
 #: part/ui/KPrConfigureSlideShow.ui:13
@@ -1071,21 +1070,21 @@ msgstr "הגדרת מצגת שקופיות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/ui/KPrConfigureSlideShow.ui:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slides"
-msgstr "&שקופיות"
+msgstr "שקופיות"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigureSlideShow.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Presentation Slides:"
-msgstr "מצגת"
+msgstr "שקופיות מצגת:"
 
 #. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
 #: part/ui/KPrConfigureSlideShow.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "מצגת שקופיות מותאמת אישית..."
+msgstr "עריכת מצגות בהתאמה אישית…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
@@ -1101,40 +1100,40 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all"
-msgstr "בחר ה&כל"
+msgstr "בחירה בהכול"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_css)
 #: part/ui/KPrHtmlExport.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select template (.css) :"
-msgstr "דפים נבחרים:"
+msgstr "בחירת תבנית (‎.css):"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
 #: part/ui/KPrHtmlExport.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Deselect all"
-msgstr "אל תבחר &כלום"
+msgstr "בחירה בכלום"
 
 #. i18n: ectx: property (text), widget (QLabel, textlable_top)
 #: part/ui/KPrHtmlExport.ui:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Title"
-msgstr "כותרת:"
+msgstr "כותרת"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
 #: part/ui/KPrHtmlExport.ui:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "Output preview"
-msgstr "תצוגה מקדימה אוטומטית"
+msgstr "תצוגת פלט מקדימה"
 
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
 #: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
-#, fuzzy, kde-format
+#, kde-format
 msgid "..."
-msgstr "חדש..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
 #: part/ui/KPrHtmlExport.ui:227
@@ -1144,15 +1143,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_author)
 #: part/ui/KPrHtmlExport.ui:243
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author"
-msgstr "יוצר:"
+msgstr "יוצר"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
 #: part/ui/KPrHtmlExport.ui:258
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Favorite"
-msgstr "מחק שקופית"
+msgstr "מחיקת מועדף"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
 #: part/ui/KPrHtmlExport.ui:286
@@ -1186,9 +1185,9 @@ msgid "Zip file need to contain style.css"
 msgstr ""
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Template"
-msgstr "מחק שקופית"
+msgstr "מחיקת תבנית"
 
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
@@ -1196,35 +1195,34 @@ msgid "You may not remove the templates provided with the application"
 msgstr ""
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Template"
-msgstr "מחק שקופית"
+msgstr "הוספת תבנית"
 
 #: part/ui/KPrHtmlExportDialog.cpp:325
-#, fuzzy, kde-format
+#, kde-format
 msgid "Confirm remove"
-msgstr "שמירת הגדרות..."
+msgstr "אישור הסרה"
 
 #: part/ui/KPrHtmlExportDialog.cpp:326
-#, fuzzy, kde-format
+#, kde-format
 msgid "Are you sure you want to remove \"%1\"?"
-msgstr "האם ברצונך להסיר את השקופית הנוכחית?"
+msgstr "להסיר את „%1”?"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
-msgstr "שינוי זווית"
+msgstr "החלפת פעולת שמע"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "No sound"
-msgstr " שניות"
+msgstr "בלי שמע"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import..."
-msgstr "ייבוא סגנונות..."
+msgstr "ייבוא…"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
@@ -1239,9 +1237,8 @@ msgstr ""
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
 msgid "From Bottom"
-msgstr "כניסה מלמטה"
+msgstr "מלמטה"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
@@ -1251,9 +1248,8 @@ msgstr "כניסה מלמטה"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
 msgid "From Left"
-msgstr "כניסה משמאל"
+msgstr "משמאל"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
@@ -1263,9 +1259,8 @@ msgstr "כניסה משמאל"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
 msgid "From Right"
-msgstr "כניסה מימין"
+msgstr "מימין"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
@@ -1275,9 +1270,8 @@ msgstr "כניסה מימין"
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
-#, fuzzy
 msgid "From Top"
-msgstr "כניסה מלמעלה"
+msgstr "מלמעלה"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
@@ -1321,9 +1315,9 @@ msgid "Unknown subtype"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clock"
-msgstr "&צבעים:"
+msgstr "שעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 msgid "From Twelve Clockwise"
@@ -1346,44 +1340,37 @@ msgid "From Twelve Counterclockwise"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "From Three Counterclockwise"
-msgstr "כניסה מימין"
+msgstr "משלוש נגד כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
-#, fuzzy
 msgid "From Six Counterclockwise"
-msgstr "כניסה מימין"
+msgstr "משש נגד כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
-#, fuzzy
 msgid "From Nine Counterclockwise"
-msgstr "כניסה מימין"
+msgstr "מתשע נגדר כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double Fan"
-msgstr "חץ כפול"
+msgstr "מאוורר כפול"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
-#, fuzzy
 msgid "Fan Out Vertical"
-msgstr "פתיחה אנכית"
+msgstr "מאוורר אנכי החוצה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy
 msgid "Fan Out Horizontal"
-msgstr "פתיחה אופקית"
+msgstr "מאוורר אופקי החוצה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, fuzzy
 msgid "Fan In Vertical"
-msgstr "פתיחה אנכית"
+msgstr "מאוורר אנכי פנימה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy
 msgid "Fan In Horizontal"
-msgstr "פתיחה אופקית"
+msgstr "מאוורר אופקי פנימה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
 #, fuzzy

@@ -3,19 +3,20 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2008, 2010, 2012.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2010.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kocolorspaces\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2012-06-14 08:32+0800\n"
-"Last-Translator: Franklin Weng <franklin@goodhorse.idv.tw>\n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-05-26 23:20+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
@@ -95,10 +96,9 @@ msgid "Gray"
 msgstr "灰"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha (32-bit float/channel)"
+#, kde-format
 msgid "Grayscale/Alpha (16-bit float/channel)"
-msgstr "灰階/Alpha（32 位元浮點數/每色頻）"
+msgstr "灰階/Alpha（16 位元浮點數/每色頻）"
 
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
 #, kde-format
@@ -176,10 +176,9 @@ msgid "Blue"
 msgstr "藍"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
-#, fuzzy, kde-format
-#| msgid "RGBA (32-bit floating/channel)"
+#, kde-format
 msgid "RGBA (16-bit floating/channel)"
-msgstr "RGB（32 位元浮點數/每色頻）"
+msgstr "RGB（16 位元浮點數/每色頻）"
 
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
 #, kde-format
@@ -350,10 +349,9 @@ msgid "RGB16 Histogram"
 msgstr "RGB16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:154
-#, fuzzy, kde-format
-#| msgid "RGB16 Histogram"
+#, kde-format
 msgid "RGBF16 Histogram"
-msgstr "RGB16 直方圖"
+msgstr "RGBF16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:160
 #, kde-format
@@ -363,23 +361,22 @@ msgstr "RGBF32 直方圖"
 #: lcms2/LcmsEnginePlugin.cpp:180
 #, kde-format
 msgid "GRAY/Alpha8 Histogram"
-msgstr "灰/Alpha8 直方圖"
+msgstr "GRAY/Alpha8 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:185
 #, kde-format
 msgid "GRAY/Alpha16 Histogram"
-msgstr "灰階/Alpha16 直方圖"
+msgstr "GRAY/Alpha16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:190
-#, fuzzy, kde-format
-#| msgid "RGB16 Histogram"
+#, kde-format
 msgid "GRAYF16 Histogram"
-msgstr "RGB16 直方圖"
+msgstr "GRAYF16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:196
 #, kde-format
 msgid "GRAY/Alpha 32 float Histogram"
-msgstr "灰/Alpha 32 浮點直方圖"
+msgstr "GRAY/Alpha 32 浮點直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:207
 #, kde-format
@@ -407,10 +404,9 @@ msgid "XYZ16 Histogram"
 msgstr "XYZ16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:245
-#, fuzzy, kde-format
-#| msgid "XYZ16 Histogram"
+#, kde-format
 msgid "XYZF16 Histogram"
-msgstr "XYZ16 直方圖"
+msgstr "XYZF16 直方圖"
 
 #: lcms2/LcmsEnginePlugin.cpp:251
 #, kde-format
