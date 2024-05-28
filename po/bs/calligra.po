@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-30 00:38+0000\n"
+"POT-Creation-Date: 2024-05-28 00:38+0000\n"
 "PO-Revision-Date: 2015-02-26 18:25+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -804,66 +804,66 @@ msgstr "Pozicija umetanja:"
 msgid "Paste at Cursor:"
 msgstr "Zalijepi na kursor:"
 
-#: main/KoApplication.cpp:189
+#: main/KoApplication.cpp:191
 #, kde-format
 msgid "Only print and exit"
 msgstr "Samo odštampaj i izađi"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:193
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Napravi novi dokument prema šablonu"
 
-#: main/KoApplication.cpp:192
+#: main/KoApplication.cpp:194
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template file"
 msgstr "Napravi novi dokument prema šablonu"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:195
 #, kde-format
 msgid "Override display DPI"
 msgstr "Prevaziđi DPI ekrana"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Samo izvezi u PDF i izađi"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:197
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Ime datoteke za izvoz-pdf"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "samo učitaj datoteku i izađi"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "učitaj datoteku, pokaži prozor i traku napretka a zatim izađi"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Ime datoteke u koju se pišu informacija profilisanja."
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Učitaj datoteku i sačuvaj je kao datoteku ODF. Namijenjeno za otklanjanje "
 "grešaka."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:215
+#: main/KoApplication.cpp:217
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -874,12 +874,12 @@ msgstr ""
 "To nije preporučljivo.\n"
 "Molim preuzmite i instalirajte x64 gradnju umjesto toga."
 
-#: main/KoApplication.cpp:255
+#: main/KoApplication.cpp:257
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritična greška"
 
-#: main/KoApplication.cpp:256
+#: main/KoApplication.cpp:258
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -890,22 +890,22 @@ msgstr ""
 "To bi moglao biti problem  instalacije.\n"
 "Pokušajte ponovno pokrenuti ili reinstalirati."
 
-#: main/KoApplication.cpp:493
+#: main/KoApplication.cpp:495
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Uzorak nije pronađen za:%1"
 
-#: main/KoApplication.cpp:496
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Pronađeno je previše šablona za: %1"
 
-#: main/KoApplication.cpp:518 main/KoApplication.cpp:535
+#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Šablon %1 nije mogao da se učita."
 
-#: main/KoApplication.cpp:525
+#: main/KoApplication.cpp:527
 #, fuzzy, kde-format
 #| msgid "No template found for: %1"
 msgid "No template found at: %1"
@@ -939,17 +939,17 @@ msgstr "Uvijek koristi ovaj šablon pri pokretanju programa"
 msgid "Always use this template"
 msgstr "Uvijek koristi ovaj šablon"
 
-#: main/KoDocument.cpp:544
+#: main/KoDocument.cpp:548
 #, kde-format
 msgid "Making backup..."
 msgstr "Pravim rezervnu kopiju..."
 
-#: main/KoDocument.cpp:559
+#: main/KoDocument.cpp:563
 #, kde-format
 msgid "Saving..."
 msgstr "Snimam..."
 
-#: main/KoDocument.cpp:587
+#: main/KoDocument.cpp:591
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -958,7 +958,7 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: main/KoDocument.cpp:589
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -967,12 +967,12 @@ msgstr ""
 "Ne mogu snimiti%1\n"
 "Razlog: %2"
 
-#: main/KoDocument.cpp:617
+#: main/KoDocument.cpp:621
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Dokument <i>%1</i> snimljen"
 
-#: main/KoDocument.cpp:705
+#: main/KoDocument.cpp:709
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -981,38 +981,38 @@ msgstr ""
 "Šifra ovog kodiranog dokumenta nije poznata. Autosnimanje odbijeno! Molimo "
 "da snimite vaš rad ručno."
 
-#: main/KoDocument.cpp:708
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatski snimam..."
 
-#: main/KoDocument.cpp:720
+#: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Greška tokom automatskog snimanja. Nema prostora na disku?"
 
-#: main/KoDocument.cpp:808
+#: main/KoDocument.cpp:812
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Nisam mogao da napravim datoteku za snimanje"
 
-#: main/KoDocument.cpp:852 main/KoDocument.cpp:874 main/KoDocument.cpp:904
-#: main/KoDocument.cpp:938
+#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
+#: main/KoDocument.cpp:942
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Nije moguće zapisati '%1'. Particija puna?"
 
-#: main/KoDocument.cpp:859
+#: main/KoDocument.cpp:863
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Nije bilo moguće upisati RDF metapodatke. Particija puna?"
 
-#: main/KoDocument.cpp:867 main/KoDocument.cpp:913 main/KoDocument.cpp:1971
+#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Ne mogu da zapišem „%1“. Nema prostora na disku?"
 
-#: main/KoDocument.cpp:1213
+#: main/KoDocument.cpp:1217
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1021,7 +1021,7 @@ msgstr ""
 "Loše formiran URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1229
+#: main/KoDocument.cpp:1233
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1030,102 +1030,102 @@ msgstr ""
 "Pronašao sam automatski snimljenu verziju ovog dokumenta.\n"
 "Da li je želite otvoriti?"
 
-#: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Datoteka %1 ne postoji."
 
-#: main/KoDocument.cpp:1429
+#: main/KoDocument.cpp:1433
 #, kde-format
 msgid "Opening Document"
 msgstr "Otvaram okument"
 
-#: main/KoDocument.cpp:1445
+#: main/KoDocument.cpp:1449
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Ne mogu kreirati filter priključak"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1453
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Ne mogu kreirati izlazni dokument"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1457
 #, kde-format
 msgid "File not found"
 msgstr "Datoteka nije pronađena"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1461
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Ne mogu napraviti mjesto za čuvanje podataka"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1465
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Loš MIME tip"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1469
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Greška u ugrađenom dokumentu"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1473
 #, kde-format
 msgid "Format not recognized"
 msgstr "Format nije prepoznat"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1477
 #, kde-format
 msgid "Not implemented"
 msgstr "Nije implementirano"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Parsing error"
 msgstr "Greška u raščlanjivanju"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Document is password protected"
 msgstr "Dokument je zaštićen šifrom"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1489
 #, kde-format
 msgid "Invalid file format"
 msgstr "Pogrešan format datoteke"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Internal error"
 msgstr "Interna greška"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Out of memory"
 msgstr "Nema više memorije"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Isprazni filter priključak"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Pokušaj da se učita u pogrešnu vrstu dokumenta"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1513
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Skidanje udaljene datoteke nije uspjelo"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Unknown error"
 msgstr "Nepoznata greška"
 
-#: main/KoDocument.cpp:1523
+#: main/KoDocument.cpp:1527
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1136,17 +1136,17 @@ msgstr ""
 "Razlog:%1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1581
+#: main/KoDocument.cpp:1585
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokument <i>%1</i> se učitava"
 
-#: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Nisam mogao da nađem %1"
 
-#: main/KoDocument.cpp:1650
+#: main/KoDocument.cpp:1654
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1155,23 +1155,23 @@ msgstr ""
 "Greška pri raščlanjivanju u %1 u liniji %2, koloni %3\n"
 "Poruka o grešci: %4"
 
-#: main/KoDocument.cpp:1673
+#: main/KoDocument.cpp:1677
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 nije datoteka."
 
-#: main/KoDocument.cpp:1688
+#: main/KoDocument.cpp:1692
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
 "Nisam mogao da otvorim datoteku za čitanje (provjerite dozvole čitanja)."
 
-#: main/KoDocument.cpp:1699
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Nisam mogao da pročitam početak datoteke."
 
-#: main/KoDocument.cpp:1730
+#: main/KoDocument.cpp:1734
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1180,17 +1180,17 @@ msgstr ""
 "greška u raščlanjivanju glavnog dokumenta u liniji %1, koloni %2\n"
 "Poruka o grešci: %3"
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1755
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Nije važeća Calligra datoteka: %1"
 
-#: main/KoDocument.cpp:1832
+#: main/KoDocument.cpp:1836
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Neispravan dokument: nema datoteke „maindoc.xml“."
 
-#: main/KoDocument.cpp:1856
+#: main/KoDocument.cpp:1860
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1199,25 +1199,25 @@ msgstr ""
 "Dokument <i>%1</i> sadržava nekoliko verzija. Idi na Datoteka->Verzije da se "
 "otvaraju stare verzije."
 
-#: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
+#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
 #, kde-format
 msgid "Untitled"
 msgstr "Neimenovano"
 
-#: main/KoDocument.cpp:2060 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokument <b>'%1'</b> je mijenjan.</p><p>Želite li ga snimiti?</p>"
 
-#: main/KoDocument.cpp:2143
+#: main/KoDocument.cpp:2147
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Interna greška: saveXML nije implementiran"
 
-#: main/KoDocument.cpp:2176
+#: main/KoDocument.cpp:2180
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1226,7 +1226,7 @@ msgstr ""
 "Ne mogu otvoriti\n"
 "%1"
 
-#: main/KoDocument.cpp:2178
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1235,27 +1235,27 @@ msgstr ""
 "Ne mogu otvoriti %1\n"
 "Razlog: %2"
 
-#: main/KoDocument.cpp:2231
+#: main/KoDocument.cpp:2235
 msgid "a word processing"
 msgstr "obrada riječi"
 
-#: main/KoDocument.cpp:2232
+#: main/KoDocument.cpp:2236
 msgid "a spreadsheet"
 msgstr "tabelarni proračun"
 
-#: main/KoDocument.cpp:2233
+#: main/KoDocument.cpp:2237
 msgid "a presentation"
 msgstr "prezentacija"
 
-#: main/KoDocument.cpp:2234
+#: main/KoDocument.cpp:2238
 msgid "a chart"
 msgstr "grafikon"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2239
 msgid "a drawing"
 msgstr "crtež"
 
-#: main/KoDocument.cpp:2543
+#: main/KoDocument.cpp:2547
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1264,7 +1264,7 @@ msgstr ""
 "Dokument \"%1\" je mijenjan.\n"
 "Želite li snimiti vaše izmjene ili ih poništiti?"
 
-#: main/KoDocument.cpp:2546
+#: main/KoDocument.cpp:2550
 #, kde-format
 msgid "Close Document"
 msgstr "Zatvori dokument"

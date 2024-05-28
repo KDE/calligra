@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-30 00:38+0000\n"
+"POT-Creation-Date: 2024-05-28 00:38+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -803,68 +803,68 @@ msgstr "Versatz beim Einfügen:"
 msgid "Paste at Cursor:"
 msgstr "Am Cursor einfügen:"
 
-#: main/KoApplication.cpp:189
+#: main/KoApplication.cpp:191
 #, kde-format
 msgid "Only print and exit"
 msgstr "Nur drucken und beenden"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:193
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
 "Neues Dokument auf der Basis der angegebenen Vorlage (Name der Desktop-"
 "Datei) erstellen"
 
-#: main/KoApplication.cpp:192
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Neues Dokument auf der Basis der angegebenen Vorlage erstellen"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:195
 #, kde-format
 msgid "Override display DPI"
 msgstr "Bildschirm-DPI überschreiben"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Nur als PDF exportieren und beenden"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:197
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Dateiname für PDF-Export"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "nur die Datei laden und dann beenden"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 "die Datei laden, das Fenster und die Prozessleiste anzeigen und dann das "
 "Programm beenden"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Dateiname um die Autoreninformationen hinein zu schreiben"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Eine Datei laden und sie als ODF-Datei speichern. Zum Beheben von Fehlern "
 "gedacht."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Zu öffnende Datei(en) oder URLs (Adressen)"
 
-#: main/KoApplication.cpp:215
+#: main/KoApplication.cpp:217
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -876,12 +876,12 @@ msgstr ""
 "Dies wird nicht empfohlen.\n"
 "Bitte laden Sie eine X64-Version von Krita herunter und installieren Sie sie."
 
-#: main/KoApplication.cpp:255
+#: main/KoApplication.cpp:257
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritischer Fehler"
 
-#: main/KoApplication.cpp:256
+#: main/KoApplication.cpp:258
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -892,22 +892,22 @@ msgstr ""
 "Die kann ein Installationsproblem sein.\n"
 "Versuchen Sie, neu zu starten oder installieren Sie neu."
 
-#: main/KoApplication.cpp:493
+#: main/KoApplication.cpp:495
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Keine Vorlage gefunden für: %1"
 
-#: main/KoApplication.cpp:496
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Zu viele Vorlagen gefunden für: %1"
 
-#: main/KoApplication.cpp:518 main/KoApplication.cpp:535
+#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Vorlage %1 lässt sich nicht laden."
 
-#: main/KoApplication.cpp:525
+#: main/KoApplication.cpp:527
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Keine Vorlage gefunden unter %1"
@@ -943,17 +943,17 @@ msgstr "Immer diese Vorlage beim Programmstart verwenden"
 msgid "Always use this template"
 msgstr "Immer diese Vorlage verwenden"
 
-#: main/KoDocument.cpp:544
+#: main/KoDocument.cpp:548
 #, kde-format
 msgid "Making backup..."
 msgstr "Sicherung wird erstellt ..."
 
-#: main/KoDocument.cpp:559
+#: main/KoDocument.cpp:563
 #, kde-format
 msgid "Saving..."
 msgstr "Wird gespeichert ..."
 
-#: main/KoDocument.cpp:587
+#: main/KoDocument.cpp:591
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -962,7 +962,7 @@ msgstr ""
 "Speichern nicht möglich:\n"
 " %1"
 
-#: main/KoDocument.cpp:589
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -971,12 +971,12 @@ msgstr ""
 "Speichern von %1 nicht möglich.\n"
 "Ursache: %2"
 
-#: main/KoDocument.cpp:617
+#: main/KoDocument.cpp:621
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Dokument <i>%1</i> gespeichert"
 
-#: main/KoDocument.cpp:705
+#: main/KoDocument.cpp:709
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -985,46 +985,46 @@ msgstr ""
 "Das Passwort dieses verschlüsselten Dokuments ist nicht bekannt. "
 "Automatisches Speichern abgebrochen! Bitte speichern Sie Ihre Arbeit manuell."
 
-#: main/KoDocument.cpp:708
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatisches Speichern läuft ..."
 
-#: main/KoDocument.cpp:720
+#: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr ""
 "Fehler beim automatischen Speichern. Möglicherweise ist nicht genug Platz "
 "auf dem Speichermedium."
 
-#: main/KoDocument.cpp:808
+#: main/KoDocument.cpp:812
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Das Erstellen der Datei zum Speichern ist nicht möglich"
 
-#: main/KoDocument.cpp:852 main/KoDocument.cpp:874 main/KoDocument.cpp:904
-#: main/KoDocument.cpp:938
+#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
+#: main/KoDocument.cpp:942
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr ""
 "„%1“ kann nicht geschrieben werden. Möglicherweise ist nicht genug Platz auf "
 "dem Speichermedium."
 
-#: main/KoDocument.cpp:859
+#: main/KoDocument.cpp:863
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr ""
 "RDF-Metadaten können nicht geschrieben werden. Möglicherweise ist nicht "
 "genug Platz auf dem Speichermedium."
 
-#: main/KoDocument.cpp:867 main/KoDocument.cpp:913 main/KoDocument.cpp:1971
+#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr ""
 "Fehler beim Schreiben von „%1“. Möglicherweise ist nicht genug Platz auf dem "
 "Speichermedium."
 
-#: main/KoDocument.cpp:1213
+#: main/KoDocument.cpp:1217
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1033,7 +1033,7 @@ msgstr ""
 "Unzulässige Adresse (URL):\n"
 "%1"
 
-#: main/KoDocument.cpp:1229
+#: main/KoDocument.cpp:1233
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1042,102 +1042,102 @@ msgstr ""
 "Es existiert eine automatische Sicherung dieses Dokuments.\n"
 "Möchten Sie diese stattdessen öffnen?"
 
-#: main/KoDocument.cpp:1305 main/KoDocument.cpp:1666 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Die Datei %1 existiert nicht."
 
-#: main/KoDocument.cpp:1429
+#: main/KoDocument.cpp:1433
 #, kde-format
 msgid "Opening Document"
 msgstr "Dokument wird geöffnet"
 
-#: main/KoDocument.cpp:1445
+#: main/KoDocument.cpp:1449
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Das Filtermodul kann nicht erstellt werden"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1453
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Das Ausgabedokument kann nicht erstellt werden"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1457
 #, kde-format
 msgid "File not found"
 msgstr "Datei nicht gefunden"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1461
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Speicher kann nicht erstellt werden"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1465
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Falscher MIME-Typ"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1469
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Fehler in eingebettetem Dokument"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1473
 #, kde-format
 msgid "Format not recognized"
 msgstr "Format nicht erkannt"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1477
 #, kde-format
 msgid "Not implemented"
 msgstr "Nicht verfügbar"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Parsing error"
 msgstr "Syntaxfehler"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Document is password protected"
 msgstr "Dokument ist passwortgeschützt"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1489
 #, kde-format
 msgid "Invalid file format"
 msgstr "Ungültiges Dateiformat"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Internal error"
 msgstr "Interner Fehler"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Out of memory"
 msgstr "Nicht genügend Speicher"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Leeres Filtermodul"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Es wird versucht, den falschen Typ eines Dokuments zu laden"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1513
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Fehler beim Herunterladen der entfernten Datei"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-#: main/KoDocument.cpp:1523
+#: main/KoDocument.cpp:1527
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1148,17 +1148,17 @@ msgstr ""
 "Ursache: %1\n"
 "%3"
 
-#: main/KoDocument.cpp:1581
+#: main/KoDocument.cpp:1585
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokument <i>%1</i> geladen"
 
-#: main/KoDocument.cpp:1638 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 kann nicht gefunden werden"
 
-#: main/KoDocument.cpp:1650
+#: main/KoDocument.cpp:1654
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1167,24 +1167,24 @@ msgstr ""
 "Lesefehler in %1 in Zeile %2, Spalte %3\n"
 "Fehlermeldung: %4"
 
-#: main/KoDocument.cpp:1673
+#: main/KoDocument.cpp:1677
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 ist keine Datei"
 
-#: main/KoDocument.cpp:1688
+#: main/KoDocument.cpp:1692
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
 "Das Öffnen der Datei zum Lesen ist nicht möglich. Überprüfen Sie Ihre "
 "Berechtigungen."
 
-#: main/KoDocument.cpp:1699
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Der Dateianfang kann nicht gelesen werden."
 
-#: main/KoDocument.cpp:1730
+#: main/KoDocument.cpp:1734
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1193,17 +1193,17 @@ msgstr ""
 "Lesefehler im Hauptdokument bei Zeile %1, Spalte %2\n"
 "Fehlermeldung: %3"
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1755
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Keine gültige Calligra-Datei: %1."
 
-#: main/KoDocument.cpp:1832
+#: main/KoDocument.cpp:1836
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Ungültiges Dokument: Kein „maindoc.xml“-Datei"
 
-#: main/KoDocument.cpp:1856
+#: main/KoDocument.cpp:1860
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1212,13 +1212,13 @@ msgstr ""
 "Das Dokument <i>%1</i> enthält mehrere Versionen. Rufen Sie Datei -> "
 "Versionen auf, um eine alte Version zu öffnen. "
 
-#: main/KoDocument.cpp:2057 main/KoDocument.cpp:2511 main/KoDocument.cpp:2540
+#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
 #, kde-format
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: main/KoDocument.cpp:2060 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1227,12 +1227,12 @@ msgstr ""
 "<p>Das Dokument <b>„%1“</b> wurde geändert.</p><p>Möchten Sie es speichern?</"
 "p>"
 
-#: main/KoDocument.cpp:2143
+#: main/KoDocument.cpp:2147
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Interner Fehler: Die Funktion „saveXML“ wird nicht unterstützt."
 
-#: main/KoDocument.cpp:2176
+#: main/KoDocument.cpp:2180
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1241,7 +1241,7 @@ msgstr ""
 "Öffnen nicht möglich\n"
 "%1"
 
-#: main/KoDocument.cpp:2178
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1250,27 +1250,27 @@ msgstr ""
 "Öffnen der Datei %1 nicht möglich\n"
 "Ursache: %2"
 
-#: main/KoDocument.cpp:2231
+#: main/KoDocument.cpp:2235
 msgid "a word processing"
 msgstr "eine Textverarbeitung"
 
-#: main/KoDocument.cpp:2232
+#: main/KoDocument.cpp:2236
 msgid "a spreadsheet"
 msgstr "eine Tabellenkalkulation"
 
-#: main/KoDocument.cpp:2233
+#: main/KoDocument.cpp:2237
 msgid "a presentation"
 msgstr "eine Präsentation"
 
-#: main/KoDocument.cpp:2234
+#: main/KoDocument.cpp:2238
 msgid "a chart"
 msgstr "ein Diagramm"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2239
 msgid "a drawing"
 msgstr "eine Zeichnung"
 
-#: main/KoDocument.cpp:2543
+#: main/KoDocument.cpp:2547
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1279,7 +1279,7 @@ msgstr ""
 "Das Dokument „%1“ wurde geändert.\n"
 "Möchten Sie die Änderungen speichern oder verwerfen?"
 
-#: main/KoDocument.cpp:2546
+#: main/KoDocument.cpp:2550
 #, kde-format
 msgid "Close Document"
 msgstr "Dokument schließen"
