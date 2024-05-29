@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-05-06 05:27+0200\n"
+"PO-Revision-Date: 2024-05-28 05:54+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3726,12 +3726,12 @@ msgstr "ტექსტზე მიმართვა"
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr ""
+msgstr "ჯერ შექმენით ინდექსი მიმართვამდე."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
 msgid "Select the index you want to reference"
-msgstr ""
+msgstr "აირჩიეთ ობიექტი, რომელზე მიმართვაც გნებავთ"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
