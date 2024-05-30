@@ -13,6 +13,15 @@
             "application/x-iwork-keynote-sffkey"
         ],
         "Name": "Images (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[ca]": "Imatges (OpenDocument, MS Visio, WordPerfect,...)",
+        "Name[eo]": "Bildoj (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[es]": "Imágenes (OpenDocument, MS Visio, WordPerfect...)",
+        "Name[ka]": "გამოსახულებები (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[nl]": "Afbeeldingen (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[sl]": "Slike (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[tr]": "Görseller (OpenDocument, MS Visio, WordPerfect, …)",
+        "Name[uk]": "Зображення (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[x-test]": "xxImages (OpenDocument, MS Visio, WordPerfect, ...)xx",
         "ServiceTypes": [
             "ThumbCreator"
         ]
