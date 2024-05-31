@@ -900,37 +900,3 @@ msgstr "Филтър на Words за внасяне на RTF"
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Файлът не може да бъде зареден."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Препоръчително ( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Локално (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Друго ( %1 )"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Грешка при откриване на кодовата таблица: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "Ко&дова таблица:"
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "Препоръчително: UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "Локално (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "Ко&дова таблица:"
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr ""
-#~ "Задаване на кодовата таблица на изходния HTML файл. Препоръчва се да "
-#~ "използвате кодовата таблица UTF8, която е и избрана по подразбиране."

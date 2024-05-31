@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-02-03 20:30+0100\n"
+"PO-Revision-Date: 2024-05-30 07:49+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15557,7 +15557,7 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:72
 #, kde-format
 msgid "Hide &all"
-msgstr "Kaŝi ĉion"
+msgstr "K&aŝi ĉion"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:97

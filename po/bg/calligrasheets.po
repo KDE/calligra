@@ -15340,16 +15340,3 @@ msgstr "Трябва да маркирате няколко клетки."
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Връзката сочи към програмата или скрипт \"%1\".\n"
-#~ "Злонамерени програми могат да навредят на компютъра ви. Сигурни ли сте, "
-#~ "че искате да стартирате програмата?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Отваряне на връзката?"
