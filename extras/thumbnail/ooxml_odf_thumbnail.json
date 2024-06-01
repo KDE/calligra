@@ -37,10 +37,12 @@
             "model/3mf"
         ],
         "Name": "OpenDocument, Microsoft Office Documents",
+        "Name[ca@valencia]": "OpenDocument, Microsoft Office Documents",
         "Name[ca]": "OpenDocument, Microsoft Office Documents",
         "Name[en_GB]": "OpenDocument, Microsoft Office Documents",
         "Name[eo]": "OpenDocument, Microsoft Office-Dokumentoj",
         "Name[es]": "Documentos OpenDocument, Microsoft Office",
+        "Name[fr]": "OpenDocument, Documents pour Microsoft Office ",
         "Name[it]": "OpenDocument, documenti di Microsoft Office",
         "Name[ka]": "OpenDocument-ის, Microsoft Office-ის დოკუმენტები",
         "Name[nl]": "OpenDocument, Microsoft Office documenten",

@@ -13,10 +13,12 @@
             "application/x-iwork-keynote-sffkey"
         ],
         "Name": "Images (OpenDocument, MS Visio, WordPerfect, ...)",
+        "Name[ca@valencia]": "Imatges (OpenDocument, MS Visio, WordPerfect…)",
         "Name[ca]": "Imatges (OpenDocument, MS Visio, WordPerfect,...)",
         "Name[en_GB]": "Images (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[eo]": "Bildoj (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[es]": "Imágenes (OpenDocument, MS Visio, WordPerfect...)",
+        "Name[fr]": "Images (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[it]": "Immagini (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[ka]": "გამოსახულებები (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[nl]": "Afbeeldingen (OpenDocument, MS Visio, WordPerfect, ...)",
