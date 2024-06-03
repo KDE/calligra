@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-05-28 05:54+0200\n"
+"PO-Revision-Date: 2024-06-02 11:29+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1432,6 +1432,8 @@ msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
+"<qt>%1-ში შენახვამ, შეიძლება, ზოგიერთი დაფორმატების დაკარგვა გამოიწვიოს."
+"<p>მაინც გნებავთ ამ ფორმატში შენახვა?</qt>"
 
 #: main/KoMainWindow.cpp:828
 #, kde-format
@@ -1444,6 +1446,8 @@ msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
+"<qt>%1-ში გატანამ, შეიძლება, ზოგიერთი დაფორმატების დაკარგვა გამოიწვიოს."
+"<p>მაინც გნებავთ ამ ფორმატში გატანა?</qt>"
 
 #: main/KoMainWindow.cpp:837
 #, kde-format
@@ -3243,7 +3247,9 @@ msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
+"<qt>დაიკარგება ჩასწორებები.<p>დარჩენილია %1 არასწორი ინსტრუქცია.</qt>"
 msgstr[1] ""
+"<qt>დაიკარგება ჩასწორებები.<p>დარჩენილია %1 არასწორი ინსტრუქცია.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:299
 #, kde-format
@@ -3515,6 +3521,8 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
+"ეს დოკუმენტი უცნობ საკონტროლო ჯამს შეიცავს. როცა პაროლს შეიყვან, ის შეიძლება "
+"არ შემოწმდეს."
 
 #: store/KoEncryptedStore.cpp:245
 #, kde-format
@@ -3528,6 +3536,8 @@ msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
+"დოკუმენტი უცნობ დაშიფვრის მეთოდს შეიცავს. მისი ზოგიერთი ნაწილი შეიძლება ვერ "
+"წაიკითხოთ."
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
@@ -3542,6 +3552,8 @@ msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
+"დოკუმენტი არასრულ დაშიფვრის მეთოდს შეიცავს. მისი ზოგიერთი ნაწილი შეიძლება "
+"ვერ წაიკითხოთ."
 
 #: store/KoEncryptedStore.cpp:349
 #, kde-format
@@ -3990,7 +4002,7 @@ msgstr "ფერების დამატება / წაშლა..."
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "ახალი ავტორის პროფილის დამატება (იწყებს მიმდინარეს ასლით)"
 
 #: widgets/KoConfigAuthorPage.cpp:54
 #, kde-format
@@ -5076,7 +5088,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr ""
+msgstr "<qt>ჭდის ფანჯრის პარამეტრების ჩვენება.</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format

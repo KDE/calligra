@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-30 13:36+0200\n"
+"PO-Revision-Date: 2024-06-02 11:34+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -78,6 +78,8 @@ msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
 "kde.kspread, got %1"
 msgstr ""
+"არასწორი დოკუმენტი. მოველოდი mime-ის ტიპს application/x-kspread ან "
+"application/x-vnd.kde.plan, მივიღე %1"
 
 #: core/ksp/SheetsKspDoc.cpp:52
 #, kde-format
@@ -121,7 +123,7 @@ msgstr "ფურცელი%1"
 #: core/Sheet.cpp:660
 #, kde-format
 msgid "Validation for cell %1 failed"
-msgstr ""
+msgstr "გადამოწმება უჯრედისთვის %1 ჩავარდა"
 
 #: core/StyleManager.cpp:38
 #, kde-format
@@ -174,7 +176,7 @@ msgstr "ტექსტი"
 #: engine/FunctionDescription.cpp:39
 #, kde-format
 msgid "Whole number (like 1, 132, 2344)"
-msgstr ""
+msgstr "მთელი რიცხვი (როგორიცაა 1, 132, 2344)"
 
 #: engine/FunctionDescription.cpp:41
 #, kde-format
@@ -3341,7 +3343,7 @@ msgstr "პირველი ინტერესი"
 #: functions/financial.xml:1471
 #, kde-format
 msgid "Settlement"
-msgstr ""
+msgstr "შეთანხმება"
 
 #: functions/financial.xml:23 functions/financial.xml:58
 #, kde-format
@@ -3546,7 +3548,7 @@ msgstr "CONTINUOUS(1000;0.1;1) უდრის 1105.17"
 #: functions/financial.xml:1475
 #, kde-format
 msgid "Maturity"
-msgstr ""
+msgstr "თამასუქის განაღდების ვადა"
 
 #: functions/financial.xml:189 functions/financial.xml:460
 #: functions/financial.xml:777 functions/financial.xml:924
@@ -3638,7 +3640,7 @@ msgstr "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) უდრის -11904.05420
 #: functions/financial.xml:1245 functions/financial.xml:1269
 #, kde-format
 msgid "Salvage"
-msgstr ""
+msgstr "ლიკვიდური ღირებულება"
 
 #: functions/financial.xml:293 functions/financial.xml:326
 #: functions/financial.xml:1249 functions/financial.xml:1273
@@ -6023,7 +6025,7 @@ msgstr "COUNTA(5) აბრუნებს 1"
 #: functions/math.xml:327
 #, kde-format
 msgid "Cell range"
-msgstr ""
+msgstr "უჯრედების შუალედი"
 
 #: functions/math.xml:331
 #, kde-format
@@ -6172,7 +6174,7 @@ msgstr "შემოწმების დიაპაზონი"
 #: functions/math.xml:437
 #, kde-format
 msgid "Sum range"
-msgstr ""
+msgstr "შეჯამების შუალედი"
 
 #: functions/math.xml:441
 #, kde-format
@@ -7658,7 +7660,7 @@ msgstr ""
 #: functions/reference.xml:244
 #, kde-format
 msgid "Result vector"
-msgstr ""
+msgstr "შედეგობრივი ვექტორი"
 
 #: functions/reference.xml:248
 #, kde-format
@@ -9054,7 +9056,7 @@ msgstr ""
 #: functions/statistical.xml:974
 #, kde-format
 msgid "The percentile value between 0 and 1, inclusive."
-msgstr ""
+msgstr "პერცენტილის მნიშვნელობა შუალედიდან 0-1, ჩათვლით."
 
 #: functions/statistical.xml:978
 #, no-c-format, kde-format
@@ -9958,7 +9960,7 @@ msgstr ""
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format
 msgid "Decimals"
-msgstr ""
+msgstr "ციფრები მძიმის შემდეგ"
 
 #: functions/text.xml:19
 #, kde-format
@@ -12106,7 +12108,7 @@ msgstr ""
 #: part/dialogs/PageLayoutSheetPage.ui:101
 #, kde-format
 msgid "Drawings"
-msgstr ""
+msgstr "ნახატები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, headersCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:114
@@ -12280,7 +12282,7 @@ msgstr "რაოდენობა"
 #: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
 #, kde-format
 msgid "CountA"
-msgstr ""
+msgstr "რაოდენობა2"
 
 #: part/dialogs/PreferenceDialog.cpp:318
 #, kde-format
@@ -12703,7 +12705,7 @@ msgstr ""
 #: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
 msgid "Insert Sheet"
-msgstr ""
+msgstr "ფურცლის ჩასმა"
 
 #: part/View.cpp:232
 #, kde-format
@@ -12713,7 +12715,7 @@ msgstr ""
 #: part/View.cpp:236
 #, kde-format
 msgid "Duplicate Sheet"
-msgstr ""
+msgstr "ფურცლის დუბლირება"
 
 #: part/View.cpp:237
 #, kde-format
@@ -13556,7 +13558,7 @@ msgstr ""
 #: ui/commands/SheetCommands.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
-msgstr ""
+msgstr "ფურცლის დუბლირება"
 
 #: ui/commands/SheetCommands.cpp:167
 msgctxt "(qtundo-format)"

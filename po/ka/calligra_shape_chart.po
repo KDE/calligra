@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-30 15:48+0200\n"
+"PO-Revision-Date: 2024-06-02 09:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -181,6 +181,8 @@ msgstr "დამატება აკლია"
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr ""
+"დამატება, რომელიც საჭიროა დიაგრამაში ტექსტური ჭდეების საჩვენებლად, "
+"ხელმისაწვდომი არაა."
 
 #: ChartShape.cpp:305
 #, kde-format
@@ -188,6 +190,8 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
+"დამატება, რომელიც ტექსტური ჭდეების საჩვენებლადაა საჭირო, Flake-ის მიმდინარე "
+"ვერსიასთან თავსებადი არაა."
 
 #: ChartShape.cpp:306
 #, kde-format
@@ -407,32 +411,32 @@ msgstr "რადარის შევსებული გრაფიკი"
 #: ChartShapeFactory.cpp:242
 #, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr ""
+msgstr "გაყიდვების დიაგრამა 'სანთლები'"
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr ""
+msgstr "გაყიდვების დიაგრამა 'იაპონური სანთლები'"
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
 msgid "OHLC Stock Chart"
-msgstr ""
+msgstr "OHLC გაყიდვების დიაგრამა"
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr ""
+msgstr "გაყიდვის დიაგრამა \"ღია მაღალი დაბალი დახურვა\""
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
 msgid "HLC Stock Chart"
-msgstr ""
+msgstr "HLC გაყიდვების დიაგრამა"
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr ""
+msgstr "გაყიდვის დიაგრამა \"მაღალი დაბალი დახურვა\""
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -595,132 +599,132 @@ msgstr "ღერძის ჭდეების დამალვა"
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr ""
+msgstr "ღერძის ძირითადი ბადის ხაზების ჩვენება"
 
 #: commands/AxisCommand.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr ""
+msgstr "ღერძის ძირითადი ბადის ხაზების დამალვა"
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr ""
+msgstr "ღერძის დამხმარე ბადის ხაზების ჩვენება"
 
 #: commands/AxisCommand.cpp:175
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr ""
+msgstr "ღერძის დამხმარე ბადის ხაზების დამალვა"
 
 #: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "ლოგარითმული მასშტაბი"
 
 #: commands/AxisCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr ""
+msgstr "წრფივი მასშტაბი"
 
 #: commands/AxisCommand.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr ""
+msgstr "ღერძის ნაბიჯის სიგანის დაყენება"
 
 #: commands/AxisCommand.cpp:201
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr ""
+msgstr "ღერძის ქვენაბიჯის სიგანის დაყენება"
 
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr ""
+msgstr "ავტომატური ნაბიჯის სიგანის დაყენება"
 
 #: commands/AxisCommand.cpp:211
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr ""
+msgstr "ნაბიჯის სიგანის ხელით მითითება"
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr ""
+msgstr "ავტომატური ქვენაბიჯის სიგანე"
 
 #: commands/AxisCommand.cpp:222
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr ""
+msgstr "ღერძის ქვენაბიჯის სიგანის ხელით მითითება"
 
 #: commands/AxisCommand.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr ""
+msgstr "ღერძის ჭდის ფონტის დაყენება"
 
 #: commands/AxisCommand.cpp:236
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr ""
+msgstr "ღერძის მდებარეობის დაყენება"
 
 #: commands/AxisCommand.cpp:257
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr ""
+msgstr "ღერძის ჭდის მდებარეობის დაყენება"
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr ""
+msgstr "ტექსტის ფორმის ჩვენება"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr ""
+msgstr "ტექსტის ფორმის დამალვა"
 
 #: commands/ChartTypeCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr ""
+msgstr "ჩვეულებრივი ზოლებიანი დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "შედგენილი ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "პროცენტული ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr ""
+msgstr "ნორმალური ხაზებიანი დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "შედგენილი ხაზოვანი ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "პროცენტული ხაზოვანი ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:107
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr ""
+msgstr "ნორმალური ალაგიანი დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:110
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "შეგენილი ალაგის ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "პროცენტული ალაგის ჰისტოგრამა"
 
 #: commands/ChartTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
@@ -735,7 +739,7 @@ msgstr "ბეჭდის გრაფიკი"
 #: commands/ChartTypeCommand.cpp:126
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr ""
+msgstr "წერტილოვანი დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:129
 msgctxt "(qtundo-format)"
@@ -750,132 +754,132 @@ msgstr "რადარის შევსებული გრაფიკი"
 #: commands/ChartTypeCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr ""
+msgstr "გაყიდვების დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
-msgstr ""
+msgstr "ბუშტის ფორმის დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:141
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr ""
+msgstr "ზედაპირის დიაგრამა"
 
 #: commands/ChartTypeCommand.cpp:144
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr ""
+msgstr "განტის დიაგრამა"
 
 #: commands/DatasetCommand.cpp:137
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr ""
+msgstr "მონაცემების სეტის დიაგრამის ტიპის დაყენება"
 
 #: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr ""
+msgstr "მონაცემების სეტის კატეგორიის ჩვენება"
 
 #: commands/DatasetCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr ""
+msgstr "მონაცემების სეტის კატეგორიის დამალვა"
 
 #: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr ""
+msgstr "მონაცემების სეტის ნომრის ჩვენება"
 
 #: commands/DatasetCommand.cpp:158
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr ""
+msgstr "მონაცემების სეტის ნომრის დამალვა"
 
 #: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr ""
+msgstr "მონაცემების სეტის პროცენტის ჩვენება"
 
 #: commands/DatasetCommand.cpp:169
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr ""
+msgstr "მონაცემების სეტის პროცენტის დამალვა"
 
 #: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr ""
+msgstr "მონაცემების სეტის სიმბოლოს ჩვენება"
 
 #: commands/DatasetCommand.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr ""
+msgstr "მონაცემების სეტის სიმბოლოს დამალვა"
 
 #: commands/DatasetCommand.cpp:188
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr ""
+msgstr "მონაცემების სეტის ფუნჯის ფერის დაყენება"
 
 #: commands/DatasetCommand.cpp:195
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr ""
+msgstr "მონაცემების სეტის ფანქრის ფერის დაყენება"
 
 #: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr ""
+msgstr "მონაცემების სეტის მარკერის დამალვა"
 
 #: commands/DatasetCommand.cpp:206
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr ""
+msgstr "მონაცემების სეტის მარკერის სიმბოლოს ჩვენება"
 
 #: commands/DatasetCommand.cpp:214
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr ""
+msgstr "მონაცემების სეტის ღერძის დაყენება"
 
 #: commands/GapCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr ""
+msgstr "დაშორების დაყენება ზოლებს შორის"
 
 #: commands/GapCommand.cpp:67
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr ""
+msgstr "დაშორების დაყენება სეტებს შორის"
 
 #: commands/LegendCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr ""
+msgstr "შინაარსის სათაურის დაყენება"
 
 #: commands/LegendCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr ""
+msgstr "შინაარსის ფონტის დაყენება"
 
 #: commands/LegendCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr ""
+msgstr "შინაარსის ფონტის ზომის დაყენება"
 
 #: commands/LegendCommand.cpp:97
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr ""
+msgstr "შინაარსის ორიენტაციის დაყენება"
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "ჰორიზონტალური პანელების დაყენება"
 
 #: commands/PlotAreaCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "ვერტიკალური პანელების დაყენება"
 
 #: DataSet.cpp:274
 #, kde-format
@@ -917,7 +921,7 @@ msgstr "პროცენტი"
 #: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Polar Chart"
-msgstr ""
+msgstr "პოლარული დიაგრამა"
 
 #: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
 #, kde-format
@@ -927,22 +931,22 @@ msgstr "შევსებული"
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "Stock Chart"
-msgstr ""
+msgstr "გაყიდვების დიაგრამა"
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "Candlestick"
-msgstr ""
+msgstr "იაპონურისანთლები"
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr ""
+msgstr "ღიამაღალიდაბალიდახურვა"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
 #, kde-format
 msgid "HighLowClose"
-msgstr ""
+msgstr "მაღალიდაბალიდახურვა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
@@ -984,25 +988,25 @@ msgstr "ავტომატური"
 #: widgets/RadarDataSetConfigWidget.cpp:297
 #, kde-format
 msgid "Data Set %1"
-msgstr ""
+msgstr "მონაცემების სეტი %1"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
 #, kde-format
 msgid "Select a data set"
-msgstr ""
+msgstr "აირჩიეთ მონაცემების სეტი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr ""
+msgstr "ნახაზის ტიპის დაყენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
 #, kde-format
 msgid "Attach To Axis"
-msgstr ""
+msgstr "ღერძზე მიმაგრება"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1047,7 +1051,7 @@ msgstr "რიცხვი"
 #: DataSetConfigWidget.ui:287
 #, kde-format
 msgid "Error Bars"
-msgstr ""
+msgstr "აცდენის ზოლები"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
@@ -1068,7 +1072,7 @@ msgstr "ფანჯარა"
 #: dialogs/AxisScalingDialog.ui:19
 #, kde-format
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "ლოგარითმული მასშტაბი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
@@ -1080,22 +1084,22 @@ msgstr "ბიჯის სიგანე:"
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr ""
+msgstr "ქვენაბიჯის სიგანე:"
 
 #: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
 msgid "Bubble Data Editor"
-msgstr ""
+msgstr "ბუშტი მონაცემების რედაქტორი"
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
 #, kde-format
 msgid "Insert Column Before"
-msgstr ""
+msgstr "სვეტის ჩასმა მანამდე"
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
 #, kde-format
 msgid "Insert Column After"
-msgstr ""
+msgstr "სვეტის ჩასმა შემდეგ"
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
@@ -1121,7 +1125,7 @@ msgstr "DELETE"
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
 #, kde-format
 msgid "Bubbles Editor"
-msgstr ""
+msgstr "ბუშტების რედაქტორი"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1129,7 +1133,7 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr ""
+msgstr "მონაცემების სვეტის ჩასმა მონიშნულ სვეტამდე"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1160,14 +1164,14 @@ msgstr "..."
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr ""
+msgstr "მონაცემების მწკრივის ჩასმა მონიშნული მწკრივის ქვემოთ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr ""
+msgstr "მონაცემების მწკრივის ჩასმა მონიშნული მწკრივის ზემოთ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1175,7 +1179,7 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr ""
+msgstr "მონაცემების სვეტის ჩასმა მონიშნულ სვეტის შემდეგ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
@@ -1188,7 +1192,7 @@ msgstr "მონიშნულის წაშლა"
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "ხელით კონტროლი ხელით კონტროლი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1218,7 +1222,7 @@ msgstr "მონაცემების სეტის წაშლა"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr ""
+msgstr "მონაცემების სეტის დამატება მონიშნული მონაცემების სეტის შემეგ"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
@@ -1262,7 +1266,7 @@ msgstr "ნაგულისხმები ჭდე: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "უჯრედის შუალედი X-მნიშვნელობებისთვის: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1272,20 +1276,20 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "გამოყენებული ნაგულისხმები მნიშვნელობები"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "უჯრედის შუალედი Y-მნიშვნელობებისთვის: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "ბუშტის ზომა უჯრედის შუალედისთვის: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
@@ -1303,7 +1307,7 @@ msgstr "X მნიშვნელობები:"
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr ""
+msgstr "<b>აირჩიეთ მონაცემების სეტი</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82
@@ -1326,6 +1330,16 @@ msgid ""
 "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
 "style=\" font-weight:600;\">Name:</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">სახელი:</span></p></body></html>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
@@ -1337,13 +1351,13 @@ msgstr "მონაცემების რედაქტორი"
 #: dialogs/ChartTableEditor.ui:29
 #, kde-format
 msgid "&Data sets in rows"
-msgstr ""
+msgstr "&მონაცემის სეტები მწკრივებში"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
 #, kde-format
 msgid "Data sets in &columns"
-msgstr ""
+msgstr "მონაცემის სეტები &სვეტებში"
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1354,7 +1368,7 @@ msgstr "აირჩიეთ ფონტი"
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr ""
+msgstr "შეცდომის ზოლების დაფორმატება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1691,17 +1705,17 @@ msgstr "მონაცემის წერტილი %1"
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
 #, kde-format
 msgid "E&xplode Factor"
-msgstr ""
+msgstr "&აფეთქების ფაქტორი"
 
 #: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Surface Chart"
-msgstr ""
+msgstr "ზედაპირის დიაგრამა"
 
 #: PlotAreaConfigWidget.cpp:279
 #, kde-format
 msgid "Gantt Chart"
-msgstr ""
+msgstr "განტის დიაგრამა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
 #: PlotAreaConfigWidget.ui:61
@@ -1713,7 +1727,7 @@ msgstr "3D"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "ვერტიკალური ზოლები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
@@ -1741,31 +1755,31 @@ msgstr "ღერძები"
 #: widgets/RingConfigWidget.ui:171
 #, kde-format
 msgid "Data Sets"
-msgstr ""
+msgstr "მონაცემის სეტები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
 #, kde-format
 msgid "Data Points"
-msgstr ""
+msgstr "მონაცემის წერტილები"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "შუალედის ხაზი"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "გაძლიერების მარკერი"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "კარგვის მარკერი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
@@ -1788,42 +1802,42 @@ msgstr "კატეგორიები"
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "ბრტყელი"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "მრგვალი ბოლო"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "ოთხკუთხედი ბოლო"
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "წამახული"
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "მომრგვალებული შეერთება"
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "მოღუნული შეერთება"
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "ფაცეტის ლიმიტი"
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "მონიშნულის ხაზის სიგანის დაყენება"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format

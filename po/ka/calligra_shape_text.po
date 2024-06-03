@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-30 13:56+0200\n"
+"PO-Revision-Date: 2024-06-02 11:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -26,7 +26,7 @@ msgstr "ანოტაცია"
 #: AnnotationTextShapeFactory.cpp:33
 #, kde-format
 msgid "Annotation shape to show annotation content"
-msgstr ""
+msgstr "ანოტაციის ფორმა ანოტაციის შემცველობის საჩვენებლად"
 
 #: AnnotationTextShapeFactory.cpp:41
 #, kde-format
@@ -162,7 +162,7 @@ msgstr "ბიბლიოგრაფიის შეცვლა"
 #: dialogs/BibliographyConfigureDialog.ui:20
 #, kde-format
 msgid "Formatting of bibliography entries"
-msgstr ""
+msgstr "ბიბლიოგრაფიის ელემენტების დაფორმატება"
 
 #. i18n: ectx: property (text), widget (QLabel, prefixLabel)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -236,23 +236,23 @@ msgstr "ბმები"
 #: dialogs/ChangeConfigureDialog.cpp:143
 #, kde-format
 msgid "This is a line of inserted text."
-msgstr ""
+msgstr "ეს ჩასმული ტექსტის ხაზია."
 
 #: dialogs/ChangeConfigureDialog.cpp:149
 #, kde-format
 msgid "This is a line of deleted text."
-msgstr ""
+msgstr "ეს წაშლილი ტექსტის ხაზია."
 
 #: dialogs/ChangeConfigureDialog.cpp:155
 #, kde-format
 msgid "This is a line of text whose format has been changed."
-msgstr ""
+msgstr "ეს ხაზია, რომლის ტექსტის დაფორმატებაც შეიცვალა."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
 #: dialogs/ChangeConfigureDialog.ui:17
 #, kde-format
 msgid "Configure Change Tracking"
-msgstr ""
+msgstr "ცვლილებების ტრეკინგის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ChangeConfigureDialog.ui:30
@@ -408,7 +408,7 @@ msgstr ""
 #: dialogs/ChangeConfigureDialog.ui:172
 #, kde-format
 msgid "Deletions"
-msgstr ""
+msgstr "წაშლები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:231
@@ -420,7 +420,7 @@ msgstr "ფორმატის ცვლილებები"
 #: dialogs/ChangeTrackingOptionsWidget.ui:14
 #, kde-format
 msgid "Change Tracking Options"
-msgstr ""
+msgstr "ტრეკინგის პარამეტრების შეცვლა"
 
 #. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
 #: dialogs/ChangeTrackingOptionsWidget.ui:142
@@ -564,6 +564,8 @@ msgid ""
 "The document already contains the bibliography entry with different data.\n"
 "Do you want to adjust existing entries?"
 msgstr ""
+"დოკუმენტი უკვე შეიცავს ბიბლიოგრაფიულ ჩანაწერს, მაგრამ სხვა მონაცემებით.\n"
+"გნებავთ არსებული ჩანაწერების გასწორება?"
 
 #: dialogs/CitationInsertionDialog.cpp:58
 #: dialogs/CitationInsertionDialog.cpp:75
@@ -575,13 +577,13 @@ msgstr "მოკლე სახელი%1"
 #: dialogs/CitationInsertionDialog.ui:20
 #, kde-format
 msgid "Insert Bibliography entry"
-msgstr ""
+msgstr "ბიბლიოგრაფიული ჩანაწერის დამატება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/CitationInsertionDialog.ui:32
 #, kde-format
 msgid "Insert Bibliography Entry Details"
-msgstr ""
+msgstr "ბიბლიოგრაფიული ჩანაწერის დეტალების დამატება"
 
 #. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
 #: dialogs/CitationInsertionDialog.ui:38
@@ -634,19 +636,19 @@ msgstr "ელფოტა"
 #: dialogs/CitationInsertionDialog.ui:85
 #, kde-format
 msgid "Inbook"
-msgstr ""
+msgstr "წიგნში"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:90
 #, kde-format
 msgid "Incollection"
-msgstr ""
+msgstr "კოლექციაში"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:95
 #, kde-format
 msgid "Inproceedings"
-msgstr ""
+msgstr "მოხსენებებში"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -1039,13 +1041,13 @@ msgstr "კოლექციაში"
 #: dialogs/InsertBibliographyDialog.ui:96
 #, kde-format
 msgid "In proceedings"
-msgstr ""
+msgstr "მოხსენებებში"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:131
 #, kde-format
 msgid "Tech report"
-msgstr ""
+msgstr "ტექნიკური ანგარიში"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:146
@@ -1093,7 +1095,7 @@ msgstr "დამატება > >"
 #: dialogs/InsertBibliographyDialog.ui:199
 #, kde-format
 msgid "Span"
-msgstr ""
+msgstr "ინტერვალი"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: dialogs/InsertBibliographyDialog.ui:206
@@ -1145,17 +1147,17 @@ msgstr "სანიშნე არ არსებობს"
 #: dialogs/LinkInsertionDialog.cpp:189
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr ""
+msgstr "სათაურის გადმოწერა: 0% დასრულდა"
 
 #: dialogs/LinkInsertionDialog.cpp:212
 #, kde-format
 msgid "Fetch timed out"
-msgstr ""
+msgstr "მიღების მოლოდინის ვადა ამოიწურა"
 
 #: dialogs/LinkInsertionDialog.cpp:266
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr ""
+msgstr "სათაურის გადმოწერა: %1% დასრულდა"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
@@ -1257,19 +1259,19 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:47
 #, kde-format
 msgid "Add tab stop"
-msgstr ""
+msgstr "ტაბულაციის ბიჯის დამატება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:71
 #, kde-format
 msgid "Tab character"
-msgstr ""
+msgstr "ტაბულაციის სიმბოლო"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:76
 #, kde-format
 msgid "Space character"
-msgstr ""
+msgstr "ჰარეს სიმბოლო"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:81
@@ -1300,7 +1302,7 @@ msgstr "ჭდე"
 #: dialogs/ListLevelWidget.ui:149
 #, kde-format
 msgid "First line separated from label by:"
-msgstr ""
+msgstr "რითია გამოყოფილი პირველი ხაზი ჭდისგან:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
@@ -1327,7 +1329,7 @@ msgstr "მარჯვენა"
 #: dialogs/ListLevelWidget.ui:300
 #, kde-format
 msgid "Per level increase:"
-msgstr ""
+msgstr "დონის გაზრდისას:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
@@ -1345,13 +1347,13 @@ msgstr "ფორმატი:"
 #: dialogs/ListLevelWidget.ui:429
 #, kde-format
 msgid "Display levels above:"
-msgstr ""
+msgstr "დონეების ჩვენება ზემოდან:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, synchro)
 #: dialogs/ListLevelWidget.ui:436
 #, kde-format
 msgid "Letter synchronization"
-msgstr ""
+msgstr "სიმბოლოს სინქრონიზაცია"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
@@ -1406,7 +1408,7 @@ msgstr "სანიშნის ჩასმა"
 #: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
-msgstr ""
+msgstr "შეიყვანეთ სახელი სანიშნესთვის"
 
 #: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
 #, kde-format
@@ -1416,18 +1418,18 @@ msgstr "სანიშნეების მართვა"
 #: dialogs/NotesConfigurationDialog.cpp:24
 #, kde-format
 msgid "Footnote Settings"
-msgstr ""
+msgstr "სქოლიოს მორგება"
 
 #: dialogs/NotesConfigurationDialog.cpp:27
 #, kde-format
 msgid "Endnote Settings"
-msgstr ""
+msgstr "განმარტებებისა და შენიშვნების მორგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/NotesConfigurationDialog.ui:54
 #, kde-format
 msgid "Automatic Numbering:"
-msgstr ""
+msgstr "ავტომატური დანომვრა:"
 
 #. i18n: ectx: property (text), widget (QLabel, prefix)
 #: dialogs/NotesConfigurationDialog.ui:75
@@ -1457,7 +1459,7 @@ msgstr " სუფიქსი:"
 #: dialogs/NotesConfigurationDialog.ui:127
 #, kde-format
 msgid "Starts over at:"
-msgstr ""
+msgstr "თავიდან დაწყება მნიშვნელობაზე:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:144
@@ -1523,7 +1525,7 @@ msgstr "I,II,III, ..."
 #: dialogs/NotesConfigurationDialog.ui:290
 #, kde-format
 msgid "Continuation Notice:"
-msgstr ""
+msgstr "გაგრძელების გაფრთხილება:"
 
 #. i18n: ectx: property (text), widget (QLabel, cont2)
 #: dialogs/NotesConfigurationDialog.ui:305
@@ -1565,7 +1567,7 @@ msgstr "შუაზე გასწორებული"
 #, kde-format
 msgctxt "Tab follows the bullet or number"
 msgid "Tab Stop"
-msgstr ""
+msgstr "ტაბულაციის ბიჯი"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:40
 #, kde-format
@@ -1699,7 +1701,7 @@ msgstr "ფონის ფერი"
 #: dialogs/ParagraphDropCaps.cpp:20
 #, kde-format
 msgid "Whole Word"
-msgstr ""
+msgstr "მთლიანი სიტყვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphDropCaps.ui:32
@@ -1748,7 +1750,7 @@ msgstr "დეკორაციები"
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
 msgid "Drop Caps"
-msgstr ""
+msgstr "აბზაცის ძალიან დიდი ასოთი დაწყება"
 
 #: dialogs/ParagraphIndentSpacing.cpp:25
 #, kde-format
@@ -1903,7 +1905,7 @@ msgstr ""
 #: dialogs/ParagraphSettingsDialog.cpp:28
 #, kde-format
 msgid "Paragraph Format"
-msgstr ""
+msgstr "აბზაცის დაფორმატება"
 
 #: dialogs/QuickTableButton.cpp:147
 #, kde-format
@@ -1913,12 +1915,12 @@ msgstr "ცხრილის ჩასმა"
 #: dialogs/SectionFormatDialog.cpp:41
 #, kde-format
 msgid "Section name"
-msgstr ""
+msgstr "განყოფილების სახელი"
 
 #: dialogs/SectionFormatDialog.cpp:100 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
-msgstr ""
+msgstr "განყოფილებების მორგება"
 
 #: dialogs/SectionFormatDialog.cpp:149
 #, kde-format
@@ -1953,7 +1955,7 @@ msgstr ""
 #: dialogs/SectionsSplitDialog.ui:37
 #, kde-format
 msgid "after end of section:"
-msgstr ""
+msgstr "განყოფილების დასასრულის შემდეგ:"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:29
@@ -1965,18 +1967,18 @@ msgstr "შენიშვნის ჩასმა"
 #: dialogs/SimpleAnnotationWidget.ui:39
 #, kde-format
 msgid "Remove Note"
-msgstr ""
+msgstr "შენიშვნის წაშლა"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCaptionsWidget.ui:34
 #, kde-format
 msgid "Add caption"
-msgstr ""
+msgstr "წარწერის დამატება"
 
 #: dialogs/SimpleCharacterWidget.cpp:53
 #, kde-format
 msgid "Change font format"
-msgstr ""
+msgstr "ფონტის ფორმატის შეცვლა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:23
@@ -1988,13 +1990,13 @@ msgstr ""
 #: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
-msgstr ""
+msgstr "ციტატის ჩასმა"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
 #: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, kde-format
 msgid "Configure Bibliography"
-msgstr ""
+msgstr "ბიბლიოგრაფიის მორგება"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
@@ -2010,13 +2012,13 @@ msgstr ""
 #: dialogs/SimpleFootEndNotesWidget.ui:29
 #, kde-format
 msgid "Endnote"
-msgstr ""
+msgstr "ქვედა სქოლიო"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:48
 #, kde-format
 msgid "Footnote"
-msgstr ""
+msgstr "სქოლიო"
 
 #. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
 #: dialogs/SimpleInsertWidget.ui:20
@@ -2028,7 +2030,7 @@ msgstr ""
 #: dialogs/SimpleLinksWidget.ui:34
 #, kde-format
 msgid "Hyperlinks"
-msgstr ""
+msgstr "ჰიპერბმულები"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
 #: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
@@ -2099,7 +2101,7 @@ msgstr ""
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
@@ -2226,13 +2228,13 @@ msgstr "სიგანის სტრატეგია"
 #: dialogs/TableDialog.ui:112
 #, kde-format
 msgid "Fixed column width:"
-msgstr ""
+msgstr "ფიქსირებული სვეტის სიგანე:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
 #: dialogs/TableDialog.ui:125
 #, kde-format
 msgid "Fit to contents"
-msgstr ""
+msgstr "შემცველობაში ჩატევა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
 #: dialogs/TableDialog.ui:138
@@ -2243,22 +2245,22 @@ msgstr ""
 #: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr ""
+msgstr "შინაარსი - მორგება"
 
 #: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
 msgid "Table Title"
-msgstr ""
+msgstr "ცხრილის სათაური"
 
 #: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Use outline"
-msgstr ""
+msgstr "კონტურის გამოყენება"
 
 #: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
-msgstr ""
+msgstr "სტილების გამოყენება"
 
 #: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
 #, kde-format
@@ -2328,12 +2330,12 @@ msgstr "სტილი"
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr ""
+msgstr "შინაარსი - სტილების მორგება"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
-msgstr ""
+msgstr "ხელმისაწვდომი სტილები"
 
 #. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
 #: dialogs/TableOfContentsStyleConfigure.ui:20
@@ -2360,7 +2362,7 @@ msgstr ""
 #: ReferencesTool.cpp:120 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
-msgstr ""
+msgstr "ხელით ჩასმა..."
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2375,7 +2377,7 @@ msgstr "გამართვა..."
 #: ReferencesTool.cpp:126
 #, kde-format
 msgid "Configure the Table of Contents"
-msgstr ""
+msgstr "შინაარსის მორგება"
 
 #: ReferencesTool.cpp:129
 #, kde-format
@@ -2450,7 +2452,7 @@ msgstr "სანიშნის დამატება"
 #: ReferencesTool.cpp:184
 #, kde-format
 msgid "Add Bookmark :"
-msgstr ""
+msgstr "სანიშნეს დამატება :"
 
 #: ReferencesTool.cpp:189
 #, kde-format
@@ -2888,7 +2890,7 @@ msgstr ""
 #: TextTool.cpp:486
 #, kde-format
 msgid "Insert Comment"
-msgstr ""
+msgstr "კომენტარის ჩასმა"
 
 #: TextTool.cpp:570
 #, kde-format

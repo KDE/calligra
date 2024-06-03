@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-05-25 07:27+0300\n"
+"PO-Revision-Date: 2024-06-01 14:55+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4554,7 +4554,7 @@ msgstr "ערוך נתיב"
 #: widgets/koDocumentInfoAboutWidget.ui:280
 #, kde-format
 msgid "&Reset"
-msgstr "&שחזר"
+msgstr "&שחזור"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
@@ -5111,17 +5111,17 @@ msgstr ""
 #: widgets/KoRuler.cpp:1174
 #, kde-format
 msgid "First line indent"
-msgstr "הזחה לשורה הראשונה"
+msgstr "הזחת השורה הראשונה"
 
 #: widgets/KoRuler.cpp:1177
 #, kde-format
 msgid "Left indent"
-msgstr "הזחה שמאלית"
+msgstr "הזחה שמאלה"
 
 #: widgets/KoRuler.cpp:1180
 #, kde-format
 msgid "Right indent"
-msgstr "הזחה ימנית"
+msgstr "הזחה ימינה"
 
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
