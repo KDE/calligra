@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-02 10:37+0200\n"
+"PO-Revision-Date: 2024-06-05 09:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1535,7 +1535,7 @@ msgstr "საათის ისრის მიმართულებით 
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Clockwise Left"
-msgstr "საათის ისრის მიმართულებით მარჯცხნივ"
+msgstr "საათის ისრის მიმართულებით მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Top Left"
@@ -1543,47 +1543,47 @@ msgstr "საათის ისრის მიმართულებით 
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Bottom Left"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ქვემოდან ზემოთ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Clockwise Bottom Right"
-msgstr ""
+msgstr "საათის ისრის მიმართულებით ქვემოთ მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Right"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ზემოდან მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ზემოდან"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Right"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Bottom"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ქვემოთ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Counterclockwise Left"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Top Left"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ზემოდან მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Bottom Left"
-msgstr ""
+msgstr "საათის ისრის მიმართულებით ქვემოდან მარცხნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
 msgid "Counterclockwise Bottom Right"
-msgstr ""
+msgstr "საათის ისრის საწინააღმდეგოდ ქვემოდან მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
 msgid "Clockwise Top Right"
-msgstr ""
+msgstr "საათის ისრის მიმართულებით ზემოთ მარჯვნივ"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
 #, kde-format
@@ -1662,11 +1662,11 @@ msgstr "შეღებილი"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 msgid "Diagonal Bottom Left"
-msgstr ""
+msgstr "დიაგონალურად ქვედა მარცხნიდან"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 msgid "Diagonal Bottom Left Reverse"
-msgstr ""
+msgstr "დიაგონალურად ქვედა მარცხნიდან, უკუღმა"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
 msgid "Diagonal Top Left"
@@ -1674,25 +1674,25 @@ msgstr "დიაგონალურად ზედა მარცხენ�
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
 msgid "Diagonal Top Left Reverse"
-msgstr ""
+msgstr "დიაგონალური ზედა მარცხენა რევერსული"
 
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Vee"
-msgstr ""
+msgstr "V ფორმის გაფერადებული"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
 #, kde-format
 msgid "Barn Zig Zag"
-msgstr ""
+msgstr "ზიგზაგი გაფერადებული"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Horizontal Reversed"
-msgstr ""
+msgstr "ჰორიზონტალური შებრუნებული"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Vertical Reversed"
-msgstr ""
+msgstr "ვერტიკალური შებრუნებული"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
@@ -1703,25 +1703,25 @@ msgstr "ყუთი"
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 msgid "From Top Left"
-msgstr ""
+msgstr "ზედა მარცხნიდან"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 msgid "From Top Right"
-msgstr ""
+msgstr "ზედა მარჯვნიდან"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
 msgid "From Bottom Left"
-msgstr ""
+msgstr "ქვედა მარცხნიდან"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
 msgid "From Bottom Right"
-msgstr ""
+msgstr "ქვედა მარჯვნიდან"
 
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
 #, kde-format
@@ -1731,41 +1731,41 @@ msgstr "დიაგონალური"
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Four Box"
-msgstr ""
+msgstr "ოთხი ყუთი"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In"
-msgstr ""
+msgstr "კუთხეები შიგნით"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners In Reverse"
-msgstr ""
+msgstr "კუთხეები უკუმიმართულებით"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out"
-msgstr ""
+msgstr "კუთხეები გარეთ"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 msgid "Corners Out Reverse"
-msgstr ""
+msgstr "კუთხეები გარეთ უკუმიმართულებით"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Misc Diagonal"
-msgstr ""
+msgstr "სხვადასხვა დიაგონალები"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
 msgid "Double Barn Door"
-msgstr ""
+msgstr "ორმაგი გაფერადებული"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
 msgid "Double Diamond"
-msgstr ""
+msgstr "ორმაგი რომბი"
 
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Vee"
-msgstr ""
+msgstr "V-ის ფორმის ეფექტი"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
 #, kde-format
@@ -1779,16 +1779,16 @@ msgstr "მინავლება"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
-msgstr ""
+msgstr "ჯვარედინი მინავლება"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Fade over Color"
-msgstr ""
+msgstr "მინავლება ფერზე"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
 #, kde-format
 msgid "ArrowHead"
-msgstr ""
+msgstr "ისრის თავი"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
@@ -1800,7 +1800,7 @@ msgstr "ქვემოთ"
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 msgid "Down Reverse"
-msgstr ""
+msgstr "დაბლა პირიქით"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
@@ -1810,7 +1810,7 @@ msgstr "მარცხენა"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
 msgid "Left Reverse"
-msgstr ""
+msgstr "მარცხნივ პირიქით"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
@@ -1823,7 +1823,7 @@ msgstr "წრე"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
 msgid "Circle Reverse"
-msgstr ""
+msgstr "წრეწირი პირიქით"
 
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
@@ -1846,7 +1846,7 @@ msgstr "პრიზმა"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond Reverse"
-msgstr ""
+msgstr "რომბი პირიქით"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Rectangular"
@@ -1854,7 +1854,7 @@ msgstr "მართკუთხედი"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Rectangular Reverse"
-msgstr ""
+msgstr "ოთხკუთხედი პირიქით"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
@@ -1867,15 +1867,15 @@ msgstr "გული"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Heart Reverse"
-msgstr ""
+msgstr "გული პირიქით"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole"
-msgstr ""
+msgstr "კლიტის ჭუჭრუტანა"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
 msgid "Keyhole Reverse"
-msgstr ""
+msgstr "კლიტის ჭუჭრუტანა პირიქით"
 
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
 #, kde-format
@@ -1885,7 +1885,7 @@ msgstr "ხუთკუთხედი"
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, kde-format
 msgid "RoundRect"
-msgstr ""
+msgstr "მომრგვალებული მართკუთხედი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
 #, kde-format
@@ -1898,7 +1898,7 @@ msgstr "ოთხწერტილიანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Four Point Star Reverse"
-msgstr ""
+msgstr "ოთხქიმიანი ვარსკვლავი პირქით"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Five Point Star"
@@ -1906,7 +1906,7 @@ msgstr "ხუთწერტილიანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Five Point Star Reverse"
-msgstr ""
+msgstr "ხუთქიმიანი ვარსკვლავი პირქით"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
 msgid "Six Point Star"
@@ -1914,7 +1914,7 @@ msgstr "ექვსწერტილანი ვარსკვლავი"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
 msgid "Six Point Star Reverse"
-msgstr ""
+msgstr "ექვსქიმიანი ვარსკვლავი პირქით"
 
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
 #, kde-format
@@ -1924,55 +1924,55 @@ msgstr "სამკუთხედი"
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box Snakes"
-msgstr ""
+msgstr "ბლოკური გველები"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Top In"
-msgstr ""
+msgstr "ორი ბლოკი ზემოთ შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 msgid "Two Box Bottom In"
-msgstr ""
+msgstr "ორი ბლოკი ქვემოთ შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 msgid "Two Box Left In"
-msgstr ""
+msgstr "ორი ბლოკი მარცხნივ შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 msgid "Two Box Right In"
-msgstr ""
+msgstr "ორი ბლოკი მარჯვნივ შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 msgid "Four Box Vertical In"
-msgstr ""
+msgstr "ოთხი ბლოკი ზემოთ შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 msgid "Four Box Horizontal In"
-msgstr ""
+msgstr "ოთხი ბლოკი ჰორიზონტალურად შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Top Out"
-msgstr ""
+msgstr "ორი ბლოკი ზემოთ გარეთ"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Bottom Out"
-msgstr ""
+msgstr "ორი ბლოკი ქვემოთ გარეთ"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Two Box Left Out"
-msgstr ""
+msgstr "ორი ბლოკი მარცხნივ გარეთ"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Two Box Right Out"
-msgstr ""
+msgstr "ორი ბლოკი მარჯვნივ გარეთ"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
 msgid "Four Box Vertical Out"
-msgstr ""
+msgstr "ოთხი ბლოკი ვერტიკალურად შიგნით"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
 msgid "Four Box Horizontal Out"
-msgstr ""
+msgstr "ოთხი ბლოკი ჰორიზონტალურად გარეთ"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
 #, kde-format
