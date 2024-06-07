@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-05 05:16+0200\n"
+"PO-Revision-Date: 2024-06-06 05:24+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1235,12 +1235,14 @@ msgid ""
 "Insert links to Bookmarks. To create bookmarks,\n"
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
+"ჩასვამს ბმულებს სანიშნეებამდე. იმისათვის, რომ სანიშნე შექმნათ,\n"
+"დააწკაპუნეთ 'სანიშნეებზე' ბმულებისა და სანიშნეების განყოფილებაში"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:132
 #, kde-format
 msgid "The name of the bookmark to where the link has to point to"
-msgstr ""
+msgstr "სანიშნეს სახელი, სადაც ბმული მიუთითებს"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:135
@@ -1256,6 +1258,7 @@ msgstr " სახელი:"
 #, kde-format
 msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
 msgstr ""
+"<p><ul><li><b>ერთმაგი</b>: ხაზებს შორის ნორმალური დაშორება</li></ul></p> "
 
 #. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
 #: dialogs/ListLevelWidget.ui:47
@@ -2641,7 +2644,7 @@ msgstr "სიის ან სიის დონის დაფორმა�
 #: TextTool.cpp:304
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
-msgstr ""
+msgstr "სიის ჩართ/გამორთ გადართვა ან მიმდინარე დონის დაფორმატების შეცვლა"
 
 #: TextTool.cpp:307
 #, kde-format
@@ -2836,7 +2839,7 @@ msgstr "უჯრედების დაყოფა"
 #: TextTool.cpp:450
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
-msgstr ""
+msgstr "აირჩიეთ საზღვრის სტილი და დახატეთ ეს სტილი ცხრილზე"
 
 #: TextTool.cpp:454
 #, kde-format
@@ -2847,6 +2850,8 @@ msgstr "აბზაცი..."
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
+"შეცვალეთ აბზაცის მინდვრები, ტექსტის დინება, საზღვრები, მარკერები, დანომვრა "
+"და ა.შ."
 
 #: TextTool.cpp:459
 #, kde-format
@@ -2882,12 +2887,12 @@ msgstr "სპეციალური სიმბოლო..."
 #: TextTool.cpp:477
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
-msgstr ""
+msgstr "ჩასვით ერთი ან მეტი სიმბოლო, რომელიც კლავიატურაზე არაა"
 
 #: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
-msgstr ""
+msgstr "ჩასვით ერთი ან მეტი სიმბოლო, რომელიც კლავიატურაზე არაა."
 
 #: TextTool.cpp:481
 #, kde-format
