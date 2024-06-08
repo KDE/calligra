@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-26 08:39+0300\n"
+"PO-Revision-Date: 2024-06-06 07:39+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -199,25 +199,25 @@ msgstr "יחס הצורה לטקסט הוא:"
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "בשורה עם טקסט (מתנהג כתו)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "מרחף אבל מעוגן למקום תווים"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "מרחף אבל מעוגן לפסקה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "ריחוף חופשי (לא מעוגן לטקסט)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
@@ -229,7 +229,7 @@ msgstr "מקום אנכי"
 #: part/dialogs/KWAnchoringProperties.ui:60
 #, kde-format
 msgid "Top align with:"
-msgstr ""
+msgstr "יישור עליון מול:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
@@ -237,13 +237,13 @@ msgstr ""
 #: part/dialogs/KWAnchoringProperties.ui:186
 #, kde-format
 msgid "Center align with:"
-msgstr ""
+msgstr "מירכוז מול:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
 #, kde-format
 msgid "Bottom align with:"
-msgstr ""
+msgstr "יישור תחתון מול:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -257,9 +257,9 @@ msgstr "היסט"
 #. i18n: ectx: property (text), widget (QLabel, lHOffset)
 #: part/dialogs/KWAnchoringProperties.ui:119
 #: part/dialogs/KWAnchoringProperties.ui:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "from:"
-msgstr "מאת:"
+msgstr "מ־:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
@@ -271,13 +271,13 @@ msgstr "מקום אופקי"
 #: part/dialogs/KWAnchoringProperties.ui:169
 #, kde-format
 msgid "Left align with:"
-msgstr ""
+msgstr "יישור שמאלי מול:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
 #, kde-format
 msgid "Right align with:"
-msgstr ""
+msgstr "יישור ימני מול:"
 
 #: part/dialogs/KWConfigureDialog.cpp:28
 #, kde-format
@@ -309,12 +309,12 @@ msgstr "הגדרות מסמך"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr ""
+msgstr "יוצר/ת"
 
 #: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "יוצר/ת"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
 #: part/dialogs/KWCreateBookmark.ui:13
@@ -409,7 +409,7 @@ msgstr "החלפת מאפייני צורה"
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr ""
+msgstr "עיגון אל…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -451,7 +451,7 @@ msgstr "&שמאל"
 #: part/dialogs/KWInsertImage.ui:75
 #, kde-format
 msgid "&Center"
-msgstr ""
+msgstr "המ&רכז"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
@@ -469,67 +469,67 @@ msgstr "יישור אנכי"
 #: part/dialogs/KWInsertImage.ui:98
 #, kde-format
 msgid "&Top"
-msgstr ""
+msgstr "החלק ה&עליון"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
 #: part/dialogs/KWInsertImage.ui:105
 #, kde-format
 msgid "&Middle"
-msgstr ""
+msgstr "ה&אמצע"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
 #: part/dialogs/KWInsertImage.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Bottom"
-msgstr "למטה:"
+msgstr "&תחתון"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
 #: part/dialogs/KWInsertImage.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Wrap-around"
 msgstr "גלישת טקסט מסביב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run through this shape"
 msgstr "הטקסט ייכנס לתוך מסגרת זו"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Skip below this shape"
-msgstr "הטקסט ייכנס לתוך מסגרת זו"
+msgstr "דילוג על הצורה הזאת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on left side of this shape"
-msgstr "הטקסט ייכנס לתוך מסגרת זו"
+msgstr "הטקסט יעבור משמאל לצורה הזאת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on right side of this shape"
-msgstr "הטקסט ייכנס לתוך מסגרת זו"
+msgstr "הטקסט יעבור מימין לצורה הזאת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on longest side of this shape"
-msgstr "הטקסט ייכנס לתוך מסגרת זו"
+msgstr "הטקסט יעבור לאורך הצד הארוך של הצורה הזאת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on both sides of this shape"
-msgstr "הטקסט ייכנס לתוך מסגרת זו"
+msgstr "הטקסט יעבור משני צידי הצורה הזאת"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "הרצה על צדדים שרחבים מ־:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
@@ -571,19 +571,19 @@ msgstr "שכפול סגנון עמוד"
 #: part/dialogs/KWPageSettingsDialog.cpp:218
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "הוספת סגנון עמוד חדש עם השם:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "טקסט במקום אחר:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/KWRunAroundProperties.ui:105
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "הצורה משפיעה על הטקסט לפי:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:114
@@ -601,7 +601,7 @@ msgstr "מתאר"
 #: part/dialogs/KWRunAroundProperties.ui:131
 #, kde-format
 msgid "Shape and text is separated:"
-msgstr ""
+msgstr "הצורה והטקסט נפרדים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWRunAroundProperties.ui:140
@@ -613,13 +613,13 @@ msgstr "שמאלה ב־:"
 #: part/dialogs/KWRunAroundProperties.ui:169
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "מעל ב־:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: part/dialogs/KWRunAroundProperties.ui:198
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "מתחת ב־:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: part/dialogs/KWRunAroundProperties.ui:227
@@ -739,7 +739,7 @@ msgstr "שורות:"
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Readability:"
-msgstr "קריאות:"
+msgstr "קריאוּת:"
 
 #: part/dockers/KWStatisticsWidget.cpp:147
 #, fuzzy, kde-format
@@ -1110,7 +1110,7 @@ msgstr "פייר דוקרוקט"
 #: part/KWAboutData.h:32
 #, kde-format
 msgid "C. Boemann"
-msgstr ""
+msgstr "קמילה בוימן"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #: part/KWAboutData.h:37
@@ -1131,12 +1131,12 @@ msgstr "בודווין רמפט"
 #: part/KWAboutData.h:35
 #, kde-format
 msgid "Pierre Stirnweiss"
-msgstr ""
+msgstr "פייר שטירנווייס"
 
 #: part/KWAboutData.h:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formatting stuff"
-msgstr "תווי עיצוב"
+msgstr "ענייני עיצוב"
 
 #: part/KWAboutData.h:36
 #, kde-format
@@ -1146,7 +1146,7 @@ msgstr "אינגה וולין"
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Thorsten Zachmann"
-msgstr ""
+msgstr "תורסתן זקמן"
 
 #: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
 #: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
@@ -1160,7 +1160,7 @@ msgstr "מסנן"
 #: part/KWAboutData.h:38
 #, kde-format
 msgid "Matus Uzak"
-msgstr ""
+msgstr "מתוס אוזק"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1170,27 +1170,27 @@ msgstr "פריסה וצביעה"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Pavol Korinek"
-msgstr ""
+msgstr "פבול קורינק"
 
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Shreya Pandit"
-msgstr ""
+msgstr "שרייה פנדיט"
 
 #: part/KWAboutData.h:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Statistics docker"
-msgstr "סטטיסטיקה"
+msgstr "מעגן סטטיסטיקה"
 
 #: part/KWAboutData.h:41
 #, kde-format
 msgid "Brijesh Patel"
-msgstr ""
+msgstr "בריג׳ש פאתל"
 
 #: part/KWAboutData.h:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Foot and endnotes"
-msgstr "כותרת תחתונה"
+msgstr "הערות שוליים ותחתונות"
 
 #: part/KWAboutData.h:42
 #, kde-format
@@ -1200,12 +1200,12 @@ msgstr "ביבליוגרפיה"
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Smit Patel"
-msgstr ""
+msgstr "סמיט פאתל"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Mojtaba Shahi"
-msgstr ""
+msgstr "מויטאבה שאהי"
 
 #: part/KWAboutData.h:43
 #, kde-format
@@ -1215,17 +1215,17 @@ msgstr "מנהל סגנונות"
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Lassi Nieminen"
-msgstr ""
+msgstr "לאסי נימינן"
 
 #: part/KWAboutData.h:45
 #, kde-format
 msgid "Hanzes Matus"
-msgstr ""
+msgstr "היינצס מאטוס"
 
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Lukáš Tvrdý"
-msgstr ""
+msgstr "לוקאש טברדי"
 
 #: part/KWAboutData.h:47
 #, kde-format
@@ -1245,7 +1245,7 @@ msgstr "תמיכה ב־ODF"
 #: part/KWAboutData.h:49
 #, kde-format
 msgid "Robert Mathias Marmorstein"
-msgstr ""
+msgstr "רוברט מתיאס מרמורשטיין"
 
 #: part/KWAboutData.h:50
 #, kde-format
@@ -1265,7 +1265,7 @@ msgstr "סוון לופקן"
 #: part/KWAboutData.h:53
 #, kde-format
 msgid "Frank Dekervel"
-msgstr "Frank Dekervel"
+msgstr "פרנק דקרבל"
 
 #: part/KWAboutData.h:54
 #, kde-format
@@ -1280,7 +1280,7 @@ msgstr "דאג אנדרסן"
 #: part/KWAboutData.h:56
 #, kde-format
 msgid "Nash Hoogwater"
-msgstr "Nash Hoogwater"
+msgstr "נאש הוגווטר"
 
 #: part/KWAboutData.h:57
 #, kde-format
@@ -1522,12 +1522,12 @@ msgstr "שינוי אופן התנהגות הצורה"
 #: part/KWView.cpp:287
 #, kde-format
 msgid "Create Template From Document..."
-msgstr ""
+msgstr "יצירת תבנית ממסמך…"
 
 #: part/KWView.cpp:288
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "שמירת המסמך הזה ושימוש בו כתבנית בהמשך"
 
 #: part/KWView.cpp:290
 #, kde-format
@@ -1535,6 +1535,8 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"אפשר לשמור את המסמך הזה כתבנית.<br><br>אפשר להשתמש בתבנית החדשה הזאת כנקודת "
+"התחלה למסמך אחר."
 
 #: part/KWView.cpp:309
 #, kde-format
@@ -1559,19 +1561,19 @@ msgstr ""
 #: part/KWView.cpp:320
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "הצגת הצללת שדות"
 
 #: part/KWView.cpp:326
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "הצגת/הסתרת רקעים מוצללים של שדות"
 
 #: part/KWView.cpp:327
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
-msgstr ""
+msgstr "הצגת/הסתרת שדות (משתנים וכו׳) על ידי ציור הרקע שלהם בצבע מנוגד."
 
 #: part/KWView.cpp:329
 #, kde-format
@@ -1581,7 +1583,7 @@ msgstr "הצגת מסגרת צורת טקסט"
 #: part/KWView.cpp:330
 #, kde-format
 msgid "Turns the border display on and off"
-msgstr ""
+msgstr "הפעלת/כיבוי הצגת מסגרת"
 
 #: part/KWView.cpp:337
 #, kde-format
@@ -1599,9 +1601,9 @@ msgid "Show Table Borders"
 msgstr "הצגת מסגרת טבלה"
 
 #: part/KWView.cpp:346
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of table borders"
-msgstr "הצגה או הסתרה של תווים שאינם מודפסים"
+msgstr "הצגה או הסתרה של מסגרות הטבלה"
 
 #: part/KWView.cpp:348
 #, fuzzy, kde-format
@@ -1615,7 +1617,7 @@ msgstr ""
 #: part/KWView.cpp:350
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "הצגת גבולות מקטע"
 
 #: part/KWView.cpp:356
 #, fuzzy, kde-format
@@ -1656,7 +1658,7 @@ msgstr ""
 #: part/KWView.cpp:375
 #, kde-format
 msgid "Snap to Grid"
-msgstr ""
+msgstr "הצמדה לרשת"
 
 #: part/KWView.cpp:383
 #, kde-format
@@ -1671,12 +1673,12 @@ msgstr "הצגת או הסתרת שורת המצב"
 #: part/KWView.cpp:390
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "מצב מסך מלא"
 
 #: part/KWView.cpp:391
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "הגדרת תצוגה במסך מלא"
 
 #: part/KWView.cpp:398
 #, kde-format
@@ -1686,14 +1688,14 @@ msgstr "גיליונות סגנון סמנטיים…"
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "שינוי והוספת גיליונות סגנון סמנטיים"
 
 #: part/KWView.cpp:401
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
-msgstr ""
+msgstr "גיליונות סגנון משמשים לעיצוב תצוגת המידע שמאוחסן ב־RDF."
 
 #: part/KWView.cpp:416
 #, kde-format
@@ -1839,12 +1841,12 @@ msgstr "לא נמצאו תוצאות"
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "החיפוש הגיע לתחתית, ממשיך מלמעלה."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "החיפוש הגיע לראש, ממשיך מלמטה."
 
 #: part/Words.cpp:41
 #, kde-format
@@ -1869,7 +1871,7 @@ msgstr "כותרת תחתונה לעמודים זוגיים"
 #: part/Words.cpp:49
 #, kde-format
 msgid "Main text"
-msgstr "טקסט ראש"
+msgstr "טקסט ראשי"
 
 #: part/Words.cpp:51
 #, kde-format
