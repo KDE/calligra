@@ -4,14 +4,14 @@
 # Copyright (C).
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2007, 2010.
+# Stefan Asserhäll <stefan.asserhall@gmail.com>, 2007, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2010-04-28 19:34+0200\n"
-"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
