@@ -27,6 +27,7 @@
         "Description": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[ca@valencia]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[ca]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
+        "Description[cs]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[en_GB]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[eo]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
         "Description[es]": "BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT",
