@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-11 05:38+0200\n"
+"PO-Revision-Date: 2024-06-12 05:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1222,6 +1222,9 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
+"ჩასვით ვებგვერდების ბმულები. ბმულისთვის შეგიძლიათ, ორივე, URL და ჭდე "
+"მიუთითოთ.\n"
+" ან უბრალოდ შეიყვანეთ URL და დააწკაპუნეთ ღილაკზე 'სათაურის URL-დან მიღება'"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
@@ -1339,6 +1342,12 @@ msgid ""
 "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
 "est laborum."
 msgstr ""
+"              ლორემ იპსუმ მარტოობამ ნახავდით წყალობა მაჩოების მწყემსის სტოპ "
+"მომაგონებს გამოსავალს გაუწყრები მოუდო ბრესონის მკლავებზე ჩანგალი. ვიდრტვინოთ "
+"დაედევნებოდა შინაური ჩანგალი ყარაულობას გამოსავალს, ბიზნესში სავ მადლობა "
+"იმზადებდა ვისწავლე გადაეცა მოცლა. ევსებოდათ ბრესონის არაფერმა უკეთესობაზედ "
+"აუჩქარებლივ მთავარითა. ხელებიდან დაედევნებოდა ადარებდა გაივლიო მადლობა "
+"ბიზნესში."
 
 #. i18n: ectx: property (text), widget (QLabel, labelLabel)
 #: dialogs/ListLevelWidget.ui:117
@@ -2073,6 +2082,7 @@ msgstr "სქოლიო"
 #, kde-format
 msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
 msgstr ""
+"სხვა ჩასმები \"მიმართვებიდან\"  ქვემოთ და \"ფიგურის დამატების\" პანელში"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertLink)
 #: dialogs/SimpleLinksWidget.ui:34
@@ -2227,6 +2237,22 @@ msgid ""
 "will reformat all text that previously got the named style assigned to it. "
 "Use the Styles docker to apply styles to text.</p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">შეგიძლიათ, ტექსტს "
+"სახელიანი სტილი მიანიჭოთ და შეცვალოთ სტილის თვისებები, რომ შეიცვალოს ყველა "
+"ტექსტი, რომელიც ამ სტილს იყენებს.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">სტილის ცვლილების "
+"გადატარება თავიდან დააფორმატებს ყველა ტექსტს, რომელიც ამ სახელიან სტილს "
+"იყენებდა. ტექსტზე სტილების გადასატარებლად სტლების პანელი შეგიძლიათ, "
+"გამოიყენოთ.</p></body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68
 #, kde-format
@@ -2518,6 +2544,8 @@ msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
+"აჩვენებს მხტუნარას, რომელიც შეიცავს პარამეტრებსა ხალი სანიშნეს დასამატებლად "
+"ან არსებული სანიშნეების სამართავად"
 
 #: ReferencesTool.cpp:197
 #, kde-format
@@ -2904,6 +2932,10 @@ msgid ""
 "selected paragraphs.</p><p>If no text is selected, the paragraph where the "
 "cursor is located will be changed.</p>"
 msgstr ""
+"<p>შეცვალეთ აბზაცის მინდვრები, ტექსტის დინება, საზღვრები, მარკერები, "
+"დანომვრა და ა.შ.</p><p>მონიშნეთ ტექსტი ერთზე მეტ აბზაცში, რომ ყველა "
+"მონიშნული აბზაცის დაფორმატება შეცვალოთ. </p><p>თუ ტექსტი მონიშნული არაა, "
+"შეიცვლება აბზაცი, სადაც კურსორია დასმული.</p>"
 
 #: TextTool.cpp:463
 #, kde-format
@@ -2921,6 +2953,8 @@ msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
+"<p>სტილების ფონტისა და აბზაცის ატრიბუტების შეცვლა.</p><p>ამ დიალოგში ერთზე "
+"მეტი სტილი შეგიძლიათ, შეცვალოთ.</p>"
 
 #: TextTool.cpp:473
 #, kde-format

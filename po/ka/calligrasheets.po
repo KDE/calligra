@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-11 11:28+0200\n"
+"PO-Revision-Date: 2024-06-12 05:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -610,7 +610,7 @@ msgstr "CHARTOASCII(\"v\") 118-ს აბრუნებს"
 #: functions/conversion.xml:97
 #, kde-format
 msgid "CHARTOASCII(r) is an error. The character must be in quotes."
-msgstr ""
+msgstr "CHARTOASCII(r) შეცდომაა. სიმბოლო ბრჭყალებში უნდა იყოს."
 
 #: functions/conversion.xml:105
 #, kde-format
@@ -1140,7 +1140,7 @@ msgstr "DVARP(A1:C5; \"ხელფასი\"; A9:A11)"
 #: functions/database.xml:284
 #, kde-format
 msgid "Range containing the pivot table"
-msgstr ""
+msgstr "შუალედი, რომელიც კრებსით ცხრილს შეიცავს"
 
 #: functions/database.xml:288
 #, kde-format
@@ -1629,7 +1629,7 @@ msgstr "DATE(წელი;თვე;თარიღი)"
 #: functions/datetime.xml:355
 #, kde-format
 msgid "DATE(2000;5;5) returns Friday 05 May 2000"
-msgstr ""
+msgstr "DATE(2000;5;5) აბრუნებს Friday 05 May 2000"
 
 #: functions/datetime.xml:375
 #, kde-format
@@ -1830,7 +1830,7 @@ msgstr ""
 #: functions/datetime.xml:530
 #, kde-format
 msgid "The TODAY() function returns the current date."
-msgstr ""
+msgstr "ფუნქცია TODAY() მიმდინარე თარიღს აბრუნებს."
 
 #: functions/datetime.xml:531
 #, kde-format
@@ -2081,12 +2081,12 @@ msgstr "NETWORKDAY(საწყისი თარიღი; საბოლო�
 #: functions/datetime.xml:707
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\") returns 5 workdays"
-msgstr ""
+msgstr "NETWORKDAY(\"01/01/2001\";\"01/08/2001\") აბრუნებს 5 სამუშაო დღეს"
 
 #: functions/datetime.xml:708
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) returns 3 workdays"
-msgstr ""
+msgstr "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) აბრუნებს 3 სამუშაო დღეს"
 
 #: functions/datetime.xml:720
 #, kde-format
@@ -2340,7 +2340,7 @@ msgstr ""
 #: functions/engineering.xml:142
 #, kde-format
 msgid "CONVERT(Number; From Unit; To Unit)"
-msgstr ""
+msgstr "CONVERT(რიცხვი; ერთეულიდან; ერთეულზე)"
 
 #: functions/engineering.xml:143
 #, kde-format
@@ -2422,6 +2422,7 @@ msgstr "გამოტანის მინიმალური სიგრ�
 msgid ""
 "The DEC2BIN() function returns a decimal value formatted as a binary number."
 msgstr ""
+"ფუნქცია DEC2BIN() გადაცემულ ათობით მნიშვნელობას ორობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:200
 #, kde-format
@@ -2444,6 +2445,8 @@ msgid ""
 "The DEC2HEX() function returns a decimal value formatted as a hexadecimal "
 "number."
 msgstr ""
+"ფუნქცია DEC2HEX() გადაცემულ ათობით მნიშვნელობას თექვსმეტობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:219
 #, kde-format
@@ -2465,6 +2468,7 @@ msgstr "DEC2HEX(55) აბრუნებს \"37\""
 msgid ""
 "The DEC2OCT() function returns a decimal value formatted as an octal number."
 msgstr ""
+"ფუნქცია DEC2OCT() გადაცემულ ათობით მნიშვნელობას რვაობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:238
 #, kde-format
@@ -2486,6 +2490,7 @@ msgstr "DEC2OCT(55) აბრუნებს \"67\""
 msgid ""
 "The OCT2BIN() function returns an octal value formatted as a binary number."
 msgstr ""
+"ფუნქცია OCT2BIN() გადაცემულ რვაობით მნიშვნელობას ორობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:257
 #, kde-format
@@ -2507,6 +2512,7 @@ msgstr "OCT2BIN(\"55\") აბრუნებს \"101101\""
 msgid ""
 "The OCT2DEC() function returns an octal value formatted as a decimal number."
 msgstr ""
+"ფუნქცია OCT2DEC() გადაცემულ რვაობით მნიშვნელობას ათობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:272
 #, kde-format
@@ -2529,6 +2535,8 @@ msgid ""
 "The OCT2HEX() function returns an octal value formatted as a hexadecimal "
 "number."
 msgstr ""
+"ფუნქცია OCT2HEX() გადაცემულ რვაობით მნიშვნელობას თექვსმეტობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:291
 #, kde-format
@@ -2550,6 +2558,7 @@ msgstr "OCT2HEX(\"55\") აბრუნებს \"2D\""
 msgid ""
 "The BIN2DEC() function returns a binary value formatted as a decimal number."
 msgstr ""
+"ფუნქცია BIN2DEC() გადაცემულ ორობით მნიშვნელობას ათობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:306
 #, kde-format
@@ -2571,6 +2580,7 @@ msgstr "BIN2DEC(\"11111\") 31-ს აბრუნებს "
 msgid ""
 "The BIN2OCT() function returns a binary value formatted as an octal number."
 msgstr ""
+"ფუნქცია BIN2OCT() გადაცემულ ორობით მნიშვნელობას რვაობით სისტემაში დააბრუნებს."
 
 #: functions/engineering.xml:325
 #, kde-format
@@ -2593,6 +2603,8 @@ msgid ""
 "The BIN2HEX() function returns a binary value formatted as a hexadecimal "
 "number."
 msgstr ""
+"ფუნქცია BIN2HEX() გადაცემულ ორობით მნიშვნელობას თექვსმეტობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:344
 #, kde-format
@@ -2615,6 +2627,8 @@ msgid ""
 "The HEX2DEC() function returns a hexadecimal value formatted as a decimal "
 "number."
 msgstr ""
+"ფუნქცია HEX2DEC() გადაცემულ თექვსმეტობით მნიშვნელობას ათობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:359
 #, kde-format
@@ -2637,6 +2651,8 @@ msgid ""
 "The HEX2OCT() function returns a hexadecimal value formatted as an octal "
 "number."
 msgstr ""
+"ფუნქცია HEX2OCT() გადაცემულ თექვსმეტობით მნიშვნელობას რვაობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:374
 #, kde-format
@@ -2659,6 +2675,8 @@ msgid ""
 "The HEX2BIN() function returns a hexadecimal value formatted as a binary "
 "number."
 msgstr ""
+"ფუნქცია HEX2BIN() გადაცემულ თექვსმეტობით მნიშვნელობას ორობით სისტემაში "
+"დააბრუნებს."
 
 #: functions/engineering.xml:389
 #, kde-format
@@ -4274,7 +4292,7 @@ msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) უდრის 34.2823387842%"
 #: functions/financial.xml:819
 #, kde-format
 msgid "Effective interest rate"
-msgstr ""
+msgstr "ეფექტური საპროცენტო განაკვეთი"
 
 #: functions/financial.xml:827
 #, no-c-format, kde-format
@@ -4303,7 +4321,7 @@ msgstr "გადახდა"
 #: functions/financial.xml:850 functions/financial.xml:999
 #, kde-format
 msgid "Future value (FV - optional)"
-msgstr ""
+msgstr "მომავალი ღირებულება (FV - არასავალდებულო)"
 
 #: functions/financial.xml:858
 #, kde-format
@@ -13108,7 +13126,7 @@ msgstr "ფურცლის დაცვის მოხსნა"
 #: part/View.cpp:1804
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
-msgstr ""
+msgstr "ბეჭდვის შუალედის ჩამოყრა"
 
 #: part/View.cpp:1813
 #, kde-format
