@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-26 08:48+0300\n"
+"PO-Revision-Date: 2024-06-13 07:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -31,21 +31,21 @@ msgstr ""
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edit"
-msgstr "&סיום"
+msgstr "&עריכה"
 
 #. i18n: ectx: Menu (view)
 #: part/calligrastage.rc:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "&View"
-msgstr "&עוגה"
+msgstr "ת&צוגה"
 
 #. i18n: ectx: Menu (insert)
 #: part/calligrastage.rc:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Insert"
-msgstr "הוספת קובץ"
+msgstr "הו&ספה"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrastage.rc:54
@@ -55,7 +55,7 @@ msgstr "&עיצוב"
 
 #. i18n: ectx: Menu (page)
 #: part/calligrastage.rc:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Slide"
 msgstr "&שקופיות"
 
@@ -67,33 +67,29 @@ msgstr "מ&צגת"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrastage.rc:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Settings"
-msgstr "הגדרות נתיבים"
+msgstr "ה&גדרות"
 
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr "מצגת שקופיות מותאמת אישית"
+msgstr "הוספת מצגת שקופיות מותאמת אישית"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr "יצירת מצגת HTML"
+msgstr "יצירת הנפשת צורה"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr "יצירת מצגת HTML"
+msgstr "עריכת אירוע הזנקת הנפשה"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr "יצירת מצגת HTML"
+msgstr "הסרת הנפשת צורה"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 #, fuzzy
@@ -102,10 +98,9 @@ msgid "Delete custom slide show"
 msgstr "מחק שקופית"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr "מחק שקופית"
+msgstr "מחיקת שקופית"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
 #, fuzzy
@@ -381,24 +376,24 @@ msgid "Double click to add an object"
 msgstr ""
 
 #: part/KPrPresentationDrawWidget.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pen Color"
-msgstr "צבע"
+msgstr "צבע עט"
 
 #: part/KPrPresentationDrawWidget.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pen Size"
-msgstr "הגדלת גודל גופן"
+msgstr "גודל עט"
 
 #: part/KPrPresentationDrawWidget.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Black"
-msgstr "&צבעים:"
+msgstr "שחור"
 
 #: part/KPrPresentationDrawWidget.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "White"
-msgstr "רוחב:"
+msgstr "לבן"
 
 #: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
@@ -416,14 +411,14 @@ msgid "Blue"
 msgstr "כחול"
 
 #: part/KPrPresentationDrawWidget.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yellow"
-msgstr "איטית"
+msgstr "צהוב"
 
 #: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Next Slide"
-msgstr "השקופית ה&באה"
+msgstr "השקופית הבאה"
 
 #: part/KPrPresenterViewInterface.cpp:59
 #, kde-format
@@ -436,9 +431,9 @@ msgid "Current Slide %1 of %2"
 msgstr "יצירת מצגת HTML"
 
 #: part/KPrPresenterViewInterface.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "End of Slide Show"
-msgstr "מצגת שקופיות"
+msgstr "סוף מצגת השקופיות"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
@@ -450,16 +445,16 @@ msgstr ""
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
-#, fuzzy, kde-format
+#, kde-format
 msgid "start after previous animation"
-msgstr "יצירת מצגת HTML"
+msgstr "התחלה אחרי ההנפשה הקודמת"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
-#, fuzzy, kde-format
+#, kde-format
 msgid "start with previous animation"
-msgstr "יצירת מצגת HTML"
+msgstr "התחלה עם ההנפשה הקודמת"
 
 #: part/KPrShapeAnimations.cpp:208
 #, kde-format
@@ -468,9 +463,9 @@ msgstr ""
 
 #: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation"
-msgstr "יצירת מצגת HTML"
+msgstr "הנפשה"
 
 #: part/KPrShapeAnimations.cpp:231
 #, kde-format
@@ -523,19 +518,19 @@ msgid "Copy Slide"
 msgstr "העתקת שקופית"
 
 #: part/KPrView.cpp:85 part/KPrView.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy the current slide"
-msgstr "לפני השקופית הנוכחית"
+msgstr "העתקת השקופית הנוכחית"
 
 #: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Slide"
-msgstr "מחק שקופית"
+msgstr "מחיקת שקופית"
 
 #: part/KPrView.cpp:88 part/KPrView.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the current slide"
-msgstr "לפני השקופית הנוכחית"
+msgstr "מחיקת השקופית הנוכחית"
 
 #: part/KPrView.cpp:90
 #, fuzzy, kde-format
@@ -543,39 +538,39 @@ msgid "Master Slide..."
 msgstr "&הוספת שקופית..."
 
 #: part/KPrView.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Previous Slide"
-msgstr "השקופית ה&קודמת"
-
-#: part/KPrView.cpp:92 part/KPrView.cpp:93
-#, fuzzy, kde-format
-msgid "Go to previous slide"
 msgstr "השקופית הקודמת"
 
+#: part/KPrView.cpp:92 part/KPrView.cpp:93
+#, kde-format
+msgid "Go to previous slide"
+msgstr "מעבר לשקופית הקודמת"
+
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to next slide"
-msgstr "עבור לשקופית:"
+msgstr "מעבר לשקופית הבאה"
 
 #: part/KPrView.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Slide"
-msgstr "הדבק שקופית"
+msgstr "השקופית הראשונה"
 
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to first slide"
-msgstr "עבור לשקופית:"
+msgstr "מעבר לשקופית הראשונה"
 
 #: part/KPrView.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Last Slide"
-msgstr "הדבק שקופית"
+msgstr "השקופית האחרונה"
 
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to last slide"
-msgstr "עבור לשקופית:"
+msgstr "מעבר לשקופית האחרונה"
 
 #: part/KPrView.cpp:103
 #, fuzzy, kde-format
@@ -588,14 +583,14 @@ msgid "Export as HTML..."
 msgstr ""
 
 #: part/KPrView.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "הוספת תמונה"
+msgstr "הוספת תמונות כשקופיות…"
 
 #: part/KPrView.cpp:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Appear Animation"
-msgstr "יצירת מצגת HTML"
+msgstr "יצירת הנפשת הופעה"
 
 #: part/KPrView.cpp:276
 #, fuzzy, kde-format
@@ -1084,7 +1079,7 @@ msgstr "שקופיות מצגת:"
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "עריכת מצגות בהתאמה אישית…"
+msgstr "עריכת מצגת שקופיות בהתאמה אישית…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
@@ -1682,7 +1677,7 @@ msgstr "&מימין:"
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Up"
-msgstr ""
+msgstr "למעלה"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
@@ -1770,7 +1765,7 @@ msgstr "אפקט &תמונה:"
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Vee"
-msgstr ""
+msgstr "וי של חווה"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
 #, fuzzy, kde-format
@@ -1790,7 +1785,7 @@ msgstr "קווים אנכיים"
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
-msgstr ""
+msgstr "קופסה"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
@@ -1828,7 +1823,7 @@ msgstr "אלכסוני 1"
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Four Box"
-msgstr ""
+msgstr "ארבע קופסאות"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
 #, fuzzy
@@ -1868,7 +1863,7 @@ msgstr "חץ כפול"
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Vee"
-msgstr ""
+msgstr "וי"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
 #, fuzzy, kde-format
@@ -1882,7 +1877,7 @@ msgstr "דהייה"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 msgid "Crossfade"
-msgstr ""
+msgstr "עמעום מדורג"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
 #, fuzzy
@@ -1936,7 +1931,7 @@ msgstr "קווים אנכיים"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
-msgstr ""
+msgstr "עין"
 
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
 #, kde-format
@@ -1946,7 +1941,7 @@ msgstr "משושה"
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Iris"
-msgstr ""
+msgstr "קשתית"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
 msgid "Diamond"

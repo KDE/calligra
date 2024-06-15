@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-06 07:39+0300\n"
+"PO-Revision-Date: 2024-06-12 23:25+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -742,9 +742,9 @@ msgid "Readability:"
 msgstr "קריאוּת:"
 
 #: part/dockers/KWStatisticsWidget.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flesch reading ease"
-msgstr "נקודות נוחות קריאה"
+msgstr "מידת קריאות Flesch"
 
 #: part/dockers/KWStatisticsWidget.cpp:149
 #, kde-format
@@ -795,9 +795,9 @@ msgstr "תווים מזרח אסייתיים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flesch Reading Ease"
-msgstr "נקודות נוחות קריאה"
+msgstr "מידת קריאות Flesch"
 
 #: part/i18n/stylenames.cpp:8
 #, kde-format
@@ -1828,10 +1828,10 @@ msgstr "החלפה"
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "נמצאה תוצאה"
+msgstr[1] "נמצאו שתי תוצאות"
+msgstr[2] "נמצאו %1 תוצאות"
+msgstr[3] "נמצאו %1 תוצאות"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
