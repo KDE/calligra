@@ -4252,7 +4252,7 @@ msgstr "小数点符："
 #: widgets/KoCsvImportDialog.ui:275
 #, kde-format
 msgid "Thousands separator:"
-msgstr "千位分割符："
+msgstr "千位分隔符："
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
 #: widgets/KoCsvImportDialog.ui:320
