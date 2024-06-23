@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-02-09 18:00+0300\n"
+"PO-Revision-Date: 2024-06-22 13:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.07.70\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1278,7 +1278,7 @@ msgstr " Metin:"
 #: dialogs/LinkInsertionDialog.ui:113
 #, kde-format
 msgid "Link To Bookmark"
-msgstr "Yer İmlerine Ekle"
+msgstr "Yer İmine Bağlantıla"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:117
@@ -1287,7 +1287,7 @@ msgid ""
 "Insert links to Bookmarks. To create bookmarks,\n"
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
-"Bağlantıları Yer İmleri’ne ekle. Yer imi oluşturmak için\n"
+"Bağlantılara yer imi koyun. Yer imi oluşturmak için\n"
 "Bağlantılar ve Yer İmleri alanından \"Yer İmleri\"ne tıklayın"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
@@ -1466,7 +1466,7 @@ msgstr "\"%1\" adlı bir yer imi zaten var."
 #: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
 msgid "Insert Bookmark"
-msgstr "Yer İmi Ekle"
+msgstr "Yer İmi Yerleştir"
 
 #: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
@@ -2529,12 +2529,12 @@ msgstr "Yer imi için bir bağlantı girin."
 #: ReferencesTool.cpp:183
 #, kde-format
 msgid "Add Bookmark"
-msgstr "Yer İmi Ekle"
+msgstr "Yer İmi Koy"
 
 #: ReferencesTool.cpp:184
 #, kde-format
 msgid "Add Bookmark :"
-msgstr "Yer İmi Ekle:"
+msgstr "Yer imi koy:"
 
 #: ReferencesTool.cpp:189
 #, kde-format
@@ -2591,7 +2591,7 @@ msgstr "Yer imi boş olamaz"
 #: ReferencesTool.cpp:373
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr "Tekrarlı Ad. \"Yer İmlerini Yönetin\"e tıklayın"
+msgstr "Yinelenmiş ad. \"Yer İmlerini Yönet\"e tıklayın"
 
 #: ReferencesTool.cpp:374
 #, kde-format
