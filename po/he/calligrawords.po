@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-12 23:25+0300\n"
+"PO-Revision-Date: 2024-06-23 15:31+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1381,17 +1381,17 @@ msgid "Document Title"
 msgstr "כותרת מסמך"
 
 #: part/KWDocument.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 1"
 msgstr "כותרת 1"
 
 #: part/KWDocument.cpp:557
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 2"
 msgstr "כותרת 2"
 
 #: part/KWDocument.cpp:563
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 3"
 msgstr "כותרת 3"
 
@@ -1606,13 +1606,13 @@ msgid "Toggle the display of table borders"
 msgstr "הצגה או הסתרה של מסגרות הטבלה"
 
 #: part/KWView.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
-"הצגה או הסתרה של תווים שאינם מודפסים.<br/><br/>כאשר אפשרות זו נבחרת, KWord "
-"יציג טאבים, רווחים, מעברי שורה ותווים אחרים שאינם מודפסים."
+"הצגת או הסתרת גבולות טבלה.<br/><br/>כשהאפשרות פעילה, מילים יציג לך מסגרות "
+"נסתרות של טבלאות בקו אפור דקיק."
 
 #: part/KWView.cpp:350
 #, kde-format
@@ -1620,18 +1620,18 @@ msgid "Show Section Bounds"
 msgstr "הצגת גבולות מקטע"
 
 #: part/KWView.cpp:356
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of section bounds"
-msgstr "הצגה או הסתרה של תווים שאינם מודפסים"
+msgstr "הצגת או הסתרת גבולות סעיפים"
 
 #: part/KWView.cpp:358
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"הצגה או הסתרה של תווים שאינם מודפסים.<br/><br/>כאשר אפשרות זו נבחרת, KWord "
-"יציג טאבים, רווחים, מעברי שורה ותווים אחרים שאינם מודפסים."
+"הצגת או הסתרת גבולות סעיפים.<br/><br/>כשהאפשרות פעילה, גבולות של סעיפים "
+"יסומנו בסוגריים אופקיים אפורים דקיקים."
 
 #: part/KWView.cpp:360
 #, kde-format
