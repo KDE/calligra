@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-18 15:57+0200\n"
+"PO-Revision-Date: 2024-06-25 10:52+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -14205,7 +14205,7 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
 msgid "Datetime"
-msgstr ""
+msgstr "Datum/čas"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
 #, kde-format
