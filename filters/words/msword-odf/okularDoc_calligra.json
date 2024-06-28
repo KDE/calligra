@@ -8,22 +8,11 @@
         "Name[ca@valencia]": "Okular",
         "Name[ca]": "Okular",
         "Name[cs]": "Okular",
-        "Name[en_GB]": "okular",
-        "Name[eo]": "okular",
-        "Name[es]": "okular",
         "Name[fr]": "Okular",
         "Name[gl]": "Okular",
-        "Name[it]": "okular",
-        "Name[ka]": "okular",
-        "Name[lv]": "okular",
-        "Name[nl]": "okular",
-        "Name[pl]": "okular",
-        "Name[sl]": "okular",
-        "Name[sv]": "okular",
         "Name[tr]": "Okular",
         "Name[uk]": "Okular",
         "Name[x-test]": "xxokularxx",
-        "Name[zh_TW]": "okular",
         "ServiceTypes": [
             "KParts/ReadOnlyPart"
         ]
