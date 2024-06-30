@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-11 23:25+0300\n"
+"PO-Revision-Date: 2024-06-29 16:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.0\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -547,7 +547,7 @@ msgstr "סגנון Latex"
 #: sheets/latex/export/latexexportwidget.ui:45
 #, kde-format
 msgid "Words style"
-msgstr "סגנון Words"
+msgstr "סגנון „מילים”"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: sheets/latex/export/latexexportwidget.ui:58
@@ -815,7 +815,7 @@ msgstr "שקופית %1"
 #: words/ascii/ImportDialog.cc:30
 #, kde-format
 msgid "Words's Plain Text Import Filter"
-msgstr "מסנן ייבוא טקסט רגיל של Words"
+msgstr "מסנן ייבוא טקסט רגיל של „מילים”"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
 #: words/ascii/ImportDialogUI.ui:16
@@ -896,7 +896,7 @@ msgstr "אי אפשר לטעון את הקובץ כיוון שלא נראה שה
 #: words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "Words's RTF Import Filter"
-msgstr "מסנן ייבוא מ־RTF של Words"
+msgstr "מסנן ייבוא מ־RTF של „מילים”"
 
 #: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
 #, kde-format

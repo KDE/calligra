@@ -19,14 +19,14 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-23 15:31+0300\n"
+"PO-Revision-Date: 2024-06-29 16:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.0\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -1085,7 +1085,7 @@ msgstr "אפור למעלה ולמטה"
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "Words של Calligra"
+msgstr "Calligra מילים"
 
 #: part/KWAboutData.h:21
 #, kde-format
@@ -1095,7 +1095,7 @@ msgstr "מעבד תמלילים"
 #: part/KWAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "כל הזכויות שמורות 1998‏-%1, צוות Words"
+msgstr "כל הזכויות שמורות 1998‏-%1, צוות „מילים”"
 
 #: part/KWAboutData.h:31 part/KWAboutData.h:32
 #, kde-format
@@ -1432,7 +1432,7 @@ msgstr "רגיל"
 #: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, Words ייצא כעת"
+msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, „מילים” ייצא כעת"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1555,7 +1555,7 @@ msgid ""
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
-"החלפת מצב הצגה של תווים שלא מיועדים להצגה.<br/><br/>כשהאפשרות פעילה, Words "
+"החלפת מצב הצגה של תווים שלא מיועדים להצגה.<br/><br/>כשהאפשרות פעילה, „מילים” "
 "יציג טאבים, רווחים, ירידות שורה ועוד תווים שאינם להצגה."
 
 #: part/KWView.cpp:320
