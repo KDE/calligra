@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-13 07:24+0300\n"
+"PO-Revision-Date: 2024-07-01 09:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.1\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -63,7 +63,7 @@ msgstr "&שקופיות"
 #: part/calligrastage.rc:74
 #, kde-format
 msgid "Sli&de Show"
-msgstr "מ&צגת"
+msgstr "מ&צגת שקופיות"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrastage.rc:81
@@ -92,10 +92,9 @@ msgid "Remove shape animation"
 msgstr "הסרת הנפשת צורה"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "מחק שקופית"
+msgstr "מחיקת מצגת שקופיות מותאמת אישית"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
 msgctxt "(qtundo-format) Delete one slide"
@@ -103,148 +102,139 @@ msgid "Delete slide"
 msgstr "מחיקת שקופית"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "מחק שקופית"
-msgstr[1] "מחק שקופית"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מחיקת שקופית"
+msgstr[1] "מחיקת שקופית"
+msgstr[2] "מחיקת שקופיות"
+msgstr[3] "מחיקת שקופיות"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr "משך המצגת: "
+msgstr "עריכת השהיית/משך הנפשה"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr "מצגת שקופיות מותאמת אישית"
+msgstr "עריכת מצגת שקופיות מותאמת אישית"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr "שינוי אפקט תמונה"
+msgstr "יצירת אפקט שקופית"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr "אפקט &תמונה:"
+msgstr "שינוי אפקט שקופית"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr "מחק שקופית"
+msgstr "מחיקת אפקט שקופית"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "שינוי מעבר בין שקופיות"
+msgstr "שינוי מעברון שקופית"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr "הגדרת מצגת שקופיות מותאמת אישית"
+msgstr "שינוי שם מצגת השקופיות המותאמת"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr "שינוי מעבר בין שקופיות"
+msgstr "שינוי סדר הנפשות"
 
 #: part/KPrAboutData.h:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "&הגדרות מצגת שקופיות..."
+msgstr "Calligra במה"
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Presentation Tool"
-msgstr "מצגת"
+msgstr "כלי הצגת שקופיות"
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "(c) 1998-2006, KPresenter הצוות של"
+msgstr "כל הזכויות שמורות 1998-%1, צוות במה"
 
 #: part/KPrAboutData.h:31 part/KPrAboutData.h:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Former maintainer"
-msgstr "מתחזק נוכחי"
+msgstr "מתחזק לשעבר"
 
 #: part/KPrAboutData.h:31
 #, kde-format
 msgid "Thorsten Zachmann"
-msgstr ""
+msgstr "תורסתן זקמן"
 
 #: part/KPrAboutData.h:32
 #, kde-format
 msgid "Laurent Montel"
-msgstr ""
+msgstr "לורנט מונטל"
 
 #: part/KPrAboutData.h:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Original author"
-msgstr "כותב מקורי"
+msgstr "יוצר מקורי"
 
 #: part/KPrAboutData.h:33
 #, kde-format
 msgid "Reginald Stadlbauer"
-msgstr ""
+msgstr "רגינלד שטדבוייר"
 
 #: part/KPrAboutData.h:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Werner Trobin"
-msgstr "ממורכז"
+msgstr "ורנר טרובין"
 
 #: part/KPrAboutData.h:35
 #, kde-format
 msgid "David Faure"
-msgstr ""
+msgstr "דוד פור"
 
 #: part/KPrAboutData.h:36
 #, kde-format
 msgid "Toshitaka Fujioka"
-msgstr ""
+msgstr "טושיטאקה פוג׳יוקה"
 
 #: part/KPrAboutData.h:37
 #, kde-format
 msgid "Lukáš Tinkl"
-msgstr ""
+msgstr "לוקאש טינקל"
 
 #: part/KPrAboutData.h:38
 #, kde-format
 msgid "Ariya Hidayat"
-msgstr ""
+msgstr "ארייה הידאיאת"
 
 #: part/KPrAboutData.h:39
 #, kde-format
 msgid "Percy Leonhardt"
-msgstr ""
+msgstr "פרסי לאונהארדט"
 
 #: part/KPrAboutData.h:40
 #, kde-format
 msgid "Thomas Zander"
-msgstr ""
+msgstr "תומס זנדר"
 
 #: part/KPrAboutData.h:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Peter Simonsson"
-msgstr "אפשרויות KPresenter"
+msgstr "פיטר סימונסון"
 
 #: part/KPrAboutData.h:42
 #, kde-format
 msgid "Boudewijn Rempt "
-msgstr ""
+msgstr "בודווין רמפט "
 
 #: part/KPrAboutData.h:43
 #, fuzzy, kde-format
@@ -254,37 +244,37 @@ msgstr "קו &סגור"
 #: part/KPrAboutData.h:44
 #, kde-format
 msgid "C. Boemann "
-msgstr ""
+msgstr "קמילה בוימן "
 
 #: part/KPrAboutData.h:45
 #, kde-format
 msgid "Fredy Yanardi "
-msgstr ""
+msgstr "פרדי ינארדי"
 
 #: part/KPrAboutData.h:46
 #, kde-format
 msgid "Jan Hambrecht "
-msgstr ""
+msgstr "יאן המברכט "
 
 #: part/KPrAboutData.h:47
 #, kde-format
 msgid "Marijn Kruisselbrink "
-msgstr ""
+msgstr "מארן קרויסלברינק"
 
 #: part/KPrAboutData.h:48
 #, kde-format
 msgid "Martin Pfeiffer "
-msgstr ""
+msgstr "מרטין פייפר "
 
 #: part/KPrAboutData.h:49
 #, kde-format
 msgid "Sven Langkamp "
-msgstr ""
+msgstr "סוון לאנגקאמפ"
 
 #: part/KPrAboutData.h:50
 #, kde-format
 msgid "Timothée Lacroix "
-msgstr ""
+msgstr "טימותי לקרואה"
 
 #: part/KPrAboutData.h:52
 #, kde-format
@@ -303,7 +293,7 @@ msgstr "צוות התרגום של KDE ישראל"
 #: part/KPrSlidesSorterDocumentModel.cpp:85
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: part/KPrCustomSlideShowsModel.cpp:59
 #: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
@@ -317,63 +307,62 @@ msgid "End of presentation. Click to exit."
 msgstr "סוף המצגת. לחיצה תצא."
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout"
-msgstr "&הגדרות עמוד..."
+msgstr "פריסה"
 
 #: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
-msgstr ""
+msgstr "לא ניתן למצוא את הרכיב, Calligra במה ייסגר כעת."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
-msgstr ""
+msgstr "לא ניתן למצוא את רכיב התמונה הנחוץ. Calligra במה ייסגר כעת."
 
 #: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
-msgstr ""
+msgstr "שגיאת התקנה"
 
 #: part/KPrPicturesImport.cpp:61
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
-msgstr "הוספת תמונה"
+msgstr "הוספת תמונות"
 
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
 msgid "Placeholder shape"
-msgstr ""
+msgstr "צורת ממלא מקום"
 
 #: part/KPrPlaceholderStrategy.cpp:34
 msgid "Double click to add a title"
-msgstr ""
+msgstr "לחיצה כפולה להוספת כותרת"
 
 #: part/KPrPlaceholderStrategy.cpp:35
 msgid "Double click to add an outline"
-msgstr ""
+msgstr "לחיצה כפולה להוספת מתאר"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
 msgid "Double click to add a text"
-msgstr ""
+msgstr "לחיצה כפולה להוספת טקסט"
 
 #: part/KPrPlaceholderStrategy.cpp:38
 msgid "Double click to add notes"
-msgstr ""
+msgstr "לחיצה כפולה להוספת הערות"
 
 #: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
-msgstr ""
+msgstr "לחיצה כפולה להוספת תמונה"
 
 #: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
-msgstr ""
+msgstr "לחיצה כפולה להוספת תרשים"
 
 #: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
-msgstr ""
+msgstr "לחיצה כפולה להוספת פריט"
 
 #: part/KPrPresentationDrawWidget.cpp:88
 #, kde-format
@@ -423,12 +412,12 @@ msgstr "השקופית הבאה"
 #: part/KPrPresenterViewInterface.cpp:59
 #, kde-format
 msgid "Speaker Notes"
-msgstr ""
+msgstr "הערות מציג או מציגה"
 
 #: part/KPrPresenterViewInterface.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current Slide %1 of %2"
-msgstr "יצירת מצגת HTML"
+msgstr "שקופית נוכחית %1 מתוך %2"
 
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
@@ -440,7 +429,7 @@ msgstr "סוף מצגת השקופיות"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "התחלה בלחיצת עכבר"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
@@ -459,7 +448,7 @@ msgstr "התחלה עם ההנפשה הקודמת"
 #: part/KPrShapeAnimations.cpp:208
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "להתחיל לאחר %1 שניות. משך של %2 שניות."
 
 #: part/KPrShapeAnimations.cpp:227
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
@@ -473,19 +462,19 @@ msgid "Shape"
 msgstr "צורה"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:281
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move Here"
-msgstr "הזז שקופית"
+msgstr "ה&עברה לכאן"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Copy Here"
-msgstr "העתק שקופית"
+msgstr "הע&תקה לכאן"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:289
 #, kde-format
 msgid "C&ancel"
-msgstr ""
+msgstr "&ביטול"
 
 #: part/KPrView.cpp:74
 #, kde-format
@@ -493,14 +482,14 @@ msgid "Normal"
 msgstr "רגיל"
 
 #: part/KPrView.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Master Slides"
-msgstr "הדבק שקופית"
+msgstr "הצגת שקופיות הורה"
 
 #: part/KPrView.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Slideshow..."
-msgstr "מעבר לשקופית"
+msgstr "ייבוא מצגת שקופיות…"
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -510,7 +499,7 @@ msgstr "הוספת שקופית"
 #: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
-msgstr ""
+msgstr "להוסיף שקופית חדשה אחרי הנוכחית"
 
 #: part/KPrView.cpp:84
 #, kde-format
@@ -533,9 +522,9 @@ msgid "Delete the current slide"
 msgstr "מחיקת השקופית הנוכחית"
 
 #: part/KPrView.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Master Slide..."
-msgstr "&הוספת שקופית..."
+msgstr "שקופית הורה…"
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -573,14 +562,14 @@ msgid "Go to last slide"
 msgstr "מעבר לשקופית האחרונה"
 
 #: part/KPrView.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Stage..."
-msgstr "&הגדרות מצגת שקופיות..."
+msgstr "הגדרת במה…"
 
 #: part/KPrView.cpp:237
 #, kde-format
 msgid "Export as HTML..."
-msgstr ""
+msgstr "ייצוא כ־HTML…"
 
 #: part/KPrView.cpp:263
 #, kde-format
@@ -593,234 +582,233 @@ msgid "Create Appear Animation"
 msgstr "יצירת הנפשת הופעה"
 
 #: part/KPrView.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "מצגת שקופיות מותאמת אישית..."
+msgstr "עריכת מצגות שקופיות מותאמות אישית…"
 
 #: part/KPrView.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Presentation"
-msgstr "מצגת"
+msgstr "התחלת הצגת מצגת"
 
 #: part/KPrView.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "From Current Slide"
-msgstr "אחרי השקופית הנוכחית"
+msgstr "מהשקופית הנוכחית"
 
 #: part/KPrView.cpp:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "From First Slide"
-msgstr "התחל מהשקופית ה&ראשונה"
+msgstr "מהשקופית הראשונה"
 
 #: part/KPrView.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stop presentation"
-msgstr "הרץ מצגת בלולאה"
+msgstr "עצירת ההצגה"
 
 #: part/KPrView.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Status Bar"
-msgstr "הצג שורת מצב"
+msgstr "הצגת שורת מצב"
 
 #: part/KPrView.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide Status Bar"
-msgstr "הצג שורת מצב"
+msgstr "הסתרת שורת מצב"
 
 #: part/KPrView.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides the status bar"
-msgstr "הצג שורת מצב"
+msgstr "הצגת או הסתרת שורת המצב"
 
 #: part/KPrView.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Slide Show..."
-msgstr "&הגדרות מצגת שקופיות..."
+msgstr "הגדרת מצגת שקופיות…"
 
 #: part/KPrView.cpp:313
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Presenter View..."
-msgstr "הגדרות KPresenter..."
+msgstr "הגדרת תצוגת מציג או מציגה…"
 
 #: part/KPrView.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgid "Draw on the presentation..."
-msgstr "כתיבה על מצגת"
+msgstr "ציור על המצגת…"
 
 #: part/KPrView.cpp:324
-#, fuzzy, kde-format
+#, kde-format
 msgid "Highlight the presentation..."
-msgstr "כתיבה על מצגת"
+msgstr "הדגשה במצגת…"
 
 #: part/KPrView.cpp:331
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "כתיבה על מצגת"
+msgstr "מסך שחור על המצגת…"
 
 #: part/KPrViewModeNotes.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Notes"
-msgstr "הערה"
+msgstr "הערות"
 
 #: part/KPrViewModeSlidesSorter.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slides Sorter"
-msgstr "שקופית ראשית"
+msgstr "מסדר שקופיות"
 
 #: part/KPrViewModeSlidesSorter.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Show: "
-msgstr "מצגת שקופיות"
+msgstr "מצגת שקופיות:"
 
 #: part/KPrViewModeSlidesSorter.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new custom slide show"
-msgstr "מצגת שקופיות"
+msgstr "הוספת מצגת שקופיות בהתאמה אישית"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete current custom slide show"
-msgstr "לפני השקופית הנוכחית"
+msgstr "מחיקת מצגת השקופיות הנוכחית המותאמת אישית"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add slides to current custom slide show"
-msgstr "מצגת שקופיות מותאמת אישית"
+msgstr "הוספת שקופיות למצגת השקופיות הנוכחית המותאמת אישית"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr "מצגת שקופיות מותאמת אישית"
+msgstr "הסרת שקופיות ממצגת השקופיות הנוכחית המותאמת אישית"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate Slide"
-msgstr "מחק שקופית"
+msgstr "שכפול מצגת"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Slideshow"
-msgstr "יצירת מצגת HTML"
+msgstr "התחלת הצגת מצגת"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new slide"
-msgstr "מצגת שקופיות"
+msgstr "הוספת שקופית חדשה"
 
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete selected slides"
-msgstr "השקופיות הנבחרות:"
+msgstr "מחיקת השקופיות הנבחרות"
 
 #: part/KPrViewModeSlidesSorter.cpp:537
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename"
-msgstr "הסר קישור"
+msgstr "שינוי שם"
 
 #: part/KPrViewModeSlidesSorter.cpp:541
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cut"
-msgstr "מותא&ם אישית"
+msgstr "גזירה"
 
 #: part/KPrViewModeSlidesSorter.cpp:542
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy"
-msgstr "הע&תק"
+msgstr "העתקה"
 
 #: part/KPrViewModeSlidesSorter.cpp:543
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste"
-msgstr "נתיב"
+msgstr "הדבקה"
 
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Show %1"
-msgstr "מצגת שקופיות"
+msgstr "מצגת שקופיות %1"
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "All slides"
-msgstr "כל הקבצים"
+msgstr "כל השקופיות"
 
 #: part/KPrViewModeSlidesSorter.cpp:682 part/ui/KPrHtmlExportDialog.cpp:153
 #: part/ui/KPrHtmlExportDialog.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Error"
-msgstr "חץ"
+msgstr "שגיאה"
 
 #: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
-msgstr ""
+msgstr "לא יכולות להיות שתי מצגות באותו השם."
 
 #: part/pagelayout/KPrPlaceholders.cpp:48
 #: part/pagelayout/KPrPlaceholders.cpp:49
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr "&הגדרות עמוד..."
+msgstr "הגדרת פריסה"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic animation preview"
-msgstr "מיקוף אוטומטי"
+msgstr "תצוגה מקדימה אוטומטית להנפשות"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview animation"
-msgstr "מצגת"
+msgstr "תצוגת הנפשות מקדימה"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Transitions"
-msgstr "שינוי מעבר בין שקופיות"
+msgstr "מעברוני שקופיות"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Click Actions"
-msgstr "יצירת מצגת HTML"
+msgstr "פעולות לחיצה על צורה"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Animations"
-msgstr "יצירת מצגת HTML"
+msgstr "הנפשות צורות"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage animation delay and duration: "
-msgstr "משך המצגת: "
+msgstr "ניהול השהיית ומשך הנפשה:"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start: "
-msgstr "תר&שים"
+msgstr "התחלה:"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr ""
+msgstr "בלחיצה על העכבר"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "after previous animation"
-msgstr "יצירת מצגת HTML"
+msgstr "אחרי ההנפשה הקודמת"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "with previous animation"
-msgstr "יצירת מצגת HTML"
+msgstr "עם ההנפשה הקודמת"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
 msgid "Delay: "
-msgstr ""
+msgstr "השהיה:"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duration: "
-msgstr "כיוון"
+msgstr "משך:"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
@@ -834,19 +822,19 @@ msgid "No Effect"
 msgstr "ללא אפקט"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid " sec"
-msgstr " שניות"
+msgstr "  שנ׳"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "ידני"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "אוטומטי"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, fuzzy, kde-format
@@ -867,17 +855,17 @@ msgstr "החלת סגנון על מסגרות"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "כניסה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
 #, kde-format
 msgid "Exit"
-msgstr ""
+msgstr "יציאה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
 #, kde-format
 msgid "Emphasis"
-msgstr ""
+msgstr "הדגשה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
 #, fuzzy, kde-format
@@ -887,7 +875,7 @@ msgstr "שקופית מותאמת אישית:"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "נתיב תנועה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
 #, fuzzy, kde-format
@@ -919,7 +907,7 @@ msgstr "הסר קישור"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
-msgstr ""
+msgstr "סדר:"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, fuzzy, kde-format
@@ -944,7 +932,7 @@ msgstr "לפני השקופית הנוכחית"
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
 msgid "seconds"
-msgstr ""
+msgstr "שניות"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: part/tools/animationtool/wdg_tool_crop.ui:16
@@ -956,7 +944,7 @@ msgstr "חיתוך"
 #: part/tools/animationtool/wdg_tool_crop.ui:36
 #, kde-format
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:60
@@ -986,7 +974,7 @@ msgstr "קבע את רוחב הקו."
 #: part/tools/animationtool/wdg_tool_crop.ui:94
 #, kde-format
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
 #: part/tools/animationtool/wdg_tool_crop.ui:111
@@ -1004,7 +992,7 @@ msgstr "קיבוע היחס"
 #: part/tools/animationtool/wdg_tool_crop.ui:132
 #, kde-format
 msgid "Layer"
-msgstr ""
+msgstr "שכבה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:137
@@ -1027,7 +1015,7 @@ msgstr "עריכת צורה"
 #: part/ui/KPrConfigurePresenterView.ui:16
 #, kde-format
 msgid "Multiple monitors"
-msgstr ""
+msgstr "ריבוי צגים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigurePresenterView.ui:24
@@ -1044,12 +1032,12 @@ msgstr "הפעלת תצוגת מציג"
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
 msgid "Monitor %1 (primary)"
-msgstr ""
+msgstr "צג %1 (עיקרי)"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:29
 #, kde-format
 msgid "Monitor %1"
-msgstr ""
+msgstr "צג %1"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, kde-format
@@ -1085,13 +1073,13 @@ msgstr "עריכת מצגת שקופיות בהתאמה אישית…"
 #: part/ui/KPrHtmlExport.ui:20
 #, kde-format
 msgid "HTML Export"
-msgstr ""
+msgstr "ייצוא HTML"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
 #: part/ui/KPrHtmlExport.ui:29
 #, kde-format
 msgid "Tick the slide should be exported :"
-msgstr ""
+msgstr "נא לסמן את השקופית לייצוא:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
@@ -1134,7 +1122,7 @@ msgstr "…"
 #: part/ui/KPrHtmlExport.ui:227
 #, kde-format
 msgid "Browse"
-msgstr ""
+msgstr "עיון"
 
 #. i18n: ectx: property (text), widget (QLabel, label_author)
 #: part/ui/KPrHtmlExport.ui:243
@@ -1152,32 +1140,32 @@ msgstr "מחיקת מועדף"
 #: part/ui/KPrHtmlExport.ui:286
 #, kde-format
 msgid "Open in browser"
-msgstr ""
+msgstr "פתיחה בדפדפן"
 
 #: part/ui/KPrHtmlExportDialog.cpp:34
 #, kde-format
 msgid "Html Export"
-msgstr ""
+msgstr "ייצוא HTML"
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
 msgid "Export"
-msgstr ""
+msgstr "ייצוא"
 
 #: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
-msgstr ""
+msgstr "כבר יש קובץ מועדף בשם הזה"
 
 #: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
-msgstr ""
+msgstr "קובץ שגוי, ‎.zip בלבד או שה־zip פגום"
 
 #: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr ""
+msgstr "בקובץ ה־zip אמור להיות styles.css"
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
@@ -1187,7 +1175,7 @@ msgstr "מחיקת תבנית"
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
-msgstr ""
+msgstr "אסור לך להסיר את התבניות שסופקו עם היישום"
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
@@ -1222,7 +1210,7 @@ msgstr "ייבוא…"
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
 msgid "Bar"
-msgstr ""
+msgstr "פס"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
@@ -1307,7 +1295,7 @@ msgstr "מלמעלה"
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
 #, kde-format
 msgid "Unknown subtype"
-msgstr ""
+msgstr "תת־סוג לא ידוע"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
@@ -1316,23 +1304,23 @@ msgstr "שעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 msgid "From Twelve Clockwise"
-msgstr ""
+msgstr "משתיים עשרה עם כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
 msgid "From Three Clockwise"
-msgstr ""
+msgstr "משלוש עם כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
 msgid "From Six Clockwise"
-msgstr ""
+msgstr "משש עם כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
 msgid "From Nine Clockwise"
-msgstr ""
+msgstr "מתשע עם כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
 msgid "From Twelve Counterclockwise"
-msgstr ""
+msgstr "משתיים עשרה נגד כיוון השעון"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
 msgid "From Three Counterclockwise"
