@@ -1,0 +1,169 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-07-02 22:36+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.05.1\n"
+
+#: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "הוספת טווח טקסט"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "צורת טקסט אומנותית"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "צורה שמציגה שורת טקסט בודדה"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "טקסט אומנותי"
+
+#: ArtisticTextTool.cpp:72
+#, kde-format
+msgid "Detach Path"
+msgstr "ניתוק נתיב"
+
+#: ArtisticTextTool.cpp:77
+#, kde-format
+msgid "Convert to Path"
+msgstr "המרה לנתיב"
+
+#: ArtisticTextTool.cpp:82
+#, kde-format
+msgid "Bold text"
+msgstr "טקסט מודגש"
+
+#: ArtisticTextTool.cpp:87
+#, kde-format
+msgid "Italic text"
+msgstr "טקסט נטוי"
+
+#: ArtisticTextTool.cpp:92
+#, kde-format
+msgid "Superscript"
+msgstr "כתב עילי"
+
+#: ArtisticTextTool.cpp:97
+#, kde-format
+msgid "Subscript"
+msgstr "כתב תחתי"
+
+#: ArtisticTextTool.cpp:102
+#, kde-format
+msgid "Anchor at Start"
+msgstr "עוגן בהתחלה"
+
+#: ArtisticTextTool.cpp:107
+#, kde-format
+msgid "Anchor at Middle"
+msgstr "עוגן באמצע"
+
+#: ArtisticTextTool.cpp:112
+#, kde-format
+msgid "Anchor at End"
+msgstr "עוגן בסוף"
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Click to change cursor position."
+msgstr "לחיצה תשנה את מקום הסמן."
+
+#: ArtisticTextTool.cpp:305
+#, kde-format
+msgid "Click to select text shape."
+msgstr "לחיצה תבחר את צורת הטקסט."
+
+#: ArtisticTextTool.cpp:308
+#, kde-format
+msgid "Double click to put text on path."
+msgstr "לחיצה כפולה תציב את הטקסט על נתיב."
+
+#: ArtisticTextTool.cpp:311
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr "גרירת הידית תשנה את היסט ההתחלה."
+
+#: ArtisticTextTool.cpp:315
+#, kde-format
+msgid "Press escape to finish editing."
+msgstr "escape יסיים את העריכה."
+
+#: ArtisticTextTool.cpp:494
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "אנטר יסיים את העריכה."
+
+#: ArtisticTextTool.cpp:588
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "המרה לנתיב"
+
+#: ArtisticTextTool.cpp:601
+#, kde-format
+msgid "Text Properties"
+msgstr "מאפייני טקסט"
+
+#: ArtisticTextTool.cpp:610
+#, kde-format
+msgid "Text On Path"
+msgstr "טקסט על נתיב"
+
+#: ArtisticTextToolFactory.cpp:17
+#, kde-format
+msgid "Artistic text editing"
+msgstr "עריכת טקסט אומנותי"
+
+#: AttachTextToPathCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "צירוף נתיב"
+
+#: ChangeTextAnchorCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr "החלפת עוגן טקסט"
+
+#: ChangeTextFontCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr "החלפת גופן"
+
+#: ChangeTextOffsetCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr "החלפת היסט טקסט"
+
+#: DetachTextFromPathCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "ניתוק נתיב"
+
+#: RemoveTextRangeCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "הסרת טווח טקסט"
+
+#: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
+#: ReplaceTextRangeCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "החלפת טווח טקסט"

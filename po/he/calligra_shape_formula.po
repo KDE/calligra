@@ -1,0 +1,342 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-07-02 14:56+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.05.1\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "צוות התרגום של KDE ישראל"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde-l10n-he@kde.org"
+
+#: FormulaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Add text to formula"
+msgstr "הוספת טקסט לנוסחה"
+
+#: FormulaCommand.cpp:220
+msgctxt "(qtundo-format)"
+msgid "Change rows"
+msgstr "החלפת חיצים"
+
+#: FormulaEditor.cpp:71
+msgctxt "(qtundo-format)"
+msgid "Add text"
+msgstr "הוספת טקסט"
+
+#: FormulaEditor.cpp:104
+msgctxt "(qtundo-format)"
+msgid "Insert row"
+msgstr "הוספת שורה"
+
+#: FormulaEditor.cpp:109
+msgctxt "(qtundo-format)"
+msgid "Remove row"
+msgstr "הסרת שורה"
+
+#: FormulaEditor.cpp:117
+msgctxt "(qtundo-format)"
+msgid "Insert column"
+msgstr "הוספת עמודה"
+
+#: FormulaEditor.cpp:122
+msgctxt "(qtundo-format)"
+msgid "Remove column"
+msgstr "הסרת עמודה"
+
+#: FormulaEditor.cpp:148
+msgctxt "(qtundo-format)"
+msgid "Insert formula elements."
+msgstr "הוספת רכיבי נוסחה."
+
+#: FormulaEditor.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Remove formula elements"
+msgstr "הסרת רכיבי נוסחה"
+
+#: FormulaToolWidget.cpp:69
+#, kde-format
+msgid "Arrows"
+msgstr "חיצים"
+
+#: FormulaToolWidget.cpp:71
+#, kde-format
+msgid "Greek"
+msgstr "יוונית"
+
+#: FormulaToolWidget.cpp:73
+#, kde-format
+msgid "Relations"
+msgstr "קשרים"
+
+#: FormulaToolWidget.cpp:77
+#, kde-format
+msgid "Operators"
+msgstr "פעולות"
+
+#: FormulaToolWidget.cpp:80
+#, kde-format
+msgid "Miscellaneous"
+msgstr "שונות"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: FormulaToolWidget.ui:24
+#, kde-format
+msgid "Insert"
+msgstr "הוספה"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
+#: FormulaToolWidget.ui:36
+#, kde-format
+msgid "Elements"
+msgstr "רכיבים"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
+#: FormulaToolWidget.ui:132
+#, kde-format
+msgid "Symbols"
+msgstr "סמלים"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
+#: FormulaToolWidget.ui:228
+#, kde-format
+msgid "Actions"
+msgstr "פעולות"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
+#: FormulaToolWidget.ui:279
+#, kde-format
+msgctxt "This button opens a file dialog to load a MathML file"
+msgid "Load..."
+msgstr "טעינה…"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonSave)
+#: FormulaToolWidget.ui:286
+#, kde-format
+msgid "Save..."
+msgstr "שמירה…"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: FormulaToolWidget.ui:294
+#, kde-format
+msgid "Edit"
+msgstr "עריכה"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
+#: FormulaToolWidget.ui:300
+#, kde-format
+msgid "General options"
+msgstr "אפשרויות כלליות"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolWidget.ui:325
+#, kde-format
+msgid "Font:"
+msgstr "גופן:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColors)
+#: FormulaToolWidget.ui:341
+#, kde-format
+msgid "Colors:"
+msgstr "צבעים:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
+#: FormulaToolWidget.ui:349
+#, kde-format
+msgid "Specific options"
+msgstr "אפשרויות מסוימות"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: FormulaToolWidget.ui:371
+#, kde-format
+msgid "Rows:"
+msgstr "שורות:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: FormulaToolWidget.ui:378
+#, kde-format
+msgid "Columns:"
+msgstr "עמודות:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: FormulaToolWidget.ui:406
+#, kde-format
+msgid "View MathML"
+msgstr "הצגת MathML"
+
+#: KoFormulaShape.cpp:200
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"המסמך הזה מכי לקישור חיצוני למסמך מרוחק\n"
+"%1"
+
+#: KoFormulaShape.cpp:201
+#, kde-format
+msgid "Confirmation Required"
+msgstr "נדרש אישור"
+
+#: KoFormulaShape.cpp:202
+#, kde-format
+msgid "Download"
+msgstr "הורדה"
+
+#: KoFormulaShape.cpp:203
+#, kde-format
+msgid "Skip"
+msgstr "דילוג"
+
+#: KoFormulaShapeFactory.cpp:20
+#, kde-format
+msgid "Formula"
+msgstr "נוסחה"
+
+#: KoFormulaShapeFactory.cpp:22
+#, kde-format
+msgid "A formula"
+msgstr "נוסחה"
+
+#: KoFormulaTool.cpp:409
+#, kde-format
+msgid "Insert fenced element"
+msgstr "הוספת רכיב מגודר"
+
+#: KoFormulaTool.cpp:410
+#, kde-format
+msgid "Insert enclosed element"
+msgstr "הוספת רכיב מתוחם"
+
+#: KoFormulaTool.cpp:412
+#, kde-format
+msgid "Insert root"
+msgstr "הוספת שורש"
+
+#: KoFormulaTool.cpp:413
+#, kde-format
+msgid "Insert square root"
+msgstr "הוספת שורש ריבועי"
+
+#: KoFormulaTool.cpp:415
+#, kde-format
+msgid "Insert fraction"
+msgstr "הוספת קו שבר"
+
+#: KoFormulaTool.cpp:416
+#, kde-format
+msgid "Insert bevelled fraction"
+msgstr "הוספת קו שבר נטוי"
+
+#: KoFormulaTool.cpp:421
+#, kde-format
+msgid "Insert 3x3 table"
+msgstr "הוספת טבלה 3×3"
+
+#: KoFormulaTool.cpp:427
+#, kde-format
+msgid "Insert 2 dimensional vector"
+msgstr "הוספת וקטור דו־ממדי"
+
+#: KoFormulaTool.cpp:432
+#, kde-format
+msgid "Insert subscript"
+msgstr "הוספת כתב תחתי"
+
+#: KoFormulaTool.cpp:433
+#, kde-format
+msgid "Insert superscript"
+msgstr "הוספת כתב עילי"
+
+#: KoFormulaTool.cpp:434
+#, kde-format
+msgid "Insert sub- and superscript"
+msgstr "הוספת כתב תחתי ועילי"
+
+#: KoFormulaTool.cpp:438
+#, kde-format
+msgid "Insert overscript"
+msgstr "הוספת כתב עליון"
+
+#: KoFormulaTool.cpp:439
+#, kde-format
+msgid "Insert underscript"
+msgstr "הוספת כתב תחתון"
+
+#: KoFormulaTool.cpp:440
+#, kde-format
+msgid "Insert under- and overscript"
+msgstr "הוספת כתב תחתון ועליון"
+
+#: KoFormulaTool.cpp:451
+#, kde-format
+msgid "Insert row"
+msgstr "הוספת שורה"
+
+#: KoFormulaTool.cpp:458
+#, kde-format
+msgid "Insert column"
+msgstr "הוספת עמודה"
+
+#: KoFormulaTool.cpp:465
+#, kde-format
+msgid "Remove row"
+msgstr "הסרת שורה"
+
+#: KoFormulaTool.cpp:472
+#, kde-format
+msgid "Remove column"
+msgstr "הסרת עמודה"
+
+#: KoFormulaToolFactory.cpp:17
+#, kde-format
+msgid "Formula editing"
+msgstr "עריכת נוסחה"
+
+#: KoM2MMLForumulaTool.cpp:98
+#, kde-format
+msgid "Mode: "
+msgstr "מצב: "
+
+#: KoM2MMLForumulaTool.cpp:101
+#, kde-format
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#: KoM2MMLForumulaTool.cpp:103
+#, kde-format
+msgid "Matlab"
+msgstr "Matlab"
+
+#: KoM2MMLForumulaTool.cpp:175
+#, kde-format
+msgid "Parse error."
+msgstr "שגיאת פענוח."
+
+#: KoM2MMLForumulaTool.cpp:204
+#, kde-format
+msgid "Edit formula with LaTeX/Matlab syntax"
+msgstr "עריכת נוסחה בתחביר LaTeX/Matlab"
+
+#: KoM2MMLForumulaTool.cpp:206
+#, kde-format
+msgid "Edit formula with LaTeX syntax"
+msgstr "עריכת נוסחה בתחביר LaTeX"

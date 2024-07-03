@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-01 09:10+0300\n"
+"PO-Revision-Date: 2024-07-02 18:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -837,20 +837,19 @@ msgid "Automatic"
 msgstr "אוטומטי"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Transition:"
-msgstr "שינוי מעבר בין שקופיות"
+msgstr "מעברון שקופית:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply To All Slides"
-msgstr "החלת סגנונות"
+msgstr "החלה על כל השקופיות"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr "החלת סגנון על מסגרות"
+msgstr "החלת אפקט השקופית על כל השקופיות"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
 #, kde-format
@@ -868,9 +867,9 @@ msgid "Emphasis"
 msgstr "הדגשה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom"
-msgstr "שקופית מותאמת אישית:"
+msgstr "מותאם אישית"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
 #, kde-format
@@ -878,9 +877,9 @@ msgid "Motion path"
 msgstr "נתיב תנועה"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ole Action"
-msgstr "גובה:"
+msgstr "פעולת OLE"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
 #, kde-format
@@ -890,19 +889,19 @@ msgstr ""
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit animation"
-msgstr "יצירת מצגת HTML"
+msgstr "עריכת הנפשה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add new animation"
-msgstr "יצירת מצגת HTML"
+msgstr "הוספת הנפשה חדשה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove animation"
-msgstr "הסר קישור"
+msgstr "הסרת הנפשה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
@@ -910,24 +909,24 @@ msgid "Order: "
 msgstr "סדר:"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move animation up"
-msgstr "יצירת מצגת HTML"
+msgstr "העלאת ההנפשה למעלה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move animation down"
-msgstr "יצירת מצגת HTML"
+msgstr "הורדת ההנפשה למטה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new animation"
-msgstr "מצגת שקופיות"
+msgstr "הוספת הנפשה חדשה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete current animation"
-msgstr "לפני השקופית הנוכחית"
+msgstr "מחיקת ההנפשה הנוכחית"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
@@ -954,9 +953,9 @@ msgstr "&רוחב"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr "קבע את רוחב הקו."
+msgstr "יישמר את רוחב קבוע החיתוך"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -966,9 +965,9 @@ msgstr "&גובה:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr "קבע את רוחב הקו."
+msgstr "יישמר את גובה קבוע החיתוך"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -1366,9 +1365,9 @@ msgid "Fan In Horizontal Reverse"
 msgstr "קווים אופקיים"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double Sweep"
-msgstr "אפקט &תמונה:"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 #, fuzzy
@@ -1674,9 +1673,8 @@ msgstr "למעלה"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Vertical"
-msgstr "פתיחה אנכית"
+msgstr "אנכי"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
@@ -1686,9 +1684,8 @@ msgstr "פתיחה אנכית"
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
-#, fuzzy
 msgid "Horizontal"
-msgstr "פתיחה אופקית"
+msgstr "אופקי"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
@@ -1726,9 +1723,9 @@ msgid "Horizontal Reverse"
 msgstr "קווים אופקיים"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Barn Door"
-msgstr "חץ כפול"
+msgstr "דלת אסם"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 #, fuzzy
