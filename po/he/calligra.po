@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-06-01 14:55+0300\n"
+"PO-Revision-Date: 2024-07-04 15:44+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.1\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -4027,122 +4027,104 @@ msgid "Typing"
 msgstr ""
 
 #: text/KoTextEditor_format.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Bold"
-msgstr "מודגש:"
+msgstr "מודגש"
 
 #: text/KoTextEditor_format.cpp:70
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Italic"
-msgstr "נטוי:"
+msgstr "נטוי"
 
 #: text/KoTextEditor_format.cpp:83
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Underline"
 msgstr "קו תחתון"
 
 #: text/KoTextEditor_format.cpp:102
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
-msgstr "קו חוצה:"
+msgstr "קו חוצה"
 
 #: text/KoTextEditor_format.cpp:139 text/KoTextEditor_format.cpp:140
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Alignment"
-msgstr "שינוי יישור"
+msgstr "שינוי היישור"
 
 #: text/KoTextEditor_format.cpp:157
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Alignment"
-msgstr "יישור אנכי:"
+msgstr "הגדרת יישור אנכי"
 
 #: text/KoTextEditor_format.cpp:192 text/KoTextEditor_format.cpp:193
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
-msgstr "שינוי הזחה"
+msgstr "הקטנת הזחה"
 
 #: text/KoTextEditor_format.cpp:229 text/KoTextEditor_format.cpp:230
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
-msgstr "שינוי הזחה"
+msgstr "הגדלת הזחה"
 
 #: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
-msgstr "שינוי רישיות"
+msgstr "הקטנת הכתב"
 
 #: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
-msgstr "שינוי רישיות"
+msgstr "הגדלת הכתב"
 
 #: text/KoTextEditor_format.cpp:294
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Font"
-msgstr "בחר גופן"
+msgstr "הגדרת גופן"
 
 #: text/KoTextEditor_format.cpp:307
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
-msgstr "בחר גופן"
+msgstr "הגדרת גודל גופן"
 
 #: text/KoTextEditor_format.cpp:320
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
-msgstr "שנייה"
+msgstr "הגדרת צבע הרקע"
 
 #: text/KoTextEditor_format.cpp:333
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
-msgstr "עוד צבעי טקסט..."
+msgstr "הגדרת צבע טקסט"
 
 #: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
-msgstr "יצירת סגנון חדש"
+msgstr "הגדרת סגנון תווים"
 
 #: text/KoTextEditor_format.cpp:466
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
-msgstr "טקסט פיסקה רגיל"
+msgstr "הגדרת סגנון פסקה"
 
 #: text/KoTextEditor_format.cpp:528
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"
-msgstr "תבנית תאריך"
+msgstr "עיצוב"
 
 #: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format"
-msgstr "תבנית תאריך"
+msgstr "עיצוב"
 
 #: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default"
-msgstr "ב&רירת מחדל"
+msgstr "ברירת מחדל"
 
 #: widgets/KoColorPopupAction.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity"
-msgstr "Script"
+msgstr "אטימות"
 
 #: widgets/KoColorSetWidget.cpp:150
 #, fuzzy, kde-format
@@ -4150,9 +4132,9 @@ msgid "Recent:"
 msgstr "מסמך מלאחרונה:"
 
 #: widgets/KoColorSetWidget.cpp:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add / Remove Colors..."
-msgstr "עוד צבעים..."
+msgstr "הוספת / הסרת צבעים…"
 
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
@@ -4160,9 +4142,9 @@ msgid "Add new author profile (starts out as a copy of current)"
 msgstr ""
 
 #: widgets/KoConfigAuthorPage.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the author profile"
-msgstr "מחיקת טקסט"
+msgstr "מחיקת פרופיל הכותב"
 
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
@@ -4170,9 +4152,9 @@ msgid "Name (not duplicate or blank name):"
 msgstr ""
 
 #: widgets/KoConfigAuthorPage.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name of Profile"
-msgstr "מספר תמונות"
+msgstr "שם הפרופיל"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
@@ -4212,15 +4194,15 @@ msgstr "דוא״ל:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
 #: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Telephone (home):"
-msgstr "טלפון (בבית):"
+msgstr "טלפון (בית):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
 #: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Telephone (work):"
-msgstr "טלפון (בעבודה)"
+msgstr "טלפון (עבודה):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
 #: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
@@ -4253,9 +4235,9 @@ msgid "Country:"
 msgstr "מדינה:"
 
 #: widgets/KoCsvImportDialog.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Data"
-msgstr "ייבוא מסמך"
+msgstr "ייבוא נתונים"
 
 #: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
 #: widgets/KoCsvImportDialog.cpp:483
