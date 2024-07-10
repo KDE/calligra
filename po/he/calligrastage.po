@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-07 08:09+0300\n"
+"PO-Revision-Date: 2024-07-09 14:58+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -237,9 +237,9 @@ msgid "Boudewijn Rempt "
 msgstr "בודווין רמפט "
 
 #: part/KPrAboutData.h:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Carlos Licea "
-msgstr "קו &סגור"
+msgstr "קרלוס ליסאה"
 
 #: part/KPrAboutData.h:44
 #, kde-format
@@ -812,9 +812,9 @@ msgstr "משך:"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview Shape Animation"
-msgstr "יצירת מצגת HTML"
+msgstr "תצוגת הנפשת צורה מקדימה"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -1336,33 +1336,31 @@ msgstr "מתשע נגדר כיוון השעון"
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Double Fan"
-msgstr "מאוורר כפול"
+msgstr "מניפה כפולה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan Out Vertical"
-msgstr "מאוורר אנכי החוצה"
+msgstr "מניפה יוצאת אנכית"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan Out Horizontal"
-msgstr "מאוורר אופקי החוצה"
+msgstr "מניפה יוצאת אופקית"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical"
-msgstr "מאוורר אנכי פנימה"
+msgstr "מניפה נכנסת אנכית"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal"
-msgstr "מאוורר אופקי פנימה"
+msgstr "מניפה נכנסת אופקית"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
-#, fuzzy
 msgid "Fan In Vertical Reverse"
-msgstr "קווים אנכיים"
+msgstr "מניפה נכנסת אנכית הפוכה"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
-#, fuzzy
 msgid "Fan In Horizontal Reverse"
-msgstr "קווים אופקיים"
+msgstr "מניפה נכנסת אופקית הפוכה"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
@@ -1386,44 +1384,36 @@ msgid "Opposite Horizontal"
 msgstr "מנוגד אופקי"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy
 msgid "Parallel Diagonal Top Left"
-msgstr "אפקט &תמונה:"
+msgstr "אלכסוני מקבילי פינה שמאלית עליונה"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy
 msgid "Parallel Diagonal Bottom Left"
-msgstr "כניסה מלמטה"
+msgstr "אלכסוני מקבילי פינה שמאלית תחתונה"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy
 msgid "Parallel Vertical Reverse"
-msgstr "קווים אנכיים"
+msgstr "אנכי מקבילי הפוך"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy
 msgid "Parallel Diagonal Reverse"
-msgstr "קווים אופקיים"
+msgstr "אלכסוני מקבילי הפוך"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy
 msgid "Opposite Vertical Reverse"
-msgstr "קווים אנכיים"
+msgstr "אנכי נגדי הפוך"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy
 msgid "Opposite Horizontal Reverse"
-msgstr "קווים אופקיים"
+msgstr "אופקי נגדי הפוך"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
-#, fuzzy
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr "אפקט &תמונה:"
+msgstr "אלכסוני מקבילי פינה שמאלית עליונה הפוך"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
-#, fuzzy
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr "כניסה מלמטה"
+msgstr "אלכסוני מקבילי פינה שמאלית תחתונה הפוך"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
@@ -1451,44 +1441,36 @@ msgid "Center Bottom"
 msgstr "במרכז למטה"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, fuzzy
 msgid "Fan Out Top"
-msgstr "פתיחה אופקית"
+msgstr "מניפה יוצאת מלמעלה"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, fuzzy
 msgid "Fan Out Right"
-msgstr "פתיחה אופקית"
+msgstr "מניפה יוצאת מימין"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy
 msgid "Fan Out Bottom"
-msgstr "כניסה מלמטה"
+msgstr "מניפה יוצאת מלמטה"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, fuzzy
 msgid "Fan Out Left"
-msgstr "פתיחה אנכית"
+msgstr "מניפה יוצאת משמאל"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy
 msgid "Fan In Top"
-msgstr "פתיחה אופקית"
+msgstr "מניפה נכנסת מלמעלה"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy
 msgid "Fan In Right"
-msgstr "כניסה מימין"
+msgstr "מניפה נכנסת מימין"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
-#, fuzzy
 msgid "Fan In Bottom"
-msgstr "כניסה מלמטה"
+msgstr "מניפה נכנסת מלמטה"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
-#, fuzzy
 msgid "Fan In Left"
-msgstr "כניסה משמאל"
+msgstr "מניפה נכנסת משמאל"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
 #, kde-format
@@ -1610,9 +1592,8 @@ msgid "Counterclockwise Bottom Right"
 msgstr "נגד כיוון השעון מימין למטה"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
-#, fuzzy
 msgid "Clockwise Top Right"
-msgstr "כניסה מימין"
+msgstr "עם כיוון השעון מימין למעלה"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
 #, kde-format
@@ -1622,9 +1603,8 @@ msgstr "שמשה קדמית"
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
-#, fuzzy
 msgid "Right"
-msgstr "&מימין:"
+msgstr "ימינה"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
@@ -1657,17 +1637,15 @@ msgstr "אופקי"
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, fuzzy
 msgid "Right Reverse"
-msgstr "קווים אופקיים"
+msgstr "ימינה הפוך"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
-#, fuzzy
 msgid "Up Reverse"
-msgstr "קווים אנכיים"
+msgstr "למעלה"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
@@ -1675,9 +1653,8 @@ msgstr "קווים אנכיים"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Vertical Reverse"
-msgstr "קווים אנכיים"
+msgstr "אנכי הפוך"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
@@ -1685,9 +1662,8 @@ msgstr "קווים אנכיים"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Horizontal Reverse"
-msgstr "קווים אופקיים"
+msgstr "אופקי הפוך"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
 #, kde-format
@@ -1695,24 +1671,20 @@ msgid "Barn Door"
 msgstr "דלת אסם"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#, fuzzy
 msgid "Diagonal Bottom Left"
-msgstr "כניסה מלמטה"
+msgstr "אלכסוני משמאל למטה"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy
 msgid "Diagonal Bottom Left Reverse"
-msgstr "כניסה מלמטה"
+msgstr "אלכסוני משמאל למטה הפוך"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Diagonal Top Left"
-msgstr "אפקט &תמונה:"
+msgstr "אלכסוני שמאל למעלה"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
-#, fuzzy
 msgid "Diagonal Top Left Reverse"
-msgstr "אפקט &תמונה:"
+msgstr "אלכסוני פינה שמאלית עליונה הפוך"
 
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
@@ -1793,9 +1765,8 @@ msgid "Misc Diagonal"
 msgstr "אלכסוני שונות"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
-#, fuzzy
 msgid "Double Barn Door"
-msgstr "חץ כפול"
+msgstr "דלת מסבאה כפולה"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
 msgid "Double Diamond"
@@ -1821,9 +1792,8 @@ msgid "Crossfade"
 msgstr "עמעום מדורג"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
-#, fuzzy
 msgid "Fade over Color"
-msgstr "הגדרת צבע טקסט"
+msgstr "עמעום על פני צבע"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
 #, kde-format
@@ -2134,14 +2104,12 @@ msgid "Spiral"
 msgstr "מערבולת"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
-#, fuzzy
 msgid "Clockwise Top Left In"
-msgstr "כניסה משמאל"
+msgstr "כניסה משמאל למעלה עם כיוון השעון"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy
 msgid "Clockwise Top Left Out"
-msgstr "כניסה משמאל"
+msgstr "יציאה משמאל למעלה עם כיוון השעון"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 #, fuzzy
@@ -2219,44 +2187,36 @@ msgid "Waterfall"
 msgstr "מפל"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
-#, fuzzy
 msgid "Top Left Vertical"
-msgstr "פתיחה אנכית"
+msgstr "אנכי משמאל למעלה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, fuzzy
 msgid "Top Left Horizontal"
-msgstr "פתיחה אופקית"
+msgstr "אופקי משמאל למעלה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, fuzzy
 msgid "Top Right Vertical"
-msgstr "פתיחה אנכית"
+msgstr "אנכי מימין למעלה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy
 msgid "Top Right Horizontal"
-msgstr "פתיחה אופקית"
+msgstr "אופקי מימין למעלה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, fuzzy
 msgid "Bottom Left Vertical"
-msgstr "סגירה אנכית"
+msgstr "אנכי משמאל למטה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy
 msgid "Bottom Left Horizontal"
-msgstr "סגירה אופקית"
+msgstr "אופקי משמאל למטה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
-#, fuzzy
 msgid "Bottom Right Vertical"
-msgstr "כניסה מלמטה"
+msgstr "אנכי מימין למטה"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
-#, fuzzy
 msgid "Bottom Right Horizontal"
-msgstr "השתלבות אופקית 1"
+msgstr "אופקי מימין למטה"
 
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
 #, kde-format
