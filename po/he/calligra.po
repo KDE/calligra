@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-07-06 14:18+0300\n"
+"PO-Revision-Date: 2024-07-12 23:38+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -106,7 +106,7 @@ msgstr ""
 #: basicflakes/tools/KoPencilTool.cpp:337
 #, kde-format
 msgid "Pencil"
-msgstr ""
+msgstr "עיפרון"
 
 #: flake/commands/KoConnectionShapeTypeCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -142,7 +142,7 @@ msgstr "העברת נקודת בקרה"
 #: flake/commands/KoPathFillRuleCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr ""
+msgstr "הגדרת כלל מילוי"
 
 #: flake/commands/KoPathPointInsertCommand.cpp:70
 msgctxt "(qtundo-format)"
@@ -246,12 +246,12 @@ msgstr "קיבוץ צורות"
 #: flake/commands/KoShapeGroupCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr ""
+msgstr "הוספת צורות לקבוצה"
 
 #: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
-msgstr ""
+msgstr "שמירה על יחס גובה־רוחב"
 
 #: flake/commands/KoShapeLockCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -344,7 +344,7 @@ msgstr "הסרת תת־נתיב"
 #: flake/KoConnectionShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "רגיל"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:18
 #, kde-format
@@ -368,7 +368,7 @@ msgstr "שעה"
 #: flake/KoConnectionShapeFactory.cpp:24
 #, kde-format
 msgid "A connection between two other shapes"
-msgstr ""
+msgstr "חיבור בין שתי צורות אחרות"
 
 #: flake/KoGridData.cpp:206
 #, kde-format
@@ -405,7 +405,7 @@ msgstr "הדבקת צורות"
 #: flake/KoToolManager.cpp:442
 #, kde-format
 msgid "Active tool: %1"
-msgstr ""
+msgstr "כלי פעיל: %1"
 
 #: flake/KoToolProxy.cpp:589
 msgctxt "(qtundo-format)"
@@ -428,7 +428,7 @@ msgstr ""
 #: flake/SnapGuideConfigWidget.ui:56
 #, kde-format
 msgid "Bounding box of shape"
-msgstr ""
+msgstr "תיבה תוחמת של צורה"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:72
@@ -446,7 +446,7 @@ msgstr ""
 #: flake/SnapGuideConfigWidget.ui:85
 #, kde-format
 msgid "Orthogonal"
-msgstr ""
+msgstr "מאונך"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:98
@@ -463,7 +463,7 @@ msgstr "קווים מנחים"
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
 msgid "Embedded svg shape"
-msgstr ""
+msgstr "צורת svg מוטמעת"
 
 #: flake/tools/KoCreateShapesToolFactory.cpp:16
 #, kde-format
@@ -493,7 +493,7 @@ msgstr "נקודה חלקה"
 #: flake/tools/KoPathTool.cpp:105
 #, kde-format
 msgid "Symmetric Point"
-msgstr ""
+msgstr "נקודה סימטרית"
 
 #: flake/tools/KoPathTool.cpp:110
 #, kde-format
@@ -533,12 +533,12 @@ msgstr "שבירה בנקודה"
 #: flake/tools/KoPathTool.cpp:142
 #, kde-format
 msgid "Break at segment"
-msgstr ""
+msgstr "קטיעה במקטע"
 
 #: flake/tools/KoPathTool.cpp:146
 #, kde-format
 msgid "Join with segment"
-msgstr ""
+msgstr "צירוף למקטע"
 
 #: flake/tools/KoPathTool.cpp:151
 #, kde-format
@@ -558,12 +558,12 @@ msgstr "קו/עיקול"
 #: flake/tools/KoPathTool.cpp:522
 #, kde-format
 msgid "Drag to move handle."
-msgstr ""
+msgstr "גרירה תזיז את הידיות."
 
 #: flake/tools/KoPathTool.cpp:586
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
-msgstr ""
+msgstr "גרירה תזיז את הנקודה. עם Shift להחלפת סוג הנקודה."
 
 #: flake/tools/KoPathTool.cpp:588
 #, kde-format
@@ -583,7 +583,7 @@ msgstr "לחיצה על B תשבור את הנתיב בנקודה הנבחרת."
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr ""
+msgstr "לחיצה על B תקטע את הנתיב במקטעים הנבחרים."
 
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
@@ -594,19 +594,19 @@ msgstr "עריכת נתיבים"
 #: widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr ""
+msgstr "תקריב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: flake/tools/KoZoomToolWidget.ui:20
 #, kde-format
 msgid "Zoom In"
-msgstr ""
+msgstr "התקרבות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: flake/tools/KoZoomToolWidget.ui:30
 #, kde-format
 msgid "Zoom Out"
-msgstr ""
+msgstr "התרחקות"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -677,7 +677,7 @@ msgstr "ביצוע %1 מחדש"
 #: kundo2/kundo2model.cpp:54
 #, kde-format
 msgid "<empty>"
-msgstr ""
+msgstr "<ריק>"
 
 #: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
 #: main/KoUndoStackAction.cpp:33
@@ -724,7 +724,7 @@ msgstr "אין שמירה אוטומטית"
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr ""
+msgstr " דק׳"
 
 #: main/config/KoConfigDocumentPage.cpp:66
 #, kde-format
@@ -781,7 +781,7 @@ msgstr "א&נכי:"
 #: pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Misc"
-msgstr ""
+msgstr "שונות"
 
 #: main/config/KoConfigMiscPage.cpp:78
 #, kde-format
@@ -791,12 +791,12 @@ msgstr "יחידות:"
 #: main/config/KoConfigMiscPage.cpp:87
 #, kde-format
 msgid "Handle radius:"
-msgstr ""
+msgstr "רדיוס ידית:"
 
 #: main/config/KoConfigMiscPage.cpp:94
 #, kde-format
 msgid "Grab sensitivity:"
-msgstr ""
+msgstr "רגישות תפיסה:"
 
 #: main/config/KoConfigMiscPage.cpp:101
 #, kde-format
@@ -806,7 +806,7 @@ msgstr "היסט הדבקה:"
 #: main/config/KoConfigMiscPage.cpp:105
 #, kde-format
 msgid "Paste at Cursor:"
-msgstr ""
+msgstr "הדבקה בסמן:"
 
 #: main/KoApplication.cpp:191
 #, kde-format
@@ -814,14 +814,14 @@ msgid "Only print and exit"
 msgstr "רק הדפס וצא"
 
 #: main/KoApplication.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
-msgstr "פתח מסמך חדש מתוך תבנית"
+msgstr "פתיחת מסמך חדש שמבוסס על קובץ התבנית שסופק (שם desktopfile)"
 
 #: main/KoApplication.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open a new document based on the given template file"
-msgstr "פתח מסמך חדש מתוך תבנית"
+msgstr "פתיחת מסמך חדש שמבוסס על קובץ התבנית שסופק"
 
 #: main/KoApplication.cpp:195
 #, kde-format
@@ -829,29 +829,29 @@ msgid "Override display DPI"
 msgstr "עקוף את הגדרת הנקודות לאינץ' של התצוגה"
 
 #: main/KoApplication.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Only export to PDF and exit"
-msgstr "רק הדפס וצא"
+msgstr "רק לייצא ל־PDF ולצאת"
 
 #: main/KoApplication.cpp:197
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr ""
+msgstr "שם קובץ ל־PD מיוצא"
 
 #: main/KoApplication.cpp:198
 #, kde-format
 msgid "just load the file and then exit"
-msgstr ""
+msgstr "פשוט לטעון את הקובץ ולצאת"
 
 #: main/KoApplication.cpp:200
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr ""
+msgstr "לטעון את הקובץ, להציג את החלון וסרגל ההתקדמות ולצאת"
 
 #: main/KoApplication.cpp:202
 #, kde-format
 msgid "Filename to write profiling information into."
-msgstr ""
+msgstr "שם קובץ שאליו ייכתבו פרטי השוואת הביצועים."
 
 #: main/KoApplication.cpp:205
 #, kde-format
@@ -872,9 +872,9 @@ msgid ""
 msgstr ""
 
 #: main/KoApplication.cpp:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Critical Error"
-msgstr "מילת השלמה"
+msgstr "%1: שגיאה משמעותית"
 
 #: main/KoApplication.cpp:258
 #, kde-format
@@ -885,7 +885,7 @@ msgid ""
 msgstr ""
 
 #: main/KoApplication.cpp:495
-#, fuzzy, kde-format
+#, kde-format
 msgid "No template found for: %1"
 msgstr "לא נמצאה תבנית עבור: %1"
 
@@ -900,15 +900,15 @@ msgid "Template %1 failed to load."
 msgstr "טעינת התבנית %1 לא הצליחה."
 
 #: main/KoApplication.cpp:527
-#, fuzzy, kde-format
+#, kde-format
 msgid "No template found at: %1"
-msgstr "לא נמצאה תבנית עבור: %1"
+msgstr "לא נמצאה תבנית תחת: %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
-msgstr ""
+msgstr "שחזור קבצים"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:171
 #, kde-format
@@ -922,25 +922,25 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Always use this template at application start up"
-msgstr "התחל את %1 תמיד עם התבנית הנבחרת"
+msgstr "תמיד להשתמש בתבנית הזאת עם טעינת היישום"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Always use this template"
-msgstr "התחל את %1 תמיד עם התבנית הנבחרת"
+msgstr "תמיד להשתמש בתבנית הזאת"
 
 #: main/KoDocument.cpp:548
 #, kde-format
 msgid "Making backup..."
-msgstr "יוצר גיבוי..."
+msgstr "נוצר גיבוי…"
 
 #: main/KoDocument.cpp:563
 #, kde-format
 msgid "Saving..."
-msgstr "שומר..."
+msgstr "נשמר…"
 
 #: main/KoDocument.cpp:591
 #, kde-format
@@ -948,7 +948,7 @@ msgid ""
 "Could not save\n"
 "%1"
 msgstr ""
-"אין אפשרות לשמור את\n"
+"אי אפשר לשמור את\n"
 "%1"
 
 #: main/KoDocument.cpp:593
@@ -957,13 +957,13 @@ msgid ""
 "Could not save %1\n"
 "Reason: %2"
 msgstr ""
-"אין אפשרות לשמור את %1\n"
+"אי אפשר לשמור את %1\n"
 "הסיבה: %2"
 
 #: main/KoDocument.cpp:621
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document <i>%1</i> saved"
-msgstr "כותרת המסמך"
+msgstr "המסמך <i>%1</i> נשמר"
 
 #: main/KoDocument.cpp:709
 #, kde-format
@@ -975,33 +975,33 @@ msgstr ""
 #: main/KoDocument.cpp:712
 #, kde-format
 msgid "Autosaving..."
-msgstr "מבצע שמירה אוטומטית..."
+msgstr "מתבצעת שמירה אוטומטית…"
 
 #: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr "אירעה שגיאה במהלך השמירה האוטומטית. האם המחיצה מלאה?"
+msgstr "אירעה שגיאה במהלך השמירה האוטומטית. המחיצה מלאה?"
 
 #: main/KoDocument.cpp:812
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "אי אפשר ליצור את הקובץ לשמירה"
 
 #: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
 #: main/KoDocument.cpp:942
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "אין אפשרות לכתוב את \"%1\". האם המחיצה מלאה?"
+msgstr "אי אפשר לכתוב את ‚%1’. המחיצה מלאה?"
 
 #: main/KoDocument.cpp:863
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
-msgstr "אין אפשרות לכתוב את \"%1\". האם המחיצה מלאה?"
+msgstr "לא ניתן לכתוב נתוני על כ־RDF. המחיצה מלאה?"
 
 #: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
-msgstr "אירעה שגיאה במהלך הניסיון לכתוב את \"%1\". האם המחיצה מלאה?"
+msgstr "אירעה שגיאה במהלך הניסיון לכתוב את „%1”. המחיצה מלאה?"
 
 #: main/KoDocument.cpp:1217
 #, kde-format
@@ -1027,64 +1027,64 @@ msgid "The file %1 does not exist."
 msgstr "הקובץ %1 לא קיים."
 
 #: main/KoDocument.cpp:1433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opening Document"
 msgstr "פתיחת מסמך"
 
 #: main/KoDocument.cpp:1449
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not create the filter plugin"
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "לא ניתן ליצור תוסף סינון"
 
 #: main/KoDocument.cpp:1453
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not create the output document"
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "לא ניתן ליצור את מסמך הפלט"
 
 #: main/KoDocument.cpp:1457
-#, fuzzy, kde-format
+#, kde-format
 msgid "File not found"
-msgstr "מיקום הקובץ:"
+msgstr "הקובץ לא נמצא"
 
 #: main/KoDocument.cpp:1461
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot create storage"
-msgstr "יצירת תבנית"
+msgstr "לא ניתן ליצור אחסון"
 
 #: main/KoDocument.cpp:1465
 #, kde-format
 msgid "Bad MIME type"
-msgstr ""
+msgstr "סוג תוכן/MIME שגוי"
 
 #: main/KoDocument.cpp:1469
-#, fuzzy, kde-format
+#, kde-format
 msgid "Error in embedded document"
-msgstr "אירעה שגיאה במהלך שמירת המסמכים המוטבעים"
+msgstr "שגיאה במסמך המשובץ"
 
 #: main/KoDocument.cpp:1473
 #, kde-format
 msgid "Format not recognized"
-msgstr ""
+msgstr "הסוג לא מזוהה"
 
 #: main/KoDocument.cpp:1477
 #, kde-format
 msgid "Not implemented"
-msgstr ""
+msgstr "לא ממומש"
 
 #: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Parsing error"
-msgstr ""
+msgstr "שגיאת פענוח"
 
 #: main/KoDocument.cpp:1485
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document is password protected"
-msgstr "לא נראה שמסמך זה הוא מסמך MathML"
+msgstr "המסמך מוגן בסיסמה"
 
 #: main/KoDocument.cpp:1489
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid file format"
-msgstr "התבנית המקומית"
+msgstr "סוג הקובץ שגוי"
 
 #: main/KoDocument.cpp:1497
 #, kde-format
@@ -1094,17 +1094,17 @@ msgstr "שגיאה פנימית"
 #: main/KoDocument.cpp:1501
 #, kde-format
 msgid "Out of memory"
-msgstr ""
+msgstr "נגמר הזיכרון"
 
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
-msgstr ""
+msgstr "תוסף מסנן ריק"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
-msgstr ""
+msgstr "מתבצע ניסיון לטעון לסוג שגוי של מסמך"
 
 #: main/KoDocument.cpp:1513
 #, kde-format
@@ -1114,7 +1114,7 @@ msgstr "הורדת הקובץ המרוחק נכשלה"
 #: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Unknown error"
-msgstr ""
+msgstr "שגיאה לא ידועה"
 
 #: main/KoDocument.cpp:1527
 #, kde-format
@@ -1135,7 +1135,7 @@ msgstr "המסמך <i>%1</i> נטען"
 #: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
-msgstr "אין אפשרות למצוא את %1"
+msgstr "אי אפשר למצוא את %1"
 
 #: main/KoDocument.cpp:1654
 #, kde-format
@@ -1143,7 +1143,7 @@ msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"שגיאת פירוק ב־%1, בשורה %2, טור %3\n"
+"שגיאת פענוח ב־%1, בשורה %2, עמודה %3\n"
 "הודעת שגיאה: %4"
 
 #: main/KoDocument.cpp:1677
@@ -1154,12 +1154,12 @@ msgstr "%1 אינו קובץ."
 #: main/KoDocument.cpp:1692
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
-msgstr "אין אפשרות לפתוח את הקובץ לקריאה (בדוק את הרשאות הקריאה)."
+msgstr "אי אפשר לפתוח את הקובץ לקריאה (כדאי לבדוק את הרשאות הקריאה)."
 
 #: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not read the beginning of the file."
-msgstr "אין אפשרות לקרוא את תחילת הקובץ."
+msgstr "אי אפשר לקרוא את תחילת הקובץ."
 
 #: main/KoDocument.cpp:1734
 #, kde-format
@@ -1167,7 +1167,7 @@ msgid ""
 "parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פירוק במסמך הראשי בשורה%1, טור %2\n"
+"שגיאת פענוח במסמך הראשי בשורה %1, עמודה %2\n"
 "הודעת שגיאה: %3"
 
 #: main/KoDocument.cpp:1755
@@ -1178,7 +1178,7 @@ msgstr "לא קובץ Calligra תקני: %1"
 #: main/KoDocument.cpp:1836
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr "מסמך לא תקף: אין קובץ \"maindoc.xml\"."
+msgstr "מסמך שגוי: אין קובץ „maindoc.xml”."
 
 #: main/KoDocument.cpp:1860
 #, kde-format
@@ -1186,6 +1186,7 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
+"המסמך <i>%1</i> מכיל מספר גרסאות. יש לגשת לקובץ->גרסאות כדי לפתוח גרסה ישנה."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
@@ -1198,7 +1199,7 @@ msgstr "ללא שם"
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
-msgstr "<p>המסמך <b>\"%1\"</b> שונה.</p><p>האם ברצונך לשמור אותו?</p>"
+msgstr "<p>המסמך <b>„%1”</b> השתנה.</p><p>לשמור אותו?</p>"
 
 #: main/KoDocument.cpp:2147
 #, kde-format
@@ -1211,7 +1212,7 @@ msgid ""
 "Could not open\n"
 "%1"
 msgstr ""
-"אין אפשרות לפתוח את\n"
+"לא ניתן לפתוח את\n"
 "%1"
 
 #: main/KoDocument.cpp:2182
@@ -1220,12 +1221,12 @@ msgid ""
 "Could not open %1\n"
 "Reason: %2"
 msgstr ""
-"אין אפשרות לפתוח את %1\n"
+"לא ניתן לפתוח את %1\n"
 "הסיבה: %2"
 
 #: main/KoDocument.cpp:2235
 msgid "a word processing"
-msgstr ""
+msgstr "עיבוד תמלילים"
 
 #: main/KoDocument.cpp:2236
 msgid "a spreadsheet"
@@ -1237,11 +1238,11 @@ msgstr "מצגת"
 
 #: main/KoDocument.cpp:2238
 msgid "a chart"
-msgstr ""
+msgstr "תרשים"
 
 #: main/KoDocument.cpp:2239
 msgid "a drawing"
-msgstr ""
+msgstr "ציור"
 
 #: main/KoDocument.cpp:2547
 #, kde-format
@@ -1270,12 +1271,12 @@ msgstr "לא"
 #: main/KoDocumentSectionToolTip.cpp:37
 #, kde-format
 msgid "Yes"
-msgstr ""
+msgstr "כן"
 
 #: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
 msgid "Could not export file."
-msgstr "אין אפשרות לייצא את הקובץ."
+msgstr "אי אפשר לייצא את הקובץ."
 
 #: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
 #, kde-format
@@ -1288,7 +1289,7 @@ msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr ""
-"אין אפשרות לייבא קובץ מסוג\n"
+"לא ניתן לייבא קובץ מסוג\n"
 "%1"
 
 #: main/KoFilterManager.cpp:533
@@ -1304,7 +1305,7 @@ msgstr "בחירת מסנן"
 #: main/KoFindText.cpp:47
 #, kde-format
 msgid "Case Sensitive"
-msgstr ""
+msgstr "תלוי רישיות"
 
 #: main/KoFindText.cpp:47
 #, kde-format
@@ -1314,17 +1315,17 @@ msgstr ""
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Match only whole words"
-msgstr ""
+msgstr "לכידת מילים שלמות בלבד"
 
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Whole Words Only"
-msgstr ""
+msgstr "מילים שלמות בלבד"
 
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
-msgstr ""
+msgstr "איתור מהסמן"
 
 #: main/KoFindText.cpp:49
 #, kde-format
@@ -1339,7 +1340,7 @@ msgstr "מסמך %1 שלא נשמר (%2)"
 #: main/KoMainWindow.cpp:263
 #, kde-format
 msgid "Export as PDF..."
-msgstr "ייצוא כ־PDF..."
+msgstr "ייצוא כ־PDF…"
 
 #: main/KoMainWindow.cpp:275
 #, kde-format
@@ -1349,7 +1350,7 @@ msgstr "רענון"
 #: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Versions..."
-msgstr "גירסאות..."
+msgstr "גרסאות…"
 
 #: main/KoMainWindow.cpp:283
 #, kde-format
@@ -1359,17 +1360,17 @@ msgstr "פתיחת מסמך קיים כמסמך &ללא שם…"
 #: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "E&xport..."
-msgstr "ייצ&וא..."
+msgstr "יי&צוא…"
 
 #: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "En&crypt Document"
-msgstr "ה&צפנת מסמך"
+msgstr "הצ&פנת מסמך"
 
 #: main/KoMainWindow.cpp:296
 #, kde-format
 msgid "&Uncompress to Directory"
-msgstr ""
+msgstr "&חילוץ לתיקייה"
 
 #: main/KoMainWindow.cpp:301
 #, kde-format
@@ -1379,28 +1380,28 @@ msgstr "תצוגה &חדשה"
 #: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
-msgstr "מידע מסמך"
+msgstr "פרטי מסמך"
 
 #: main/KoMainWindow.cpp:331
 #, kde-format
 msgid "Full Screen Mode"
-msgstr ""
+msgstr "מצב מסך מ&לא"
 
 #: main/KoMainWindow.cpp:336
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Dockers"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת מעגנים"
 
 #: main/KoMainWindow.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת פסי כותרת למעגנים"
 
 #: main/KoMainWindow.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dockers"
-msgstr "מספר שורות"
+msgstr "מעגנים"
 
 #: main/KoMainWindow.cpp:632
 #, kde-format
@@ -1428,8 +1429,8 @@ msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
-"<qt>שמירה בתור %1 עלולה לגרום לאובדן מסויים של עיצוב.<p>האם ברצונך לשמור "
-"בתבנית זו בכל זאת?</qt>"
+"<qt>שמירה בתור %1 עלולה לגרום לאובדן עיצוב ברמה כלשהי.<p>לשמור בתבנית הזאת "
+"בכל אופן?</qt>"
 
 #: main/KoMainWindow.cpp:828
 #, kde-format
@@ -1442,8 +1443,8 @@ msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
-"<qt>ייצוא בתור %1 עלול לגרום לאובדן מסויים של עיצוב.<p>האם ברצונך לייצא "
-"לתבנית זו בכל זאת?</qt>"
+"<qt>ייצוא בתור %1 עלולה לגרום לאובדן עיצוב ברמה כלשהי.<p>לייצא לתבנית הזאת "
+"בכל אופן?</qt>"
 
 #: main/KoMainWindow.cpp:837
 #, kde-format
@@ -1507,16 +1508,16 @@ msgstr "אזהרה"
 #: main/KoMainWindow.cpp:2030
 #, kde-format
 msgid "Show %1 Toolbar"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת סרגל כלים %1"
 
 #: main/KoMainWindow.cpp:2032
 #, kde-format
 msgid "Hide %1 Toolbar"
-msgstr "הסתר סרגל כלים %1"
+msgstr "הסתרת סרגל כלים %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Existing Document"
 msgstr "פתיחת מסמך קיים"
 
@@ -1564,13 +1565,13 @@ msgstr "פתיחת המסמך הזה"
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
-msgstr ""
+msgstr "<tr><td><b>מועד שינוי:</b></td><td>%1</td></tr>"
 
 #: main/KoRecentDocumentsPane.cpp:170
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
-msgstr ""
+msgstr "<tr><td><b>מועד גישה:</b></td><td>%1</td></tr>"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1601,12 +1602,12 @@ msgstr "קבוצה:"
 #: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
-msgstr "&הוספת קבוצה..."
+msgstr "הו&ספת קבוצה…"
 
 #: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, kde-format
 msgid "&Remove"
-msgstr "ה&סרה"
+msgstr "הס&רה"
 
 #: main/KoTemplateCreateDia.cpp:145
 #, kde-format
@@ -1626,7 +1627,7 @@ msgstr "מותאם אישית:"
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
-msgstr "ב&חירה..."
+msgstr "ב&חירה…"
 
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
@@ -1636,7 +1637,7 @@ msgstr "להשתמש בתבנית החדשה כברירת מחדל"
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "האם אתה בטוח שברצונך לכתוב על התבנית הקיימת \"%1\"?"
+msgstr "לכתוב על התבנית הקיימת „%1”?"
 
 #: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -1646,37 +1647,37 @@ msgstr "הוספת קבוצה"
 #: main/KoTemplateCreateDia.cpp:416
 #, kde-format
 msgid "Enter group name:"
-msgstr "הזן שם לקבוצה:"
+msgstr "נא למלא שם לקבוצה:"
 
 #: main/KoTemplateCreateDia.cpp:421
 #, kde-format
 msgid "This name is already used."
-msgstr "שם זה נמצא כבר בשימוש."
+msgstr "שם זה כבר בשימוש."
 
 #: main/KoTemplateCreateDia.cpp:445
 #, kde-format
 msgid "Do you really want to remove that group?"
-msgstr "האם אתה בטוח שברצונך להסיר קבוצה זו?"
+msgstr "להסיר את הקבוצה הזאת?"
 
 #: main/KoTemplateCreateDia.cpp:446
 #, kde-format
 msgid "Remove Group"
-msgstr "הסרת קבוצה"
+msgstr "להסיר קבוצה"
 
 #: main/KoTemplateCreateDia.cpp:448
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "האם אתה בטוח שברצונך להסיר תבנית זו?"
+msgstr "להסיר את התבנית הזאת?"
 
 #: main/KoTemplateCreateDia.cpp:449
 #, kde-format
 msgid "Remove Template"
-msgstr "הסרת תבנית"
+msgstr "להסיר תבנית"
 
 #: main/KoTemplateCreateDia.cpp:497
 #, kde-format
 msgid "Could not load picture."
-msgstr "אין אפשרות לטעון את התמונה."
+msgstr "לא ניתו לטעון את התמונה."
 
 #: main/KoTemplateCreateDia.cpp:499
 #, kde-format
@@ -1691,7 +1692,7 @@ msgstr "להשתמש בתבנית הזאת"
 #: main/KoVersionDialog.cpp:34
 #, kde-format
 msgid "Version"
-msgstr "גירסה"
+msgstr "גרסה"
 
 #: main/KoVersionDialog.cpp:48
 #, kde-format
@@ -1711,7 +1712,7 @@ msgstr "הערה"
 #: main/KoVersionDialog.cpp:57
 #, kde-format
 msgid "&Add"
-msgstr "ה&וסף"
+msgstr "הוס&פה"
 
 #: main/KoVersionDialog.cpp:63
 #, kde-format
@@ -1721,12 +1722,12 @@ msgstr "&שינוי"
 #: main/KoVersionDialog.cpp:66
 #, kde-format
 msgid "&Open"
-msgstr "&פתח"
+msgstr "&פתיחה"
 
 #: main/KoVersionDialog.cpp:116
 #, kde-format
 msgid "A new version could not be added"
-msgstr ""
+msgstr "אי אפשר להוסיף גרסה חדשה"
 
 #: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
 #, kde-format
@@ -1734,9 +1735,9 @@ msgid "Date: %1"
 msgstr "תאריך: %1"
 
 #: main/KoView.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Author Profile"
-msgstr "צבע ברירת מחדל"
+msgstr "פרופיל כותב פעיל"
 
 #: main/KoView.cpp:347 main/KoView.cpp:401
 #, kde-format
@@ -1745,9 +1746,9 @@ msgid "Anonymous"
 msgstr "אלמוני"
 
 #: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default Author Profile"
-msgstr "צבע ברירת מחדל"
+msgstr "פרופיל כותב כברירת מחדל"
 
 #: odf/KoDocumentInfo.cpp:56
 #, kde-format
@@ -1765,7 +1766,7 @@ msgid ""
 "Parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פירוק במסמך הראשי בשורה %1, טור %2\n"
+"שגיאת פענוח במסמך הראשי בשורה %1, עמודה %2\n"
 "הודעת שגיאה: %3"
 
 #: odf/KoPageFormat.cpp:48
@@ -1895,48 +1896,44 @@ msgid "US Common 10"
 msgstr ""
 
 #: odf/KoPageFormat.cpp:73
-#, fuzzy
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "ISO DL"
 
 #: odf/KoPageFormat.cpp:74
-#, fuzzy
 msgctxt "Page size"
 msgid "US Folio"
-msgstr "US Folio"
+msgstr "פוליו אמריקאי"
 
 #: odf/KoPageFormat.cpp:75
-#, fuzzy
 msgctxt "Page size"
 msgid "US Ledger"
-msgstr "US Ledger"
+msgstr "ספר חשבונות אמריקאי"
 
 #: odf/KoPageFormat.cpp:76
-#, fuzzy
 msgctxt "Page size"
 msgid "US Tabloid"
-msgstr "US Tabloid"
+msgstr "צהובון אמריקאי"
 
 #: odf/KoUnit.cpp:27
 #, kde-format
 msgid "Millimeters (mm)"
-msgstr "מילימטרים (מ\"מ)"
+msgstr "מילימטרים (מ״מ)"
 
 #: odf/KoUnit.cpp:29
 #, kde-format
 msgid "Centimeters (cm)"
-msgstr "סנטימטרים (ס\"מ)"
+msgstr "סנטימטרים (ס״מ)"
 
 #: odf/KoUnit.cpp:31
 #, kde-format
 msgid "Decimeters (dm)"
-msgstr "דצימטרים (ד\"מ)"
+msgstr "דצימטרים (ד״מ)"
 
 #: odf/KoUnit.cpp:33
 #, kde-format
 msgid "Inches (in)"
-msgstr "אינצ'ים (in)"
+msgstr "אינצ׳ים (in)"
 
 #: odf/KoUnit.cpp:35
 #, kde-format
@@ -1951,7 +1948,7 @@ msgstr "קיקרו (cc)"
 #: odf/KoUnit.cpp:39
 #, kde-format
 msgid "Points (pt)"
-msgstr "נקודות (נק')"
+msgstr "נקודות (נק׳)"
 
 #: odf/KoUnit.cpp:41
 #, kde-format
@@ -1971,7 +1968,7 @@ msgstr "החלפת שקופית הורה"
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change master page"
-msgstr "החלת עמוד ההורה"
+msgstr "החלת עמוד הורה"
 
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -1981,7 +1978,7 @@ msgstr "הגדרת פריסת עמוד"
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Display master background"
-msgstr "הצגת רקע ההורה"
+msgstr "הצגת רקע הורה"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -2071,7 +2068,7 @@ msgid "Document"
 msgstr "מסמך"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "מחבר"
@@ -2257,7 +2254,7 @@ msgstr "מחיקת שכבה"
 #: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
-msgstr "אי אפשר למחוק את כל השכבות. צריכה להישאר לפחות שכבה אחת."
+msgstr "אי אפשר למחוק את כל השכבות. חייבת להישאר לפחות שכבה אחת."
 
 #: pageapp/KoPADocumentStructureDocker.cpp:329
 #, kde-format
@@ -2399,7 +2396,7 @@ msgstr "הגדרות עמוד..."
 #: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
-msgstr "מישתנה"
+msgstr "משתנה"
 
 #: pageapp/KoPAView.cpp:419
 #, kde-format
@@ -2417,19 +2414,18 @@ msgid "Import Slideshow"
 msgstr "ייבוא מצגת שקופיות"
 
 #: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Could not import\n"
 "%1"
 msgstr ""
-"אין אפשרות לפתוח את\n"
+"לא ניתן לייבא\n"
 "%1"
 
 #: pageapp/KoPAView.cpp:655
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
-msgstr "שינוי טאבולטור"
+msgstr "החלפת פריסת עמוד"
 
 #. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
@@ -2439,61 +2435,59 @@ msgstr "הגדרת תמונה…"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
-msgstr "שנייה"
+msgstr "רקע"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Background"
-msgstr "שנייה"
+msgstr "רקע העמוד"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Design"
-msgstr "תצוגה מקדימה של העמוד"
+msgstr "עיצוב העמוד"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Design"
-msgstr "הסתר סרגל כלים %1"
+msgstr "עיצוב השקופית"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master page"
-msgstr "שנייה"
+msgstr "להשתמש ברקע עמוד ההורה"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master slide"
-msgstr "שנייה"
+msgstr "להשתמש ברקע שקופית ההורה"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display shapes of master page"
-msgstr "שינוי סוג רשימה"
+msgstr "הצגת צורות עמוד ההורה"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display shapes of master slide"
-msgstr "שינוי סוג רשימה"
+msgstr "הצגת צורות שקופית ההורה"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
-msgstr "שנייה"
+msgstr "החלפת תמונת רקע עמוד"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
-msgstr "שנייה"
+msgstr "החלפת תמונת רקע שקופית"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Master Slide %1/%2"
-msgstr "הדבקת טקסט"
+msgstr "שקופית הורה %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
 #, kde-format
@@ -2555,13 +2549,13 @@ msgstr "שקיפות"
 #: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "פעולה לא מוגדרת במרחב צבעי השקיפות"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:26
 #: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "L*a*b* (מספר שלם בגודל 16 סיביות/ערוץ, לא מנוהל)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:28
 #: pigment/compositeops/KoCompositeOps.h:207
@@ -2574,13 +2568,13 @@ msgstr "בהירות"
 #: pigment/KoBasicHistogramProducers.cpp:416
 #, kde-format
 msgid "a*"
-msgstr ""
+msgstr "a*‎"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:42
 #: pigment/KoBasicHistogramProducers.cpp:417
 #, kde-format
 msgid "b*"
-msgstr ""
+msgstr "b*‎"
 
 #: pigment/colorspaces/KoRgbU16ColorSpace.cpp:25
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
@@ -2638,9 +2632,9 @@ msgstr ""
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha darken"
-msgstr "ירוק כהה"
+msgstr "החשכת השקיפות"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
 #: pigment/KoCompositeOpRegistry.cpp:60
@@ -2736,51 +2730,51 @@ msgstr "שינוי גבולות"
 
 #: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lighten"
-msgstr "ירוק בהיר"
+msgstr "הבהרה"
 
 #: pigment/compositeops/KoCompositeOps.h:121
 #: pigment/KoCompositeOpRegistry.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hard Light"
-msgstr "&גובה:"
+msgstr "אור קשיח"
 
 #: pigment/compositeops/KoCompositeOps.h:122
 #: pigment/KoCompositeOpRegistry.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Light (SVG)"
-msgstr "בודד"
+msgstr "אורך רך (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:123
 #: pigment/KoCompositeOpRegistry.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr "בודד"
+msgstr "אורך רך (Photoshop)"
 
 #: pigment/compositeops/KoCompositeOps.h:124
 #: pigment/KoCompositeOpRegistry.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamma Light"
-msgstr "ירוק בהיר"
+msgstr "אור גאמה"
 
 #: pigment/compositeops/KoCompositeOps.h:125
 #: pigment/KoCompositeOpRegistry.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vivid Light"
-msgstr "ירוק בהיר"
+msgstr "אור חי"
 
 #: pigment/compositeops/KoCompositeOps.h:126
 #: pigment/KoCompositeOpRegistry.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pin Light"
-msgstr "ירוק בהיר"
+msgstr "אור נקודתי"
 
 #: pigment/compositeops/KoCompositeOps.h:127
 #: pigment/KoCompositeOpRegistry.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear Light"
-msgstr "רוחב שורה:"
+msgstr "אור קווי"
 
 #: pigment/compositeops/KoCompositeOps.h:129
 #, kde-format
@@ -2812,15 +2806,15 @@ msgid "Addition"
 msgstr "הוספה"
 
 #: pigment/compositeops/KoCompositeOps.h:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inversed-Subtract"
-msgstr "תמצית"
+msgstr "חיסור מהופך"
 
 #: pigment/compositeops/KoCompositeOps.h:138
 #: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
-msgstr ""
+msgstr "חילוק"
 
 #: pigment/compositeops/KoCompositeOps.h:140
 #: pigment/KoCompositeOpRegistry.cpp:57
@@ -2832,7 +2826,7 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
 msgid "Difference"
-msgstr ""
+msgstr "הבדל"
 
 #: pigment/compositeops/KoCompositeOps.h:142
 #: pigment/KoCompositeOpRegistry.cpp:56
@@ -2847,9 +2841,9 @@ msgid "Equivalence"
 msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Additive-Subtractive"
-msgstr "תמצית"
+msgstr "מחסר מתווסף"
 
 #: pigment/compositeops/KoCompositeOps.h:175
 #: pigment/KoCompositeOpRegistry.cpp:75
@@ -2871,14 +2865,14 @@ msgstr "העתקת כחול"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tangent Normalmap"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "מפה רגילה משיקה"
 
 #: pigment/compositeops/KoCompositeOps.h:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Combine Normal Maps"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "שילוב מפות רגילות"
 
 #: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:81
@@ -2890,7 +2884,7 @@ msgstr "צבע"
 #: pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgid "Hue"
-msgstr ""
+msgstr "גוון"
 
 #: pigment/compositeops/KoCompositeOps.h:183
 #: pigment/KoCompositeOpRegistry.cpp:83
@@ -2942,123 +2936,123 @@ msgstr "צבע בהיר יותר"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color HSI"
-msgstr "צבע:"
+msgstr "צבע HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:194
 #: pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgid "Hue HSI"
-msgstr ""
+msgstr "גוון ב־HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:195
 #: pigment/KoCompositeOpRegistry.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSI"
-msgstr "תמצית"
+msgstr "רוויה ב־HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:196
 #: pigment/KoCompositeOpRegistry.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSI"
-msgstr "תמצית"
+msgstr "הגברת רוויה ב־HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:197
 #: pigment/KoCompositeOpRegistry.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSI"
-msgstr "תיאור:"
+msgstr "הנמכת רוויה ב־HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:198
 #: pigment/KoCompositeOpRegistry.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Intensity"
-msgstr "אינטרנט"
+msgstr "חוזק"
 
 #: pigment/compositeops/KoCompositeOps.h:199
 #: pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Intensity"
-msgstr "שינוי הזחה"
+msgstr "חיזוק"
 
 #: pigment/compositeops/KoCompositeOps.h:200
 #: pigment/KoCompositeOpRegistry.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Intensity"
-msgstr "שינוי הזחה"
+msgstr "החלשה"
 
 #: pigment/compositeops/KoCompositeOps.h:202
 #: pigment/KoCompositeOpRegistry.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color HSL"
-msgstr "צבע:"
+msgstr "צבע HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:203
 #: pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgid "Hue HSL"
-msgstr ""
+msgstr "גוון ב־HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:204
 #: pigment/KoCompositeOpRegistry.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSL"
-msgstr "תמצית"
+msgstr "רוויה ב־HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:205
 #: pigment/KoCompositeOpRegistry.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSL"
-msgstr "תמצית"
+msgstr "הגברת רוויה ב־HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:206
 #: pigment/KoCompositeOpRegistry.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSL"
-msgstr "תיאור:"
+msgstr "הנמכת רוויה ב־HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:208
 #: pigment/KoCompositeOpRegistry.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Lightness"
-msgstr "שינוי הזחה"
+msgstr "הבהרה"
 
 #: pigment/compositeops/KoCompositeOps.h:209
 #: pigment/KoCompositeOpRegistry.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Lightness"
-msgstr "שינוי הזחה"
+msgstr "החשכה"
 
 #: pigment/compositeops/KoCompositeOps.h:211
 #: pigment/KoCompositeOpRegistry.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color HSV"
-msgstr "צבע:"
+msgstr "צבע HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:212
 #: pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgid "Hue HSV"
-msgstr ""
+msgstr "גוון ב־HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:213
 #: pigment/KoCompositeOpRegistry.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSV"
-msgstr "תמצית"
+msgstr "רוויה ב־HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:214
 #: pigment/KoCompositeOpRegistry.cpp:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSV"
-msgstr "תמצית"
+msgstr "הגברת רוויה ב־HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:215
 #: pigment/KoCompositeOpRegistry.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSV"
-msgstr "תיאור:"
+msgstr "הנמכת רוויה ב־HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:216
 #: pigment/KoCompositeOpRegistry.cpp:111
@@ -3107,7 +3101,7 @@ msgstr "היסטוגרמה"
 #: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
 msgid "L*"
-msgstr ""
+msgstr "L*‎"
 
 #: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
@@ -3127,12 +3121,12 @@ msgstr "XYZ"
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
-msgstr ""
+msgstr "L*a*b*‎"
 
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
-msgstr ""
+msgstr "CMYK"
 
 #: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
@@ -3142,12 +3136,12 @@ msgstr "גווני אפור"
 #: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
-msgstr ""
+msgstr "גווני אפור (בלי שקיפות)"
 
 #: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
 msgid "YCbCr"
-msgstr ""
+msgstr "YCbCr"
 
 #: pigment/KoColorModelStandardIds.cpp:20
 #, kde-format
@@ -3162,17 +3156,17 @@ msgstr "16 סיביות"
 #: pigment/KoColorModelStandardIds.cpp:22
 #, kde-format
 msgid "16 Bits Float"
-msgstr ""
+msgstr "שבר עשרוני ב־16 סיביות"
 
 #: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "32 Bits Float"
-msgstr ""
+msgstr "שבר עשרוני ב־32 סיביות"
 
 #: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
 msgid "64 Bits Float"
-msgstr ""
+msgstr "שבר עשרוני ב־64 סיביות"
 
 #: pigment/KoCompositeOp.cpp:23 pigment/KoCompositeOpRegistry.cpp:24
 #, kde-format
@@ -3187,27 +3181,27 @@ msgstr "שלילי"
 #: pigment/KoCompositeOp.cpp:39 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "HSY"
-msgstr ""
+msgstr "HSY"
 
 #: pigment/KoCompositeOp.cpp:43 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSI"
-msgstr ""
+msgstr "HSI"
 
 #: pigment/KoCompositeOp.cpp:47 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSL"
-msgstr ""
+msgstr "HSL"
 
 #: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
 msgid "Mix"
-msgstr ""
+msgstr "ערבוב"
 
 #: pigment/KoCompositeOpRegistry.cpp:32
 #, kde-format
@@ -3232,7 +3226,7 @@ msgstr "החשכת השקיפות"
 #: pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgid "Bumpmap"
-msgstr ""
+msgstr "מפת גבהים"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -3298,9 +3292,9 @@ msgstr "חדש"
 
 #. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
 #: rdf/KoDocumentRdfEditWidget.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "copy"
-msgstr "העתקה"
+msgstr "עותק"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
 #. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
@@ -3490,9 +3484,9 @@ msgid "URI"
 msgstr "כתובת מלאה"
 
 #: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Literal"
-msgstr "אלמוג בהיר"
+msgstr ""
 
 #: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:30
 #, kde-format
@@ -3510,14 +3504,14 @@ msgid "Subject"
 msgstr "נושא"
 
 #: rdf/KoSopranoTableModel.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgid "Predicate"
-msgstr "תמונה"
+msgstr ""
 
 #: rdf/KoSopranoTableModel.cpp:125
 #, kde-format
 msgid "Object"
-msgstr "אובייקט"
+msgstr "עצם"
 
 #: rdf/KoSopranoTableModel.cpp:127
 #, kde-format
@@ -3706,10 +3700,9 @@ msgid "New Section"
 msgstr "סעיף חדש"
 
 #: text/commands/ParagraphFormattingCommand.cpp:82
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr "שינוי רווח בין פיסקאות"
+msgstr "עיצוב פסקה ישיר"
 
 #: text/commands/RenameSectionCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -4015,9 +4008,9 @@ msgid "Opacity"
 msgstr "אטימות"
 
 #: widgets/KoColorSetWidget.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recent:"
-msgstr "מסמך מלאחרונה:"
+msgstr "אחרונים:"
 
 #: widgets/KoColorSetWidget.cpp:163
 #, kde-format
@@ -4129,7 +4122,7 @@ msgstr "ייבוא נתונים"
 
 #: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
 #: widgets/KoCsvImportDialog.cpp:483
-#, fuzzy, kde-format
+#, kde-format
 msgid "Generic"
 msgstr "כללי"
 
@@ -4221,13 +4214,13 @@ msgstr "טאב"
 #: widgets/KoCsvImportDialog.ui:150
 #, kde-format
 msgid "Space"
-msgstr "Space"
+msgstr "רווח"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: widgets/KoCsvImportDialog.ui:195
 #, kde-format
 msgid "Text&quote:"
-msgstr "&ציטטות טקסט:"
+msgstr "סימני &ציטוט:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.ui:212
@@ -4326,25 +4319,25 @@ msgstr "קבלת עזרה…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr ""
+msgstr "ציפת מעגן"
 
 #: widgets/KoDockWidgetTitleBar.cpp:61
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr ""
+msgstr "סגירת מעגן"
 
 #: widgets/KoDockWidgetTitleBar.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
-msgstr "יצירת מסמך"
+msgstr "צמצום מעגן"
 
 #: widgets/KoDockWidgetTitleBar.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "מספר שורות"
+msgstr "נעילת מעגן"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
 #: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
@@ -4424,7 +4417,7 @@ msgstr "נתיב:"
 #: widgets/koDocumentInfoAboutWidget.ui:280
 #, kde-format
 msgid "&Reset"
-msgstr "&שחזור"
+msgstr "&איפוס"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
@@ -4534,7 +4527,7 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
-"<qt>המסךמ שמור כעת בתור %1. יש לשנות את המסמך ל־<b>OASIS OpenDocument</b> "
+"<qt>המסמך שמור כעת בתור %1. יש לשנות את המסמך ל־<b>OASIS OpenDocument</b> "
 "כדי להצפין אותו.<p>להחליף את סוג הקובץ ל־OASIS OpenDocument?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:391
@@ -4553,7 +4546,7 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
-"<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את ההצפנה, נש לשמור את "
+"<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את ההצפנה, נא לשמור את "
 "המסמך.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:412
@@ -4792,25 +4785,25 @@ msgid "Page Edge:"
 msgstr "שול העמוד:"
 
 #: widgets/KoPageLayoutWidget.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Facing Pages:"
-msgstr "העמוד הבא"
+msgstr "עמודים זה מול זה:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
 #: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "Facing pages"
-msgstr "העמוד הבא"
+msgstr "עמודים זה מול זה"
 
 #: widgets/KoPageLayoutWidget.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Layout:"
-msgstr "הגדרות עמוד"
+msgstr "פריסת עמוד:"
 
 #: widgets/KoPageLayoutWidget.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page spread"
-msgstr "תצוגה מקדימה של העמוד"
+msgstr "פריסת עמודים"
 
 #. i18n: ectx: property (text), widget (QLabel, unitsLabel)
 #: widgets/KoPageLayoutWidget.ui:25
@@ -4820,9 +4813,9 @@ msgstr "יחידה:"
 
 #. i18n: ectx: property (text), widget (QLabel, stylesLabel)
 #: widgets/KoPageLayoutWidget.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Follow style:"
-msgstr "סגנון גופן"
+msgstr "מעקב אחר סגנון:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoPageLayoutWidget.ui:61
@@ -4862,9 +4855,9 @@ msgstr "לרוחב"
 
 #. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
 #: widgets/KoPageLayoutWidget.ui:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Facing pages:"
-msgstr "שפה:"
+msgstr "עמודים זה מול זה:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, singleSided)
 #: widgets/KoPageLayoutWidget.ui:153
@@ -4904,9 +4897,9 @@ msgstr "שוליים"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Top:"
-msgstr "קבוצה:"
+msgstr "עליון:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.ui:230
@@ -4916,15 +4909,15 @@ msgstr "הצד הנכרך:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page edge:"
-msgstr "תצוגה מקדימה של העמוד"
+msgstr "שול העמוד:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom:"
-msgstr "יישור אוטומטי"
+msgstr "תחתון:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-05-05 12:53+0300\n"
+"PO-Revision-Date: 2024-07-12 22:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.1\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -12067,10 +12067,10 @@ msgid "SECH(0) equals 1"
 msgstr "(COSH(0 שווה ל־1"
 
 #: part/AboutData.h:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
-msgstr "ערכים"
+msgstr "גיליונות של Calligra"
 
 #: part/AboutData.h:29
 #, fuzzy, kde-format
@@ -12093,9 +12093,9 @@ msgid "Torben Weis"
 msgstr ""
 
 #: part/AboutData.h:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maintainer"
-msgstr "מרטיניק"
+msgstr "מתחזק"
 
 #: part/AboutData.h:40
 #, kde-format
@@ -12123,9 +12123,9 @@ msgid "John Dailey"
 msgstr ""
 
 #: part/AboutData.h:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Philipp Müller"
-msgstr "הפיליפינים"
+msgstr "פיליפ מילר"
 
 #: part/AboutData.h:45
 #, kde-format
@@ -12145,9 +12145,9 @@ msgid "Import/export filter developer"
 msgstr ""
 
 #: part/AboutData.h:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shaheed Haque"
-msgstr "שם הגיליון"
+msgstr "שהיד האק"
 
 #: part/AboutData.h:48
 #, kde-format
@@ -12170,9 +12170,9 @@ msgid "Helge Deller"
 msgstr "דולר בליזי"
 
 #: part/AboutData.h:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Percy Leonhart"
-msgstr "אחוזים"
+msgstr "פרסי לאונהארדט"
 
 #: part/AboutData.h:53
 #, kde-format
@@ -12215,9 +12215,9 @@ msgid "John Tapsell"
 msgstr ""
 
 #: part/AboutData.h:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Robert Knight"
-msgstr "גבול ימני"
+msgstr "רוברט נייט"
 
 #: part/AboutData.h:62
 #, kde-format
@@ -12225,9 +12225,9 @@ msgid "Stefan Nikolaus"
 msgstr ""
 
 #: part/AboutData.h:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Developer (functions)"
-msgstr "<h2>פונקציות קשורות</h2><ul>"
+msgstr "מפתח (פונקציות)"
 
 #: part/AboutData.h:63
 #, kde-format
@@ -12259,16 +12259,16 @@ msgstr "צוות התרגום KDE-IL"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
-#, fuzzy, kde-format
+#, kde-format
 msgid "&File"
-msgstr "קובץ"
+msgstr "&קובץ"
 
 #. i18n: ectx: Menu (Edit)
 #. i18n: ectx: Menu (edit)
 #: part/calligrasheets.rc:13 part/calligrasheets_readonly.rc:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edit"
-msgstr "&עריכה..."
+msgstr "&עריכה"
 
 #. i18n: ectx: Menu (Fill)
 #: part/calligrasheets.rc:22
@@ -12278,22 +12278,22 @@ msgstr "&מלא"
 
 #. i18n: ectx: Menu (Clear)
 #: part/calligrasheets.rc:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear"
-msgstr "שנה"
+msgstr "פינוי"
 
 #. i18n: ectx: Menu (Delete)
 #: part/calligrasheets.rc:44 part/View.cpp:430
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete"
-msgstr "מחק שורות"
+msgstr "מחיקה"
 
 #. i18n: ectx: Menu (View)
 #. i18n: ectx: Menu (view)
 #: part/calligrasheets.rc:54 part/calligrasheets_readonly.rc:9
-#, fuzzy, kde-format
+#, kde-format
 msgid "&View"
-msgstr "&חדש"
+msgstr "ת&צוגה"
 
 #. i18n: ectx: Menu (go)
 #: part/calligrasheets.rc:65
@@ -12303,9 +12303,9 @@ msgstr ""
 
 #. i18n: ectx: Menu (Insert)
 #: part/calligrasheets.rc:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Insert"
-msgstr "הוסף שורות"
+msgstr "הו&ספה"
 
 #. i18n: ectx: Menu (ExternalData)
 #: part/calligrasheets.rc:89
@@ -12351,9 +12351,9 @@ msgstr "טווח ה&דפסה"
 
 #. i18n: ectx: Menu
 #: part/calligrasheets.rc:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manual Page Breaks"
-msgstr "&גבולות עמוד:"
+msgstr "מעברי עמוד ידניים"
 
 #. i18n: ectx: Menu (Data)
 #: part/calligrasheets.rc:147
@@ -12592,9 +12592,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/InterfaceOptionsWidget.ui:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Unit:"
-msgstr "שעה"
+msgstr "י&חידה:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
 #: part/dialogs/InterfaceOptionsWidget.ui:61
@@ -12618,7 +12618,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/InterfaceOptionsWidget.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colors"
 msgstr "צבעים"
 
@@ -12626,7 +12626,7 @@ msgstr "צבעים"
 #: part/dialogs/InterfaceOptionsWidget.ui:91
 #, fuzzy, kde-format
 msgid "&Grid:"
-msgstr "גורדה"
+msgstr "&רשת:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:101
@@ -12639,9 +12639,9 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:105
 #: part/dialogs/InterfaceOptionsWidget.ui:212
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom..."
-msgstr "מותאמת אישית"
+msgstr "התאמה אישית…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:198
@@ -12676,45 +12676,45 @@ msgstr "גיליון"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/PageLayoutSheetPage.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print settings"
-msgstr "הדפסה"
+msgstr "הגדרות הדפסה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gridCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
-msgstr "גורדה"
+msgstr "רשת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commentCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comment indicator"
-msgstr "הצג &סימון הערות"
+msgstr "מחוון הערות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chartsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Charts"
-msgstr "תר&שים"
+msgstr "תרשימים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, objectsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Objects"
-msgstr "&אובייקט..."
+msgstr "עצמים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, zeroValuesCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zero values"
-msgstr "ערך התחלתי:"
+msgstr "ערכי אפס"
 
 #. i18n: ectx: property (text), widget (QCheckBox, formulaCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula indicator"
-msgstr "הצג &סימון נוסחאות"
+msgstr "מחוון נוסחאות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, drawingsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:101
@@ -12724,9 +12724,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, headersCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Headers"
-msgstr "כותרת"
+msgstr "כותרות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/dialogs/PageLayoutSheetPage.ui:124
@@ -12754,15 +12754,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, horizontalCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center horizontally"
-msgstr "מיזוג התאים %1"
+msgstr "מירכוז אופקי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center vertically"
-msgstr "הצגת תוכן התא באופן אנכי."
+msgstr "מירכוז אנכי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/PageLayoutSheetPage.ui:173
@@ -12804,29 +12804,29 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, pageLimitsButton)
 #: part/dialogs/PageLayoutSheetPage.ui:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page limits:"
-msgstr "גדול תחתון"
+msgstr "גבולות עמוד:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroup)
 #: part/dialogs/PageLayoutSheetPage.ui:315 ui/dialogs/PositionWidget.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal"
-msgstr "פורינט"
+msgstr "אופקי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
 #: part/dialogs/PageLayoutSheetPage.ui:335 ui/dialogs/PositionWidget.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical"
-msgstr "מטיקל"
+msgstr "אנכי"
 
 #: part/dialogs/PreferenceDialog.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr "הגדרות KSpread"
+msgstr "הגדרה"
 
 #: part/dialogs/PreferenceDialog.cpp:286
 #, kde-format
@@ -12834,31 +12834,31 @@ msgid "Interface"
 msgstr "ממשק"
 
 #: part/dialogs/PreferenceDialog.cpp:291
-#, fuzzy, kde-format
+#, kde-format
 msgid "Down"
-msgstr "&למטה"
+msgstr "למטה"
 
 #: part/dialogs/PreferenceDialog.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Up"
-msgstr "למ&עלה"
+msgstr "למעלה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right"
-msgstr "&ימינה"
+msgstr "ימינה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left"
-msgstr "&שמאלה"
+msgstr "שמאלה"
 
 #: part/dialogs/PreferenceDialog.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgid "Down, First Column"
-msgstr "הוסף טורים"
+msgstr "למטה, עמודה ראשונה"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
 #: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
@@ -12902,14 +12902,14 @@ msgid "Open/Save"
 msgstr ""
 
 #: part/dialogs/PreferenceDialog.cpp:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "Function Modules"
-msgstr "פונקציה"
+msgstr "מודולי פונקציות"
 
 #: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tools"
-msgstr "טוגו"
+msgstr "כלים"
 
 #: part/dialogs/PreferenceDialog.cpp:332
 #, kde-format
@@ -12927,13 +12927,13 @@ msgid "Spell Checker Behavior"
 msgstr "אופן תפקוד בודק האיות"
 
 #: part/dialogs/PreferenceDialog.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "כותב"
 
 #: part/dialogs/PreferenceDialog.cpp:349
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author"
 msgstr "כותב"
 
@@ -13148,27 +13148,27 @@ msgstr "גיליונות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Sheets"
-msgstr "הסתר גיליון"
+msgstr "כל הגיליונות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeSheetButton)
 #: part/dialogs/SheetSelectWidget.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Sheet"
-msgstr "הסתר גיליון"
+msgstr "הגיליון הפעיל"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected Sheets:"
-msgstr "חשב גיליון מחדש"
+msgstr "הגיליונות הנבחרים:"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available sheets"
-msgstr "הסתר גיליון"
+msgstr "הגיליונות הזמינים"
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:72
@@ -13184,9 +13184,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available Sheets"
-msgstr "הסתר גיליון"
+msgstr "הגיליונות הזמינים"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewSelected)
 #: part/dialogs/SheetSelectWidget.ui:112
@@ -13207,62 +13207,62 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewSelected)
 #: part/dialogs/SheetSelectWidget.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected Sheets"
-msgstr "חשב גיליון מחדש"
+msgstr "הגיליונות הנבחרים"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonSelectAll)
 #: part/dialogs/SheetSelectWidget.ui:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all sheets"
-msgstr "בחר טבלאות:"
+msgstr "בחירה בכל הגיליונות"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveTop)
 #: part/dialogs/SheetSelectWidget.ui:167
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move selected sheet to the top"
-msgstr "העברת אובייקט התא אל לוח העריכה."
+msgstr "העברת הגיליון הנבחר לראש"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonSelect)
 #: part/dialogs/SheetSelectWidget.ui:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select sheets"
-msgstr "רשימת בחירה..."
+msgstr "בחירת גיליונות"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveUp)
 #: part/dialogs/SheetSelectWidget.ui:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move selected sheet up"
-msgstr "מעבר לגיליון הבא."
+msgstr "העלאת הגיליון הנבחר מעלה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonRemove)
 #: part/dialogs/SheetSelectWidget.ui:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove sheets"
-msgstr "הסר גיליון"
+msgstr "הסרת גיליונות"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveDown)
 #: part/dialogs/SheetSelectWidget.ui:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move selected sheet down"
-msgstr "מעבר לגיליון הבא."
+msgstr "הורדת הגיליון הנבחר למטה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonRemoveAll)
 #: part/dialogs/SheetSelectWidget.ui:232
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear Selection"
-msgstr "בחירת נוסחה"
+msgstr "איפוס הבחירה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveBottom)
 #: part/dialogs/SheetSelectWidget.ui:245
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move selected sheet to the bottom"
-msgstr "העברת אובייקט התא אל לוח העריכה."
+msgstr "הורדת הגיליון הנבחר לתחתית"
 
 #: part/Find.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Case Sensitive"
-msgstr "הדבקה והוספה"
+msgstr "תלוי רישיות"
 
 #: part/Find.cpp:40
 #, kde-format
@@ -13410,9 +13410,9 @@ msgid "Recalculate Sheet"
 msgstr "חשב גיליון מחדש"
 
 #: part/View.cpp:279 part/View.cpp:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recalculate"
-msgstr "חשב גיליון מחדש"
+msgstr "חישוב מחדש"
 
 #: part/View.cpp:283
 #, fuzzy, kde-format
@@ -13455,9 +13455,9 @@ msgid "&Create Template From Document..."
 msgstr "יצירת &תבנית מתוך המסמך..."
 
 #: part/View.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor"
-msgstr "אנדורה"
+msgstr "עוגן"
 
 #: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
 #, kde-format
@@ -13465,7 +13465,7 @@ msgid "Cell"
 msgstr "תא"
 
 #: part/View.cpp:311 part/View.cpp:1037
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page"
 msgstr "עמוד"
 
@@ -13480,14 +13480,14 @@ msgid "Next Sheet"
 msgstr "הגיליון הבא"
 
 #: part/View.cpp:320
-#, fuzzy, kde-format
+#, kde-format
 msgid "Next"
-msgstr "טקסט"
+msgstr "הבא"
 
 #: part/View.cpp:321
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move to the next sheet"
-msgstr "מעבר לגיליון הבא."
+msgstr "מעבר לגיליון הבא"
 
 #: part/View.cpp:326
 #, kde-format
@@ -13495,14 +13495,14 @@ msgid "Previous Sheet"
 msgstr "הגיליון הקודם"
 
 #: part/View.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "Previous"
-msgstr "הגיליון הקודם"
+msgstr "הקודם"
 
 #: part/View.cpp:328
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move to the previous sheet"
-msgstr "מעבר לגיליון הקודם."
+msgstr "מעבר לגיליון הקודם"
 
 #: part/View.cpp:333
 #, kde-format
@@ -13510,14 +13510,14 @@ msgid "First Sheet"
 msgstr "הגיליון הראשון"
 
 #: part/View.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "First"
-msgstr "מפתח ראשון"
+msgstr "הראשון"
 
 #: part/View.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move to the first sheet"
-msgstr "מעבר לגיליון הראשון."
+msgstr "מעבר לגיליון הראשון"
 
 #: part/View.cpp:339
 #, kde-format
@@ -13525,80 +13525,80 @@ msgid "Last Sheet"
 msgstr "הגיליון האחרון"
 
 #: part/View.cpp:340
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
-msgstr "רשימה"
+msgstr "האחרון"
 
 #: part/View.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move to the last sheet"
-msgstr "מעבר לגיליון האחרון."
+msgstr "מעבר לגיליון האחרון"
 
 #: part/View.cpp:347
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Header"
-msgstr "מספר טור"
+msgstr "כותרת עמודה"
 
 #: part/View.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the column header"
-msgstr "הצג &כותרות טורים"
+msgstr "הצגת כותרת העמודה"
 
 #: part/View.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row Header"
-msgstr "כותרת"
+msgstr "כותרת שורה"
 
 #: part/View.cpp:353
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the row header"
-msgstr "הצג כו&תרות שורות"
+msgstr "הצגת כותרת השורה"
 
 #: part/View.cpp:357
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Scrollbar"
-msgstr "הצג פס &גלילה אופקי"
+msgstr "פס גלילה אופקי"
 
 #: part/View.cpp:358
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the horizontal scrollbar"
-msgstr "הצג פס &גלילה אופקי"
+msgstr "הצגת פס גלילה אופקי"
 
 #: part/View.cpp:362
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Scrollbar"
-msgstr "הצג &פס גלילה אנכי"
+msgstr "פס גלילה אנכי"
 
 #: part/View.cpp:363
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the vertical scrollbar"
-msgstr "הצג &פס גלילה אנכי"
+msgstr "הצגת פס גלילה אנכי"
 
 #: part/View.cpp:367
-#, fuzzy, kde-format
+#, kde-format
 msgid "Status Bar"
-msgstr "הצג שורת מצב"
+msgstr "שורת מצב"
 
 #: part/View.cpp:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the status bar"
-msgstr "הצגת שורת המצב."
+msgstr "הצגת שורת מצב"
 
 #: part/View.cpp:372
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tab Bar"
-msgstr "הצג שורת לשוניות"
+msgstr "שורת לשוניות"
 
 #: part/View.cpp:373
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the tab bar"
-msgstr "הצג שורת הלשוניות."
+msgstr "הצגת שורת לשוניות"
 
 #: part/View.cpp:378
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set various Calligra Sheets options"
-msgstr "קביעת אפשרויות שונות של KSpread."
+msgstr "הגדרת מגוון אפשרויות של גיליונות Calligra"
 
 #: part/View.cpp:390
 #, kde-format
@@ -13606,34 +13606,34 @@ msgid "No calculation"
 msgstr "ללא חישוב"
 
 #: part/View.cpp:396
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using sum"
-msgstr "חישוב באמצעות סכום."
+msgstr "חישוב באמצעות sum (סכום)"
 
 #: part/View.cpp:402
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using minimum"
-msgstr "חישוב באמצעות מינימום."
+msgstr "חישוב באמצעות minimum (מזערי)"
 
 #: part/View.cpp:408
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using maximum"
-msgstr "חישוב באמצעות מקסימום."
+msgstr "חישוב באמצעות maximum (הגדול ביותר)"
 
 #: part/View.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using average"
-msgstr "חישוב באמצעות ממוצע."
+msgstr "חישוב באמצעות average (ממוצע)"
 
 #: part/View.cpp:420
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using the count"
-msgstr "חישוב באמצעות ספירה."
+msgstr "חישוב באמצעות count (ספירה)"
 
 #: part/View.cpp:426
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculate using the countA"
-msgstr "ספירה באמצעות הפונקציה countA."
+msgstr "חישוב באמצעות countA (ספירה "
 
 #: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
 #, kde-format
@@ -13646,14 +13646,14 @@ msgid "You cannot hide the last visible sheet."
 msgstr "אין אפשרות להסתיר את הגיליון הגלוי האחרון."
 
 #: part/View.cpp:1510
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter a password."
-msgstr "הזן את שם התחום:"
+msgstr "נא למלא סיסמה."
 
 #: part/View.cpp:1522
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter the password."
-msgstr "הזן את שם התחום:"
+msgstr "נא למלא את הסיסמה."
 
 #: part/View.cpp:1530
 #, kde-format
@@ -13681,10 +13681,9 @@ msgid "Unprotect Sheet"
 msgstr "ביטול הגנה על גיליון"
 
 #: part/View.cpp:1804
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
-msgstr "אפס טווח הדפסה"
+msgstr "איפוס טווח הדפסה"
 
 #: part/View.cpp:1813
 #, kde-format
@@ -13761,23 +13760,20 @@ msgid "%1x%2"
 msgstr ""
 
 #: part/ViewAdaptor.cpp:127
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
-msgstr "שינוי טקסט"
+msgstr "החלפת צבע הטקסט"
 
 #: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
-msgstr "צבע רקע"
+msgstr "החלפת צבע הרקע"
 
 #: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
 #: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
-msgstr "שינוי צבע גבול"
+msgstr "החלפת המסגרת"
 
 #: ui/CellToolBase.cpp:813
 #, kde-format
@@ -13786,33 +13782,32 @@ msgstr ""
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alignment"
-msgstr "מרכז"
+msgstr "יישור"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Borders"
-msgstr "&מסגרת"
+msgstr "מסגרת"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number format"
-msgstr "מספר הניסיונות"
+msgstr "תבנית מספר"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge"
-msgstr "מזג תאים"
+msgstr "מיזוג"
 
 #: ui/commands/ApplyFilterCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
-msgstr "החלת סגנון"
+msgstr "החלת סינון"
 
 #: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
@@ -13936,39 +13931,39 @@ msgid "Dec"
 msgstr "דצמ'"
 
 #: ui/commands/AutoFillCommand.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Monday"
-msgstr "כסף"
+msgstr "יום שני"
 
 #: ui/commands/AutoFillCommand.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tuesday"
-msgstr "טורקיה"
+msgstr "יום שלישי"
 
 #: ui/commands/AutoFillCommand.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wednesday"
-msgstr "טורקיה"
+msgstr "יום רביעי"
 
 #: ui/commands/AutoFillCommand.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Thursday"
-msgstr "טורקיה"
+msgstr "יום חמישי"
 
 #: ui/commands/AutoFillCommand.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Friday"
-msgstr "ו'"
+msgstr "יום שישי"
 
 #: ui/commands/AutoFillCommand.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturday"
-msgstr "פירעון"
+msgstr "שבת"
 
 #: ui/commands/AutoFillCommand.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sunday"
-msgstr "סודן"
+msgstr "יום ראשון"
 
 #: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
@@ -14006,52 +14001,44 @@ msgid "Sun"
 msgstr "א'"
 
 #: ui/commands/AutoFillCommand.cpp:673
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "מילוי אוטומטי"
 
 #: ui/commands/DataManipulators.cpp:108
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Value"
-msgstr "שינוי זווית"
+msgstr "שינוי ערך"
 
 #: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "הוספת תאים"
 
 #: ui/commands/DataManipulators.cpp:191
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "הסרת תאים"
 
 #: ui/commands/DeleteCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete"
-msgstr "מחק שורות"
+msgstr "מחיקה"
 
 #: ui/commands/MergeCommand.cpp:83
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
-msgstr "מיזוג התאים %1"
+msgstr "מיזוג תאים אופקית"
 
 #: ui/commands/MergeCommand.cpp:85
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
-msgstr "מיזוג התאים %1"
+msgstr "מיזוג תאים אנכית"
 
 #: ui/commands/MergeCommand.cpp:87
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
-msgstr "מזג תאים"
+msgstr "מיזוג תאים"
 
 #: ui/commands/MergeCommand.cpp:90
 #, fuzzy
@@ -14065,174 +14052,148 @@ msgid "Merging of columns or rows is not supported."
 msgstr ""
 
 #: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
-msgstr "עריכת תחום"
+msgstr "הוספת אזור עם שם"
 
 #: ui/commands/NamedAreaCommand.cpp:44
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
-msgstr "הסרת תחום"
+msgstr "הסרת אזור עם שם"
 
 #: ui/commands/RowColumnManipulators.cpp:35
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Column"
-msgstr "שינוי גודל טור"
+msgstr "שינוי גודל עמודה"
 
 #: ui/commands/RowColumnManipulators.cpp:93
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "שינוי גודל שורה"
 
 #: ui/commands/RowColumnManipulators.cpp:283
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
-msgstr "הסתר טורים"
+msgstr "הסתרת שורות/עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:285
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
-msgstr "הסתר טורים"
+msgstr "הסתרת עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:287
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
-msgstr "הסתר שורות"
+msgstr "הסתרת שורות"
 
 #: ui/commands/RowColumnManipulators.cpp:290
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
-msgstr "הצגת טורים"
+msgstr "הצגת שורות/עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:292
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
-msgstr "הצגת טורים"
+msgstr "הצגת עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:294
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "הצגת שורות"
 
 #: ui/commands/RowColumnManipulators.cpp:539
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
-msgstr "התאם טור"
+msgstr "כיוון עמודות/שורות"
 
 #: ui/commands/RowColumnManipulators.cpp:541
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
-msgstr "התאם טור"
+msgstr "כיוון עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:543
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
-msgstr "התאם שורה"
+msgstr "כיוון שורות"
 
 #: ui/commands/RowColumnManipulators.cpp:556
 #: ui/commands/RowColumnManipulators.cpp:574
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
-msgstr "הוסף טורים"
+msgstr "הוספת עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:576
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
-msgstr "הסרת טורים"
+msgstr "הסרת עמודות"
 
 #: ui/commands/RowColumnManipulators.cpp:631
 #: ui/commands/RowColumnManipulators.cpp:649
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
-msgstr "הוסף שורות"
+msgstr "הוספת שורות"
 
 #: ui/commands/RowColumnManipulators.cpp:651
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "הסרת שורות"
 
 #: ui/commands/SheetCommands.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
 msgstr "שינוי שם גיליון"
 
 #: ui/commands/SheetCommands.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "הסתרת הגיליון %1"
 
 #: ui/commands/SheetCommands.cpp:48
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet"
-msgstr "הסתר גיליון"
+msgstr "הסתרת הגיליון"
 
 #: ui/commands/SheetCommands.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "הצגת הגיליון %1"
 
 #: ui/commands/SheetCommands.cpp:79 ui/dialogs/ShowDialog.cpp:70
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
-msgstr "הצג גיליון"
+msgstr "הצגת גיליון"
 
 #: ui/commands/SheetCommands.cpp:104
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
-msgstr "הוסף גיליון"
+msgstr "הוספת גיליון"
 
 #: ui/commands/SheetCommands.cpp:130
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Sheet"
-msgstr "חשב גיליון מחדש"
+msgstr "שכפול גיליון"
 
 #: ui/commands/SheetCommands.cpp:167
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Sheet"
-msgstr "הסר גיליון"
+msgstr "הסרת גיליון"
 
 #: ui/commands/SheetCommands.cpp:197
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "שינוי מאפייני גיליון"
 
 #: ui/commands/StyleCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
-msgstr "סגנון גיליון"
+msgstr "איפוס סגנון"
 
 #: ui/commands/StyleCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Style"
-msgstr "שינוי זווית"
+msgstr "החלפת סגנון"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -14274,9 +14235,9 @@ msgstr "רומניה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Italic"
-msgstr "איטליה"
+msgstr "נטוי"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:66
@@ -14393,33 +14354,29 @@ msgid "Cell Format"
 msgstr "עיצוב תא"
 
 #: ui/dialogs/LayoutDialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "עיצוב תא"
+msgstr "הגדרת עיצוב תא"
 
 #: ui/dialogs/LayoutDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&כללי"
+msgstr "כללי"
 
 #: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgid "Border"
-msgstr "&מסגרת"
+msgstr "מסגרת"
 
 #: ui/dialogs/LayoutDialog.cpp:147
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "&רקע"
+msgstr "רקע"
 
 #: ui/dialogs/LayoutDialog.cpp:150
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "&הגנה על תא"
+msgstr "הגנה על תא"
 
 #: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
@@ -14543,8 +14500,7 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "תאריך ושעה"
 
@@ -14706,7 +14662,7 @@ msgid "Style"
 msgstr "סגנון"
 
 #: ui/dialogs/LayoutPage_General.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Name of the style"
 msgid "Name:"
 msgstr "שם:"
@@ -14722,7 +14678,7 @@ msgid "A style with this name already exists."
 msgstr "כבר קיים סגנון בשם זה."
 
 #: ui/dialogs/LayoutPage_General.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "The style name can not be empty."
 msgstr "שם הסגנון לא יכול להיות ריק."
 
@@ -14767,7 +14723,7 @@ msgstr "רגיל"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #: ui/dialogs/PositionWidget.ui:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center"
 msgstr "מרכז"
 
@@ -14817,9 +14773,9 @@ msgstr "לאמצע"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/dialogs/PositionWidget.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom"
-msgstr "ישר למטה"
+msgstr "למטה"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -14860,15 +14816,15 @@ msgstr "גלישת טקסט"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
 #: ui/dialogs/PositionWidget.ui:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical text"
 msgstr "טקסט אנכי"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
 #: ui/dialogs/PositionWidget.ui:200
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shrink to fit"
-msgstr "קו חוצה"
+msgstr "כיווץ להתאמה"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
 #: ui/dialogs/ProtectionWidget.ui:35
@@ -14971,19 +14927,19 @@ msgid "Select hidden sheets to show:"
 msgstr "בחר גיליונות מוסתרים שיש להציג:"
 
 #: ui/ExternalEditor.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply"
-msgstr "אפריל"
+msgstr "החלה"
 
 #: ui/ExternalEditor.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply changes"
-msgstr "החלת סגנון"
+msgstr "החלת שינויים"
 
 #: ui/ExternalEditor.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cancel"
-msgstr "צרפת"
+msgstr "ביטול"
 
 #: ui/ExternalEditor.cpp:61
 #, kde-format
@@ -14996,14 +14952,14 @@ msgid "All"
 msgstr "הכל"
 
 #: ui/FilterPopup.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Empty"
-msgstr "מצרים"
+msgstr "ריק"
 
 #: ui/FilterPopup.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Non-empty"
-msgstr "ללא"
+msgstr "לא ריק"
 
 #: ui/MapViewModel.cpp:179
 #, fuzzy, kde-format
