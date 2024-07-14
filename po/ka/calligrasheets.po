@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-06-12 05:50+0200\n"
+"PO-Revision-Date: 2024-07-13 06:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -89,6 +89,10 @@ msgid ""
 "When you open it with this version of Calligra Sheets, some information may "
 "be lost."
 msgstr ""
+"ეს დოკუმენტი Calligra Sheets-ის უფრო ახალ ვერსიაშია შექმნილი (სინტაქსის "
+"შეცდომა: %1)\n"
+"როცა მას Calligra Sheets-ის ამ ვერსიით გახსნით, ზოგიერთი ინფორმაცია "
+"შეიძლება, დაიკარგოს."
 
 #: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
@@ -228,6 +232,8 @@ msgstr "ნებისმიერი მნიშვნელობის დ�
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
 msgstr ""
+"სტრიქონი, რომელიც თარიღების შუალედს წარმოადგენს (მაგ: \"2/22/2012\"-"
+"\"5/22/2012\")"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
@@ -363,6 +369,7 @@ msgid ""
 "The BITAND() function performs a bit-wise AND operation for the two integer "
 "parameters."
 msgstr ""
+"ფუნქცია BITAND() ბიტური ორ მთელ რიცხვზე ბიტურ 'და' ოპერაციას შეასრულებს."
 
 #: functions/bitops.xml:20
 #, kde-format
@@ -1094,7 +1101,7 @@ msgstr ""
 #: functions/database.xml:227
 #, kde-format
 msgid "DSTDEVP(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DSTDEVP(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:228
 #, kde-format
@@ -1145,12 +1152,12 @@ msgstr "შუალედი, რომელიც კრებსით ც�
 #: functions/database.xml:288
 #, kde-format
 msgid "Name of the field of which you want the summary data"
-msgstr ""
+msgstr "ველის სახელი, რომლისთვისაც მონაცემების შეჯამების მიღება გნებავთ"
 
 #: functions/database.xml:291
 #, kde-format
 msgid "Fetches summary data from a pivot table."
-msgstr ""
+msgstr "გამოითხოვს შეჯამების მონაცემების კრებსითი ცხრილიდან."
 
 #: functions/database.xml:292
 #, kde-format
@@ -1461,7 +1468,7 @@ msgstr "SECOND(0.1234) 42-ს აბრუნებს"
 #: functions/datetime.xml:277 functions/datetime.xml:300
 #, kde-format
 msgid "First (earlier) date value"
-msgstr ""
+msgstr "პირველი (უფრო ძველი) თარიღის მნიშვნელობა"
 
 #: functions/datetime.xml:235 functions/datetime.xml:258
 #: functions/datetime.xml:281 functions/datetime.xml:304
@@ -1564,7 +1571,7 @@ msgstr ""
 #: functions/datetime.xml:308
 #, kde-format
 msgid "The DAYS() function returns the difference between two dates in days."
-msgstr ""
+msgstr "DAYS() ორ თარიღს შორის სხვაობას აბრუნებს, დღეებში."
 
 #: functions/datetime.xml:309
 #, kde-format
@@ -1788,7 +1795,7 @@ msgstr "DAYNAME(კვირისდღე)"
 #: functions/datetime.xml:495
 #, kde-format
 msgid "DAYNAME(1) returns Monday (if the week starts on Monday)"
-msgstr ""
+msgstr "DAYNAME(1) აბრუნებს ორშაბათს (თუ კვირა ორშაბათს იწყება)"
 
 #: functions/datetime.xml:504
 #, kde-format
@@ -1825,7 +1832,7 @@ msgstr "CURRENTDATE()"
 #: functions/datetime.xml:520
 #, kde-format
 msgid "CURRENTDATE() returns \"Saturday 13 April 2002\""
-msgstr ""
+msgstr "CURRENTDATE() აბრუნებს \"Saturday 13 April 2002\""
 
 #: functions/datetime.xml:530
 #, kde-format
@@ -1862,7 +1869,7 @@ msgstr "NOW() აბრუნებს \"Saturday 13 April 2002 19:12:01\""
 #: functions/datetime.xml:554
 #, kde-format
 msgid "The CURRENTDATETIME() function returns the current date and time."
-msgstr ""
+msgstr "ფუნქცია CURRENTDATETIME() მიმდინარე თარიღს და დროს აბრუნებს."
 
 #: functions/datetime.xml:555
 #, kde-format
@@ -1872,7 +1879,7 @@ msgstr "CURRENTDATETIME()"
 #: functions/datetime.xml:556
 #, kde-format
 msgid "CURRENTDATETIME() returns \"Saturday 13 April 2002 19:12:01\""
-msgstr ""
+msgstr "CURRENTDATETIME() აბრუნებს \"Saturday 13 April 2002 19:12:01\""
 
 #: functions/datetime.xml:564
 #, kde-format
@@ -1925,7 +1932,7 @@ msgstr "ISOWEEKNUM (თარიღი)"
 #: functions/datetime.xml:594
 #, kde-format
 msgid "ISOWEEKNUM(A1) returns 51 when A1 is \"21st of Dec\"."
-msgstr ""
+msgstr "ISOWEEKNUM(A1) აბრუნებს 51 როცა A1-ის მნიშვნელობაა \"21st of Dec\"."
 
 #: functions/datetime.xml:611
 #, kde-format
@@ -1985,7 +1992,7 @@ msgstr ""
 #: functions/datetime.xml:637
 #, kde-format
 msgid "DATEDIF(first date; second date; interval)"
-msgstr ""
+msgstr "DATEDIF(პირველი თარიღი; მეორე თარიღი; ინტერვალი)"
 
 #: functions/datetime.xml:638
 #, kde-format
@@ -3367,24 +3374,24 @@ msgstr "შეთანხმება"
 #: functions/financial.xml:23 functions/financial.xml:58
 #, kde-format
 msgid "Annual rate of security"
-msgstr ""
+msgstr "ფასიანი ქაღალდების წლიური მოგება"
 
 #: functions/financial.xml:27 functions/financial.xml:62
 #, kde-format
 msgid "Par value"
-msgstr ""
+msgstr "ნომინალი"
 
 #: functions/financial.xml:31
 #, kde-format
 msgid "Number of payments per year"
-msgstr ""
+msgstr "გადახდების რაოდენობა წელიწადში"
 
 #: functions/financial.xml:35 functions/financial.xml:66
 #: functions/financial.xml:193 functions/financial.xml:365
 #: functions/financial.xml:620
 #, kde-format
 msgid "Day counting basis"
-msgstr ""
+msgstr "დღეების დათვლის ბაზისი"
 
 #: functions/financial.xml:39
 #, kde-format
@@ -3729,14 +3736,14 @@ msgstr "DDB(75000;1;60;12;2) 1721.81-ს აბრუნებს"
 #: functions/financial.xml:357 functions/financial.xml:1349
 #, kde-format
 msgid "Price per $100 face value"
-msgstr ""
+msgstr "ფასი ყოველი $100 ნომინალური ფასისთვის"
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
 #: functions/financial.xml:1377 functions/financial.xml:1453
 #, kde-format
 msgid "Redemption"
-msgstr ""
+msgstr "გამოსყიდვის ფასი"
 
 #: functions/financial.xml:369
 #, kde-format
@@ -4198,7 +4205,7 @@ msgstr ""
 #: functions/financial.xml:717
 #, kde-format
 msgid "ISPMT(Rate; Period; NPer; PV)"
-msgstr ""
+msgstr "ISPMT(განაკვეთი; პერიოდი; NPer; PV)"
 
 #: functions/financial.xml:718
 #, kde-format
@@ -4326,7 +4333,7 @@ msgstr "მომავალი ღირებულება (FV - არა�
 #: functions/financial.xml:858
 #, kde-format
 msgid "Returns the number of periods of an investment."
-msgstr ""
+msgstr "აბრუნებს ინვესტიციის პერიოდების რაოდენობას."
 
 #: functions/financial.xml:859
 #, kde-format
@@ -4499,7 +4506,7 @@ msgstr ""
 #: functions/financial.xml:1089
 #, kde-format
 msgid "Basis     Calculation method"
-msgstr ""
+msgstr "ბაზისი     გამოთვლის მეთოდი"
 
 #: functions/financial.xml:1090
 #, kde-format
@@ -4806,7 +4813,7 @@ msgstr ""
 #: functions/financial.xml:1431
 #, kde-format
 msgid "XNPV( Rate; Values; Dates )"
-msgstr ""
+msgstr "XNPV( განაკვეთი; მნიშვნელობები; თარიღები )"
 
 #: functions/financial.xml:1432
 #, no-c-format, kde-format
@@ -4963,7 +4970,7 @@ msgstr "N(3.14) აბრუნებს 3.14"
 #: functions/information.xml:47
 #, kde-format
 msgid "N(\"7\") returns 0 (because \"7\" is text)"
-msgstr ""
+msgstr "N(\"7\") აბრუნებს მნიშვნელბას 0 (იმიტომ, რომ \"7\" ტექსტია)"
 
 #: functions/information.xml:55
 #, kde-format
