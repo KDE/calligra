@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-07-12 23:38+0300\n"
+"PO-Revision-Date: 2024-07-14 08:06+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -287,10 +287,9 @@ msgid "Set Shadow"
 msgstr "הגדרת הצללה"
 
 #: flake/commands/KoShapeShearCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "מחיקת טקסט"
+msgstr ""
 
 #: flake/commands/KoShapeSizeCommand.cpp:33
 msgctxt "(qtundo-format)"
@@ -361,9 +360,9 @@ msgid "Type:"
 msgstr "סוג:"
 
 #: flake/KoConnectionShapeFactory.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tie"
-msgstr "שעה"
+msgstr "קשר"
 
 #: flake/KoConnectionShapeFactory.cpp:24
 #, kde-format
@@ -440,7 +439,7 @@ msgstr ""
 #: flake/SnapGuideConfigWidget.ui:75
 #, kde-format
 msgid " px"
-msgstr ""
+msgstr " פיקסלים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:85
@@ -452,7 +451,7 @@ msgstr "מאונך"
 #: flake/SnapGuideConfigWidget.ui:98
 #, kde-format
 msgid "Intersection of lines"
-msgstr ""
+msgstr "הצטלבות קווים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:111
@@ -856,12 +855,12 @@ msgstr "שם קובץ שאליו ייכתבו פרטי השוואת הביצוע
 #: main/KoApplication.cpp:205
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
-msgstr ""
+msgstr "לטעון קובץ ולשמור אותו כקובץ ODF. מיועד לניפוי שגיאות."
 
 #: main/KoApplication.cpp:207
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "קבצים או כתובות לפתיחה"
 
 #: main/KoApplication.cpp:217
 #, kde-format
@@ -870,6 +869,9 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"הגרסה שמופעלת כרגע היא 32 סיביות על גבי Windows ב־64 סיביות.\n"
+"זה לא מצב מומלץ.\n"
+"נא להוריד ולהתקין את מהדורת x64 במקום."
 
 #: main/KoApplication.cpp:257
 #, kde-format
@@ -883,6 +885,9 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
+"חלקים חיוניים ביישום לא נמצאים.\n"
+"יכול להיות שזאת תקלה בהתקנה.\n"
+"נא לנסות להפעיל או להתקין מחדש."
 
 #: main/KoApplication.cpp:495
 #, kde-format
@@ -913,12 +918,12 @@ msgstr "שחזור קבצים"
 #: main/KoAutoSaveRecoveryDialog.cpp:171
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "אפשר לשחזר את קובץ השמירה האוטומטית הבא:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "אפשר לשחזר את קובצי השמירה האוטומטית הבאים:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -971,6 +976,8 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
+"הסיסמה למסמך המוצפן הזה לא ידועה. השמירה האוטומטית בוטלה! נא לשמור את העבודה "
+"שלך ידנית."
 
 #: main/KoDocument.cpp:712
 #, kde-format
@@ -1810,10 +1817,9 @@ msgid "ISO B5"
 msgstr "ISO B5"
 
 #: odf/KoPageFormat.cpp:56
-#, fuzzy
 msgctxt "Page size"
 msgid "US Executive"
-msgstr "US Executive"
+msgstr ""
 
 #: odf/KoPageFormat.cpp:57
 msgctxt "Page size"
@@ -2155,10 +2161,9 @@ msgid "Locked"
 msgstr "נעול"
 
 #: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
-msgstr "מחיקת טקסט"
+msgstr ""
 
 #: pageapp/KoPADocumentModel.cpp:675
 #, kde-format
@@ -2580,13 +2585,13 @@ msgstr "b*‎"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (מספר שלם בגודל 16 סיביות/ערוץ, לא מנוהל)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (מספר שלם בגודל 8 סיביות/ערוץ, לא מנוהל)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
@@ -2607,7 +2612,7 @@ msgstr "אדום"
 #: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr ""
+msgstr "פעולה לא מוגדרת במרחב %1"
 
 #: pigment/colorspaces/KoSimpleColorSpace.h:91
 #: pigment/colorspaces/KoSimpleColorSpace.h:97
@@ -2622,12 +2627,12 @@ msgstr ""
 #: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
-msgstr ""
+msgstr "פעולה לא מוגדרת במרחב הצבעים %1"
 
 #: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
 #, kde-format
 msgid "Simple Color Conversion Engine"
-msgstr ""
+msgstr "מנגנון פשוט להמרת צבעים"
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
@@ -2696,7 +2701,7 @@ msgstr "ערבוב קשיח"
 #: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
-msgstr ""
+msgstr "ממוצע גאומטרי"
 
 #: pigment/compositeops/KoCompositeOps.h:114
 #: pigment/KoCompositeOpRegistry.cpp:68
@@ -2718,15 +2723,15 @@ msgstr "מסך"
 
 #: pigment/compositeops/KoCompositeOps.h:118
 #: pigment/KoCompositeOpRegistry.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Dodge"
-msgstr "צבעים"
+msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:119
 #: pigment/KoCompositeOpRegistry.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear Dodge"
-msgstr "שינוי גבולות"
+msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
