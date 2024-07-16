@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-13 06:13+0200\n"
+"PO-Revision-Date: 2024-07-15 05:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -427,6 +427,7 @@ msgid ""
 "The BITOR() function performs a bit-wise OR operation for the two integer "
 "parameters. "
 msgstr ""
+"ფუნქცია BITOR() ბიტური ორ მთელ რიცხვზე ბიტურ 'ან' ოპერაციას შეასრულებს. "
 
 #: functions/bitops.xml:76
 #, kde-format
@@ -602,7 +603,7 @@ msgstr "ერთსიმბოლოიანი სტრიქონი გ�
 #, kde-format
 msgid ""
 "The CHARTOASCII() function returns the ASCII code for the given character."
-msgstr ""
+msgstr "ფუნქცია CHARTOASCII() მითითებული სიმბოლოს ASCII კოდს აბრუნებს."
 
 #: functions/conversion.xml:95
 #, kde-format
@@ -629,6 +630,7 @@ msgstr "გადასაყვანი ASCII მნიშვნელობ�
 msgid ""
 "The ASCIITOCHAR() function returns the character for each given ASCII code"
 msgstr ""
+"ფუნქცია ASCIITOCHAT() თითოეულ გადაცემული ASCII კოდისთვის სიმბოლოს აბრუნებს"
 
 #: functions/conversion.xml:110
 #, kde-format
@@ -795,7 +797,7 @@ msgstr ""
 #: functions/conversion.xml:215
 #, kde-format
 msgid "SEXDEC(time value) or SEXDEC(hours;minutes;seconds)"
-msgstr ""
+msgstr "SEXDEC(დროის მნიშვნელობა) ან SEXDEC(საათები;წუთები;წამები)"
 
 #: functions/conversion.xml:216
 #, kde-format
@@ -883,7 +885,7 @@ msgstr "რიცხვობრივი"
 #: functions/conversion.xml:271
 #, kde-format
 msgid "The ARABIC() function converts a roman numeral into a number."
-msgstr ""
+msgstr "ფუნქცია ARABIC() რომაულ რიცხვს არაბულში გადაიყვანს."
 
 #: functions/conversion.xml:272
 #, kde-format
@@ -1626,7 +1628,7 @@ msgstr "DAYOFYEAR(2000;2;29) აბრუნებს 60"
 #: functions/datetime.xml:353
 #, kde-format
 msgid "The DATE() function returns the date formatted with local parameters."
-msgstr ""
+msgstr "ფუნქცია DATE() ლოკალური პარამეტრებით დაფორმატებულ თარიღს აბრუნებს."
 
 #: functions/datetime.xml:354
 #, kde-format
@@ -1641,7 +1643,7 @@ msgstr "DATE(2000;5;5) აბრუნებს Friday 05 May 2000"
 #: functions/datetime.xml:375
 #, kde-format
 msgid "The TIME() function returns the time formatted with local parameters."
-msgstr ""
+msgstr "ფუნქცია TIME() ლოკალური პარამეტრებით დაფორმატებულ დროს აბრუნებს."
 
 #: functions/datetime.xml:376
 #, kde-format
@@ -2394,7 +2396,7 @@ msgstr "ERF(0.4) უდრის 0.42839236"
 #: functions/engineering.xml:180
 #, kde-format
 msgid "The ERFC() function returns the complementary error function."
-msgstr ""
+msgstr "ფუნქცია ERFC() აბრუნებს დამატებით შეცდომების ფუნქციას."
 
 #: functions/engineering.xml:181
 #, kde-format
@@ -2997,7 +2999,7 @@ msgstr "IMTANH(\"1.2\") აბრუნებს 0.83365"
 #: functions/engineering.xml:612
 #, kde-format
 msgid "The IMEXP(string) returns the exponential of a complex number."
-msgstr ""
+msgstr "IMEXP(სტრიქონი) კომპლექსური რიცხვის ექსპონენტს დააბრუნებს."
 
 #: functions/engineering.xml:613
 #, kde-format
@@ -3017,7 +3019,7 @@ msgstr "IMEXP(\"12i\") აბრუნებს \"0.843854-0.536573i\" "
 #: functions/engineering.xml:627
 #, kde-format
 msgid "The IMLN(string) returns the natural logarithm of a complex number."
-msgstr ""
+msgstr "IMLN(სტრიქონი) აბრუნებს კომპლექსური რიცხვის ნატურალურ ლოგარითმს."
 
 #: functions/engineering.xml:628
 #, kde-format
@@ -3037,7 +3039,7 @@ msgstr "IMLN(\"12\") აბრუნებს 2.48491 "
 #: functions/engineering.xml:642
 #, kde-format
 msgid "The IMLOG2(string) returns the base-2 logarithm of a complex number."
-msgstr ""
+msgstr "IMLOG2(სტრიქონი) აბრუნებს კომპლექსური რიცხვის ლოგარითმს ორობითი ფუძით."
 
 #: functions/engineering.xml:643
 #, kde-format
@@ -3053,6 +3055,7 @@ msgstr "IMLOG2(\"3+4i\") აბრუნებს \"2.321928+1.337804i\""
 #, kde-format
 msgid "The IMLOG10(string) returns the base-10 logarithm of a complex number."
 msgstr ""
+"IMLOG10(სტრიქონი) აბრუნებს კომპლექსური რიცხვის ლოგარითმს ათობითი ფუძით."
 
 #: functions/engineering.xml:657
 #, kde-format
@@ -3067,7 +3070,7 @@ msgstr "IMLOG10(\"3+4i\") აბრუნებს \"0.69897+0.402719i\""
 #: functions/engineering.xml:670
 #, kde-format
 msgid "The IMSQRT(string) returns the square root of a complex number."
-msgstr ""
+msgstr "IMSQRT(სტრიქონი) აბრუნებს კომპლექსური რიცხვის კვადრატულ ფესვს."
 
 #: functions/engineering.xml:671
 #, kde-format
@@ -3092,7 +3095,7 @@ msgstr "კვება"
 #: functions/engineering.xml:689
 #, kde-format
 msgid "The IMPOWER(string) returns a complex number raised to a power."
-msgstr ""
+msgstr "IMPOWER(სტრიქონი) აბრუნებს ნამდვილ ხარისხში აყვანილ კომპლექსურ რიცხვს."
 
 #: functions/engineering.xml:690
 #, kde-format
@@ -3112,7 +3115,7 @@ msgstr "IMPOWER(\"1.2\";2) 1.44-ს აბრუნებს "
 #: functions/engineering.xml:721
 #, kde-format
 msgid "The IMSUM() returns the sum of several complex numbers of form x+yi."
-msgstr ""
+msgstr "IMSUM() აბრუნებს რამდენიმე x+yi ფორმის კომპლექსური რიცხვის ჯამს."
 
 #: functions/engineering.xml:722
 #, kde-format
@@ -3133,7 +3136,7 @@ msgstr "IMSUM(1.2;\"1i\") აბრუნებს \"1.2+i\""
 #, kde-format
 msgid ""
 "The IMDIV() returns the division of several complex numbers of form x+yi."
-msgstr ""
+msgstr "IMDIV() აბრუნებს რამდენიმე x+yi ფორმის კომპლექსური რიცხვის განაყოფს."
 
 #: functions/engineering.xml:753
 #, kde-format
@@ -3154,7 +3157,7 @@ msgstr "IMDIV(\"12+i\";\"12-i\") აბრუნებს \"0.986207+0.16551i\""
 #, kde-format
 msgid ""
 "The IMSUB() returns the difference of several complex numbers of form x+yi."
-msgstr ""
+msgstr "IMSUB() აბრუნებს რამდენიმე x+yi ფორმის კომპლექსური რიცხვის სხვაობას."
 
 #: functions/engineering.xml:785
 #, kde-format
@@ -3176,6 +3179,7 @@ msgstr "IMSUB(1.2;\"1i\") აბრუნებს \"1.2-i\""
 msgid ""
 "The IMPRODUCT() returns the product of several complex numbers of form x+yi."
 msgstr ""
+"IMPRODUCT() აბრუნებს რამდენიმე x+yi ფორმის კომპლექსური რიცხვის ნამრავლს."
 
 #: functions/engineering.xml:816
 #, kde-format
@@ -3198,6 +3202,8 @@ msgid ""
 "The IMCONJUGATE(complex number) returns the conjugate of a complex number of "
 "form x+yi."
 msgstr ""
+"IMCONJUGATE(კომპლექსური რიცხვი) აბრუნებს რამდენიმე x+yi ფორმის კომპლექსური "
+"რიცხვის უღლებას."
 
 #: functions/engineering.xml:831
 #, kde-format
@@ -3225,6 +3231,8 @@ msgid ""
 "The IMARGUMENT(complex number) returns the argument of a complex number of "
 "form x+yi."
 msgstr ""
+"IMARGUMENT(კომპლექსური რიცხვი) აბრუნებს x+yi ფორმის კომპლექსური რიცხვის "
+"არგუმენტს."
 
 #: functions/engineering.xml:847
 #, kde-format
@@ -3251,6 +3259,7 @@ msgstr "IMARGUMENT(\"12\") აბრუნებს \"#Div/0\""
 msgid ""
 "The IMABS(complex number) returns the norm of a complex number of form x+yi."
 msgstr ""
+"IMABS(კომპლექსური რიცხვი) აბრუნებს x+yi ფორმის კომპლექსური რიცხვის მოდულს."
 
 #: functions/engineering.xml:863
 #, kde-format
@@ -3290,6 +3299,8 @@ msgid ""
 "The DELTA() function returns 1 if x equals y, otherwise returns 0. y "
 "defaults to 0."
 msgstr ""
+"ფუნქცია DELTA() აბრუნებს 1-ს, თუ x უდრის y-ს. წინააღმდეგ შემთხვევაში "
+"აბრუნებს 0-ს. y ნაგულისხმევად 0-ის ტოლია."
 
 #: functions/engineering.xml:883
 #, kde-format
@@ -3317,6 +3328,8 @@ msgid ""
 "The GESTEP() function returns 1 if x greater or equals y, otherwise returns "
 "0. y defaults to 0."
 msgstr ""
+"ფუნქცია GETSTEP() აბრუნებს 1-ს, თუ x მეტი ან ტოლია y-ის. წინააღმდეგ "
+"შემთხვევაში აბრუნებს 0-ს. y ნაგულისხმევად 0-ის ტოლია."
 
 #: functions/engineering.xml:903
 #, kde-format
@@ -4101,14 +4114,14 @@ msgstr ""
 #: functions/financial.xml:1046
 #, kde-format
 msgid "Rate is the periodic interest rate."
-msgstr ""
+msgstr "საპროცენტო განაკვეთი ბაზარზე."
 
 #: functions/financial.xml:660 functions/financial.xml:1047
 #, kde-format
 msgid ""
 "Period is the amortizement period. 1 for the first and NPER for the last "
 "period."
-msgstr ""
+msgstr "პერიოდი ამორტიზაციის პერიოდია. 1 პირველი და NPER ბოლო პერიოდისთვის."
 
 #: functions/financial.xml:661 functions/financial.xml:1048
 #, kde-format
@@ -5044,12 +5057,12 @@ msgstr "ISBLANK(x)"
 #: functions/information.xml:89
 #, kde-format
 msgid "ISBLANK(A1) returns True if A1 is empty"
-msgstr ""
+msgstr "ISBLANK(A1) აბრუნებს ჭეშმარიტს, თუ A1 ცარიელია"
 
 #: functions/information.xml:90
 #, kde-format
 msgid "ISBLANK(A1) returns False if A1 holds a value"
-msgstr ""
+msgstr "ISBLANK(A1) აბრუნებს ცრუს, თუ A1 მნიშვნელობას შეიცავს"
 
 #: functions/information.xml:102
 #, kde-format
@@ -5057,6 +5070,8 @@ msgid ""
 "The ISNUMBER() function returns True if the parameter is a numerical value. "
 "Otherwise it returns False. It's the same as ISNUM."
 msgstr ""
+"ფუნქცია ISNUMBER() აბრუნებს ჭეშმარიტს, თუ პარამეტრი რიცხვითი მნიშვნელობა. "
+"სხვა შემთხვევაში აბრუნებს ცრუს. იგივე, რაც ISNUM."
 
 #: functions/information.xml:103
 #, kde-format
@@ -5079,6 +5094,8 @@ msgid ""
 "The ISNUM() function returns True if the parameter is a numerical value. "
 "Otherwise it returns False. It's the same as ISNUMBER."
 msgstr ""
+"ფუნქცია ISNUM() აბრუნებს ჭეშმარიტს, თუ პარამეტრი რიცხვითი მნიშვნელობა. სხვა "
+"შემთხვევაში აბრუნებს ცრუს. იგივე, რაც ISNUMBER."
 
 #: functions/information.xml:119
 #, kde-format
@@ -5101,6 +5118,8 @@ msgid ""
 "The ISTIME() function returns True if the parameter is a time value. "
 "Otherwise it returns False."
 msgstr ""
+"ფუნქცია ISTIME() აბრუნებს ჭეშმარიტს თუ პარამეტრი დროის მნიშვნელობაა. სხვა "
+"შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/information.xml:135
 #, kde-format
@@ -5123,6 +5142,8 @@ msgid ""
 "The ISDATE() function returns True if the parameter is a date value. "
 "Otherwise it returns False"
 msgstr ""
+"ფუნქცია ISDATE() აბრუნებს ჭეშმარიტს თუ პარამეტრი თარიღის მნიშვნელობაა. სხვა "
+"შემთხვევაში აბრუნებს ცრუს"
 
 #: functions/information.xml:150
 #, kde-format
@@ -5145,6 +5166,8 @@ msgid ""
 "The ISREF() function returns True if the parameter refers to a reference. "
 "Otherwise it returns False"
 msgstr ""
+"ფუნქცია ISREF() აბრუნებს ჭეშმარიტს, თუ პარამეტრი მიმართვაზე მიუთითებს. სხვა "
+"შემთხვევაში აბრუნებს ცრუს"
 
 #: functions/information.xml:165
 #, kde-format
@@ -5167,6 +5190,8 @@ msgid ""
 "The ISTEXT() function returns True if the parameter is a string. Otherwise "
 "it returns False"
 msgstr ""
+"ფუნქცია ISTEXT() აბრუნებს ჭეშმარიტს თუ პარამეტრი სტრიქონია. სხვა შემთხვევაში "
+"აბრუნებს ცრუს"
 
 #: functions/information.xml:180
 #, kde-format
@@ -5189,6 +5214,8 @@ msgid ""
 "The ISNONTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNOTTEXT."
 msgstr ""
+"ფუნქცია ISNONTEXT() აბრუნებს ჭეშმარიტს თუ პარამეტრი სტრიქონი არაა. სხვა "
+"შემთხვევაში აბრუნებს ცრუს. იგივე, რაც ISNOTTEXT."
 
 #: functions/information.xml:195
 #, kde-format
@@ -5211,6 +5238,8 @@ msgid ""
 "The ISNOTTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNONTEXT."
 msgstr ""
+"ფუნქცია ISNOTTEXT() აბრუნებს ჭეშმარიტს თუ პარამეტრი სტრიქონი არაა. სხვა "
+"შემთხვევაში აბრუნებს ცრუს. იგივე, რაც ISNONTEXT."
 
 #: functions/information.xml:211
 #, kde-format
@@ -5233,6 +5262,8 @@ msgid ""
 "The ISFORMULA() function returns True if the referenced cell contains a "
 "formula. Otherwise it returns False"
 msgstr ""
+"ფუნქცია ISFORMULA() აბრუნებს ჭეშმარიტს, თუ მიმართული უჯრედი ფორმულას "
+"შეიცავს. სხვა შემთხვევაში აბრუნებს ცრუს"
 
 #: functions/information.xml:227
 #, kde-format
@@ -5245,6 +5276,8 @@ msgid ""
 "The ISODD() function returns True if the number is odd. Otherwise returns "
 "False."
 msgstr ""
+"ფუნქცია ISODD() აბრუნებს ჭეშმარიტს, თუ რიცხვი კენტია. სხვა შემთხვევაში "
+"აბრუნებს ცრუს."
 
 #: functions/information.xml:240
 #, kde-format
@@ -5267,6 +5300,8 @@ msgid ""
 "The ISEVEN() function returns True if the number is even. Otherwise returns "
 "False."
 msgstr ""
+"ფუნქცია ISEVEN() აბრუნებს ჭეშმარიტს, თუ რიცხვი ლუწია. სხვა შემთხვევაში "
+"აბრუნებს ცრუს."
 
 #: functions/information.xml:255
 #, kde-format
@@ -5290,6 +5325,9 @@ msgid ""
 "A. Otherwise, it returns False. Use ISERROR() if you want to include the N/A "
 "error as well."
 msgstr ""
+"ფუნქცია ISERR() აბრუნებს ჭეშმარიტს, თუ მისი პარამეტრი N/A-ის გარდა "
+"ნებისმიერი სხვა შეცდომაა. სხვა შემთხვევაში აბრუნებს ცრუს. თუ გნებავთ, N/A "
+"შეცდომაც შეამოწმოთ, გამოიყენეთ ISERROR()."
 
 #: functions/information.xml:270
 #, kde-format
@@ -5302,6 +5340,8 @@ msgid ""
 "The ISERROR() function returns True if its parameter is an error of any "
 "type. Otherwise, it returns False."
 msgstr ""
+"ფუნქცია ISERROR() აბრუნებს ჭეშმარიტს, თუ მისი პარამეტრი ნებისმიერი ტიპის "
+"შეცდომაა. სხვა შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/information.xml:285
 #, kde-format
@@ -5314,6 +5354,8 @@ msgid ""
 "The ISNA() function returns True if its parameter is a N/A error. In all "
 "other cases, it returns False."
 msgstr ""
+"ფუნქცია ISNA() აბრუნებს ჭეშმარიტს, თუ მისი პარამეტრი N/A შეცდომაა. ნებისმიერ "
+"სხვა შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/information.xml:300
 #, kde-format
@@ -5323,7 +5365,7 @@ msgstr "ISNA(x)"
 #: functions/information.xml:310
 #, kde-format
 msgid "The NA() function returns the constant error value, N/A."
-msgstr ""
+msgstr "ფუნქცია NA() აბრუნებს კონსტანტის შეცდომის მნიშვნელობას, N/A."
 
 #: functions/information.xml:311
 #, kde-format
@@ -5347,7 +5389,7 @@ msgstr "TYPE(x)"
 #: functions/information.xml:328
 #, kde-format
 msgid "TYPE(A1) returns 2, if A1 contains \"Text\""
-msgstr ""
+msgstr "TYPE(A1) აბრუნებს მნიშვნელობას 2, თუ A1 შეიცავს მნიშვნელობას \"Text\""
 
 #: functions/information.xml:329
 #, kde-format
@@ -5379,7 +5421,7 @@ msgstr "ლოგიკური"
 #: functions/logic.xml:11
 #, kde-format
 msgid "The FALSE() function returns the boolean value FALSE."
-msgstr ""
+msgstr "ფუნქცია FALSE() აბრუნებს ლოგიკურ მნიშვნელობას *ცრუ*."
 
 #: functions/logic.xml:12
 #, kde-format
@@ -5394,7 +5436,7 @@ msgstr "FALSE() დააბრუნებს ცრუს"
 #: functions/logic.xml:21
 #, kde-format
 msgid "The TRUE() function returns the boolean value TRUE."
-msgstr ""
+msgstr "ფუნქცია TRUE() აბრუნებს ლოგიკურ მნიშვნელობას *ჭეშმარიტი*."
 
 #: functions/logic.xml:22
 #, kde-format
@@ -5663,7 +5705,7 @@ msgstr "SUBTOTAL(function; value)"
 #: functions/math.xml:21
 #, kde-format
 msgid "If A1:A5 contains 7, 24, 23, 56 and 9:"
-msgstr ""
+msgstr "თუ A1:A5 შეიცავს მნიშვნელობებს 7, 24, 23, 56 და 9:"
 
 #: functions/math.xml:22
 #, kde-format
@@ -6119,6 +6161,7 @@ msgstr "COUNTIF(range;criteria)"
 #, kde-format
 msgid "COUNTIF(A2:A3;\"14\") returns 1 if A2 is -4 and A3 is 14"
 msgstr ""
+"COUNTIF(A2:A3;\"14\") აბრუნებს მნიშვნელობას 1 თუ A2 არის -4 და A3 არის 14"
 
 #: functions/math.xml:364 functions/math.xml:379 functions/math.xml:654
 #: functions/math.xml:670 functions/math.xml:684 functions/math.xml:702
@@ -6551,7 +6594,7 @@ msgstr "SQRTPI(2) უდრის 2.506628"
 #: functions/math.xml:688
 #, kde-format
 msgid "The LN() function returns the natural logarithm of x."
-msgstr ""
+msgstr "ფუნქცია LN() x-ის ნატურალურ ლოგარითმს აბრუნებს."
 
 #: functions/math.xml:689
 #, kde-format
@@ -6571,7 +6614,7 @@ msgstr "LN(0) უდრის -inf"
 #: functions/math.xml:710
 #, kde-format
 msgid "The LOGn() function returns the base n logarithm of x."
-msgstr ""
+msgstr "ფუნქცია LOGn() x-ის n-ფუძიან ლოგარითმს აბრუნებს."
 
 #: functions/math.xml:711
 #, kde-format
@@ -6591,7 +6634,7 @@ msgstr "LOGn(12;2) უდრის 3.5849625"
 #: functions/math.xml:733
 #, kde-format
 msgid "The ROOTN() function returns the non-negative nth root of x."
-msgstr ""
+msgstr "ფუნქცია ROOTN() x-ის n-ხარიხის არაუარყოფით ფესვს აბრუნებს."
 
 #: functions/math.xml:734
 #, kde-format
@@ -6606,7 +6649,7 @@ msgstr "ROOTN(9;2) უდრის 3"
 #: functions/math.xml:748
 #, kde-format
 msgid "The CUR() function returns the non-negative cube root of x."
-msgstr ""
+msgstr "ფუნქცია CUR() x-ის არაუარყოფით კუბურ ფესვს აბრუნებს."
 
 #: functions/math.xml:749
 #, kde-format
@@ -6626,7 +6669,7 @@ msgstr "მცურავმძიმიანი მნიშვნელო�
 #: functions/math.xml:763
 #, kde-format
 msgid "The LOG() function returns the base-10 logarithm of x."
-msgstr ""
+msgstr "ფუნქცია LOG() x-ის 10-ფუძის ლოგარითმს აბრუნებს."
 
 #: functions/math.xml:764
 #, kde-format
@@ -6651,7 +6694,7 @@ msgstr "დადებითი მცურავმძიმიანი მ�
 #: functions/math.xml:782
 #, kde-format
 msgid "The LOG10() function returns the base-10 logarithm of the argument."
-msgstr ""
+msgstr "ფუნქცია LOG10() არგუმენტის 10-ფუძის ლოგარითმს აბრუნებს."
 
 #: functions/math.xml:783
 #, kde-format
@@ -6735,7 +6778,7 @@ msgstr "CEIL(-12.5) უდრის -12"
 #: functions/math.xml:855 functions/math.xml:884
 #, kde-format
 msgid "Significance (optional)"
-msgstr ""
+msgstr "სიზუსტე (არასავალდებულო)"
 
 #: functions/math.xml:859 functions/math.xml:888
 #, kde-format
@@ -6879,12 +6922,12 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr ""
+msgstr "RAND() უდრის, მაგალითად, 0.78309922..."
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
 msgid "A floating point value (greater 0)"
-msgstr ""
+msgstr "მცურავმძიმიანი მნიშვნელობა (ნულზე მეტი)"
 
 #: functions/math.xml:964
 #, kde-format
@@ -6923,12 +6966,12 @@ msgstr "RANDPOISSON(4)"
 #: functions/math.xml:994 functions/math.xml:1014 functions/math.xml:1034
 #, kde-format
 msgid "A floating point value (between 0 and 1)"
-msgstr ""
+msgstr "მცურავმძიმიანი მნიშვნელობა (შუალედიდან 0-1)"
 
 #: functions/math.xml:998
 #, kde-format
 msgid "Trials (greater 0)"
-msgstr ""
+msgstr "ცდები (0-ზე მეტი)"
 
 #: functions/math.xml:1002
 #, kde-format
@@ -6950,7 +6993,7 @@ msgstr "RANDBINOM(4)"
 #: functions/math.xml:1018
 #, kde-format
 msgid "Failures (greater 0)"
-msgstr ""
+msgstr "ჩავარდნები (0-ზე მეტი)"
 
 #: functions/math.xml:1022
 #, kde-format
@@ -6989,12 +7032,12 @@ msgstr "RANDBERNOULLI(0.45)"
 #: functions/math.xml:1053
 #, kde-format
 msgid "Mean value of the normal distribution"
-msgstr ""
+msgstr "ნორმალური განაწილების საშუალო მნიშვნელობა"
 
 #: functions/math.xml:1057
 #, kde-format
 msgid "Dispersion of the normal distribution"
-msgstr ""
+msgstr "ნორმალური განაწილების დისპერსია"
 
 #: functions/math.xml:1061
 #, kde-format
