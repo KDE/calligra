@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-06-02 11:29+0200\n"
+"PO-Revision-Date: 2024-07-16 06:45+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3381,6 +3381,60 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "family:'Verdana'; font-size:13pt;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># ჩასვით აქ თქვენი SPARQL მოთხოვნა<br /"
+"># შედეგებს ქვემოთ იხილავთ.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:191
@@ -3403,6 +3457,11 @@ msgid ""
 "the stylesheet for all existing semantic objects to the new default "
 "stylesheet as well."
 msgstr ""
+"დააყენეთ ნაგულისხმევი სტილების ცხრილი ამ დოკუმენტში არსებული სემანტიკური "
+"ობიექტებისთვის. ახალი RDF ობიექტები ამ სტილების ცხრილს ავტომატურად "
+"გამოიყენებენ. ღილაკები საშუალებას გაძლევენ, სტილების ცხრილი ახალ ნაგულისხმევ "
+"სტილების ცხრილში არსებული ყველა არსებული სემანტიკური ობიექტებისთვისაც "
+"დააყენოთ."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
@@ -3562,6 +3621,9 @@ msgid ""
 "document will remain unreadable. Please try and save the document again to "
 "prevent losing your work."
 msgstr ""
+"როგორც ჩანს, მანიფესტის ფაილი დაზიანებულია. მას ვერ შეცვლით და დოკუმენტის "
+"წაკითხვა შეუძლებელი იქნება. იმისათვის, რომ თავიდან აიცილოთ თქვენი სამუშაოს "
+"დაკარგვა, დოკუმენტის შენახვა კიდევ სცადეთ."
 
 #: store/KoEncryptedStore.cpp:447
 #, kde-format
@@ -3569,6 +3631,9 @@ msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
+"მანიფესტის ფაილის ჩაწერა შეუძლებელია. მას ვერ შეცვლით და დოკუმენტის წაკითხვა "
+"შეუძლებელი იქნება. იმისათვის, რომ თავიდან აიცილოთ თქვენი სამუშაოს დაკარგვა, "
+"დოკუმენტის შენახვა კიდევ სცადეთ."
 
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
@@ -4469,6 +4534,8 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
+"<qt>დოკუმენტის გაშიფვრა მის პაროლით დაცვას მოაცილებს. <p>მართლა გნებავთ "
+"ფაილის გაშიფვრა?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:351
 #, kde-format
@@ -4486,6 +4553,8 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
+"<qt>დოკუმენტის ავტომატური შენახვა შეუძლებელია. <p>გაშიფვრის დასასრულებლად "
+"საჭიროა, შეინახოთ დოკუმენტი.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
 #: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
@@ -4499,6 +4568,8 @@ msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
+"<qt>დოკუმენტის გაშიფვრის დასასრულებლად საჭიროა, შეინახოთ ის.<p>გნებავთ, "
+"შეინახოთ დოკუმენტი ახლავე?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
@@ -4507,6 +4578,9 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
+"<qt>დოკუმენტი ამჟამად შენახულია, როგორც %1. დასაშიფრად საჭიროა, რომ "
+"დოკუმენტი <b>OASIS OpenDocument</b>-ში გადაიყვანოთ. <p>გნებავთ ფაილის OASIS "
+"OpenDocument-ში გადაყვანა?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
@@ -4524,6 +4598,8 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
+"<qt>დოკუმენტის ავტომატური შენახვა შეუძლებელია. <p>დაშიფვრის დასასრულებლად "
+"საჭიროა, შეინახოთ დოკუმენტი.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:412
 #, kde-format
@@ -4532,6 +4608,9 @@ msgid ""
 "encryption the document needs to be saved.<p>Do you want to save the "
 "document now?</qt>"
 msgstr ""
+"<qt>დოკუმენტი შეიცვალა მას შემდეგ, რაც ის გახსენით. დოკუმენტის დაშიფვრის "
+"დასასრულებლად საჭიროა, შეინახოთ ის. <p>გნებავთ დოკუმენტის შენახვა ახლავე?</"
+"qt>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, add)
 #: widgets/KoEditColorSet.ui:45
@@ -4948,6 +5027,8 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
+"<qt>ჭდე, რომლის აღდგენასაც ცდილობთ, ჭდეების სიაში უკვე არსებობს."
+"<br>შეიყვანეთ ახალი, უნიკალური სახელი მისთვის.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:142
 #, kde-format
@@ -5056,6 +5137,17 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>საძიებო ტერმინების აქ შეყვანა დაამატებს ან წაშლის რესურსებს თეგის "
+"მიმდინარე ხედიდან.<para>გაფილტვრა რესურსის ნაწილობრივი, დიდი ასოების სახელზე "
+"დაფუძნებული:<br><icode>ნაწილობრივი სახელი</icode> ან < icode>!partialname</"
+"icode>.</para><para>სხვა თეგების ნაკრების-/გამორიცხვა:<br><icode>[Tagname]</"
+"icode> ან <icode>![Tagname]</icode> .</para><para>შემთხვევითი და სრული "
+"სახელის შესატყვისი in-/exclusion:<br><icode>\"ExactMatch\"</icode> ან "
+"<icode>!\"ExactMatch\"</icode>.</para>ფილტრი შედეგების შენახვა შეუძლებელია "
+"<interface>All Presets</interface> ხედისთვის.<br>ამ ხედში <interface>Enter</"
+"interface> დაჭერით ან ფილტრის ველის გასუფთავებით აღდგება ყველა ელემენტი."
+"<br>შექმნა და/ან გადაერთეთ სხვა ტეგზე, თუ გსურთ შეინახოთ გაფილტრული "
+"რესურსები დასახელებულ ნაკრებებში.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5070,6 +5162,15 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>საძიებო ტერმინების აქ შეყვანა დაამატებს ან წაშლის რესურსებს თეგის "
+"მიმდინარე ხედიდან.<para>გაფილტვრა რესურსის ნაწილობრივი, დიდი ასოების სახელზე "
+"დაფუძნებული:<br><icode>ნაწილობრივი სახელი</icode> ან < icode>!partialname</"
+"icode>.</para><para>სხვა თეგების ნაკრების-/გამორიცხვა:<br><icode>[Tagname]</"
+"icode> ან <icode>![Tagname]</icode> .</para><para>შემთხვევითი და სრული "
+"სახელის შესატყვისი in-/exclusion:<br><icode>\"ExactMatch\"</icode> ან "
+"<icode>!\"ExactMatch\"</icode>.</para>დაჭერით <interface>Enter</interface> "
+"ან <interface>Save</interface> ღილაკზე დაწკაპუნებით შეინახავს ცვლილებებს.</"
+"qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
@@ -5083,6 +5184,8 @@ msgid ""
 "<qt>Save the currently filtered set as the new members of the current tag.</"
 "qt>"
 msgstr ""
+"<qt>ამჟამად გაფილტრული სეტის შენახვა მიმდინარე ჭდის ახალი წევრების სახით.</"
+"qt>"
 
 #: widgets/KoTagToolButton.cpp:45
 #, kde-format
