@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-07-14 08:06+0300\n"
+"PO-Revision-Date: 2024-07-16 22:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1819,7 +1819,7 @@ msgstr "ISO B5"
 #: odf/KoPageFormat.cpp:56
 msgctxt "Page size"
 msgid "US Executive"
-msgstr ""
+msgstr "ניהולי אמריקאי"
 
 #: odf/KoPageFormat.cpp:57
 msgctxt "Page size"
@@ -2689,7 +2689,7 @@ msgstr "מיזוג גרגרים"
 #: pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgid "Grain Extract"
-msgstr ""
+msgstr "חילוץ גרגרים"
 
 #: pigment/compositeops/KoCompositeOps.h:112
 #: pigment/KoCompositeOpRegistry.cpp:65
@@ -2713,7 +2713,7 @@ msgstr "מקבילי"
 #: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Allanon"
-msgstr ""
+msgstr "אלנון"
 
 #: pigment/compositeops/KoCompositeOps.h:117
 #: pigment/KoCompositeOpRegistry.cpp:44
@@ -2802,7 +2802,7 @@ msgstr "החשכה"
 #: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
-msgstr ""
+msgstr "גאמה כהה"
 
 #: pigment/compositeops/KoCompositeOps.h:134
 #: pigment/KoCompositeOpRegistry.cpp:28
@@ -2825,7 +2825,7 @@ msgstr "חילוק"
 #: pigment/KoCompositeOpRegistry.cpp:57
 #, kde-format
 msgid "Arcus Tangent"
-msgstr ""
+msgstr "טנגנס הופכי"
 
 #: pigment/compositeops/KoCompositeOps.h:141
 #: pigment/KoCompositeOpRegistry.cpp:53
@@ -2843,7 +2843,7 @@ msgstr "החרגה"
 #: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Equivalence"
-msgstr ""
+msgstr "שוויון מקורב"
 
 #: pigment/compositeops/KoCompositeOps.h:144
 #, kde-format
