@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-07-16 22:15+0300\n"
+"PO-Revision-Date: 2024-07-19 09:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -50,12 +50,12 @@ msgstr "נתיב ביד חופשית"
 #: basicflakes/tools/KoCreatePathTool.cpp:443
 #, kde-format
 msgid "Angle snapping delta:"
-msgstr ""
+msgstr "הפרש הצמדת זווית:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:450
 #, kde-format
 msgid "Activate angle snap:"
-msgstr ""
+msgstr "הפעלת הצמדת זווית:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:458
 #, kde-format
@@ -421,7 +421,7 @@ msgstr "מפרקים"
 #: flake/SnapGuideConfigWidget.ui:43
 #, kde-format
 msgid "Extension of lines"
-msgstr ""
+msgstr "הארכה של קווים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:56
@@ -433,7 +433,7 @@ msgstr "תיבה תוחמת של צורה"
 #: flake/SnapGuideConfigWidget.ui:72
 #, kde-format
 msgid "Proximity distance where snapping happens"
-msgstr ""
+msgstr "מרחק להצמדה אוטומטית"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:75
@@ -573,6 +573,8 @@ msgstr "גרירה תזיז את נקודת הבקרה."
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
+"אפשר לגרור כדי לשנות את העיקול ישירות. לחיצה כפולה כדי להוסיף נקודה חדשה "
+"בנתיב."
 
 #: flake/tools/KoPathTool.cpp:620
 #, kde-format
@@ -1317,7 +1319,7 @@ msgstr "תלוי רישיות"
 #: main/KoFindText.cpp:47
 #, kde-format
 msgid "Match cases when searching"
-msgstr ""
+msgstr "לבדוק התאמת רישיות בעת החיפוש"
 
 #: main/KoFindText.cpp:48
 #, kde-format
