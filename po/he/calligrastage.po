@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-09 14:58+0300\n"
+"PO-Revision-Date: 2024-07-20 07:20+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -1692,9 +1692,9 @@ msgid "Barn Vee"
 msgstr "וי של חווה"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Barn Zig Zag"
-msgstr "אפקט &תמונה:"
+msgstr "אסם זיגזג"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
 msgid "Horizontal Reversed"
@@ -1778,9 +1778,9 @@ msgid "Vee"
 msgstr "וי"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zig Zag"
-msgstr "אפקט &תמונה:"
+msgstr "זיגזג"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
 #, kde-format
@@ -1809,21 +1809,18 @@ msgstr "למטה"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, fuzzy
 msgid "Down Reverse"
-msgstr "קווים אנכיים"
+msgstr "למטה הפוך"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
-#, fuzzy
 msgid "Left"
-msgstr "או&רך:"
+msgstr "שמאלה"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
-#, fuzzy
 msgid "Left Reverse"
-msgstr "קווים אנכיים"
+msgstr "שמאלה הפוך"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
@@ -1835,9 +1832,8 @@ msgid "Circle"
 msgstr "עיגול"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#, fuzzy
 msgid "Circle Reverse"
-msgstr "קווים אנכיים"
+msgstr "עיגול הפוך"
 
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format

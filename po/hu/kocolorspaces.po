@@ -3,19 +3,20 @@
 #
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010.
 # Balázs Úr <urbalazs@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2012-11-03 09:53+0100\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2024-07-20 15:19+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
@@ -95,10 +96,9 @@ msgid "Gray"
 msgstr "Szürke"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha (32-bit float/channel)"
+#, kde-format
 msgid "Grayscale/Alpha (16-bit float/channel)"
-msgstr "Szürkeárnyalatos/Alfa (32-bites lebegő/csatorna)"
+msgstr "Szürkeárnyalatos/Alfa (16-bites lebegő/csatorna)"
 
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
 #, kde-format
@@ -369,10 +369,9 @@ msgid "GRAY/Alpha16 Histogram"
 msgstr "GRAY/Alpha16 hisztogram"
 
 #: lcms2/LcmsEnginePlugin.cpp:190
-#, fuzzy, kde-format
-#| msgid "RGBF16 Histogram"
+#, kde-format
 msgid "GRAYF16 Histogram"
-msgstr "RGBF16 hisztogram"
+msgstr "GRAYF16 hisztogram"
 
 #: lcms2/LcmsEnginePlugin.cpp:196
 #, kde-format

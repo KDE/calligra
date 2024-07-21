@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-12 22:24+0300\n"
+"PO-Revision-Date: 2024-07-20 07:30+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -148,9 +148,9 @@ msgstr "כותרת1"
 
 #: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
 #: ui/dialogs/LayoutPage_General.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default"
-msgstr "תוצאה"
+msgstr "ברירת מחדל"
 
 #: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
 #, kde-format
@@ -241,14 +241,14 @@ msgid ""
 msgstr ""
 
 #: engine/FunctionDescription.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "<p><b>Return type:</b> %1</p>"
-msgstr "<p><b>טיפוס מוחזר: </b>"
+msgstr "<p><b>טיפוס מוחזר:</b> %1</p>"
 
 #: engine/FunctionDescription.cpp:168
 #, kde-format
 msgid "Syntax"
-msgstr ""
+msgstr "תחביר"
 
 #: engine/FunctionDescription.cpp:177
 #, kde-format
@@ -256,34 +256,34 @@ msgid "Parameters"
 msgstr "פרמטרים"
 
 #: engine/FunctionDescription.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "<br><b>Type:</b> %1"
-msgstr "<br><b>טיפוס:</b> "
+msgstr "<br><b>טיפוס:</b> %1"
 
 #: engine/FunctionDescription.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "<li><b>Comment:</b> %1"
-msgstr "<li><b>הערה:</b> "
+msgstr "<li><b>הערה:</b> %1"
 
 #: engine/FunctionDescription.cpp:186
 #, kde-format
 msgid "Examples"
-msgstr ""
+msgstr "דוגמאות"
 
 #: engine/FunctionDescription.cpp:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Related Functions"
-msgstr "<h2>פונקציות קשורות</h2><ul>"
+msgstr "פונקציות קשורות"
 
 #: engine/Localization.cpp:769
-#, fuzzy, kde-format
+#, kde-format
 msgid "true"
-msgstr "אם True"
+msgstr "חיובי"
 
 #: engine/Localization.cpp:770
-#, fuzzy, kde-format
+#, kde-format
 msgid "false"
-msgstr "אם False"
+msgstr "שלילי"
 
 #: engine/SheetBase.cpp:359
 #, kde-format
@@ -294,66 +294,66 @@ msgstr "תלות"
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
-msgstr ""
+msgstr "#מעגלי!"
 
 #: engine/Value.cpp:670
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
-msgstr ""
+msgstr "#תלות!"
 
 #: engine/Value.cpp:678
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
-msgstr ""
+msgstr "#חלוקה/0!"
 
 #: engine/Value.cpp:686
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
-msgstr ""
+msgstr "#לא_זמין"
 
 #: engine/Value.cpp:694
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
-msgstr ""
+msgstr "#שם?"
 
 #: engine/Value.cpp:702
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
-msgstr ""
+msgstr "#מס׳!"
 
 #: engine/Value.cpp:710
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
-msgstr ""
+msgstr "#ריק!"
 
 #: engine/Value.cpp:718
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
-msgstr "ARS"
+msgstr "#פענוח!"
 
 #: engine/Value.cpp:726
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
-msgstr ""
+msgstr "#הפניה!"
 
 #: engine/Value.cpp:734
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
-msgstr ""
+msgstr "#ערך!"
 
 #: functions/bitops.xml:5
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bit Operations"
-msgstr "פעולה"
+msgstr "פעולות על סיביות"
 
 #: functions/bitops.xml:11 functions/bitops.xml:31 functions/bitops.xml:49
 #: functions/bitops.xml:67 functions/bitops.xml:87 functions/math.xml:71
@@ -1686,9 +1686,9 @@ msgstr "(\"DAYS(\"2002-02-22\"; \"2002-02-26 מחזירה 4"
 #: functions/datetime.xml:401 functions/datetime.xml:415
 #: functions/datetime.xml:433 functions/datetime.xml:447
 #: functions/datetime.xml:574
-#, fuzzy, kde-format
+#, kde-format
 msgid "Year"
-msgstr "שנים"
+msgstr "שנה"
 
 #: functions/datetime.xml:322 functions/datetime.xml:345
 #: functions/datetime.xml:419 functions/financial.xml:301
@@ -2055,9 +2055,9 @@ msgstr ""
 "הפונקציה ()EVEN מעגלת את המספר הנתון כלפי מעלה למספר השלם הזוגי הקרוב ביותר."
 
 #: functions/datetime.xml:612
-#, fuzzy, kde-format
+#, kde-format
 msgid "WEEKNUM(date; method)"
-msgstr "WEEKDAY(שיטה ;תאריך)"
+msgstr "WEEKNUM(תאריך; שיטה)"
 
 #: functions/datetime.xml:613
 #, kde-format
@@ -2075,19 +2075,19 @@ msgid ""
 msgstr ""
 
 #: functions/datetime.xml:623 functions/datetime.xml:647
-#, fuzzy, kde-format
+#, kde-format
 msgid "First date"
-msgstr "מפתח ראשון"
+msgstr "תאריך ראשון"
 
 #: functions/datetime.xml:627 functions/datetime.xml:651
-#, fuzzy, kde-format
+#, kde-format
 msgid "Second date"
-msgstr "ערך התאריך השני"
+msgstr "תאריך שני"
 
 #: functions/datetime.xml:631 functions/datetime.xml:655
-#, fuzzy, kde-format
+#, kde-format
 msgid "interval"
-msgstr "&כללי"
+msgstr "הפרש"
 
 #: functions/datetime.xml:635
 #, fuzzy, kde-format
@@ -3720,9 +3720,9 @@ msgstr "(CONTINUOUS(1000;0.1;1 שווה ל־1105.17"
 #: functions/financial.xml:1321 functions/financial.xml:1345
 #: functions/financial.xml:1369 functions/financial.xml:1445
 #: functions/financial.xml:1475
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maturity"
-msgstr "מאוריצ'יוס"
+msgstr "בגרות"
 
 #: functions/financial.xml:189 functions/financial.xml:460
 #: functions/financial.xml:777 functions/financial.xml:924
@@ -3751,32 +3751,32 @@ msgid "COUPNUM(\"2/28/2001\"; \"8/31/2001\"; 2; 0) returns 1"
 msgstr "(COUPNUM(\"2/28/2001\"; \"8/31/2001\"; 2; 0 מחזירה 1"
 
 #: functions/financial.xml:212 functions/financial.xml:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "rate"
-msgstr "תאריך"
+msgstr "קצב"
 
 #: functions/financial.xml:216 functions/financial.xml:253
-#, fuzzy, kde-format
+#, kde-format
 msgid "periods"
 msgstr "תקופות"
 
 #: functions/financial.xml:220 functions/financial.xml:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "value"
 msgstr "ערך"
 
 #: functions/financial.xml:224 functions/financial.xml:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "start"
 msgstr "התחלה"
 
 #: functions/financial.xml:228 functions/financial.xml:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "end"
-msgstr "ין"
+msgstr "סוף"
 
 #: functions/financial.xml:232 functions/financial.xml:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "type"
 msgstr "סוג"
 
@@ -8061,19 +8061,19 @@ msgstr "AREAS(התייחסות)"
 
 #: functions/reference.xml:236 functions/reference.xml:258
 #: functions/reference.xml:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lookup value"
-msgstr "ערך עליון"
+msgstr "ערך לאיתור"
 
 #: functions/reference.xml:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lookup vector"
-msgstr "ערך עליון"
+msgstr "וקטור לאיתור"
 
 #: functions/reference.xml:244
-#, fuzzy, kde-format
+#, kde-format
 msgid "Result vector"
-msgstr "תוצאה"
+msgstr "וקטור תוצאה"
 
 #: functions/reference.xml:248
 #, kde-format
@@ -8098,14 +8098,14 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
 
 #: functions/reference.xml:262 functions/reference.xml:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data source"
-msgstr "מסד נתונים"
+msgstr "מקור נתונים"
 
 #: functions/reference.xml:270 functions/reference.xml:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sorted (optional)"
-msgstr "שיטה (אופציונלי)"
+msgstr "ממוין (רשות)"
 
 #: functions/reference.xml:274
 #, kde-format
@@ -8152,29 +8152,29 @@ msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr ""
 
 #: functions/reference.xml:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula cell"
-msgstr "הצג סרגל נוסחאות"
+msgstr "תא נוסחה"
 
 #: functions/reference.xml:314
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row cell"
-msgstr "הסרת תא"
+msgstr "תא שורה"
 
 #: functions/reference.xml:318
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row replacement"
-msgstr "החלפה"
+msgstr "החלפת שורה"
 
 #: functions/reference.xml:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column cell (optional)"
-msgstr "שיטה (אופציונלי)"
+msgstr "תא עמודה (רשות)"
 
 #: functions/reference.xml:326
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column replacement (optional)"
-msgstr "מספר מוחלט (אופציונלי)"
+msgstr "החלפת עמודה (רשות)"
 
 #: functions/reference.xml:330
 #, kde-format
@@ -8195,19 +8195,19 @@ msgid ""
 msgstr ""
 
 #: functions/reference.xml:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search value"
-msgstr "ערך התחלתי:"
+msgstr "ערך לחיפוש"
 
 #: functions/reference.xml:343
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search region"
-msgstr "כיוון הגיליון:"
+msgstr "אזור חיפוש"
 
 #: functions/reference.xml:347
-#, fuzzy, kde-format
+#, kde-format
 msgid "Match type (optional)"
-msgstr "סוג (אופציונלי)"
+msgstr "סוג התאמה (רשות)"
 
 #: functions/reference.xml:351
 #, kde-format
@@ -8228,19 +8228,19 @@ msgid "MATCH(Search value; Search region; Match type)"
 msgstr ""
 
 #: functions/reference.xml:360
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reference or range"
-msgstr "התייחסות"
+msgstr "הפניה או טווח"
 
 #: functions/reference.xml:364
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of rows to offset"
-msgstr "מספר המרכיבים לבחירה"
+msgstr "מספר השורות להזחה"
 
 #: functions/reference.xml:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of columns to offset"
-msgstr "מספר המרכיבים לבחירה"
+msgstr "מספר העמודות להזחה"
 
 #: functions/reference.xml:372
 #, kde-format
@@ -8409,7 +8409,7 @@ msgid "Beta parameter"
 msgstr "פרמטר ביתא"
 
 #: functions/statistical.xml:103 functions/statistical.xml:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start"
 msgstr "התחלה"
 
@@ -8419,9 +8419,9 @@ msgid "End"
 msgstr "סוף"
 
 #: functions/statistical.xml:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cumulative"
-msgstr "דגל מצטבר"
+msgstr "מצטבר"
 
 #: functions/statistical.xml:115
 #, kde-format
@@ -8770,14 +8770,14 @@ msgid "FDIST(0.8;8;12) yields 0.61"
 msgstr "(FDIST(0.8;8;12 נותנת 0.61"
 
 #: functions/statistical.xml:359
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number r1"
-msgstr "מספר"
+msgstr "מספר r1"
 
 #: functions/statistical.xml:363
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number r2"
-msgstr "מספר"
+msgstr "מספר r2"
 
 #: functions/statistical.xml:367
 #, fuzzy, kde-format
@@ -10240,14 +10240,14 @@ msgid "VARIANCE(12;5;7) equals 13"
 msgstr "(VARA(12;5;7 שווה ל־13"
 
 #: functions/statistical.xml:1592
-#, fuzzy, kde-format
+#, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "(VARA(15;80;3 שווה ל־...1716.333"
+msgstr "‏‎VARIANCE(15;80;3)‎ שווה ל־1716.333…"
 
 #: functions/statistical.xml:1593
-#, fuzzy, kde-format
+#, kde-format
 msgid "VARIANCE(6;7;8) equals 1"
-msgstr "(VARA(6;7;8 שווה ל־1"
+msgstr "‏‎VARIANCE(6;7;8)‎ שווה ל־1"
 
 #: functions/statistical.xml:1625
 #, kde-format
@@ -12363,27 +12363,27 @@ msgstr "&נתונים"
 
 #. i18n: ectx: Menu (Filter)
 #: part/calligrasheets.rc:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter"
-msgstr "קובץ"
+msgstr "מסנן"
 
 #. i18n: ectx: Menu (tools)
 #: part/calligrasheets.rc:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Tools"
-msgstr "טוגו"
+msgstr "&כלים"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrasheets.rc:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Settings"
-msgstr "מחרוזת"
+msgstr "ה&גדרות"
 
 #. i18n: ectx: ToolBar (editToolBar)
 #: part/calligrasheets.rc:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit"
-msgstr "&עריכה..."
+msgstr "עריכה"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
 #: part/calligrasheets.rc:219
@@ -12393,17 +12393,17 @@ msgstr "ניווט"
 
 #. i18n: ectx: Menu
 #: part/calligrasheets.rc:225
-#, fuzzy, kde-format
+#, kde-format
 msgid "Activate"
-msgstr "הסתר גיליון"
+msgstr "הפעלה"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font"
-msgstr "פורינט"
+msgstr "גופן"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
 #: part/calligrasheets.rc:261
@@ -12417,14 +12417,14 @@ msgid "Comment:"
 msgstr "הערה:"
 
 #: part/CellEditorDocker.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Editor"
-msgstr "התא"
+msgstr "עורך תאים"
 
 #: part/CellEditorDocker.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula"
-msgstr "הצג סרגל נוסחאות"
+msgstr "נוסחה"
 
 #: part/CellTool.cpp:63
 #, kde-format
@@ -12437,81 +12437,79 @@ msgid "Define the print range in the current sheet"
 msgstr "הגדרת טווח ההדפסה בגיליון הנוכחי."
 
 #: part/CellToolFactory.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell formatting"
-msgstr "עיצוב תא"
+msgstr "עיצוב תאים"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ChartDatabaseSelector)
 #: part/chart/ChartDatabaseSelector.ui:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database Selector"
-msgstr "<h2>פונקציות קשורות</h2><ul>"
+msgstr "בורר מסד נתונים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_areaBox)
 #: part/chart/ChartDatabaseSelector.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Area"
-msgstr "מסד נתונים"
+msgstr "אזור נתונים"
 
 #. i18n: ectx: property (text), widget (QLabel, m_areaLabel)
 #: part/chart/ChartDatabaseSelector.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Area:"
-msgstr "תחום: %1"
+msgstr "אזור:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstRowAsLabel)
 #: part/chart/ChartDatabaseSelector.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "First row as label"
-msgstr "השו&רה הראשונה מכילה את הכותרת"
+msgstr "שורה ראשונה כתווית"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColumnAsLabel)
 #: part/chart/ChartDatabaseSelector.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "First column as label"
-msgstr "השו&רה הראשונה מכילה את הכותרת"
+msgstr "עמודה ראשונה כתווית"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
 #: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Format"
-msgstr "&תבנית נתונים"
+msgstr "עיצוב נתונים"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_dataInRows)
 #: part/chart/ChartDatabaseSelector.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data sets in rows"
-msgstr "הוסף טורים"
+msgstr "סדרות נתונים בשורות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_dataInColumns)
 #: part/chart/ChartDatabaseSelector.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data sets in columns"
-msgstr "הוסף טורים"
+msgstr "סדרות נתונים בעמודות"
 
 #: part/commands/DefinePrintRangeCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
-msgstr "הגדר טווח הדפסה"
+msgstr "הגדרת טווח הדפסה"
 
 #: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr "שינוי הגדרות עמוד"
+msgstr "הגדרת פריסת עמוד"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FileOptionsWidget)
 #: part/dialogs/FileOptionsWidget.ui:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "File Options"
-msgstr "אפשרויות כלליות"
+msgstr "אפשרויות קובץ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/FileOptionsWidget.ui:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of entries in Recent Files list:"
-msgstr "מספר &קבצים אחרונים:"
+msgstr "מספר הרשומות ברשימה הקבצים האחרונים:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
 #: part/dialogs/FileOptionsWidget.ui:26
@@ -12523,9 +12521,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autosave interval:"
-msgstr "&שמור אוטומטית (בדקות):"
+msgstr "הפרש בין שמירות אוטומטית:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:46
@@ -12544,15 +12542,15 @@ msgstr ""
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid " min"
-msgstr " דקות"
+msgstr " דק׳"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/FileOptionsWidget.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create backup file:"
-msgstr "צור קובץ גיבוי"
+msgstr "יצירת קובץ גיבוי:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
 #: part/dialogs/FileOptionsWidget.ui:72
@@ -12578,9 +12576,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/InterfaceOptionsWidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Func&tion shown in status bar:"
-msgstr "הצגת שורת המצב."
+msgstr "&פונקציה שמופיעה בשורת המצב:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
 #: part/dialogs/InterfaceOptionsWidget.ui:44
@@ -12730,9 +12728,9 @@ msgstr "כותרות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/dialogs/PageLayoutSheetPage.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page order"
-msgstr "&גבולות עמוד:"
+msgstr "סדר עמודים"
 
 #. i18n: ectx: property (text), widget (QRadioButton, ltrButton)
 #: part/dialogs/PageLayoutSheetPage.ui:130
@@ -12766,29 +12764,29 @@ msgstr "מירכוז אנכי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/PageLayoutSheetPage.ui:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Repetitions on each page"
-msgstr "חזור על השורות הבאות בכל עמוד:"
+msgstr "חזרות בכל עמוד"
 
 #. i18n: ectx: property (text), widget (QCheckBox, columnsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Columns from"
-msgstr "טורים"
+msgstr "עמודות מ־"
 
 #. i18n: ectx: property (text), widget (QCheckBox, rowsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rows from"
-msgstr "&שורה"
+msgstr "שורות מ־"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: part/dialogs/PageLayoutSheetPage.ui:199
 #: part/dialogs/PageLayoutSheetPage.ui:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "to"
-msgstr "מעבר לתא"
+msgstr "עד"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: part/dialogs/PageLayoutSheetPage.ui:269
@@ -14944,7 +14942,7 @@ msgstr "ביטול"
 #: ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Discard changes"
-msgstr ""
+msgstr "התעלמות מהשינויים"
 
 #: ui/FilterPopup.cpp:54
 #, kde-format
@@ -14962,20 +14960,20 @@ msgid "Non-empty"
 msgstr "לא ריק"
 
 #: ui/MapViewModel.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Activate sheet named foo"
 msgid "Activate %1"
-msgstr "הסתר גיליון"
+msgstr "הפעלת %1"
 
 #: ui/RegionSelector.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Single Cell"
-msgstr "חשב גיליון מחדש"
+msgstr "בחירת תא נפרד"
 
 #: ui/RegionSelector.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Multiple Cells"
-msgstr "יש לבחור מספר תאים."
+msgstr "בחירת תאים במרוכז"
 
 #: ui/strategy/HyperlinkStrategy.cpp:67
 #, kde-format
