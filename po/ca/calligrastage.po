@@ -1,9 +1,9 @@
 # Translation of calligrastage.po to Catalan
-# Copyright (C) 2000-2023 This_file_is_part_of_KDE
+# Copyright (C) 2000-2024 This_file_is_part_of_KDE
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2023.
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2021, 2023.
 msgid ""
@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-05-02 16:55+0200\n"
+"PO-Revision-Date: 2024-07-31 11:43+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -89,7 +89,7 @@ msgstr "Elimina l'animació de forma"
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "Elimina la presentació personalitzada"
+msgstr "Suprimeix la presentació personalitzada"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
 msgctxt "(qtundo-format) Delete one slide"
@@ -100,8 +100,8 @@ msgstr "Suprimeix la presentació"
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "Elimina la diapositiva"
-msgstr[1] "Elimina les diapositives"
+msgstr[0] "Suprimeix la diapositiva"
+msgstr[1] "Suprimeix les diapositives"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
@@ -126,7 +126,7 @@ msgstr "Modifica un efecte de diapositiva"
 #: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr "Elimina l'efecte de diapositiva"
+msgstr "Suprimeix l'efecte de diapositiva"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
 msgctxt "(qtundo-format)"
@@ -514,12 +514,12 @@ msgstr "Copia la diapositiva actual"
 #: part/KPrView.cpp:87 part/KPrViewModeSlidesSorter.cpp:174
 #, kde-format
 msgid "Delete Slide"
-msgstr "Elimina la diapositiva"
+msgstr "Suprimeix la diapositiva"
 
 #: part/KPrView.cpp:88 part/KPrView.cpp:89
 #, kde-format
 msgid "Delete the current slide"
-msgstr "Elimina la diapositiva actual"
+msgstr "Suprimeix la diapositiva actual"
 
 #: part/KPrView.cpp:90
 #, kde-format
@@ -670,7 +670,7 @@ msgstr "Afegeix una presentació nova"
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr "Elimina la presentació personalitzada actual"
+msgstr "Suprimeix la presentació personalitzada actual"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
@@ -700,7 +700,7 @@ msgstr "Afegeix una diapositiva nova"
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
 #, kde-format
 msgid "Delete selected slides"
-msgstr "Elimina les diapositives seleccionades"
+msgstr "Suprimeix les diapositives seleccionades"
 
 #: part/KPrViewModeSlidesSorter.cpp:537
 #, kde-format
@@ -929,7 +929,7 @@ msgstr "Afegeix una animació nova"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Delete current animation"
-msgstr "Elimina l'animació actual"
+msgstr "Suprimeix l'animació actual"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
@@ -1137,7 +1137,7 @@ msgstr "Autor"
 #: part/ui/KPrHtmlExport.ui:258
 #, kde-format
 msgid "Delete Favorite"
-msgstr "Elimina el favorit"
+msgstr "Suprimeix el favorit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
 #: part/ui/KPrHtmlExport.ui:286
@@ -1173,7 +1173,7 @@ msgstr "El fitxer ZIP ha de contenir style.css"
 #: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
 msgid "Delete Template"
-msgstr "Elimina la plantilla"
+msgstr "Suprimeix la plantilla"
 
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format

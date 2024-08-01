@@ -702,7 +702,7 @@
 <listitem
 ><para
 ><action
->Elimina <guimenuitem
+>Suprimeix <guimenuitem
 >Cel·les</guimenuitem
 >, <guimenuitem
 >Columnes</guimenuitem
@@ -2279,7 +2279,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Elimina les cel·les...</guimenuitem>
+>Suprimeix les cel·les...</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2309,13 +2309,13 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Elimina les files</guimenuitem>
+>Suprimeix les files</guimenuitem>
 </menuchoice
 ></term>
 <listitem
 ><para
 ><action
->Elimina les files seleccionades.</action>
+>Suprimeix les files seleccionades.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -2369,13 +2369,13 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Elimina les columnes</guimenuitem>
+>Suprimeix les columnes</guimenuitem>
 </menuchoice
 ></term>
 <listitem
 ><para
 ><action
->Elimina les columnes seleccionades.</action>
+>Suprimeix les columnes seleccionades.</action>
 </para
 ></listitem>
 </varlistentry>

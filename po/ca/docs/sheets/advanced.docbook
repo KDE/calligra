@@ -852,7 +852,7 @@
 <title
 >Protegir el document</title>
 <para
->Protegir el document vol dir que sense la contrasenya un usuari no podrà afegir ni eliminar fulls. La protecció del document no protegeix cel·les.</para>
+>Protegir el document vol dir que sense la contrasenya un usuari no podrà afegir ni suprimir fulls. La protecció del document no protegeix cel·les.</para>
 <para
 >Seleccioneu <menuchoice
 ><guimenu

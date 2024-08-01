@@ -586,7 +586,7 @@ often.</para>
 > <guimenu
 >Edita</guimenu
 > <guimenuitem
->Elimina</guimenuitem
+>Suprimeix</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -2310,13 +2310,13 @@ it would be autocorrected to <userinput
 ><guimenu
 >Diapositiva</guimenu
 > <guimenuitem
->Elimina la diapositiva</guimenuitem
+>Suprimeix la diapositiva</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
 <para
 ><action
->Elimina la pàgina actual de la presentació.</action
+>Suprimeix la pàgina actual de la presentació.</action
 > Se us preguntarà per a confirmar aquesta acció.</para>
 </listitem>
 </varlistentry>
