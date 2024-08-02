@@ -191,7 +191,7 @@ msgstr "Il non trovava alcun del elementox expectate: %1"
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr "Il nonpote trovar objectivo pro id \"%1\" in file \"%2\""
+msgstr "Il non pote trovar objectivo pro id \"%1\" in file \"%2\""
 
 #: libmsooxml/MsooXmlRelationships.cpp:93
 #: libmsooxml/MsooXmlRelationships.cpp:112
@@ -1465,7 +1465,7 @@ msgstr ""
 #~| msgid "Could not find target for id \"%1\" in file \"%2\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not find target for id \"%1\" in file \"%2\""
-#~ msgstr "Il nonpote trovar objectivo pro id \"%1\" in file \"%2\""
+#~ msgstr "Il non pote trovar objectivo pro id \"%1\" in file \"%2\""
 
 #, fuzzy
 #~| msgid "Could not find relationships file \"%1\""
