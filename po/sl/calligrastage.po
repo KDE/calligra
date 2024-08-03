@@ -1,20 +1,20 @@
 # translation of kpresenter.po to Slovenian
 # Translation of kpresenter.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrastage.po 1678866 2024-04-29 01:11:38Z scripty $
+# $Id: calligrastage.po 1686204 2024-08-03 01:13:58Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 1999.
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2003, 2005, 2006, 2008, 2011, 2012.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2003, 2004.
 # Jure Repinc <jlp@holodeck1.com>, 2006.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2020, 2021.
+# SPDX-FileCopyrightText: 2019, 2020, 2021, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-02-01 09:24+0100\n"
+"PO-Revision-Date: 2024-08-02 05:59+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -1690,7 +1690,7 @@ msgstr "Diagonalno z vrha levo v obratni smeri"
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Vee"
-msgstr "Skedenj xxx"
+msgstr "Barn Vee"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
 #, kde-format
@@ -1776,7 +1776,7 @@ msgstr "Dvojni diamant"
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Vee"
-msgstr "Vee xxx"
+msgstr "Vee"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
 #, kde-format
@@ -1935,7 +1935,7 @@ msgstr "Trikotnik"
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box Snakes"
-msgstr "Kače v škatli xxx"
+msgstr "Kače v škatli"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Top In"
@@ -1963,19 +1963,19 @@ msgstr "Štiri škatle vodoravno"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Top Out"
-msgstr "Dve škatli na vrhu xxx"
+msgstr "Dve škatli na vrhu"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Bottom Out"
-msgstr "Dve škatli na dnu xxx"
+msgstr "Dve škatli na dnu"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Two Box Left Out"
-msgstr "Dve škatli na levi xxx"
+msgstr "Dve škatli na levi"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Two Box Right Out"
-msgstr "Dve škatli na desni xxx"
+msgstr "Dve škatli na desni"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
 msgid "Four Box Vertical Out"

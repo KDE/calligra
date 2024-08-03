@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1681018 2024-05-28 01:09:59Z scripty $
+# $Id: calligra.po 1686204 2024-08-03 01:13:58Z scripty $
 # $Source$
 #
 #
@@ -9,14 +9,14 @@
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2003, 2004, 2005.
 # Jure Repinc <jlp@holodeck1.com>, 2006.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2022, 2023.
+# SPDX-FileCopyrightText: 2019, 2022, 2023, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
 # Martin Srebotnjak <miles@filmsi.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-28 00:38+0000\n"
-"PO-Revision-Date: 2024-04-16 07:18+0200\n"
+"PO-Revision-Date: 2024-08-02 05:47+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -477,7 +477,7 @@ msgstr "Ustvari predmet"
 #: flake/tools/KoPanToolFactory.cpp:17
 #, kde-format
 msgid "Pan"
-msgstr "Pan xxx"
+msgstr "Pan"
 
 #: flake/tools/KoPathSegmentChangeStrategy.cpp:129
 msgctxt "(qtundo-format)"
@@ -502,12 +502,12 @@ msgstr "Simetrična točka"
 #: flake/tools/KoPathTool.cpp:110
 #, kde-format
 msgid "Make curve point"
-msgstr "Naredi iz krivulje točko xxx"
+msgstr "Naredi točko na krivulji"
 
 #: flake/tools/KoPathTool.cpp:114
 #, kde-format
 msgid "Make line point"
-msgstr "Naredi iz črte točko xxx"
+msgstr "Naredi točko črte"
 
 #: flake/tools/KoPathTool.cpp:118
 #, kde-format

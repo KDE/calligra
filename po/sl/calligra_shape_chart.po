@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2008, 2010, 2012, 2013.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2020.
+# SPDX-FileCopyrightText: 2019, 2020, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2020-11-02 10:07+0100\n"
+"PO-Revision-Date: 2024-08-02 05:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 
@@ -427,7 +427,7 @@ msgstr "OHLC Delniški grafikon"
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr "Open High Low Close stock chart xxx 1"
+msgstr "Open High Low Close stock chart"
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
@@ -437,7 +437,7 @@ msgstr "HLC delniški grafikon"
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr "High Low Close stock chart xxx 2"
+msgstr "High Low Close stock chart"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -932,22 +932,22 @@ msgstr "Polnjeno"
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "Stock Chart"
-msgstr "Delniški grafikon xxx"
+msgstr "Delniški grafikon"
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "Candlestick"
-msgstr "Sveča xxx"
+msgstr "Sveča"
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr "OpenHighLowClose xxx"
+msgstr "OpenHighLowClose"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
 #, kde-format
 msgid "HighLowClose"
-msgstr "HighLowClose xxx"
+msgstr "HighLowClose"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
