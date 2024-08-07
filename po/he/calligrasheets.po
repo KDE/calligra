@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-22 20:02+0300\n"
+"PO-Revision-Date: 2024-08-06 11:18+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -10341,9 +10341,9 @@ msgid "x (array)"
 msgstr "ערך (מערך)"
 
 #: functions/statistical.xml:1708
-#, fuzzy, kde-format
+#, kde-format
 msgid "mean"
-msgstr "עומאן"
+msgstr "ממוצא"
 
 #: functions/statistical.xml:1712
 #, fuzzy, kde-format
@@ -12045,9 +12045,9 @@ msgid "SEC(Float)"
 msgstr "COS(Float)"
 
 #: functions/trig.xml:316
-#, fuzzy, kde-format
+#, kde-format
 msgid "SEC(0) equals 1"
-msgstr "(COSH(0 שווה ל־1"
+msgstr "SEC(0) שווה ל־1"
 
 #: functions/trig.xml:328
 #, fuzzy, kde-format
@@ -12057,14 +12057,14 @@ msgid ""
 msgstr "הפונקציה ()COS מחזירה את הקוסינוס של x, כאשר x נתון ברדיאנים."
 
 #: functions/trig.xml:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "SECH(Float)"
-msgstr "COSH(Float)"
+msgstr "SECH(Float)"
 
 #: functions/trig.xml:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "SECH(0) equals 1"
-msgstr "(COSH(0 שווה ל־1"
+msgstr "SECH(0) שווה ל־1"
 
 #: part/AboutData.h:27
 #, kde-format
@@ -12073,14 +12073,14 @@ msgid "Calligra Sheets"
 msgstr "גיליונות של Calligra"
 
 #: part/AboutData.h:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spreadsheet Application"
-msgstr "תוכנית הגיליון האלקטרוני של KOffice"
+msgstr "יישום גיליונות נתונים"
 
 #: part/AboutData.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "(c) ‏1998-2005, הצוות של KSpread"
+msgstr "כל הזכויות שמורות 1998‏-%1, צוות גיליונות Calligra"
 
 #: part/AboutData.h:39
 #, kde-format
@@ -12432,9 +12432,9 @@ msgid "Define Print Range"
 msgstr "הגדר טווח הדפסה"
 
 #: part/CellTool.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Define the print range in the current sheet"
-msgstr "הגדרת טווח ההדפסה בגיליון הנוכחי."
+msgstr "הגדרת טווח ההדפסה בגיליון הנוכחי"
 
 #: part/CellToolFactory.cpp:20
 #, kde-format
@@ -12622,7 +12622,7 @@ msgstr "צבעים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Grid:"
 msgstr "&רשת:"
 
@@ -12643,9 +12643,9 @@ msgstr "התאמה אישית…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Out&line:"
-msgstr "גבול מקיף"
+msgstr "מ&תאר עמוד:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:208
@@ -12790,9 +12790,9 @@ msgstr "עד"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: part/dialogs/PageLayoutSheetPage.ui:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scaling"
-msgstr "שילינג"
+msgstr "התאמת קנה מידה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomButton)
 #: part/dialogs/PageLayoutSheetPage.ui:275
@@ -13007,9 +13007,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show c&omment indicator"
-msgstr "הצג &סימון הערות"
+msgstr "הצגת מחוון ה&ערות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:120
@@ -13037,9 +13037,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show page outline"
-msgstr "הצג &גבולות עמוד"
+msgstr "הצגת מתאר עמוד"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:140
@@ -13298,19 +13298,19 @@ msgid "Sheet %1 could not be found for printing"
 msgstr ""
 
 #: part/PrintJob.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "Nothing to print for sheet(s) %1."
-msgstr "אין מה להדפיס."
+msgstr "אין מה להדפיס לגיליונות %1."
 
 #: part/View.cpp:225
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheet Properties..."
-msgstr "מאפייני גיליון"
+msgstr "מאפייני גיליון…"
 
 #: part/View.cpp:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modify current sheet's properties"
-msgstr "שינוי המאפיינים של הגיליון הנוכחי."
+msgstr "שינוי מאפייני הגיליון הנוכחי"
 
 #: part/View.cpp:231 part/View.cpp:2005
 #, kde-format
@@ -13318,19 +13318,19 @@ msgid "Insert Sheet"
 msgstr "הוסף גיליון"
 
 #: part/View.cpp:232
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a new sheet"
-msgstr "הוספת גיליון חדש."
+msgstr "הוספת גיליון חדש"
 
 #: part/View.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate Sheet"
-msgstr "חשב גיליון מחדש"
+msgstr "שכפול גיליון"
 
 #: part/View.cpp:237
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate the selected sheet"
-msgstr "הסתרת הגיליון הפעיל."
+msgstr "הסתרת הגיליון הפעיל"
 
 #: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
 #, kde-format
@@ -13338,9 +13338,9 @@ msgid "Remove Sheet"
 msgstr "הסר גיליון"
 
 #: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the active sheet"
-msgstr "הסרת הגיליון הפעיל."
+msgstr "הסרת הגיליון הפעיל"
 
 #: part/View.cpp:247
 #, kde-format
@@ -13348,9 +13348,9 @@ msgid "Rename Sheet..."
 msgstr "שינוי שם הגיליון..."
 
 #: part/View.cpp:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename the active sheet"
-msgstr "שינוי שם הגיליון הפעיל."
+msgstr "שינוי שם הגיליון הפעיל"
 
 #: part/View.cpp:252
 #, kde-format
@@ -13358,9 +13358,9 @@ msgid "Show Sheet..."
 msgstr "הצגת גיליון..."
 
 #: part/View.cpp:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show a hidden sheet"
-msgstr "הצגת גיליון מוסתר."
+msgstr "הצגת גיליון מוסתר"
 
 #: part/View.cpp:257
 #, kde-format
@@ -13368,9 +13368,9 @@ msgid "Hide Sheet"
 msgstr "הסתר גיליון"
 
 #: part/View.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide the active sheet"
-msgstr "הסתרת הגיליון הפעיל."
+msgstr "הסתרת הגיליון הפעיל"
 
 #: part/View.cpp:262
 #, kde-format
@@ -13388,14 +13388,14 @@ msgid "Reset Print Range"
 msgstr "אפס טווח הדפסה"
 
 #: part/View.cpp:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset the print range in the current sheet"
-msgstr "הגדרת טווח ההדפסה בגיליון הנוכחי."
+msgstr "איפוס טווח ההדפסה בגיליון הנוכחי"
 
 #: part/View.cpp:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Outline"
-msgstr "גבול מקיף"
+msgstr "מתאר עמוד"
 
 #: part/View.cpp:273
 #, fuzzy, kde-format
