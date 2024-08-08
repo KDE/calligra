@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "changecase",
         "Name": "Change case plugin",
         "Name[ca@valencia]": "Connector de canvi de caixa",
         "Name[ca]": "Connector de canvi de caixa",

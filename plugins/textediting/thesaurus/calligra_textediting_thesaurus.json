@@ -21,7 +21,6 @@
         "Description[x-test]": "xxShow Related Wordsxx",
         "Description[zh_TW]": "顯示相關單字",
         "Icon": "",
-        "Id": "thesaurustool",
         "Name": "Thesaurus Tool",
         "Name[ca@valencia]": "Eina Tesaurus",
         "Name[ca]": "Eina Tesaurus",

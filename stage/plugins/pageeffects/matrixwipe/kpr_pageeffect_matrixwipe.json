@@ -18,7 +18,6 @@
         "Description[uk]": "Ефект матричного витирання сторінки",
         "Description[x-test]": "xxMatrix wipe Page Effectsxx",
         "Description[zh_TW]": "矩陣掃描頁面效果",
-        "Id": "kpr_pageeffect_matrixwipe",
         "Name": "Matrix wipe",
         "Name[ca@valencia]": "Esborrat de matriu",
         "Name[ca]": "Esborrat de matriu",

@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "spellcheck",
         "Name": "SpellCheck plugin",
         "Name[ca@valencia]": "Connector d'ortografia",
         "Name[ca]": "Connector d'ortografia",

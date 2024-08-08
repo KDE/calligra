@@ -19,7 +19,6 @@
         "Description[uk]": "Додаток для створення зв’язку між записами місць у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map location items between document and RDF databasexx",
         "Description[zh_TW]": "讓文件與 RDF 資料庫位置項目對應的外掛程式",
-        "Id": "calligra_semanticitem_location",
         "Name": "RDF Location Plugin",
         "Name[ca@valencia]": "Connector d'ubicació RDF",
         "Name[ca]": "Connector d'ubicació RDF",

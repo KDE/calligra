@@ -7,7 +7,16 @@ include_directories(
 
 add_subdirectory(pics)
 
-set(pathshapes_PART_SRCS
+set(pathshapes_PART_SRCS)
+
+ki18n_wrap_ui(pathshapes_PART_SRCS
+    star/StarShapeConfigWidget.ui
+    rectangle/RectangleShapeConfigWidget.ui
+    ellipse/EllipseShapeConfigWidget.ui
+    spiral/SpiralShapeConfigWidget.ui
+)
+add_library(calligra_shape_paths SHARED
+    ${pathshapes_PART_SRCS}
     ellipse/EllipseShape.cpp
     ellipse/EllipseShapeFactory.cpp
     ellipse/EllipseShapeConfigWidget.cpp
@@ -37,14 +46,6 @@ set(pathshapes_PART_SRCS
     enhancedpath/CalloutDebug.cpp
     PathShapesPlugin.cpp
 )
-
-ki18n_wrap_ui(pathshapes_PART_SRCS
-    star/StarShapeConfigWidget.ui
-    rectangle/RectangleShapeConfigWidget.ui
-    ellipse/EllipseShapeConfigWidget.ui
-    spiral/SpiralShapeConfigWidget.ui
-)
-add_library(calligra_shape_paths MODULE ${pathshapes_PART_SRCS})
 
 target_link_libraries(calligra_shape_paths flake kowidgets)
 

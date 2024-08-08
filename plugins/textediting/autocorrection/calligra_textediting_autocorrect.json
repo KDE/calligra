@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "autocorrect",
         "Name": "Autocorrection plugin",
         "Name[ca@valencia]": "Connector de correcció automàtica",
         "Name[ca]": "Connector de correcció automàtica",

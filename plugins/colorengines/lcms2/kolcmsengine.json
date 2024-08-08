@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "kolcmsengine",
         "Name": "LCMS Color Management Engine for Pigment",
         "Name[ca@valencia]": "Motor de gestió de color LCMS per al Pigment",
         "Name[ca]": "Motor de gestió de color LCMS per al Pigment",

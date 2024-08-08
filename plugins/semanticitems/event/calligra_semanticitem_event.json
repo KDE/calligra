@@ -19,7 +19,6 @@
         "Description[uk]": "Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map calendar event items between document and RDF databasexx",
         "Description[zh_TW]": "讓文件與 RDF 資料庫行事曆事件項目對應的外掛程式",
-        "Id": "calligra_semanticitem_event",
         "Name": "RDF Calendar Event Plugin",
         "Name[ca@valencia]": "Connector d'esdeveniments de calendari RDF",
         "Name[ca]": "Connector d'esdeveniments de calendari RDF",

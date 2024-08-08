@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "defaulttools",
         "Name": "Default Flake Tools",
         "Name[ca@valencia]": "Eines de floc per defecte",
         "Name[ca]": "Eines de floc per defecte",

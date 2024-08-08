@@ -56,7 +56,6 @@
         "Description[x-test]": "xxPPTX file rendererxx",
         "Description[zh_CN]": "PPTX 文件渲染器",
         "Description[zh_TW]": "PPTX 檔案繪製器",
-        "Id": "okularGenerator_pptx_calligra",
         "License": "GPL",
         "MimeTypes": [
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",

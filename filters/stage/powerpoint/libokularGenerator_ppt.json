@@ -56,7 +56,6 @@
         "Description[x-test]": "xxPPT file rendererxx",
         "Description[zh_CN]": "PPT 文件渲染器",
         "Description[zh_TW]": "PPT 檔案繪製器",
-        "Id": "okularGenerator_ppt_calligra",
         "License": "GPL",
         "MimeTypes": [
             "application/vnd.ms-powerpoint"

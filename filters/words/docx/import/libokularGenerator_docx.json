@@ -56,7 +56,6 @@
         "Description[x-test]": "xxDOCX file rendererxx",
         "Description[zh_CN]": "DOCX 文件渲染器",
         "Description[zh_TW]": "DOCX 檔案繪製器",
-        "Id": "okularGenerator_docx_calligra",
         "License": "GPL",
         "MimeTypes": [
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

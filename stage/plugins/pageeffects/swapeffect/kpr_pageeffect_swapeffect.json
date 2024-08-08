@@ -18,7 +18,6 @@
         "Description[uk]": "Ефект перегортання сторінки",
         "Description[x-test]": "xxSwap Page Effectxx",
         "Description[zh_TW]": "變換頁面效果",
-        "Id": "kpr_pageeffect_swapeffect",
         "Name": "Swap Effect",
         "Name[ca@valencia]": "Efecte d'agranat",
         "Name[ca]": "Efecte d'escombrat",

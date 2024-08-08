@@ -1,7 +1,6 @@
 {
     "KPlugin": {
         "Icon": "",
-        "Id": "textvariables",
         "Name": "Text Variables",
         "Name[ca@valencia]": "Variables de text",
         "Name[ca]": "Variables de text",

@@ -31,7 +31,6 @@
         "Description[zh_TW]": "將行事曆插入一塊儲存格範圍。",
         "EnabledByDefault": true,
         "Icon": "x-office-calendar",
-        "Id": "CalendarTool",
         "License": "GPL",
         "Name": "Calendar Tool",
         "Name[ca@valencia]": "Eina de calendari",

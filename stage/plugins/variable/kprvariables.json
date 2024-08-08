@@ -1,7 +1,6 @@
 {
     "KPlugin": {
         "Icon": "",
-        "Id": "kprvariables",
         "Name": "Presentation Variables",
         "Name[ca@valencia]": "Variables de presentació",
         "Name[ca]": "Variables de presentació",
