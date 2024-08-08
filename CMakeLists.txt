@@ -128,6 +128,7 @@ endif()
 if (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
     set(CALLIGRA_SHOULD_BUILD_GEMINI FALSE)
+    set(CALLIGRA_SHOULD_BUILD_BRAINDUMP FALSE)
     if(BUILD_UNMAINTAINED)
         set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
     else()
@@ -137,6 +138,7 @@ else ()
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
     set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
     set(CALLIGRA_SHOULD_BUILD_GEMINI TRUE)
+    set(CALLIGRA_SHOULD_BUILD_BRAINDUMP TRUE)
 endif ()
 
 # finally choose products/features to build
@@ -963,9 +965,8 @@ calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
     )
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
-    NOT_WIN "unmaintained on Windows"
-    Qt6WebEngineWidgets_FOUND "QWebPage needed for webpage plugin"
-    )
+    Qt6WebEngineWidgets_FOUND "QWebEnginePage needed for webpage plugin"
+)
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
