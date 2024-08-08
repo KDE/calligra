@@ -51,9 +51,6 @@ public:
 public Q_SLOTS:
     void forceDockTabFonts();
 
-protected:
-    void closeEvent(QCloseEvent *e) override;
-
 private:
     RootSection *m_doc;
     View *view;

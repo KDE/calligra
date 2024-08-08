@@ -32,6 +32,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KStandardAction>
+#include <KWindowStateSaver>
 
 #include <KoCanvasObserverBase.h>
 #include <KoDockFactoryBase.h>
@@ -50,6 +51,8 @@ MainWindow::MainWindow(RootSection *document)
     , m_activeView(0)
     , m_dockerManager(0)
 {
+    new KWindowStateSaver(this, "MainWindow");
+
     // then, setup our actions
     setupActions();
 
@@ -71,18 +74,6 @@ MainWindow::MainWindow(RootSection *document)
 
     setAutoSaveSettings(qApp->applicationName());
 
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-
-    KConfigGroup config(KSharedConfig::openConfig(), qApp->applicationName());
-    const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
-                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
-    resize(size);
-
     foreach (QDockWidget *wdg, m_dockWidgets) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
             wdg->setVisible(true);
@@ -96,21 +87,6 @@ MainWindow::~MainWindow()
 {
     // The view need to be deleted before the dockermanager
     delete view;
-}
-
-void MainWindow::closeEvent(QCloseEvent *e)
-{
-    Q_UNUSED(e);
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    if (QApplication::desktop()->isVirtualDesktop()) {
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-    }
-
-    KConfigGroup config(KSharedConfig::openConfig(), qApp->applicationName());
-    config.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), width());
-    config.writeEntry(QString::fromLatin1("Height %1").arg(desk.height()), height());
 }
 
 void MainWindow::setupActions()
