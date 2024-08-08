@@ -56,7 +56,6 @@
         "Description[x-test]": "xxOpenDocument Text file rendererxx",
         "Description[zh_CN]": "OpenDocument 文本文件渲染器",
         "Description[zh_TW]": "OpenDocument 文字檔案繪製器",
-        "Id": "okularGenerator_odt_calligra",
         "License": "GPL",
         "MimeTypes": [
             "application/vnd.oasis.opendocument.text",

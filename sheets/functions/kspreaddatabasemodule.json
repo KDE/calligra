@@ -31,7 +31,6 @@
         "Description[x-test]": "xxDAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATAxx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "DatabaseModule",
         "License": "GPL",
         "Name": "Database Functions",
         "Name[ca@valencia]": "Funcions de base de dades",

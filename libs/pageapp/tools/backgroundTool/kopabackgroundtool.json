@@ -1,6 +1,5 @@
 {
     "KPlugin": {
-        "Id": "kopabackgroundtool",
         "Name": "Page Application Background Tool",
         "Name[ca@valencia]": "Eina d'aplicació de fons de pàgina",
         "Name[ca]": "Eina d'aplicació de fons de pàgina",

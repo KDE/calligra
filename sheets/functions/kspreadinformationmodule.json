@@ -30,7 +30,6 @@
         "Description[x-test]": "xxERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPExx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "InformationModule",
         "License": "GPL",
         "Name": "Information Functions",
         "Name[ca@valencia]": "Funcions d'informació",

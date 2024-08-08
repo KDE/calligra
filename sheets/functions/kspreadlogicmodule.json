@@ -30,7 +30,6 @@
         "Description[x-test]": "xxAND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XORxx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "LogicModule",
         "License": "GPL",
         "Name": "Logic Functions",
         "Name[ca@valencia]": "Funcions lògiques",

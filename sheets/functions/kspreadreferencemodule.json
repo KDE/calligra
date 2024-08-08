@@ -31,7 +31,6 @@
         "Description[x-test]": "xxADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, MULTIPLE.OPERATIONS ROW, ROWS, VLOOKUPxx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "ReferenceModule",
         "License": "GPL",
         "Name": "Reference Functions",
         "Name[ca@valencia]": "Funcions de referència",

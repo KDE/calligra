@@ -30,7 +30,6 @@
         "Description[x-test]": "xxBITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFTxx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "BitOpsModule",
         "License": "GPL",
         "Name": "Bit Operation Functions",
         "Name[ca@valencia]": "Funcions d'operació de bit",

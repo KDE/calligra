@@ -30,7 +30,6 @@
         "Description[x-test]": "xxACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANHxx",
         "EnabledByDefault": true,
         "Icon": "funct",
-        "Id": "TrigonometryModule",
         "License": "GPL",
         "Name": "Trigonometry Functions",
         "Name[ca@valencia]": "Funcions trigonomètriques",
