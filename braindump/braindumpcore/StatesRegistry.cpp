@@ -33,10 +33,9 @@ void StatesRegistry::Private::parseStatesRC(const QString &_filename)
         qCritical() << "Can't open " << _filename;
         return;
     }
-    QString errMsg;
-    int line, column;
-    if (!doc.setContent(&file, &errMsg, &line, &column)) {
-        qCritical() << "At (" << line << ", " << column << ") " << errMsg;
+    auto parseResult = doc.setContent(file.readAll());
+    if (!parseResult) {
+        qCritical() << "At (" << parseResult.errorLine << ", " << parseResult.errorColumn << ") " << parseResult.errorMessage;
         file.close();
         return;
     }
