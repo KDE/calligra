@@ -100,7 +100,7 @@ QVariant DocumentModel::data(const QModelIndex &index, int role) const
             return section->name();
         }
         case SectionPtr:
-            return qVariantFromValue(section);
+            return QVariant::fromValue(section);
         }
     }
     return QVariant();
@@ -173,12 +173,12 @@ QMimeData *DocumentModel::mimeData(const QModelIndexList &indexes) const
     QMimeData *data = new QMimeData();
     QString format = types[0];
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
     for (; it != indexes.end(); ++it)
-        stream << qVariantFromValue(qulonglong(it->internalPointer()));
+        stream << QVariant::fromValue(qulonglong(it->internalPointer()));
 
     data->setData(format, encoded);
     return data;
@@ -199,7 +199,7 @@ bool DocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction action, i
         return false;
 
     QByteArray encoded = data->data(format);
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QDataStream stream(&encoded, QIODeviceBase::ReadOnly);
     QList<Section *> shapes;
 
     // decode the data
