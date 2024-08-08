@@ -32,8 +32,8 @@ public:
     virtual ~ChangeLayoutCommand();
 
 public:
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     Section *m_section;

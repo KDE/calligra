@@ -42,9 +42,9 @@ public:
     virtual ~RememberPositionCommand();
 
 public:
-    virtual void undo();
+    void undo() override;
     /// Will do nothing
-    virtual void redo();
+    void redo() override;
 
 private:
     QMap<KoShape *, QRectF> m_shapesToGeom;

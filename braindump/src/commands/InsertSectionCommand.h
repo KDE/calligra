@@ -30,10 +30,10 @@ class SectionGroup;
 class InsertSectionCommand : public KUndo2Command
 {
 public:
-    InsertSectionCommand(SectionsIO *_sectionIO, Section *_section, SectionGroup *_parent, DocumentModel *_model, Section *_above);
-    InsertSectionCommand(SectionsIO *_sectionIO, Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx);
-    virtual void undo();
-    virtual void redo();
+    explicit InsertSectionCommand(SectionsIO *_sectionIO, Section *_section, SectionGroup *_parent, DocumentModel *_model, Section *_above);
+    explicit InsertSectionCommand(SectionsIO *_sectionIO, Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx);
+    void undo() override;
+    void redo() override;
 
 private:
     SectionsIO *m_sectionIO;

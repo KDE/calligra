@@ -29,10 +29,10 @@ class SectionGroup;
 class MoveSectionCommand : public KUndo2Command
 {
 public:
-    MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, Section *_above);
-    MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx);
-    virtual void undo();
-    virtual void redo();
+    explicit MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, Section *_above);
+    explicit MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx);
+    void undo() override;
+    void redo() override;
 
 private:
     Section *m_section;

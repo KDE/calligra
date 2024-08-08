@@ -28,9 +28,9 @@ class Section;
 class RenameSectionCommand : public KUndo2Command
 {
 public:
-    RenameSectionCommand(DocumentModel *_model, Section *_section, const QString &_newName);
-    virtual void undo();
-    virtual void redo();
+    explicit RenameSectionCommand(DocumentModel *_model, Section *_section, const QString &_newName);
+    void undo() override;
+    void redo() override;
 
 private:
     DocumentModel *m_model;
