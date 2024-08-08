@@ -62,14 +62,14 @@ class SectionContainerShapePaste : public KoOdfPaste
 public:
     SectionContainerShapePaste(SectionContainer *_container, KoShapeLayer *_layer, Layout *_layout)
         : m_container(_container)
-        , m_layer(_layer)
         , m_layout(_layout)
     {
+        Q_UNUSED(_layer)
     }
     virtual ~SectionContainerShapePaste()
     {
     }
-    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore)
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override
     {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, m_container->resourceManager());
@@ -81,7 +81,6 @@ public:
 
 private:
     SectionContainer *m_container;
-    KoShapeLayer *m_layer;
     Layout *m_layout;
 };
 

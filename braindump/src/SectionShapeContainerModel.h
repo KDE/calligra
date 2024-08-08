@@ -29,17 +29,17 @@ class SectionShapeContainerModel : public KoShapeContainerModel
 public:
     explicit SectionShapeContainerModel(Section *_section);
     ~SectionShapeContainerModel();
-    void add(KoShape *child);
-    void setClipped(const KoShape *, bool);
-    bool isClipped(const KoShape *) const;
-    void setInheritsTransform(const KoShape *, bool);
-    bool inheritsTransform(const KoShape *) const;
-    void remove(KoShape *child);
-    int count() const;
-    QList<KoShape *> shapes() const;
-    void containerChanged(KoShapeContainer *, KoShape::ChangeType type);
-    void childChanged(KoShape *, KoShape::ChangeType);
-    bool isChildLocked(const KoShape *child) const;
+    void add(KoShape *child) override;
+    void setClipped(const KoShape *, bool) override;
+    bool isClipped(const KoShape *) const override;
+    void setInheritsTransform(const KoShape *, bool) override;
+    bool inheritsTransform(const KoShape *) const override;
+    void remove(KoShape *child) override;
+    int count() const override;
+    QList<KoShape *> shapes() const override;
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType type) override;
+    void childChanged(KoShape *, KoShape::ChangeType) override;
+    bool isChildLocked(const KoShape *child) const override;
 
 public:
     /**

@@ -28,14 +28,14 @@ class ColumnLayout : public Layout
 public:
     ColumnLayout();
     virtual ~ColumnLayout();
-    virtual QRectF boundingBox() const;
+    QRectF boundingBox() const override;
 
 protected:
-    virtual void shapesAdded(QList<KoShape *> _shape);
-    virtual void shapeAdded(KoShape *_shape);
-    virtual void shapeRemoved(KoShape *_shape);
-    virtual void shapeGeometryChanged(KoShape *_shape);
-    virtual void relayout();
+    void shapesAdded(QList<KoShape *> _shape) override;
+    void shapeAdded(KoShape *_shape) override;
+    void shapeRemoved(KoShape *_shape) override;
+    void shapeGeometryChanged(KoShape *_shape) override;
+    void relayout() override;
 
 private:
     QList<KoShape *> m_shapes;
@@ -47,7 +47,7 @@ class ColumnLayoutFactory : public LayoutFactory
 public:
     ColumnLayoutFactory();
     virtual ~ColumnLayoutFactory();
-    virtual Layout *createLayout() const;
+    Layout *createLayout() const override;
 };
 
 #endif

@@ -38,8 +38,8 @@ private:
     void initContainer(Section *, RootSection *_rootSection);
 
 public:
-    virtual void addShape(KoShape *shape);
-    virtual void removeShape(KoShape *shape);
+    void addShape(KoShape *shape) override;
+    void removeShape(KoShape *shape) override;
 
 public:
     Section *section();

@@ -71,8 +71,7 @@ protected:
     virtual void relayout() = 0;
 
 protected:
-    // Reimplemented from QObject
-    virtual bool event(QEvent *e);
+    bool event(QEvent *e) override;
 Q_SIGNALS:
     void boundingBoxChanged(const QRectF &_rect);
 
