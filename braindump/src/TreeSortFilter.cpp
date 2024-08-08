@@ -64,7 +64,7 @@ bool TreeSortFilter::numericLessThan(const QString &l, const QString &r) const
 
 bool TreeSortFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (filterRegExp().isEmpty())
+    if (filterRegularExpression().pattern().isEmpty())
         return true;
 
     QModelIndex current(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
@@ -73,7 +73,7 @@ bool TreeSortFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
         bool atLeastOneValidChild = false;
         int i = 0;
         while (!atLeastOneValidChild) {
-            const QModelIndex child(current.child(i, current.column()));
+            const QModelIndex child(current.model()->index(i, current.column(), current));
             if (!child.isValid())
                 // No valid child
                 break;
@@ -84,7 +84,7 @@ bool TreeSortFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
         return atLeastOneValidChild;
     }
 
-    return sourceModel()->data(current).toString().contains(filterRegExp());
+    return sourceModel()->data(current).toString().contains(filterRegularExpression());
 }
 
 // vim: et:ts=4:sw=4:sts=4

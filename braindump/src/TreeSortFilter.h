@@ -48,9 +48,9 @@ protected:
     /**
      * Compares @p left and @p right. They are treated as QStrings.
      */
-    virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
-    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     inline bool numericLessThan(const QString &l, const QString &r) const;
