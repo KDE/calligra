@@ -47,12 +47,12 @@ private:
 
 public:
     void activateView(View *view);
-    QList<KoCanvasObserverBase *> canvasObservers() const;
+    QList<KoCanvasObserverBase *> canvasObservers() const override;
 public Q_SLOTS:
     void forceDockTabFonts();
 
 protected:
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent *e) override;
 
 private:
     RootSection *m_doc;

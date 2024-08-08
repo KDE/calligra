@@ -45,39 +45,39 @@ public:
     }
 
     /// reimplemented method
-    virtual void addCommand(KUndo2Command *command);
+    void addCommand(KUndo2Command *command) override;
     /// reimplemented method
-    virtual KoShapeManager *shapeManager() const;
+    KoShapeManager *shapeManager() const override;
     /// reimplemented method
-    virtual void updateCanvas(const QRectF &rc);
+    void updateCanvas(const QRectF &rc) override;
     /// reimplemented method
-    virtual void updateInputMethodInfo();
+    void updateInputMethodInfo() override;
 
-    KoToolProxy *toolProxy() const
+    KoToolProxy *toolProxy() const override
     {
         return m_toolProxy;
     }
-    KoViewConverter *viewConverter() const;
-    QWidget *canvasWidget()
+    KoViewConverter *viewConverter() const override;
+    QWidget *canvasWidget() override
     {
         return this;
     }
-    const QWidget *canvasWidget() const
+    const QWidget *canvasWidget() const override
     {
         return this;
     }
-    KoUnit unit() const;
+    KoUnit unit() const override;
     const QPoint &documentOffset() const;
-    QPoint documentOrigin() const;
+    QPoint documentOrigin() const override;
 
     View *koPAView() const
     {
         return m_view;
     }
 
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
-    virtual bool snapToGrid() const;
-    virtual void setCursor(const QCursor &cursor);
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const override;
+    virtual bool snapToGrid() const override;
+    virtual void setCursor(const QCursor &cursor) override;
 public Q_SLOTS:
     /**
      * Update the origin of the document.
@@ -87,7 +87,7 @@ public Q_SLOTS:
     void setDocumentOffset(const QPoint &offset);
 
 protected:
-    virtual void focusInEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event) override;
 
 Q_SIGNALS:
     void documentRect(const QRectF &);
@@ -104,32 +104,32 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented method from superclass
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     /// reimplemented method from superclass
-    void tabletEvent(QTabletEvent *event);
+    void tabletEvent(QTabletEvent *event) override;
     /// reimplemented method from superclass
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented method from superclass
-    void keyReleaseEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented method from superclass
-    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) override;
     /// reimplemented method from superclass
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    virtual void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// reimplemented method from superclass
-    virtual void resizeEvent(QResizeEvent *event);
+    virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updateOffset();
