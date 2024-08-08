@@ -19,9 +19,6 @@
 
 #include "WebToolWidget.h"
 
-#include <QWebFrame>
-#include <QWebPage>
-
 #include <kundo2command.h>
 
 #include <KoCanvasBase.h>
@@ -40,11 +37,11 @@ public:
         , m_oldUrl(shape->url())
     {
     }
-    virtual void undo()
+    void undo() override
     {
         m_shape->setUrl(m_oldUrl);
     }
-    virtual void redo()
+    void redo() override
     {
         m_shape->setUrl(m_newUrl);
     }
@@ -65,14 +62,14 @@ public:
             m_cache = shape->cache();
         }
     }
-    virtual void undo()
+    void undo() override
     {
         m_shape->setCached(!m_shape->isCached());
         if (m_shape->isCached()) {
             m_shape->setCache(m_cache);
         }
     }
-    virtual void redo()
+    void redo() override
     {
         m_shape->setCached(!m_shape->isCached());
     }

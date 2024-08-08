@@ -20,11 +20,14 @@
 #include "WebShape.h"
 
 #include <QBuffer>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
-#include <QWebFrame>
-#include <QWebPage>
+#include <QWebEnginePage>
+#include <QWebEngineSettings>
+#include <QWebEngineView>
 
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
@@ -34,7 +37,10 @@
 #include <../../src/Xml.h>
 
 WebShape::WebShape()
-    : m_webPage(new QWebPage)
+    : m_hiddenScene(std::make_unique<QGraphicsScene>())
+    , m_hiddenView(std::make_unique<QGraphicsView>(m_hiddenScene.get()))
+    , m_webPage(new QWebEnginePage)
+    , m_webView(new QWebEngineView(m_webPage, nullptr))
     , m_cached(false)
     , m_cacheLocked(false)
     , m_loaded(false)
@@ -42,9 +48,11 @@ WebShape::WebShape()
     , m_zoom(1.0)
     , m_scrollPosition(0, 0)
 {
-    m_webPage->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-    m_webPage->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
-    connect(m_webPage, SIGNAL(loadFinished(bool)), SLOT(loadFinished(bool)));
+    m_hiddenScene->addWidget(m_webView);
+
+    m_webView->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+    connect(m_webPage, &QWebEnginePage::loadFinished, this, &WebShape::loadFinished);
+    m_webView->show();
 }
 
 WebShape::~WebShape()
@@ -54,11 +62,11 @@ WebShape::~WebShape()
 void WebShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF target = converter.documentToView(QRectF(QPointF(0, 0), size()));
-    m_webPage->setViewportSize(target.size().toSize());
+    m_webView->resize(target.size().toSize());
     qreal cz = target.width() / size().width();
-    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
-    m_webPage->mainFrame()->render(&painter);
+    m_webView->setZoomFactor(m_zoom * cz);
+    m_webPage->runJavaScript(QString("window.scrollTo(%1, %2);").arg(m_scrollPosition.x()).arg(m_scrollPosition.y()));
+    m_webView->render(&painter);
 }
 
 void WebShape::saveOdf(KoShapeSavingContext &context) const
@@ -102,7 +110,7 @@ bool WebShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
         if (childElement.tagName() == "cache") {
             m_cache = childElement.text();
             m_firstLoad = true;
-            m_webPage->mainFrame()->setContent(m_cache.toUtf8());
+            m_webPage->setContent(m_cache.toUtf8());
         }
     }
     if (!m_cached) {
@@ -119,7 +127,7 @@ const QUrl &WebShape::url()
 void WebShape::setUrl(const QUrl &_url)
 {
     m_url = _url;
-    m_webPage->mainFrame()->load(_url);
+    m_webPage->load(_url);
 
     notifyChanged();
     update();
@@ -127,10 +135,10 @@ void WebShape::setUrl(const QUrl &_url)
     m_cacheLocked = false;
 }
 
-void WebShape::loadFinished(bool)
+void WebShape::loadFinished(bool on)
 {
     update();
-    m_loaded = true;
+    m_loaded = on;
     if (!m_cacheLocked) {
         updateCache();
     }
@@ -139,7 +147,9 @@ void WebShape::loadFinished(bool)
 
 void WebShape::updateCache()
 {
-    m_cache = m_webPage->mainFrame()->toHtml();
+    m_webPage->toHtml([this](const QString &content) {
+        m_cache = content;
+    });
     m_cacheLocked = true;
 }
 
@@ -157,7 +167,7 @@ void WebShape::setCached(bool _cache)
             updateCache();
         }
     } else {
-        m_webPage->mainFrame()->load(m_url);
+        m_webPage->load(m_url);
     }
     update();
 }
@@ -166,7 +176,7 @@ void WebShape::setCache(const QString &_cache)
 {
     m_cache = _cache;
     m_cacheLocked = true;
-    m_webPage->mainFrame()->setContent(_cache.toUtf8());
+    m_webPage->setContent(_cache.toUtf8());
     update();
 }
 

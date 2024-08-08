@@ -229,6 +229,7 @@ find_package(Qt6 ${REQUIRED_QT_VERSION} QUIET
     Quick
     QuickWidgets
     Sql
+    WebEngineWidgets
 )
 
 
@@ -258,10 +259,10 @@ set_package_properties(Qt6Sql PROPERTIES
     PURPOSE "Optional for Sheets' database connection"
     TYPE OPTIONAL
     )
-set_package_properties(Qt6WebKit PROPERTIES
+set_package_properties(Qt6WebEngine PROPERTIES
     PURPOSE "Required for Braindump's Web shape"
     TYPE OPTIONAL
-    )
+)
 
 set(HAVE_OPENGL ${Qt6OpenGL_FOUND})
 
@@ -963,7 +964,7 @@ calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
-    Qt6WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
+    Qt6WebEngineWidgets_FOUND "QWebPage needed for webpage plugin"
     )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
@@ -1004,8 +1005,6 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 # by calling calligra_disable_product with the product id and the reason,
 # e.g.:
 # calligra_disable_product(APP_FOO "isn't buildable at the moment")
-
-calligra_disable_product(APP_BRAINDUMP "Disabled, will (probably) be removed from Calligra")
 
 #############################################
 ####     Calculate buildable products    ####

@@ -17,12 +17,11 @@ ki18n_wrap_ui( webshape_LIB_SRCS
 
 add_library(braindump_shape_web MODULE ${webshape_LIB_SRCS})
 
-target_link_libraries(
-    braindump_shape_web
+target_link_libraries(braindump_shape_web PRIVATE
     flake
     Qt6::Core
-    Qt6::WebKitWidgets
+    Qt6::WebEngineWidgets
     Qt6::Svg
-    )
+)
 install(TARGETS braindump_shape_web DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 

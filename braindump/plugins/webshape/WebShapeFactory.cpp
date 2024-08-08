@@ -19,9 +19,6 @@
 
 #include "WebShapeFactory.h"
 
-#include <QWebFrame>
-#include <QWebPage>
-
 #include <KLocalizedString>
 
 #include <KoIcon.h>

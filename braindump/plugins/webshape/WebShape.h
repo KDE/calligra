@@ -21,11 +21,15 @@
 #define _WEBSHAPE_H_
 
 #include <KoShape.h>
+#include <QObject>
 #include <QUrl>
 
 #define WEBSHAPEID "WebShape"
 
-class QWebPage;
+class QWebEnginePage;
+class QWebEngineView;
+class QGraphicsScene;
+class QGraphicsView;
 
 class WebShape : public QObject, public KoShape
 {
@@ -35,9 +39,9 @@ public:
     ~WebShape();
 
     // absolutely necessary:
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     const QUrl &url();
     void setUrl(const QUrl &_url);
     bool isCached() const;
@@ -57,8 +61,11 @@ private Q_SLOTS:
     void loadFinished(bool);
 
 private:
+    std::unique_ptr<QGraphicsScene> m_hiddenScene;
+    std::unique_ptr<QGraphicsView> m_hiddenView;
     QUrl m_url;
-    QWebPage *m_webPage;
+    QWebEnginePage *const m_webPage;
+    QWebEngineView *const m_webView;
     bool m_cached;
     QString m_cache;
     bool m_cacheLocked;
