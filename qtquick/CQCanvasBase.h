@@ -8,18 +8,18 @@
 #ifndef CQCANVASBASE_H
 #define CQCANVASBASE_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
 class KoZoomController;
 class CQCanvasController;
-class CQCanvasBase : public QDeclarativeItem
+class CQCanvasBase : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(qreal shapeTransparency READ shapeTransparency WRITE setShapeTransparency NOTIFY shapeTransparencyChanged)
 
 public:
-    explicit CQCanvasBase(QDeclarativeItem *parent);
+    explicit CQCanvasBase(QQuickItem *parent);
     virtual ~CQCanvasBase();
 
     CQCanvasController *canvasController() const;

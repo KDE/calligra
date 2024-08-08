@@ -31,6 +31,7 @@
 #include <KoToolManager.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
+#include <qquickpainteditem.h>
 #include <stage/part/KPrDocument.h>
 
 #include <KActionCollection>
@@ -126,7 +127,7 @@ public:
     }
 };
 
-CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem *parent)
+CQPresentationCanvas::CQPresentationCanvas(QQuickItem *parent)
     : CQCanvasBase(parent)
     , d(new Private)
 {
@@ -242,7 +243,7 @@ void CQPresentationCanvas::openFile(const QString &uri)
 
     KoDocumentEntry entry;
     const auto metaDatas = KoPluginLoader::pluginLoaders("calligra/parts");
-    for (const auto metaData : metaDatas) {
+    for (const auto &metaData : metaDatas) {
         if (metaData.fileName().contains(QLatin1String("stagepart"))) {
             entry = KoDocumentEntry(loader);
             break;
@@ -268,7 +269,7 @@ void CQPresentationCanvas::openFile(const QString &uri)
         if (ok) {
             QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove(QRegExp("-template$"));
+            mimeType.remove(QRegularExpression("-template$"));
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();
@@ -391,10 +392,10 @@ bool CQPresentationCanvas::event(QEvent *event)
     default:
         break;
     }
-    return QDeclarativeItem::event(event);
+    return QQuickPaintedItem::event(event);
 }
 
-void CQPresentationCanvas::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void CQPresentationCanvas::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (d->canvasBase) {
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget *>(d->canvasBase);
@@ -402,5 +403,5 @@ void CQPresentationCanvas::geometryChanged(const QRectF &newGeometry, const QRec
             widget->setGeometry(newGeometry);
         }
     }
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
 }

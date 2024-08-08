@@ -21,8 +21,8 @@ public:
     KoZoomController *zoomController;
 };
 
-CQCanvasBase::CQCanvasBase(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+CQCanvasBase::CQCanvasBase(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , d(new Private)
 {
 }

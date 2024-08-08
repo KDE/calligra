@@ -241,14 +241,6 @@ set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Encrypted communications"
 )
 
-set_package_properties(Qt6Declarative PROPERTIES
-    PURPOSE "Required for QtQuick1 components"
-    TYPE RECOMMENDED
-)
-set_package_properties(Qt6OpenGL PROPERTIES
-    PURPOSE "Required for QtQuick1 components"
-    TYPE RECOMMENDED
-    )
 set_package_properties(Qt6Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
     TYPE RECOMMENDED
@@ -973,13 +965,12 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
-    Qt6OpenGL_FOUND "Qt OpenGL not found"
-    Qt6Declarative_FOUND "QtDeclarative not found"
-    )
+    Qt6Quick_FOUND "QtQuick not found"
+)
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
     Qt6Quick_FOUND "QtQuick not found"
-    )
+)
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
     Qt6OpenGL_FOUND "Qt OpenGL not found"

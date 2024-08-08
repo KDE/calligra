@@ -25,7 +25,7 @@ class CQPresentationCanvas : public CQCanvasBase
     Q_PROPERTY(QObject *textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
-    explicit CQPresentationCanvas(QDeclarativeItem *parent = nullptr);
+    explicit CQPresentationCanvas(QQuickItem *parent = nullptr);
     virtual ~CQPresentationCanvas();
 
     int currentSlide() const;
@@ -39,15 +39,15 @@ public:
 
     void setCurrentSlide(int slide);
 
-    virtual void render(QPainter *painter, const QRectF &target);
+    void render(QPainter *painter, const QRectF &target) override;
 
     QObject *textEditor() const;
     // Deselects any text selection present in the document, and deselects all shapes
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
 
-    virtual qreal shapeTransparency() const;
-    virtual void setShapeTransparency(qreal newTransparency);
+    qreal shapeTransparency() const override;
+    void setShapeTransparency(qreal newTransparency) override;
 
 Q_SIGNALS:
     void currentSlideChanged();
@@ -56,9 +56,9 @@ Q_SIGNALS:
     void textEditorChanged();
 
 protected:
-    virtual bool event(QEvent *event);
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void openFile(const QString &uri);
+    bool event(QEvent *event) override;
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void openFile(const QString &file) override;
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize &size);

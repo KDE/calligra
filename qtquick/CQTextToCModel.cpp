@@ -22,6 +22,8 @@
 #include <QTextObject>
 #include <QTimer>
 
+using namespace std::chrono;
+
 Q_DECLARE_METATYPE(QTextDocument *)
 
 struct TextToCModelEntry {
@@ -73,24 +75,24 @@ CQTextToCModel::CQTextToCModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames[Title] = "title";
-    roleNames[Level] = "level";
-    roleNames[PageNumber] = "pageNumber";
-    setRoleNames(roleNames);
-
-    connect(&d->updateTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-    d->updateTimer.setInterval(5000); // after 5 seconds of pause we update
+    connect(&d->updateTimer, &QTimer::timeout, this, &CQTextToCModel::timeout);
+    d->updateTimer.setInterval(5s);
     d->updateTimer.setSingleShot(true);
 
-    connect(&d->doneTimer, SIGNAL(timeout()), this, SLOT(updateToC()));
-    d->doneTimer.setInterval(1000); // after 1 seconds of silence we assume layout is done
+    connect(&d->doneTimer, &QTimer::timeout, this, &CQTextToCModel::updateToC);
+    d->doneTimer.setInterval(1s);
     d->doneTimer.setSingleShot(true);
 }
 
-CQTextToCModel::~CQTextToCModel()
+CQTextToCModel::~CQTextToCModel() = delete;
+
+QHash<int, QByteArray> CQTextToCModel::roleNames() const
 {
-    delete d;
+    return {
+        {Title, "title"},
+        {Level, "level"},
+        {PageNumber, "pageNumber"},
+    };
 }
 
 QVariant CQTextToCModel::data(const QModelIndex &index, int role) const

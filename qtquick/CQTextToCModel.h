@@ -21,8 +21,9 @@ public:
     enum TextToCModelRoleNames { Title = Qt::UserRole + 1, Level, PageNumber };
     explicit CQTextToCModel(QObject *parent = nullptr);
     virtual ~CQTextToCModel();
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QHash<int, QByteArray> roleNames() const;
 
     QObject *canvas() const;
     void setCanvas(QObject *newCanvas);

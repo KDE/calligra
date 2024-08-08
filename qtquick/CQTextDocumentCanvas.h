@@ -39,7 +39,7 @@ class CQTextDocumentCanvas : public CQCanvasBase
 
     Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
-    explicit CQTextDocumentCanvas(QDeclarativeItem *parent = nullptr);
+    explicit CQTextDocumentCanvas(QQuickItem *parent = nullptr);
     virtual ~CQTextDocumentCanvas();
 
     int currentPageNumber() const;
@@ -53,7 +53,7 @@ public:
     QObject *documentModel() const;
     QSize documentSize() const;
 
-    virtual void render(QPainter *painter, const QRectF &target);
+    void render(QPainter *painter, const QRectF &target) override;
 
     KWDocument *document() const;
     Q_INVOKABLE QObject *doc() const;
@@ -63,8 +63,8 @@ public:
 
     Q_INVOKABLE qreal pagePosition(int page);
 
-    virtual qreal shapeTransparency() const;
-    virtual void setShapeTransparency(qreal newTransparency);
+    qreal shapeTransparency() const override;
+    void setShapeTransparency(qreal newTransparency) override;
 
     QObject *textEditor();
     // Deselects any text selection present in the document, and deselects all shapes
@@ -101,13 +101,13 @@ Q_SIGNALS:
     void thumbnailSizeChanged();
 
 protected:
-    virtual bool event(QEvent *event);
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void openFile(const QString &uri);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e);
+    bool event(QEvent *event) override;
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void openFile(const QString &uri) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
 
 private Q_SLOTS:
     void findNoMatchFound();
