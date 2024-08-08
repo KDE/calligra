@@ -71,7 +71,7 @@ void StateTool::mousePressEvent(KoPointerEvent *event)
     StateShape *hit = 0;
     const QRectF roi(event->point, QSizeF(1, 1));
     const QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
-    const KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     for (KoShape *shape : shapes) {
         hit = dynamic_cast<StateShape *>(shape);
         if (hit) {

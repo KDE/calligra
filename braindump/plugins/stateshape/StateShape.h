@@ -31,9 +31,9 @@ public:
     ~StateShape();
 
     // absolutely necessary:
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     const QString &categoryId() const;
     void setCategoryId(const QString &_categoryId);
     const QString &stateId() const;

@@ -125,7 +125,7 @@ void View::initGUI()
 
     // Init the widgets
     QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins({});
     gridLayout->setSpacing(0);
     setLayout(gridLayout);
 

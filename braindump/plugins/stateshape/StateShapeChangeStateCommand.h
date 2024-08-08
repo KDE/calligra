@@ -28,8 +28,8 @@ class StateShapeChangeStateCommand : public KUndo2Command
 {
 public:
     StateShapeChangeStateCommand(StateShape *_shape, const QString &_newCategoryId, const QString &_newStateId);
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     StateShape *m_shape;

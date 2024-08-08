@@ -28,7 +28,7 @@ public:
     explicit StateToolFactory();
     ~StateToolFactory();
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

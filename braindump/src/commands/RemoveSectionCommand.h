@@ -30,8 +30,8 @@ class RemoveSectionCommand : public KUndo2Command
 {
 public:
     RemoveSectionCommand(Section *_section, DocumentModel *_model);
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
 
 private:
     Section *m_section;

@@ -96,8 +96,7 @@ void ColumnLayout::relayout()
         qDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
     }
     qDebug() << "</moh>";
-std:
-    sort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
+    std::sort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
     // Update position
     qreal y = 0;
     qDebug() << "<Updating>";

@@ -22,6 +22,7 @@
 #include <QMenu>
 
 #include <KoIcon.h>
+#include <QActionGroup>
 
 #include "Canvas.h"
 #include "DocumentModel.h"
@@ -128,7 +129,7 @@ void SectionsBoxDock::setup(RootSection *document, View *view)
 
 void SectionsBoxDock::slotSectionActivated(const QModelIndex &index)
 {
-    Section *section = qVariantValue<Section *>(m_proxy->data(index, DocumentModel::SectionPtr));
+    Section *section = qvariant_cast<Section *>(m_proxy->data(index, DocumentModel::SectionPtr));
     m_view->setActiveSection(section);
 }
 

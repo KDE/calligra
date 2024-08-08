@@ -21,6 +21,7 @@
 #define _BRAINDUMP_QUICK_STATES_PLUGIN_H_
 
 #include <KXMLGUIClient>
+#include <QObject>
 
 class BraindumpQuickStatesPlugin : public QObject, public KXMLGUIClient
 {

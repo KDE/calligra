@@ -27,18 +27,18 @@ public:
     {
     }
 
-    QString id() const
+    QString id() const override
     {
         return "sharedtooldocker";
     }
 
-    QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         ToolDocker *dockWidget = new ToolDocker();
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockRight;
     }
@@ -52,17 +52,17 @@ public:
     {
     }
 
-    QString id() const
+    QString id() const override
     {
         return "ToolBarDocker";
     }
 
-    QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         return new QDockWidget(i18n("Tool Bars"));
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockTop;
     }

@@ -152,7 +152,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
 void Canvas::tabletEvent(QTabletEvent *event)
 {
-    m_toolProxy->tabletEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + m_documentOffset)));
+    m_toolProxy->tabletEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + m_documentOffset)));
 }
 
 void Canvas::mousePressEvent(QMouseEvent *event)
@@ -160,7 +160,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
     m_toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + m_documentOffset)));
 
     if (!event->isAccepted() && event->button() == Qt::RightButton) {
-        showContextMenu(event->globalPos(), toolProxy()->popupActionList());
+        showContextMenu(event->globalPosition().toPoint(), toolProxy()->popupActionList());
     }
 
     event->setAccepted(true);
@@ -224,7 +224,7 @@ void Canvas::keyReleaseEvent(QKeyEvent *event)
 
 void Canvas::wheelEvent(QWheelEvent *event)
 {
-    m_toolProxy->wheelEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + m_documentOffset)));
+    m_toolProxy->wheelEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + m_documentOffset)));
 }
 
 void Canvas::closeEvent(QCloseEvent *event)

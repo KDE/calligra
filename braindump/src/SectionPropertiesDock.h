@@ -53,12 +53,12 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString("SectionProperties");
     }
 
-    virtual QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         SectionPropertiesDock *dockWidget = new SectionPropertiesDock();
 
@@ -67,7 +67,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockRight;
     }

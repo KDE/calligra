@@ -108,7 +108,7 @@ private Q_SLOTS:
     void ungroupSelection();
 
 protected:
-    virtual void focusInEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event) override;
 
 private:
     void createCanvas(Section *_currentSection);
