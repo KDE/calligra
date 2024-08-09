@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-09 00:39+0000\n"
 "PO-Revision-Date: 2016-12-08 08:22+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
@@ -128,12 +128,12 @@ msgstr "網址："
 msgid "Use a cache copy"
 msgstr "使用快取複本"
 
-#: plugins/webshape/WebShapeFactory.cpp:33
+#: plugins/webshape/WebShapeFactory.cpp:30
 #, kde-format
 msgid "Web Shape"
 msgstr "網頁元件"
 
-#: plugins/webshape/WebShapeFactory.cpp:35
+#: plugins/webshape/WebShapeFactory.cpp:32
 #, kde-format
 msgid "A web shape"
 msgstr "網頁元件"
@@ -256,7 +256,7 @@ msgstr "切換顯示標題列"
 msgid "Toggles organising the options in tabs or not"
 msgstr "切換是否能在分頁內組織選項"
 
-#: src/layouts/ColumnLayout.cpp:129
+#: src/layouts/ColumnLayout.cpp:128
 #, kde-format
 msgid "Column"
 msgstr "欄"
@@ -266,7 +266,7 @@ msgstr "欄"
 msgid "Free"
 msgstr "自由"
 
-#: src/MainWindow.cpp:120
+#: src/MainWindow.cpp:96
 #, kde-format
 msgid "Dockers"
 msgstr "嵌入元件"
@@ -281,42 +281,42 @@ msgstr "未命名 %1"
 msgid "Dump properties"
 msgstr "傾印屬性"
 
-#: src/SectionsBoxDock.cpp:43
+#: src/SectionsBoxDock.cpp:44
 #, kde-format
 msgid "Whiteboards"
 msgstr "白板"
 
-#: src/SectionsBoxDock.cpp:56
+#: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Minimal View"
 msgstr "最小檢視"
 
-#: src/SectionsBoxDock.cpp:57
+#: src/SectionsBoxDock.cpp:58
 #, kde-format
 msgid "Detailed View"
 msgstr "詳細檢視"
 
-#: src/SectionsBoxDock.cpp:58
+#: src/SectionsBoxDock.cpp:59
 #, kde-format
 msgid "Thumbnail View"
 msgstr "縮圖檢視"
 
-#: src/SectionsBoxDock.cpp:69
+#: src/SectionsBoxDock.cpp:70
 #, kde-format
 msgid "View mode"
 msgstr "檢視模式"
 
-#: src/SectionsBoxDock.cpp:81
+#: src/SectionsBoxDock.cpp:82
 #, kde-format
 msgid "Add new whiteboard below current."
 msgstr "在目前的白板下新增白板。"
 
-#: src/SectionsBoxDock.cpp:82
+#: src/SectionsBoxDock.cpp:83
 #, kde-format
 msgid "Add new whiteboard above current."
 msgstr "在目前的白板上新增白板。"
 
-#: src/SectionsBoxDock.cpp:83
+#: src/SectionsBoxDock.cpp:84
 #, kde-format
 msgid "Add new whiteboard as child of current."
 msgstr "新增目前白板的子白板。"
