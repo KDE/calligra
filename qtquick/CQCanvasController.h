@@ -11,7 +11,7 @@
 
 #ifndef CQCANVASCONTROLLER_H
 #define CQCANVASCONTROLLER_H
-
+#include "filters/sheets/opencalc/ooutils.h"
 #include <KoCanvasController.h>
 
 class QSize;
@@ -24,30 +24,30 @@ public:
     explicit CQCanvasController(KActionCollection *actionCollection);
     virtual ~CQCanvasController();
 
-    virtual void setVastScrolling(qreal factor);
-    virtual void setZoomWithWheel(bool zoom);
-    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
-    virtual void setScrollBarValue(const QPoint &value);
-    virtual QPoint scrollBarValue() const;
-    virtual void pan(const QPoint &distance);
-    virtual QPointF preferredCenter() const;
-    virtual void setPreferredCenter(const QPointF &viewPoint);
-    virtual void recenterPreferred();
-    virtual void zoomTo(const QRect &rect);
-    virtual void zoomBy(const QPoint &center, qreal zoom);
-    virtual void zoomOut(const QPoint &center);
-    virtual void zoomIn(const QPoint &center);
-    virtual void ensureVisible(KoShape *shape);
-    virtual void ensureVisible(const QRectF &rect, bool smooth);
-    virtual int canvasOffsetY() const;
-    virtual int canvasOffsetX() const;
-    virtual int visibleWidth() const;
-    virtual int visibleHeight() const;
-    virtual KoCanvasBase *canvas() const;
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void setDrawShadow(bool drawShadow);
-    virtual QSize viewportSize() const;
-    virtual void scrollContentsBy(int dx, int dy);
+    void setVastScrolling(qreal factor) override;
+    void setZoomWithWheel(bool zoom) override;
+    void updateDocumentSize(const QSize &sz, bool recalculateCenter) override;
+    void setScrollBarValue(const QPoint &value) override;
+    QPoint scrollBarValue() const override;
+    void pan(const QPoint &distance) override;
+    QPointF preferredCenter() const override;
+    void setPreferredCenter(const QPointF &viewPoint) override;
+    void recenterPreferred() override;
+    void zoomTo(const QRect &rect) override;
+    void zoomBy(const QPoint &center, qreal zoom) override;
+    void zoomOut(const QPoint &center) override;
+    void zoomIn(const QPoint &center) override;
+    void ensureVisible(KoShape *shape) override;
+    void ensureVisible(const QRectF &rect, bool smooth) override;
+    int canvasOffsetY() const override;
+    int canvasOffsetX() const override;
+    int visibleWidth() const override;
+    int visibleHeight() const override;
+    KoCanvasBase *canvas() const override;
+    void setCanvas(KoCanvasBase *canvas) override;
+    void setDrawShadow(bool drawShadow) override;
+    QSize viewportSize() const override;
+    void scrollContentsBy(int dx, int dy) override;
 
     QSize documentSize() const;
 

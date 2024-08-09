@@ -30,7 +30,7 @@ class CQSpreadsheetCanvas : public CQCanvasBase
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
-    explicit CQSpreadsheetCanvas(QDeclarativeItem *parent = nullptr);
+    explicit CQSpreadsheetCanvas(QQuickItem *parent = nullptr);
     virtual ~CQSpreadsheetCanvas();
 
     int currentSheet() const;
@@ -40,7 +40,7 @@ public:
 
     void setCurrentSheet(int sheet);
 
-    virtual void render(QPainter *painter, const QRectF &target);
+    void render(QPainter *painter, const QRectF &target) override;
 
 Q_SIGNALS:
     void currentSheetChanged();
@@ -48,7 +48,7 @@ Q_SIGNALS:
 
 protected:
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void openFile(const QString &file);
+    void openFile(const QString &file) override;
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize &size);

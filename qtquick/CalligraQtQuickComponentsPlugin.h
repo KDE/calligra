@@ -10,16 +10,16 @@
 #ifndef CALLIGRAQTQUICKCOMPONENTSPLUGIN_H
 #define CALLIGRAQTQUICKCOMPONENTSPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlEngineExtensionPlugin>
 
-class CalligraQtQuickComponentsPlugin : public QDeclarativeExtensionPlugin
+class CalligraQtQuickComponentsPlugin : public QQmlEngineExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.calligra.CalligraQtQuickComponentsPlugin")
 
 public:
     void registerTypes(const char *uri);
-    virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
 private:
 };

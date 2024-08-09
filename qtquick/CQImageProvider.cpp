@@ -14,7 +14,7 @@ const char CQImageProvider::identificationString[] = "cqimage";
 CQImageProvider *CQImageProvider::s_imageProvider = 0;
 
 CQImageProvider::CQImageProvider()
-    : QDeclarativeImageProvider(Image)
+    : QQuickImageProvider(Image)
 {
 }
 

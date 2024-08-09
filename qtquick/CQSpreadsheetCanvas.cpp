@@ -24,6 +24,7 @@
 #include <QGraphicsWidget>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <sheets/Doc.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
 #include <sheets/part/CanvasItem.h>
@@ -107,7 +108,7 @@ public:
     }
 };
 
-CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem *parent)
+CQSpreadsheetCanvas::CQSpreadsheetCanvas(QQuickItem *parent)
     : CQCanvasBase(parent)
     , d(new Private)
 {

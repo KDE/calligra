@@ -11,10 +11,10 @@
 #ifndef CQIMAGEPROVIDER_H
 #define CQIMAGEPROVIDER_H
 
-#include <QDeclarativeImageProvider>
 #include <QHash>
+#include <QQuickImageProvider>
 
-class CQImageProvider : public QDeclarativeImageProvider
+class CQImageProvider : public QQuickImageProvider
 {
 public:
     static const char identificationString[];
@@ -22,7 +22,7 @@ public:
 
     CQImageProvider();
     virtual ~CQImageProvider();
-    virtual QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
 
     void addImage(const QString &id, const QImage &image);
     bool containsId(const QString &id);

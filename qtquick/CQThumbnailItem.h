@@ -8,18 +8,18 @@
 #ifndef CQTHUMBNAILITEM_H
 #define CQTHUMBNAILITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class CQThumbnailItem : public QDeclarativeItem
+class CQThumbnailItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QPixmap content READ content WRITE setContent NOTIFY contentChanged)
 
 public:
-    explicit CQThumbnailItem(QDeclarativeItem *parent = nullptr);
+    explicit CQThumbnailItem(QQuickItem *parent = nullptr);
     ~CQThumbnailItem();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *);
+    void paint(QPainter *painter) override;
 
     QPixmap content() const;
 

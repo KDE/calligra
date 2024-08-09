@@ -20,8 +20,8 @@
 #include "CQPresentationModel.h"
 #include "CQThumbnailItem.h"
 
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
+#include <QQmlContext>
+#include <QQmlEngine>
 
 void CalligraQtQuickComponentsPlugin::registerTypes(const char *uri)
 {
@@ -37,14 +37,14 @@ void CalligraQtQuickComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<CQLinkArea>(uri, 0, 1, "LinkArea");
 }
 
-void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+void CalligraQtQuickComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     CQImageProvider::s_imageProvider = new CQImageProvider;
     engine->addImageProvider(CQImageProvider::identificationString, CQImageProvider::s_imageProvider);
 
     engine->rootContext()->setContextProperty("Calligra", new CQPluginLoaderProxy(engine));
 
-    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
+    QQmlEngineExtensionPlugin::initializeEngine(engine, uri);
 }
 
 #include "CalligraQtQuickComponentsPlugin.moc"

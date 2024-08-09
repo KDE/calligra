@@ -10,9 +10,9 @@
 #ifndef CQLINKAREA_H
 #define CQLINKAREA_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class CQLinkArea : public QDeclarativeItem
+class CQLinkArea : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QVariantList links READ links WRITE setLinks NOTIFY linksChanged)
@@ -20,9 +20,9 @@ class CQLinkArea : public QDeclarativeItem
     Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor NOTIFY linkColorChanged)
 
 public:
-    explicit CQLinkArea(QDeclarativeItem *parent = nullptr);
+    explicit CQLinkArea(QQuickItem *parent = nullptr);
     virtual ~CQLinkArea();
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
+    void paint(QPainter *painter) override;
 
     QVariantList links() const;
     void setLinks(const QVariantList &newLinks);
@@ -42,13 +42,13 @@ Q_SIGNALS:
     void linkColorChanged();
 
 protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
 
 #endif // CQLINKAREA_H

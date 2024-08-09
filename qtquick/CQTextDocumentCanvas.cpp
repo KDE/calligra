@@ -47,9 +47,9 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsWidget>
 #include <QMimeDatabase>
+#include <QMouseEvent>
 #include <QPluginLoader>
 #include <QStyleOptionGraphicsItem>
 #include <QSvgRenderer>
@@ -57,6 +57,8 @@
 #include <QTextDocumentFragment>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QUrl>
+#include <qurlquery.h>
 
 class CQTextDocumentCanvas::Private
 {
@@ -199,7 +201,7 @@ public:
     }
 };
 
-CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem *parent)
+CQTextDocumentCanvas::CQTextDocumentCanvas(QQuickItem *parent)
     : CQCanvasBase(parent)
     , d(new Private)
 {
@@ -225,9 +227,9 @@ void CQTextDocumentCanvas::openFile(const QString &uri)
 
     KoDocumentEntry entry;
     const auto metaDatas = KoPluginLoader::pluginLoaders("calligra/parts");
-    for (const auto metaData : metaDatas) {
+    for (const auto &metaData : metaDatas) {
         if (metaData.fileName().contains(QLatin1String("wordspart"))) {
-            entry = KoDocumentEntry(loader);
+            entry = KoDocumentEntry(metaData);
             break;
         }
     }
@@ -245,35 +247,36 @@ void CQTextDocumentCanvas::openFile(const QString &uri)
 
     QUrl url(uri);
     if (url.scheme() == "newfile") {
+        QUrlQuery query(url);
         KWDocument *doc = qobject_cast<KWDocument *>(document);
         doc->initEmpty();
         KWPageStyle style = doc->pageManager()->defaultPageStyle();
         Q_ASSERT(style.isValid());
 
         KoColumns columns;
-        columns.count = url.queryItemValue("columncount").toInt();
-        columns.gapWidth = url.queryItemValue("columngap").toDouble();
+        columns.count = query.queryItemValue("columncount").toInt();
+        columns.gapWidth = query.queryItemValue("columngap").toDouble();
         style.setColumns(columns);
 
         KoPageLayout layout = style.pageLayout();
-        layout.format = KoPageFormat::formatFromString(url.queryItemValue("pageformat"));
-        layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
-        layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
-        layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
-        if (url.queryItemValue("facingpages").toInt() == 1) {
-            layout.bindingSide = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
-            layout.pageEdge = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+        layout.format = KoPageFormat::formatFromString(query.queryItemValue("pageformat"));
+        layout.orientation = (KoPageFormat::Orientation)query.queryItemValue("pageorientation").toInt();
+        layout.height = MM_TO_POINT(query.queryItemValue("height").toDouble());
+        layout.width = MM_TO_POINT(query.queryItemValue("width").toDouble());
+        if (query.queryItemValue("facingpages").toInt() == 1) {
+            layout.bindingSide = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
+            layout.pageEdge = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
             layout.leftMargin = layout.rightMargin = -1;
         } else {
             layout.bindingSide = layout.pageEdge = -1;
-            layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
-            layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+            layout.leftMargin = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
+            layout.rightMargin = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
         }
-        layout.topMargin = MM_TO_POINT(url.queryItemValue("topmargin").toDouble());
-        layout.bottomMargin = MM_TO_POINT(url.queryItemValue("bottommargin").toDouble());
+        layout.topMargin = MM_TO_POINT(query.queryItemValue("topmargin").toDouble());
+        layout.bottomMargin = MM_TO_POINT(query.queryItemValue("bottommargin").toDouble());
         style.setPageLayout(layout);
 
-        doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
+        doc->setUnit(KoUnit::fromSymbol(query.queryItemValue("unit")));
         doc->relayout();
     } else if (url.scheme() == "template") {
         qApp->setOverrideCursor(Qt::BusyCursor);
@@ -285,7 +288,7 @@ void CQTextDocumentCanvas::openFile(const QString &uri)
         if (ok) {
             QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove(QRegExp("-template$"));
+            mimeType.remove(QRegularExpression("-template$"));
             document->setMimeTypeAfterLoading(mimeType);
             document->resetURL();
             document->setEmpty();
@@ -654,7 +657,7 @@ bool CQTextDocumentCanvas::event(QEvent *event)
     default:
         break;
     }
-    return QDeclarativeItem::event(event);
+    return QQuickPaintedItem::event(event);
 }
 
 void CQTextDocumentCanvas::currentToolChanged(KoCanvasController *controller, int uniqueToolId)
@@ -664,9 +667,9 @@ void CQTextDocumentCanvas::currentToolChanged(KoCanvasController *controller, in
     d->currentTool = qobject_cast<KoToolBase *>(KoToolManager::instance()->toolById(d->canvas, KoToolManager::instance()->activeToolId()));
 }
 
-void CQTextDocumentCanvas::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
+void CQTextDocumentCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->position(), e->button(), e->buttons(), e->modifiers());
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseDoubleClickEvent(&pe);
     updateCanvas();
@@ -674,9 +677,9 @@ void CQTextDocumentCanvas::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
     e->setAccepted(me.isAccepted());
 }
 
-void CQTextDocumentCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void CQTextDocumentCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->position(), e->button(), e->buttons(), e->modifiers());
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseMoveEvent(&pe);
     updateCanvas();
@@ -684,9 +687,9 @@ void CQTextDocumentCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
     e->setAccepted(me.isAccepted());
 }
 
-void CQTextDocumentCanvas::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void CQTextDocumentCanvas::mousePressEvent(QMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->position(), e->button(), e->buttons(), e->modifiers());
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mousePressEvent(&pe);
     updateCanvas();
@@ -694,9 +697,9 @@ void CQTextDocumentCanvas::mousePressEvent(QGraphicsSceneMouseEvent *e)
     e->setAccepted(me.isAccepted());
 }
 
-void CQTextDocumentCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void CQTextDocumentCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->position(), e->button(), e->buttons(), e->modifiers());
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseReleaseEvent(&pe);
     updateCanvas();
@@ -704,7 +707,7 @@ void CQTextDocumentCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
     e->setAccepted(me.isAccepted());
 }
 
-void CQTextDocumentCanvas::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void CQTextDocumentCanvas::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (d->canvas) {
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget *>(d->canvas);
@@ -712,7 +715,7 @@ void CQTextDocumentCanvas::geometryChanged(const QRectF &newGeometry, const QRec
             widget->setGeometry(newGeometry);
         }
     }
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
 }
 
 void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase *canvas)

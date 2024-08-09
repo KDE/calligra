@@ -24,11 +24,10 @@ public:
     int contentHeight;
 };
 
-CQThumbnailItem::CQThumbnailItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+CQThumbnailItem::CQThumbnailItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , d(new Private)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
 CQThumbnailItem::~CQThumbnailItem()
@@ -36,7 +35,7 @@ CQThumbnailItem::~CQThumbnailItem()
     delete d;
 }
 
-void CQThumbnailItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void CQThumbnailItem::paint(QPainter *painter)
 {
     if (!d->content.isNull()) {
         QPixmap pixmap = d->content.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);

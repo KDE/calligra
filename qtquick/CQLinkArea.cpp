@@ -9,8 +9,9 @@
 
 #include "CQLinkArea.h"
 
-#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
 #include <QPainter>
+#include <qquickitem.h>
 
 struct LinkLayerLink {
     QRectF linkRect;
@@ -37,26 +38,22 @@ public:
     QColor linkColor;
 };
 
-CQLinkArea::CQLinkArea(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+CQLinkArea::CQLinkArea(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , d(new Private)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton);
     setAcceptTouchEvents(true);
 }
 
-CQLinkArea::~CQLinkArea()
-{
-    delete d;
-}
+CQLinkArea::~CQLinkArea() = default;
 
-void CQLinkArea::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void CQLinkArea::paint(QPainter *painter)
 {
     painter->save();
     painter->setPen(Qt::transparent);
     painter->setBrush(QBrush(d->linkColor));
-    foreach (const LinkLayerLink &link, d->realLinks) {
+    for (const LinkLayerLink &link : std::as_const(d->realLinks)) {
         QRectF target((link.linkRect.y() / d->sourceSize.height()) * height(),
                       (link.linkRect.x() / d->sourceSize.width()) * width(),
                       (link.linkRect.height() / d->sourceSize.height()) * height(),
@@ -119,18 +116,18 @@ void CQLinkArea::setLinkColor(const QColor &color)
     }
 }
 
-void CQLinkArea::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void CQLinkArea::mousePressEvent(QMouseEvent *event)
 {
     d->clickInProgress = true;
     d->clickLocation = event->pos();
 }
 
-void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void CQLinkArea::mouseReleaseEvent(QMouseEvent *event)
 {
     d->clickInProgress = false;
     // Don't activate anything if the finger has moved too far
     QRect rect((d->clickLocation - QPointF(d->wiggleFactor, d->wiggleFactor)).toPoint(), QSize(d->wiggleFactor * 2, d->wiggleFactor * 2));
-    if (!rect.contains(event->pos().toPoint())) {
+    if (!rect.contains(event->pos())) {
         return;
     }
     QUrl url;
@@ -153,7 +150,7 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void CQLinkArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void CQLinkArea::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
     Q_EMIT doubleClicked();

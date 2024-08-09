@@ -8,28 +8,28 @@
 #ifndef CQCANVASCONTROLLERITEM_H
 #define CQCANVASCONTROLLERITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class CQCanvasControllerItem : public QDeclarativeItem
+class CQCanvasControllerItem : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeItem *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
-    Q_PROPERTY(QDeclarativeItem *flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
+    Q_PROPERTY(QQuickItem *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QQuickItem *flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
     Q_PROPERTY(qreal minimumZoom READ minimumZoom WRITE setMinimumZoom NOTIFY minimumZoomChanged)
     Q_PROPERTY(qreal maximumZoom READ maximumZoom WRITE setMaximumZoom NOTIFY maximumZoomChanged)
 public:
-    explicit CQCanvasControllerItem(QDeclarativeItem *parent = nullptr);
+    explicit CQCanvasControllerItem(QQuickItem *parent = nullptr);
     ~CQCanvasControllerItem();
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
+    void paint(QPainter *painter) override;
 
-    QDeclarativeItem *canvas() const;
-    void setCanvas(QDeclarativeItem *canvas);
+    QQuickItem *canvas() const;
+    void setCanvas(QQuickItem *canvas);
 
-    QDeclarativeItem *flickable() const;
-    void setFlickable(QDeclarativeItem *item);
+    QQuickItem *flickable() const;
+    void setFlickable(QQuickItem *item);
 
     QSize documentSize() const;
 
@@ -67,8 +67,7 @@ Q_SIGNALS:
     void movingFastChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize &size);

@@ -32,14 +32,15 @@ CQPresentationModel::CQPresentationModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    QHash<int, QByteArray> roles;
-    roles.insert(ThumbnailRole, "thumbnail");
-    setRoleNames(roles);
 }
 
-CQPresentationModel::~CQPresentationModel()
+CQPresentationModel::~CQPresentationModel() = default;
+
+QHash<int, QByteArray> CQPresentationModel::roleNames() const
 {
-    delete d;
+    return {
+        {ThumbnailRole, "thumbnail"},
+    };
 }
 
 QVariant CQPresentationModel::data(const QModelIndex &index, int role) const
@@ -86,7 +87,7 @@ int CQPresentationModel::rowCount(const QModelIndex &parent) const
     return 0;
 }
 
-QDeclarativeItem *CQPresentationModel::canvas() const
+QQuickitem *CQPresentationModel::canvas() const
 {
     return d->canvas;
 }
@@ -96,7 +97,7 @@ QSizeF CQPresentationModel::thumbnailSize() const
     return d->thumbnailSize;
 }
 
-void CQPresentationModel::setCanvas(QDeclarativeItem *canvas)
+void CQPresentationModel::setCanvas(QQuickItem *canvas)
 {
     if (d->canvas != canvas && qobject_cast<CQPresentationCanvas *>(canvas)) {
         d->canvas = qobject_cast<CQPresentationCanvas *>(canvas);

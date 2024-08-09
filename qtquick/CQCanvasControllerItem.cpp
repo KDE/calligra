@@ -7,7 +7,6 @@
 
 #include "CQCanvasControllerItem.h"
 
-#include <QGLWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPainter>
@@ -40,7 +39,7 @@ public:
     }
 
     CQCanvasBase *canvas;
-    QDeclarativeItem *flickable;
+    QQuickItem *flickable;
     CQCanvasController *canvasController;
 
     QSize documentSize;
@@ -61,12 +60,10 @@ public:
     QImage placeholder;
 };
 
-CQCanvasControllerItem::CQCanvasControllerItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+CQCanvasControllerItem::CQCanvasControllerItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , d(new Private)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
-    setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
 }
 
 CQCanvasControllerItem::~CQCanvasControllerItem()
@@ -74,7 +71,7 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
     delete d;
 }
 
-void CQCanvasControllerItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void CQCanvasControllerItem::paint(QPainter *painter)
 {
     if (!d->zooming || d->placeholder.isNull()) {
         return;
@@ -87,12 +84,12 @@ void CQCanvasControllerItem::paint(QPainter *painter, const QStyleOptionGraphics
                        QRectF(QPointF(0, 0), d->placeholder.size()));
 }
 
-QDeclarativeItem *CQCanvasControllerItem::canvas() const
+QQuickItem *CQCanvasControllerItem::canvas() const
 {
     return d->canvas;
 }
 
-void CQCanvasControllerItem::setCanvas(QDeclarativeItem *canvas)
+void CQCanvasControllerItem::setCanvas(QQuickItem *canvas)
 {
     if (canvas != d->canvas) {
         if (d->canvas) {
@@ -117,12 +114,12 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem *canvas)
     }
 }
 
-QDeclarativeItem *CQCanvasControllerItem::flickable() const
+QQuickItem *CQCanvasControllerItem::flickable() const
 {
     return d->flickable;
 }
 
-void CQCanvasControllerItem::setFlickable(QDeclarativeItem *item)
+void CQCanvasControllerItem::setFlickable(QQuickItem *item)
 {
     if (item != d->flickable) {
         if (item->metaObject()->indexOfProperty("contentWidth") == -1) {
@@ -310,27 +307,10 @@ void CQCanvasControllerItem::returnToBounds()
     d->lastY = pos.y();
 }
 
-void CQCanvasControllerItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void CQCanvasControllerItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     Q_UNUSED(newGeometry);
     Q_UNUSED(oldGeometry);
-}
-
-QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
-{
-    Q_UNUSED(value);
-    if (change == QGraphicsItem::ItemScenePositionHasChanged && d->canvasController) {
-        QPointF pos(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
-        float xDiff = pos.x() - d->lastX;
-        float yDiff = pos.y() - d->lastY;
-        d->canvasController->blockSignals(true);
-        d->canvasController->pan(QPoint(xDiff, yDiff));
-        d->canvasController->blockSignals(false);
-        d->lastX = pos.x();
-        d->lastY = pos.y();
-    }
-
-    return value;
 }
 
 void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
