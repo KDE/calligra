@@ -30,10 +30,6 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-private Q_SLOTS:
-    /// Called when the docker changes area
-    void locationChanged(Qt::DockWidgetArea area);
-
 private:
     KoModeBox *m_modeBox;
 };

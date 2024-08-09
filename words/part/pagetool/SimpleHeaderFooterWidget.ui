@@ -11,19 +11,29 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
    <item>
-    <widget class="QToolButton" name="insertHeader">
-     <property name="text">
-      <string>...</string>
-     </property>
-    </widget>
+    <widget class="QToolButton" name="insertHeader" />
    </item>
    <item>
-    <widget class="QToolButton" name="insertFooter">
-     <property name="text">
-      <string>...</string>
-     </property>
-    </widget>
+    <widget class="QToolButton" name="insertFooter" />
    </item>
    <item>
     <widget class="QWidget" name="SpecialSpacer" native="true"/>

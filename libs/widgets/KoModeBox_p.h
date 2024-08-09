@@ -50,13 +50,8 @@ public:
     explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox() override;
 
-    /**
-     * Should been called when the docker position has changed.
-     * Organise widgets and icons and orientation of the tabs.
-     *
-     * @param area the new location area
-     */
-    void locationChanged(Qt::DockWidgetArea area);
+    enum HorizontalTabsSide { LeftSide, RightSide };
+
 public Q_SLOTS:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active tool.
@@ -96,9 +91,6 @@ private Q_SLOTS:
     /// switch icon mode
     void switchIconMode(int);
 
-    /// switch tabs side
-    void switchTabsSide(int);
-
     /**
      * Add a tool to the modebox.
      * The tools should all be added before the first showing since adding will not really add
@@ -109,15 +101,14 @@ private Q_SLOTS:
      */
     void addToolAction(KoToolAction *toolAction);
 
+Q_SIGNALS:
+    void switchTabsSide(HorizontalTabsSide side);
+
 public:
     static QString applicationName;
 
 private:
     enum IconMode { IconAndText, IconOnly };
-
-    enum VerticalTabsSide { TopSide, BottomSide };
-
-    enum HorizontalTabsSide { LeftSide, RightSide };
 
     QIcon createTextIcon(KoToolAction *toolAction) const;
     QIcon createSimpleIcon(KoToolAction *toolAction) const;
@@ -126,7 +117,7 @@ private:
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
 
 #endif // _KO_TOOLBOX_H_
