@@ -9,6 +9,7 @@
 #include "KoView.h"
 
 // local directory
+#include "KoShapeCollectionMenu.h"
 #include "KoView_p.h"
 
 #include "KoDockRegistry.h"
@@ -31,6 +32,7 @@
 #include <KoIcon.h>
 
 #include <KActionCollection>
+#include <KActionMenu>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -47,6 +49,8 @@
 #include <QList>
 #include <QPrintDialog>
 #include <QStatusBar>
+#include <QToolBar>
+#include <QToolButton>
 #include <QUrl>
 
 // static
@@ -325,6 +329,21 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
     return printDialog;
 }
 
+class AddShapeAction : public KActionMenu
+{
+public:
+    explicit AddShapeAction(QObject *parent = nullptr)
+        : KActionMenu(parent)
+    {
+        delete menu();
+        setPopupMode(QToolButton::InstantPopup);
+        setMenu(new KoShapeCollectionMenu);
+        setProperty("isShortcutConfigurable", false);
+        setIcon(QIcon::fromTheme("shape-choose-symbolic"));
+        setText(i18nc("@action:intoolbar", "Add Shape"));
+    }
+};
+
 void KoView::setupGlobalActions()
 {
     QAction *undo = actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
@@ -335,6 +354,8 @@ void KoView::setupGlobalActions()
     d->actionAuthor = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, &KSelectAction::textTriggered, this, &KoView::changeAuthorProfile);
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
+
+    actionCollection()->addAction("add_shape", new AddShapeAction(this));
 
     slotUpdateAuthorProfileActions();
 }

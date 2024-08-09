@@ -15,11 +15,6 @@ set(calligradockers_SRCS
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
 
-    shapecollection/CollectionShapeFactory.cpp
-    shapecollection/ShapeCollectionDocker.cpp
-    shapecollection/CollectionItemModel.cpp
-    shapecollection/OdfCollectionLoader.cpp
-
     Plugin.cpp
 )
 

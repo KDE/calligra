@@ -47,6 +47,7 @@ set(komain_LIB_SRCS
     KoDetailsPane.cpp
     KoOpenPane.cpp
     KoRecentDocumentsPane.cpp
+    KoShapeCollectionMenu.cpp
     KoTemplate.cpp
     KoTemplateCreateDia.cpp
     KoTemplateGroup.cpp

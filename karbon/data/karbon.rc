@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <gui name="Karbon"
-     version="16"
+     version="17"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -155,6 +155,8 @@
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
         <Action name="edit_delete"/>
+        <Spacer />
+        <Action name="add_shape"/>
     </ToolBar>
     <ToolBar name="object_toolbar" hidden="true">
         <text>Object</text>

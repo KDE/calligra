@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Plugin.h"
-#include "shapecollection/ShapeCollectionDocker.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
 #include "snapguidedocker/SnapGuideDockerFactory.h"
 
@@ -20,7 +19,6 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add(new SnapGuideDockerFactory());
     KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
-    KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
 }
 
 #include <Plugin.moc>
