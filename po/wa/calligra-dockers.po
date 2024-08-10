@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2010-12-24 14:38+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -18,78 +18,6 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Dji n' a trové nole fôme el ramexhnêye! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, fuzzy, kde-format
-#| msgid "Not a valid KOffice file: %1"
-msgid "Not a valid Calligra file: %1"
-msgstr "Çouci n' est nén on fitchî KOffice valåbe : %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Dji n' a trové pont d' etikete body e fitchî: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Dji n' a trové pont d' etikete office:drawing e fitchî: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Dji n' a trové nou fôme e fitchî: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Radjouter fôme"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Co ds ôtes"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Drovi ramexhnêye des fômes"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Oister ramexhnêye des fômes"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Prémetou"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Djeyometreye"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Fletches"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Plaijhant"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Aroke di ramexhnêye"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -99,6 +27,50 @@ msgstr "Prôpietés del fôme"
 #, kde-format
 msgid "Snap Settings"
 msgstr ""
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Dji n' a trové nole fôme el ramexhnêye! %1"
+
+#, fuzzy
+#~| msgid "Not a valid KOffice file: %1"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Çouci n' est nén on fitchî KOffice valåbe : %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Dji n' a trové pont d' etikete body e fitchî: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Dji n' a trové pont d' etikete office:drawing e fitchî: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Dji n' a trové nou fôme e fitchî: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Radjouter fôme"
+
+#~ msgid "More"
+#~ msgstr "Co ds ôtes"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Drovi ramexhnêye des fômes"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Oister ramexhnêye des fômes"
+
+#~ msgid "Default"
+#~ msgstr "Prémetou"
+
+#~ msgid "Geometrics"
+#~ msgstr "Djeyometreye"
+
+#~ msgid "Arrows"
+#~ msgstr "Fletches"
+
+#~ msgid "Funny"
+#~ msgstr "Plaijhant"
+
+#~ msgid "Collection Error"
+#~ msgstr "Aroke di ramexhnêye"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

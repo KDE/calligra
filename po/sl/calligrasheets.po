@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1678866 2024-04-29 01:11:38Z scripty $
+# $Id: calligrasheets.po 1687215 2024-08-10 01:17:16Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2023-04-26 08:09+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -897,7 +897,7 @@ msgid "Number"
 msgstr "Število"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12686,105 +12686,105 @@ msgid "&Insert"
 msgstr "&Vstavi"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, kde-format
 msgid "&External Data"
 msgstr "&Zunanji podatki"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, kde-format
 msgid "F&ormat"
 msgstr "&Oblika"
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, kde-format
 msgid "Merge Cells"
 msgstr "Združi celice"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, kde-format
 msgid "&Row"
 msgstr "&Vrstica"
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, kde-format
 msgid "&Column"
 msgstr "&Stolpec"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, kde-format
 msgid "&Sheet"
 msgstr "&List"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
 msgstr "&Obseg tiskanja"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, kde-format
 msgid "Manual Page Breaks"
 msgstr "Ročni prelomi strani"
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, kde-format
 msgid "&Data"
 msgstr "&Podatki"
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, kde-format
 msgid "Filter"
 msgstr "Filter"
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, kde-format
 msgid "&Tools"
 msgstr "O&rodja"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, kde-format
 msgid "&Settings"
 msgstr "Na&stavitve"
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, kde-format
 msgid "Edit"
 msgstr "Uredi"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, kde-format
 msgid "Navigation"
 msgstr "Krmarjenje"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, kde-format
 msgid "Activate"
 msgstr "Omogoči"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "Pisava"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, kde-format
 msgid "Color/Border"
 msgstr "Barva/Obroba"

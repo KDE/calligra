@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2008-01-16 14:38+0200\n"
 "Last-Translator: Abdelrahman <abd_elrahman_em@yahoo.com>\n"
 "Language-Team: \n"
@@ -84,13 +84,13 @@ msgid "Edit"
 msgstr "حرّر"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:150
+#: part/calligrawords.rc:152
 #, kde-format
 msgid "Spell Check Result"
 msgstr "نتيجة فحص الهجاء"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:177
+#: part/calligrawords.rc:179
 #, kde-format
 msgid "Change Variable To"
 msgstr "غيّر المتغير إلى"

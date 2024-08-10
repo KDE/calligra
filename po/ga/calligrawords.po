@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kword.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -80,13 +80,13 @@ msgid "Edit"
 msgstr "Eagar"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:150
+#: part/calligrawords.rc:152
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Torthaí an Litreora"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:177
+#: part/calligrawords.rc:179
 #, kde-format
 msgid "Change Variable To"
 msgstr "Athraigh Athróg Go"

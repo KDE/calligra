@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2022-03-14 12:28+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -1618,6 +1618,28 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Accesat:</b></td><td>%1</td></tr>"
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, kde-format
+msgid "Default"
+msgstr "Implicit"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, fuzzy, kde-format
+#| msgid "Geometric Mean"
+msgid "Geometrics"
+msgstr "Înţeles geometric"
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, kde-format
+msgid "Arrows"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, kde-format
 msgid "Show Guides"
@@ -1782,19 +1804,26 @@ msgstr "Nu s-a putut adăuga o nouă versiune"
 msgid "Date: %1"
 msgstr "Dată: %1"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "Formă"
+
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "Instrument activ: %1"
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Textul &selectat"
@@ -4292,11 +4321,6 @@ msgstr "Format"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Format"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, kde-format
-msgid "Default"
-msgstr "Implicit"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, kde-format

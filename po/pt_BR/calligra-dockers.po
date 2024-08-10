@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-02-28 08:13-0300\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -21,77 +21,6 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Não foram encontradas formas na coleção! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Não é um arquivo do Calligra válido: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Não foi encontrada a marca 'body' no arquivo: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Não foi encontrada a marca 'office:drawing' no arquivo: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Não foram encontradas formas no arquivo: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Adicionar forma"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Mais"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Abrir a coleção de formas"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Remover a coleção de formas"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Padrão"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geométricas"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Setas"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Engraçadas"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Erro da coleção"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -101,6 +30,48 @@ msgstr "Propriedades da forma"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Configurações do ajuste"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Não foram encontradas formas na coleção! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Não é um arquivo do Calligra válido: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Não foi encontrada a marca 'body' no arquivo: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Não foi encontrada a marca 'office:drawing' no arquivo: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Não foram encontradas formas no arquivo: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Adicionar forma"
+
+#~ msgid "More"
+#~ msgstr "Mais"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Abrir a coleção de formas"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Remover a coleção de formas"
+
+#~ msgid "Default"
+#~ msgstr "Padrão"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geométricas"
+
+#~ msgid "Arrows"
+#~ msgstr "Setas"
+
+#~ msgid "Funny"
+#~ msgstr "Engraçadas"
+
+#~ msgid "Collection Error"
+#~ msgstr "Erro da coleção"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

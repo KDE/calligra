@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2021-08-22 11:29+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -1722,6 +1722,27 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>पहुँचा गया:</b></td><td>%1</td></tr>"
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, kde-format
+msgid "Default"
+msgstr "डिफ़ॉल्ट"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, kde-format
+msgid "Geometrics"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, kde-format
+msgid "Arrows"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
@@ -1888,19 +1909,26 @@ msgstr "एक नया संस्करण जोड़ा जा सकत�
 msgid "Date: %1"
 msgstr "तारीख़: %1"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "रूप"
+
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "सक्रिय औज़ार: %1"
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Default Author Profile"
@@ -4485,11 +4513,6 @@ msgstr "फॉर्मेट"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "फॉर्मेट"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, kde-format
-msgid "Default"
-msgstr "डिफ़ॉल्ट"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, kde-format

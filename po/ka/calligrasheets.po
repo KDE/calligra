@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-08-08 08:07+0200\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"PO-Revision-Date: 2024-08-09 02:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -870,7 +870,7 @@ msgid "Number"
 msgstr "რიცხვი"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -1638,7 +1638,7 @@ msgstr "დღე"
 #, kde-format
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
-msgstr ""
+msgstr "ფუნქცია DAYOFYEAR() წლის დღის ნომერს აბრუნებს (1...365)."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -1820,6 +1820,8 @@ msgid ""
 "some countries the first day of the week is Monday, while in others the "
 "first day of the week is Sunday."
 msgstr ""
+"ფუნქცია DAYNAME() კვირის დღის სახელს აბრუნებს (1..7). ზოგ ქვეყანაში კვირის "
+"პირველი დღე ორშაბათია, სხვაგან კი ეს კვირა შეიძლება, იყოს."
 
 #: functions/datetime.xml:494
 #, kde-format
@@ -1922,6 +1924,8 @@ msgid ""
 "The CURRENTTIME() function returns the current time formatted with local "
 "parameters."
 msgstr ""
+"ფუნქცია CURRENTTIME() ლოკალური პარამეტრებით დაფორმატებულ მიმდინარე დროს "
+"აბრუნებს."
 
 #: functions/datetime.xml:565
 #, kde-format
@@ -2083,6 +2087,8 @@ msgid ""
 "The WORKDAY() function returns the date which is working days from the start "
 "date."
 msgstr ""
+"ფუნქცია WORKDAY() აბრუნებს თარიღს, რომელიც მითითებული სამუშაო დღის შემდეგაა "
+"დაწყების თარიღიდან."
 
 #: functions/datetime.xml:682 functions/datetime.xml:705
 #, kde-format
@@ -2134,11 +2140,12 @@ msgstr "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) აბრუნებს 3 �
 #, kde-format
 msgid "DATE2UNIX() function converts a date and time value to unix time."
 msgstr ""
+"ფუნქცია DATE2UNIX() თარიღისა და დროის მნიშვნელობებს Unix-ის დროშ გადაიყვანს."
 
 #: functions/datetime.xml:721 functions/datetime.xml:736
 #, kde-format
 msgid "A unix time is the number of seconds after midnight January 1st, 1970."
-msgstr ""
+msgstr "Unix-ის დრო 1970 წლის პირველი იანვრის შემდეგ წამების რაოდენობაა."
 
 #: functions/datetime.xml:722
 #, kde-format
@@ -2158,7 +2165,7 @@ msgstr "Unixtime"
 #: functions/datetime.xml:735
 #, kde-format
 msgid "UNIX2DATE() function converts unix time to a date and time value."
-msgstr ""
+msgstr "ფუნქცია UNIX2DATE() Unix-ის დროს თარიღსა და დროში გადაიყვანს."
 
 #: functions/datetime.xml:737
 #, kde-format
@@ -2217,7 +2224,7 @@ msgstr "ფუნქციის თანმიმდევრობა"
 #: functions/engineering.xml:41
 #, kde-format
 msgid "The BESSELI() function returns the modified Bessel function In(x)."
-msgstr ""
+msgstr "ფუნქცია BESSELI() შეცვლილ ბესელის ფუნქციას ln(x) აბრუნებს."
 
 #: functions/engineering.xml:42
 #, kde-format
@@ -2232,7 +2239,7 @@ msgstr "BESSELI(0.7;3) აბრუნებს 0.007367374"
 #: functions/engineering.xml:62
 #, kde-format
 msgid "The BESSELJ() function returns the Bessel function."
-msgstr ""
+msgstr "ფუნქცია BESSELJ() ბესელის ფუნქციას აბრუნებს."
 
 #: functions/engineering.xml:63
 #, kde-format
@@ -2293,7 +2300,7 @@ msgstr "ერთეულამდე"
 msgid ""
 "The CONVERT() function returns a conversion from one measurement system to "
 "another."
-msgstr ""
+msgstr "ფუნქცია CONVERT() ერთი საზომი ერთეულიდან მეორეში გადაყვანას აბრუნებს."
 
 #: functions/engineering.xml:130
 #, kde-format
@@ -2302,6 +2309,9 @@ msgid ""
 "ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight "
 "(hundredweight)."
 msgstr ""
+"მხარდაჭერილი მასის ერთეულები: g (გრამი), sg (ნაწილები), lbm (ფუნტები), u "
+"(ატომური მასა), ozm (უნცია), stone (ქვა), ton (ტონა), grain (მარცვალი), "
+"pweight (1.55517384 გრამი) და hweight (hundredweight)."
 
 #: functions/engineering.xml:131
 #, kde-format
@@ -2320,7 +2330,7 @@ msgstr ""
 #: functions/engineering.xml:133
 #, kde-format
 msgid "Supported force units: N (Newton), dyn, pound."
-msgstr ""
+msgstr "მხარდაჭერილი ძალის ერთეულები: N (ნიუტონი, dyn (დინი) და pound (ფუნტი)."
 
 #: functions/engineering.xml:134
 #, kde-format
@@ -2334,6 +2344,8 @@ msgstr ""
 #, kde-format
 msgid "Supported power units: W (Watt), HP (horsepower), PS (Pferdestaerke)."
 msgstr ""
+"მხარდაჭერილი სიმძლავრის ერთეულებია: W (ვატი), HP (ცხენისძალა და PS "
+"(Pferdestaerke)."
 
 #: functions/engineering.xml:136
 #, kde-format
@@ -2378,6 +2390,8 @@ msgid ""
 "Supported speed units: m/s (meters per second), m/h (meters per hour), mph "
 "(miles per hour), kn (knot)."
 msgstr ""
+"მხარდაჭერილი სიჩქარის ერთეულებია: m/s (მეტრი წამში), m/h (მეტრი საათში, mph "
+"(მილი საათში) და kn (კვანძი)."
 
 #: functions/engineering.xml:141
 #, kde-format
@@ -2388,6 +2402,11 @@ msgid ""
 "1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, "
 "1E-12), f (femto, 1E-15), a (atto, 1E-18)."
 msgstr ""
+"მეტრული ერთეულებისთვის შეგიძლიათ, შემდეგი პრეფიქსები გამოიყენოთ: E (ექსა, 1E"
+"+18), P (პეტა, 1E+15), T (ტერა, 1E+12), G (გიგა, 1E+09), M (მეგა, 1E+06), k "
+"(კილო, 1E+03), h (ჰექტო, 1E+02), e (დეკა, 1E+01), d (დეცი, 1E-01), c (ცენტი, "
+"1E-02), m (მილი, 1E-03), u (მიკრო, 1E-06), n (ნანო, 1E-09), p (პიკო, 1E-12), "
+"f (ფემტო, 1E-15), a (ატო, 1E-18)."
 
 #: functions/engineering.xml:142
 #, kde-format
@@ -3697,7 +3716,7 @@ msgstr "ტიპი"
 #: functions/financial.xml:236
 #, kde-format
 msgid "Calculates the cumulative interest payment."
-msgstr ""
+msgstr "გამოითვლის დაგროვებულ პროცენტების გადახდას."
 
 #: functions/financial.xml:237
 #, kde-format
@@ -3712,7 +3731,7 @@ msgstr "CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) უდრის -3562,187023"
 #: functions/financial.xml:273
 #, kde-format
 msgid "Calculates the cumulative principal payment."
-msgstr ""
+msgstr "გამოითვლის დაგროვებულ ძირითად გადახდას."
 
 #: functions/financial.xml:274
 #, kde-format
@@ -4995,7 +5014,7 @@ msgstr "ბმა"
 #: functions/information.xml:30
 #, kde-format
 msgid "The FORMULA() function returns the formula of a cell as string."
-msgstr ""
+msgstr "ფუნქცია FORMULA() უჯრედის ფორმულას ტექსტის სახით აბრუნებს."
 
 #: functions/information.xml:31
 #, kde-format
@@ -5006,7 +5025,7 @@ msgstr "FORMULA(x)"
 #, kde-format
 msgid ""
 "FORMULA(A1) returns \"=SUM(1+2)\" if the cell A1 contains such a formula."
-msgstr ""
+msgstr "FORMULA(A1) დააბრუნებს \"=SUM(1+2)\", თუ უჯრედი A1 ამ ფორუმას შეიცავს."
 
 #: functions/information.xml:44
 #, kde-format
@@ -5045,9 +5064,9 @@ msgid ""
 "return. It is one of the following: \"directory\" returns the path of the "
 "current directory, \"numfile\" returns the number of active documents, "
 "\"release\" returns the version of Calligra Sheets as text, \"recalc\" "
-"returns the current recalculation mode: \"Automatic\" or \"Manual\", "
-"\"system\" returns the name of the operating environment, \"osversion\" "
-"returns the current operating system."
+"returns the current recalculation mode: \"Automatic\" or \"Manual\", \"system"
+"\" returns the name of the operating environment, \"osversion\" returns the "
+"current operating system."
 msgstr ""
 
 #: functions/information.xml:60
@@ -6032,7 +6051,7 @@ msgstr "ODD(-2) აბრუნებს -3"
 #: functions/math.xml:229
 #, kde-format
 msgid "The GAMMA() function returns the gamma function value."
-msgstr ""
+msgstr "ფუნქცია GAMMA() გამა ფუნქციის მნიშვნელობას აბრუნებს."
 
 #: functions/math.xml:230
 #, kde-format
@@ -6411,6 +6430,8 @@ msgstr "G_PRODUCT(მნიშვნელობა;მნიშვნელო�
 #, kde-format
 msgid "The DIV() function divides the first value by the other values in turn."
 msgstr ""
+"ფუნქცია DIV() პირველ მნიშვნელობას მეორეზე, შემდეგ კი შემდეგ მნიშვნელობებზე "
+"ყოფს."
 
 #: functions/math.xml:508
 #, kde-format
@@ -7407,7 +7428,7 @@ msgstr ""
 #: functions/math.xml:1256
 #, kde-format
 msgid "Invertible matrices have a non-zero determinant."
-msgstr ""
+msgstr "შებრუნებად მატრიცებს არანულოვანი დეტერმინანტი გააჩნიათ."
 
 #: functions/math.xml:1258
 #, kde-format
@@ -7427,7 +7448,7 @@ msgstr "განზომილება"
 #: functions/math.xml:1273
 #, kde-format
 msgid "Creates the unity matrix of the given dimension."
-msgstr ""
+msgstr "შექმნის მითითებული განზომილების მქონე მატრიცას."
 
 #: functions/math.xml:1275
 #, kde-format
@@ -7437,7 +7458,7 @@ msgstr "MUNIT(dimension)"
 #: functions/math.xml:1276
 #, kde-format
 msgid "MUNIT(3) creates a 3x3 unity matrix"
-msgstr ""
+msgstr "ფუნქცია MUNIT(3) 3x3 მატრიცას ჰქმნის"
 
 #: functions/math.xml:1289 functions/math.xml:1291
 #, kde-format
@@ -7459,7 +7480,7 @@ msgstr "TRANSPOSE(A1:C3)"
 #: functions/reference.xml:5
 #, kde-format
 msgid "Lookup & Reference"
-msgstr ""
+msgstr "ძებნა და მიმართვა"
 
 #: functions/reference.xml:11
 #, kde-format
@@ -7713,12 +7734,12 @@ msgstr ""
 #: functions/reference.xml:165
 #, kde-format
 msgid "INDIRECT(referenceText, a1 style)"
-msgstr ""
+msgstr "INDIRECT(მიმართვისტექსტი, a1 სტილი)"
 
 #: functions/reference.xml:166
 #, kde-format
 msgid "INDIRECT(A1), A1 contains \"B1\", and B1 1 => returns 1"
-msgstr ""
+msgstr "INDIRECT(A1), A1 შეიცავს \"B1\", და B1 1 => აბრუნებს 1"
 
 #: functions/reference.xml:167
 #, kde-format
@@ -7997,7 +8018,7 @@ msgstr "წანაცვლების შუალედის სიგა�
 #: functions/reference.xml:380
 #, kde-format
 msgid "Modifies a reference's position and dimension."
-msgstr ""
+msgstr "შეცვლის მიმართვის მდებარეობას და განზომილებას."
 
 #: functions/reference.xml:381
 #, kde-format
@@ -11880,105 +11901,105 @@ msgid "&Insert"
 msgstr "&ჩასმა"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, kde-format
 msgid "&External Data"
 msgstr "&გარე მონაცემები"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, kde-format
 msgid "F&ormat"
 msgstr "&ფორმატი"
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, kde-format
 msgid "Merge Cells"
 msgstr "უჯრედების შერწყმა"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, kde-format
 msgid "&Row"
 msgstr "&მწკრივი"
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, kde-format
 msgid "&Column"
 msgstr "&სვეტი"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, kde-format
 msgid "&Sheet"
 msgstr "&ფურცელი"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
 msgstr "&ბეჭდვის დიაპაზონი"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, kde-format
 msgid "Manual Page Breaks"
 msgstr "გვერდის დასრულება ხელით"
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, kde-format
 msgid "&Data"
 msgstr "მონაცემები"
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, kde-format
 msgid "Filter"
 msgstr "ფილტრი"
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, kde-format
 msgid "&Tools"
 msgstr "&ხელსაწყოები"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, kde-format
 msgid "&Settings"
 msgstr "&პარამეტრები"
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, kde-format
 msgid "Edit"
 msgstr "ჩასწორება"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, kde-format
 msgid "Navigation"
 msgstr "ნავიგაცია"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, kde-format
 msgid "Activate"
 msgstr "აქტივაცია"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "შრიფტი"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, kde-format
 msgid "Color/Border"
 msgstr "ფერი/საზღვარი"

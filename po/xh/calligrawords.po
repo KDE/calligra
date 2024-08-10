@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2002-11-08 16:06+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -92,13 +92,13 @@ msgid "Edit"
 msgstr "Beka Umbhalo kakuhle"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:150
+#: part/calligrawords.rc:152
 #, fuzzy, kde-format
 msgid "Spell Check Result"
 msgstr "Ukhangelo Lopelo"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:177
+#: part/calligrawords.rc:179
 #, kde-format
 msgid "Change Variable To"
 msgstr "Tshintsha Okutshintshayo Kwi"

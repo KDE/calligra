@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2014-10-20 19:50+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -15,77 +15,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Nisu pronađeni oblici u kolekciji! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Nije važeća Calligra datoteka: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Nema označenog tijela u datoteci: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Nema office:drawing  oznake u datoteci: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Oblici u dokumentu nisu pronađeni: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Dodati oblik"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Više"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Otvori kolekciju oblika"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Obriši kolekciju oblika"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Podrazumijevano"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometrijski"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Strelice"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Smiješno"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Greška u kolekciji"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -95,6 +24,48 @@ msgstr "Osobine oblika"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Postavke namještanja"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Nisu pronađeni oblici u kolekciji! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Nije važeća Calligra datoteka: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Nema označenog tijela u datoteci: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Nema office:drawing  oznake u datoteci: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Oblici u dokumentu nisu pronađeni: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Dodati oblik"
+
+#~ msgid "More"
+#~ msgstr "Više"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Otvori kolekciju oblika"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Obriši kolekciju oblika"
+
+#~ msgid "Default"
+#~ msgstr "Podrazumijevano"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometrijski"
+
+#~ msgid "Arrows"
+#~ msgstr "Strelice"
+
+#~ msgid "Funny"
+#~ msgstr "Smiješno"
+
+#~ msgid "Collection Error"
+#~ msgstr "Greška u kolekciji"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16,77 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "توپلامدىن شەكىل تېپىلمىدى! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "ئىناۋەتلىك كاللىگىرا ھۆججىتى ئەمەس: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr ""
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr ""
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "ھۆججەتتىن شەكىل تېپىلمىدى: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "شەكىل قوش"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "تېخىمۇ كۆپ"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "شەكىل توپلىمىنى ئېچىش"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "شەكىل توپلىمىنى چىقىرىۋېتىش"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "كۆڭۈلدىكى"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "گېئومېتىرىيىلىك شەكىللەر"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "يا ئوقلار"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "قىزىقارلىق"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "توپلام خاتالىقى"
 
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
@@ -97,6 +26,42 @@ msgstr "شەكىل خاسلىقى"
 #, kde-format
 msgid "Snap Settings"
 msgstr ""
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "توپلامدىن شەكىل تېپىلمىدى! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "ئىناۋەتلىك كاللىگىرا ھۆججىتى ئەمەس: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "ھۆججەتتىن شەكىل تېپىلمىدى: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "شەكىل قوش"
+
+#~ msgid "More"
+#~ msgstr "تېخىمۇ كۆپ"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "شەكىل توپلىمىنى ئېچىش"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "شەكىل توپلىمىنى چىقىرىۋېتىش"
+
+#~ msgid "Default"
+#~ msgstr "كۆڭۈلدىكى"
+
+#~ msgid "Geometrics"
+#~ msgstr "گېئومېتىرىيىلىك شەكىللەر"
+
+#~ msgid "Arrows"
+#~ msgstr "يا ئوقلار"
+
+#~ msgid "Funny"
+#~ msgstr "قىزىقارلىق"
+
+#~ msgid "Collection Error"
+#~ msgstr "توپلام خاتالىقى"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

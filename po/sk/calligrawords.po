@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2023-12-06 18:27+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -86,13 +86,13 @@ msgid "Edit"
 msgstr "Editovať"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:150
+#: part/calligrawords.rc:152
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Výsledok kontroly pravopisu"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:177
+#: part/calligrawords.rc:179
 #, kde-format
 msgid "Change Variable To"
 msgstr "Zmeniť premennú na"

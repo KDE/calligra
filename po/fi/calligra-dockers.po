@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2014-02-28 23:54+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -22,78 +22,6 @@ msgstr ""
 "X-POT-Import-Date: 2013-01-13 22:09:46+0000\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Kokoelmasta ei löytynyt muotoja! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Ei ole kelvollinen Calligra-tiedosto: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Tunnistetta body ei löytynyt tiedostosta: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Ei löytynyt office:drawing -tunnistetta tiedostosta: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Muotoa ei löytynyt tiedostosta: %1"
-
-# @title:window
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Muodon lisäys"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Lisää"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Avaa muotokokoelma"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Poista muotokokoelma"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Oletus"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometriset"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Nuolet"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Hauska"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Kokoelmavirhe"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -103,6 +31,49 @@ msgstr "Muodon ominaisuudet"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Kiinnittymisasetukset"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Kokoelmasta ei löytynyt muotoja! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Ei ole kelvollinen Calligra-tiedosto: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Tunnistetta body ei löytynyt tiedostosta: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Ei löytynyt office:drawing -tunnistetta tiedostosta: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Muotoa ei löytynyt tiedostosta: %1"
+
+# @title:window
+#~ msgid "Add Shape"
+#~ msgstr "Muodon lisäys"
+
+#~ msgid "More"
+#~ msgstr "Lisää"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Avaa muotokokoelma"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Poista muotokokoelma"
+
+#~ msgid "Default"
+#~ msgstr "Oletus"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometriset"
+
+#~ msgid "Arrows"
+#~ msgstr "Nuolet"
+
+#~ msgid "Funny"
+#~ msgstr "Hauska"
+
+#~ msgid "Collection Error"
+#~ msgstr "Kokoelmavirhe"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

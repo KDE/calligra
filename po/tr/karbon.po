@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2024-03-01 15:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -101,19 +101,19 @@ msgid "Edit"
 msgstr "Düzenle"
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:160
+#: data/karbon.rc:162
 #, kde-format
 msgid "Object"
 msgstr "Nesne"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:169
+#: data/karbon.rc:171
 #, kde-format
 msgid "Align"
 msgstr "Hizalama"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:178
+#: data/karbon.rc:180
 #, kde-format
 msgid "Effects"
 msgstr "Efektler"

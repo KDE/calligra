@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-03-31 09:08+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,77 +18,6 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Nem található alakzat a gyűjteményben! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Nem érvényes Calligra-fájl: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Nincs található törzs címke a fájlban: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Nem hivatalos:rajzoló címke a következő fájlban található: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Nem található alakzat a fájlban: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Forma hozzáadása"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Több"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Forma gyűjtemény megnyitása"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Forma gyűjtemény eltávolítása"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Alapértelmezett"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometriák"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Nyílak"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Vicces"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Gyűjtemény hiba"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -98,6 +27,48 @@ msgstr "Alak tulajdonságok"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Illesztő beállítások"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Nem található alakzat a gyűjteményben! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Nem érvényes Calligra-fájl: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Nincs található törzs címke a fájlban: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Nem hivatalos:rajzoló címke a következő fájlban található: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Nem található alakzat a fájlban: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Forma hozzáadása"
+
+#~ msgid "More"
+#~ msgstr "Több"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Forma gyűjtemény megnyitása"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Forma gyűjtemény eltávolítása"
+
+#~ msgid "Default"
+#~ msgstr "Alapértelmezett"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometriák"
+
+#~ msgid "Arrows"
+#~ msgstr "Nyílak"
+
+#~ msgid "Funny"
+#~ msgstr "Vicces"
+
+#~ msgid "Collection Error"
+#~ msgstr "Gyűjtemény hiba"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

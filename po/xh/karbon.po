@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2002-11-02 14:53+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -106,19 +106,19 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:160
+#: data/karbon.rc:162
 #, fuzzy, kde-format
 msgid "Object"
 msgstr "&Injongo"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:169
+#: data/karbon.rc:171
 #, fuzzy, kde-format
 msgid "Align"
 msgstr "Ubeko ngokuhambelana:"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:178
+#: data/karbon.rc:180
 #, kde-format
 msgid "Effects"
 msgstr "Iziqhano"

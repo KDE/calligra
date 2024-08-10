@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2008-04-17 22:27+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -883,7 +883,7 @@ msgid "Number"
 msgstr "ตัวเลข"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12236,92 +12236,92 @@ msgid "&Insert"
 msgstr "แทรก"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, kde-format
 msgid "&External Data"
 msgstr "ข้อมูล&ภายนอก"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, kde-format
 msgid "F&ormat"
 msgstr "รู&ปแบบ"
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, kde-format
 msgid "Merge Cells"
 msgstr "ผสานเซลล์"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, kde-format
 msgid "&Row"
 msgstr "แ&ถว"
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, kde-format
 msgid "&Column"
 msgstr "ส&ดมภ์"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, kde-format
 msgid "&Sheet"
 msgstr "แ&ผ่นงาน"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
 msgstr "&ช่วงการพิมพ์"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, fuzzy, kde-format
 #| msgid "Page Borders"
 msgid "Manual Page Breaks"
 msgstr "ขอบกระดาษ"
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, kde-format
 msgid "&Data"
 msgstr "ข้อ&มูล"
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, kde-format
 msgid "Filter"
 msgstr "ตัวกรอง"
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, kde-format
 msgid "&Tools"
 msgstr "เ&ครื่องมือ"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, kde-format
 msgid "&Settings"
 msgstr "&ตั้งค่า"
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, kde-format
 msgid "Edit"
 msgstr "แก้ไข"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, kde-format
 msgid "Navigation"
 msgstr "การนำทาง"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, fuzzy, kde-format
 #| msgid "Hide Sheet"
 msgid "Activate"
@@ -12329,14 +12329,14 @@ msgstr "ซ่อนแผ่นงาน"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "แบบอักษร"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, kde-format
 msgid "Color/Border"
 msgstr "สี/เส้นขอบ"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -875,7 +875,7 @@ msgid "Number"
 msgstr "Нумар"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, fuzzy, kde-format
 msgid "Format"
@@ -12472,105 +12472,105 @@ msgid "&Insert"
 msgstr "У&ставіць"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, fuzzy, kde-format
 msgid "&External Data"
 msgstr "Знешнія дадзеныя"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, fuzzy, kde-format
 msgid "F&ormat"
 msgstr "Ф&армат"
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, fuzzy, kde-format
 msgid "Merge Cells"
 msgstr "Аб'яднаць вочкі"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, fuzzy, kde-format
 msgid "&Row"
 msgstr "Радок"
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, fuzzy, kde-format
 msgid "&Column"
 msgstr "Слупок"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, fuzzy, kde-format
 msgid "&Sheet"
 msgstr "Ліст"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, fuzzy, kde-format
 msgid "&Print Range"
 msgstr "Вобласць друку"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, fuzzy, kde-format
 msgid "Manual Page Breaks"
 msgstr "Межы старонак:"
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, fuzzy, kde-format
 msgid "&Data"
 msgstr "Дадзеныя"
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, fuzzy, kde-format
 msgid "Filter"
 msgstr "Файл"
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, fuzzy, kde-format
 msgid "&Tools"
 msgstr "Н&ачынне"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, fuzzy, kde-format
 msgid "&Settings"
 msgstr "&Настаўленні"
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Змяніць"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, fuzzy, kde-format
 msgid "Navigation"
 msgstr "Навігацыя"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, fuzzy, kde-format
 msgid "Activate"
 msgstr "Схаваць ліст"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "&Шрыфт"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, fuzzy, kde-format
 msgid "Color/Border"
 msgstr "Колер і межы"

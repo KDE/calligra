@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-05-12 14:26+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -102,19 +102,19 @@ msgid "Edit"
 msgstr "Rediger"
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:160
+#: data/karbon.rc:162
 #, kde-format
 msgid "Object"
 msgstr "Objekt"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:169
+#: data/karbon.rc:171
 #, kde-format
 msgid "Align"
 msgstr "Juster"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:178
+#: data/karbon.rc:180
 #, kde-format
 msgid "Effects"
 msgstr "Effektar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2009-04-26 13:56+0300\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
@@ -19,78 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Nu au fost găsite forme în colecție! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, fuzzy, kde-format
-#| msgid "Not a valid KOffice file: %1"
-msgid "Not a valid Calligra file: %1"
-msgstr "Nu este un fișier KOffice valid: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr ""
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr ""
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr ""
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Adaugă formă"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Mai multe"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Deschide colecția de forme"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Elimină colecția de forme"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Implicit"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometrice"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Săgeți"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Nostime"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Eroare colecție"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -100,3 +28,38 @@ msgstr "Proprietăți formă"
 #, kde-format
 msgid "Snap Settings"
 msgstr ""
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Nu au fost găsite forme în colecție! %1"
+
+#, fuzzy
+#~| msgid "Not a valid KOffice file: %1"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Nu este un fișier KOffice valid: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Adaugă formă"
+
+#~ msgid "More"
+#~ msgstr "Mai multe"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Deschide colecția de forme"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Elimină colecția de forme"
+
+#~ msgid "Default"
+#~ msgstr "Implicit"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometrice"
+
+#~ msgid "Arrows"
+#~ msgstr "Săgeți"
+
+#~ msgid "Funny"
+#~ msgstr "Nostime"
+
+#~ msgid "Collection Error"
+#~ msgstr "Eroare colecție"

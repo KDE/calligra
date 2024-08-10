@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -1676,6 +1676,27 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Foydalanilgan:</b></td><td>%1</td></tr>"
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, fuzzy, kde-format
+msgid "Default"
+msgstr "&Andoza"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, kde-format
+msgid "Geometrics"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, kde-format
+msgid "Arrows"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, fuzzy, kde-format
 #| msgid "Show %1"
@@ -1842,18 +1863,25 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Sana:"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Add Space"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "Boʻsh joy qoʻshish"
+
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Andoza rang"
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Andoza rang"
@@ -4318,11 +4346,6 @@ msgstr "Sanani koʻrinishi"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Sanani koʻrinishi"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, fuzzy, kde-format
-msgid "Default"
-msgstr "&Andoza"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, fuzzy, kde-format
@@ -12381,9 +12404,6 @@ msgstr "%1%"
 #, fuzzy
 #~ msgid "Add Multiline"
 #~ msgstr "Koʻp qatorli matn qoʻshish"
-
-#~ msgid "Add Space"
-#~ msgstr "Boʻsh joy qoʻshish"
 
 #~ msgid "Add Root"
 #~ msgstr "Ildizni qoʻshish"

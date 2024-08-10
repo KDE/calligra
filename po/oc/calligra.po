@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -1701,6 +1701,30 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr ""
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, fuzzy, kde-format
+#| msgid "Make Default"
+msgid "Default"
+msgstr "Defaut"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, kde-format
+msgid "Geometrics"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, fuzzy, kde-format
+#| msgctxt "Mouse Cursor Shape"
+#| msgid "Arrow"
+msgid "Arrows"
+msgstr "Flècha"
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, fuzzy, kde-format
 #| msgid "Snap to Grid"
@@ -1873,18 +1897,25 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Data :"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "Forma"
+
+#: main/KoView.cpp:354
 #, kde-format
 msgid "Active Author Profile"
 msgstr ""
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr ""
@@ -4376,12 +4407,6 @@ msgstr "Format"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Format"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, fuzzy, kde-format
-#| msgid "Make Default"
-msgid "Default"
-msgstr "Defaut"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, kde-format
@@ -8482,10 +8507,6 @@ msgstr "%1%"
 
 #~ msgid "Rotate"
 #~ msgstr "እንደገና አስጀምሩ"
-
-#~ msgctxt "Mouse Cursor Shape"
-#~ msgid "Arrow"
-#~ msgstr "Flècha"
 
 #~ msgctxt "Mouse Cursor Shape"
 #~ msgid "Up Arrow"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2010-12-26 09:50+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -854,7 +854,7 @@ msgid "Number"
 msgstr "ਨੰਬਰ:"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, fuzzy, kde-format
 #| msgid "Auto-Format..."
@@ -11951,99 +11951,99 @@ msgid "&Insert"
 msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, fuzzy, kde-format
 #| msgid "Last Sheet"
 msgid "&External Data"
 msgstr "ਆਖਰੀ ਸ਼ੀਟ"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, fuzzy, kde-format
 #| msgid "Auto-Format..."
 msgid "F&ormat"
 msgstr "ਆਟੋ-ਫਾਰਮੈਟ..."
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Merge Cells"
 msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, kde-format
 msgid "&Row"
 msgstr ""
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, fuzzy, kde-format
 #| msgid "Column: %1"
 msgid "&Column"
 msgstr "ਕਾਲਮ: %1"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "&Sheet"
 msgstr "ਸ਼ੀਟ"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
 msgstr ""
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, kde-format
 msgid "Manual Page Breaks"
 msgstr ""
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, kde-format
 msgid "&Data"
 msgstr ""
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, fuzzy, kde-format
 #| msgid "Auto-Format..."
 msgid "Filter"
 msgstr "ਆਟੋ-ਫਾਰਮੈਟ..."
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, fuzzy, kde-format
 #| msgid "Tools"
 msgid "&Tools"
 msgstr "ਟੂਲ"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, kde-format
 msgid "&Settings"
 msgstr ""
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgid "Edit"
 msgstr "ਸੋਧ(&E)..."
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, kde-format
 msgid "Navigation"
 msgstr ""
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, fuzzy, kde-format
 #| msgctxt "Activate sheet named foo"
 #| msgid "Activate %1"
@@ -12052,14 +12052,14 @@ msgstr "%1 ਐਕਟੀਵੇਟ"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr ""
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, fuzzy, kde-format
 #| msgid "Border Color"
 msgid "Color/Border"

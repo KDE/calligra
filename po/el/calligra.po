@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2023-07-25 00:29+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -1590,6 +1590,30 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Προσπελάστηκε:</b></td><td>%1</td></tr>"
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, kde-format
+msgid "Default"
+msgstr "Προκαθορισμένο"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, fuzzy, kde-format
+#| msgid "Geometric Mean"
+msgid "Geometrics"
+msgstr "Γεωμετρικός μέσος"
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, fuzzy, kde-format
+#| msgctxt "Mouse Cursor Shape"
+#| msgid "Arrow"
+msgid "Arrows"
+msgstr "Βέλος"
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, kde-format
 msgid "Show Guides"
@@ -1751,18 +1775,25 @@ msgstr "Αδυναμία προσθήκης μιας νέας έκδοσης"
 msgid "Date: %1"
 msgstr "Ημερομηνία: %1"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "Σχήμα"
+
+#: main/KoView.cpp:354
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Ενεργό προφίλ συγγραφέα"
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Ανώνυμο"
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Προκαθορισμένο προφίλ συγγραφέα"
@@ -4062,11 +4093,6 @@ msgstr "Γίνεται διαμόρφωση"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Τύπος αποθήκευσης"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, kde-format
-msgid "Default"
-msgstr "Προκαθορισμένο"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, kde-format
@@ -13207,10 +13233,6 @@ msgstr "%1"
 #~ msgstr ""
 #~ "Ορισμός όλων των ιδιοτήτων μόνο για ανάγνωση:\n"
 #~ "(χρήσιμο για τον έλεγχο της λειτουργίας μόνο ανάγνωσης)"
-
-#~ msgctxt "Mouse Cursor Shape"
-#~ msgid "Arrow"
-#~ msgstr "Βέλος"
 
 #~ msgctxt "Mouse Cursor Shape"
 #~ msgid "Up Arrow"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -900,7 +900,7 @@ msgid "Number"
 msgstr "எண்"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:235
+#: functions/conversion.xml:251 part/calligrasheets.rc:237
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12901,92 +12901,92 @@ msgid "&Insert"
 msgstr "கிடக்கைகளை செருகு"
 
 #. i18n: ectx: Menu (ExternalData)
-#: part/calligrasheets.rc:89
+#: part/calligrasheets.rc:91
 #, kde-format
 msgid "&External Data"
 msgstr "வெளிப்புற தகவல்"
 
 #. i18n: ectx: Menu (Format)
-#: part/calligrasheets.rc:96
+#: part/calligrasheets.rc:98
 #, kde-format
 msgid "F&ormat"
 msgstr "வடிவமைப்பு"
 
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104
+#: part/calligrasheets.rc:106
 #, kde-format
 msgid "Merge Cells"
 msgstr "செல்களை ஒன்றாகச் சேர்"
 
 #. i18n: ectx: Menu (Row)
-#: part/calligrasheets.rc:112
+#: part/calligrasheets.rc:114
 #, kde-format
 msgid "&Row"
 msgstr "குறுக்குவரிசை"
 
 #. i18n: ectx: Menu (Column)
-#: part/calligrasheets.rc:118
+#: part/calligrasheets.rc:120
 #, kde-format
 msgid "&Column"
 msgstr "நெடுவரிசை"
 
 #. i18n: ectx: Menu (Sheet)
-#: part/calligrasheets.rc:124
+#: part/calligrasheets.rc:126
 #, kde-format
 msgid "&Sheet"
 msgstr "தாள்"
 
 #. i18n: ectx: Menu (PrintRange)
-#: part/calligrasheets.rc:132
+#: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
 msgstr "&வரம்பை அச்சிடு"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:137
+#: part/calligrasheets.rc:139
 #, fuzzy, kde-format
 #| msgid "&Page borders:"
 msgid "Manual Page Breaks"
 msgstr "&பக்க எல்லைகள்:"
 
 #. i18n: ectx: Menu (Data)
-#: part/calligrasheets.rc:147
+#: part/calligrasheets.rc:149
 #, kde-format
 msgid "&Data"
 msgstr "தரவு"
 
 #. i18n: ectx: Menu (Filter)
-#: part/calligrasheets.rc:149
+#: part/calligrasheets.rc:151
 #, fuzzy, kde-format
 msgid "Filter"
 msgstr "கோப்பு"
 
 #. i18n: ectx: Menu (tools)
-#: part/calligrasheets.rc:165
+#: part/calligrasheets.rc:167
 #, fuzzy, kde-format
 msgid "&Tools"
 msgstr "டோகோ"
 
 #. i18n: ectx: Menu (settings)
-#: part/calligrasheets.rc:178
+#: part/calligrasheets.rc:180
 #, fuzzy, kde-format
 msgid "&Settings"
 msgstr "சரம்"
 
 #. i18n: ectx: ToolBar (editToolBar)
-#: part/calligrasheets.rc:209
+#: part/calligrasheets.rc:211
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "முறைமைத்தகுதி..."
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:219
+#: part/calligrasheets.rc:221
 #, kde-format
 msgid "Navigation"
 msgstr "வழிச்செலுத்துதல்"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:225
+#: part/calligrasheets.rc:227
 #, fuzzy, kde-format
 #| msgid "Hide Sheet"
 msgid "Activate"
@@ -12994,14 +12994,14 @@ msgstr "தாளை மறை"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "ப்ராயின்ட்"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:261
+#: part/calligrasheets.rc:263
 #, kde-format
 msgid "Color/Border"
 msgstr "நிறம்/ஓரம்"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 00:38+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2004-09-07 14:22+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -1682,6 +1682,27 @@ msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
 msgstr ""
 
+#: main/KoShapeCollectionMenu.cpp:354 text/styles/KoStyleManager.cpp:95
+#: text/styles/KoStyleManager.cpp:100
+#, fuzzy, kde-format
+msgid "Default"
+msgstr "&Rhagosodyn"
+
+#: main/KoShapeCollectionMenu.cpp:358
+#, kde-format
+msgid "Geometrics"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:369
+#, kde-format
+msgid "Arrows"
+msgstr ""
+
+#: main/KoShapeCollectionMenu.cpp:373
+#, kde-format
+msgid "Funny"
+msgstr ""
+
 #: main/KoStandardAction.cpp:19
 #, fuzzy, kde-format
 #| msgid "Show %1"
@@ -1848,18 +1869,25 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Dyddiad:"
 
-#: main/KoView.cpp:335
+#: main/KoView.cpp:343
+#, fuzzy, kde-format
+#| msgid "Add Space"
+msgctxt "@action:intoolbar"
+msgid "Add Shape"
+msgstr "Ychwanegu Bwlch"
+
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Lliw Rhagosodol"
 
-#: main/KoView.cpp:347 main/KoView.cpp:401
+#: main/KoView.cpp:368 main/KoView.cpp:422
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:400 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Lliw Rhagosodol"
@@ -4384,11 +4412,6 @@ msgstr "Fformat Dyddiad"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Fformat Dyddiad"
-
-#: text/styles/KoStyleManager.cpp:95 text/styles/KoStyleManager.cpp:100
-#, fuzzy, kde-format
-msgid "Default"
-msgstr "&Rhagosodyn"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, fuzzy, kde-format
@@ -12430,9 +12453,6 @@ msgstr "%1%"
 
 #~ msgid "Add Multiline"
 #~ msgstr "Ychwanegu Aml-linell"
-
-#~ msgid "Add Space"
-#~ msgstr "Ychwanegu Bwlch"
 
 #~ msgid "Add Root"
 #~ msgstr "Ychwanegu Isradd"

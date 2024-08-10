@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-03-01 22:52+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -18,77 +18,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Δεν βρέθηκαν σχήματα στη συλλογή! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Μη έγκυρο αρχείο του Calligra: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Δεν βρέθηκε ετικέτα body στο αρχείο: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Δεν βρέθηκε ετικέτα office:drawing στο αρχείο: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Δεν βρέθηκαν σχήματα στο αρχείο: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Προσθήκη σχήματος"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Περισσότερα"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Άνοιγμα συλλογής σχήματος"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Αφαίρεση συλλογής σχήματος"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Προκαθορισμένο"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Γεωμετρία"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Βέλη"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Αστεία"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Σφάλμα συλλογής"
 
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
@@ -99,6 +28,48 @@ msgstr "Ιδιότητες σχήματος"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Ρυθμίσεις προσαρμογής"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Δεν βρέθηκαν σχήματα στη συλλογή! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Μη έγκυρο αρχείο του Calligra: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Δεν βρέθηκε ετικέτα body στο αρχείο: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Δεν βρέθηκε ετικέτα office:drawing στο αρχείο: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Δεν βρέθηκαν σχήματα στο αρχείο: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Προσθήκη σχήματος"
+
+#~ msgid "More"
+#~ msgstr "Περισσότερα"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Άνοιγμα συλλογής σχήματος"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Αφαίρεση συλλογής σχήματος"
+
+#~ msgid "Default"
+#~ msgstr "Προκαθορισμένο"
+
+#~ msgid "Geometrics"
+#~ msgstr "Γεωμετρία"
+
+#~ msgid "Arrows"
+#~ msgstr "Βέλη"
+
+#~ msgid "Funny"
+#~ msgstr "Αστεία"
+
+#~ msgid "Collection Error"
+#~ msgstr "Σφάλμα συλλογής"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2013-03-12 23:22+0100\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -15,77 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Keine Objekte in der Sammlung gefunden. %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Keine gültige Calligra-Datei: %1."
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Kein body-Tag in der Datei %1 gefunden."
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Kein office:drawing-Tag in der Datei %1 gefunden."
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Keine Objekte in der Datei %1 gefunden."
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Objekt hinzufügen"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Mehr"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Objektsammlung öffnen"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Objektsammlung entfernen"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Standard"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometrie"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Pfeile"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Spaß"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Fehler in Sammlung"
 
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
@@ -96,6 +25,48 @@ msgstr "Objekteigenschaften"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Einrast-Einstellungen"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Keine Objekte in der Sammlung gefunden. %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Keine gültige Calligra-Datei: %1."
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Kein body-Tag in der Datei %1 gefunden."
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Kein office:drawing-Tag in der Datei %1 gefunden."
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Keine Objekte in der Datei %1 gefunden."
+
+#~ msgid "Add Shape"
+#~ msgstr "Objekt hinzufügen"
+
+#~ msgid "More"
+#~ msgstr "Mehr"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Objektsammlung öffnen"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Objektsammlung entfernen"
+
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometrie"
+
+#~ msgid "Arrows"
+#~ msgstr "Pfeile"
+
+#~ msgid "Funny"
+#~ msgstr "Spaß"
+
+#~ msgid "Collection Error"
+#~ msgstr "Fehler in Sammlung"
 
 #, fuzzy
 #~| msgid "Found no shapes in the collection! %1"

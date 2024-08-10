@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-10 00:41+0000\n"
 "PO-Revision-Date: 2022-08-12 13:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,77 +21,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.04.3\n"
 
-#: shapecollection/OdfCollectionLoader.cpp:60
-#, kde-format
-msgid "Found no shapes in the collection! %1"
-msgstr "Koleksiyonda hiç şekil yok! %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:120
-#, kde-format
-msgid "Not a valid Calligra file: %1"
-msgstr "Geçerli bir Calligra dosyası değil: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:143
-#, kde-format
-msgid "No body tag found in file: %1"
-msgstr "Dosyada hiçbir body etiketi bulunamadı: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:151
-#, kde-format
-msgid "No office:drawing tag found in file: %1"
-msgstr "Dosyada hiçbir office:drawing etiketi bulunamadı: %1"
-
-#: shapecollection/OdfCollectionLoader.cpp:159
-#: shapecollection/OdfCollectionLoader.cpp:167
-#, kde-format
-msgid "No shapes found in file: %1"
-msgstr "Dosyada hiçbir şekil bulunamadı: %1"
-
-#: shapecollection/ShapeCollectionDocker.cpp:110
-#, kde-format
-msgid "Add Shape"
-msgstr "Şekil Ekle"
-
-#: shapecollection/ShapeCollectionDocker.cpp:144
-#, kde-format
-msgid "More"
-msgstr "Daha Fazla"
-
-#: shapecollection/ShapeCollectionDocker.cpp:172
-#, kde-format
-msgid "Open Shape Collection"
-msgstr "Şekil Koleksiyonu Aç"
-
-#: shapecollection/ShapeCollectionDocker.cpp:180
-#, kde-format
-msgid "Remove Shape Collection"
-msgstr "Şekil Koleksiyonunu Kaldır"
-
-#: shapecollection/ShapeCollectionDocker.cpp:327
-#, kde-format
-msgid "Default"
-msgstr "Öntanımlı"
-
-#: shapecollection/ShapeCollectionDocker.cpp:331
-#, kde-format
-msgid "Geometrics"
-msgstr "Geometrik Şekiller"
-
-#: shapecollection/ShapeCollectionDocker.cpp:342
-#, kde-format
-msgid "Arrows"
-msgstr "Oklar"
-
-#: shapecollection/ShapeCollectionDocker.cpp:346
-#, kde-format
-msgid "Funny"
-msgstr "Eğlenceli"
-
-#: shapecollection/ShapeCollectionDocker.cpp:513
-#, kde-format
-msgid "Collection Error"
-msgstr "Koleksiyon Hatası"
-
 #: shapeproperties/ShapePropertiesDocker.cpp:41
 #, kde-format
 msgid "Shape Properties"
@@ -101,3 +30,45 @@ msgstr "Şekil Özellikleri"
 #, kde-format
 msgid "Snap Settings"
 msgstr "Yapıştırma Ayarları"
+
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Koleksiyonda hiç şekil yok! %1"
+
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Geçerli bir Calligra dosyası değil: %1"
+
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Dosyada hiçbir body etiketi bulunamadı: %1"
+
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Dosyada hiçbir office:drawing etiketi bulunamadı: %1"
+
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Dosyada hiçbir şekil bulunamadı: %1"
+
+#~ msgid "Add Shape"
+#~ msgstr "Şekil Ekle"
+
+#~ msgid "More"
+#~ msgstr "Daha Fazla"
+
+#~ msgid "Open Shape Collection"
+#~ msgstr "Şekil Koleksiyonu Aç"
+
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Şekil Koleksiyonunu Kaldır"
+
+#~ msgid "Default"
+#~ msgstr "Öntanımlı"
+
+#~ msgid "Geometrics"
+#~ msgstr "Geometrik Şekiller"
+
+#~ msgid "Arrows"
+#~ msgstr "Oklar"
+
+#~ msgid "Funny"
+#~ msgstr "Eğlenceli"
+
+#~ msgid "Collection Error"
+#~ msgstr "Koleksiyon Hatası"
