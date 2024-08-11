@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:41+0000\n"
-"PO-Revision-Date: 2024-07-16 06:45+0200\n"
+"PO-Revision-Date: 2024-08-10 06:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1583,20 +1583,19 @@ msgid "Default"
 msgstr "ნაგულისხმები"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "საშუალო გეომეტრიული"
+msgstr "გეომეტრია"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "ისრები"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "სასაცილო"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1760,11 +1759,10 @@ msgid "Date: %1"
 msgstr "თარიღი: %1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "ფორმა"
+msgstr "მოხაზულობის დამატება"
 
 #: main/KoView.cpp:354
 #, kde-format

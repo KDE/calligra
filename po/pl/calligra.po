@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:41+0000\n"
-"PO-Revision-Date: 2024-05-30 10:51+0200\n"
+"PO-Revision-Date: 2024-08-10 12:55+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -1594,20 +1594,19 @@ msgid "Default"
 msgstr "Domyślne"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Średnia geometryczna"
+msgstr "Geometryczne"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Strzałki"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Zabawne"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1771,11 +1770,10 @@ msgid "Date: %1"
 msgstr "Data: %1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Kształt"
+msgstr "Dodaj kształt"
 
 #: main/KoView.cpp:354
 #, kde-format

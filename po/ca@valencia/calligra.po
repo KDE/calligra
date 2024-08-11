@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:41+0000\n"
-"PO-Revision-Date: 2024-07-31 11:40+0200\n"
+"PO-Revision-Date: 2024-08-10 10:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1596,20 +1596,19 @@ msgid "Default"
 msgstr "Predeterminat"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Mitjana geomètrica"
+msgstr "Geometria"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Fletxes"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Divertit"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1773,11 +1772,10 @@ msgid "Date: %1"
 msgstr "Data: %1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Forma"
+msgstr "Afig una forma"
 
 #: main/KoView.cpp:354
 #, kde-format

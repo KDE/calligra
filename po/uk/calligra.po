@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-10 00:41+0000\n"
-"PO-Revision-Date: 2024-04-16 12:11+0300\n"
+"PO-Revision-Date: 2024-08-10 09:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1688,20 +1688,19 @@ msgid "Default"
 msgstr "Типовий"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Середнє геометричне"
+msgstr "Геометрія"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Стрілки"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Кумедне"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1865,11 +1864,10 @@ msgid "Date: %1"
 msgstr "Дата: %1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Форма"
+msgstr "Додати форму"
 
 #: main/KoView.cpp:354
 #, kde-format
