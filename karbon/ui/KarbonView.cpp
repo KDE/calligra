@@ -260,6 +260,8 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument *doc, QWidget *par
                 d->showPaletteAction->setChecked(false);
             }
         }
+
+        mainWindow()->setStatusBar(statusBar());
     }
 
     reorganizeGUI();

@@ -685,6 +685,8 @@ void View::initView()
     d->viewLayout = new QGridLayout;
     layout->addLayout(d->viewLayout);
 
+    layout->addWidget(statusBar());
+
     // Setup the Canvas and its controller.
     d->canvas = new Canvas(this);
     SheetsCanvasControllerWidget *canvasController = new SheetsCanvasControllerWidget(actionCollection(), this);

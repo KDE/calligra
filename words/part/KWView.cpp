@@ -121,7 +121,9 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
+    layout->setSpacing(0);
     layout->addWidget(m_gui);
+    layout->addWidget(statusBar());
 
     setComponentName(KWFactory::componentData().componentName(), KWFactory::componentData().componentDisplayName());
     setXMLFile("calligrawords.rc");

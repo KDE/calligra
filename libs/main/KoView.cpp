@@ -83,6 +83,8 @@ public:
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
 
+    QStatusBar *statusBar;
+
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
     class StatusBarItem
@@ -178,11 +180,11 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setupGlobalActions();
 
-    QStatusBar *sb = statusBar();
-    if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document.data(), &KoDocument::statusBarMessage, this, &KoView::slotActionStatusText);
-        connect(d->document.data(), &KoDocument::clearStatusBarMessage, this, &KoView::slotClearStatusText);
-    }
+    d->statusBar = new QStatusBar(this);
+    d->statusBar->setProperty("_breeze_statusbar_separator", true);
+    d->statusBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(d->document.data(), &KoDocument::statusBarMessage, this, &KoView::slotActionStatusText);
+    connect(d->document.data(), &KoDocument::clearStatusBarMessage, this, &KoView::slotClearStatusText);
 
     // add all plugins.
     foreach (const QString &docker, KoDockRegistry::instance()->keys()) {
@@ -393,8 +395,7 @@ KoMainWindow *KoView::mainWindow() const
 
 QStatusBar *KoView::statusBar() const
 {
-    KoMainWindow *mw = mainWindow();
-    return mw ? mw->statusBar() : 0;
+    return d->statusBar;
 }
 
 void KoView::slotActionStatusText(const QString &text)

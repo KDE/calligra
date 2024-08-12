@@ -79,6 +79,7 @@
 #include <QStatusBar>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <qboxlayout.h>
 
 class Q_DECL_HIDDEN KoPAView::Private
 {
@@ -133,6 +134,7 @@ public:
     QTabBar *tabBar;
 
     QGridLayout *tabBarLayout;
+    QVBoxLayout *mainLayout;
     QWidget *insideWidget;
 
     // status bar
@@ -211,14 +213,15 @@ void KoPAView::addImages(const QVector<QImage> &imageList, const QPoint &insertA
 
 void KoPAView::initGUI(KoPAFlags flags)
 {
-    d->tabBarLayout = new QGridLayout(this);
-    d->tabBarLayout->setContentsMargins({});
-    d->tabBarLayout->setSpacing(0);
+    d->mainLayout = new QVBoxLayout(this);
+    d->mainLayout->setContentsMargins({});
+    d->mainLayout->setSpacing(0);
+    d->tabBarLayout = new QGridLayout;
+    d->mainLayout->addLayout(d->tabBarLayout);
     d->insideWidget = new QWidget();
     QGridLayout *gridLayout = new QGridLayout(d->insideWidget);
     gridLayout->setContentsMargins({});
     gridLayout->setSpacing(0);
-    setLayout(d->tabBarLayout);
 
     d->canvas = new KoPACanvas(this, d->doc, this);
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
@@ -328,6 +331,8 @@ void KoPAView::initGUI(KoPAFlags flags)
     if (mw) {
         KoToolManager::instance()->requestToolActivation(d->canvasController);
     }
+
+    d->mainLayout->addWidget(statusBar());
 }
 
 void KoPAView::initActions()
