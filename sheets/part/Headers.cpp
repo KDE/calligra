@@ -404,7 +404,8 @@ void RowHeader::paint(QPainter *painter, const QRectF &painterRect)
 
         const qreal rawHeight = sheet->rowFormats()->rowHeight(y);
         const qreal height = converter->documentToViewY(rawHeight);
-        const QRectF rect(0, converter->documentToViewY(yPos), width, height);
+        QRectF rect(0, converter->documentToViewY(yPos), width, height);
+        rect.adjust(-1, 0, 0, 0);
 
         if (selected || highlighted) {
             painter->setPen(QPen(selectionColor.darker(150), 0));
@@ -966,7 +967,8 @@ void ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
         }
 
         const qreal width = converter->documentToViewX(sheet->columnFormats()->colWidth(x));
-        const QRectF rect(converter->documentToViewX(xPos), 0, width, height);
+        QRectF rect(converter->documentToViewX(xPos), 0, width, height);
+        rect.adjust(0, -1, 0, 0);
 
         if (selected || highlighted) {
             painter->setPen(QPen(selectionColor.darker(150), 0));
@@ -1094,7 +1096,7 @@ void SelectAllButton::paint(QPainter *painter, const QRectF &painterRect)
         painter->setPen(QPen(backgroundColor.darker(150), 0));
         painter->setBrush(backgroundBrush);
     }
-    painter->drawRect(painterRect.adjusted(0, 0, -1, -1));
+    painter->drawRect(painterRect.adjusted(-1, -1, -1, -1));
 }
 
 void SelectAllButton::mousePress(KoPointerEvent *event)

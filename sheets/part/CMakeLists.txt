@@ -39,7 +39,7 @@ set (calligrasheetspartlib_LIB_SRCS
     CanvasBase.cpp
     Canvas.cpp
     CanvasItem.cpp
-    CellEditorDocker.cpp
+    CellEditorWidget.cpp
     CellTool.cpp
     CellToolFactory.cpp
     Doc.cpp

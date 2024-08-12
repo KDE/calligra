@@ -18,6 +18,7 @@
 #include "View.h"
 
 #include "Canvas.h"
+#include "CellEditorWidget.h"
 #include "Doc.h"
 #include "Factory.h"
 #include "HeaderWidgets.h"
@@ -121,6 +122,7 @@ public:
     QHash<const Sheet *, QPointer<SheetView>> sheetViews;
 
     // GUI elements
+    CellEditorWidget *cellEditor;
     QWidget *frame;
     Canvas *canvas;
     KoCanvasController *canvasController;
@@ -668,9 +670,20 @@ Doc *View::doc() const
 
 void View::initView()
 {
-    d->viewLayout = new QGridLayout(this);
-    d->viewLayout->setContentsMargins({});
-    d->viewLayout->setSpacing(0);
+    auto layout = new QVBoxLayout(this);
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+
+    auto cellEditor = new CellEditorWidget(this);
+    layout->addWidget(cellEditor);
+
+    auto separator = new QFrame(this);
+    separator->setFrameStyle(QFrame::HLine);
+    separator->setFixedHeight(1);
+    layout->addWidget(separator);
+
+    d->viewLayout = new QGridLayout;
+    layout->addLayout(d->viewLayout);
 
     // Setup the Canvas and its controller.
     d->canvas = new Canvas(this);
@@ -803,6 +816,8 @@ void View::initView()
     });
     connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, d->canvas, &Canvas::setDocumentOffset);
     connect(d->canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &View::shapeSelectionChanged);
+
+    cellEditor->setCanvas(d->canvas);
 }
 
 Canvas *View::canvasWidget() const

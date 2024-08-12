@@ -7,7 +7,6 @@
 // Local
 #include "Factory.h"
 #include "AboutData.h"
-#include "CellEditorDocker.h"
 #include "Doc.h"
 #include "Part.h"
 
@@ -60,9 +59,6 @@ const KoComponentData &Factory::global()
         s_global = new KoComponentData(*aboutData());
 
         KoResourcePaths::addResourceType("sheet-styles", "data", "calligrasheets/sheetstyles/");
-
-        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
-        dockRegistry->add(new CellEditorDockerFactory);
     }
     return *s_global;
 }
