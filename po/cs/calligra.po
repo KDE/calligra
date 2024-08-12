@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2024-06-07 11:36+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -4117,7 +4117,7 @@ msgid "Generic"
 msgstr "Obecné"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -4710,37 +4710,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr "&Přidat mezi přednastavené přechody"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "Ikona a text"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "Pouze ikona"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr ""
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "Jednostranný"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr ""
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "Spodní strana"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "Levá strana"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "Pravá strana"
@@ -5232,3 +5223,6 @@ msgstr "Všechny podporované formáty"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Bottom side"
+#~ msgstr "Spodní strana"

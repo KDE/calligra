@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -4306,7 +4306,7 @@ msgid "Generic"
 msgstr "Распоред на страна"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "&Додади група..."
@@ -4904,37 +4904,27 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "&Додади група..."
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr ""
-
-#: widgets/KoModeBox.cpp:574
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-msgid "Top side"
+msgid "Sidebar side"
 msgstr "inch"
 
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-msgid "Bottom side"
-msgstr "inch"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "inch"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "inch"
@@ -5440,6 +5430,14 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Top side"
+#~ msgstr "inch"
+
+#, fuzzy
+#~ msgid "Bottom side"
+#~ msgstr "inch"
 
 #, fuzzy
 #~ msgid "E&ncoding:"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2009-09-29 20:45+0200\n"
 "Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -4449,7 +4449,7 @@ msgid "Generic"
 msgstr "Općenito"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Dodaj tekst"
@@ -5048,40 +5048,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Dodaj tekst"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Align Left"
-msgid "Tabs side"
-msgstr "Poravnaj lijevo"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "Jednostruko"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Align Left"
-msgid "Top side"
-msgstr "Poravnaj lijevo"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Align Left"
-msgid "Bottom side"
-msgstr "Poravnaj lijevo"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Linen"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Linen"
@@ -5598,6 +5586,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Tabs side"
+#~ msgstr "Poravnaj lijevo"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Top side"
+#~ msgstr "Poravnaj lijevo"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Bottom side"
+#~ msgstr "Poravnaj lijevo"
 
 #, fuzzy
 #~ msgid "E&ncoding:"

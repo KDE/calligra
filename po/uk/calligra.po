@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2024-08-10 09:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -4518,7 +4518,7 @@ msgid "Generic"
 msgstr "Загальні"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -5118,37 +5118,28 @@ msgstr "Колір межі."
 msgid "&Add to Predefined Gradients"
 msgstr "&Додати до попередньо визначених градієнтів"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "Піктограма і текст"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "Лише піктограма"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "Бік вкладок"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "Одностороння"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "Верхній бік"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "Нижній бік"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "Лівий бік"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "Правий бік"
@@ -5669,6 +5660,15 @@ msgstr "Усі підтримувані формати"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Tabs side"
+#~ msgstr "Бік вкладок"
+
+#~ msgid "Top side"
+#~ msgstr "Верхній бік"
+
+#~ msgid "Bottom side"
+#~ msgstr "Нижній бік"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

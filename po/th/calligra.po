@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -4547,7 +4547,7 @@ msgid "Generic"
 msgstr "ค่าทั่วไป"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "ข้อความ"
@@ -5152,39 +5152,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "ข้อความ"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-msgid "Tabs side"
-msgstr "การจัดวาง"
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "เส้นเดี่ยว"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-msgid "Top side"
-msgstr "การจัดวาง"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-msgid "Bottom side"
-msgstr "การจัดวาง"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgid "Left side"
 msgstr "เยื้องทางซ้าย"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Right indent"
 msgid "Right side"
@@ -5713,6 +5705,18 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Tabs side"
+#~ msgstr "การจัดวาง"
+
+#, fuzzy
+#~ msgid "Top side"
+#~ msgstr "การจัดวาง"
+
+#, fuzzy
+#~ msgid "Bottom side"
+#~ msgstr "การจัดวาง"
 
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"

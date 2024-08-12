@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -4203,7 +4203,7 @@ msgid "Generic"
 msgstr "Generik"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Teks"
@@ -4808,37 +4808,28 @@ msgstr "Hentikan warna."
 msgid "&Add to Predefined Gradients"
 msgstr "&Tambahkan ke Gradien-gradien Yang Ditentukan Sebelumnya"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "Ikon dan Teks"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "Hanya ikon"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "Sisi tab"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "Satu sisi"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "Sisi atas"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "Sisi bawah"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "Sisi kiri"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "Sisi kanan"
@@ -5357,6 +5348,15 @@ msgstr "Semua format yang didukung"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Tabs side"
+#~ msgstr "Sisi tab"
+
+#~ msgid "Top side"
+#~ msgstr "Sisi atas"
+
+#~ msgid "Bottom side"
+#~ msgstr "Sisi bawah"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

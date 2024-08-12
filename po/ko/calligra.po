@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -4188,7 +4188,7 @@ msgid "Generic"
 msgstr "일반"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "텍스트"
@@ -4784,37 +4784,28 @@ msgstr "중지 색상입니다."
 msgid "&Add to Predefined Gradients"
 msgstr "미리 정의된 그라디언트에 추가(&A)"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "아이콘과 텍스트"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "아이콘만"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "탭 쪽"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "단면"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "위쪽"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "아래쪽"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "왼쪽"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "오른쪽"
@@ -5326,6 +5317,15 @@ msgstr "모든 지원하는 형식"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Tabs side"
+#~ msgstr "탭 쪽"
+
+#~ msgid "Top side"
+#~ msgstr "위쪽"
+
+#~ msgid "Bottom side"
+#~ msgstr "아래쪽"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

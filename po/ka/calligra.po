@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2024-08-10 06:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -4196,7 +4196,7 @@ msgid "Generic"
 msgstr "ზოგადი"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "ტექსტი"
@@ -4794,37 +4794,28 @@ msgstr "ფერის გაჩერება."
 msgid "&Add to Predefined Gradients"
 msgstr "ჩამატება წინასწარ &აღწერილი გრადიენტებში"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "ხატულა და ტექსტი"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "მხოლოდ, ხატულა"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "ჩანართები გვერდზე"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "ერთმხრივი"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "ზედა გვერდზე"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "ქვედა გვერდზე"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "მარცხენა მხარე"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "მარჯვენა მხარე"
@@ -5340,6 +5331,15 @@ msgstr "ყველა მხარდაჭერილი ფორმატ�
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Tabs side"
+#~ msgstr "ჩანართები გვერდზე"
+
+#~ msgid "Top side"
+#~ msgstr "ზედა გვერდზე"
+
+#~ msgid "Bottom side"
+#~ msgstr "ქვედა გვერდზე"
 
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"

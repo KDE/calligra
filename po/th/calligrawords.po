@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 13:35+0700\n"
 "Last-Translator:  <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1776,11 +1776,7 @@ msgid "Page layout"
 msgstr "ด้วยความขอบคุณอย่างสูง"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
-#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
-#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
-#: part/pagetool/SimpleHeaderFooterWidget.ui:17
-#: part/pagetool/SimpleHeaderFooterWidget.ui:24
-#: part/pagetool/SimpleSetupWidget.ui:17
+#: part/pagetool/SimpleSetupWidget.ui:32
 #, fuzzy, kde-format
 msgid "..."
 msgstr "&หน้า"

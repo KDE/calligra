@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2023-02-24 11:06+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1756,11 +1756,7 @@ msgid "Page layout"
 msgstr "Rozvržení stránky"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
-#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
-#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
-#: part/pagetool/SimpleHeaderFooterWidget.ui:17
-#: part/pagetool/SimpleHeaderFooterWidget.ui:24
-#: part/pagetool/SimpleSetupWidget.ui:17
+#: part/pagetool/SimpleSetupWidget.ui:32
 #, kde-format
 msgid "..."
 msgstr "..."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2021-08-22 11:29+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -4641,7 +4641,7 @@ msgid "Generic"
 msgstr "जेनेरिक"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -5244,42 +5244,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "पाठ"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Zoom"
-msgid "Tabs side"
-msgstr "ज़ूम"
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "एकल"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Zoom"
-msgid "Top side"
-msgstr "ज़ूम"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Zoom"
-msgid "Bottom side"
-msgstr "ज़ूम"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgid "Left side"
 msgstr "बायाँ हाशिया"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Right indent"
 msgid "Right side"
@@ -5820,6 +5809,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgid "Tabs side"
+#~ msgstr "ज़ूम"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgid "Top side"
+#~ msgstr "ज़ूम"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgid "Bottom side"
+#~ msgstr "ज़ूम"
 
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"

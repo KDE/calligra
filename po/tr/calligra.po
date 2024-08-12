@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
-"PO-Revision-Date: 2024-06-22 13:09+0300\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"PO-Revision-Date: 2024-08-11 23:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1589,20 +1589,19 @@ msgid "Default"
 msgstr "Öntanımlı"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Geometrik Ortalama"
+msgstr "Geometrik"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Oklar"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Eğlenceli"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1766,11 +1765,10 @@ msgid "Date: %1"
 msgstr "Tarih: %1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Şekil"
+msgstr "Şekil Ekle"
 
 #: main/KoView.cpp:354
 #, kde-format
@@ -4200,7 +4198,7 @@ msgid "Generic"
 msgstr "Genel"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Metin"
@@ -4799,37 +4797,28 @@ msgstr "Durma rengi."
 msgid "&Add to Predefined Gradients"
 msgstr "Ön Tanımlı Geçişlere &Ekle"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "Simge ve Metin"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "Yalnızca simge"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "Sekme tarafı"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "Tek yanlı"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "Üst bölüm"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "Alt bölüm"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "Sol bölüm"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "Sağ Bölüm"
@@ -5346,6 +5335,15 @@ msgstr "Tüm desteklenen biçimler"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Tabs side"
+#~ msgstr "Sekme tarafı"
+
+#~ msgid "Top side"
+#~ msgstr "Üst bölüm"
+
+#~ msgid "Bottom side"
+#~ msgstr "Alt bölüm"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

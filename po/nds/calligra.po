@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2014-07-02 23:21+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -4471,7 +4471,7 @@ msgid "Generic"
 msgstr "Allgemeen"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -5097,42 +5097,30 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "Text"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Bottom"
-msgid "Tabs side"
-msgstr "Nerrn"
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "Enkelsieden"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Bottom"
-msgid "Top side"
-msgstr "Nerrn"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Bottom"
-msgid "Bottom side"
-msgstr "Nerrn"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgid "Left side"
 msgstr "Links inrücken"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Right indent"
 msgid "Right side"
@@ -5647,6 +5635,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgid "Tabs side"
+#~ msgstr "Nerrn"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgid "Top side"
+#~ msgstr "Nerrn"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgid "Bottom side"
+#~ msgstr "Nerrn"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

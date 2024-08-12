@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-01-01 23:07+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -4306,7 +4306,7 @@ msgid "Generic"
 msgstr "Звычайны"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Тэкст"
@@ -4891,37 +4891,27 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Тэкст"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-msgid "Tabs side"
-msgstr "Маштабаванне"
+msgid "Sidebar side"
+msgstr "Халасты/не замужам"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-msgid "Top side"
-msgstr "Маштабаванне"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-msgid "Bottom side"
-msgstr "Маштабаванне"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Водступ злева"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Водступ справа"
@@ -5419,6 +5409,18 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Tabs side"
+#~ msgstr "Маштабаванне"
+
+#, fuzzy
+#~ msgid "Top side"
+#~ msgstr "Маштабаванне"
+
+#, fuzzy
+#~ msgid "Bottom side"
+#~ msgstr "Маштабаванне"
 
 #, fuzzy
 #~ msgid "Cannot find encoding: %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -4536,7 +4536,7 @@ msgid "Generic"
 msgstr "Generic"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "Tèxt"
@@ -5152,42 +5152,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "Tèxt"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Bottom:"
-msgid "Tabs side"
-msgstr "Aval:"
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "Simple"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Bottom:"
-msgid "Top side"
-msgstr "Aval:"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Bottom:"
-msgid "Bottom side"
-msgstr "Aval:"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 #| msgid "Left:"
 msgid "Left side"
 msgstr "Esquèrra:"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Right:"
 msgid "Right side"
@@ -5724,6 +5713,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgid "Tabs side"
+#~ msgstr "Aval:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgid "Top side"
+#~ msgstr "Aval:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgid "Bottom side"
+#~ msgstr "Aval:"
 
 #, fuzzy
 #~| msgid "Warning"

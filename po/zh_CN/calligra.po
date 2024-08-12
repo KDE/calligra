@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1564,10 +1564,9 @@ msgid "Default"
 msgstr "默认"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "几何平均"
+msgstr ""
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
@@ -1741,11 +1740,10 @@ msgid "Date: %1"
 msgstr "日期：%1"
 
 #: main/KoView.cpp:343
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "形状"
+msgstr ""
 
 #: main/KoView.cpp:354
 #, kde-format
@@ -4159,7 +4157,7 @@ msgid "Generic"
 msgstr "常规"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "文本"
@@ -4746,37 +4744,28 @@ msgstr "终止颜色。"
 msgid "&Add to Predefined Gradients"
 msgstr "添加到预定义渐变(&A)"
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr "图标和文本"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr "仅图标"
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr "标签页边栏"
+#: widgets/KoModeBox.cpp:669
+#, fuzzy, kde-format
+#| msgid "Single sided"
+msgid "Sidebar side"
+msgstr "单面"
 
-#: widgets/KoModeBox.cpp:574
-#, kde-format
-msgid "Top side"
-msgstr "顶边"
-
-#: widgets/KoModeBox.cpp:575
-#, kde-format
-msgid "Bottom side"
-msgstr "下边"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "左侧"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, kde-format
 msgid "Right side"
 msgstr "右侧"
@@ -5285,3 +5274,12 @@ msgstr "所有支持的格式"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1|/|$[~stripAccel %1]"
+
+#~ msgid "Tabs side"
+#~ msgstr "标签页边栏"
+
+#~ msgid "Top side"
+#~ msgstr "顶边"
+
+#~ msgid "Bottom side"
+#~ msgstr "下边"

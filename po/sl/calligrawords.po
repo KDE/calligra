@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1687215 2024-08-10 01:17:16Z scripty $
+# $Id: calligrawords.po 1687502 2024-08-12 01:13:33Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2022-11-15 13:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1774,11 +1774,7 @@ msgid "Page layout"
 msgstr "Postavitev strani"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
-#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
-#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
-#: part/pagetool/SimpleHeaderFooterWidget.ui:17
-#: part/pagetool/SimpleHeaderFooterWidget.ui:24
-#: part/pagetool/SimpleSetupWidget.ui:17
+#: part/pagetool/SimpleSetupWidget.ui:32
 #, kde-format
 msgid "..."
 msgstr "..."

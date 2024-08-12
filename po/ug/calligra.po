@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -4441,7 +4441,7 @@ msgid "Generic"
 msgstr "ئادەتتىكى"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "تېكىست"
@@ -5052,39 +5052,29 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, kde-format
 msgid "Icon and Text"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
-#, kde-format
-msgid "Tabs side"
-msgstr ""
-
-#: widgets/KoModeBox.cpp:574
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Bottom"
-msgid "Top side"
-msgstr "ئاستى"
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "يەككە"
 
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Bottom"
-msgid "Bottom side"
-msgstr "ئاستى"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, kde-format
 msgid "Left side"
 msgstr "سول تەرەپ"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Right Edge:"
 msgid "Right side"
@@ -5616,6 +5606,16 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgid "Top side"
+#~ msgstr "ئاستى"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgid "Bottom side"
+#~ msgstr "ئاستى"
 
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"

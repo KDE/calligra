@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2024-06-29 16:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1767,11 +1767,7 @@ msgid "Page layout"
 msgstr "פריסת עמוד"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
-#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
-#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
-#: part/pagetool/SimpleHeaderFooterWidget.ui:17
-#: part/pagetool/SimpleHeaderFooterWidget.ui:24
-#: part/pagetool/SimpleSetupWidget.ui:17
+#: part/pagetool/SimpleSetupWidget.ui:32
 #, kde-format
 msgid "..."
 msgstr "..."

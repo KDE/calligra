@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -4701,7 +4701,7 @@ msgid "Generic"
 msgstr "साधारण"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -5333,43 +5333,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "पाठ"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Tabs side"
-msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "एकल"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Top side"
-msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Bottom side"
-msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Linen"
 msgid "Left side"
 msgstr "लिनेन"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 #| msgid "Lighten"
 msgid "Right side"
@@ -5913,6 +5901,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Tabs side"
+#~ msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Top side"
+#~ msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Bottom side"
+#~ msgstr "स्वत: पङ्क्तिबद्ध गर्नुहोस्"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-02-08 20:05+0530\n"
 "Last-Translator: ஸ்ரீராமதாஸ் <shriramadhas@gmail.com>\n"
 "Language-Team: தமிழ் <ubuntu-l10n-tam@lists.ubuntu.com>\n"
@@ -1891,11 +1891,7 @@ msgid "Page layout"
 msgstr "பக்கம் உருவரை"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
-#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
-#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
-#: part/pagetool/SimpleHeaderFooterWidget.ui:17
-#: part/pagetool/SimpleHeaderFooterWidget.ui:24
-#: part/pagetool/SimpleSetupWidget.ui:17
+#: part/pagetool/SimpleSetupWidget.ui:32
 #, fuzzy, kde-format
 #| msgid "New..."
 msgid "..."

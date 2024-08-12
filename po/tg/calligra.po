@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2019-09-29 12:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <kde-i18n-doc@kde.org>\n"
@@ -4476,7 +4476,7 @@ msgid "Generic"
 msgstr "Умумӣ"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Афзудани матн"
@@ -5073,40 +5073,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Афзудани матн"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Tabs side"
-msgstr "Баробаркунии автоматикӣ"
+#| msgid "Single"
+msgid "Sidebar side"
+msgstr "Яктага"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Top side"
-msgstr "Баробаркунии автоматикӣ"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-#| msgid "Align Auto"
-msgid "Bottom side"
-msgstr "Баробаркунии автоматикӣ"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Зағирӣ"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Сабзи равшан"
@@ -5630,6 +5618,21 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Tabs side"
+#~ msgstr "Баробаркунии автоматикӣ"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Top side"
+#~ msgstr "Баробаркунии автоматикӣ"
+
+#, fuzzy
+#~| msgid "Align Auto"
+#~ msgid "Bottom side"
+#~ msgstr "Баробаркунии автоматикӣ"
 
 #, fuzzy
 #~ msgid "E&ncoding:"

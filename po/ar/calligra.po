@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-12 00:39+0000\n"
 "PO-Revision-Date: 2008-01-12 07:26+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -4338,7 +4338,7 @@ msgid "Generic"
 msgstr "شامل"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:563
+#: widgets/KoModeBox.cpp:662
 #, kde-format
 msgid "Text"
 msgstr "النص"
@@ -4943,37 +4943,27 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:566
+#: widgets/KoModeBox.cpp:665
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "النص"
 
-#: widgets/KoModeBox.cpp:567
+#: widgets/KoModeBox.cpp:666
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:570
+#: widgets/KoModeBox.cpp:669
 #, fuzzy, kde-format
-msgid "Tabs side"
-msgstr "تكبير"
+msgid "Sidebar side"
+msgstr "مفرد"
 
-#: widgets/KoModeBox.cpp:574
-#, fuzzy, kde-format
-msgid "Top side"
-msgstr "تكبير"
-
-#: widgets/KoModeBox.cpp:575
-#, fuzzy, kde-format
-msgid "Bottom side"
-msgstr "تكبير"
-
-#: widgets/KoModeBox.cpp:578
+#: widgets/KoModeBox.cpp:678
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "المسافة البادئة اليسرى"
 
-#: widgets/KoModeBox.cpp:579
+#: widgets/KoModeBox.cpp:679
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "المسافة البادئة اليمنى"
@@ -5467,6 +5457,18 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Tabs side"
+#~ msgstr "تكبير"
+
+#, fuzzy
+#~ msgid "Top side"
+#~ msgstr "تكبير"
+
+#, fuzzy
+#~ msgid "Bottom side"
+#~ msgstr "تكبير"
 
 #~ msgid ""
 #~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
