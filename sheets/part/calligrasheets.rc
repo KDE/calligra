@@ -211,10 +211,6 @@
 <ToolBar fullWidth="true" name="editToolBar"><text>Edit</text>
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
- <Separator/>
- <Action name="cut"/>
- <Action name="copy"/>
- <Action name="paste"/>
 </ToolBar>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<   Navigation ToolBar   >>>>>>>>>>>>>>>>>>>>>>>> -->
@@ -235,22 +231,9 @@
  <Action name="fontSize"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="formatToolBar"><text>Format</text>
- <Action name="bold"/>
- <Action name="italic"/>
- <Action name="underline"/>
- <Separator/>
- <Action name="alignLeft"/>
- <Action name="alignCenter"/>
- <Action name="alignRight"/>
- <!--
- <Separator/>
- <Action name="alignTop"/>
- <Action name="alignMiddle"/>
- <Action name="alignBottom"/>
- -->
- <Action name="wrapText"/>
- <Separator/>
+ <Spacer />
  <Action name="cellStyle"/>
+ <Action name="add_shape"/>
  <!--
  <Action name="percent"/>
  <Action name="increasePrecision"/>
