@@ -11,6 +11,18 @@
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -18,6 +30,9 @@
      </property>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QTreeWidget" name="m_sectionList">
          <property name="sizePolicy">
@@ -55,11 +70,37 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="m_openExistingButton">
-         <property name="text">
-          <string>Open Existing Document</string>
+        <widget class="QFrame">
+         <property name="fixedHeight">
+          <number>1</number>
+         </property>
+         <property name="frameStyle">
+          <enum>QFrame::HLine</enum>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="openExistingWrapper">
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="topMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <property name="bottomMargin">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="m_openExistingButton">
+           <property name="text">
+            <string>Open Existing Document</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
