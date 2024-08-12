@@ -25,12 +25,13 @@
 
 #include <KConfig>
 #include <KLocalizedString>
+#include <KPageWidget>
 
-#include <khelpclient.h>
-#include <kseparator.h>
-#include <kstandardguiitem.h>
-#include <kurllabel.h>
-#include <kwindowconfig.h>
+#include <KHelpClient>
+#include <KSeparator>
+#include <KStandardGuiItem>
+#include <KUrlLabel>
+#include <KWindowConfig>
 
 void KoDialogPrivate::setupLayout()
 {
@@ -69,6 +70,11 @@ void KoDialogPrivate::queuedLayoutUpdate()
         mTopLayout = new QHBoxLayout(q);
     }
 
+    KPageWidget *pageWidget = qobject_cast<KPageWidget *>(mMainWidget);
+    if (pageWidget) {
+        mTopLayout->setContentsMargins({});
+    }
+
     if (mUrlHelp) {
         mTopLayout->addWidget(mUrlHelp, 0, Qt::AlignRight);
     }
@@ -87,7 +93,11 @@ void KoDialogPrivate::queuedLayoutUpdate()
 
     if (mButtonBox) {
         mButtonBox->setOrientation(mButtonOrientation);
-        mTopLayout->addWidget(mButtonBox);
+        if (pageWidget) {
+            pageWidget->setPageFooter(mButtonBox);
+        } else {
+            mTopLayout->addWidget(mButtonBox);
+        }
     }
 
     if (focusWidget) {
