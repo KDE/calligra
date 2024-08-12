@@ -61,9 +61,11 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase *cellTool, const QDomElement
     setWindowTitle(i18n(name.toLatin1()));
 
     QLayout *layout = new GroupFlowLayout(this); // QBoxLayout(QBoxLayout::TopToBottom, this);
+    layout->setContentsMargins({});
 
     for (QDomElement group = e.firstChildElement("group"); !group.isNull(); group = group.nextSiblingElement("group")) {
         QHBoxLayout *groupLayout = new QHBoxLayout();
+        groupLayout->setSpacing(4);
         layout->addItem(groupLayout);
 
         // In each group there are a number of actions that will be layouted together.
@@ -83,6 +85,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase *cellTool, const QDomElement
                 QToolButton *b = new QToolButton(this);
                 b->setFocusPolicy(Qt::NoFocus);
                 b->setDefaultAction(a);
+                b->setAutoRaise(true);
                 w = b;
             }
 
