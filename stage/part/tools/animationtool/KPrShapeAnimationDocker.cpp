@@ -137,6 +137,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_animationsView->installEventFilter(this);
 
     QVBoxLayout *layout = new QVBoxLayout;
+    layout->setContentsMargins({});
     layout->addLayout(hlayout);
     layout->addWidget(m_animationsView);
     layout->addLayout(hlayout2);

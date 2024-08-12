@@ -25,7 +25,8 @@ KPrSoundEventActionWidget::KPrSoundEventActionWidget(QWidget *parent)
     , m_soundCollection(0)
     , m_soundCombo(new QComboBox())
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
+    layout->setContentsMargins({});
     layout->addWidget(m_soundCombo);
 
     connect(m_soundCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrSoundEventActionWidget::soundComboChanged);

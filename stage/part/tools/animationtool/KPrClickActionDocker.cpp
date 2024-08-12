@@ -42,10 +42,11 @@ KPrClickActionDocker::KPrClickActionDocker(QWidget *parent, Qt::WindowFlags flag
 {
     setObjectName("KPrClickActionDocker");
     // setup widget layout
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto layout = new QVBoxLayout(this);
+    layout->setContentsMargins({});
 
-    QList<KoEventActionFactoryBase *> factories = KoEventActionRegistry::instance()->presentationEventActions();
-    foreach (KoEventActionFactoryBase *factory, factories) {
+    const QList<KoEventActionFactoryBase *> factories = KoEventActionRegistry::instance()->presentationEventActions();
+    for (KoEventActionFactoryBase *factory : factories) {
         QWidget *optionWidget = factory->createOptionWidget();
         layout->addWidget(optionWidget);
         m_eventActionWidgets.insert(factory->id(), optionWidget);
@@ -57,8 +58,6 @@ KPrClickActionDocker::KPrClickActionDocker(QWidget *parent, Qt::WindowFlags flag
     QWidget *specialSpacer = new QWidget(this);
     specialSpacer->setObjectName("SpecialSpacer");
     layout->addWidget(specialSpacer);
-
-    setLayout(layout);
 }
 
 void KPrClickActionDocker::selectionChanged()
