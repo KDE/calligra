@@ -305,7 +305,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     setIconSize();
     d->tabBar->setExpanding(false);
-    d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    d->tabBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     d->layout->addWidget(d->stack);
 
     const auto toolActions = KoToolManager::instance()->toolActionList();
