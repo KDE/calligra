@@ -164,6 +164,8 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     : KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
+    setButtons(KoDialog::Ok | KoDialog::Cancel | KoDialog::User1);
+    setButtonText(KoDialog::User1, i18n("Discard All"));
     setMinimumSize(650, 500);
     QWidget *page = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(page);
@@ -185,13 +187,12 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
 
         QString path = QDir::homePath() + "/" + filename;
         // get thumbnail -- all calligra apps save a thumbnail
-        KoStore *store = KoStore::createStore(path, KoStore::Read);
+        auto store = std::unique_ptr<KoStore>(KoStore::createStore(path, KoStore::Read));
 
         if (store && (store->open(QString("Thumbnails/thumbnail.png")) || store->open(QString("preview.png")))) {
             // Hooray! No long delay for the user...
             QByteArray bytes = store->read(store->size());
             store->close();
-            delete store;
             QImage img;
             img.loadFromData(bytes);
             file->thumbnail = img.scaled(QSize(200, 200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -206,8 +207,22 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
 
     m_model = new FileItemModel(fileItems, m_listView);
     m_listView->setModel(m_model);
+
+    layout->addWidget(m_listView);
+    layout->addWidget(new QLabel(
+        i18n("If you select Cancel, all recoverable files will be kept.\nIf you press OK, selected files will be recovered, the unselected files discarded.")));
+
     layout->addWidget(m_listView);
     setMainWidget(page);
+    connect(this, &KoDialog::user1Clicked, this, &KoAutoSaveRecoveryDialog::slotDeleteAll);
+}
+
+void KoAutoSaveRecoveryDialog::slotDeleteAll()
+{
+    for (FileItem *fileItem : std::as_const(m_model->m_fileItems)) {
+        fileItem->checked = false;
+    }
+    accept();
 }
 
 QStringList KoAutoSaveRecoveryDialog::recoverableFiles()

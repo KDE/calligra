@@ -22,8 +22,8 @@ public:
     QStringList recoverableFiles();
 
 public Q_SLOTS:
-
     void toggleFileItem(bool toggle);
+    void slotDeleteAll();
 
 private:
     QListView *m_listView;
