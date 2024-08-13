@@ -5,8 +5,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KOCONFIGGRIDPAGE_H
-#define KOCONFIGGRIDPAGE_H
+#pragma once
 
 #include <QWidget>
 
@@ -38,5 +37,3 @@ private:
     class Private;
     Private *const d;
 };
-
-#endif // KOCONFIGGRIDPAGE_H

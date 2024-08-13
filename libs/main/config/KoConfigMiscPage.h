@@ -6,10 +6,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KOCONFIGMISCPAGE_H
-#define KOCONFIGMISCPAGE_H
+#pragma once
 
-#include <KoVBox.h>
+#include <QWidget>
 
 #include "komain_export.h"
 
@@ -17,7 +16,7 @@ class KoUnit;
 class KoDocument;
 class KoDocumentResourceManager;
 
-class KOMAIN_EXPORT KoConfigMiscPage : public KoVBox
+class KOMAIN_EXPORT KoConfigMiscPage : public QWidget
 {
     Q_OBJECT
 
@@ -36,7 +35,5 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
-
-#endif // KOCONFIGMISCPAGE_H

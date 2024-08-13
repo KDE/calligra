@@ -24,7 +24,8 @@
 KWConfigureDialog::KWConfigureDialog(KWView *parent)
     : KPageDialog(parent)
 {
-    setFaceType(List);
+    setFaceType(FlatList);
+    setMinimumWidth(1100);
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
 

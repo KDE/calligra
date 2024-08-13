@@ -5,16 +5,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KOCONFIGDOCUMENTPAGE_H
-#define KOCONFIGDOCUMENTPAGE_H
+#pragma once
 
-#include <KoVBox.h>
+#include <QWidget>
 
 #include "komain_export.h"
 
 class KoDocument;
 
-class KOMAIN_EXPORT KoConfigDocumentPage : public KoVBox
+class KOMAIN_EXPORT KoConfigDocumentPage : public QWidget
 {
     Q_OBJECT
 
@@ -29,7 +28,5 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
-
-#endif // KOCONFIGDOCUMENTPAGE_H

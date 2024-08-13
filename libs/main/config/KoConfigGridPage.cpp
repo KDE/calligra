@@ -53,47 +53,43 @@ KoConfigGridPage::KoConfigGridPage(KoDocument *doc, char *name)
     KoUnit unit = d->doc->unit();
     KoGridData &gd = d->doc->gridData();
 
-    QGroupBox *generalGrp = new QGroupBox(i18n("Grid"), this);
-    QFormLayout *layoutGeneral = new QFormLayout(generalGrp);
-    d->gridChBox = new QCheckBox(generalGrp);
+    QFormLayout *layout = new QFormLayout;
+    d->gridChBox = new QCheckBox(i18nc("@option:check", "Show grid"), this);
     d->gridChBox->setChecked(gd.showGrid());
-    d->snapChBox = new QCheckBox(generalGrp);
+    d->snapChBox = new QCheckBox(i18nc("@option:check", "Snap to grid"), this);
     d->snapChBox->setChecked(gd.snapToGrid());
-    d->gridColorBtn = new KColorButton(gd.gridColor(), generalGrp);
+    d->gridColorBtn = new KColorButton(gd.gridColor(), this);
     d->gridColorBtn->setAlphaChannelEnabled(true);
-    layoutGeneral->addRow(i18n("Show grid:"), d->gridChBox);
-    layoutGeneral->addRow(i18n("Snap to grid:"), d->snapChBox);
-    layoutGeneral->addRow(i18n("Grid color:"), d->gridColorBtn);
+    layout->addRow(i18n("Grid:"), d->gridChBox);
+    layout->addRow({}, d->snapChBox);
+    layout->addRow(i18n("Grid color:"), d->gridColorBtn);
 
-    QGroupBox *spacingGrp = new QGroupBox(i18n("Spacing"), this);
-    QHBoxLayout *hboxLayout = new QHBoxLayout(spacingGrp);
-    QFormLayout *layoutSpacingGrp = new QFormLayout();
-    d->spaceHorizUSpin = new KoUnitDoubleSpinBox(spacingGrp);
+    d->spaceHorizUSpin = new KoUnitDoubleSpinBox(this);
     d->spaceHorizUSpin->setMinMaxStep(0.0, 1000, 0.1);
     d->spaceHorizUSpin->setUnit(unit);
     d->spaceHorizUSpin->changeValue(gd.gridX());
-    d->spaceVertUSpin = new KoUnitDoubleSpinBox(spacingGrp);
+    auto hLayout = new QHBoxLayout;
+    d->spaceVertUSpin = new KoUnitDoubleSpinBox(this);
     d->spaceVertUSpin->setMinMaxStep(0.0, 1000, 0.1);
     d->spaceVertUSpin->setUnit(unit);
     d->spaceVertUSpin->changeValue(gd.gridY());
-    layoutSpacingGrp->addRow(i18nc("Horizontal grid spacing", "&Horizontal:"), d->spaceHorizUSpin);
-    layoutSpacingGrp->addRow(i18nc("Vertical grid spacing", "&Vertical:"), d->spaceVertUSpin);
-    hboxLayout->addLayout(layoutSpacingGrp);
-    d->bnLinkSpacing = new KoAspectButton(spacingGrp);
+    hLayout->addWidget(d->spaceVertUSpin);
+    d->bnLinkSpacing = new KoAspectButton(this);
     d->bnLinkSpacing->setKeepAspectRatio(gd.gridX() == gd.gridY());
-    hboxLayout->addWidget(d->bnLinkSpacing);
-    hboxLayout->addStretch();
+    hLayout->addWidget(d->bnLinkSpacing);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins({});
-    mainLayout->addWidget(generalGrp);
-    mainLayout->addWidget(spacingGrp);
-    mainLayout->addStretch();
+    layout->addRow(i18nc("Horizontal grid spacing", "Horizontal spacing:"), d->spaceHorizUSpin);
+    layout->addRow(i18nc("Vertical grid spacing", "Vertical spacing:"), hLayout);
 
     setValuesFromGrid(d->doc->gridData());
 
     connect(d->spaceHorizUSpin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoConfigGridPage::spinBoxHSpacingChanged);
     connect(d->spaceVertUSpin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoConfigGridPage::spinBoxVSpacingChanged);
+
+    auto hbox = new QHBoxLayout(this);
+    hbox->addStretch();
+    hbox->addLayout(layout);
+    hbox->addStretch();
 }
 
 KoConfigGridPage::~KoConfigGridPage()

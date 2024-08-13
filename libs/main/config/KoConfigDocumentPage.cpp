@@ -38,14 +38,13 @@ public:
 };
 
 KoConfigDocumentPage::KoConfigDocumentPage(KoDocument *doc, char *name)
-    : d(new Private(doc))
+    : d(std::make_unique<Private>(doc))
 {
     setObjectName(name);
 
     d->config = d->doc->documentPart()->componentData().config();
 
-    QGroupBox *gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
-    QFormLayout *layout = new QFormLayout(gbDocumentSettings);
+    auto layout = new QFormLayout;
 
     d->oldAutoSave = doc->defaultAutoSave() / 60;
 
@@ -57,7 +56,7 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument *doc, char *name)
         d->oldBackupFile = interfaceGroup.readEntry("BackupFile", d->oldBackupFile);
     }
 
-    d->autoSave = new QSpinBox(gbDocumentSettings);
+    d->autoSave = new QSpinBox(this);
     d->autoSave->setRange(0, 60);
     d->autoSave->setSingleStep(1);
     d->autoSave->setSpecialValueText(i18n("No autosave"));
@@ -65,15 +64,17 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument *doc, char *name)
     d->autoSave->setValue(d->oldAutoSave);
     layout->addRow(i18n("Autosave interval:"), d->autoSave);
 
-    d->createBackupFile = new QCheckBox(gbDocumentSettings);
+    d->createBackupFile = new QCheckBox(this);
     d->createBackupFile->setChecked(d->oldBackupFile);
     layout->addRow(i18n("Create backup file:"), d->createBackupFile);
+
+    auto hbox = new QHBoxLayout(this);
+    hbox->addStretch();
+    hbox->addLayout(layout);
+    hbox->addStretch();
 }
 
-KoConfigDocumentPage::~KoConfigDocumentPage()
-{
-    delete d;
-}
+KoConfigDocumentPage::~KoConfigDocumentPage() = default;
 
 void KoConfigDocumentPage::apply()
 {

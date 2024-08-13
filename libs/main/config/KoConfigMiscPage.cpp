@@ -52,7 +52,7 @@ public:
 };
 
 KoConfigMiscPage::KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name)
-    : d(new Private(doc, documentResources))
+    : d(std::make_unique<Private>(doc, documentResources))
 {
     setObjectName(name);
 
@@ -65,55 +65,53 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *d
 
     const KoUnit documentUnit = d->doc->unit();
 
-    QGroupBox *miscGroupBox = new QGroupBox(i18n("Misc"), this);
-
-    QFormLayout *miscLayout = new QFormLayout();
+    auto miscLayout = new QFormLayout;
 
     // #################"laurent
     // don't load unitType from config file because unit is
     // depend from words file => unit can be different from config file
 
-    d->unit = new KComboBox(miscGroupBox);
+    d->unit = new KComboBox(this);
     d->unit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
     miscLayout->addRow(i18n("Units:"), d->unit);
     d->oldUnit = documentUnit;
     d->unit->setCurrentIndex(d->oldUnit.indexInListForUi(KoUnit::HidePixel));
 
-    d->handleRadius = new QSpinBox(miscGroupBox);
+    d->handleRadius = new QSpinBox(this);
     d->handleRadius->setRange(3, 20);
     d->handleRadius->setSingleStep(1);
     d->handleRadius->setSuffix(" px");
     d->handleRadius->setValue(d->oldHandleRadius);
     miscLayout->addRow(i18n("Handle radius:"), d->handleRadius);
 
-    d->grabSensitivity = new QSpinBox(miscGroupBox);
+    d->grabSensitivity = new QSpinBox(this);
     d->grabSensitivity->setRange(3, 20);
     d->grabSensitivity->setSingleStep(1);
     d->grabSensitivity->setSuffix(" px");
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
     miscLayout->addRow(i18n("Grab sensitivity:"), d->grabSensitivity);
 
-    d->pasteOffset = new KoUnitDoubleSpinBox(miscGroupBox);
+    d->pasteOffset = new KoUnitDoubleSpinBox(this);
     d->pasteOffset->setMinMaxStep(-1000, 1000, 0.1);
     d->pasteOffset->setValue(d->oldPasteOffset);
     d->pasteOffset->setUnit(documentUnit);
     d->pasteOffset->setDisabled(d->oldPasteAtCursor);
     miscLayout->addRow(i18n("Paste offset:"), d->pasteOffset);
 
-    d->pasteAtCursor = new QCheckBox(miscGroupBox);
+    d->pasteAtCursor = new QCheckBox(this);
     d->pasteAtCursor->setChecked(d->oldPasteAtCursor);
     miscLayout->addRow(i18n("Paste at Cursor:"), d->pasteAtCursor);
 
-    miscGroupBox->setLayout(miscLayout);
-
     connect(d->unit, QOverload<int>::of(&QComboBox::activated), this, &KoConfigMiscPage::slotUnitChanged);
     connect(d->pasteAtCursor, &QAbstractButton::clicked, d->pasteOffset, &QWidget::setDisabled);
+
+    auto hbox = new QHBoxLayout(this);
+    hbox->addStretch();
+    hbox->addLayout(miscLayout);
+    hbox->addStretch();
 }
 
-KoConfigMiscPage::~KoConfigMiscPage()
-{
-    delete d;
-}
+KoConfigMiscPage::~KoConfigMiscPage() = default;
 
 void KoConfigMiscPage::apply()
 {
