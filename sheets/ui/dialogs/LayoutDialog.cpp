@@ -34,6 +34,7 @@
 #include <KPageWidget>
 
 using namespace Calligra::Sheets;
+using namespace Qt::StringLiterals;
 
 /***************************************************************************
  *
@@ -115,37 +116,45 @@ void LayoutDialog::onApply()
 void LayoutDialog::init(bool isStyle)
 {
     setWindowTitle(i18n("Cell Format"));
-    setMinimumWidth(800);
+    setMinimumWidth(1100);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     setButtonText(Apply, i18n("Set Cell Format"));
 
     KPageWidget *main = new KPageWidget;
     setMainWidget(main);
-    main->setFaceType(KPageWidget::List);
+    main->setFaceType(KPageWidget::FlatList);
 
+    KPageWidgetItem *page;
     if (isStyle) {
         generalPage = new LayoutPageGeneral(this, m_styleManager);
         connect(generalPage, &LayoutPageGeneral::validDataChanged, this, &LayoutDialog::setOkButtonEnabled);
-        main->addPage(generalPage, i18n("General"));
+        page = main->addPage(generalPage, i18n("General"));
+        page->setIcon(QIcon::fromTheme(u"settings-configure-symbolic"_s));
     }
 
     Localization *locale = m_sheet->map()->calculationSettings()->locale();
     floatPage = new LayoutPageFloat(this, locale, m_sheet->fullMap()->formatter());
-    main->addPage(floatPage, i18n("Data Format"));
+    page = main->addPage(floatPage, i18n("Data Format"));
+    page->setIcon(QIcon::fromTheme(u"cell_layout"_s));
 
     fontPage = new LayoutPageFont(this);
-    main->addPage(fontPage, i18n("Font"));
+    page = main->addPage(fontPage, i18n("Font"));
+    page->setIcon(QIcon::fromTheme(u"font-symbolic"_s));
 
     KoUnit unit = m_sheet->doc()->unit();
     positionPage = new LayoutPagePosition(this, unit);
-    main->addPage(positionPage, i18n("Position"));
+    page = main->addPage(positionPage, i18n("Position"));
+    page->setIcon(QIcon::fromTheme(u"align-horizontal-left-to-anchor"_s));
 
     borderPage = new LayoutPageBorder(this);
-    main->addPage(borderPage, i18n("Border"));
+    page = main->addPage(borderPage, i18n("Border"));
+    page->setIcon(QIcon::fromTheme(u"format-border-set-all"_s));
 
     patternPage = new LayoutPagePattern(this);
-    main->addPage(patternPage, i18n("Background"));
+    page = main->addPage(patternPage, i18n("Background"));
+    page->setIcon(QIcon::fromTheme(u"color-profile-symbolic"_s));
 
     protectPage = new LayoutPageProtection(this);
-    main->addPage(protectPage, i18n("Cell Protection"));
+    page = main->addPage(protectPage, i18n("Cell Protection"));
+    page->setIcon(QIcon::fromTheme(u"channel-secure-symbolic"_s));
 }
