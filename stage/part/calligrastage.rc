@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="stage" version="126" translationDomain="calligrastage">
+<gui name="stage" version="127" translationDomain="calligrastage">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -86,17 +86,12 @@
     <ToolBar name="mainToolBar">
         <Separator/>
         <Action name="page_insertpage"/>
-        <Action name="slideshow_start"/>
         <Separator/>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
-        <Separator/>
-        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-        <Action name="edit_delete"/>
         <Spacer />
         <Action name="add_shape"/>
+        <Action name="slideshow_start"/>
     </ToolBar>
     <Menu name="default_canvas_popup">
         <ActionList name="toolproxy_action_list"/>
