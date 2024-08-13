@@ -212,7 +212,6 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     layout->addWidget(new QLabel(
         i18n("If you select Cancel, all recoverable files will be kept.\nIf you press OK, selected files will be recovered, the unselected files discarded.")));
 
-    layout->addWidget(m_listView);
     setMainWidget(page);
     connect(this, &KoDialog::user1Clicked, this, &KoAutoSaveRecoveryDialog::slotDeleteAll);
 }
