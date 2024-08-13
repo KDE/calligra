@@ -267,7 +267,8 @@ PreferenceDialog::PreferenceDialog(View *view)
 {
     setObjectName(QLatin1String("PreferenceDialog"));
     setWindowTitle(i18nc("@title:window", "Configure"));
-    setFaceType(List);
+    setFaceType(FlatList);
+    setMinimumWidth(1100);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -283,6 +284,8 @@ PreferenceDialog::PreferenceDialog(View *view)
     // Interface Options Widget
     widget = new QWidget(this);
     d->interfaceOptions.setupUi(widget);
+    d->interfaceOptions.hbox->insertStretch(0);
+    d->interfaceOptions.hbox->insertStretch(2);
     page = new KPageWidgetItem(widget, i18n("Interface"));
     page->setIcon(koIcon("preferences-desktop-theme"));
     addPage(page);
@@ -315,6 +318,8 @@ PreferenceDialog::PreferenceDialog(View *view)
     // Open/Save Options Widget
     widget = new QWidget(this);
     d->fileOptions.setupUi(widget);
+    d->fileOptions.hbox->insertStretch(0);
+    d->fileOptions.hbox->insertStretch(2);
     page = new KPageWidgetItem(widget, i18n("Open/Save"));
     page->setIcon(koIcon("document-save"));
     addPage(page);
