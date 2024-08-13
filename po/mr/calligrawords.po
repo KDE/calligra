@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2013-04-12 16:20+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -541,7 +541,7 @@ msgstr "शैली"
 msgid "Clone"
 msgstr "प्रतिकृत करा"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "काढून टाका"
@@ -659,7 +659,7 @@ msgid "Page Size && Margins"
 msgstr "पानाचा आकार व समास"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "निर्माण करा"
@@ -1497,32 +1497,32 @@ msgstr "माऊसचा कर्सर X:Y"
 msgid "Zoom Controller"
 msgstr "झूम नियंत्रक"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "आकार गुणधर्म..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "आकाराची वागणूक बदला"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "दस्तऐवजा वरून नमूना बनवा"
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "हा दस्तऐवज साठवा व नंतर नमूना म्हणून वापरा"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1531,17 +1531,17 @@ msgstr ""
 "हा दस्तऐवज नमूना म्हणून साठवू शकता.<br><br>हा नवीन नमूना इतर दस्तऐवजाची सुरुवात म्हणून "
 "वापरू शकता."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "फॉर्मेटिंग अक्षरे दर्शवा"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "छपाई अयोग्य अक्षरांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1551,34 +1551,34 @@ msgstr ""
 "छपाई अयोग्य अक्षरांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हा पर्याय कार्यान्वित असेल तर "
 "वर्डस् तुम्हाला टॅब्स, रिकाम्या जागा, केरिएज रिटर्न व इतर छपाई अयोग्य अक्षरे दर्शवितो."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "प्रक्षेत्र शेडिंग्स दाखवा"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "प्रक्षेत्राची शेडेड पार्श्वभूमी चालू/बंद करा"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr "प्रक्षेत्राचे (व्हेरियेबल्स इ.) दृश्य त्याची पार्श्वभूमी विरुध्द रंगात रंगवून चालू/बंद करतो."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "मजकूर आकार किनारे दर्शवा"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "किनारा प्रदर्शन चालू व बंद करतो"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1588,17 +1588,17 @@ msgstr ""
 "किनारा प्रदर्शन चालू व बंद करतो.<br/><br/>किनारे कधीही छापले जात नाहीत. दस्तऐवज "
 "छापलेल्या पानावर कसे दिसेल ते बघण्यासाठी हा पर्याय उपयोगी आहे."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "कोष्टक किनारे दर्शवा"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1607,18 +1607,18 @@ msgstr ""
 "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हे कार्यान्वित असेल तर कोणतीही "
 "अदृश्य कोष्टक किनार वर्डस् एक पातळ धूसर रेषेने दर्शवितो."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid "Toggle the display of table borders"
 msgid "Toggle the display of section bounds"
 msgstr "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1630,17 +1630,17 @@ msgstr ""
 "कोष्टक किनारांचे प्रदर्शन चालू/बंद करतो.<br/><br/>जर हे कार्यान्वित असेल तर कोणतीही "
 "अदृश्य कोष्टक किनार वर्डस् एक पातळ धूसर रेषेने दर्शवितो."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "मोजपट्टी दर्शवा"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "मोजपट्टी दर्शवितो व लपवतो"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1652,42 +1652,42 @@ msgstr ""
 "व फ्रेमचे स्थान व रुंदी दर्शवितात व टेब्युलेटर्सचे स्थान ठरविण्यासाठी वापरतात.<p>जर "
 "मोजपट्ट्या प्रदर्शित हव्या असतील तर हे निवडा.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "जाळ्याकडे खेचा"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "स्थिती पट्टी दर्शवा"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "स्थिती पट्टी दर्शवितो व लपवतो"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "सेमेंटीक शैलीतक्ते..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "सेमेंटीक शैलीतक्ते बदला व जोडा"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, fuzzy, kde-format
 #| msgid ""
 #| "Stylesheets are used to format contact, event, and location information "
@@ -1698,22 +1698,22 @@ msgid ""
 msgstr ""
 "Rdf मध्ये साठवलेल्या संपर्क, घटना व स्थान माहितीस स्वरूप देण्यासाठी  शैलीतक्ते वापरले जातात"
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "संयोजीत करा..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "पानाची रचना..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "पूर्ण पानाचे गुणधर्म बदला"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1722,33 +1722,33 @@ msgstr ""
 "पूर्ण पानाचे गुणधर्म बदला.<p>वर्तमानात तुम्ही पानाचा आकार, पानाचा कल, शिर्षक व "
 "अधोशिर्षक आकार, व स्थंभ संयोजना बदलू शकता.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "शिर्षक तयार करा"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "अधोशिर्षक तयार करा"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 #| msgid "No framesets in document"
 msgid "Shows comments in the document"
 msgstr "दस्तऐवजात फ्रेमसेट आढळले नाही"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Shows or hides the status bar"
 msgid "Shows or hides word counting in status bar"

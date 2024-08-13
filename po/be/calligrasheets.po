@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -875,7 +875,7 @@ msgid "Number"
 msgstr "Нумар"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, fuzzy, kde-format
 msgid "Format"
@@ -12447,7 +12447,7 @@ msgid "Clear"
 msgstr "Ачысціць"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Выдаліць"
@@ -12550,27 +12550,27 @@ msgid "Edit"
 msgstr "Змяніць"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, fuzzy, kde-format
 msgid "Navigation"
 msgstr "Навігацыя"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, fuzzy, kde-format
 msgid "Activate"
 msgstr "Схаваць ліст"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "&Шрыфт"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, fuzzy, kde-format
 msgid "Color/Border"
 msgstr "Колер і межы"
@@ -12580,12 +12580,12 @@ msgstr "Колер і межы"
 msgid "Comment:"
 msgstr "Каментар:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, fuzzy, kde-format
 msgid "Cell Editor"
 msgstr "Вочка"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, fuzzy, kde-format
 msgid "Formula"
 msgstr "Паказаць радок формулы"
@@ -12844,7 +12844,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Без абмежавання"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, fuzzy, kde-format
 msgid "Sheet"
 msgstr "Ліст"
@@ -13038,37 +13038,37 @@ msgid "Down, First Column"
 msgstr "Уніз, першы слупок"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Няма"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, fuzzy, kde-format
 msgid "Sum"
 msgstr "Сума"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, fuzzy, kde-format
 msgid "Min"
 msgstr "Мін"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, fuzzy, kde-format
 msgid "Max"
 msgstr "Макс"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, fuzzy, kde-format
 msgid "Average"
 msgstr "Сярэдняе"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, fuzzy, kde-format
 msgid "Count"
 msgstr "Колькасць"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, fuzzy, kde-format
 msgid "CountA"
 msgstr "Колькасць"
@@ -13083,7 +13083,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "Функцыя"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Н&ачынне"
@@ -13497,7 +13497,7 @@ msgstr "Шырыня: %1 %2"
 msgid "Hide Column"
 msgstr "Схаваць слупок"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, fuzzy, kde-format
 msgid "Area is too large."
 msgstr "Дыяпазон занадта вялікі."
@@ -13512,457 +13512,457 @@ msgstr "Не знойдзены ліст %1 для друку"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Няма чаго друкаваць на лісце %1."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, fuzzy, kde-format
 msgid "Sheet Properties..."
 msgstr "Уласцівасці ліста"
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, fuzzy, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Змена ўласцівасцяў ліста"
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, fuzzy, kde-format
 msgid "Insert Sheet"
 msgstr "Уставіць ліст"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, fuzzy, kde-format
 msgid "Insert a new sheet"
 msgstr "Уставіць новы ліст"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, fuzzy, kde-format
 msgid "Duplicate Sheet"
 msgstr "Пералічыць ліст"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, fuzzy, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Схаваць бягучы ліст"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Выдаліць ліст"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Выдаліць бягучы ліст"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, fuzzy, kde-format
 msgid "Rename Sheet..."
 msgstr "Пераназваць ліст..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, fuzzy, kde-format
 msgid "Rename the active sheet"
 msgstr "Пераназваць бягучы ліст"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, fuzzy, kde-format
 msgid "Show Sheet..."
 msgstr "Паказаць ліст..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, fuzzy, kde-format
 msgid "Show a hidden sheet"
 msgstr "Паказаць утоены ліст"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, fuzzy, kde-format
 msgid "Hide Sheet"
 msgstr "Схаваць ліст"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, fuzzy, kde-format
 msgid "Hide the active sheet"
 msgstr "Схаваць бягучы ліст"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, fuzzy, kde-format
 msgid "Page Layout..."
 msgstr "Старонка..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, fuzzy, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Паказаць вобласць друку ліста на друкарку"
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, fuzzy, kde-format
 msgid "Reset Print Range"
 msgstr "Прыбраць"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Задаць вобласць друку бягучага ліста"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, fuzzy, kde-format
 msgid "Page Outline"
 msgstr "Межы вакол дыяпазону"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, fuzzy, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Паказаць на лісце мяжы старонак"
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, fuzzy, kde-format
 msgid "Recalculate Sheet"
 msgstr "Пералічыць ліст"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, fuzzy, kde-format
 msgid "Recalculate"
 msgstr "Пералічыць ліст"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Пералічыць значэнне кожнага вочка на бягучым лісце"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, fuzzy, kde-format
 msgid "Recalculate Document"
 msgstr "Пералічыць дакумент"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Пералічыць значэнне кожнага вочка на ўсіх лістах"
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, fuzzy, kde-format
 msgid "Protect &Sheet..."
 msgstr "Абараніць ліст..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, fuzzy, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Абараніць ліст ад змен"
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, fuzzy, kde-format
 msgid "Protect &Document..."
 msgstr "Абараніць дакумент..."
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, fuzzy, kde-format
 msgid "Protect the document from being modified"
 msgstr "Абараніць увесь дакумент ад змен"
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, fuzzy, kde-format
 msgid "&Create Template From Document..."
 msgstr "Стварыць шаблон з дакумента..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, fuzzy, kde-format
 msgid "Anchor"
 msgstr "Андора"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, fuzzy, kde-format
 msgid "Cell"
 msgstr "Вочка"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "ліст"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, fuzzy, kde-format
 msgid "Next Sheet"
 msgstr "Наступны ліст"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, fuzzy, kde-format
 msgid "Next"
 msgstr "Тэкст"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, fuzzy, kde-format
 msgid "Move to the next sheet"
 msgstr "Перайсці на наступны ліст"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, fuzzy, kde-format
 msgid "Previous Sheet"
 msgstr "Папярэдні ліст"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, fuzzy, kde-format
 msgid "Previous"
 msgstr "Папярэдні ліст"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, fuzzy, kde-format
 msgid "Move to the previous sheet"
 msgstr "Перайсці на папярэдні ліст"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, fuzzy, kde-format
 msgid "First Sheet"
 msgstr "Першы ліст"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, fuzzy, kde-format
 msgid "First"
 msgstr "Першы ключ"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, fuzzy, kde-format
 msgid "Move to the first sheet"
 msgstr "Перайсці на першы ліст"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, fuzzy, kde-format
 msgid "Last Sheet"
 msgstr "Апошні ліст"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, fuzzy, kde-format
 #| msgid "List"
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Спіс"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, fuzzy, kde-format
 msgid "Move to the last sheet"
 msgstr "Перайсці на апошні ліст."
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, fuzzy, kde-format
 msgid "Column Header"
 msgstr "Нумар слупка"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, fuzzy, kde-format
 msgid "Show the column header"
 msgstr "Паказваць загалоўкі слупкоў"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, fuzzy, kde-format
 msgid "Row Header"
 msgstr "Загаловак"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, fuzzy, kde-format
 msgid "Show the row header"
 msgstr "Паказваць загалоўкі радкоў"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, fuzzy, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Паказваць гарызантальную паласу прагорткі"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, fuzzy, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Паказваць гарызантальную паласу прагорткі"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, fuzzy, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Паказваць вертыкальную паласу прагорткі"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, fuzzy, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Паказваць вертыкальную паласу прагорткі"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, fuzzy, kde-format
 msgid "Status Bar"
 msgstr "Паказаць радок стану"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, fuzzy, kde-format
 msgid "Show the status bar"
 msgstr "Паказаць радок стану"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, fuzzy, kde-format
 msgid "Tab Bar"
 msgstr "Паказаць ярлыкі лістоў"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, fuzzy, kde-format
 msgid "Show the tab bar"
 msgstr "Паказаць ярлыкі лістоў"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Усталёўка розных параметраў KSpread"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, fuzzy, kde-format
 msgid "No calculation"
 msgstr "Без падліку"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, fuzzy, kde-format
 msgid "Calculate using sum"
 msgstr "Паказаць суму значэнняў вылучаных вочак"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, fuzzy, kde-format
 msgid "Calculate using minimum"
 msgstr "Паказаць мінімальнае значэнне ў вылучаных вочках"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, fuzzy, kde-format
 msgid "Calculate using maximum"
 msgstr "Паказаць максімальнае значэнне ў вылучаных вочках"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, fuzzy, kde-format
 msgid "Calculate using average"
 msgstr "Паказаць сярэдняе значэнне вылучаных вочак"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, fuzzy, kde-format
 msgid "Calculate using the count"
 msgstr "Паказаць колькасць лікаў у вылучаных вочках"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, fuzzy, kde-format
 msgid "Calculate using the countA"
 msgstr "Паказаць колькасць непустых вылучаных вочак"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Вы не можаце рэдагаваць абаронены ліст"
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Вы не можаце схаваць апошні бачны ліст."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, fuzzy, kde-format
 msgid "Password is incorrect."
 msgstr "Пароль няслушны."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Абараніць дакумент"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Зняць абарону з дакумента"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Абараніць ліст"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Зняць абарону з ліста"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Прыбраць"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Вы не можаце выдаліць апошні ліст."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, fuzzy, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Выдаліць бягучы ліст?"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Увядзіце імя:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, fuzzy, kde-format
 msgid "Rename Sheet"
 msgstr "Пераназваць ліст"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, fuzzy, kde-format
 msgid "Change Sheet Name"
 msgstr "Змяніць імя ліста"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, fuzzy, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Імя ліста не можа быць пустым."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, fuzzy, kde-format
 msgid "This name is already used."
 msgstr "Гэтае імя ўжо скарыстана."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr "Сума: "
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Сярэдняе: "
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Мінімум: "
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Максімум: "
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Колькасць лікаў: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Колькасць: "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr ""

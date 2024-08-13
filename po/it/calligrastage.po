@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2021-03-01 13:59+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -418,21 +418,21 @@ msgstr "Fine della presentazione"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "avvia al clic del mouse"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "avvia dopo l'animazione precedente"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "avvia con l'animazione precedente"
@@ -880,7 +880,7 @@ msgstr "Chiamata multimediale"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, kde-format
 msgid "Edit animation"
 msgstr "Modifica animazione"
@@ -910,12 +910,12 @@ msgstr "Sposta animazione in alto"
 msgid "Move animation down"
 msgstr "Sposta animazione in basso"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Add a new animation"
 msgstr "Aggiungi una nuova animazione"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Delete current animation"
 msgstr "Elimina l'animazione attuale"
@@ -1183,17 +1183,17 @@ msgstr "Conferma eliminazione"
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "Sei sicuro di voler eliminare «%1»?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Cambia azione sonora"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "No sound"
 msgstr "Senza suono"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, kde-format
 msgid "Import..."
 msgstr "Importa..."

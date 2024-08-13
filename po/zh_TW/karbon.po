@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-05-21 01:23+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "布林運算"
@@ -394,193 +394,193 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pesder.liao@msa.hinet.net"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "插入圖片"
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "選擇要加入的圖片"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr "無法載入影像。"
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Import graphic"
 msgstr "匯入圖片"
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr "無法建立影像物件。"
 
-#: ui/KarbonView.cpp:634
+#: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "水平映射"
 
-#: ui/KarbonView.cpp:636
+#: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "垂直映射"
 
-#: ui/KarbonView.cpp:638
+#: ui/KarbonView.cpp:640
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "水平與垂直映射"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "分離路徑"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr "大綱模式(&M)"
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "匯入圖片(&I)..."
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, kde-format
 msgid "Edit Guides"
 msgstr "編輯引導"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "複製(&D)"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "水平分散置中"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "水平分散攤開"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "分散置左邊框"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "分散置右邊框"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "分散垂直置中"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "分散垂直攤開"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "分散置底邊框"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "分散置頂邊框"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, kde-format
 msgid "Show Color Palette"
 msgstr "顯示調色盤"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, kde-format
 msgid "Show or hide color palette"
 msgstr "顯示或隱藏調色盤"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Clip Object"
 msgstr "修剪物件(&C)"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "反修剪物件(&U)"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "垂直映射"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "水平映射"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, kde-format
 msgid "&Close Path"
 msgstr "關閉路徑(&C)"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, kde-format
 msgid "Com&bine Path"
 msgstr "組合路徑(&B)"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, kde-format
 msgid "Se&parate Path"
 msgstr "分離路徑(&P)"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
 msgstr "反轉路徑(&V)"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
 msgstr "相交路徑"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
 msgstr "減去路徑"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
 msgstr "統一路徑"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr "排除路徑"
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "將路徑貼齊格線"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "縮放到選取區"
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "縮放到繪圖區"

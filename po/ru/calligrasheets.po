@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2022-05-11 21:25+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -903,7 +903,7 @@ msgid "Number"
 msgstr "Число"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12827,7 +12827,7 @@ msgid "Clear"
 msgstr "Очистить"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, kde-format
 msgid "Delete"
 msgstr "Удалить"
@@ -12930,27 +12930,27 @@ msgid "Edit"
 msgstr "Изменить"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr "Навигация"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, kde-format
 msgid "Activate"
 msgstr "Активировать"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "Шрифт"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "Цвет и границы"
@@ -12960,12 +12960,12 @@ msgstr "Цвет и границы"
 msgid "Comment:"
 msgstr "Комментарий:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, kde-format
 msgid "Cell Editor"
 msgstr "Редактор ячеек"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "Формула"
@@ -13230,7 +13230,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Без ограничения"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "Лист"
@@ -13422,37 +13422,37 @@ msgid "Down, First Column"
 msgstr "Вниз, первый столбец"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "Нет"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "Сумма"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "Минимум"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "Максимум"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "Среднее"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "Количество чисел"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "Количество"
@@ -13467,7 +13467,7 @@ msgstr "Открытие и сохранение"
 msgid "Function Modules"
 msgstr "Функциональные модули"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "Инструменты"
@@ -13882,7 +13882,7 @@ msgstr "Ширина: %1 %2"
 msgid "Hide Column"
 msgstr "Скрыть столбец"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, kde-format
 msgid "Area is too large."
 msgstr "Диапазон слишком велик."
@@ -13897,457 +13897,457 @@ msgstr "Не найден лист %1 для печати"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Нечего печатать на листе %1."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Свойства листа..."
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Изменение свойств листа"
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Вставить лист"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Вставить новую таблицу"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Дублировать лист"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Дублировать выделенную страницу"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Удалить лист"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Удалить текущий лист"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Переименовать лист..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Переименовать текущий лист"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Показать лист..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Показать скрытый лист"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Скрыть лист"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Скрыть текущий лист"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
 msgstr "Страница..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Указать область печати листа на принтер"
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Убрать"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Задать область печати текущего листа"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, kde-format
 msgid "Page Outline"
 msgstr "Границы страниц"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Указать в таблице, где будет граница страницы"
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Пересчитать лист"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, kde-format
 msgid "Recalculate"
 msgstr "Пересчитать"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Пересчитать значение каждой ячейки на текущем листе"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Пересчитать документ"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Пересчитать значение каждой ячейки на всех листах"
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Защитить &лист..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Защитить лист от изменений"
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Защитить &документ..."
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Защитить весь документ от изменений"
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "Создать &шаблон из документа..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, kde-format
 msgid "Anchor"
 msgstr "Якорь"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "Ячейка"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, kde-format
 msgid "Page"
 msgstr "Страница"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Переключить форму якоря"
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "Следующий лист"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, kde-format
 msgid "Next"
 msgstr "Следующий"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Перейти на следующий лист"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Предыдущий лист"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, kde-format
 msgid "Previous"
 msgstr "Предыдущий"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Перейти на предыдущий лист"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "Первый лист"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, kde-format
 msgid "First"
 msgstr "Первый"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Перейти на первый лист"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "Последний лист"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Последний"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Перейти на последний лист"
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, kde-format
 msgid "Column Header"
 msgstr "Заголовок столбца"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, kde-format
 msgid "Show the column header"
 msgstr "Показывать заголовки столбцов"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, kde-format
 msgid "Row Header"
 msgstr "Заголовок строки"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, kde-format
 msgid "Show the row header"
 msgstr "Показывать заголовки строк"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Горизонтальная полоса прокрутки"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Показывать горизонтальную полосу прокрутки"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Вертикальная полоса прокрутки"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Показывать вертикальную полосу прокрутки"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, kde-format
 msgid "Status Bar"
 msgstr "Строка состояния"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, kde-format
 msgid "Show the status bar"
 msgstr "Показать строку состояния"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
 msgstr "Панель вкладок"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Показать ярлычки листов"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Установить различные параметры Calligra Sheets"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, kde-format
 msgid "No calculation"
 msgstr "Без подсчёта"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Показать сумму значений выделенных ячеек"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Показать минимальное значение в выделенных ячейках"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Показать максимальное значение в выделенных ячейках"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using average"
 msgstr "Показать среднее значение выделенных ячеек"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Показать количество чисел в выделенных ячейках"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "Показать количество непустых выделенных ячеек"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Вы не можете редактировать защищённый лист"
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Вы не можете скрыть последний видимый лист."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, kde-format
 msgid "Enter a password."
 msgstr "Введите пароль."
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, kde-format
 msgid "Enter the password."
 msgstr "Введите пароль."
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Пароль неверный."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, kde-format
 msgid "Protect Document"
 msgstr "Защитить документ"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Снять защиту с документа"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Защитить лист"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Снять защиту с листа"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr ""
 "Сбросить диапазон печати\n"
 "сброс диапазона печати"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Вы не можете удалить последний лист."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Удалить текущий лист?"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "Введите имя:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Переименовать лист"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Изменить имя листа"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Имя листа не может быть пустым."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr "Это имя уже использовано."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, kde-format
 msgid "Sum: "
 msgstr "Сумма: "
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, kde-format
 msgid "Average: "
 msgstr "Среднее: "
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, kde-format
 msgid "Min: "
 msgstr "Минимум: "
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, kde-format
 msgid "Max: "
 msgstr "Максимум: "
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, kde-format
 msgid "Count: "
 msgstr "Количество чисел: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, kde-format
 msgid "CountA: "
 msgstr "Количество: "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

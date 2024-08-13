@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "बुलीयन ऑपरेशन"
@@ -388,193 +388,193 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "chetan@kompkin.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "आरेखने समाविष्ट करा"
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "समाविष्ट करण्यासाठी आरेखनाची निवड करा"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr "प्रतिमा लोड करू शकत नाही."
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Import graphic"
 msgstr "आरेखन आयात करा"
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr "प्रतिमेचा आकार साकार करू शकत नाही"
 
-#: ui/KarbonView.cpp:634
+#: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "आडवेरित्या प्रतिबिंबित करा"
 
-#: ui/KarbonView.cpp:636
+#: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "उभेरित्या प्रतिबिंबित करा"
 
-#: ui/KarbonView.cpp:638
+#: ui/KarbonView.cpp:640
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "आडवेरित्या व उभेरित्या प्रतिबिंबित करा"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "वेगळे मार्ग"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr "रूपरेषा पद्धत (&M)"
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, kde-format
 msgid "Edit Guides"
 msgstr "मार्गदर्शक तत्व संपादित करा"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "प्रतिकृती (&D)"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "मध्यभागाचे वितरण करा (आडव्या स्थितीत)"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "मोकळ्या जागांचे वितरण करा (आडव्या स्थितीत)"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "डाव्या बाजूच्या सीमांचे वितरण करा"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "उजव्या बाजूंच्या सीमांचे वितरण करा"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "मध्यभागाचे वितरण करा (उभ्या स्थितीत)"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "मोकळ्या जागांचे वितरण करा (उभ्या स्थितीत)"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "खालील बाजूच्या सीमांचे वितरण करा"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "वरील बाजूच्या सीमांचे वितरण करा"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, kde-format
 msgid "Show Color Palette"
 msgstr "रंगपाटी दर्शवा"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, kde-format
 msgid "Show or hide color palette"
 msgstr "रंगपाटी दर्शवा किंवा लपवा"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Clip Object"
 msgstr "घटक खंडीत करा (&C)"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "घटक मोकळे करा (&U)"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "उभेरित्या प्रतिबिंबित करा"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "आडवेरित्या प्रतिबिंबित करा"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, kde-format
 msgid "&Close Path"
 msgstr "मार्ग बंद करा (&C)"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, kde-format
 msgid "Com&bine Path"
 msgstr "मार्ग एकत्र करा (&B)"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, kde-format
 msgid "Se&parate Path"
 msgstr "मार्ग वेगळे करा (&P)"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
 msgstr "मार्ग उलट करा (&V)"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
 msgstr "मार्ग एकमेकांना छेदतील अशी रचना करा"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
 msgstr "मार्ग कमी करा"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
 msgstr "मार्ग एकत्रित करा"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr "मार्ग वगळा"
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "मार्ग जाळ्याकडे खेचा"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "निवडीकडे झूम करा"
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "आरेखनाकडे झूम करा"

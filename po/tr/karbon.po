@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-03-01 15:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 24.02.0\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "Boole İşlemi"
@@ -395,193 +395,193 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "tulliana@gmail.com, volkangezer@gmail.com, emir_sari@icloud.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Grafik ekle"
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "Eklenecek Grafiği Seçin"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr "Görsel yüklenemedi."
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Import graphic"
 msgstr "Grafik içe aktar"
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr "Görsel şekli oluşturulamadı."
 
-#: ui/KarbonView.cpp:634
+#: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "Yatay Çevir"
 
-#: ui/KarbonView.cpp:636
+#: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "Dikey Çevir"
 
-#: ui/KarbonView.cpp:638
+#: ui/KarbonView.cpp:640
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "Yatay ve Dikey Çevir"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "Yolları ayır"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr "Dış Hat &Kipi"
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "Grafik İçe &Aktar..."
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, kde-format
 msgid "Edit Guides"
 msgstr "Kılavuzları Düzenle"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "Çoğal&t"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "Ortayı Dağıt (Yatay)"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Boşlukları Dağıt (Yatay)"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "Sol Kenarlıkları Dağıt"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "Sağ Kenarlıkları Dağıt"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "Ortayı Dağıt (Dikey)"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "Boşlukları Dağıt (Dikey)"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "Alt Kenarlıkları Dağıt"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "Üst Kenarlıkları &Dağıt"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, kde-format
 msgid "Show Color Palette"
 msgstr "Renk Paletini Göster"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, kde-format
 msgid "Show or hide color palette"
 msgstr "Renk paletini göster veya gizle"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Clip Object"
 msgstr "&Nesneyi Kırp"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "&Nesneleri Sök"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Dikey Döndür"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Yatay Çevir"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, kde-format
 msgid "&Close Path"
 msgstr "&Yolu Kapat"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, kde-format
 msgid "Com&bine Path"
 msgstr "Yolu &Birleştir"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, kde-format
 msgid "Se&parate Path"
 msgstr "Yolu &Ayır"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
 msgstr "Yolu &Tersine Çevir"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
 msgstr "Yolları Kesiştir"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
 msgstr "Yolları Çıkar"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
 msgstr "Yolları Birleştir"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr "Yolları Dışla"
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "Yolu Izgaraya Tuttur"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "Seçime Yakınlaştır"
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "Çizime Yakınlaştır"

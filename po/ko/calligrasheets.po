@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -870,7 +870,7 @@ msgid "Number"
 msgstr "숫자"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12434,7 +12434,7 @@ msgid "Clear"
 msgstr "지우기"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, kde-format
 msgid "Delete"
 msgstr "삭제"
@@ -12537,27 +12537,27 @@ msgid "Edit"
 msgstr "편집"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr "탐색"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, kde-format
 msgid "Activate"
 msgstr "활성화"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "글꼴"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "색상/경계"
@@ -12567,12 +12567,12 @@ msgstr "색상/경계"
 msgid "Comment:"
 msgstr "주석:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, kde-format
 msgid "Cell Editor"
 msgstr "셀 편집기"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "수식"
@@ -12830,7 +12830,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "무제한"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "시트"
@@ -13022,37 +13022,37 @@ msgid "Down, First Column"
 msgstr "아래, 첫 번째 열"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "없음"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "합계"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "최소"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "최대"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "평균"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "개수"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
@@ -13067,7 +13067,7 @@ msgstr "열기/저장"
 msgid "Function Modules"
 msgstr "함수 모듈"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "도구"
@@ -13480,7 +13480,7 @@ msgstr "너비: %1 %2"
 msgid "Hide Column"
 msgstr "열 숨기기"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, kde-format
 msgid "Area is too large."
 msgstr "영역이 너무 큽니다."
@@ -13495,393 +13495,393 @@ msgstr "인쇄할 %1 시트를 찾을 수 없음"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "%1 시트에 인쇄할 내용이 없습니다."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "시트 속성..."
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "현재 시트의 속성 수정"
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "시트 삽입"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "새 시트 삽입"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "시트 복제"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "선택한 시트 복제"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "시트 삭제"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "활성 시트 삭제"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "시트 이름 바꾸기..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "활성 시트 이름 바꾸기"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "시트 표시..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "숨겨진 시트 표시"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "시트 숨기기"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "활성 시트 숨기기"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
 msgstr "쪽 레이아웃..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "인쇄할 스프레드 시트의 레이아웃 지정"
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
 msgstr "인쇄 범위 초기화"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "현재 시트의 인쇄 범위 초기화"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, kde-format
 msgid "Page Outline"
 msgstr "쪽 테두리"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "스프레드시트에 쪽 경계선 표시"
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "시트 다시 계산"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, kde-format
 msgid "Recalculate"
 msgstr "다시 계산"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "현재 워크시트의 모든 셀 값을 다시 계산"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, kde-format
 msgid "Recalculate Document"
 msgstr "문서 다시 계산"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "모든 워크시트에서 모든 셀의 값을 다시 계산"
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "시트 보호(&S)..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "시트가 수정되지 않도록 보호"
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
 msgstr "문서 보호(&D)..."
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "문서가 수정되지 않도록 보호"
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "문서에서 템플릿 만들기(&C)..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, kde-format
 msgid "Anchor"
 msgstr "고정"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "셀"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, kde-format
 msgid "Page"
 msgstr "쪽"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "모양 고정 전환"
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "다음 시트"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, kde-format
 msgid "Next"
 msgstr "다음"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "다음 시트로 이동"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "이전 시트"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, kde-format
 msgid "Previous"
 msgstr "이전"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "이전 시트로 이동"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "첫 시트"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, kde-format
 msgid "First"
 msgstr "처음"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "첫 번째 시트로 이동"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "마지막 시트"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "마지막"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "마지막 시트로 이동"
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, kde-format
 msgid "Column Header"
 msgstr "열 머리글"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, kde-format
 msgid "Show the column header"
 msgstr "열 머리글 표시"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, kde-format
 msgid "Row Header"
 msgstr "행 머리글"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, kde-format
 msgid "Show the row header"
 msgstr "행 머리글 표시"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "수평 스크롤 바"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "수평 스크롤 바 표시"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "수직 스크롤 바"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "수직 스크롤 바 표시"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, kde-format
 msgid "Status Bar"
 msgstr "상태 표시줄"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, kde-format
 msgid "Show the status bar"
 msgstr "상태 표시줄 표시"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
 msgstr "탭 표시줄"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, kde-format
 msgid "Show the tab bar"
 msgstr "탭 표시줄 표시"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "다양한 Calligra Sheets 옵션 설정"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, kde-format
 msgid "No calculation"
 msgstr "계산 안 함"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, kde-format
 msgid "Calculate using sum"
 msgstr "합계 계산"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "최솟값 계산"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "최댓값 계산"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using average"
 msgstr "평균 계산"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, kde-format
 msgid "Calculate using the count"
 msgstr "개수 계산"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "countA 계산"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "보호된 시트를 변경할 수 없습니다."
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "표시된 단 하나의 시트를 숨길 수 없습니다."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, kde-format
 msgid "Enter a password."
 msgstr "암호를 입력하십시오."
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, kde-format
 msgid "Enter the password."
 msgstr "암호를 입력하십시오."
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr "암호가 잘못되었습니다."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, kde-format
 msgid "Protect Document"
 msgstr "문서 보호"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, kde-format
 msgid "Unprotect Document"
 msgstr "문서 보호 해제"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, kde-format
 msgid "Protect Sheet"
 msgstr "시트 보호"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "시트 보호 해제"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "인쇄 범위 초기화"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "단 하나의 시트를 삭제할 수 없습니다."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13890,62 +13890,62 @@ msgstr ""
 "활성 시트를 삭제하려고 합니다.\n"
 "계속 진행하시겠습니까?"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "이름 입력:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "시트 이름 바꾸기"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "시트 이름 바꾸기"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "시트 이름을 비워 둘 수 없습니다."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr "같은 이름이 이미 있습니다."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, kde-format
 msgid "Sum: "
 msgstr "합계: "
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, kde-format
 msgid "Average: "
 msgstr "평균: "
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, kde-format
 msgid "Min: "
 msgstr "최소: "
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, kde-format
 msgid "Max: "
 msgstr "최대: "
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, kde-format
 msgid "Count: "
 msgstr "개수: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

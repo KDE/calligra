@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2022-12-15 11:39-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -547,7 +547,7 @@ msgstr "Estilo"
 msgid "Clone"
 msgstr "Clonar"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Excluir"
@@ -665,7 +665,7 @@ msgid "Page Size && Margins"
 msgstr "Tamanho da página e margens"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Criar"
@@ -1505,32 +1505,32 @@ msgstr "Cursor do mouse X:Y"
 msgid "Zoom Controller"
 msgstr "Controlador de ampliação"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr "Sair do modo de tela cheia"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Propriedades da forma..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Muda como a forma se comporta"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Criar modelo a partir do documento..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Salvar este documento e usá-lo posteriormente como um modelo"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1539,17 +1539,17 @@ msgstr ""
 "Você pode salvar este documento como um modelo.<br><br>Você pode usar este "
 "novo modelo para iniciar um outro documento."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Mostrar os caracteres de formatação"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Alternar a exibição de caracteres não imprimíveis"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1560,17 +1560,17 @@ msgstr ""
 "habilitado, o Words exibe suas tabulações, espaços, parágrafos e outros "
 "caracteres não imprimíveis."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Mostrar as sombras dos campos"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "Ativar/desativar o fundo sombreado dos campos"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1579,17 +1579,17 @@ msgstr ""
 "Ativa/desativa a visualização dos campos (variáveis, etc.), desenhando o seu "
 "fundo com uma cor em contraste."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Mostrar as bordas da forma de texto"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Alterna a exibição da borda"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1599,17 +1599,17 @@ msgstr ""
 "Alterna a exibição da borda.<br/><br/>As bordas nunca são impressas. Esta "
 "opção é útil para ver como o documento aparece em uma página impressa."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Mostrar as bordas da tabela"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Alternar a exibição das bordas das tabelas"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1618,17 +1618,17 @@ msgstr ""
 "Alternar a exibição das bordas das tabelas.<br/><br/>Quando habilitado, o "
 "Words exibe qualquer borda de tabela invisível com uma linha fina em cinza."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "Mostrar os limites da seção"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Alternar a exibição dos limites da seção"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1637,17 +1637,17 @@ msgstr ""
 "Alterna a exibição dos limites da seção.<br/><br/>Quando ativado, todos os "
 "limites da seção serão indicados com parênteses cinzas finos na horizontal."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Mostrar réguas"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Mostra ou oculta as réguas"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1660,42 +1660,42 @@ msgstr ""
 "podem ser usadas para posicionar marcadores de tabulação, entre outras "
 "coisas.<p>Desmarque esta caixa para desabilitar a exibição das réguas.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Ajustar à grade"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Mostrar barra de status"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Mostra ou oculta a barra de status"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr "Modo de tela cheia"
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr "Muda a janela para o modo de tela cheia"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Folhas de estilo semânticas..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Modificar e adicionar folhas de estilo semânticas"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1704,22 +1704,22 @@ msgstr ""
 "As folhas de estilo são usadas para formatar as informações armazenadas em "
 "RDF."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Configurar..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Layout da página..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Mudar propriedades de toda página"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1729,32 +1729,32 @@ msgstr ""
 "orientação do papel, tamanho do cabeçalho e rodapé, e configurações de "
 "colunas.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Criar cabeçalho"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Criar rodapé"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Mostrar comentários"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Mostrar comentários no documento"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Número de palavras"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Mostra ou oculta a quantidade de palavras na barra de status"

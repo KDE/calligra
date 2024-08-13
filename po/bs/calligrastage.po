@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2014-10-20 19:44+0000\n"
 "Last-Translator: Emrah Dautbegovic <edautbegov1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -420,21 +420,21 @@ msgstr "Kraj slajd prezentacije"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "pokreni na klik miša"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "pokreni nakon prethodne animacije"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "pokreni sa prethodnom animacijom"
@@ -884,7 +884,7 @@ msgstr "Medijski poziv"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, kde-format
 msgid "Edit animation"
 msgstr "Izmijeni animaciju"
@@ -914,12 +914,12 @@ msgstr "Pomjeri animaciju gore"
 msgid "Move animation down"
 msgstr "Pomjeri animaciju dolje"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Add a new animation"
 msgstr "Dodaj novu animaciju"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Delete current animation"
 msgstr "Obriši renutnu animaciju"
@@ -1187,17 +1187,17 @@ msgstr "Potvrdi uklanjanje"
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "Da li ste sigurni da želite da uklonite \"%1\"?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Promijeni akciju zvuka"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "No sound"
 msgstr "Bez zvuka"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, kde-format
 msgid "Import..."
 msgstr "Uvezi..."

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-05-13 16:46+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -544,7 +544,7 @@ msgstr "Stils"
 msgid "Clone"
 msgstr "Klonēt"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Dzēst"
@@ -662,7 +662,7 @@ msgid "Page Size && Margins"
 msgstr "Lapas izmērs un apmales"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Izveidot"
@@ -1499,32 +1499,32 @@ msgstr "Peles kursors: X:Y"
 msgid "Zoom Controller"
 msgstr "Tālummaiņas kontrolieris"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr "Iziet no pilnekrāna režīma"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Objekta īpašības..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Mainīt objekta uzvedību"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Izveidot veidni no dokumenta..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Saglabāt šo dokumentu, lai to vēlāk izmantotu kā veidni"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1533,17 +1533,17 @@ msgstr ""
 "Varat saglabāt šo dokumentu kā veidni.<br><br>Varat izmantot šo jauno veidni "
 "kā sākuma punktu citam dokumentam."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Rādīt formatēšanas atzīmes"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Pārslēgt nedrukājamo rakstzīmju rādīšanu"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1554,17 +1554,17 @@ msgstr ""
 "„Words“ rāda tabulācijas, atstarpju, jaunas rindas un citas nedrukājamās "
 "rakstzīmes."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Rādīt lauku ēnojumus"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "Pārslēgt lauku izēnotu fonu"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1573,17 +1573,17 @@ msgstr ""
 "Pārslēgt lauku vizualizāciju (mainīgie u.c.), zīmējot to fonu kontrastējošā "
 "krāsā."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Rādīt tekstlodziņa malas"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Ieslēdz un izslēdz robežu attēlošanu"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1594,17 +1594,17 @@ msgstr ""
 "drukātas. Šī iespēja ir noderīga, lai redzētu, kā dokuments izskatīsies uz "
 "drukātas lapas."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Rādīt tabulu malas"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Pārslēgt tabulu malu rādīšanu"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1613,17 +1613,17 @@ msgstr ""
 "Pārslēgt tabulu malu rādīšanu.<br/><br/>To ieslēdzot, „Words“ parādīs "
 "jebkādas citādi neredzamas tabulu malas ar smalku pelēku līniju."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "Rādīt sadaļu robežas"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Pārslēgt sadaļu robežu rādīšanu"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1632,17 +1632,17 @@ msgstr ""
 "Pārslēgt sadaļu robežu rādīšanu.<br/><br/> Šo ieslēdzot, visas sadaļu "
 "robežas programma parādīs ar smalkām pelēkām horizontālām iekavām."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Rādīt lineālus"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Rāda vai slēpj lineālus"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1654,42 +1654,42 @@ msgstr ""
 "lapas un ietvara pozīciju un platumu, kā arī tos var izmantot tabulatoru "
 "novietošanai. <p> Noņemiet atzīmi, lai lineālus nerādītu.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Fiksēt pie režģa"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Rādīt statusa joslu"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Rāda vai slēpj statusa joslu"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr "Pilnekrāna režīms"
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr "Ieslēgt skata pilnekrāna režīmu"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Semantiskās stilu lapas..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Mainīt un pievienot semantiskās stilu lapas"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1698,22 +1698,22 @@ msgstr ""
 "Stilu lapas tiek izmantotas, lai formatēt informācijas attēlošanu, kas "
 "glabājas RDF."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Konfigurēt..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Lapas izkārtojums..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Mainīt visas lapas īpašības"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1722,32 +1722,32 @@ msgstr ""
 "Mainīt visas lapas īpašības. <p> Pagaidām varat mainīt tikai lapas izmēru, "
 "orientāciju, augšmalas un apakšmalas izmēru un kolonnu iestatījumus.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Izveidot galveni"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Izveidot kājeni"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Rādīt komentārus"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Dokumentā rādīt komentārus"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Vārdu skaits"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Rāda vai slēpj vārdu skaitu statusa joslā"

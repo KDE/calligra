@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-07-20 07:20+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -426,21 +426,21 @@ msgstr "סוף מצגת השקופיות"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "התחלה בלחיצת עכבר"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "התחלה אחרי ההנפשה הקודמת"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "התחלה עם ההנפשה הקודמת"
@@ -888,7 +888,7 @@ msgstr "קריאה למדיה"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, kde-format
 msgid "Edit animation"
 msgstr "עריכת הנפשה"
@@ -918,12 +918,12 @@ msgstr "העלאת ההנפשה למעלה"
 msgid "Move animation down"
 msgstr "הורדת ההנפשה למטה"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Add a new animation"
 msgstr "הוספת הנפשה חדשה"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Delete current animation"
 msgstr "מחיקת ההנפשה הנוכחית"
@@ -1191,17 +1191,17 @@ msgstr "אישור הסרה"
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "להסיר את „%1”?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "החלפת פעולת שמע"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "No sound"
 msgstr "בלי שמע"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, kde-format
 msgid "Import..."
 msgstr "ייבוא…"

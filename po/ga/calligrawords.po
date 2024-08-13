@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kword.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -548,7 +548,7 @@ msgstr "Stíl:"
 msgid "Clone"
 msgstr "Dúnadh"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Scrios"
@@ -667,7 +667,7 @@ msgid "Page Size && Margins"
 msgstr "Méid an Leathanaigh agus Imill"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Cruthaigh"
@@ -1509,49 +1509,49 @@ msgstr "Ionad na Luiche: X:Y"
 msgid "Zoom Controller"
 msgstr ""
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, fuzzy, kde-format
 msgid "Shape Properties..."
 msgstr "Airíonna an Leathanaigh"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, fuzzy, kde-format
 msgid "Create Template From Document..."
 msgstr "&Cruthaigh Teimpléad Ó Cháipéis..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr ""
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, fuzzy, kde-format
 msgid "Show Formatting Characters"
 msgstr "Carachtair Fhormáidithe"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr ""
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1559,34 +1559,34 @@ msgid ""
 "printing characters."
 msgstr ""
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, fuzzy, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Cumraigh Imlínte an Tábla"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr ""
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1594,51 +1594,51 @@ msgid ""
 "page."
 msgstr ""
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, fuzzy, kde-format
 msgid "Show Table Borders"
 msgstr "Cumraigh Imlínte an Tábla"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr ""
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr ""
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Taispeáin Rialóirí"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Taispeáin nó folaigh rialóirí"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1647,98 +1647,98 @@ msgid ""
 "being displayed.</p>"
 msgstr ""
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Léim go Greille"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Taispeáin an Barra Stádais"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Taispeáin nó folaigh an barra stádais"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr ""
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr ""
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, fuzzy, kde-format
 msgid "Configure..."
 msgstr "C&umraigh..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Leagan Amach an Leathanaigh..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, fuzzy, kde-format
 msgid "Change properties of entire page"
 msgstr "Athraigh Airíonna an Leathanaigh"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, fuzzy, kde-format
 msgid "Create Header"
 msgstr "Cruthaigh Sraith"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, fuzzy, kde-format
 msgid "Create Footer"
 msgstr "Cruthaigh Sraith"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, fuzzy, kde-format
 #| msgid "Remove Comment"
 msgid "Show Comments"
 msgstr "Bain Nóta"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 #| msgid "No framesets in document"
 msgid "Shows comments in the document"
 msgstr "Níl frámadáin sa cháipéis"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Shows or hides the status bar"
 msgid "Shows or hides word counting in status bar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-05-30 19:17+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -543,7 +543,7 @@ msgstr "Стил"
 msgid "Clone"
 msgstr "Копиране"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Изтриване"
@@ -661,7 +661,7 @@ msgid "Page Size && Margins"
 msgstr "Размер на страница и полета"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Създаване"
@@ -1495,49 +1495,49 @@ msgstr "Курсор на мишката X:Y"
 msgid "Zoom Controller"
 msgstr "Управление на мащаба"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Настройки на форма…"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Създаване на шаблон от документа…"
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Записване на документа като шаблон"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Показване на форматиращи символи"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Показване и скриване на неотпечатващите се знаци."
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1548,34 +1548,34 @@ msgstr ""
 "включено, Words показва табулации, интервали, нови редове и други "
 "неотпечатващи се знаци."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, fuzzy, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Граници на страница"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Показване и скриване на границите."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1585,17 +1585,17 @@ msgstr ""
 "Показване и скриване на границите. <br/><br/>Границите никога не се печатат. "
 "Тази опция е полезна, за да видите как ще изглежда документът разпечатан."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, fuzzy, kde-format
 msgid "Show Table Borders"
 msgstr "Граници на страница"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, fuzzy, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Показване и скриване на неотпечатващите се знаци."
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, fuzzy, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1605,17 +1605,17 @@ msgstr ""
 "включено, Words показва табулации, интервали, нови редове и други "
 "неотпечатващи се знаци."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Показване и скриване на неотпечатващите се знаци."
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1625,17 +1625,17 @@ msgstr ""
 "включено, Words показва табулации, интервали, нови редове и други "
 "неотпечатващи се знаци."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Показване на линийките"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Показване и скриване на линийките"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1648,42 +1648,42 @@ msgstr ""
 "използвани за разполагане на табулации.<p>Махнете отметката, за да забраните "
 "показването им.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Прилепване към мрежата"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Показване на лента за състояние"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Показване и скриване лентата за състоянието"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Семантични стилове…"
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Промяна и добавяне на семантични стилове"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, fuzzy, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1692,22 +1692,22 @@ msgstr ""
 "Стиловете се използват за форматиране на съдържащи се в Rdf данни за "
 "контакти, събития и местополжения."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Настройки…"
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Подредба на страница…"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Промяна настройките за цялата страница."
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1717,32 +1717,32 @@ msgstr ""
 "големината и ориентацията на страницата, размера на горен и долен колонтитул "
 "и настройките за колони.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Създаване на горен колонтитул"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Създаване на долен колонтитул"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 msgid "Shows comments in the document"
 msgstr "Няма набори от рамки в документа"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Показване и скриване лентата за състоянието"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2012-07-04 16:58+0200\n"
 "Last-Translator: Jean Cayron <jean.cayron@base.be>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -451,14 +451,14 @@ msgstr "Difén do diaporama"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, fuzzy, kde-format
 #| msgid "Create shape animation"
 msgid "start after previous animation"
@@ -466,7 +466,7 @@ msgstr "Ahiver animåcion d' fôme"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, fuzzy, kde-format
 #| msgid "Create shape animation"
 msgid "start with previous animation"
@@ -953,7 +953,7 @@ msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, fuzzy, kde-format
 #| msgid "Animation tool"
 msgid "Edit animation"
@@ -988,13 +988,13 @@ msgstr "Animåcion des fômes"
 msgid "Move animation down"
 msgstr "Usteye d' animåcion"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 #| msgid "Add new slideshow"
 msgid "Add a new animation"
 msgstr "Radjouter novea diaporama"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 #| msgid "Delete the current slide"
 msgid "Delete current animation"
@@ -1265,19 +1265,19 @@ msgstr "Racertiner l' oistaedje"
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "Voloz disfacer « %1 » po do bon ?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
 #, fuzzy
 #| msgid "Change sound action"
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Candjî l' accion son"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, kde-format
 msgid "No sound"
 msgstr "Pont d' son"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, kde-format
 msgid "Import..."
 msgstr "Abaguer..."

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1010,14 +1010,28 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "บันทึกจานสี"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
+#, fuzzy, kde-format
+#| msgid "Disc Bullet"
+msgid "Discard All"
+msgstr "สัญลักษณ์แบบจานกลวง"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:175
 #, kde-format
 msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
@@ -1582,7 +1596,7 @@ msgstr "ยังไม่กำหนดชื่อ"
 msgid "Open Document"
 msgstr "เปิดเอกสาร"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "นำเข้าเอกสาร"
@@ -1633,7 +1647,7 @@ msgid "Hide %1 Toolbar"
 msgstr "ซ่อนแถบเครื่องมือ %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 msgid "Open Existing Document"
 msgstr "เปิดเอกสารที่มีอยู่แล้ว"
@@ -1878,26 +1892,26 @@ msgstr "ไม่สามารถทำการเพิ่มรุ่นใ
 msgid "Date: %1"
 msgstr "วันที่: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Add Space"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "เพิ่มช่องว่าง"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "เครื่องมือที่ใช้อยู่: %1"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "สีปริยาย"
@@ -2554,115 +2568,115 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "พอดีกับหน้า"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, kde-format
 msgid "D&elete"
 msgstr "ลบ"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
 msgid "Snap to Grid"
 msgstr "แสดงเส้นกริด"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, fuzzy, kde-format
 #| msgid "Change List Type"
 msgid "Show Master Pages"
 msgstr "เปลี่ยนประเภทของรายการ"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show Rulers"
 msgstr "แสดงไม้บรรทัด"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "แสดง/ซ่อนไม้บรรทัดของมุมมอง"
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 #| msgid "Change List Type"
 msgid "Show Page Margins"
 msgstr "เปลี่ยนประเภทของรายการ"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, fuzzy, kde-format
 #| msgid "Show/hide the view's rulers"
 msgid "Show/hide the page margins"
 msgstr "แสดง/ซ่อนไม้บรรทัดของมุมมอง"
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, kde-format
 msgid "Insert Page"
 msgstr "แทรกหน้า"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, fuzzy, kde-format
 msgid "Insert a new page after the current one"
 msgstr "ลบภาพนิ่งหน้าที่ถัดจากหน้าปัจจุบัน"
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, fuzzy, kde-format
 msgid "Copy Page"
 msgstr "คัดลอกภาพนิ่ง"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "คัดลอกภาพนิ่งหน้าปัจจุบัน"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "ลบภาพนิ่ง"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "คัดลอกภาพนิ่งหน้าปัจจุบัน"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, fuzzy, kde-format
 #| msgid "&Mail Merge..."
 msgid "Master Page..."
 msgstr "ต้นแบบหลักภาพนิ่ง..."
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "การจัดวางหน้ากระดาษ..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "ตัวแปร"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import Document..."
 msgstr "นำเข้าเอกสาร"
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure..."
 msgstr "ยืนยันการบันทึก"
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "นำเข้ารูปแบบ"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2674,7 +2688,7 @@ msgstr ""
 "ไม่สามารถเปิด\n"
 "%1 ได้"
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 #, fuzzy
 #| msgid "Change Tabulator"
 msgctxt "(qtundo-format)"
@@ -4711,30 +4725,30 @@ msgstr "นำเข้ารูปแบบ"
 msgid "to"
 msgstr "หยุด"
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "แก้ไขเมื่อ:"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, fuzzy, kde-format
 #| msgid "Default"
 msgid "&Details"
 msgstr "ค่าปริยาย"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr ""
@@ -11639,9 +11653,6 @@ msgstr "%1%"
 
 #~ msgid "Arabic Numbers"
 #~ msgstr "เลขอารบิก"
-
-#~ msgid "Disc Bullet"
-#~ msgstr "สัญลักษณ์แบบจานกลวง"
 
 #~ msgid "Custom Bullet"
 #~ msgstr "สัญลักษณ์กำหนดเอง"

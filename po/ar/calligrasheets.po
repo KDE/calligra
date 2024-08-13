@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2013-10-16 08:25+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: \n"
@@ -878,7 +878,7 @@ msgid "Number"
 msgstr "عدد"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12443,7 +12443,7 @@ msgid "Clear"
 msgstr "امسح"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, kde-format
 msgid "Delete"
 msgstr "احذف"
@@ -12546,27 +12546,27 @@ msgid "Edit"
 msgstr "حرر"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr "الإبحار"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, fuzzy, kde-format
 msgid "Activate"
 msgstr "اخف الورقة"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "الخط"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "لون/حد"
@@ -12576,12 +12576,12 @@ msgstr "لون/حد"
 msgid "Comment:"
 msgstr "التعليق:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, fuzzy, kde-format
 msgid "Cell Editor"
 msgstr "الخلية هي"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, fuzzy, kde-format
 msgid "Formula"
 msgstr "شريط الصيغة"
@@ -12841,7 +12841,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "لا حصر"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "ورقة"
@@ -13033,37 +13033,37 @@ msgid "Down, First Column"
 msgstr "أسفل، العمود الأول"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "لا شيء"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "مجموع"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "الأدنى"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "الأكبر"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "متوسط"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "تعداد"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
@@ -13078,7 +13078,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "الدالة"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "أ&دوات"
@@ -13492,7 +13492,7 @@ msgstr "العرض: %1 %2"
 msgid "Hide Column"
 msgstr "اخف العمود"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, kde-format
 msgid "Area is too large."
 msgstr "المنطقة كبيرة جدا."
@@ -13507,394 +13507,394 @@ msgstr "الورقة %1 لا يمكن العثور عليها للطباعة"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "لا شيء للطباعة للورقة %1."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, fuzzy, kde-format
 msgid "Sheet Properties..."
 msgstr "خصائص الورقة"
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "عدّل خصائص الورقة الحالية"
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "أدرج ورقة"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "أدرج ورقة جديدة"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "كرر الورقة"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "كرر الورقة المنتقاة"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "أزل الورقة"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "أزل الورقة النشطة"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "أعد تسمية الورقة..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "أعد تسمية الورقة النشطة"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "اعرض الورقة..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "اعرض ورقة مخفية"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "اخف الورقة"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "اخف الورقة النشطة"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
 msgstr "تخطيط الصفحة..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "حدد تخطيط ورقة الحساب لمخرجات الطباعة"
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
 msgstr "استعادة نطاق الطباعة"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "حدد نطاق الطباعة في الورقة الحالية"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, fuzzy, kde-format
 msgid "Page Outline"
 msgstr "محيط"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, fuzzy, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "اعرض على أوراق الحساب أين ستكون حدود الصفحة"
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "أعد حساب الورقة"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, kde-format
 msgid "Recalculate"
 msgstr "أعد الحساب"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "أعد حساب قيمة كل خلية في ورقة العمل الحالية"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, kde-format
 msgid "Recalculate Document"
 msgstr "أعد حساب المستند"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "أعد حساب قيمة كل خلية في كل أوراق العمل"
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "احم الـ&ورقة..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "احم الورقة من أن تُعدل"
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
 msgstr "احم المـ&ستند..."
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "احم المستند من أن يُعدل"
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "أنـ&شئ قالبا من مستند..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, fuzzy, kde-format
 msgid "Anchor"
 msgstr "أندورا"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "خلية"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "صفحة"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "الورقة التالية"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, kde-format
 msgid "Next"
 msgstr "التالي"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "انقل للورقة التالية"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "الورقة السابقة"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, kde-format
 msgid "Previous"
 msgstr "السابق"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "انقل للورقة السابقة"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "الورقة الأولى"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, kde-format
 msgid "First"
 msgstr "الأول"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "انقل للورقة الأولى"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "الورقة الأخيرة"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, fuzzy, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "الأخير"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "انقل للورقة الأخيرة"
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, fuzzy, kde-format
 msgid "Column Header"
 msgstr "رقم العمود"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, fuzzy, kde-format
 msgid "Show the column header"
 msgstr "اعرض ترويسة العمو&د"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, fuzzy, kde-format
 msgid "Row Header"
 msgstr "ترويسة"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, fuzzy, kde-format
 msgid "Show the row header"
 msgstr "اعرض تر&ويسة الصف"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, fuzzy, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "اعرض شريط التمرير الأ&فقي"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, fuzzy, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "اعرض شريط التمرير الأ&فقي"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, fuzzy, kde-format
 msgid "Vertical Scrollbar"
 msgstr "اعرض شريط التمرير الرأ&سي"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, fuzzy, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "اعرض شريط التمرير الرأ&سي"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, kde-format
 msgid "Status Bar"
 msgstr "شريط الحالة"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, kde-format
 msgid "Show the status bar"
 msgstr "اعرض شريط الحالة"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
 msgstr "شريط اللسان"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, kde-format
 msgid "Show the tab bar"
 msgstr "اعرض شريط اللسان"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "اضبط خيارات KSpread المتنوعة"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, kde-format
 msgid "No calculation"
 msgstr "لا حساب"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, kde-format
 msgid "Calculate using sum"
 msgstr "احسب باستخدام المجموع"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "احسب باستخدام الحد الأدنى"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "احسب باستخدام الحد الأقصى"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using average"
 msgstr "احسب باستخدام المتوسط"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, kde-format
 msgid "Calculate using the count"
 msgstr "احسب باستخدام التعداد"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "احسب باستخدام countA"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "لا يمكنك تغيير ورقة محمية."
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "لا يمكنك إخفاء آخر الأوراق الظاهرة."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, kde-format
 msgid "Enter a password."
 msgstr "أدخل كلمة مرور."
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, kde-format
 msgid "Enter the password."
 msgstr "أدخل كلمة المرور."
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr "كلمة المرور غير صحيحة."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, kde-format
 msgid "Protect Document"
 msgstr "احم المستند"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, kde-format
 msgid "Unprotect Document"
 msgstr "الغ حماية المستند"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, kde-format
 msgid "Protect Sheet"
 msgstr "احم الورقة"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "الغ حماية الورقة"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "استعادة نطاق الطباعة"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "لا يمكنك حذف الورقة الوحيدة."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13903,62 +13903,62 @@ msgstr ""
 "أنت بصدد إزالة الورقة النشطة.\n"
 "هل تريد المتابعة؟"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "أدخل الاسم:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "أعد تسمية الورقة"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "غيِّر اسم الورقة"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "اسم الورقة لا يمكن إفراغه."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr "هذا الاسم مستخدم من قبل."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, kde-format
 msgid "Sum: "
 msgstr "المجموع:"
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, kde-format
 msgid "Average: "
 msgstr "المتوسط:"
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, kde-format
 msgid "Min: "
 msgstr "الأدنى:"
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, kde-format
 msgid "Max: "
 msgstr "الأقصى:"
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, kde-format
 msgid "Count: "
 msgstr "تعداد: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr ""

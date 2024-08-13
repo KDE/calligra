@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2007-12-09 17:58+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -436,21 +436,21 @@ msgstr "Дэманстрацыя"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:509
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, fuzzy, kde-format
 msgid "start after previous animation"
 msgstr "Стварыць прэзентацыю HTML"
 
 #: part/KPrShapeAnimations.cpp:197
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:515
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, fuzzy, kde-format
 msgid "start with previous animation"
 msgstr "Стварыць прэзентацыю HTML"
@@ -902,7 +902,7 @@ msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, fuzzy, kde-format
 msgid "Edit animation"
 msgstr "Стварыць прэзентацыю HTML"
@@ -932,12 +932,12 @@ msgstr "Стварыць прэзентацыю HTML"
 msgid "Move animation down"
 msgstr "Стварыць прэзентацыю HTML"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:502
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, fuzzy, kde-format
 msgid "Add a new animation"
 msgstr "Дэманстрацыя"
 
-#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, fuzzy, kde-format
 msgid "Delete current animation"
 msgstr "Перад бягучым слайдам"
@@ -1208,18 +1208,18 @@ msgstr "Захаваць налады..."
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "Вы сапраўды жадаеце выдаліць бягучы слайд?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:79
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Паварот"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
 #, fuzzy, kde-format
 msgid "No sound"
 msgstr " секунд"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
 #, fuzzy, kde-format
 msgid "Import..."
 msgstr "Імпарт стыляў..."

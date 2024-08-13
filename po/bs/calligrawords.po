@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2014-10-20 19:38+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -539,7 +539,7 @@ msgstr "Stil"
 msgid "Clone"
 msgstr "Kloniraj"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Obriši"
@@ -657,7 +657,7 @@ msgid "Page Size && Margins"
 msgstr "Veličina strane i margine"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Napravi"
@@ -1501,33 +1501,33 @@ msgstr "Kursor miša X:Y"
 msgid "Zoom Controller"
 msgstr "Kontroler uvećanja"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, fuzzy, kde-format
 #| msgid "Exit Distraction-Free Mode"
 msgid "Exit Fullscreen Mode"
 msgstr "Izlaz iz načina rada koj ne odvraća pažnju"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Svojstva lika..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Promijeni ponašanje figure"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Napravi šablon od dokumenta..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Spašava ovaj dokument radi kasnijeg korištenja kao šablona"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1536,17 +1536,17 @@ msgstr ""
 "Možete spasiti ovaj dokument kao šablon.<br><br>Ovaj novi šablon možete "
 "koristiti kao polaznu tačku za neki drugi dokument."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Prikaži formatne znakove"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Preklopi prikaz neispisivih znakova"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1556,17 +1556,17 @@ msgstr ""
 "Preklopi prikaz neštampanih znakova.<br/><br/>Kada je ovo omogućeno, Words "
 "prikazuje tabulatore, razmake, nove redove i druge neispisive znakove."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Pokaži sjenu polja"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "Prebaci na osjenčenu pozadinu polja"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1575,17 +1575,17 @@ msgstr ""
 "Prebaci vizualizaciju polja (varijable itd) crtanjem svoje pozadine u "
 "kontrastnoj boji."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Prikaži ivice tekstualnog lika"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Aktivira ili deaktivira prikaz granica okvira"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1596,17 +1596,17 @@ msgstr ""
 "štampaju. Ova je opcija korisna da vidite kako će se dokument pojaviti na "
 "ispisanoj stranici."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Prikaži ivice tabela"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Preklopi prikaz ivica tabela"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1615,17 +1615,17 @@ msgstr ""
 "Preklopi prikaz ivica tabela.<br/><br/>Kada je ova opcija omogućena, Words "
 "koje pokazuje nevidljive granice tabele tankim sivim linijama."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "Prikaži granice sekcija"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Perklopi prikaz granica sekcija"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1634,17 +1634,17 @@ msgstr ""
 "Preklopi prikaz granica sekcija.<br/><br/>Kada se to omogućeno, bilo koje "
 "granice sekcija će biti označene sa tankim sivim horizontalnim zagradama."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Prikaži lenjire"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Prikazuje ili skriva linijare"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1657,43 +1657,43 @@ msgstr ""
 "pozicioniranje tabulatora između ostalog.<p>Deaktivirajte ovu opciju ako ne "
 "želite da se linijari prikazuju.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Poravnaj s mrežom"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Prikaži statusnu traku"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Pokazuje ili skriva traku stanja"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, fuzzy, kde-format
 #| msgid "Set view in distraction free mode"
 msgid "Set view in fullscreen mode"
 msgstr "Postavi pogled u načinu rada koj ne odvraća pažnju"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Semantički listovi stilova..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Promijeni i dodaj semantičke listove stilova"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1702,22 +1702,22 @@ msgstr ""
 "Stilovi se koriste za oblikovanje prikaza informacija koja je pohranjena u "
 "RDF."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Konfiguriši..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Raspored strane..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Promjena svojstava cijele stranice"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1727,32 +1727,32 @@ msgstr ""
 "papira, orijentaciju papira , veličine zaglavlja i podnožja i postavke "
 "stupaca. </p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Kreiraj zaglavlje"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Kreiraj podnožje"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Prikaži komentare"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Prikazuje komentare dokumentu"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Broj riječi"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Prikazuje ili skriva brojanje riječi na statusnoj traci"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2021-01-18 19:22+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -979,14 +979,28 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "வெளிர் பச்சை"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
+#, fuzzy, kde-format
+#| msgid "Disc Bullet"
+msgid "Discard All"
+msgstr "வட்டு பொட்டு"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:175
 #, kde-format
 msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
@@ -1558,7 +1572,7 @@ msgstr "தலைப்பில்லாதது"
 msgid "Open Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "ஆவணத்தை இறக்கு"
@@ -1612,7 +1626,7 @@ msgid "Hide %1 Toolbar"
 msgstr "கருவிப்பட்டி %1 யை மறை"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open &Existing Document"
 msgid "Open Existing Document"
@@ -1858,25 +1872,25 @@ msgstr ""
 msgid "Date: %1"
 msgstr "தேதி"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Add Space"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "இடைவெளியை சேர் "
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "முன்னிருப்பு வண்ணம்"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "முன்னிருப்பு வண்ணம்"
@@ -2536,113 +2550,113 @@ msgid_plural "Paste Pages"
 msgstr[0] "உரையை ஒட்டு"
 msgstr[1] "உரையை ஒட்டு"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr "கருவிகள்"
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "உரையை அழி"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Snap to Grid"
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, fuzzy, kde-format
 msgid "Show Rulers"
 msgstr "%1 கருவிப்பட்டையை காட்டு"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "உரையை செருகு"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Page"
 msgstr "நிறுவன பெயர்"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "உரையை அழி"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "உரையை அழி"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "உரையை அழி"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page..."
 msgstr "உரையை ஒட்டு"
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "பக்க இடஅமைவு..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "மாறி"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import Document..."
 msgstr "ஆவணத்தை இறக்கு"
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure..."
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "பாணிகளை இறக்கு"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2654,7 +2668,7 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -4642,28 +4656,28 @@ msgstr "பாணிகளை இறக்கு"
 msgid "to"
 msgstr "ஆசிரியர்"
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, fuzzy, kde-format
 msgid "modified"
 msgstr "நடு:"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, fuzzy, kde-format
 msgid "&Details"
 msgstr "&முன்னிருந்த"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr ""
@@ -11125,9 +11139,6 @@ msgstr "%1%"
 
 #~ msgid "Arabic Numbers"
 #~ msgstr "அராபிய எண்கள்"
-
-#~ msgid "Disc Bullet"
-#~ msgstr "வட்டு பொட்டு"
 
 #~ msgid "Custom Bullet"
 #~ msgstr "தனிப்பயன் பொட்டு"

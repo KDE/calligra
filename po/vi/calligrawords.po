@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2008-01-19 20:08+0700\n"
 "Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@lists.kde.org>\n"
@@ -573,7 +573,7 @@ msgstr "Kiểu:"
 msgid "Clone"
 msgstr "Lời kết"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Xoá(delete)"
@@ -694,7 +694,7 @@ msgid "Page Size && Margins"
 msgstr "Cỡ trang và Lề"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Tạo"
@@ -1566,50 +1566,50 @@ msgstr "Vị trí con trỏ: X:Y"
 msgid "Zoom Controller"
 msgstr "Điều khiển Phóng"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, fuzzy, kde-format
 #| msgid "Page Properties"
 msgid "Shape Properties..."
 msgstr "Thuộc tính của Trang"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, fuzzy, kde-format
 msgid "Create Template From Document..."
 msgstr "Chèn Mới "
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr ""
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, fuzzy, kde-format
 msgid "Show Formatting Characters"
 msgstr "Các kí tự Định dạng"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Hiện/ẩn các kí tự không in được"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1623,35 +1623,35 @@ msgstr ""
 "Hiện/ẩn các kí tự không in được.<br/><br/>Nếu được chọn, KWord hiện tab, "
 "khoảng trống, xuống dòng và các kí tự không in được khác."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Text Shape Borders"
 msgstr "Cấu hình Viền Bảng"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Hiện hoặc ẩn viền khung"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1661,19 +1661,19 @@ msgstr ""
 "Hiện hoặc ẩn viền khung.<br/><br/>Viền không bao giờ được in ra. Lựa chọn "
 "này hữu hiệu cho việc xem tài liệu sẽ in ra như thế nào."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Table Borders"
 msgstr "Cấu hình Viền Bảng"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, fuzzy, kde-format
 #| msgid "Toggle the display of non-printing characters"
 msgid "Toggle the display of table borders"
 msgstr "Hiện/ẩn các kí tự không in được"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1686,18 +1686,18 @@ msgstr ""
 "Hiện/ẩn các kí tự không in được.<br/><br/>Nếu được chọn, KWord hiện tab, "
 "khoảng trống, xuống dòng và các kí tự không in được khác."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr ""
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid "Toggle the display of non-printing characters"
 msgid "Toggle the display of section bounds"
 msgstr "Hiện/ẩn các kí tự không in được"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1710,17 +1710,17 @@ msgstr ""
 "Hiện/ẩn các kí tự không in được.<br/><br/>Nếu được chọn, KWord hiện tab, "
 "khoảng trống, xuống dòng và các kí tự không in được khác."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Hiện Các thước kẻ"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Hiện hoặc ẩn các thước kẻ"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1733,66 +1733,66 @@ msgstr ""
 "khung, và có thể được dùng để định vị khoảng cách tab và nhiều thứ khác."
 "<p>Bỏ chọn ở đây để ẩn các thước kẻ.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Bắt vào Lưới"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, fuzzy, kde-format
 #| msgid "Status Bar"
 msgid "Show Status Bar"
 msgstr "Thanh Trạng thái"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, fuzzy, kde-format
 #| msgid "Show the status bar"
 msgid "Shows or hides the status bar"
 msgstr "Hiện thanh trạng thái"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, fuzzy, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Viền"
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, fuzzy, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Viền"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, fuzzy, kde-format
 msgid "Configure..."
 msgstr "Cấu hình"
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Bố trí Trang..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Thay đổi thuộc tính của toàn bộ trang"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, fuzzy, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1801,35 +1801,35 @@ msgstr ""
 "Thay đổi thuộc tính của toàn bộ trang.<p>Hiện tại bạn có thể thay đổi khích "
 "thước trang, hướng giấy, cỡ header và footer, và thiết lập cột.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, fuzzy, kde-format
 #| msgid "Create Frame"
 msgid "Create Header"
 msgstr "Tạo Khung"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, fuzzy, kde-format
 #| msgid "Create Frame"
 msgid "Create Footer"
 msgstr "Tạo Khung"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, fuzzy, kde-format
 msgid "Show Comments"
 msgstr "Tháo gỡ"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 #| msgid "No framesets in document"
 msgid "Shows comments in the document"
 msgstr "Không có bộ khung nào trong tài liệu"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Show the status bar"
 msgid "Shows or hides word counting in status bar"

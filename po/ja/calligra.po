@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -919,15 +919,28 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "ファイルを復元する"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
+#, kde-format
+msgid "Discard All"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "自動保存した次のファイルは復元することができます:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:175
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "自動保存した次のファイルは復元することができます:"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -1474,7 +1487,7 @@ msgstr "タイトルなし"
 msgid "Open Document"
 msgstr "文書を開く"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "文書をインポート"
@@ -1524,7 +1537,7 @@ msgid "Hide %1 Toolbar"
 msgstr "%1ツールバーを隠す"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "保存済み文書を開く"
@@ -1766,25 +1779,25 @@ msgstr "新しいバージョンを追加できませんでした"
 msgid "Date: %1"
 msgstr "日付: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "シェイプ"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "アクティブな作者プロファイル"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "デフォルトの作者プロファイル"
@@ -2342,110 +2355,110 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "ページを貼り付け"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr "ツール"
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, kde-format
 msgid "D&elete"
 msgstr "削除(&E)"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, kde-format
 msgid "Snap to Grid"
 msgstr "グリッドに合わせる"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, kde-format
 msgid "Show Master Pages"
 msgstr "マスターページを表示"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show Rulers"
 msgstr "定規を表示"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "ビューの定規の表示/非表示を切り替え"
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Show Page Margins"
 msgstr "マスターページを表示"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, fuzzy, kde-format
 #| msgid "Show/hide the view's rulers"
 msgid "Show/hide the page margins"
 msgstr "ビューの定規の表示/非表示を切り替え"
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, kde-format
 msgid "Insert Page"
 msgstr "ページを挿入"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "現在のページの後に新しいページを挿入"
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, kde-format
 msgid "Copy Page"
 msgstr "ページをコピー"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, kde-format
 msgid "Copy the current page"
 msgstr "現在のページをコピー"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, kde-format
 msgid "Delete Page"
 msgstr "ページを削除"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, kde-format
 msgid "Delete the current page"
 msgstr "現在のページを削除"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, kde-format
 msgid "Master Page..."
 msgstr "マスターページ..."
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "ページレイアウト..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "変数"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, kde-format
 msgid "Import Document..."
 msgstr "文書をインポート..."
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, kde-format
 msgid "Configure..."
 msgstr "設定..."
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Slideshow"
 msgstr "スライドショーをインポート"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2454,7 +2467,7 @@ msgstr ""
 "%1 \n"
 "をインポートできませんでした"
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "ページレイアウトを変更"
@@ -4329,30 +4342,30 @@ msgstr "インポートする行:"
 msgid "to"
 msgstr " - "
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "更新日:"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, fuzzy, kde-format
 #| msgid "Detail"
 msgid "&Details"
 msgstr "詳細"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr ""

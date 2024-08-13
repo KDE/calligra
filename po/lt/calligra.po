@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2017-06-25 14:28+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -1006,14 +1006,27 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Išsaugoti paletę"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
-msgid "The following autosave file can be recovered:"
+msgid "Discard All"
 msgstr ""
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:175
+#, kde-format
 msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
@@ -1578,7 +1591,7 @@ msgstr "bevardis"
 msgid "Open Document"
 msgstr "Atverti dokumentą"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "Importuoti dokumentą"
@@ -1626,7 +1639,7 @@ msgid "Hide %1 Toolbar"
 msgstr "Slėpti %1 priemonių juostą"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Atverti egzistuojantį dokumentą"
@@ -1872,26 +1885,26 @@ msgstr "Nauja versija negali būti pridėta"
 msgid "Date: %1"
 msgstr "Data: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Forma"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "Aktyvus įrankis: %1"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonimas"
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Default Author Profile"
@@ -2502,113 +2515,113 @@ msgstr[1] "Įklijuoti puslapį"
 msgstr[2] ""
 msgstr[3] "Įklijuoti puslapį"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr "Įrankiai"
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, kde-format
 msgid "D&elete"
 msgstr "&Trinti"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Pritraukti prie tinklelio"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Master Pages"
 msgstr "Bazinis puslapis"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show Rulers"
 msgstr "Rodyti liniuotes"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Page Margins"
 msgstr "Bazinis puslapis"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, kde-format
 msgid "Insert Page"
 msgstr "Įterpti puslapį"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, kde-format
 msgid "Copy Page"
 msgstr "Kopijuoti puslapį"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgid "Copy the current page"
 msgstr "Trinti puslapį"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, kde-format
 msgid "Delete Page"
 msgstr "Trinti puslapį"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgid "Delete the current page"
 msgstr "Trinti puslapį"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, kde-format
 msgid "Master Page..."
 msgstr "Bazinis puslapis..."
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "Puslapio išdėstymas..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Kintamasis"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, kde-format
 msgid "Import Document..."
 msgstr "Importuoti dokumentą..."
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, kde-format
 msgid "Configure..."
 msgstr "Konfigūruoti..."
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, fuzzy, kde-format
 #| msgid "Import columns:"
 msgid "Import Slideshow"
 msgstr "Importuoti stulpelius:"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2617,7 +2630,7 @@ msgstr ""
 "Nepavyko atverti\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change parameter"
@@ -4596,30 +4609,30 @@ msgstr "Importuoti stulpelius:"
 msgid "to"
 msgstr "iki"
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "Keista:"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, fuzzy, kde-format
 #| msgid "Detail"
 msgid "&Details"
 msgstr "Detaliai"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr ""

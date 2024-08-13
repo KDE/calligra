@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2023-05-31 14:25-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -902,7 +902,7 @@ msgid "Number"
 msgstr "Número"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12823,7 +12823,7 @@ msgid "Clear"
 msgstr "Limpar"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, kde-format
 msgid "Delete"
 msgstr "Excluir"
@@ -12926,27 +12926,27 @@ msgid "Edit"
 msgstr "Editar"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr "Navegação"
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, kde-format
 msgid "Activate"
 msgstr "Ativar"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "Fonte"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "Cor/Borda"
@@ -12956,12 +12956,12 @@ msgstr "Cor/Borda"
 msgid "Comment:"
 msgstr "Comentário:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, kde-format
 msgid "Cell Editor"
 msgstr "Editor de célula"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "Fórmula"
@@ -13226,7 +13226,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Sem Limite"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "Planilha"
@@ -13418,37 +13418,37 @@ msgid "Down, First Column"
 msgstr "Para Baixo, Primeira Coluna"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "Nenhum"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "Soma"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "Média"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "Contagem"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
@@ -13463,7 +13463,7 @@ msgstr "Abrir/Salvar"
 msgid "Function Modules"
 msgstr "Módulos de Funções"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "Ferramentas"
@@ -13886,7 +13886,7 @@ msgstr "Largura: %1 %2"
 msgid "Hide Column"
 msgstr "Ocultar Coluna"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, kde-format
 msgid "Area is too large."
 msgstr "A área é muito grande."
@@ -13901,393 +13901,393 @@ msgstr "A folha %1 não foi encontrada para ser impressa"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Nada para imprimir para folha(s) %1."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Propriedades da planilha..."
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Modificar as propriedades da planilha"
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Inserir Planilha"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Inserir uma nova folha"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Duplicar planilha"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Duplicar planilha selecionada"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Remover planilha"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Remove a folha ativa"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Renomear Planilha..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Renomear a folha ativa"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Mostrar Planilha..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Mostra uma folha oculta"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Ocultar planilha"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Oculta a folha ativa"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
 msgstr "Página..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Indicar o formato da planilha para impressão"
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Reiniciar intervalo de impressão"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Limpar o intervalo de impressão na folha atual"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, kde-format
 msgid "Page Outline"
 msgstr "Contorno da página"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Mostrar na planilha a localização dos contornos da página"
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Recalcular planilha"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, kde-format
 msgid "Recalculate"
 msgstr "Recalcular"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Recalcular o valor de cada célula na planilha atual"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Recalcular documento"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Recalcular o valor de cada célula em todas as planilhas"
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Proteger &Planilha..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Proteger a folha de modificações"
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Proteger &Documento..."
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Proteger o documento de modificações"
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "&Criar modelo a partir do documento..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, kde-format
 msgid "Anchor"
 msgstr "Âncora"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "Célula"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, kde-format
 msgid "Page"
 msgstr "Página"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Alternar ancoramento da forma"
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "Próxima Planilha"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, kde-format
 msgid "Next"
 msgstr "Próxima"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Mover para a próxima planilha"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Planilha anterior"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, kde-format
 msgid "Previous"
 msgstr "Anterior"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Mover para a planilha anterior"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "Primeira planilha"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, kde-format
 msgid "First"
 msgstr "Primeira"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Move para a primeira planilha"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "Última planilha"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Última"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Move para a última planilha"
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, kde-format
 msgid "Column Header"
 msgstr "Cabeçalho da coluna"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, kde-format
 msgid "Show the column header"
 msgstr "Mostrar cabeçalho da coluna"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, kde-format
 msgid "Row Header"
 msgstr "Cabeçalho da linha"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, kde-format
 msgid "Show the row header"
 msgstr "Mostrar cabeçalho da linha"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Barra de rolagem horizontal"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Mostrar barra de rolagem horizontal"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Barra de rolagem vertical"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Mostrar barra de rolagem vertical"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, kde-format
 msgid "Status Bar"
 msgstr "Barra de status"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, kde-format
 msgid "Show the status bar"
 msgstr "Mostrar a barra de status"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
 msgstr "Barra de abas"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Mostrar a barra de páginas"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Definir as várias opções do Calligra Sheets"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, kde-format
 msgid "No calculation"
 msgstr "Nenhum cálculo"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Calcular usando o somatório"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Calcular usando o mínimo"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Calcular usando o máximo"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using average"
 msgstr "Calcular usando a média"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Calcular usando a quantidade"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "Calcular usando a contagemA"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Você não pode mudar uma planilha protegida."
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Você não pode ocultar a última planilha visível."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, kde-format
 msgid "Enter a password."
 msgstr "Insira uma senha."
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, kde-format
 msgid "Enter the password."
 msgstr "Insira a senha."
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr "A senha está incorreta."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, kde-format
 msgid "Protect Document"
 msgstr "Proteger documento"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Desproteger documento"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Proteger planilha"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Desproteger planilha"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Reinicializar intervalo de impressão"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Você não pode apagar a única planilha."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14296,62 +14296,62 @@ msgstr ""
 "Você está prestes a remover a planilha ativa.\n"
 "Deseja continuar?"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "Digite o nome:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Renomear planilha"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Mudar Nome da Planilha"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Nome da planilha não pode ser vazio."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr "Este nome já está em uso."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, kde-format
 msgid "Sum: "
 msgstr "Soma: "
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, kde-format
 msgid "Average: "
 msgstr "Média: "
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, kde-format
 msgid "Min: "
 msgstr "Mín: "
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, kde-format
 msgid "Max: "
 msgstr "Máx: "
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, kde-format
 msgid "Count: "
 msgstr "Quantidade: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, kde-format
 msgid "CountA: "
 msgstr "Contagem (countA): "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

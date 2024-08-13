@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -908,15 +908,28 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "파일 복구"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
+#, kde-format
+msgid "Discard All"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "다음 자동 저장된 파일을 복구할 수 있습니다:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:175
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "다음 자동 저장된 파일을 복구할 수 있습니다:"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -1469,7 +1482,7 @@ msgstr "제목 없음"
 msgid "Open Document"
 msgstr "문서 열기"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "문서 가져오기"
@@ -1519,7 +1532,7 @@ msgid "Hide %1 Toolbar"
 msgstr "%1 도구 모음 숨기기"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "기존 문서 열기"
@@ -1759,25 +1772,25 @@ msgstr "새 버전을 추가할 수 없음"
 msgid "Date: %1"
 msgstr "날짜: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "모양"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "활성 작성자 프로필"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "익명"
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "기본 작성자 프로필"
@@ -2324,108 +2337,108 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "쪽 붙여넣기"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
 msgid "Tools"
 msgstr "도구"
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, kde-format
 msgid "D&elete"
 msgstr "삭제(&E)"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, kde-format
 msgid "Snap to Grid"
 msgstr "격자에 맞추기"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, kde-format
 msgid "Show Master Pages"
 msgstr "마스터 쪽 표시"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show Rulers"
 msgstr "눈금자 표시"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "보기의 눈금자 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, kde-format
 msgid "Show Page Margins"
 msgstr "쪽 여백 표시"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "쪽 여백 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, kde-format
 msgid "Insert Page"
 msgstr "쪽 삽입"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "현재 쪽 다음에 새 쪽 삽입"
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, kde-format
 msgid "Copy Page"
 msgstr "쪽 복사"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, kde-format
 msgid "Copy the current page"
 msgstr "현재 쪽 복사"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, kde-format
 msgid "Delete Page"
 msgstr "쪽 삭제"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, kde-format
 msgid "Delete the current page"
 msgstr "현재 쪽 삭제"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, kde-format
 msgid "Master Page..."
 msgstr "마스터 쪽..."
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "쪽 레이아웃..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "변수"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, kde-format
 msgid "Import Document..."
 msgstr "문서 가져오기..."
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, kde-format
 msgid "Configure..."
 msgstr "설정..."
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Slideshow"
 msgstr "슬라이드 쇼 가져오기"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2434,7 +2447,7 @@ msgstr ""
 "가져올 수 없음\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "쪽 레이아웃 변경"
@@ -4350,28 +4363,28 @@ msgstr "줄 가져오기:"
 msgid "to"
 msgstr "끝"
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr "시도하기(&T)"
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, kde-format
 msgid "modified"
 msgstr "수정됨"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, kde-format
 msgid "&Details"
 msgstr "자세히(&D)"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr "도움 받기..."

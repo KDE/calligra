@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2015-09-09 09:40+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -543,7 +543,7 @@ msgstr "Stílus"
 msgid "Clone"
 msgstr "Klónozás"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Törlés"
@@ -661,7 +661,7 @@ msgid "Page Size && Margins"
 msgstr "Oldalméret és margók"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Létrehozás"
@@ -1500,33 +1500,33 @@ msgstr "Egérmutató: X:Y"
 msgid "Zoom Controller"
 msgstr "Nagyításvezérlő"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, fuzzy, kde-format
 #| msgid "Exit Distraction-Free Mode"
 msgid "Exit Fullscreen Mode"
 msgstr "Kilépés a zaklatottságmentes módból"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Alakzattulajdonságok…"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Az alakzat viselkedésének módosítása"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Sablon létrehozása dokumentumból…"
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "A dokumentum elmentése később felhasználható sablonként"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1535,17 +1535,17 @@ msgstr ""
 "A dokumentum sablonként való elmentése nem sikerült.<br><br>A létrejött "
 "sablont új dokumentumok kiindulási mintájának lehet használni."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Formázókarakterek megjelenítése"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1556,17 +1556,17 @@ msgstr ""
 ">Ha ez be van jelölve, a Words megjeleníti a tabulátorokat, szóközöket, "
 "sorvége jeleket és a többi nem nyomtatható karaktert."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Mezőárnyékolók megjelenítése"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "A mezők árnyékolt hátterének átváltása"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1575,17 +1575,17 @@ msgstr ""
 "A mezők (változók, stb.) megjelenésének váltása a hátterük kontrasztos "
 "színnel való rajzolásával."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Szövegalakzat szegélyeinek megjelenítése"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "A szegélyek megjelenítésének ki- és bekapcsolása"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1596,17 +1596,17 @@ msgstr ""
 "jelennek lesznek kinyomtatva, tehát ez a beállítás csak a papír alakjának "
 "megjelenítését szolgálja."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Táblázatszegélyek megjelenítése"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1616,18 +1616,18 @@ msgstr ""
 "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
 "táblázatszegélyeket."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, fuzzy, kde-format
 msgid "Show Section Bounds"
 msgstr "Az automatikus javítás beállításainak megváltoztatása."
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 #| msgid "Toggle the display of table borders"
 msgid "Toggle the display of section bounds"
 msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1640,17 +1640,17 @@ msgstr ""
 "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
 "táblázatszegélyeket."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Vonalzók megjelenítése"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "A vonalzók ki- és bekapcsolása"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1663,43 +1663,43 @@ msgstr ""
 "pozícióját megmérni.<p>Ha nem szeretné használni a vonalzókat, szüntesse meg "
 "a kijelölést.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Rácshoz illesztés"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Az állapotsor megjelenítése"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Az állapotsor megjelenítése és elrejtése"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, fuzzy, kde-format
 #| msgid "Set view in distraction free mode"
 msgid "Set view in fullscreen mode"
 msgstr "Nézet beállítása a zaklatottságmentes módban"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Szemantikus stíluslapok…"
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Szemantikus stíluslapok módosítása és hozzáadása"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1708,22 +1708,22 @@ msgstr ""
 "A stíluslapok az RDF-fájlokban tárolt információk megjelenítésének "
 "formázásához használhatók."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Beállítás…"
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Oldalelrendezés…"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Az oldal tulajdonságainak megváltoztatása"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1733,32 +1733,32 @@ msgstr ""
 "fejléc illetve a lábléc méretét és az oszlopok beállításait lehet "
 "megváltoztatni.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Fejléc létrehozása"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Lábléc létrehozása"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Megjegyzések megjelenítése"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Megjeleníti a megjegyzéseket a dokumentumban"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Szavak száma"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Megjeleníti vagy elrejti a szavak számát az állapotsoron"

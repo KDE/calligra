@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -859,7 +859,7 @@ msgid "Number"
 msgstr "അക്കം"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12168,7 +12168,7 @@ msgid "Clear"
 msgstr "വൃത്തിയാക്കുക"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, kde-format
 msgid "Delete"
 msgstr "നീക്കം ചെയ്യുക"
@@ -12271,13 +12271,13 @@ msgid "Edit"
 msgstr "ചിട്ട"
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr ""
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, fuzzy, kde-format
 #| msgid "Active Sheet"
 msgid "Activate"
@@ -12285,14 +12285,14 @@ msgstr "സജീവ ഷീറ്റ്"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Font"
 msgstr "അക്ഷരസഞ്ചയം"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "നിറം/അതിര്‍ത്തി"
@@ -12302,13 +12302,13 @@ msgstr "നിറം/അതിര്‍ത്തി"
 msgid "Comment:"
 msgstr "കമന്റ്:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Cell is"
 msgid "Cell Editor"
 msgstr "കളമാണു്"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, kde-format
 msgid "Formula"
 msgstr "ഫോര്‍മുല"
@@ -12561,7 +12561,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "പ്രഭാവമില്ല"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "ഷീറ്റ്"
@@ -12756,40 +12756,40 @@ msgid "Down, First Column"
 msgstr "അപരിചിതമായ നിര %d-ല്‍ മാറ്റം വരുത്തിയിരിക്കുന്നു"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, fuzzy, kde-format
 #| msgid "Sun"
 msgid "Sum"
 msgstr "സൂര്യന്‍"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, fuzzy, kde-format
 #| msgid "Mon"
 msgid "Min"
 msgstr "Mon"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, fuzzy, kde-format
 #| msgid "May"
 msgid "Max"
 msgstr "മേയ്"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "ശരാശരി"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "എണ്ണം"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, fuzzy, kde-format
 #| msgid "Count"
 msgid "CountA"
@@ -12805,7 +12805,7 @@ msgstr "തുറക്കുക/സൂക്ഷിക്കുക"
 msgid "Function Modules"
 msgstr "എഫ്‌വിഡബ്ലിയുഎം മൊഡ്യൂളുകള്‍"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "ഉപകരണങ്ങള്‍"
@@ -13201,7 +13201,7 @@ msgstr "വീതി: %1 %2"
 msgid "Hide Column"
 msgstr "നിര മറയ്ക്കുക"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, fuzzy, kde-format
 #| msgid ""
 #| "The range\n"
@@ -13223,484 +13223,484 @@ msgstr "ഷീറ്റ് %1 പ്രിന്റിങ്ങിനായി �
 msgid "Nothing to print for sheet(s) %1."
 msgstr ""
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, fuzzy, kde-format
 #| msgid "Sheet Properties"
 msgid "Sheet Properties..."
 msgstr "ഷീറ്റ് ഗുണഗണങ്ങള്‍"
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "ഷീറ്റ് ചേര്‍ക്കുക"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "ഒരു പുതിയ ഷീറ്റ് ചേര്‍ക്കുക"
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, fuzzy, kde-format
 msgid "Duplicate Sheet"
 msgstr "_നേരത്തെയുള്ള ഡിസ്ക്"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, fuzzy, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "തിരഞ്ഞെടുത്ത നക്ഷത്രരാശി മാത്രം"
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "ഷീറ്റ് നീക്കം ചെയ്യുക"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, fuzzy, kde-format
 #| msgid "Move to the last sheet"
 msgid "Remove the active sheet"
 msgstr "അവസാനത്തെ ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "ഷീറ്റിന്റെ പേരു് മാറ്റുക..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Rename the active sheet"
 msgstr "ഷീറ്റിന്റെ പേരു് മാറ്റുക"
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "ഷീറ്റ് കാണിക്കുക..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, fuzzy, kde-format
 msgid "Show a hidden sheet"
 msgstr ""
 "കാണിക്കുന്നതിനുള്ള പ്രോഗ്രാം തുടങ്ങുന്നതില്‍ പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "ഷീറ്റ് മറയ്ക്കുക"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, fuzzy, kde-format
 msgid "Hide the active sheet"
 msgstr "തിരഞ്ഞെടുത്ത നക്ഷത്രരാശി മാത്രം"
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
 msgstr "പേജ് വിന്യാസം..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr ""
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, fuzzy, kde-format
 msgid "Reset Print Range"
 msgstr "വേര്‍ഷന്‍ പ്രിന്‍റ് ചെയ്തു് പുറത്തു് കടക്കുക"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, fuzzy, kde-format
 #| msgid "Remove the contents of the current cell"
 msgid "Reset the print range in the current sheet"
 msgstr "ഈ കളത്തിന്റെ ഉള്ളടക്കങ്ങള്‍ നീക്കം ചെയ്യുക"
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, fuzzy, kde-format
 msgid "Page Outline"
 msgstr "അപ്പര്‍ വോള്‍ട്ട റിപ്പബ്ലിക്"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr ""
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Recalculate Sheet"
 msgstr "ഷീറ്റിന്റെ പേരു് മാറ്റുക"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, fuzzy, kde-format
 msgid "Recalculate"
 msgstr "പ്രഭാവമില്ല"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, fuzzy, kde-format
 #| msgid "Select all sheets"
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "എല്ലാ ഷീറ്റുകളും തെരഞ്ഞെടുക്കുക"
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Recalculate Document"
 msgstr "ഷീറ്റിന്റെ പേരു് മാറ്റുക"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr ""
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Protect &Sheet..."
 msgstr "ഷീറ്റ് കാണിക്കുക..."
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr ""
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Protect &Document..."
 msgstr "സുരക്ഷിതത്വം"
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr ""
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, fuzzy, kde-format
 #| msgid "Create Style From Cell..."
 msgid "&Create Template From Document..."
 msgstr "കളത്തില്‍നിന്നു ശൈലി സൃഷ്ടിക്കുക..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, kde-format
 msgid "Anchor"
 msgstr "നങ്കൂരം"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "കളം"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, kde-format
 msgid "Page"
 msgstr "പേജ്"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, fuzzy, kde-format
 msgid "Switch shape anchoring"
 msgstr "ഫോട്ടോ ദശയിലേയ്ക്കു് മാറുക"
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "അടുത്ത ഷീറ്റ്"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, kde-format
 msgid "Next"
 msgstr "അടുത്തതു്"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "അടുത്ത ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "മുമ്പുളള ഷീറ്റ്"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, kde-format
 msgid "Previous"
 msgstr "മുമ്പത്തെ"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "മുമ്പുളള ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "ആദ്യ ഷീറ്റ്"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, kde-format
 msgid "First"
 msgstr "ആദ്യത്തെ"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "ആദ്യത്തെ ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "അവസാന ഷീറ്റ്"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, fuzzy, kde-format
 #| msgid "Last"
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "അന്ത്യം"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "അവസാനത്തെ ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, kde-format
 msgid "Column Header"
 msgstr "നിര തലക്കെട്ടു്"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, kde-format
 msgid "Show the column header"
 msgstr "നിര തലക്കെട്ടു് കാണിക്കുക"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, kde-format
 msgid "Row Header"
 msgstr "വരി തലക്കെട്ടു്"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, kde-format
 msgid "Show the row header"
 msgstr "വരി തലക്കെട്ടു് കാണിക്കുക"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, fuzzy, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "കുറുകെയുള്ള ഫ്ലിപ്പ്"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, fuzzy, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr ""
 "കാണിക്കുന്നതിനുള്ള പ്രോഗ്രാം തുടങ്ങുന്നതില്‍ പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, fuzzy, kde-format
 msgid "Vertical Scrollbar"
 msgstr "നേരെയുള്ള ഫ്ലിപ്പ്"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, fuzzy, kde-format
 msgid "Show the vertical scrollbar"
 msgstr ""
 "കാണിക്കുന്നതി�ുള്ള പ്രോഗ്രാം തുടങ്ങുന്നതില്‍ പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, kde-format
 msgid "Status Bar"
 msgstr "അവസ്ഥാപട്ട"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, fuzzy, kde-format
 msgid "Show the status bar"
 msgstr ""
 "കാണിക്കുന്നതിനുള്ള പ്രോഗ്രാം തുടങ്ങുന്നതില്‍ പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
 msgstr "ടാബ്പട്ട"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, fuzzy, kde-format
 msgid "Show the tab bar"
 msgstr ""
 "കാണിക്കുന്നതിനുള്ള പ്രോഗ്രാം തുടങ്ങുന്നതില്‍ പരാജയപ്പെട്ടു:\n"
 "%s"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, fuzzy, kde-format
 #| msgid "Cell Values"
 msgid "Set various Calligra Sheets options"
 msgstr "കളം മൂല്യങ്ങള്‍"
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, fuzzy, kde-format
 msgid "No calculation"
 msgstr "പ്രഭാവമില്ല"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, fuzzy, kde-format
 msgid "Calculate using sum"
 msgstr "കമ്പ്യൂട്ടറിന്റെ സ്ഥിരസ്ഥായിയായ സമയ മേഖല ഉപയോഗിക്കുന്നു"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, fuzzy, kde-format
 msgid "Calculate using minimum"
 msgstr "കമ്പ്യൂട്ടറിന്റെ സ്ഥിരസ്ഥായിയായ സമയ മേഖല ഉപയോഗിക്കുന്നു"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, fuzzy, kde-format
 msgid "Calculate using maximum"
 msgstr "എത്ര കാന്തിമാനം വരെയുള്ളതിനു പേര് കാണിക്കണം: "
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, fuzzy, kde-format
 msgid "Calculate using average"
 msgstr "കമ്പ്യൂട്ടറിന്റെ സ്ഥിരസ്ഥായിയായ സമയ മേഖല ഉപയോഗിക്കുന്നു"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, fuzzy, kde-format
 msgid "Calculate using the count"
 msgstr "കമ്പ്യൂട്ടറിന്റെ സ്ഥിരസ്ഥായിയായ സമയ മേഖല ഉപയോഗിക്കുന്നു"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, fuzzy, kde-format
 msgid "Calculate using the countA"
 msgstr "കമ്പ്യൂട്ടറിന്റെ സ്ഥിരസ്ഥായിയായ സമയ മേഖല ഉപയോഗിക്കുന്നു"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "തിരഞ്ഞെടുത്ത നക്ഷത്രരാശി മാത്രം"
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "തിരഞ്ഞെടുത്ത നക്ഷത്രരാശി മാത്രം"
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, kde-format
 msgid "Enter a password."
 msgstr "ഒരു അടയാളവാക്കു് നല്‍കുക."
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, kde-format
 msgid "Enter the password."
 msgstr "അടയാളവാക്കു് നല്‍കുക."
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr "അടയാളവാക്കു് തെറ്റാണു്."
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Protect Document"
 msgstr "സുരക്ഷിതത്വം"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Unprotect Document"
 msgstr "സുരക്ഷിതത്വം"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, fuzzy, kde-format
 #| msgid "&Protected"
 msgid "Protect Sheet"
 msgstr "&സുരക്ഷിതം"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, fuzzy, kde-format
 #| msgid "Insert Sheet"
 msgid "Unprotect Sheet"
 msgstr "ഷീറ്റ് ചേര്‍ക്കുക"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "വേര്‍ഷന്‍ പ്രിന്‍റ് ചെയ്തു് പുറത്തു് കടക്കുക"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "തിരഞ്ഞെടുത്ത നക്ഷത്രരാശി മാത്രം"
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "പേരു് നല്‍കുക:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "ഷീറ്റിന്റെ പേരു് മാറ്റുക"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "ഷീറ്റ് നാമം മാറ്റുക"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, fuzzy, kde-format
 #| msgid "The style name can not be empty."
 msgid "Sheet name cannot be empty."
 msgstr "ശൈലീനാമം ശുന്യമാകാന്‍ പാടില്ല."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr ""
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, kde-format
 msgid "Sum: "
 msgstr ""
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, kde-format
 msgid "Average: "
 msgstr "ശരാശരി:"
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, kde-format
 msgid "Min: "
 msgstr ""
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, kde-format
 msgid "Max: "
 msgstr ""
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, kde-format
 msgid "Count: "
 msgstr "എണ്ണം: "
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Count: "
 msgid "CountA: "
 msgstr "എണ്ണം: "
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr ""

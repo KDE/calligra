@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2002-11-08 16:06+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -590,7 +590,7 @@ msgstr "Uhlobo:"
 msgid "Clone"
 msgstr "Iyavala:"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Cima Umqolo"
@@ -717,7 +717,7 @@ msgid "Page Size && Margins"
 msgstr "Khusela Ubungakanani"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, fuzzy, kde-format
 msgid "Create"
 msgstr "Yenza i Table"
@@ -1589,34 +1589,34 @@ msgstr ""
 msgid "Zoom Controller"
 msgstr ""
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, fuzzy, kde-format
 #| msgid "Frame Properties"
 msgid "Shape Properties..."
 msgstr "Izinto zobumnini Zesakhelo"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Create Template From Document..."
 msgid "Create Template From Document..."
 msgstr "&Yenza i Template Esuka Kuxwebhu..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Gcina olu xwebhu kwaye ulusebenzise mva njenge template"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1625,18 +1625,18 @@ msgstr ""
 "Ungagcina olu xwebhu njenge template. <br><br>Ungasebenzisa le template "
 "intsha njengenqaku lokuqala lolunye uxwebhu."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, fuzzy, kde-format
 #| msgid "&Formatting Characters"
 msgid "Show Formatting Characters"
 msgstr "&Ifomatha Iimpawu"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, fuzzy, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Qhobosha umboniso weempawu ezinga-shicilelwayo."
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1651,35 +1651,35 @@ msgstr ""
 "KWord ikubonisa i tabs, izithuba, ubuyiselo labagcwalisi kunye nabanye "
 "abasebenzi abanga-shicilelwayo."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Text Shape Borders"
 msgstr "Qwalasela Imida ye table"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, fuzzy, kde-format
 msgid "Turns the border display on and off"
 msgstr "Ijika umboniso womda ngokuvula nokuvala."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, fuzzy, kde-format
 #| msgid ""
 #| "Turns the border display on and off.<br><br>The borders are never "
@@ -1694,18 +1694,18 @@ msgstr ""
 "khetho luyasebenziseka ukubona indlela uxwebhu lizakuvela ngalo kwiphepha "
 "elishicilelweyo."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Table Borders"
 msgstr "Qwalasela Imida ye table"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, fuzzy, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Qhobosha umboniso weempawu ezinga-shicilelwayo."
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1719,17 +1719,17 @@ msgstr ""
 "KWord ikubonisa i tabs, izithuba, ubuyiselo labagcwalisi kunye nabanye "
 "abasebenzi abanga-shicilelwayo."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, fuzzy, kde-format
 msgid "Show Section Bounds"
 msgstr "Tshintsha iinketho zolungiso oluzenzekelayo."
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Qhobosha umboniso weempawu ezinga-shicilelwayo."
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1743,17 +1743,17 @@ msgstr ""
 "KWord ikubonisa i tabs, izithuba, ubuyiselo labagcwalisi kunye nabanye "
 "abasebenzi abanga-shicilelwayo."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Bonisa Iirula"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, fuzzy, kde-format
 msgid "Shows or hides rulers"
 msgstr "Bonisa okanye fihla iirula."
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, fuzzy, kde-format
 #| msgid ""
 #| "The rulers are the white measuring spaces top and left of the document. "
@@ -1771,67 +1771,67 @@ msgstr ""
 "zingasetyenziswa ukubeka iziniki zithuba phakathi kwezinye.<p>Sukukhangela "
 "le ukuze ukhubazise iirula ukuba zingaboniswa."
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Bonisa Umbhalo ozantsi ephepheni"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Show Status Bar"
 msgstr "Bonisa &Imo yebar "
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Shows or hides the status bar"
 msgstr "Bonisa &Imo yebar "
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, fuzzy, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Rhweba ngaphakathi Uhlobo..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, fuzzy, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Rhweba ngaphakathi Uhlobo..."
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, fuzzy, kde-format
 #| msgid "C&onfigure..."
 msgid "Configure..."
 msgstr "Q&walasela..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, fuzzy, kde-format
 msgid "Page Layout..."
 msgstr "Tshintsha Ubeko"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, fuzzy, kde-format
 msgid "Change properties of entire page"
 msgstr "Tshintsha izinto zobumnini zephepha lonke."
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change properties of the entire page.<p>Currently you can change paper "
@@ -1844,35 +1844,35 @@ msgstr ""
 "ubungakanani bephepha, ulungiso kakuhle lephepha, umbhalo ophezulu ephepheni "
 "nombhalo osezantsi ephepheni, kunye nezicwangciso zomhlathi."
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, fuzzy, kde-format
 #| msgid "Create Text Frame"
 msgid "Create Header"
 msgstr "Yenza Isakhelo Sombhalo"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, fuzzy, kde-format
 #| msgid "Create Text Frame"
 msgid "Create Footer"
 msgstr "Yenza Isakhelo Sombhalo"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, fuzzy, kde-format
 #| msgid "Remove Comment"
 msgid "Show Comments"
 msgstr "Susa Ugqabazo"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 msgid "Shows comments in the document"
 msgstr "Bonisa kuphela umbhalo woxwebhu."
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Shows or hides word counting in status bar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -978,14 +978,27 @@ msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Асбоб ойналари"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:171
+#: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
-msgid "The following autosave file can be recovered:"
+msgid "Discard All"
 msgstr ""
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:175
+#, kde-format
 msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:213
+#, kde-format
+msgid ""
+"If you select Cancel, all recoverable files will be kept.\n"
+"If you press OK, selected files will be recovered, the unselected files "
+"discarded."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
@@ -1557,7 +1570,7 @@ msgstr "Сарлавҳа"
 msgid "Open Document"
 msgstr "Ҳужжатни очиш"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:515
+#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
 #, kde-format
 msgid "Import Document"
 msgstr "Ҳужжатни импорт қилиш"
@@ -1611,7 +1624,7 @@ msgid "Hide %1 Toolbar"
 msgstr "%1 асбоблар панелини бекитиш"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open This Document"
 msgid "Open Existing Document"
@@ -1859,24 +1872,24 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Сана:"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Тўлқин"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Матнни ўчириш"
 
-#: main/KoView.cpp:368 main/KoView.cpp:422
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:421 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Матнни ўчириш"
@@ -2521,114 +2534,114 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "Матнни қўйиш"
 
-#: pageapp/KoPAView.cpp:296 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Андоза ранг"
 
-#: pageapp/KoPAView.cpp:346
+#: pageapp/KoPAView.cpp:351
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "Матнни ўчириш"
 
-#: pageapp/KoPAView.cpp:356
+#: pageapp/KoPAView.cpp:361
 #, fuzzy, kde-format
 #| msgid "Show %1"
 msgid "Snap to Grid"
 msgstr "%1 ойнасини кўрсатиш"
 
-#: pageapp/KoPAView.cpp:365
+#: pageapp/KoPAView.cpp:370
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "Намунани яратиш"
 
-#: pageapp/KoPAView.cpp:369
+#: pageapp/KoPAView.cpp:374
 #, fuzzy, kde-format
 #| msgid "Show %1"
 msgid "Show Rulers"
 msgstr "%1 ойнасини кўрсатиш"
 
-#: pageapp/KoPAView.cpp:371
+#: pageapp/KoPAView.cpp:376
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:375
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "Намунани яратиш"
 
-#: pageapp/KoPAView.cpp:377
+#: pageapp/KoPAView.cpp:382
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:381
+#: pageapp/KoPAView.cpp:386
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "Матнни қўйиш"
 
-#: pageapp/KoPAView.cpp:383 pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:392
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Page"
 msgstr "Ташкилотнинг номи"
 
-#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "Матнни ўчириш"
 
-#: pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:398
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "Матнни ўчириш"
 
-#: pageapp/KoPAView.cpp:396 pageapp/KoPAView.cpp:397
+#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "Матнни ўчириш"
 
-#: pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:405
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page..."
 msgstr "Матнни қўйиш"
 
-#: pageapp/KoPAView.cpp:404
+#: pageapp/KoPAView.cpp:409
 #, kde-format
 msgid "Page Layout..."
 msgstr "Бет мосламалари..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:414 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Ўзгарувчи"
 
-#: pageapp/KoPAView.cpp:419
+#: pageapp/KoPAView.cpp:424
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import Document..."
 msgstr "Ҳужжатни импорт қилиш"
 
-#: pageapp/KoPAView.cpp:423
+#: pageapp/KoPAView.cpp:428
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure..."
 msgstr "Сақлашни тасдиқлаш"
 
-#: pageapp/KoPAView.cpp:513
+#: pageapp/KoPAView.cpp:518
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "Услубларни импорт қилиш"
 
-#: pageapp/KoPAView.cpp:540 pageapp/KoPAView.cpp:543
+#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2640,7 +2653,7 @@ msgstr ""
 "%1\n"
 "файлини очиб бўлмади."
 
-#: pageapp/KoPAView.cpp:655
+#: pageapp/KoPAView.cpp:660
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -4620,29 +4633,29 @@ msgstr "Услубларни импорт қилиш"
 msgid "to"
 msgstr "Муаллиф"
 
-#: widgets/KoDialog.cpp:246
+#: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:449
+#: widgets/KoDialog.cpp:459
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "Ўзгарган:"
 
-#: widgets/KoDialog.cpp:458
+#: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:813
+#: widgets/KoDialog.cpp:823
 #, fuzzy, kde-format
 msgid "&Details"
 msgstr "&Андоза"
 
-#: widgets/KoDialog.cpp:961
+#: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
 msgstr ""

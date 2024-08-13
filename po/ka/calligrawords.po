@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2024-04-30 10:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -541,7 +541,7 @@ msgstr "სტილი"
 msgid "Clone"
 msgstr "კლონირება"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "წაშლა"
@@ -659,7 +659,7 @@ msgid "Page Size && Margins"
 msgstr "გვერდის ზომა და საზღვრები"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "შექმნა"
@@ -1493,32 +1493,32 @@ msgstr "თაგუნას კურსორი X:Y"
 msgid "Zoom Controller"
 msgstr "გადიდების კონტროლერი"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr "სრული ეკრანის რეჟიმიდან გასვლა"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "ფორმის თვისებები..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "კონტურის ქცევის შეცვლა"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "ნიმუშის შექმნა დოკუმენტიდან..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "დოკუმენტის შენახვა და მოგვიანებით ნიმუშად გამოყენება"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1527,17 +1527,17 @@ msgstr ""
 "შეგიძლიათ, ეს დოკუმენტი ნიმუშად შეინახოთ. <br><br>შეგიძლიათ, ეს ნიმუში სხვა "
 "დოკუმენტის საწყის წერტილად გამოიყენოთ."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "დაფორმატების სიმბოლოების ჩვენება"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "არაბეჭდვადი სიმბოლოების ჩვენების გადართვა"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1548,17 +1548,17 @@ msgstr ""
 "გაჩვენებთ ტაბულაციის, ჰარეს, გადატანის და სხვა სიმბოლოებს, რომელიც არ "
 "იბეჭდება."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "ველის დაჩრდილვების ჩვენება"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "ველების დაჩრდილული ფონის გადართვა"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1567,17 +1567,17 @@ msgstr ""
 "ველების (ცვლადების, ა.შ.) ვიზუალიზაციის გადართვა მათი ფონის კონტრასტული "
 "ფერის დახატვით."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "ტექსტს ბლოკის საზღვრების ჩვენება"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "გადართავს საზღვრის ჩვენებას"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1588,17 +1588,17 @@ msgstr ""
 "პარამეტრი სასარგებლოა, რომ დაინახოთ, როგორ გამოჩნდება დოკუმენტი დაბეჭდილ "
 "გვერდზე."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "ცხრილის საზღვრების ჩვენება"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "ცხრილის საზღვრების ჩვენების გადართვა"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1607,17 +1607,17 @@ msgstr ""
 "ცხრილის საზღვრების ჩვენების გადართვა.<br/><br/>როცა ეს ჩართულია, Words "
 "უჩინარი ცხრილის საზღვრებს თხელი ნაცრისფერი ხაზით გაჩვენებთ."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "ნაწილის საზღვრების ჩვენება"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "ნაწილის საზღვრების ჩვენების გადრთვა"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1626,17 +1626,17 @@ msgstr ""
 "ნაწილის საზღვრების ჩვენების გადართვა.<br/><br/>როცა ეს ჩართულია, ყველა "
 "ნაწილის საზღვარი თხელი ჰორიზონტალური ბრჭყალებით მოინიშნება."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "სახაზავების ჩვენება"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "სახაზავების ჩვენება/დამალვა"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1649,42 +1649,42 @@ msgstr ""
 "შეგიძლიათ გამოიყენოთ ტაბულატორების განსათავსებლად და ა.შ.<p>გამორთეთ, რომ "
 "სახაზავები ნაჩვენები აღარ იყოს.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "ბადეზე მიბმა"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "მდგომარეობის ზოლის ჩვენება"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "სტატუსის ზოლის ჩვენება/დამალვა"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr "სრული ეკრანის რეჟიმი"
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr "ხედის დაყენება სრული ეკრანის რეჟიმში"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "სემანტიკური სტილის ცხრილები..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "სემანტიკური სტილის ცხრილების შეცვლა და დამატება"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1693,22 +1693,22 @@ msgstr ""
 "სტილის ცხრილები RDF-ში დამახსოვრებული ინფორმაცის ჩვენების დასაფორმატებლად "
 "გამოიყენება."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "გამართვა..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "გვერდის განლაგება..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "მთელი გვერდის თვისებების შეცვლა"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1718,32 +1718,32 @@ msgstr ""
 "გვერდის ორიენტაცია, თავსართისა და ქვედა კოლონტიტულის ზომები და სვეტის "
 "პარამეტრები.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "თავსართის შექმნა"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "ქვესართის შექმნა"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "კომენტარების ჩვენება"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "აჩვენებს კომტენტარებს დოკუმენტში"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "სიტყვების რაოდენობა"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "აჩვენებს ან დამალავს სიტყვების რაოდენობას სტატუსის ზოლში"

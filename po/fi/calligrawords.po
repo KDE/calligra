@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2018-08-19 18:37+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -569,7 +569,7 @@ msgstr "Tyyli"
 msgid "Clone"
 msgstr "Monista"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Poista"
@@ -689,7 +689,7 @@ msgid "Page Size && Margins"
 msgstr "Sivun koko ja reunukset"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Luo"
@@ -1540,33 +1540,33 @@ msgstr "Hiiren osoitin X:Y"
 msgid "Zoom Controller"
 msgstr "Suurennuksen muokkain"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, fuzzy, kde-format
 #| msgid "Exit Distraction-Free Mode"
 msgid "Exit Fullscreen Mode"
 msgstr "Poistu häiriötekijättömästä tilasta"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Muodon ominaisuudet"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Muuta muodon toimintaa"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Luo tiedostosta mallipohja…"
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Tallenna tämä tiedosto ja käytä sitä myöhemmin mallipohjana"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1575,17 +1575,17 @@ msgstr ""
 "Voit tallentaa tämän tiedoston mallipohjaksi.<br><br>Uutta mallipohjaa voi "
 "käyttää toisen tiedoston lähtökohtana."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Näytä muotoilumerkit"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Vaihtaa tulostumattomien asettelumerkkien näyttöä."
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1596,17 +1596,17 @@ msgstr ""
 "valittuna, Words näyttää sarkainmerkit, välilyönnit, rivinvaihdot ja muut "
 "tulostumattomat merkit."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Näytä kenttien varjostus"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "Näytä tai piilota kenttien sävytetty tausta"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1615,17 +1615,17 @@ msgstr ""
 "Korosta kentät (muuttujat jne.) piirtämällä niiden tausta eroavalla "
 "taustalla tai poista korostus käytöstä."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Näytä tekstimuodon reunat"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Aseta reunojen näyttö näkyville tai pois."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1635,17 +1635,17 @@ msgstr ""
 "Vaihtaa reunojen näytön. <br /><br />Kehysten reunuksia ei tulosteta "
 "koskaan. Asetuksen avulla voidaan nähdä, kuinka tiedosto näkyy tulostettuna."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Näytä taulukon reunat"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Vaihda taulukon reunojen näyttöä"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1654,17 +1654,17 @@ msgstr ""
 "Vaihda taulukon reunojen näyttöä<br/><br/>Kun tämä asetus on valittuna, "
 "Words näyttää kaikki näkymättömät taulukon reunat ohuella harmaalla viivalla."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "Näytä osien rajat"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Vaihda osien rajojen näyttöä"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1673,17 +1673,17 @@ msgstr ""
 "Vaihda osien rajojen näyttöä<br/><br/>Kun tämä asetus on valittuna, osien "
 "rajat ilmaistaan ohuilla harmain vaakasuorin hakasulkein."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Näytä viivaimet"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Näyttää tai piilottaa viivaimet"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1696,65 +1696,65 @@ msgstr ""
 "voidaan käyttää esimerkiksi sarkaimien asettamiseen. <p>Ota tämä valinta "
 "pois, jos et halua näyttää viivaimia.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Sovita ruudukkoon"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Näytä tilarivi"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Näytä tai piilota tilarivi"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, fuzzy, kde-format
 #| msgid "Set view in distraction free mode"
 msgid "Set view in fullscreen mode"
 msgstr "Aseta näkymä häiriötekijättömään tilaan"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Semanttiset tyylisivut…"
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Muuta ja lisää semanttisia tyylisivuja"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr "Tyylisivuilla muotoillaan RDF:ään tallennettuja tietoja"
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Asetukset…"
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Sivun asettelu…"
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Vaihda koko sivun ominaisuuksia"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1763,32 +1763,32 @@ msgstr ""
 "Vaihda koko sivun ominaisuuksia. <p> Voit muuttaa paperin kokoa ja suuntaa, "
 "ylä- ja alatunnisteen kokoa sekä palstojen asetuksia.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Luo ylätunniste"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Luo alatunniste"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Näytä kommentit"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Näytä kommentit tiedostossa"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Sanamäärä"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Näyttää tai piilottaa sanamäärän tilarivillä"

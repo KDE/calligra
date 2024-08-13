@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/karbon.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
@@ -395,206 +395,206 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "seoc@iolfree.ie,kscanne@gmail.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Ionsáigh grafaic"
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "Roghnaigh Grafaic le Cur Leis"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr "Níorbh fhéidir íomhá a luchtú."
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Import graphic"
 msgstr "Iompórtáil grafaic"
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr "Níorbh fhéidir giuirléid íomhá a chruthú."
 
-#: ui/KarbonView.cpp:634
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Mirror Horizontally"
-msgstr "C&othrom:"
-
 #: ui/KarbonView.cpp:636
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Vertically"
+msgid "Mirror Horizontally"
 msgstr "C&othrom:"
 
 #: ui/KarbonView.cpp:638
 #, fuzzy
 msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "C&othrom:"
+
+#: ui/KarbonView.cpp:640
+#, fuzzy
+msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "C&othrom:"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "Deighil Co&nair"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr "&Mód Imlíne"
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "&Iompórtáil Grafaic..."
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 msgid "Edit Guides"
 msgstr "Cuir Grádán in Eagar"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Dúblach"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, fuzzy, kde-format
 #| msgid "Align Center (Horizontal)"
 msgid "Distribute Center (Horizontal)"
 msgstr "Ailínigh Sa Lár (cothrománach)"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, fuzzy, kde-format
 #| msgid "Align Center (Horizontal)"
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Ailínigh Sa Lár (cothrománach)"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Left Borders"
 msgstr "&Dáil"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Right Borders"
 msgstr "&Dáil"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, fuzzy, kde-format
 #| msgid "Align Center (Horizontal)"
 msgid "Distribute Center (Vertical)"
 msgstr "Ailínigh Sa Lár (cothrománach)"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, fuzzy, kde-format
 #| msgid "Align Center (Horizontal)"
 msgid "Distribute Gaps (Vertical)"
 msgstr "Ailínigh Sa Lár (cothrománach)"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Bottom Borders"
 msgstr "&Dáil"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Top Borders"
 msgstr "&Dáil"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, fuzzy, kde-format
 msgid "Show Color Palette"
 msgstr "Taispeáin nó folaigh rialóirí"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, fuzzy, kde-format
 msgid "Show or hide color palette"
 msgstr "Taispeáin nó folaigh rialóirí"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 msgid "&Clip Object"
 msgstr "&Réad"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, fuzzy, kde-format
 msgid "&Unclip Objects"
 msgstr "&Díghrúpáil Réada"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Scáthánaigh go hIngearach"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 msgid "Mirror Horizontally"
 msgstr "C&othrom:"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, kde-format
 msgid "&Close Path"
 msgstr "&Dún Conair"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, kde-format
 msgid "Com&bine Path"
 msgstr "Comhchean&gail Conair"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, kde-format
 msgid "Se&parate Path"
 msgstr "Deighil Co&nair"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
 msgstr "Iompaigh Conai&r"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
 msgstr "Trasnaigh Conairí"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
 msgstr "Dealaigh Conairí"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
 msgstr "Aontaigh Conairí"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr "Fág Conairí As"
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "Léim Conair go dtí an Greille"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "Súmáil go dtí an Roghnúchán"
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, fuzzy, kde-format
 #| msgid "Zoom to Selection"
 msgid "Zoom to Drawing"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -920,7 +920,7 @@ msgid "Number"
 msgstr "Nommer"
 
 #. i18n: ectx: ToolBar (formatToolBar)
-#: functions/conversion.xml:251 part/calligrasheets.rc:237
+#: functions/conversion.xml:251 part/calligrasheets.rc:233
 #: ui/dialogs/LayoutPage_Float.cpp:51
 #, kde-format
 msgid "Format"
@@ -12933,7 +12933,7 @@ msgid "Clear"
 msgstr "Jaar"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:430
+#: part/calligrasheets.rc:44 part/View.cpp:432
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Uitvee Rye"
@@ -13037,13 +13037,13 @@ msgid "Edit"
 msgstr "Geldigheid..."
 
 #. i18n: ectx: ToolBar (navigationToolBar)
-#: part/calligrasheets.rc:221
+#: part/calligrasheets.rc:217
 #, kde-format
 msgid "Navigation"
 msgstr ""
 
 #. i18n: ectx: Menu
-#: part/calligrasheets.rc:227
+#: part/calligrasheets.rc:223
 #, fuzzy, kde-format
 #| msgid "Hide Sheet"
 msgid "Activate"
@@ -13051,14 +13051,14 @@ msgstr "Steek weg Staat"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:233 ui/CellToolOptionWidgets.xml:3
+#: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
 #: ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "maand"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
-#: part/calligrasheets.rc:263
+#: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
 msgstr "Kleur/Grens"
@@ -13068,13 +13068,13 @@ msgstr "Kleur/Grens"
 msgid "Comment:"
 msgstr "Kommentaar:"
 
-#: part/CellEditorDocker.cpp:44
+#: part/CellEditorWidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Cell is"
 msgid "Cell Editor"
 msgstr "Sel is"
 
-#: part/CellEditorDocker.cpp:55
+#: part/CellEditorWidget.cpp:55
 #, fuzzy, kde-format
 msgid "Formula"
 msgstr "Vertoon formule"
@@ -13334,7 +13334,7 @@ msgstr ""
 msgid "No Limit"
 msgstr "Skeisimbool"
 
-#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:230 part/View.cpp:241
+#: part/dialogs/PageLayoutDialog.cpp:130 part/View.cpp:232 part/View.cpp:243
 #, kde-format
 msgid "Sheet"
 msgstr "Staat"
@@ -13535,37 +13535,37 @@ msgid "Down, First Column"
 msgstr "Voeg by Kolomme"
 
 #: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:387
+#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "Geen"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:393
+#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "Som"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:405
+#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:411
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "Gemiddelde"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:417
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "Tel"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:423
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
 #, fuzzy, kde-format
 msgid "CountA"
 msgstr "Tel"
@@ -13581,7 +13581,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "Funksie"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:717
+#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Togo"
@@ -13967,7 +13967,7 @@ msgstr "Wydte: %1 %2"
 msgid "Hide Column"
 msgstr "Steek weg Kolom"
 
-#: part/Headers.cpp:233 part/Headers.cpp:724
+#: part/Headers.cpp:233 part/Headers.cpp:725
 #, fuzzy, kde-format
 msgid "Area is too large."
 msgstr "Area te groot!"
@@ -13982,409 +13982,409 @@ msgstr ""
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Niks na druk."
 
-#: part/View.cpp:225
+#: part/View.cpp:227
 #, fuzzy, kde-format
 msgid "Sheet Properties..."
 msgstr "Staat Styl..."
 
-#: part/View.cpp:228
+#: part/View.cpp:230
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:231 part/View.cpp:2005
+#: part/View.cpp:233 part/View.cpp:2022
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Voeg by Staat"
 
-#: part/View.cpp:232
+#: part/View.cpp:234
 #, fuzzy, kde-format
 msgid "Insert a new sheet"
 msgstr "Voeg by 'n nuwe staat."
 
-#: part/View.cpp:236
+#: part/View.cpp:238
 #, fuzzy, kde-format
 #| msgid "Recalculate Sheet"
 msgid "Duplicate Sheet"
 msgstr "Herbereken Staat"
 
-#: part/View.cpp:237
+#: part/View.cpp:239
 #, fuzzy, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Steek weg die aktief staat."
 
-#: part/View.cpp:242 part/View.cpp:1813 part/View.cpp:1818 part/View.cpp:2010
+#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Verwyder Staat"
 
-#: part/View.cpp:243 part/View.cpp:2006 part/View.cpp:2011
+#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Verwyder die aktief staat."
 
-#: part/View.cpp:247
+#: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Herbenaam Staat..."
 
-#: part/View.cpp:250
+#: part/View.cpp:252
 #, fuzzy, kde-format
 msgid "Rename the active sheet"
 msgstr "Herbenaam die aktief staat."
 
-#: part/View.cpp:252
+#: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Vertoon Staat..."
 
-#: part/View.cpp:255
+#: part/View.cpp:257
 #, fuzzy, kde-format
 msgid "Show a hidden sheet"
 msgstr "Vertoon 'n weg gesteekte staat."
 
-#: part/View.cpp:257
+#: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Steek weg Staat"
 
-#: part/View.cpp:260
+#: part/View.cpp:262
 #, fuzzy, kde-format
 msgid "Hide the active sheet"
 msgstr "Steek weg die aktief staat."
 
-#: part/View.cpp:262
+#: part/View.cpp:264
 #, fuzzy, kde-format
 msgid "Page Layout..."
 msgstr "Papier Uitleg..."
 
-#: part/View.cpp:265
+#: part/View.cpp:267
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr ""
 
-#: part/View.cpp:267
+#: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Herstel Druk Omvang"
 
-#: part/View.cpp:270
+#: part/View.cpp:272
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Definieer die druk omvang in die huidige staat."
 
-#: part/View.cpp:272
+#: part/View.cpp:274
 #, fuzzy, kde-format
 #| msgid "Border Outline"
 msgid "Page Outline"
 msgstr "Grens Buitelyn"
 
-#: part/View.cpp:273
+#: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr ""
 
-#: part/View.cpp:277
+#: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Herbereken Staat"
 
-#: part/View.cpp:279 part/View.cpp:287
+#: part/View.cpp:281 part/View.cpp:289
 #, fuzzy, kde-format
 #| msgid "Recalculate Sheet"
 msgid "Recalculate"
 msgstr "Herbereken Staat"
 
-#: part/View.cpp:283
+#: part/View.cpp:285
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Herbereken die waarde van elke sel in die huidige werkvel."
 
-#: part/View.cpp:285
+#: part/View.cpp:287
 #, fuzzy, kde-format
 msgid "Recalculate Document"
 msgstr "Herbereken Staat"
 
-#: part/View.cpp:291
+#: part/View.cpp:293
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Herbereken die waarde van elke sel in die huidige werkvel."
 
-#: part/View.cpp:293
+#: part/View.cpp:295
 #, fuzzy, kde-format
 msgid "Protect &Sheet..."
 msgstr "Volgende Staat"
 
-#: part/View.cpp:295
+#: part/View.cpp:297
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr ""
 
-#: part/View.cpp:298
+#: part/View.cpp:300
 #, fuzzy, kde-format
 msgid "Protect &Document..."
 msgstr "Presisie"
 
-#: part/View.cpp:300
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr ""
 
-#: part/View.cpp:305
+#: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "Skep Werkvoorbeeld Van Dokument..."
 
-#: part/View.cpp:309
+#: part/View.cpp:311
 #, fuzzy, kde-format
 #| msgid "Andorra"
 msgid "Anchor"
 msgstr "Andorra"
 
-#: part/View.cpp:310 part/View.cpp:1037 part/View.cpp:1502
+#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
 #, kde-format
 msgid "Cell"
 msgstr "Sel"
 
-#: part/View.cpp:311 part/View.cpp:1037
+#: part/View.cpp:313 part/View.cpp:1054
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
 msgstr "bladsy"
 
-#: part/View.cpp:313
+#: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:319
+#: part/View.cpp:321
 #, kde-format
 msgid "Next Sheet"
 msgstr "Volgende Staat"
 
-#: part/View.cpp:320
+#: part/View.cpp:322
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Next"
 msgstr "Teks"
 
-#: part/View.cpp:321
+#: part/View.cpp:323
 #, fuzzy, kde-format
 msgid "Move to the next sheet"
 msgstr "Beweeg na die volgende staat."
 
-#: part/View.cpp:326
+#: part/View.cpp:328
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Vorige Staat"
 
-#: part/View.cpp:327
+#: part/View.cpp:329
 #, fuzzy, kde-format
 #| msgid "Previous Sheet"
 msgid "Previous"
 msgstr "Vorige Staat"
 
-#: part/View.cpp:328
+#: part/View.cpp:330
 #, fuzzy, kde-format
 msgid "Move to the previous sheet"
 msgstr "Beweeg na die vorige staat."
 
-#: part/View.cpp:333
+#: part/View.cpp:335
 #, kde-format
 msgid "First Sheet"
 msgstr "Eerste Staat"
 
-#: part/View.cpp:334
+#: part/View.cpp:336
 #, fuzzy, kde-format
 #| msgid "First Key"
 msgid "First"
 msgstr "Eerste Sleutel"
 
-#: part/View.cpp:335
+#: part/View.cpp:337
 #, fuzzy, kde-format
 msgid "Move to the first sheet"
 msgstr "Beweeg na die eerste staat."
 
-#: part/View.cpp:339
+#: part/View.cpp:341
 #, kde-format
 msgid "Last Sheet"
 msgstr "Laaste Staat"
 
-#: part/View.cpp:340
+#: part/View.cpp:342
 #, fuzzy, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Lys:"
 
-#: part/View.cpp:341
+#: part/View.cpp:343
 #, fuzzy, kde-format
 msgid "Move to the last sheet"
 msgstr "Beweeg na die laaste staat."
 
-#: part/View.cpp:347
+#: part/View.cpp:349
 #, fuzzy, kde-format
 msgid "Column Header"
 msgstr "Kolom Nommer"
 
-#: part/View.cpp:348
+#: part/View.cpp:350
 #, fuzzy, kde-format
 #| msgid "Show c&olumn header"
 msgid "Show the column header"
 msgstr "Vertoon kolom opskrif"
 
-#: part/View.cpp:352
+#: part/View.cpp:354
 #, fuzzy, kde-format
 msgid "Row Header"
 msgstr "grootter"
 
-#: part/View.cpp:353
+#: part/View.cpp:355
 #, fuzzy, kde-format
 #| msgid "Show &row header"
 msgid "Show the row header"
 msgstr "Vertoon ry opskrif"
 
-#: part/View.cpp:357
+#: part/View.cpp:359
 #, fuzzy, kde-format
 #| msgid "Show &horizontal scrollbar"
 msgid "Horizontal Scrollbar"
 msgstr "Vertoon horisontaal rolstaaf"
 
-#: part/View.cpp:358
+#: part/View.cpp:360
 #, fuzzy, kde-format
 #| msgid "Show &horizontal scrollbar"
 msgid "Show the horizontal scrollbar"
 msgstr "Vertoon horisontaal rolstaaf"
 
-#: part/View.cpp:362
+#: part/View.cpp:364
 #, fuzzy, kde-format
 #| msgid "Show &vertical scrollbar"
 msgid "Vertical Scrollbar"
 msgstr "Vertoon vertikaal rolstaaf"
 
-#: part/View.cpp:363
+#: part/View.cpp:365
 #, fuzzy, kde-format
 #| msgid "Show &vertical scrollbar"
 msgid "Show the vertical scrollbar"
 msgstr "Vertoon vertikaal rolstaaf"
 
-#: part/View.cpp:367
+#: part/View.cpp:369
 #, fuzzy, kde-format
 msgid "Status Bar"
 msgstr "Vertoon statusbalk"
 
-#: part/View.cpp:368
+#: part/View.cpp:370
 #, fuzzy, kde-format
 msgid "Show the status bar"
 msgstr "Vertoon statusbalk"
 
-#: part/View.cpp:372
+#: part/View.cpp:374
 #, fuzzy, kde-format
 msgid "Tab Bar"
 msgstr "Vertoon Tabel"
 
-#: part/View.cpp:373
+#: part/View.cpp:375
 #, fuzzy, kde-format
 msgid "Show the tab bar"
 msgstr "Vertoon statusbalk"
 
-#: part/View.cpp:378
+#: part/View.cpp:380
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Stel verskeie Kspread opsies."
 
-#: part/View.cpp:390
+#: part/View.cpp:392
 #, kde-format
 msgid "No calculation"
 msgstr "Nee berekening"
 
-#: part/View.cpp:396
+#: part/View.cpp:398
 #, fuzzy, kde-format
 msgid "Calculate using sum"
 msgstr "Bereken te gebruik som"
 
-#: part/View.cpp:402
+#: part/View.cpp:404
 #, fuzzy, kde-format
 msgid "Calculate using minimum"
 msgstr "Bereken te gebruik minimum"
 
-#: part/View.cpp:408
+#: part/View.cpp:410
 #, fuzzy, kde-format
 msgid "Calculate using maximum"
 msgstr "Bereken te gebruik maksimum"
 
-#: part/View.cpp:414
+#: part/View.cpp:416
 #, fuzzy, kde-format
 msgid "Calculate using average"
 msgstr "Bereken te gebruik gemiddelde"
 
-#: part/View.cpp:420
+#: part/View.cpp:422
 #, fuzzy, kde-format
 msgid "Calculate using the count"
 msgstr "Bereken te gebruik die tel"
 
-#: part/View.cpp:426
+#: part/View.cpp:428
 #, fuzzy, kde-format
 msgid "Calculate using the countA"
 msgstr "Bereken te gebruik die tel"
 
-#: part/View.cpp:1389 part/View.cpp:1408 part/View.cpp:1835
+#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Jy kan nie uitvee die slegs staat."
 
-#: part/View.cpp:1428
+#: part/View.cpp:1445
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Jy kan nie steek weg die laaste sigbare tabel."
 
-#: part/View.cpp:1510
+#: part/View.cpp:1527
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1522
+#: part/View.cpp:1539
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1530
+#: part/View.cpp:1547
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1546
+#: part/View.cpp:1563
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Presisie"
 
-#: part/View.cpp:1548
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Presisie"
 
-#: part/View.cpp:1567
+#: part/View.cpp:1584
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Vooraf kies"
 
-#: part/View.cpp:1569
+#: part/View.cpp:1586
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Vooraf kies"
 
-#: part/View.cpp:1804
+#: part/View.cpp:1821
 #, fuzzy
 #| msgid "Reset Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Herstel Druk Omvang"
 
-#: part/View.cpp:1813
+#: part/View.cpp:1830
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Jy kan nie uitvee die slegs staat."
 
-#: part/View.cpp:1817
+#: part/View.cpp:1834
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14393,62 +14393,62 @@ msgstr ""
 "Jy word aangaande na verwyder die aktief staat.\n"
 "Doen Jy wil hê na gaan voort?"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Enter name:"
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1841
+#: part/View.cpp:1858
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Herbenaam Staat"
 
-#: part/View.cpp:1847 part/View.cpp:1853
+#: part/View.cpp:1864 part/View.cpp:1870
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Verander Staat Naam"
 
-#: part/View.cpp:1847
+#: part/View.cpp:1864
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Staat naam kan nie wees leeg."
 
-#: part/View.cpp:1853
+#: part/View.cpp:1870
 #, kde-format
 msgid "This name is already used."
 msgstr "Hierdie naam is alreeds gebruik word."
 
-#: part/View.cpp:1921
+#: part/View.cpp:1938
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr " Som: %1"
 
-#: part/View.cpp:1925
+#: part/View.cpp:1942
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Gemiddelde: %1"
 
-#: part/View.cpp:1929
+#: part/View.cpp:1946
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Min: %1"
 
-#: part/View.cpp:1933
+#: part/View.cpp:1950
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Max: %1"
 
-#: part/View.cpp:1937
+#: part/View.cpp:1954
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Tel: %1"
 
-#: part/View.cpp:1941
+#: part/View.cpp:1958
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Tel: %1"
 
-#: part/View.cpp:1948
+#: part/View.cpp:1965
 #, kde-format
 msgid "%1x%2"
 msgstr ""

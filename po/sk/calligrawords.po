@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2023-12-06 18:27+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -547,7 +547,7 @@ msgstr "Štýl"
 msgid "Clone"
 msgstr "Klonovať"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Zmazať"
@@ -665,7 +665,7 @@ msgid "Page Size && Margins"
 msgstr "Rozmer stránky && Okraje"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Vytvoriť"
@@ -1505,32 +1505,32 @@ msgstr "Kurzor myši X:Y"
 msgid "Zoom Controller"
 msgstr "Správca zoomu"
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr "Ukončiť režim celej obrazovky"
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
 msgstr "Vlastnosti tvaru..."
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr "Zmeniť ako sa tvar správa"
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
 msgstr "Vytvoriť šablónu z dokumentu..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Uložiť tento dokument a použiť ho neskôr aok šablónu"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1539,17 +1539,17 @@ msgstr ""
 "Môžete uložiť tento dokument ako šablónu.<br><br>Môžete použiť túto novú "
 "šablónu ako štartovací bol pre iný dokument."
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
 msgstr "Ukázať formátovacie znaky"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Prepnúť zobrazenie netlačiteľných znakov"
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
@@ -1559,17 +1559,17 @@ msgstr ""
 "Prepnúť zobrazenie netlačiteľných znakov.<br/><br/>Ak je toto zapnuté, Words "
 "bude zobrazovať tabulátory, medzery, konce riadkov a iné netlačiteľné znaky."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr "Zobraziť tieňovania poľa"
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr "Prepnúť tieňované pozadia polí"
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
@@ -1578,17 +1578,17 @@ msgstr ""
 "Prepnúť vizualizáciu polí (premenné a pod.) zobrazením ich pozadia v "
 "kontrastnej farbe."
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
 msgstr "Zobraziť hranice textového tvaru"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
 msgstr "Prepne zobrazenie okrajov"
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
@@ -1598,17 +1598,17 @@ msgstr ""
 "Prepne zobrazenie okrajov.<br/><br/>Okraje sa nikdy netlačia. Táto voľba sa "
 "hodí, ak chcete vidieť, ako sa dokument zobrazí po vytlačení."
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
 msgstr "Zobraziť hranice tabuľky"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Prepnúť zobrazenie hraníc tabuľky"
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
@@ -1617,17 +1617,17 @@ msgstr ""
 "Prepnúť zobrazenie hraníc tabuľky.<br/><br/>Ak je toto zapnuté, Words bude "
 "zobrazovať neviditeľné hranice tabuľky tenkou šedou čiarou."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
 msgstr "Zobraziť hranice oblasti"
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Prepnúť zobrazenie hraníc oblasti"
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
@@ -1636,17 +1636,17 @@ msgstr ""
 "Prepnúť zobrazenie hraníc oblasti.<br/><br/>Ak je toto zapnuté, všetky "
 "hranice oblasti budú zobrazené tenkými šedými vodorovnými konzolami"
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Zobraziť pravítko"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, kde-format
 msgid "Shows or hides rulers"
 msgstr "Zobrazí alebo skryje pravítko"
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
@@ -1658,42 +1658,42 @@ msgstr ""
 "stránky a rámcov a dajú sa použiť, okrem iného, aj na umiestnenie "
 "tabulátorov. <p>Vypnutím tejto voľby vypnete zobrazenie pravítiek.</p>"
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Pripnúť k mriežke"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Zobraziť stavový riadok"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Zobraziť alebo skryť stavový riadok"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr "Režim celej obrazovky"
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr "Nastaviť pohľad v režime celej obrazovky"
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
 msgstr "Sémantické štýly..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
 msgstr "Upraviť a pridať sémantické štýly"
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
@@ -1702,22 +1702,22 @@ msgstr ""
 "Štýly sa používajú na formátovanie zobrazenia informácií, ktoré sú uložené v "
 "RDF."
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
 msgstr "Nastaviť..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
 msgstr "Vzhľad stránky..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
 msgstr "Zmeniť vlastnosti celej stránky"
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
@@ -1726,32 +1726,32 @@ msgstr ""
 "Zmeniť vlastnosti celej stránky.<p>Momentálne môžete zmeniť veľkosť papiera, "
 "jeho orientáciu, veľkosť hlavičky a pätičky a nastavenie stĺpcov.</p>"
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
 msgstr "Vytvoriť hlavičku"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
 msgstr "Vytvoriť pätu"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
 msgstr "Zobraziť komentáre"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
 msgstr "Zobraziť komentáre v dokumente"
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr "Počet slov"
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
 msgstr "Zobrazí alebo skryje počet slov v stavovom riadku"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -590,7 +590,7 @@ msgstr "Gaya:"
 msgid "Clone"
 msgstr "Penutup"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:302
+#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Hapuskan Baris"
@@ -716,7 +716,7 @@ msgid "Page Size && Margins"
 msgstr "Lindungi Saiz"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:407
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
 #, fuzzy, kde-format
 msgid "Create"
 msgstr "Cipta Jadual"
@@ -1593,34 +1593,34 @@ msgstr ""
 msgid "Zoom Controller"
 msgstr ""
 
-#: part/KWView.cpp:184
+#: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:276
+#: part/KWView.cpp:278
 #, fuzzy, kde-format
 #| msgid "Frame Properties"
 msgid "Shape Properties..."
 msgstr "Ciri Bingkai"
 
-#: part/KWView.cpp:278
+#: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
 msgstr ""
 
-#: part/KWView.cpp:287
+#: part/KWView.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Create Template From Document..."
 msgid "Create Template From Document..."
 msgstr "&Cipta Templat Dari Dokumen..."
 
-#: part/KWView.cpp:288
+#: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
 msgstr "Simpan dokumen ini dan gunakannya kemudian sebagai templat"
 
-#: part/KWView.cpp:290
+#: part/KWView.cpp:292
 #, kde-format
 msgid ""
 "You can save this document as a template.<br><br>You can use this new "
@@ -1629,18 +1629,18 @@ msgstr ""
 "Anda boleh simpan dokumen ini sebagai templat.<br><br>Anda boleh gunakan "
 "templat baru ini sebagai titik mula untuk dokumen lain. "
 
-#: part/KWView.cpp:309
+#: part/KWView.cpp:311
 #, fuzzy, kde-format
 #| msgid "&Formatting Characters"
 msgid "Show Formatting Characters"
 msgstr "&Memformatkan Aksara"
 
-#: part/KWView.cpp:315
+#: part/KWView.cpp:317
 #, fuzzy, kde-format
 msgid "Toggle the display of non-printing characters"
 msgstr "Toggel paparan aksara tak cetak."
 
-#: part/KWView.cpp:317
+#: part/KWView.cpp:319
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1655,35 +1655,35 @@ msgstr ""
 "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
 "anda."
 
-#: part/KWView.cpp:320
+#: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
 msgstr ""
 
-#: part/KWView.cpp:326
+#: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
 msgstr ""
 
-#: part/KWView.cpp:327
+#: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
 
-#: part/KWView.cpp:329
+#: part/KWView.cpp:331
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Text Shape Borders"
 msgstr "Konfigur Sempadan Jadual"
 
-#: part/KWView.cpp:330
+#: part/KWView.cpp:332
 #, fuzzy, kde-format
 msgid "Turns the border display on and off"
 msgstr "Buka dan tutup paparan sempadan."
 
-#: part/KWView.cpp:337
+#: part/KWView.cpp:339
 #, fuzzy, kde-format
 #| msgid ""
 #| "Turns the border display on and off.<br><br>The borders are never "
@@ -1697,18 +1697,18 @@ msgstr ""
 "Buka dan tutup paparan sempadan.<br><br>Sempadan tidak akan dicetak. Pilihan "
 "ini berguna untuk melihat bagaimana rupa dokumen pada halaman bercetak. "
 
-#: part/KWView.cpp:340
+#: part/KWView.cpp:342
 #, fuzzy, kde-format
 #| msgid "Configure Table Borders"
 msgid "Show Table Borders"
 msgstr "Konfigur Sempadan Jadual"
 
-#: part/KWView.cpp:346
+#: part/KWView.cpp:348
 #, fuzzy, kde-format
 msgid "Toggle the display of table borders"
 msgstr "Toggel paparan aksara tak cetak."
 
-#: part/KWView.cpp:348
+#: part/KWView.cpp:350
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1722,17 +1722,17 @@ msgstr ""
 "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
 "anda."
 
-#: part/KWView.cpp:350
+#: part/KWView.cpp:352
 #, fuzzy, kde-format
 msgid "Show Section Bounds"
 msgstr "Ubah pilihan autopembetulan."
 
-#: part/KWView.cpp:356
+#: part/KWView.cpp:358
 #, fuzzy, kde-format
 msgid "Toggle the display of section bounds"
 msgstr "Toggel paparan aksara tak cetak."
 
-#: part/KWView.cpp:358
+#: part/KWView.cpp:360
 #, fuzzy, kde-format
 #| msgid ""
 #| "Toggle the display of non-printing characters.<br><br>When this is "
@@ -1746,17 +1746,17 @@ msgstr ""
 "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
 "anda."
 
-#: part/KWView.cpp:360
+#: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
 msgstr "Papar Pembaris"
 
-#: part/KWView.cpp:362
+#: part/KWView.cpp:364
 #, fuzzy, kde-format
 msgid "Shows or hides rulers"
 msgstr "Papar atau sembunyikan pembaris."
 
-#: part/KWView.cpp:364
+#: part/KWView.cpp:366
 #, fuzzy, kde-format
 #| msgid ""
 #| "The rulers are the white measuring spaces top and left of the document. "
@@ -1774,70 +1774,70 @@ msgstr ""
 "digunakan untuk menentukan posisi penjadual.<p>Nyahsemak ini untuk "
 "menyahaktifkan pembaris dari dipaparkan."
 
-#: part/KWView.cpp:375
+#: part/KWView.cpp:377
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Papar Pengaki"
 
-#: part/KWView.cpp:383
+#: part/KWView.cpp:385
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Show Status Bar"
 msgstr "Papar bar &status"
 
-#: part/KWView.cpp:384
+#: part/KWView.cpp:386
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Shows or hides the status bar"
 msgstr "Papar bar &status"
 
-#: part/KWView.cpp:390
+#: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: part/KWView.cpp:391
+#: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
 msgstr ""
 
-#: part/KWView.cpp:398
+#: part/KWView.cpp:400
 #, fuzzy, kde-format
 #| msgid "Import Styles..."
 msgid "Semantic Stylesheets..."
 msgstr "Import Gaya..."
 
-#: part/KWView.cpp:400
+#: part/KWView.cpp:402
 #, fuzzy, kde-format
 #| msgid "Import Styles..."
 msgid "Modify and add semantic stylesheets"
 msgstr "Import Gaya..."
 
-#: part/KWView.cpp:401
+#: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
 
-#: part/KWView.cpp:416
+#: part/KWView.cpp:418
 #, fuzzy, kde-format
 #| msgid "C&onfigure..."
 msgid "Configure..."
 msgstr "&Konfigur..."
 
-#: part/KWView.cpp:425
+#: part/KWView.cpp:427
 #, fuzzy, kde-format
 #| msgid "Page &Layout..."
 msgid "Page Layout..."
 msgstr "&Bentangan Halaman..."
 
-#: part/KWView.cpp:427
+#: part/KWView.cpp:429
 #, fuzzy, kde-format
 msgid "Change properties of entire page"
 msgstr "Ubah ciri seluruh halaman."
 
-#: part/KWView.cpp:429
+#: part/KWView.cpp:431
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change properties of the entire page.<p>Currently you can change paper "
@@ -1849,35 +1849,35 @@ msgstr ""
 "Ubah ciri seluruh halaman.<p>Kini anda boleh ubah saiz kertas, orientasi "
 "kertas, saiz pengepala dan pengaki, dan seting lajur."
 
-#: part/KWView.cpp:432
+#: part/KWView.cpp:434
 #, fuzzy, kde-format
 #| msgid "Create Text Frame"
 msgid "Create Header"
 msgstr "Cipta Bingkai Teks"
 
-#: part/KWView.cpp:438
+#: part/KWView.cpp:440
 #, fuzzy, kde-format
 #| msgid "Create Text Frame"
 msgid "Create Footer"
 msgstr "Cipta Bingkai Teks"
 
-#: part/KWView.cpp:445
+#: part/KWView.cpp:447
 #, fuzzy, kde-format
 #| msgid "Remove Comment"
 msgid "Show Comments"
 msgstr "Alih Keluar Komen"
 
-#: part/KWView.cpp:446
+#: part/KWView.cpp:448
 #, fuzzy, kde-format
 msgid "Shows comments in the document"
 msgstr "Papar teks dokumen sahaja."
 
-#: part/KWView.cpp:452
+#: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
 msgstr ""
 
-#: part/KWView.cpp:453
+#: part/KWView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Show &status bar"
 msgid "Shows or hides word counting in status bar"

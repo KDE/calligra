@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 13:34+0530\n"
 "Last-Translator: தங்கமணி அருண் <thangam.arunx@gmail.com>\n"
 "Language-Team:  உபண்டு தமிழ் குழுமம் <ubuntu-l10n-tam@lists.ubuntu.co>>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 #, fuzzy
 #| msgid "Boolean Operation"
 msgctxt "(qtundo-format)"
@@ -402,46 +402,38 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "thangam.arunx@gmail.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr ""
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Choose Gradient to Add"
 msgid "Choose Graphic to Add"
 msgstr "சேர்ப்பதற்கான சரிவானை தேர்ந்தெடுதெடு"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Import graphic"
 msgstr ""
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
-
-#: ui/KarbonView.cpp:634
-#, fuzzy
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
-msgctxt "(qtundo-format)"
-msgid "Mirror Horizontally"
-msgstr "&கிடைமட்டம்:"
 
 #: ui/KarbonView.cpp:636
 #, fuzzy
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgctxt "(qtundo-format)"
-msgid "Mirror Vertically"
+msgid "Mirror Horizontally"
 msgstr "&கிடைமட்டம்:"
 
 #: ui/KarbonView.cpp:638
@@ -449,184 +441,192 @@ msgstr "&கிடைமட்டம்:"
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "&கிடைமட்டம்:"
+
+#: ui/KarbonView.cpp:640
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "&கிடைமட்டம்:"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 #, fuzzy
 #| msgid "Flatten Path"
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "தட்டையான பாதை"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr ""
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
 msgstr ""
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 #| msgid "Gradient"
 msgid "Edit Guides"
 msgstr "சரிவு"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "அடுக்கை நீக்கு"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Center (Horizontal)"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Gaps (Horizontal)"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Left Borders"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Right Borders"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Center (Vertical)"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Gaps (Vertical)"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Bottom Borders"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, fuzzy, kde-format
 #| msgid "&Distribute"
 msgid "Distribute Top Borders"
 msgstr "&வழங்கு"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, fuzzy, kde-format
 #| msgid "Show grid:"
 msgid "Show Color Palette"
 msgstr "கட்டத்தை காட்டு:"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, fuzzy, kde-format
 #| msgid "Show grid:"
 msgid "Show or hide color palette"
 msgstr "கட்டத்தை காட்டு:"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Clip Object"
 msgstr "&பொருள்"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Unclip Objects"
 msgstr "&பொருள்"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, fuzzy, kde-format
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgid "Mirror Vertically"
 msgstr "&கிடைமட்டம்:"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgid "Mirror Horizontally"
 msgstr "&கிடைமட்டம்:"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, fuzzy, kde-format
 #| msgid "Choose Pattern to Add"
 msgid "&Close Path"
 msgstr "சேர்ப்பதற்கான மாதிரியை தேர்ந்தெடு"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, fuzzy, kde-format
 #| msgid "Refine Path"
 msgid "Com&bine Path"
 msgstr "பாதையை சரியாக்கு"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, fuzzy, kde-format
 #| msgid "Flatten Path"
 msgid "Se&parate Path"
 msgstr "தட்டையான பாதை"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, fuzzy, kde-format
 #| msgid "Refine Path"
 msgid "Re&verse Path"
 msgstr "பாதையை சரியாக்கு"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, fuzzy, kde-format
 #| msgid "Refine Path"
 msgid "Intersect Paths"
 msgstr "பாதையை சரியாக்கு"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, fuzzy, kde-format
 #| msgid "Flatten Path"
 msgid "Subtract Paths"
 msgstr "தட்டையான பாதை"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, fuzzy, kde-format
 #| msgid "Refine Path"
 msgid "Unite Paths"
 msgstr "பாதையை சரியாக்கு"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr ""
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, fuzzy, kde-format
 #| msgid "Snap to grid:"
 msgid "Snap Path to Grid"
 msgstr "தடீர் கட்டம்:"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr ""
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr ""

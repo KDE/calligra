@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-13 00:39+0000\n"
 "PO-Revision-Date: 2009-03-02 21:39+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:760
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 #, fuzzy
 #| msgid "Boolean Operation"
 msgctxt "(qtundo-format)"
@@ -402,48 +402,40 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "raviratlami@aol.in,"
 
-#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:432
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 #, fuzzy
 #| msgid "Intersect Paths"
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "रस्ता इंटरसेक्ट करव"
 
-#: ui/KarbonView.cpp:367
+#: ui/KarbonView.cpp:369
 #, fuzzy, kde-format
 msgid "Choose Graphic to Add"
 msgstr "जोड़े बर अनुपात चुनव"
 
-#: ui/KarbonView.cpp:403
+#: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:403 ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, fuzzy, kde-format
 #| msgid "Intersect Paths"
 msgid "Import graphic"
 msgstr "रस्ता इंटरसेक्ट करव"
 
-#: ui/KarbonView.cpp:408 ui/KarbonView.cpp:415
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
-
-#: ui/KarbonView.cpp:634
-#, fuzzy
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
-msgctxt "(qtundo-format)"
-msgid "Mirror Horizontally"
-msgstr "आड़ा: (&H)"
 
 #: ui/KarbonView.cpp:636
 #, fuzzy
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgctxt "(qtundo-format)"
-msgid "Mirror Vertically"
+msgid "Mirror Horizontally"
 msgstr "आड़ा: (&H)"
 
 #: ui/KarbonView.cpp:638
@@ -451,176 +443,184 @@ msgstr "आड़ा: (&H)"
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:640
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "आड़ा: (&H)"
 
-#: ui/KarbonView.cpp:693
+#: ui/KarbonView.cpp:695
 #, fuzzy
 #| msgid "Se&parate Path"
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "रस्ता अलग करव (&p)"
 
-#: ui/KarbonView.cpp:874
+#: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
 msgstr ""
 
-#: ui/KarbonView.cpp:882
+#: ui/KarbonView.cpp:884
 #, fuzzy, kde-format
 #| msgid "Intersect Paths"
 msgid "&Import Graphic..."
 msgstr "रस्ता इंटरसेक्ट करव"
 
-#: ui/KarbonView.cpp:886
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 #| msgid "Edit Gradient"
 msgid "Edit Guides"
 msgstr "अनुपात संपादित करव"
 
-#: ui/KarbonView.cpp:892
+#: ui/KarbonView.cpp:894
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "दुहरी प्रति (&D)"
 
-#: ui/KarbonView.cpp:897
+#: ui/KarbonView.cpp:899
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Center (Horizontal)"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:901
+#: ui/KarbonView.cpp:903
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Gaps (Horizontal)"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:905
+#: ui/KarbonView.cpp:907
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Left Borders"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:911
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Right Borders"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:915
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Center (Vertical)"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:919
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Gaps (Vertical)"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:923
 #, fuzzy, kde-format
 #| msgid "Distribute Top Borders"
 msgid "Distribute Bottom Borders"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:927
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
 
-#: ui/KarbonView.cpp:929
+#: ui/KarbonView.cpp:931
 #, fuzzy, kde-format
 #| msgid "Shows or hides grid"
 msgid "Show Color Palette"
 msgstr "ग्रिड देखाव या लुकाव"
 
-#: ui/KarbonView.cpp:931
+#: ui/KarbonView.cpp:933
 #, fuzzy, kde-format
 #| msgid "Shows or hides grid"
 msgid "Show or hide color palette"
 msgstr "ग्रिड देखाव या लुकाव"
 
-#: ui/KarbonView.cpp:935
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Clip Object"
 msgstr "चीज (&O)"
 
-#: ui/KarbonView.cpp:939
+#: ui/KarbonView.cpp:941
 #, fuzzy, kde-format
 #| msgid "&Ungroup Objects"
 msgid "&Unclip Objects"
 msgstr "चीज मन से समूह हटाव (&U)"
 
-#: ui/KarbonView.cpp:943
+#: ui/KarbonView.cpp:945
 #, fuzzy, kde-format
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgid "Mirror Vertically"
 msgstr "आड़ा: (&H)"
 
-#: ui/KarbonView.cpp:947
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 #| msgctxt "Horizontal grid spacing"
 #| msgid "&Horizontal:"
 msgid "Mirror Horizontally"
 msgstr "आड़ा: (&H)"
 
-#: ui/KarbonView.cpp:954
+#: ui/KarbonView.cpp:956
 #, kde-format
 msgid "&Close Path"
 msgstr "रस्ता बंद करव (&C)"
 
-#: ui/KarbonView.cpp:960
+#: ui/KarbonView.cpp:962
 #, kde-format
 msgid "Com&bine Path"
 msgstr "रस्ता कम्बाइन करव (&b)"
 
-#: ui/KarbonView.cpp:966
+#: ui/KarbonView.cpp:968
 #, kde-format
 msgid "Se&parate Path"
 msgstr "रस्ता अलग करव (&p)"
 
-#: ui/KarbonView.cpp:972
+#: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
 msgstr "रस्ता उलटा करव (&v)"
 
-#: ui/KarbonView.cpp:978
+#: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
 msgstr "रस्ता इंटरसेक्ट करव"
 
-#: ui/KarbonView.cpp:984
+#: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
 msgstr "रस्ता सब्सट्रेक्ट करव"
 
-#: ui/KarbonView.cpp:990
+#: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
 msgstr "रस्ता यूनाइट करव"
 
-#: ui/KarbonView.cpp:996
+#: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
 msgstr "रस्ता एक्सक्लूड"
 
-#: ui/KarbonView.cpp:1002
+#: ui/KarbonView.cpp:1004
 #, fuzzy, kde-format
 #| msgid "Snap to Grid"
 msgid "Snap Path to Grid"
 msgstr "ग्रिड मं स्नेप करव"
 
-#: ui/KarbonView.cpp:1010
+#: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "चयन मं जूम करव"
 
-#: ui/KarbonView.cpp:1014
+#: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "ड्राइंग म जूम करव"
