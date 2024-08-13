@@ -54,7 +54,7 @@ void KoPAPageBase::paintBackground(QPainter &painter, const KoViewConverter &con
     painter.save();
     applyConversion(painter, converter);
     KoPageLayout layout = pageLayout();
-    painter.setPen(QPen(Qt::black, 0));
+    painter.setPen(Qt::NoPen);
 
     if (background()) {
         QPainterPath p;

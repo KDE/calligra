@@ -25,6 +25,7 @@
 
 // Qt includes
 #include <QBrush>
+#include <QGraphicsDropShadowEffect>
 #include <QPainter>
 #include <QPainterPath>
 
@@ -37,6 +38,12 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::StrongFocus);
     connect(document, &KWDocument::pageSetupChanged, this, &KWCanvas::pageSetupChanged);
+
+    auto effect = new QGraphicsDropShadowEffect(this);
+    effect->setBlurRadius(8);
+    effect->setOffset(0);
+    effect->setColor(QColor(0, 0, 0, 255));
+    setGraphicsEffect(effect);
     if (m_view != nullptr) {
         m_viewConverter = m_view->viewConverter();
     }

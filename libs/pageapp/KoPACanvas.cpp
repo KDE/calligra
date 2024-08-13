@@ -16,6 +16,7 @@
 
 #include <kxmlguifactory.h>
 
+#include <QGraphicsDropShadowEffect>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPainter>
@@ -26,6 +27,11 @@ KoPACanvas::KoPACanvas(KoPAViewBase *view, KoPADocument *doc, QWidget *parent, Q
 {
     setView(view);
     setFocusPolicy(Qt::StrongFocus);
+    auto effect = new QGraphicsDropShadowEffect(this);
+    effect->setBlurRadius(8);
+    effect->setOffset(0);
+    effect->setColor(QColor(0, 0, 0, 255));
+    setGraphicsEffect(effect);
     // this is much faster than painting it in the paintevent
     setAutoFillBackground(true);
     updateSize();

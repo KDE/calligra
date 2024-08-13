@@ -215,16 +215,6 @@ void KoPAViewModeNormal::changePageLayout(const KoPageLayout &pageLayout, bool a
 
 void KoPAViewModeNormal::paintMargins(QPainter &painter, const KoViewConverter &converter)
 {
-    if (!canvas()->showPageMargins()) {
-        return;
-    }
-    KoPAPageBase *page = m_view->activePage();
-    KoPageLayout pl = page->pageLayout();
-
-    QSizeF pageSize = QSizeF(pl.width, pl.height);
-    QRectF marginRect(pl.leftMargin, pl.topMargin, pageSize.width() - pl.leftMargin - pl.rightMargin, pageSize.height() - pl.topMargin - pl.bottomMargin);
-
-    QPen pen(Qt::gray, 0);
-    painter.setPen(pen);
-    painter.drawRect(converter.documentToView(marginRect));
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
