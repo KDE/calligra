@@ -81,43 +81,15 @@ private:
     int m_widgetIndex;
 };
 
-class KoSectionListDelegate : public QStyledItemDelegate
-{
-public:
-    KoSectionListDelegate(QObject *parent = nullptr)
-        : QStyledItemDelegate(parent)
-    {
-    }
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
-    {
-        QStyledItemDelegate::paint(painter, option, index);
-
-        if (!(option.state & (int)!(QStyle::State_Sibling & QStyle::State_Enabled))) {
-            int ypos = option.rect.y() + ((option.rect.height() - 2) / 2);
-            QRect lineRect(option.rect.left(), ypos, option.rect.width(), 2);
-            QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomRight());
-            gradient.setColorAt(option.direction == Qt::LeftToRight ? 0 : 1, option.palette.color(QPalette::Text));
-            gradient.setColorAt(option.direction == Qt::LeftToRight ? 1 : 0, Qt::transparent);
-
-            painter->fillRect(lineRect, gradient);
-        }
-    }
-};
-
 class KoOpenPanePrivate : public Ui_KoOpenPaneBase
 {
 public:
     KoOpenPanePrivate()
         : Ui_KoOpenPaneBase()
     {
-        m_customWidgetsSeparator = 0;
-        m_templatesSeparator = 0;
     }
 
     int m_freeCustomWidgetIndex;
-    KoSectionListItem *m_customWidgetsSeparator;
-    KoSectionListItem *m_templatesSeparator;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, const QStringList &mimeFilter, const QString &templatesResourcePath)
@@ -130,9 +102,6 @@ KoOpenPane::KoOpenPane(QWidget *parent, const QStringList &mimeFilter, const QSt
     d->m_openExistingButton->setText(i18n("Open Existing Document"));
 
     connect(d->m_openExistingButton, &QAbstractButton::clicked, this, &KoOpenPane::openFileDialog);
-
-    KoSectionListDelegate *delegate = new KoSectionListDelegate(d->m_sectionList);
-    d->m_sectionList->setItemDelegate(delegate);
 
     connect(d->m_sectionList, &QTreeWidget::itemSelectionChanged, this, &KoOpenPane::updateSelectedWidget);
     connect(d->m_sectionList, &QTreeWidget::itemClicked, this, &KoOpenPane::itemClicked);
@@ -221,10 +190,6 @@ void KoOpenPane::initTemplates(const QString &templatesResourcePath)
                 continue;
             }
 
-            if (!d->m_templatesSeparator) {
-                d->m_templatesSeparator = new KoSectionListItem(d->m_sectionList, "", 999);
-            }
-
             KoTemplatesPane *pane = new KoTemplatesPane(this, group->name(), group, templateTree.defaultTemplate());
             connect(pane, &KoDetailsPane::openUrl, this, &KoOpenPane::openTemplate);
             connect(pane, &KoTemplatesPane::alwaysUseChanged, this, &KoOpenPane::alwaysUseChanged);
@@ -278,10 +243,6 @@ void KoOpenPane::dropEvent(QDropEvent *event)
 void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString &title, const QString &icon)
 {
     Q_ASSERT(widget);
-
-    if (!d->m_customWidgetsSeparator) {
-        d->m_customWidgetsSeparator = new KoSectionListItem(d->m_sectionList, "", 3);
-    }
 
     QString realtitle = title;
 
