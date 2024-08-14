@@ -9,22 +9,25 @@
 
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
+#include <QCloseEvent>
+#include <QDialogButtonBox>
 #include <QMessageBox>
 
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
-    : KoDialog(parent)
+    : QDialog(parent)
 {
-    setButtons(Ok | Cancel | Apply);
+    auto layout = new QVBoxLayout(this);
+    layout->setContentsMargins({});
     m_styleManagerWidget = new StyleManager(this);
-    setMainWidget(m_styleManagerWidget);
+    layout->addWidget(m_styleManagerWidget);
     setWindowTitle(i18n("Style Manager"));
 
-    connect(this, &StyleManagerDialog::applyClicked, this, &StyleManagerDialog::slotApplyClicked);
+    connect(m_styleManagerWidget->buttonBox(), &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_styleManagerWidget->buttonBox(), &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(m_styleManagerWidget->buttonBox()->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &StyleManagerDialog::slotApplyClicked);
 }
 
-StyleManagerDialog::~StyleManagerDialog()
-{
-}
+StyleManagerDialog::~StyleManagerDialog() = default;
 
 void StyleManagerDialog::slotApplyClicked()
 {
@@ -39,7 +42,7 @@ void StyleManagerDialog::accept()
         return;
     }
     m_styleManagerWidget->save();
-    KoDialog::accept();
+    QDialog::accept();
     deleteLater();
 }
 
@@ -66,7 +69,7 @@ void StyleManagerDialog::reject()
             return;
         }
     }
-    KoDialog::reject();
+    QDialog::reject();
     deleteLater();
 }
 

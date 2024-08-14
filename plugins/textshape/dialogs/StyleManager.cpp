@@ -24,7 +24,7 @@
 #include <QDebug>
 
 StyleManager::StyleManager(QWidget *parent)
-    : QWidget(parent)
+    : QSplitter(parent)
     , m_styleManager(0)
     , m_paragraphStylesModel(new StylesManagerModel(this))
     , m_characterStylesModel(new StylesManagerModel(this))
@@ -34,8 +34,10 @@ StyleManager::StyleManager(QWidget *parent)
     , m_unappliedStyleChanges(false)
 {
     widget.setupUi(this);
-    layout()->setContentsMargins({});
+    widget.tabs->tabBar()->setExpanding(true);
     widget.bNew->setToolTip(i18n("Create a new style inheriting the current style"));
+
+    widget.buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
 
     // Force "Base" background of the style listviews to white, so the background
     // is consistent with the one of the preview area. Also the usual document text colors
@@ -225,7 +227,7 @@ void StyleManager::save()
         setCharacterStyle(characterStyle);
     }
 
-    m_unappliedStyleChanges = false;
+    setUnappliedStyleChanges(false);
 }
 
 void StyleManager::currentParagraphStyleChanged()
@@ -235,7 +237,7 @@ void StyleManager::currentParagraphStyleChanged()
     if (style) {
         widget.paragraphStylePage->save();
         m_paragraphStylesModel->updateStyle(style);
-        m_unappliedStyleChanges = true;
+        setUnappliedStyleChanges(true);
     }
 }
 
@@ -256,7 +258,7 @@ void StyleManager::currentCharacterStyleChanged()
     if (style) {
         widget.characterStylePage->save();
         m_characterStylesModel->updateStyle(style);
-        m_unappliedStyleChanges = true;
+        setUnappliedStyleChanges(true);
     }
 }
 
@@ -275,7 +277,7 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
     widget.paragraphStylePage->setStyleManager(m_styleManager); // updates style combos
     m_paragraphStylesModel->addStyle(style);
     setParagraphStyle(style);
-    m_unappliedStyleChanges = true;
+    setUnappliedStyleChanges(true);
 }
 
 void StyleManager::addCharacterStyle(KoCharacterStyle *style)
@@ -283,7 +285,7 @@ void StyleManager::addCharacterStyle(KoCharacterStyle *style)
     widget.characterStylePage->setStyleManager(m_styleManager); // updates style combos
     m_characterStylesModel->addStyle(style);
     setCharacterStyle(style);
-    m_unappliedStyleChanges = true;
+    setUnappliedStyleChanges(true);
 }
 
 void StyleManager::removeParagraphStyle(KoParagraphStyle *style)
@@ -387,9 +389,18 @@ void StyleManager::tabChanged(int index)
     }
 }
 
-bool StyleManager::unappliedStyleChanges()
+bool StyleManager::unappliedStyleChanges() const
 {
     return m_unappliedStyleChanges;
+}
+
+void StyleManager::setUnappliedStyleChanges(bool unappliedStyleChanges)
+{
+    if (m_unappliedStyleChanges == unappliedStyleChanges) {
+        return;
+    }
+    m_unappliedStyleChanges = unappliedStyleChanges;
+    Q_EMIT unappliedStyleChangesChanged(m_unappliedStyleChanges);
 }
 
 bool StyleManager::checkUniqueStyleName()
@@ -437,4 +448,9 @@ bool StyleManager::checkUniqueStyleName(int widgetIndex)
         }
     }
     return unique;
+}
+
+QDialogButtonBox *StyleManager::buttonBox() const
+{
+    return widget.buttonBox;
 }

@@ -8,9 +8,10 @@
 #ifndef STYLEMANAGER_H
 #define STYLEMANAGER_H
 
+#include <qdialogbuttonbox.h>
 #include <ui_StyleManager.h>
 
-#include <QWidget>
+#include <QSplitter>
 
 class StylesManagerModel;
 class StylesSortFilterProxyModel;
@@ -20,8 +21,9 @@ class KoParagraphStyle;
 class KoCharacterStyle;
 
 class QModelIndex;
+class QDialogButtonBox;
 
-class StyleManager : public QWidget
+class StyleManager : public QSplitter
 {
     Q_OBJECT
 public:
@@ -35,11 +37,14 @@ public:
     // Check that the new name of style is unique or not
     bool checkUniqueStyleName();
 
+    QDialogButtonBox *buttonBox() const;
+
 public Q_SLOTS:
     void save();
     void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
-    bool unappliedStyleChanges();
+    bool unappliedStyleChanges() const;
+    void setUnappliedStyleChanges(bool unappliedStyleChanges);
 
 private Q_SLOTS:
     void slotParagraphStyleSelected(const QModelIndex &index);
@@ -54,6 +59,9 @@ private Q_SLOTS:
     void currentCharacterNameChanged(const QString &name);
     void buttonNewPressed();
     void tabChanged(int index);
+
+Q_SIGNALS:
+    void unappliedStyleChangesChanged(bool hasChange);
 
 private:
     bool checkUniqueStyleName(int widgetIndex);

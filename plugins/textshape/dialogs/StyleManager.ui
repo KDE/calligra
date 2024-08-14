@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>StyleManager</class>
- <widget class="QWidget" name="StyleManager">
+ <widget class="QSplitter" name="StyleManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,74 +10,123 @@
     <height>318</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>1</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QWidget" name="">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0" colspan="2">
-        <widget class="QTabWidget" name="tabs">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>99</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <widget class="QListView" name="paragraphStylesListView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>14</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <attribute name="title">
-           <string>Paragraph</string>
-          </attribute>
-         </widget>
-         <widget class="QListView" name="characterStylesListView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>14</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <attribute name="title">
-           <string>Character</string>
-          </attribute>
-         </widget>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="bNew">
-         <property name="text">
-          <string>&amp;New</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="bDelete">
-         <property name="text">
-          <string>Delete</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+  <widget class="QWidget">
+   <layout class="QVBoxLayout" name="sidebarLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabs">
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>99</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <widget class="QListView" name="paragraphStylesListView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>14</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <attribute name="title">
+        <string>Paragraph</string>
+       </attribute>
+      </widget>
+      <widget class="QListView" name="characterStylesListView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>14</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <attribute name="title">
+        <string>Character</string>
+       </attribute>
+      </widget>
      </widget>
+    </item>
+    <item>
+     <widget class="QFrame">
+      <property name="frameStyle"><enum>QFrame::HLine</enum></property>
+      <property name="fixedHeight"><number>1</number></property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="sidebarLayout">
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>6</number>
+      </property>
+      <property name="bottomMargin">
+       <number>6</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="bNew">
+        <property name="text">
+         <string>&amp;New</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="bDelete">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget">
+   <layout class="QVBoxLayout" name="sidebarLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -92,9 +141,34 @@
       <widget class="ParagraphGeneral" name="paragraphStylePage"/>
       <widget class="CharacterGeneral" name="characterStylePage"/>
      </widget>
-    </widget>
-   </item>
-  </layout>
+    </item>
+    <item>
+     <widget class="QFrame">
+      <property name="frameStyle"><enum>QFrame::HLine</enum></property>
+      <property name="fixedHeight"><number>1</number></property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="sidebarLayout">
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>6</number>
+      </property>
+      <property name="bottomMargin">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QDialogButtonBox" name="buttonBox" />
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>

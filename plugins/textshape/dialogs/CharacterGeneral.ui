@@ -14,6 +14,9 @@
    <property name="margin">
     <number>0</number>
    </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabs">
      <property name="sizePolicy">
@@ -21,6 +24,9 @@
        <horstretch>99</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="documentMode">
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
@@ -94,6 +100,12 @@
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame">
+     <property name="frameStyle"><enum>QFrame::HLine</enum></property>
+     <property name="fixedHeight"><number>1</number></property>
     </widget>
    </item>
    <item>
