@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1687602 2024-08-13 01:13:50Z scripty $
+# $Id: calligrawords.po 1687688 2024-08-14 01:14:00Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2022-11-15 13:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -275,39 +275,39 @@ msgstr "Poravnaj na levo z:"
 msgid "Right align with:"
 msgstr "Poravnaj na desno z:"
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
 msgstr "Nastavi"
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr "Razno"
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "Mreža"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokument"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
 msgstr "Nastavitve dokumenta"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Avtor"
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr "Avtor"

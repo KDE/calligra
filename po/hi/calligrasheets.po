@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -5071,12 +5071,12 @@ msgstr "ZERO_COUPON(फेस मूल्य;दर;वर्ष)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) बराबर है: 148.64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "हस्तचालित"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -10951,7 +10951,7 @@ msgstr "FIND(पाठ_ढूंढें;पाठ_में;प्रारं
 msgid "Source string"
 msgstr "स्रोत वाक्यांश"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, kde-format
 msgid "Position"
 msgstr "स्थिति"
@@ -12387,7 +12387,7 @@ msgstr "शीट छुपाएं"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Font"
 msgstr "फ़ॉन्ट"
@@ -12467,7 +12467,7 @@ msgid "First column as label"
 msgstr "पहले स्तम्भ में शीर्षक हैं (&F)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Data Format"
 msgid "Data Format"
@@ -12509,14 +12509,14 @@ msgid "File Options"
 msgstr "कम विकल्प"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, fuzzy, kde-format
 #| msgid "&Number of files to show in Recent Files list:"
 msgid "Number of entries in Recent Files list:"
 msgstr "वर्तमान फ़ाइल सूची में दिखाए जाने वाले फ़ाइलों की संख्या: (&N)"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -12524,14 +12524,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, fuzzy, kde-format
 #| msgid "Au&tosave delay (minutes):"
 msgid "Autosave interval:"
 msgstr "स्वतःसहेजने में देरी (मिनट):"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
@@ -12539,28 +12539,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, fuzzy, kde-format
 #| msgid "min"
 msgid " min"
 msgstr "मि."
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, fuzzy, kde-format
 #| msgid "Create backup files"
 msgid "Create backup file:"
 msgstr "बैकअप फ़ाइलें बनाएँ"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -12568,13 +12568,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -12582,14 +12582,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, fuzzy, kde-format
 #| msgid "Show the status bar"
 msgid "Func&tion shown in status bar:"
 msgstr "स्थिति पट्टी दिखाएँ"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -12597,72 +12597,56 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, fuzzy, kde-format
 #| msgid "Unixtime"
 msgid "&Unit:"
 msgstr "यूनिक्सटाइम"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, fuzzy, kde-format
 #| msgid "&Indentation step (%1):"
 msgid "I&ndentation step:"
 msgstr "इंडेन्टेशन चरण (%1): (&I)"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, kde-format
 msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
 "Decrease Indent actions."
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Color"
-msgid "Colors"
-msgstr "रंग"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
+#: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Gourde"
-msgid "&Grid:"
-msgstr "गोर्दे"
+#| msgid "&Grid color:"
+msgid "&Grid Color:"
+msgstr "ग्रिड रंग: (&G)"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr "ग्रिड रंग यानी प्रत्येक कक्ष के किनारा रंग को परिवर्तित करने के लिए यहाँ क्लिक करें."
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, fuzzy, kde-format
-#| msgid "Custom"
-msgid "Custom..."
-msgstr "मनपसंद"
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
+#: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
 #| msgid "Outline"
-msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "आउटलाइन"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -12858,137 +12842,137 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "केस्प्रेड कॉन्फ़िगर करें"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
 msgid "Interface"
 msgstr "इंटरफेस"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, kde-format
 msgid "Down"
 msgstr "नीचे"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Up"
 msgstr "ऊपर"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "दायाँ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "बायाँ"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, kde-format
 msgid "Down, First Column"
 msgstr "नीचे, पहले स्तम्भ में"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "जोड़"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "न्यून."
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "अधिकतम"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "औसत"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "गिनती"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Function Modules"
 msgstr "फंक्शन"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, fuzzy, kde-format
 #| msgid "&Tools"
 msgid "Tools"
 msgstr "औज़ार (&T)"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
 msgid "Spelling"
 msgstr "वर्तनी"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "वर्तनी जांच बर्ताव"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, fuzzy, kde-format
 #| msgid "author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "लेखक"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, fuzzy, kde-format
 #| msgid "author"
 msgid "Author"
 msgstr "लेखक"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
 msgstr "पूर्णता विधि: (&m)"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
 msgstr "पॉप अप"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "अर्ध स्वचलित"
@@ -14491,35 +14475,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "वर्तमान कक्ष के लिए जो फ़ॉन्ट आप चुन रहे हैं उसका पूर्वावलोकन आप देख सकते हैं."
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, kde-format
 msgid "Cell Format"
 msgstr "कक्ष फ़ॉर्मेट"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "कक्ष फ़ॉर्मेट"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "सामान्य (&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "किनारा"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "पृष्ठभूमि (&g)"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
@@ -15135,6 +15119,21 @@ msgstr "बहुत से कक्ष चुनें"
 #| msgid "Link <i>%1</i> activated"
 msgid "Link %1 activated"
 msgstr "कड़ी <i>%1</i> सक्रिय किया गया"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Colors"
+#~ msgstr "रंग"
+
+#, fuzzy
+#~| msgid "Gourde"
+#~ msgid "&Grid:"
+#~ msgstr "गोर्दे"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Custom..."
+#~ msgstr "मनपसंद"
 
 #, fuzzy
 #~| msgid "Processing is not possible, because some cells are protected."
@@ -40709,9 +40708,6 @@ msgstr "कड़ी <i>%1</i> सक्रिय किया गया"
 
 #~ msgid "&Method of calc:"
 #~ msgstr "केल्क की विधि: (&M)"
-
-#~ msgid "&Grid color:"
-#~ msgstr "ग्रिड रंग: (&G)"
 
 #~ msgid "Default page &size:"
 #~ msgstr "डिफ़ॉल्ट पृष्ठ आकार: (&s)"

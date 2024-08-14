@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2023-07-25 00:29+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -711,101 +711,89 @@ msgstr "Ρ&υθμίσεις"
 msgid "File"
 msgstr "Αρχείο"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, kde-format
-msgid "Document Settings"
-msgstr "Ρυθμίσεις εγγράφου"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr "Όχι αυτόματη αποθήκευση"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr " min"
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Διάστημα αυτόματης αποθήκευσης:"
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
 msgstr "Δημιουργία αρχείου υποστηρικτικής αποθήκευσης:"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, kde-format
-msgid "Grid"
-msgstr "Κάνναβος"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, kde-format
-msgid "Show grid:"
+#: main/config/KoConfigGridPage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Εμφάνιση καννάβου:"
 
-#: main/config/KoConfigGridPage.cpp:65
-#, kde-format
-msgid "Snap to grid:"
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "Προσαρμογή στον κάνναβο:"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Grid"
+msgid "Grid:"
+msgstr "Κάνναβος"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
 msgstr "Χρώμα καννάβου:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, kde-format
-msgid "Spacing"
-msgstr "Κενό διάστημα"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Οριζόντιο:"
 
-#: main/config/KoConfigGridPage.cpp:80
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:82
+#, fuzzy, kde-format
+#| msgctxt "Vertical grid spacing"
+#| msgid "&Vertical:"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&Κατακόρυφο:"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr "Διάφορα"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
 msgstr "Μονάδες:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr "Ακτίνα χειρισμού:"
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "Ευαισθησία σύλληψης:"
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
 msgid "Paste offset:"
 msgstr "Απόσταση επικόλλησης:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr "Επικόλληση στο δρομέα:"
@@ -2108,24 +2096,42 @@ msgid_plural "Move pages"
 msgstr[0] "Μετακίνηση σελίδας"
 msgstr[1] "Μετακίνηση σελίδων"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr "Διαμόρφωση"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr "Διάφορα"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "Κάνναβος"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Έγγραφο"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "Ρυθμίσεις εγγράφου"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Συγγραφέας"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Συγγραφέας"
@@ -5374,6 +5380,9 @@ msgstr "Όλοι οι υποστηριζόμενοι τύποι"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Spacing"
+#~ msgstr "Κενό διάστημα"
 
 #~ msgid "Tabs side"
 #~ msgstr "Πλευρά καρτελών"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -5482,12 +5482,12 @@ msgstr "ZERO_COUPON(nilai muka;kadar;tahun)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) sama dengan 148.64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Manual"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -11709,7 +11709,7 @@ msgstr "FIND(cari_teks;dalam_teks;nombor_mula)"
 msgid "Source string"
 msgstr "Rentetan sumber"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, kde-format
 msgid "Position"
 msgstr "Posisi"
@@ -13205,7 +13205,7 @@ msgstr "Sembunyikan Helaian"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "Forint"
@@ -13283,7 +13283,7 @@ msgid "First column as label"
 msgstr "&Baris pertama mengandungi pengepala"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Data Format"
 msgid "Data Format"
@@ -13324,13 +13324,13 @@ msgid "File Options"
 msgstr "Pilihan Am"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, fuzzy, kde-format
 msgid "Number of entries in Recent Files list:"
 msgstr "&Bilangan fail terbaru:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -13338,13 +13338,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, fuzzy, kde-format
 msgid "Autosave interval:"
 msgstr "&Autosimpan (min):"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
@@ -13352,27 +13352,27 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, fuzzy, kde-format
 #| msgid "min"
 msgid " min"
 msgstr "minit"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Cipta fail sandaran"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -13380,13 +13380,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -13394,13 +13394,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, fuzzy, kde-format
 msgid "Func&tion shown in status bar:"
 msgstr "Papar bar status."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -13408,71 +13408,55 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, fuzzy, kde-format
 #| msgid "time"
 msgid "&Unit:"
 msgstr "masa "
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, kde-format
 msgid "I&ndentation step:"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, kde-format
 msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
 "Decrease Indent actions."
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Color"
-msgid "Colors"
-msgstr "Warna"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
+#: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Gourde"
-msgid "&Grid:"
-msgstr "Gourde"
+#| msgid "&Grid color:"
+msgid "&Grid Color:"
+msgstr "Warna &grid:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, fuzzy, kde-format
-#| msgid "Custom"
-msgid "Custom..."
-msgstr "Biasa"
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
+#: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
 #| msgid "Border Outline"
-msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "Sempadan Garis Luar"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -13664,136 +13648,136 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "Konfigur KSpread"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
 msgid "Interface"
 msgstr "Antara muka"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, fuzzy, kde-format
 msgid "Down"
 msgstr "&Bawah"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, fuzzy, kde-format
 msgid "Up"
 msgstr "&Atas"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, fuzzy, kde-format
 msgid "Right"
 msgstr "&Kanan"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, fuzzy, kde-format
 msgid "Left"
 msgstr "&Kiri"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, fuzzy, kde-format
 msgid "Down, First Column"
 msgstr "Selitkan Lajur"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "Tiada"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "Hasil Tambah"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "Minimum"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "Maksimum"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "Purata"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "Hitung "
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "Hitung "
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Function Modules"
 msgstr "Fungsi"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Togo"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
 msgid "Spelling"
 msgstr "Ejaan"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "Perilaku Penyemak Eja"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, fuzzy, kde-format
 #| msgid "author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "pengarang"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, fuzzy, kde-format
 #| msgid "author"
 msgid "Author"
 msgstr "pengarang"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
 msgstr "Mod &Pelengkapan"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
 msgstr "Popup"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "Semi-Automatik"
@@ -15280,35 +15264,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, kde-format
 msgid "Cell Format"
 msgstr "Format Sel"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "Format Sel"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&Am"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, fuzzy, kde-format
 msgid "Border"
 msgstr "&Sempadan"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "&Latar belakang"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
@@ -15925,6 +15909,21 @@ msgstr "Anda mesti pilih sel berbilang."
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Colors"
+#~ msgstr "Warna"
+
+#, fuzzy
+#~| msgid "Gourde"
+#~ msgid "&Grid:"
+#~ msgstr "Gourde"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Custom..."
+#~ msgstr "Biasa"
 
 #~ msgid "Open Link?"
 #~ msgstr "Buka Pautan?"
@@ -43052,9 +43051,6 @@ msgstr ""
 
 #~ msgid "&Method of calc:"
 #~ msgstr "&Kaedah pengiraan:"
-
-#~ msgid "&Grid color:"
-#~ msgstr "Warna &grid:"
 
 #~ msgid "Default page &size:"
 #~ msgstr "&Saiz halaman piawai:"

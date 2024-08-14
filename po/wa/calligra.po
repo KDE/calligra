@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2011-01-17 21:09+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -808,105 +808,89 @@ msgstr "A&pontiaedjes"
 msgid "File"
 msgstr "Fitchî"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, kde-format
-msgid "Document Settings"
-msgstr "Apontiaedjes do documint"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No auto save"
 msgid "No autosave"
 msgstr "Nou schapaedje otomatike"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Auto save (min):"
 msgid "Autosave interval:"
 msgstr "Schapaedje otomatike (mun):"
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Create backup file"
 msgid "Create backup file:"
 msgstr "Ahiver copeye di såvrité"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, kde-format
-msgid "Grid"
-msgstr "Grile"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, kde-format
-msgid "Show grid:"
+#: main/config/KoConfigGridPage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Mostrer grile:"
 
-#: main/config/KoConfigGridPage.cpp:65
-#, kde-format
-msgid "Snap to grid:"
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "Claper sol grile:"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Grid"
+msgid "Grid:"
+msgstr "Grile"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
 msgstr "Coleur del grile:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, kde-format
-msgid "Spacing"
-msgstr "Espåçmint"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:81
+#, fuzzy, kde-format
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
-msgstr "&Coûtchî:"
+msgid "Horizontal spacing:"
+msgstr "&Coûtchî"
 
-#: main/config/KoConfigGridPage.cpp:80
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:82
+#, fuzzy, kde-format
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
-msgstr "&Astampé:"
+msgid "Vertical spacing:"
+msgstr "&Astampé"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr "Totes sôres"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
 msgstr "Unités :"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr "Reyon del pougneye :"
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "Sinsiûlisté di l' apougnaedje :"
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Copy offset:"
 msgid "Paste offset:"
 msgstr "Displaeçmint do copiaedje :"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2269,25 +2253,43 @@ msgid_plural "Move pages"
 msgstr[0] "Bodjî pådje"
 msgstr[1] "Bodjî pådjes"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr "Apontyî"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr "Totes sôres"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "Grile"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Documint"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "Apontiaedjes do documint"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Oteur"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Oteur"
@@ -5807,6 +5809,17 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#~ msgid "Spacing"
+#~ msgstr "Espåçmint"
+
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Coûtchî:"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Astampé:"
 
 #, fuzzy
 #~| msgid "Bottom"
@@ -12747,14 +12760,6 @@ msgstr "%1%"
 
 #~ msgid "Alignment"
 #~ msgstr "Aroymint"
-
-#, fuzzy
-#~ msgid "Horizontal:"
-#~ msgstr "&Coûtchî"
-
-#, fuzzy
-#~ msgid "Vertical:"
-#~ msgstr "&Astampé"
 
 #, fuzzy
 #~ msgid "Scale"

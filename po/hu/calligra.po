@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2015-09-08 10:39+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -702,101 +702,89 @@ msgstr "&Beállítások"
 msgid "File"
 msgstr "Fájl"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, kde-format
-msgid "Document Settings"
-msgstr "Dokumentumbeállítások"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr "Nincs automatikus mentés"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr " perc"
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Automatikus mentési időköz:"
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
 msgstr "Biztonsági mentés készítése:"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, kde-format
-msgid "Grid"
-msgstr "Rács"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, kde-format
-msgid "Show grid:"
+#: main/config/KoConfigGridPage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Rács megjelenítése:"
 
-#: main/config/KoConfigGridPage.cpp:65
-#, kde-format
-msgid "Snap to grid:"
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "Igazítás a rácshoz:"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Grid"
+msgid "Grid:"
+msgstr "Rács"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
 msgstr "A rács színe:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, kde-format
-msgid "Spacing"
-msgstr "Távolság"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Vízszintes:"
 
-#: main/config/KoConfigGridPage.cpp:80
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:82
+#, fuzzy, kde-format
+#| msgctxt "Vertical grid spacing"
+#| msgid "&Vertical:"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&Függőleges:"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr "Vegyes"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
 msgstr "Egységek:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr "Fogantyú sugara:"
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "Megfogás érzékenysége:"
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
 msgid "Paste offset:"
 msgstr "Beillesztési eltolás:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr "Beillesztés a kurzornál:"
@@ -2114,24 +2102,42 @@ msgid_plural "Move pages"
 msgstr[0] "Oldal mozgatása"
 msgstr[1] "Oldalak mozgatása"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr "Beállítás"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr "Vegyes"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "Rács"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokumentum"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "Dokumentumbeállítások"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Szerző"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Szerző"
@@ -5422,6 +5428,9 @@ msgstr "Minden támogatott formátum"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Spacing"
+#~ msgstr "Távolság"
 
 #~ msgid "Tabs side"
 #~ msgstr "Lapok oldal"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -266,39 +266,39 @@ msgstr "左对齐："
 msgid "Right align with:"
 msgstr "右对齐："
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
 msgstr "配置"
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr "杂项"
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "网格"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "文档"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
 msgstr "文档设置"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者"
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr "作者"

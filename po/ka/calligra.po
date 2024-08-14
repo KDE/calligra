@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
-"PO-Revision-Date: 2024-08-12 05:11+0200\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"PO-Revision-Date: 2024-08-13 05:59+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -700,101 +700,89 @@ msgstr "გამართვა"
 msgid "File"
 msgstr "ფაილი"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, kde-format
-msgid "Document Settings"
-msgstr "დოკუმენტის მორგება"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr "ავტომატური შენახვის გარეშე"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr " წთ"
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr "ავტომატური შენახვის ინტერვალი:"
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
 msgstr "მარქაფის ფაილის შექმნა:"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, kde-format
-msgid "Grid"
-msgstr "ბადე"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, kde-format
-msgid "Show grid:"
+#: main/config/KoConfigGridPage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "ბადის ჩვენება:"
 
-#: main/config/KoConfigGridPage.cpp:65
-#, kde-format
-msgid "Snap to grid:"
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "ბადეზე მიბმა:"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Grid"
+msgid "Grid:"
+msgstr "ბადე"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
 msgstr "ბადის ფერი:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, kde-format
-msgid "Spacing"
-msgstr "დაშორება"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&ჰორიზონტალური:"
 
-#: main/config/KoConfigGridPage.cpp:80
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:82
+#, fuzzy, kde-format
+#| msgctxt "Vertical grid spacing"
+#| msgid "&Vertical:"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&ვერტიკალური:"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr "სხვანი"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
 msgstr "ერთეულები:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr "მართვის წერტილის რადიუსი:"
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "ჩაჭერის მგრძნობიარობა:"
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
 msgid "Paste offset:"
 msgstr "ჩასმის წანაცვლება:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr "კურსორთან ჩასმა:"
@@ -913,7 +901,7 @@ msgstr "ფაილების აღდგენა"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "ყველაფრის მოცილება"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -932,6 +920,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"თუ აირჩევთ გაუქმებას, ყველა აღდგენადი ფაილი შენარჩუნდება.\n"
+"თუ დააწვებით ღილაკს 'დიახ', მონიშნული ფაილები აღდგება, მოუნიშნავი კი "
+"წაიშლება."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -2090,24 +2081,42 @@ msgid_plural "Move pages"
 msgstr[0] "გვერდის გადატანა"
 msgstr[1] "გვერდების გატანა"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr "მორგება"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr "სხვანი"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "ბადე"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "დოკუმენტი"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "დოკუმენტის მორგება"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ავტორი"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
@@ -5343,6 +5352,9 @@ msgstr "ყველა მხარდაჭერილი ფორმატ�
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Spacing"
+#~ msgstr "დაშორება"
 
 #~ msgid "Tabs side"
 #~ msgstr "ჩანართები გვერდზე"

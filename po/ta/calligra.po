@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2021-01-18 19:22+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -766,108 +766,86 @@ msgstr "ஒற்றை"
 msgid "File"
 msgstr "கோப்புப்பெயர்"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "ஆவண குறுக்கம்"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No date set"
 msgid "No autosave"
 msgstr "தேதி அமைக்கவில்லை"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosave interval:"
 msgstr "தானாக சேமித்தல்..."
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "%1 கருவிப்பட்டையை காட்டு"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
-msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "%1 கருவிப்பட்டையை காட்டு"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+msgid "Grid:"
 msgstr "%1 கருவிப்பட்டையை காட்டு"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
-msgid "Snap to grid:"
-msgstr "%1 கருவிப்பட்டையை காட்டு"
-
-#: main/config/KoConfigGridPage.cpp:66
-#, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "பின்னனி வண்ணம்: "
 
-#: main/config/KoConfigGridPage.cpp:68
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
-#| msgid "Line &Spacing"
-msgid "Spacing"
-msgstr "கோட்டு &இடைவெளி"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "கிடைக்கோடு"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "நெடுக்கோடு"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "அலகு:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Shadow:"
 msgid "Paste offset:"
 msgstr "நிழல்:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2271,26 +2249,44 @@ msgid_plural "Move pages"
 msgstr[0] "உரையை அழி"
 msgstr[1] "உரையை அழி"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure"
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "%1 கருவிப்பட்டையை காட்டு"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "ஆவணத்தை திற "
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "ஆவண குறுக்கம்"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ஆசிரியர்"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "ஆசிரியர்"
@@ -5637,6 +5633,23 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Line &Spacing"
+#~ msgid "Spacing"
+#~ msgstr "கோட்டு &இடைவெளி"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "கிடைக்கோடு"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "நெடுக்கோடு"
 
 #, fuzzy
 #~| msgid "Align Auto"
@@ -10460,14 +10473,6 @@ msgstr "%1%"
 
 #~ msgid "Alignment"
 #~ msgstr "சீரமை"
-
-#, fuzzy
-#~ msgid "Horizontal:"
-#~ msgstr "கிடைக்கோடு"
-
-#, fuzzy
-#~ msgid "Vertical:"
-#~ msgstr "நெடுக்கோடு"
 
 #, fuzzy
 #~ msgid "Scale"

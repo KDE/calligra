@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2013-10-25 11:53+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -5276,12 +5276,12 @@ msgstr "ZERO_COUPON(jövőbeli érték;kamatláb;évek)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;,1;20) értéke 148,64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "kézi"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -11333,7 +11333,7 @@ msgstr "FINDB(keresett_szöveg;szöveg;bájt pozíció Kezdet)"
 msgid "Source string"
 msgstr "Forrás szöveg"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, kde-format
 msgid "Position"
 msgstr "Pozíció"
@@ -12766,7 +12766,7 @@ msgstr "Aktiválás"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Font"
 msgstr "Betűtípus"
@@ -12838,7 +12838,7 @@ msgid "First column as label"
 msgstr "Első oszlop használata címkeként"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "Adatformátum"
@@ -12872,13 +12872,13 @@ msgid "File Options"
 msgstr "Fájlbeállítások"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, kde-format
 msgid "Number of entries in Recent Files list:"
 msgstr "A legutóbbi fájlok listájának hossza:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -12888,13 +12888,13 @@ msgstr ""
 "fájlnevek maximális számát."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Automatikus mentési időköz:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, fuzzy, kde-format
 #| msgid ""
 #| "Here you can select the time between autosaves, or disable this feature "
@@ -12909,26 +12909,26 @@ msgstr ""
 "(húzza a csúszkát balra)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr "Nincs automatikus mentés"
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, kde-format
 msgid " min"
 msgstr " perc"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, kde-format
 msgid "Create backup file:"
 msgstr "Biztonsági mentés készítése:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -12938,13 +12938,13 @@ msgstr ""
 "Alapértelmezetten engedélyezve van."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr "A kurzor mozgatása Enter lenyomása után:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -12954,14 +12954,14 @@ msgstr ""
 "jobbra, felfelé vagy lefelé lévő cellára ugrik a beállítástól függően."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, fuzzy, kde-format
 #| msgid "Function shown in status bar:"
 msgid "Func&tion shown in status bar:"
 msgstr "Az állapotsoron megjelenő függvény:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -12971,27 +12971,27 @@ msgstr ""
 "végrehajtott számítás kiválasztására használható."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "&Unit:"
 msgstr "Egység:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, fuzzy, kde-format
 #| msgid "Indentation step:"
 msgid "I&ndentation step:"
 msgstr "Behúzási lépés:"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, fuzzy, kde-format
 #| msgid ""
 #| "Set the amount of indent that will be used in the cell when you choose "
@@ -13003,21 +13003,15 @@ msgstr ""
 "A behúzás mértékének beállítása, amely a Behúzás növelése vagy Behúzás "
 "csökkentése műveletek kiválasztásakor lesz használva a cellában."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, kde-format
-msgid "Colors"
-msgstr "Színek"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
+#: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Grid:"
-msgid "&Grid:"
-msgstr "Rács:"
+#| msgid "Color:"
+msgid "&Grid Color:"
+msgstr "Szín:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
@@ -13025,23 +13019,15 @@ msgstr ""
 "Kattintson ide a rács színének, például az egyes cellák szegélyeinek "
 "módosításához."
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, kde-format
-msgid "Custom..."
-msgstr "Egyéni…"
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
+#: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
 #| msgid "Page Outline:"
-msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "Oldalkörvonal:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -13222,121 +13208,121 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "Beállítás"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
 msgid "Interface"
 msgstr "Kezelőfelület"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, kde-format
 msgid "Down"
 msgstr "Le"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Up"
 msgstr "Fel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Jobbra"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Balra"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, kde-format
 msgid "Down, First Column"
 msgstr "Lent, első oszlop"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "nincs"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "összeg"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "minimum"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "maximum"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "átlag"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "darabszám"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr "Megnyitás/mentés"
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, kde-format
 msgid "Function Modules"
 msgstr "Függvénymodulok"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "Eszközök"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr "Bővítmények"
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
 msgid "Spelling"
 msgstr "Helyesírás"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "A helyesírás-ellenőrző beállításai"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Szerző"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, kde-format
 msgid "Author"
 msgstr "Szerző"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
 msgstr "Címkiegészítési mó&d:"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13344,12 +13330,12 @@ msgid ""
 msgstr ""
 "Lehetővé teszi a szövegkiegészítési mód kiválasztását a legördülő listából."
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
 msgstr "felbukkanó ablakban"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "félig automatikus"
@@ -14791,35 +14777,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Itt tekinthető meg a kiválasztott betűtípus előnézete."
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, kde-format
 msgid "Cell Format"
 msgstr "Cellaformátum"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "Cellaformátum"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "Ált&alános"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "Szegély"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "Há&ttér"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
@@ -15478,6 +15464,17 @@ msgstr "Több cella kijelölése"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "%1 hivatkozás aktiválva"
+
+#~ msgid "Colors"
+#~ msgstr "Színek"
+
+#, fuzzy
+#~| msgid "Grid:"
+#~ msgid "&Grid:"
+#~ msgstr "Rács:"
+
+#~ msgid "Custom..."
+#~ msgstr "Egyéni…"
 
 #~ msgid ""
 #~ "Processing is not possible, because some cells are locked as elements of "

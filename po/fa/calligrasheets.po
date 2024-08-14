@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2011-09-26 14:19+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -5313,12 +5313,12 @@ msgstr ""
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "&مرجع:‌"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "راهنما"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -11587,7 +11587,7 @@ msgstr "طول متن"
 msgid "Source string"
 msgstr "مرتب‌سازی"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, kde-format
 msgid "Position"
 msgstr "موقعیت"
@@ -13110,7 +13110,7 @@ msgstr "مخفی کردن برگه"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, fuzzy, kde-format
 #| msgid "&Font"
 msgid "Font"
@@ -13191,7 +13191,7 @@ msgid "First column as label"
 msgstr "&اولین ستون حاوی سرآیند است‌"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Data Format"
 msgid "Data Format"
@@ -13233,14 +13233,14 @@ msgid "File Options"
 msgstr "گزینه‌های کمتر"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, fuzzy, kde-format
 #| msgid "&Number of files to show in Recent Files list:"
 msgid "Number of entries in Recent Files list:"
 msgstr "&تعداد پرونده‌ها جهت نمایش در فهرست پرونده‌های اخیر:‌"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -13250,14 +13250,14 @@ msgstr ""
 "داده می‌شوند را کنترل می‌کند."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, fuzzy, kde-format
 #| msgid "Au&tosave delay (minutes):"
 msgid "Autosave interval:"
 msgstr "تأخیر &ذخیره خودکار )دقیقه(:‌"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, fuzzy, kde-format
 #| msgid ""
 #| "Here you can select the time between autosaves, or disable this feature "
@@ -13271,28 +13271,28 @@ msgstr ""
 "ذخیره خودکار )کشیدن لغزان به چپ( کل این ویژگی را غیرفعال کنید."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, fuzzy, kde-format
 #| msgid "min"
 msgid " min"
 msgstr "دقيقه"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, fuzzy, kde-format
 #| msgid "Create backup files"
 msgid "Create backup file:"
 msgstr "ایجاد پرونده‌های پشتیبان"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -13302,13 +13302,13 @@ msgstr ""
 "صورت پیش‌فرض علامت زده می‌شود."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -13319,14 +13319,14 @@ msgstr ""
 "می‌دهد."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, fuzzy, kde-format
 #| msgid "Show the status bar"
 msgid "Func&tion shown in status bar:"
 msgstr "نمایش میله وضعیت"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -13336,27 +13336,27 @@ msgstr ""
 "خلاصه میله وضعیت استفاده کرد."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, fuzzy, kde-format
 #| msgid "time"
 msgid "&Unit:"
 msgstr "زمان"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, fuzzy, kde-format
 #| msgid "&Indentation step (%1):"
 msgid "I&ndentation step:"
 msgstr "گام &تورفتگی )%1(:"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, fuzzy, kde-format
 #| msgid ""
 #| "Lets you define the amount of indenting used by the Increase Indent and "
@@ -13368,45 +13368,29 @@ msgstr ""
 "به شما اجازه می‌دهد که مقدار تورفتگی مورد استفاده را با افزایش تورفتگی و کاهش "
 "گزینه تورفتگی در گزینگان قالب تعریف کنید."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Color"
-msgid "Colors"
-msgstr "رنگ"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
+#: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Gourde"
-msgid "&Grid:"
-msgstr "گورده"
+#| msgid "&Grid color:"
+msgid "&Grid Color:"
+msgstr "رنگ &توری:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr "برای تغییر رنگ توری یعنی رنگ لبه‌های هر سلول، اینجا را فشار دهید."
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, fuzzy, kde-format
-#| msgid "Custom"
-msgid "Custom..."
-msgstr "سفارشی"
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
+#: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
 #| msgid "Border Outline"
-msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "طرح کلی لبه"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -13605,125 +13589,125 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "پیکربندی KSpread"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
 msgid "Interface"
 msgstr "واسط"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, kde-format
 msgid "Down"
 msgstr "پایین"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Up"
 msgstr "بالا"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "راست"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "چپ"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, kde-format
 msgid "Down, First Column"
 msgstr "پایین، اولین ستون"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "هيچ‌کدام"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "جمع"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "کمینه"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "بیشینه"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "ميانگین"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "شمارش"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "شمارشA"
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Function Modules"
 msgstr "تابع"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, fuzzy, kde-format
 #| msgid "&Tools"
 msgid "Tools"
 msgstr "&ابزارها‌"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
 msgid "Spelling"
 msgstr "هجی"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "رفتار غلط‌گیر"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, fuzzy, kde-format
 #| msgid "author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "نویسنده"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, fuzzy, kde-format
 #| msgid "author"
 msgid "Author"
 msgstr "نویسنده"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
 msgstr "حالت &تکمیل:"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13732,12 +13716,12 @@ msgstr ""
 "به شما اجازه می‌دهد که از گستره‌ای از گزینگان جعبه گزینش پایین افت، حالت تکمیل "
 "متن )خودکار( را انتخاب کنید."
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
 msgstr "بالاپر"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "نیمه‌خودکار"
@@ -15320,35 +15304,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "می‌توانید پیش‌نمایشی از قلمی که برای سلول جاری انتخاب می‌کنید را ببینید."
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, kde-format
 msgid "Cell Format"
 msgstr "قالب سلول"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "قالب سلول"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&عمومی‌"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "لبه"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "&زمینه‌"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
@@ -16122,6 +16106,21 @@ msgstr "برگزیدن سلولهای چندگانه"
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Colors"
+#~ msgstr "رنگ"
+
+#, fuzzy
+#~| msgid "Gourde"
+#~ msgid "&Grid:"
+#~ msgstr "گورده"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Custom..."
+#~ msgstr "سفارشی"
 
 #~ msgid ""
 #~ "This link points to the program or script '%1'.\n"
@@ -34043,9 +34042,6 @@ msgstr ""
 
 #~ msgid "&Method of calc:"
 #~ msgstr "&روش محاسبه:"
-
-#~ msgid "&Grid color:"
-#~ msgstr "رنگ &توری:"
 
 #~ msgid "Default page &size:"
 #~ msgstr "&اندازه صفحه پیش‌فرض:"

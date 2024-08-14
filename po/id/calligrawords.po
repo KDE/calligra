@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2022-06-05 07:46+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -266,39 +266,39 @@ msgstr "Sejajar kiri dengan:"
 msgid "Right align with:"
 msgstr "Sejajar kanan dengan:"
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
 msgstr "Konfigurasikan"
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr "Aneka"
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "Kisi"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokumen"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
 msgstr "Pengaturan Dokumen"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Penulis"
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr "Penulis"

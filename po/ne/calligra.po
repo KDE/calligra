@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -827,114 +827,93 @@ msgstr "सेटिङ्ङ"
 msgid "File"
 msgstr "फाइल"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Document Subject"
-msgid "Document Settings"
-msgstr "कागजात विषय"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No date set"
 msgid "No autosave"
 msgstr "मिति सेट गरिएको छैन"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosave interval:"
 msgstr "स्वत: बचत हुँदैछ..."
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Create backup file:"
 msgstr "आकार सिर्जना गर्नुहोस्।"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "ग्रिड देखाउनुहोस्"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "ग्रिडमा सटाउनुहोस्"
+
+#: main/config/KoConfigGridPage.cpp:63
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Show grid:"
+msgid "Grid:"
 msgstr "ग्रिड देखाउनुहोस्"
 
 #: main/config/KoConfigGridPage.cpp:65
-#, fuzzy, kde-format
-#| msgid "Snap to Grid"
-msgid "Snap to grid:"
-msgstr "ग्रिडमा सटाउनुहोस्"
-
-#: main/config/KoConfigGridPage.cpp:66
 #, fuzzy, kde-format
 #| msgid "&Background color:"
 msgid "Grid color:"
 msgstr "पृष्ठभूमि रङ:"
 
-#: main/config/KoConfigGridPage.cpp:68
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
-#| msgid "Line &Spacing"
-msgid "Spacing"
-msgstr "रेखा खाली स्थान"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
+#| msgid "Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "तेर्सो"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
-#| msgid "&Vertical"
+#| msgid "Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "ठाडो"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "एकाइ:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Offset:"
 msgid "Paste offset:"
 msgstr "अफसेट:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2361,27 +2340,47 @@ msgid_plural "Move pages"
 msgstr[0] "पृष्ठ सार्नुहोस्"
 msgstr[1] "पृष्ठ सार्नुहोस्"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure"
 msgstr "बचत यकीन गर्नुहोस्।"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Grid"
+msgstr "ग्रिड देखाउनुहोस्"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "कागजात"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+#| msgid "Document Subject"
+msgid "Document Settings"
+msgstr "कागजात विषय"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "लेखक"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "लेखक"
@@ -5915,6 +5914,23 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Line &Spacing"
+#~ msgid "Spacing"
+#~ msgstr "रेखा खाली स्थान"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "तेर्सो"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "ठाडो"
 
 #, fuzzy
 #~| msgid "Align Auto"
@@ -12415,16 +12431,6 @@ msgstr "%1%"
 
 #~ msgid "Alignment"
 #~ msgstr "पंक्तिबद्धता"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgid "Horizontal:"
-#~ msgstr "तेर्सो"
-
-#, fuzzy
-#~| msgid "Vertical"
-#~ msgid "Vertical:"
-#~ msgstr "ठाडो"
 
 #, fuzzy
 #~| msgid "Save"

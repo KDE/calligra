@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2019-09-29 12:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <kde-i18n-doc@kde.org>\n"
@@ -760,112 +760,89 @@ msgstr "Яктага"
 msgid "File"
 msgstr "Номи файл"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Document Subject"
-msgid "Document Settings"
-msgstr "Мавзӯъи ҳуҷҷат"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No date set"
 msgid "No autosave"
 msgstr "Сана сабт нашудааст"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosave interval:"
 msgstr "Худнигоҳдорӣ..."
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Эҷоди қолиб"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
 #| msgid "Change Shadow"
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Тағйири соя"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Change Shadow"
-msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "Тағйири соя"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Change Shadow"
+msgid "Grid:"
 msgstr "Тағйири соя"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
-#| msgid "Change Shadow"
-msgid "Snap to grid:"
-msgstr "Тағйири соя"
-
-#: main/config/KoConfigGridPage.cpp:66
-#, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "Ранги замина:"
 
-#: main/config/KoConfigGridPage.cpp:68
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
-#| msgid "Line &Spacing"
-msgid "Spacing"
-msgstr "Фосилаи байни &сатрҳо"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Уфуқӣ"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&Амудӣ"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "Воҳиди санҷиш:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Shadow:"
 msgid "Paste offset:"
 msgstr "Соя:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2266,26 +2243,46 @@ msgid_plural "Move pages"
 msgstr[0] "Ҳузфи матн"
 msgstr[1] "Ҳузфи матн"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure"
 msgstr "Тасдиқи нигоҳдорӣ"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Change Shadow"
+msgid "Grid"
+msgstr "Тағйири соя"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Кушодани санад"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+#| msgid "Document Subject"
+msgid "Document Settings"
+msgstr "Мавзӯъи ҳуҷҷат"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Муаллиф"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Муаллиф"
@@ -5632,6 +5629,23 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Line &Spacing"
+#~ msgid "Spacing"
+#~ msgstr "Фосилаи байни &сатрҳо"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Уфуқӣ"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Амудӣ"
 
 #, fuzzy
 #~| msgid "Align Auto"
@@ -10367,14 +10381,6 @@ msgstr "%1%"
 
 #~ msgid "Alignment"
 #~ msgstr "Баробаркунӣ"
-
-#, fuzzy
-#~ msgid "Horizontal:"
-#~ msgstr "&Уфуқӣ"
-
-#, fuzzy
-#~ msgid "Vertical:"
-#~ msgstr "&Амудӣ"
 
 #, fuzzy
 #~ msgid "Scale"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2022-12-15 11:39-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -273,39 +273,39 @@ msgstr "Alinhar esquerda com:"
 msgid "Right align with:"
 msgstr "Alinhar direita com:"
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
 msgstr "Configurar"
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr "Diversos"
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "Grade"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Documento"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
 msgstr "Configurações do documento"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr "Autor"

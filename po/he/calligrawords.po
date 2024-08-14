@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2024-06-29 16:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -279,39 +279,39 @@ msgstr "יישור שמאלי מול:"
 msgid "Right align with:"
 msgstr "יישור ימני מול:"
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
 msgstr "הגדרה"
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr "שונות"
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
 msgstr "רשת"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "מסמך"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
 msgstr "הגדרות מסמך"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "יוצר/ת"
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr "יוצר/ת"

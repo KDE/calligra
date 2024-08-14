@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2024-05-01 10:22+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -5407,12 +5407,12 @@ msgstr "ZERO_COUPON (valeur faciale ; taux ; années)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON (1000 ; 0,1 ; 20) vaut 148,64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Manuel"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -11724,7 +11724,7 @@ msgstr "FINDB (texte cherché ; dans le texte ; numéro de départ)"
 msgid "Source string"
 msgstr "Chaîne source"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, kde-format
 msgid "Position"
 msgstr "Position"
@@ -13181,7 +13181,7 @@ msgstr "Activer"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, kde-format
 msgid "Font"
 msgstr "Police"
@@ -13253,7 +13253,7 @@ msgid "First column as label"
 msgstr "Première colonne comme étiquette"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "Format de données"
@@ -13287,13 +13287,13 @@ msgid "File Options"
 msgstr "Options du fichier"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, kde-format
 msgid "Number of entries in Recent Files list:"
 msgstr "Nombres d'entrées dans la liste des fichiers récents :"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -13303,13 +13303,13 @@ msgstr ""
 "activez le menu « Fichier / Récemment ouvert (s) »."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Délai d'auto-enregistrement : "
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
@@ -13320,26 +13320,26 @@ msgstr ""
 "choisissant la valeur minimale)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr "Pas d'auto-enregistrement"
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, kde-format
 msgid " min"
 msgstr "min."
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, kde-format
 msgid "Create backup file:"
 msgstr "Créer un fichier de sauvegarde : "
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -13349,13 +13349,13 @@ msgstr ""
 "soient créés. Il s'agit du réglage par défaut."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr "Mouvement du curseur après la pression de la touche « Entrée » : "
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -13366,13 +13366,13 @@ msgstr ""
 "le bas, selon la valeur de ce paramètre."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, kde-format
 msgid "Func&tion shown in status bar:"
 msgstr "Fonc&tion affichée dans la barre d'état :"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -13382,25 +13382,25 @@ msgstr ""
 "effectué par la fonction de consolidation de la barre d'état."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, kde-format
 msgid "&Unit:"
 msgstr "&Unité : "
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr "Choisir l'unité par défaut à utiliser dans vos feuilles."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, kde-format
 msgid "I&ndentation step:"
 msgstr "Pas d'i&ndentation: "
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, kde-format
 msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
@@ -13409,20 +13409,15 @@ msgstr ""
 "Vous permet de choisir la valeur du pas d'indentation utilisée par les "
 "actions « Augmenter l'indentation » et « Diminuer l'indentation »."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, kde-format
-msgid "Colors"
-msgstr "Couleurs"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
-#, kde-format
-msgid "&Grid:"
-msgstr "&Grille :"
+#: part/dialogs/InterfaceOptionsWidget.ui:87
+#, fuzzy, kde-format
+#| msgid "&Grid color:"
+msgid "&Grid Color:"
+msgstr "Co&uleur du quadrillage :"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
@@ -13430,22 +13425,15 @@ msgstr ""
 "Cliquez ici pour changer la couleur de la grille, c'est-à-dire la couleur "
 "des bordures de chaque cellule."
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, kde-format
-msgid "Custom..."
-msgstr "Personnaliser..."
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
-#, kde-format
-msgid "Page Out&line:"
+#: part/dialogs/InterfaceOptionsWidget.ui:104
+#, fuzzy, kde-format
+#| msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "Cont&our de page :"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -13626,121 +13614,121 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "Configurer"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
 msgid "Interface"
 msgstr "Interface"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, kde-format
 msgid "Down"
 msgstr "En bas"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, kde-format
 msgid "Up"
 msgstr "En haut"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Droit"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Gauche"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, kde-format
 msgid "Down, First Column"
 msgstr "En bas, première colonne"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
 msgstr "Aucun"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
 msgid "Sum"
 msgstr "Somme"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
 msgid "Average"
 msgstr "Moyenne"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, kde-format
 msgid "Count"
 msgstr "Compte"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, kde-format
 msgid "CountA"
 msgstr "Compte A"
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr "Ouvrir / Enregistrer"
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, kde-format
 msgid "Function Modules"
 msgstr "Modules de fonction"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, kde-format
 msgid "Tools"
 msgstr "Outils"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr "Modules externes"
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
 msgid "Spelling"
 msgstr "Correction orthographique"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, kde-format
 msgid "Spell Checker Behavior"
 msgstr "Comportement du vérificateur orthographique"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Auteur"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, kde-format
 msgid "Author"
 msgstr "Auteur"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
 msgstr "Mode de &complètement :"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
@@ -13749,12 +13737,12 @@ msgstr ""
 "Vous pouvez choisir le mode de complètement parmi les différentes "
 "possibilités de la liste déroulante."
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
 msgstr "Contextuel"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
 msgstr "Semi-automatique"
@@ -15220,32 +15208,32 @@ msgstr ""
 "Vous pouvez voir un aperçu de la police que vous avez choisie pour la "
 "cellule courante."
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, kde-format
 msgid "Cell Format"
 msgstr "Format de cellule"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, kde-format
 msgid "Set Cell Format"
 msgstr "Définir un format de cellule"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, kde-format
 msgid "General"
 msgstr "Général"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "Bordure"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, kde-format
 msgid "Background"
 msgstr "En arrière-plan"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, kde-format
 msgid "Cell Protection"
 msgstr "Protection de cellule"
@@ -15984,6 +15972,15 @@ msgstr "Sélectionner plusieurs cellules"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "Lien %1 activé"
+
+#~ msgid "Colors"
+#~ msgstr "Couleurs"
+
+#~ msgid "&Grid:"
+#~ msgstr "&Grille :"
+
+#~ msgid "Custom..."
+#~ msgstr "Personnaliser..."
 
 #~ msgid ""
 #~ "Processing is not possible, because some cells are locked as elements of "
@@ -47106,9 +47103,6 @@ msgstr "Lien %1 activé"
 #~ msgstr ""
 #~ "Si cette case est cochée, un message d'erreur apparaît lorsque KSpread ne "
 #~ "comprend pas la formule que vous avez saisie."
-
-#~ msgid "&Grid color:"
-#~ msgstr "Co&uleur du quadrillage :"
 
 #~ msgid "Default page &size:"
 #~ msgstr "D&imension de la page par défaut :"

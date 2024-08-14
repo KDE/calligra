@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2011-06-25 12:31+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -292,25 +292,25 @@ msgstr "Hægri:"
 msgid "Right align with:"
 msgstr "Hægri:"
 
-#: part/dialogs/KWConfigureDialog.cpp:28
+#: part/dialogs/KWConfigureDialog.cpp:29
 #, fuzzy, kde-format
 #| msgid "P&icture..."
 msgid "Configure"
 msgstr "Mynd..."
 
-#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
 msgstr ""
 
-#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Grid 1"
 msgid "Grid"
 msgstr "Möskvi 1"
 
-#: part/dialogs/KWConfigureDialog.cpp:44
+#: part/dialogs/KWConfigureDialog.cpp:45
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
@@ -318,20 +318,20 @@ msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Titill skjals"
 
-#: part/dialogs/KWConfigureDialog.cpp:45
+#: part/dialogs/KWConfigureDialog.cpp:46
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Settings"
 msgstr "Titill skjals"
 
-#: part/dialogs/KWConfigureDialog.cpp:49
+#: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr ""
 
-#: part/dialogs/KWConfigureDialog.cpp:50
+#: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
 msgstr ""

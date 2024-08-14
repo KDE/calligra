@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2015-01-29 09:07+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -755,101 +755,82 @@ msgstr "&Stillingar"
 msgid "File"
 msgstr "Skrá"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Stillingar skjals"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Búa til afrit"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
-msgid "Grid"
-msgstr "Hnitanet"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, fuzzy, kde-format
-msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Sýna hnitanet:"
 
-#: main/config/KoConfigGridPage.cpp:65
+#: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
-msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "Jafna við hnitanet"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+msgid "Grid:"
+msgstr "Hnitanet"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "Stilla lit möskva:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, fuzzy, kde-format
-msgid "Spacing"
-msgstr "Millibil"
-
-#: main/config/KoConfigGridPage.cpp:79
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Lárétt:"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "Lóð&rétt:"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, fuzzy, kde-format
-msgid "Misc"
-msgstr "Ýmislegt"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 msgid "Units:"
 msgstr "Mælieiningar:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 msgid "Paste offset:"
 msgstr "Líma skyggnu"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2178,24 +2159,42 @@ msgid_plural "Move pages"
 msgstr[0] "Færa &upp"
 msgstr[1] "Færa &upp"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 msgid "Configure"
 msgstr "Stilla"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, fuzzy, kde-format
+msgid "Misc"
+msgstr "Ýmislegt"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Hnitanet"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Skjal"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Stillingar skjals"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Höfundur"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "Höfundur"
@@ -5398,6 +5397,10 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Spacing"
+#~ msgstr "Millibil"
 
 #, fuzzy
 #~ msgid "Tabs side"

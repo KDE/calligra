@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -5161,12 +5161,12 @@ msgstr "ZERO_COUPON(намінал;стаўка;гадоў)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) ураўноўваецца 148.64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:428
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
 #, fuzzy, kde-format
 msgid "Manual"
 msgstr "Самастойнае"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:430
+#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, fuzzy, kde-format
 msgid "Automatic"
@@ -11155,7 +11155,7 @@ msgstr "FIND(find_text;within_text;start_num)"
 msgid "Source string"
 msgstr "Радок"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:141
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
 #, fuzzy, kde-format
 msgid "Position"
 msgstr "Пазіцыя"
@@ -12564,7 +12564,7 @@ msgstr "Схаваць ліст"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:137
+#: ui/dialogs/LayoutDialog.cpp:141
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "&Шрыфт"
@@ -12636,7 +12636,7 @@ msgid "First column as label"
 msgstr "Першы слупок утрымоўвае загалоўкі"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:134
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Data Format"
 msgstr "Фармат дадзеных"
@@ -12672,13 +12672,13 @@ msgid "File Options"
 msgstr "Схаваць параметры"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/FileOptionsWidget.ui:19
+#: part/dialogs/FileOptionsWidget.ui:21
 #, fuzzy, kde-format
 msgid "Number of entries in Recent Files list:"
 msgstr "Колькасць апошніх файлаў:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
-#: part/dialogs/FileOptionsWidget.ui:26
+#: part/dialogs/FileOptionsWidget.ui:28
 #, fuzzy, kde-format
 msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
@@ -12688,13 +12688,13 @@ msgstr ""
 "файлы."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/FileOptionsWidget.ui:39
+#: part/dialogs/FileOptionsWidget.ui:41
 #, fuzzy, kde-format
 msgid "Autosave interval:"
 msgstr "Аўтазахаванне (мін):"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:46
+#: part/dialogs/FileOptionsWidget.ui:48
 #, fuzzy, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
@@ -12704,26 +12704,26 @@ msgstr ""
 "адключыць аўтазахаванне, перавядучы паўзунок у крайняе левае становішча."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:49
+#: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
-#: part/dialogs/FileOptionsWidget.ui:52
+#: part/dialogs/FileOptionsWidget.ui:54
 #, fuzzy, kde-format
 msgid " min"
 msgstr "хв"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: part/dialogs/FileOptionsWidget.ui:65
+#: part/dialogs/FileOptionsWidget.ui:67
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Ствараць рэзервовую копію"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
-#: part/dialogs/FileOptionsWidget.ui:72
+#: part/dialogs/FileOptionsWidget.ui:74
 #, fuzzy, kde-format
 msgid ""
 "Check this box if you want some backup files created. This is checked per "
@@ -12733,13 +12733,13 @@ msgstr ""
 "адчыняюцца файлаў. Па змаўчанні параметр уключаны."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: part/dialogs/InterfaceOptionsWidget.ui:17
+#: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
-#: part/dialogs/InterfaceOptionsWidget.ui:27
+#: part/dialogs/InterfaceOptionsWidget.ui:29
 #, fuzzy, kde-format
 msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
@@ -12749,13 +12749,13 @@ msgstr ""
 "клавішу Enter."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: part/dialogs/InterfaceOptionsWidget.ui:34
+#: part/dialogs/InterfaceOptionsWidget.ui:36
 #, fuzzy, kde-format
 msgid "Func&tion shown in status bar:"
 msgstr "Паказаць радок стану"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
-#: part/dialogs/InterfaceOptionsWidget.ui:44
+#: part/dialogs/InterfaceOptionsWidget.ui:46
 #, fuzzy, kde-format
 msgid ""
 "This drop down selection box can be used to choose the calculation performed "
@@ -12763,66 +12763,52 @@ msgid ""
 msgstr "Выбар функцыі, вынік якой будзе паказаны ў радку стану."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/InterfaceOptionsWidget.ui:51
+#: part/dialogs/InterfaceOptionsWidget.ui:53
 #, fuzzy, kde-format
 msgid "&Unit:"
 msgstr "час"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
-#: part/dialogs/InterfaceOptionsWidget.ui:61
+#: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
-#: part/dialogs/InterfaceOptionsWidget.ui:68
+#: part/dialogs/InterfaceOptionsWidget.ui:70
 #, fuzzy, kde-format
 msgid "I&ndentation step:"
 msgstr "Крок водступу (%1):"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
-#: part/dialogs/InterfaceOptionsWidget.ui:78
+#: part/dialogs/InterfaceOptionsWidget.ui:80
 #, fuzzy, kde-format
 msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
 "Decrease Indent actions."
 msgstr "Велічыня водступу ў вочках."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/InterfaceOptionsWidget.ui:85
-#, fuzzy, kde-format
-msgid "Colors"
-msgstr "Колер"
-
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: part/dialogs/InterfaceOptionsWidget.ui:91
+#: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-msgid "&Grid:"
-msgstr "Гурд"
+msgid "&Grid Color:"
+msgstr "Колер сеткі:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:101
+#: part/dialogs/InterfaceOptionsWidget.ui:97
 #, fuzzy, kde-format
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr "Выбар колеру меж вочка."
 
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_gridColor)
-#. i18n: ectx: property (text), item, widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:105
-#: part/dialogs/InterfaceOptionsWidget.ui:212
-#, fuzzy, kde-format
-msgid "Custom..."
-msgstr "Асаблівы"
-
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/InterfaceOptionsWidget.ui:198
+#: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
-msgid "Page Out&line:"
+msgid "Page Out&line Color:"
 msgstr "Межы вакол дыяпазону"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
-#: part/dialogs/InterfaceOptionsWidget.ui:208
+#: part/dialogs/InterfaceOptionsWidget.ui:114
 #, fuzzy, kde-format
 msgid ""
 "When the View ->Show Page Borders menu item is checked, the page borders are "
@@ -13005,133 +12991,133 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "Налада KSpread"
 
-#: part/dialogs/PreferenceDialog.cpp:286
+#: part/dialogs/PreferenceDialog.cpp:289
 #, fuzzy, kde-format
 msgid "Interface"
 msgstr "Інтэрфейс"
 
-#: part/dialogs/PreferenceDialog.cpp:291
+#: part/dialogs/PreferenceDialog.cpp:294
 #, fuzzy, kde-format
 msgid "Down"
 msgstr "Долу"
 
-#: part/dialogs/PreferenceDialog.cpp:292
+#: part/dialogs/PreferenceDialog.cpp:295
 #, fuzzy, kde-format
 msgid "Up"
 msgstr "Угору"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:296 ui/dialogs/PositionWidget.ui:75
 #, fuzzy, kde-format
 msgid "Right"
 msgstr "Праваруч"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:294 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:297 ui/dialogs/PositionWidget.ui:61
 #, fuzzy, kde-format
 msgid "Left"
 msgstr "Леваруч"
 
-#: part/dialogs/PreferenceDialog.cpp:295
+#: part/dialogs/PreferenceDialog.cpp:298
 #, fuzzy, kde-format
 msgid "Down, First Column"
 msgstr "Уніз, першы слупок"
 
-#: part/dialogs/PreferenceDialog.cpp:296 part/dialogs/PreferenceDialog.cpp:304
-#: part/dialogs/PreferenceDialog.cpp:427 part/View.cpp:389
+#: part/dialogs/PreferenceDialog.cpp:299 part/dialogs/PreferenceDialog.cpp:307
+#: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Няма"
 
-#: part/dialogs/PreferenceDialog.cpp:298 part/View.cpp:395
+#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, fuzzy, kde-format
 msgid "Sum"
 msgstr "Сума"
 
-#: part/dialogs/PreferenceDialog.cpp:299 part/View.cpp:401
+#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, fuzzy, kde-format
 msgid "Min"
 msgstr "Мін"
 
-#: part/dialogs/PreferenceDialog.cpp:300 part/View.cpp:407
+#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, fuzzy, kde-format
 msgid "Max"
 msgstr "Макс"
 
-#: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, fuzzy, kde-format
 msgid "Average"
 msgstr "Сярэдняе"
 
-#: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:419
+#: part/dialogs/PreferenceDialog.cpp:305 part/View.cpp:419
 #, fuzzy, kde-format
 msgid "Count"
 msgstr "Колькасць"
 
-#: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:425
 #, fuzzy, kde-format
 msgid "CountA"
 msgstr "Колькасць"
 
-#: part/dialogs/PreferenceDialog.cpp:318
+#: part/dialogs/PreferenceDialog.cpp:323
 #, kde-format
 msgid "Open/Save"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:329
+#: part/dialogs/PreferenceDialog.cpp:334
 #, fuzzy, kde-format
 msgid "Function Modules"
 msgstr "Функцыя"
 
-#: part/dialogs/PreferenceDialog.cpp:330 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Н&ачынне"
 
-#: part/dialogs/PreferenceDialog.cpp:332
+#: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
 msgstr ""
 
-#: part/dialogs/PreferenceDialog.cpp:340 part/dialogs/PreferenceDialog.cpp:347
+#: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, fuzzy, kde-format
 msgid "Spelling"
 msgstr "Праверка правапісу"
 
-#: part/dialogs/PreferenceDialog.cpp:342
+#: part/dialogs/PreferenceDialog.cpp:347
 #, fuzzy, kde-format
 msgid "Spell Checker Behavior"
 msgstr "Налада праверкі арфаграфіі"
 
-#: part/dialogs/PreferenceDialog.cpp:348
+#: part/dialogs/PreferenceDialog.cpp:353
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "аўтар"
 
-#: part/dialogs/PreferenceDialog.cpp:349
+#: part/dialogs/PreferenceDialog.cpp:354
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "аўтар"
 
-#: part/dialogs/PreferenceDialog.cpp:421
+#: part/dialogs/PreferenceDialog.cpp:426
 #, fuzzy, kde-format
 msgid "&Completion mode:"
 msgstr "Аўтазавяршэнне:"
 
-#: part/dialogs/PreferenceDialog.cpp:425
+#: part/dialogs/PreferenceDialog.cpp:430
 #, fuzzy, kde-format
 msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr "Выбар рэжыму аўтаматычнага завяршэння ўводзімага тэксту."
 
-#: part/dialogs/PreferenceDialog.cpp:429
+#: part/dialogs/PreferenceDialog.cpp:434
 #, fuzzy, kde-format
 msgid "Popup"
 msgstr "Выплыўнае"
 
-#: part/dialogs/PreferenceDialog.cpp:431
+#: part/dialogs/PreferenceDialog.cpp:436
 #, fuzzy, kde-format
 msgid "Semi-Automatic"
 msgstr "Паўаўтаматычны"
@@ -14612,32 +14598,32 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Тут паказваецца прыклад фарматавання тэксту."
 
-#: ui/dialogs/LayoutDialog.cpp:117
+#: ui/dialogs/LayoutDialog.cpp:118
 #, fuzzy, kde-format
 msgid "Cell Format"
 msgstr "Фармат вочак"
 
-#: ui/dialogs/LayoutDialog.cpp:120
+#: ui/dialogs/LayoutDialog.cpp:121
 #, fuzzy, kde-format
 msgid "Set Cell Format"
 msgstr "Фармат вочак"
 
-#: ui/dialogs/LayoutDialog.cpp:129
+#: ui/dialogs/LayoutDialog.cpp:131
 #, fuzzy, kde-format
 msgid "General"
 msgstr "&Агульныя"
 
-#: ui/dialogs/LayoutDialog.cpp:144 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
 #, fuzzy, kde-format
 msgid "Border"
 msgstr "Поле"
 
-#: ui/dialogs/LayoutDialog.cpp:147
+#: ui/dialogs/LayoutDialog.cpp:154
 #, fuzzy, kde-format
 msgid "Background"
 msgstr "Фон"
 
-#: ui/dialogs/LayoutDialog.cpp:150
+#: ui/dialogs/LayoutDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Cell Protection"
 msgstr "Абарона"
@@ -15329,6 +15315,18 @@ msgstr "Вы павінны вылучыць некалькі вочак."
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Colors"
+#~ msgstr "Колер"
+
+#, fuzzy
+#~ msgid "&Grid:"
+#~ msgstr "Гурд"
+
+#, fuzzy
+#~ msgid "Custom..."
+#~ msgstr "Асаблівы"
 
 #, fuzzy
 #~ msgid ""
@@ -40452,10 +40450,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "&Method of calc:"
 #~ msgstr "Метад вылічэння:"
-
-#, fuzzy
-#~ msgid "&Grid color:"
-#~ msgstr "Колер сеткі:"
 
 #, fuzzy
 #~ msgid "Default page &size:"

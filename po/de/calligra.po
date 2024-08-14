@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -704,101 +704,87 @@ msgstr "&Einstellungen"
 msgid "File"
 msgstr "Datei"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, kde-format
-msgid "Document Settings"
-msgstr "Dokumenteinstellungen"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr "Keine automatische Sicherung"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr " min"
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr "Intervall für automatisches Speichern:"
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
 msgstr "Sicherungsdatei erstellen:"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
-#, kde-format
-msgid "Grid"
-msgstr "Gitter"
-
-#: main/config/KoConfigGridPage.cpp:64
-#, kde-format
-msgid "Show grid:"
+#: main/config/KoConfigGridPage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Gitter anzeigen:"
 
-#: main/config/KoConfigGridPage.cpp:65
-#, kde-format
-msgid "Snap to grid:"
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Snap to grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
 msgstr "An Gitter ausrichten:"
 
-#: main/config/KoConfigGridPage.cpp:66
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Grid"
+msgid "Grid:"
+msgstr "Gitter"
+
+#: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
 msgstr "Gitterfarbe:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, kde-format
-msgid "Spacing"
-msgstr "Abstände"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:81
+#, fuzzy, kde-format
+#| msgid "Horizontal:"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
-msgstr "&Waagerecht:"
+msgid "Horizontal spacing:"
+msgstr "Waagerecht:"
 
-#: main/config/KoConfigGridPage.cpp:80
-#, kde-format
+#: main/config/KoConfigGridPage.cpp:82
+#, fuzzy, kde-format
+#| msgid "Vertical:"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
-msgstr "&Senkrecht:"
+msgid "Vertical spacing:"
+msgstr "Senkrecht:"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr "Verschiedenes"
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
 msgstr "Einheiten:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr "Radius der Ziehpunkte:"
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr "Empfindlichkeit der Ziehpunkte:"
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
 msgid "Paste offset:"
 msgstr "Versatz beim Einfügen:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr "Am Cursor einfügen:"
@@ -2118,24 +2104,42 @@ msgid_plural "Move pages"
 msgstr[0] "Seite verschieben"
 msgstr[1] "Seiten verschieben"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr "Einrichten"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr "Verschiedenes"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "Gitter"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokument"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "Dokumenteinstellungen"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Autor"
@@ -5401,6 +5405,17 @@ msgstr "Alle unterstützte Formate"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Spacing"
+#~ msgstr "Abstände"
+
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Waagerecht:"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Senkrecht:"
 
 #~ msgid "Tabs side"
 #~ msgstr "Reiter-Anzeige"
@@ -13777,12 +13792,6 @@ msgstr "%1"
 
 #~ msgid "Alignment"
 #~ msgstr "Ausrichtung"
-
-#~ msgid "Horizontal:"
-#~ msgstr "Waagerecht:"
-
-#~ msgid "Vertical:"
-#~ msgstr "Senkrecht:"
 
 #~ msgid "Scale"
 #~ msgstr "Skalieren"

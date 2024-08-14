@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2008-01-27 21:10+0700\n"
 "Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -790,109 +790,90 @@ msgstr "T&hiết lập"
 msgid "File"
 msgstr "Tệp"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Thông tin về tại liệu"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosave interval:"
 msgstr "Đang tự động lưu..."
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Create backup file:"
 msgstr "Tạo đường"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Hiện &Lưới"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
+#, fuzzy, kde-format
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "Gắn vào Lưới"
+
+#: main/config/KoConfigGridPage.cpp:63
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Show grid:"
+msgid "Grid:"
 msgstr "Hiện &Lưới"
 
 #: main/config/KoConfigGridPage.cpp:65
-#, fuzzy, kde-format
-msgid "Snap to grid:"
-msgstr "Gắn vào Lưới"
-
-#: main/config/KoConfigGridPage.cpp:66
 #, fuzzy, kde-format
 #| msgid "&Background color:"
 msgid "Grid color:"
 msgstr "Màu &nền:"
 
-#: main/config/KoConfigGridPage.cpp:68
-#, fuzzy, kde-format
-msgid "Spacing"
-msgstr "Dấu cách"
-
-#: main/config/KoConfigGridPage.cpp:79
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
 #| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Ngang"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
 #| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&Dọc"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "Đơn vị:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 msgid "Paste offset:"
 msgstr "Trang Dán"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2292,27 +2273,46 @@ msgid "Move page"
 msgid_plural "Move pages"
 msgstr[0] "Di chuyển trang"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure"
 msgstr "Xác nhận Lưu"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Grid"
+msgstr "Hiện &Lưới"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Tài liệu"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Thông tin về tại liệu"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Tác giả "
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Tác giả "
@@ -5713,6 +5713,10 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Spacing"
+#~ msgstr "Dấu cách"
 
 #, fuzzy
 #~| msgid "Margins"

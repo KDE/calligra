@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2002-11-09 11:12+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -762,106 +762,85 @@ msgstr "triangleq"
 msgid "File"
 msgstr "Igama lefayile"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Ushwankathelo loxwebhu"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No value"
 msgid "No autosave"
 msgstr "Akukho xabiso"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 msgid "Create backup file:"
 msgstr "Yenza i Template"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "Bonisa isixhobo sebar %1"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
-msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "Bonisa isixhobo sebar %1"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+msgid "Grid:"
 msgstr "Bonisa isixhobo sebar %1"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
-msgid "Snap to grid:"
-msgstr "Bonisa isixhobo sebar %1"
-
-#: main/config/KoConfigGridPage.cpp:66
-#, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "Tshintsha umbala wesiqalo;"
 
-#: main/config/KoConfigGridPage.cpp:68
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
-msgid "Spacing"
-msgstr "Uniko sithuba lwelayini"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "&Tye"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "&Nkqo"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "Umnqongo:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Shadow:"
 msgid "Paste offset:"
 msgstr "Isithunzi:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2203,25 +2182,43 @@ msgid_plural "Move pages"
 msgstr[0] "Cima Okubhaliweyo"
 msgstr[1] "Cima Okubhaliweyo"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
 msgstr ""
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Bonisa isixhobo sebar %1"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Vula Uxwebhu"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Ushwankathelo loxwebhu"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Umbhali"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "Umbhali"
@@ -5527,6 +5524,22 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Spacing"
+#~ msgstr "Uniko sithuba lwelayini"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Tye"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Nkqo"
 
 #, fuzzy
 #~ msgid "Tabs side"
@@ -9984,14 +9997,6 @@ msgstr ""
 
 #~ msgid "Alignment"
 #~ msgstr "Ukwenziwa kwemigca"
-
-#, fuzzy
-#~ msgid "Horizontal:"
-#~ msgstr "&Tye"
-
-#, fuzzy
-#~ msgid "Vertical:"
-#~ msgstr "&Nkqo"
 
 #, fuzzy
 #~ msgid "Scale"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-14 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -792,111 +792,90 @@ msgstr "ตั้งค่า"
 msgid "File"
 msgstr "แฟ้ม"
 
-#: main/config/KoConfigDocumentPage.cpp:47
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "ข้อมูลย่อของเอกสาร"
-
-#: main/config/KoConfigDocumentPage.cpp:63
+#: main/config/KoConfigDocumentPage.cpp:62
 #, fuzzy, kde-format
 #| msgid "No value"
 msgid "No autosave"
 msgstr "ไม่มีค่า"
 
-#: main/config/KoConfigDocumentPage.cpp:64
+#: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
 msgstr ""
 
-#: main/config/KoConfigDocumentPage.cpp:66
+#: main/config/KoConfigDocumentPage.cpp:65
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosave interval:"
 msgstr "กำลังบันทึกอัตโนมัติ..."
 
-#: main/config/KoConfigDocumentPage.cpp:70
+#: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
 #| msgid "Create Template"
 msgid "Create backup file:"
 msgstr "สร้างเอกสารต้นแบบ"
 
-#: main/config/KoConfigGridPage.cpp:56
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:37
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: main/config/KoConfigGridPage.cpp:57
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Grid"
+msgctxt "@option:check"
+msgid "Show grid"
 msgstr "แสดงเส้นกริด"
 
-#: main/config/KoConfigGridPage.cpp:64
+#: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
 #| msgid "Show &Grid"
-msgid "Show grid:"
+msgctxt "@option:check"
+msgid "Snap to grid"
+msgstr "แสดงเส้นกริด"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Grid:"
 msgstr "แสดงเส้นกริด"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, fuzzy, kde-format
-#| msgid "Show &Grid"
-msgid "Snap to grid:"
-msgstr "แสดงเส้นกริด"
-
-#: main/config/KoConfigGridPage.cpp:66
-#, fuzzy, kde-format
 msgid "Grid color:"
 msgstr "สีพื้นหลัง:"
 
-#: main/config/KoConfigGridPage.cpp:68
+#: main/config/KoConfigGridPage.cpp:81
 #, fuzzy, kde-format
-msgid "Spacing"
-msgstr "ระยะห่างระหว่างบรรทัด"
-
-#: main/config/KoConfigGridPage.cpp:79
-#, fuzzy, kde-format
-#| msgid "&Horizontal"
 msgctxt "Horizontal grid spacing"
-msgid "&Horizontal:"
+msgid "Horizontal spacing:"
 msgstr "แนวนอน"
 
-#: main/config/KoConfigGridPage.cpp:80
+#: main/config/KoConfigGridPage.cpp:82
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "Vertical grid spacing"
-msgid "&Vertical:"
+msgid "Vertical spacing:"
 msgstr "แนวตั้ง"
 
-#: main/config/KoConfigMiscPage.cpp:68
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:32
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:33 pigment/KoCompositeOp.cpp:59
-#: pigment/KoCompositeOpRegistry.cpp:25
-#, kde-format
-msgid "Misc"
-msgstr ""
-
-#: main/config/KoConfigMiscPage.cpp:78
+#: main/config/KoConfigMiscPage.cpp:76
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "หน่วย:"
 
-#: main/config/KoConfigMiscPage.cpp:87
+#: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:94
+#: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
 msgstr ""
 
-#: main/config/KoConfigMiscPage.cpp:101
+#: main/config/KoConfigMiscPage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Shadow Offset:"
 msgid "Paste offset:"
 msgstr "ระยะเลื่อนของเงา:"
 
-#: main/config/KoConfigMiscPage.cpp:105
+#: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
 msgid "Paste at Cursor:"
 msgstr ""
@@ -2288,27 +2267,46 @@ msgid "Move page"
 msgid_plural "Move pages"
 msgstr[0] "พอดีกับหน้า"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:27
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure"
 msgstr "ยืนยันการบันทึก"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:44
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:59
+#: pigment/KoCompositeOpRegistry.cpp:25
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Grid"
+msgstr "แสดงเส้นกริด"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "เอกสาร"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:49
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "ข้อมูลย่อของเอกสาร"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Author"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ผู้เขียน"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:50 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
 #, kde-format
 msgid "Author"
 msgstr "ผู้เขียน"
@@ -5719,6 +5717,22 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Spacing"
+#~ msgstr "ระยะห่างระหว่างบรรทัด"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "แนวนอน"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "แนวตั้ง"
 
 #, fuzzy
 #~ msgid "Tabs side"
@@ -11115,14 +11129,6 @@ msgstr "%1%"
 
 #~ msgid "Alignment"
 #~ msgstr "การจัดวาง"
-
-#, fuzzy
-#~ msgid "Horizontal:"
-#~ msgstr "แนวนอน"
-
-#, fuzzy
-#~ msgid "Vertical:"
-#~ msgstr "แนวตั้ง"
 
 #, fuzzy
 #~ msgid "Scale"
