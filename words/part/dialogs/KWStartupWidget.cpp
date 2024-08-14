@@ -12,12 +12,16 @@
 
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
+#include <QTabBar>
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
     : QWidget(parent)
     , m_unit(doc->unit())
 {
     widget.setupUi(this);
+    widget.createButtonLayout->insertStretch(0);
+    widget.tabs->tabBar()->setExpanding(true);
+
     m_columns = columns;
     m_layout.leftMargin = MM_TO_POINT(30);
     m_layout.rightMargin = MM_TO_POINT(30);

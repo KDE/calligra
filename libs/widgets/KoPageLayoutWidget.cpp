@@ -29,6 +29,9 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     , d(new Private)
 {
     d->widget.setupUi(this);
+    d->widget.mainLayout->insertStretch(0);
+    d->widget.mainLayout->insertStretch(2);
+    d->widget.gridLayout->setRowStretch(d->widget.gridLayout->rowCount(), 1);
 
     d->pageLayout = layout;
     d->marginsEnabled = true;
@@ -174,11 +177,11 @@ void KoPageLayoutWidget::facingPagesChanged()
         return;
     d->allowSignals = false;
     if (d->widget.singleSided->isChecked()) {
-        d->widget.leftLabel->setText(i18n("Left Edge:"));
-        d->widget.rightLabel->setText(i18n("Right Edge:"));
+        d->widget.leftLabel->setText(i18n("Left Edge Margin:"));
+        d->widget.rightLabel->setText(i18n("Right Edge Margin:"));
     } else {
-        d->widget.leftLabel->setText(i18n("Binding Edge:"));
-        d->widget.rightLabel->setText(i18n("Page Edge:"));
+        d->widget.leftLabel->setText(i18n("Binding Edge Margin:"));
+        d->widget.rightLabel->setText(i18n("Page Edge Margin:"));
     }
     d->allowSignals = true;
     marginsChanged();
@@ -221,7 +224,10 @@ void KoPageLayoutWidget::marginsChanged()
 void KoPageLayoutWidget::setTextAreaAvailable(bool available)
 {
     d->marginsEnabled = available;
-    d->widget.margins->setEnabled(available);
+    d->widget.topMargin->setEnabled(available);
+    d->widget.bottomMargin->setEnabled(available);
+    d->widget.bindingEdgeMargin->setEnabled(available);
+    d->widget.pageEdgeMargin->setEnabled(available);
     marginsChanged();
 }
 

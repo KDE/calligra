@@ -73,11 +73,32 @@ void KoPagePreviewWidget::paintEvent(QPaintEvent *event)
     // paint scale
 }
 
+static QRectF shadowedRect(const QRectF &rect, const qreal shadowSize = 1.001)
+{
+    return rect.adjusted(shadowSize, shadowSize, -shadowSize, -shadowSize);
+}
+
+void renderRoundedRectShadow(QPainter *painter, const QRectF &rect, const QColor &color, const QBrush &background, qreal radius)
+{
+    if (!color.isValid()) {
+        return;
+    }
+
+    painter->setRenderHint(QPainter::Antialiasing, true);
+
+    qreal adjustment = 0.5 * 1.001; // Translate for the pen
+    QRectF shadowRect = rect.adjusted(adjustment, adjustment, -adjustment, adjustment);
+
+    painter->setPen(QPen(color, 1.001));
+    painter->setBrush(QBrush(background));
+    painter->drawRoundedRect(shadowRect, radius, radius);
+}
+
 void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &dimensions, bool left)
 {
-    painter.fillRect(dimensions, QBrush(palette().base()));
-    painter.setPen(QPen(palette().color(QPalette::Dark), 0));
-    painter.drawRect(dimensions);
+    const auto shadowColor = QColor::fromRgbF(0, 0, 0, 0.125);
+    const auto lineColor = QColor::fromRgbF(0, 0, 0, 0.5);
+    renderRoundedRectShadow(&painter, shadowedRect(dimensions), shadowColor, palette().base(), 5);
 
     // draw text areas
     QRect textArea = dimensions;
@@ -102,8 +123,8 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
         textArea.setLeft(textArea.left() + qRound(zoom * leftMargin));
         textArea.setRight(textArea.right() - qRound(zoom * rightMargin));
     }
-    painter.setBrush(QBrush(palette().color(QPalette::ButtonText), Qt::HorPattern));
-    painter.setPen(QPen(palette().color(QPalette::Dark), 0));
+    painter.setBrush(QBrush(lineColor, Qt::HorPattern));
+    painter.setPen(QPen(lineColor, 0));
 
     // uniform columns?
     if (d->columns.columnData.isEmpty()) {
