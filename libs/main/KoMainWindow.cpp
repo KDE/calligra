@@ -1743,9 +1743,6 @@ QDockWidget *KoMainWindow::createDockWidget(KoDockFactoryBase *factory)
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
 
-        if (dockWidget->widget() && dockWidget->widget()->layout())
-            dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
-
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = factory->defaultVisible();
 
