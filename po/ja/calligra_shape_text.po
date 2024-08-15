@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2014-07-10 00:21-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -493,38 +493,38 @@ msgstr "レコード変更"
 msgid "Show Changes"
 msgstr "変更を表示"
 
-#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#: dialogs/CharacterGeneral.cpp:60 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
 msgstr "フォント"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
-#: dialogs/CharacterGeneral.ui:27
+#: dialogs/CharacterGeneral.ui:33
 #, kde-format
 msgid "General"
 msgstr "全般"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/CharacterGeneral.ui:33
+#: dialogs/CharacterGeneral.ui:39
 #, kde-format
 msgctxt "Name of the style"
 msgid "Name:"
 msgstr "名前:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: dialogs/CharacterGeneral.ui:46
+#: dialogs/CharacterGeneral.ui:52
 #, kde-format
 msgid "Next style:"
 msgstr "次のスタイル:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: dialogs/CharacterGeneral.ui:62
+#: dialogs/CharacterGeneral.ui:68
 #, kde-format
 msgid "Parent style:"
 msgstr "親スタイル:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
-#: dialogs/CharacterGeneral.ui:78
+#: dialogs/CharacterGeneral.ui:84
 #, kde-format
 msgid "Include in table of contents"
 msgstr "目次に含める"
@@ -607,7 +607,7 @@ msgstr "位置:"
 msgid "Select"
 msgstr "選択"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Warning"
 msgstr "警告"
@@ -2138,7 +2138,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "削除"
@@ -2196,46 +2196,46 @@ msgstr "境界線なし"
 msgid "Create a new style inheriting the current style"
 msgstr "現在のスタイルを受け継いで新しいスタイルを新規作成"
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
+#: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
 #, kde-format
 msgid "New Style"
 msgstr "新しいスタイル"
 
-#: dialogs/StyleManager.cpp:431
+#: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 "「%1」という名前のスタイルは既に存在しています。別の名前を選んでください"
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "段落"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "文字"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNew)
-#: dialogs/StyleManager.ui:68
+#: dialogs/StyleManager.ui:97
 #, kde-format
 msgid "&New"
 msgstr "新規(&N)"
 
-#: dialogs/StyleManagerDialog.cpp:20
+#: dialogs/StyleManagerDialog.cpp:23
 #, kde-format
 msgid "Style Manager"
 msgstr "スタイルマネージャ"
 
-#: dialogs/StyleManagerDialog.cpp:50
+#: dialogs/StyleManagerDialog.cpp:53
 #, kde-format
 msgid "Save Changes"
 msgstr "変更を保存"
 
-#: dialogs/StyleManagerDialog.cpp:51
+#: dialogs/StyleManagerDialog.cpp:54
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "

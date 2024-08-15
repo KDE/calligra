@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:16+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -1028,13 +1028,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr ""
@@ -1630,18 +1630,18 @@ msgid "Hide %1 Toolbar"
 msgstr "गाइड देखाबू"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Open Existing Document"
 msgstr "दस्तावेज खोलू"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "हालक दस्ताबेज"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, fuzzy, kde-format
 #| msgid "Save Document"
 msgid "Custom Document"
@@ -5206,50 +5206,52 @@ msgstr "बदलू"
 msgid "Apply to document"
 msgstr "दस्तावेज सहेजू"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "&Left:"
-msgid "Left Edge:"
-msgstr "बम्माँ (&L):"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Lighten"
-msgid "Right Edge:"
-msgstr "हलुक करू"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-#| msgid "Page Size"
-msgid "Binding Edge:"
-msgstr "पृष्ठ आकार"
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "हाशिया"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Right Edge Margin:"
+msgstr "हाशिया"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
 #| msgid "Page Size"
-msgid "Page Edge:"
+msgid "Binding Edge Margin:"
 msgstr "पृष्ठ आकार"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Size"
+msgid "Page Edge Margin:"
+msgstr "पृष्ठ आकार"
+
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgid "Facing Pages:"
 msgstr "कोपी करू पृष्ठ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgid "Facing pages"
 msgstr "कोपी करू पृष्ठ"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 #| msgid "Change"
 msgid "Page Layout:"
 msgstr "बदलू"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "Page Size"
 msgid "Page spread"
@@ -5345,37 +5347,19 @@ msgstr "सीधा"
 msgid "Right to left"
 msgstr "हलुक करू"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "हाशिया"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "शीर्ष:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-#| msgid "Page Size"
-msgid "Binding edge:"
-msgstr "पृष्ठ आकार"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Size"
-msgid "Page edge:"
-msgstr "पृष्ठ आकार"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "नीच्चाँ:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Bottom Margin:"
+msgstr "हाशिया"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5722,6 +5706,35 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "बम्माँ (&L):"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgid "Right Edge:"
+#~ msgstr "हलुक करू"
+
+#~ msgid "Margins"
+#~ msgstr "हाशिया"
+
+#~ msgid "Top:"
+#~ msgstr "शीर्ष:"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgid "Binding edge:"
+#~ msgstr "पृष्ठ आकार"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgid "Page edge:"
+#~ msgstr "पृष्ठ आकार"
+
+#~ msgid "Bottom:"
+#~ msgstr "नीच्चाँ:"
 
 #, fuzzy
 #~| msgid "Snapping"
@@ -8149,26 +8162,6 @@ msgstr "%1%"
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "पृष्ठ आकार"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "हाशिया"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Right Margin"
-#~ msgstr "हाशिया"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Top Margin"
-#~ msgstr "हाशिया"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Bottom Margin"
-#~ msgstr "हाशिया"
 
 #, fuzzy
 #~| msgid "Subject:"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -931,13 +931,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "アプリケーションの起動時に常にこのテンプレートを使う"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "常にこのテンプレートを使う"
@@ -1525,17 +1525,17 @@ msgid "Hide %1 Toolbar"
 msgstr "%1ツールバーを隠す"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "保存済み文書を開く"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "最近の文書"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "カスタム文書"
@@ -4831,43 +4831,49 @@ msgstr "ページのレイアウト"
 msgid "Apply to document"
 msgstr "文書に適用"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
+#: widgets/KoPageLayoutWidget.cpp:180
+#, fuzzy, kde-format
+#| msgid "Left Edge:"
+msgid "Left Edge Margin:"
 msgstr "左端:"
 
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
+#: widgets/KoPageLayoutWidget.cpp:181
+#, fuzzy, kde-format
+#| msgid "Right Edge:"
+msgid "Right Edge Margin:"
 msgstr "右端:"
 
-#: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
 msgstr "とじしろ:"
 
-#: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "ページの端:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "見開きページ:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "見開きページ"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "ページのレイアウト:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "見開き"
@@ -4956,34 +4962,18 @@ msgstr "左から右へ"
 msgid "Right to left"
 msgstr "右から左へ"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "余白"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "上:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "とじしろ:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "ページの端:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "Bottom Margin:"
 msgstr "下:"
 
 #: widgets/KoResourceItemChooser.cpp:138
@@ -5338,6 +5328,15 @@ msgstr "サポートされているすべてのフォーマット"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Top:"
+#~ msgstr "上:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "とじしろ:"
+
+#~ msgid "Page edge:"
+#~ msgstr "ページの端:"
 
 #~ msgid "Spacing"
 #~ msgstr "間隔"

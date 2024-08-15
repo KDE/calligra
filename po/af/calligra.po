@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2002-09-27 16:44+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -959,13 +959,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, fuzzy, kde-format
 msgid "Always use this template at application start up"
 msgstr "Skep Werkvoorbeeld"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, fuzzy, kde-format
 msgid "Always use this template"
 msgstr "Skep Werkvoorbeeld"
@@ -1557,17 +1557,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Vertoon %1 Nutsbalk"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 msgid "Open Existing Document"
 msgstr "Open 'n bestaande dokument"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, fuzzy, kde-format
 msgid "Recent Documents"
 msgstr "Open 'n onlangse dokument"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Open Dokument"
@@ -5014,47 +5014,48 @@ msgstr "Bladsy Uitleg"
 msgid "Apply to document"
 msgstr "Open Dokument"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "Left:"
-msgid "Left Edge:"
-msgstr "Links:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Right:"
-msgid "Right Edge:"
-msgstr "Regterkant:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-msgid "Binding Edge:"
-msgstr "Donker Oranje"
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "Kantlyne"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
+msgid "Right Edge Margin:"
+msgstr "Ligte Groen"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+msgid "Binding Edge Margin:"
+msgstr "Donker Oranje"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
 #| msgid "Page Size"
-msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Bladsy Grootte"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 msgid "Facing Pages:"
 msgstr "Volgende styl:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 msgid "Facing pages"
 msgstr "Volgende styl:"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout:"
 msgstr "Bladsy Uitleg"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page spread"
@@ -5145,36 +5146,19 @@ msgstr "Enkel"
 msgid "Right to left"
 msgstr "Ligte Groen"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "Kantlyne"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
-msgid "Top:"
-msgstr "Bo:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-msgid "Binding edge:"
-msgstr "Donker Oranje"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Preview"
-msgid "Page edge:"
-msgstr "Bladsy Voorskou"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, fuzzy, kde-format
-msgid "Bottom:"
-msgstr "Oplyn"
+#| msgid "Margins"
+msgid "Bottom Margin:"
+msgstr "Kantlyne"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5508,6 +5492,36 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Links:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Regterkant:"
+
+#~ msgid "Margins"
+#~ msgstr "Kantlyne"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "Bo:"
+
+#, fuzzy
+#~ msgid "Binding edge:"
+#~ msgstr "Donker Oranje"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgid "Page edge:"
+#~ msgstr "Bladsy Voorskou"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "Oplyn"
 
 #, fuzzy
 #~ msgid "Spacing"
@@ -8753,25 +8767,6 @@ msgstr ""
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "Bladsy Grootte"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "Kantlyne"
-
-#, fuzzy
-#~ msgid "Right Margin"
-#~ msgstr "Ligte Groen"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Top Margin"
-#~ msgstr "Kantlyne"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Bottom Margin"
-#~ msgstr "Kantlyne"
 
 #, fuzzy
 #~ msgid "Script Interpreter"

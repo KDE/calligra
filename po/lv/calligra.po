@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2024-05-25 11:14+0300\n"
 "Last-Translator: Māris Nartišs <maris.kde@gmail.com>\n"
 "Language-Team: \n"
@@ -924,13 +924,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Ieslēdzot programmu, vienmēr atvērt šo veidni"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Vienmēr lietot šo veidni"
@@ -1526,17 +1526,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Slēpt %1 rīkjoslu"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Atvērt esošu dokumentu"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Nesenie dokumenti"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Pielāgots dokuments"
@@ -4863,43 +4863,49 @@ msgstr "Lappuses izkārtojums"
 msgid "Apply to document"
 msgstr "Pielietot dokumentam"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr "Kreisā mala:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr "Labā mala:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
-msgstr "Iesējuma mala:"
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "Maliņas"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#, fuzzy, kde-format
+#| msgid "Right indent"
+msgid "Right Edge Margin:"
+msgstr "Labā atkāpe"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
+msgstr "Iesējuma mala:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Lappuses mala:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Pretējās lappuses:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Pretējās lappuses"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Lappuses izkārtojums:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "Atvērums"
@@ -4988,35 +4994,19 @@ msgstr "No kreisās uz labo"
 msgid "Right to left"
 msgstr "No labās uz kreiso"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Piemales"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Augšā:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Iesējuma mala:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Lapas mala:"
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
+msgstr "Maliņas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "Apakša:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Bottom Margin:"
+msgstr "Maliņas"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5365,6 +5355,27 @@ msgstr "Visi atbalstītie formāti"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Kreisā mala:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Labā mala:"
+
+#~ msgid "Margins"
+#~ msgstr "Piemales"
+
+#~ msgid "Top:"
+#~ msgstr "Augšā:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Iesējuma mala:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Lapas mala:"
+
+#~ msgid "Bottom:"
+#~ msgstr "Apakša:"
 
 #~ msgid "Spacing"
 #~ msgstr "Atstarpes"
@@ -9199,26 +9210,6 @@ msgstr "%1"
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "Lappuses izmērs"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "Maliņas"
-
-#, fuzzy
-#~| msgid "Right indent"
-#~ msgid "Right Margin"
-#~ msgstr "Labā atkāpe"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Top Margin"
-#~ msgstr "Maliņas"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Bottom Margin"
-#~ msgstr "Maliņas"
 
 #, fuzzy
 #~| msgid "Scripts Manager"

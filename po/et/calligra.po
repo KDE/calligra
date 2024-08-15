@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2020-01-17 19:00+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -924,13 +924,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Rakenduse käivitamisel alustatakse alati valitud malliga"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Alati kasutatakse seda malli"
@@ -1523,17 +1523,17 @@ msgid "Hide %1 Toolbar"
 msgstr "%1 tööriistariba peitmine"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Ava olemasolev dokument"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Viimati kasutatud dokumendid"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Kohandatud dokument"
@@ -4868,43 +4868,49 @@ msgstr "Lehekülje paigutus"
 msgid "Apply to document"
 msgstr "Rakenda dokumendile"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr "Vasak serv:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr "Parem serv:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
-msgstr "Köiteserv:"
+#, fuzzy, kde-format
+#| msgid "Left Margin"
+msgid "Left Edge Margin:"
+msgstr "Vasak veeris"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#, fuzzy, kde-format
+#| msgid "Right Margin"
+msgid "Right Edge Margin:"
+msgstr "Parem veeris"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
+msgstr "Köiteserv:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Lehe serv:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Kõrvuti leheküljed:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Kõrvuti leheküljed"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Lehekülje paigutus:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "Lehekülje paigutus"
@@ -4993,35 +4999,19 @@ msgstr "Vasakul paremale"
 msgid "Right to left"
 msgstr "Paremalt vasakule"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Veerised"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Ülemine:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Köiteserv:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Lehe serv:"
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Top Margin"
+msgid "Top Margin:"
+msgstr "Ülemine veeris"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "Alumine:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom Margin"
+msgid "Bottom Margin:"
+msgstr "Alumine veeris"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5371,6 +5361,27 @@ msgstr "Kõik toetatud vormingud"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Vasak serv:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Parem serv:"
+
+#~ msgid "Margins"
+#~ msgstr "Veerised"
+
+#~ msgid "Top:"
+#~ msgstr "Ülemine:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Köiteserv:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Lehe serv:"
+
+#~ msgid "Bottom:"
+#~ msgstr "Alumine:"
 
 #~ msgid "Spacing"
 #~ msgstr "Vahe"
@@ -11831,18 +11842,6 @@ msgstr "%1"
 
 #~ msgid "Grid Divisions"
 #~ msgstr "Alusvõrgu jaotised"
-
-#~ msgid "Left Margin"
-#~ msgstr "Vasak veeris"
-
-#~ msgid "Right Margin"
-#~ msgstr "Parem veeris"
-
-#~ msgid "Top Margin"
-#~ msgstr "Ülemine veeris"
-
-#~ msgid "Bottom Margin"
-#~ msgstr "Alumine veeris"
 
 #~ msgid "Script Interpreter"
 #~ msgstr "Skripti interpretaator"

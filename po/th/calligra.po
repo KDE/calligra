@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1014,13 +1014,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "ใช้เอกสารต้นแบบนี้เสมอเมื่อโปรแกรมเริ่มการทำงาน"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "ใช้เอกสารต้นแบบนี้เสมอ"
@@ -1626,17 +1626,17 @@ msgid "Hide %1 Toolbar"
 msgstr "ซ่อนแถบเครื่องมือ %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 msgid "Open Existing Document"
 msgstr "เปิดเอกสารที่มีอยู่แล้ว"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "เอกสารที่เคยเรียกใช้"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "เอกสารกำหนดเอง"
@@ -5204,50 +5204,52 @@ msgstr "การจัดวางหน้ากระดาษ"
 msgid "Apply to document"
 msgstr "เปิดเอกสาร"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "Left:"
-msgid "Left Edge:"
-msgstr "ซ้าย:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Right:"
-msgid "Right Edge:"
-msgstr "ขวา:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-#| msgid "Printing done"
-msgid "Binding Edge:"
-msgstr "การพิมพ์เสร็จสิ้นแล้ว"
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "ขอบกระดาษ"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
+#| msgid "Right indent"
+msgid "Right Edge Margin:"
+msgstr "เยื้องทางขวา"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Printing done"
+msgid "Binding Edge Margin:"
+msgstr "การพิมพ์เสร็จสิ้นแล้ว"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
 #| msgid "Page Size"
-msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "ขนาดหน้ากระดาษ"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Facing Pages:"
 msgstr "พอดีกับหน้า"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Facing pages"
 msgstr "พอดีกับหน้า"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout:"
 msgstr "การจัดวางหน้ากระดาษ"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "a spreadsheet"
 msgid "Page spread"
@@ -5346,37 +5348,19 @@ msgstr "เส้นตรง"
 msgid "Right to left"
 msgstr "เยื้องทางขวา"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "ขอบกระดาษ"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
-msgid "Top:"
-msgstr "ข้าม"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-#| msgid "Printing done"
-msgid "Binding edge:"
-msgstr "การพิมพ์เสร็จสิ้นแล้ว"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Preview"
-msgid "Page edge:"
-msgstr "ตัวอย่างหน้ากระดาษ"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, fuzzy, kde-format
-msgid "Bottom:"
-msgstr "การจัดวาง"
+#| msgid "Margins"
+msgid "Bottom Margin:"
+msgstr "ขอบกระดาษ"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5717,6 +5701,37 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "ซ้าย:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "ขวา:"
+
+#~ msgid "Margins"
+#~ msgstr "ขอบกระดาษ"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "ข้าม"
+
+#, fuzzy
+#~| msgid "Printing done"
+#~ msgid "Binding edge:"
+#~ msgstr "การพิมพ์เสร็จสิ้นแล้ว"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgid "Page edge:"
+#~ msgstr "ตัวอย่างหน้ากระดาษ"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "การจัดวาง"
 
 #, fuzzy
 #~ msgid "Spacing"
@@ -9947,26 +9962,6 @@ msgstr "%1%"
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "ขนาดหน้ากระดาษ"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "ขอบกระดาษ"
-
-#, fuzzy
-#~| msgid "Right indent"
-#~ msgid "Right Margin"
-#~ msgstr "เยื้องทางขวา"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Top Margin"
-#~ msgstr "ขอบกระดาษ"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Bottom Margin"
-#~ msgstr "ขอบกระดาษ"
 
 #, fuzzy
 #~| msgid "Script Manager"

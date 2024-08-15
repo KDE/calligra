@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2020-05-09 23:29+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -907,13 +907,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr ""
@@ -1494,17 +1494,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Gøym %1-verktøylinje"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr ""
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr ""
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr ""
@@ -4734,43 +4734,46 @@ msgstr "Sideutsjånad"
 msgid "Apply to document"
 msgstr ""
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr ""
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr ""
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
-msgid "Binding Edge:"
+msgid "Left Edge Margin:"
 msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:181
+#, fuzzy, kde-format
+#| msgid "Right indent"
+msgid "Right Edge Margin:"
+msgstr "Høgreinnrykk"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
 #, kde-format
-msgid "Page Edge:"
+msgid "Binding Edge Margin:"
 msgstr ""
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, kde-format
+msgid "Page Edge Margin:"
+msgstr ""
+
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr ""
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr ""
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr ""
@@ -4859,34 +4862,17 @@ msgstr ""
 msgid "Right to left"
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "Margar"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, kde-format
-msgid "Bottom:"
+msgid "Bottom Margin:"
 msgstr ""
 
 #: widgets/KoResourceItemChooser.cpp:138

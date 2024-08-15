@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -532,7 +532,7 @@ msgid "Distance Between Shape and Text:"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, fuzzy, kde-format
 msgid "Columns"
 msgstr "Колона:"
@@ -662,13 +662,13 @@ msgid "Geometry"
 msgstr "Геометрија"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, fuzzy, kde-format
 msgid "Page Size && Margins"
 msgstr "Спои ќелии"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, fuzzy, kde-format
 msgid "Create"
 msgstr "&Создади табела"

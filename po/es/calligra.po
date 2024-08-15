@@ -14,15 +14,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-07-17 14:01+0100\n"
-"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"PO-Revision-Date: 2024-08-14 12:51+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -729,24 +729,21 @@ msgid "Create backup file:"
 msgstr "Crear un archivo de respaldo:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Mostrar la rejilla:"
+msgstr "Mostrar rejilla"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Ajustar a la rejilla:"
+msgstr "Ajustar a la rejilla"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Rejilla"
+msgstr "Rejilla:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -754,20 +751,16 @@ msgid "Grid color:"
 msgstr "Color de la rejilla:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontal:"
+msgstr "Espacio horizontal:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertical:"
+msgstr "Espacio vertical:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -909,7 +902,7 @@ msgstr "Recuperar archivos"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Descartar todo"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -928,15 +921,18 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Si selecciona «Cancelar», se conservarán todos los archivos recuperables.\n"
+"Si pulsa «Aceptar», se recuperarán los archivos seleccionados y se "
+"descartarán los archivos no seleccionados."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Usar siempre esta plantilla al inicio de la aplicación"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Utilizar siempre esta plantilla"
@@ -1531,17 +1527,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Ocultar la barra de herramientas %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Abrir documento existente"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Documentos recientes"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento personalizado"
@@ -1595,20 +1591,19 @@ msgid "Default"
 msgstr "Predeterminado"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Media geométrica"
+msgstr "Geométricas"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Flechas"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Divertidas"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1772,11 +1767,10 @@ msgid "Date: %1"
 msgstr "Fecha: %1"
 
 #: main/KoView.cpp:345
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Forma"
+msgstr "Añadir forma"
 
 #: main/KoView.cpp:356
 #, kde-format
@@ -4839,10 +4833,9 @@ msgid "Icon only"
 msgstr "Solo icono"
 
 #: widgets/KoModeBox.cpp:669
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Cara única"
+msgstr "Lado de barra lateral"
 
 #: widgets/KoModeBox.cpp:678
 #, kde-format
@@ -4864,43 +4857,49 @@ msgstr "Disposición de la página"
 msgid "Apply to document"
 msgstr "Aplicar al documento"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr "Borde izquierdo:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr "Borde derecho:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
-msgstr "Borde de encuadernación:"
+#, fuzzy, kde-format
+#| msgid "Left Margin"
+msgid "Left Edge Margin:"
+msgstr "Margen izquierdo"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#, fuzzy, kde-format
+#| msgid "Right Margin"
+msgid "Right Edge Margin:"
+msgstr "Margen derecho"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
+msgstr "Borde de encuadernación:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Borde de la página:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Páginas enfrentadas:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Páginas enfrentadas"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Disposición de la página:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "Despliegue de la página"
@@ -4989,35 +4988,19 @@ msgstr "De izquierda a derecha"
 msgid "Right to left"
 msgstr "De derecha a izquierda"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Márgenes"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Superior:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Borde de encuadernación:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Borde de la página:"
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Top Margin"
+msgid "Top Margin:"
+msgstr "Margen superior"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "Inferior:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom Margin"
+msgid "Bottom Margin:"
+msgstr "Margen inferior"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5370,6 +5353,27 @@ msgstr "Todos los formatos permitidos"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Borde izquierdo:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Borde derecho:"
+
+#~ msgid "Margins"
+#~ msgstr "Márgenes"
+
+#~ msgid "Top:"
+#~ msgstr "Superior:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Borde de encuadernación:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Borde de la página:"
+
+#~ msgid "Bottom:"
+#~ msgstr "Inferior:"
 
 #~ msgid "Spacing"
 #~ msgstr "Espaciado"
@@ -12044,18 +12048,6 @@ msgstr "%1"
 
 #~ msgid "Grid Divisions"
 #~ msgstr "Divisiones de la rejilla"
-
-#~ msgid "Left Margin"
-#~ msgstr "Margen izquierdo"
-
-#~ msgid "Right Margin"
-#~ msgstr "Margen derecho"
-
-#~ msgid "Top Margin"
-#~ msgstr "Margen superior"
-
-#~ msgid "Bottom Margin"
-#~ msgstr "Margen inferior"
 
 #~ msgid "Script Interpreter"
 #~ msgstr "Intérprete de guiones"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2023-02-24 11:06+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -527,7 +527,7 @@ msgid "Distance Between Shape and Text:"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "Sloupce"
@@ -654,13 +654,13 @@ msgid "Geometry"
 msgstr "Geometrie"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, kde-format
 msgid "Page Size && Margins"
 msgstr "Velikost strany a okraje"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Vytvořit"

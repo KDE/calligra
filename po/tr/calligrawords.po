@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2024-05-20 00:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -531,7 +531,7 @@ msgid "Distance Between Shape and Text:"
 msgstr "Şekil ve Metin Arasındaki Uzaklık:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "Sütunlar"
@@ -658,13 +658,13 @@ msgid "Geometry"
 msgstr "Geometri"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, kde-format
 msgid "Page Size && Margins"
 msgstr "Sayfa Boyutu ve Kenar Boşlukları"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Oluştur"

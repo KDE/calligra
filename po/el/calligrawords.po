@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2021-09-02 09:20+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -534,7 +534,7 @@ msgid "Distance Between Shape and Text:"
 msgstr "Απόσταση μεταξύ σχήματος και κειμένου:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "Στήλες"
@@ -661,13 +661,13 @@ msgid "Geometry"
 msgstr "Γεωμετρία"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, kde-format
 msgid "Page Size && Margins"
 msgstr "Μέγεθος σελίδας && περιθώρια"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Δημιουργία"

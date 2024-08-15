@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2019-08-27 06:56+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -530,7 +530,7 @@ msgid "Distance Between Shape and Text:"
 msgstr "Abstand zwischen Objekt und Text:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "Spalten"
@@ -657,13 +657,13 @@ msgid "Geometry"
 msgstr "Geometrie"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, kde-format
 msgid "Page Size && Margins"
 msgstr "Seitengröße && Ränder"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, kde-format
 msgid "Create"
 msgstr "Anlegen"

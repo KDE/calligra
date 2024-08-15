@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -972,13 +972,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Úsáid an teimpléad i gcónaí ag am thosú an fheidhmchláir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Úsáid an teimpléad seo i gcónaí"
@@ -1583,18 +1583,18 @@ msgid "Hide %1 Toolbar"
 msgstr "Folaigh an Barra Uirlisí %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open &Existing Document"
 msgid "Open Existing Document"
 msgstr "Oscail cáipéis atá ann ch&eana"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Cáipéisí is Déanaí"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Cáipéis Saincheaptha"
@@ -4976,43 +4976,49 @@ msgstr "Leagan Amach Leathanaigh"
 msgid "Apply to document"
 msgstr "Cuir i bhfeidhm ar an gcáipéis"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr "Ciumhais Ar Chlé:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr "Ciumhais Ar Dheis:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
-msgstr "Ciumhais Cheangail:"
+#, fuzzy, kde-format
+#| msgid "Left Margin"
+msgid "Left Edge Margin:"
+msgstr "Imeall ar chlé"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#, fuzzy, kde-format
+#| msgid "Right Margin"
+msgid "Right Edge Margin:"
+msgstr "Imeall ar dheis"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
+msgstr "Ciumhais Cheangail:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Ciumhais an Leathanaigh:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Leathanaigh ar aghaigh a chéile:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Leathanaigh ar aghaigh a chéile"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Leagan Amach an Leathanaigh:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "Page Header"
 msgid "Page spread"
@@ -5103,35 +5109,19 @@ msgstr "Clé go deas"
 msgid "Right to left"
 msgstr "Deas go clé"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Imill"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Barr:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Ciumhais cheangail:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Ciumhais an leathanaigh:"
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Top Margin"
+msgid "Top Margin:"
+msgstr "Imeall ag an mbarr"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "Bun:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom Margin"
+msgid "Bottom Margin:"
+msgstr "Imeall ag an mbun"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5472,6 +5462,27 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Ciumhais Ar Chlé:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Ciumhais Ar Dheis:"
+
+#~ msgid "Margins"
+#~ msgstr "Imill"
+
+#~ msgid "Top:"
+#~ msgstr "Barr:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Ciumhais cheangail:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Ciumhais an leathanaigh:"
+
+#~ msgid "Bottom:"
+#~ msgstr "Bun:"
 
 #~ msgid "Spacing"
 #~ msgstr "Spásáil"
@@ -9861,18 +9872,6 @@ msgstr "%1%"
 
 #~ msgid "Page Size"
 #~ msgstr "Méid an Leathanaigh"
-
-#~ msgid "Left Margin"
-#~ msgstr "Imeall ar chlé"
-
-#~ msgid "Right Margin"
-#~ msgstr "Imeall ar dheis"
-
-#~ msgid "Top Margin"
-#~ msgstr "Imeall ag an mbarr"
-
-#~ msgid "Bottom Margin"
-#~ msgstr "Imeall ag an mbun"
 
 #~ msgctxt "<data-source>: <object>"
 #~ msgid "%1: %2"

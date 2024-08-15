@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-13 13:01+0200\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"PO-Revision-Date: 2024-08-14 11:07+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -743,24 +743,21 @@ msgid "Create backup file:"
 msgstr "Reservekopie aanmaken:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Raster tonen:"
+msgstr "Raster tonen"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Vastzetten op raster:"
+msgstr "Vastzetten op raster"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Raster"
+msgstr "Raster:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -768,20 +765,16 @@ msgid "Grid color:"
 msgstr "Rasterkleur:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontaal:"
+msgstr "Horizontale spatiëring:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Verticaal:"
+msgstr "Verticale spatiëring:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -946,13 +939,13 @@ msgstr ""
 "bestanden waarvan de selectie ongedaan is gemaakt zullen worden verwijderd."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Altijd dit sjabloon gebruiken bij opstarten"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Altijd dit sjabloon gebruiken"
@@ -1545,17 +1538,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Werkbalk %1 verbergen"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Bestaand document openen"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Recente documenten"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Aangepast document"
@@ -4878,43 +4871,49 @@ msgstr "Paginaindeling"
 msgid "Apply to document"
 msgstr "Toepassen op dit document"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
-msgstr "Linkerzijde:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
-msgstr "Rechterzijde:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
-msgstr "Inbindkant:"
+#, fuzzy, kde-format
+#| msgid "Left Margin"
+msgid "Left Edge Margin:"
+msgstr "Linkermarge"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#, fuzzy, kde-format
+#| msgid "Right Margin"
+msgid "Right Edge Margin:"
+msgstr "Rechtermarge"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
+msgstr "Inbindkant:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Paginazijde:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Overliggende pagina's:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Overliggende pagina's"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Paginaindeling:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "Verdeling over pagina"
@@ -5003,35 +5002,19 @@ msgstr "Links naar rechts"
 msgid "Right to left"
 msgstr "Rechts naar links"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Marges"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Boven:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Inbindkant:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Paginazijde:"
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Top Margin"
+msgid "Top Margin:"
+msgstr "Bovenmarge"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
-msgstr "Onder:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom Margin"
+msgid "Bottom Margin:"
+msgstr "Ondermarge"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5381,6 +5364,27 @@ msgstr "Alle ondersteunde formaten"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Linkerzijde:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Rechterzijde:"
+
+#~ msgid "Margins"
+#~ msgstr "Marges"
+
+#~ msgid "Top:"
+#~ msgstr "Boven:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Inbindkant:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Paginazijde:"
+
+#~ msgid "Bottom:"
+#~ msgstr "Onder:"
 
 #~ msgid "Spacing"
 #~ msgstr "Spatiëring"
@@ -10150,18 +10154,6 @@ msgstr "%1"
 
 #~ msgid "Grid Divisions"
 #~ msgstr "Rasterverdeling"
-
-#~ msgid "Left Margin"
-#~ msgstr "Linkermarge"
-
-#~ msgid "Right Margin"
-#~ msgstr "Rechtermarge"
-
-#~ msgid "Top Margin"
-#~ msgstr "Bovenmarge"
-
-#~ msgid "Bottom Margin"
-#~ msgstr "Ondermarge"
 
 #~ msgid "Script Interpreter"
 #~ msgstr "Scriptinterpretator"

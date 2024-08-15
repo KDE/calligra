@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2004-07-08 16:49+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -995,14 +995,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, fuzzy, kde-format
 #| msgid "Use This Template"
 msgid "Always use this template at application start up"
 msgstr "Implijit ur patrom-se"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, fuzzy, kde-format
 #| msgid "Use This Template"
 msgid "Always use this template"
@@ -1613,18 +1613,18 @@ msgid "Hide %1 Toolbar"
 msgstr "Kuzhat ar barrenn %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open &Existing Document"
 msgid "Open Existing Document"
 msgstr "Digeriñ un teul a zo &c'hoazh"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Teulioù nevez"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Teul diouzhoc'h"
@@ -5233,50 +5233,53 @@ msgstr "Pajennaozañ"
 msgid "Apply to document"
 msgstr "Teul goullo"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "Left:"
-msgid "Left Edge:"
-msgstr "Kleiz :"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Right:"
-msgid "Right Edge:"
-msgstr "Dehoù :"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-#| msgid "Last Printing"
-msgid "Binding Edge:"
-msgstr "Moullet diwezhañ"
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "Bevennoù"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
+#| msgctxt "color"
+#| msgid "LightGreen"
+msgid "Right Edge Margin:"
+msgstr "Gwer sklaer"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Last Printing"
+msgid "Binding Edge Margin:"
+msgstr "Moullet diwezhañ"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
 #| msgid "Page Size"
-msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Ment ar bajenn"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Facing Pages:"
 msgstr "Lakaat ar bajenn a-zoare"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Facing pages"
 msgstr "Lakaat ar bajenn a-zoare"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout:"
 msgstr "Pajennaozañ"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page spread"
@@ -5376,38 +5379,19 @@ msgstr "Hedad :"
 msgid "Right to left"
 msgstr "Gwer sklaer"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
-msgstr "Bevennoù"
-
 #. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Laez :"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
+#: widgets/KoPageLayoutWidget.ui:202
 #, fuzzy, kde-format
-#| msgid "Last Printing"
-msgid "Binding edge:"
-msgstr "Moullet diwezhañ"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Preview"
-msgid "Page edge:"
-msgstr "Rakgwel ar bajenn"
+#| msgid "Top margin"
+msgid "Top Margin:"
+msgstr "Bevenn a-us"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, fuzzy, kde-format
-#| msgid "Align Left"
-msgid "Bottom:"
-msgstr "Steudañ d'a-gleiz"
+#| msgid "Bottom margin"
+msgid "Bottom Margin:"
+msgstr "Bevenn a-is"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5754,6 +5738,37 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Kleiz :"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Dehoù :"
+
+#~ msgid "Margins"
+#~ msgstr "Bevennoù"
+
+#~ msgid "Top:"
+#~ msgstr "Laez :"
+
+#, fuzzy
+#~| msgid "Last Printing"
+#~ msgid "Binding edge:"
+#~ msgstr "Moullet diwezhañ"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgid "Page edge:"
+#~ msgstr "Rakgwel ar bajenn"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Bottom:"
+#~ msgstr "Steudañ d'a-gleiz"
 
 #, fuzzy
 #~| msgid "Space"
@@ -9607,27 +9622,6 @@ msgstr "%1%"
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "Ment ar bajenn"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "Bevennoù"
-
-#, fuzzy
-#~| msgctxt "color"
-#~| msgid "LightGreen"
-#~ msgid "Right Margin"
-#~ msgstr "Gwer sklaer"
-
-#, fuzzy
-#~| msgid "Top margin"
-#~ msgid "Top Margin"
-#~ msgstr "Bevenn a-us"
-
-#, fuzzy
-#~| msgid "Bottom margin"
-#~ msgid "Bottom Margin"
-#~ msgstr "Bevenn a-is"
 
 #, fuzzy
 #~| msgid "Scripts Manager"

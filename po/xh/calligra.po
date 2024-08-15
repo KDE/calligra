@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2002-11-09 11:12+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -972,13 +972,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, fuzzy, kde-format
 msgid "Always use this template at application start up"
 msgstr "Yenza i Template"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, fuzzy, kde-format
 msgid "Always use this template"
 msgstr "Yenza i Template"
@@ -1568,17 +1568,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Bonisa isixhobo sebar %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 msgid "Open Existing Document"
 msgstr "Vula uxwebhu olukhoyo"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, fuzzy, kde-format
 msgid "Recent Documents"
 msgstr "Vu&la uxwebhu olusandukubakho"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Vula Uxwebhu"
@@ -5027,48 +5027,49 @@ msgstr "Ubeko lwephepha"
 msgid "Apply to document"
 msgstr "Vula Uxwebhu"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-#| msgid "Left:"
-msgid "Left Edge:"
-msgstr "Ekhohlo:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "Right:"
-msgid "Right Edge:"
-msgstr "Kunene:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-#| msgid "Last Printing"
-msgid "Binding Edge:"
-msgstr "Ushicilelo Lokugqibela"
+#| msgid "Margins"
+msgid "Left Edge Margin:"
+msgstr "Imida"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
+msgid "Right Edge Margin:"
+msgstr "Light Pink"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Last Printing"
+msgid "Binding Edge Margin:"
+msgstr "Ushicilelo Lokugqibela"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
 #| msgid "Page Size"
-msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Ubungakanani Bephepha"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 msgid "Facing Pages:"
 msgstr "Iphepha Elilandelayo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 msgid "Facing pages"
 msgstr "Iphepha Elilandelayo"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout:"
 msgstr "Ubeko lwephepha"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page spread"
@@ -5160,37 +5161,19 @@ msgstr "triangleq"
 msgid "Right to left"
 msgstr "Light Pink"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "Imida"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
-msgid "Top:"
-msgstr "Phezulu:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-#| msgid "Last Printing"
-msgid "Binding edge:"
-msgstr "Ushicilelo Lokugqibela"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Page Preview"
-msgid "Page edge:"
-msgstr "Imboniso yephepha"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, fuzzy, kde-format
-msgid "Bottom:"
-msgstr "Ukwenziwa kwemigca"
+#| msgid "Margins"
+msgid "Bottom Margin:"
+msgstr "Imida"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5524,6 +5507,37 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Ekhohlo:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Kunene:"
+
+#~ msgid "Margins"
+#~ msgstr "Imida"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "Phezulu:"
+
+#, fuzzy
+#~| msgid "Last Printing"
+#~ msgid "Binding edge:"
+#~ msgstr "Ushicilelo Lokugqibela"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgid "Page edge:"
+#~ msgstr "Imboniso yephepha"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "Ukwenziwa kwemigca"
 
 #, fuzzy
 #~ msgid "Spacing"
@@ -8849,25 +8863,6 @@ msgstr ""
 #~| msgid "Page Size"
 #~ msgid "Page Unit"
 #~ msgstr "Ubungakanani Bephepha"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Left Margin"
-#~ msgstr "Imida"
-
-#, fuzzy
-#~ msgid "Right Margin"
-#~ msgstr "Light Pink"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Top Margin"
-#~ msgstr "Imida"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Bottom Margin"
-#~ msgstr "Imida"
 
 #, fuzzy
 #~ msgid "Script Interpreter"

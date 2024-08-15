@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2007-07-27 16:47+0300\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -483,19 +483,19 @@ msgstr "Гуказапіс"
 msgid "Show Changes"
 msgstr "Гуказапіс"
 
-#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#: dialogs/CharacterGeneral.cpp:60 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
 msgstr "Шрыфт"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
-#: dialogs/CharacterGeneral.ui:27
+#: dialogs/CharacterGeneral.ui:33
 #, kde-format
 msgid "General"
 msgstr "Агульныя"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/CharacterGeneral.ui:33
+#: dialogs/CharacterGeneral.ui:39
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgctxt "Name of the style"
@@ -503,21 +503,21 @@ msgid "Name:"
 msgstr "Назва:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: dialogs/CharacterGeneral.ui:46
+#: dialogs/CharacterGeneral.ui:52
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "Next style:"
 msgstr "Стыль"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: dialogs/CharacterGeneral.ui:62
+#: dialogs/CharacterGeneral.ui:68
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "Parent style:"
 msgstr "Стыль"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
-#: dialogs/CharacterGeneral.ui:78
+#: dialogs/CharacterGeneral.ui:84
 #, kde-format
 msgid "Include in table of contents"
 msgstr ""
@@ -604,7 +604,7 @@ msgstr "Пазіцыя"
 msgid "Select"
 msgstr ""
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -2200,7 +2200,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "Выдаліць"
@@ -2261,49 +2261,49 @@ msgstr ""
 msgid "Create a new style inheriting the current style"
 msgstr ""
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
+#: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "New Style"
 msgstr "Стыль"
 
-#: dialogs/StyleManager.cpp:431
+#: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Paragraph"
 msgstr "Уставіць"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
 #, fuzzy, kde-format
 #| msgid "Create"
 msgid "Character"
 msgstr "Стварыць"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNew)
-#: dialogs/StyleManager.ui:68
+#: dialogs/StyleManager.ui:97
 #, kde-format
 msgid "&New"
 msgstr "&Новы"
 
-#: dialogs/StyleManagerDialog.cpp:20
+#: dialogs/StyleManagerDialog.cpp:23
 #, kde-format
 msgid "Style Manager"
 msgstr ""
 
-#: dialogs/StyleManagerDialog.cpp:50
+#: dialogs/StyleManagerDialog.cpp:53
 #, fuzzy, kde-format
 #| msgid "Record"
 msgid "Save Changes"
 msgstr "Гуказапіс"
 
-#: dialogs/StyleManagerDialog.cpp:51
+#: dialogs/StyleManagerDialog.cpp:54
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "

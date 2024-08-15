@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-12 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2014-12-22 20:33+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -485,38 +485,38 @@ msgstr "Registrér ændringer"
 msgid "Show Changes"
 msgstr "Vis ændringer"
 
-#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#: dialogs/CharacterGeneral.cpp:60 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
 msgstr "Skrifttype"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
-#: dialogs/CharacterGeneral.ui:27
+#: dialogs/CharacterGeneral.ui:33
 #, kde-format
 msgid "General"
 msgstr "Generelt"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/CharacterGeneral.ui:33
+#: dialogs/CharacterGeneral.ui:39
 #, kde-format
 msgctxt "Name of the style"
 msgid "Name:"
 msgstr "Navn:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: dialogs/CharacterGeneral.ui:46
+#: dialogs/CharacterGeneral.ui:52
 #, kde-format
 msgid "Next style:"
 msgstr "Næste stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: dialogs/CharacterGeneral.ui:62
+#: dialogs/CharacterGeneral.ui:68
 #, kde-format
 msgid "Parent style:"
 msgstr "Forælderstil:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
-#: dialogs/CharacterGeneral.ui:78
+#: dialogs/CharacterGeneral.ui:84
 #, kde-format
 msgid "Include in table of contents"
 msgstr "Inkludér i indholdsfortegnelse"
@@ -598,7 +598,7 @@ msgstr "Position:"
 msgid "Select"
 msgstr "Vælg"
 
-#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:431
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Warning"
 msgstr "Advarsel"
@@ -2124,7 +2124,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:75 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
 #, kde-format
 msgid "Delete"
 msgstr "Slet"
@@ -2182,46 +2182,46 @@ msgstr "Ingen kant"
 msgid "Create a new style inheriting the current style"
 msgstr "Opret en ny stil som arver den nuværende stil"
 
-#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:355
+#: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
 #, kde-format
 msgid "New Style"
 msgstr "Ny stil"
 
-#: dialogs/StyleManager.cpp:431
+#: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 "Der findes allerede en anden stil med navnet \"%1\". Vælg et andet navn."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:46 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
 #, kde-format
 msgid "Paragraph"
 msgstr "Afsnit"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:60 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
 #, kde-format
 msgid "Character"
 msgstr "Tegn"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNew)
-#: dialogs/StyleManager.ui:68
+#: dialogs/StyleManager.ui:97
 #, kde-format
 msgid "&New"
 msgstr "&Ny"
 
-#: dialogs/StyleManagerDialog.cpp:20
+#: dialogs/StyleManagerDialog.cpp:23
 #, kde-format
 msgid "Style Manager"
 msgstr "Stilhåndtering"
 
-#: dialogs/StyleManagerDialog.cpp:50
+#: dialogs/StyleManagerDialog.cpp:53
 #, kde-format
 msgid "Save Changes"
 msgstr "Gem ændringer"
 
-#: dialogs/StyleManagerDialog.cpp:51
+#: dialogs/StyleManagerDialog.cpp:54
 #, kde-format
 msgid ""
 "You have changes that are not applied. What do you want to do with those "

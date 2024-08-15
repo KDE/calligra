@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-13 10:18+0200\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"PO-Revision-Date: 2024-08-14 09:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -729,24 +729,21 @@ msgid "Create backup file:"
 msgstr "Crea un fitxer de còpia de seguretat:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Mostra la quadrícula:"
+msgstr "Mostra la quadrícula"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Ajusta a la quadrícula:"
+msgstr "Ajusta a la quadrícula"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Quadrícula"
+msgstr "Quadrícula:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -754,20 +751,16 @@ msgid "Grid color:"
 msgstr "Color de la quadrícula:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horitzontal:"
+msgstr "Espaiat horitzontal:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertical:"
+msgstr "Espaiat vertical:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -932,13 +925,13 @@ msgstr ""
 "seleccionats seran rebutjats."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
 msgstr "Usa sempre aquesta plantilla a l'inici de l'aplicació"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
 msgstr "Usa sempre aquesta plantilla"
@@ -983,7 +976,7 @@ msgid ""
 "Please save your work manually."
 msgstr ""
 "No es coneix la contrasenya d'aquest document encriptat. Autodesat "
-"interromput! Si us plau, deseu el vostre treball manualment."
+"interromput! Deseu el vostre treball manualment."
 
 #: main/KoDocument.cpp:712
 #, kde-format
@@ -1534,17 +1527,17 @@ msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Obre un document existent"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, kde-format
 msgid "Recent Documents"
 msgstr "Documents recents"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personalitzat"
@@ -3674,8 +3667,8 @@ msgid ""
 "prevent losing your work."
 msgstr ""
 "El fitxer manifest sembla que està corromput. No es pot modificar i el "
-"document romandrà illegible. Si us plau, proveu de desar el document de nou "
-"per tal de preveure la pèrdua de la vostra feina."
+"document romandrà illegible. Proveu de desar el document de nou per tal de "
+"preveure la pèrdua de la vostra feina."
 
 #: store/KoEncryptedStore.cpp:447
 #, kde-format
@@ -3690,12 +3683,12 @@ msgstr ""
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
-msgstr "Si us plau, introduïu la contrasenya per a obrir aquest fitxer."
+msgstr "Introduïu la contrasenya per a obrir aquest fitxer."
 
 #: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
-msgstr "Si us plau, introduïu la contrasenya per a encriptar-hi el document."
+msgstr "Introduïu la contrasenya per a encriptar el document."
 
 #: store/KoEncryptedStore.cpp:783
 #, kde-format
@@ -3855,7 +3848,7 @@ msgstr "Referència de text"
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr "Si us plau, creeu un índex de primera referència."
+msgstr "Creeu un índex de primera referència."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
@@ -4249,8 +4242,8 @@ msgid ""
 "Please check the ranges you specified. The start value must be lower than "
 "the end value."
 msgstr ""
-"Si us plau, repasseu els intervals que heu especificat. El valor d'inici ha "
-"de ser inferior que el valor final."
+"Repasseu els intervals que heu especificat. El valor d'inici ha de ser "
+"inferior al valor final."
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
 #: widgets/KoCsvImportDialog.ui:52
@@ -4603,7 +4596,7 @@ msgid ""
 "decryption, please save the document.</qt>"
 msgstr ""
 "<qt>El vostre document no es pot desar automàticament.<p>Per a completar el "
-"desencriptatge, si us plau, deseu el document.</qt>"
+"desencriptatge, deseu el document.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
 #: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
@@ -4648,7 +4641,7 @@ msgid ""
 "encryption, please save the document.</qt>"
 msgstr ""
 "<qt>El vostre document no es pot desar automàticament.<p>Per a completar "
-"l'encriptatge, si us plau, deseu el document.</qt>"
+"l'encriptatge, deseu el document.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:412
 #, kde-format
@@ -4856,43 +4849,49 @@ msgstr "Disposició de la pàgina"
 msgid "Apply to document"
 msgstr "Aplica al document"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, kde-format
-msgid "Left Edge:"
+#: widgets/KoPageLayoutWidget.cpp:180
+#, fuzzy, kde-format
+#| msgid "Left Edge:"
+msgid "Left Edge Margin:"
 msgstr "Vora esquerra:"
 
-#: widgets/KoPageLayoutWidget.cpp:178
-#, kde-format
-msgid "Right Edge:"
+#: widgets/KoPageLayoutWidget.cpp:181
+#, fuzzy, kde-format
+#| msgid "Right Edge:"
+msgid "Right Edge Margin:"
 msgstr "Vora dreta:"
 
-#: widgets/KoPageLayoutWidget.cpp:180
-#, kde-format
-msgid "Binding Edge:"
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding Edge Margin:"
 msgstr "Vora d'enquadernació:"
 
-#: widgets/KoPageLayoutWidget.cpp:181
-#, kde-format
-msgid "Page Edge:"
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page Edge Margin:"
 msgstr "Vora de la pàgina:"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
 msgstr "Pàgines cara a cara:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, kde-format
 msgid "Facing pages"
 msgstr "Pàgines cara a cara"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
 msgstr "Disposició de la pàgina:"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
 msgstr "Escampat de pàgina"
@@ -4981,34 +4980,18 @@ msgstr "D'esquerra a dreta"
 msgid "Right to left"
 msgstr "De dreta a esquerra"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
-#, kde-format
-msgid "Margins"
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top Margin:"
 msgstr "Marges"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, kde-format
-msgid "Top:"
-msgstr "Dalt:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, kde-format
-msgid "Binding edge:"
-msgstr "Vora d'enquadernació:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, kde-format
-msgid "Page edge:"
-msgstr "Vora de la pàgina:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
-#, kde-format
-msgid "Bottom:"
+#: widgets/KoPageLayoutWidget.ui:262
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "Bottom Margin:"
 msgstr "Baix:"
 
 #: widgets/KoResourceItemChooser.cpp:138
@@ -5067,7 +5050,7 @@ msgid ""
 "enter a new, unique name for it.</qt>"
 msgstr ""
 "<qt>L'etiqueta que esteu intentant recuperar ja existeix en la llista "
-"d'etiquetes.<br>Si us plau, introduïu un nom nou i únic per a ella.</qt>"
+"d'etiquetes.<br>Introduïu un nom nou i únic per a ella.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:142
 #, kde-format
@@ -5360,6 +5343,15 @@ msgstr "Tots els formats acceptats"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Top:"
+#~ msgstr "Dalt:"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Vora d'enquadernació:"
+
+#~ msgid "Page edge:"
+#~ msgstr "Vora de la pàgina:"
 
 #~ msgid "Spacing"
 #~ msgstr "Espaiat"

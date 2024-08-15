@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2002-11-08 16:06+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -574,7 +574,7 @@ msgid "Distance Between Shape and Text:"
 msgstr "Umgama phakathi kwesakhelo nombhalo (%1):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:29
+#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
 #, fuzzy, kde-format
 msgid "Columns"
 msgstr "Umhlathi"
@@ -710,14 +710,14 @@ msgid "Geometry"
 msgstr "Geometry"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
-#: part/dialogs/KWStartupWidget.ui:24
+#: part/dialogs/KWStartupWidget.ui:32
 #, fuzzy, kde-format
 #| msgid "Protect Size"
 msgid "Page Size && Margins"
 msgstr "Khusela Ubungakanani"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
-#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:409
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
 #, fuzzy, kde-format
 msgid "Create"
 msgstr "Yenza i Table"

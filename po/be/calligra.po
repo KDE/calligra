@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-15 00:39+0000\n"
 "PO-Revision-Date: 2008-01-01 23:07+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -952,13 +952,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:94
+#: main/KoDetailsPaneBase.ui:97
 #, fuzzy, kde-format
 msgid "Always use this template at application start up"
 msgstr "Заўсёды адчыняць гэты шаблон пры запуску"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
-#: main/KoDetailsPaneBase.ui:97
+#: main/KoDetailsPaneBase.ui:100
 #, fuzzy, kde-format
 msgid "Always use this template"
 msgstr "Заўсёды выкарыстаць гэты шаблон"
@@ -1551,18 +1551,18 @@ msgid "Hide %1 Toolbar"
 msgstr "Схаваць панель прылад %1 "
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
-#: main/KoOpenPane.cpp:130 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:99
+#: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
 #, fuzzy, kde-format
 #| msgid "Open This Document"
 msgid "Open Existing Document"
 msgstr "Адкрыць гэты дакумент"
 
-#: main/KoOpenPane.cpp:198
+#: main/KoOpenPane.cpp:167
 #, fuzzy, kde-format
 msgid "Recent Documents"
 msgstr "Нядаўнія дакументы"
 
-#: main/KoOpenPane.cpp:289
+#: main/KoOpenPane.cpp:250
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Іншы дакумент"
@@ -4938,43 +4938,45 @@ msgstr "Уласцівасці старонкі"
 msgid "Apply to document"
 msgstr "Пусты дакумент"
 
-#: widgets/KoPageLayoutWidget.cpp:177
-#, fuzzy, kde-format
-msgid "Left Edge:"
-msgstr "Злева:"
-
-#: widgets/KoPageLayoutWidget.cpp:178
-#, fuzzy, kde-format
-msgid "Right Edge:"
-msgstr "Справа:"
-
 #: widgets/KoPageLayoutWidget.cpp:180
 #, fuzzy, kde-format
-msgid "Binding Edge:"
-msgstr "Апошняя раздрукоўка"
+msgid "Left Edge Margin:"
+msgstr "Палі"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, fuzzy, kde-format
-msgid "Page Edge:"
+msgid "Right Edge Margin:"
+msgstr "Водступ справа"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
+#, fuzzy, kde-format
+msgid "Binding Edge Margin:"
+msgstr "Апошняя раздрукоўка"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
+#, fuzzy, kde-format
+msgid "Page Edge Margin:"
 msgstr "Памеры старонкі"
 
-#: widgets/KoPageLayoutWidget.cpp:280
+#: widgets/KoPageLayoutWidget.cpp:286
 #, fuzzy, kde-format
 msgid "Facing Pages:"
 msgstr "Старонка цалкам"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
-#: widgets/KoPageLayoutWidget.cpp:281 widgets/KoPageLayoutWidget.ui:160
+#: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
 #, fuzzy, kde-format
 msgid "Facing pages"
 msgstr "Старонка цалкам"
 
-#: widgets/KoPageLayoutWidget.cpp:283
+#: widgets/KoPageLayoutWidget.cpp:289
 #, fuzzy, kde-format
 msgid "Page Layout:"
 msgstr "Уласцівасці старонкі"
 
-#: widgets/KoPageLayoutWidget.cpp:284
+#: widgets/KoPageLayoutWidget.cpp:290
 #, fuzzy, kde-format
 msgid "Page spread"
 msgstr "электронная табліца"
@@ -5063,35 +5065,17 @@ msgstr "Радок:"
 msgid "Right to left"
 msgstr "Водступ справа"
 
-#. i18n: ectx: property (title), widget (QGroupBox, margins)
-#: widgets/KoPageLayoutWidget.ui:204
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:202
 #, fuzzy, kde-format
-msgid "Margins"
+msgid "Top Margin:"
 msgstr "Палі"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: widgets/KoPageLayoutWidget.ui:210
-#, fuzzy, kde-format
-msgid "Top:"
-msgstr "Зверху:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftLabel)
-#: widgets/KoPageLayoutWidget.ui:230
-#, fuzzy, kde-format
-msgid "Binding edge:"
-msgstr "Апошняя раздрукоўка"
-
-#. i18n: ectx: property (text), widget (QLabel, rightLabel)
-#: widgets/KoPageLayoutWidget.ui:250
-#, fuzzy, kde-format
-msgid "Page edge:"
-msgstr "Прагляд старонкі"
-
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: widgets/KoPageLayoutWidget.ui:270
+#: widgets/KoPageLayoutWidget.ui:262
 #, fuzzy, kde-format
-msgid "Bottom:"
-msgstr "Маштабаванне"
+msgid "Bottom Margin:"
+msgstr "Палі"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, fuzzy, kde-format
@@ -5421,6 +5405,34 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Left Edge:"
+#~ msgstr "Злева:"
+
+#, fuzzy
+#~ msgid "Right Edge:"
+#~ msgstr "Справа:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Палі"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "Зверху:"
+
+#, fuzzy
+#~ msgid "Binding edge:"
+#~ msgstr "Апошняя раздрукоўка"
+
+#, fuzzy
+#~ msgid "Page edge:"
+#~ msgstr "Прагляд старонкі"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "Маштабаванне"
 
 #, fuzzy
 #~ msgid "Spacing"
@@ -8974,22 +8986,6 @@ msgstr "%1%"
 #, fuzzy
 #~ msgid "Page Unit"
 #~ msgstr "Памеры старонкі"
-
-#, fuzzy
-#~ msgid "Left Margin"
-#~ msgstr "Палі"
-
-#, fuzzy
-#~ msgid "Right Margin"
-#~ msgstr "Водступ справа"
-
-#, fuzzy
-#~ msgid "Top Margin"
-#~ msgstr "Палі"
-
-#, fuzzy
-#~ msgid "Bottom Margin"
-#~ msgstr "Палі"
 
 #, fuzzy
 #~ msgid "Script Interpreter"

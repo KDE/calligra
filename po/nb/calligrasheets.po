@@ -15469,12 +15469,3 @@ msgstr "Velg flere celler"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "Lenke %1 aktivert"
-
-#~ msgid "Colors"
-#~ msgstr "Farger"
-
-#~ msgid "&Grid:"
-#~ msgstr "&Rutenett:"
-
-#~ msgid "Custom..."
-#~ msgstr "Selvvalgt …"
