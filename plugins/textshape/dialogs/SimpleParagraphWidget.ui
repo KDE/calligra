@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -62,35 +62,13 @@
       <item>
        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0,0,0,0,0">
         <property name="spacing">
-         <number>2</number>
+         <number>4</number>
         </property>
-        <item row="2" column="5" colspan="2">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="1" column="0" colspan="11">
          <widget class="StylesCombo" name="paragraphStyleCombo"/>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="FormattingButton" name="bulletListButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -101,12 +79,6 @@
         </item>
         <item row="2" column="3">
          <widget class="QToolButton" name="increaseIndent">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="autoRaise">
            <bool>true</bool>
           </property>
@@ -116,12 +88,6 @@
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QToolButton" name="alignLeft">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="autoRaise">
              <bool>true</bool>
             </property>
@@ -129,12 +95,6 @@
           </item>
           <item>
            <widget class="QToolButton" name="alignCenter">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="autoRaise">
              <bool>true</bool>
             </property>
@@ -142,12 +102,6 @@
           </item>
           <item>
            <widget class="QToolButton" name="alignRight">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="autoRaise">
              <bool>true</bool>
             </property>
@@ -155,12 +109,6 @@
           </item>
           <item>
            <widget class="QToolButton" name="alignBlock">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>4</verstretch>
-             </sizepolicy>
-            </property>
             <property name="autoRaise">
              <bool>true</bool>
             </property>
