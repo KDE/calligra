@@ -27,6 +27,7 @@ set(kowidgets_LIB_SRCS
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
+    KoTabBarProxyStyle.cpp
     KoColorPopupButton.cpp
     KoConfigAuthorPage.cpp
     KoUnitDoubleSpinBox.cpp

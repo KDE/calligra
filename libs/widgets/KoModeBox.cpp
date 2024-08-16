@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include "KoModeBox_p.h"
+#include "KoTabBarProxyStyle.h"
 
 #include <KoCanvasBase.h>
 #include <KoCanvasControllerWidget.h>
@@ -103,172 +104,6 @@ static bool compareToolActions(const KoToolAction *b1, const KoToolAction *b2)
     }
 }
 
-class TabBarStyle : public QProxyStyle
-{
-public:
-    explicit TabBarStyle()
-        : QProxyStyle()
-    {
-        _viewHoverBrush = KStatefulBrush(KColorScheme::View, KColorScheme::HoverColor);
-    }
-
-    KStatefulBrush _viewHoverBrush;
-    static constexpr int TabBar_TabMarginHeight = 8;
-    static constexpr int TabBar_TabMarginWidth = 8;
-    static constexpr int TabBar_TabItemSpacing = 8;
-    static constexpr int TabBar_TabMinWidth = 80;
-    static constexpr int TabBar_TabMinHeight = 30;
-    static constexpr int TabBar_TabOverlap = 0;
-    static constexpr int TabBar_BaseOverlap = 0;
-    static constexpr int TabBar_ActiveEffectSize = 3;
-
-    QColor alphaColor(QColor color, qreal alpha) const
-    {
-        if (alpha >= 0 && alpha < 1.0) {
-            color.setAlphaF(alpha * color.alphaF());
-        }
-        return color;
-    }
-
-    int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override
-    {
-        switch (metric) {
-        case PM_TabBarTabShiftVertical:
-            return 0;
-        case PM_TabBarTabShiftHorizontal:
-            return 0;
-        case PM_TabBarTabOverlap:
-            return 0;
-        case PM_TabBarBaseOverlap:
-            return 0;
-        case PM_TabBarTabHSpace:
-            return 2 * TabBar_TabMarginWidth;
-        case PM_TabBarTabVSpace:
-            return 2 * TabBar_TabMarginHeight;
-        default:
-            return QProxyStyle::pixelMetric(metric, option, widget);
-        }
-    }
-
-    QSize sizeFromContents(ContentsType element, const QStyleOption *option, const QSize &size, const QWidget *widget) const override
-    {
-        if (element == CT_TabBarTab) {
-            const auto tabOption(qstyleoption_cast<const QStyleOptionTab *>(option));
-            const bool hasText(tabOption && !tabOption->text.isEmpty());
-            const bool hasIcon(tabOption && !tabOption->icon.isNull());
-            const bool hasLeftButton(tabOption && !tabOption->leftButtonSize.isEmpty());
-            const bool hasRightButton(tabOption && !tabOption->leftButtonSize.isEmpty());
-
-            // calculate width increment for horizontal tabs
-            int widthIncrement = 0;
-            if (hasIcon && !(hasText || hasLeftButton || hasRightButton)) {
-                widthIncrement -= 4;
-            }
-            if (hasText && hasIcon) {
-                widthIncrement += TabBar_TabItemSpacing;
-            }
-            if (hasLeftButton && (hasText || hasIcon)) {
-                widthIncrement += TabBar_TabItemSpacing;
-            }
-            if (hasRightButton && (hasText || hasIcon || hasLeftButton)) {
-                widthIncrement += TabBar_TabItemSpacing;
-            }
-
-            // add margins
-            QSize contentSize(size);
-
-            // compare to minimum size
-            contentSize.rheight() += widthIncrement;
-            if (hasIcon && !hasText) {
-                contentSize = contentSize.expandedTo(QSize(TabBar_TabMinHeight, 0));
-            } else {
-                contentSize = contentSize.expandedTo(QSize(TabBar_TabMinHeight, TabBar_TabMinWidth));
-            }
-
-            return size;
-        }
-        return QProxyStyle::sizeFromContents(element, option, size, widget);
-    }
-
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const override
-    {
-        if (element == PE_FrameTabWidget || element == PE_FrameTabBarBase) {
-            // don't draw frame
-            return;
-        }
-
-        QProxyStyle::drawPrimitive(element, option, painter, widget);
-    }
-
-    qreal devicePixelRatio(QPainter *painter) const
-    {
-        return painter->device() ? painter->device()->devicePixelRatioF() : qApp->devicePixelRatio();
-    }
-
-    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const override
-    {
-        if (element == CE_TabBarTabShape) {
-            const auto tabOption(qstyleoption_cast<const QStyleOptionTab *>(option));
-            if (!tabOption) {
-                return;
-            }
-
-            // palette and state
-            const bool enabled = option->state & State_Enabled;
-            const bool hovered = option->state & State_MouseOver;
-            const bool selected = option->state & State_Selected;
-            const bool east = tabOption->shape == QTabBar::RoundedEast || tabOption->shape == QTabBar::TriangularEast;
-
-            // setup painter
-            painter->setRenderHint(QPainter::Antialiasing, true);
-            QRectF frameRect = option->rect;
-            QColor bgBrush;
-
-            const auto palette = option->palette;
-
-            frameRect.adjust(-1, -1, 1, 1);
-
-            if (selected) {
-                // overlap border
-                // This covers just enough of the border, so that both the border and its
-                // antialiasing effect is covered. On 100% scale it does nothing
-                const qreal overlap = devicePixelRatio(painter) * devicePixelRatio(painter);
-                frameRect.adjust(0, 0, overlap, 0);
-                bgBrush = palette.color(QPalette::Window);
-                QColor penBrush = KColorUtils::mix(bgBrush, palette.color(QPalette::WindowText), 0.3);
-                painter->setBrush(bgBrush);
-                painter->setPen(QPen(penBrush, 1.001));
-                QRectF highlightRect = frameRect;
-                highlightRect.setWidth(4); // minimum for correct accessibility
-                if (east) {
-                    highlightRect.moveRight(frameRect.right());
-                }
-                const auto hover = alphaColor(hoverColor(palette), 0.2);
-                painter->setBrush(hover);
-                painter->drawRect(frameRect);
-                painter->setBrush(palette.color(QPalette::Highlight));
-                painter->setPen(Qt::NoPen);
-                painter->drawRect(highlightRect);
-            } else if (enabled && hovered) {
-                const qreal overlap = 1.001;
-                frameRect.adjust(0, 0, overlap, 0);
-                const auto hover = alphaColor(hoverColor(palette), 0.2);
-                painter->setBrush(hover);
-                painter->setPen(Qt::NoPen);
-                painter->drawRect(frameRect);
-            }
-            return;
-        }
-
-        QProxyStyle::drawControl(element, option, painter, widget);
-    }
-
-    QColor hoverColor(const QPalette &palette) const
-    {
-        return _viewHoverBrush.brush(palette).color();
-    }
-};
-
 KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     : QWidget()
     , d(std::make_unique<Private>(canvas))
@@ -290,7 +125,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar;
     d->tabBar->setDocumentMode(true);
     d->tabBar->setShape(QTabBar::RoundedWest);
-    auto style = new TabBarStyle;
+    auto style = new KoTabBarProxyStyle;
     d->tabBar->setStyle(style);
     d->tabBar->setAutoFillBackground(true);
     QPalette palette = d->tabBar->palette();
