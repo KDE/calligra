@@ -16,6 +16,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     , m_fontMetricsChecked(false)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+    widget.mainLayout->insertStretch(2);
+    widget.formLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     connect(widget.first, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::firstLineMarginChanged);
     connect(widget.left, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::leftMarginChanged);
@@ -38,8 +41,8 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     connect(widget.lineSpacing, &QComboBox::currentIndexChanged, this, &ParagraphIndentSpacing::lineSpacingChanged);
     connect(widget.useFont, &QAbstractButton::toggled, this, &ParagraphIndentSpacing::useFontMetrices);
     connect(widget.autoTextIndent, &QCheckBox::stateChanged, this, &ParagraphIndentSpacing::autoTextIndentChanged);
-    connect(widget.proportional, &QSpinBox::valueChanged, this, &ParagraphIndentSpacing::spacingPercentChanged);
-    connect(widget.custom, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::spacingValueChanged);
+    connect(widget.percentPage, &QSpinBox::valueChanged, this, &ParagraphIndentSpacing::spacingPercentChanged);
+    connect(widget.unitsPage, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::spacingValueChanged);
     lineSpacingChanged(0);
 }
 
@@ -140,7 +143,7 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
         break;
     case 3: // proportional
         percent = true;
-        widget.proportional->setValue(m_style->lineHeightPercent());
+        widget.percentPage->setValue(m_style->lineHeightPercent());
         break;
     case 4: // additional
         custom = true;
@@ -163,14 +166,14 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
     m_spacingInherited = false;
 
     if (custom) {
-        widget.custom->setEnabled(true);
+        widget.unitsPage->setEnabled(true);
         widget.spacingStack->setCurrentWidget(widget.unitsPage);
-        widget.custom->changeValue(customValue);
+        widget.unitsPage->changeValue(customValue);
     } else {
         widget.spacingStack->setCurrentWidget(widget.percentPage);
-        widget.proportional->setEnabled(percent);
+        widget.percentPage->setEnabled(percent);
         if (!percent)
-            widget.proportional->setValue(100);
+            widget.percentPage->setValue(100);
     }
 
     widget.useFont->setEnabled(row != 5);
@@ -228,20 +231,20 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
             style->setLineHeightPercent(200);
             break;
         case 3:
-            style->setLineHeightPercent(widget.proportional->value());
+            style->setLineHeightPercent(widget.percentPage->value());
             break;
         case 4:
-            if (widget.custom->value() == 0.0) { // then we need to save it differently.
+            if (widget.unitsPage->value() == 0.0) { // then we need to save it differently.
                 style->setLineHeightPercent(100);
             } else {
-                style->setLineSpacing(widget.custom->value());
+                style->setLineSpacing(widget.unitsPage->value());
             }
             break;
         case 5:
-            style->setLineHeightAbsolute(widget.custom->value());
+            style->setLineHeightAbsolute(widget.unitsPage->value());
             break;
         case 6:
-            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.custom->value()));
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.unitsPage->value()));
             break;
         }
         style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
@@ -255,7 +258,7 @@ void ParagraphIndentSpacing::setUnit(const KoUnit &unit)
     widget.right->setUnit(unit);
     widget.before->setUnit(unit);
     widget.after->setUnit(unit);
-    widget.custom->setUnit(unit);
+    widget.unitsPage->setUnit(unit);
 }
 
 void ParagraphIndentSpacing::useFontMetrices(bool on)
