@@ -14,20 +14,18 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     : QWidget(parent)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+
+    qWarning() << widget.mainLayout->count();
 
     setColumns(columns);
     setUnit(KoUnit(KoUnit::Millimeter));
 
-    QGridLayout *layout = new QGridLayout(widget.previewPane);
-    layout->setContentsMargins({});
-    widget.previewPane->setLayout(layout);
-    m_preview = new KoPagePreviewWidget(this);
-    layout->addWidget(m_preview);
-    m_preview->setColumns(columns);
+    widget.previewPane->setColumns(columns);
 
     connect(widget.columns, QOverload<int>::of(&QSpinBox::valueChanged), this, &KWDocumentColumns::optionsChanged);
     connect(widget.spacing, &KoUnitDoubleSpinBox::valueChangedPt, this, &KWDocumentColumns::optionsChanged);
-    connect(this, &KWDocumentColumns::columnsChanged, m_preview, &KoPagePreviewWidget::setColumns);
+    connect(this, &KWDocumentColumns::columnsChanged, widget.previewPane, &KoPagePreviewWidget::setColumns);
 }
 
 void KWDocumentColumns::setColumns(const KoColumns &columns)
