@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
 "PO-Revision-Date: 2002-09-27 16:44+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -1546,12 +1546,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Donker Oranje"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vertoon %1 Nutsbalk"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Vertoon %1 Nutsbalk"

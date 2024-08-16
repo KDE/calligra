@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
-"PO-Revision-Date: 2024-08-14 11:07+0200\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"PO-Revision-Date: 2024-08-15 09:51+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -1527,12 +1527,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Werkbalk %1 tonen"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Werkbalk %1 verbergen"
@@ -4872,30 +4872,26 @@ msgid "Apply to document"
 msgstr "Toepassen op dit document"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Linkermarge"
+msgstr "Linker rand marge:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Rechtermarge"
+msgstr "Rechter rand marge:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Inbindkant:"
+msgstr "Vastklik rand marge:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Paginazijde:"
+msgstr "Paginarand marge:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5004,17 +5000,15 @@ msgstr "Rechts naar links"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Bovenmarge"
+msgstr "Bovenmarge:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Ondermarge"
+msgstr "Ondermarge:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
 "PO-Revision-Date: 2015-06-01 10:06+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -1514,12 +1514,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Advarsel"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis verktøylinje for %1"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skjul verktøylinje for %1"
@@ -5346,12 +5346,3 @@ msgstr "Alle støttede formater"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Top:"
-#~ msgstr "Øverst:"
-
-#~ msgid "Binding edge:"
-#~ msgstr "Bindekant:"
-
-#~ msgid "Page edge:"
-#~ msgstr "Sidekant:"

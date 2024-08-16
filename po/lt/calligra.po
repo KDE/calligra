@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
 "PO-Revision-Date: 2017-06-25 14:28+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -1616,12 +1616,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Dėmesio"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Rodyti %1 įrankių juostą"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Slėpti %1 priemonių juostą"

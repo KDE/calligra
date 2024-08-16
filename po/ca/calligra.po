@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
-"PO-Revision-Date: 2024-08-14 09:36+0200\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"PO-Revision-Date: 2024-08-15 10:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1516,12 +1516,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Avís"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra d'eines %1"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
@@ -4850,30 +4850,26 @@ msgid "Apply to document"
 msgstr "Aplica al document"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Vora esquerra:"
+msgstr "Marge de la vora esquerra:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Vora dreta:"
+msgstr "Marge de la vora dreta:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Vora d'enquadernació:"
+msgstr "Marge de la vora d'enquadernació:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Vora de la pàgina:"
+msgstr "Marge de la vora de la pàgina:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4982,17 +4978,15 @@ msgstr "De dreta a esquerra"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Marges"
+msgstr "Marge superior:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Baix:"
+msgstr "Marge inferior:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

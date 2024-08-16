@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-14 05:45+0200\n"
+"PO-Revision-Date: 2024-08-15 06:00+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -587,6 +587,9 @@ msgid ""
 "that Calligra Sheets can auto-convert numbers to strings if needed, so this "
 "function should rarely be needed."
 msgstr ""
+"ფუნქცია NUM2STRING() მითითებული რიცხვისთვის სტრიქონს აბრუნებს. დაიმახსოვრეთ, "
+"რომ CalligraSheet-ს, თუ ეს საჭიროა, რიცხვების სტრიქონად გადაყვანა "
+"ავტომატურადაც შეუძლია, ასე რომ, ეს ფუნქცია იშვიათად თუ დაგჭირდებათ."
 
 #: functions/conversion.xml:65
 #, kde-format
@@ -614,6 +617,8 @@ msgid ""
 "The STRING() function returns a string value for a given number. It is the "
 "same as the NUM2STRING function."
 msgstr ""
+"ფუნქცია STRING() მითითებული რიცხვის სტრიქონის ვარიანტს აბრუნებს. ეს იგივეა, "
+"რაც ფუნქცია NUM2STRING()."
 
 #: functions/conversion.xml:90
 #, kde-format
@@ -883,6 +888,9 @@ msgid ""
 "numbers can be converted. The optional Format argument specifies the level "
 "of conciseness, and defaults to 0."
 msgstr ""
+"ფუნქცია ROMAN() რიცხვს რომაულ ფორმატში აბრუნებს. შეგიძლიათ, მხოლოდ, მთელი "
+"დადებითი რიცხვების გადაყვანა. არასავალდებული ფორმატის არგუმენტი სიმოკლის "
+"დონეს მიუთითებს და ნაგულისხმევად 0-ის ტოლია."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -1224,6 +1232,10 @@ msgid ""
 "2, monday is 1, tuesday 2, ... and if the method is 3 WEEKDAY() returns 0 "
 "for monday, 1 for tuesday,..."
 msgstr ""
+"ფუნქცია WEEKDAY() მითითებული თარიღის კვირის დღეს აბრუნებს. თუ მეთოდი 1-ია "
+"(ნაგულისხმევი), WEEKDAY() აბრუნებს 1-ს კვირისთვის, 2-ს ორშაბათისთვის... თუ "
+"მეთოდი 2-ია, მაშინ ორშაბათი 1-ია, სამშაბათი ორი და ა.შ. თუ მეთოდი 3-ია, "
+"მაშინ WEEKDAY() აბრუნებს 0-ს ორშაბათისთვის, 1-ს სამშაბათისთვის და ა.შ..."
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1301,6 +1313,8 @@ msgid ""
 "The DATEVALUE function returns a number representing the day, i.e the number "
 "of days elapsed since December 31, 1899."
 msgstr ""
+"ფუნქცია DATEVALUE აბრუნებს რიცხვს, რომელიც დღეს წარმოადგენს, ანუ, დღეების "
+"რაოდენობას, რომელიც 1899 წლის 31 დეკემბრის შემდეგ გავიდა."
 
 #: functions/datetime.xml:76
 #, kde-format
@@ -1372,6 +1386,8 @@ msgid ""
 "The YEAR functions returns the year of a date. If no parameter is specified "
 "the current year gets returned."
 msgstr ""
+"ფუნქცია YEAR თარიღის წელს აბრუნებს. თუ პარამეტრი გადაცემული არაა, დაბრუნდება "
+"მიმდინარე წელი."
 
 #: functions/datetime.xml:134
 #, kde-format
@@ -1536,6 +1552,8 @@ msgid ""
 "WEEKS(\"2002-02-18\"; \"2002-02-26\"; 0) returns 1, because there is one "
 "week and 1 day in between"
 msgstr ""
+"WEEKS(\"2002-02-18\"; \"2002-02-26\"; 0) აბრუნებს 1-1, რადგან შუაში 1 კვირა "
+"და 1 დღეა"
 
 #: functions/datetime.xml:246
 #, kde-format
@@ -1981,6 +1999,7 @@ msgid ""
 "The WEEKNUM() function returns the non-ISO week number in which the date "
 "falls into."
 msgstr ""
+"ფუნქცია WEEKNUM()აბრუნებს არა-ISO კვირის ნომერს, რომელშიც თარიღი ჯდება."
 
 #: functions/datetime.xml:612
 #, kde-format
@@ -2098,6 +2117,8 @@ msgid ""
 "Holidays must be one of the following: number = days to add, a single date "
 "or an array of dates."
 msgstr ""
+"დასვენები დღეები შეიძლება იყოს ერთ-ერთი შემდეგიდან: რიცხვი = დასამატებელი "
+"დღეები, ერთი თარიღი ან თარიღების მასივი."
 
 #: functions/datetime.xml:683
 #, kde-format
@@ -2110,6 +2131,8 @@ msgid ""
 "if B9 is \"01/01/2001\", D3 is \"01/03/2001\", D4 is \"01/04/2001\" then "
 "WORKDAY(B9;2;D3:D4) returns \"Fri Jan 5 2001\""
 msgstr ""
+"თუ B9 არის \"01/01/2001\", D3 არის \"01/03/2001\" და D4 არის \"01/04/2001\" "
+"მაშინ WORKDAY(B9;2;D3:D4) აბრუნებს მნიშვნელობას \"Fri Jan 5 2001\""
 
 #: functions/datetime.xml:696
 #, kde-format
@@ -2122,6 +2145,8 @@ msgid ""
 "The NETWORKDAY() function returns the number of working days between "
 "startdate and enddate."
 msgstr ""
+"ფუნქცია NETWORKDAY() საწყისსა და საბოლოო თარიღებს შორის სამუშაო დღეების "
+"რაოდენობას აბრუნებს."
 
 #: functions/datetime.xml:706
 #, kde-format

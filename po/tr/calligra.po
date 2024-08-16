@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
-"PO-Revision-Date: 2024-08-14 14:36+0300\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"PO-Revision-Date: 2024-08-15 14:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1510,12 +1510,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Uyarı"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Göster"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Gizle"
@@ -4847,30 +4847,26 @@ msgid "Apply to document"
 msgstr "Belgeye uygula"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Sol Kenarlık:"
+msgstr "Sol kenar boşluğu:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Sağ Kenarlık:"
+msgstr "Sağ kenar boşluğu:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Cilt Kenarlığı:"
+msgstr "Cilt kenarı boşluğu:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Sayfa Kenarlığı:"
+msgstr "Sayfa kenarı boşluğu:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4979,17 +4975,15 @@ msgstr "Sağdan sola"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Kenarlıklar"
+msgstr "Üst kenar boşluğu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Alt:"
+msgstr "Alt kenar boşluğu:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

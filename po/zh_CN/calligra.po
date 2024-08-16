@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-16 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -717,24 +717,21 @@ msgid "Create backup file:"
 msgstr "创建备份文件："
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "显示网格："
+msgstr ""
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "吸附到网格："
+msgstr ""
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "网格"
+msgstr ""
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -742,20 +739,16 @@ msgid "Grid color:"
 msgstr "网格颜色："
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "水平(&H)："
+msgstr ""
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "垂直(&V)："
+msgstr ""
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -1490,12 +1483,12 @@ msgstr ""
 msgid "Warning"
 msgstr "警告"
 
-#: main/KoMainWindow.cpp:2030
+#: main/KoMainWindow.cpp:2027
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
-#: main/KoMainWindow.cpp:2032
+#: main/KoMainWindow.cpp:2029
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
@@ -4774,10 +4767,9 @@ msgid "Icon only"
 msgstr "仅图标"
 
 #: widgets/KoModeBox.cpp:669
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "单面"
+msgstr ""
 
 #: widgets/KoModeBox.cpp:678
 #, kde-format
@@ -4800,30 +4792,26 @@ msgid "Apply to document"
 msgstr "应用到文档"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "左边缘："
+msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "右边缘："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "装订边界："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "页边距："
+msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4932,17 +4920,15 @@ msgstr "从右到左"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "页边距"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "底部："
+msgstr ""
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5283,24 +5269,3 @@ msgstr "所有支持的格式"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1|/|$[~stripAccel %1]"
-
-#~ msgid "Top:"
-#~ msgstr "顶部："
-
-#~ msgid "Binding edge:"
-#~ msgstr "装订边缘："
-
-#~ msgid "Page edge:"
-#~ msgstr "页面边缘："
-
-#~ msgid "Spacing"
-#~ msgstr "间隔"
-
-#~ msgid "Tabs side"
-#~ msgstr "标签页边栏"
-
-#~ msgid "Top side"
-#~ msgstr "顶边"
-
-#~ msgid "Bottom side"
-#~ msgstr "下边"

@@ -12339,10 +12339,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "颜色："
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -14691,12 +14690,3 @@ msgstr "选择多个单元格"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "链接 %1 已激活"
-
-#~ msgid "Colors"
-#~ msgstr "颜色"
-
-#~ msgid "&Grid:"
-#~ msgstr "网格(&G)："
-
-#~ msgid "Custom..."
-#~ msgstr "自定义..."

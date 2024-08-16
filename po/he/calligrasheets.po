@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-10 22:56+0300\n"
+"PO-Revision-Date: 2024-08-15 08:35+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -8588,9 +8588,9 @@ msgid "COMBINA(12;5) returns 4368"
 msgstr "(COMBIN(12;5 מחזירה 792"
 
 #: functions/statistical.xml:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr "(COMBIN(5;5 מחזירה 1"
+msgstr "COMBINA(5;5) מחזירה 126"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -9031,9 +9031,9 @@ msgstr "מספר ההצלחות במדגם"
 
 #: functions/statistical.xml:565 functions/statistical.xml:1760
 #: functions/statistical.xml:1801
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of trials"
-msgstr "מספר תקופות"
+msgstr "מספר ניסיונות"
 
 #: functions/statistical.xml:569
 #, kde-format
@@ -9062,15 +9062,15 @@ msgstr "(HYPGEOMDIST(2; 5; 6; 20 מחזירה 0.3522"
 
 #: functions/statistical.xml:587 functions/statistical.xml:1127
 #: functions/statistical.xml:1313
-#, fuzzy, kde-format
+#, kde-format
 msgid "y values (array)"
-msgstr "ערך (מערך)"
+msgstr "ערכי y (מערך)"
 
 #: functions/statistical.xml:591 functions/statistical.xml:1131
 #: functions/statistical.xml:1317
-#, fuzzy, kde-format
+#, kde-format
 msgid "x values (array)"
-msgstr "ערך (מערך)"
+msgstr "ערכי x (מערך)"
 
 #: functions/statistical.xml:595
 #, fuzzy, kde-format
@@ -9082,9 +9082,9 @@ msgstr ""
 "ההיפרבולי שלו הוא x."
 
 #: functions/statistical.xml:596
-#, fuzzy, kde-format
+#, kde-format
 msgid "INTERCEPT(y;x)"
-msgstr "ISNONTEXT(x)"
+msgstr "INTERCEPT(y;x)"
 
 #: functions/statistical.xml:624
 #, kde-format
@@ -9152,9 +9152,9 @@ msgid "A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3"
 msgstr "A1: 3, A2: 1, A3: 5 ‏=> (LARGE(A1:A3; 2 מחזירה 3"
 
 #: functions/statistical.xml:698
-#, fuzzy, kde-format
+#, kde-format
 msgid "The LEGACYFDIST() function returns the f-distribution."
-msgstr "הפונקציה ()FDIST מחזירה את התפלגות f."
+msgstr "הפונקציה ()LEGACYFDIST מחזירה את התפלגות f."
 
 #: functions/statistical.xml:699
 #, fuzzy, kde-format
@@ -9271,7 +9271,7 @@ msgid "Float"
 msgstr "נקודה צפה"
 
 #: functions/statistical.xml:799
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The MODE() function returns the most frequently occurring value in the data "
 "set."
@@ -9520,9 +9520,9 @@ msgid "PERMUTATIONA(0,0) returns 1"
 msgstr "(FACT(0 מחזירה 1"
 
 #: functions/statistical.xml:970
-#, fuzzy, kde-format
+#, kde-format
 msgid "Range of values"
-msgstr "טווח תאים המכיל ערכים"
+msgstr "טווח ערכים"
 
 #: functions/statistical.xml:974
 #, kde-format
@@ -11024,24 +11024,24 @@ msgid "MID(text;position)"
 msgstr "MID(מיקום;טקסט)"
 
 #: functions/text.xml:363
-#, fuzzy, kde-format
+#, kde-format
 msgid "MID(\"Calligra\";2;3) returns \"all\""
-msgstr "(MID(\"KOffice\";2;3 מחזירה \"Off\""
+msgstr "MID(\"קליגרה\";2;3) מחזירה „ל”"
 
 #: functions/text.xml:364
-#, fuzzy, kde-format
+#, kde-format
 msgid "MID(\"Calligra\";2) returns \"alligra\""
-msgstr "(RIGHT(\"hello\";2 מחזירה \"lo\""
+msgstr "MID(\"קליגרה\";2) מחזירה „ליגרה”"
 
 #: functions/text.xml:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte Position"
-msgstr "מיקום"
+msgstr "מיקום בית"
 
 #: functions/text.xml:385 functions/text.xml:505 functions/text.xml:550
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte Length"
-msgstr "אורך טקסט"
+msgstr "אורך בתים"
 
 #: functions/text.xml:389
 #, fuzzy, kde-format
@@ -11089,9 +11089,9 @@ msgid ""
 msgstr "הפונקציה ()LEN מחזירה את האורך של המחרוזת הנתונה."
 
 #: functions/text.xml:425
-#, fuzzy, kde-format
+#, kde-format
 msgid "LENB(text)"
-msgstr "LEN(טקסט)"
+msgstr "LENB(טקסט)"
 
 #: functions/text.xml:437
 #, kde-format
@@ -11130,9 +11130,9 @@ msgstr ""
 "(\"CONCATENATE(\"KSpread\";\"KOffice\";\"KDE מחזירה \"KSpreadKOfficeKDE\""
 
 #: functions/text.xml:481 functions/text.xml:526
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of characters"
-msgstr "מספר התווים שיש להחליף"
+msgstr "מספר התווים"
 
 #: functions/text.xml:485
 #, kde-format
@@ -11177,9 +11177,9 @@ msgstr ""
 "את כל המחרוזת."
 
 #: functions/text.xml:510
-#, fuzzy, kde-format
+#, kde-format
 msgid "RIGHTB(text;ByteLength)"
-msgstr "RIGHT(אורך;טקסט)"
+msgstr "RIGHTB(אורך;טקסט)"
 
 #: functions/text.xml:530
 #, fuzzy, kde-format
@@ -11280,9 +11280,9 @@ msgstr ""
 "בפעם הראשונה."
 
 #: functions/text.xml:592
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(Text)"
-msgstr "ROT(טקסט)"
+msgstr "ROT13(טקסט)"
 
 #: functions/text.xml:593
 #, fuzzy, kde-format
@@ -13366,9 +13366,9 @@ msgid "Page Layout..."
 msgstr "הגדרות עמוד..."
 
 #: part/View.cpp:267
-#, fuzzy, kde-format
+#, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
-msgstr "ציון פריסת הגיליון האלקטרוני לשם הדפסה."
+msgstr "ציון פריסת הגיליון האלקטרוני לשם הדפסה"
 
 #: part/View.cpp:269
 #, kde-format
@@ -13386,9 +13386,9 @@ msgid "Page Outline"
 msgstr "מתאר עמוד"
 
 #: part/View.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
-msgstr "הצג על גבי הגיליון האלקטרוני היכן יהיו גבולות העמודים."
+msgstr "הצג על גבי הגיליון האלקטרוני היכן יהיו גבולות העמודים"
 
 #: part/View.cpp:279
 #, kde-format
@@ -13401,19 +13401,19 @@ msgid "Recalculate"
 msgstr "חישוב מחדש"
 
 #: part/View.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
-msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי."
+msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי"
 
 #: part/View.cpp:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recalculate Document"
-msgstr "חשב גיליון מחדש"
+msgstr "חישוב גיליון מחדש"
 
 #: part/View.cpp:293
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
-msgstr "חישוב מחדש של הערכים של כל התאים בכל גיליונות העבודה."
+msgstr "חישוב מחדש של הערכים של כל התאים בכל גיליונות העבודה"
 
 #: part/View.cpp:295
 #, kde-format
@@ -13421,19 +13421,19 @@ msgid "Protect &Sheet..."
 msgstr "&הגנה על הגיליון..."
 
 #: part/View.cpp:297
-#, fuzzy, kde-format
+#, kde-format
 msgid "Protect the sheet from being modified"
-msgstr "הגנה על הגיליון מפני שינויים."
+msgstr "הגנה על הגיליון מפני שינויים"
 
 #: part/View.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Protect &Document..."
-msgstr "הגנה על מסמך"
+msgstr "ה&גנה על מסמך…"
 
 #: part/View.cpp:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "Protect the document from being modified"
-msgstr "הגנה על המסמך מפני שינויים."
+msgstr "הגנה על המסמך מפני שינויים"
 
 #: part/View.cpp:307
 #, kde-format
@@ -14215,9 +14215,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Roman"
-msgstr "רומניה"
+msgstr "רומיות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:58
