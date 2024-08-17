@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2007-07-02 16:19+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -88,13 +88,13 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, kde-format
 msgid "Spell Check Result"
 msgstr ""
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "Change Variable To"
@@ -351,13 +351,13 @@ msgid "Name:"
 msgstr "نام:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, kde-format
 msgid "Columns:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, kde-format
 msgid "Column spacing:"
 msgstr ""

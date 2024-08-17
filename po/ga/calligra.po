@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -4340,7 +4340,7 @@ msgid "Generic"
 msgstr "Ginearálta"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:662
+#: widgets/KoModeBox.cpp:497
 #, kde-format
 msgid "Text"
 msgstr "Téacs"
@@ -4938,29 +4938,29 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:665
+#: widgets/KoModeBox.cpp:500
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Téacs"
 
-#: widgets/KoModeBox.cpp:666
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:669
+#: widgets/KoModeBox.cpp:504
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Taobh amháin"
 
-#: widgets/KoModeBox.cpp:678
+#: widgets/KoModeBox.cpp:513
 #, fuzzy, kde-format
 #| msgid "Left Edge:"
 msgid "Left side"
 msgstr "Ciumhais Ar Chlé:"
 
-#: widgets/KoModeBox.cpp:679
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 #| msgid "Right Edge:"
 msgid "Right side"

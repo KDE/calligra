@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2021-08-22 11:29+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -4653,7 +4653,7 @@ msgid "Generic"
 msgstr "जेनेरिक"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:662
+#: widgets/KoModeBox.cpp:497
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -5256,31 +5256,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:665
+#: widgets/KoModeBox.cpp:500
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "पाठ"
 
-#: widgets/KoModeBox.cpp:666
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:669
+#: widgets/KoModeBox.cpp:504
 #, fuzzy, kde-format
 #| msgctxt "Underline Style"
 #| msgid "Single"
 msgid "Sidebar side"
 msgstr "एकल"
 
-#: widgets/KoModeBox.cpp:678
+#: widgets/KoModeBox.cpp:513
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgid "Left side"
 msgstr "बायाँ हाशिया"
 
-#: widgets/KoModeBox.cpp:679
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 #| msgid "Right indent"
 msgid "Right side"

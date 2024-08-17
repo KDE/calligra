@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2011-01-17 21:09+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -4644,7 +4644,7 @@ msgid "Generic"
 msgstr "Djenerike"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:662
+#: widgets/KoModeBox.cpp:497
 #, kde-format
 msgid "Text"
 msgstr "Tecse"
@@ -5269,30 +5269,30 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:665
+#: widgets/KoModeBox.cpp:500
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "Tecse"
 
-#: widgets/KoModeBox.cpp:666
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:669
+#: widgets/KoModeBox.cpp:504
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Ene seule pådje"
 
-#: widgets/KoModeBox.cpp:678
+#: widgets/KoModeBox.cpp:513
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgid "Left side"
 msgstr "Ritrait di hintche"
 
-#: widgets/KoModeBox.cpp:679
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 #| msgid "Right indent"
 msgid "Right side"

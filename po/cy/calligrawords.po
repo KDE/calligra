@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2004-08-16 18:16+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -87,13 +87,13 @@ msgid "Edit"
 msgstr "Trefnu Testun"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Canlyniad Gwirio Sillafu"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, kde-format
 msgid "Change Variable To"
 msgstr "Newid Newidyn i"
@@ -360,14 +360,14 @@ msgid "Name:"
 msgstr "Enw:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Columns:"
 msgstr "Colofnau"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, fuzzy, kde-format
 #| msgid "Default column spacing:"
 msgid "Column spacing:"

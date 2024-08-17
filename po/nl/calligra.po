@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2024-08-15 09:51+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -4236,7 +4236,7 @@ msgid "Generic"
 msgstr "Algemeen"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:662
+#: widgets/KoModeBox.cpp:497
 #, kde-format
 msgid "Text"
 msgstr "Tekst"
@@ -4836,27 +4836,27 @@ msgstr "Eindkleur."
 msgid "&Add to Predefined Gradients"
 msgstr "&Aan voorgedefinieerde kleurverlopen toevoegen"
 
-#: widgets/KoModeBox.cpp:665
+#: widgets/KoModeBox.cpp:500
 #, kde-format
 msgid "Icon and Text"
 msgstr "Pictogram en tekst"
 
-#: widgets/KoModeBox.cpp:666
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon only"
 msgstr "Alleen pictogrammen"
 
-#: widgets/KoModeBox.cpp:669
+#: widgets/KoModeBox.cpp:504
 #, kde-format
 msgid "Sidebar side"
 msgstr "Kant van de zijbalk"
 
-#: widgets/KoModeBox.cpp:678
+#: widgets/KoModeBox.cpp:513
 #, kde-format
 msgid "Left side"
 msgstr "Linkerkant"
 
-#: widgets/KoModeBox.cpp:679
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Right side"
 msgstr "Rechterkant"

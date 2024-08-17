@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -4169,7 +4169,7 @@ msgid "Generic"
 msgstr "常规"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:662
+#: widgets/KoModeBox.cpp:497
 #, kde-format
 msgid "Text"
 msgstr "文本"
@@ -4756,27 +4756,27 @@ msgstr "终止颜色。"
 msgid "&Add to Predefined Gradients"
 msgstr "添加到预定义渐变(&A)"
 
-#: widgets/KoModeBox.cpp:665
+#: widgets/KoModeBox.cpp:500
 #, kde-format
 msgid "Icon and Text"
 msgstr "图标和文本"
 
-#: widgets/KoModeBox.cpp:666
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon only"
 msgstr "仅图标"
 
-#: widgets/KoModeBox.cpp:669
+#: widgets/KoModeBox.cpp:504
 #, kde-format
 msgid "Sidebar side"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:678
+#: widgets/KoModeBox.cpp:513
 #, kde-format
 msgid "Left side"
 msgstr "左侧"
 
-#: widgets/KoModeBox.cpp:679
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Right side"
 msgstr "右侧"

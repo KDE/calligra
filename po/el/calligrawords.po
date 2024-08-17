@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2021-09-02 09:20+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -87,13 +87,13 @@ msgid "Edit"
 msgstr "Επεξεργασία"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Αποτέλεσμα ορθογραφικού ελέγχου"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, kde-format
 msgid "Change Variable To"
 msgstr "Τροποποίηση μεταβλητής σε"
@@ -336,13 +336,13 @@ msgid "Name:"
 msgstr "Όνομα:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, kde-format
 msgid "Columns:"
 msgstr "Στήλες:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, kde-format
 msgid "Column spacing:"
 msgstr "Απόσταση στηλών:"

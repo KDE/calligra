@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2004-11-09 13:46+0100\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -81,14 +81,14 @@ msgid "Edit"
 msgstr "Aozañ ar skrid"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, fuzzy, kde-format
 #| msgid "Spell Checker Behavior"
 msgid "Spell Check Result"
 msgstr "Emzalc'h gwirieker ar skritur"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, fuzzy, kde-format
 #| msgid "Change Margin Frame"
 msgid "Change Variable To"
@@ -360,14 +360,14 @@ msgid "Name:"
 msgstr "Anv :"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Columns:"
 msgstr "Bannoù"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Column spacing:"

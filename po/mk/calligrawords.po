@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -79,13 +79,13 @@ msgid "Edit"
 msgstr "Уреди &текст"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, fuzzy, kde-format
 msgid "Spell Check Result"
 msgstr "Проверка на правопис"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, fuzzy, kde-format
 msgid "Change Variable To"
 msgstr "&Променливи по избор..."
@@ -330,13 +330,13 @@ msgid "Name:"
 msgstr "Име:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, fuzzy, kde-format
 msgid "Columns:"
 msgstr "Колона:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, fuzzy, kde-format
 msgid "Column spacing:"
 msgstr "Избриши колона:"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-07-04 08:13+0300\n"
+"PO-Revision-Date: 2024-08-16 08:50+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:30
@@ -84,37 +84,37 @@ msgstr "יישור לשול התחתון"
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "בריחה בכל הכיוונים"
 
 #: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "בריחה בכיוונים אופקיים"
 
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "בריחה בכיוונים אנכיים"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "בריחה מכיוון שמאל"
 
 #: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "בריחה מכיוון ימין"
 
 #: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "בריחה מכיוון מעלה"
 
 #: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "בריחה מכיוון מטה"
 
 #: connectionTool/ConnectionTool.cpp:429
 msgctxt "(qtundo-format)"
@@ -141,22 +141,22 @@ msgstr "לחיצה לעריכת נקודות חיבור."
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
-msgstr ""
+msgstr "אפשר להזיז את החיבור בגרירה או בהקשה על delete כדי להסיר אותו."
 
 #: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
-msgstr ""
+msgstr "לחיצה כפולה על נקודת החיבור או הקשה על delete תסיר אותו."
 
 #: connectionTool/ConnectionTool.cpp:792
 #, kde-format
 msgid "Double click to add connection point."
-msgstr ""
+msgstr "לחיצה כפולה תוסיף נקודת חיבור."
 
 #: connectionTool/ConnectionTool.cpp:795
 #, kde-format
 msgid "Drag to create new connection."
-msgstr ""
+msgstr "גרירה תיצור חיבור חדש."
 
 #: connectionTool/ConnectionTool.cpp:823
 #, kde-format

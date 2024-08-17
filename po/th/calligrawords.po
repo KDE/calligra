@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 13:35+0700\n"
 "Last-Translator:  <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -81,13 +81,13 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:152
+#: part/calligrawords.rc:147
 #, kde-format
 msgid "Spell Check Result"
 msgstr "ผลการตรวจคำสะกด"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:179
+#: part/calligrawords.rc:174
 #, kde-format
 msgid "Change Variable To"
 msgstr "เปลี่ยนตัวแปรเป็น"
@@ -337,13 +337,13 @@ msgid "Name:"
 msgstr "ชื่อ:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
-#: part/dialogs/KWDocumentColumns.ui:24
+#: part/dialogs/KWDocumentColumns.ui:21
 #, fuzzy, kde-format
 msgid "Columns:"
 msgstr "คอลัมน์"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
-#: part/dialogs/KWDocumentColumns.ui:44
+#: part/dialogs/KWDocumentColumns.ui:41
 #, fuzzy, kde-format
 msgid "Column spacing:"
 msgstr "คอลัมน์"

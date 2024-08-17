@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:39+0000\n"
+"POT-Creation-Date: 2024-08-17 00:39+0000\n"
 "PO-Revision-Date: 2024-05-22 12:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -349,8 +349,8 @@ msgstr "Color de fons"
 #: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
 #: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
 #: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
-#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:95
-#: dialogs/SimpleParagraphWidget.ui:219 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
+#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:23
 #: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
@@ -1304,10 +1304,8 @@ msgid " Name:"
 msgstr " Nom:"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
-#. i18n: ectx: property (whatsThis), widget (QGroupBox)
 #. i18n: ectx: property (whatsThis), widget (QWidget, ListLevelWidget)
 #: dialogs/ListLevelWidget.ui:14 dialogs/ParagraphIndentSpacing.ui:14
-#: dialogs/ParagraphIndentSpacing.ui:97
 #, kde-format
 msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
 msgstr "<p><ul><li><b>Single</b>: L'interlineat normal</li></ul></p> "
@@ -1816,113 +1814,108 @@ msgstr "Decoracions"
 msgid "Drop Caps"
 msgstr "Majúscules inicials"
 
-#: dialogs/ParagraphIndentSpacing.cpp:25
+#: dialogs/ParagraphIndentSpacing.cpp:28
 #, kde-format
 msgctxt "Line spacing value"
 msgid "Single"
 msgstr "Simple"
 
-#: dialogs/ParagraphIndentSpacing.cpp:26
+#: dialogs/ParagraphIndentSpacing.cpp:29
 #, kde-format
 msgctxt "Line spacing value"
 msgid "1.5 Lines"
 msgstr "1,5 línies"
 
-#: dialogs/ParagraphIndentSpacing.cpp:27
+#: dialogs/ParagraphIndentSpacing.cpp:30
 #, kde-format
 msgctxt "Line spacing value"
 msgid "Double"
 msgstr "Doble"
 
-#: dialogs/ParagraphIndentSpacing.cpp:28
+#: dialogs/ParagraphIndentSpacing.cpp:31
 #, kde-format
 msgctxt "Line spacing type"
 msgid "Proportional"
 msgstr "Proporcional"
 
-#: dialogs/ParagraphIndentSpacing.cpp:29
+#: dialogs/ParagraphIndentSpacing.cpp:32
 #, kde-format
 msgctxt "Line spacing type"
 msgid "Additional"
 msgstr "Addicional"
 
-#: dialogs/ParagraphIndentSpacing.cpp:30
+#: dialogs/ParagraphIndentSpacing.cpp:33
 #, kde-format
 msgctxt "Line spacing type"
 msgid "Fixed"
 msgstr "Fixat"
 
-#: dialogs/ParagraphIndentSpacing.cpp:31
+#: dialogs/ParagraphIndentSpacing.cpp:34
 #, kde-format
 msgctxt "Line spacing type"
 msgid "At least"
 msgstr "Com a mínim"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphIndentSpacing.ui:20
-#, kde-format
-msgid "Indent"
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:22
+#, fuzzy, kde-format
+#| msgid "Indent"
+msgid "Left Indent:"
 msgstr "Sagnat"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:26
-#, kde-format
-msgid "Left:"
-msgstr "Esquerra:"
+#: dialogs/ParagraphIndentSpacing.ui:35
+#, fuzzy, kde-format
+#| msgid "Indent"
+msgid "Right Indent:"
+msgstr "Sagnat"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:55
-#, kde-format
-msgid "Right:"
-msgstr "Dreta:"
-
-#. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:71
-#, kde-format
-msgid "First Line:"
+#: dialogs/ParagraphIndentSpacing.ui:48
+#, fuzzy, kde-format
+#| msgid "First Line:"
+msgid "First Line Indent:"
 msgstr "Primera línia:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
-#: dialogs/ParagraphIndentSpacing.ui:87
+#: dialogs/ParagraphIndentSpacing.ui:66
 #, kde-format
 msgid "Auto-infer from text size"
 msgstr "Infereix automàticament a partir de la mida de text"
 
-#. i18n: ectx: property (title), widget (QGroupBox)
-#: dialogs/ParagraphIndentSpacing.ui:100
-#, kde-format
-msgid "Line Spacing"
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:75
+#, fuzzy, kde-format
+#| msgid "Line Spacing"
+msgid "Line Spacing:"
 msgstr "Interlineat"
 
-#. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
-#: dialogs/ParagraphIndentSpacing.ui:134
+#. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
+#: dialogs/ParagraphIndentSpacing.ui:107
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
 
-#. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:180
-#, kde-format
-msgid "Use Font Metrics:"
+#. i18n: ectx: property (text), widget (QCheckBox, useFont)
+#: dialogs/ParagraphIndentSpacing.ui:129
+#, fuzzy, kde-format
+#| msgid "Use Font Metrics:"
+msgid "Use Font Metrics"
 msgstr "Usa mètrica de lletra:"
 
-#. i18n: ectx: property (title), widget (QGroupBox)
-#: dialogs/ParagraphIndentSpacing.ui:202
-#, kde-format
-msgid "Paragraph Space"
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:136
+#, fuzzy, kde-format
+#| msgid "Paragraph Space"
+msgid "Paragraph Space Before:"
 msgstr "Espai de paràgraf"
 
 #. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:208
-#, kde-format
-msgid "Before:"
-msgstr "Abans:"
-
-#. i18n: ectx: property (text), widget (QLabel)
-#: dialogs/ParagraphIndentSpacing.ui:221
-#, kde-format
-msgid "After:"
-msgstr "Després:"
+#: dialogs/ParagraphIndentSpacing.ui:146
+#, fuzzy, kde-format
+#| msgid "Paragraph Space"
+msgid "Paragraph Space After:"
+msgstr "Espai de paràgraf"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphLayout.ui:17
@@ -3067,6 +3060,18 @@ msgstr "Tecla premuda"
 #, kde-format
 msgid "Text editing"
 msgstr "Edició de text"
+
+#~ msgid "Left:"
+#~ msgstr "Esquerra:"
+
+#~ msgid "Right:"
+#~ msgstr "Dreta:"
+
+#~ msgid "Before:"
+#~ msgstr "Abans:"
+
+#~ msgid "After:"
+#~ msgstr "Després:"
 
 #~ msgid ""
 #~ "This link points to the program or script '%1'.\n"
