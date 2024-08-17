@@ -17,9 +17,6 @@
 
 TableOfContentsPreview::TableOfContentsPreview(QWidget *parent)
     : QFrame(parent)
-    , m_textShape(0)
-    , m_pm(0)
-    , m_styleManager(0)
     , m_previewPixSize(QSize(0, 0))
 {
 }
@@ -27,11 +24,6 @@ TableOfContentsPreview::TableOfContentsPreview(QWidget *parent)
 TableOfContentsPreview::~TableOfContentsPreview()
 {
     deleteTextShape();
-
-    if (m_pm) {
-        delete m_pm;
-        m_pm = 0;
-    }
 }
 
 void TableOfContentsPreview::setStyleManager(KoStyleManager *styleManager)
@@ -75,7 +67,7 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
 
     deleteTextShape();
 
-    m_textShape = new TextShape(&m_itom, &m_tlm);
+    m_textShape = std::make_unique<TextShape>(&m_itom, &m_tlm);
     if (m_previewPixSize.isEmpty()) {
         m_textShape->setSize(size());
     } else {
@@ -126,20 +118,15 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
 
 void TableOfContentsPreview::finishedPreviewLayout()
 {
-    if (m_pm) {
-        delete m_pm;
-        m_pm = 0;
-    }
-
     if (m_previewPixSize.isEmpty()) {
-        m_pm = new QPixmap(size());
+        m_pm = std::make_unique<QPixmap>(size());
     } else {
-        m_pm = new QPixmap(m_previewPixSize);
+        m_pm = std::make_unique<QPixmap>(m_previewPixSize);
     }
     m_pm->fill(Qt::white);
     m_zoomHandler.setZoom(0.9);
     m_zoomHandler.setDpi(72, 72);
-    QPainter p(m_pm);
+    QPainter p(m_pm.get());
 
     if (m_textShape) {
         if (m_previewPixSize.isEmpty()) {
@@ -167,8 +154,7 @@ void TableOfContentsPreview::deleteTextShape()
             lay->setContinuousLayout(false);
             lay->setBlockLayout(true);
         }
-        delete m_textShape;
-        m_textShape = 0;
+        m_textShape.reset(nullptr);
     }
 }
 

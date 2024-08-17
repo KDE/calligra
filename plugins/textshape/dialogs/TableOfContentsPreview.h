@@ -40,10 +40,10 @@ private Q_SLOTS:
     void finishedPreviewLayout();
 
 private:
-    TextShape *m_textShape;
-    QPixmap *m_pm;
+    std::unique_ptr<TextShape> m_textShape;
+    std::unique_ptr<QPixmap> m_pm;
     KoZoomHandler m_zoomHandler;
-    KoStyleManager *m_styleManager;
+    KoStyleManager *m_styleManager = nullptr;
     KoInlineTextObjectManager m_itom;
     KoTextRangeManager m_tlm;
     QSize m_previewPixSize;
