@@ -29,7 +29,7 @@ public:
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void prepareTemplateMenu();
-    void pixmapReady(int templateId);
+    void pixmapReady(int templateId, const QPixmap &pixmap);
 
 Q_SIGNALS:
     void doneWithFocus();
@@ -45,10 +45,10 @@ private:
     QTextBlock m_currentBlock;
     QList<KoTableOfContentsGeneratorInfo *> m_templateList;
     // each template in the template list will have have a previewGenerator that will be deleted after preview is generated
-    QList<TableOfContentsPreview *> m_previewGenerator;
+    QList<QPointer<TableOfContentsPreview>> m_previewGenerator;
     ItemChooserAction *m_chooser;
     ReferencesTool *m_referenceTool;
-    TableOfContentsTemplate *m_templateGenerator;
+    std::unique_ptr<TableOfContentsTemplate> const m_templateGenerator;
 };
 
 #endif

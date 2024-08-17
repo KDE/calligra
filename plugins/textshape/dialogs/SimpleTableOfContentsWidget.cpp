@@ -24,11 +24,10 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     : QWidget(parent)
     , m_blockSignals(false)
     , m_referenceTool(tool)
+    , m_templateGenerator(std::make_unique<TableOfContentsTemplate>(KoTextDocument(m_referenceTool->editor()->document()).styleManager()))
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
-
-    m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
     widget.addToC->setIcon(koIcon("insert-table-of-contents"));
     connect(widget.addToC, &QAbstractButton::clicked, this, &SimpleTableOfContentsWidget::doneWithFocus);
@@ -36,10 +35,7 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     connect(widget.addToC, &FormattingButton::itemTriggered, this, &SimpleTableOfContentsWidget::applyTemplate);
 }
 
-SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
-{
-    delete m_templateGenerator;
-}
+SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget() = default;
 
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
 {
@@ -57,13 +53,13 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     m_chooser = widget.addToC->addItemChooser(1);
 
     int index = 0;
-    foreach (KoTableOfContentsGeneratorInfo *info, m_templateList) {
+    for (KoTableOfContentsGeneratorInfo *info : std::as_const(m_templateList)) {
         TableOfContentsPreview *preview = new TableOfContentsPreview();
         preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
         preview->setPreviewSize(QSize(200, 120));
         preview->updatePreview(info);
-        connect(preview, &TableOfContentsPreview::pixmapGenerated, this, [this, index] {
-            pixmapReady(index);
+        connect(preview, &TableOfContentsPreview::pixmapGenerated, this, [this, index](const QPixmap &pixmap) {
+            pixmapReady(index, pixmap);
         });
         m_previewGenerator.append(preview);
         ++index;
@@ -87,12 +83,15 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     }
 }
 
-void SimpleTableOfContentsWidget::pixmapReady(int templateId)
+void SimpleTableOfContentsWidget::pixmapReady(int templateId, const QPixmap &pixmap)
 {
     // +1 to the templateId is because formattingButton does not allow id = 0
-    widget.addToC->addItem(m_chooser, m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
-    disconnect(m_previewGenerator.at(templateId), &TableOfContentsPreview::pixmapGenerated, this, nullptr);
-    m_previewGenerator.at(templateId)->deleteLater();
+    widget.addToC->addItem(m_chooser, pixmap, templateId + 1);
+    auto previewGenerator = m_previewGenerator.at(templateId);
+    if (previewGenerator) {
+        disconnect(previewGenerator, &TableOfContentsPreview::pixmapGenerated, this, nullptr);
+        m_previewGenerator.at(templateId)->deleteLater();
+    }
 }
 
 void SimpleTableOfContentsWidget::applyTemplate(int templateId)

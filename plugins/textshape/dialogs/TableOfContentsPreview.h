@@ -32,7 +32,8 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 Q_SIGNALS:
-    void pixmapGenerated();
+    void pixmapGenerated(QPixmap pixmap);
+
 public Q_SLOTS:
     void updatePreview(KoTableOfContentsGeneratorInfo *info);
 

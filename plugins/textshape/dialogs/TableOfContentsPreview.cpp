@@ -35,22 +35,20 @@ void TableOfContentsPreview::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    QPainter *p = new QPainter(this);
-    p->save();
-    p->translate(5.5, 1.5);
-    p->setRenderHint(QPainter::Antialiasing);
+    QPainter painter;
+    painter.save();
+    painter.translate(5.5, 1.5);
+    painter.setRenderHint(QPainter::Antialiasing);
     QRect rectang = rect();
     rectang.adjust(-4, -4, -4, -4);
 
     if (m_pm) {
-        p->drawPixmap(rectang, *m_pm, m_pm->rect());
+        painter.drawPixmap(rectang, *m_pm, m_pm->rect());
     } else {
-        p->fillRect(rectang, QBrush(QColor(Qt::white)));
+        painter.fillRect(rectang, QBrush(QColor(Qt::white)));
     }
 
-    p->restore();
-
-    delete p;
+    painter.restore();
 }
 
 void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newToCInfo)
@@ -137,13 +135,17 @@ void TableOfContentsPreview::finishedPreviewLayout()
         KoShapePaintingContext paintContext; // FIXME
         m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
-    Q_EMIT pixmapGenerated();
+    Q_EMIT pixmapGenerated(*m_pm);
     update();
 }
 
 QPixmap TableOfContentsPreview::previewPixmap()
 {
-    return QPixmap(*m_pm);
+    if (m_pm) {
+        return QPixmap(*m_pm);
+    } else {
+        return {};
+    }
 }
 
 void TableOfContentsPreview::deleteTextShape()
