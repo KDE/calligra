@@ -128,7 +128,7 @@ FormattingButton::FormattingButton(QWidget *parent)
     , m_lastId(0)
     , m_menuShownFirstTime(true)
 {
-    m_menu = new QMenu();
+    m_menu = new QMenu(this);
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
     connect(this, &QAbstractButton::released, this, &FormattingButton::itemSelected);
