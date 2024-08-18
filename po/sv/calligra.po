@@ -5058,12 +5058,12 @@ msgstr "Första radens indentering"
 #: widgets/KoRuler.cpp:1177
 #, kde-format
 msgid "Left indent"
-msgstr "Intentering till vänster"
+msgstr "Indentering till vänster"
 
 #: widgets/KoRuler.cpp:1180
 #, kde-format
 msgid "Right indent"
-msgstr "Intentering till höger"
+msgstr "Indentering till höger"
 
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
@@ -8900,11 +8900,11 @@ msgstr "%1"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Left indent"
-#~ msgstr "Intentering till vänster"
+#~ msgstr "Indentering till vänster"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right indent"
-#~ msgstr "Intentering till höger"
+#~ msgstr "Indentering till höger"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change the color of the shadow"

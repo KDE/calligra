@@ -1,7 +1,7 @@
 # translation of kspread_prf.po to Polish
 # translation of kspread.po to
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Translated by Arkadiusz Danilecki <szopen@aurora.put.poznan.pl>
-# with corrections, suggestions and updates by:
 # Waldemar Kochaniec <walkoch@polbox.pl>
 # Jacek Stolarczyk <jacek@mer.chemia.polsl.gliwice.pl>
 # Krzysztof Jasiutowicz <kpjas@box43.gnet.pl>
@@ -14,13 +14,13 @@
 # Robert Gomulka <carramba@epf.pl>, 2008, 2009.
 # Michał Konieczny <majkull@gmail.com>, 2009.
 # Marta Rybczynska <kde-i18n@rybczynska.net>, 2009, 2013.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023.
+# with corrections, suggestions and updates by:
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2023-04-29 11:14+0200\n"
+"PO-Revision-Date: 2024-08-17 10:13+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -29,6 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -12898,7 +12899,7 @@ msgstr "Czcionka"
 #: part/calligrasheets.rc:246
 #, kde-format
 msgid "Color/Border"
-msgstr "Kolor/obramowanie"
+msgstr "Barwa/obramowanie"
 
 #: part/CanvasBase.cpp:675
 #, kde-format
@@ -12992,7 +12993,7 @@ msgstr "Ustawienie układu strony"
 #: part/dialogs/FileOptionsWidget.ui:13
 #, kde-format
 msgid "File Options"
-msgstr "Opcje pliku"
+msgstr "Ustawienia pliku"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/FileOptionsWidget.ui:21
@@ -13118,10 +13119,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "Kolor:"
+msgstr "&Barwa siatki:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -13134,10 +13134,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "Za&rys strony:"
+msgstr "Barwa za&rysu strony:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -13677,7 +13676,7 @@ msgstr "Wszystkie arkusze"
 #: part/dialogs/SheetSelectWidget.ui:47
 #, kde-format
 msgid "Active Sheet"
-msgstr "Aktywny arkusz"
+msgstr "Bieżący arkusz"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
@@ -13930,7 +13929,7 @@ msgstr "Ustaw domyślny wydruku w bieżącym arkuszu"
 #: part/View.cpp:274
 #, kde-format
 msgid "Page Outline"
-msgstr "Konspekt strony"
+msgstr "Zarys strony"
 
 #: part/View.cpp:275
 #, kde-format

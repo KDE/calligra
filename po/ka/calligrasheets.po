@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-16 06:46+0200\n"
+"PO-Revision-Date: 2024-08-17 04:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8981,7 +8981,7 @@ msgid ""
 "calculated"
 msgstr ""
 "ალბათობის მნიშვნელობა, რომლისთვისაც სტანდარტული ლოგარითმული განაწილება უნდა "
-"გამოითვალოს."
+"გამოითვალოს"
 
 #: functions/statistical.xml:742
 #, kde-format

@@ -3048,15 +3048,3 @@ msgstr "Tastetrykk"
 #, kde-format
 msgid "Text editing"
 msgstr "Tekstredigering"
-
-#~ msgid "Left:"
-#~ msgstr "Venstre:"
-
-#~ msgid "Right:"
-#~ msgstr "Høyre:"
-
-#~ msgid "Before:"
-#~ msgstr "Før:"
-
-#~ msgid "After:"
-#~ msgstr "Etter:"

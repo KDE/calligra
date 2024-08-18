@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-17 00:39+0000\n"
-"PO-Revision-Date: 2024-08-10 12:55+0200\n"
+"PO-Revision-Date: 2024-08-17 10:12+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -734,24 +734,21 @@ msgid "Create backup file:"
 msgstr "Twórz kopię zapasową:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Pokaż siatkę:"
+msgstr "Pokaż siatkę"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Przyciągaj do siatki:"
+msgstr "Przyciągaj do siatki"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Siatka"
+msgstr "Siatka:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -759,20 +756,16 @@ msgid "Grid color:"
 msgstr "Kolor siatki:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "W p&oziomie:"
+msgstr "Odstęp w poziomie:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "W &pionie:"
+msgstr "Odstęp w pionie:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -911,7 +904,7 @@ msgstr "Odzyskaj pliki"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Porzuć wszystkie"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -930,6 +923,10 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Jeśli naciśniesz Anuluj, to zachowane zostaną wszystkie pliki do "
+"przywrócenia.\n"
+"Jeśli naciśniesz OK, wybrane pliki zostaną przywrócone, a niewybrane zostaną "
+"porzucone."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -4846,10 +4843,9 @@ msgid "Icon only"
 msgstr "Tylko ikona"
 
 #: widgets/KoModeBox.cpp:504
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Pojedyncza"
+msgstr "Bok paska bocznego"
 
 #: widgets/KoModeBox.cpp:513
 #, kde-format
@@ -4872,30 +4868,26 @@ msgid "Apply to document"
 msgstr "Zastosuj w dokumencie"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Lewy margines"
+msgstr "Margines lewej krawędzi:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Prawy margines"
+msgstr "Margines prawej krawędzi:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Krawędź zszycia:"
+msgstr "Margines krawędzi zszycia:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Krawędź strony:"
+msgstr "Margines krawędzi strony:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5004,15 +4996,13 @@ msgstr "Od prawej do lewej"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Górny margines"
+msgstr "Górny margines:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
 msgstr "Dolny margines"
 
