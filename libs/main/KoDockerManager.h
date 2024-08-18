@@ -29,9 +29,6 @@ public:
 
     void removeToolOptionsDocker();
 
-    /// sets the visibility of the tab and lock icons
-    void setIcons(bool enabled);
-
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.

@@ -90,6 +90,8 @@ set(kowidgets_LIB_SRCS
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
 
+    KoShapePropertyWidget.cpp
+
     KoGlobal.cpp
     KoTableView.cpp
 

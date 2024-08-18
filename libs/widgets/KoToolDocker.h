@@ -11,6 +11,7 @@
 #include <QDockWidget>
 #include <QPointer>
 
+class KoShape;
 class QWidget;
 
 #include <KoCanvasObserverBase.h>
@@ -28,12 +29,9 @@ public:
 
     void resetWidgets();
 
-    /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-protected:
-    void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
@@ -45,17 +43,9 @@ public Q_SLOTS:
      */
     bool hasOptionWidget();
 
-    /**
-     * set the tab option
-     */
-    void setTabEnabled(bool enabled);
-
 private:
-    Q_PRIVATE_SLOT(d, void toggleTab())
-    Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
-
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
 
 #endif

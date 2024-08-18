@@ -15,6 +15,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoShapeLayer.h>
+#include <KoShapePropertyWidget.h>
 #include <KoToolManager.h>
 #include <WidgetsDebug.h>
 

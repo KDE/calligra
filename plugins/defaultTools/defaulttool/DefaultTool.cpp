@@ -11,6 +11,7 @@
 #include "DefaultTool.h"
 #include "DefaultToolArrangeWidget.h"
 #include "DefaultToolWidget.h"
+#include "KoShapePropertyWidget.h"
 #include "SelectionDecorator.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeResizeStrategy.h"
@@ -1159,18 +1160,23 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 QList<QPointer<QWidget>> DefaultTool::createOptionWidgets()
 {
     QList<QPointer<QWidget>> widgets;
+
+    auto shapeProperty = new KoShapePropertyWidget;
+    shapeProperty->setCanvas(canvas());
+    widgets.append(shapeProperty);
+
     DefaultToolArrangeWidget *defaultArrange = new DefaultToolArrangeWidget(this);
     defaultArrange->setWindowTitle(i18n("Arrange"));
     widgets.append(defaultArrange);
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(nullptr);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     widgets.append(strokeWidget);
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(nullptr);
     fillWidget->setWindowTitle(i18n("Fill"));
     fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);

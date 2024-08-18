@@ -86,11 +86,6 @@ void KoDockerManager::removeToolOptionsDocker()
     d->showOptionsDocker = false;
 }
 
-void KoDockerManager::setIcons(bool enabled)
-{
-    d->toolOptionsDocker->setTabEnabled(enabled);
-}
-
 void KoDockerManager::resetToolDockerWidgets()
 {
     d->toolOptionsDocker->resetWidgets();

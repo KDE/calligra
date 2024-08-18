@@ -1,16 +1,14 @@
-/* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+// SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+// SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
+// SPDX-License-Identifier: LGPL-2.0-or-later
 
-   SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+#include "KoShapePropertyWidget.h"
 
-#include "ShapePropertiesDocker.h"
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
+#include <KoCanvasResourceManager.h>
 #include <KoParameterShape.h>
 #include <KoPathShape.h>
 #include <KoSelection.h>
-#include <KoShape.h>
 #include <KoShapeConfigWidgetBase.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeManager.h>
@@ -19,40 +17,50 @@
 
 #include <KLocalizedString>
 
+#include <QLabel>
 #include <QStackedWidget>
+#include <QVBoxLayout>
 
-class ShapePropertiesDocker::Private
+class Q_DECL_HIDDEN KoShapePropertyWidget::Private
 {
 public:
-    Private()
+    Private(KoShapePropertyWidget *widget)
+        : q(widget)
     {
     }
-    QStackedWidget *widgetStack = nullptr;
+
+    QList<QPointer<QWidget>> currentWidgetList;
+    QSet<QWidget *> currentAuxWidgets;
+    KoShapePropertyWidget *const q;
+    KoCanvasBase *canvas = nullptr;
     KoShape *currentShape = nullptr;
     KoShapeConfigWidgetBase *currentPanel = nullptr;
-    KoCanvasBase *canvas = nullptr;
+    QVBoxLayout *mainLayout = nullptr;
 };
 
-ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)
-    : QDockWidget(i18n("Shape Properties"), parent)
-    , d(std::make_unique<Private>())
+KoShapePropertyWidget::KoShapePropertyWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(std::make_unique<Private>(this))
 {
-    d->widgetStack = new QStackedWidget(this);
-    setWidget(d->widgetStack);
+    setWindowTitle(i18nc("@title:group", "Shape Properties"));
+    setObjectName("ShapePropertyWidget");
+    d->mainLayout = new QVBoxLayout(this);
+    d->mainLayout->setContentsMargins({});
+    addPlaceholder();
 }
 
-ShapePropertiesDocker::~ShapePropertiesDocker() = default;
+KoShapePropertyWidget::~KoShapePropertyWidget() = default;
 
-void ShapePropertiesDocker::unsetCanvas()
+void KoShapePropertyWidget::addPlaceholder()
 {
-    setEnabled(false);
-    d->canvas = nullptr;
-}
+    auto label = new QLabel(i18nc("@info", "No properties available"));
+    label->setEnabled(false);
+    label->setContentsMargins(0, 0, 0, 6);
+    d->mainLayout->addWidget(label);
+};
 
-void ShapePropertiesDocker::setCanvas(KoCanvasBase *canvas)
+void KoShapePropertyWidget::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != nullptr);
-
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }
@@ -60,13 +68,13 @@ void ShapePropertiesDocker::setCanvas(KoCanvasBase *canvas)
     d->canvas = canvas;
 
     if (d->canvas) {
-        connect(d->canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &ShapePropertiesDocker::selectionChanged);
-        connect(d->canvas->shapeManager(), &KoShapeManager::selectionContentChanged, this, &ShapePropertiesDocker::selectionChanged);
-        connect(d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged, this, &ShapePropertiesDocker::canvasResourceChanged);
+        connect(d->canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &KoShapePropertyWidget::selectionChanged);
+        connect(d->canvas->shapeManager(), &KoShapeManager::selectionContentChanged, this, &KoShapePropertyWidget::selectionChanged);
+        connect(d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged, this, &KoShapePropertyWidget::canvasResourceChanged);
     }
 }
 
-void ShapePropertiesDocker::selectionChanged()
+void KoShapePropertyWidget::selectionChanged()
 {
     if (!d->canvas)
         return;
@@ -78,24 +86,32 @@ void ShapePropertiesDocker::selectionChanged()
         addWidgetForShape(nullptr);
 }
 
-void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
+void KoShapePropertyWidget::addWidgetForShape(KoShape *shape)
 {
     // remove the config widget if a null shape is set, or the shape has changed
     if (!shape || shape != d->currentShape) {
-        while (d->widgetStack->count())
-            d->widgetStack->removeWidget(d->widgetStack->widget(0));
+        while (d->mainLayout->count()) {
+            auto item = d->mainLayout->itemAt(0);
+            d->mainLayout->removeItem(item);
+            delete item->widget();
+            delete item;
+        }
     }
 
     if (!shape) {
         d->currentShape = nullptr;
         d->currentPanel = nullptr;
+        addPlaceholder();
         return;
     } else if (shape != d->currentShape) {
         // when a shape is set and is differs from the previous one
         // get the config widget and insert it into the option widget
         d->currentShape = shape;
-        if (!d->currentShape)
+        if (!d->currentShape) {
+            d->currentPanel = nullptr;
+            addPlaceholder();
             return;
+        }
         QString shapeId = shape->shapeId();
         KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
         if (path) {
@@ -107,11 +123,15 @@ void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
                 shapeId = shape->shapeId();
         }
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shapeId);
-        if (!factory)
+        if (!factory) {
+            addPlaceholder();
             return;
+        }
         QList<KoShapeConfigWidgetBase *> panels = factory->createShapeOptionPanels();
-        if (!panels.count())
+        if (!panels.count()) {
+            addPlaceholder();
             return;
+        }
 
         d->currentPanel = nullptr;
         uint panelCount = panels.count();
@@ -122,18 +142,22 @@ void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
             }
         }
         if (d->currentPanel) {
-            if (d->canvas)
+            if (d->canvas) {
                 d->currentPanel->setUnit(d->canvas->unit());
-            d->widgetStack->insertWidget(0, d->currentPanel);
-            connect(d->currentPanel, &KoShapeConfigWidgetBase::propertyChanged, this, &ShapePropertiesDocker::shapePropertyChanged);
+            }
+            d->mainLayout->addWidget(d->currentPanel);
+            connect(d->currentPanel, &KoShapeConfigWidgetBase::propertyChanged, this, &KoShapePropertyWidget::shapePropertyChanged);
+        } else {
+            addPlaceholder();
         }
     }
 
-    if (d->currentPanel)
+    if (d->currentPanel) {
         d->currentPanel->open(shape);
+    }
 }
 
-void ShapePropertiesDocker::shapePropertyChanged()
+void KoShapePropertyWidget::shapePropertyChanged()
 {
     if (d->canvas && d->currentPanel) {
         KUndo2Command *cmd = d->currentPanel->createCommand();
@@ -143,7 +167,7 @@ void ShapePropertiesDocker::shapePropertyChanged()
     }
 }
 
-void ShapePropertiesDocker::canvasResourceChanged(int key, const QVariant &variant)
+void KoShapePropertyWidget::canvasResourceChanged(int key, const QVariant &variant)
 {
     if (key == KoCanvasResourceManager::Unit && d->currentPanel)
         d->currentPanel->setUnit(variant.value<KoUnit>());
