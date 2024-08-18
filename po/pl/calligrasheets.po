@@ -1,5 +1,6 @@
 # translation of kspread_prf.po to Polish
 # translation of kspread.po to
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Translated by Arkadiusz Danilecki <szopen@aurora.put.poznan.pl>
 # Waldemar Kochaniec <walkoch@polbox.pl>
 # Jacek Stolarczyk <jacek@mer.chemia.polsl.gliwice.pl>
@@ -13,14 +14,13 @@
 # Robert Gomulka <carramba@epf.pl>, 2008, 2009.
 # Michał Konieczny <majkull@gmail.com>, 2009.
 # Marta Rybczynska <kde-i18n@rybczynska.net>, 2009, 2013.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023.
 # with corrections, suggestions and updates by:
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2022-04-18 08:22+0200\n"
+"PO-Revision-Date: 2024-08-17 10:13+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -29,6 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (file)
 #: calligrasheets.rc:5
@@ -193,7 +194,7 @@ msgstr "Format"
 #: calligrasheets.rc:261
 #, kde-format
 msgid "Color/Border"
-msgstr "Kolor/obramowanie"
+msgstr "Barwa/obramowanie"
 
 #: Cell.cpp:717 Cell.cpp:780
 #, kde-format
@@ -19630,7 +19631,7 @@ msgstr "Ustawienie układu strony"
 #: part/dialogs/FileOptionsWidget.ui:13
 #, kde-format
 msgid "File Options"
-msgstr "Opcje pliku"
+msgstr "Ustawienia pliku"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/FileOptionsWidget.ui:19
@@ -20265,7 +20266,7 @@ msgstr "Wszystkie arkusze"
 #: part/dialogs/SheetSelectWidget.ui:47
 #, kde-format
 msgid "Active Sheet"
-msgstr "Aktywny arkusz"
+msgstr "Bieżący arkusz"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
@@ -20553,7 +20554,7 @@ msgstr "Ustaw domyślny wydruku w bieżącym arkuszu"
 #: part/View.cpp:311
 #, kde-format
 msgid "Page Outline"
-msgstr "Konspekt strony"
+msgstr "Zarys strony"
 
 #: part/View.cpp:312
 #, kde-format
@@ -21168,7 +21169,7 @@ msgstr "Wybierz nowy kolor obramowania"
 #: ui/CellToolBase.cpp:338
 #, kde-format
 msgid "Border Color"
-msgstr "Kolor obramowania"
+msgstr "Barwa obramowania"
 
 #: ui/CellToolBase.cpp:345
 #, kde-format
