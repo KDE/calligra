@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef SHAPEPROPERTIESDOCKERFACTORY_H
-#define SHAPEPROPERTIESDOCKERFACTORY_H
+#pragma once
 
 #include <KoDockFactoryBase.h>
 #include <QDockWidget>
@@ -20,5 +19,3 @@ public:
     QDockWidget *createDockWidget() override;
     DockPosition defaultDockPosition() const override;
 };
-
-#endif // SHAPEPROPERTIESDOCKERFACTORY_H

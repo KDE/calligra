@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef SHAPEPROPERTIESDOCKER_H
-#define SHAPEPROPERTIESDOCKER_H
+#pragma once
 
 #include <KoCanvasObserverBase.h>
 #include <KoDockFactoryBase.h>
@@ -37,7 +36,5 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
-
-#endif // SHAPEPROPERTIESDOCKER_H

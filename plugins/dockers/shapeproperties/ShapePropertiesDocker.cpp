@@ -25,40 +25,33 @@ class ShapePropertiesDocker::Private
 {
 public:
     Private()
-        : widgetStack(0)
-        , currentShape(0)
-        , currentPanel(0)
-        , canvas(0)
     {
     }
-    QStackedWidget *widgetStack;
-    KoShape *currentShape;
-    KoShapeConfigWidgetBase *currentPanel;
-    KoCanvasBase *canvas;
+    QStackedWidget *widgetStack = nullptr;
+    KoShape *currentShape = nullptr;
+    KoShapeConfigWidgetBase *currentPanel = nullptr;
+    KoCanvasBase *canvas = nullptr;
 };
 
 ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)
     : QDockWidget(i18n("Shape Properties"), parent)
-    , d(new Private())
+    , d(std::make_unique<Private>())
 {
-    d->widgetStack = new QStackedWidget();
+    d->widgetStack = new QStackedWidget(this);
     setWidget(d->widgetStack);
 }
 
-ShapePropertiesDocker::~ShapePropertiesDocker()
-{
-    delete d;
-}
+ShapePropertiesDocker::~ShapePropertiesDocker() = default;
 
 void ShapePropertiesDocker::unsetCanvas()
 {
     setEnabled(false);
-    d->canvas = 0;
+    d->canvas = nullptr;
 }
 
 void ShapePropertiesDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
 
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
@@ -82,7 +75,7 @@ void ShapePropertiesDocker::selectionChanged()
     if (selection->count() == 1)
         addWidgetForShape(selection->firstSelectedShape());
     else
-        addWidgetForShape(0);
+        addWidgetForShape(nullptr);
 }
 
 void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
@@ -94,8 +87,8 @@ void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
     }
 
     if (!shape) {
-        d->currentShape = 0;
-        d->currentPanel = 0;
+        d->currentShape = nullptr;
+        d->currentPanel = nullptr;
         return;
     } else if (shape != d->currentShape) {
         // when a shape is set and is differs from the previous one
@@ -120,7 +113,7 @@ void ShapePropertiesDocker::addWidgetForShape(KoShape *shape)
         if (!panels.count())
             return;
 
-        d->currentPanel = 0;
+        d->currentPanel = nullptr;
         uint panelCount = panels.count();
         for (uint i = 0; i < panelCount; ++i) {
             if (panels[i]->showOnShapeSelect()) {
