@@ -132,6 +132,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 {
     setObjectName("Fill widget");
     QHBoxLayout *layout = new QHBoxLayout(this);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->setContentsMargins({});
     layout->setSpacing(0);
 

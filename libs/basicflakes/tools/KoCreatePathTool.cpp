@@ -440,6 +440,7 @@ QList<QPointer<QWidget>> KoCreatePathTool::createOptionWidgets()
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");
     QGridLayout *layout = new QGridLayout(angleWidget);
+    layout->setContentsMargins({});
     layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
     QSpinBox *angleEdit = new QSpinBox(angleWidget);
     angleEdit->setValue(d->angleSnappingDelta);

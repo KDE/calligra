@@ -10,7 +10,25 @@
     <height>46</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <layout class="QFormLayout">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLabel">
      <property name="text">
@@ -20,16 +38,6 @@
    </item>
    <item row="0" column="1">
     <widget class="QComboBox" name="connectionType"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QWidget" name="SpecialSpacer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
