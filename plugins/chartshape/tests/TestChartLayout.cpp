@@ -157,9 +157,9 @@ void dbg(const QString &test, const QString topic, const QRectF &expected, const
     if (!test.isEmpty()) {
         qInfo().noquote() << "FAIL:" << test;
     }
-    qInfo().noquote() << "\t" << t << endl
+    qInfo().noquote() << "\t" << t << Qt::endl
                       << "\t  actual:" << actual << ':' << "left:" << actual.left() << "top:" << actual.top() << "right:" << actual.right() << "bottom"
-                      << actual.bottom() << "center:" << actual.center() << endl
+                      << actual.bottom() << "center:" << actual.center() << Qt::endl
                       << "\texpected:" << expected << ':' << "left:" << expected.left() << "top:" << expected.top() << "right:" << expected.right() << "bottom"
                       << expected.bottom() << "center:" << expected.center();
 }

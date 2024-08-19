@@ -105,7 +105,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapecore  komain kotextlayout kowidgets KChartQt6)
+target_link_libraries(chartshapecore  komain kotextlayout kowidgets KChart6)
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()
@@ -113,5 +113,5 @@ endif()
 
 add_library(calligra_shape_chart MODULE ChartShapeFactory.cpp )
 
-target_link_libraries(calligra_shape_chart chartshapecore KChartQt6 flake KF6::IconThemes)
+target_link_libraries(calligra_shape_chart chartshapecore KChart6 flake KF6::IconThemes)
 install(TARGETS calligra_shape_chart DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

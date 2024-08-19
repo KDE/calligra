@@ -70,7 +70,7 @@ QPointF itemPosition(const KoShape *shape)
 }
 
 // fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
-int fromOdfFontWeight(const QString &odfweight)
+QFont::Weight fromOdfFontWeight(const QString &odfweight)
 {
     if (odfweight.isEmpty() || odfweight == "normal") {
         return QFont::Normal;
@@ -81,41 +81,9 @@ int fromOdfFontWeight(const QString &odfweight)
     bool ok;
     int weight = odfweight.toInt(&ok);
     if (!ok) {
-        return 50;
+        return QFont::Normal;
     }
-    switch (weight) {
-    case 100:
-        weight = 1;
-        break;
-    case 200:
-        weight = 17;
-        break;
-    case 300:
-        weight = 33;
-        break;
-    case 400:
-        weight = 50;
-        break;
-    case 500:
-        weight = 58;
-        break;
-    case 600:
-        weight = 66;
-        break;
-    case 700:
-        weight = 75;
-        break;
-    case 800:
-        weight = 87;
-        break;
-    case 900:
-        weight = 99;
-        break;
-    default:
-        weight = 50;
-        break;
-    }
-    return weight;
+    return static_cast<QFont::Weight>(weight);
 }
 
 QString toOdfFontWeight(int weight)
@@ -361,7 +329,7 @@ KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context)
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
         if (!opacity.isEmpty() && opacity.right(1) == "%")
-            shadowColor.setAlphaF(opacity.leftRef(opacity.length() - 1).toFloat() / 100.0);
+            shadowColor.setAlphaF(QStringView(opacity).left(opacity.length() - 1).toFloat() / 100.0);
         shadow->setColor(shadowColor);
         shadow->setVisible(shadowStyle == "visible");
 

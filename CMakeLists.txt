@@ -403,13 +403,13 @@ set_package_properties(KF6Akonadi PROPERTIES
 ##
 ## Test for KChart
 ##
-macro_optional_find_package(KChartQt6 2.7.0 QUIET)
-set_package_properties(KChartQt6 PROPERTIES
+macro_optional_find_package(KChart6 3.0.0 QUIET)
+set_package_properties(KChart6 PROPERTIES
     DESCRIPTION "Library for creating business charts (part of KDiagram)"
     URL "https://www.kde.org/"
     PURPOSE "Required by Chart shape"
     TYPE RECOMMENDED
-    )
+)
 
 ##
 ## Test for eigen3
@@ -892,7 +892,7 @@ calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
-    KChartQt6_FOUND "KChart devel not found"
+    KChart6_FOUND "KChart devel not found"
     )
 
 calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE

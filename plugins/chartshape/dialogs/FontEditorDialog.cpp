@@ -7,8 +7,8 @@
 
 #include "FontEditorDialog.h"
 
+#include <KFontChooser>
 #include <KLocalizedString>
-#include <kfontchooser.h>
 
 using namespace KoChart;
 
@@ -20,13 +20,11 @@ FontEditorDialog::FontEditorDialog(QWidget *parent)
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
-    QStringList list;
-    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    fontChooser = new KFontChooser(this, KFontChooser::NoDisplayFlags, list, 7);
+    const QStringList list = KFontChooser::createFontList(KFontChooser::SmoothScalableFonts);
+    fontChooser = new KFontChooser(KFontChooser::NoDisplayFlags, this);
+    fontChooser->setFontListItems(list);
 
     setMainWidget(fontChooser);
 }
 
-FontEditorDialog::~FontEditorDialog()
-{
-}
+FontEditorDialog::~FontEditorDialog() = default;

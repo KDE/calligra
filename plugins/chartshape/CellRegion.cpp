@@ -774,7 +774,7 @@ QString CellRegion::rangeIntToString(int i)
 {
     QString tmp = QString::number(i);
     for (int j = 0; j < tmp.size(); j++) {
-        tmp[j] = 'A' + tmp[j].toLatin1() - '1';
+        tmp[j] = QChar('A' + tmp[j].toLatin1() - '1');
     }
 
     return tmp;
