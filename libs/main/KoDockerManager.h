@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KODOCKERMANAGER_H
-#define KODOCKERMANAGER_H
+#pragma once
 
 #include "komain_export.h"
 
@@ -38,7 +37,5 @@ public Q_SLOTS:
 private:
     Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
-
-#endif

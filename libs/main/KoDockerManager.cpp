@@ -38,8 +38,7 @@ public:
 
     QDockWidget *createDockWidget() override
     {
-        KoToolDocker *dockWidget = new KoToolDocker();
-        return dockWidget;
+        return new KoToolDocker();
     }
 
     DockPosition defaultDockPosition() const override
@@ -50,7 +49,7 @@ public:
 
 KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     : QObject(mainWindow)
-    , d(new Private(mainWindow))
+    , d(std::make_unique<Private>(mainWindow))
 {
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker *>(mainWindow->createDockWidget(&toolDockerFactory));
@@ -62,17 +61,14 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     });
 }
 
-KoDockerManager::~KoDockerManager()
-{
-    delete d;
-}
+KoDockerManager::~KoDockerManager() = default;
 
 void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
     QFont dockWidgetFont = KoDockRegistry::dockFont();
 
-    foreach (QWidget *w, optionWidgetList) {
+    for (QWidget *w : std::as_const(optionWidgetList)) {
 #ifdef Q_OS_MAC
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
