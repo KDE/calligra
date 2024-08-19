@@ -35,10 +35,13 @@ public:
     void addButton(QAbstractButton *button, int priority)
     {
         addChildWidget(button);
+        if (m_priorities.values().contains(priority)) {
+            qWarning() << "Button" << button << "has a conflicting priority";
+        }
 
         m_priorities.insert(button, priority);
         int index = 1;
-        foreach (QWidgetItem *item, m_items) {
+        for (QWidgetItem *item : std::as_const(m_items)) {
             if (m_priorities.value(static_cast<QAbstractButton *>(item->widget())) > priority)
                 break;
             index++;
@@ -48,8 +51,13 @@ public:
 
     QSize sizeHint() const override
     {
-        Q_ASSERT(0);
-        return QSize();
+        // This is implemented just to not freak out GammaRay, in practice
+        // this doesn't have any effect on the layout.
+        if (m_orientation == Qt::Vertical) {
+            return QSize(m_buttonSize.width(), m_buttonSize.height() * count());
+        } else {
+            return QSize(m_buttonSize.width() * count(), m_buttonSize.height());
+        }
     }
 
     void addItem(QLayoutItem *) override
@@ -80,10 +88,16 @@ public:
         int y = 0;
         const QSize &size = buttonSize();
         if (m_orientation == Qt::Vertical) {
-            foreach (QWidgetItem *w, m_items) {
+            for (QWidgetItem *w : std::as_const(m_items)) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 x += size.width();
                 if (x + size.width() > rect.width()) {
                     x = 0;
@@ -91,10 +105,16 @@ public:
                 }
             }
         } else {
-            foreach (QWidgetItem *w, m_items) {
+            for (QWidgetItem *w : std::as_const(m_items)) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 y += size.height();
                 if (y + size.height() > rect.height()) {
                     x += size.width();

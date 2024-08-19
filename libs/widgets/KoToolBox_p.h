@@ -42,14 +42,14 @@ public:
     explicit KoToolBox();
     ~KoToolBox() override;
 
+    void applyIconSize();
+
 public Q_SLOTS:
     /**
-     * Using the buttongroup id passed in addButton() you can set the new active button.
-     * If the id does not resolve to a visible button, this call is ignored.
+     * Set the new active button based on the currently active tool.
      * @param canvas the currently active canvas.
-     * @param id an id to identify the button to activate.
      */
-    void setActiveTool(KoCanvasController *canvas, int id);
+    void setActiveTool(KoCanvasController *canvas);
 
     /**
      * Show only the dynamic buttons that have a code from parameter codes.
@@ -89,11 +89,16 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void contextMenuEvent(QContextMenuEvent *event) override;
+    void changeEvent(QEvent *event) override;
+
+private:
+    void setupIconSizeMenu(QMenu *menu);
+
+    friend class KoToolBoxDocker;
 
 private:
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 };
 
 #endif // _KO_TOOLBOX_H_
