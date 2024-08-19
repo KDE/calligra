@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -41,22 +41,22 @@ msgstr "パスを描画"
 msgid "Freehand path"
 msgstr "フリーハンドパス"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:443
+#: basicflakes/tools/KoCreatePathTool.cpp:444
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr "角度スナップデルタ:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:450
+#: basicflakes/tools/KoCreatePathTool.cpp:451
 #, kde-format
 msgid "Activate angle snap:"
 msgstr "角度スナップをアクティブにする:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:458
+#: basicflakes/tools/KoCreatePathTool.cpp:459
 #, kde-format
 msgid "Angle Constraints"
 msgstr "角度の制約"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoCreatePathTool.cpp:463
 #: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
@@ -349,7 +349,7 @@ msgstr "線"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
-#: flake/KoConnectionShapeConfigWidget.ui:17
+#: flake/KoConnectionShapeConfigWidget.ui:35
 #: widgets/koDocumentInfoAboutWidget.ui:141
 #: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
@@ -4684,39 +4684,39 @@ msgstr "パレット"
 msgid "Add/Remove Colors"
 msgstr "色を追加/削除"
 
-#: widgets/KoFillConfigWidget.cpp:146
+#: widgets/KoFillConfigWidget.cpp:147
 #, kde-format
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "なし"
 
-#: widgets/KoFillConfigWidget.cpp:154
+#: widgets/KoFillConfigWidget.cpp:155
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr "単色"
 
-#: widgets/KoFillConfigWidget.cpp:162
+#: widgets/KoFillConfigWidget.cpp:163
 #, kde-format
 msgid "Gradient"
 msgstr "グラディエント"
 
-#: widgets/KoFillConfigWidget.cpp:170
+#: widgets/KoFillConfigWidget.cpp:171
 #, kde-format
 msgid "Pattern"
 msgstr "パターン"
 
-#: widgets/KoFillConfigWidget.cpp:184
+#: widgets/KoFillConfigWidget.cpp:185
 #, kde-format
 msgid "Change the filling color"
 msgstr "塗りつぶし色を変更"
 
-#: widgets/KoFillConfigWidget.cpp:195
+#: widgets/KoFillConfigWidget.cpp:196
 #, kde-format
 msgid "Change the filling gradient"
 msgstr "塗りつぶしに使用するグラデーションを変更"
 
-#: widgets/KoFillConfigWidget.cpp:202
+#: widgets/KoFillConfigWidget.cpp:203
 #, kde-format
 msgid "Change the filling pattern"
 msgstr "塗りつぶしパターンを変更"

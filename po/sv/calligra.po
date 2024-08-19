@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2024-08-15 08:11+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -42,22 +42,22 @@ msgstr "Rita kontur"
 msgid "Freehand path"
 msgstr "Frihandskontur"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:443
+#: basicflakes/tools/KoCreatePathTool.cpp:444
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr "Vinkellåsningsdelta:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:450
+#: basicflakes/tools/KoCreatePathTool.cpp:451
 #, kde-format
 msgid "Activate angle snap:"
 msgstr "Aktivera vinkellåsning:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:458
+#: basicflakes/tools/KoCreatePathTool.cpp:459
 #, kde-format
 msgid "Angle Constraints"
 msgstr "Vinkelbegränsningar"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoCreatePathTool.cpp:463
 #: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
@@ -345,7 +345,7 @@ msgstr "Linjer"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
-#: flake/KoConnectionShapeConfigWidget.ui:17
+#: flake/KoConnectionShapeConfigWidget.ui:35
 #: widgets/koDocumentInfoAboutWidget.ui:141
 #: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
@@ -4707,39 +4707,39 @@ msgstr "Palett"
 msgid "Add/Remove Colors"
 msgstr "Lägg till eller ta bort färger"
 
-#: widgets/KoFillConfigWidget.cpp:146
+#: widgets/KoFillConfigWidget.cpp:147
 #, kde-format
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "Inget"
 
-#: widgets/KoFillConfigWidget.cpp:154
+#: widgets/KoFillConfigWidget.cpp:155
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr "Fylld"
 
-#: widgets/KoFillConfigWidget.cpp:162
+#: widgets/KoFillConfigWidget.cpp:163
 #, kde-format
 msgid "Gradient"
 msgstr "Toning"
 
-#: widgets/KoFillConfigWidget.cpp:170
+#: widgets/KoFillConfigWidget.cpp:171
 #, kde-format
 msgid "Pattern"
 msgstr "Mönster"
 
-#: widgets/KoFillConfigWidget.cpp:184
+#: widgets/KoFillConfigWidget.cpp:185
 #, kde-format
 msgid "Change the filling color"
 msgstr "Ändra fyllnadsfärg"
 
-#: widgets/KoFillConfigWidget.cpp:195
+#: widgets/KoFillConfigWidget.cpp:196
 #, kde-format
 msgid "Change the filling gradient"
 msgstr "Ändra fyllnadstoning"
 
-#: widgets/KoFillConfigWidget.cpp:202
+#: widgets/KoFillConfigWidget.cpp:203
 #, kde-format
 msgid "Change the filling pattern"
 msgstr "Ändra fyllnadsmönster"

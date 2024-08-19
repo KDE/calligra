@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-17 04:22+0200\n"
+"PO-Revision-Date: 2024-08-18 04:32+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1286,6 +1286,10 @@ msgid ""
 "a 360-day calendar in which all months are assumed to have 30 days. If "
 "method is false (default) the US method will be used, the European otherwise."
 msgstr ""
+"ფუნქცია DAYS360() აბრუნებს დღეების რაოდენობას თარიღი1-დან თარიღი2-მდე 360 "
+"დღიანი კალენდრით, სადაც ყველა თვეს 30 დღე გააჩნია. თუ მეთოდი ცრუა "
+"(ნაგულიხმევი), გამოყენებული იქნება აშშ მეთოდი, წინააღმდეგ შემთხვევაში კი - "
+"ევროპული."
 
 #: functions/datetime.xml:43
 #, kde-format
@@ -1354,6 +1358,8 @@ msgid ""
 "The EDATE functions returns the date that is specified by a given date and a "
 "number of months before or after that date."
 msgstr ""
+"ფუნქცია EDATE აბრუნებს თარიღს, რომელიც მითითებულია მოცემული თარიღით და "
+"თვეების რაოდენობით ამ თარიღამდე ან მის შემდეგ."
 
 #: functions/datetime.xml:95
 #, kde-format
@@ -1376,6 +1382,8 @@ msgid ""
 "The EOMONTH functions returns the last day in the month specified by a date "
 "and the number of months from that date."
 msgstr ""
+"ფუნქცია EOMONTH აბრუნებს ბოლო დღეს თვეში, რომელიც მითითებულია თარიღით და "
+"თვეების რაოდენობით ამ თარიღიდან."
 
 #: functions/datetime.xml:116
 #, kde-format
@@ -1427,6 +1435,8 @@ msgid ""
 "The MONTH functions returns the month of a date. If no parameter is "
 "specified the current month gets returned."
 msgstr ""
+"ფუნქცია MONTH თარიღის თვეს აბრუნებს. თუ პარამეტრი მითითებული არაა, ბრუნდება "
+"მიმდინარე თვე."
 
 #: functions/datetime.xml:151
 #, kde-format
@@ -1449,6 +1459,8 @@ msgid ""
 "The DAY functions returns the day of a date. If no parameter is specified "
 "the current day gets returned."
 msgstr ""
+"ფუნქცია DAY() თარიღის დღეს აბრუნებს. თუ პარამეტრი მითითებული არაა, "
+"დაბრუნდება მიმდინარე დღე."
 
 #: functions/datetime.xml:168
 #, kde-format
@@ -1471,6 +1483,8 @@ msgid ""
 "The HOUR functions returns the hour of a time. If no parameter is specified "
 "the current hour gets returned."
 msgstr ""
+"ფუნქცია HOUR დროის საათს აბრუნებს. თუ პარამეტრი მითითებული არაა, დაბრუნდება "
+"მიმდინარე საათი."
 
 #: functions/datetime.xml:185
 #, kde-format
@@ -1493,6 +1507,8 @@ msgid ""
 "The MINUTE functions returns the minutes of a time. If no parameter is "
 "specified the current minute is returned."
 msgstr ""
+"ფუნქცია MINUTE დროის წუთებს აბრუნებს. თუ პარამეტრი მითითებული არაა, "
+"დაბრუნდება მიმდინარე წუთი."
 
 #: functions/datetime.xml:202
 #, kde-format
@@ -1515,6 +1531,8 @@ msgid ""
 "The SECOND functions returns the seconds of a time. If no parameter is "
 "specified the current second is returned."
 msgstr ""
+"ფუნქცია SECOND დროის წამებს აბრუნებს. თუ პარამეტრი მითითებული არაა, "
+"დაბრუნდება მიმდინარე წამი."
 
 #: functions/datetime.xml:219
 #, kde-format
@@ -1579,6 +1597,9 @@ msgid ""
 "whole week in between, starting at the first day of the week (monday or "
 "sunday, depending on your local settings)"
 msgstr ""
+"WEEKS(\"2002-19-02\"; \"2002-19-02\"; 1) აბრუნებს 0-, რადგან შუაში მთლიანი "
+"კვირა, რომელიც კვირის პირველი დღით (ორშაბათი ან კვირა, დამოკიდებულია თქვენ "
+"არჩევანზე) იწყება, არაა"
 
 #: functions/datetime.xml:266
 #, kde-format
@@ -2073,6 +2094,9 @@ msgid ""
 "complete years; \"ym\": month excluding years; \"yd\": days excluding years; "
 "\"md\": days excluding months and years"
 msgstr ""
+"ინტერვალი უნდა იყოს ერთ-ერთი შემდეგიდან: \"m\": თვე; \"d\" დღე; \"y\" სრული "
+"წელი, \"ym\" თვე წლის გარეშე, \"yd\" დღე წლის გარეშე, \"md\" დღეები თვისა და "
+"წლის გარეშე"
 
 #: functions/datetime.xml:637
 #, kde-format
@@ -2085,6 +2109,8 @@ msgid ""
 "DATEDIF(A1;A2;\"d\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of days 1626"
 msgstr ""
+"DATEDIF(A1;A2;\"d\") A1 არის \"1st of January 1995\" და A2 არის \"15th of "
+"June 1999\" აბრუნებს 1626 დღეს"
 
 #: functions/datetime.xml:639
 #, kde-format
@@ -2092,6 +2118,8 @@ msgid ""
 "DATEDIF(A1;A2;\"m\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of months 53"
 msgstr ""
+"DATEDIF(A1;A2;\"m\") A1 არის \"1st of January 1995\" და A2 არის \"15th of "
+"June 1999\" აბრუნებს 53 თვეს"
 
 #: functions/datetime.xml:659
 #, kde-format
@@ -2373,6 +2401,9 @@ msgid ""
 "Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi "
 "(nautical mile), ang (Angstrom), parsec, lightyear."
 msgstr ""
+"მხარდაჭერილი მანძილის ერთეულებია: m (მეტრი), in (დუიმი), ft (ფუტი), mi "
+"(მილი), Nmi (საზღვაო მილი), ang (ანგსტრომი), parsec (პარსეკი), lightyear "
+"(სინათლის წელი)."
 
 #: functions/engineering.xml:132
 #, kde-format
@@ -2380,6 +2411,8 @@ msgid ""
 "Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of "
 "Mercury), psi, Torr."
 msgstr ""
+"მხარდაჭერილი წნევის ერთეულები: Pa (პასკალი), atm (ატმოსფერო), mmHg "
+"(ვერცხლისწყლის მმ), psi (ფუნტი კვადრატულ დუიმზე), Torr (ტორი)."
 
 #: functions/engineering.xml:133
 #, kde-format
@@ -2393,6 +2426,9 @@ msgid ""
 "(IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb "
 "(foot-pound), BTU."
 msgstr ""
+"მხარდაჭერილი ენერგიის ერთეულები: J (ჯოული), c (თერმოდინამიკური კალორია), cal "
+"(კალორია), eV (ელექტრონვოლტი), HPh (ცხენისძალა/სთ), Wh (ვატი/სთ), flb (ფუტი/"
+"ფუნტი), BTU."
 
 #: functions/engineering.xml:135
 #, kde-format
@@ -4243,17 +4279,19 @@ msgstr "პერიოდი ამორტიზაციის პერი�
 #, kde-format
 msgid "NPER is the total number of periods during which annuity is paid."
 msgstr ""
+"NPER პერიოდების ჯამური რაოდენობაა, რომელშიც ამორტიზაცია ხდება (ამორტიზაციის "
+"პერიოდი)."
 
 #: functions/financial.xml:662 functions/financial.xml:716
 #: functions/financial.xml:1049
 #, kde-format
 msgid "PV is the present value in the sequence of payments."
-msgstr ""
+msgstr "PV - ქონების საწყისი ფასია."
 
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr ""
+msgstr "FV( არასავალდებულო) ნაშთური ფასია. ნაგულისხმევი: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4936,6 +4974,9 @@ msgid ""
 "C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", \"=DATE(2000;12;30)\", "
 "\"=DATE(2001;3;1)\" returns 0.2115964"
 msgstr ""
+"XIRR(B1:B4;C1:C4) დავუშვათ B1:B4 შეიცავს -20000, 4000, 12000, 8000 მაშინ, "
+"როცა C1:C4 შეიცავს \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
+"\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" დააბრუნებს 0.2115964"
 
 #: functions/financial.xml:1430
 #, kde-format
@@ -4955,6 +4996,9 @@ msgid ""
 "C1:C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returns 2907.83187"
 msgstr ""
+"XNPV(5%;B1:B4;C1:C4) ვთქვათ B1:B4 შეიცავს -20000, 4000, 12000, 8000 მაშინ, "
+"როცა C1:C4 შეიცავს \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
+"\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" დააბრუნებს 2907.83187"
 
 #: functions/financial.xml:1461
 #, kde-format
@@ -4973,6 +5017,8 @@ msgstr ""
 msgid ""
 "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns 0.106194684"
 msgstr ""
+"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) აბრუნებს "
+"მნიშვნელობას 0.106194684"
 
 #: functions/financial.xml:1495
 #, kde-format
@@ -4992,6 +5038,8 @@ msgid ""
 "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
 "returns 0.050000000"
 msgstr ""
+"YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
+"დააბრუნებს მნიშვნელობას 0.050000000"
 
 #: functions/financial.xml:1520
 #, no-c-format, kde-format
@@ -5963,6 +6011,8 @@ msgstr "EPS()"
 #, kde-format
 msgid "On most systems, this returns 2^-52=2.2204460492503131e-16"
 msgstr ""
+"სისტემების უმრავლესობაზე ეს აბრუნებს მნიშვნელობას "
+"2^-52=2.2204460492503131e-16"
 
 #: functions/math.xml:120
 #, kde-format
@@ -5987,7 +6037,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "The POWER(x;y) function returns the value of x raised to the power of y."
-msgstr ""
+msgstr "ფუნქცია POWER(x;y) აბრუნებს x ხარისხად y."
 
 #: functions/math.xml:139
 #, kde-format
@@ -6009,7 +6059,7 @@ msgstr "POWER(2;3) უდრის 8"
 msgid ""
 "The POW(x;y) function returns the value of x raised to the power of y. It's "
 "the same as POWER."
-msgstr ""
+msgstr "ფუნქცია POW(x;y) აბრუნებს x ხარისხად y-ს. იგივეა, რაც POWER()."
 
 #: functions/math.xml:159
 #, kde-format
@@ -6031,7 +6081,7 @@ msgstr "POW(2;3) უდრის 8"
 msgid ""
 "The EVEN() function returns the number rounded up to the nearest even "
 "integer."
-msgstr ""
+msgstr "ფუნქცია EVEN() უახლოეს ლუწ რიცხვამდე დამრგვალებულ რიცხვს აბრუნებს."
 
 #: functions/math.xml:175
 #, kde-format

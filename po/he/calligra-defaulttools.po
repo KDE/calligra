@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-08-16 08:50+0300\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"PO-Revision-Date: 2024-08-18 08:36+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19,19 +19,19 @@ msgstr ""
 "X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
-#: connectionTool/ConnectionPointWidget.ui:30
+#: connectionTool/ConnectionPointWidget.ui:48
 #, kde-format
 msgid "Edit Mode"
 msgstr "מצב עריכה"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEscape)
-#: connectionTool/ConnectionPointWidget.ui:37
+#: connectionTool/ConnectionPointWidget.ui:55
 #, kde-format
 msgid "Escape Direction"
 msgstr "כיוון בריחה"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
-#: connectionTool/ConnectionPointWidget.ui:97
+#: connectionTool/ConnectionPointWidget.ui:115
 #, kde-format
 msgid "Alignment"
 msgstr "יישור"
@@ -39,7 +39,7 @@ msgstr "יישור"
 #. i18n: ectx: property (text), widget (QToolButton, alignPercent)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
-#: connectionTool/ConnectionPointWidget.ui:116
+#: connectionTool/ConnectionPointWidget.ui:134
 #: defaulttool/DefaultToolTransformWidget.ui:106
 #: defaulttool/DefaultToolTransformWidget.ui:138
 #, no-c-format, kde-format
@@ -257,18 +257,20 @@ msgstr ""
 #: defaulttool/DefaultTool.cpp:471
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "אפשר ללחוץ ולגרור כדי לשנות את גודל הבחירה."
 
 #: defaulttool/DefaultTool.cpp:523
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "אפשר ללחוץ ולגרור כדי להזיז את הבחירה."
 
 #: defaulttool/DefaultTool.cpp:528
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"אפשר ללחוץ ולגרור כדי לשנות את גודל הבחירה. לחיצה אמצעית תגדיר את המקום "
+"המודגש."
 
 #: defaulttool/DefaultTool.cpp:1043
 msgctxt "(qtundo-format)"
@@ -387,13 +389,13 @@ msgid "Resize"
 msgstr "שינוי גודל"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: defaulttool/DefaultToolWidget.ui:29
+#: defaulttool/DefaultToolWidget.ui:35
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: defaulttool/DefaultToolWidget.ui:91
+#: defaulttool/DefaultToolWidget.ui:97
 #, kde-format
 msgid "Y:"
 msgstr "Y:"
@@ -401,7 +403,7 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr ""
+msgstr "יש לללחוץ על ALT כדי להחזיר מקום ב־x או ב־y"
 
 #: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
@@ -426,7 +428,7 @@ msgstr "לחיצה כפולה תוסיף קו מנחה."
 #: guidestool/GuidesTool.cpp:136
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
-msgstr ""
+msgstr "אפשר להזיז את הקו המנחה בלחיצה וגרירה. לחיצה כפולה תסיר אותו."
 
 #: guidestool/GuidesTool.cpp:373
 #, kde-format

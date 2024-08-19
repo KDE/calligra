@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2014-02-28 23:54+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-POT-Import-Date: 2013-01-13 22:09:46+0000\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:41
+#: shapeproperties/ShapePropertiesDocker.cpp:37
 #, kde-format
 msgid "Shape Properties"
 msgstr "Muodon ominaisuudet"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -40,22 +40,22 @@ msgstr "ਬਿੰਦੂ ਉੱਤੇ ਰੋਕੋ"
 msgid "Freehand path"
 msgstr "ਬਿੰਦੂ ਉੱਤੇ ਰੋਕੋ"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:443
+#: basicflakes/tools/KoCreatePathTool.cpp:444
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:450
+#: basicflakes/tools/KoCreatePathTool.cpp:451
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:458
+#: basicflakes/tools/KoCreatePathTool.cpp:459
 #, kde-format
 msgid "Angle Constraints"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoCreatePathTool.cpp:463
 #: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "Lines"
@@ -419,7 +419,7 @@ msgstr "ਲਾਈਨਾਂ"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
-#: flake/KoConnectionShapeConfigWidget.ui:17
+#: flake/KoConnectionShapeConfigWidget.ui:35
 #: widgets/koDocumentInfoAboutWidget.ui:141
 #: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
@@ -5024,41 +5024,41 @@ msgstr "ਸਕ੍ਰਿਪਟ ਫਾਇਲ"
 msgid "Add/Remove Colors"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: widgets/KoFillConfigWidget.cpp:146
+#: widgets/KoFillConfigWidget.cpp:147
 #, kde-format
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:154
+#: widgets/KoFillConfigWidget.cpp:155
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:162
+#: widgets/KoFillConfigWidget.cpp:163
 #, kde-format
 msgid "Gradient"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:170
+#: widgets/KoFillConfigWidget.cpp:171
 #, kde-format
 msgid "Pattern"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:184
+#: widgets/KoFillConfigWidget.cpp:185
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Change the filling color"
 msgstr "ਮਾਸਟਰ ਸਲਾਈਡ ਬਦਲੋ"
 
-#: widgets/KoFillConfigWidget.cpp:195
+#: widgets/KoFillConfigWidget.cpp:196
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Change the filling gradient"
 msgstr "ਮਾਸਟਰ ਸਲਾਈਡ ਬਦਲੋ"
 
-#: widgets/KoFillConfigWidget.cpp:202
+#: widgets/KoFillConfigWidget.cpp:203
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Change the filling pattern"

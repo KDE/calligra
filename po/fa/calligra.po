@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2007-08-23 12:35+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -46,23 +46,23 @@ msgstr "حذف زیرمسیر"
 msgid "Freehand path"
 msgstr "حذف زیرمسیر"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:443
+#: basicflakes/tools/KoCreatePathTool.cpp:444
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:450
+#: basicflakes/tools/KoCreatePathTool.cpp:451
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:458
+#: basicflakes/tools/KoCreatePathTool.cpp:459
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Angle Constraints"
 msgstr "تغییر تورفتگی"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:462
+#: basicflakes/tools/KoCreatePathTool.cpp:463
 #: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "Lightness"
@@ -439,7 +439,7 @@ msgstr "روشنایی"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
-#: flake/KoConnectionShapeConfigWidget.ui:17
+#: flake/KoConnectionShapeConfigWidget.ui:35
 #: widgets/koDocumentInfoAboutWidget.ui:141
 #: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
@@ -5136,42 +5136,42 @@ msgstr "پالت"
 msgid "Add/Remove Colors"
 msgstr "افزودن/حذف رنگها"
 
-#: widgets/KoFillConfigWidget.cpp:146
+#: widgets/KoFillConfigWidget.cpp:147
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "No stroke or fill"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: widgets/KoFillConfigWidget.cpp:154
+#: widgets/KoFillConfigWidget.cpp:155
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:162
+#: widgets/KoFillConfigWidget.cpp:163
 #, kde-format
 msgid "Gradient"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:170
+#: widgets/KoFillConfigWidget.cpp:171
 #, kde-format
 msgid "Pattern"
 msgstr ""
 
-#: widgets/KoFillConfigWidget.cpp:184
+#: widgets/KoFillConfigWidget.cpp:185
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling color"
 msgstr "تغییر اولین تورفتگی خط"
 
-#: widgets/KoFillConfigWidget.cpp:195
+#: widgets/KoFillConfigWidget.cpp:196
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling gradient"
 msgstr "تغییر اولین تورفتگی خط"
 
-#: widgets/KoFillConfigWidget.cpp:202
+#: widgets/KoFillConfigWidget.cpp:203
 #, fuzzy, kde-format
 #| msgid "Change First Line Indent"
 msgid "Change the filling pattern"

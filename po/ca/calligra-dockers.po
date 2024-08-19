@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2023-02-27 22:47+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:41
+#: shapeproperties/ShapePropertiesDocker.cpp:37
 #, kde-format
 msgid "Shape Properties"
 msgstr "Propietats de forma"

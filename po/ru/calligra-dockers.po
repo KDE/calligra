@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 00:41+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2015-02-23 03:18+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:41
+#: shapeproperties/ShapePropertiesDocker.cpp:37
 #, kde-format
 msgid "Shape Properties"
 msgstr "Параметры объекта"

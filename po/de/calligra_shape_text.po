@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -151,7 +151,7 @@ msgstr "Absteigend"
 #. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
 #. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
 #: dialogs/BibliographyConfigureDialog.ui:14
-#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, kde-format
 msgid "Configure bibliography"
 msgstr "Literaturverzeichnis einrichten"
@@ -344,7 +344,7 @@ msgstr "Hintergrundfarbe"
 #: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
 #: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
 #: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
-#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:26
 #: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
@@ -1047,7 +1047,7 @@ msgstr "Schriftart"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
+#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Literaturverzeichnis einfügen"
@@ -2012,13 +2012,13 @@ msgid "after end of section:"
 msgstr "Nach dem Ende von Abschnitt:"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:29
+#: dialogs/SimpleAnnotationWidget.ui:32
 #, kde-format
 msgid "Insert Note"
 msgstr "Anmerkung einfügen"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:39
+#: dialogs/SimpleAnnotationWidget.ui:42
 #, kde-format
 msgid "Remove Note"
 msgstr "Anmerkung entfernen"
@@ -2035,19 +2035,19 @@ msgid "Change font format"
 msgstr "Schriftformat ändern"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#: dialogs/SimpleCitationBibliographyWidget.ui:26
 #, kde-format
 msgid "Insert citation at current position"
 msgstr "Eine Literaturstelle an der aktuellen Position einfügen"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
+#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr "Literaturstelle einfügen"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
-#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#: dialogs/SimpleCitationBibliographyWidget.ui:58
 #, kde-format
 msgid "Configure Bibliography"
 msgstr "Literaturverzeichnis einrichten"

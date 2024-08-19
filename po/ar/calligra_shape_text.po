@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2007-10-14 16:07+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: <en@li.org>\n"
@@ -157,7 +157,7 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
 #. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
 #: dialogs/BibliographyConfigureDialog.ui:14
-#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, fuzzy, kde-format
 msgid "Configure bibliography"
 msgstr "إدراج فهرس"
@@ -353,7 +353,7 @@ msgstr "لون الخلفية:"
 #: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
 #: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
 #: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
-#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:26
 #: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
 #: dialogs/SimpleTableWidget.ui:137
 #, fuzzy, kde-format
@@ -1011,7 +1011,7 @@ msgstr "الخط"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
+#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:164
 #, fuzzy, kde-format
 msgid "Insert Bibliography"
 msgstr "إدراج فهرس"
@@ -1962,13 +1962,13 @@ msgid "after end of section:"
 msgstr "إدراج"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:29
+#: dialogs/SimpleAnnotationWidget.ui:32
 #, fuzzy, kde-format
 msgid "Insert Note"
 msgstr "إدراج فهرس"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:39
+#: dialogs/SimpleAnnotationWidget.ui:42
 #, fuzzy, kde-format
 msgid "Remove Note"
 msgstr "إدراج فهرس"
@@ -1985,19 +1985,19 @@ msgid "Change font format"
 msgstr "أسلوب الفقرة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#: dialogs/SimpleCitationBibliographyWidget.ui:26
 #, fuzzy, kde-format
 msgid "Insert citation at current position"
 msgstr "إدراج فهرس"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
+#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:159
 #, fuzzy, kde-format
 msgid "Insert Citation"
 msgstr "إدراج"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
-#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#: dialogs/SimpleCitationBibliographyWidget.ui:58
 #, fuzzy, kde-format
 msgid "Configure Bibliography"
 msgstr "إدراج فهرس"

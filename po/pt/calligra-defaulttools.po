@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2019-02-06 11:39+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -15,19 +15,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
-#: connectionTool/ConnectionPointWidget.ui:30
+#: connectionTool/ConnectionPointWidget.ui:48
 #, kde-format
 msgid "Edit Mode"
 msgstr "Modo de Edição"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEscape)
-#: connectionTool/ConnectionPointWidget.ui:37
+#: connectionTool/ConnectionPointWidget.ui:55
 #, kde-format
 msgid "Escape Direction"
 msgstr "Direcção de Escape"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
-#: connectionTool/ConnectionPointWidget.ui:97
+#: connectionTool/ConnectionPointWidget.ui:115
 #, kde-format
 msgid "Alignment"
 msgstr "Alinhamento"
@@ -35,7 +35,7 @@ msgstr "Alinhamento"
 #. i18n: ectx: property (text), widget (QToolButton, alignPercent)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
-#: connectionTool/ConnectionPointWidget.ui:116
+#: connectionTool/ConnectionPointWidget.ui:134
 #: defaulttool/DefaultToolTransformWidget.ui:106
 #: defaulttool/DefaultToolTransformWidget.ui:138
 #, no-c-format, kde-format
@@ -391,13 +391,13 @@ msgid "Resize"
 msgstr "Dimensionar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: defaulttool/DefaultToolWidget.ui:29
+#: defaulttool/DefaultToolWidget.ui:35
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: defaulttool/DefaultToolWidget.ui:91
+#: defaulttool/DefaultToolWidget.ui:97
 #, kde-format
 msgid "Y:"
 msgstr "Y:"

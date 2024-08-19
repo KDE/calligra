@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-19 00:39+0000\n"
 "PO-Revision-Date: 2022-02-25 13:43+0700\n"
 "Last-Translator: Linerly <linerly@protonmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -152,7 +152,7 @@ msgstr "Urut turun"
 #. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
 #. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
 #: dialogs/BibliographyConfigureDialog.ui:14
-#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, kde-format
 msgid "Configure bibliography"
 msgstr "Konfigurasikan bibliografi"
@@ -345,7 +345,7 @@ msgstr "Warna Latarbelakang"
 #: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
 #: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
 #: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
-#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:26
 #: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
@@ -1047,7 +1047,7 @@ msgstr "Font"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:164
+#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Sisipkan Bibliografi"
@@ -2009,13 +2009,13 @@ msgid "after end of section:"
 msgstr "sesudah akhir bagian:"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:29
+#: dialogs/SimpleAnnotationWidget.ui:32
 #, kde-format
 msgid "Insert Note"
 msgstr "Sisipkan Catatan"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
-#: dialogs/SimpleAnnotationWidget.ui:39
+#: dialogs/SimpleAnnotationWidget.ui:42
 #, kde-format
 msgid "Remove Note"
 msgstr "Hapus Catatan"
@@ -2032,19 +2032,19 @@ msgid "Change font format"
 msgstr "Ubah format font"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#: dialogs/SimpleCitationBibliographyWidget.ui:26
 #, kde-format
 msgid "Insert citation at current position"
 msgstr "Sisipkan kutipan di posisi saat ini"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:159
+#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert Citation"
 msgstr "Sisipkan Kutipan"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
-#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#: dialogs/SimpleCitationBibliographyWidget.ui:58
 #, kde-format
 msgid "Configure Bibliography"
 msgstr "Konfigurasikan Bibliografi"
