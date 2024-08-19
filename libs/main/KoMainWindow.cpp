@@ -1430,17 +1430,17 @@ void KoMainWindow::slotConfigureKeys()
         // The undo/redo action text is "undo" + command, replace by simple text while inside editor
         undoAction = currentView()->actionCollection()->action("edit_undo");
         redoAction = currentView()->actionCollection()->action("edit_redo");
-        oldUndoText = undoAction->text();
-        oldRedoText = redoAction->text();
-        undoAction->setText(i18n("Undo"));
-        redoAction->setText(i18n("Redo"));
+        oldUndoText = undoAction->toolTip();
+        oldRedoText = redoAction->toolTip();
+        undoAction->setToolTip(i18n("Undo"));
+        redoAction->setToolTip(i18n("Redo"));
     }
 
     guiFactory()->showConfigureShortcutsDialog();
 
     if (currentView()) {
-        undoAction->setText(oldUndoText);
-        redoAction->setText(oldRedoText);
+        undoAction->setToolTip(oldUndoText);
+        redoAction->setToolTip(oldRedoText);
     }
 
     Q_EMIT keyBindingsChanged();

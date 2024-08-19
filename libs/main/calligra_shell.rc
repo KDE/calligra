@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="Calligra" version="27" translationDomain="calligra">
+<gui name="Calligra" version="28" translationDomain="calligra">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -51,5 +51,11 @@
   <Action name="file_print" />
   <Action name="file_print_preview" />
   //-->
+  <Separator />
 </ToolBar>
+<ActionProperties scheme="Default">
+  <Action name="file_new" priority="0" />
+  <Action name="file_open" priority="0" />
+  <Action name="file_save" priority="0" />
+</ActionProperties>
 </gui>

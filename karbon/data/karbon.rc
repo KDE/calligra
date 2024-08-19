@@ -148,15 +148,9 @@
     </MenuBar>
     <ToolBar name="edit_toolbar" position="top">
         <text>Edit</text>
+        <Separator />
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
-        <Separator/>
-        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-        <Action name="edit_delete"/>
-        <Spacer />
-        <Action name="add_shape"/>
     </ToolBar>
     <ToolBar name="object_toolbar" hidden="true">
         <text>Object</text>
@@ -179,4 +173,23 @@
     <ToolBar name="Effects" hidden="true">
         <text>Effects</text>
     </ToolBar>
+    <ToolBar name="add_shape_toolbar" position="top">
+        <text>Add Shape</text>
+        <Spacer />
+        <Action name="add_shape"/>
+    </ToolBar>
+    <ActionProperties scheme="Default">
+      <Action name="edit_undo" priority="0" />
+      <Action name="edit_redo" priority="0" />
+      <Action name="object_order_front" priority="0" />
+      <Action name="object_order_raise" priority="0" />
+      <Action name="object_order_lower" priority="0" />
+      <Action name="object_order_back" priority="0" />
+      <Action name="object_align_horizontal_left" priority="0" />
+      <Action name="object_align_horizontal_center" priority="0" />
+      <Action name="object_align_horizontal_right" priority="0" />
+      <Action name="object_align_vertical_top" priority="0" />
+      <Action name="object_align_vertical_center" priority="0" />
+      <Action name="object_align_vertical_bottom" priority="0" />
+    </ActionProperties>
 </gui>
