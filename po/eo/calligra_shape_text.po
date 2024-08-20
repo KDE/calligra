@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-01-03 14:17+0100\n"
+"PO-Revision-Date: 2024-08-19 21:47+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1855,24 +1855,21 @@ msgstr "Almenaŭ"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Deŝovo"
+msgstr "Maldekstra Deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Deŝovo"
+msgstr "Dekstra Deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Unua Linio:"
+msgstr "Unua-Linia Deŝovo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1882,10 +1879,9 @@ msgstr "Aŭtomate konkludi el tekstograndeco"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Linia interspaco"
+msgstr "Linia Interspaco:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1895,24 +1891,21 @@ msgstr " %"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
-#, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
+#, kde-format
 msgid "Use Font Metrics"
-msgstr "Uzi Font-Metrikojn:"
+msgstr "Uzi Tipar-Metrikojn"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Alinea Spaco"
+msgstr "Alinea Spaco Antaŭ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Alinea Spaco"
+msgstr "Alinea Spaco Post:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphLayout.ui:17
@@ -3054,27 +3047,3 @@ msgstr "Klavopremo"
 #, kde-format
 msgid "Text editing"
 msgstr "Tekstoredaktado"
-
-#~ msgid "Left:"
-#~ msgstr "Maldekstra:"
-
-#~ msgid "Right:"
-#~ msgstr "Dekstre:"
-
-#~ msgid "Before:"
-#~ msgstr "Antaŭ:"
-
-#~ msgid "After:"
-#~ msgstr "Post:"
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Ĉi tiu ligo montras al la programo aŭ skripto '%1'.\n"
-#~ "Malicaj programoj povas damaĝi vian komputilon. Ĉu vi certas, ke vi volas "
-#~ "ruli ĉi tiun programon?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Ĉu malfermi ligon?"

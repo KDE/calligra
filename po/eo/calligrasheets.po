@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-05-30 07:49+0200\n"
+"PO-Revision-Date: 2024-08-19 21:47+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -13124,10 +13124,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "Koloro:"
+msgstr "&Krada Koloro:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -13140,10 +13139,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "Paĝa K&onturo:"
+msgstr "Paĝ-Kontura Ko&loro:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -15654,34 +15652,3 @@ msgstr "Elekti Multoblajn Ĉelojn"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "Ligilo %1 aktivigita"
-
-#~ msgid "Colors"
-#~ msgstr "Koloroj"
-
-#~ msgid "&Grid:"
-#~ msgstr "&Krado:"
-
-#~ msgid "Custom..."
-#~ msgstr "Propra..."
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr ""
-#~ "Pretigo ne eblas, ĉar kelkaj ĉeloj estas ŝlositaj kiel elementoj de "
-#~ "matrico."
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "Pretigo ne eblas, ĉar iuj ĉeloj estas protektitaj."
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Ĉi tiu ligo montras al la programo aŭ skripto '%1'.\n"
-#~ "Malicaj programoj povas damaĝi vian komputilon. Ĉu vi certas, ke vi volas "
-#~ "ruli ĉi tiun programon?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Ĉu malfermi ligilon?"

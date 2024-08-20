@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-04-18 18:23+0200\n"
+"PO-Revision-Date: 2024-08-19 16:05+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,12 +22,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Miguel Branco, Adrián Chaves Fernández"
+msgstr "Miguel Branco, Adrián Chaves (Gallaecio)"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -728,24 +728,21 @@ msgid "Create backup file:"
 msgstr "Crear un ficheiro de salvagarda:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Amosar a grade:"
+msgstr "Amosar a grade."
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Axustar á Grade:"
+msgstr "Axustar á grade."
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Grade"
+msgstr "Grade:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -753,20 +750,16 @@ msgid "Grid color:"
 msgstr "Cor da grade:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontal:"
+msgstr "Espazado horizontal:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertical:"
+msgstr "Espazado vertical:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -907,7 +900,7 @@ msgstr "Recuperar ficheiros"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Descartar todo"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -926,6 +919,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Se selecciona «Cancelar», manteranse todos os ficheiros recuperábeis.\n"
+"Se preme «Aceptar», recuperaranse os ficheiros seleccionados, e descartarase "
+"o resto."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1591,20 +1587,19 @@ msgid "Default"
 msgstr "Predefinido"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Media xeométrica"
+msgstr "Xeométricas"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Frechas"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Gracioso"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1768,11 +1763,10 @@ msgid "Date: %1"
 msgstr "Data: %1"
 
 #: main/KoView.cpp:345
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Forma"
+msgstr "Engadir unha forma"
 
 #: main/KoView.cpp:356
 #, kde-format
@@ -4837,10 +4831,9 @@ msgid "Icon only"
 msgstr "Só icona"
 
 #: widgets/KoModeBox.cpp:504
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Unha soa cara"
+msgstr "Lado da barra lateral"
 
 #: widgets/KoModeBox.cpp:513
 #, kde-format
@@ -4863,30 +4856,26 @@ msgid "Apply to document"
 msgstr "Aplicar ao documento"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Marxe esquerda"
+msgstr "Marxe do bordo esquerdo:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Marxe dereita"
+msgstr "Marxe do bordo dereito:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Beira de axuste:"
+msgstr "Marxe da beira de axuste:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Límite de Páxina:"
+msgstr "Marxe do límite de páxina:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4995,17 +4984,15 @@ msgstr "Dereita a esquerda"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Marxe superior"
+msgstr "Marxe superior:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Marxe inferior"
+msgstr "Marxe inferior:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

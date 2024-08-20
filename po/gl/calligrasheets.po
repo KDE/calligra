@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-02-27 06:39+0100\n"
+"PO-Revision-Date: 2024-08-19 15:20+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -13170,10 +13170,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "Cor:"
+msgstr "Cor da &grade:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -13186,10 +13185,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "&Contorno da páxina:"
+msgstr "Cor do &contorno da páxina:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114

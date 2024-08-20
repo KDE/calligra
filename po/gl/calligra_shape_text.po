@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-02-25 11:53+0100\n"
+"PO-Revision-Date: 2024-08-19 15:45+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1860,24 +1860,21 @@ msgstr "Como mínimo"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Sangrado"
+msgstr "Sangrar á esquerda:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Sangrado"
+msgstr "Sangrar á dereita:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Primeira Liña:"
+msgstr "Sangrado da primeira liña:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1887,10 +1884,9 @@ msgstr "Inferir a partir do tamaño do texto"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Espazado de Texto"
+msgstr "Espazo entre liñas:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1900,24 +1896,21 @@ msgstr " %"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
-#, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
+#, kde-format
 msgid "Use Font Metrics"
-msgstr "Usar métricas de tipo de letra:"
+msgstr "Usar as métricas da fonte."
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Espazo de Parágrafo"
+msgstr "Espazo antes dun parágrafo:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Espazo de Parágrafo"
+msgstr "Espazo despois dun parágrafo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphLayout.ui:17

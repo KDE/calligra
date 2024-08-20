@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-14 00:39+0000\n"
-"PO-Revision-Date: 2024-08-18 04:32+0200\n"
+"PO-Revision-Date: 2024-08-19 06:42+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1575,6 +1575,10 @@ msgid ""
 "returns the maximal possible number of weeks between those days. If the mode "
 "is 1, it only returns the number of whole weeks in between."
 msgstr ""
+"ფუნქცია WEEKS() ორ თარიღს შორის დაშორებას აბრუნებს კვირებში. მესამე "
+"პარამეტრი მიუთითებს გამოთვლის რეჟიმზე: თუ რეჟიმი 0-ის ტოლია, WEEKS "
+"მაქსიმალურ შესაძლო კვირების რაოდენობას დააბრუნებს ამ დღეებს შორის. თუ რეჟიმი "
+"1-ის ტოლია - სრული კვირების რაოდენობას."
 
 #: functions/datetime.xml:244
 #, kde-format
@@ -1609,6 +1613,10 @@ msgid ""
 "returns the maximal possible number of months between those days. If the "
 "mode is 1, it only returns the number of complete months in between."
 msgstr ""
+"ფუნქცია MONTHS() ორ თარიღს შორის დაშორებას აბრუნებს თვეებში. მესამე "
+"პარამეტრი მიუთითებს გამოთვლის რეჟიმზე: თუ რეჟიმი 0-ის ტოლია, MONTH() "
+"მაქსიმალურ შესაძლო თვეების რაოდენობას დააბრუნებს ამ დღეებს შორის. თუ რეჟიმი "
+"1-ის ტოლია - სრული თვეების რაოდენობას."
 
 #: functions/datetime.xml:267
 #, kde-format
@@ -1642,6 +1650,10 @@ msgid ""
 "is 1, it only returns whole years, starting at the 1st Jan and ending on the "
 "31st Dec."
 msgstr ""
+"ფუნქცია YEARS() ორ თარიღს შორის დაშორებას აბრუნებს წლებში. მესამე პარამეტრი "
+"მიუთითებს გამოთვლის რეჟიმზე: თუ რეჟიმი 0-ის ტოლია, YEARS() მაქსიმალურ "
+"შესაძლო წლების რაოდენობას დააბრუნებს ამ დღეებს შორის. თუ რეჟიმი 1-ის ტოლია - "
+"სრული წლების რაოდენობას."
 
 #: functions/datetime.xml:290
 #, kde-format
@@ -1958,6 +1970,8 @@ msgid ""
 "The NOW() function returns the current date and time. It is identical with "
 "CURRENTDATETIME and provided for compatibility with other applications."
 msgstr ""
+"ფუნქცია NOW() მიმდინარე თარიღსა და დროს აბრუნებს. იგივეა, რაც "
+"CURRENTDATETIME და არსებობს სხვა აპლიკაციებთან თავსებადობისთვის."
 
 #: functions/datetime.xml:543
 #, kde-format
@@ -2009,6 +2023,8 @@ msgid ""
 "The EASTERSUNDAY() function returns the date which corresponds to Easter "
 "Sunday in the year given as the parameter."
 msgstr ""
+"ფუნქცია EASTERSUNDAY() აბრუნებს თარიღის, რომელიც აღდგომის კვირას შეესაბამება "
+"წლისთვის, რომელიც პარამეტრის სახითაა გადაცემული."
 
 #: functions/datetime.xml:579
 #, kde-format
@@ -2059,6 +2075,9 @@ msgid ""
 "week in the year, with a week beginning on Sunday (1, this is the default if "
 "Method is omitted.)"
 msgstr ""
+"WEEKNUM(A1; 1) აბრუნებს 11 როცა A1 უდრის \"9th of March 2008\". კვირის "
+"ნომერი წელიწადში, სადაც კვირა კვირადღით იწყება (1, ეს ნაგულისხმევი მეთოდია, "
+"თუ არ მიუთითებთ.)"
 
 #: functions/datetime.xml:614
 #, kde-format
@@ -2066,6 +2085,8 @@ msgid ""
 "WEEKNUM(A1; 2) returns 10 when A1 is \"9th of March 2008\". Number of the "
 "week in the year, with a week beginning on Monday (2)"
 msgstr ""
+"WEEKNUM(A1; 2) აბრუნებს 10 როცა A1 უდრის \"9th of March 2008\". კვირის "
+"ნომერი წელიწადში, სადაც კვირა ორშაბათს იწყება (2)"
 
 #: functions/datetime.xml:623 functions/datetime.xml:647
 #, kde-format
@@ -2280,6 +2301,8 @@ msgid ""
 "The BASE() function converts a number from base-10 to a string value in a "
 "target base from 2 to 36."
 msgstr ""
+"ფუნქცია BASE() გადაიყვანს გადაცემულ რიცხვს სტრიქონის სახით ათობითიდან "
+"სასურველ ათვლის სისტემაში 2-დან 36-მდე."
 
 #: functions/engineering.xml:24
 #, kde-format
@@ -2339,6 +2362,8 @@ msgid ""
 "The BESSELK() function returns the modified Bessel function, which is "
 "equivalent to the Bessel function evaluated for purely imaginary arguments."
 msgstr ""
+"ფუნქცია BESSELK() აბრუნებს შეცვლილ ბესელის ფუნქციას, რომელიც იგივეა, რაც "
+"ბესელის ფუნქცია წარმოსახვითი არგუმენტებისთვის."
 
 #: functions/engineering.xml:84
 #, kde-format
@@ -2356,6 +2381,8 @@ msgid ""
 "The BESSELY() function returns the Bessel function, which is also called the "
 "Weber function or the Neumann function."
 msgstr ""
+"ფუნქცია BESSELY() აბრუნებს ბესელის ფუნქციას, რომელსაც ასევე ჰქვია ვებერის "
+"ფუნქცია ან ნეიმანის ფუნქცია."
 
 #: functions/engineering.xml:105
 #, kde-format
@@ -2534,6 +2561,8 @@ msgid ""
 "The ERF() function returns the error function. With a single argument, ERF() "
 "returns the error function between 0 and that argument."
 msgstr ""
+"ფუნქცია ERF() შეცდომის ფუნქციას აბრუნებს. გადაეცემა ერთი არგუმენტი და ERF() "
+"აბრუნებს შეცდომის ფუნქციას 0-სა და იმ არგუმენტს შორის."
 
 #: functions/engineering.xml:162
 #, kde-format
@@ -5638,6 +5667,9 @@ msgid ""
 "returns False (unless any of the values in an error - then it returns an "
 "error)."
 msgstr ""
+"ფუნქცია AND() აბრუნებს ჭეშმარიტს, თუ მისი ყველა მნიშვნელობა ჭეშმარიტია. "
+"წინააღმდეგ შემთხვევაში აბრუნებს ცრუს (იმ შემთხვევის გარდა, თუ ერთ-ერთი "
+"მნიშვნელობა შეცდომაა - ამ შემთხვევაში ფუნქცია შეცდომას აბრუნებს)."
 
 #: functions/logic.xml:52
 #, kde-format
@@ -5661,6 +5693,9 @@ msgid ""
 "Otherwise it returns False (unless any of the values is an error, then it "
 "returns an error)."
 msgstr ""
+"ფუნქცია OR() აბრუნებს ჭეშმარიტს, თუ მისი ერთი მნიშვნელობა მაინც ჭეშმარიტია. "
+"წინააღმდეგ შემთხვევაში აბრუნებს ცრუს (იმ შემთხვევის გარდა, თუ ერთ-ერთი "
+"მნიშვნელობა შეცდომაა - ამ შემთხვევაში ფუნქცია შეცდომას აბრუნებს)."
 
 #: functions/logic.xml:83
 #, kde-format
@@ -5683,6 +5718,8 @@ msgid ""
 "The NAND() function returns True if at least one value is not true. "
 "Otherwise it returns False."
 msgstr ""
+"ფუნქცია NAND() აბრუნებს ჭეშმარიტს, თუ ერთ-ერთი მნიშვნელობა მაინც ჭეშმარიტი "
+"არაა. წინააღმდეგ შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/logic.xml:114
 #, kde-format
@@ -5705,6 +5742,8 @@ msgid ""
 "The NOR() function returns True if all the values given as parameters are of "
 "boolean type and have the value false. Otherwise it returns False."
 msgstr ""
+"ფუნქცია NOR() აბრუნებს ჭეშმარიტს, თუ ყველა გადაცემული პარამეტრი ლოგიკური "
+"ტიპისაა და მისი მნიშვნელობა ცრუა. წინააღმდეგ შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/logic.xml:145
 #, kde-format
@@ -5818,6 +5857,8 @@ msgstr "ნებისმიერი ალტერნატივა"
 msgid ""
 "Return X unless it is an Error, in which case return an alternative value."
 msgstr ""
+"აბრუნებს X-ს, თუ ის შეცდომა არაა, რომლის შემთხვევაშიც სხვა მნიშვნელობას "
+"აბრუნებს."
 
 #: functions/logic.xml:232
 #, kde-format
@@ -5835,6 +5876,7 @@ msgstr ""
 #, kde-format
 msgid "Return X unless it is an NA, in which case return an alternative value."
 msgstr ""
+"აბრუნებს X-ს, თუ ის NA არაა, რომლის შემთხვევაშიც სხვა მნიშვნელობას აბრუნებს."
 
 #: functions/logic.xml:250
 #, kde-format
@@ -6195,6 +6237,8 @@ msgid ""
 "This function returns -1 if the number is negative, 0 if the number is null "
 "and 1 if the number is positive."
 msgstr ""
+"ეს ფუნქცია აბრუნებს -1-ს, თუ რიცხვი უარყოფითია, 0-ს, თუ ის ნულოვანია და 1-ს, "
+"თუ რიცხვი დადებითია."
 
 #: functions/math.xml:265
 #, kde-format
@@ -6351,6 +6395,8 @@ msgid ""
 "The FACT() function calculates the factorial of the parameter. The "
 "mathematical expression is (value)!."
 msgstr ""
+"ფუნქცია FACT() პარამეტრის ფაქტორიალს გამოთვლის. მათემატიკური გამოსახულებაა "
+"(მნიშვნელობა)!."
 
 #: functions/math.xml:369
 #, kde-format
@@ -6372,7 +6418,7 @@ msgstr "FACT(0) აბრუნებს 1"
 msgid ""
 "The FACTDOUBLE() function calculates the double factorial of a number, i.e. "
 "x!!."
-msgstr ""
+msgstr "ფუნქცია FACTDOUBLE() რიცხვის ორმაგ ფაქტორიალს გამოთვლის (ანუ: x!!)."
 
 #: functions/math.xml:384
 #, kde-format
@@ -6469,6 +6515,8 @@ msgid ""
 "SUMIF(A1:A4;\"=0\";B1:B4) sums all values in range B1:B4 if the "
 "corresponding value in A1:A4 matches =0"
 msgstr ""
+"SUMIF(A1:A4;\"=0\";B1:B4) შეკრებს ყველა მნიშვნელობას შუალედიდან B1:B4 თუ "
+"შესაბამისი მნიშვნელობა უჯრედებში A1:A4 ემთხვევა =0"
 
 #: functions/math.xml:458
 #, kde-format
@@ -6524,6 +6572,8 @@ msgid ""
 "The G_PRODUCT() function is the same as KPRODUCT. It is provided for "
 "Gnumeric compatibility."
 msgstr ""
+"ფუნქცია G_PRODUCT() იგივეა, რაც KPRODUCT. არებობს Gnumeric-თან "
+"თავსებადობისთვის."
 
 #: functions/math.xml:494
 #, kde-format
@@ -6734,6 +6784,8 @@ msgid ""
 "The SQRT() function returns the non-negative square root of the argument. It "
 "is an error if the argument is negative."
 msgstr ""
+"ფუნქცია SQRT() არგუმენტის არაუარყოფით კვადრატულ ფესვს აბრუნებს. დააბრუნებს "
+"შეცდომას, თუ არგუმენტი უარყოფითია."
 
 #: functions/math.xml:659
 #, kde-format
@@ -6756,6 +6808,8 @@ msgid ""
 "The SQRTPI() function returns the non-negative square root of x * PI. It is "
 "an error if the argument is negative."
 msgstr ""
+"ფუნქცია SQRTPI() გადაცემული არაუარყოფითი რიცხვის ფესვის პიზე ნამრავლს "
+"აბრუნებს. დააბრუნებს შეცდომას, თუ არგუმენტი უარყოფითია."
 
 #: functions/math.xml:675
 #, kde-format
@@ -7449,7 +7503,7 @@ msgstr "მნიშვნელი"
 #: functions/math.xml:1204
 #, kde-format
 msgid "Function QUOTIENT returns the integer portion of numerator/denumerator."
-msgstr ""
+msgstr "ფუნქცია QUOTIENT მრიცხველის/მნიშვნელის მთელ ნაწილს აბრუნებს."
 
 #: functions/math.xml:1205
 #, kde-format
@@ -7467,6 +7521,8 @@ msgid ""
 "Function MDETERM returns the determinant of a given matrix. The matrix must "
 "be of type n x n."
 msgstr ""
+"ფუნქცია MDETERM მითითებული მატრიცის დეტერმინანტს აბრუნებს. მატრიცა n x n "
+"ტიპის უნდა იყოს."
 
 #: functions/math.xml:1220
 #, kde-format
@@ -7495,6 +7551,8 @@ msgid ""
 "matrix must be the same as row count of the second one. The result is a "
 "matrix."
 msgstr ""
+"ფუნქცია MMULT ორ მატრიცას ამრავლებს. პირველი მატრიცის სვეტების რაოდენობა "
+"მეორე მატრიცის მწკრივების რაოდენობის ტოლი უნდა იყო. შედეგი მატრიცაა."
 
 #: functions/math.xml:1239 functions/math.xml:1257 functions/math.xml:1274
 #: functions/math.xml:1290
@@ -11333,7 +11391,7 @@ msgstr "JIS(ტექსტი)"
 msgid ""
 "The BAHTTEXT() function converts a number to a text in Thai characters "
 "(baht)."
-msgstr ""
+msgstr "ფუნქცია BAHTTEXT() რიცხვს ტაილანდურში (ბაჰტი) გადაიყვანს."
 
 #: functions/text.xml:843
 #, kde-format
@@ -11433,6 +11491,8 @@ msgid ""
 "The ACOS() function returns the arc cosine in radians and the value is "
 "mathematically defined to be 0 to PI (inclusive)."
 msgstr ""
+"ფუნქცია ACOS() აბრუნებს არკკოსინუსს რადიანებში და მნიშვნელობა მათემატიკურად "
+"აღწერილია, რომ არის შუალედიდან 0-პი (ჩათვლით)."
 
 #: functions/trig.xml:80
 #, kde-format
@@ -11455,6 +11515,8 @@ msgid ""
 "The ASIN() function returns the arc sine in radians and the value is "
 "mathematically defined to be -PI/2 to PI/2 (inclusive)."
 msgstr ""
+"ფუნქცია ASIN() აბრუნებს არკსინუსს რადიანებში და მნიშვნელობა მათემატიკურად "
+"აღწერილია როგორც შუალედიდან -პი/2-პი/2 (ჩათვლით)."
 
 #: functions/trig.xml:96
 #, kde-format
@@ -11477,6 +11539,8 @@ msgid ""
 "The ATAN() function returns the arc tangent in radians and the value is "
 "mathematically defined to be -PI/2 to PI/2 (inclusive)."
 msgstr ""
+"ფუნქცია ATAN() აბრუნებს არკტანგენსს რადიანებში და მნიშვნელობა მათემატიკურად "
+"აღწერილია, როგორც შუალედიდან -პი/2-პი/2 (ჩათვლით)."
 
 #: functions/trig.xml:112
 #, kde-format
@@ -11499,6 +11563,8 @@ msgid ""
 "The COSH() function returns the hyperbolic cosine of x, which is defined "
 "mathematically as (exp(x) + exp(-x)) / 2."
 msgstr ""
+"ფუნქცია COSH() x-ის ჰიპერბოლურ კოსინუსს აბრუნებს, რომელიც მათემატიკურად "
+"აღწერილია, როგორც (exp(x) + exp(-x)) / 2."
 
 #: functions/trig.xml:129
 #, kde-format
@@ -11521,6 +11587,8 @@ msgid ""
 "The SINH() function returns the hyperbolic sine of x, which is defined "
 "mathematically as (exp(x) - exp(-x)) / 2."
 msgstr ""
+"ფუნქცია SINH() x-ის ჰიპერბოლურ სინუსს აბრუნებს, რომელიც მათემატიკურად "
+"აღწერილია, როგორც (exp(x) - exp(-x)) / 2."
 
 #: functions/trig.xml:145
 #, kde-format
@@ -11543,6 +11611,8 @@ msgid ""
 "The TANH() function returns the hyperbolic tangent of x, which is defined "
 "mathematically as sinh(x)/cosh(x)."
 msgstr ""
+"ფუნქცია TANH() x-ის ჰიპერბოლურ ტანგენსს აბრუნებს, რომელიც მათემატიკურად "
+"აღწერილია, როგორც sinh(x)/cosh(x)."
 
 #: functions/trig.xml:161
 #, kde-format
@@ -11566,6 +11636,9 @@ msgid ""
 "the value whose hyperbolic cosine is x. If x is less than 1.0, acosh() "
 "returns not-a-number (NaN) and errno is set."
 msgstr ""
+"ფუნქცია ACOSH() x-ის ინვერსიულ ჰიპერბოლურ კოსინუსს გამოთვლის. ეს "
+"მნიშვნელობაა, რომლის ჰიპერბოლური კოსინუსიც x-ია. თუ x 1.0-ზე ნაკლებია, "
+"acosh() აბრუნებს რიცხვი-არაა შეცდომას (NaN) და შეცდომა დაბრუნდება."
 
 #: functions/trig.xml:177
 #, kde-format
@@ -11588,6 +11661,8 @@ msgid ""
 "The ASINH() function calculates the inverse hyperbolic sine of x; that is "
 "the value whose hyperbolic sine is x."
 msgstr ""
+"ფუნქცია ASIN() x-ის ინვერსიულ ჰიპერბოლურ სინუსს გამოთვლის. ეს მნიშვნელობაა, "
+"რომლის ჰიპერბოლური სინუსიც x-ია."
 
 #: functions/trig.xml:193
 #, kde-format
@@ -11611,6 +11686,10 @@ msgid ""
 "the value whose hyperbolic tangent is x. If the absolute value of x is "
 "greater than 1.0, ATANH() returns not-a-number (NaN)."
 msgstr ""
+"ფუნქცია ATANH() x-ის ინვერსიულ ჰიპერბოლურ ტანგენსს გამოთვლის. ეს "
+"მნიშვნელობაა, რომლის ჰიპერბოლური ტანგენსიც x-ს ტოლია. თუ x-ის აბსოლუტური "
+"მნიშვნელობა 1.0-ზე მეტია, ფუნქცია ATANH() დააბრუნებს რიცხვი-არაა (NaN) "
+"შეცდომას."
 
 #: functions/trig.xml:209
 #, kde-format
@@ -12780,6 +12859,8 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
+"თუ ეს თოლია დასმულია, Calligra Sheets უჯრედებში შედეგების მაგიერ ფორმულებს "
+"აჩვენებს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:163

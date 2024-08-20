@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-05-04 23:30+0100\n"
+"PO-Revision-Date: 2024-08-19 21:47+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -726,24 +726,21 @@ msgid "Create backup file:"
 msgstr "Krei rezervan dosieron:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Montri kradon:"
+msgstr "Montri kradon"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Alklaki al krado:"
+msgstr "Kapti per krado"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Krado"
+msgstr "Krado:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -751,20 +748,16 @@ msgid "Grid color:"
 msgstr "Kradkoloro:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontala:"
+msgstr "Horizontala interspacado:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertikala:"
+msgstr "Vertikala interspacado:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -1590,18 +1583,17 @@ msgstr "<tr><td><b>Alirita:</b></td><td>%1</td></tr>"
 #: text/styles/KoStyleManager.cpp:100
 #, kde-format
 msgid "Default"
-msgstr "Defaŭlte"
+msgstr "Defaŭlto"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
 msgstr "Geometria Mezo"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Sagoj"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
@@ -1770,11 +1762,10 @@ msgid "Date: %1"
 msgstr "Dato: %1"
 
 #: main/KoView.cpp:345
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Formo"
+msgstr "Aldoni Formon"
 
 #: main/KoView.cpp:356
 #, kde-format
@@ -4836,10 +4827,9 @@ msgid "Icon only"
 msgstr "Nur piktogramo"
 
 #: widgets/KoModeBox.cpp:504
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Unuflanka"
+msgstr "Flankbreta flanko"
 
 #: widgets/KoModeBox.cpp:513
 #, kde-format
@@ -4862,30 +4852,26 @@ msgid "Apply to document"
 msgstr "Apliki al dokumento"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Maldekstra Rando:"
+msgstr "Maldekstro-Randa Marĝeno:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Dekstra Rando:"
+msgstr "Dekstro-Randa Marĝeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Binding Edge:"
+msgstr "Lig-Randa Marĝeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Paĝa Rando:"
+msgstr "Paĝo-Randa Marĝeno:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4994,17 +4980,15 @@ msgstr "Dekstre al maldekstre"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Marĝenoj"
+msgstr "Supra Marĝeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Malsupro:"
+msgstr "Malsupra Marĝeno:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5351,49 +5335,3 @@ msgstr "Ĉiuj subtenataj formatoj"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Top:"
-#~ msgstr "Supre:"
-
-#~ msgid "Binding edge:"
-#~ msgstr "Binda rando:"
-
-#~ msgid "Page edge:"
-#~ msgstr "Paĝrando:"
-
-#~ msgid "Spacing"
-#~ msgstr "Interspacigo"
-
-#~ msgid "Tabs side"
-#~ msgstr "Flanketoj"
-
-#~ msgid "Top side"
-#~ msgstr "Supra flanko"
-
-#~ msgid "Bottom side"
-#~ msgstr "Malsupra flanko"
-
-#~ msgid ""
-#~ "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document "
-#~ "can not be opened."
-#~ msgstr ""
-#~ "QCA havas nuntempe neniun subtenon por SHA1 aŭ PBKDF2 uzante SHA1. La "
-#~ "dokumento ne povas esti malfermita."
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Rekomendita (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Loko ( %1 )"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Aliaj ( %1 )"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "Ne povas trovi kodigon: %1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "Kodpreze&nto:"
