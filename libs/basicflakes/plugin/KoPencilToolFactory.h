@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef _KOPENCILTOOLFACTORY_H_
-#define _KOPENCILTOOLFACTORY_H_
+#pragma once
 
 #include <KoToolFactoryBase.h>
 
@@ -17,5 +16,3 @@ public:
 
     KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
-
-#endif // _KOPENCILTOOLFACTORY_H_

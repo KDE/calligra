@@ -21,9 +21,7 @@ KoCreatePathToolFactory::KoCreatePathToolFactory()
     setActivationShapeId("flake/edit");
 }
 
-KoCreatePathToolFactory::~KoCreatePathToolFactory()
-{
-}
+KoCreatePathToolFactory::~KoCreatePathToolFactory() = default;
 
 KoToolBase *KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
 {

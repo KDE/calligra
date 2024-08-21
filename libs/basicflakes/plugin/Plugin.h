@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
-#ifndef PLUGIN_H
-#define PLUGIN_H
+
+#pragma once
 
 #include <QObject>
 #include <QVariantList>
@@ -15,8 +15,5 @@ class Plugin : public QObject
 
 public:
     Plugin(QObject *parent, const QVariantList &);
-    ~Plugin() override
-    {
-    }
+    ~Plugin() override = default;
 };
-#endif

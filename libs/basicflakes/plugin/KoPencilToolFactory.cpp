@@ -20,9 +20,7 @@ KoPencilToolFactory::KoPencilToolFactory()
     setActivationShapeId("flake/edit");
 }
 
-KoPencilToolFactory::~KoPencilToolFactory()
-{
-}
+KoPencilToolFactory::~KoPencilToolFactory() = default;
 
 KoToolBase *KoPencilToolFactory::createTool(KoCanvasBase *canvas)
 {
