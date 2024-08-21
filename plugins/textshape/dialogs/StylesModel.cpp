@@ -24,9 +24,9 @@
 
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent)
-    , m_styleManager(0)
-    , m_currentParagraphStyle(0)
-    , m_defaultCharacterStyle(0)
+    , m_styleManager(nullptr)
+    , m_currentParagraphStyle(nullptr)
+    , m_defaultCharacterStyle(nullptr)
     , m_provideStyleNone(false)
 {
     m_modelType = modelType;
@@ -103,7 +103,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
                 return m_styleThumbnailer->thumbnail(m_draftParStyleList[id]);
             }
         } else {
-            KoCharacterStyle *usedStyle = 0;
+            KoCharacterStyle *usedStyle = nullptr;
             if (id == NoneStyleId) {
                 usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
                 if (!usedStyle) {
@@ -150,7 +150,7 @@ void StylesModel::setCurrentParagraphStyle(int styleId)
     }
     if (m_currentParagraphStyle) {
         delete m_currentParagraphStyle;
-        m_currentParagraphStyle = 0;
+        m_currentParagraphStyle = nullptr;
     }
     m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
 }
@@ -177,7 +177,7 @@ QImage StylesModel::stylePreview(int row, const QSize &size)
         return QImage();
     }
     if (m_modelType == StylesModel::ParagraphStyle) {
-        KoParagraphStyle *usedStyle = 0;
+        KoParagraphStyle *usedStyle = nullptr;
         usedStyle = m_styleManager->paragraphStyle(index(row).internalId());
         if (usedStyle) {
             return m_styleThumbnailer->thumbnail(usedStyle, size);
@@ -186,7 +186,7 @@ QImage StylesModel::stylePreview(int row, const QSize &size)
             return m_styleThumbnailer->thumbnail(m_draftParStyleList[index(row).internalId()], size);
         }
     } else {
-        KoCharacterStyle *usedStyle = 0;
+        KoCharacterStyle *usedStyle = nullptr;
         if (index(row).internalId() == (quintptr)NoneStyleId) {
             usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
             if (!usedStyle) {
@@ -265,7 +265,7 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, &KoStyleManager::characterStyleRemoved, this, &StylesModel::removeCharacterStyle);
     }
     m_styleManager = sm;
-    if (m_styleManager == 0) {
+    if (m_styleManager == nullptr) {
         return;
     }
 

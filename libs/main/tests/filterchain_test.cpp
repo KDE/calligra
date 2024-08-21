@@ -16,7 +16,7 @@ int main(int /*argc*/, char ** /*argv*/)
     g.setSourceMimeType("application/vnd.oasis.opendocument.text");
     g.dump();
 
-    KoFilterManager *manager = new KoFilterManager(0);
+    KoFilterManager *manager = new KoFilterManager(nullptr);
     qDebug() << "Trying to build some filter chains...";
     QByteArray mimeType("foo/bar");
     KoFilterChain::Ptr chain = g.chain(manager, mimeType);

@@ -151,10 +151,10 @@ private:
         ListStyleInput(const PptTextPFRun &pf, const PptTextCFRun &cf)
             : pf(pf)
             , cf(cf)
-            , cf_(0)
-            , cf9(0)
-            , cf10(0)
-            , si(0)
+            , cf_(nullptr)
+            , cf9(nullptr)
+            , cf10(nullptr)
+            , si(nullptr)
         {
         }
     };
@@ -298,15 +298,15 @@ private:
     void defineListStyle(KoGenStyle &style,
                          const quint32 textType,
                          const MSO::TextMasterStyleAtom &levels,
-                         const MSO::TextMasterStyle9Atom *levels9 = 0,
-                         const MSO::TextMasterStyle10Atom *levels10 = 0);
+                         const MSO::TextMasterStyle9Atom *levels9 = nullptr,
+                         const MSO::TextMasterStyle10Atom *levels10 = nullptr);
 
     void defineListStyle(KoGenStyle &style,
                          const quint32 textType,
                          const quint16 indentLevel,
-                         const MSO::TextMasterStyleLevel *level = 0,
-                         const MSO::TextMasterStyle9Level *level9 = 0,
-                         const MSO::TextMasterStyle10Level *level10 = 0);
+                         const MSO::TextMasterStyleLevel *level = nullptr,
+                         const MSO::TextMasterStyle9Level *level9 = nullptr,
+                         const MSO::TextMasterStyle10Level *level10 = nullptr);
 
     void defineListStyle(KoGenStyle &style, const quint16 indentLevel, const ListStyleInput &info);
 
@@ -566,10 +566,10 @@ private:
     }
     const MSO::PerSlideHeadersFootersContainer *getPerSlideHF(const MSO::SlideContainer *slide) const
     {
-        const MSO::PerSlideHeadersFootersContainer *hf = 0;
+        const MSO::PerSlideHeadersFootersContainer *hf = nullptr;
         const MSO::MasterOrSlideContainer *master = p->getMaster(slide);
-        const MSO::MainMasterContainer *m1 = (master) ? master->anon.get<MSO::MainMasterContainer>() : 0;
-        const MSO::SlideContainer *m2 = (master) ? master->anon.get<MSO::SlideContainer>() : 0;
+        const MSO::MainMasterContainer *m1 = (master) ? master->anon.get<MSO::MainMasterContainer>() : nullptr;
+        const MSO::SlideContainer *m2 = (master) ? master->anon.get<MSO::SlideContainer>() : nullptr;
         if (slide && slide->perSlideHFContainer) {
             hf = slide->perSlideHFContainer.data();
         } else if (m1 && m1->perSlideHeadersFootersContainer) {
@@ -586,7 +586,7 @@ private:
         if (f && f->rgFontCollectionEntry.size() > fontRef) {
             return &f->rgFontCollectionEntry[fontRef].fontEntityAtom;
         }
-        return 0;
+        return nullptr;
     }
 
     /**

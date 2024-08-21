@@ -63,7 +63,7 @@ public:
      *
      * @param context The context the KoTextLoader is called in
      */
-    explicit KoTextLoader(KoShapeLoadingContext &context, KoShape *shape = 0);
+    explicit KoTextLoader(KoShapeLoadingContext &context, KoShape *shape = nullptr);
 
     /**
      * Destructor.

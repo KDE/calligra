@@ -235,7 +235,7 @@ EnhancedPathParameter *EnhancedPathShape::parameter(const QString &text)
     if (parameterIt != m_parameters.constEnd()) {
         return parameterIt.value();
     } else {
-        EnhancedPathParameter *parameter = 0;
+        EnhancedPathParameter *parameter = nullptr;
         const char c = text[0].toLatin1();
         if (c == '$' || c == '?') {
             parameter = new EnhancedPathReferenceParameter(text, this);

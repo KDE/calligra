@@ -20,7 +20,7 @@ class KoStyleStack::KoStyleStackPrivate
 KoStyleStack::KoStyleStack()
     : m_styleNSURI(KoXmlNS::style)
     , m_foNSURI(KoXmlNS::fo)
-    , d(0)
+    , d(nullptr)
 {
     clear();
 }
@@ -28,7 +28,7 @@ KoStyleStack::KoStyleStack()
 KoStyleStack::KoStyleStack(const char *styleNSURI, const char *foNSURI)
     : m_styleNSURI(styleNSURI)
     , m_foNSURI(foNSURI)
-    , d(0)
+    , d(nullptr)
 {
     m_propertiesTagNames.append("properties");
     clear();
@@ -87,7 +87,7 @@ void KoStyleStack::push(const KoXmlElement &style)
 
 QString KoStyleStack::property(const QString &nsURI, const QString &name) const
 {
-    return property(nsURI, name, 0);
+    return property(nsURI, name, nullptr);
 }
 QString KoStyleStack::property(const QString &nsURI, const QString &name, const QString &detail) const
 {
@@ -122,7 +122,7 @@ inline QString KoStyleStack::property(const QString &nsURI, const QString &name,
 
 bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name) const
 {
-    return hasProperty(nsURI, name, 0);
+    return hasProperty(nsURI, name, nullptr);
 }
 
 bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name, const QString &detail) const
@@ -251,7 +251,7 @@ QString KoStyleStack::userStyleDisplayName(const QString &family) const
 void KoStyleStack::setTypeProperties(const char *typeProperties)
 {
     m_propertiesTagNames.clear();
-    m_propertiesTagNames.append(typeProperties == 0 || qstrlen(typeProperties) == 0 ? QString("properties") : (QString(typeProperties) + "-properties"));
+    m_propertiesTagNames.append(typeProperties == nullptr || qstrlen(typeProperties) == 0 ? QString("properties") : (QString(typeProperties) + "-properties"));
 }
 
 void KoStyleStack::setTypeProperties(const QList<QString> &typeProperties)

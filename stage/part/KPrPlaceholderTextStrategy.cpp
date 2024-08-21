@@ -35,7 +35,7 @@
 
 KPrPlaceholderTextStrategy::KPrPlaceholderTextStrategy(const QString &presentationClass)
     : KPrPlaceholderStrategy(presentationClass)
-    , m_textShape(0)
+    , m_textShape(nullptr)
 {
 }
 
@@ -169,5 +169,5 @@ void KPrPlaceholderTextStrategy::init(KoDocumentResourceManager *documentResourc
 
 KoShapeUserData *KPrPlaceholderTextStrategy::userData() const
 {
-    return m_textShape ? m_textShape->userData() : 0;
+    return m_textShape ? m_textShape->userData() : nullptr;
 }

@@ -157,7 +157,7 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     }
 
     KPrPage *prPage = static_cast<KPrPage *>(page);
-    if (prPage == 0) {
+    if (prPage == nullptr) {
         return;
     }
     KPrNotes *notes = prPage->pageNotes();
@@ -186,7 +186,7 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
 void KPrViewModeNotes::addShape(KoShape *shape)
 {
     KoShape *parent = shape;
-    KPrNotes *notes = 0;
+    KPrNotes *notes = nullptr;
     // similar to KoPADocument::pageByShape()
     while (!notes && (parent = parent->parent())) {
         notes = dynamic_cast<KPrNotes *>(parent);
@@ -204,7 +204,7 @@ void KPrViewModeNotes::addShape(KoShape *shape)
 void KPrViewModeNotes::removeShape(KoShape *shape)
 {
     KoShape *parent = shape;
-    KPrNotes *notes = 0;
+    KPrNotes *notes = nullptr;
     while (!notes && (parent = parent->parent())) {
         notes = dynamic_cast<KPrNotes *>(parent);
     }

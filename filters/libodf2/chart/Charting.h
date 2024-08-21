@@ -400,7 +400,7 @@ public:
         , m_y1(0)
         , m_x2(0)
         , m_y2(0)
-        , m_areaFormat(0)
+        , m_areaFormat(nullptr)
     {
     }
     virtual ~Obj()
@@ -631,7 +631,7 @@ public:
         , m_showDataLabelCategory(false)
         , m_showDataLabelSeries(false)
         , m_markerType(NoMarker)
-        , spPr(0)
+        , spPr(nullptr)
     {
     }
     ~Series() override
@@ -745,15 +745,15 @@ public:
         , m_topMargin(0)
         , m_rightMargin(0)
         , m_bottomMargin(0)
-        , m_impl(0)
-        , m_plotArea(0)
-        , m_legend(0)
+        , m_impl(nullptr)
+        , m_plotArea(nullptr)
+        , m_legend(nullptr)
         , m_transpose(false)
         , m_stacked(false)
         , m_f100(false)
         , m_style(2)
-        , m_fillGradient(0)
-        , m_plotAreaFillGradient(0)
+        , m_fillGradient(nullptr)
+        , m_plotAreaFillGradient(nullptr)
         , m_markerType(NoMarker)
         , m_showLines(false)
         , m_textSize(10)

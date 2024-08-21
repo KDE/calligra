@@ -110,11 +110,11 @@ private Q_SLOTS:
 private:
     struct FrameSets {
         FrameSets()
-            : oddHeaders(0)
-            , evenHeaders(0)
-            , oddFooters(0)
-            , evenFooters(0)
-            , pageBackground(0)
+            : oddHeaders(nullptr)
+            , evenHeaders(nullptr)
+            , oddFooters(nullptr)
+            , evenFooters(nullptr)
+            , pageBackground(nullptr)
         {
         }
         KWTextFrameSet *oddHeaders;

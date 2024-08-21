@@ -14,7 +14,7 @@
 static struct ArchReporter {
     ArchReporter()
     {
-        createOptimizedClass<KoReportCurrentArch>(0);
+        createOptimizedClass<KoReportCurrentArch>(nullptr);
     }
 } StaticReporter;
 

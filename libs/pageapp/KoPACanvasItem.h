@@ -27,11 +27,11 @@ public:
 
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
 
     QGraphicsObject *canvasItem() override

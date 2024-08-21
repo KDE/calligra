@@ -141,7 +141,7 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     if (resource.isValid()) {
         return resource.value<KoChangeTracker *>();
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -158,7 +158,7 @@ KoShapeController *KoTextDocument::shapeController() const
     if (resource.isValid()) {
         return resource.value<KoShapeController *>();
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -238,21 +238,21 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
 {
     QTextList *textList = block.textList();
     if (!textList)
-        return 0;
+        return nullptr;
     return list(textList);
 }
 
 KoList *KoTextDocument::list(QTextList *textList) const
 {
     if (!textList) {
-        return 0;
+        return nullptr;
     }
     // FIXME: this is horrible.
     foreach (KoList *l, lists()) {
         if (l->textLists().contains(textList))
             return l;
     }
-    return 0;
+    return nullptr;
 }
 
 KoList *KoTextDocument::list(KoListStyle::ListIdType listId) const
@@ -261,7 +261,7 @@ KoList *KoTextDocument::list(KoListStyle::ListIdType listId) const
         if (l->textListIds().contains(listId))
             return l;
     }
-    return 0;
+    return nullptr;
 }
 
 void KoTextDocument::clearText()

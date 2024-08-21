@@ -87,7 +87,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             // add new colorset to predefined colorsets
             if (!srv->addResource(cs)) {
                 delete cs;
-                cs = 0;
+                cs = nullptr;
             }
         }
         if (cs) {
@@ -133,7 +133,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     , d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
-    d->colorSet = 0;
+    d->colorSet = nullptr;
 
     d->firstShowOfContainer = true;
 
@@ -141,7 +141,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->setContentsMargins(4, 4, 4, 4);
     d->mainLayout->setSpacing(2);
 
-    d->colorSetContainer = 0;
+    d->colorSetContainer = nullptr;
 
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();

@@ -112,7 +112,7 @@ KUndo2Command *DragAndDropStrategy::createCommand()
     } else if (d->cell == Cell(selection()->activeSheet(), col, row)) {
         selection()->initialize(QPoint(col, row), selection()->activeSheet());
     }
-    return 0;
+    return nullptr;
 }
 
 bool DragAndDropStrategy::dragStarted() const

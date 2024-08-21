@@ -22,8 +22,8 @@ void TestDeleteSlidesCommand::delSlide()
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(p1 != 0);
-    QVERIFY(m1 != 0);
+    QVERIFY(p1 != nullptr);
+    QVERIFY(m1 != nullptr);
 
     KoPAPage *page2 = new KoPAPage(master1);
     doc.insertPage(page2, 0);

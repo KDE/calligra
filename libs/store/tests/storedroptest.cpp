@@ -39,7 +39,7 @@ private:
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
-    StoreDropTest *window = new StoreDropTest(0);
+    StoreDropTest *window = new StoreDropTest(nullptr);
     window->resize(500, 500);
     window->show();
 

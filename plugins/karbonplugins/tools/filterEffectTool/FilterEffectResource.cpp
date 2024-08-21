@@ -84,7 +84,7 @@ QString FilterEffectResource::defaultFileExtension() const
 FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffectStack *filterStack)
 {
     if (!filterStack)
-        return 0;
+        return nullptr;
 
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -98,7 +98,7 @@ FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffect
     FilterEffectResource *resource = new FilterEffectResource("");
     if (!resource->m_data.setContent(ba)) {
         delete resource;
-        return 0;
+        return nullptr;
     }
 
     return resource;
@@ -108,7 +108,7 @@ KoFilterEffectStack *FilterEffectResource::toFilterStack() const
 {
     KoFilterEffectStack *filterStack = new KoFilterEffectStack();
     if (!filterStack)
-        return 0;
+        return nullptr;
 
     QByteArray data = m_data.toByteArray();
     KoXmlDocument doc;
@@ -117,10 +117,10 @@ KoFilterEffectStack *FilterEffectResource::toFilterStack() const
 
     // only allow object bounding box units
     if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox")
-        return 0;
+        return nullptr;
 
     if (e.attribute("primitiveUnits") != "objectBoundingBox")
-        return 0;
+        return nullptr;
 
     // parse filter region rectangle
     QRectF filterRegion;

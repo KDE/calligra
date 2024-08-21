@@ -156,7 +156,7 @@ QWidget *DateVariable::createOptionsWidget()
         return new FixedDateFormat(this);
     default:;
     }
-    return 0;
+    return nullptr;
 }
 
 void DateVariable::setDefinition(const QString &definition)

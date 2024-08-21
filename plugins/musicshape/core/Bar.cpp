@@ -135,7 +135,7 @@ StaffElement *Bar::staffElement(Staff *staff, int index)
         }
     }
     Q_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 int Bar::indexOfStaffElement(StaffElement *element)

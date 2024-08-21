@@ -45,7 +45,7 @@ CellEditorWidget::CellEditorWidget(QWidget *parent)
 {
     setWindowTitle(i18n("Cell Editor"));
 
-    d->canvas = 0;
+    d->canvas = nullptr;
     d->canvasResetBugWorkaround = false;
 
     d->locationComboBox = new LocationComboBox(this);
@@ -77,7 +77,7 @@ CellEditorWidget::~CellEditorWidget() = default;
 
 void CellEditorWidget::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
 
     d->canvasResetBugWorkaround = !!d->canvas;
     if (d->toolProxy) {
@@ -99,9 +99,9 @@ void CellEditorWidget::unsetCanvas()
     if (d->toolProxy) {
         disconnect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorWidget::toolChanged);
     }
-    d->canvas = 0;
-    d->toolProxy = 0;
-    d->locationComboBox->setSelection(0);
+    d->canvas = nullptr;
+    d->toolProxy = nullptr;
+    d->locationComboBox->setSelection(nullptr);
 }
 
 void CellEditorWidget::toolChanged(const QString &toolId)

@@ -26,7 +26,7 @@ class SimpleCanvas : public KoCanvasBase
 {
 public:
     SimpleCanvas()
-        : KoCanvasBase(0)
+        : KoCanvasBase(nullptr)
         , m_shapeManager(new KoShapeManager(this))
     {
     }
@@ -64,22 +64,22 @@ public:
 
     KoToolProxy *toolProxy() const override
     {
-        return 0;
+        return nullptr;
     }
 
     KoViewConverter *viewConverter() const override
     {
-        return 0;
+        return nullptr;
     }
 
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
 
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
 
     KoUnit unit() const override

@@ -9,7 +9,7 @@
 
 KoTextCommandBase::KoTextCommandBase(KUndo2Command *parent)
     : KUndo2Command(parent)
-    , m_tool(0)
+    , m_tool(nullptr)
 {
 }
 

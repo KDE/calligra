@@ -150,7 +150,7 @@ public:
             // parent hack to keep it clickable
             tabButton->setParent(q);
             tabButton->show();
-            lockButton->setParent(0);
+            lockButton->setParent(nullptr);
             lockButton->setParent(q);
             lockButton->show();
         } else {
@@ -159,12 +159,12 @@ public:
             lockButton->setIcon(lockIcon);
             tabButton->setVisible(false);
             // parent hack to keep it clickable
-            tabButton->setParent(0);
-            lockButton->setParent(0);
+            tabButton->setParent(nullptr);
+            lockButton->setParent(nullptr);
             lockButton->setParent(q);
             lockButton->show();
         }
-        q->resizeEvent(0);
+        q->resizeEvent(nullptr);
     }
     void toggleTab()
     {

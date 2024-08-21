@@ -46,17 +46,17 @@ class KarbonFilterEffectsTool::Private
 {
 public:
     Private()
-        : filterSelector(0)
-        , configSelector(0)
-        , configStack(0)
-        , posX(0)
-        , posY(0)
-        , posW(0)
-        , posH(0)
-        , clearButton(0)
-        , currentEffect(0)
-        , currentPanel(0)
-        , currentShape(0)
+        : filterSelector(nullptr)
+        , configSelector(nullptr)
+        , configStack(nullptr)
+        , posX(nullptr)
+        , posY(nullptr)
+        , posW(nullptr)
+        , posH(nullptr)
+        , clearButton(nullptr)
+        , currentEffect(nullptr)
+        , currentPanel(nullptr)
+        , currentShape(nullptr)
     {
     }
 
@@ -69,7 +69,7 @@ public:
         clearButton->setEnabled(false);
 
         if (!shape || !shape->filterEffectStack()) {
-            addWidgetForEffect(0, tool);
+            addWidgetForEffect(nullptr, tool);
             return;
         }
 
@@ -86,7 +86,7 @@ public:
         KoFilterEffect *effect = index > 0 ? shape->filterEffectStack()->filterEffects().first() : 0;
 
         addWidgetForEffect(effect, tool);
-        clearButton->setEnabled(shape->filterEffectStack() != 0);
+        clearButton->setEnabled(shape->filterEffectStack() != nullptr);
     }
 
     void addWidgetForEffect(KoFilterEffect *filterEffect, KarbonFilterEffectsTool *tool)
@@ -98,8 +98,8 @@ public:
         }
 
         if (!filterEffect) {
-            currentEffect = 0;
-            currentPanel = 0;
+            currentEffect = nullptr;
+            currentPanel = nullptr;
         } else if (!currentEffect || currentEffect->id() != filterEffect->id()) {
             // when a effect is set and is differs from the previous one
             // get the config widget and insert it into the option widget
@@ -133,19 +133,19 @@ public:
         posX->blockSignals(true);
         posX->setValue(100.0 * region.x());
         posX->blockSignals(false);
-        posX->setEnabled(currentEffect != 0);
+        posX->setEnabled(currentEffect != nullptr);
         posY->blockSignals(true);
         posY->setValue(100.0 * region.y());
         posY->blockSignals(false);
-        posY->setEnabled(currentEffect != 0);
+        posY->setEnabled(currentEffect != nullptr);
         posW->blockSignals(true);
         posW->setValue(100.0 * region.width());
         posW->blockSignals(false);
-        posW->setEnabled(currentEffect != 0);
+        posW->setEnabled(currentEffect != nullptr);
         posH->blockSignals(true);
         posH->setValue(100.0 * region.height());
         posH->blockSignals(false);
-        posH->setEnabled(currentEffect != 0);
+        posH->setEnabled(currentEffect != nullptr);
     }
 
     EditMode editModeFromMousePosition(const QPointF &mousePosition, KarbonFilterEffectsTool *tool)
@@ -156,7 +156,7 @@ public:
             // get the filter rectangle in shape coordinates
             QRectF filterRect = currentEffect->filterRectForBoundingRect(sizeRect);
             // get the transformation from document to shape coordinates
-            QTransform transform = currentShape->absoluteTransformation(0).inverted();
+            QTransform transform = currentShape->absoluteTransformation(nullptr).inverted();
             // adjust filter rectangle by grab sensitivity
             const int grabDistance = tool->grabSensitivity();
             QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabDistance, grabDistance));
@@ -292,7 +292,7 @@ KoInteractionStrategy *KarbonFilterEffectsTool::createStrategy(KoPointerEvent *e
 {
     EditMode mode = d->editModeFromMousePosition(event->point, this);
     if (mode == None)
-        return 0;
+        return nullptr;
 
     return new FilterRegionEditStrategy(this, d->currentShape, d->currentEffect, mode);
 }
@@ -319,7 +319,7 @@ void KarbonFilterEffectsTool::editFilter()
     QPointer<QDialog> dlg = new QDialog();
     dlg->setWindowTitle(i18n("Filter Effect Editor"));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    QWidget *mainWidget = new QWidget(0);
+    QWidget *mainWidget = new QWidget(nullptr);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
@@ -343,7 +343,7 @@ void KarbonFilterEffectsTool::clearFilter()
     if (!d->currentShape->filterEffectStack())
         return;
 
-    canvas()->addCommand(new FilterStackSetCommand(0, d->currentShape));
+    canvas()->addCommand(new FilterStackSetCommand(nullptr, d->currentShape));
 
     d->fillConfigSelector(d->currentShape, this);
 }
@@ -361,7 +361,7 @@ void KarbonFilterEffectsTool::filterSelected(int index)
     if (!d->currentShape || !d->currentShape->filterEffectStack())
         return;
 
-    KoFilterEffect *effect = 0;
+    KoFilterEffect *effect = nullptr;
     QList<KoFilterEffect *> filterEffects = d->currentShape->filterEffectStack()->filterEffects();
     if (index >= 0 && index < filterEffects.count()) {
         effect = filterEffects[index];

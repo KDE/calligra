@@ -68,7 +68,7 @@ KPrPageEffectFactory::~KPrPageEffectFactory()
 
 KPrPageEffect *KPrPageEffectFactory::createPageEffect(const Properties &properties) const
 {
-    KPrPageEffectStrategy *strategy = 0;
+    KPrPageEffectStrategy *strategy = nullptr;
 
     EffectStrategies::iterator it(d->strategies.find(properties.subType));
 
@@ -82,8 +82,8 @@ KPrPageEffect *KPrPageEffectFactory::createPageEffect(const Properties &properti
 
 KPrPageEffect *KPrPageEffectFactory::createPageEffect(const KoXmlElement &element) const
 {
-    KPrPageEffectStrategy *strategy = 0;
-    KPrPageEffect *pageEffect = 0;
+    KPrPageEffectStrategy *strategy = nullptr;
+    KPrPageEffect *pageEffect = nullptr;
 
     if (element.hasAttributeNS(KoXmlNS::smil, "subtype")) {
         QString smilSubType(element.attributeNS(KoXmlNS::smil, "subtype"));

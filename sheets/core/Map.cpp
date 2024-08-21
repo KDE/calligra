@@ -93,7 +93,7 @@ Map::Map(DocBase *doc, int syntaxVersion)
     d->tableId = 1;
     d->overallRowCount = 0;
     d->loadedRowsCounter = 0;
-    d->loadingInfo = 0;
+    d->loadingInfo = nullptr;
     d->readwrite = true;
 
     d->bindingManager = new BindingManager(this);
@@ -287,7 +287,7 @@ LoadingInfo *Map::loadingInfo() const
 void Map::deleteLoadingInfo()
 {
     delete d->loadingInfo;
-    d->loadingInfo = 0;
+    d->loadingInfo = nullptr;
 }
 
 void Map::handleDamages(const QList<Damage *> &damages)
@@ -351,6 +351,6 @@ void Map::addCommand(KUndo2Command *command)
 KoDocumentResourceManager *Map::resourceManager() const
 {
     if (!doc())
-        return 0;
+        return nullptr;
     return doc()->resourceManager();
 }

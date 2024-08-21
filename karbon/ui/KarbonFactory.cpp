@@ -27,7 +27,7 @@
 
 #include <KIconLoader>
 
-KoComponentData *KarbonFactory::s_global = 0;
+KoComponentData *KarbonFactory::s_global = nullptr;
 
 KarbonFactory::KarbonFactory()
     : KPluginFactory()

@@ -13,7 +13,7 @@ RC4Decryption::RC4Decryption(const QByteArray &salt, const QByteArray &encrypted
     : m_salt(salt)
     , m_encryptedVerifier(encryptedVerifier)
     , m_encryptedVerifierHash(encryptedVerifierHash)
-    , m_rc4(0)
+    , m_rc4(nullptr)
 {
 }
 

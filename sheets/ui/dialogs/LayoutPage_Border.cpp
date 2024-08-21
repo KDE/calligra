@@ -204,8 +204,8 @@ LayoutPageBorder::LayoutPageBorder(QWidget *parent)
 void LayoutPageBorder::InitializeGrids()
 {
     QGridLayout *grid = new QGridLayout(this);
-    QGridLayout *grid2 = 0;
-    QGroupBox *tmpQGroupBox = 0;
+    QGridLayout *grid2 = nullptr;
+    QGroupBox *tmpQGroupBox = nullptr;
 
     /***********************/
     /* here is the data to initialize all the border buttons with */

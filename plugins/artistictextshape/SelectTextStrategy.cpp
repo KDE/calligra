@@ -10,7 +10,7 @@
 
 SelectTextStrategy::SelectTextStrategy(ArtisticTextTool *textTool, int cursor)
     : KoInteractionStrategy(textTool)
-    , m_selection(0)
+    , m_selection(nullptr)
     , m_oldCursor(cursor)
     , m_newCursor(cursor)
 {
@@ -35,7 +35,7 @@ void SelectTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keybo
 
 KUndo2Command *SelectTextStrategy::createCommand()
 {
-    return 0;
+    return nullptr;
 }
 
 void SelectTextStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)

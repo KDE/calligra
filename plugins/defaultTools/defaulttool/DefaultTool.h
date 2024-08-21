@@ -72,7 +72,7 @@ public:
      *   is inside the selection rectangle and false if it is just outside.
      *   The value of innerHandleMeaning is undefined if the handle location is NoHandle
      */
-    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = nullptr);
 
 public Q_SLOTS:
     /// Activate the tool and paint selection handles

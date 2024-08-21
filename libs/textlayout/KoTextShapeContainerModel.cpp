@@ -19,9 +19,9 @@
 #include <TextLayoutDebug.h>
 
 struct Relation {
-    Relation(KoShape *shape = 0)
+    Relation(KoShape *shape = nullptr)
         : child(shape)
-        , anchor(0)
+        , anchor(nullptr)
         , nested(false)
         , inheritsTransform(false)
     {
@@ -56,7 +56,7 @@ void KoTextShapeContainerModel::add(KoShape *child)
     Relation relation(child);
     d->children.insert(child, relation);
 
-    KoShapeAnchor *toBeAddedAnchor = 0;
+    KoShapeAnchor *toBeAddedAnchor = nullptr;
     foreach (KoShapeAnchor *anchor, d->shapeRemovedAnchors) {
         if (child == anchor->shape()) {
             toBeAddedAnchor = anchor;
@@ -147,7 +147,7 @@ void KoTextShapeContainerModel::addAnchor(KoShapeAnchor *anchor)
 void KoTextShapeContainerModel::removeAnchor(KoShapeAnchor *anchor)
 {
     if (d->children.contains(anchor->shape())) {
-        d->children[anchor->shape()].anchor = 0;
+        d->children[anchor->shape()].anchor = nullptr;
         d->shapeRemovedAnchors.removeAll(anchor);
     }
 }
@@ -157,13 +157,13 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     if (!d->children.contains(child))
         return;
     Relation relation = d->children.value(child);
-    if (relation.anchor == 0)
+    if (relation.anchor == nullptr)
         return;
 
     QPointF newPosition = child->position() + move /* + relation.anchor->offset()*/;
     // warnTextLayout <<"proposeMove:" /*<< move <<" |"*/ << newPosition <<" |" << parentShapeRect;
 
-    QTextLayout *layout = 0;
+    QTextLayout *layout = nullptr;
     int anchorPosInParag = -1;
 
     if (relation.anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
@@ -181,7 +181,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 
         // the rest of the code uses the shape baseline, at this time the bottom. So adjust
         newPosition.setY(newPosition.y() + child->size().height());
-        if (layout == 0) {
+        if (layout == nullptr) {
             QTextBlock block = document->findBlock(posInDocument);
             layout = block.layout();
             anchorPosInParag = posInDocument - block.position();
@@ -213,7 +213,7 @@ bool KoTextShapeContainerModel::isChildLocked(const KoShape *child) const
 
 void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
 {
-    if (child == 0) {
+    if (child == nullptr) {
         return;
     }
     KoTextShapeData *data = qobject_cast<KoTextShapeData *>(child->parent()->userData());

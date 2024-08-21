@@ -41,7 +41,7 @@ StylesComboPreview::StylesComboPreview(QWidget *parent)
     : QLineEdit(parent)
     , m_renamingNewStyle(false)
     , m_shouldAddNewStyle(false)
-    , m_addButton(0)
+    , m_addButton(nullptr)
 {
     init();
 }
@@ -49,7 +49,7 @@ StylesComboPreview::StylesComboPreview(QWidget *parent)
 StylesComboPreview::~StylesComboPreview()
 {
     delete m_addButton;
-    m_addButton = 0;
+    m_addButton = nullptr;
 }
 
 void StylesComboPreview::init()
@@ -99,7 +99,7 @@ void StylesComboPreview::setPreview(const QImage &image)
 
 bool StylesComboPreview::isAddButtonShown() const
 {
-    return m_addButton != 0;
+    return m_addButton != nullptr;
 }
 
 void StylesComboPreview::resizeEvent(QResizeEvent *ev)

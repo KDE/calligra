@@ -110,7 +110,7 @@ public:
     virtual void clear()
     {
         delete m_root;
-        m_root = createLeafNode(m_capacity + 1, 0, 0);
+        m_root = createLeafNode(m_capacity + 1, 0, nullptr);
         m_leafMap.clear();
     }
 
@@ -188,7 +188,7 @@ protected:
         virtual void clear();
         virtual bool isRoot() const
         {
-            return m_parent == 0;
+            return m_parent == nullptr;
         }
         virtual bool isLeaf() const
         {
@@ -341,7 +341,7 @@ template<typename T>
 KoRTree<T>::KoRTree(int capacity, int minimum)
     : m_capacity(capacity)
     , m_minimum(minimum)
-    , m_root(createLeafNode(m_capacity + 1, 0, 0))
+    , m_root(createLeafNode(m_capacity + 1, 0, nullptr))
 {
     if (minimum > capacity / 2)
         qFatal("KoRTree::KoRTree minimum can be maximal capacity/2");
@@ -386,7 +386,7 @@ void KoRTree<T>::insertHelper(const QRectF &bb, const T &data, int id)
     if (leaf->childCount() < m_capacity) {
         leaf->insert(nbb, data, id);
         m_leafMap[data] = leaf;
-        adjustTree(leaf, 0);
+        adjustTree(leaf, nullptr);
     } else {
         leaf->insert(nbb, data, id);
         m_leafMap[data] = leaf;
@@ -428,7 +428,7 @@ void KoRTree<T>::remove(const T &data)
 {
     // qDebug() << "KoRTree remove";
     LeafNode *leaf = m_leafMap[data];
-    if (leaf == 0) {
+    if (leaf == nullptr) {
         qWarning() << "KoRTree<T>::remove( const T&data) data not found";
         return;
     }
@@ -644,7 +644,7 @@ void KoRTree<T>::adjustTree(Node *node1, Node *node2)
     if (node1->isRoot()) {
         // qDebug() << "  root";
         if (node2) {
-            NonLeafNode *newRoot = createNonLeafNode(m_capacity + 1, node1->level() + 1, 0);
+            NonLeafNode *newRoot = createNonLeafNode(m_capacity + 1, node1->level() + 1, nullptr);
             newRoot->insert(node1->boundingBox(), node1);
             newRoot->insert(node2->boundingBox(), node2);
             m_root = newRoot;
@@ -663,12 +663,12 @@ void KoRTree<T>::adjustTree(Node *node1, Node *node2)
 
         if (!node2) {
             // qDebug() << "  update";
-            adjustTree(parent, 0);
+            adjustTree(parent, nullptr);
         } else {
             if (parent->childCount() < m_capacity) {
                 // qDebug() << "  no split needed";
                 parent->insert(node2->boundingBox(), node2);
-                adjustTree(parent, 0);
+                adjustTree(parent, nullptr);
             } else {
                 // qDebug() << "  split again";
                 parent->insert(node2->boundingBox(), node2);
@@ -708,7 +708,7 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node *> &reinsert)
                 m_root->clear();
                 delete m_root;
                 m_root = kid;
-                m_root->setParent(0);
+                m_root->setParent(nullptr);
                 // qDebug() << " new root" << m_root;
             } else {
                 qFatal("KoRTree::condenseTree cast to NonLeafNode failed");
@@ -1020,7 +1020,7 @@ typename KoRTree<T>::NonLeafNode *KoRTree<T>::LeafNode::chooseNode(const QRectF 
     Q_UNUSED(bb);
     Q_UNUSED(level);
     qFatal("LeafNode::chooseNode called. This should not happen!");
-    return 0;
+    return nullptr;
 }
 
 template<typename T>

@@ -71,7 +71,7 @@ public:
     QString localizedName() const;
     QString helpText() const;
     void setHelpText(const QString &text);
-    Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = 0);
+    Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = nullptr);
 
     QString alternateName() const;
     void setAlternateName(const QString &name);
@@ -95,7 +95,7 @@ public:
     ValueCalc *m_calc;
     FuncExtra *m_extra;
 
-    FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra = 0);
+    FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra = nullptr);
     Value exec();
     Value exec(const valVector &args);
 };

@@ -100,13 +100,13 @@ QString KPrViewAdaptor::pageNotes(int page, const QString &format) const
     QList<KoPAPageBase *> slideShow = doc->slideShow();
     if (page >= 0 && page < slideShow.size()) {
         KPrPage *prPage = dynamic_cast<KPrPage *>(slideShow[page]);
-        Q_ASSERT(0 != prPage);
-        if (0 != prPage) {
+        Q_ASSERT(nullptr != prPage);
+        if (nullptr != prPage) {
             KPrNotes *pageNotes = prPage->pageNotes();
             KoShape *textShape = pageNotes->textShape();
             KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData *>(textShape->userData());
-            Q_ASSERT(0 != textShapeData);
-            if (0 != textShapeData) {
+            Q_ASSERT(nullptr != textShapeData);
+            if (nullptr != textShapeData) {
                 if (format == "plain") {
                     return textShapeData->document()->toPlainText();
                 } else if (format == "html") {

@@ -86,7 +86,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory *csf)
                 KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get(csf->colorSpaceEngine());
                 Q_ASSERT(engine);
                 NodeKey engineKey(engine->id(), engine->id(), engine->id());
-                Node *engineNode = 0;
+                Node *engineNode = nullptr;
                 QHash<NodeKey, Node *>::ConstIterator it = d->graph.constFind(engineKey);
                 if (it != d->graph.constEnd()) {
                     engineNode = it.value();
@@ -173,10 +173,10 @@ KoColorConversionSystem::Node *KoColorConversionSystem::createNode(const QString
     n->depthId = _depthId;
     n->profileName = _profileName;
     d->graph.insert(NodeKey(_modelId, _depthId, _profileName), n);
-    Q_ASSERT(vertexBetween(d->alphaNode, n) == 0); // The two color spaces should not be connected yet
+    Q_ASSERT(vertexBetween(d->alphaNode, n) == nullptr); // The two color spaces should not be connected yet
     Vertex *vFromAlpha = createVertex(d->alphaNode, n);
     vFromAlpha->setFactoryFromSrc(new KoColorConversionFromAlphaTransformationFactory(_modelId, _depthId, _profileName));
-    Q_ASSERT(vertexBetween(n, d->alphaNode) == 0); // The two color spaces should not be connected yet
+    Q_ASSERT(vertexBetween(n, d->alphaNode) == nullptr); // The two color spaces should not be connected yet
     Vertex *vToAlpha = createVertex(n, d->alphaNode);
     vToAlpha->setFactoryFromDst(new KoColorConversionToAlphaTransformationFactory(_modelId, _depthId, _profileName));
     return n;
@@ -345,7 +345,7 @@ KoColorConversionSystem::Vertex *KoColorConversionSystem::vertexBetween(KoColorC
             return oV;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KoColorConversionSystem::Vertex *KoColorConversionSystem::createVertex(Node *srcNode, Node *dstNode)
@@ -417,8 +417,8 @@ bool KoColorConversionSystem::existsGoodPath(const QString &srcModelId,
 
 QString KoColorConversionSystem::bestPathToDot(const QString &srcKey, const QString &dstKey) const
 {
-    const Node *srcNode = 0;
-    const Node *dstNode = 0;
+    const Node *srcNode = nullptr;
+    const Node *dstNode = nullptr;
     foreach (Node *node, d->graph) {
         if (node->id() == srcKey) {
             srcNode = node;

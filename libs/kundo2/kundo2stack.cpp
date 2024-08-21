@@ -119,12 +119,12 @@
 */
 
 KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent)
-    : m_hasParent(parent != 0)
+    : m_hasParent(parent != nullptr)
     , m_timedID(0)
     , m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
-    if (parent != 0) {
+    if (parent != nullptr) {
         parent->d->child_list.append(this);
     }
     setText(text);
@@ -142,11 +142,11 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
 */
 
 KUndo2Command::KUndo2Command(KUndo2Command *parent)
-    : m_hasParent(parent != 0)
+    : m_hasParent(parent != nullptr)
     , m_timedID(0)
 {
     d = new KUndo2CommandPrivate;
-    if (parent != 0)
+    if (parent != nullptr)
         parent->d->child_list.append(this);
     setTime();
 }
@@ -315,7 +315,7 @@ int KUndo2Command::childCount() const
 const KUndo2Command *KUndo2Command::child(int index) const
 {
     if (index < 0 || index >= d->child_list.count())
-        return 0;
+        return nullptr;
     return d->child_list.at(index);
 }
 
@@ -610,7 +610,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     : QObject(parent)
     , m_index(0)
     , m_clean_index(0)
-    , m_group(0)
+    , m_group(nullptr)
     , m_undo_limit(0)
     , m_useCumulativeUndoRedo(false)
     , m_lastMergedSetCount(0)
@@ -635,7 +635,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
 KUndo2QStack::~KUndo2QStack()
 {
 #ifndef QT_NO_UNDOGROUP
-    if (m_group != 0)
+    if (m_group != nullptr)
         m_group->removeStack(this);
 #endif
     clear();
@@ -711,7 +711,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
 
     bool macro = !m_macro_stack.isEmpty();
 
-    KUndo2Command *cur = 0;
+    KUndo2Command *cur = nullptr;
     if (macro) {
         KUndo2Command *macro_cmd = m_macro_stack.last();
         if (!macro_cmd->d->child_list.isEmpty())
@@ -725,7 +725,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
             m_clean_index = -1; // we've deleted the clean state
     }
 
-    bool try_merge = cur != 0 && cur->id() != -1 && cur->id() == cmd->id() && (macro || m_index != m_clean_index);
+    bool try_merge = cur != nullptr && cur->id() != -1 && cur->id() == cmd->id() && (macro || m_index != m_clean_index);
 
     /*!
      *Here we are going to try to merge several commands together using the QVector field in the commands using
@@ -801,7 +801,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
     }
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
-        cmd = 0;
+        cmd = nullptr;
         if (!macro) {
             Q_EMIT indexChanged(m_index);
             Q_EMIT canUndoChanged(canUndo());
@@ -1198,7 +1198,7 @@ void KUndo2QStack::endMacro()
 const KUndo2Command *KUndo2QStack::command(int index) const
 {
     if (index < 0 || index >= m_command_list.count())
-        return 0;
+        return nullptr;
     return m_command_list.at(index);
 }
 
@@ -1270,11 +1270,11 @@ void KUndo2QStack::setActive(bool active)
 #ifdef QT_NO_UNDOGROUP
     Q_UNUSED(active);
 #else
-    if (m_group != 0) {
+    if (m_group != nullptr) {
         if (active)
             m_group->setActiveStack(this);
         else if (m_group->activeStack() == this)
-            m_group->setActiveStack(0);
+            m_group->setActiveStack(nullptr);
     }
 #endif
 }
@@ -1284,7 +1284,7 @@ bool KUndo2QStack::isActive() const
 #ifdef QT_NO_UNDOGROUP
     return true;
 #else
-    return m_group == 0 || m_group->activeStack() == this;
+    return m_group == nullptr || m_group->activeStack() == this;
 #endif
 }
 void KUndo2QStack::setUseCumulativeUndoRedo(bool value)

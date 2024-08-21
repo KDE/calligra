@@ -167,7 +167,7 @@ void KoTosContainer::saveText(KoShapeSavingContext &context) const
 void KoTosContainer::setPlainText(const QString &text)
 {
     KoShape *textShape = this->textShape();
-    if (textShape == 0) {
+    if (textShape == nullptr) {
         warnFlake << "No text shape present in KoTosContainer";
         return;
     }
@@ -199,7 +199,7 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
     Q_D(KoTosContainer);
 
     KoShape *textShape = this->textShape();
-    if (textShape == 0) {
+    if (textShape == nullptr) {
         warnFlake << "No text shape present in KoTosContainer";
         return;
     }
@@ -223,7 +223,7 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
 Qt::Alignment KoTosContainer::textAlignment() const
 {
     KoShape *textShape = this->textShape();
-    if (textShape == 0) {
+    if (textShape == nullptr) {
         warnFlake << "No text shape present in KoTosContainer";
         return Qt::AlignTop;
     }
@@ -264,7 +264,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
 {
     if (!documentResources) {
         warnFlake << "KoDocumentResourceManager not found";
-        return 0;
+        return nullptr;
     }
 
     Q_D(KoTosContainer);
@@ -276,7 +276,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
 
     QSet<KoShape *> delegates;
     delegates << this;
-    KoShape *textShape = 0;
+    KoShape *textShape = nullptr;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get("TextShapeID");
     if (factory) { // not installed, that's too bad, but allowed
         textShape = factory->createDefaultShape(documentResources);
@@ -317,7 +317,7 @@ void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
     Q_D(KoTosContainer);
-    if (d->model == 0) {
+    if (d->model == nullptr) {
         return;
     }
 

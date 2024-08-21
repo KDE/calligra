@@ -17,9 +17,9 @@
 
 BibliographyPreview::BibliographyPreview(QWidget *parent)
     : QFrame(parent)
-    , m_textShape(0)
-    , m_pm(0)
-    , m_styleManager(0)
+    , m_textShape(nullptr)
+    , m_pm(nullptr)
+    , m_styleManager(nullptr)
     , m_previewPixSize(QSize(0, 0))
 {
 }
@@ -30,7 +30,7 @@ BibliographyPreview::~BibliographyPreview()
 
     if (m_pm) {
         delete m_pm;
-        m_pm = 0;
+        m_pm = nullptr;
     }
 }
 
@@ -114,7 +114,7 @@ void BibliographyPreview::finishedPreviewLayout()
 {
     if (m_pm) {
         delete m_pm;
-        m_pm = 0;
+        m_pm = nullptr;
     }
 
     if (m_previewPixSize.isEmpty()) {
@@ -154,7 +154,7 @@ void BibliographyPreview::deleteTextShape()
             lay->setBlockLayout(true);
         }
         delete m_textShape;
-        m_textShape = 0;
+        m_textShape = nullptr;
     }
 }
 

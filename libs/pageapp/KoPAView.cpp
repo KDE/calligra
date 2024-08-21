@@ -86,8 +86,8 @@ class Q_DECL_HIDDEN KoPAView::Private
 public:
     Private(KoPADocument *document)
         : doc(document)
-        , canvas(0)
-        , activePage(0)
+        , canvas(nullptr)
+        , activePage(nullptr)
     {
     }
 
@@ -337,9 +337,9 @@ void KoPAView::initGUI(KoPAFlags flags)
 
 void KoPAView::initActions()
 {
-    QAction *action = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", 0, 0);
+    QAction *action = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", nullptr, nullptr);
     d->cutController = new KoCutController(kopaCanvas(), action);
-    action = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", nullptr, nullptr);
     d->copyController = new KoCopyController(kopaCanvas(), action);
     d->editPaste = actionCollection()->addAction(KStandardAction::Paste, "edit_paste", proxyObject, SLOT(editPaste()));
     connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &KoPAView::clipboardDataChanged);
@@ -531,7 +531,7 @@ void KoPAView::importDocument()
     if (dialog->exec() == QDialog::Accepted) {
         QUrl url(dialog->selectedUrls().first());
         QString tmpFile;
-        if (KIO::NetAccess::download(url, tmpFile, 0)) {
+        if (KIO::NetAccess::download(url, tmpFile, nullptr)) {
             QFile file(tmpFile);
             file.open(QIODevice::ReadOnly);
             QByteArray ba;
@@ -542,10 +542,10 @@ void KoPAView::importDocument()
             data.setData(KoOdf::mimeType(d->doc->documentType()), ba);
             KoPAPastePage paste(d->doc, d->activePage);
             if (!paste.paste(d->doc->documentType(), &data)) {
-                KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
+                KMessageBox::error(nullptr, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
             }
         } else {
-            KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
+            KMessageBox::error(nullptr, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
         }
     }
     delete dialog;
@@ -907,7 +907,7 @@ void KoPAView::setShowRulers(bool show)
 
 void KoPAView::insertPage()
 {
-    KoPAPageBase *page = 0;
+    KoPAPageBase *page = nullptr;
     if (viewMode()->masterMode()) {
         KoPAMasterPage *masterPage = d->doc->newMasterPage();
         masterPage->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::white)));
@@ -1004,7 +1004,7 @@ bool KoPAView::exportPageThumbnail(KoPAPageBase *page, const QUrl &url, const QS
             fileUrl.setScheme("file");
         }
         const bool bLocalFile = fileUrl.isLocalFile();
-        QTemporaryFile *tmpFile = bLocalFile ? 0 : new QTemporaryFile();
+        QTemporaryFile *tmpFile = bLocalFile ? nullptr : new QTemporaryFile();
         if (bLocalFile || tmpFile->open()) {
             QFile file(bLocalFile ? fileUrl.path() : tmpFile->fileName());
             if (file.open(QIODevice::ReadWrite)) {
@@ -1073,19 +1073,19 @@ void KoPAView::goToLastPage()
 
 void KoPAView::findDocumentSetNext(QTextDocument *document)
 {
-    KoPAPageBase *page = 0;
-    KoShape *startShape = 0;
+    KoPAPageBase *page = nullptr;
+    KoShape *startShape = nullptr;
     KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-    if (lay != 0) {
+    if (lay != nullptr) {
         startShape = lay->shapes().value(0);
         Q_ASSERT(startShape->shapeId() == "TextShapeID");
         page = d->doc->pageByShape(startShape);
         if (d->doc->pageIndex(page) == -1) {
-            page = 0;
+            page = nullptr;
         }
     }
 
-    if (page == 0) {
+    if (page == nullptr) {
         page = d->activePage;
         startShape = page;
     }
@@ -1096,7 +1096,7 @@ void KoPAView::findDocumentSetNext(QTextDocument *document)
         // find next text shape
         shape = KoShapeTraversal::nextShape(shape, "TextShapeID");
         // get next text shape
-        if (shape != 0) {
+        if (shape != nullptr) {
             if (page != d->activePage) {
                 setActivePage(page);
                 d->canvas->update();
@@ -1123,20 +1123,20 @@ void KoPAView::findDocumentSetNext(QTextDocument *document)
 
 void KoPAView::findDocumentSetPrevious(QTextDocument *document)
 {
-    KoPAPageBase *page = 0;
-    KoShape *startShape = 0;
+    KoPAPageBase *page = nullptr;
+    KoShape *startShape = nullptr;
     KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-    if (lay != 0) {
+    if (lay != nullptr) {
         startShape = lay->shapes().value(0);
         Q_ASSERT(startShape->shapeId() == "TextShapeID");
         page = d->doc->pageByShape(startShape);
         if (d->doc->pageIndex(page) == -1) {
-            page = 0;
+            page = nullptr;
         }
     }
 
     bool check = false;
-    if (page == 0) {
+    if (page == nullptr) {
         page = d->activePage;
         startShape = KoShapeTraversal::last(page);
         check = true;
@@ -1149,7 +1149,7 @@ void KoPAView::findDocumentSetPrevious(QTextDocument *document)
             shape = KoShapeTraversal::previousShape(shape, "TextShapeID");
         }
         // get next text shape
-        if (shape != 0) {
+        if (shape != nullptr) {
             if (page != d->activePage) {
                 setActivePage(page);
                 d->canvas->update();

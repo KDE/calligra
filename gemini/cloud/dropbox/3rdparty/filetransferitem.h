@@ -41,7 +41,7 @@ public:
         Is_CancelledRolse
     };
 
-    explicit FileTransferItem(QString filename, QString sizestr, QString dropbox_path, bool is_download, QObject *parent = 0)
+    explicit FileTransferItem(QString filename, QString sizestr, QString dropbox_path, bool is_download, QObject *parent = nullptr)
         : ListItem(parent)
         , m_filename(filename)
         , m_dropbox_path(dropbox_path)
@@ -55,7 +55,7 @@ public:
         , m_size(sizestr)
     {
     }
-    FileTransferItem(QObject *parent = 0)
+    FileTransferItem(QObject *parent = nullptr)
         : ListItem(parent)
     {
     }

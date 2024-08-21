@@ -40,7 +40,7 @@ public:
     {
         foreach (QPointer<QWidget> optionWidget, optionWidgets) {
             if (optionWidget) {
-                optionWidget->setParent(0);
+                optionWidget->setParent(nullptr);
                 delete optionWidget;
             }
         }

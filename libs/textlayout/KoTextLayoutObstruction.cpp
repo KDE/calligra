@@ -63,7 +63,7 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(const QRectF &rect, bool rtl)
     : m_side(None)
     , m_polygon(QPolygonF())
     , m_line(QRectF())
-    , m_shape(0)
+    , m_shape(nullptr)
     , m_runAroundThreshold(0)
 {
     qreal borderHalfWidth = 0;
@@ -119,7 +119,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
     }
 
     if (shape->shadow() && shape->shadow()->isVisible()) {
-        QTransform transform = shape->absoluteTransformation(0);
+        QTransform transform = shape->absoluteTransformation(nullptr);
         bb = transform.mapRect(bb);
         KoInsets insets;
         shape->shadow()->insets(insets);

@@ -98,8 +98,8 @@ void LabeledWidget::clearLineEdit()
 
 ReferencesTool::ReferencesTool(KoCanvasBase *canvas)
     : TextTool(canvas)
-    , m_configure(0)
-    , m_stocw(0)
+    , m_configure(nullptr)
+    , m_stocw(nullptr)
     , m_canvas(canvas)
 {
     createActions();
@@ -111,7 +111,7 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    QWidgetAction *wAction = 0;
+    QWidgetAction *wAction = nullptr;
 
     QAction *action = new QAction(i18n("Insert"), this);
     addAction("insert_tableofcontents", action);
@@ -211,13 +211,13 @@ void ReferencesTool::deactivate()
 QList<QPointer<QWidget>> ReferencesTool::createOptionWidgets()
 {
     QList<QPointer<QWidget>> widgets;
-    m_stocw = new SimpleTableOfContentsWidget(this, 0);
+    m_stocw = new SimpleTableOfContentsWidget(this, nullptr);
 
-    m_sfenw = new SimpleFootEndNotesWidget(this, 0);
+    m_sfenw = new SimpleFootEndNotesWidget(this, nullptr);
 
-    m_scbw = new SimpleCitationBibliographyWidget(this, 0);
+    m_scbw = new SimpleCitationBibliographyWidget(this, nullptr);
 
-    m_slw = new SimpleLinksWidget(this, 0);
+    m_slw = new SimpleLinksWidget(this, nullptr);
     // Connect to/with simple table of contents option widget
     connect(m_stocw, &SimpleTableOfContentsWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
 

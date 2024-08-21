@@ -56,7 +56,7 @@ public:
     /**
      * Create a new instance of an inline object.
      */
-    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const = 0;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = nullptr) const = 0;
 
     /**
      * return the id for the variable this factory creates.

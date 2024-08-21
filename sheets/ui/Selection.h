@@ -77,21 +77,21 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void initialize(const QPoint &point, Sheet *sheet = 0);
+    void initialize(const QPoint &point, Sheet *sheet = nullptr);
 
     /**
      * Sets the selection to @p range
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void initialize(const QRect &range, Sheet *sheet = 0);
+    void initialize(const QRect &range, Sheet *sheet = nullptr);
 
     /**
      * Sets the selection to @p region
      * @param region the region's locations
      * @param sheet the sheet the region belongs to
      */
-    void initialize(const Region &region, Sheet *sheet = 0);
+    void initialize(const Region &region, Sheet *sheet = nullptr);
 
     /**
      * Emits signal changed(const Region&)
@@ -110,14 +110,14 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void extend(const QPoint &point, Sheet *sheet = 0);
+    void extend(const QPoint &point, Sheet *sheet = nullptr);
 
     /**
      * Extends the current selection with the Range @p range
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void extend(const QRect &range, Sheet *sheet = 0);
+    void extend(const QRect &range, Sheet *sheet = nullptr);
 
     /**
      * Extends the current selection with the Region @p region
@@ -129,7 +129,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element *eor(const QPoint &point, SheetBase *sheet = 0) override;
+    Element *eor(const QPoint &point, SheetBase *sheet = nullptr) override;
 
     /**
      * The cursor represents the cursor position. This is needed for merged cells
@@ -144,7 +144,7 @@ public:
     /**
      * @return the name of the region (e.g. "A1:A2")
      */
-    QString name(Sheet *originSheet = 0) const;
+    QString name(Sheet *originSheet = nullptr) const;
 
     /**
      * Sets the selection's active sheet.

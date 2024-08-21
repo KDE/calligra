@@ -71,7 +71,7 @@ public:
 
     KUndo2Command *createCommand() override
     {
-        return 0;
+        return nullptr;
     }
 
     void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) override
@@ -153,9 +153,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeftCorner)
     , m_mouseWasInsideHandles(false)
-    , m_moveCommand(0)
+    , m_moveCommand(nullptr)
     , m_selectionHandler(new SelectionHandler(this))
-    , m_customEventStrategy(0)
+    , m_customEventStrategy(nullptr)
     , m_guideLine(new GuideLine())
 {
     setupActions();
@@ -535,14 +535,14 @@ void DefaultTool::updateCursor()
         }
     }
     useCursor(cursor);
-    if (currentStrategy() == 0)
+    if (currentStrategy() == nullptr)
         Q_EMIT statusTextChanged(statusText);
 }
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoInteractionTool::paint(painter, converter);
-    if (currentStrategy() == 0 && koSelection()->count() > 0) {
+    if (currentStrategy() == nullptr && koSelection()->count() > 0) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle, true, true);
         decorator.setSelection(koSelection());
         decorator.setHandleRadius(handleRadius());
@@ -564,7 +564,7 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
-    if (currentStrategy() == 0 && koSelection()->count() > 0) {
+    if (currentStrategy() == nullptr && koSelection()->count() > 0) {
         QRectF bound = handlesSize();
         if (bound.contains(event->point)) {
             bool inside;
@@ -748,11 +748,11 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         if (shapes.count() > 0) {
             // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
             if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
-                m_moveCommand = 0;
+                m_moveCommand = nullptr;
             if (m_moveCommand && shapes != m_lastUsedShapes) {
                 // We are not moving exactly the same shapes in the same order as last time,
                 // so we cannot reuse the command
-                m_moveCommand = 0;
+                m_moveCommand = nullptr;
                 m_lastUsedShapes.clear();
             }
             if (m_moveCommand) { // alter previous instead of creating new one.
@@ -773,7 +773,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 void DefaultTool::keyPressEvent(QKeyEvent *event)
 {
     KoInteractionTool::keyPressEvent(event);
-    if (currentStrategy() == 0) {
+    if (currentStrategy() == nullptr) {
         switch (event->key()) {
         case Qt::Key_Left:
         case Qt::Key_Right:
@@ -815,7 +815,7 @@ void DefaultTool::customMoveEvent(KoPointerEvent *event)
             if (command)
                 canvas()->addCommand(command);
             delete m_customEventStrategy;
-            m_customEventStrategy = 0;
+            m_customEventStrategy = nullptr;
             repaintDecorations();
         }
         event->accept();
@@ -916,7 +916,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
     if (!converter)
         return KoFlake::NoHandle;
 
-    if (innerHandleMeaning != 0) {
+    if (innerHandleMeaning != nullptr) {
         QPainterPath path;
         path.addPolygon(m_selectionOutline);
         *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
@@ -927,7 +927,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
 
         // if just inside the outline
         if (qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE) {
-            if (innerHandleMeaning != 0) {
+            if (innerHandleMeaning != nullptr) {
                 if (qAbs(pt.x()) < 4 && qAbs(pt.y()) < 4)
                     *innerHandleMeaning = true;
             }
@@ -943,11 +943,11 @@ void DefaultTool::recalcSelectionBox()
         return;
 
     if (koSelection()->count() > 1) {
-        QTransform matrix = koSelection()->absoluteTransformation(0);
+        QTransform matrix = koSelection()->absoluteTransformation(nullptr);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
         m_angle = 0.0; // koSelection()->rotation();
     } else {
-        QTransform matrix = koSelection()->firstSelectedShape()->absoluteTransformation(0);
+        QTransform matrix = koSelection()->firstSelectedShape()->absoluteTransformation(nullptr);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
         m_angle = 0.0; // koSelection()->firstSelectedShape()->rotation();
     }
@@ -1067,7 +1067,7 @@ void DefaultTool::selectionUngroup()
         }
     }
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
 
     // add a ungroup command for each found shape container to the macro command
     foreach (KoShape *shape, containerSet) {
@@ -1181,7 +1181,7 @@ QList<QPointer<QWidget>> DefaultTool::createOptionWidgets()
     fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);
 
-    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(nullptr);
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);
@@ -1201,7 +1201,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
     // reset the move by keys when a new strategy is created otherwise we might change the
     // command after a new command was added. This happens when you where faster than the timer.
-    m_moveCommand = 0;
+    m_moveCommand = nullptr;
 
     KoShapeManager *shapeManager = canvas()->shapeManager();
     KoSelection *select = shapeManager->selection();
@@ -1238,7 +1238,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         if (m_hotPosition != newHotPosition)
             canvas()->resourceManager()->setResource(HotPosition, newHotPosition);
-        return 0;
+        return nullptr;
     }
 
     bool selectMultiple = event->modifiers() & Qt::ControlModifier;
@@ -1275,7 +1275,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     }
 
     if ((event->buttons() & Qt::LeftButton) == 0)
-        return 0; // Nothing to do for middle/right mouse button
+        return nullptr; // Nothing to do for middle/right mouse button
 
     KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
@@ -1283,7 +1283,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         // check if we have hit a guide
         if (m_guideLine->isValid()) {
             m_guideLine->select();
-            return 0;
+            return nullptr;
         }
         if (!selectMultiple) {
             repaintDecorations();
@@ -1309,7 +1309,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         return new ShapeMoveStrategy(this, event->point);
     }
-    return 0;
+    return nullptr;
 }
 
 void DefaultTool::updateActions()

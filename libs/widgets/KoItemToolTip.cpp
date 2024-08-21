@@ -25,7 +25,7 @@ public:
     QBasicTimer timer;
 
     Private()
-        : document(0)
+        : document(nullptr)
     {
     }
 };

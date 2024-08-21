@@ -62,7 +62,7 @@ Q_DECLARE_METATYPE(QTextDocument *)
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (d->startOfArea == 0 || d->endOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == nullptr || d->endOfArea == nullptr) // We have not been layouted yet
         return;
 
     /*
@@ -79,7 +79,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion(); // fetch after painter->translate so the clipRegion is correct
-    KoTextBlockBorderData *lastBorder = 0;
+    KoTextBlockBorderData *lastBorder = nullptr;
     QRectF lastBorderRect;
 
     QTextFrame::iterator it = d->startOfArea->it;
@@ -104,7 +104,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
                 lastBorder->paint(*painter, lastBorderRect);
-                lastBorder = 0;
+                lastBorder = nullptr;
             }
         }
 
@@ -154,7 +154,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         QTextLayout *layout = block.layout();
-        KoTextBlockBorderData *border = 0;
+        KoTextBlockBorderData *border = nullptr;
 
         if (blockIndex >= d->blockRects.count())
             break;
@@ -167,19 +167,19 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             KoTextBlockPaintStrategyBase *paintStrategy = blockData.paintStrategy();
 
             KoTextBlockPaintStrategyBase dummyPaintStrategy;
-            if (paintStrategy == 0) {
+            if (paintStrategy == nullptr) {
                 paintStrategy = &dummyPaintStrategy;
             }
             if (!paintStrategy->isVisible()) {
                 if (lastBorder) { // draw previous block's border
                     lastBorder->paint(*painter, lastBorderRect);
-                    lastBorder = 0;
+                    lastBorder = nullptr;
                 }
                 continue; // this paragraph shouldn't be shown so just skip it
             }
 
             // Check and update border drawing code
-            if (lastBorder == 0) {
+            if (lastBorder == nullptr) {
                 lastBorderRect = br;
             } else if (lastBorder != border || lastBorderRect.width() != br.width() || lastBorderRect.x() != br.x()) {
                 lastBorder->paint(*painter, lastBorderRect);
@@ -354,7 +354,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         } else {
             if (lastBorder) {
                 lastBorder->paint(*painter, lastBorderRect);
-                lastBorder = 0;
+                lastBorder = nullptr;
             }
         }
     }

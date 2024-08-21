@@ -45,7 +45,7 @@ public:
 
     KoShape *createShape(const KoProperties *properties, KoDocumentResourceManager *documentResources) const override;
 
-    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     // reimplemented to not create a default shape to just overwrite it afterwards
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;

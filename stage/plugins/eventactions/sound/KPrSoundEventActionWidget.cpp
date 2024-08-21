@@ -20,9 +20,9 @@
 
 KPrSoundEventActionWidget::KPrSoundEventActionWidget(QWidget *parent)
     : KPrEventActionWidget(parent)
-    , m_shape(0)
-    , m_eventAction(0)
-    , m_soundCollection(0)
+    , m_shape(nullptr)
+    , m_eventAction(nullptr)
+    , m_soundCollection(nullptr)
     , m_soundCombo(new QComboBox())
 {
     auto layout = new QVBoxLayout(this);
@@ -60,7 +60,7 @@ void KPrSoundEventActionWidget::soundComboChanged()
         return;
     }
 
-    KPrSoundData *soundData = 0;
+    KPrSoundData *soundData = nullptr;
     if (m_soundCombo->currentIndex() > 1) { // a previous sound was chosen
         // copy it rather then just point to it - so the refcount is updated
         soundData = new KPrSoundData(*m_soundCollection->findSound(m_soundCombo->currentText()));
@@ -80,7 +80,7 @@ void KPrSoundEventActionWidget::soundComboChanged()
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Change sound action"));
     if (m_eventAction) {
         new KoEventActionRemoveCommand(m_shape, m_eventAction, cmd);
-        m_eventAction = 0;
+        m_eventAction = nullptr;
     }
 
     if (soundData) {

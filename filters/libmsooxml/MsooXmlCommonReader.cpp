@@ -37,7 +37,7 @@ MsooXmlCommonReader::~MsooXmlCommonReader()
 
 void MsooXmlCommonReader::init()
 {
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
     m_read_p_args = {};
     m_pPr_lvl = 0;
     m_addManifestEntryForPicturesDirExecuted = false;

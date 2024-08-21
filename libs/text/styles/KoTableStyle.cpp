@@ -28,7 +28,7 @@ class Q_DECL_HIDDEN KoTableStyle::Private
 {
 public:
     Private()
-        : parentStyle(0)
+        : parentStyle(nullptr)
         , next(0)
     {
     }

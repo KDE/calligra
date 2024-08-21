@@ -15,7 +15,7 @@
 
 ValidParentStylesProxyModel::ValidParentStylesProxyModel(QObject *parent)
     : StylesFilteredModelBase(parent)
-    , m_styleManager(0)
+    , m_styleManager(nullptr)
 {
 }
 

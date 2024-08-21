@@ -118,7 +118,7 @@ void KoXmlWriter::prepareForTextNode()
 
 void KoXmlWriter::startElement(const char *tagName, bool indentInside)
 {
-    Q_ASSERT(tagName != 0);
+    Q_ASSERT(tagName != nullptr);
 
     // Tell parent that it has children
     bool parentIndent = prepareForChild();
@@ -180,7 +180,7 @@ void KoXmlWriter::endElement()
             writeIndent();
         }
         writeCString("</");
-        Q_ASSERT(tag.tagName != 0);
+        Q_ASSERT(tag.tagName != nullptr);
         writeCString(tag.tagName);
         writeChar('>');
     }

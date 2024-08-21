@@ -23,8 +23,8 @@ class Q_DECL_HIDDEN KoSnapGuide::Private
 public:
     Private(KoCanvasBase *parentCanvas)
         : canvas(parentCanvas)
-        , editedShape(0)
-        , currentStrategy(0)
+        , editedShape(nullptr)
+        , currentStrategy(nullptr)
         , active(true)
         , snapDistance(10)
     {
@@ -117,7 +117,7 @@ int KoSnapGuide::snapDistance() const
 
 QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers)
 {
-    d->currentStrategy = 0;
+    d->currentStrategy = nullptr;
 
     if (!d->active || (modifiers & Qt::ShiftModifier))
         return mousePosition;
@@ -207,8 +207,8 @@ QList<KoShape *> KoSnapGuide::ignoredShapes() const
 
 void KoSnapGuide::reset()
 {
-    d->currentStrategy = 0;
-    d->editedShape = 0;
+    d->currentStrategy = nullptr;
+    d->editedShape = nullptr;
     d->ignoredPoints.clear();
     d->ignoredShapes.clear();
     // remove all custom strategies

@@ -107,7 +107,7 @@ void WmfExport::paintDocument(KarbonDocument *document)
 
 void WmfExport::paintShape(KoShape *shape)
 {
-    QList<QPolygonF> subpaths = shape->outline().toFillPolygons(shape->absoluteTransformation(0));
+    QList<QPolygonF> subpaths = shape->outline().toFillPolygons(shape->absoluteTransformation(nullptr));
 
     if (!subpaths.count())
         return;

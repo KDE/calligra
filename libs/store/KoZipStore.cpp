@@ -81,7 +81,7 @@ void KoZipStore::init(const QByteArray &appIdentification)
 {
     Q_D(KoStore);
 
-    m_currentDir = 0;
+    m_currentDir = nullptr;
     d->good = m_pZip->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
     if (!d->good)
@@ -101,7 +101,7 @@ void KoZipStore::init(const QByteArray &appIdentification)
         m_pZip->setCompression(KZip::DeflateCompression);
         // We don't need the extra field in Calligra - so we leave it as "no extra field".
     } else {
-        d->good = m_pZip->directory() != 0;
+        d->good = m_pZip->directory() != nullptr;
     }
 }
 
@@ -122,7 +122,7 @@ bool KoZipStore::doFinalize()
 bool KoZipStore::openWrite(const QString &name)
 {
     Q_D(KoStore);
-    d->stream = 0; // Don't use!
+    d->stream = nullptr; // Don't use!
     return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
 
@@ -130,7 +130,7 @@ bool KoZipStore::openRead(const QString &name)
 {
     Q_D(KoStore);
     const KArchiveEntry *entry = m_pZip->directory()->entry(name);
-    if (entry == 0) {
+    if (entry == nullptr) {
         return false;
     }
     if (entry->isDirectory()) {
@@ -198,7 +198,7 @@ bool KoZipStore::enterRelativeDirectory(const QString &dirName)
         const KArchiveEntry *entry = m_currentDir->entry(dirName);
         if (entry && entry->isDirectory()) {
             m_currentDir = dynamic_cast<const KArchiveDirectory *>(entry);
-            return m_currentDir != 0;
+            return m_currentDir != nullptr;
         }
         return false;
     } else // Write, no checking here
@@ -208,12 +208,12 @@ bool KoZipStore::enterRelativeDirectory(const QString &dirName)
 bool KoZipStore::enterAbsoluteDirectory(const QString &path)
 {
     if (path.isEmpty()) {
-        m_currentDir = 0;
+        m_currentDir = nullptr;
         return true;
     }
     m_currentDir = dynamic_cast<const KArchiveDirectory *>(m_pZip->directory()->entry(path));
     Q_ASSERT(m_currentDir);
-    return m_currentDir != 0;
+    return m_currentDir != nullptr;
 }
 
 bool KoZipStore::fileExists(const QString &absPath) const

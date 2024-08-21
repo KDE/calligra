@@ -32,7 +32,7 @@ public:
         if (m_textEditingPlugins.contains(pluginId)) {
             return m_textEditingPlugins.value(pluginId);
         }
-        return 0;
+        return nullptr;
     }
 
     QList<KoTextEditingPlugin *> values() const

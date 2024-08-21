@@ -303,7 +303,7 @@ class Q_DECL_HIDDEN Filter::Private
 {
 public:
     Private()
-        : condition(0)
+        : condition(nullptr)
         , conditionSourceIsRange(false)
         , displayDuplicates(true)
     {
@@ -338,7 +338,7 @@ void Filter::operator=(const Filter &other)
 void Filter::copyFrom(const Filter &other)
 {
     if (!other.d->condition)
-        d->condition = 0;
+        d->condition = nullptr;
     else if (other.d->condition->type() == AbstractCondition::And)
         d->condition = new And(*static_cast<And *>(other.d->condition));
     else if (other.d->condition->type() == AbstractCondition::Or)
@@ -410,7 +410,7 @@ void Filter::addSubFilter(Composition composition, const Filter &filter)
 {
     if (!d->condition) {
         if (!filter.d->condition)
-            d->condition = 0;
+            d->condition = nullptr;
         else if (filter.d->condition->type() == AbstractCondition::And)
             d->condition = new And(*static_cast<And *>(filter.d->condition));
         else if (filter.d->condition->type() == AbstractCondition::Or)
@@ -468,7 +468,7 @@ void Filter::removeConditions(int fieldNumber)
     if (fieldNumber == -1) {
         //         debugSheets <<"removing all conditions";
         delete d->condition;
-        d->condition = 0;
+        d->condition = nullptr;
         return;
     }
     if (!d->condition)
@@ -476,7 +476,7 @@ void Filter::removeConditions(int fieldNumber)
     d->condition->removeConditions(fieldNumber);
     if (d->condition->isEmpty()) {
         delete d->condition;
-        d->condition = 0;
+        d->condition = nullptr;
     }
 }
 

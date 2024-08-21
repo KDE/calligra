@@ -94,7 +94,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement &sheet)
 
         /* so we don't panic over finding ourself in the following test*/
         sname.clear();
-        while (obj->map()->findSheet(testName) != 0) {
+        while (obj->map()->findSheet(testName) != nullptr) {
             nameSuffix++;
             testName = baseName + '_' + QString::number(nameSuffix);
         }

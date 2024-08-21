@@ -19,8 +19,8 @@ public:
         , counterSpacing(0)
         , counterIsImage(false)
         , counterIndex(1)
-        , border(0)
-        , paintStrategy(0)
+        , border(nullptr)
+        , paintStrategy(nullptr)
     {
         layoutedMarkupRanges[KoTextBlockData::Misspell] = false;
         layoutedMarkupRanges[KoTextBlockData::Grammar] = false;
@@ -294,5 +294,5 @@ KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 bool KoTextBlockData::saveXmlID() const
 {
     // as suggested by boemann, http://lists.kde.org/?l=calligra-devel&m=132396354701553&w=2
-    return d->paintStrategy != 0;
+    return d->paintStrategy != nullptr;
 }

@@ -31,7 +31,7 @@ MoveSectionCommand::MoveSectionCommand(Section *_section, SectionGroup *_parent,
     , m_idx(-1)
     , m_previousIndex(_section->sectionParent()->indexOf(_section))
 {
-    Q_ASSERT(_above == 0 || _parent == _above->sectionParent());
+    Q_ASSERT(_above == nullptr || _parent == _above->sectionParent());
     Q_ASSERT(m_previousIndex >= 0 && m_previousIndex < m_previousParent->sections().count());
 }
 
@@ -40,7 +40,7 @@ MoveSectionCommand::MoveSectionCommand(Section *_section, SectionGroup *_parent,
     , m_parent(_parent)
     , m_previousParent(_section->sectionParent())
     , m_model(_model)
-    , m_above(0)
+    , m_above(nullptr)
     , m_idx(_idx)
     , m_previousIndex(_section->sectionParent()->indexOf(_section))
 {

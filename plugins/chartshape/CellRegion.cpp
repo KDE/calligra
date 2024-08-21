@@ -346,7 +346,7 @@ public:
 
 CellRegion::Private::Private()
 {
-    table = 0;
+    table = nullptr;
 }
 
 CellRegion::Private::~Private()

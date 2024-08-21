@@ -52,7 +52,7 @@ void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, q
 
 KoColorTransformation *KoCompositeColorTransformation::createOptimizedCompositeTransform(const QVector<KoColorTransformation *> transforms)
 {
-    KoColorTransformation *finalTransform = 0;
+    KoColorTransformation *finalTransform = nullptr;
 
     int numValidTransforms = 0;
     foreach (KoColorTransformation *t, transforms) {

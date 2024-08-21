@@ -38,7 +38,7 @@ K_PLUGIN_FACTORY_WITH_JSON(QPROImportFactory, "calligra_filter_qpro2sheets.json"
 QpTableList::QpTableList()
 {
     for (int lIdx = 0; lIdx < cNameCnt; ++lIdx) {
-        cTable[lIdx] = 0;
+        cTable[lIdx] = nullptr;
     }
 }
 
@@ -59,7 +59,7 @@ QpTableList::table(unsigned pIdx, SheetBase* pTable)
 SheetBase*
 QpTableList::table(unsigned pIdx)
 {
-    return (pIdx < cNameCnt ? cTable[pIdx] : 0);
+    return (pIdx < cNameCnt ? cTable[pIdx] : nullptr);
 }
 
 
@@ -111,11 +111,11 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpIStream lIn(QFile::encodeName(m_chain->inputFile()));
 
     if (!lIn) {
-        KMessageBox::error(0L, i18n("QPRO filter cannot open input file - please report."));
+        KMessageBox::error(nullptr, i18n("QPRO filter cannot open input file - please report."));
         return KoFilter::FileNotFound;
     }
 
-    SheetBase *table = 0;
+    SheetBase *table = nullptr;
 
     QString field;
     int value = 0;
@@ -125,13 +125,13 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpTableList             lTableNames;
     QP_UINT8                lPageIdx = 0;
 
-    QpRec*                  lRec = 0;
-    QpRecBop*               lRecBop = 0;
-    QpRecIntegerCell*       lRecInt = 0;
-    QpRecFloatingPointCell* lRecFloat = 0;
-    QpRecFormulaCell*       lRecFormula = 0;
-    QpRecLabelCell*         lRecLabel = 0;
-    QpRecPageName*          lRecPageName = 0;
+    QpRec*                  lRec = nullptr;
+    QpRecBop*               lRecBop = nullptr;
+    QpRecIntegerCell*       lRecInt = nullptr;
+    QpRecFloatingPointCell* lRecFloat = nullptr;
+    QpRecFormulaCell*       lRecFormula = nullptr;
+    QpRecLabelCell*         lRecLabel = nullptr;
+    QpRecPageName*          lRecPageName = nullptr;
 
     do {
         field.clear();
@@ -145,7 +145,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             // find out if we know about this table already, if not create it
             table = lTableNames.table(lPageIdx);
 
-            if (table == 0) {
+            if (table == nullptr) {
                 table = ksdoc->map()->addNewSheet();
                 // set up a default name for the table
                 table->setSheetName(lTableNames.name(lPageIdx));
@@ -175,7 +175,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
             // check for referenced tables that haven't been created yet
             for (unsigned lIdx = 0; lIdx < lTableNames.cNameCnt; ++lIdx) {
-                if (lTableNames.allocated(lIdx) && (lTableNames.table(lIdx) == 0)) {
+                if (lTableNames.allocated(lIdx) && (lTableNames.table(lIdx) == nullptr)) {
                     // we're about to reference a table that hasn't been created yet.
                     // setText gets upset about this, so create a blank table
 
@@ -216,7 +216,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             break;
 
         case QpPassword:
-            KMessageBox::error(0L, i18n("Unable to open password protected files.\n"
+            KMessageBox::error(nullptr, i18n("Unable to open password protected files.\n"
                                         "The password algorithm has not been published")
                               );
             delete lRec;
@@ -224,7 +224,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
         }
 
         delete lRec;
-        lRec = 0;
+        lRec = nullptr;
     } while (lIn);
 
     ksdoc->map()->loadingInfo()->setInitialActiveSheet(table);

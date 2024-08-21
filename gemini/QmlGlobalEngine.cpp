@@ -7,7 +7,7 @@
 
 #include "QmlGlobalEngine.h"
 
-QmlGlobalEngine *QmlGlobalEngine::sm_instance = 0;
+QmlGlobalEngine *QmlGlobalEngine::sm_instance = nullptr;
 
 QQmlEngine *QmlGlobalEngine::engine() const
 {
@@ -28,7 +28,7 @@ QmlGlobalEngine *QmlGlobalEngine::instance()
 }
 
 QmlGlobalEngine::QmlGlobalEngine()
-    : m_engine(0)
+    : m_engine(nullptr)
 {
 }
 

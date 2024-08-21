@@ -65,7 +65,7 @@ void StyleManager::defineOasisStyle(const QString &oasisName, const QString &sty
 CustomStyle *StyleManager::style(QString const &name) const
 {
     if (name.isEmpty())
-        return 0;
+        return nullptr;
     // on OpenDocument loading
     //     if ( !m_oasisStyles.isEmpty() )
     {
@@ -77,7 +77,7 @@ CustomStyle *StyleManager::style(QString const &name) const
         return m_styles[name];
     if ((name == "Default") || (name == m_defaultStyle->name()))
         return m_defaultStyle;
-    return 0;
+    return nullptr;
 }
 
 void StyleManager::takeStyle(CustomStyle *style)

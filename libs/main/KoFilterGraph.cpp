@@ -27,7 +27,7 @@ namespace CalligraFilter
 Graph::Graph(const QByteArray &from)
     : m_from(from)
     , m_graphValid(false)
-    , d(0)
+    , d(nullptr)
 {
     buildGraph();
     shortestPaths(); // Will return after a single lookup if "from" is invalid (->no check here)
@@ -186,7 +186,7 @@ QByteArray Graph::findCalligraPart() const
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
-    const Vertex *v = 0;
+    const Vertex *v = nullptr;
 
     // Be sure that v gets initialized correctly
     while (!v && partIt != partEnd) {

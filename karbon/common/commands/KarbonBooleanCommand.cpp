@@ -20,11 +20,11 @@ class Q_DECL_HIDDEN KarbonBooleanCommand::Private
 public:
     Private(KoShapeBasedDocumentBase *c)
         : shapeBasedDocument(c)
-        , pathA(0)
-        , pathB(0)
-        , resultingPath(0)
-        , resultParent(0)
-        , resultParentCmd(0)
+        , pathA(nullptr)
+        , pathB(nullptr)
+        , resultingPath(nullptr)
+        , resultParent(nullptr)
+        , resultParentCmd(nullptr)
         , operation(Intersection)
         , isExecuted(false)
     {
@@ -72,8 +72,8 @@ void KarbonBooleanCommand::redo()
 {
     if (!d->resultingPath) {
         // transform input paths to global coordinates
-        QPainterPath pa = d->pathA->absoluteTransformation(0).map(d->pathA->outline());
-        QPainterPath pb = d->pathB->absoluteTransformation(0).map(d->pathB->outline());
+        QPainterPath pa = d->pathA->absoluteTransformation(nullptr).map(d->pathA->outline());
+        QPainterPath pb = d->pathB->absoluteTransformation(nullptr).map(d->pathB->outline());
         QPainterPath pr;
         switch (d->operation) {
         case Intersection:
@@ -91,7 +91,7 @@ void KarbonBooleanCommand::redo()
             break;
         }
 
-        QTransform transformationA = d->pathA->absoluteTransformation(0);
+        QTransform transformationA = d->pathA->absoluteTransformation(nullptr);
         // transform resulting path to local coordinate system of input path A
         pr = transformationA.inverted().map(pr);
         // create a path shape from the resulting path in local coordinates

@@ -85,7 +85,7 @@ Sheet *MusicXmlReader::loadSheet(const KoXmlElement &scoreElement)
     KoXmlElement partList = namedItem(scoreElement, "part-list");
     if (partList.isNull()) {
         // debugMusic << "no part list found";
-        return 0;
+        return nullptr;
     }
     KoXmlElement elem;
     forEachElement(elem, partList)

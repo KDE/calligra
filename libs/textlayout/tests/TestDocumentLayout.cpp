@@ -23,8 +23,8 @@
 
 void TestDocumentLayout::initTestCase()
 {
-    m_doc = 0;
-    m_layout = 0;
+    m_doc = nullptr;
+    m_layout = nullptr;
 }
 
 void TestDocumentLayout::setupTest(const QString &initText)
@@ -38,7 +38,7 @@ void TestDocumentLayout::setupTest(const QString &initText)
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager(0);
+    m_styleManager = new KoStyleManager(nullptr);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);

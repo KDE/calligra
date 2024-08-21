@@ -33,8 +33,8 @@ class Q_DECL_HIDDEN Selection::Private
 public:
     Private()
     {
-        activeSheet = 0;
-        originSheet = 0;
+        activeSheet = nullptr;
+        originSheet = nullptr;
         anchor = QPoint(1, 1);
         cursor = QPoint(1, 1);
 
@@ -54,7 +54,7 @@ public:
         activeSubRegionStart = 0;
         activeSubRegionLength = 1;
 
-        canvasBase = 0;
+        canvasBase = nullptr;
         referenceMode = false;
     }
 
@@ -94,7 +94,7 @@ public:
 ****************************************************************************/
 
 Selection::Selection(KoCanvasBase *canvasBase)
-    : KoToolSelection(0)
+    : KoToolSelection(nullptr)
     , Region(1, 1)
     , d(new Private())
 {
@@ -531,7 +531,7 @@ void Selection::extend(const QRect &range, Sheet *sheet)
 
     const QRect newRange = extendToMergedAreas(range, sheet);
 
-    Element *element = 0;
+    Element *element = nullptr;
     if (d->multipleOccurences) {
         const int subRegionEnd = d->activeSubRegionStart + d->activeSubRegionLength;
         const bool prepend = d->activeSubRegionLength == 0;
@@ -1014,7 +1014,7 @@ void Selection::emitChanged(const Region &region)
             do {
                 left--;
                 int firstHidden;
-                if (sheet->columnFormats()->isHiddenOrFiltered(left, 0, &firstHidden)) {
+                if (sheet->columnFormats()->isHiddenOrFiltered(left, nullptr, &firstHidden)) {
                     left = firstHidden;
                 } else {
                     break;
@@ -1038,7 +1038,7 @@ void Selection::emitChanged(const Region &region)
             do {
                 top--;
                 int firstHidden;
-                if (sheet->rowFormats()->isHiddenOrFiltered(top, 0, &firstHidden)) {
+                if (sheet->rowFormats()->isHiddenOrFiltered(top, nullptr, &firstHidden)) {
                     top = firstHidden;
                 } else {
                     break;

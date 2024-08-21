@@ -119,7 +119,7 @@ void RenderThread::run()
     if (!painter.begin(image)) {
         warnVector << "Failed to create image-cache";
         delete image;
-        image = 0;
+        image = nullptr;
     } else {
         painter.scale(m_zoomX, m_zoomY);
         draw(painter);
@@ -368,10 +368,10 @@ QImage *VectorShape::render(const KoViewConverter &converter, bool asynchronous,
 {
     QRectF rect = converter.documentToView(boundingRect());
     int id = rect.size().toSize().height();
-    QImage *cache = useCache ? m_cache[id] : 0;
+    QImage *cache = useCache ? m_cache[id] : nullptr;
 
     if (!cache || cache->isNull()) { // recreate the cached image
-        cache = 0;
+        cache = nullptr;
         if (!m_isRendering) {
             m_isRendering = true;
             qreal zoomX, zoomY;

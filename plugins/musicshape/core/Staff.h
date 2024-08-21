@@ -88,8 +88,8 @@ public:
      * specified and no clef changes are found in the given bar, this method returns oldClef instead of searching for
      * older clef changes.
      */
-    Clef *lastClefChange(int bar, int time = -1, Clef *oldClef = 0);
-    Clef *lastClefChange(Bar *bar, int time = -1, Clef *oldClef = 0);
+    Clef *lastClefChange(int bar, int time = -1, Clef *oldClef = nullptr);
+    Clef *lastClefChange(Bar *bar, int time = -1, Clef *oldClef = nullptr);
     KeySignature *lastKeySignatureChange(int bar);
     KeySignature *lastKeySignatureChange(Bar *bar);
     TimeSignature *lastTimeSignatureChange(int bar);

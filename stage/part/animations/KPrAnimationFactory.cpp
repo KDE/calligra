@@ -32,7 +32,7 @@
 
 KPrAnimationBase *KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KPrShapeAnimation *shapeAnimation)
 {
-    KPrAnimationBase *animation = 0;
+    KPrAnimationBase *animation = nullptr;
     if (element.namespaceURI() == KoXmlNS::anim) {
         if (element.tagName() == "set") {
             animation = new KPrAnimSet(shapeAnimation);
@@ -51,7 +51,7 @@ KPrAnimationBase *KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement
         if (animation) {
             if (!animation->loadOdf(element, context)) {
                 delete animation;
-                animation = 0;
+                animation = nullptr;
             } else {
             }
         } else {

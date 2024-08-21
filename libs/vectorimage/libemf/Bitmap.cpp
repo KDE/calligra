@@ -32,7 +32,7 @@ Bitmap::Bitmap(QDataStream &stream,
                quint32 offBitsSrc, // offset to source bitmap
                quint32 cbBitsSrc) // size of source bitmap
     : m_hasImage(false)
-    , m_header(0)
+    , m_header(nullptr)
     , m_imageIsValid(false)
 {
     // If necessary read away garbage before the bitmap header.

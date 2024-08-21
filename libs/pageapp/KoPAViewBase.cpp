@@ -17,7 +17,7 @@ public:
 KoPAViewBase::KoPAViewBase()
     : d(new Private)
 {
-    d->viewMode = 0;
+    d->viewMode = nullptr;
     proxyObject = new KoPAViewProxyObject(this);
 }
 

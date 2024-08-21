@@ -51,13 +51,13 @@ public:
     KoToolBoxButton *selectedButton{nullptr};
     QHash<QString, KoToolBoxButton *> buttonsByToolId;
     QMap<QString, Section *> sections;
-    KoToolBoxLayout *layout{0};
-    QButtonGroup *buttonGroup{0};
+    KoToolBoxLayout *layout{nullptr};
+    QButtonGroup *buttonGroup{nullptr};
     QHash<QToolButton *, QString> visibilityCodes;
     bool floating{false};
     int iconSize{0};
     QMap<QAction *, int> contextIconSizes;
-    QAction *defaultIconSizeAction{0};
+    QAction *defaultIconSizeAction{nullptr};
     Qt::Orientation orientation{Qt::Vertical};
 };
 
@@ -132,7 +132,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     }
 
     Section *sectionWidget = d->sections.value(sectionToBeAddedTo);
-    if (sectionWidget == 0) {
+    if (sectionWidget == nullptr) {
         sectionWidget = new Section(this);
         d->addSection(sectionWidget, sectionToBeAddedTo);
     }
@@ -189,7 +189,7 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
     Q_UNUSED(canvas);
-    const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    const bool enabled = layer == nullptr || (layer->isEditable() && layer->isVisible());
     const auto buttons = d->visibilityCodes.keys();
     for (QToolButton *button : buttons) {
         if (d->visibilityCodes[button].endsWith(QLatin1String("/always"))) {

@@ -32,10 +32,10 @@ const QString DocumentColorsName("Document Colors");
 
 KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWidget *parent)
     : QWidget(parent)
-    , m_prevButton(0)
-    , m_nextButton(0)
-    , m_choosePalette(0)
-    , m_colorBar(0)
+    , m_prevButton(nullptr)
+    , m_nextButton(nullptr)
+    , m_choosePalette(nullptr)
+    , m_colorBar(nullptr)
     , m_palettes(KoResourceServerProvider::instance()->paletteServer())
 {
     m_palettes.connectToResourceServer();
@@ -162,7 +162,7 @@ void KarbonPaletteBarWidget::selectPalette()
     QAction *selectedAction = palletteMenu.exec(m_choosePalette->mapToGlobal(QPoint(0, 0)));
     if (selectedAction) {
         int selectedIndex = selectedAction->data().toInt();
-        KoColorSet *selectedColorSet = 0;
+        KoColorSet *selectedColorSet = nullptr;
         if (selectedIndex) {
             selectedColorSet = dynamic_cast<KoColorSet *>(resources.at(selectedIndex - 1));
         } else {

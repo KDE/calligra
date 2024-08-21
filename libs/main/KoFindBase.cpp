@@ -14,7 +14,7 @@ class Q_DECL_HIDDEN KoFindBase::Private
 public:
     Private()
         : currentMatch(0)
-        , options(0)
+        , options(nullptr)
     {
     }
 

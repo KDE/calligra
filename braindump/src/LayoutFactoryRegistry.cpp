@@ -31,7 +31,7 @@ struct LayoutFactoryRegistry::Private {
     QMap<QString, LayoutFactory *> factories;
 };
 
-LayoutFactoryRegistry *LayoutFactoryRegistry::Private::s_instance = 0;
+LayoutFactoryRegistry *LayoutFactoryRegistry::Private::s_instance = nullptr;
 
 LayoutFactoryRegistry::LayoutFactoryRegistry()
     : d(new Private)
@@ -66,7 +66,7 @@ Layout *LayoutFactoryRegistry::createLayout(const QString &id) const
         Q_ASSERT(layout->id() == id);
         return layout;
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

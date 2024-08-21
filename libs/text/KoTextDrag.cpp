@@ -32,13 +32,13 @@
 #include "TextDebug.h"
 
 KoTextDrag::KoTextDrag()
-    : m_mimeData(0)
+    : m_mimeData(nullptr)
 {
 }
 
 KoTextDrag::~KoTextDrag()
 {
-    if (m_mimeData == 0) {
+    if (m_mimeData == nullptr) {
         delete m_mimeData;
     }
 }
@@ -66,7 +66,7 @@ bool KoTextDrag::setOdf(const char *mimeType, KoTextOdfSaveHelper &helper)
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
-    KoTextSharedSavingData *textSharedData = 0;
+    KoTextSharedSavingData *textSharedData = nullptr;
     if (sharedData) {
         textSharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
     }
@@ -141,7 +141,7 @@ bool KoTextDrag::setOdf(const char *mimeType, KoTextOdfSaveHelper &helper)
 
 void KoTextDrag::setData(const QString &mimeType, const QByteArray &data)
 {
-    if (m_mimeData == 0) {
+    if (m_mimeData == nullptr) {
         m_mimeData = new QMimeData();
     }
     m_mimeData->setData(mimeType, data);
@@ -150,6 +150,6 @@ void KoTextDrag::setData(const QString &mimeType, const QByteArray &data)
 QMimeData *KoTextDrag::takeMimeData()
 {
     QMimeData *mimeData = m_mimeData;
-    m_mimeData = 0;
+    m_mimeData = nullptr;
     return mimeData;
 }

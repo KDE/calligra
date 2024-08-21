@@ -40,7 +40,7 @@ class Q_DECL_HIDDEN KoDocumentSectionView::Private
 {
 public:
     Private()
-        : delegate(0)
+        : delegate(nullptr)
         , mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)

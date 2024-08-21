@@ -67,14 +67,14 @@
 KoShapePrivate::KoShapePrivate(KoShape *shape)
     : q_ptr(shape)
     , size(50, 50)
-    , parent(0)
-    , userData(0)
-    , appData(0)
-    , stroke(0)
-    , shadow(0)
-    , border(0)
-    , clipPath(0)
-    , filterEffectStack(0)
+    , parent(nullptr)
+    , userData(nullptr)
+    , appData(nullptr)
+    , stroke(nullptr)
+    , shadow(nullptr)
+    , border(nullptr)
+    , clipPath(nullptr)
+    , filterEffectStack(nullptr)
     , transparency(0.0)
     , zIndex(0)
     , runThrough(0)
@@ -89,7 +89,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     , textRunAroundDistanceBottom(0.0)
     , textRunAroundThreshold(0.0)
     , textRunAroundContour(KoShape::ContourFull)
-    , anchor(0)
+    , anchor(nullptr)
     , minimumHeight(0.0)
 {
     // All interactions allowed by default
@@ -138,7 +138,7 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 void KoShapePrivate::updateStroke()
 {
     Q_Q(KoShape);
-    if (stroke == 0)
+    if (stroke == nullptr)
         return;
     KoInsets insets;
     stroke->strokeInsets(q, insets);
@@ -350,7 +350,7 @@ bool KoShape::hitTest(const QPointF &position) const
     if (d->parent && d->parent->isClipped(this) && !d->parent->hitTest(position))
         return false;
 
-    QPointF point = absoluteTransformation(0).inverted().map(position);
+    QPointF point = absoluteTransformation(nullptr).inverted().map(position);
     QRectF bb(QPointF(), size());
     if (d->stroke) {
         KoInsets insets;
@@ -366,7 +366,7 @@ bool KoShape::hitTest(const QPointF &position) const
 
     // the shadow has an offset to the shape, so we simply
     // check if the position minus the shadow offset hits the shape
-    point = absoluteTransformation(0).inverted().map(position - d->shadow->offset());
+    point = absoluteTransformation(nullptr).inverted().map(position - d->shadow->offset());
 
     return bb.contains(point);
 }
@@ -375,7 +375,7 @@ QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
 
-    QTransform transform = absoluteTransformation(0);
+    QTransform transform = absoluteTransformation(nullptr);
     QRectF bb = outlineRect();
     if (d->stroke) {
         KoInsets insets;
@@ -427,7 +427,7 @@ QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) con
 
 void KoShape::applyAbsoluteTransformation(const QTransform &matrix)
 {
-    QTransform globalMatrix = absoluteTransformation(0);
+    QTransform globalMatrix = absoluteTransformation(nullptr);
     // the transformation is relative to the global coordinate system
     // but we want to change the local matrix, so convert the matrix
     // to be relative to the local coordinate system
@@ -586,7 +586,7 @@ void KoShape::update(const QRectF &rect) const
     Q_D(const KoShape);
 
     if (!d->shapeManagers.empty() && isVisible()) {
-        QRectF rc(absoluteTransformation(0).mapRect(rect));
+        QRectF rc(absoluteTransformation(nullptr).mapRect(rect));
         foreach (KoShapeManager *manager, d->shapeManagers) {
             manager->update(rc);
         }
@@ -635,7 +635,7 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
         point = QPointF(size().width() / 2.0, size().height() / 2.0);
         break;
     }
-    return absoluteTransformation(0).map(point);
+    return absoluteTransformation(nullptr).map(point);
 }
 
 void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor)
@@ -1484,11 +1484,11 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     d->fill.clear();
     if (d->stroke && !d->stroke->deref()) {
         delete d->stroke;
-        d->stroke = 0;
+        d->stroke = nullptr;
     }
     if (d->shadow && !d->shadow->deref()) {
         delete d->shadow;
-        d->shadow = 0;
+        d->shadow = nullptr;
     }
     setBackground(loadOdfFill(context));
     setStroke(loadOdfStroke(element, context));
@@ -1701,11 +1701,11 @@ QSharedPointer<KoShapeBackground> KoShape::loadOdfFill(KoShapeLoadingContext &co
         return bg;
 #endif
     } else {
-        return QSharedPointer<KoShapeBackground>(0);
+        return QSharedPointer<KoShapeBackground>(nullptr);
     }
 
     if (!bg->loadStyle(context.odfLoadingContext(), size())) {
-        return QSharedPointer<KoShapeBackground>(0);
+        return QSharedPointer<KoShapeBackground>(nullptr);
     }
 
     return bg;
@@ -1759,7 +1759,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
 #endif
     }
 
-    return 0;
+    return nullptr;
 }
 
 KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) const
@@ -1783,7 +1783,7 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
 
         return shadow;
     }
-    return 0;
+    return nullptr;
 }
 
 KoBorder *KoShapePrivate::loadOdfBorder(KoShapeLoadingContext &context) const
@@ -1795,7 +1795,7 @@ KoBorder *KoShapePrivate::loadOdfBorder(KoShapeLoadingContext &context) const
         return border;
     }
     delete border;
-    return 0;
+    return nullptr;
 }
 
 void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -2088,7 +2088,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfTransformation) {
-        QTransform matrix = absoluteTransformation(0) * context.shapeOffset(this);
+        QTransform matrix = absoluteTransformation(nullptr) * context.shapeOffset(this);
         if (!matrix.isIdentity()) {
             if (qAbs(matrix.m11() - 1) < 1E-5 // 1
                 && qAbs(matrix.m12()) < 1E-5 // 0
@@ -2248,22 +2248,22 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
 
 QPointF KoShape::shapeToDocument(const QPointF &point) const
 {
-    return absoluteTransformation(0).map(point);
+    return absoluteTransformation(nullptr).map(point);
 }
 
 QRectF KoShape::shapeToDocument(const QRectF &rect) const
 {
-    return absoluteTransformation(0).mapRect(rect);
+    return absoluteTransformation(nullptr).mapRect(rect);
 }
 
 QPointF KoShape::documentToShape(const QPointF &point) const
 {
-    return absoluteTransformation(0).inverted().map(point);
+    return absoluteTransformation(nullptr).inverted().map(point);
 }
 
 QRectF KoShape::documentToShape(const QRectF &rect) const
 {
-    return absoluteTransformation(0).inverted().mapRect(rect);
+    return absoluteTransformation(nullptr).inverted().mapRect(rect);
 }
 
 bool KoShape::addDependee(KoShape *shape)

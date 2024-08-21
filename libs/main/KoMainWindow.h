@@ -63,7 +63,7 @@ public:
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *part = 0, bool deletePrevious = true);
+    void setRootDocument(KoDocument *doc, KoPart *part = nullptr, bool deletePrevious = true);
 
     /**
      * This is used to handle the document used at start up before it actually
@@ -360,7 +360,7 @@ private:
      */
     bool queryClose() override;
 
-    bool openDocumentInternal(const QUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KoPart *newpart = nullptr, KoDocument *newdoc = nullptr);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()

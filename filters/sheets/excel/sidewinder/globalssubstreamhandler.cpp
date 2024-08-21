@@ -73,7 +73,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook *workbook, unsigned ve
     d->workbook = workbook;
     d->version = version;
     d->passwordProtected = false;
-    d->decryption = 0;
+    d->decryption = nullptr;
 }
 
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
@@ -130,7 +130,7 @@ Sheet *GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
     if (iter != d->bofMap.end())
         return iter->second;
     else
-        return 0;
+        return nullptr;
 }
 
 QString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
@@ -736,7 +736,7 @@ void GlobalsSubStreamHandler::handleFilepass(FilepassRecord *record)
         d->decryption = new RC4Decryption(record->salt(), record->encryptedVerifier(), record->encryptedVerifierHash());
         if (!d->decryption->checkPassword("VelvetSweatshop")) {
             delete d->decryption;
-            d->decryption = 0;
+            d->decryption = nullptr;
             qCWarning(lcSidewinder) << "Invalid password";
         } else {
             d->decryption->setInitialPosition(record->position() + 54 + 4);

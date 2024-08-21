@@ -149,7 +149,7 @@ KoGenStyle NumberFormatParser::parse(const QString &origNumberFormat, KoGenStyle
                     QString localeId;
                     while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']'))
                         localeId += numberFormat[i++];
-                    const QLocale locale = NumberFormatParser::locale(localeId.toInt(0, 16));
+                    const QLocale locale = NumberFormatParser::locale(localeId.toInt(nullptr, 16));
                     language = locale.name();
                     language = language.left(language.indexOf(QLatin1String("_")));
                     country = locale.name();

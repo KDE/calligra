@@ -43,7 +43,7 @@ FormulaCursor::FormulaCursor(BasicElement *element, int position)
 
 FormulaCursor::FormulaCursor()
 {
-    FormulaCursor(0, 0);
+    FormulaCursor(nullptr, 0);
 }
 
 FormulaCursor::FormulaCursor(const FormulaCursor &other)
@@ -212,7 +212,7 @@ void FormulaCursor::setCursorTo(const QPointF &point)
         }
     } else {
         BasicElement *formulaElement = m_currentElement;
-        while (formulaElement->parentElement() != 0) {
+        while (formulaElement->parentElement() != nullptr) {
             formulaElement = formulaElement->parentElement();
         }
         formulaElement->setCursorTo(*this, point);

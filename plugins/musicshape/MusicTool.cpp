@@ -20,7 +20,7 @@
 
 MusicTool::MusicTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_musicshape(0)
+    , m_musicshape(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
 void MusicTool::deactivate()
 {
     // debugMusic<<"MusicTool::deactivate";
-    m_musicshape = 0;
+    m_musicshape = nullptr;
 }
 
 void MusicTool::paint(QPainter &painter, const KoViewConverter &viewConverter)

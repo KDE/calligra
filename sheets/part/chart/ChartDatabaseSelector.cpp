@@ -36,8 +36,8 @@ ChartDatabaseSelector::ChartDatabaseSelector(Map *map)
     , d(new Private)
 {
     d->map = map;
-    d->selection = 0;
-    d->shape = 0;
+    d->selection = nullptr;
+    d->shape = nullptr;
     d->widget.setupUi(this);
 }
 

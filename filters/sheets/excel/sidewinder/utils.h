@@ -151,20 +151,22 @@ static inline void decodeRK(unsigned rkvalue, bool &isInteger, int &i, double &f
  */
 enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
 
-QString readByteString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0);
-QString readTerminatedUnicodeChars(const void *data, unsigned *size = 0, unsigned maxSize = -1, bool *error = 0);
+QString readByteString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = nullptr, unsigned *size = nullptr);
+QString readTerminatedUnicodeChars(const void *data, unsigned *size = nullptr, unsigned maxSize = -1, bool *error = nullptr);
 QString readUnicodeChars(const void *data,
                          unsigned length,
                          unsigned maxSize = -1,
-                         bool *error = 0,
-                         unsigned *size = 0,
+                         bool *error = nullptr,
+                         unsigned *size = nullptr,
                          unsigned continuePosition = -1,
                          unsigned offset = 0,
                          bool unicode = true,
                          bool asianPhonetics = false,
                          bool richText = false);
-QString readUnicodeString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0, unsigned continuePosition = -1);
-QString readUnicodeCharArray(const void *p, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0, unsigned continuePosition = -1);
+QString
+readUnicodeString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = nullptr, unsigned *size = nullptr, unsigned continuePosition = -1);
+QString
+readUnicodeCharArray(const void *p, unsigned length, unsigned maxSize = -1, bool *error = nullptr, unsigned *size = nullptr, unsigned continuePosition = -1);
 
 std::ostream &operator<<(std::ostream &s, const QString &ustring);
 std::ostream &operator<<(std::ostream &s, const QByteArray &data);

@@ -538,7 +538,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
         return;
 
     int lastN = -1;
-    Profile *profile = 0; // profile to be moved, will be the last one
+    Profile *profile = nullptr; // profile to be moved, will be the last one
     foreach (Profile *p, m_profiles) {
         if (p->index > lastN) {
             lastN = p->index;
@@ -546,7 +546,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
         }
     }
 
-    Q_ASSERT(profile != 0);
+    Q_ASSERT(profile != nullptr);
 
     // do nothing if the deleted group was the last one
     if (deletedIndex > lastN)

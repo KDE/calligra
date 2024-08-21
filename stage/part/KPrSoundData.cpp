@@ -21,7 +21,7 @@ public:
     Private(KPrSoundCollection *c)
         : refCount(0)
         , collection(c)
-        , tempFile(0)
+        , tempFile(nullptr)
         , taggedForSaving(false)
     {
     }
@@ -134,7 +134,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device)
     struct Finally {
         Finally(QIODevice *d)
             : device(d)
-            , bytes(0)
+            , bytes(nullptr)
         {
         }
         ~Finally()
@@ -149,7 +149,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device)
 
     // remove prev data
     delete d->tempFile;
-    d->tempFile = 0;
+    d->tempFile = nullptr;
 
     d->tempFile = new QTemporaryFile();
     if (!d->tempFile->open())
@@ -175,7 +175,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device)
         }
         if (failed) { // read or write failed; so lets cleanly abort.
             delete d->tempFile;
-            d->tempFile = 0;
+            d->tempFile = nullptr;
             return false;
         }
     }

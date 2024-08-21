@@ -178,7 +178,7 @@ KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1, KoPathPoint *p2)
         p[j - 1] = curve[0];
     }
 
-    KoPathPoint *pm = new KoPathPoint(0, p[2]);
+    KoPathPoint *pm = new KoPathPoint(nullptr, p[2]);
     pm->setControlPoint1(p[1]);
     pm->setControlPoint2(curve[1]);
     p1->setControlPoint2(p[0]);

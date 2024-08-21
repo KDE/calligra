@@ -55,12 +55,12 @@ KoMarkerData::KoMarkerData(KoMarker *marker, qreal width, MarkerPosition positio
 }
 
 KoMarkerData::KoMarkerData(MarkerPosition position)
-    : d(new Private(0, 0, position, false))
+    : d(new Private(nullptr, 0, position, false))
 {
 }
 
 KoMarkerData::KoMarkerData()
-    : d(0)
+    : d(nullptr)
 {
     Q_ASSERT(0);
 }

@@ -53,7 +53,7 @@ bool Object::applyDrawing(const MSO::OfficeArtDgContainer &container)
             }
 
             // The drawing may attached to an anchor which contains the information where our drawing will be located.
-            MSO::XlsOfficeArtClientAnchor *anchor = spc->clientAnchor ? spc->clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>() : 0;
+            MSO::XlsOfficeArtClientAnchor *anchor = spc->clientAnchor ? spc->clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>() : nullptr;
             if (anchor) {
                 m_colL = anchor->colL;
                 m_dxL = anchor->dxL;

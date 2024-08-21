@@ -409,7 +409,7 @@ public:
     {
         if (m_itemIt != m_plcf.m_items.end())
             return *m_itemIt;
-        return 0;
+        return nullptr;
     }
 
     U32 currentRun() const
@@ -437,7 +437,7 @@ T *PLCFIterator<T>::toFirst()
     m_indexIt = m_plcf.m_indices.begin();
     if (m_itemIt != m_plcf.m_items.end())
         return *m_itemIt;
-    return 0;
+    return nullptr;
 }
 
 // Note: m_indexIt-=2 as we have n+1 indices!
@@ -517,7 +517,7 @@ template<class T>
 T *PLCFMap<T>::item(U32 index) const
 {
     auto it = m_items.find(index);
-    return it != m_items.end() ? it->second.get() : 0;
+    return it != m_items.end() ? it->second.get() : nullptr;
 }
 
 template<class T>
@@ -747,16 +747,16 @@ const U8 *FKPIterator<Offset>::current() const
             if (pos < 0) {
                 wvlog << "ERROR: FKP internalOffset (" << m_fkp.m_internalOffset << ") is bigger than "
                       << "2*" << (int)tmp << ", FKP array index would be negative!" << Qt::endl;
-                return 0;
+                return nullptr;
             } else if (pos >= 511 - m_fkp.m_internalOffset) {
                 wvlog << "ERROR: FKP array index (" << pos << " is bigger than allocated size (" << 511 - m_fkp.m_internalOffset << ")" << Qt::endl;
-                return 0;
+                return nullptr;
             } else {
                 return &m_fkp.m_fkp[pos];
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /**

@@ -16,7 +16,7 @@ public:
     explicit KoSelectionPrivate(KoSelection *parent)
         : KoShapePrivate(parent)
         , eventTriggered(false)
-        , activeLayer(0)
+        , activeLayer(nullptr)
         , q(parent)
     {
     }

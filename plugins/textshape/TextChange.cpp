@@ -8,8 +8,8 @@
 TextChange::TextChange()
     : m_formerPosition(0)
     , m_position(0)
-    , m_previous(0)
-    , m_next(0)
+    , m_previous(nullptr)
+    , m_next(nullptr)
 {
 }
 

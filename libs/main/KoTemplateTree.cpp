@@ -24,8 +24,8 @@
 
 KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath, bool readTree)
     : m_templatesResourcePath(templatesResourcePath)
-    , m_defaultGroup(0)
-    , m_defaultTemplate(0)
+    , m_defaultGroup(nullptr)
+    , m_defaultTemplate(nullptr)
 {
     if (readTree)
         readTemplateTree();
@@ -65,7 +65,7 @@ void KoTemplateTree::writeTemplateTree()
                 // kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     // kDebug( 30003 ) <<"local only";
-                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
+                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), nullptr);
                     // kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
                     // kDebug( 30003 ) <<"global";

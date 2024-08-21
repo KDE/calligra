@@ -56,8 +56,8 @@ QString rotationAlignmentToString(KoTableCellStyle::RotationAlignment align)
 }
 
 KoTableCellStylePrivate::KoTableCellStylePrivate()
-    : paragraphStyle(0)
-    , parentStyle(0)
+    : paragraphStyle(nullptr)
+    , parentStyle(nullptr)
     , next(0)
 {
 }

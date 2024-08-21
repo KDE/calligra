@@ -28,8 +28,8 @@
 #include <QFile>
 
 /* Init static data */
-FileHeader* XmlParser::_fileHeader = 0;
-Document* XmlParser::_root = 0;
+FileHeader* XmlParser::_fileHeader = nullptr;
+Document* XmlParser::_root = nullptr;
 KoStore* XmlParser::_in = nullptr;
 
 XmlParser::XmlParser(const QString &filename): _filename(filename)

@@ -76,7 +76,8 @@ ListLevelWidget::ListLevelWidget(QWidget *parent)
     widget.format->addItems(KoOdfNumberDefinition::userFormatDescriptions());
 
     QGridLayout *bulletLayout = new QGridLayout();
-    m_charSelect = new KCharSelect(0, 0, KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
+    m_charSelect =
+        new KCharSelect(nullptr, nullptr, KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
     bulletLayout->addWidget(m_charSelect, 0, 0);
     widget.bulletTab->setLayout(bulletLayout);
 

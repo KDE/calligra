@@ -278,8 +278,8 @@ PreferenceDialog::PreferenceDialog(View *view)
     connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &PreferenceDialog::slotDefault);
     connect(button(QDialogButtonBox::Reset), &QAbstractButton::clicked, this, &PreferenceDialog::slotReset);
 
-    QWidget *widget = 0;
-    KPageWidgetItem *page = 0;
+    QWidget *widget = nullptr;
+    KPageWidgetItem *page = nullptr;
 
     // Interface Options Widget
     widget = new QWidget(this);

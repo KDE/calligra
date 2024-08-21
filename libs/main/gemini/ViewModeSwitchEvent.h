@@ -20,7 +20,7 @@ struct ViewModeSynchronisationObject {
         , currentIndex(-1)
         , scrollBarValue(QPoint())
         , zoomLevel(0)
-        , gridData(0)
+        , gridData(nullptr)
     {
     }
 

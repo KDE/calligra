@@ -53,8 +53,8 @@
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
     : KoShapeContainer(new KoTextShapeContainerModel())
     , KoFrameShape(KoXmlNS::draw, "text-box")
-    , m_pageProvider(0)
-    , m_imageCollection(0)
+    , m_pageProvider(nullptr)
+    , m_imageCollection(nullptr)
     , m_clip(true)
 {
     setShapeId(TextShape_SHAPEID);
@@ -169,7 +169,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
 QPointF TextShape::convertScreenPos(const QPointF &point) const
 {
-    QPointF p = absoluteTransformation(0).inverted().map(point);
+    QPointF p = absoluteTransformation(nullptr).inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
@@ -237,7 +237,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     }
     const bool saveMyText = index == 0; // only save the text once.
 
-    m_textShapeData->saveOdf(context, 0, 0, saveMyText ? -1 : 0);
+    m_textShapeData->saveOdf(context, nullptr, 0, saveMyText ? -1 : 0);
     writer.endElement(); // draw:text-box
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -363,7 +363,7 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
 
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    bool ok = m_textShapeData->loadOdf(element, context, 0, this);
+    bool ok = m_textShapeData->loadOdf(element, context, nullptr, this);
     if (ok)
         ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
     return ok;

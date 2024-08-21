@@ -56,7 +56,7 @@ KWTextFrameSet::~KWTextFrameSet()
     debugWords << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
     // delete the root area provider first and set to 0 as we don't want relayouting on deletion
     delete m_rootAreaProvider;
-    m_rootAreaProvider = 0;
+    m_rootAreaProvider = nullptr;
     delete m_document;
 }
 
@@ -141,7 +141,7 @@ void KWTextFrameSet::cleanupShape(KoShape *shape)
                 KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
                 rootAreaProvider()->releaseAllAfter(prevRootArea);
                 lay->removeRootArea(prevRootArea);
-                rootArea->setAssociatedShape(0);
+                rootArea->setAssociatedShape(nullptr);
                 break;
             }
         }

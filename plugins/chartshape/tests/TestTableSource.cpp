@@ -60,13 +60,13 @@ void TestTableSource::testRenaming()
 void TestTableSource::testRemoval()
 {
     m_source.remove("Table1");
-    QCOMPARE(m_source.get("Table1"), (Table *)0);
+    QCOMPARE(m_source.get("Table1"), (Table *)nullptr);
     QVERIFY(m_source.get("Table2"));
     QCOMPARE(m_source.get("Table2")->model(), &m_table2);
 
     m_source.remove("Table2");
-    QCOMPARE(m_source.get("Table1"), (Table *)0);
-    QCOMPARE(m_source.get("Table2"), (Table *)0);
+    QCOMPARE(m_source.get("Table1"), (Table *)nullptr);
+    QCOMPARE(m_source.get("Table2"), (Table *)nullptr);
 }
 
 void TestTableSource::testAdding_SAM()
@@ -95,13 +95,13 @@ void TestTableSource::testRenaming_SAM()
 void TestTableSource::testRemoval_SAM()
 {
     m_sheetAccessModel.removeColumns(0, 1);
-    QCOMPARE(m_source.get("Table3"), (Table *)0);
+    QCOMPARE(m_source.get("Table3"), (Table *)nullptr);
     QVERIFY(m_source.get("Table4"));
     QCOMPARE(m_source.get("Table4")->model(), &m_table4);
 
     m_sheetAccessModel.removeColumns(0, 1);
-    QCOMPARE(m_source.get("Table3"), (Table *)0);
-    QCOMPARE(m_source.get("Table4"), (Table *)0);
+    QCOMPARE(m_source.get("Table3"), (Table *)nullptr);
+    QCOMPARE(m_source.get("Table4"), (Table *)nullptr);
 }
 
 QTEST_MAIN(TestTableSource)

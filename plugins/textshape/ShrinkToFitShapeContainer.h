@@ -46,7 +46,7 @@ public:
 class ShrinkToFitShapeContainer : public KoShapeContainer
 {
 public:
-    explicit ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources = 0);
+    explicit ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources = nullptr);
     ~ShrinkToFitShapeContainer() override;
 
     // reimplemented
@@ -59,7 +59,7 @@ public:
     /**
      * Factory function to create and return a ShrinkToFitShapeContainer instance that wraps the \a shape with it.
      */
-    static ShrinkToFitShapeContainer *wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager = 0);
+    static ShrinkToFitShapeContainer *wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager = nullptr);
 
     /**
      * Try to load text-on-shape from \a element and wrap \a shape with it.

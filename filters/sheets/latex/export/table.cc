@@ -248,7 +248,7 @@ void Table::generate(QTextStream& out)
 void Table::generateTopLineBorder(QTextStream& out, int row)
 {
 
-    Cell* cell = 0;
+    Cell* cell = nullptr;
     QBitArray border(getMaxColumn());
     bool fullLine = true;
     for (int index = 1; index <= getMaxColumn(); index++) {
@@ -299,7 +299,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 /*******************************************/
 void Table::generateBottomLineBorder(QTextStream& out, int row)
 {
-    Cell* cell = 0;
+    Cell* cell = nullptr;
     QBitArray border(getMaxColumn());
     bool fullLine = true;
 
@@ -362,7 +362,7 @@ void Table::generateCell(QTextStream& out, int row, int col)
 /*******************************************/
 void Table::generateTableHeader(QTextStream& out)
 {
-    Column* column = 0;
+    Column* column = nullptr;
 
     out << "{";
 

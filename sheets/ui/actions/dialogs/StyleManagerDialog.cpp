@@ -155,7 +155,7 @@ void StyleManagerDialog::onApply()
 
 void StyleManagerDialog::slotNew()
 {
-    CustomStyle *parentStyle = 0;
+    CustomStyle *parentStyle = nullptr;
     QTreeWidgetItem *item = m_styleList->currentItem();
     if (item) {
         const QString name = item->text(0);
@@ -168,7 +168,7 @@ void StyleManagerDialog::slotNew()
 
     int i = 1;
     QString newName(i18n("style%1", m_styleManager->count() + i));
-    while (m_styleManager->style(newName) != 0) {
+    while (m_styleManager->style(newName) != nullptr) {
         ++i;
         newName = i18n("style%1", m_styleManager->count() + i);
     }
@@ -194,7 +194,7 @@ void StyleManagerDialog::slotEdit()
     if (!item)
         return;
 
-    CustomStyle *style = 0;
+    CustomStyle *style = nullptr;
 
     QString name(item->text(0));
     if (name == i18n("Default"))
@@ -224,7 +224,7 @@ void StyleManagerDialog::slotRemove()
         return;
 
     const QString name = item->text(0);
-    CustomStyle *style = 0;
+    CustomStyle *style = nullptr;
     if (name == i18n("Default"))
         style = m_styleManager->defaultStyle();
     else
@@ -245,7 +245,7 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem *item)
     if (!item)
         return;
     const QString name = item->text(0);
-    CustomStyle *style = 0;
+    CustomStyle *style = nullptr;
     if (name == i18n("Default"))
         style = m_styleManager->defaultStyle();
     else

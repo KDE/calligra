@@ -10,7 +10,7 @@
 #include <KLocalizedString>
 
 ClipCommand::ClipCommand(PictureShape *shape, bool clip)
-    : KUndo2Command(0)
+    : KUndo2Command(nullptr)
     , m_pictureShape(shape)
     , m_clip(clip)
 {
@@ -30,7 +30,7 @@ void ClipCommand::redo()
     if (m_clip) {
         m_pictureShape->setClipPath(m_pictureShape->generateClipPath());
     } else {
-        m_pictureShape->setClipPath(0);
+        m_pictureShape->setClipPath(nullptr);
     }
     m_pictureShape->update();
 }
@@ -38,7 +38,7 @@ void ClipCommand::redo()
 void ClipCommand::undo()
 {
     if (m_clip) {
-        m_pictureShape->setClipPath(0);
+        m_pictureShape->setClipPath(nullptr);
     } else {
         m_pictureShape->setClipPath(m_pictureShape->generateClipPath());
     }

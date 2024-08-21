@@ -17,7 +17,7 @@
 RoundCornersCommand::RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_path(path)
-    , m_copy(0)
+    , m_copy(nullptr)
 {
     Q_ASSERT(path);
 
@@ -194,8 +194,8 @@ void RoundCornersCommand::roundPath()
         KoPathSegment lastSeg;
 
         KoPathPoint *currPoint = nextSeg.first();
-        KoPathPoint *firstPoint = 0;
-        KoPathPoint *lastPoint = 0;
+        KoPathPoint *firstPoint = nullptr;
+        KoPathPoint *lastPoint = nullptr;
 
         // check if first path point is a smooth join with the closing segment
         bool firstPointIsCorner = m_copy->isClosedSubpath(subpathIndex) && !currPoint->isSmooth(prevSeg.first(), nextSeg.second());
@@ -325,7 +325,7 @@ KoPathPoint *RoundCornersCommand::addSegment(KoPathShape *p, KoPathSegment &s)
         return p->curveTo(s.first()->controlPoint2(), s.second()->controlPoint1(), s.second()->point());
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void RoundCornersCommand::copyPath(KoPathShape *dst, KoPathShape *src)

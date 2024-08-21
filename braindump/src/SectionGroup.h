@@ -31,10 +31,10 @@ public:
     SectionGroup(const SectionGroup &_rhs);
     virtual ~SectionGroup();
     void insertSection(Section *page, int index);
-    void insertSection(Section *page, Section *before = 0);
+    void insertSection(Section *page, Section *before = nullptr);
     void removeSection(Section *page);
     QList<Section *> sections() const;
-    Section *newSection(Section *before = 0);
+    Section *newSection(Section *before = nullptr);
     Section *nextSection(Section *section);
     int indexOf(Section *section);
 

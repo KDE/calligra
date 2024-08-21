@@ -32,7 +32,7 @@ class XlsxXmlTableReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlTableReader(KoOdfWriters *writers);
     ~XlsxXmlTableReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_table();

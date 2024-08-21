@@ -61,7 +61,7 @@ public:
     /**
      * Creates a new tabbar.
      */
-    explicit TabBar(QWidget *parent = nullptr, const char *name = 0);
+    explicit TabBar(QWidget *parent = nullptr, const char *name = nullptr);
 
     /**
      * Destroy the tabbar.

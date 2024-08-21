@@ -152,10 +152,10 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     // Default type: normal bar chart
     , chartType(BarChartType)
     , chartSubtype(NormalChartSubtype)
-    , wall(0)
-    , floor(0)
+    , wall(nullptr)
+    , floor(nullptr)
     , threeD(false)
-    , threeDScene(0)
+    , threeDScene(nullptr)
     // By default, x and y axes are not swapped.
     , vertical(false)
     // OpenOffice.org's default. It means the first pie slice starts at the
@@ -353,7 +353,7 @@ Axis *PlotArea::xAxis() const
             return axis;
     }
 
-    return 0;
+    return nullptr;
 }
 
 Axis *PlotArea::yAxis() const
@@ -363,7 +363,7 @@ Axis *PlotArea::yAxis() const
             return axis;
     }
 
-    return 0;
+    return nullptr;
 }
 
 Axis *PlotArea::secondaryXAxis() const
@@ -379,7 +379,7 @@ Axis *PlotArea::secondaryXAxis() const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 Axis *PlotArea::secondaryYAxis() const
@@ -395,7 +395,7 @@ Axis *PlotArea::secondaryYAxis() const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 ChartType PlotArea::chartType() const

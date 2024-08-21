@@ -87,14 +87,14 @@ bool operator!=(const FLD &lhs, const FLD &rhs)
 using namespace wvWare;
 
 Fields::Fields(OLEStreamReader *tableStream, const Word97::FIB &fib)
-    : m_main(0)
-    , m_header(0)
-    , m_footnote(0)
-    , m_annotation(0)
-    , m_endnote(0)
-    , m_textbox(0)
-    , m_headerTextbox(0)
-    , m_bookmark(0)
+    : m_main(nullptr)
+    , m_header(nullptr)
+    , m_footnote(nullptr)
+    , m_annotation(nullptr)
+    , m_endnote(nullptr)
+    , m_textbox(nullptr)
+    , m_headerTextbox(nullptr)
+    , m_bookmark(nullptr)
 {
     tableStream->push();
 
@@ -153,7 +153,7 @@ const FLD *Fields::fldForCP(Parser::SubDocument subDocument, U32 cp) const
     switch (subDocument) {
     case Parser::None:
         wvlog << "Error: The state of the parser is invalid!" << Qt::endl;
-        return 0;
+        return nullptr;
         break;
     case Parser::Main:
         return fldForCP(m_main, cp);
@@ -166,7 +166,7 @@ const FLD *Fields::fldForCP(Parser::SubDocument subDocument, U32 cp) const
         break;
     case Parser::Macro:
         wvlog << "Warning: There shouldn't be any fields in macro text" << Qt::endl;
-        return 0;
+        return nullptr;
         break;
     case Parser::Annotation:
         return fldForCP(m_annotation, cp);
@@ -184,7 +184,7 @@ const FLD *Fields::fldForCP(Parser::SubDocument subDocument, U32 cp) const
         return fldForCP(m_bookmark, cp);
         break;
     }
-    return 0; // make the compiler happy, never reached
+    return nullptr; // make the compiler happy, never reached
 }
 
 void Fields::read(U32 fc, U32 lcb, OLEStreamReader *tableStream, PLCFMap<FLD> **plcf)
@@ -204,7 +204,7 @@ void Fields::sanityCheck(const OLEStreamReader *tableStream, U32 nextFC, U32 lcb
 const FLD *Fields::fldForCP(const PLCFMap<FLD> *plcf, U32 cp) const
 {
     if (!plcf)
-        return 0;
+        return nullptr;
 
     return plcf->item(cp);
 }

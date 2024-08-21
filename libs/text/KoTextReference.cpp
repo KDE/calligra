@@ -42,7 +42,7 @@ void KoTextReference::variableMoved(const QTextDocument *document, int posInDocu
 void KoTextReference::setup()
 {
     locator()->addListener(this);
-    variableMoved(0, 0);
+    variableMoved(nullptr, 0);
 }
 
 KoTextLocator *KoTextReference::locator()

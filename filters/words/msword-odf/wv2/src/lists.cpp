@@ -229,8 +229,8 @@ using namespace wvWare;
 
 ListLevel::ListLevel(OLEStreamReader *tableStream)
     : m_lvlf(tableStream, false)
-    , m_grpprlPapx(0)
-    , m_grpprlChpx(0)
+    , m_grpprlPapx(nullptr)
+    , m_grpprlChpx(nullptr)
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "######" << Qt::endl
@@ -262,8 +262,8 @@ ListLevel::ListLevel(OLEStreamReader *tableStream)
 }
 
 ListLevel::ListLevel(const Word97::ANLD &anld)
-    : m_grpprlPapx(0)
-    , m_grpprlChpx(0)
+    : m_grpprlPapx(nullptr)
+    , m_grpprlChpx(nullptr)
 {
     m_lvlf.iStartAt = anld.iStartAt;
     m_lvlf.nfc = anld.nfc;
@@ -397,7 +397,7 @@ void ListLevel::applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) 
     wvlog << "cbGrpprlPapx=" << static_cast<int>(m_lvlf.cbGrpprlPapx) << Qt::endl;
 #endif
     if (m_grpprlPapx)
-        pap->apply(m_grpprlPapx, m_lvlf.cbGrpprlPapx, 0, styleSheet, 0, Word8);
+        pap->apply(m_grpprlPapx, m_lvlf.cbGrpprlPapx, nullptr, styleSheet, nullptr, Word8);
 }
 
 void ListLevel::applyGrpprlChpx(Word97::CHP *chp, const Style *style, const StyleSheet *styleSheet) const
@@ -406,7 +406,7 @@ void ListLevel::applyGrpprlChpx(Word97::CHP *chp, const Style *style, const Styl
     wvlog << "cbGrpprlChpx=" << static_cast<int>(m_lvlf.cbGrpprlChpx) << Qt::endl;
 #endif
     if (m_grpprlChpx)
-        chp->apply(m_grpprlChpx, m_lvlf.cbGrpprlChpx, style, styleSheet, 0, Word8);
+        chp->apply(m_grpprlChpx, m_lvlf.cbGrpprlChpx, style, styleSheet, nullptr, Word8);
 }
 
 int ListLevel::writeCharProperty(U16 sprm, U8 value, U8 **grpprl)
@@ -482,7 +482,7 @@ const ListLevel *ListData::listLevel(U8 level) const
 {
     if (level < m_listLevels.size())
         return m_listLevels[level];
-    return 0;
+    return nullptr;
 }
 
 void ListData::applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const
@@ -502,7 +502,7 @@ void ListData::applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) c
 
 ListFormatOverrideLVL::ListFormatOverrideLVL(OLEStreamReader *tableStream)
     : m_lfolvl(tableStream, false)
-    , m_level(0)
+    , m_level(nullptr)
 {
     if (m_lfolvl.fFormatting) {
         m_level = new ListLevel(tableStream);
@@ -587,7 +587,7 @@ const ListFormatOverrideLVL *ListFormatOverride::overrideLVL(U8 level) const
     for (; it != end; ++it)
         if ((*it)->level() == level)
             return *it;
-    return 0;
+    return nullptr;
 }
 
 void ListFormatOverride::appendListFormatOverrideLVL(ListFormatOverrideLVL *listFormatOverrideLVL)
@@ -596,7 +596,7 @@ void ListFormatOverride::appendListFormatOverrideLVL(ListFormatOverrideLVL *list
 }
 
 ListText::ListText()
-    : chp(0)
+    : chp(nullptr)
 {
 }
 
@@ -691,11 +691,11 @@ void ListInfo::dump() const
 }
 
 ListInfoProvider::ListInfoProvider(const StyleSheet *styleSheet)
-    : m_listNames(0)
-    , m_pap(0)
+    : m_listNames(nullptr)
+    , m_pap(nullptr)
     , m_styleSheet(styleSheet)
-    , m_currentLfoLVL(0)
-    , m_currentLst(0)
+    , m_currentLfoLVL(nullptr)
+    , m_currentLst(nullptr)
     , m_version(Word67)
 {
 #ifdef WV2_DEBUG_LIST_READING
@@ -704,11 +704,11 @@ ListInfoProvider::ListInfoProvider(const StyleSheet *styleSheet)
 }
 
 ListInfoProvider::ListInfoProvider(OLEStreamReader *tableStream, const Word97::FIB &fib, const StyleSheet *styleSheet)
-    : m_listNames(0)
-    , m_pap(0)
+    : m_listNames(nullptr)
+    , m_pap(nullptr)
     , m_styleSheet(styleSheet)
-    , m_currentLfoLVL(0)
-    , m_currentLst(0)
+    , m_currentLfoLVL(nullptr)
+    , m_currentLst(nullptr)
     , m_version(Word8)
 {
 #ifdef WV2_DEBUG_LIST_READING
@@ -772,9 +772,9 @@ bool ListInfoProvider::setPAP(Word97::PAP *pap)
 #endif
     // Is it a list paragraph at all?
     if ((m_version == Word67 ? static_cast<S16>(pap->nLvlAnm) : pap->ilfo) < 1) {
-        m_pap = 0;
-        m_currentLfoLVL = 0;
-        m_currentLst = 0;
+        m_pap = nullptr;
+        m_currentLfoLVL = nullptr;
+        m_currentLst = nullptr;
         return false;
     }
 
@@ -789,9 +789,9 @@ bool ListInfoProvider::setPAP(Word97::PAP *pap)
                 convertCompatANLD();
             else {
                 wvlog << "Bug: ListInfoProvider::setWord97StylePAP -- out of bounds access (ilfo=" << pap->ilfo << ")" << Qt::endl;
-                m_pap = 0;
-                m_currentLfoLVL = 0;
-                m_currentLst = 0;
+                m_pap = nullptr;
+                m_currentLfoLVL = nullptr;
+                m_currentLst = nullptr;
                 return false;
             }
         }
@@ -948,14 +948,14 @@ ListData *ListInfoProvider::findLST(S32 lsid)
     for (; it != end; ++it)
         if ((*it)->lsid() == lsid)
             return *it;
-    return 0;
+    return nullptr;
 }
 
 const ListLevel *ListInfoProvider::formattingListLevel() const
 {
     if (m_currentLfoLVL && m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel())
         return m_currentLfoLVL->listLevel();
-    return m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : 0;
+    return m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : nullptr;
 }
 
 std::pair<S32, bool> ListInfoProvider::startAt()
@@ -970,7 +970,7 @@ std::pair<S32, bool> ListInfoProvider::startAt()
         // Reset the startAt flag after the first paragraph (Word 97 spec, LFO parag.)
         m_currentLfoLVL->resetStartAtFlag();
     } else {
-        const ListLevel *level = m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : 0;
+        const ListLevel *level = m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : nullptr;
         if (level)
             start.first = level->startAt();
     }

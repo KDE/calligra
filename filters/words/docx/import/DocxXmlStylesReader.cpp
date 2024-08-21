@@ -382,7 +382,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (type == "table") {
                     m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
                     m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                    if (m_currentTableStyleProperties == 0) {
+                    if (m_currentTableStyleProperties == nullptr) {
                         m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                     }
                 }
@@ -390,7 +390,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (type == "table") {
                     m_currentTableStyleProperties->textStyle = m_currentTextStyle;
                     m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
-                    m_currentTableStyleProperties = 0;
+                    m_currentTableStyleProperties = nullptr;
                 }
             }
             else if (name() == QLatin1StringView("pPr"))
@@ -398,7 +398,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (type == "table") {
                     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
                     m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                    if (m_currentTableStyleProperties == 0) {
+                    if (m_currentTableStyleProperties == nullptr) {
                         m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                     }
                 }
@@ -406,30 +406,30 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 if (type == "table") {
                     m_currentTableStyleProperties->paragraphStyle = m_currentParagraphStyle;
                     m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
-                    m_currentTableStyleProperties = 0;
+                    m_currentTableStyleProperties = nullptr;
                 }
             }
             else if (name() == QLatin1StringView("tblPr"))
             {
                 m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                if (m_currentTableStyleProperties == 0) {
+                if (m_currentTableStyleProperties == nullptr) {
                     m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 }
                 m_tableMainStyle = KoTblStyle::create();
                 TRY_READ(tblPr)
                 m_currentStyle->mainStyle = m_tableMainStyle;
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
-                m_currentTableStyleProperties = 0;
+                m_currentTableStyleProperties = nullptr;
             }
             else if (name() == QLatin1StringView("tcPr"))
             {
                 m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                if (m_currentTableStyleProperties == 0) {
+                if (m_currentTableStyleProperties == nullptr) {
                     m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 }
                 TRY_READ(tcPr)
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
-                m_currentTableStyleProperties = 0;
+                m_currentTableStyleProperties = nullptr;
             }
             ELSE_TRY_READ_IF(tblStylePr)
             else if (QUALIFIED_NAME_IS(basedOn))
@@ -584,7 +584,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SeCell, m_currentTableStyleProperties);
     }
 
-    m_currentTableStyleProperties = 0;
+    m_currentTableStyleProperties = nullptr;
 
     READ_EPILOGUE
 }

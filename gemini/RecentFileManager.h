@@ -15,7 +15,7 @@ class RecentFileManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit RecentFileManager(QObject *parent = 0);
+    explicit RecentFileManager(QObject *parent = nullptr);
     ~RecentFileManager() override;
 
     /// @return the size of the recent files list

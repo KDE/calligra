@@ -44,32 +44,32 @@ public:
     Sheet *sheet() const;
 
     /** Height of the given row. firstRow and lastRow are set to the first and last row that share the same height. */
-    double rowHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
+    double rowHeight(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
     void setRowHeight(int firstRow, int lastRow, double height);
 
-    bool isHidden(int row, int *lastRow = 0, int *firstRow = 0) const;
+    bool isHidden(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
 
-    bool isFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
+    bool isFiltered(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
     void setFiltered(int firstRow, int lastRow, bool filtered);
 
-    bool isHiddenOrFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
+    bool isHiddenOrFiltered(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
 
-    double visibleHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
+    double visibleHeight(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
 
     double totalRowHeight(int firstRow, int lastRow) const;
     double totalVisibleRowHeight(int firstRow, int lastRow) const;
 
-    int rowForPosition(double ypos, double *topOfRow = 0) const;
+    int rowForPosition(double ypos, double *topOfRow = nullptr) const;
 
-    bool hasPageBreak(int row, int *lastRow = 0, int *firstRow = 0) const;
+    bool hasPageBreak(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 
     /** Convenience function - sets everything at once. */
     void setRowFormat(int firstRow, int lastRow, const RowFormat &f);
     RowFormat getRowFormat(int row) const;
 
-    bool isDefaultRow(int row, int *lastRow = 0, int *firstRow = 0) const;
+    bool isDefaultRow(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
     void setDefault(int firstRow, int lastRow);
     int lastNonDefaultRow() const;
 

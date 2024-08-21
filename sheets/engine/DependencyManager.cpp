@@ -247,7 +247,7 @@ void DependencyManager::regionMoved(const Region &movedRegion, const CellBase &d
     Region::ConstIterator end(movedRegion.constEnd());
     for (Region::ConstIterator it(movedRegion.constBegin()); it != end; ++it) {
         SheetBase *const sheet = (*it)->sheet();
-        locationOffset.setSheet((sheet == destination.sheet()) ? 0 : destination.sheet());
+        locationOffset.setSheet((sheet == destination.sheet()) ? nullptr : destination.sheet());
 
         QHash<SheetBase *, RTree<CellBase> *>::ConstIterator cit = d->consumers.constFind(sheet);
         if (cit == d->consumers.constEnd())

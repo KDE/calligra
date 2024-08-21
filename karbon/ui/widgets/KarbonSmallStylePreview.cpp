@@ -39,7 +39,7 @@ class KarbonFillStyleWidget : public QPushButton
 public:
     KarbonFillStyleWidget(QWidget *parent)
         : QPushButton(parent)
-        , m_fill(0)
+        , m_fill(nullptr)
         , m_checkerPainter(5)
     {
         setCursor(Qt::PointingHandCursor);
@@ -105,7 +105,7 @@ class KarbonStrokeStyleWidget : public QPushButton
 public:
     KarbonStrokeStyleWidget(QWidget *parent)
         : QPushButton(parent)
-        , m_stroke(0)
+        , m_stroke(nullptr)
         , m_checkerPainter(5)
     {
         setCursor(Qt::PointingHandCursor);
@@ -224,8 +224,8 @@ void KarbonSmallStylePreview::selectionChanged()
 {
     KoCanvasController *controller = KoToolManager::instance()->activeCanvasController();
     if (!controller || !controller->canvas()) {
-        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(0));
-        m_strokeFrame->setStroke(0);
+        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(nullptr));
+        m_strokeFrame->setStroke(nullptr);
         QWidget::update();
         return;
     }
@@ -235,8 +235,8 @@ void KarbonSmallStylePreview::selectionChanged()
         m_fillFrame->setFill(shape->background());
         m_strokeFrame->setStroke(shape->stroke());
     } else {
-        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(0));
-        m_strokeFrame->setStroke(0);
+        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(nullptr));
+        m_strokeFrame->setStroke(nullptr);
     }
     QWidget::update();
 }

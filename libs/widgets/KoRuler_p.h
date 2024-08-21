@@ -209,7 +209,7 @@ public:
     qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     qreal doSnapping(const qreal value) const;
-    Selection selectionAtPosition(const QPoint &pos, int *selectOffset = 0);
+    Selection selectionAtPosition(const QPoint &pos, int *selectOffset = nullptr);
     int hotSpotIndex(const QPoint &pos);
     qreal effectiveActiveRangeStart() const;
     qreal effectiveActiveRangeEnd() const;

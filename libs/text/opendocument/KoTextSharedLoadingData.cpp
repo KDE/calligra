@@ -41,8 +41,8 @@ class Q_DECL_HIDDEN KoTextSharedLoadingData::Private
 {
 public:
     Private()
-        : defaultCharacterStyle(0)
-        , defaultParagraphStyle(0)
+        : defaultCharacterStyle(nullptr)
+        , defaultParagraphStyle(nullptr)
     {
     }
     ~Private()

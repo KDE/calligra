@@ -105,7 +105,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext 
 KoFilter::ConversionStatus VmlDrawingReader::read_xml()
 {
     unsigned index = 0;
-    KoXmlWriter *oldBody = 0;
+    KoXmlWriter *oldBody = nullptr;
 
     while (!atEnd()) {
         readNext();

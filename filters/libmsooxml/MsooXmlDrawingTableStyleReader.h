@@ -52,7 +52,7 @@ public:
     explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);
     ~MsooXmlDrawingTableStyleReader() override;
 
-    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();

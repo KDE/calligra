@@ -36,7 +36,7 @@ SceneObject::SceneObject(Object3D *parent, bool topLevel)
     , KoShapeContainer()
 #endif
     , m_topLevel(topLevel)
-    , m_threeDParams(0)
+    , m_threeDParams(nullptr)
 {
 }
 

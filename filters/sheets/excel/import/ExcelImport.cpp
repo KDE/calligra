@@ -171,7 +171,7 @@ ExcelImport::ExcelImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
     d = new Private(this);
-    d->storeout = 0;
+    d->storeout = nullptr;
 }
 
 ExcelImport::~ExcelImport()
@@ -216,17 +216,17 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
     connect(d->workbook, &Workbook::sigProgress, this, &ExcelImport::slotSigProgress);
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
-        d->workbook = 0;
+        d->workbook = nullptr;
         delete d->storeout;
-        d->storeout = 0;
+        d->storeout = nullptr;
         return KoFilter::InvalidFormat;
     }
 
     if (d->workbook->isPasswordProtected()) {
         delete d->workbook;
-        d->workbook = 0;
+        d->workbook = nullptr;
         delete d->storeout;
-        d->storeout = 0;
+        d->storeout = nullptr;
         return KoFilter::PasswordProtected;
     }
 
@@ -297,7 +297,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
     }
 
     delete d->storeout;
-    d->storeout = 0;
+    d->storeout = nullptr;
     storeBuffer.close();
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
@@ -362,8 +362,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray &from, const QB
     delete d->shapeStyles;
     delete d->dataStyles;
     d->inputFile.clear();
-    d->outputDoc = 0;
-    d->shapesXml = 0;
+    d->outputDoc = nullptr;
+    d->shapesXml = nullptr;
 
     Q_EMIT sigProgress(100);
     return KoFilter::OK;
@@ -986,7 +986,7 @@ void ExcelImport::Private::processCellObjects(Cell *ic, Calligra::Sheets::Cell o
     // handle charts
     foreach (ChartObject *chart, ic->charts()) {
         Sheet *const sheet = ic->sheet();
-        if (chart->m_chart->m_impl == 0) {
+        if (chart->m_chart->m_impl == nullptr) {
             qCDebug(lcExcelImport) << "Invalid chart to be created, no implementation.";
             continue;
         }

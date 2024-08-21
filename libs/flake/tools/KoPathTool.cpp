@@ -66,8 +66,8 @@ qreal squaredDistance(const QPointF &p1, const QPointF &p2)
 
 struct KoPathTool::PathSegment {
     PathSegment()
-        : path(0)
-        , segmentStart(0)
+        : path(nullptr)
+        , segmentStart(nullptr)
         , positionOnSegment(0)
     {
     }
@@ -85,10 +85,10 @@ struct KoPathTool::PathSegment {
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
-    , m_activeHandle(0)
+    , m_activeHandle(nullptr)
     , m_handleRadius(3)
-    , m_activeSegment(0)
-    , m_currentStrategy(0)
+    , m_activeSegment(nullptr)
+    , m_currentStrategy(nullptr)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
@@ -242,7 +242,7 @@ void KoPathTool::removePoints()
         PointHandle *pointHandle = dynamic_cast<PointHandle *>(m_activeHandle);
         if (pointHandle && m_pointSelection.contains(pointHandle->activePoint())) {
             delete m_activeHandle;
-            m_activeHandle = 0;
+            m_activeHandle = nullptr;
         }
         m_pointSelection.clear();
         d->canvas->addCommand(cmd);
@@ -441,7 +441,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             m_activeHandle->paint(painter, converter);
         } else {
             delete m_activeHandle;
-            m_activeHandle = 0;
+            m_activeHandle = nullptr;
         }
     }
 
@@ -479,13 +479,13 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment);
                 event->accept();
                 delete m_activeSegment;
-                m_activeSegment = 0;
+                m_activeSegment = nullptr;
             } else {
                 if ((event->modifiers() & Qt::ControlModifier) == 0) {
                     m_pointSelection.clear();
                 }
                 // start rubberband selection
-                Q_ASSERT(m_currentStrategy == 0);
+                Q_ASSERT(m_currentStrategy == nullptr);
                 m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
                 event->accept();
             }
@@ -510,7 +510,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     delete m_activeSegment;
-    m_activeSegment = 0;
+    m_activeSegment = nullptr;
 
     foreach (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         QRectF roi = handleGrabRect(shape->documentToShape(event->point));
@@ -541,7 +541,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             QList<KoPathPoint *> points = shape->pointsAt(roi);
             if (!points.empty()) {
                 // find the nearest control point from all points within the roi
-                KoPathPoint *bestPoint = 0;
+                KoPathPoint *bestPoint = nullptr;
                 KoPathPoint::PointType bestPointType = KoPathPoint::Node;
                 qreal minDistance = HUGE_VAL;
                 foreach (KoPathPoint *p, points) {
@@ -605,7 +605,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_activeHandle)
         m_activeHandle->repaint();
     delete m_activeHandle;
-    m_activeHandle = 0;
+    m_activeHandle = nullptr;
 
     PathSegment *hoveredSegment = segmentAtPoint(event->point);
     if (hoveredSegment) {
@@ -637,12 +637,12 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
             event->ignore();
         }
         delete m_currentStrategy;
-        m_currentStrategy = 0;
+        m_currentStrategy = nullptr;
 
         if (m_pointSelection.selectedShapes().count() == 1)
             Q_EMIT pathChanged(m_pointSelection.selectedShapes().constFirst());
         else
-            Q_EMIT pathChanged(0);
+            Q_EMIT pathChanged(nullptr);
     }
 }
 
@@ -662,7 +662,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Escape:
             m_currentStrategy->cancelInteraction();
             delete m_currentStrategy;
-            m_currentStrategy = 0;
+            m_currentStrategy = nullptr;
             break;
         default:
             event->ignore();
@@ -796,7 +796,7 @@ KoPathTool::PathSegment *KoPathTool::segmentAtPoint(const QPointF &point)
 
     if (!segment->isValid()) {
         delete segment;
-        segment = 0;
+        segment = nullptr;
     }
 
     return segment;
@@ -860,7 +860,7 @@ void KoPathTool::updateOptionsWidget()
     if (selectedShapes.count() == 1)
         Q_EMIT pathChanged(selectedShapes.first());
     else
-        Q_EMIT pathChanged(0);
+        Q_EMIT pathChanged(nullptr);
     Q_EMIT typeChanged(type);
 }
 
@@ -896,11 +896,11 @@ void KoPathTool::deactivate()
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape *>());
     delete m_activeHandle;
-    m_activeHandle = 0;
+    m_activeHandle = nullptr;
     delete m_activeSegment;
-    m_activeSegment = 0;
+    m_activeSegment = nullptr;
     delete m_currentStrategy;
-    m_currentStrategy = 0;
+    m_currentStrategy = nullptr;
     d->canvas->snapGuide()->reset();
 }
 

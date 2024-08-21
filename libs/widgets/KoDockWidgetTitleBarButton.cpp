@@ -45,12 +45,12 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
 {
     ensurePolished();
 
-    const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
+    const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, nullptr, this);
     if (icon().isNull()) {
         return QSize(18, 18); // TODO: was QSize(margin, margin), hardcoded values seem bad
     }
 
-    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
     if (iconSize != d->iconSize) {
         const_cast<KoDockWidgetTitleBarButton *>(this)->d->iconSize = iconSize;
         const QPixmap pm = icon().pixmap(iconSize);
@@ -100,7 +100,7 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     opt.activeSubControls = {};
     opt.features = QStyleOptionToolButton::None;
     opt.arrowType = Qt::NoArrow;
-    int size = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    int size = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
     opt.iconSize = QSize(size, size);
     style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &p, this);
 }

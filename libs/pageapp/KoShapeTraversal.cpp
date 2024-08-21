@@ -15,15 +15,15 @@
 
 KoShape *KoShapeTraversal::nextShape(const KoShape *current)
 {
-    return nextShapeStep(current, 0);
+    return nextShapeStep(current, nullptr);
 }
 
 KoShape *KoShapeTraversal::nextShape(const KoShape *current, const QString &shapeId)
 {
-    KoShape *next = nextShapeStep(current, 0);
+    KoShape *next = nextShapeStep(current, nullptr);
 
-    while (next != 0 && next->shapeId() != shapeId) {
-        next = nextShapeStep(next, 0);
+    while (next != nullptr && next->shapeId() != shapeId) {
+        next = nextShapeStep(next, nullptr);
     }
 
     return next;
@@ -31,15 +31,15 @@ KoShape *KoShapeTraversal::nextShape(const KoShape *current, const QString &shap
 
 KoShape *KoShapeTraversal::previousShape(const KoShape *current)
 {
-    return previousShapeStep(current, 0);
+    return previousShapeStep(current, nullptr);
 }
 
 KoShape *KoShapeTraversal::previousShape(const KoShape *current, const QString &shapeId)
 {
-    KoShape *previous = previousShapeStep(current, 0);
+    KoShape *previous = previousShapeStep(current, nullptr);
 
-    while (previous != 0 && previous->shapeId() != shapeId) {
-        previous = previousShapeStep(previous, 0);
+    while (previous != nullptr && previous->shapeId() != shapeId) {
+        previous = previousShapeStep(previous, nullptr);
     }
 
     return previous;
@@ -63,10 +63,10 @@ KoShape *KoShapeTraversal::nextShapeStep(const KoShape *current, const KoShapeCo
 {
     Q_ASSERT(current);
     if (!current) {
-        return 0;
+        return nullptr;
     }
 
-    KoShape *next = 0;
+    KoShape *next = nullptr;
 
     if (parent) {
         const QList<KoShape *> shapes = parent->shapes();
@@ -75,7 +75,7 @@ KoShape *KoShapeTraversal::nextShapeStep(const KoShape *current, const KoShapeCo
 
         if (it == shapes.end()) {
             warnPageApp << "the shape is not in the list of children of his parent";
-            return 0;
+            return nullptr;
         }
 
         ++it;
@@ -83,7 +83,7 @@ KoShape *KoShapeTraversal::nextShapeStep(const KoShape *current, const KoShapeCo
             next = *it;
         } else {
             KoShapeContainer *currentParent = parent->parent();
-            next = currentParent ? nextShapeStep(parent, currentParent) : 0;
+            next = currentParent ? nextShapeStep(parent, currentParent) : nullptr;
         }
     } else {
         if (const KoShapeContainer *container = dynamic_cast<const KoShapeContainer *>(current)) {
@@ -93,9 +93,9 @@ KoShape *KoShapeTraversal::nextShapeStep(const KoShape *current, const KoShapeCo
             }
         }
 
-        if (next == 0) {
+        if (next == nullptr) {
             KoShapeContainer *currentParent = current->parent();
-            next = currentParent ? nextShapeStep(current, currentParent) : 0;
+            next = currentParent ? nextShapeStep(current, currentParent) : nullptr;
         }
     }
 
@@ -106,20 +106,20 @@ KoShape *KoShapeTraversal::previousShapeStep(const KoShape *current, const KoSha
 {
     Q_ASSERT(current);
     if (!current) {
-        return 0;
+        return nullptr;
     }
 
-    KoShape *previous = 0;
+    KoShape *previous = nullptr;
 
     if (parent) {
-        if (previous == 0) {
+        if (previous == nullptr) {
             const QList<KoShape *> shapes = parent->shapes();
             QList<KoShape *>::const_iterator it(std::find(shapes.begin(), shapes.end(), current));
             Q_ASSERT(it != shapes.end());
 
             if (it == shapes.end()) {
                 warnPageApp << "the shape is not in the list of children of his parent";
-                return 0;
+                return nullptr;
             }
 
             if (it != shapes.begin()) {
@@ -131,7 +131,7 @@ KoShape *KoShapeTraversal::previousShapeStep(const KoShape *current, const KoSha
         }
     } else {
         KoShapeContainer *currentParent = current->parent();
-        previous = currentParent ? previousShapeStep(current, currentParent) : 0;
+        previous = currentParent ? previousShapeStep(current, currentParent) : nullptr;
     }
 
     return previous;

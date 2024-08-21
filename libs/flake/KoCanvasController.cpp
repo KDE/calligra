@@ -19,7 +19,7 @@ public:
         , margin(0)
         , preferredCenterFractionX(0.5)
         , preferredCenterFractionY(0.5)
-        , actionCollection(0)
+        , actionCollection(nullptr)
     {
     }
 
@@ -83,7 +83,7 @@ KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
 
 KoCanvasBase *KoCanvasController::canvas() const
 {
-    return 0;
+    return nullptr;
 }
 
 void KoCanvasController::setDocumentSize(const QSize &sz)

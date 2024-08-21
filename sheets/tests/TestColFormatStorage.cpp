@@ -41,7 +41,7 @@ void TestColFormatStorage::testColWidth()
     int firstCol, lastCol;
     s.colWidth(5, &lastCol);
     QCOMPARE(lastCol, 9);
-    s.colWidth(5, 0, &firstCol);
+    s.colWidth(5, nullptr, &firstCol);
     QCOMPARE(firstCol, 1);
     s.colWidth(50, &lastCol, &firstCol);
     QCOMPARE(firstCol, 10);
@@ -61,7 +61,7 @@ void TestColFormatStorage::testHidden()
     QCOMPARE(last, 20);
     QVERIFY(!s.isHidden(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.isHidden(25, 0, &first));
+    QVERIFY(!s.isHidden(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 
@@ -76,7 +76,7 @@ void TestColFormatStorage::testFiltered()
     QCOMPARE(last, 20);
     QVERIFY(!s.isFiltered(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.isFiltered(25, 0, &first));
+    QVERIFY(!s.isFiltered(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 
@@ -186,7 +186,7 @@ void TestColFormatStorage::testPageBreak()
     QCOMPARE(last, 20);
     QVERIFY(!s.hasPageBreak(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.hasPageBreak(25, 0, &first));
+    QVERIFY(!s.hasPageBreak(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 

@@ -86,7 +86,7 @@ private:
 
 WebTool::WebTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_tmpShape(0)
+    , m_tmpShape(nullptr)
     , m_dragMode(NO_DRAG)
 {
 }
@@ -106,7 +106,7 @@ void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> 
             break;
     }
     emit(shapeChanged(m_currentShape));
-    if (m_currentShape == 0) {
+    if (m_currentShape == nullptr) {
         // none found
         Q_EMIT done();
         return;
@@ -121,7 +121,7 @@ void WebTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void WebTool::mousePressEvent(KoPointerEvent *event)
 {
-    WebShape *hit = 0;
+    WebShape *hit = nullptr;
     QRectF roi(event->point, QSizeF(1, 1));
     const QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection *selection = canvas()->shapeManager()->selection();

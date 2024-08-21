@@ -64,7 +64,7 @@ void TestStyles::testChangeParent()
 
     // test that separating will leave the child with exactly the same dataset
     // as it had before the inheritance
-    style3.setParentStyle(0);
+    style3.setParentStyle(nullptr);
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style3.topMargin(), 0.0); // we hadn't explicitly set the margin on style3
 

@@ -89,7 +89,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         optEdit.icon = koIcon("document-properties");
         optEdit.features |= QStyleOptionButton::Flat;
         optEdit.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);
+        view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, nullptr);
     } else {
         const QString category = index.data().toString();
         const QRect optRect = option.rect;

@@ -74,7 +74,7 @@ void PointHandle::repaint() const
 KoInteractionStrategy *PointHandle::handleMousePress(KoPointerEvent *event)
 {
     if ((event->button() & Qt::LeftButton) == 0)
-        return 0;
+        return nullptr;
     if ((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift pressed.
         KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection *>(m_tool->selection());
 
@@ -105,7 +105,7 @@ KoInteractionStrategy *PointHandle::handleMousePress(KoPointerEvent *event)
     } else {
         KoPathPoint::PointProperties props = m_activePoint->properties();
         if (!m_activePoint->activeControlPoint1() || !m_activePoint->activeControlPoint2())
-            return 0;
+            return nullptr;
 
         KoPathPointTypeCommand::PointType pointType = KoPathPointTypeCommand::Smooth;
         // cycle the smooth->symmetric->unsmooth state of the path point
@@ -118,7 +118,7 @@ KoInteractionStrategy *PointHandle::handleMousePress(KoPointerEvent *event)
         pointData.append(KoPathPointData(m_activePoint->parent(), m_activePoint->parent()->pathPointIndex(m_activePoint)));
         m_tool->canvas()->addCommand(new KoPathPointTypeCommand(pointData, pointType));
     }
-    return 0;
+    return nullptr;
 }
 
 bool PointHandle::check(const QList<KoPathShape *> &selectedShapes)
@@ -168,7 +168,7 @@ KoInteractionStrategy *ParameterHandle::handleMousePress(KoPointerEvent *event)
             selection->clear();
         return new KoParameterChangeStrategy(m_tool, m_parameterShape, m_handleId);
     }
-    return 0;
+    return nullptr;
 }
 
 bool ParameterHandle::check(const QList<KoPathShape *> &selectedShapes)
@@ -189,8 +189,8 @@ KoInteractionStrategy *ConnectionHandle::handleMousePress(KoPointerEvent *event)
             selection->clear();
         KoConnectionShape *shape = dynamic_cast<KoConnectionShape *>(m_parameterShape);
         if (!shape)
-            return 0;
+            return nullptr;
         return new KoPathConnectionPointStrategy(m_tool, shape, m_handleId);
     }
-    return 0;
+    return nullptr;
 }

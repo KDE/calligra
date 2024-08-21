@@ -320,7 +320,7 @@ GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b
 bool DrawStyle::fLine() const
 {
-    const MSO::LineStyleBooleanProperties *p = 0;
+    const MSO::LineStyleBooleanProperties *p = nullptr;
     quint16 shapeType = msosptNil;
 
     if (sp) {

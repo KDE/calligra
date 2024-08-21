@@ -30,7 +30,7 @@
 #include <QStyleOptionGraphicsItem>
 
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
-    : QGraphicsWidget(0)
+    : QGraphicsWidget(nullptr)
     , KWCanvasBase(document, this)
 {
     setAttribute(Qt::WA_OpaquePaintEvent, true);

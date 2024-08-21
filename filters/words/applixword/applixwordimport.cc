@@ -205,7 +205,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     // We'll get the paragraph style only at the end of the paragraph,
     // so bufferize the paragraph contents
     QBuffer paragraphBuffer;
-    KoXmlWriter* paragraphWriter = 0;
+    KoXmlWriter* paragraphWriter = nullptr;
 
     /**************************************************************************
      * Read header                                                            *
@@ -316,7 +316,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             const QString autoStyleName = mainStyles.insert(paragStyle);
 
             delete paragraphWriter;
-            paragraphWriter = 0;
+            paragraphWriter = nullptr;
             paragraphBuffer.close();
 
             bodyWriter->startElement("text:p");
@@ -755,7 +755,7 @@ APPLIXWORDImport::readHeader(QTextStream &stream)
         printf("Incorrect header - maybe it is not an applixword file\n");
         printf("Headerline: <%s>\n", (const char *) mystr.toLatin1().constData());
 
-        QMessageBox::critical(0L, "Applixword header problem",
+        QMessageBox::critical(nullptr, "Applixword header problem",
                               QString("The Applixword header is not correct. "
                                       "May be it is not an applixword file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),

@@ -36,7 +36,7 @@ void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
     d->currentStrategy = createStrategy(event);
-    if (d->currentStrategy == 0)
+    if (d->currentStrategy == nullptr)
         event->ignore();
 }
 
@@ -59,7 +59,7 @@ void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
         if (command)
             d->canvas->addCommand(command);
         delete d->currentStrategy;
-        d->currentStrategy = 0;
+        d->currentStrategy = nullptr;
         repaintDecorations();
     } else
         event->ignore();
@@ -79,7 +79,7 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
-    if (d->currentStrategy == 0) { // catch all cases where no current strategy is needed
+    if (d->currentStrategy == nullptr) { // catch all cases where no current strategy is needed
         if (event->key() == Qt::Key_Space)
             Q_EMIT activateTemporary(KoPanTool_ID);
     } else if (event->key() == Qt::Key_Escape) {
@@ -102,7 +102,7 @@ void KoInteractionTool::cancelCurrentStrategy()
     if (d->currentStrategy) {
         d->currentStrategy->cancelInteraction();
         delete d->currentStrategy;
-        d->currentStrategy = 0;
+        d->currentStrategy = nullptr;
     }
 }
 

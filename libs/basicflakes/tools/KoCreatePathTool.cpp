@@ -135,7 +135,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
             if (haveCloseModifier) {
                 d->shape->closeMerge();
                 // we are closing the path, so reset the existing start path point
-                d->existingStartPoint = 0;
+                d->existingStartPoint = nullptr;
                 // finish path
                 endPath();
             } else {
@@ -294,7 +294,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         d->shape->closeMerge();
 
         // we are closing the path, so reset the existing start path point
-        d->existingStartPoint = 0;
+        d->existingStartPoint = nullptr;
         // finish path
         endPath();
     }
@@ -339,8 +339,8 @@ void KoCreatePathTool::cancelPath()
     if (d->shape) {
         canvas()->updateCanvas(handlePaintRect(d->firstPoint->point()));
         canvas()->updateCanvas(d->shape->boundingRect());
-        d->firstPoint = 0;
-        d->activePoint = 0;
+        d->firstPoint = nullptr;
+        d->activePoint = nullptr;
     }
     d->cleanUp();
 }
@@ -356,7 +356,7 @@ void KoCreatePathTool::removeLastPoint()
             lastPointIndex.second--;
             delete d->shape->removePoint(lastPointIndex);
 
-            d->hoveredPoint = 0;
+            d->hoveredPoint = nullptr;
 
             d->repaintActivePoint();
             canvas()->updateCanvas(d->shape->boundingRect());
@@ -399,8 +399,8 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
 {
     Q_D(KoCreatePathTool);
 
-    KoPathShape *startShape = 0;
-    KoPathShape *endShape = 0;
+    KoPathShape *startShape = nullptr;
+    KoPathShape *endShape = nullptr;
     pathShape->normalize();
 
     // check if existing start/end points are still valid
@@ -459,7 +459,7 @@ QList<QPointer<QWidget>> KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    d->strokeWidget = new KoStrokeConfigWidget(0);
+    d->strokeWidget = new KoStrokeConfigWidget(nullptr);
     d->strokeWidget->setWindowTitle(i18n("Line"));
     d->strokeWidget->setCanvas(canvas());
     d->strokeWidget->setActive(false);
@@ -479,7 +479,7 @@ KoShapeStroke *KoCreatePathTool::createStroke()
 {
     Q_D(KoCreatePathTool);
 
-    KoShapeStroke *stroke = 0;
+    KoShapeStroke *stroke = nullptr;
     if (d->strokeWidget) {
         stroke = d->strokeWidget->createShapeStroke();
     }

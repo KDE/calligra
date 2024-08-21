@@ -42,7 +42,7 @@ void TestPathSegment::segmentCopy()
 
 void TestPathSegment::segmentDegree()
 {
-    KoPathSegment s0(0, 0);
+    KoPathSegment s0(nullptr, nullptr);
     QCOMPARE(s0.degree(), -1);
 
     KoPathSegment s1(QPointF(0, 0), QPointF(100, 100));

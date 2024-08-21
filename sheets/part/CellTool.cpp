@@ -56,7 +56,7 @@ CellTool::CellTool(KoCanvasBase *canvas)
 {
     d->canvas = static_cast<CanvasBase *>(canvas);
 
-    QAction *action = 0;
+    QAction *action = nullptr;
 
     // -- misc actions --
 

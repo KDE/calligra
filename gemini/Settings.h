@@ -22,7 +22,7 @@ class Settings : public QObject
     Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
 
 public:
-    explicit Settings(QObject *parent = 0);
+    explicit Settings(QObject *parent = nullptr);
     ~Settings() override;
 
 public Q_SLOTS:

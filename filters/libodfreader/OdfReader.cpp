@@ -49,10 +49,10 @@ static int debugIndent = 0;
 #endif
 
 OdfReader::OdfReader()
-    : m_backend(0)
-    , m_context(0)
-    , m_textReader(0)
-    , m_drawReader(0)
+    : m_backend(nullptr)
+    , m_context(nullptr)
+    , m_textReader(nullptr)
+    , m_drawReader(nullptr)
 {
 }
 

@@ -202,7 +202,7 @@ private:
 template<typename T>
 RectStorage<T>::RectStorage(MapBase *map)
     : m_map(map)
-    , m_loader(0)
+    , m_loader(nullptr)
 {
 }
 
@@ -210,7 +210,7 @@ template<typename T>
 RectStorage<T>::RectStorage(const RectStorage &other)
     : m_map(other.m_map)
     , m_usedArea(other.m_usedArea)
-    , m_loader(0)
+    , m_loader(nullptr)
 {
     m_tree = other.m_tree;
     if (other.m_loader) {
@@ -537,7 +537,7 @@ void RectStorage<T>::ensureLoaded() const
     if (m_loader) {
         m_loader->waitForFinished();
         delete m_loader;
-        const_cast<RectStorage<T> *>(this)->m_loader = 0;
+        const_cast<RectStorage<T> *>(this)->m_loader = nullptr;
     }
 }
 

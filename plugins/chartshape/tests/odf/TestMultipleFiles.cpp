@@ -49,7 +49,7 @@ TestMultipleFiles::TestMultipleFiles()
 void TestMultipleFiles::initTestCase()
 {
     qInstallMessageHandler(filterMessages);
-    m_chart = new ChartShape(0);
+    m_chart = new ChartShape(nullptr);
     currentDoc = 0;
 }
 
@@ -62,7 +62,7 @@ void TestMultipleFiles::init()
 {
     QVERIFY(currentDoc < documents.count());
     qInfo() << "------ Testing:" << documents.at(currentDoc);
-    m_chart = new ChartShape(0);
+    m_chart = new ChartShape(nullptr);
 
     QDir srcdir(QFINDTESTDATA(documents.at(currentDoc)));
     QVERIFY(srcdir.exists());
@@ -87,5 +87,5 @@ void TestMultipleFiles::cleanup()
 {
     ++currentDoc;
     delete m_chart;
-    m_chart = 0;
+    m_chart = nullptr;
 }

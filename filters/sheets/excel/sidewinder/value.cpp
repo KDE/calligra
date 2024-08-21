@@ -45,8 +45,8 @@ public:
         b = false;
         i = 0;
         f = 0.0;
-        s = 0;
-        r = 0;
+        s = nullptr;
+        r = nullptr;
         type = Value::Empty;
         ref();
     }
@@ -55,7 +55,7 @@ public:
     ~ValueData()
     {
         if (this == s_null)
-            s_null = 0;
+            s_null = nullptr;
         switch (type) {
         case Value::RichText:
             delete r;
@@ -105,7 +105,7 @@ private:
 };
 
 // to be shared between all empty value
-ValueData *ValueData::s_null = 0;
+ValueData *ValueData::s_null = nullptr;
 
 // static things
 Value ks_value_empty;
@@ -292,12 +292,12 @@ void Value::setValue(const QString &s)
     switch (type()) {
     case RichText:
         delete d->r;
-        d->r = 0;
+        d->r = nullptr;
         break;
     case Error:
     case String:
         delete d->s;
-        d->s = 0;
+        d->s = nullptr;
         break;
     default:
         break;
@@ -350,12 +350,12 @@ void Value::setValue(const QString &s, const std::map<unsigned, FormatFont> &for
     switch (type()) {
     case RichText:
         delete d->r;
-        d->r = 0;
+        d->r = nullptr;
         break;
     case Error:
     case String:
         delete d->s;
-        d->s = 0;
+        d->s = nullptr;
         break;
     default:
         break;
@@ -383,12 +383,12 @@ void Value::setError(const QString &msg)
     switch (type()) {
     case RichText:
         delete d->r;
-        d->r = 0;
+        d->r = nullptr;
         break;
     case Error:
     case String:
         delete d->s;
-        d->s = 0;
+        d->s = nullptr;
         break;
     default:
         break;

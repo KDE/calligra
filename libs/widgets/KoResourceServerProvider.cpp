@@ -29,8 +29,8 @@ class GradientResourceServer : public KoResourceServer<KoAbstractGradient>
 public:
     GradientResourceServer(const QString &type, const QString &extensions)
         : KoResourceServer<KoAbstractGradient>(type, extensions)
-        , m_foregroundToTransparent(0)
-        , m_foregroundToBackground(0)
+        , m_foregroundToTransparent(nullptr)
+        , m_foregroundToBackground(nullptr)
     {
         insertSpecialGradients();
     }
@@ -74,7 +74,7 @@ private:
         if (index != -1)
             fileExtension = filename.mid(index).toLower();
 
-        KoAbstractGradient *grad = 0;
+        KoAbstractGradient *grad = nullptr;
 
         if (fileExtension == ".svg" || fileExtension == ".kgr")
             grad = new KoStopGradient(filename);

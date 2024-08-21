@@ -113,7 +113,7 @@ void DocxStyleWriter::read()
             if (!parent.isEmpty()) {
                 DocxStyleHelper::inheritTextStyles(&properties, parent, manager);
             }
-            if (textProperties != 0) {
+            if (textProperties != nullptr) {
                 properties.copyPropertiesFrom(*textProperties);
             }
             DocxStyleHelper::handleTextStyles(&properties, m_documentWriter);

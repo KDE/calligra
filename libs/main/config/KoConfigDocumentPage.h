@@ -18,7 +18,7 @@ class KOMAIN_EXPORT KoConfigDocumentPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoConfigDocumentPage(KoDocument *doc, char *name = 0L);
+    explicit KoConfigDocumentPage(KoDocument *doc, char *name = nullptr);
     ~KoConfigDocumentPage() override;
 
     void apply();

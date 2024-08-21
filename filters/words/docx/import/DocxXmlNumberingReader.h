@@ -22,7 +22,7 @@ class DocxXmlNumberingReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlNumberingReader(KoOdfWriters *writers);
     ~DocxXmlNumberingReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_numbering();

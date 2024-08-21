@@ -61,10 +61,10 @@ public:
 
 VideoDataPrivate::VideoDataPrivate()
     : refCount(0)
-    , temporaryFile(0)
+    , temporaryFile(nullptr)
     , key(0)
     , errorCode(VideoData::Success)
-    , collection(0)
+    , collection(nullptr)
     , dataStoreState(VideoData::StateEmpty)
     , saveVideoInZip(false)
 {
@@ -86,7 +86,7 @@ void VideoDataPrivate::setSuffix(const QString &name)
 
 VideoData::VideoData()
     : KoShapeUserData()
-    , d(0)
+    , d(nullptr)
 {
 }
 
@@ -302,7 +302,7 @@ void VideoData::copyToTemporary(QIODevice &device)
         warnVideo << "open temporary file for writing failed";
         d->errorCode = VideoData::StorageFailed;
         delete d;
-        d = 0;
+        d = nullptr;
         return;
     }
     QCryptographicHash md5(QCryptographicHash::Md5);

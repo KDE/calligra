@@ -135,7 +135,7 @@ void KoShapeUnclipCommand::redo()
 
     const uint shapeCount = d->shapesToUnclip.count();
     for (uint i = 0; i < shapeCount; ++i) {
-        d->shapesToUnclip[i]->setClipPath(0);
+        d->shapesToUnclip[i]->setClipPath(nullptr);
         d->shapesToUnclip[i]->update();
     }
 

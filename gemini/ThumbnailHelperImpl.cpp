@@ -24,8 +24,8 @@
 
 ThumbnailHelperImpl::ThumbnailHelperImpl(QObject *parent)
     : QObject(parent)
-    , m_part(0)
-    , m_doc(0)
+    , m_part(nullptr)
+    , m_doc(nullptr)
 {
 }
 

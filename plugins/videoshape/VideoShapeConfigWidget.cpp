@@ -17,8 +17,8 @@
 
 VideoShapeConfigWidget::VideoShapeConfigWidget()
     : KoShapeConfigWidgetBase()
-    , m_shape(0)
-    , m_fileSelectionWidget(0)
+    , m_shape(nullptr)
+    , m_fileSelectionWidget(nullptr)
 {
 }
 

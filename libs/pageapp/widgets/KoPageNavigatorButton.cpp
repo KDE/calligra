@@ -15,7 +15,7 @@
 
 KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *parent)
     : QToolButton(parent)
-    , m_action(0)
+    , m_action(nullptr)
 {
     setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     setFocusPolicy(Qt::NoFocus);

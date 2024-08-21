@@ -191,7 +191,7 @@ ValueCalc::ValueCalc(ValueConverter *c)
     : converter(c)
 {
     // initialize the random number generator
-    srand(time(0));
+    srand(time(nullptr));
 
     // register array-walk functions
     registerAwFunc("sum", awSum);
@@ -1963,7 +1963,7 @@ arrayWalkFunc ValueCalc::awFunc(const QString &name)
 {
     if (awFuncs.count(name))
         return awFuncs[name];
-    return 0;
+    return nullptr;
 }
 
 void ValueCalc::registerAwFunc(const QString &name, arrayWalkFunc func)

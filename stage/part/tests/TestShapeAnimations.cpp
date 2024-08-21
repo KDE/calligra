@@ -36,7 +36,7 @@ const int ANIMATIONS_COUNT = 9;
 void TestShapeAnimations::initTestCase()
 {
     // Initialize Animations
-    QTextBlockUserData *textBlockUserData = 0;
+    QTextBlockUserData *textBlockUserData = nullptr;
     for (int i = 0; i < 9; i++) {
         MockShape *shape = new MockShape();
         shape->setSize(QSizeF(100, 100));
@@ -420,8 +420,8 @@ void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
 void TestShapeAnimations::cleanStepSubStepData()
 {
     foreach (MockShapeAnimation *animation, m_animation) {
-        animation->setStep(0);
-        animation->setSubStep(0);
+        animation->setStep(nullptr);
+        animation->setSubStep(nullptr);
         animation->setStepIndex(-1);
         animation->setSubStepIndex(-1);
     }

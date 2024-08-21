@@ -1689,7 +1689,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     int value = 0;
     int currentTab = -1;
     int selectedTab = 0;
-    Sheet * selTable = 0;
+    Sheet * selTable = nullptr;
 
     QDomElement docElem = doc.documentElement();
     QDomElement uiData  = docElem.namedItem("UIData").toElement();

@@ -149,7 +149,7 @@ public:
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString displayText(const Style &s = Style(), Value *v = 0, bool *showFormula = 0) const;
+    QString displayText(const Style &s = Style(), Value *v = nullptr, bool *showFormula = nullptr) const;
 
     /**
      * \return the conditions associated with this cell

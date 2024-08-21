@@ -36,25 +36,25 @@ class MockPart : public KoPart
 {
 public:
     MockPart()
-        : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
+        : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), nullptr)
     {
     }
     KoView *createViewInstance(KoDocument *document, QWidget *parent) override
     {
         Q_UNUSED(document);
         Q_UNUSED(parent);
-        return 0;
+        return nullptr;
     }
     KoMainWindow *createMainWindow() override
     {
-        return 0;
+        return nullptr;
     }
 
 protected:
     QGraphicsItem *createCanvasItem(KoDocument *document) override
     {
         Q_UNUSED(document);
-        return 0;
+        return nullptr;
     }
 };
 
@@ -67,7 +67,7 @@ public:
     }
     KoView *createViewInstance(QWidget * /* parent */)
     {
-        return 0;
+        return nullptr;
     }
     const char *odfTagName(bool b) override
     {
@@ -81,7 +81,7 @@ public:
 protected:
     virtual QGraphicsItem *createCanvasItem()
     {
-        return 0;
+        return nullptr;
     }
 };
 

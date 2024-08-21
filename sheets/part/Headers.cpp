@@ -65,7 +65,7 @@ RowHeader::RowHeader(CanvasBase *_canvas)
     , m_bSelection(false)
     , m_iSelectionAnchor(1)
     , m_bResize(false)
-    , m_lSize(0)
+    , m_lSize(nullptr)
     , m_bMousePressed(false)
     , m_cellToolIsActive(true)
     , m_font(KoGlobal::defaultFont())
@@ -209,7 +209,7 @@ void RowHeader::mouseRelease(KoPointerEvent *_ev)
                 delete command;
         }
         delete m_lSize;
-        m_lSize = 0;
+        m_lSize = nullptr;
     } else if (m_bSelection) {
         QRect rect = m_pCanvas->selection()->lastRange();
 
@@ -230,7 +230,7 @@ void RowHeader::mouseRelease(KoPointerEvent *_ev)
 
             if (hiddenRows.count() > 0) {
                 if (m_pCanvas->selection()->isColumnSelected()) {
-                    KMessageBox::error(/* XXX TODO this*/ 0, i18n("Area is too large."));
+                    KMessageBox::error(/* XXX TODO this*/ nullptr, i18n("Area is too large."));
                     return;
                 }
 
@@ -498,7 +498,7 @@ ColumnHeader::ColumnHeader(CanvasBase *_canvas)
     , m_bSelection(false)
     , m_iSelectionAnchor(1)
     , m_bResize(false)
-    , m_lSize(0)
+    , m_lSize(nullptr)
     , m_bMousePressed(false)
     , m_cellToolIsActive(true)
     , m_font(KoGlobal::defaultFont())
@@ -701,7 +701,7 @@ void ColumnHeader::mouseRelease(KoPointerEvent *_ev)
                 delete command;
         }
         delete m_lSize;
-        m_lSize = 0;
+        m_lSize = nullptr;
     } else if (m_bSelection) {
         QRect rect = m_pCanvas->selection()->lastRange();
 
@@ -722,7 +722,7 @@ void ColumnHeader::mouseRelease(KoPointerEvent *_ev)
 
             if (hiddenCols.count() > 0) {
                 if (m_pCanvas->selection()->isRowSelected()) {
-                    KMessageBox::error(0 /* XXX TODO this */, i18n("Area is too large."));
+                    KMessageBox::error(nullptr /* XXX TODO this */, i18n("Area is too large."));
                     return;
                 }
 

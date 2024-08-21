@@ -54,20 +54,20 @@ class Q_DECL_HIDDEN KoTextDocumentLayout::Private
 {
 public:
     Private(KoTextDocumentLayout *)
-        : styleManager(0)
-        , changeTracker(0)
-        , inlineTextObjectManager(0)
-        , textRangeManager(0)
-        , provider(0)
-        , layoutPosition(0)
-        , anchoringRootArea(0)
+        : styleManager(nullptr)
+        , changeTracker(nullptr)
+        , inlineTextObjectManager(nullptr)
+        , textRangeManager(nullptr)
+        , provider(nullptr)
+        , layoutPosition(nullptr)
+        , anchoringRootArea(nullptr)
         , anchoringIndex(0)
         , anAnchorIsPlaced(false)
         , anchoringSoftBreak(INT_MAX)
         , allowPositionInlineObject(true)
-        , continuationObstruction(0)
-        , referencedLayout(0)
-        , annotationLayoutManager(0)
+        , continuationObstruction(nullptr)
+        , referencedLayout(nullptr)
+        , annotationLayoutManager(nullptr)
         , defaultTabSizing(0)
         , y(0)
         , isLayouting(false)
@@ -314,7 +314,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
             // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
             // those cases we only need to relayout the root-area dirty where the variable is on.
-            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded) + 1) : 0;
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded) + 1) : nullptr;
             if (toArea) {
                 if (toArea != fromArea) {
                     endIndex = qMax(startIndex, d->rootAreaList.indexOf(toArea));
@@ -348,10 +348,10 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
 {
     QTextBlock block = document()->findBlock(position);
     if (!block.isValid())
-        return 0;
+        return nullptr;
     QTextLine line = block.layout()->lineForTextPosition(position - block.position());
     if (!line.isValid())
-        return 0;
+        return nullptr;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         QRectF rect = rootArea->boundingRect(); // should already be normalized()
@@ -366,7 +366,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
             return rootArea;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &point) const
@@ -378,7 +378,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &poin
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
@@ -389,7 +389,7 @@ void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == nullptr)
         return;
     QTextCharFormat cf = format.toCharFormat();
     if (d->showInlineObjectVisualization) {
@@ -511,7 +511,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     Q_UNUSED(item);
     // We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == nullptr)
         return;
     if (!d->allowPositionInlineObject)
         return;
@@ -610,7 +610,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             // refPos += QPointF(refTextShapeData->leftPadding(), -refTextShapeData->documentOffset() + refTextShapeData->topPadding());
 
             refPos += QPointF(0, -d->anchoringRootArea->top());
-            refPos = refShape->absoluteTransformation(0).map(refPos);
+            refPos = refShape->absoluteTransformation(nullptr).map(refPos);
 
             // FIXME we need a more precise position than anchorParagraph Rect
             Q_EMIT foundAnnotation(annotation->annotationShape(), refPos);
@@ -621,7 +621,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
     for (int i = 0; i < d->textAnchors.size(); i++) {
-        d->textAnchors[i]->setPlacementStrategy(0);
+        d->textAnchors[i]->setPlacementStrategy(nullptr);
     }
 
     qDeleteAll(d->anchoredObstructions);
@@ -639,7 +639,7 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 {
     // Note: This method is called by qt during layout AND during paint
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == nullptr)
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
@@ -653,7 +653,7 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     }
     KoTextLayoutRootArea *rootArea = d->rootAreaForInlineObject.value(obj);
 
-    if (rootArea == 0 || rootArea->associatedShape() == 0)
+    if (rootArea == nullptr || rootArea->associatedShape() == nullptr)
         return;
 
     QTextDocument *doc = document();
@@ -745,10 +745,10 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
-    FrameIterator *transferedFootNoteCursor = 0;
-    KoInlineNote *transferedContinuedNote = 0;
+    FrameIterator *transferedFootNoteCursor = nullptr;
+    KoInlineNote *transferedContinuedNote = nullptr;
     int footNoteAutoCount = 0;
-    KoTextLayoutRootArea *rootArea = 0;
+    KoTextLayoutRootArea *rootArea = nullptr;
 
     d->rootAreaList.clear();
 
@@ -792,7 +792,7 @@ bool KoTextDocumentLayout::doLayout()
 
             // Layout all that can fit into that root area
             bool finished;
-            FrameIterator *tmpPosition = 0;
+            FrameIterator *tmpPosition = nullptr;
             do {
                 rootArea->setFootNoteCountInDoc(footNoteAutoCount);
                 rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);

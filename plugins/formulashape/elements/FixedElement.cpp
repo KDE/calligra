@@ -28,7 +28,7 @@ BasicElement *FixedElement::elementAfter(int position) const
     if (position % 2 == 0) {
         return elementNext(position);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -37,7 +37,7 @@ BasicElement *FixedElement::elementBefore(int position) const
     if (position % 2 == 1) {
         return elementNext(position);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

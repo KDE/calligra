@@ -132,7 +132,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     /* NOTE: The default value of props. in {height, left, margin-*,
      * mso-wrp-distance-*, rotation, top, width, z-index} is 0. */
-    QString *p_str = 0;
+    QString *p_str = nullptr;
 
     // horizontal position
     if (m_currentVMLProperties.insideGroup) {
@@ -161,7 +161,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             }
             x_position = p_str->left(p_str->length() - 2).toDouble();
             x_pos_string = *p_str;
-            p_str = 0;
+            p_str = nullptr;
         }
     }
 
@@ -191,7 +191,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             }
             y_position = p_str->left(p_str->length() - 2).toDouble();
             y_pos_string = *p_str;
-            p_str = 0;
+            p_str = nullptr;
         }
     }
 

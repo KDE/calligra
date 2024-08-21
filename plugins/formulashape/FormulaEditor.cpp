@@ -50,7 +50,7 @@ void FormulaEditor::paint(QPainter &painter) const
 
 FormulaCommand *FormulaEditor::insertText(const QString &text)
 {
-    FormulaCommand *undo = 0;
+    FormulaCommand *undo = nullptr;
     m_inputBuffer = text;
     if (m_cursor.insideToken()) {
         TokenElement *token = static_cast<TokenElement *>(m_cursor.currentElement());
@@ -60,7 +60,7 @@ FormulaCommand *FormulaEditor::insertText(const QString &text)
             undo = new FormulaCommandReplaceText(token, m_cursor.position(), 0, text);
         }
     } else {
-        TokenElement *token = static_cast<TokenElement *>(ElementFactory::createElement(tokenType(text[0]), 0));
+        TokenElement *token = static_cast<TokenElement *>(ElementFactory::createElement(tokenType(text[0]), nullptr));
         token->insertText(0, text);
         undo = insertElement(token);
         if (undo) {
@@ -77,12 +77,12 @@ FormulaCommand *FormulaEditor::insertMathML(const QString &data)
 {
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
-    tmpDocument.setContent(QString(data), false, 0, 0, 0);
-    BasicElement *element = ElementFactory::createElement(tmpDocument.documentElement().tagName(), 0);
+    tmpDocument.setContent(QString(data), false, nullptr, nullptr, nullptr);
+    BasicElement *element = ElementFactory::createElement(tmpDocument.documentElement().tagName(), nullptr);
     element->readMathML(tmpDocument.documentElement()); // and load the new formula
     FormulaCommand *command = insertElement(element);
     debugFormula << "Inserting " << tmpDocument.documentElement().tagName();
-    if (command == 0) {
+    if (command == nullptr) {
         delete element;
     }
     return command;
@@ -124,14 +124,14 @@ FormulaCommand *FormulaEditor::changeTable(bool insert, bool rows)
             }
         }
     } else {
-        return 0;
+        return nullptr;
     }
     return undo;
 }
 
 FormulaCommand *FormulaEditor::insertElement(BasicElement *element)
 {
-    FormulaCommand *undo = 0;
+    FormulaCommand *undo = nullptr;
     if (m_cursor.insideInferredRow()) {
         RowElement *tmprow = static_cast<RowElement *>(m_cursor.currentElement());
         QList<BasicElement *> list;
@@ -153,7 +153,7 @@ FormulaCommand *FormulaEditor::insertElement(BasicElement *element)
 
 FormulaCommand *FormulaEditor::remove(bool elementBeforePosition)
 {
-    FormulaCommand *undo = 0;
+    FormulaCommand *undo = nullptr;
     if (m_cursor.insideInferredRow()) {
         RowElement *tmprow = static_cast<RowElement *>(m_cursor.currentElement());
         if (m_cursor.isSelecting()) {

@@ -20,11 +20,11 @@ class Q_DECL_HIDDEN KoCanvasBase::Private
 {
 public:
     Private()
-        : shapeController(0)
-        , resourceManager(0)
+        : shapeController(nullptr)
+        , resourceManager(nullptr)
         , isResourceManagerShared(false)
-        , controller(0)
-        , snapGuide(0)
+        , controller(nullptr)
+        , snapGuide(nullptr)
     {
     }
 
@@ -112,7 +112,7 @@ KoSnapGuide *KoCanvasBase::snapGuide() const
 
 KoGuidesData *KoCanvasBase::guidesData()
 {
-    return 0;
+    return nullptr;
 }
 
 QWidget *KoCanvasBase::createSnapGuideConfigWidget() const

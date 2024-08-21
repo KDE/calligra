@@ -8,6 +8,6 @@
 
 AbstractStylesModel::AbstractStylesModel(QObject *parent)
     : QAbstractItemModel(parent)
-    , m_styleThumbnailer(0)
+    , m_styleThumbnailer(nullptr)
 {
 }

@@ -19,7 +19,7 @@ class Q_DECL_HIDDEN KoTextSharedSavingData::Private
 {
 public:
     Private(void)
-        : changes(0)
+        : changes(nullptr)
     {
     }
     ~Private()

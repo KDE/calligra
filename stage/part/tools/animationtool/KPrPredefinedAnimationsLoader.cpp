@@ -71,7 +71,7 @@ KPrCollectionItemModel *KPrPredefinedAnimationsLoader::modelById(const QString &
     } else {
         warnStageAnimation << "Didn't find a model with id ==" << id;
     }
-    return 0;
+    return nullptr;
 }
 
 KPrCollectionItemModel *KPrPredefinedAnimationsLoader::subModelById(const QString &id)
@@ -79,7 +79,7 @@ KPrCollectionItemModel *KPrPredefinedAnimationsLoader::subModelById(const QStrin
     if (m_subModelMap.contains(id)) {
         return m_subModelMap[id];
     }
-    return 0;
+    return nullptr;
 }
 
 void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
@@ -203,8 +203,8 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
 {
     // Read animation data from xml file and store data on lists
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext context(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(context, 0);
+    KoOdfLoadingContext context(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(context, nullptr);
     KoXmlDocument doc;
 
     const QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrastage/animations/animations.xml");
@@ -223,7 +223,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
                     KoXmlElement animation;
                     forEachElement(animation, parAnimation)
                     {
-                        KPrShapeAnimation *shapeAnimation = 0;
+                        KPrShapeAnimation *shapeAnimation = nullptr;
                         shapeAnimation = loadOdfShapeAnimation(animation, shapeContext);
                         if (shapeAnimation) {
                             m_animations.append(shapeAnimation);
@@ -335,14 +335,14 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     // load preset and id
     // TODO: ole-action, media-call are not supported
 
-    KPrShapeAnimation *shapeAnimation = 0;
+    KPrShapeAnimation *shapeAnimation = nullptr;
     // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
     forEachElement(e, element)
     {
-        if (shapeAnimation == 0) {
+        if (shapeAnimation == nullptr) {
             KoShape *shape = animShape;
-            QTextBlockUserData *textBlockData = 0;
+            QTextBlockUserData *textBlockData = nullptr;
             shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
         }
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));

@@ -472,7 +472,7 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     }
 
     // Legend style FIXME: Check if more styling then just the font goes here.
-    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart", 0);
+    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart", nullptr);
     OdfHelper::saveOdfFont(style, d->font, d->fontColor);
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 

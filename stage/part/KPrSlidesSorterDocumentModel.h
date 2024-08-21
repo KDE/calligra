@@ -24,7 +24,7 @@ class KPrSlidesSorterDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document = 0);
+    KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document = nullptr);
     ~KPrSlidesSorterDocumentModel() override;
 
     /**

@@ -7,7 +7,7 @@
 #include "KoShapeConfigWidgetBase.h"
 
 KoShapeConfigWidgetBase::KoShapeConfigWidgetBase()
-    : m_resourceManager(0)
+    : m_resourceManager(nullptr)
 {
 }
 
@@ -36,5 +36,5 @@ bool KoShapeConfigWidgetBase::showOnShapeSelect()
 
 KUndo2Command *KoShapeConfigWidgetBase::createCommand()
 {
-    return 0;
+    return nullptr;
 }

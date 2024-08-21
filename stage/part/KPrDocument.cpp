@@ -175,7 +175,7 @@ void KPrDocument::addAnimation(KPrShapeAnimation *animation)
 
     // add animation to the shape animation data so that it can be regenerated on delete shape and undo
     KPrShapeApplicationData *applicationData = dynamic_cast<KPrShapeApplicationData *>(shape->applicationData());
-    if (applicationData == 0) {
+    if (applicationData == nullptr) {
         applicationData = new KPrShapeApplicationData();
         shape->setApplicationData(applicationData);
     }

@@ -25,7 +25,7 @@
 ODrawClient::ODrawClient(Swinder::Sheet *sheet)
     : m_sheet(sheet)
     , m_zIndex(0)
-    , m_styleManager(0)
+    , m_styleManager(nullptr)
 {
 }
 
@@ -158,7 +158,7 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct, const
         KoTextWriter textWriter(context);
         textWriter.write(m_shapeText.richText(), 0);
 
-        doc.setStyleManager(0);
+        doc.setStyleManager(nullptr);
     } else { // plain-text
         QStringList lines = m_shapeText.text().split(QRegularExpression("[\n\r]"));
         foreach (const QString &line, lines) {

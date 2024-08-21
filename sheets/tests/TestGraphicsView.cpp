@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     Calligra::Sheets::CanvasItem *canvas = new Calligra::Sheets::CanvasItem(&doc);
 
     QRect usedArea = canvas->activeSheet()->usedArea(true);
-    QFontMetricsF fm(font, 0);
+    QFontMetricsF fm(font, nullptr);
     QSizeF size(canvas->activeSheet()->columnPosition(usedArea.right() + 3), canvas->activeSheet()->rowPosition(usedArea.bottom() + 5));
     canvas->setDocumentSize(size);
     size = canvas->zoomHandler()->documentToView(size);

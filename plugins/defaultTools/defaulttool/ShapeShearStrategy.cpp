@@ -124,7 +124,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     m_initialSelectionAngle = currentAngle - angle;
 
     qDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y();
-    m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map(m_solidPoint);
+    m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(nullptr).map(m_solidPoint);
 
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored

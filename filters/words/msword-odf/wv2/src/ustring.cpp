@@ -178,9 +178,9 @@ bool wvWare::operator==(const wvWare::CString &c1, const wvWare::CString &c2)
 }
 
 UChar UChar::null;
-UString::Rep UString::Rep::null = {0, 0, 1};
+UString::Rep UString::Rep::null = {nullptr, 0, 1};
 UString UString::null;
-static char *statBuffer = 0L;
+static char *statBuffer = nullptr;
 
 UChar::UChar(const UCharReference &c)
     : uc(c.unicode())
@@ -580,7 +580,7 @@ bool wvWare::operator==(const UString &s1, const UString &s2)
 
 bool wvWare::operator==(const UString &s1, const char *s2)
 {
-    if (s2 == 0L && s1.isNull())
+    if (s2 == nullptr && s1.isNull())
         return true;
 
     if (s1.length() != static_cast<int>(strlen(s2)))
@@ -637,5 +637,5 @@ UConstString::~UConstString()
         memcpy(n, data(), l * sizeof(UChar));
         rep->dat = n;
     } else
-        rep->dat = 0;
+        rep->dat = nullptr;
 }

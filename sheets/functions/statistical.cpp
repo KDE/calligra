@@ -1054,7 +1054,7 @@ Value func_confidence(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_correl_pop(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value covar = func_covar(args, calc, 0);
+    Value covar = func_covar(args, calc, nullptr);
     Value stdevp1 = calc->stddevP(args[0]);
     Value stdevp2 = calc->stddevP(args[1]);
 
@@ -1340,7 +1340,7 @@ Value func_ftest(valVector args, ValueCalc *calc, FuncExtra *)
     param.append(Value(r1));
     param.append(Value(r2));
 
-    return calc->mul(Value(2.0), func_legacyfdist(param, calc, 0));
+    return calc->mul(Value(2.0), func_legacyfdist(param, calc, nullptr));
 }
 
 //
@@ -2766,7 +2766,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     Value a1 = calc->div(sumYX, sumXX);
 
     // v2 = INTERCEPT = b
-    Value v2 = func_intercept(param, calc, 0); // v2 is const, we only need to calc it once
+    Value v2 = func_intercept(param, calc, nullptr); // v2 is const, we only need to calc it once
 
     // fill array up with values
     for (uint i = 0; i < args[2].count(); ++i) {
@@ -2774,7 +2774,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
         Value v1;
 
         if (withOffset) {
-            v1 = calc->mul(func_slope(param, calc, 0), Value(newX[i]));
+            v1 = calc->mul(func_slope(param, calc, nullptr), Value(newX[i]));
             trend = Value(calc->add(v1, v2));
         } else {
             // b=0
@@ -2912,7 +2912,7 @@ Value func_ttest(valVector args, ValueCalc *calc, FuncExtra *)
     tmp.insert(0, t);
     tmp.insert(1, dof);
     tmp.insert(2, Value(mode));
-    return func_tdist(tmp, calc, 0);
+    return func_tdist(tmp, calc, nullptr);
 }
 
 //
@@ -2924,7 +2924,7 @@ Value func_variance(valVector args, ValueCalc *calc, FuncExtra *)
     if (count < 2)
         return Value::errorVALUE();
 
-    Value result = func_devsq(args, calc, 0);
+    Value result = func_devsq(args, calc, nullptr);
     return calc->div(result, count - 1);
 }
 
@@ -2937,7 +2937,7 @@ Value func_variancea(valVector args, ValueCalc *calc, FuncExtra *)
     if (count < 2)
         return Value::errorVALUE();
 
-    Value result = func_devsqa(args, calc, 0);
+    Value result = func_devsqa(args, calc, nullptr);
     return calc->div(result, count - 1);
 }
 
@@ -2950,7 +2950,7 @@ Value func_variancep(valVector args, ValueCalc *calc, FuncExtra *)
     if (count == 0)
         return Value::errorVALUE();
 
-    Value result = func_devsq(args, calc, 0);
+    Value result = func_devsq(args, calc, nullptr);
     return calc->div(result, count);
 }
 
@@ -2963,7 +2963,7 @@ Value func_variancepa(valVector args, ValueCalc *calc, FuncExtra *)
     if (count == 0)
         return Value::errorVALUE();
 
-    Value result = func_devsqa(args, calc, 0);
+    Value result = func_devsqa(args, calc, nullptr);
     return calc->div(result, count);
 }
 

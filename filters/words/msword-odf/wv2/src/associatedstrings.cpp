@@ -25,7 +25,7 @@
 using namespace wvWare;
 
 AssociatedStrings::AssociatedStrings(U32 fcSttbfAssoc, U32 lcbSttbfAssoc, U16 lid, OLEStreamReader *tableStream)
-    : m_sttbf(0)
+    : m_sttbf(nullptr)
 {
     tableStream->push();
     tableStream->seek(fcSttbfAssoc);

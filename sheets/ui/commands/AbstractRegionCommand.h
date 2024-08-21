@@ -61,7 +61,7 @@ public:
      * \return \c false if the command fails, was already executed once or is not approved
      * \see setRegisterUndo, isApproved
      */
-    virtual bool execute(KoCanvasBase *canvas = 0);
+    virtual bool execute(KoCanvasBase *canvas = nullptr);
 
     /**
      * Executes the actual operation.

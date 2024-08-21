@@ -22,7 +22,7 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_hasPosOffsetV = false;
     m_posOffsetH = 0;
     m_posOffsetV = 0;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
     m_read_t_args = false;
 }
 

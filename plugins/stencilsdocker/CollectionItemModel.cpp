@@ -80,15 +80,15 @@ void CollectionItemModel::setViewMode(QListView::ViewMode vm)
 QMimeData *CollectionItemModel::mimeData(const QModelIndexList &indexes) const
 {
     if (indexes.isEmpty())
-        return 0;
+        return nullptr;
 
     QModelIndex index = indexes.first();
 
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     if (m_shapeTemplateList.isEmpty())
-        return 0;
+        return nullptr;
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
@@ -125,7 +125,7 @@ Qt::ItemFlags CollectionItemModel::flags(const QModelIndex &index) const
 const KoProperties *CollectionItemModel::properties(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() > m_shapeTemplateList.count())
-        return 0;
+        return nullptr;
 
     return m_shapeTemplateList[index.row()].properties;
 }

@@ -144,7 +144,7 @@ public:
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
         : context(context)
-        , textSharedData(0)
+        , textSharedData(nullptr)
         ,
         // stylesDotXml says from where the office:automatic-styles are to be picked from:
         // the content.xml or the styles.xml (in a multidocument scenario). It does not
@@ -155,10 +155,10 @@ public:
         , bodyProgressValue(0)
         , nextProgressReportMs(0)
         , currentLists(10)
-        , currentListStyle(0)
+        , currentListStyle(nullptr)
         , currentListLevel(1)
-        , endCharStyle(0)
-        , styleManager(0)
+        , endCharStyle(nullptr)
+        , styleManager(nullptr)
         , shape(s)
         , loadSpanLevel(0)
         , loadSpanInitialPos(0)
@@ -201,7 +201,7 @@ KoList *KoTextLoader::Private::previousList(int level) const
     Q_ASSERT(level > 0 && level <= 10);
 
     if (m_previousList.size() < level) {
-        return 0;
+        return nullptr;
     }
 
     return m_previousList.at(level - 1);
@@ -475,7 +475,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
             KoTextInlineRdf::attach(inlineRdf, cursor);
         } else {
             delete inlineRdf;
-            inlineRdf = 0;
+            inlineRdf = nullptr;
         }
     }
 
@@ -495,7 +495,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
             cursor.setBlockFormat(blockFormat);
         }
     }
-    d->endCharStyle = 0;
+    d->endCharStyle = nullptr;
 
     cursor.setCharFormat(cf); // restore the cursor char format
 }
@@ -596,7 +596,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
             KoTextInlineRdf::attach(inlineRdf, cursor);
         } else {
             delete inlineRdf;
-            inlineRdf = 0;
+            inlineRdf = nullptr;
         }
     }
 
@@ -611,7 +611,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
-    KoList *continuedList = 0;
+    KoList *continuedList = nullptr;
     int level;
 
     if (d->currentLists[d->currentListLevel - 1] || d->currentListLevel == 1) {
@@ -718,8 +718,8 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
     }
 
     if (numberedParagraph || --d->currentListLevel == 1) {
-        d->currentListStyle = 0;
-        d->currentLists.fill(0);
+        d->currentListStyle = nullptr;
+        d->currentLists.fill(nullptr);
     }
 }
 
@@ -823,7 +823,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
         QString className = noteElem.attributeNS(KoXmlNS::text, "note-class");
-        KoInlineNote *note = 0;
+        KoInlineNote *note = nullptr;
         int position = cursor.position(); // need to store this as the following might move is
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
@@ -908,7 +908,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #endif
 
         if (!(isTextNS && localName == "span")) {
-            d->endCharStyle = 0;
+            d->endCharStyle = nullptr;
         }
 
         if (node.isText()) {
@@ -1002,7 +1002,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         startmark->setInlineRdf(inlineRdf);
                     } else {
                         delete inlineRdf;
-                        inlineRdf = 0;
+                        inlineRdf = nullptr;
                     }
                 }
 
@@ -1372,7 +1372,7 @@ void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QV
 
     if (cell.isValid()) {
         QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
-        KoTableCellStyle *cellStyle = 0;
+        KoTableCellStyle *cellStyle = nullptr;
         if (!cellStyleName.isEmpty()) {
             cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
         } else if (tcarManager.defaultRowCellStyle(currentRow)) {
@@ -1405,7 +1405,7 @@ void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QV
                 cell.setFormat(cellFormat);
             } else {
                 delete inlineRdf;
-                inlineRdf = 0;
+                inlineRdf = nullptr;
             }
         }
 
@@ -1418,7 +1418,7 @@ void KoTextLoader::loadShapeWithHyperLink(const KoXmlElement &element, QTextCurs
 {
     // get the hyperlink
     QString hyperLink = element.attributeNS(KoXmlNS::xlink, "href");
-    KoShape *shape = 0;
+    KoShape *shape = nullptr;
 
     // load the shape for hyperlink
     KoXmlNode node = element.firstChild();
@@ -1436,7 +1436,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
     if (!shape) {
         debugText << "shape '" << element.localName() << "' unhandled";
-        return 0;
+        return nullptr;
     }
 
     KoShapeAnchor *anchor = new KoShapeAnchor(shape);

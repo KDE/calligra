@@ -43,7 +43,7 @@ void OdfTextTrackStyles::unregisterDocument(QTextDocument *qDoc)
 OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
     : QObject(manager)
     , m_styleManager(manager)
-    , m_changeCommand(0)
+    , m_changeCommand(nullptr)
 {
     connect(manager, &KoStyleManager::editHasBegun, this, &OdfTextTrackStyles::beginEdit);
     connect(manager, &KoStyleManager::editHasEnded, this, &OdfTextTrackStyles::endEdit);
@@ -63,7 +63,7 @@ OdfTextTrackStyles::~OdfTextTrackStyles()
 
 void OdfTextTrackStyles::beginEdit()
 {
-    Q_ASSERT(m_changeCommand == 0);
+    Q_ASSERT(m_changeCommand == nullptr);
     m_changeCommand = new ChangeStylesMacroCommand(m_documents, m_styleManager.data());
 }
 
@@ -77,7 +77,7 @@ void OdfTextTrackStyles::endEdit()
     } else
         delete m_changeCommand;
 
-    m_changeCommand = 0;
+    m_changeCommand = nullptr;
 }
 
 void OdfTextTrackStyles::recordStyleChange(int id, const KoParagraphStyle *origStyle, const KoParagraphStyle *newStyle)

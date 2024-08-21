@@ -115,7 +115,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
 
     // Data Stream
-    LEInputStream *datastm = 0;
+    LEInputStream *datastm = nullptr;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         debugMsDoc << "Failed to open /Data stream, no big deal (OPTIONAL).";
@@ -124,7 +124,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
 
     // Summary Information Stream
-    LEInputStream *sistm = 0;
+    LEInputStream *sistm = nullptr;
     QBuffer buff4;
     if (!readStream(storage, "/SummaryInformation", buff4)) {
         debugMsDoc << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
@@ -140,11 +140,11 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     struct Finalizer {
     public:
         Finalizer(LEInputStream *ds, LEInputStream *sis)
-            : m_store(0)
-            , m_genStyles(0)
-            , m_document(0)
-            , m_contentWriter(0)
-            , m_bodyWriter(0)
+            : m_store(nullptr)
+            , m_genStyles(nullptr)
+            , m_document(nullptr)
+            , m_contentWriter(nullptr)
+            , m_bodyWriter(nullptr)
             , m_datastm(ds)
             , m_sistm(sis)
         {
@@ -221,7 +221,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     // create our document object, writing to the temporary buffers
-    Document *document = 0;
+    Document *document = nullptr;
 
     try {
         document = new Document(QFile::encodeName(inputFile).data(),

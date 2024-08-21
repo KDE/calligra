@@ -14,7 +14,7 @@ KoPostscriptPaintDevice::KoPostscriptPaintDevice()
 
 QPaintEngine *KoPostscriptPaintDevice::paintEngine() const
 {
-    return 0;
+    return nullptr;
 }
 
 int KoPostscriptPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const

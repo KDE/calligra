@@ -22,5 +22,5 @@ KoInlineObject *InsertTextLocator::createInlineObject()
         KoInlineObject *obj = editor->insertIndexMarker();
         Q_UNUSED(obj); // intentionally unused: if we return it, it gets inserted again
     }
-    return 0;
+    return nullptr;
 }

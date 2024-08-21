@@ -52,7 +52,7 @@ void KoConnectionShapeConfigWidget::save()
 KUndo2Command *KoConnectionShapeConfigWidget::createCommand()
 {
     if (!m_connection) {
-        return 0;
+        return nullptr;
     } else {
         KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex());
         return new KoConnectionShapeTypeCommand(m_connection, type);

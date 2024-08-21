@@ -336,7 +336,7 @@ QSGNode *ViewController::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintN
         if (node) {
             delete node;
         }
-        return 0;
+        return nullptr;
     }
 
     auto root = static_cast<QSGTransformNode *>(node);

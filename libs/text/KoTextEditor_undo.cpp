@@ -86,7 +86,7 @@ void KoTextEditor::Private::documentCommandAdded()
         void undo() override
         {
             QTextDocument *doc = m_document.data();
-            if (doc == 0)
+            if (doc == nullptr)
                 return;
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
             m_p->emitTextFormatChanged();
@@ -95,7 +95,7 @@ void KoTextEditor::Private::documentCommandAdded()
         void redo() override
         {
             QTextDocument *doc = m_document.data();
-            if (doc == 0)
+            if (doc == nullptr)
                 return;
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
             m_p->emitTextFormatChanged();

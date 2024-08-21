@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 
 FullScreenPlayer::FullScreenPlayer(const QUrl &url)
-    : QWidget(0)
+    : QWidget(nullptr)
     , m_seekSlider(new Phonon::SeekSlider(this))
     , m_volumeSlider(new Phonon::VolumeSlider(this))
 {

@@ -61,7 +61,7 @@ public:
     explicit XlsxDrawingObject(Sheet *sheet)
         : m_sheet(sheet)
         , m_type(Unknown)
-        , m_shapeBody(0)
+        , m_shapeBody(nullptr)
     {
     }
     ~XlsxDrawingObject()
@@ -142,7 +142,7 @@ class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlDrawingReader(KoOdfWriters *writers);
     ~XlsxXmlDrawingReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_oneCellAnchor();

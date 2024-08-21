@@ -30,7 +30,7 @@ InsertSectionCommand::InsertSectionCommand(SectionsIO *_sectionIO, Section *_sec
     , m_above(_above)
     , m_idx(-1)
 {
-    Q_ASSERT(_above == 0 || _parent == _above->sectionParent());
+    Q_ASSERT(_above == nullptr || _parent == _above->sectionParent());
 }
 
 InsertSectionCommand::InsertSectionCommand(SectionsIO *_sectionIO, Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx)
@@ -38,7 +38,7 @@ InsertSectionCommand::InsertSectionCommand(SectionsIO *_sectionIO, Section *_sec
     , m_section(_section)
     , m_parent(_parent)
     , m_model(_model)
-    , m_above(0)
+    , m_above(nullptr)
     , m_idx(_idx)
 {
     Q_ASSERT(_idx >= 0 && _idx <= _parent->sections().count());

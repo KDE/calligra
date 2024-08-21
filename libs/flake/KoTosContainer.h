@@ -75,7 +75,7 @@ public:
      * @param documentResources
      * @return The created text shape or 0 in case it failed
      */
-    KoShape *createTextShape(KoDocumentResourceManager *documentResources = 0);
+    KoShape *createTextShape(KoDocumentResourceManager *documentResources = nullptr);
 
     void setRunThrough(short int runThrough) override;
 
@@ -109,7 +109,7 @@ protected:
      */
     KoShape *textShape() const;
 
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
 
 private:
     Q_DECLARE_PRIVATE(KoTosContainer)

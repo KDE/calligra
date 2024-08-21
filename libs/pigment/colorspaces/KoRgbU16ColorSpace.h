@@ -29,9 +29,9 @@ public:
 
     virtual KoColorSpace *clone() const;
 
-    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const override;
+    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = nullptr) const override;
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const override;
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = nullptr) const override;
 
     void toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
     QVector<qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;

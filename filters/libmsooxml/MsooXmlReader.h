@@ -32,7 +32,7 @@ class MsooXmlRelationships;
 class KOMSOOXML_EXPORT MsooXmlReaderContext
 {
 protected:
-    MsooXmlReaderContext(MsooXmlRelationships *_relationships = 0);
+    MsooXmlReaderContext(MsooXmlRelationships *_relationships = nullptr);
 
 public:
     virtual ~MsooXmlReaderContext();
@@ -59,7 +59,7 @@ public:
     virtual ~MsooXmlReader();
 
     //! Reads/parses the file
-    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) = 0;
+    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext *context = nullptr) = 0;
 
     //! Sets filename for the document being read.
     //! Only for error reporting purposes, used in raiseError().

@@ -35,8 +35,8 @@
 #include "commands/RemoveSectionCommand.h"
 
 SectionsBoxDock::SectionsBoxDock()
-    : m_view(0)
-    , m_model(0)
+    : m_view(nullptr)
+    , m_model(nullptr)
     , m_proxy(new TreeSortFilter(this))
 {
     QWidget *mainWidget = new QWidget(this);
@@ -219,7 +219,7 @@ void SectionsBoxDock::selectSection(Section *section)
 void SectionsBoxDock::removedSection()
 {
     if (m_model->rowCount() == 0) {
-        m_view->setActiveSection(0);
+        m_view->setActiveSection(nullptr);
     } else {
         slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
     }

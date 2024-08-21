@@ -59,7 +59,7 @@ LegendConfigWidget::~LegendConfigWidget()
 
 QAction *LegendConfigWidget::createAction()
 {
-    return 0;
+    return nullptr;
 }
 
 int toIndex(Position pos)

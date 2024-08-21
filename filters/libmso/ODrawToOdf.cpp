@@ -49,7 +49,7 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer &o, Writer 
             out.xml.startElement("draw:g");
 
             // TODO: rotation and flipping of group shapes
-            const DrawStyle ds(0, 0, sp);
+            const DrawStyle ds(nullptr, nullptr, sp);
             qreal rotation = toQReal(ds.rotation());
             out.g_rotation += rotation;
             out.g_flipH = sp->shapeProp.fFlipH;
@@ -86,15 +86,15 @@ void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock &of, Write
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer &out, const OfficeArtSpContainer &o)
 {
     KoGenStyle style;
-    const OfficeArtDggContainer *drawingGroup = 0;
-    const OfficeArtSpContainer *master = 0;
+    const OfficeArtDggContainer *drawingGroup = nullptr;
+    const OfficeArtSpContainer *master = nullptr;
 
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
 
         // locate the OfficeArtSpContainer of the master shape
         if (o.shapeProp.fHaveMaster) {
-            const DrawStyle tmp(0, &o);
+            const DrawStyle tmp(nullptr, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
         }

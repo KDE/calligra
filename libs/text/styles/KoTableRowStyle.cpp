@@ -25,7 +25,7 @@ class Q_DECL_HIDDEN KoTableRowStyle::Private : public QSharedData
 public:
     Private()
         : QSharedData()
-        , parentStyle(0)
+        , parentStyle(nullptr)
         , next(0)
     {
     }

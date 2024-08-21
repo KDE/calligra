@@ -50,9 +50,9 @@ public:
         , rightPadding(0)
         , bottomPadding(0)
         , direction(KoText::AutoDirection)
-        , textpage(0)
-        , rootArea(0)
-        , paragraphStyle(0)
+        , textpage(nullptr)
+        , rootArea(nullptr)
+        , paragraphStyle(nullptr)
     {
     }
 
@@ -115,13 +115,13 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
 
     // After setting the document (even if not changing it) we need to explicitly set the root area
     // to 0. Otherwise crashes may occur when inserting textshape in words (or resetting document)
-    d->rootArea = 0;
+    d->rootArea = nullptr;
 
     if (d->document == document)
         return;
     d->document = document;
 
-    if (kodoc.textEditor() == 0)
+    if (kodoc.textEditor() == nullptr)
         kodoc.setTextEditor(new KoTextEditor(d->document));
 }
 
@@ -263,7 +263,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 {
     Q_D(KoTextShapeData);
     // load the (text) style of the frame
-    const KoXmlElement *style = 0;
+    const KoXmlElement *style = nullptr;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(element.attributeNS(KoXmlNS::draw, "style-name"),
                                                                      "graphic",
@@ -310,7 +310,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
         styleStack.restore();
 
         QString family = style->attributeNS(KoXmlNS::style, "family", "graphic");
-        KoParagraphStyle *defaultStyle = 0;
+        KoParagraphStyle *defaultStyle = nullptr;
         const KoXmlElement *dstyle = context.odfLoadingContext().stylesReader().defaultStyle(family);
         if (dstyle) {
             defaultStyle = new KoParagraphStyle();

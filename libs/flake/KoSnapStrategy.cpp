@@ -183,7 +183,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *prox
         if (!path) {
             continue;
         }
-        QTransform matrix = path->absoluteTransformation(0);
+        QTransform matrix = path->absoluteTransformation(nullptr);
 
         const int subpathCount = path->subpathCount();
         for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {

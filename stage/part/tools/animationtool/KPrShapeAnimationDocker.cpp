@@ -59,10 +59,10 @@ QSize DialogMenu::sizeHint() const
 
 KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     : QWidget(parent)
-    , m_view(0)
-    , m_animationGroupModel(0)
-    , m_previewMode(0)
-    , m_lastSelectedShape(0)
+    , m_view(nullptr)
+    , m_animationGroupModel(nullptr)
+    , m_previewMode(nullptr)
+    , m_lastSelectedShape(nullptr)
 {
     setObjectName("KPrShapeAnimationDocker");
 
@@ -463,7 +463,7 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
                 return m_lastSelectedShape;
             }
         }
-        m_lastSelectedShape = 0;
+        m_lastSelectedShape = nullptr;
     } else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())) {
         foreach (KoShape *shape, selection->selectedShapes()) {
             shape->update();
@@ -481,7 +481,7 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
             return selectedShape;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void KPrShapeAnimationDocker::testEditPanelRoot()

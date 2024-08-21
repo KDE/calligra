@@ -32,8 +32,8 @@ public:
         : context(c)
         , zIndex(0)
         , documentResources(resourceManager)
-        , documentRdf(0)
-        , sectionModel(0)
+        , documentRdf(nullptr)
+        , sectionModel(nullptr)
     {
     }
 
@@ -134,7 +134,7 @@ void KoShapeLoadingContext::shapeLoaded(KoShape *shape)
 
 KoImageCollection *KoShapeLoadingContext::imageCollection()
 {
-    return d->documentResources ? d->documentResources->imageCollection() : 0;
+    return d->documentResources ? d->documentResources->imageCollection() : nullptr;
 }
 
 int KoShapeLoadingContext::zIndex()
@@ -161,7 +161,7 @@ void KoShapeLoadingContext::addSharedData(const QString &id, KoSharedLoadingData
 
 KoSharedLoadingData *KoShapeLoadingContext::sharedData(const QString &id) const
 {
-    KoSharedLoadingData *data = 0;
+    KoSharedLoadingData *data = nullptr;
     QMap<QString, KoSharedLoadingData *>::const_iterator it(d->sharedData.find(id));
     if (it != d->sharedData.constEnd()) {
         data = it.value();

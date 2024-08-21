@@ -73,8 +73,8 @@ CellToolBase::CellToolBase(KoCanvasBase *canvas)
     : KoInteractionTool(canvas)
     , d(new Private(this))
 {
-    d->cellEditor = 0;
-    d->externalEditor = 0;
+    d->cellEditor = nullptr;
+    d->externalEditor = nullptr;
     d->initialized = false;
     d->lastEditorWithFocus = EmbeddedEditor;
 
@@ -323,7 +323,7 @@ void CellToolBase::deactivate()
     Selection *sel = selection();
     // Disconnect.
     if (sel)
-        disconnect(sel, 0, this, 0);
+        disconnect(sel, nullptr, this, nullptr);
     // close the cell editor
     deleteEditor(true); // save changes
     // clear the selection rectangle
@@ -682,7 +682,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     // That means we get a synchronous repaint after the cell editor
     // widget is gone. Otherwise we may get painting errors.
     delete d->cellEditor;
-    d->cellEditor = 0;
+    d->cellEditor = nullptr;
 
     d->actions->onEditorDeleted();
 

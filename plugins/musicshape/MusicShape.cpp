@@ -51,8 +51,8 @@ MusicShape::MusicShape()
     , m_style(new MusicStyle)
     , m_engraver(new Engraver())
     , m_renderer(new MusicRenderer(m_style))
-    , m_successor(0)
-    , m_predecessor(0)
+    , m_successor(nullptr)
+    , m_predecessor(nullptr)
 {
     /*    debugMusic << "firstShape:" << firstShape << "this:" << this;
 

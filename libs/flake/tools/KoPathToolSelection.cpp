@@ -152,8 +152,8 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     QList<KoPathPointData> pd(selectedPointsData());
     std::sort(pd.begin(), pd.end());
 
-    KoPathPointData last(0, KoPathPointIndex(-1, -1));
-    KoPathPointData lastSubpathStart(0, KoPathPointIndex(-1, -1));
+    KoPathPointData last(nullptr, KoPathPointIndex(-1, -1));
+    KoPathPointData lastSubpathStart(nullptr, KoPathPointIndex(-1, -1));
 
     QList<KoPathPointData>::const_iterator it(pd.constBegin());
     for (; it != pd.constEnd(); ++it) {

@@ -70,7 +70,7 @@ public:
      * The created thumbnail is cached.
      */
     QImage thumbnail(KoCharacterStyle *characterStyle,
-                     KoParagraphStyle *paragraphStyle = 0,
+                     KoParagraphStyle *paragraphStyle = nullptr,
                      const QSize &size = QSize(),
                      bool recreateThumbnail = false,
                      KoStyleThumbnailerFlags flags = KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));

@@ -46,7 +46,7 @@ class KoVersionModifyDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KoVersionModifyDialog(QWidget *parent, KoVersionInfo *info = 0);
+    explicit KoVersionModifyDialog(QWidget *parent, KoVersionInfo *info = nullptr);
 
     QString comment() const;
 

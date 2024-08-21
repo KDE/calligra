@@ -228,7 +228,7 @@ int main(int argc, char **argv)
     if (parser.isSet("backup")) {
         // Code form koDocument.cc
         KIO::UDSEntry entry;
-        if (KIO::NetAccess::stat(urlOut, entry, 0L)) { // this file exists => backup
+        if (KIO::NetAccess::stat(urlOut, entry, nullptr)) { // this file exists => backup
             qDebug() << "Making backup...";
             QUrl backup(urlOut);
             backup.setPath(urlOut.path() + '~');

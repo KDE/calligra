@@ -17,7 +17,7 @@
 Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
-    : d(0)
+    : d(nullptr)
 {
 }
 
@@ -47,12 +47,12 @@ KoFilterEffect *KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlEle
 {
     KoFilterEffectFactoryBase *factory = get(element.tagName());
     if (!factory)
-        return 0;
+        return nullptr;
 
     KoFilterEffect *filterEffect = factory->createFilterEffect();
     if (filterEffect->load(element, context))
         return filterEffect;
 
     delete filterEffect;
-    return 0;
+    return nullptr;
 }

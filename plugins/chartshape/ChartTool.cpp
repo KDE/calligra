@@ -81,7 +81,7 @@ public:
 };
 
 ChartTool::Private::Private()
-    : shape(0)
+    : shape(nullptr)
 {
 }
 
@@ -206,7 +206,7 @@ void ChartTool::mouseReleaseEvent(KoPointerEvent *event)
 void ChartTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
 {
     debugChartTool << shapes;
-    d->shape = 0;
+    d->shape = nullptr;
     for (KoShape *s : shapes) {
         d->shape = dynamic_cast<ChartShape *>(s);
         if (!d->shape) {
@@ -260,7 +260,7 @@ void ChartTool::deactivate()
     if (d->shape) {
         d->shape->update(); // to get rid of decoration
     }
-    d->shape = 0;
+    d->shape = nullptr;
 }
 
 QList<QPointer<QWidget>> ChartTool::createOptionWidgets()
@@ -404,7 +404,7 @@ void ChartTool::setChartType(ChartType type, ChartSubtype subtype)
         return;
     }
     ChartTypeCommand *command = new ChartTypeCommand(d->shape);
-    if (command != 0) {
+    if (command != nullptr) {
         command->setChartType(type, subtype);
         canvas()->addCommand(command);
     }
@@ -709,7 +709,7 @@ void ChartTool::setTitleResize(int index)
     }
     // TODD: undo command
     TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->title()->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         return;
     }
     labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);
@@ -749,7 +749,7 @@ void ChartTool::setSubTitleResize(int index)
     }
     // TODD: undo command
     TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->subTitle()->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         return;
     }
     labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);
@@ -789,7 +789,7 @@ void ChartTool::setFooterResize(int index)
     }
     // TODD: undo command
     TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->footer()->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         return;
     }
     labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);

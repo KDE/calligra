@@ -224,7 +224,7 @@ Value func_edate(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_eomonth(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // add months to date using EDATE
-    Value modDate = func_edate(args, calc, 0);
+    Value modDate = func_edate(args, calc, nullptr);
     if (modDate.isError())
         return modDate;
 
@@ -594,7 +594,7 @@ Value func_currentDateTime(valVector, ValueCalc *calc, FuncExtra *)
 // Function: DAYOFYEAR
 Value func_dayOfYear(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value date = func_date(args, calc, 0);
+    Value date = func_date(args, calc, nullptr);
     if (date.isError())
         return date;
     return Value(date.asDate(calc->settings()).dayOfYear());

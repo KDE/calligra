@@ -30,7 +30,7 @@ class Q_DECL_HIDDEN KoTableColumnStyle::Private : public QSharedData
 public:
     Private()
         : QSharedData()
-        , parentStyle(0)
+        , parentStyle(nullptr)
     {
     }
 

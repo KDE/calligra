@@ -416,7 +416,7 @@ void KoXmlStreamAttribute::Private::generateQName()
 // ----------------------------------------------------------------
 
 KoXmlStreamAttribute::KoXmlStreamAttribute()
-    : d(new KoXmlStreamAttribute::Private(0, 0))
+    : d(new KoXmlStreamAttribute::Private(nullptr, nullptr))
 {
     // debugOdf2 << "default constructor called";
 }

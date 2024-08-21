@@ -39,7 +39,7 @@ private:
     struct SectionHandle {
         explicit SectionHandle(KoSection *_sec)
             : sec(_sec)
-            , parent(0)
+            , parent(nullptr)
         {
         }
 

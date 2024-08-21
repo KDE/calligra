@@ -16,7 +16,7 @@ class TemplatesModel : public QAbstractListModel
     Q_PROPERTY(bool showWide READ showWide WRITE setShowWide NOTIFY showWideChanged)
 public:
     enum TemplateRoles { TitleRole = Qt::UserRole + 1, DescriptionRole, ColorRole, ThumbnailRole, UrlRole, VariantCountRole, VariantsRole };
-    explicit TemplatesModel(QObject *parent = 0);
+    explicit TemplatesModel(QObject *parent = nullptr);
     ~TemplatesModel() override;
 
     QHash<int, QByteArray> roleNames() const override;

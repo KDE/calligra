@@ -14,7 +14,7 @@ class KoFilterEffect;
 
 struct InputChangeData {
     InputChangeData()
-        : filterEffect(0)
+        : filterEffect(nullptr)
         , inputIndex(-1)
     {
     }
@@ -37,9 +37,9 @@ struct InputChangeData {
 class FilterInputChangeCommand : public KUndo2Command
 {
 public:
-    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, KUndo2Command *parent = nullptr);
+    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = nullptr, KUndo2Command *parent = nullptr);
 
-    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = 0, KUndo2Command *parent = nullptr);
+    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = nullptr, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

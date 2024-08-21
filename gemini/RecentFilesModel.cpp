@@ -21,7 +21,7 @@ RecentFilesModel::RecentFilesModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
-    d->recentFileManager = 0;
+    d->recentFileManager = nullptr;
 }
 
 RecentFilesModel::~RecentFilesModel()

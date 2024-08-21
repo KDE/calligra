@@ -146,13 +146,13 @@ QMimeData *KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes
 {
     // check if there is data to encode
     if (!indexes.count()) {
-        return 0;
+        return nullptr;
     }
 
     // check if we support a format
     QStringList types = mimeTypes();
     if (types.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     QMimeData *data = new QMimeData();
@@ -247,7 +247,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         beginRow = rowCount(QModelIndex());
     }
 
-    KoPAPageBase *pageAfter = 0;
+    KoPAPageBase *pageAfter = nullptr;
 
     if ((beginRow - 1) >= 0) {
         pageAfter = m_document->pageByIndex(beginRow - 1, false);

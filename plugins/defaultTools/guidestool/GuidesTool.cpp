@@ -28,7 +28,7 @@ GuidesTool::GuidesTool(KoCanvasBase *canvas)
     , m_index(-1)
     , m_position(0)
     , m_mode(EditGuide)
-    , m_options(0)
+    , m_options(nullptr)
     , m_isMoving(false)
 {
 }

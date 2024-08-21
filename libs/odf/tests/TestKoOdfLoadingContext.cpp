@@ -40,7 +40,7 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
 
     KoXmlWriter *contentWriter = odfStore.contentWriter();
-    QVERIFY(contentWriter != 0);
+    QVERIFY(contentWriter != nullptr);
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
 

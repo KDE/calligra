@@ -34,7 +34,7 @@ class GenValidationStyles;
 class GenValidationStyle
 {
 public:
-    explicit GenValidationStyle(Validity *_val = 0, CalculationSettings *cs = nullptr)
+    explicit GenValidationStyle(Validity *_val = nullptr, CalculationSettings *cs = nullptr)
     {
         initVal(_val, cs);
     }

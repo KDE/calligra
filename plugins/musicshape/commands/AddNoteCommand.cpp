@@ -20,7 +20,7 @@ AddNoteCommand::AddNoteCommand(MusicShape *shape, Chord *chord, Staff *staff, Du
     , m_oldDuration(chord->duration())
     , m_newDuration(duration)
     , m_oldDots(chord->dots())
-    , m_note(0)
+    , m_note(nullptr)
 {
     bool exists = false;
     for (int i = 0; i < m_chord->noteCount(); i++) {

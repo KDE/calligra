@@ -334,7 +334,7 @@ void STD::clearInternal()
     fAutoRedef = 0;
     fHidden = 0;
     unused8_3 = 0;
-    grupx = 0;
+    grupx = nullptr;
     grupxLen = 0;
     m_invalid = false;
 }
@@ -471,10 +471,10 @@ Style::Style(const U16 stdfSize, OLEStreamReader *tableStream, U16 *ftc)
     : m_isEmpty(false)
     , m_isWrapped(true)
     , m_invalid(false)
-    , m_std(0)
-    , m_properties(0)
-    , m_chp(0)
-    , m_upechpx(0)
+    , m_std(nullptr)
+    , m_properties(nullptr)
+    , m_chp(nullptr)
+    , m_upechpx(nullptr)
 {
     // NOTE: A signed integer that specifies the size, in bytes, of std.  This
     // value MUST NOT be less than 0.  LPStd structures are stored on even-byte
@@ -546,10 +546,10 @@ Style::Style(const Word97::CHP &chp)
     : m_isEmpty(true)
     , m_isWrapped(false)
     , m_invalid(true)
-    , m_std(0)
-    , m_properties(0)
-    , m_chp(0)
-    , m_upechpx(0)
+    , m_std(nullptr)
+    , m_properties(nullptr)
+    , m_chp(nullptr)
+    , m_upechpx(nullptr)
 {
     m_chp = new Word97::CHP(chp);
 }
@@ -635,7 +635,7 @@ void Style::unwrapStyle(const StyleSheet &stylesheet, WordVersion version)
 #endif
 
     if (m_std->sgc == sgcPara) {
-        const Style *parentStyle = 0;
+        const Style *parentStyle = nullptr;
         // only try to unwrap the "parent" if the style isn't the Nil style
         if (m_std->istdBase != 0x0fff) {
             parentStyle = stylesheet.styleByIndex(m_std->istdBase);
@@ -663,7 +663,7 @@ void Style::unwrapStyle(const StyleSheet &stylesheet, WordVersion version)
 #ifdef WV2_DEBUG_SPRMS
             wvlog << "############# Applying paragraph exceptions: " << cbUPX << Qt::endl;
 #endif
-            m_properties->pap().apply(data, cbUPX, parentStyle, &stylesheet, 0, version); // try without data stream for now
+            m_properties->pap().apply(data, cbUPX, parentStyle, &stylesheet, nullptr, version); // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
             wvlog << "############# done"
                   << "[" << name().ascii() << "]" << Qt::endl;
@@ -680,7 +680,7 @@ void Style::unwrapStyle(const StyleSheet &stylesheet, WordVersion version)
 #ifdef WV2_DEBUG_SPRMS
                 wvlog << "############# Applying character exceptions: " << cbUPX << Qt::endl;
 #endif
-                m_chp->apply(data, cbUPX, parentStyle, &stylesheet, 0, version); // try without data stream for now
+                m_chp->apply(data, cbUPX, parentStyle, &stylesheet, nullptr, version); // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
                 wvlog << "############# done"
                       << "[" << name().ascii() << "]" << Qt::endl;
@@ -688,7 +688,7 @@ void Style::unwrapStyle(const StyleSheet &stylesheet, WordVersion version)
             }
         }
     } else if (m_std->sgc == sgcChp) {
-        const Style *parentStyle = 0;
+        const Style *parentStyle = nullptr;
         // only try to unwrap the "parent" if the style isn't the Nil style
         if (m_std->istdBase != 0x0fff) {
             parentStyle = stylesheet.styleByIndex(m_std->istdBase);
@@ -717,7 +717,7 @@ void Style::unwrapStyle(const StyleSheet &stylesheet, WordVersion version)
         }
 
         // finally apply so the chpx so we have ourselves a nice chp
-        m_chp->apply(m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, 0, version);
+        m_chp->apply(m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, nullptr, version);
     } else {
         wvlog << "Warning: Unknown style type code detected" << Qt::endl;
     }
@@ -1077,7 +1077,7 @@ const Style *StyleSheet::styleByIndex(U16 istd) const
     if (istd < m_styles.size()) {
         return m_styles[istd];
     }
-    return 0;
+    return nullptr;
 }
 
 const Style *StyleSheet::styleByID(U16 sti) const
@@ -1087,7 +1087,7 @@ const Style *StyleSheet::styleByID(U16 sti) const
             return *it;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 U16 StyleSheet::indexByID(U16 sti, bool &ok) const

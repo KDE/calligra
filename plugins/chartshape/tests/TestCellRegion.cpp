@@ -17,7 +17,7 @@
 #include "CellRegion.h"
 
 TestCellRegion::TestCellRegion()
-    : QObject(0)
+    : QObject(nullptr)
 {
 }
 

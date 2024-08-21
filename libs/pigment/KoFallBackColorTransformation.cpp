@@ -42,7 +42,7 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace 
                                                                                   KoColorConversionTransformation::internalConversionFlags()));
     d->fallBackToCs = d->fallBackToCsCache->transformation();
     d->colorTransformation = _transfo;
-    d->buff = 0;
+    d->buff = nullptr;
     d->buffSize = 0;
 }
 
@@ -56,10 +56,10 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTr
     d->fallBackColorSpace = _fallBackToCs->srcColorSpace();
     d->csToFallBack = _csToFallBack;
     d->fallBackToCs = _fallBackToCs;
-    d->csToFallBackCache = 0;
-    d->fallBackToCsCache = 0;
+    d->csToFallBackCache = nullptr;
+    d->fallBackToCsCache = nullptr;
     d->colorTransformation = _transfo;
-    d->buff = 0;
+    d->buff = nullptr;
     d->buffSize = 0;
 }
 

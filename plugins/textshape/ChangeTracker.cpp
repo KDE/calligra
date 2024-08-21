@@ -11,7 +11,7 @@
 
 ChangeTracker::ChangeTracker(TextTool *parent)
     : QObject(parent)
-    , m_document(0)
+    , m_document(nullptr)
     , m_tool(parent)
     , m_enableSignals(true)
     , m_reverseUndo(false)

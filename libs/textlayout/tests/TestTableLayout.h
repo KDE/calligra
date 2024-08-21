@@ -116,8 +116,8 @@ private:
                    const QString &bottomLeftText,
                    const QString &bottomMidText,
                    const QString &bottomRightText,
-                   KoTableStyle *tableStyle = 0);
-    QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle *tableStyle = 0);
+                   KoTableStyle *tableStyle = nullptr);
+    QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle *tableStyle = nullptr);
 
 private:
     QTextDocument *m_doc;

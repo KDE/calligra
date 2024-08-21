@@ -39,7 +39,7 @@ public:
 };
 
 OpcRelSetManager::Private::Private()
-    : documentRelSet(0)
+    : documentRelSet(nullptr)
 {
 }
 
@@ -88,7 +88,7 @@ void OpcRelSetManager::clear()
 
     if (d->documentRelSet) {
         delete d->documentRelSet;
-        d->documentRelSet = 0;
+        d->documentRelSet = nullptr;
     }
 }
 

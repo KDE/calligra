@@ -703,7 +703,7 @@ QList<QAction *> CellToolBase::Private::popupActionList() const
 
 void CellToolBase::Private::createPopupMenuActions()
 {
-    QAction *action = 0;
+    QAction *action = nullptr;
 
     for (int i = 1; i <= 7; ++i) {
         action = new QAction(q);

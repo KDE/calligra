@@ -17,7 +17,7 @@ class ToolManager : public QQuickItem
     Q_PROPERTY(QObject *currentTool READ currentTool NOTIFY currentToolChanged);
 
 public:
-    explicit ToolManager(QQuickItem *parent = 0);
+    explicit ToolManager(QQuickItem *parent = nullptr);
     ~ToolManager() override;
 
     QObject *currentTool() const;

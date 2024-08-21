@@ -152,7 +152,7 @@ const QList<BasicElement *> TableElement::childElements() const
 int TableElement::positionOfChild(BasicElement *child) const
 {
     TableRowElement *temp = dynamic_cast<TableRowElement *>(child);
-    if (temp == 0) {
+    if (temp == nullptr) {
         return -1;
     } else {
         int p = m_rows.indexOf(temp);
@@ -301,7 +301,7 @@ QString TableElement::attributesDefaultValue(const QString &attribute) const
 
 bool TableElement::readMathMLContent(const KoXmlElement &element)
 {
-    BasicElement *tmpElement = 0;
+    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, element) // iterate over the elements
     {
@@ -348,7 +348,7 @@ bool TableElement::removeChild(BasicElement *child)
         return false;
     } else {
         m_rows.removeAll(tmp);
-        tmp->setParentElement(0);
+        tmp->setParentElement(nullptr);
     }
     return true;
 }

@@ -52,12 +52,12 @@ static KoDocumentInfo *loadDocumentInfo(const QString &odt)
     if (!odfReadStore.loadAndParse("meta.xml", metaDoc, error)) {
         delete store;
         delete documentInfo;
-        return 0;
+        return nullptr;
     }
     if (!documentInfo->loadOasis(metaDoc)) {
         delete store;
         delete documentInfo;
-        return 0;
+        return nullptr;
     }
     delete store;
     return documentInfo;

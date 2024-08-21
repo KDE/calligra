@@ -15,8 +15,8 @@ FrameIterator::FrameIterator(QTextFrame *frame)
 {
     it = frame->begin();
     m_frame = it.parentFrame();
-    currentTableIterator = 0;
-    currentSubFrameIterator = 0;
+    currentTableIterator = nullptr;
+    currentSubFrameIterator = nullptr;
     lineTextStart = -1;
     endNoteIndex = 0;
 }
@@ -26,8 +26,8 @@ FrameIterator::FrameIterator(const QTextTableCell &cell)
     Q_ASSERT(cell.isValid());
     it = cell.begin();
     m_frame = it.parentFrame();
-    currentTableIterator = 0;
-    currentSubFrameIterator = 0;
+    currentTableIterator = nullptr;
+    currentSubFrameIterator = nullptr;
     lineTextStart = -1;
     endNoteIndex = 0;
 }
@@ -43,12 +43,12 @@ FrameIterator::FrameIterator(FrameIterator *other)
     if (other->currentTableIterator)
         currentTableIterator = new TableIterator(other->currentTableIterator);
     else
-        currentTableIterator = 0;
+        currentTableIterator = nullptr;
 
     if (other->currentSubFrameIterator)
         currentSubFrameIterator = new FrameIterator(other->currentSubFrameIterator);
     else
-        currentSubFrameIterator = 0;
+        currentSubFrameIterator = nullptr;
 }
 
 FrameIterator::~FrameIterator()
@@ -83,10 +83,10 @@ bool FrameIterator::operator==(const FrameIterator &other) const
 
 TableIterator *FrameIterator::tableIterator(QTextTable *table)
 {
-    if (table == 0) {
+    if (table == nullptr) {
         delete currentTableIterator;
-        currentTableIterator = 0;
-    } else if (currentTableIterator == 0) {
+        currentTableIterator = nullptr;
+    } else if (currentTableIterator == nullptr) {
         currentTableIterator = new TableIterator(table);
         currentTableIterator->masterPageName = masterPageName;
     }
@@ -95,10 +95,10 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
 
 FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
 {
-    if (subFrame == 0) {
+    if (subFrame == nullptr) {
         delete currentSubFrameIterator;
-        currentSubFrameIterator = 0;
-    } else if (currentSubFrameIterator == 0) {
+        currentSubFrameIterator = nullptr;
+    } else if (currentSubFrameIterator == nullptr) {
         currentSubFrameIterator = new FrameIterator(subFrame);
         currentSubFrameIterator->masterPageName = masterPageName;
     }

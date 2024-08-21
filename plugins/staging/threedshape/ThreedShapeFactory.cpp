@@ -61,7 +61,7 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 
     debugThreed << "Creating a 3d shape";
 
-    SceneObject *defaultShape = new SceneObject(0, true);
+    SceneObject *defaultShape = new SceneObject(nullptr, true);
     defaultShape->setShapeId(THREEDSHAPEID);
 
     return defaultShape;

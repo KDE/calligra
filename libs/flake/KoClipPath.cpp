@@ -94,7 +94,7 @@ public:
             return;
 
         initialShapeSize = clippedShape->outline().boundingRect().size();
-        initialTransformToShape = clippedShape->absoluteTransformation(0).inverted();
+        initialTransformToShape = clippedShape->absoluteTransformation(nullptr).inverted();
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
 
@@ -102,7 +102,7 @@ public:
             if (!path)
                 continue;
             // map clip path to shape coordinates of clipped shape
-            QTransform m = path->absoluteTransformation(0) * transformToShape;
+            QTransform m = path->absoluteTransformation(nullptr) * transformToShape;
             if (clipPath.isEmpty())
                 clipPath = m.map(path->outline());
             else
@@ -143,7 +143,7 @@ void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const K
     KoShape *shape = clippedShape;
     while (shape) {
         if (shape->clipPath()) {
-            QTransform m = scaleFromPercent(shape->outline().boundingRect().size()) * shape->absoluteTransformation(0);
+            QTransform m = scaleFromPercent(shape->outline().boundingRect().size()) * shape->absoluteTransformation(nullptr);
             if (clipPath.isEmpty())
                 clipPath = m.map(shape->clipPath()->path());
             else
@@ -182,7 +182,7 @@ QTransform KoClipPath::clipDataTransformation(KoShape *clippedShape) const
         return d->initialTransformToShape;
 
     // the current transformation of the clipped shape
-    QTransform currentShapeTransform = clippedShape->absoluteTransformation(0);
+    QTransform currentShapeTransform = clippedShape->absoluteTransformation(nullptr);
 
     // calculate the transformation which represents any resizing of the clipped shape
     const QSizeF currentShapeSize = clippedShape->outline().boundingRect().size();

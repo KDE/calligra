@@ -19,7 +19,7 @@ const qreal FlatnessTolerance = ldexp(1.0, -MaxRecursionDepth - 1);
 class BezierSegment
 {
 public:
-    BezierSegment(int degree = 0, QPointF *p = 0)
+    BezierSegment(int degree = 0, QPointF *p = nullptr)
     {
         if (degree) {
             for (int i = 0; i <= degree; ++i)
@@ -544,7 +544,7 @@ KoPathSegment::KoPathSegment(KoPathPoint *first, KoPathPoint *second)
 }
 
 KoPathSegment::KoPathSegment(const KoPathSegment &segment)
-    : d(new Private(this, 0, 0))
+    : d(new Private(this, nullptr, nullptr))
 {
     if (!segment.first() || segment.first()->parent())
         setFirst(segment.first());
@@ -673,7 +673,7 @@ QPointF KoPathSegment::pointAt(qreal t) const
     } else {
         QPointF splitP;
 
-        d->deCasteljau(t, 0, 0, &splitP, 0, 0);
+        d->deCasteljau(t, nullptr, nullptr, &splitP, nullptr, nullptr);
 
         return splitP;
     }
@@ -1227,11 +1227,11 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt(qreal t) const
 
         if (degree() == 2) {
             if (second()->activeControlPoint1()) {
-                KoPathPoint *s1p1 = new KoPathPoint(0, d->first->point());
-                KoPathPoint *s1p2 = new KoPathPoint(0, splitP);
+                KoPathPoint *s1p1 = new KoPathPoint(nullptr, d->first->point());
+                KoPathPoint *s1p2 = new KoPathPoint(nullptr, splitP);
                 s1p2->setControlPoint1(splitCP1);
-                KoPathPoint *s2p1 = new KoPathPoint(0, splitP);
-                KoPathPoint *s2p2 = new KoPathPoint(0, d->second->point());
+                KoPathPoint *s2p1 = new KoPathPoint(nullptr, splitP);
+                KoPathPoint *s2p2 = new KoPathPoint(nullptr, d->second->point());
                 s2p2->setControlPoint1(splitCP2);
                 results.first = KoPathSegment(s1p1, s1p2);
                 results.second = KoPathSegment(s2p1, s2p2);

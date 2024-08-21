@@ -89,5 +89,5 @@ KUndo2Command *StateToolWidget::createCommand()
 {
     save();
 
-    return 0;
+    return nullptr;
 }

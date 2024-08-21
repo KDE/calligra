@@ -1232,7 +1232,7 @@ SSTRecord::SSTRecord(Workbook *book)
 {
     d = new SSTRecord::Private();
     d->total = 0;
-    d->esst = 0;
+    d->esst = nullptr;
 }
 
 SSTRecord::~SSTRecord()
@@ -1358,7 +1358,7 @@ const unsigned ObjRecord::id = 0x5D;
 
 ObjRecord::ObjRecord(Workbook *book)
     : Record(book)
-    , m_object(0)
+    , m_object(nullptr)
 {
 }
 ObjRecord::~ObjRecord()
@@ -1447,7 +1447,7 @@ void ObjRecord::setData(unsigned size, const unsigned char *data, const unsigned
                 qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord Picture";
                 setIsValid(false);
                 delete m_object;
-                m_object = 0;
+                m_object = nullptr;
                 return;
             }
             startPict += 6;
@@ -1512,7 +1512,7 @@ void ObjRecord::setData(unsigned size, const unsigned char *data, const unsigned
             qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord note with id=" << id;
             setIsValid(false);
             delete m_object;
-            m_object = 0;
+            m_object = nullptr;
             return;
         }
         // const unsigned long isShared = readU16(startPict); // 0x0000 = Not shared, 0x0001 = Shared.
@@ -1568,7 +1568,7 @@ void ObjRecord::setData(unsigned size, const unsigned char *data, const unsigned
         qCWarning(lcSidewinder) << "ObjRecord::setData: Unexpected objecttype" << ot << "in ObjRecord";
         setIsValid(false);
         delete m_object;
-        m_object = 0;
+        m_object = nullptr;
         return;
     }
 
@@ -1642,7 +1642,7 @@ void ObjRecord::setData(unsigned size, const unsigned char *data, const unsigned
                     embedInfoSize += 3;
                     if (cbClass > 0x0000) { // strClass specifies the class name of the embedded control
                         unsigned size = 0;
-                        QString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
+                        QString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, nullptr, &size);
                         embedInfoSize += size;
 
                         // TODO
@@ -2009,7 +2009,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char *data, co
 
     if (d->container.blipStore.data() && m_workbook->store()) {
         m_workbook->store()->enterDirectory("Pictures");
-        d->pictureNames = createPictures(m_workbook->store(), 0, &d->container.blipStore->rgfb);
+        d->pictureNames = createPictures(m_workbook->store(), nullptr, &d->container.blipStore->rgfb);
         m_workbook->store()->leaveDirectory();
     }
 }
@@ -2221,9 +2221,9 @@ public:
 ExcelReader::ExcelReader()
 {
     d = new ExcelReader::Private();
-    d->workbook = 0;
-    d->activeSheet = 0;
-    d->globals = 0;
+    d->workbook = nullptr;
+    d->activeSheet = nullptr;
+    d->globals = nullptr;
 }
 
 ExcelReader::~ExcelReader()
@@ -2784,7 +2784,7 @@ void ExcelReader::handleBOF(BOFRecord *record)
             d->activeSheet = sheet;
         d->handlerStack.push_back(new WorksheetSubStreamHandler(sheet, d->globals));
     } else if (record->type() == BOFRecord::Chart) {
-        SubStreamHandler *parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
+        SubStreamHandler *parentHandler = d->handlerStack.empty() ? nullptr : d->handlerStack.back();
         d->handlerStack.push_back(new Swinder::ChartSubStreamHandler(d->globals, parentHandler));
     } else {
         qCDebug(lcSidewinder) << "ExcelReader::handleBOF Unhandled type=" << record->type();

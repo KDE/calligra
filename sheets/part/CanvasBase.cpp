@@ -72,7 +72,7 @@ using namespace Calligra::Sheets;
  ****************************************************************/
 
 CanvasBase::CanvasBase(Doc *doc)
-    : KoCanvasBase(0)
+    : KoCanvasBase(nullptr)
     , d(new Private)
 {
     d->offset = QPointF(0.0, 0.0);

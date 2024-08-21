@@ -28,7 +28,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
         m_insideTable = true;
     }
 
-    m_tableStyle = 0;
+    m_tableStyle = nullptr;
 
     if (!d->tableStyleList) {
         d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle *>;

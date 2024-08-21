@@ -27,7 +27,7 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
     : m_toolFactory(tool)
     , m_uniqueId(newUniqueToolHelperId())
     , m_hasCustomShortcut(false)
-    , m_toolAction(0)
+    , m_toolAction(nullptr)
 {
     // TODO: how to get an existing custom shortcut in the beginning here?
     // Once the first ShortcutToolAction is added to the actionCollection,

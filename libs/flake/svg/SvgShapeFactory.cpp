@@ -65,14 +65,14 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
     const KoXmlElement &imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
         errorFlake << "svg image element not found";
-        return 0;
+        return nullptr;
     }
 
     if (imageElement.tagName() == "image") {
         debugFlake << "trying to create shapes from svg image";
         QString href = imageElement.attribute("href");
         if (href.isEmpty())
-            return 0;
+            return nullptr;
 
         // check the mimetype
         if (href.startsWith(QLatin1String("./"))) {
@@ -81,10 +81,10 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
         debugFlake << mimetype;
         if (mimetype != "image/svg+xml")
-            return 0;
+            return nullptr;
 
         if (!context.odfLoadingContext().store()->open(href))
-            return 0;
+            return nullptr;
 
         KoStoreDevice dev(context.odfLoadingContext().store());
         KoXmlDocument xmlDoc;
@@ -99,14 +99,14 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         if (!parsed) {
             errorFlake << "Error while parsing file: "
                        << "at line " << line << " column: " << col << " message: " << errormessage << Qt::endl;
-            return 0;
+            return nullptr;
         }
 
         SvgParser parser(context.documentResourceManager());
 
         QList<KoShape *> shapes = parser.parseSvg(xmlDoc.documentElement());
         if (shapes.isEmpty())
-            return 0;
+            return nullptr;
 
         int zIndex = 0;
         if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
@@ -126,7 +126,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             if (!loaded) {
                 errorFlake << "Failed to load svg shape: " << shape->shapeId();
                 delete shape;
-                return 0;
+                return nullptr;
             }
             return shape;
         }
@@ -139,5 +139,5 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         return svgGroup;
     }
 
-    return 0;
+    return nullptr;
 }

@@ -40,7 +40,7 @@ public:
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
      */
-    void startDocument(const char *rootElemName, const char *publicId = 0, const char *systemId = 0);
+    void startDocument(const char *rootElemName, const char *publicId = nullptr, const char *systemId = nullptr);
 
     /// Call this to terminate an XML document.
     void endDocument();
@@ -238,7 +238,7 @@ public:
 
 private:
     struct Tag {
-        Tag(const char *t = 0, bool ind = true)
+        Tag(const char *t = nullptr, bool ind = true)
             : tagName(t)
             , hasChildren(false)
             , lastChildIsText(false)

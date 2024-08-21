@@ -29,7 +29,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
     setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(Qt::black))));
-    setStroke(0);
+    setStroke(nullptr);
 }
 
 KarbonCalligraphicShape::~KarbonCalligraphicShape()

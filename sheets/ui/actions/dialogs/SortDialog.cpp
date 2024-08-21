@@ -47,10 +47,10 @@ public:
         Q_UNUSED(option)
         if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
             if (rows.isEmpty()) {
-                return 0;
+                return nullptr;
             }
         } else if (columns.isEmpty()) {
-            return 0;
+            return nullptr;
         }
         KComboBox *const combo = new KComboBox(parent);
         return combo;

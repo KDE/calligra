@@ -36,7 +36,7 @@ void TestKoLZF::testArrayCompressionNullPointerInput()
 {
     char outputdata[4];
 
-    const int compressedDataLength = KoLZF::compress(0, 4, outputdata, 4);
+    const int compressedDataLength = KoLZF::compress(nullptr, 4, outputdata, 4);
 
     QCOMPARE(compressedDataLength, 0);
 }
@@ -45,7 +45,7 @@ void TestKoLZF::testArrayCompressionNullPointerOutput()
 {
     const char inputData[] = "test";
 
-    const int compressedDataLength = KoLZF::compress(inputData, 4, 0, 4);
+    const int compressedDataLength = KoLZF::compress(inputData, 4, nullptr, 4);
 
     QCOMPARE(compressedDataLength, 0);
 }
@@ -75,7 +75,7 @@ void TestKoLZF::testArrayDecompressionNullPointerInput()
 {
     char outputdata[4];
 
-    const int uncompressedDataLength = KoLZF::decompress(0, 0, outputdata, 4);
+    const int uncompressedDataLength = KoLZF::decompress(nullptr, 0, outputdata, 4);
 
     QCOMPARE(uncompressedDataLength, 0);
 }
@@ -84,7 +84,7 @@ void TestKoLZF::testArrayDecompressionNullPointerOutput()
 {
     const char inputData[] = "test";
 
-    const int uncompressedDataLength = KoLZF::decompress(inputData, 4, 0, 4);
+    const int uncompressedDataLength = KoLZF::decompress(inputData, 4, nullptr, 4);
 
     QCOMPARE(uncompressedDataLength, 0);
 }

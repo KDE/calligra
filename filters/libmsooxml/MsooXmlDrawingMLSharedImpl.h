@@ -737,7 +737,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     m_currentSatMod = 0;
     m_currentAlpha = 0;
 
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = nullptr;
 
 #if !defined MSOOXML_THEMESREADER_CPP
     QString valTransformed = m_context->colorMap.value(val);

@@ -95,7 +95,7 @@ struct KOPLUGIN_EXPORT PluginsConfig {
  * @param owner QObject owner
  * @return a list of services (by library name) that were not know in the config
  */
-KOPLUGIN_EXPORT void load(const QString &directory, const PluginsConfig &config = PluginsConfig(), QObject *owner = 0);
+KOPLUGIN_EXPORT void load(const QString &directory, const PluginsConfig &config = PluginsConfig(), QObject *owner = nullptr);
 
 /**
  * Load all plugins that are located in the specified directory and return their KPluginFactory objects.

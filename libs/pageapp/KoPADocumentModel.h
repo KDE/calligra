@@ -30,7 +30,7 @@ class KOPAGEAPP_EXPORT KoPADocumentModel : public KoDocumentSectionModel
     Q_OBJECT
 public:
     /// Constructs a new document section model using the specified documents data
-    explicit KoPADocumentModel(QObject *parent, KoPADocument *document = 0);
+    explicit KoPADocumentModel(QObject *parent, KoPADocument *document = nullptr);
 
     /// Set the document used in the model
     void setDocument(KoPADocument *document);

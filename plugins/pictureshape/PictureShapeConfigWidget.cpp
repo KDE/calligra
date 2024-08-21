@@ -36,7 +36,7 @@ void PictureShapeLoadWaiter::setImageData(KJob *job)
 
     deleteLater();
 
-    if (m_pictureShape == 0)
+    if (m_pictureShape == nullptr)
         return; // ugh, the shape got deleted meanwhile (## err, who would set the pointer to null?)
 
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
@@ -59,8 +59,8 @@ void PictureShapeLoadWaiter::setImageData(KJob *job)
 // ---------------------------------------------------- //
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
-    : m_shape(0)
-    , m_fileWidget(0)
+    : m_shape(nullptr)
+    , m_fileWidget(nullptr)
 {
 }
 

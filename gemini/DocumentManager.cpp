@@ -25,11 +25,11 @@ class DocumentManager::Private
 {
 public:
     Private()
-        : proxy(0)
-        , document(0)
-        , part(0)
-        , settingsManager(0)
-        , recentFileManager(0)
+        : proxy(nullptr)
+        , document(nullptr)
+        , part(nullptr)
+        , settingsManager(nullptr)
+        , recentFileManager(nullptr)
         , importingDocument(false)
         , temporaryFile(false)
     {
@@ -48,7 +48,7 @@ public:
     bool temporaryFile;
 };
 
-DocumentManager *DocumentManager::sm_instance = 0;
+DocumentManager *DocumentManager::sm_instance = nullptr;
 
 KoDocument *DocumentManager::document() const
 {
@@ -182,7 +182,7 @@ void DocumentManager::openDocument(const QString &document, bool import)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = 0;
+    d->document = nullptr;
     QMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());

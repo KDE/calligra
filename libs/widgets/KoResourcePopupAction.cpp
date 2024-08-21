@@ -35,8 +35,8 @@ class KoResourcePopupAction::Private
 {
 public:
     Private()
-        : resourceList(0)
-        , background(0)
+        : resourceList(nullptr)
+        , background(nullptr)
         , checkerPainter(4)
     {
     }
@@ -64,7 +64,7 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
         resourceModel->setColumnCount(1);
     }
 
-    KoResource *resource = 0;
+    KoResource *resource = nullptr;
     if (resourceAdapter->resources().count() > 0) {
         resource = resourceAdapter->resources().at(0);
     }

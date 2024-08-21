@@ -38,7 +38,7 @@ void TestWriteStyleXml::testWriteRegionLeft()
     buffer.open(QIODevice::WriteOnly);
     {
         KoXmlWriter writer(&buffer);
-        writer.startDocument(0);
+        writer.startDocument(nullptr);
         office_document_styles styles(&writer);
         styles.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
         styles.addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");

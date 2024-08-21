@@ -12,7 +12,7 @@
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
     : m_state(state)
-    , m_shape(0)
+    , m_shape(nullptr)
 {
     widget.setupUi(this);
 
@@ -99,7 +99,7 @@ void KWFrameConnectSelector::open(KoShape *shape)
 
     foreach (KWFrameSet *fs, m_state->document()->frameSets()) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(fs);
-        if (textFs == 0 || textFs->textFrameSetType() != Words::OtherTextFrameSet)
+        if (textFs == nullptr || textFs->textFrameSetType() != Words::OtherTextFrameSet)
             continue;
         m_frameSets.append(textFs);
         QTreeWidgetItem *row = new QTreeWidgetItem(widget.framesList);

@@ -14,7 +14,7 @@
 StencilListView::StencilListView(QWidget *parent)
     : QListView(parent)
 {
-    int iconSize = style()->pixelMetric(QStyle::PM_IconViewIconSize, 0, this);
+    int iconSize = style()->pixelMetric(QStyle::PM_IconViewIconSize, nullptr, this);
     setFocusPolicy(Qt::NoFocus);
     setFrameShape(QFrame::NoFrame);
     setIconSize(QSize(iconSize, iconSize));

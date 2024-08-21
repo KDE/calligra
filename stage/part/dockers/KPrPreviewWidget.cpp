@@ -19,9 +19,9 @@
 
 KPrPreviewWidget::KPrPreviewWidget(QWidget *parent)
     : QWidget(parent)
-    , m_pageEffect(0)
-    , m_pageEffectRunner(0)
-    , m_page(0)
+    , m_pageEffect(nullptr)
+    , m_pageEffectRunner(nullptr)
+    , m_page(nullptr)
 {
     connect(&m_timeLine, &QTimeLine::valueChanged, this, &KPrPreviewWidget::animate);
 }
@@ -73,7 +73,7 @@ void KPrPreviewWidget::setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, K
     delete m_pageEffect;
     m_pageEffect = pageEffect;
     delete m_pageEffectRunner;
-    m_pageEffectRunner = 0;
+    m_pageEffectRunner = nullptr;
 
     m_page = page;
     m_prevpage = prevpage;

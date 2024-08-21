@@ -30,10 +30,10 @@ class KoColorPopupAction::KoColorPopupActionPrivate
 {
 public:
     KoColorPopupActionPrivate()
-        : colorSetWidget(0)
-        , colorChooser(0)
-        , opacitySlider(0)
-        , menu(0)
+        : colorSetWidget(nullptr)
+        , colorChooser(nullptr)
+        , opacitySlider(nullptr)
+        , menu(nullptr)
         , checkerPainter(4)
         , showFilter(true)
         , applyMode(true)

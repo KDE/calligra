@@ -16,7 +16,7 @@ class KoInteractionToolPrivate : public KoToolBasePrivate
 public:
     KoInteractionToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
         : KoToolBasePrivate(qq, canvas)
-        , currentStrategy(0)
+        , currentStrategy(nullptr)
     {
     }
 

@@ -223,7 +223,7 @@ struct UPECHPX {
     UPECHPX()
         : istd(0)
         , cb(0)
-        , grpprl(0)
+        , grpprl(nullptr)
     {
     }
     ~UPECHPX()

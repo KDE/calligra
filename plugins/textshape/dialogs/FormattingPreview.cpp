@@ -36,8 +36,8 @@
 FormattingPreview::FormattingPreview(QWidget *parent)
     : QFrame(parent)
     , m_sampleText(i18n("Font"))
-    , m_characterStyle(0)
-    , m_paragraphStyle(0)
+    , m_characterStyle(nullptr)
+    , m_paragraphStyle(nullptr)
     , m_thumbnailer(new KoStyleThumbnailer())
     , m_previewLayoutRequired(true)
 {

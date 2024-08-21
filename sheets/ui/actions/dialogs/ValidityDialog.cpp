@@ -291,8 +291,8 @@ void ValidityDialog::changeIndexType(int _index)
         val_min->setEnabled(true);
         choose->setEnabled(true);
 
-        val_min->setValidator(0);
-        val_max->setValidator(0);
+        val_min->setValidator(nullptr);
+        val_max->setValidator(nullptr);
         if (choose->currentIndex() <= 4) {
             edit1->setText(i18n("Date:"));
             edit2->setText("");
@@ -306,8 +306,8 @@ void ValidityDialog::changeIndexType(int _index)
     case 5:
         val_min->setEnabled(true);
         choose->setEnabled(true);
-        val_min->setValidator(0);
-        val_max->setValidator(0);
+        val_min->setValidator(nullptr);
+        val_max->setValidator(nullptr);
         if (choose->currentIndex() <= 4) {
             edit1->setText(i18n("Time:"));
             edit2->setText("");

@@ -128,7 +128,7 @@ public:
     ValueCache();
     bool hasNegativeWidth() const;
     bool hasNegativeHeight() const;
-    qreal value(const QString &name, bool *valid = 0) const;
+    qreal value(const QString &name, bool *valid = nullptr) const;
     bool valueExists(const QString &name);
     void setValue(const QString &name, qreal value);
     qreal operator[](const QString &name) const;
@@ -371,7 +371,7 @@ public:
         , m_needsRelayout(true)
         , m_childNeedsRelayout(true)
         , m_firstLayout(true)
-        , m_algorithmImpl(0)
+        , m_algorithmImpl(nullptr)
     {
     }
     ~LayoutNodeAtom() override

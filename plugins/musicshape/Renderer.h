@@ -32,7 +32,7 @@ class MusicRenderer
 public:
     struct RenderState {
         RenderState()
-            : clef(0)
+            : clef(nullptr)
         {
         }
 

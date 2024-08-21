@@ -31,13 +31,13 @@ DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles &_style
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
 {
 }
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice *io, KoOdfWriters *writers)
     : MSOOXML::MsooXmlReader(io, writers)
-    , m_context(0)
+    , m_context(nullptr)
 {
 }
 

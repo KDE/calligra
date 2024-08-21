@@ -17,20 +17,20 @@
 #include <algorithm>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
-    : toplevelGroup(0)
-    , sublevelGroup(0)
-    , strokeGroup(0)
-    , cmd1(0)
-    , cmd2(0)
-    , strokeCmd(0)
-    , toplevelShape1(0)
-    , toplevelShape2(0)
-    , sublevelShape1(0)
-    , sublevelShape2(0)
-    , extraShape1(0)
-    , extraShape2(0)
-    , strokeShape1(0)
-    , strokeShape2(0)
+    : toplevelGroup(nullptr)
+    , sublevelGroup(nullptr)
+    , strokeGroup(nullptr)
+    , cmd1(nullptr)
+    , cmd2(nullptr)
+    , strokeCmd(nullptr)
+    , toplevelShape1(nullptr)
+    , toplevelShape2(nullptr)
+    , sublevelShape1(nullptr)
+    , sublevelShape2(nullptr)
+    , extraShape1(nullptr)
+    , extraShape2(nullptr)
+    , strokeShape1(nullptr)
+    , strokeShape2(nullptr)
 {
 }
 
@@ -82,54 +82,54 @@ void TestShapeGroupCommand::init()
 
 void TestShapeGroupCommand::cleanup()
 {
-    if (toplevelShape1->parent() == 0) {
+    if (toplevelShape1->parent() == nullptr) {
         delete toplevelShape1;
     }
-    toplevelShape1 = 0;
-    if (toplevelShape2->parent() == 0) {
+    toplevelShape1 = nullptr;
+    if (toplevelShape2->parent() == nullptr) {
         delete toplevelShape2;
     }
-    toplevelShape2 = 0;
-    if (sublevelShape1->parent() == 0) {
+    toplevelShape2 = nullptr;
+    if (sublevelShape1->parent() == nullptr) {
         delete sublevelShape1;
     }
-    sublevelShape1 = 0;
-    if (sublevelShape2->parent() == 0) {
+    sublevelShape1 = nullptr;
+    if (sublevelShape2->parent() == nullptr) {
         delete sublevelShape2;
     }
-    sublevelShape2 = 0;
-    if (extraShape1->parent() == 0) {
+    sublevelShape2 = nullptr;
+    if (extraShape1->parent() == nullptr) {
         delete extraShape1;
     }
-    extraShape1 = 0;
-    if (extraShape2->parent() == 0) {
+    extraShape1 = nullptr;
+    if (extraShape2->parent() == nullptr) {
         delete extraShape2;
     }
-    extraShape2 = 0;
-    if (strokeShape1->parent() == 0) {
+    extraShape2 = nullptr;
+    if (strokeShape1->parent() == nullptr) {
         delete strokeShape1;
     }
-    strokeShape1 = 0;
-    if (strokeShape2->parent() == 0) {
+    strokeShape1 = nullptr;
+    if (strokeShape2->parent() == nullptr) {
         delete strokeShape2;
     }
-    strokeShape2 = 0;
-    if (sublevelGroup->parent() == 0) {
+    strokeShape2 = nullptr;
+    if (sublevelGroup->parent() == nullptr) {
         delete sublevelGroup;
     }
-    sublevelGroup = 0;
-    if (strokeGroup->parent() == 0) {
+    sublevelGroup = nullptr;
+    if (strokeGroup->parent() == nullptr) {
         delete strokeGroup;
-        strokeGroup = 0;
+        strokeGroup = nullptr;
     }
     delete toplevelGroup;
-    toplevelGroup = 0;
+    toplevelGroup = nullptr;
     delete cmd1;
-    cmd1 = 0;
+    cmd1 = nullptr;
     delete cmd2;
-    cmd2 = 0;
+    cmd2 = nullptr;
     delete strokeCmd;
-    strokeCmd = 0;
+    strokeCmd = nullptr;
 }
 
 void TestShapeGroupCommand::testToplevelGroup()
@@ -148,10 +148,10 @@ void TestShapeGroupCommand::testToplevelGroup()
     QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
 
     cmd1->undo();
-    QVERIFY(toplevelShape1->parent() == 0);
+    QVERIFY(toplevelShape1->parent() == nullptr);
     QCOMPARE(toplevelShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(50, 50));
     QCOMPARE(toplevelShape1->position(), QPointF(50, 50));
-    QVERIFY(toplevelShape2->parent() == 0);
+    QVERIFY(toplevelShape2->parent() == nullptr);
     QCOMPARE(toplevelShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(50, 150));
     QCOMPARE(toplevelShape2->position(), QPointF(50, 150));
 }
@@ -198,7 +198,7 @@ void TestShapeGroupCommand::testSublevelGroup()
     expectedOrder << sublevelShape2 << sublevelShape1;
     QCOMPARE(childOrder, expectedOrder);
     // check that the group has the zIndex/parent of its added top shape
-    QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer *>(0));
+    QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer *>(nullptr));
     QCOMPARE(toplevelGroup->zIndex(), 1);
 }
 
@@ -219,7 +219,7 @@ void TestShapeGroupCommand::testAddToToplevelGroup()
 
     cmd2->undo();
 
-    QVERIFY(extraShape1->parent() == 0);
+    QVERIFY(extraShape1->parent() == nullptr);
     QCOMPARE(extraShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
     QCOMPARE(extraShape1->position(), QPointF(150, 50));
     QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
@@ -252,7 +252,7 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
     cmd2->undo();
 
-    QVERIFY(extraShape2->parent() == 0);
+    QVERIFY(extraShape2->parent() == nullptr);
     QCOMPARE(extraShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 50));
     QCOMPARE(extraShape2->position(), QPointF(250, 50));
     QCOMPARE(sublevelShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));

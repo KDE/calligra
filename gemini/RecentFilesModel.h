@@ -15,7 +15,7 @@ class RecentFilesModel : public QAbstractListModel
 public:
     enum PresetRoles { ImageRole = Qt::UserRole + 1, TextRole, UrlRole, NameRole, DateRole };
 
-    explicit RecentFilesModel(QObject *parent = 0);
+    explicit RecentFilesModel(QObject *parent = nullptr);
     ~RecentFilesModel() override;
 
     QHash<int, QByteArray> roleNames() const override;

@@ -73,7 +73,7 @@ public:
     KoPathPoint *splitSegment(KoPathPoint *p1, KoPathPoint *p2, qreal splitPosition)
     {
         if (!p1->activeControlPoint2() && !p2->activeControlPoint1())
-            return 0;
+            return nullptr;
 
         QPointF q[4] = {p1->point(),
                         p1->activeControlPoint2() ? p1->controlPoint2() : p1->point(),

@@ -85,24 +85,24 @@ public:
     Private(MainWindow *qq)
         : q(qq)
         , allowClose(true)
-        , touchView(0)
-        , desktopView(0)
-        , currentView(0)
-        , settings(0)
+        , touchView(nullptr)
+        , desktopView(nullptr)
+        , currentView(nullptr)
+        , settings(nullptr)
         , slateMode(false)
         , docked(false)
-        , touchKoView(0)
-        , touchEventReceiver(0)
-        , desktopKoView(0)
-        , desktopViewProxy(0)
+        , touchKoView(nullptr)
+        , touchEventReceiver(nullptr)
+        , desktopKoView(nullptr)
+        , desktopViewProxy(nullptr)
         , forceDesktop(false)
         , forceTouch(false)
         , temporaryFile(false)
-        , syncObject(0)
-        , toDesktop(0)
-        , toTouch(0)
-        , switcher(0)
-        , alternativeSaveAction(0)
+        , syncObject(nullptr)
+        , toDesktop(nullptr)
+        , toTouch(nullptr)
+        , switcher(nullptr)
+        , alternativeSaveAction(nullptr)
     {
 #ifdef Q_OS_WIN
         // slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -192,7 +192,7 @@ public:
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
-            QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+            QMessageBox::warning(nullptr, "No QML found", mainqml + " doesn't exist.");
         }
         QFileInfo fi(mainqml);
 
@@ -231,7 +231,7 @@ public:
             qApp->setApplicationName("calligrastage");
             desktopView = new KoMainWindow(STAGE_MIME_TYPE, KPrFactory::componentData());
         } else {
-            desktopView = 0;
+            desktopView = nullptr;
             qDebug() << "Big trouble, things gonna break. desktopView is not created." << settings->currentFileClass();
             return;
         }
@@ -370,7 +370,7 @@ void MainWindow::switchToTouch()
             ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->touchView, d->syncObject);
             QApplication::sendEvent(view, &aboutToSwitchEvent);
         }
-        d->desktopView->setParent(0);
+        d->desktopView->setParent(nullptr);
     }
 
     setCentralWidget(d->touchView);
@@ -405,7 +405,7 @@ void MainWindow::touchChange()
         // so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToTouchModeEvent, view, d->touchView, d->syncObject);
         QApplication::sendEvent(d->touchEventReceiver, &switchedEvent);
-        d->syncObject = 0;
+        d->syncObject = nullptr;
         qApp->processEvents();
     }
     if (d->toDesktop) {
@@ -425,7 +425,7 @@ void MainWindow::switchToDesktop()
 
     ViewModeSynchronisationObject *syncObject = new ViewModeSynchronisationObject;
 
-    KoView *view = 0;
+    KoView *view = nullptr;
     if (d->desktopView) {
         view = d->desktopView->rootView();
     }
@@ -441,7 +441,7 @@ void MainWindow::switchToDesktop()
     qApp->processEvents();
 
     if (d->currentTouchPage == "MainPage") {
-        d->touchView->setParent(0);
+        d->touchView->setParent(nullptr);
         d->touchView->setVisible(false);
         setCentralWidget(d->desktopView);
     }
@@ -482,7 +482,7 @@ void MainWindow::documentChanged()
 {
     if (d->desktopView) {
         d->desktopView->deleteLater();
-        d->desktopView = 0;
+        d->desktopView = nullptr;
         qApp->processEvents();
     }
     d->initDesktopView();
@@ -554,7 +554,7 @@ void MainWindow::setAlternativeSaveAction(QAction *altAction)
             tb->removeAction(cloudSave);
             // find the action /after/ the save action (because we want the alt save there, not before it)
             QAction *saveAction = d->desktopView->actionCollection()->action("file_save");
-            QAction *afterSave = 0;
+            QAction *afterSave = nullptr;
             bool useNext = false;
             Q_FOREACH (QAction *action, tb->actions()) {
                 if (useNext) {
@@ -703,7 +703,7 @@ void MainWindow::closeWindow()
 bool MainWindow::Private::queryClose()
 {
     desktopView->setNoCleanup(true);
-    if (DocumentManager::instance()->document() == 0)
+    if (DocumentManager::instance()->document() == nullptr)
         return true;
 
     // main doc + internally stored child documents

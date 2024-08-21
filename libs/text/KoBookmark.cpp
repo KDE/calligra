@@ -82,7 +82,7 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
                     setInlineRdf(inlineRdf);
                 } else {
                     delete inlineRdf;
-                    inlineRdf = 0;
+                    inlineRdf = nullptr;
                 }
             }
         } else {

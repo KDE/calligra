@@ -50,35 +50,35 @@ public:
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
      */
-    Value tryParseBool(const QString &str, bool *ok = 0) const;
+    Value tryParseBool(const QString &str, bool *ok = nullptr) const;
 
     /**
      * Tries for floating point, integer, complex (and percentage) type.
      * If \p str can be interpreted as one of these types, \p ok is set to
      * \c true and the corresponding value will be returned.
      */
-    Value tryParseNumber(const QString &str, bool *ok = 0) const;
+    Value tryParseNumber(const QString &str, bool *ok = nullptr) const;
 
     /**
      * Tries for datetime type. If \p str can be interpreted as this
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
      */
-    Value tryParseDateTime(const QString &str, bool *ok = 0) const;
+    Value tryParseDateTime(const QString &str, bool *ok = nullptr) const;
 
     /**
      * Tries for date type. If \p str can be interpreted as this
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
      */
-    Value tryParseDate(const QString &str, bool *ok = 0) const;
+    Value tryParseDate(const QString &str, bool *ok = nullptr) const;
 
     /**
      * Tries for time type. If \p str can be interpreted as this
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
      */
-    Value tryParseTime(const QString &str, bool *ok = 0) const;
+    Value tryParseTime(const QString &str, bool *ok = nullptr) const;
 
 protected:
     /**

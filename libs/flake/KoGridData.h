@@ -109,7 +109,7 @@ public:
      * Returns a toggle action that can be added to the menu of your views.
      * @param by passing the canvas the toggle action will automatically update the canvas when its toggled.
      */
-    KToggleAction *gridToggleAction(QWidget *canvas = 0);
+    KToggleAction *gridToggleAction(QWidget *canvas = nullptr);
 
 private:
     class Private;

@@ -186,7 +186,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     // Add only blocks with text
     if (!tocEntryText.isEmpty()) {
-        KoParagraphStyle *tocTemplateStyle = 0;
+        KoParagraphStyle *tocTemplateStyle = nullptr;
 
         if (outlineLevel >= 1 && (outlineLevel - 1) < m_ToCInfo->m_entryTemplate.size() && outlineLevel <= m_ToCInfo->m_outlineLevel) {
             // List's index starts with 0, outline level starts with 0
@@ -199,7 +199,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
             }
 
             tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate->styleId);
-            if (tocTemplateStyle == 0) {
+            if (tocTemplateStyle == nullptr) {
                 tocTemplateStyle = styleManager->defaultTableOfContentsEntryStyle(outlineLevel);
             }
 

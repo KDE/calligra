@@ -21,7 +21,7 @@ KoSectionModel::~KoSectionModel()
 KoSection *KoSectionModel::createSection(const QTextCursor &cursor, KoSection *parent, const QString &name)
 {
     if (!isValidNewName(name)) {
-        return 0;
+        return nullptr;
     }
 
     KoSection *result = new KoSection(cursor, name, parent);
@@ -55,7 +55,7 @@ KoSectionEnd *KoSectionModel::createSectionEnd(KoSection *section)
 KoSection *KoSectionModel::sectionAtPosition(int pos) const
 {
     // TODO: Rewrite it by traversing Model as tree
-    KoSection *result = 0;
+    KoSection *result = nullptr;
     int level = -1; // Seeking the section with maximum level
     QHash<QString, KoSection *>::ConstIterator it = m_sectionNames.begin();
     for (; it != m_sectionNames.end(); ++it) {

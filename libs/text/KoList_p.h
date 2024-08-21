@@ -25,11 +25,11 @@ public:
     KoListPrivate(KoList *q, const QTextDocument *document)
         : q(q)
         , type(KoList::TextList)
-        , style(0)
+        , style(nullptr)
         , textLists(10)
         , textListIds(10)
         , document(document)
-        , listToBeContinuedFrom(0)
+        , listToBeContinuedFrom(nullptr)
     {
     }
 

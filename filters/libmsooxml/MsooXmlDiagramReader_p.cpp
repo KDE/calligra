@@ -56,11 +56,11 @@ using namespace MSOOXML;
 /****************************************************************************************************/
 
 Context::Context()
-    : m_rootPoint(0)
+    : m_rootPoint(nullptr)
     , m_connections(new ConnectionListNode)
     , m_rootLayout(new Diagram::LayoutNodeAtom)
     , m_parentLayout(m_rootLayout)
-    , m_currentNode(0)
+    , m_currentNode(nullptr)
 {
 }
 
@@ -210,7 +210,7 @@ void ValueCache::setRectValue(const QString &name, qreal value)
 
 AbstractNode::AbstractNode(const QString &tagName)
     : m_tagName(tagName)
-    , m_parent(0)
+    , m_parent(nullptr)
 {
 }
 AbstractNode::~AbstractNode()
@@ -551,7 +551,7 @@ void AbstractAtom::dump(Context *context, int level)
 void AbstractAtom::readElement(Context *context, MsooXmlDiagramReader *reader)
 {
     if (reader->isStartElement()) {
-        AbstractAtom *node = 0;
+        AbstractAtom *node = nullptr;
 
         if (reader->qualifiedName() == QLatin1String("dgm:layoutNode")) {
             node = new LayoutNodeAtom;
@@ -643,7 +643,7 @@ void AbstractAtom::writeAtom(Context *context, KoXmlWriter *xmlWriter, KoGenStyl
 
 QExplicitlySharedDataPointer<LayoutNodeAtom> AbstractAtom::parentLayout() const
 {
-    LayoutNodeAtom *p = 0;
+    LayoutNodeAtom *p = nullptr;
     for (QExplicitlySharedDataPointer<AbstractAtom> a = parent(); a && !p; a = a->parent())
         p = dynamic_cast<LayoutNodeAtom *>(a.data());
     return QExplicitlySharedDataPointer<LayoutNodeAtom>(p);
@@ -1009,7 +1009,7 @@ void LayoutNodeAtom::finishBuild(Context *context)
     context->m_parentLayout = oldLayout;
 
     delete m_algorithmImpl;
-    m_algorithmImpl = 0;
+    m_algorithmImpl = nullptr;
     QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm();
     switch (alg ? alg->m_type : AlgorithmAtom::UnknownAlg) {
     case AlgorithmAtom::UnknownAlg:
@@ -2667,8 +2667,8 @@ void ForEachAtom::build(Context *context)
 /****************************************************************************************************/
 
 AbstractAlgorithm::AbstractAlgorithm()
-    : m_context(0)
-    , m_oldCurrentNode(0)
+    : m_context(nullptr)
+    , m_oldCurrentNode(nullptr)
 {
 }
 
@@ -2991,7 +2991,7 @@ void CycleAlgorithm::virtualDoLayout()
     // Specifies where to place nodes in relation to the center circle.
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
 
-    LayoutNodeAtom *nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
+    LayoutNodeAtom *nodeInCenter = firstNodeInCenter ? childs.takeFirst() : nullptr;
     const qreal childsCount = childs.count();
 
     QMap<QString, qreal> values = layout()->finalValues();

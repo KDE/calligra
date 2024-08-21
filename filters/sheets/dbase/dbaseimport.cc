@@ -41,12 +41,12 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
     bool result = dbase.load(inputFile);
 
     if (dbase.version() != 3) {
-        KMessageBox::error(0, i18n("File format is not supported."));
+        KMessageBox::error(nullptr, i18n("File format is not supported."));
         return KoFilter::NotImplemented;
     }
 
     if (!result) {
-        KMessageBox::error(0, i18n("Could not read from file."));
+        KMessageBox::error(nullptr, i18n("Could not read from file."));
         return KoFilter::StupidError;
     }
 

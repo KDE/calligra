@@ -43,8 +43,8 @@
 
 KPrAnimate::KPrAnimate(KPrShapeAnimation *shapeAnimation)
     : KPrAnimationBase(shapeAnimation)
-    , m_attribute(0)
-    , m_values(0)
+    , m_attribute(nullptr)
+    , m_values(nullptr)
 {
 }
 

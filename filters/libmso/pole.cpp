@@ -612,7 +612,7 @@ bool valid_enames(DirTree *dirtree, unsigned index)
 {
     std::vector<unsigned> chi = dirtree->children(index);
     QList<std::string> names;
-    DirEntry *e = 0;
+    DirEntry *e = nullptr;
 
 #ifdef POLE_DEBUG
     if (chi.size()) {
@@ -771,7 +771,7 @@ unsigned DirTree::entryCount()
 DirEntry *DirTree::entry(unsigned index)
 {
     if (index >= entryCount())
-        return (DirEntry *)0;
+        return (DirEntry *)nullptr;
     return &entries[index];
 }
 
@@ -807,7 +807,7 @@ std::string DirTree::fullName(unsigned index)
     std::string result = entry(index)->name;
     result.insert(0, "/");
     int p = parent(index);
-    DirEntry *_entry = 0;
+    DirEntry *_entry = nullptr;
     while (p > 0) {
         _entry = entry(p);
         if (_entry->dir && _entry->valid) {
@@ -828,7 +828,7 @@ std::string DirTree::fullName(unsigned index)
 DirEntry *DirTree::entry(const std::string &name, bool create)
 {
     if (!name.length())
-        return (DirEntry *)0;
+        return (DirEntry *)nullptr;
 
     // quick check for "/" (that's root)
     if (name == "/")
@@ -872,7 +872,7 @@ DirEntry *DirTree::entry(const std::string &name, bool create)
         else {
             // not found among children
             if (!create)
-                return (DirEntry *)0;
+                return (DirEntry *)nullptr;
 
             // create a new entry
             unsigned parent = index;
@@ -1216,7 +1216,7 @@ bool StorageIO::open()
 
 void StorageIO::load()
 {
-    unsigned char *buffer = 0;
+    unsigned char *buffer = nullptr;
     unsigned long buflen = 0;
     std::vector<unsigned long> blocks;
 
@@ -1410,16 +1410,16 @@ StreamIO *StorageIO::streamIO(const std::string &name)
 #endif
     // sanity check
     if (!name.length())
-        return (StreamIO *)0;
+        return (StreamIO *)nullptr;
 
     // search in the entries
     DirEntry *entry = dirtree->entry(name);
     // if( entry) std::cout << "FOUND\n";
     if (!entry)
-        return (StreamIO *)0;
+        return (StreamIO *)nullptr;
     // if( !entry->dir ) std::cout << "  NOT DIR\n";
     if (entry->dir)
-        return (StreamIO *)0;
+        return (StreamIO *)nullptr;
 
     StreamIO *result = new StreamIO(this, entry);
     result->fullName = name;

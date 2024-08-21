@@ -361,12 +361,12 @@ Record *RecordRegistry::createRecord(unsigned id, Workbook *book)
         return it2->second(book, q->recordArgs[id]);
     }
 
-    return 0;
+    return nullptr;
 }
 
 RecordRegistry *RecordRegistry::instance()
 {
-    static RecordRegistry *sinstance = 0;
+    static RecordRegistry *sinstance = nullptr;
     if (!sinstance)
         sinstance = new RecordRegistry();
     return sinstance;

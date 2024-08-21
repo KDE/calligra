@@ -120,13 +120,13 @@ QpFormulaStack::push(const char* pString)
 const char*
 QpFormulaStack::top()
 {
-    return (cIdx >= 0 ? cStack[cIdx] : 0);
+    return (cIdx >= 0 ? cStack[cIdx] : nullptr);
 }
 
 const char*
 QpFormulaStack::operator [](int pIdx)
 {
-    char* lResult = 0;
+    char* lResult = nullptr;
 
     if (pIdx <= 0 && (cIdx + pIdx) >= 0) {
         lResult = cStack[cIdx + pIdx];
@@ -138,12 +138,12 @@ QpFormulaStack::operator [](int pIdx)
 // ------------------------------------------------------------------
 
 static const QpFormulaConv gConv[] = {
-    {0,   QpFormula::floatFunc,       0},
-    {1,   QpFormula::ref,             0},
-    {2,   QpFormula::ref,             0},
+    {0,   QpFormula::floatFunc,       nullptr},
+    {1,   QpFormula::ref,             nullptr},
+    {2,   QpFormula::ref,             nullptr},
     {4,   QpFormula::func1,         "("},
-    {5,   QpFormula::intFunc,         0},
-    {6,   QpFormula::stringFunc,      0},
+    {5,   QpFormula::intFunc,         nullptr},
+    {6,   QpFormula::stringFunc,      nullptr},
 // {7, default ??? don't know what this is ???
     {8,   QpFormula::unaryOperand,  "-"},
     {9,   QpFormula::binaryOperand, "+"},
@@ -289,7 +289,7 @@ static const QpFormulaConv gConv[] = {
     {159, QpFormula::func1,         "@property("},
     {160, QpFormula::func1,         "@ddelink("},
     {161, QpFormula::func1,         "@command("},
-    {0,   0,                             0}
+    {0,   nullptr,                             nullptr}
 };
 
 QpFormula::QpFormula(QpRecFormulaCell& pCell, QpTableNames& pTable)
@@ -299,7 +299,7 @@ QpFormula::QpFormula(QpRecFormulaCell& pCell, QpTableNames& pTable)
         , cFormulaRefs((unsigned char*)&pCell.formula()[pCell.formulaReferences()]
                        , (unsigned)(pCell.formulaLen() - pCell.formulaReferences())
                       )
-        , cReplaceFunc(0)
+        , cReplaceFunc(nullptr)
         , cFormulaStart(strcpy(new char[2], "+"))
         , cIdx(0)
         , cDropLeadingAt(0)
@@ -310,12 +310,12 @@ QpFormula::QpFormula(QpRecFormulaCell& pCell, QpTableNames& pTable)
 QpFormula::~QpFormula()
 {
     delete [] cArgSeparator;
-    cArgSeparator = 0;
+    cArgSeparator = nullptr;
 
     delete [] cFormulaStart;
-    cFormulaStart = 0;
+    cFormulaStart = nullptr;
 
-    cReplaceFunc = 0;
+    cReplaceFunc = nullptr;
 }
 
 void
@@ -336,10 +336,10 @@ QpFormula::formula()
         int lFound = 0;
         int lIdx;
 
-        if (cReplaceFunc != 0) {
+        if (cReplaceFunc != nullptr) {
             // search through override list for this function/operand
             for (lIdx = 0
-                        ; !lFound && cReplaceFunc[lIdx].cFunc != 0
+                        ; !lFound && cReplaceFunc[lIdx].cFunc != nullptr
                     ; ++lIdx
                 ) {
                 if (cReplaceFunc[lIdx].cOperand == lOperand) {
@@ -352,7 +352,7 @@ QpFormula::formula()
 
         // if no override then find the default
         for (lIdx = 0
-                    ; !lFound && gConv[lIdx].cFunc != 0
+                    ; !lFound && gConv[lIdx].cFunc != nullptr
                 ; ++lIdx
             ) {
             if (gConv[lIdx].cOperand == lOperand) {
@@ -514,7 +514,7 @@ QpFormula::replaceFunc(QpFormulaConv* pFuncEntry)
 void
 QpFormula::stringFuncReal(const char*)
 {
-    char* lString = 0;
+    char* lString = nullptr;
 
     cFormula >> lString;
 

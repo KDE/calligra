@@ -26,7 +26,7 @@ public:
     enum KeyType { NormalKey, SpacerKey, ShiftKey, EnterKey, BackspaceKey, NumericModeKey, CloseKey, LeftArrowKey, RightArrowKey };
     Q_ENUM(KeyType)
 
-    explicit KeyboardModel(QObject *parent = 0);
+    explicit KeyboardModel(QObject *parent = nullptr);
     ~KeyboardModel() override;
 
     void classBegin() override;

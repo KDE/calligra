@@ -18,7 +18,7 @@ class Q_DECL_HIDDEN RowFormatStorage::Private
 {
 public:
     Private();
-    double rawRowHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
+    double rawRowHeight(int row, int *lastRow = nullptr, int *firstRow = nullptr) const;
 
     Sheet *sheet;
     mdds::flat_segment_tree<int, double> rowHeights;
@@ -274,7 +274,7 @@ int RowFormatStorage::lastNonDefaultRow() const
 {
     int row = KS_rowMax;
     int firstRow;
-    while (row > 0 && isDefaultRow(row, 0, &firstRow)) {
+    while (row > 0 && isDefaultRow(row, nullptr, &firstRow)) {
         row = firstRow - 1;
     }
     if (row < 1)

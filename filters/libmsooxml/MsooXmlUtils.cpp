@@ -212,13 +212,13 @@ QIODevice *Utils::openDeviceForFile(const KZip *zip, QString &errorMessage, cons
         errorMessage = i18n("Entry '%1' not found.", fileName);
         debugMsooXml << errorMessage;
         status = KoFilter::FileNotFound;
-        return 0;
+        return nullptr;
     }
     if (!entry->isFile()) {
         errorMessage = i18n("Entry '%1' is not a file.", fileName);
         debugMsooXml << errorMessage;
         status = KoFilter::WrongFormat;
-        return 0;
+        return nullptr;
     }
     const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
     debugMsooXml << "Entry" << fileName << "has size" << f->size();
@@ -312,7 +312,7 @@ copyOle(QString &errorMessage, const QString sourceName, KoStore *outputStore, c
     }
     outputStore->close();
     delete inputDevice;
-    inputDevice = 0;
+    inputDevice = nullptr;
     return status;
 }
 #undef BLOCK_SIZE
@@ -422,7 +422,7 @@ KoFilter::ConversionStatus Utils::loadThumbnail(QImage &thumbnail, KZip *zip)
 
 //! @return true if @a el has tag name is equal to @a expectedTag or false otherwise;
 //!         on failure optional @a warningPrefix message is prepended to the warning
-static bool checkTag(const KoXmlElement &el, const char *expectedTag, const char *warningPrefix = 0)
+static bool checkTag(const KoXmlElement &el, const char *expectedTag, const char *warningPrefix = nullptr)
 {
     if (el.tagName() != expectedTag) {
         warnMsooXml << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString()) << "tag name=" << el.tagName() << " expected:" << expectedTag;
@@ -871,8 +871,8 @@ qreal Utils::defineMarkerWidth(const QString &markerWidth, const qreal lineWidth
 //-----------------------------------------
 
 Utils::XmlWriteBuffer::XmlWriteBuffer()
-    : m_origWriter(0)
-    , m_newWriter(0)
+    : m_origWriter(nullptr)
+    , m_newWriter(nullptr)
 {
 }
 
@@ -885,7 +885,7 @@ KoXmlWriter *Utils::XmlWriteBuffer::setWriter(KoXmlWriter *writer)
 {
     Q_ASSERT(!m_origWriter && !m_newWriter);
     if (m_origWriter || m_newWriter) {
-        return 0;
+        return nullptr;
     }
     m_origWriter = writer; // remember
     m_newWriter = new KoXmlWriter(&m_buffer, m_origWriter->indentLevel() + 1);
@@ -896,7 +896,7 @@ KoXmlWriter *Utils::XmlWriteBuffer::releaseWriter()
 {
     Q_ASSERT(m_newWriter && m_origWriter);
     if (!m_newWriter || !m_origWriter) {
-        return 0;
+        return nullptr;
     }
     m_origWriter->addCompleteElement(&m_buffer);
     return releaseWriterInternal();
@@ -906,7 +906,7 @@ KoXmlWriter *Utils::XmlWriteBuffer::releaseWriter(QString &bkpXmlSnippet)
 {
     Q_ASSERT(m_newWriter && m_origWriter);
     if (!m_newWriter || !m_origWriter) {
-        return 0;
+        return nullptr;
     }
     bkpXmlSnippet = QString::fromUtf8(m_buffer.buffer(), m_buffer.buffer().size());
     return releaseWriterInternal();
@@ -915,20 +915,20 @@ KoXmlWriter *Utils::XmlWriteBuffer::releaseWriter(QString &bkpXmlSnippet)
 KoXmlWriter *Utils::XmlWriteBuffer::releaseWriterInternal()
 {
     if (!m_newWriter || !m_origWriter) {
-        return 0;
+        return nullptr;
     }
     delete m_newWriter;
-    m_newWriter = 0;
+    m_newWriter = nullptr;
     KoXmlWriter *tmp = m_origWriter;
-    m_origWriter = 0;
+    m_origWriter = nullptr;
     return tmp;
 }
 
 void Utils::XmlWriteBuffer::clear()
 {
     delete m_newWriter;
-    m_newWriter = 0;
-    m_origWriter = 0;
+    m_newWriter = nullptr;
+    m_origWriter = nullptr;
 }
 
 QString Utils::columnName(uint column)

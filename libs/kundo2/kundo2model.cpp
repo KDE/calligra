@@ -48,7 +48,7 @@
 KUndo2Model::KUndo2Model(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    m_stack = 0;
+    m_stack = nullptr;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, &QItemSelectionModel::currentChanged, this, &KUndo2Model::setStackCurrentIndex);
     m_emty_label = i18n("<empty>");
@@ -69,13 +69,13 @@ void KUndo2Model::setStack(KUndo2QStack *stack)
     if (m_stack == stack)
         return;
 
-    if (m_stack != 0) {
+    if (m_stack != nullptr) {
         disconnect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
         disconnect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
         disconnect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
     }
     m_stack = stack;
-    if (m_stack != 0) {
+    if (m_stack != nullptr) {
         connect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
         connect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
         connect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
@@ -88,7 +88,7 @@ void KUndo2Model::stackDestroyed(QObject *obj)
 {
     if (obj != m_stack)
         return;
-    m_stack = 0;
+    m_stack = nullptr;
 
     stackChanged();
 }
@@ -102,7 +102,7 @@ void KUndo2Model::stackChanged()
 
 void KUndo2Model::setStackCurrentIndex(const QModelIndex &index)
 {
-    if (m_stack == 0)
+    if (m_stack == nullptr)
         return;
 
     if (index == selectedIndex())
@@ -116,12 +116,12 @@ void KUndo2Model::setStackCurrentIndex(const QModelIndex &index)
 
 QModelIndex KUndo2Model::selectedIndex() const
 {
-    return m_stack == 0 ? QModelIndex() : createIndex(m_stack->index(), 0);
+    return m_stack == nullptr ? QModelIndex() : createIndex(m_stack->index(), 0);
 }
 
 QModelIndex KUndo2Model::index(int row, int column, const QModelIndex &parent) const
 {
-    if (m_stack == 0)
+    if (m_stack == nullptr)
         return QModelIndex();
 
     if (parent.isValid())
@@ -143,7 +143,7 @@ QModelIndex KUndo2Model::parent(const QModelIndex &) const
 
 int KUndo2Model::rowCount(const QModelIndex &parent) const
 {
-    if (m_stack == 0)
+    if (m_stack == nullptr)
         return 0;
 
     if (parent.isValid())
@@ -159,7 +159,7 @@ int KUndo2Model::columnCount(const QModelIndex &) const
 
 QVariant KUndo2Model::data(const QModelIndex &index, int role) const
 {
-    if (m_stack == 0)
+    if (m_stack == nullptr)
         return QVariant();
 
     if (index.column() != 0)

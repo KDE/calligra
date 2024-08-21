@@ -55,7 +55,7 @@ const int INVALID = -1;
 
 KPrShapeAnimations::KPrShapeAnimations(KPrDocument *document, QObject *parent)
     : QAbstractTableModel(parent)
-    , m_currentEditedAnimation(0)
+    , m_currentEditedAnimation(nullptr)
     , m_firstEdition(true)
     , m_oldBegin(INVALID)
     , m_oldDuration(INVALID)
@@ -472,7 +472,7 @@ void KPrShapeAnimations::endTimeLineEdition()
         m_oldDuration = INVALID;
     }
     m_firstEdition = true;
-    m_currentEditedAnimation = 0;
+    m_currentEditedAnimation = nullptr;
 }
 
 void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, const int duration)
@@ -566,8 +566,8 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
         }
         QList<KPrShapeAnimation *> movedChildren = QList<KPrShapeAnimation *>();
         QList<KPrAnimationSubStep *> movedSubSteps = QList<KPrAnimationSubStep *>();
-        KPrAnimationSubStep *newSubStep = 0;
-        KPrAnimationStep *newStep = 0;
+        KPrAnimationSubStep *newSubStep = nullptr;
+        KPrAnimationStep *newStep = nullptr;
         KPrShapeAnimation::NodeType currentType =
             static_cast<KPrShapeAnimation::NodeType>(data(this->index(index.row(), KPrShapeAnimations::NodeType)).toInt());
         if (currentType == KPrShapeAnimation::AfterPrevious) {
@@ -708,7 +708,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
         }
         // If old substep or step is empty remove from list;
         if (oldSubStep->children().isEmpty()) {
-            oldSubStep->setParent(0);
+            oldSubStep->setParent(nullptr);
         }
         if (oldStep->children().isEmpty()) {
             removeStep(oldStep);
@@ -798,7 +798,7 @@ KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index) const
             return animation->shape();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape) const
@@ -918,7 +918,7 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(int row, int *pGroup, KPrS
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, const QModelIndex &previousAnimation)
@@ -1125,7 +1125,7 @@ KPrShapeAnimation::NodeType KPrShapeAnimations::triggerEventByIndex(const QModel
 {
     Q_ASSERT(index.isValid());
     KPrShapeAnimation::NodeType nodeType = KPrShapeAnimation::OnClick;
-    animationByRow(index.row(), 0, &nodeType);
+    animationByRow(index.row(), nullptr, &nodeType);
     return nodeType;
 }
 

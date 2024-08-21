@@ -20,7 +20,7 @@ public:
         , endPoint(pointData1.pointIndex)
         , startPoint(pointData2.pointIndex)
         , splitIndex(KoPathPointIndex(-1, -1))
-        , removedPoint(0)
+        , removedPoint(nullptr)
         , reverse(ReverseNone)
     {
     }
@@ -220,5 +220,5 @@ void KoPathPointMergeCommand::undo()
     d->pathShape->update();
 
     // reset the removed point
-    d->removedPoint = 0;
+    d->removedPoint = nullptr;
 }

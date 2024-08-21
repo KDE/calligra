@@ -434,9 +434,9 @@ XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
-    , m_currentSeries(0)
-    , m_currentShapeProperties(0)
+    , m_context(nullptr)
+    , m_currentSeries(nullptr)
+    , m_currentShapeProperties(nullptr)
     , m_readTxContext(None)
     , m_areaContext(ChartArea)
     , m_serMarkerDefined(false)
@@ -537,7 +537,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     // write the embedded object file
     m_context->m_chartWriter->saveContent(m_context->m_storeout, manifest);
 
-    m_context = 0;
+    m_context = nullptr;
     return KoFilter::OK;
 }
 

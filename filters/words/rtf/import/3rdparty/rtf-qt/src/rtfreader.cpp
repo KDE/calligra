@@ -38,7 +38,7 @@ namespace RtfReader
 {
 Reader::Reader(QObject *parent)
     : QObject(parent)
-    , m_inputDevice(0)
+    , m_inputDevice(nullptr)
 {
 }
 
@@ -63,7 +63,7 @@ void Reader::close()
         return;
     m_inputDevice->close();
     delete m_inputDevice;
-    m_inputDevice = 0;
+    m_inputDevice = nullptr;
 }
 
 QString Reader::fileName() const

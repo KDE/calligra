@@ -109,7 +109,7 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSlash, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    m_cellStyles.append(0);
+    m_cellStyles.append(nullptr);
     for (int i = 0; i < 7; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i] * 3, color);
         m_cellStyles.append(cellStyle.clone());
@@ -147,7 +147,7 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     int i = 1;
     KoZoomHandler zoomHandler;
     foreach (KoTableCellStyle *style, m_cellStyles) {
-        if (style == 0) {
+        if (style == nullptr) {
             widget.border->addBlanks(chooser, 1);
             i++;
             continue;
@@ -162,7 +162,11 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
             p.scale(zoomHandler.zoomedResolutionX(), zoomHandler.zoomedResolutionY());
             KoTextLayoutCellHelper cellStyleHelper(*style);
             qreal width = style->topBorderWidth();
-            cellStyleHelper.drawTopHorizontalBorder(p, 0, 8 / zoomHandler.zoomedResolutionY() - width / 2, pm.width() / zoomHandler.zoomedResolutionX(), 0);
+            cellStyleHelper.drawTopHorizontalBorder(p,
+                                                    0,
+                                                    8 / zoomHandler.zoomedResolutionY() - width / 2,
+                                                    pm.width() / zoomHandler.zoomedResolutionX(),
+                                                    nullptr);
 
             widget.border->addItem(chooser, pm, i, KoUnit().toUserStringValue(style->topBorderWidth()) + "pt");
         } else {

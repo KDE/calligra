@@ -109,9 +109,9 @@ private:
 KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet *> &frameSets)
     : m_pageManager(pageManager)
     , m_frameSets(frameSets)
-    , m_maintext(0)
-    , m_backgroundFrameSet(0)
-    , m_document(0)
+    , m_maintext(nullptr)
+    , m_backgroundFrameSet(nullptr)
+    , m_document(nullptr)
     , m_setup(false)
 {
 }
@@ -206,7 +206,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             Q_ASSERT(m_frameSets.contains(m_backgroundFrameSet)); // the emit should have made that so :)
         }
         KoShape *background = sequencedShapeOn(m_backgroundFrameSet, page);
-        if (background == 0) {
+        if (background == nullptr) {
             background = new KWPageBackground();
             background->setPosition(QPointF(0, page.offsetInDocument()));
             new KWFrame(background, m_backgroundFrameSet);
@@ -264,17 +264,17 @@ void KWFrameLayout::layoutFramesOnPage(KWPage page, int pageNumber)
     KoColumns columns = pageStyle.columns();
     int columnIndex = 0;
     KoShape **main;
-    KoShape *footer = 0, *header = 0;
-    KoShape *pageBackground = 0;
+    KoShape *footer = nullptr, *header = nullptr;
+    KoShape *pageBackground = nullptr;
     main = new KoShape *[columns.count];
     if (columns.count > 0)
-        main[0] = 0;
+        main[0] = nullptr;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     QList<KoShape *> shapes = sequencedShapesOnPage(pageRect);
 
     debugWords << "pageNumber=" << pageNumber << "columns=" << columns.count << "shapeCount=" << shapes.count();
     foreach (KoShape *shape, shapes) {
-        KWTextFrameSet *textFrameSet = 0;
+        KWTextFrameSet *textFrameSet = nullptr;
         switch (KWFrameSet::from(shape)->type()) {
         case Words::BackgroundFrameSet:
             pageBackground = shape;
@@ -657,7 +657,7 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(Words::TextFrameSetType type, const K
     Q_ASSERT(page.isValid());
     setup();
     FrameSets frameSets = m_pageStyles.value(page.pageStyle());
-    KWTextFrameSet **answer = 0;
+    KWTextFrameSet **answer = nullptr;
     switch (type) {
     case Words::OddPagesHeaderTextFrameSet:
         answer = &frameSets.oddHeaders;
@@ -681,7 +681,7 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(Words::TextFrameSetType type, const K
 
     // The frameset wasn't created yet what can happen if for example a file is
     // loaded that does not exist or just does not create the required framesets.
-    if (*answer == 0) {
+    if (*answer == nullptr) {
         KWTextFrameSet *newFS = new KWTextFrameSet(m_document, type);
         *answer = newFS;
         if (type != Words::MainTextFrameSet) {
@@ -705,8 +705,8 @@ void KWFrameLayout::setup()
         return;
     }
     KWTextFrameSet *oldMainText = m_maintext;
-    m_maintext = 0;
-    m_backgroundFrameSet = 0;
+    m_maintext = nullptr;
+    m_backgroundFrameSet = nullptr;
     m_pageStyles.clear();
     foreach (KWFrameSet *fs, m_frameSets) {
         if (fs->type() == Words::BackgroundFrameSet) {
@@ -728,9 +728,9 @@ void KWFrameLayout::setup()
                 frameSets.evenFooters = tfs;
                 break;
             case Words::MainTextFrameSet:
-                Q_ASSERT(m_maintext == 0); // there can be only one!
+                Q_ASSERT(m_maintext == nullptr); // there can be only one!
                 if (tfs != oldMainText) {
-                    oldMainText = 0;
+                    oldMainText = nullptr;
                     disconnect(tfs, &KWFrameSet::shapeRemoved, this, &KWFrameLayout::mainShapeRemoved);
                     connect(tfs, &KWFrameSet::shapeRemoved, this, &KWFrameLayout::mainShapeRemoved);
                 }
@@ -750,8 +750,8 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     if (!factory)
-        return 0;
-    KoDocumentResourceManager *rm = 0;
+        return nullptr;
+    KoDocumentResourceManager *rm = nullptr;
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);
@@ -795,7 +795,7 @@ QList<KoShape *> KWFrameLayout::sequencedShapesOn(KWFrameSet *fs, int pageNumber
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 {
     debugWords << "frameSet=" << fs << "shapeCount=" << (fs ? fs->shapeCount() : 0);
-    if (fs == 0)
+    if (fs == nullptr)
         return;
     if (fs->shapeCount() == 0)
         return;
@@ -819,7 +819,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
         return frame;
     }
 
-    KoShape *orig = 0;
+    KoShape *orig = nullptr;
     // Lets find the last non-copy frame in the frameset
     for (int i = fs->shapeCount() - 1; i >= 0; --i) {
         KoShape *candidate = fs->shapes()[i];
@@ -872,7 +872,7 @@ KWTextFrameSet *KWFrameLayout::getFrameSet(Words::TextFrameSetType type, const K
     default:
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void KWFrameLayout::mainShapeRemoved(KoShape *shape)

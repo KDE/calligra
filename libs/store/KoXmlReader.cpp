@@ -324,7 +324,7 @@ private:
     QString cacheValue(const QString &value)
     {
         if (value.isEmpty())
-            return 0;
+            return nullptr;
 
         const unsigned &ii = valueHash[value];
         if (ii > 0)
@@ -857,12 +857,12 @@ KoXmlNodeData::KoXmlNodeData(unsigned long initialRefCount)
 #ifdef KOXML_COMPACT
     , nodeDepth(0)
 #endif
-    , parent(0)
-    , prev(0)
-    , next(0)
-    , first(0)
-    , last(0)
-    , packedDoc(0)
+    , parent(nullptr)
+    , prev(nullptr)
+    , next(nullptr)
+    , first(nullptr)
+    , last(nullptr)
+    , packedDoc(nullptr)
     , nodeIndex(0)
     , refCount(initialRefCount)
 {
@@ -892,14 +892,14 @@ void KoXmlNodeData::clear()
     prefix.clear();
     namespaceURI.clear();
     textData.clear();
-    packedDoc = 0;
+    packedDoc = nullptr;
 
     attr.clear();
     attrNS.clear();
 
     parent = nullptr;
-    prev = next = 0;
-    first = last = 0;
+    prev = next = nullptr;
+    first = last = nullptr;
 
     loaded = false;
 }
@@ -1039,7 +1039,7 @@ void KoXmlNodeData::loadChildren(int depth)
     // in case depth is different
     unloadChildren();
 
-    KoXmlNodeData *lastDat = 0;
+    KoXmlNodeData *lastDat = nullptr;
 
     unsigned childStop = 0;
     if (nodeIndex == packedDoc->itemCount(nodeDepth) - 1)
@@ -1108,9 +1108,9 @@ void KoXmlNodeData::loadChildren(int depth)
             dat->namespaceURI = qname.nsURI;
             dat->parent = this;
             dat->prev = lastDat;
-            dat->next = 0;
-            dat->first = 0;
-            dat->last = 0;
+            dat->next = nullptr;
+            dat->first = nullptr;
+            dat->last = nullptr;
             dat->loaded = false;
             dat->textData = (textItem) ? value : QString();
 
@@ -1262,7 +1262,7 @@ void KoXmlNodeData::unloadChildren()
 
     clearAttributes();
     loaded = false;
-    first = last = 0;
+    first = last = nullptr;
 }
 
 #ifdef KOXML_COMPACT
@@ -1500,7 +1500,7 @@ public:
     KoXmlDocumentData(unsigned long initialRefCount = 1);
     ~KoXmlDocumentData();
 
-    bool setContent(QXmlStreamReader *reader, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(QXmlStreamReader *reader, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
 
     KoXmlDocumentType dt;
 
@@ -1711,7 +1711,7 @@ bool KoXmlNode::hasChildNodes() const
     if (!d->loaded)
         d->loadChildren();
 
-    return d->first != 0;
+    return d->first != nullptr;
 }
 
 int KoXmlNode::childNodesCount() const

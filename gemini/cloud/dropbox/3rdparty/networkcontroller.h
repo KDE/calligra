@@ -26,7 +26,7 @@ class NetworkController : public QObject
 {
     Q_OBJECT
 public:
-    explicit NetworkController(QObject *parent = 0);
+    explicit NetworkController(QObject *parent = nullptr);
     ~NetworkController() override;
 
     static QString Dropbox_Folder()

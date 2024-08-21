@@ -25,7 +25,7 @@
 
 StyleManager::StyleManager(QWidget *parent)
     : QSplitter(parent)
-    , m_styleManager(0)
+    , m_styleManager(nullptr)
     , m_paragraphStylesModel(new StylesManagerModel(this))
     , m_characterStylesModel(new StylesManagerModel(this))
     , m_paragraphProxyModel(new StylesSortFilterProxyModel(this))
@@ -124,7 +124,7 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
     widget.characterStylePage->save();
     widget.paragraphStylePage->save();
-    KoParagraphStyle *localStyle = 0;
+    KoParagraphStyle *localStyle = nullptr;
 
     if (style) {
         QMap<KoParagraphStyle *, KoParagraphStyle *>::ConstIterator it = m_modifiedParagraphStyles.constFind(style);
@@ -141,7 +141,7 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
     widget.paragraphStylePage->setStyle(localStyle, 0, false);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
-    widget.paragraphStylesListView->setEnabled(style != 0);
+    widget.paragraphStylesListView->setEnabled(style != nullptr);
 }
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
@@ -149,7 +149,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     Q_UNUSED(canDelete);
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
-    KoCharacterStyle *localStyle = 0;
+    KoCharacterStyle *localStyle = nullptr;
 
     if (style) {
         QMap<KoCharacterStyle *, KoCharacterStyle *>::ConstIterator it = m_modifiedCharacterStyles.constFind(style);
@@ -165,7 +165,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.characterStylePage->setStyle(localStyle, false);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
-    widget.characterStylePage->setEnabled(style != 0);
+    widget.characterStylePage->setEnabled(style != nullptr);
     //   widget.bDelete->setEnabled(canDelete);
 }
 
@@ -181,8 +181,8 @@ void StyleManager::save()
     }
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
-    widget.paragraphStylePage->setStyle(0, 0, false);
-    widget.characterStylePage->setStyle(0, false);
+    widget.paragraphStylePage->setStyle(nullptr, 0, false);
+    widget.characterStylePage->setStyle(nullptr, false);
 
     m_styleManager->beginEdit();
 
@@ -333,7 +333,7 @@ void StyleManager::buttonNewPressed()
 {
     if (checkUniqueStyleName()) {
         if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()) {
-            KoParagraphStyle *newStyle = 0;
+            KoParagraphStyle *newStyle = nullptr;
             KoParagraphStyle *style = dynamic_cast<KoParagraphStyle *>(
                 m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle *>());
             if (style) {
@@ -346,7 +346,7 @@ void StyleManager::buttonNewPressed()
             addParagraphStyle(newStyle);
             widget.paragraphStylePage->selectName();
         } else {
-            KoCharacterStyle *newStyle = 0;
+            KoCharacterStyle *newStyle = nullptr;
             KoCharacterStyle *style =
                 m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle *>();
             if (style) {

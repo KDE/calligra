@@ -36,7 +36,7 @@ KoFindStrategy::KoFindStrategy(QWidget *parent)
 
 KoFindStrategy::~KoFindStrategy()
 {
-    if (m_dialog->parent() == 0)
+    if (m_dialog->parent() == nullptr)
         delete m_dialog;
 }
 

@@ -12,7 +12,7 @@ class KoCanvasObserverBasePrivate
 {
 public:
     KoCanvasObserverBasePrivate()
-        : canvas(0)
+        : canvas(nullptr)
     {
     }
 
@@ -46,7 +46,7 @@ void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase *canvas)
 
 void KoCanvasObserverBase::unsetObservedCanvas()
 {
-    d->canvas = 0;
+    d->canvas = nullptr;
     unsetCanvas();
 }
 

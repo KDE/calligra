@@ -137,7 +137,7 @@ void TestPAPageMoveCommand::redoUndoAfter()
 
 void TestPAPageMoveCommand::redoUndoBefore()
 {
-    KoPAPageMoveCommand cmd1(&m_doc, m_pages[1], 0);
+    KoPAPageMoveCommand cmd1(&m_doc, m_pages[1], nullptr);
 
     QList<KoPAMasterPage *> pages1;
     pages1.insert(0, m_pages[1]);
@@ -220,7 +220,7 @@ void TestPAPageMoveCommand::redoUndoBefore()
 
 void TestPAPageMoveCommand::redoUndoStart()
 {
-    KoPAPageMoveCommand cmd1(&m_doc, m_pages[4], 0);
+    KoPAPageMoveCommand cmd1(&m_doc, m_pages[4], nullptr);
 
     QList<KoPAMasterPage *> pages1;
     pages1.insert(0, m_pages[4]);
@@ -232,7 +232,7 @@ void TestPAPageMoveCommand::redoUndoStart()
     cmd1.redo();
     checkOrder(pages1);
 
-    KoPAPageMoveCommand cmd2(&m_doc, m_pages[1], 0);
+    KoPAPageMoveCommand cmd2(&m_doc, m_pages[1], nullptr);
 
     QList<KoPAMasterPage *> pages2;
     pages2.insert(0, m_pages[1]);
@@ -244,7 +244,7 @@ void TestPAPageMoveCommand::redoUndoStart()
     cmd2.redo();
     checkOrder(pages2);
 
-    KoPAPageMoveCommand cmd3(&m_doc, m_pages[4], 0);
+    KoPAPageMoveCommand cmd3(&m_doc, m_pages[4], nullptr);
 
     QList<KoPAMasterPage *> pages3;
     pages3.insert(0, m_pages[4]);
@@ -267,7 +267,7 @@ void TestPAPageMoveCommand::redoUndoStart()
     pages4.insert(3, m_pages[2]);
     pages4.insert(4, m_pages[3]);
 
-    KoPAPageMoveCommand cmd4(&m_doc, multiPages1, 0);
+    KoPAPageMoveCommand cmd4(&m_doc, multiPages1, nullptr);
     cmd4.redo();
     checkOrder(pages4);
 
@@ -282,7 +282,7 @@ void TestPAPageMoveCommand::redoUndoStart()
     pages5.insert(3, m_pages[4]);
     pages5.insert(4, m_pages[3]);
 
-    KoPAPageMoveCommand cmd5(&m_doc, multiPages2, 0);
+    KoPAPageMoveCommand cmd5(&m_doc, multiPages2, nullptr);
     cmd5.redo();
     checkOrder(pages5);
 

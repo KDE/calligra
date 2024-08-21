@@ -809,8 +809,8 @@ U16 word6toWord8(U8 sprm)
 
 ParagraphProperties *initPAPFromStyle(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version)
 {
-    ParagraphProperties *properties = 0;
-    if (exceptions == 0) {
+    ParagraphProperties *properties = nullptr;
+    if (exceptions == nullptr) {
         if (!styleSheet) {
             wvlog << "Warning: Couldn't read from the stylesheet." << Qt::endl;
             return new ParagraphProperties();
@@ -833,7 +833,7 @@ ParagraphProperties *initPAPFromStyle(const U8 *exceptions, const StyleSheet *st
         U16 tmpIstd = readU16(exceptions);
         exceptions += 2;
 
-        const Style *style = 0;
+        const Style *style = nullptr;
         if (styleSheet) {
             style = styleSheet->styleByIndex(tmpIstd);
             if (style) {
@@ -861,7 +861,7 @@ Word97::TAP *initTAP(const U8 *exceptions, OLEStreamReader *dataStream, WordVers
 {
     Word97::TAP *tap = new Word97::TAP;
 
-    if (exceptions == 0)
+    if (exceptions == nullptr)
         return tap;
 
     int cb = static_cast<int>(*exceptions++) << 1; // Count of words (x2) -> count of bytes
@@ -873,7 +873,7 @@ Word97::TAP *initTAP(const U8 *exceptions, OLEStreamReader *dataStream, WordVers
 
     exceptions += 2; // skip the istd
     cb = cb < 0 ? 0 : cb; // safety :-}
-    tap->apply(exceptions, cb, 0, 0, dataStream, version); // we don't need a style(sheet), do we?
+    tap->apply(exceptions, cb, nullptr, nullptr, dataStream, version); // we don't need a style(sheet), do we?
 
     return tap;
 }
@@ -1394,7 +1394,7 @@ void CHP::apply(const U8 *grpprl, U16 count, const Style *paragraphStyle, const 
 
 void CHP::applyExceptions(const U8 *exceptions, const Style *paragraphStyle, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version)
 {
-    if (exceptions == 0)
+    if (exceptions == nullptr)
         return;
     U8 cb = *exceptions;
     ++exceptions;
@@ -2037,11 +2037,11 @@ void SEP::apply(const U8 *grpprl, U16 count, const Style *style, const StyleShee
 
 void SEP::applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version)
 {
-    if (exceptions == 0)
+    if (exceptions == nullptr)
         return;
     U16 cb = readU16(exceptions);
     exceptions += 2;
-    apply(exceptions, cb, 0, styleSheet, dataStream, version);
+    apply(exceptions, cb, nullptr, styleSheet, dataStream, version);
 }
 
 // Returns -1 if this wasn't a SEP sprm and it returns the length

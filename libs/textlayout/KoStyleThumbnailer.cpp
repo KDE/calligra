@@ -134,7 +134,7 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle,
         return QImage();
     } else if ((!(flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
         return QImage();
-    } else if (characterStyle == 0) {
+    } else if (characterStyle == nullptr) {
         return QImage();
     }
 
@@ -169,7 +169,7 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle,
         QTextBlock block = cursor.block();
         paragraphStyleClone->applyStyle(block, true);
         delete paragraphStyleClone;
-        paragraphStyleClone = 0;
+        paragraphStyleClone = nullptr;
     }
 
     if (flags & UseStyleNameText) {

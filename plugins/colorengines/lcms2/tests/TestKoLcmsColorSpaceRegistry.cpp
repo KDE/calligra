@@ -19,13 +19,13 @@ void TestKoColorSpaceRegistry::testRgbU8()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer8BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    QVERIFY(colorSpaceFactory != nullptr);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    QVERIFY(colorSpace != 0);
+    QVERIFY(colorSpace != nullptr);
 
     const KoColorProfile *profile = colorSpace->profile();
-    QVERIFY(profile != 0);
+    QVERIFY(profile != nullptr);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
 
@@ -41,13 +41,13 @@ void TestKoColorSpaceRegistry::testRgbU16()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer16BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    QVERIFY(colorSpaceFactory != nullptr);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb16();
-    QVERIFY(colorSpace != 0);
+    QVERIFY(colorSpace != nullptr);
 
     const KoColorProfile *profile = colorSpace->profile();
-    QVERIFY(profile != 0);
+    QVERIFY(profile != nullptr);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
 
@@ -63,13 +63,13 @@ void TestKoColorSpaceRegistry::testLab()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID, Integer16BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
-    QVERIFY(colorSpaceFactory != 0);
+    QVERIFY(colorSpaceFactory != nullptr);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->lab16();
-    QVERIFY(colorSpace != 0);
+    QVERIFY(colorSpace != nullptr);
 
     const KoColorProfile *profile = colorSpace->profile();
-    QVERIFY(profile != 0);
+    QVERIFY(profile != nullptr);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
 

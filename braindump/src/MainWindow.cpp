@@ -48,8 +48,8 @@
 
 MainWindow::MainWindow(RootSection *document)
     : m_doc(document)
-    , m_activeView(0)
-    , m_dockerManager(0)
+    , m_activeView(nullptr)
+    , m_dockerManager(nullptr)
 {
     new KWindowStateSaver(this, "MainWindow");
 
@@ -100,7 +100,7 @@ void MainWindow::setupActions()
 
 QDockWidget *MainWindow::createDockWidget(KoDockFactoryBase *factory)
 {
-    QDockWidget *dockWidget = 0;
+    QDockWidget *dockWidget = nullptr;
 
     if (!m_dockWidgetMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -108,7 +108,7 @@ QDockWidget *MainWindow::createDockWidget(KoDockFactoryBase *factory)
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget)
-            return 0;
+            return nullptr;
         m_dockWidgets.push_back(dockWidget);
 
         dockWidget->setObjectName(factory->id());

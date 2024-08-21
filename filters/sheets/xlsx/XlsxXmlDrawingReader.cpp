@@ -104,7 +104,7 @@ void XlsxDrawingObject::save(KoXmlWriter *xmlWriter)
         QByteArray data = static_cast<QBuffer *>(m_shapeBody->device())->buffer().constData();
         xmlWriter->addCompleteElement(data);
         delete m_shapeBody;
-        m_shapeBody = 0;
+        m_shapeBody = nullptr;
     } break;
     }
 }
@@ -193,8 +193,8 @@ XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
-    , m_currentDrawingObject(0)
+    , m_context(nullptr)
+    , m_currentDrawingObject(nullptr)
     , m_anchorType(XlsxDrawingObject::NoAnchor)
     , m_chartNumber(0)
 {
@@ -236,7 +236,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 #if 0
     m_context->saveCurrentCellData();
 #endif
-    m_context = 0;
+    m_context = nullptr;
     return KoFilter::OK;
 }
 
@@ -285,7 +285,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString &refe
         ~DrawingObjectGuard()
         {
             delete *m_obj;
-            *m_obj = 0;
+            *m_obj = nullptr;
         }
 
     private:
@@ -334,7 +334,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString &refe
             XlsxDrawingObject::Position pos = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             Cell *cell = m_context->sheet->cell(pos.m_col, pos.m_row, true);
             cell->appendDrawing(m_currentDrawingObject);
-            m_currentDrawingObject = 0;
+            m_currentDrawingObject = nullptr;
         }
     }
     return KoFilter::OK;
@@ -466,7 +466,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 }
 
 XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture()
-    : m_pictureWriter(0)
+    : m_pictureWriter(nullptr)
 {
     m_pictureBuffer.open(QIODevice::ReadWrite);
 }

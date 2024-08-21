@@ -27,15 +27,15 @@
 #include <DebugPigment.h>
 #include <KLocalizedString>
 
-KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
-KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
-KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
+KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = nullptr;
 
-KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::m_instance = 0;
-KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpolationStrategy::m_instance = 0;
-KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolationStrategy::m_instance = 0;
-KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
-KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
+KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = nullptr;
+KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = nullptr;
 
 KoSegmentGradient::KoSegmentGradient(const QString &file)
     : KoAbstractGradient(file)
@@ -226,13 +226,13 @@ KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void KoSegmentGradient::colorAt(KoColor &dst, qreal t) const
 {
     const KoGradientSegment *segment = segmentAt(t);
-    Q_ASSERT(segment != 0);
+    Q_ASSERT(segment != nullptr);
 
     if (segment) {
         segment->colorAt(dst, t);
@@ -266,7 +266,7 @@ KoGradientSegment::KoGradientSegment(int interpolationType,
                                      const KoColor &startColor,
                                      const KoColor &endColor)
 {
-    m_interpolator = 0;
+    m_interpolator = nullptr;
 
     switch (interpolationType) {
     case INTERP_LINEAR:
@@ -286,7 +286,7 @@ KoGradientSegment::KoGradientSegment(int interpolationType,
         break;
     }
 
-    m_colorInterpolator = 0;
+    m_colorInterpolator = nullptr;
 
     switch (colorInterpolationType) {
     case COLOR_INTERP_RGB:
@@ -460,7 +460,7 @@ void KoGradientSegment::colorAt(KoColor &dst, qreal t) const
 
 bool KoGradientSegment::isValid() const
 {
-    if (m_interpolator == 0 || m_colorInterpolator == 0)
+    if (m_interpolator == nullptr || m_colorInterpolator == nullptr)
         return false;
     return true;
 }
@@ -475,7 +475,7 @@ KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy(
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new RGBColorInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -529,7 +529,7 @@ KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrat
 
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new HSVCWColorInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -574,7 +574,7 @@ KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStr
 
 KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new HSVCCWColorInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -614,7 +614,7 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor &dst, 
 
 KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new LinearInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -658,7 +658,7 @@ KoGradientSegment::CurvedInterpolationStrategy::CurvedInterpolationStrategy()
 
 KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new CurvedInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -684,7 +684,7 @@ qreal KoGradientSegment::CurvedInterpolationStrategy::valueAt(qreal t, qreal mid
 
 KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new SineInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -702,7 +702,7 @@ qreal KoGradientSegment::SineInterpolationStrategy::valueAt(qreal t, qreal middl
 
 KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new SphereIncreasingInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -720,7 +720,7 @@ qreal KoGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(qreal t,
 
 KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::instance()
 {
-    if (m_instance == 0) {
+    if (m_instance == nullptr) {
         m_instance = new SphereDecreasingInterpolationStrategy();
         Q_CHECK_PTR(m_instance);
     }
@@ -830,7 +830,7 @@ void KoSegmentGradient::moveSegmentMiddleOffset(KoGradientSegment *segment, doub
 
 void KoSegmentGradient::splitSegment(KoGradientSegment *segment)
 {
-    Q_ASSERT(segment != 0);
+    Q_ASSERT(segment != nullptr);
     QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         KoColor midleoffsetColor(segment->endColor().colorSpace());
@@ -851,7 +851,7 @@ void KoSegmentGradient::splitSegment(KoGradientSegment *segment)
 
 void KoSegmentGradient::duplicateSegment(KoGradientSegment *segment)
 {
-    Q_ASSERT(segment != 0);
+    Q_ASSERT(segment != nullptr);
     QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePositionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
@@ -871,7 +871,7 @@ void KoSegmentGradient::duplicateSegment(KoGradientSegment *segment)
 
 void KoSegmentGradient::mirrorSegment(KoGradientSegment *segment)
 {
-    Q_ASSERT(segment != 0);
+    Q_ASSERT(segment != nullptr);
     KoColor tmpColor = segment->startColor();
     segment->setStartColor(segment->endColor());
     segment->setEndColor(tmpColor);
@@ -890,9 +890,9 @@ void KoSegmentGradient::mirrorSegment(KoGradientSegment *segment)
 
 KoGradientSegment *KoSegmentGradient::removeSegment(KoGradientSegment *segment)
 {
-    Q_ASSERT(segment != 0);
+    Q_ASSERT(segment != nullptr);
     if (m_segments.count() < 2)
-        return 0;
+        return nullptr;
     QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePositionPercentage;
@@ -913,7 +913,7 @@ KoGradientSegment *KoSegmentGradient::removeSegment(KoGradientSegment *segment)
         m_segments.erase(it);
         return nextSegment;
     }
-    return 0;
+    return nullptr;
 }
 
 bool KoSegmentGradient::removeSegmentPossible() const

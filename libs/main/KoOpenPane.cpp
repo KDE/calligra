@@ -127,7 +127,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const QStringList &mimeFilter, const QSt
     sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
 
     if (!sizes.isEmpty())
-        Q_EMIT splitterResized(0, sizes);
+        Q_EMIT splitterResized(nullptr, sizes);
 
     connect(this, &KoOpenPane::splitterResized, this, &KoOpenPane::saveSplitterSizes);
 
@@ -178,8 +178,8 @@ void KoOpenPane::initRecentDocs()
 
 void KoOpenPane::initTemplates(const QString &templatesResourcePath)
 {
-    QTreeWidgetItem *selectItem = 0;
-    QTreeWidgetItem *firstItem = 0;
+    QTreeWidgetItem *selectItem = nullptr;
+    QTreeWidgetItem *firstItem = nullptr;
     const int templateOffset = 1000;
 
     if (!templatesResourcePath.isEmpty()) {
@@ -269,7 +269,7 @@ void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString &title, 
 QTreeWidgetItem *KoOpenPane::addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight)
 {
     if (!widget) {
-        return 0;
+        return nullptr;
     }
 
     int id = d->m_widgetStack->addWidget(widget);
@@ -282,7 +282,7 @@ QTreeWidgetItem *KoOpenPane::addPane(const QString &title, const QString &iconNa
 QTreeWidgetItem *KoOpenPane::addPane(const QString &title, const QPixmap &icon, QWidget *widget, int sortWeight)
 {
     if (!widget) {
-        return 0;
+        return nullptr;
     }
 
     int id = d->m_widgetStack->addWidget(widget);

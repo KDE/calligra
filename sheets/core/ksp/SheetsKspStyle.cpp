@@ -65,7 +65,7 @@ bool Ksp::loadStyles(StyleManager *manager, KoXmlElement const &styles)
                 return false;
             def->setType(Style::BUILTIN);
         } else if (!name.isNull()) {
-            CustomStyle *style = 0;
+            CustomStyle *style = nullptr;
             if (e.hasAttribute("parent") && e.attribute("parent") == "Default")
                 style = new CustomStyle(name, def);
             else

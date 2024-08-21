@@ -73,7 +73,7 @@ void OpenCalcStyles::addFont(QFont const & font, bool def)
 
 QString OpenCalcStyles::cellStyle(CellStyle const & cs)
 {
-    CellStyle * t = 0;
+    CellStyle * t = nullptr;
     foreach(t, m_cellStyles) {
         if (CellStyle::isEqual(t, cs))
             return t->name;
@@ -91,7 +91,7 @@ QString OpenCalcStyles::cellStyle(CellStyle const & cs)
 
 QString OpenCalcStyles::columnStyle(ColumnStyle const & cs)
 {
-    ColumnStyle * t = 0;
+    ColumnStyle * t = nullptr;
     foreach(t, m_columnStyles) {
         if (ColumnStyle::isEqual(t, cs))
             return t->name;
@@ -114,7 +114,7 @@ QString OpenCalcStyles::numberStyle(NumberStyle const &)
 
 QString OpenCalcStyles::rowStyle(RowStyle const & rs)
 {
-    RowStyle * t = 0;
+    RowStyle * t = nullptr;
     foreach(t, m_rowStyles) {
         if (RowStyle::isEqual(t, rs))
             return t->name;
@@ -132,7 +132,7 @@ QString OpenCalcStyles::rowStyle(RowStyle const & rs)
 
 QString OpenCalcStyles::sheetStyle(SheetStyle const & ts)
 {
-    SheetStyle * t = 0;
+    SheetStyle * t = nullptr;
     foreach(t, m_sheetStyles) {
         if (SheetStyle::isEqual(t, ts))
             return t->name;
@@ -159,7 +159,7 @@ QString convertPenToString(QPen const & pen)
 void OpenCalcStyles::addCellStyles(QDomDocument & doc, QDomElement & autoStyles)
 {
 
-    CellStyle * t = 0;
+    CellStyle * t = nullptr;
     foreach(t, m_cellStyles) {
         QDomElement ts = doc.createElement("style:style");
         ts.setAttribute("style:name", t->name);
@@ -266,7 +266,7 @@ void OpenCalcStyles::addCellStyles(QDomDocument & doc, QDomElement & autoStyles)
 
 void OpenCalcStyles::addColumnStyles(QDomDocument & doc, QDomElement & autoStyles)
 {
-    ColumnStyle * t = 0;
+    ColumnStyle * t = nullptr;
     foreach(t, m_columnStyles) {
         QDomElement ts = doc.createElement("style:style");
         ts.setAttribute("style:name", t->name);
@@ -288,7 +288,7 @@ void OpenCalcStyles::addNumberStyles(QDomDocument & /*doc*/, QDomElement & /*aut
 
 void OpenCalcStyles::addRowStyles(QDomDocument & doc, QDomElement & autoStyles)
 {
-    RowStyle * t = 0;
+    RowStyle * t = nullptr;
     foreach(t, m_rowStyles) {
         QDomElement ts = doc.createElement("style:style");
         ts.setAttribute("style:name", t->name);
@@ -307,7 +307,7 @@ void OpenCalcStyles::addRowStyles(QDomDocument & doc, QDomElement & autoStyles)
 
 void OpenCalcStyles::addSheetStyles(QDomDocument & doc, QDomElement & autoStyles)
 {
-    SheetStyle * t = 0;
+    SheetStyle * t = nullptr;
     foreach(t, m_sheetStyles) {
         QDomElement ts = doc.createElement("style:style");
         ts.setAttribute("style:name", t->name);

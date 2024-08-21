@@ -47,7 +47,7 @@ public:
                 return relation;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     // TODO use a QMap<KoShape*, bool> instead this should speed things up a bit
@@ -87,7 +87,7 @@ void KoShapeContainerDefaultModel::proposeMove(KoShape *shape, QPointF &move)
 void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clipping)
 {
     Private::Relation *relation = d->findRelation(child);
-    if (relation == 0)
+    if (relation == nullptr)
         return;
     if (relation->inside == clipping)
         return;
@@ -106,7 +106,7 @@ bool KoShapeContainerDefaultModel::isClipped(const KoShape *child) const
 void KoShapeContainerDefaultModel::remove(KoShape *child)
 {
     Private::Relation *relation = d->findRelation(child);
-    if (relation == 0)
+    if (relation == nullptr)
         return;
     d->relations.removeAll(relation);
     delete relation;
@@ -138,7 +138,7 @@ void KoShapeContainerDefaultModel::containerChanged(KoShapeContainer *, KoShape:
 void KoShapeContainerDefaultModel::setInheritsTransform(const KoShape *shape, bool inherit)
 {
     Private::Relation *relation = d->findRelation(shape);
-    if (relation == 0)
+    if (relation == nullptr)
         return;
     if (relation->inheritsTransform == inherit)
         return;

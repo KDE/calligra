@@ -28,7 +28,7 @@ class QImage;
 class FLAKE_EXPORT KoShapePainter
 {
 public:
-    explicit KoShapePainter(KoShapeManagerPaintingStrategy *strategy = 0);
+    explicit KoShapePainter(KoShapeManagerPaintingStrategy *strategy = nullptr);
     ~KoShapePainter();
 
     /**

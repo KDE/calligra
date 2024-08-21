@@ -24,7 +24,7 @@ public:
     ~Private()
     {
         foreach (KoImageDataPrivate *id, images)
-            id->collection = 0;
+            id->collection = nullptr;
     }
 
     QMap<qint64, KoImageDataPrivate *> images;

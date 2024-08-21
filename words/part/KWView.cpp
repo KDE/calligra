@@ -104,7 +104,7 @@
 
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     : KoView(part, document, parent)
-    , m_canvas(0)
+    , m_canvas(nullptr)
     , m_textMinX(1)
     , m_textMaxX(600)
     , m_minPageNum(1)
@@ -294,11 +294,11 @@ void KWView::setupActions()
     connect(m_actionCreateTemplate, &QAction::triggered, this, &KWView::createTemplate);
 
     // -------------- Edit actions
-    action = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", nullptr, nullptr);
     new KoCutController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", nullptr, nullptr);
     new KoCopyController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Paste, "edit_paste", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Paste, "edit_paste", nullptr, nullptr);
     new KoPasteController(canvasBase(), action);
 
     action = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
@@ -499,7 +499,7 @@ KoShape *KWView::selectedShape() const
         return s;
     }
 
-    return 0;
+    return nullptr;
 }
 
 // -------------------- Actions -----------------------
@@ -785,7 +785,7 @@ void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction 
 {
     unplugActionList("frameset_type_action");
     plugActionList("frameset_type_action", actions);
-    if (factory() == 0) // we are a kpart, the factory is only set on the active component.
+    if (factory() == nullptr) // we are a kpart, the factory is only set on the active component.
         return;
     QMenu *menu = dynamic_cast<QMenu *>(factory()->container("frame_popup", this));
     if (menu)
@@ -840,19 +840,19 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 
     // Since we move _up_ calculate the position where a frame would _start_ if
     // we were scrolled to the _first_ page
-    QPointF pos = currentFrameSet->shapes().first()->absoluteTransformation(0).map(QPointF(0, 5));
+    QPointF pos = currentFrameSet->shapes().first()->absoluteTransformation(nullptr).map(QPointF(0, 5));
 
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
 
     // Find textshape under that position and from current frameset
     QList<KoShape *> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() - 20, 40, 40));
-    KoTextShapeData *textShapeData = 0;
+    KoTextShapeData *textShapeData = nullptr;
     foreach (KoShape *shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData *>(userData))) {
             foreach (KoShape *s, currentFrameSet->shapes()) {
                 if (s == shape) {
-                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                    pos = shape->absoluteTransformation(nullptr).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 
                     KoTextLayoutArea *area = textShapeData->rootArea();
@@ -881,20 +881,20 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
     // Since we move _down_ calculate the position where a frame would _end_ if
     // we were scrolled to the _lasst_ page
     KoShape *shape = currentFrameSet->shapes().last();
-    QPointF pos = shape->absoluteTransformation(0).map(QPointF(0, shape->size().height() - 5));
+    QPointF pos = shape->absoluteTransformation(nullptr).map(QPointF(0, shape->size().height() - 5));
     pos.setY(pos.y() - m_document->pageManager()->page(qreal(pos.y())).rect().bottom());
 
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset() + QPointF(0, m_canvas->canvasController()->visibleHeight()), viewConverter());
 
     // Find textshape under that position and from current frameset
     QList<KoShape *> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() - 20, 40, 40));
-    KoTextShapeData *textShapeData = 0;
+    KoTextShapeData *textShapeData = nullptr;
     foreach (KoShape *shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData *>(userData))) {
             foreach (KoShape *s, currentFrameSet->shapes()) {
                 if (s == shape) {
-                    pos = shape->absoluteTransformation(0).inverted().map(pos);
+                    pos = shape->absoluteTransformation(nullptr).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 
                     KoTextLayoutArea *area = textShapeData->rootArea();

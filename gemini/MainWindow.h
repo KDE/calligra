@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_PROPERTY(QObject *desktopKoView READ desktopKoView NOTIFY desktopKoViewChanged)
 
 public:
-    explicit MainWindow(QStringList fileNames, QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit MainWindow(QStringList fileNames, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow() override;
 
     bool allowClose() const;

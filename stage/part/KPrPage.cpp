@@ -73,7 +73,7 @@ KPrPage::KPrPage(KoPAMasterPage *masterPage, KPrDocument *document)
     , d(new Private(this, document))
 {
     setApplicationData(new KPrPageApplicationData());
-    placeholders().init(0, shapes());
+    placeholders().init(nullptr, shapes());
 }
 
 KPrPage::~KPrPage()
@@ -269,7 +269,7 @@ void KPrPage::loadOdfPageTag(const KoXmlElement &element, KoPALoadingContext &lo
 void KPrPage::loadOdfPageExtra(const KoXmlElement &element, KoPALoadingContext &loadingContext)
 {
     // the layout needs to be loaded after the shapes are already loaded so the initialization of the data works
-    KPrPageLayout *layout = 0;
+    KPrPageLayout *layout = nullptr;
     if (element.hasAttributeNS(KoXmlNS::presentation, "presentation-page-layout-name")) {
         KPrPageLayouts *layouts = loadingContext.documentResourceManager()->resource(KPresenter::PageLayouts).value<KPrPageLayouts *>();
 
@@ -367,5 +367,5 @@ bool KPrPage::displayShape(KoShape *shape) const
 
 KoShapeManagerPaintingStrategy *KPrPage::getPaintingStrategy() const
 {
-    return new KPrShapeManagerDisplayMasterStrategy(0, new KPrPageSelectStrategyFixed(this));
+    return new KPrShapeManagerDisplayMasterStrategy(nullptr, new KPrPageSelectStrategyFixed(this));
 }

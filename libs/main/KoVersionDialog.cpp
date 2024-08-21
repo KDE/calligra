@@ -106,7 +106,7 @@ void KoVersionDialog::updateButton()
 
 void KoVersionDialog::slotAdd()
 {
-    KoVersionModifyDialog *dlg = new KoVersionModifyDialog(this, 0);
+    KoVersionModifyDialog *dlg = new KoVersionModifyDialog(this, nullptr);
     if (!dlg->exec()) {
         delete dlg;
         return;
@@ -139,7 +139,7 @@ void KoVersionDialog::slotModify()
     if (!list->currentItem())
         return;
 
-    KoVersionInfo *version = 0;
+    KoVersionInfo *version = nullptr;
     for (int i = 0; i < m_doc->versionList().size(); ++i) {
         if (m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0)) {
             version = &m_doc->versionList()[i];
@@ -162,7 +162,7 @@ void KoVersionDialog::slotOpen()
     if (!list->currentItem())
         return;
 
-    KoVersionInfo *version = 0;
+    KoVersionInfo *version = nullptr;
     for (int i = 0; i < m_doc->versionList().size(); ++i) {
         if (m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0)) {
             version = &m_doc->versionList()[i];
@@ -190,7 +190,7 @@ void KoVersionDialog::slotOpen()
         KoPart *part = entry.createKoPart(&errorMsg);
         if (!part) {
             if (!errorMsg.isEmpty())
-                KMessageBox::error(0, errorMsg);
+                KMessageBox::error(nullptr, errorMsg);
             return;
         }
         KoMainWindow *mainWindow = part->createMainWindow();

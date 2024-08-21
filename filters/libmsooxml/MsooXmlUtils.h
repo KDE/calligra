@@ -200,7 +200,7 @@ KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *
                                                                  KoOdfWriters *writers,
                                                                  QString &errorMessage,
                                                                  const QString &fileName,
-                                                                 MsooXmlReaderContext *context = 0);
+                                                                 MsooXmlReaderContext *context = nullptr);
 
 /*! Copies file @a sourceName from zip archive @a zip to @a outputStore store
  under @a destinationName name. If @a size is not 0, *size is set to size of the image

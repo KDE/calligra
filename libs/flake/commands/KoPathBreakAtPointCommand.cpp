@@ -47,7 +47,7 @@ KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData
         m_closedIndex.push_back(KoPathPointIndex(-1, 0));
     }
 
-    KoPathPointData last(0, KoPathPointIndex(-1, -1));
+    KoPathPointData last(nullptr, KoPathPointIndex(-1, -1));
     for (int i = m_pointDataList.size() - 1; i >= 0; --i) {
         const KoPathPointData &current = m_pointDataList.at(i);
 
@@ -72,7 +72,7 @@ KoPathBreakAtPointCommand::~KoPathBreakAtPointCommand()
 void KoPathBreakAtPointCommand::redo()
 {
     KUndo2Command::redo();
-    KoPathPointData last(0, KoPathPointIndex(-1, -1));
+    KoPathPointData last(nullptr, KoPathPointIndex(-1, -1));
 
     // offset, needed when path was opened
     int offset = 0;
@@ -115,7 +115,7 @@ void KoPathBreakAtPointCommand::redo()
 void KoPathBreakAtPointCommand::undo()
 {
     KUndo2Command::undo();
-    KoPathShape *lastPathShape = 0;
+    KoPathShape *lastPathShape = nullptr;
 
     for (int i = 0; i < m_pointDataList.size(); ++i) {
         const KoPathPointData &pd = m_pointDataList.at(i);

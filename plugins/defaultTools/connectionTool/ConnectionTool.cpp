@@ -52,9 +52,9 @@ ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_editMode(Idle)
     , m_connectionType(KoConnectionShape::Standard)
-    , m_currentShape(0)
+    , m_currentShape(nullptr)
     , m_activeHandle(-1)
-    , m_currentStrategy(0)
+    , m_currentStrategy(nullptr)
     , m_oldSnapStrategies(KoSnapGuide::Strategies())
     , m_resetPaint(true)
 {
@@ -177,7 +177,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             painter.save();
             painter.setPen(QPen(Qt::black, 0));
-            QTransform transform = shape->absoluteTransformation(0);
+            QTransform transform = shape->absoluteTransformation(nullptr);
             KoShape::applyConversion(painter, converter);
             // Draw all the connection points of the shape
             KoConnectionPoints connectionPoints = shape->connectionPoints();
@@ -369,7 +369,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 useCursor(Qt::CrossCursor);
             }
         } else {
-            m_currentShape = 0;
+            m_currentShape = nullptr;
             useCursor(Qt::ArrowCursor);
         }
     } else if (m_editMode == EditConnection) {
@@ -406,7 +406,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (m_currentStrategy) {
-        KUndo2Command *createCmd = 0;
+        KUndo2Command *createCmd = nullptr;
         if (m_editMode == CreateConnection) {
             // check if connection handles have a minimal distance
             KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape *>(m_currentShape);
@@ -451,7 +451,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
             }
         }
         delete m_currentStrategy;
-        m_currentStrategy = 0;
+        m_currentStrategy = nullptr;
     }
     updateStatusText();
 }
@@ -524,14 +524,14 @@ void ConnectionTool::deactivate()
 {
     // Put everything to 0 to be able to begin a new shape properly
     delete m_currentStrategy;
-    m_currentStrategy = 0;
+    m_currentStrategy = nullptr;
     resetEditMode();
     m_resetPaint = true;
     repaintDecorations();
     // restore previously set snap strategies
     canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
     canvas()->snapGuide()->reset();
-    m_currentShape = 0;
+    m_currentShape = nullptr;
 }
 
 qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const
@@ -563,7 +563,7 @@ KoShape *ConnectionTool::findShapeAtPosition(const QPointF &position) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 KoShape *ConnectionTool::findNonConnectionShapeAtPosition(const QPointF &position) const
@@ -579,7 +579,7 @@ KoShape *ConnectionTool::findNonConnectionShapeAtPosition(const QPointF &positio
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) const
@@ -616,7 +616,7 @@ KoConnectionShape *ConnectionTool::nearestConnectionShape(const QList<KoShape *>
 {
     int grabDistance = grabSensitivity();
 
-    KoConnectionShape *nearestConnectionShape = 0;
+    KoConnectionShape *nearestConnectionShape = nullptr;
     qreal minSquaredDistance = HUGE_VAL;
     const qreal maxSquaredDistance = grabDistance * grabDistance;
 
@@ -675,7 +675,7 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
 void ConnectionTool::resetEditMode()
 {
     m_connectionType = KoConnectionShape::Standard;
-    setEditMode(Idle, 0, -1);
+    setEditMode(Idle, nullptr, -1);
     Q_EMIT sendConnectionPointEditState(false);
 }
 
@@ -824,7 +824,7 @@ QList<QPointer<QWidget>> ConnectionTool::createOptionWidgets()
             list.append(cw);
         }
     }
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(nullptr);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);
@@ -957,9 +957,9 @@ void ConnectionTool::getConnectionType(int type)
 void ConnectionTool::toggleConnectionPointEditMode(int state)
 {
     if (state == Qt::Checked)
-        setEditMode(EditConnectionPoint, 0, -1);
+        setEditMode(EditConnectionPoint, nullptr, -1);
     else if (state == Qt::Unchecked)
-        setEditMode(Idle, 0, -1);
+        setEditMode(Idle, nullptr, -1);
     else
         return;
 }

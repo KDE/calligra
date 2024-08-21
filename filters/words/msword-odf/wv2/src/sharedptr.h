@@ -120,7 +120,7 @@ template<class T>
 struct SharedPtr {
 public:
     SharedPtr()
-        : ptr(0)
+        : ptr(nullptr)
     {
     }
     SharedPtr(T *t)
@@ -182,7 +182,7 @@ public:
     }
     bool operator!() const
     {
-        return (ptr == 0);
+        return (ptr == nullptr);
     }
     operator T *() const
     {

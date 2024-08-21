@@ -27,7 +27,7 @@ public:
 
     LoadingInfo()
         : m_fileFormat(Unknown)
-        , m_initialActiveSheet(0)
+        , m_initialActiveSheet(nullptr)
         , m_loadTemplate(false)
     {
     }

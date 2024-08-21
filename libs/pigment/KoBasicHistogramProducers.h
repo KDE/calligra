@@ -166,8 +166,8 @@ public:
 
     KoHistogramProducer *generate() override
     {
-        KoHistogramProducer *producer = 0;
-        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
+        KoHistogramProducer *producer = nullptr;
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, nullptr);
         if (cs) {
             producer = new T(KoID(id(), name()), cs);
         }

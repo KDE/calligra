@@ -12,7 +12,7 @@ struct Q_DECL_HIDDEN KoColorTransformationFactoryRegistry::Private {
     static KoColorTransformationFactoryRegistry *s_registry;
 };
 
-KoColorTransformationFactoryRegistry *KoColorTransformationFactoryRegistry::Private::s_registry = 0;
+KoColorTransformationFactoryRegistry *KoColorTransformationFactoryRegistry::Private::s_registry = nullptr;
 
 KoColorTransformationFactoryRegistry::KoColorTransformationFactoryRegistry()
     : d(new Private)
@@ -38,7 +38,7 @@ void KoColorTransformationFactoryRegistry::removeColorTransformationFactory(KoCo
 
 KoColorTransformationFactoryRegistry *KoColorTransformationFactoryRegistry::instance()
 {
-    if (Private::s_registry == 0) {
+    if (Private::s_registry == nullptr) {
         Private::s_registry = new KoColorTransformationFactoryRegistry();
     }
     return Private::s_registry;

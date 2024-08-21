@@ -46,7 +46,7 @@ public:
 };
 
 LabelAction::LabelAction(const QString &label)
-    : QWidgetAction(0)
+    : QWidgetAction(nullptr)
 {
     m_label = new QLabel(label);
     setDefaultWidget(m_label);
@@ -68,7 +68,7 @@ public:
 };
 
 ItemChooserAction::ItemChooserAction(int columns)
-    : QWidgetAction(0)
+    : QWidgetAction(nullptr)
     , m_cnt(0)
     , m_columns(columns)
 {
@@ -109,7 +109,7 @@ QToolButton *ItemChooserAction::removeLastItem()
 {
     --m_cnt;
     QLayoutItem *li = m_containerLayout->itemAtPosition(m_cnt / m_columns, m_cnt % m_columns);
-    QToolButton *b = 0;
+    QToolButton *b = nullptr;
     if (li) {
         m_containerLayout->removeItem(li);
         b = qobject_cast<QToolButton *>(li->widget());

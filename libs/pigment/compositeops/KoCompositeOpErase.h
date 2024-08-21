@@ -55,7 +55,7 @@ public:
                 channels_type srcAlpha = s[_CSTraits::alpha_pos];
 
                 // apply the alphamask
-                if (mask != 0) {
+                if (mask != nullptr) {
                     quint8 U8_mask = *mask;
 
                     if (U8_mask != OPACITY_TRANSPARENT_U8) {

@@ -36,7 +36,7 @@ class KoDocumentResourceManager;
 struct FLAKE_EXPORT KoShapeTemplate {
     KoShapeTemplate()
     {
-        properties = 0;
+        properties = nullptr;
         order = 0;
     }
     QString id; ///< The id of the shape
@@ -208,7 +208,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -222,7 +222,7 @@ public:
      * @see createDefaultShape() newDocumentResourceManager() addTemplate()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const;
 
     /**
      * This method provides the default implementation for creating a shape

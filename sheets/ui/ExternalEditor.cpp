@@ -39,8 +39,8 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     : KTextEdit(parent)
     , d(new Private)
 {
-    d->cellTool = 0;
-    d->highlighter = 0;
+    d->cellTool = nullptr;
+    d->highlighter = nullptr;
     d->isArray = false;
 
     setCurrentFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));

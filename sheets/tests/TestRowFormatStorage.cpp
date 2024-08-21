@@ -40,7 +40,7 @@ void TestRowFormatStorage::testRowHeight()
     int firstRow, lastRow;
     s.rowHeight(5, &lastRow);
     QCOMPARE(lastRow, 9);
-    s.rowHeight(5, 0, &firstRow);
+    s.rowHeight(5, nullptr, &firstRow);
     QCOMPARE(firstRow, 1);
     s.rowHeight(50, &lastRow, &firstRow);
     QCOMPARE(firstRow, 10);
@@ -60,7 +60,7 @@ void TestRowFormatStorage::testHidden()
     QCOMPARE(last, 20);
     QVERIFY(!s.isHidden(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.isHidden(25, 0, &first));
+    QVERIFY(!s.isHidden(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 
@@ -75,7 +75,7 @@ void TestRowFormatStorage::testFiltered()
     QCOMPARE(last, 20);
     QVERIFY(!s.isFiltered(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.isFiltered(25, 0, &first));
+    QVERIFY(!s.isFiltered(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 
@@ -185,7 +185,7 @@ void TestRowFormatStorage::testPageBreak()
     QCOMPARE(last, 20);
     QVERIFY(!s.hasPageBreak(5, &last));
     QCOMPARE(last, 9);
-    QVERIFY(!s.hasPageBreak(25, 0, &first));
+    QVERIFY(!s.hasPageBreak(25, nullptr, &first));
     QCOMPARE(first, 21);
 }
 

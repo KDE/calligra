@@ -223,7 +223,7 @@ public Q_SLOTS:
     void updateAll();
 
 protected:
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
 
 private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &loadingContext);

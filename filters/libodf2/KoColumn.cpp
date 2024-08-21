@@ -18,8 +18,8 @@ const QMap<KoColumn::Visibility, QString> visibilityMap{{KoColumn::Collapse, "co
 }
 
 KoColumn::KoColumn()
-    : m_defaultCellStyle(0)
-    , m_style(0)
+    : m_defaultCellStyle(nullptr)
+    , m_style(nullptr)
     , m_visibility(Visible)
 {
 }

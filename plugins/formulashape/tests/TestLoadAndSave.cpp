@@ -1351,32 +1351,32 @@ void TestLoadAndSave::encloseElement()
 
 void TestLoadAndSave::subElement()
 {
-    test(new SubSupElement(0, SubScript));
+    test(new SubSupElement(nullptr, SubScript));
 }
 
 void TestLoadAndSave::supElement()
 {
-    test(new SubSupElement(0, SupScript));
+    test(new SubSupElement(nullptr, SupScript));
 }
 
 void TestLoadAndSave::subsupElement()
 {
-    test(new SubSupElement(0, SubSupScript));
+    test(new SubSupElement(nullptr, SubSupScript));
 }
 
 void TestLoadAndSave::underElement()
 {
-    test(new UnderOverElement(0, Under));
+    test(new UnderOverElement(nullptr, Under));
 }
 
 void TestLoadAndSave::overElement()
 {
-    test(new UnderOverElement(0, Over));
+    test(new UnderOverElement(nullptr, Over));
 }
 
 void TestLoadAndSave::underoverElement()
 {
-    test(new UnderOverElement(0, UnderOver));
+    test(new UnderOverElement(nullptr, UnderOver));
 }
 
 void TestLoadAndSave::multiscriptsElement()

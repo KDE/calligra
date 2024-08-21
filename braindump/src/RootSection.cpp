@@ -29,16 +29,16 @@
 #include "ViewManager.h"
 
 RootSection::RootSection()
-    : SectionGroup(0)
+    : SectionGroup(nullptr)
     , m_undoStack(new KUndo2Stack(this))
     , m_viewManager(new ViewManager(this))
     , m_sectionsSaver(new SectionsIO(this))
-    , m_currentSection(0)
+    , m_currentSection(nullptr)
 {
     connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
     connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
     if (sections().isEmpty()) {
-        newSection(0);
+        newSection(nullptr);
     }
 }
 

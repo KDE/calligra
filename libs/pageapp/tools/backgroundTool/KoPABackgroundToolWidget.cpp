@@ -91,7 +91,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
     QUrl url = QFileDialog::getOpenFileUrl();
     if (!url.isEmpty()) {
         QString tmpFile;
-        if (KIO::NetAccess::download(url, tmpFile, 0)) {
+        if (KIO::NetAccess::download(url, tmpFile, nullptr)) {
             QImage image(tmpFile);
             if (!image.isNull()) {
                 const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);

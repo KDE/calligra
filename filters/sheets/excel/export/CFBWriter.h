@@ -72,8 +72,8 @@ private:
             : id(id)
             , name(name)
             , type(type)
-            , leftSibling(0)
-            , rightSibling(0)
+            , leftSibling(nullptr)
+            , rightSibling(nullptr)
             , firstSector(-1)
             , streamSize(0)
         {

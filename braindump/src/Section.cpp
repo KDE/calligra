@@ -24,7 +24,7 @@
 #include "SectionContainer.h"
 
 Section::Section(RootSection *_rootSection)
-    : SectionGroup(0)
+    : SectionGroup(nullptr)
     , m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout"))
     , m_sectionContainer(new SectionContainer(this, _rootSection))
 {

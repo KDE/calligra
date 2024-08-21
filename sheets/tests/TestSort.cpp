@@ -24,7 +24,7 @@ void TestSort::AscendingOrder()
 
     Value cellvalue;
 
-    KoCanvasBase *canvas = 0;
+    KoCanvasBase *canvas = nullptr;
     Selection *selection = new Selection(canvas);
 
     selection->setActiveSheet(sheet);
@@ -78,7 +78,7 @@ void TestSort::DescendingOrder()
 
     Value cellvalue;
 
-    KoCanvasBase *canvas = 0;
+    KoCanvasBase *canvas = nullptr;
     Selection *selection = new Selection(canvas);
 
     selection->setActiveSheet(sheet);

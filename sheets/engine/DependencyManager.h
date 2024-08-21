@@ -58,7 +58,7 @@ public:
     /**
      * Updates the whole \p map.
      */
-    void updateAllDependencies(const MapBase *map, Updater *updater = 0);
+    void updateAllDependencies(const MapBase *map, Updater *updater = nullptr);
 
     /**
      * Returns the cell depths.

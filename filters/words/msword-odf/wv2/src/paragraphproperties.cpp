@@ -22,20 +22,20 @@
 using namespace wvWare;
 
 ParagraphProperties::ParagraphProperties()
-    : m_listInfo(0)
+    : m_listInfo(nullptr)
 {
 }
 
 ParagraphProperties::ParagraphProperties(const Word97::PAP &pap)
     : m_pap(pap)
-    , m_listInfo(0)
+    , m_listInfo(nullptr)
 {
 }
 
 ParagraphProperties::ParagraphProperties(const ParagraphProperties &rhs)
     : Shared(rhs)
     , m_pap(rhs.pap())
-    , m_listInfo(0)
+    , m_listInfo(nullptr)
 {
     if (rhs.listInfo())
         m_listInfo = new ListInfo(*rhs.listInfo());

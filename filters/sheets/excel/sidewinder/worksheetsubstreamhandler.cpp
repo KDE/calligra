@@ -71,14 +71,14 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet *sheet, const Globals
 {
     d->sheet = sheet;
     d->globals = globals;
-    d->lastFormulaCell = 0;
-    d->formulaStringCell = 0;
+    d->lastFormulaCell = nullptr;
+    d->formulaStringCell = nullptr;
     d->noteCount = 0;
-    d->lastDrawingObject = 0;
-    d->lastGroupObject = 0;
-    d->lastOfficeArtObject = 0;
+    d->lastDrawingObject = nullptr;
+    d->lastGroupObject = nullptr;
+    d->lastOfficeArtObject = nullptr;
     d->officeArtObjectCounter = 0;
-    d->curConditionalFormat = 0;
+    d->curConditionalFormat = nullptr;
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
@@ -347,7 +347,7 @@ void WorksheetSubStreamHandler::handleDataTable(DataTableRecord *record)
     QString formula = dataTableFormula(row, column, record);
     d->lastFormulaCell->setFormula(formula);
 
-    d->lastFormulaCell = 0;
+    d->lastFormulaCell = nullptr;
 }
 
 void WorksheetSubStreamHandler::handleDimension(DimensionRecord *record)
@@ -723,7 +723,7 @@ void WorksheetSubStreamHandler::handleSharedFormula(SharedFormulaRecord *record)
     QString formula = decodeFormula(row, column, true, record->tokens());
     d->lastFormulaCell->setFormula(formula);
 
-    d->lastFormulaCell = 0;
+    d->lastFormulaCell = nullptr;
 }
 
 void WorksheetSubStreamHandler::handleString(StringRecord *record)
@@ -734,7 +734,7 @@ void WorksheetSubStreamHandler::handleString(StringRecord *record)
         return;
 
     d->formulaStringCell->setValue(record->value());
-    d->formulaStringCell = 0;
+    d->formulaStringCell = nullptr;
 }
 
 void WorksheetSubStreamHandler::handleTopMargin(TopMarginRecord *record)
@@ -786,7 +786,7 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord *record)
     }
     if (d->lastOfficeArtObject) {
         d->lastOfficeArtObject->setText(*record);
-        d->lastOfficeArtObject = 0;
+        d->lastOfficeArtObject = nullptr;
     }
 }
 
@@ -818,7 +818,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord *record)
 
     qCDebug(lcSidewinder) << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << (record->m_object ? record->m_object->type() : -1);
 
-    d->lastOfficeArtObject = 0;
+    d->lastOfficeArtObject = nullptr;
 
     bool handled = false;
     if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
@@ -865,7 +865,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord *record)
                     if (d->lastGroupObject) {
                         if (!o.shapeProp.fChild) {
                             delete d->lastGroupObject;
-                            d->lastGroupObject = 0;
+                            d->lastGroupObject = nullptr;
                         }
                     }
                 }
@@ -875,10 +875,10 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord *record)
 
     if (record->m_object)
         d->sharedObjects[id] = record->m_object;
-    record->m_object = 0; // take over ownership
+    record->m_object = nullptr; // take over ownership
 
     delete d->lastDrawingObject;
-    d->lastDrawingObject = 0;
+    d->lastDrawingObject = nullptr;
 }
 
 void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord *record)

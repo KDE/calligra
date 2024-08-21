@@ -99,7 +99,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
         }
     }
 
-    cacheItem = 0;
+    cacheItem = nullptr;
 
     QMutexLocker lock(&d->cacheMutex);
     QList<CachedTransformation *> cachedTransfos = d->cache.values(key);

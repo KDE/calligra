@@ -64,7 +64,7 @@
 
 #include "MainDebug.h"
 
-KoApplication *KoApplication::KoApp = 0;
+KoApplication *KoApplication::KoApp = nullptr;
 
 namespace
 {
@@ -75,7 +75,7 @@ class KoApplicationPrivate
 {
 public:
     KoApplicationPrivate()
-        : splashScreen(0)
+        : splashScreen(nullptr)
     {
     }
     QByteArray nativeMimeType;
@@ -88,7 +88,7 @@ public:
 class KoApplication::ResetStarting
 {
 public:
-    ResetStarting(QWidget *splash = 0)
+    ResetStarting(QWidget *splash = nullptr)
         : m_splash(splash)
     {
     }
@@ -253,7 +253,7 @@ bool KoApplication::start()
     }
 
     if (entry.isEmpty()) {
-        QMessageBox::critical(0,
+        QMessageBox::critical(nullptr,
                               i18n("%1: Critical Error", applicationName()),
                               i18n("Essential application components could not be found.\n"
                                    "This might be an installation issue.\n"
@@ -296,7 +296,7 @@ bool KoApplication::start()
 
         if (!part) {
             if (!errorMsg.isEmpty())
-                KMessageBox::error(0, errorMsg);
+                KMessageBox::error(nullptr, errorMsg);
             return false;
         }
 
@@ -492,10 +492,10 @@ bool KoApplication::start()
                             paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
                         }
                         if (paths.isEmpty()) {
-                            KMessageBox::error(0, i18n("No template found for: %1", desktopName));
+                            KMessageBox::error(nullptr, i18n("No template found for: %1", desktopName));
                             delete mainWindow;
                         } else if (paths.count() > 1) {
-                            KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
+                            KMessageBox::error(nullptr, i18n("Too many templates found for: %1", desktopName));
                             delete mainWindow;
                         } else {
                             templatePath = paths.at(0);
@@ -517,14 +517,14 @@ bool KoApplication::start()
                             debugMain << "Template loaded...";
                             numberOfOpenDocuments++;
                         } else {
-                            KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.toDisplayString()));
+                            KMessageBox::error(nullptr, i18n("Template %1 failed to load.", templateURL.toDisplayString()));
                             delete mainWindow;
                         }
                     }
                     // now try to load
                 } else if (doNew) {
                     if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {
-                        KMessageBox::error(0, i18n("No template found at: %1", url.toDisplayString()));
+                        KMessageBox::error(nullptr, i18n("No template found at: %1", url.toDisplayString()));
                         delete mainWindow;
                     } else {
                         if (mainWindow->openDocument(part, url)) {
@@ -534,7 +534,7 @@ bool KoApplication::start()
                             debugMain << "Template loaded...";
                             numberOfOpenDocuments++;
                         } else {
-                            KMessageBox::error(0, i18n("Template %1 failed to load.", url.toDisplayString()));
+                            KMessageBox::error(nullptr, i18n("Template %1 failed to load.", url.toDisplayString()));
                             delete mainWindow;
                         }
                     }

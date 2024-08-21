@@ -16,8 +16,8 @@ public:
     Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape *> &p)
         : controller(c)
         , paths(p)
-        , combinedPath(0)
-        , combinedPathParent(0)
+        , combinedPath(nullptr)
+        , combinedPathParent(nullptr)
         , isCombined(false)
     {
         foreach (KoPathShape *path, paths)

@@ -70,8 +70,8 @@ QDockWidget *KoPADocumentStructureDockerFactory::createDockWidget()
 KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget *parent)
     : QDockWidget(parent)
     , KoCanvasObserverBase()
-    , m_doc(0)
-    , m_model(0)
+    , m_doc(nullptr)
+    , m_model(nullptr)
 {
     setWindowTitle(i18n("Document"));
 
@@ -205,7 +205,7 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
     if (!shape)
         return;
     // check whether the newly selected shape is a page or shape/layer
-    bool isPage = (dynamic_cast<KoPAPageBase *>(shape) != 0);
+    bool isPage = (dynamic_cast<KoPAPageBase *>(shape) != nullptr);
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
@@ -297,7 +297,7 @@ void KoPADocumentStructureDocker::addLayer()
                 std::sort(layers.begin(), layers.end(), KoShape::compareShapeZIndex);
                 layer->setZIndex(layers.last()->zIndex() + 1);
             }
-            KUndo2Command *cmd = new KoShapeCreateCommand(m_doc, layer, 0);
+            KUndo2Command *cmd = new KoShapeCreateCommand(m_doc, layer, nullptr);
             cmd->setText(kundo2_i18n("Create Layer"));
             m_doc->addCommand(cmd);
             m_model->update();
@@ -314,7 +314,7 @@ void KoPADocumentStructureDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
 
     if (selectedLayers.count()) {
         if (m_doc->pages().count() > selectedPages.count()) {
@@ -326,7 +326,7 @@ void KoPADocumentStructureDocker::deleteItem()
             cmd = new KoShapeDeleteCommand(m_doc, deleteShapes);
             cmd->setText(kundo2_i18n("Delete Layer"));
         } else {
-            KMessageBox::error(0, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
+            KMessageBox::error(nullptr, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
     } else if (selectedShapes.count()) {
         cmd = new KoShapeDeleteCommand(m_doc, selectedShapes);
@@ -349,7 +349,7 @@ void KoPADocumentStructureDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
 
     if (selectedLayers.count()) {
         //         // check if all layers could be raised
@@ -379,7 +379,7 @@ void KoPADocumentStructureDocker::lowerItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
 
     if (selectedLayers.count()) {
         //         // check if all layers could be raised
@@ -441,9 +441,9 @@ void KoPADocumentStructureDocker::setCanvas(KoCanvasBase *canvas)
 
 void KoPADocumentStructureDocker::unsetCanvas()
 {
-    m_doc = 0;
-    m_model->setDocument(0);
-    m_sectionView->setModel(0);
+    m_doc = nullptr;
+    m_model->setDocument(nullptr);
+    m_sectionView->setModel(nullptr);
 }
 
 void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)

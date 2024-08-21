@@ -56,9 +56,9 @@ KoColorSpaceRegistry *KoColorSpaceRegistry::instance()
 
 void KoColorSpaceRegistry::init()
 {
-    d->rgbU8sRGB = 0;
-    d->lab16sLAB = 0;
-    d->alphaCs = 0;
+    d->rgbU8sRGB = nullptr;
+    d->lab16sLAB = nullptr;
+    d->alphaCs = nullptr;
 
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
@@ -97,8 +97,8 @@ void KoColorSpaceRegistry::init()
 KoColorSpaceRegistry::KoColorSpaceRegistry()
     : d(new Private())
 {
-    d->colorConversionSystem = 0;
-    d->colorConversionCache = 0;
+    d->colorConversionSystem = nullptr;
+    d->colorConversionCache = nullptr;
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
@@ -200,7 +200,7 @@ QList<const KoColorProfile *> KoColorSpaceRegistry::profilesFor(const KoColorSpa
 {
     QReadLocker l(&d->registrylock);
     QList<const KoColorProfile *> profiles;
-    if (csf == 0)
+    if (csf == nullptr)
         return profiles;
 
     QHash<QString, KoColorProfile *>::Iterator it;
@@ -267,7 +267,7 @@ const KoColorSpace *KoColorSpaceRegistry::getCachedColorSpace(const QString &csI
         return it.value();
     }
 
-    return 0;
+    return nullptr;
 }
 
 QString KoColorSpaceRegistry::idsToCacheName(const QString &csID, const QString &profileName) const
@@ -291,17 +291,17 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
 
         if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type : " << csID;
-            return 0;
+            return nullptr;
         }
 
         profileName = csf->defaultProfile();
     }
 
     if (profileName.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
-    const KoColorSpace *cs = 0;
+    const KoColorSpace *cs = nullptr;
     {
         QReadLocker l(&d->registrylock);
         cs = getCachedColorSpace(csID, profileName);
@@ -312,7 +312,7 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
 
         if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type :" << csf;
-            return 0;
+            return nullptr;
         }
 
         // last attempt at getting a profile, sometimes the default profile, like adobe cmyk isn't available.
@@ -342,7 +342,7 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
         // We did our best, but still have no profile: and since csf->grabColorSpace
         // needs the profile to find the colorspace, we have to give up.
         if (!p) {
-            return 0;
+            return nullptr;
         }
         profileName = p->name();
 
@@ -361,7 +361,7 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
             cs = csf->grabColorSpace(p);
             if (!cs) {
                 dbgPigmentCSRegistry << "Unable to create color space";
-                return 0;
+                return nullptr;
             }
 
             dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << idsToCacheName(cs->id(), cs->profile()->name())
@@ -383,7 +383,7 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
 const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
     if (csID.isEmpty()) {
-        return 0;
+        return nullptr;
     }
     if (profile) {
         d->registrylock.lockForRead();
@@ -401,10 +401,10 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
             d->registrylock.unlock();
             if (!csf) {
                 dbgPigmentCSRegistry << "Unknown color space type :" << csf;
-                return 0;
+                return nullptr;
             }
             if (!csf->profileIsCompatible(profile)) {
-                return 0;
+                return nullptr;
             }
 
             QWriteLocker l(&d->registrylock);
@@ -413,7 +413,7 @@ const KoColorSpace *KoColorSpaceRegistry::colorSpace(const QString &csID, const 
             if (!cs) {
                 cs = csf->grabColorSpace(profile);
                 if (!cs)
-                    return 0;
+                    return nullptr;
 
                 QString name = idsToCacheName(csID, profile->name());
                 d->csMap[name] = cs;
@@ -448,7 +448,7 @@ const KoColorSpace *KoColorSpaceRegistry::rgb8(const QString &profileName)
 
 const KoColorSpace *KoColorSpaceRegistry::rgb8(const KoColorProfile *profile)
 {
-    if (profile == 0) {
+    if (profile == nullptr) {
         if (!d->rgbU8sRGB) {
             d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId());
         }
@@ -481,7 +481,7 @@ const KoColorSpace *KoColorSpaceRegistry::lab16(const QString &profileName)
 
 const KoColorSpace *KoColorSpaceRegistry::lab16(const KoColorProfile *profile)
 {
-    if (profile == 0) {
+    if (profile == nullptr) {
         if (!d->lab16sLAB) {
             d->lab16sLAB = colorSpace(KoLabColorSpace::colorSpaceId(), profile);
         }

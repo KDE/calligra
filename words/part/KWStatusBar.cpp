@@ -47,7 +47,7 @@ public:
     QWidget *m_widget;
     KWStatusBarBaseItem(QWidget *parent = nullptr)
         : QStackedWidget(parent)
-        , m_widget(0)
+        , m_widget(nullptr)
     {
 #ifdef Q_WS_MAC
         setAttribute(Qt::WA_MacMiniSize, true);
@@ -113,7 +113,7 @@ public:
 KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     : QObject(statusBar)
     , m_statusbar(statusBar)
-    , m_controller(0)
+    , m_controller(nullptr)
     , m_currentPageNumber(0)
 {
     KWDocument *document = view->kwdocument();
@@ -223,7 +223,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_zoomAction->setChecked(document->config().statusBarShowZoom());
     m_statusbar->addAction(m_zoomAction);
 
-    updateCurrentTool(0);
+    updateCurrentTool(nullptr);
     setCurrentView(view);
     connect(KoToolManager::instance(), &KoToolManager::changedTool, this, &KWStatusBar::updateCurrentTool);
 }
@@ -319,8 +319,8 @@ void KWStatusBar::updatePageSize()
 void KWStatusBar::updateCursorPosition()
 {
     int line = 1;
-    KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
-    KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
+    KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : nullptr;
+    KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : nullptr;
     if (editor) {
         line = editor->block().firstLineNumber();
         int posInDoc = editor->position() - editor->block().position();
@@ -380,9 +380,9 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
     m_controller = canvasController->proxyObject;
     if (canvasController) {
         // find KWView parent of the canvas controller widget
-        KWView *view = 0;
+        KWView *view = nullptr;
         QWidget *parent = widget->parentWidget();
-        while (view == 0 && parent != 0) {
+        while (view == nullptr && parent != nullptr) {
             view = dynamic_cast<KWView *>(parent);
             if (!view) {
                 parent = parent->parentWidget();
@@ -399,12 +399,12 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
 
 void KWStatusBar::setCurrentView(KWView *view)
 {
-    if (view == 0) {
-        m_currentView = 0;
+    if (view == nullptr) {
+        m_currentView = nullptr;
         return;
     } else if (view == m_currentView) {
         return;
-    } else if (view->canvasBase() == 0) {
+    } else if (view->canvasBase() == nullptr) {
         return;
     }
 
@@ -438,7 +438,7 @@ void KWStatusBar::setCurrentView(KWView *view)
     updatePageStyle();
     updatePageSize();
 
-    if (m_currentView == 0)
+    if (m_currentView == nullptr)
         return;
 
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
@@ -538,7 +538,7 @@ void KWStatusBar::removeView(QObject *object)
         m_zoomWidgets.remove(view);
     }
     if (view == m_currentView)
-        m_currentView = 0;
+        m_currentView = nullptr;
 }
 
 // static

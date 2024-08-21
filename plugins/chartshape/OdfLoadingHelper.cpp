@@ -16,7 +16,7 @@
 using namespace KoChart;
 
 OdfLoadingHelper::OdfLoadingHelper()
-    : tableSource(0)
+    : tableSource(nullptr)
     , chartUsesInternalModelOnly(true)
     , categoryRegionSpecifiedInXAxis(false)
 {

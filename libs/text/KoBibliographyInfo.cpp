@@ -24,7 +24,7 @@ int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadin
 }
 
 KoBibliographyInfo::KoBibliographyInfo()
-    : m_generator(0)
+    : m_generator(nullptr)
 {
 }
 
@@ -34,7 +34,7 @@ KoBibliographyInfo::~KoBibliographyInfo()
         qDeleteAll(entryTemplate.indexEntries);
     }
     delete m_generator;
-    m_generator = 0; // just to be safe
+    m_generator = nullptr; // just to be safe
 }
 
 void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element)

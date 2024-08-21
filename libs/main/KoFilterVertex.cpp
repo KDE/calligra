@@ -11,11 +11,11 @@ namespace CalligraFilter
 {
 
 Vertex::Vertex(const QByteArray &mimeType)
-    : m_predecessor(0)
+    : m_predecessor(nullptr)
     , m_mimeType(mimeType)
     , m_weight(UINT_MAX)
     , m_index(-1)
-    , d(0)
+    , d(nullptr)
 {
 }
 
@@ -36,7 +36,7 @@ bool Vertex::setKey(unsigned int key)
 void Vertex::reset()
 {
     m_weight = UINT_MAX;
-    m_predecessor = 0;
+    m_predecessor = nullptr;
 }
 
 void Vertex::addEdge(Edge *edge)
@@ -49,8 +49,8 @@ void Vertex::addEdge(Edge *edge)
 const Edge *Vertex::findEdge(const Vertex *vertex) const
 {
     if (!vertex)
-        return 0;
-    const Edge *edge = 0;
+        return nullptr;
+    const Edge *edge = nullptr;
     foreach (Edge *e, m_edges) {
         if (e->vertex() == vertex && (!edge || e->weight() < edge->weight())) {
             edge = e;

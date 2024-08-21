@@ -19,7 +19,7 @@ namespace Libemf
 /*****************************************************************************/
 
 BitBltRecord::BitBltRecord(QDataStream &stream, quint32 recordSize)
-    : m_bitmap(0)
+    : m_bitmap(nullptr)
 {
     // debugVectorImage << "stream position at the start: " << stream.device()->pos();
     // debugVectorImage << "record size: " << recordSize;
@@ -131,7 +131,7 @@ QImage BitBltRecord::image()
 
 /*****************************************************************************/
 StretchDiBitsRecord::StretchDiBitsRecord(QDataStream &stream, quint32 recordSize)
-    : m_bitmap(0)
+    : m_bitmap(nullptr)
 {
     // debugVectorImage << "stream position at the start: " << stream.device()->pos();
     // debugVectorImage << "recordSize =" << recordSize;

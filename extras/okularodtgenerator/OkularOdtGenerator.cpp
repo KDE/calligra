@@ -176,7 +176,7 @@ bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::P
 bool OkularOdtGenerator::doCloseDocument()
 {
     delete m_doc;
-    m_doc = 0;
+    m_doc = nullptr;
 
     m_documentInfo = Okular::DocumentInfo();
     m_documentSynopsis = Okular::DocumentSynopsis();
@@ -234,7 +234,7 @@ Okular::TextPage *OkularOdtGenerator::textPage(Okular::Page *page)
     QTextDocument *textDocument = m_doc->mainFrameSet()->document();
     KoTextDocumentLayout *textDocumentLayout = static_cast<KoTextDocumentLayout *>(textDocument->documentLayout());
 
-    KoTextLayoutRootArea *rootArea = 0;
+    KoTextLayoutRootArea *rootArea = nullptr;
     foreach (KoTextLayoutRootArea *area, textDocumentLayout->rootAreas()) {
         if (area->page()->pageNumber() == page->number() + 1) {
             rootArea = area;
@@ -243,14 +243,14 @@ Okular::TextPage *OkularOdtGenerator::textPage(Okular::Page *page)
     }
 
     if (!rootArea) {
-        return 0;
+        return nullptr;
     }
 
     const QVector<KoCharAreaInfo> charAreaInfos = rootArea->generateCharAreaInfos();
 
     // TODO: text from master pages (headers/footers), text in floating shapes
     if (charAreaInfos.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     KWPage *wpage = static_cast<KWPage *>(rootArea->page());
@@ -283,5 +283,5 @@ Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo(const QSet<Okular:
 
 const Okular::DocumentSynopsis *OkularOdtGenerator::generateDocumentSynopsis()
 {
-    return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : 0;
+    return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : nullptr;
 }

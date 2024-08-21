@@ -92,7 +92,7 @@
 
 KUndo2Group::KUndo2Group(QObject *parent)
     : QObject(parent)
-    , m_active(0)
+    , m_active(nullptr)
 {
 }
 
@@ -105,7 +105,7 @@ KUndo2Group::~KUndo2Group()
     QList<KUndo2QStack *>::iterator it = m_stack_list.begin();
     QList<KUndo2QStack *>::iterator end = m_stack_list.end();
     while (it != end) {
-        (*it)->m_group = 0;
+        (*it)->m_group = nullptr;
         ++it;
     }
 }
@@ -142,8 +142,8 @@ void KUndo2Group::removeStack(KUndo2QStack *stack)
     if (m_stack_list.removeAll(stack) == 0)
         return;
     if (stack == m_active)
-        setActiveStack(0);
-    stack->m_group = 0;
+        setActiveStack(nullptr);
+    stack->m_group = nullptr;
 }
 
 /*!
@@ -176,7 +176,7 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
     if (m_active == stack)
         return;
 
-    if (m_active != 0) {
+    if (m_active != nullptr) {
         disconnect(m_active, &KUndo2QStack::canUndoChanged, this, &KUndo2Group::canUndoChanged);
         disconnect(m_active, &KUndo2QStack::undoTextChanged, this, &KUndo2Group::undoTextChanged);
         disconnect(m_active, &KUndo2QStack::canRedoChanged, this, &KUndo2Group::canRedoChanged);
@@ -187,7 +187,7 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
 
     m_active = stack;
 
-    if (m_active == 0) {
+    if (m_active == nullptr) {
         Q_EMIT canUndoChanged(false);
         Q_EMIT undoTextChanged(QString());
         Q_EMIT canRedoChanged(false);
@@ -237,7 +237,7 @@ KUndo2QStack *KUndo2Group::activeStack() const
 
 void KUndo2Group::undo()
 {
-    if (m_active != 0)
+    if (m_active != nullptr)
         m_active->undo();
 }
 
@@ -252,7 +252,7 @@ void KUndo2Group::undo()
 
 void KUndo2Group::redo()
 {
-    if (m_active != 0)
+    if (m_active != nullptr)
         m_active->redo();
 }
 
@@ -267,7 +267,7 @@ void KUndo2Group::redo()
 
 bool KUndo2Group::canUndo() const
 {
-    return m_active != 0 && m_active->canUndo();
+    return m_active != nullptr && m_active->canUndo();
 }
 
 /*!
@@ -281,7 +281,7 @@ bool KUndo2Group::canUndo() const
 
 bool KUndo2Group::canRedo() const
 {
-    return m_active != 0 && m_active->canRedo();
+    return m_active != nullptr && m_active->canRedo();
 }
 
 /*!
@@ -295,7 +295,7 @@ bool KUndo2Group::canRedo() const
 
 QString KUndo2Group::undoText() const
 {
-    return m_active == 0 ? QString() : m_active->undoText();
+    return m_active == nullptr ? QString() : m_active->undoText();
 }
 
 /*!
@@ -309,7 +309,7 @@ QString KUndo2Group::undoText() const
 
 QString KUndo2Group::redoText() const
 {
-    return m_active == 0 ? QString() : m_active->redoText();
+    return m_active == nullptr ? QString() : m_active->redoText();
 }
 
 /*!
@@ -323,7 +323,7 @@ QString KUndo2Group::redoText() const
 
 bool KUndo2Group::isClean() const
 {
-    return m_active == 0 || m_active->isClean();
+    return m_active == nullptr || m_active->isClean();
 }
 
 #ifndef QT_NO_ACTION

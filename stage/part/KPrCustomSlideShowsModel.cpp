@@ -119,13 +119,13 @@ QMimeData *KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) co
 {
     // check if there is data to encode
     if (!indexes.count()) {
-        return 0;
+        return nullptr;
     }
 
     // check if we support a format
     const QStringList types = mimeTypes();
     if (types.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     QMimeData *data = new QMimeData();

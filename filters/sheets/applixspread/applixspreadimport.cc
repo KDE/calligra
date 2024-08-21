@@ -1169,7 +1169,7 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
         printf("Header not correct - May be it is not an applixspreadsheet file\n");
         printf("Headerline: <%s>\n", mystr.toLatin1().data());
 
-        QMessageBox::critical(0L, "Applix spreadsheet header problem",
+        QMessageBox::critical(nullptr, "Applix spreadsheet header problem",
                               QString("The Applix Spreadsheet header is not correct. "
                                       "May be it is not an applix spreadsheet file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),

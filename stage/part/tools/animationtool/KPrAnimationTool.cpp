@@ -42,10 +42,10 @@ const int HANDLE_DISTANCE = 10;
 
 KPrAnimationTool::KPrAnimationTool(KoCanvasBase *canvas)
     : KoPathTool(canvas)
-    , m_currentMotionPathSelected(0)
-    , m_pathShapeManager(0)
+    , m_currentMotionPathSelected(nullptr)
+    , m_pathShapeManager(nullptr)
     , m_initializeTool(true)
-    , m_shapeAnimationWidget(0)
+    , m_shapeAnimationWidget(nullptr)
 {
 }
 
@@ -140,7 +140,7 @@ void KPrAnimationTool::deactivate()
                &KPrShapeAnimationDocker::slotActivePageChanged);
     m_initializeTool = true;
     delete m_pathShapeManager;
-    m_pathShapeManager = 0;
+    m_pathShapeManager = nullptr;
     KoPathTool::deactivate();
 }
 
@@ -279,7 +279,7 @@ void KPrAnimationTool::cleanMotionPathManager()
     }
     m_animateMotionMap.clear();
     m_shapesMap.clear();
-    m_currentMotionPathSelected = 0;
+    m_currentMotionPathSelected = nullptr;
 }
 
 void KPrAnimationTool::reloadMotionPaths()

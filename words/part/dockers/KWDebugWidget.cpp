@@ -22,7 +22,7 @@
 
 KWDebugWidget::KWDebugWidget(QWidget *parent)
     : QWidget(parent)
-    , m_canvas(0)
+    , m_canvas(nullptr)
 {
     initUi();
     initLayout();
@@ -65,7 +65,7 @@ void KWDebugWidget::updateData()
         return;
     }
 
-    KoTextEditor *editor = 0;
+    KoTextEditor *editor = nullptr;
     if (m_canvas) {
         editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
         if (!editor) {

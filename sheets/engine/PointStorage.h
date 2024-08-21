@@ -564,7 +564,7 @@ public:
      * Can be used in conjunction with nextInColumn() to loop through a column.
      * \return the first used data in \p col or the default data, if the column is empty.
      */
-    T firstInColumn(int col, int *newRow = 0) const
+    T firstInColumn(int col, int *newRow = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         const int index = m_cols.indexOf(col);
@@ -582,7 +582,7 @@ public:
      * Can be used in conjunction with nextInRow() to loop through a row.
      * \return the first used data in \p row or the default data, if the row is empty.
      */
-    T firstInRow(int row, int *newCol = 0) const
+    T firstInRow(int row, int *newCol = nullptr) const
     {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's empty?
@@ -601,7 +601,7 @@ public:
      * Can be used in conjunction with prevInColumn() to loop through a column.
      * \return the last used data in \p col or the default data, if the column is empty.
      */
-    T lastInColumn(int col, int *newRow = 0) const
+    T lastInColumn(int col, int *newRow = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         const int index = m_cols.lastIndexOf(col);
@@ -619,7 +619,7 @@ public:
      * Can be used in conjunction with prevInRow() to loop through a row.
      * \return the last used data in \p row or the default data, if the row is empty.
      */
-    T lastInRow(int row, int *newCol = 0) const
+    T lastInRow(int row, int *newCol = nullptr) const
     {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         if (m_rows.isEmpty()) {
@@ -649,7 +649,7 @@ public:
      * Can be used in conjunction with firstInColumn() to loop through a column.
      * \return the next used data in \p col or the default data, there is no further data.
      */
-    T nextInColumn(int col, int row, int *newRow = 0) const
+    T nextInColumn(int col, int row, int *newRow = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
@@ -675,7 +675,7 @@ public:
      * Can be used in conjunction with firstInRow() to loop through a row.
      * \return the next used data in \p row or the default data, if there is no further data.
      */
-    T nextInRow(int col, int row, int *newCol = 0) const
+    T nextInRow(int col, int row, int *newCol = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
@@ -703,7 +703,7 @@ public:
      * Can be used in conjunction with lastInColumn() to loop through a column.
      * \return the previous used data in \p col or the default data, there is no further data.
      */
-    T prevInColumn(int col, int row, int *newRow = 0) const
+    T prevInColumn(int col, int row, int *newRow = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
@@ -728,7 +728,7 @@ public:
      * Can be used in conjunction with lastInRow() to loop through a row.
      * \return the previous used data in \p row or the default data, if there is no further data.
      */
-    T prevInRow(int col, int row, int *newCol = 0) const
+    T prevInRow(int col, int row, int *newCol = nullptr) const
     {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);

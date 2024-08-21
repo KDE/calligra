@@ -27,10 +27,10 @@
 using namespace wvWare;
 
 Footnotes97::Footnotes97(OLEStreamReader *tableStream, const Word97::FIB &fib)
-    : m_footnoteRef(0)
-    , m_footnoteRefIt(0)
-    , m_endnoteRef(0)
-    , m_endnoteRefIt(0)
+    : m_footnoteRef(nullptr)
+    , m_footnoteRefIt(nullptr)
+    , m_endnoteRef(nullptr)
+    , m_endnoteRefIt(nullptr)
 {
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::Footnotes97()" << Qt::endl

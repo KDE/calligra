@@ -574,7 +574,7 @@ public:
     {
         QList<CssToken> tokenList = tokenize(selector);
         if (tokenList.isEmpty())
-            return 0;
+            return nullptr;
 
         if (tokenList.count() == 1) {
             // simple selector
@@ -583,7 +583,7 @@ public:
             // complex selector
             return new CssComplexSelector(tokenList);
         }
-        return 0;
+        return nullptr;
     }
 
     QMap<QString, QString> cssStyles;

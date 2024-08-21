@@ -29,7 +29,7 @@ KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy()
 
 KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *rm)
 {
-    KoShape *shape = 0;
+    KoShape *shape = nullptr;
 
     QUrl url = QFileDialog::getOpenFileUrl();
     if (!url.isEmpty()) {
@@ -39,7 +39,7 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
         Q_ASSERT(collection);
 
         QString tmpFile;
-        if (KIO::NetAccess::download(url, tmpFile, 0)) {
+        if (KIO::NetAccess::download(url, tmpFile, nullptr)) {
             QImage image(tmpFile);
             if (!image.isNull()) {
                 // setSuffix(url.prettyUrl());

@@ -32,7 +32,7 @@ public:
         , gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM))
         , gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM))
         , gridColor(Qt::lightGray)
-        , toggleGridAction(0)
+        , toggleGridAction(nullptr)
     {
     }
 
@@ -203,7 +203,7 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 KToggleAction *KoGridData::gridToggleAction(QWidget *canvas)
 {
     if (!d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
+        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), nullptr);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }

@@ -31,8 +31,8 @@ class Sheet::Private
 {
 public:
     Private()
-        : workbook(0)
-        , autoFilters(0)
+        : workbook(nullptr)
+        , autoFilters(nullptr)
     {
     }
 
@@ -689,7 +689,7 @@ Column::Column(Sheet *sheet, unsigned index)
     d->visible = true;
     d->outlineLevel = 0;
     d->collapsed = false;
-    d->format = 0;
+    d->format = nullptr;
 }
 
 Column::~Column()
@@ -822,7 +822,7 @@ Row::Row(Sheet *sheet, unsigned index)
     d->visible = true;
     d->outlineLevel = 0;
     d->collapsed = false;
-    d->format = 0;
+    d->format = nullptr;
 }
 
 Row::~Row()

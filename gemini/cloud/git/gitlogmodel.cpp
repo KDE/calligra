@@ -149,7 +149,7 @@ void GitLogModel::refreshLog()
     }
 
     git_oid oid;
-    git_commit *commit = NULL;
+    git_commit *commit = nullptr;
     while (git_revwalk_next(&oid, walker) == 0) {
         error = git_commit_lookup(&commit, repository, &oid);
         if (error != 0) {

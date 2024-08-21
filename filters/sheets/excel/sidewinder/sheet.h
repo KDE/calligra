@@ -168,7 +168,7 @@ public:
     int drawObjectsGroupCount() const;
     MSO::OfficeArtSpgrContainer drawObjectsGroup(int groupId) const;
     QList<OfficeArtObject *> drawObjects(int groupId = -1) const;
-    void addDrawObject(OfficeArtObject *drawObject, const MSO::OfficeArtSpgrContainer *group = 0);
+    void addDrawObject(OfficeArtObject *drawObject, const MSO::OfficeArtSpgrContainer *group = nullptr);
 
     void addConditionalFormat(ConditionalFormat *format);
     QList<ConditionalFormat *> conditionalFormats() const;

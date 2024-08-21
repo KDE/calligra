@@ -113,7 +113,7 @@ public:
 
     public:
         Mark()
-            : input(0)
+            : input(nullptr)
             , pos(0)
         {
         }

@@ -304,7 +304,7 @@ QAbstractItemModel *CellEditor::model()
 void CellEditor::setCompleter(QCompleter *completer)
 {
     if (d->complete)
-        QObject::disconnect(d->complete, 0, this, 0);
+        QObject::disconnect(d->complete, nullptr, this, nullptr);
 
     d->complete = completer;
 

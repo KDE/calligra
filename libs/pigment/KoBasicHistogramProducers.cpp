@@ -18,12 +18,12 @@
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
 
-static const KoColorSpace *m_labCs = 0;
+static const KoColorSpace *m_labCs = nullptr;
 
 KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID &id, int channelCount, int nrOfBins)
     : m_channels(channelCount)
     , m_nrOfBins(nrOfBins)
-    , m_colorSpace(0)
+    , m_colorSpace(nullptr)
     , m_id(id)
 {
     m_bins.resize(m_channels);

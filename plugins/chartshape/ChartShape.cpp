@@ -201,28 +201,28 @@ public:
 };
 
 ChartShape::Private::Private(ChartShape *shape)
-    : internalModel(0)
-    , internalModelHelper(0)
-    , resourceManager(0)
+    : internalModel(nullptr)
+    , internalModelHelper(nullptr)
+    , resourceManager(nullptr)
 
 {
     // Register the owner.
     this->shape = shape;
 
     // Components
-    title = 0;
-    subTitle = 0;
-    footer = 0;
-    legend = 0;
-    plotArea = 0;
+    title = nullptr;
+    subTitle = nullptr;
+    footer = nullptr;
+    legend = nullptr;
+    plotArea = nullptr;
 
     // Data
-    proxyModel = 0;
+    proxyModel = nullptr;
 
     // If not explicitly set otherwise, this chart provides its own data.
     usesInternalModelOnly = true;
 
-    document = 0;
+    document = nullptr;
 }
 
 ChartShape::Private::~Private()
@@ -298,10 +298,10 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     if (!d->title) {
         d->title = new TextLabelDummy;
         if (ENABLE_USER_INTERACTION)
-            KMessageBox::error(0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing"));
+            KMessageBox::error(nullptr, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing"));
         // Potential problem 2) TextShape incompatible
-    } else if (dynamic_cast<TextLabelData *>(d->title->userData()) == 0 && ENABLE_USER_INTERACTION)
-        KMessageBox::error(0,
+    } else if (dynamic_cast<TextLabelData *>(d->title->userData()) == nullptr && ENABLE_USER_INTERACTION)
+        KMessageBox::error(nullptr,
                            i18n("The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape."),
                            i18n("Plugin Incompatible"));
 
@@ -309,7 +309,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     // enough for unit tests, so there has to be no TextShape plugin doing the
     // actual text rendering, we just need KoTextShapeData which is in the libs.
     TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->title->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         labelData = new TextLabelData;
         KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
         labelData->document()->setDocumentLayout(documentLayout);
@@ -341,7 +341,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
         d->subTitle = new TextLabelDummy;
     }
     labelData = dynamic_cast<TextLabelData *>(d->subTitle->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         labelData = new TextLabelData;
         KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
         labelData->document()->setDocumentLayout(documentLayout);
@@ -371,7 +371,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
         d->footer = new TextLabelDummy;
     }
     labelData = dynamic_cast<TextLabelData *>(d->footer->userData());
-    if (labelData == 0) {
+    if (labelData == nullptr) {
         labelData = new TextLabelData;
         KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
         labelData->document()->setDocumentLayout(documentLayout);
@@ -750,7 +750,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
 
             // For security reasons we need to ask confirmation if the
             // url is remote.
-            int result = KMessageBox::warningTwoActionsCancel(0,
+            int result = KMessageBox::warningTwoActionsCancel(nullptr,
                                                               i18n("This document contains an external link to a remote document\n%1", tmpURL),
                                                               i18n("Confirmation Required"),
                                                               KGuiItem(i18n("Download")),
@@ -833,7 +833,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement, KoShapeLo
     helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
 
     // Get access to sheets in Calligra Sheets
-    QAbstractItemModel *sheetAccessModel = 0;
+    QAbstractItemModel *sheetAccessModel = nullptr;
     if (resourceManager() && resourceManager()->hasResource(Sheets::CanvasResource::AccessModel)) {
         QVariant var = resourceManager()->resource(Sheets::CanvasResource::AccessModel);
         sheetAccessModel = static_cast<QAbstractItemModel *>(var.value<void *>());

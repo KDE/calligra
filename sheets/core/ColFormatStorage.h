@@ -45,32 +45,32 @@ public:
     Sheet *sheet() const;
 
     /** Width of the given col. firstCol and lastCol are set to the first and last col that share the same width. */
-    double colWidth(int col, int *lastCol = 0, int *firstCol = 0) const;
+    double colWidth(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
     void setColWidth(int firstCol, int lastCol, double width);
 
-    bool isHidden(int col, int *lastCol = 0, int *firstCol = 0) const;
+    bool isHidden(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
     void setHidden(int firstCol, int lastCol, bool hidden);
 
-    bool isFiltered(int col, int *lastCol = 0, int *firstCol = 0) const;
+    bool isFiltered(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
     void setFiltered(int firstCol, int lastCol, bool filtered);
 
-    bool isHiddenOrFiltered(int col, int *lastCol = 0, int *firstCol = 0) const;
+    bool isHiddenOrFiltered(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
 
-    double visibleWidth(int col, int *lastCol = 0, int *firstCol = 0) const;
+    double visibleWidth(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
 
     double totalColWidth(int firstCol, int lastCol) const;
     double totalVisibleColWidth(int firstCol, int lastCol) const;
 
-    int colForPosition(double ypos, double *topOfCol = 0) const;
+    int colForPosition(double ypos, double *topOfCol = nullptr) const;
 
-    bool hasPageBreak(int col, int *lastCol = 0, int *firstCol = 0) const;
+    bool hasPageBreak(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
     void setPageBreak(int firstCol, int lastCol, bool pageBreak);
 
     /** Convenience function - sets everything at once. */
     void setColFormat(int firstCol, int lastCol, const ColFormat &f);
     ColFormat getColFormat(int col) const;
 
-    bool isDefaultCol(int col, int *lastCol = 0, int *firstCol = 0) const;
+    bool isDefaultCol(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
     void setDefault(int firstCol, int lastCol);
     int lastNonDefaultCol() const;
 

@@ -41,9 +41,9 @@
 
 KoPADocumentModel::KoPADocumentModel(QObject *parent, KoPADocument *document)
     : KoDocumentSectionModel(parent)
-    , m_document(0)
+    , m_document(nullptr)
     , m_master(false)
-    , m_lastContainer(0)
+    , m_lastContainer(nullptr)
 {
     setDocument(document);
 }
@@ -209,7 +209,7 @@ QVariant KoPADocumentModel::data(const QModelIndex &index, int role) const
     case PropertiesRole:
         return QVariant::fromValue(properties(shape));
     case AspectRatioRole: {
-        QTransform matrix = shape->absoluteTransformation(0);
+        QTransform matrix = shape->absoluteTransformation(nullptr);
         QRectF bbox = matrix.mapRect(shape->outline().boundingRect());
         KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
         if (container) {
@@ -392,13 +392,13 @@ QMimeData *KoPADocumentModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
     if (!indexes.count()) {
-        return 0;
+        return nullptr;
     }
 
     // check if we support a format
     QStringList types = mimeTypes();
     if (types.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     QMimeData *data = new QMimeData();
@@ -487,7 +487,7 @@ bool KoPADocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
             if (row < 0) {
                 return false;
             }
-            KoPAPageBase *after = (row != 0) ? m_document->pageByIndex(row - 1, false) : 0;
+            KoPAPageBase *after = (row != 0) ? m_document->pageByIndex(row - 1, false) : nullptr;
             debugPageApp << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
             return doDrop(pages, after, action);
         } else {
@@ -500,9 +500,9 @@ bool KoPADocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
         }
         KoPAPageBase *after;
         if ((m_document->pageIndex(pages.first()) - 1) == parent.row()) {
-            after = (parent.row() != 0) ? m_document->pageByIndex(parent.row() - 1, false) : 0;
+            after = (parent.row() != 0) ? m_document->pageByIndex(parent.row() - 1, false) : nullptr;
         } else {
-            after = (parent.row() > -1) ? m_document->pageByIndex(parent.row(), false) : 0;
+            after = (parent.row() > -1) ? m_document->pageByIndex(parent.row(), false) : nullptr;
         }
         return doDrop(pages, after, action);
     }

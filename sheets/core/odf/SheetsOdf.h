@@ -89,7 +89,7 @@ CALLIGRA_SHEETS_CORE_EXPORT QString saveRegion(Region *region);
  * @param namespacePrefix The namespace prefix.
  * \note Use Odf::loadRegion() for plain cell references.
  */
-CALLIGRA_SHEETS_CORE_EXPORT QString decodeFormula(const QString &expression_, const Localization *locale = 0, const QString &namespacePrefix = QString());
+CALLIGRA_SHEETS_CORE_EXPORT QString decodeFormula(const QString &expression_, const Localization *locale = nullptr, const QString &namespacePrefix = QString());
 
 /**
  * Converts a localized formula to an OpenDocument representation of a formula.
@@ -97,7 +97,7 @@ CALLIGRA_SHEETS_CORE_EXPORT QString decodeFormula(const QString &expression_, co
  * @param locale The locale from which the expression should be converted.
  * \note Use Odf::saveRegion() for plain cell references.
  */
-CALLIGRA_SHEETS_CORE_EXPORT QString encodeFormula(const QString &expr, const Localization *locale = 0);
+CALLIGRA_SHEETS_CORE_EXPORT QString encodeFormula(const QString &expr, const Localization *locale = nullptr);
 
 // These are used in filters.
 CALLIGRA_SHEETS_CORE_EXPORT QString convertRefToRange(const QString &sheet, const QRect &rect);

@@ -25,11 +25,11 @@
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
     : QWidget(parent)
-    , m_style(0)
-    , m_styleManager(0)
+    , m_style(nullptr)
+    , m_styleManager(nullptr)
     , m_thumbnail(new KoStyleThumbnailer())
-    , m_paragraphStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
-    , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
+    , m_paragraphStyleModel(new StylesModel(nullptr, StylesModel::ParagraphStyle))
+    , m_characterInheritedStyleModel(new StylesModel(nullptr, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     widget.tabs->tabBar()->setExpanding(true);
@@ -76,7 +76,7 @@ void CharacterGeneral::hideStyleName(bool hide)
 void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMode)
 {
     m_style = style;
-    if (m_style == 0)
+    if (m_style == nullptr)
         return;
     blockSignals(true);
 
@@ -101,8 +101,8 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMo
 void CharacterGeneral::save(KoCharacterStyle *style)
 {
     KoCharacterStyle *savingStyle;
-    if (style == 0) {
-        if (m_style == 0)
+    if (style == nullptr) {
+        if (m_style == nullptr)
             return;
         else
             savingStyle = m_style;

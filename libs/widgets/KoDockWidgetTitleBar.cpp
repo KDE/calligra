@@ -108,8 +108,8 @@ QSize KoDockWidgetTitleBar::sizeHint() const
 
     QDockWidget *q = qobject_cast<QDockWidget *>(parentWidget());
 
-    int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
-    int fw = q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q);
+    int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, nullptr, q);
+    int fw = q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, q);
 
     // get size of buttons...
     QSize closeSize(0, 0);
@@ -355,8 +355,8 @@ void KoDockWidgetTitleBar::Private::updateIcons()
     lockButton->setIcon((!locked) ? koIcon("object-unlocked") : koIcon("object-locked"));
 
     // this method gets called when switching themes, so update all of the themed icons now
-    floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, q));
-    closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, 0, q));
+    floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, nullptr, q));
+    closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, nullptr, q));
 
     if (q->widget()) {
         collapseButton->setIcon(q->widget()->isHidden() ? closeIcon(q) : openIcon(q));

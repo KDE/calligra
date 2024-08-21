@@ -44,7 +44,7 @@ Workbook::Workbook(KoStore *store)
     d->passwordProtected = false;
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
-    d->dggContainer = 0;
+    d->dggContainer = nullptr;
     d->baseDate = QDate(1899, 12, 30).startOfDay();
 
     // initialize palette
@@ -83,7 +83,7 @@ void Workbook::clear()
     }
     d->sheets.clear();
     delete d->dggContainer;
-    d->dggContainer = 0;
+    d->dggContainer = nullptr;
 }
 
 bool Workbook::load(const char *filename)
@@ -107,7 +107,7 @@ unsigned Workbook::sheetCount() const
 Sheet *Workbook::sheet(unsigned index)
 {
     if (index >= sheetCount())
-        return (Sheet *)0;
+        return (Sheet *)nullptr;
     return d->sheets[index];
 }
 

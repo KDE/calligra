@@ -35,9 +35,9 @@ public:
         , horizontalRel(KoShapeAnchor::HChar)
         , flowWithText(true)
         , anchorType(KoShapeAnchor::AnchorToCharacter)
-        , placementStrategy(0)
+        , placementStrategy(nullptr)
         , pageNumber(-1)
-        , textLocation(0)
+        , textLocation(nullptr)
     {
     }
 
@@ -72,7 +72,7 @@ KoShapeAnchor::KoShapeAnchor(KoShape *shape)
 
 KoShapeAnchor::~KoShapeAnchor()
 {
-    if (d->placementStrategy != 0) {
+    if (d->placementStrategy != nullptr) {
         delete d->placementStrategy;
     }
 }
@@ -312,8 +312,8 @@ void KoShapeAnchor::saveOdf(KoShapeSavingContext &context) const
     }
 
     if (shape()->parent()) { // an anchor may not yet have been layout-ed
-        QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
-        QTransform shapeMatrix = shape()->absoluteTransformation(0);
+        QTransform parentMatrix = shape()->parent()->absoluteTransformation(nullptr).inverted();
+        QTransform shapeMatrix = shape()->absoluteTransformation(nullptr);
 
         qreal dx = d->offset.x() - shapeMatrix.dx() * parentMatrix.m11() - shapeMatrix.dy() * parentMatrix.m21();
         qreal dy = d->offset.y() - shapeMatrix.dx() * parentMatrix.m12() - shapeMatrix.dy() * parentMatrix.m22();

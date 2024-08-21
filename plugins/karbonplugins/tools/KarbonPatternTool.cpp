@@ -32,8 +32,8 @@
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_currentStrategy(0)
-    , m_optionsWidget(0)
+    , m_currentStrategy(nullptr)
+    , m_optionsWidget(nullptr)
 {
 }
 
@@ -152,7 +152,7 @@ void KarbonPatternTool::initialize()
         if (!selectedShapes.contains(strategy->shape()) || !strategy->shape()->isEditable()) {
             m_strategies.remove(strategy->shape());
             if (m_currentStrategy == strategy)
-                m_currentStrategy = 0;
+                m_currentStrategy = nullptr;
             delete strategy;
             continue;
         }
@@ -163,7 +163,7 @@ void KarbonPatternTool::initialize()
             // delete the gradient
             m_strategies.remove(strategy->shape());
             if (m_currentStrategy == strategy)
-                m_currentStrategy = 0;
+                m_currentStrategy = nullptr;
             delete strategy;
             continue;
         }
@@ -232,7 +232,7 @@ void KarbonPatternTool::deactivate()
     foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes())
         shape->update();
 
-    m_currentStrategy = 0;
+    m_currentStrategy = nullptr;
 }
 
 void KarbonPatternTool::documentResourceChanged(int key, const QVariant &res)

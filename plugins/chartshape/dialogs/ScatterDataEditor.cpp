@@ -34,7 +34,7 @@ public:
 
     DataProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
-        , dataSetModel(0)
+        , dataSetModel(nullptr)
     {
     }
 

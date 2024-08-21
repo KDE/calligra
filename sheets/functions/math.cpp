@@ -1306,7 +1306,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
             return Value::errorVALUE();
         a.resize(1);
         a[0] = range;
-        res = f->exec(a, calc, 0);
+        res = f->exec(a, calc, nullptr);
         break;
     case 11: // VarP
         f = FunctionRepository::self()->function("VARP");
@@ -1314,7 +1314,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
             return Value::errorVALUE();
         a.resize(1);
         a[0] = range;
-        res = f->exec(a, calc, 0);
+        res = f->exec(a, calc, nullptr);
         break;
     default:
         return Value::errorVALUE();

@@ -32,7 +32,7 @@ public:
         NameRole,
         SectionRole
     };
-    ListItem(QObject *parent = 0)
+    ListItem(QObject *parent = nullptr)
         : QObject(parent)
     {
     }
@@ -52,7 +52,7 @@ class ListModel : public QAbstractListModel
     Q_PROPERTY(int count READ count)
 
 public:
-    explicit ListModel(ListItem *prototype, QObject *parent = 0);
+    explicit ListModel(ListItem *prototype, QObject *parent = nullptr);
     ~ListModel() override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

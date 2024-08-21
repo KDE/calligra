@@ -79,10 +79,10 @@ public:
     KUndo2ViewPrivate()
         :
 #ifndef QT_NO_UNDOGROUP
-        group(0)
+        group(nullptr)
         ,
 #endif
-        model(0)
+        model(nullptr)
     {
     }
 
@@ -177,7 +177,7 @@ KUndo2QStack *KUndo2View::stack() const
 void KUndo2View::setStack(KUndo2QStack *stack)
 {
 #ifndef QT_NO_UNDOGROUP
-    setGroup(0);
+    setGroup(nullptr);
 #endif
     d->model->setStack(stack);
 }
@@ -198,17 +198,17 @@ void KUndo2View::setGroup(KUndo2Group *group)
     if (d->group == group)
         return;
 
-    if (d->group != 0) {
+    if (d->group != nullptr) {
         disconnect(d->group.data(), &KUndo2Group::activeStackChanged, d->model, &KUndo2Model::setStack);
     }
 
     d->group = group;
 
-    if (d->group != 0) {
+    if (d->group != nullptr) {
         connect(d->group.data(), &KUndo2Group::activeStackChanged, d->model, &KUndo2Model::setStack);
         d->model->setStack((KUndo2QStack *)d->group->activeStack());
     } else {
-        d->model->setStack(0);
+        d->model->setStack(nullptr);
     }
 }
 

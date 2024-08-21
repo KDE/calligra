@@ -47,8 +47,8 @@ using namespace MSOOXML;
 
 MsooXmlImport::MsooXmlImport(const QString &bodyContentElement, QObject *parent)
     : KoOdfExporter(bodyContentElement, parent)
-    , m_zip(0)
-    , m_outputStore(0)
+    , m_zip(nullptr)
+    , m_outputStore(nullptr)
 {
 }
 
@@ -86,7 +86,7 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore, K
     KZip *zip = new KZip(m_chain->inputFile());
     debugMsooXml << "Store created";
 
-    QTemporaryFile *tempFile = 0;
+    QTemporaryFile *tempFile = nullptr;
 
     if (!zip->open(QIODevice::ReadOnly)) {
         errorMessage = i18n("Could not open the requested file %1", m_chain->inputFile());
@@ -124,8 +124,8 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore, K
 
     status = openFile(writers, errorMessage);
 
-    m_zip = 0; // clear context
-    m_outputStore = 0; // clear context
+    m_zip = nullptr; // clear context
+    m_outputStore = nullptr; // clear context
 
     QImage thumbnail;
     if (status == KoFilter::OK) {
@@ -241,7 +241,7 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
     if (!QCA::isSupported("sha1") || !QCA::isSupported("aes128-ecb")) {
 #endif
         debugMsooXml << "sha1 or aes128_ecb are not supported";
-        return 0;
+        return nullptr;
 #ifdef HAVE_QCA2
     }
 

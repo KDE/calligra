@@ -14,7 +14,7 @@
 XFigStreamLineReader::XFigStreamLineReader(QIODevice *device)
     : m_TextStream(device)
     , m_ObjectCode(-1)
-    , m_HasError((device == 0) || (!device->isReadable()))
+    , m_HasError((device == nullptr) || (!device->isReadable()))
 {
 }
 

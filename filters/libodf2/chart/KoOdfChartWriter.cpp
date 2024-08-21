@@ -687,7 +687,7 @@ bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, 
             lines = (impl->style == KoChart::ScatterImpl::Line || impl->style == KoChart::ScatterImpl::LineMarker);
             marker = (impl->style == KoChart::ScatterImpl::Marker || impl->style == KoChart::ScatterImpl::LineMarker);
         }
-        const bool noLineFill = ((series->spPr != 0) && series->spPr->lineFill.type == KoChart::Fill::None);
+        const bool noLineFill = ((series->spPr != nullptr) && series->spPr->lineFill.type == KoChart::Fill::None);
         lines = lines && !noLineFill;
         lines = lines || m_chart->m_showLines;
 

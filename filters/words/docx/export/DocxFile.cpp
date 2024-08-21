@@ -100,7 +100,7 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
     KoStoreDevice metaDevice(docxStore);
     KoXmlWriter writer(&metaDevice);
 
-    writer.startDocument(0, 0, 0);
+    writer.startDocument(nullptr, nullptr, nullptr);
     writer.startElement("Relationships");
     writer.addAttribute("xmlns", "http://schemas.openxmlformats.org/package/2006/relationships");
 
@@ -143,7 +143,7 @@ KoFilter::ConversionStatus DocxFile::writeDocumentRels(KoStore *docxStore)
     KoStoreDevice metaDevice(docxStore);
     KoXmlWriter writer(&metaDevice);
 
-    writer.startDocument(0, 0, 0);
+    writer.startDocument(nullptr, nullptr, nullptr);
     writer.startElement("Relationships");
     writer.addAttribute("xmlns", "http://schemas.openxmlformats.org/package/2006/relationships");
 

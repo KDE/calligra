@@ -19,9 +19,9 @@ public:
     KoPathConnectionPointStrategyPrivate(KoToolBase *owner, KoConnectionShape *connectionShape, int handle)
         : KoParameterChangeStrategyPrivate(owner, connectionShape, handle)
         , connectionShape(connectionShape)
-        , oldConnectionShape(0)
+        , oldConnectionShape(nullptr)
         , oldConnectionId(-1)
-        , newConnectionShape(0)
+        , newConnectionShape(nullptr)
         , newConnectionId(-1)
     {
         if (handleId == 0) {

@@ -36,9 +36,9 @@
 
 KPrClickActionDocker::KPrClickActionDocker(QWidget *parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
-    , m_view(0)
-    , m_soundCollection(0)
-    , m_canvas(0)
+    , m_view(nullptr)
+    , m_soundCollection(nullptr)
+    , m_canvas(nullptr)
 {
     setObjectName("KPrClickActionDocker");
     // setup widget layout
@@ -88,7 +88,7 @@ void KPrClickActionDocker::selectionChanged()
         foreach (QWidget *widget, m_eventActionWidgets) {
             KPrEventActionWidget *actionWidget = dynamic_cast<KPrEventActionWidget *>(widget);
             if (actionWidget) {
-                KPrEventActionData data(0, 0, m_soundCollection);
+                KPrEventActionData data(nullptr, nullptr, m_soundCollection);
                 actionWidget->setData(&data);
             }
         }

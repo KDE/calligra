@@ -94,7 +94,7 @@ Value func_polr(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_pola(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // acos (a / polr(a,b))
-    Value polr = func_polr(args, calc, 0);
+    Value polr = func_polr(args, calc, nullptr);
     if (calc->isZero(polr))
         return Value::errorDIV0();
     Value res = calc->acos(calc->div(args[0], polr));

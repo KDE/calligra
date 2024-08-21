@@ -74,7 +74,7 @@ class XlsxXmlCommentsReader : public XlsxXmlCommonReader
 public:
     explicit XlsxXmlCommentsReader(KoOdfWriters *writers);
     ~XlsxXmlCommentsReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_comments();

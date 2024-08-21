@@ -40,7 +40,7 @@ KUndo2Command *KoPathPointRemoveCommand::createCommand(const QList<KoPathPointDa
     QList<KoPathPointData> sortedPointData(pointDataList);
     std::sort(sortedPointData.begin(), sortedPointData.end());
 
-    KoPathPointData last(0, KoPathPointIndex(-1, -1));
+    KoPathPointData last(nullptr, KoPathPointIndex(-1, -1));
     // add last at the end so that the point date before last will also be put in
     // the right places.
     sortedPointData.append(last);
@@ -113,7 +113,7 @@ KoPathPointRemoveCommand::KoPathPointRemoveCommand(const QList<KoPathPointData> 
         KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
         if (point) {
             d->pointDataList.append(*it);
-            d->points.append(0);
+            d->points.append(nullptr);
         }
     }
     std::sort(d->pointDataList.begin(), d->pointDataList.end());
@@ -128,7 +128,7 @@ KoPathPointRemoveCommand::~KoPathPointRemoveCommand()
 void KoPathPointRemoveCommand::redo()
 {
     KUndo2Command::redo();
-    KoPathShape *lastPathShape = 0;
+    KoPathShape *lastPathShape = nullptr;
     int updateBefore = d->pointDataList.size();
     for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
         const KoPathPointData &pd = d->pointDataList.at(i);
@@ -168,7 +168,7 @@ void KoPathPointRemoveCommand::redo()
 void KoPathPointRemoveCommand::undo()
 {
     KUndo2Command::undo();
-    KoPathShape *lastPathShape = 0;
+    KoPathShape *lastPathShape = nullptr;
     for (int i = 0; i < d->pointDataList.size(); ++i) {
         const KoPathPointData &pd = d->pointDataList.at(i);
         if (lastPathShape && lastPathShape != pd.pathShape) {

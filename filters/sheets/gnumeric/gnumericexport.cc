@@ -905,7 +905,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     */
     const QList<QString> namedAreas = map->namedAreaManager()->areaNames();
     if (namedAreas.count() > 0) {
-        SheetBase* sheet = 0;
+        SheetBase* sheet = nullptr;
         QRect range;
         QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
         for (int i = 0; i < namedAreas.count(); ++i) {
@@ -935,8 +935,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     QString str;
 
-    View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
-    Canvas * canvas = 0L;
+    View *view = ksdoc->documentPart()->views().isEmpty() ? nullptr : static_cast<View*>(ksdoc->documentPart()->views().first());
+    Canvas * canvas = nullptr;
     QString activeTableName;
     if (view) {
         canvas = view->canvasWidget();

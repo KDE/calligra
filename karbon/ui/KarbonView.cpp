@@ -140,29 +140,29 @@ public:
     Private(KarbonPart *part, KarbonDocument *doc)
         : karbonPart(part)
         , part(doc)
-        , colorBar(0)
-        , closePath(0)
-        , combinePath(0)
-        , separatePath(0)
-        , reversePath(0)
-        , intersectPath(0)
-        , subtractPath(0)
-        , unitePath(0)
-        , excludePath(0)
-        , pathSnapToGrid(0)
-        , configureAction(0)
-        , clipObjects(0)
-        , unclipObjects(0)
-        , flipVertical(0)
-        , flipHorizontal(0)
-        , viewAction(0)
-        , snapGridAction(0)
-        , showPageMargins(0)
-        , showGuidesAction(0)
-        , showPaletteAction(0)
-        , status(0)
-        , cursorCoords(0)
-        , smallPreview(0)
+        , colorBar(nullptr)
+        , closePath(nullptr)
+        , combinePath(nullptr)
+        , separatePath(nullptr)
+        , reversePath(nullptr)
+        , intersectPath(nullptr)
+        , subtractPath(nullptr)
+        , unitePath(nullptr)
+        , excludePath(nullptr)
+        , pathSnapToGrid(nullptr)
+        , configureAction(nullptr)
+        , clipObjects(nullptr)
+        , unclipObjects(nullptr)
+        , flipVertical(nullptr)
+        , flipHorizontal(nullptr)
+        , viewAction(nullptr)
+        , snapGridAction(nullptr)
+        , showPageMargins(nullptr)
+        , showGuidesAction(nullptr)
+        , showPaletteAction(nullptr)
+        , status(nullptr)
+        , cursorCoords(nullptr)
+        , smallPreview(nullptr)
     {
     }
 
@@ -334,7 +334,7 @@ void KarbonView::dropEvent(QDropEvent *e)
             QList<KoShape *> selectedShapes = selection->selectedShapes();
             foreach (KoShape *shape, selectedShapes) {
                 KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(shape->stroke());
-                KoShapeStroke *newStroke = 0;
+                KoShapeStroke *newStroke = nullptr;
                 if (stroke) {
                     newStroke = new KoShapeStroke(*stroke);
                     newStroke->setColor(color);
@@ -343,10 +343,10 @@ void KarbonView::dropEvent(QDropEvent *e)
                 }
                 strokes.append(newStroke);
             }
-            kopaCanvas()->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
+            kopaCanvas()->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, nullptr));
         } else {
             QSharedPointer<KoShapeBackground> fill(new KoColorBackground(color));
-            kopaCanvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
+            kopaCanvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, nullptr));
         }
     }
 
@@ -365,7 +365,7 @@ void KarbonView::fileImportGraphic()
     }
     filter.append(imageFilter);
 
-    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Choose Graphic to Add"));
     dialog.setMimeTypeFilters(imageFilter);
     QString fname = dialog.filename();
@@ -373,7 +373,7 @@ void KarbonView::fileImportGraphic()
     if (fname.isEmpty())
         return;
 
-    KarbonPart importPart(0);
+    KarbonPart importPart(nullptr);
     KarbonDocument importDocument(&importPart);
     importPart.setDocument(&importDocument);
 
@@ -402,19 +402,19 @@ void KarbonView::fileImportGraphic()
     if (imageFilter.contains(currentMimeFilter)) {
         QImage image;
         if (!image.load(fname)) {
-            KMessageBox::error(0, i18n("Could not load image."), i18n("Import graphic"), KMessageBox::Options());
+            KMessageBox::error(nullptr, i18n("Could not load image."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get("PictureShape");
         if (!factory) {
-            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
+            KMessageBox::error(nullptr, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
 
         KoShape *picture = factory->createDefaultShape(kopaDocument()->resourceManager());
         KoImageCollection *imageCollection = kopaDocument()->resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
-            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
+            KMessageBox::error(nullptr, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
 
@@ -1136,7 +1136,7 @@ void KarbonView::selectionChanged()
         d->unitePath->setEnabled(selectedPaths + selectedParametrics == 2);
         d->pathSnapToGrid->setEnabled(selectedPaths > 0);
         d->clipObjects->setEnabled(selectedPaths > 0 && count > 1);
-        d->unclipObjects->setEnabled(selectedShapes.first()->clipPath() != 0);
+        d->unclipObjects->setEnabled(selectedShapes.first()->clipPath() != nullptr);
         // if only one shape selected, set its parent layer as the active layer
         if (count == 1) {
             KoShapeContainer *parent = selection->selectedShapes().first()->parent();

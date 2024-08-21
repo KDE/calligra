@@ -22,7 +22,7 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:
-    explicit KPrDocument(KoPart *part = 0);
+    explicit KPrDocument(KoPart *part = nullptr);
     ~KPrDocument() override;
 
     /// reimplemented

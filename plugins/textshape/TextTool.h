@@ -137,7 +137,7 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    QRectF caretRect(QTextCursor *cursor, bool *upToDate = 0) const;
+    QRectF caretRect(QTextCursor *cursor, bool *upToDate = nullptr) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 

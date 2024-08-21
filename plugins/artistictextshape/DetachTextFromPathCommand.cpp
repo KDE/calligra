@@ -11,7 +11,7 @@
 DetachTextFromPathCommand::DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_textShape(textShape)
-    , m_pathShape(0)
+    , m_pathShape(nullptr)
 {
     setText(kundo2_i18n("Detach Path"));
 

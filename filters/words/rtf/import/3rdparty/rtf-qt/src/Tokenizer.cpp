@@ -35,7 +35,7 @@ void Tokenizer::pullControlSymbol(Token *token)
             QString hexDigits;
             hexDigits.append(QChar(highNibbleHexDigit));
             hexDigits.append(QChar(lowNibbleHexDigit));
-            uint codepoint = hexDigits.toUInt(0, 16);
+            uint codepoint = hexDigits.toUInt(nullptr, 16);
             token->type = Plain;
             token->name = QByteArray(1, codepoint);
         }

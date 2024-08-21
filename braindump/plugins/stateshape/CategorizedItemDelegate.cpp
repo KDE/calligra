@@ -34,7 +34,7 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate *_fallbac
     _fallback->setParent(this);
     d->fallback = _fallback;
     // QT5TODO: Pass correct param to KCategoryDrawer
-    d->categoryDrawer = new KCategoryDrawer(0);
+    d->categoryDrawer = new KCategoryDrawer(nullptr);
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {
@@ -54,7 +54,7 @@ bool CategorizedItemDelegate::editorEvent(QEvent *event, QAbstractItemModel *mod
 void CategorizedItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &_option, const QModelIndex &index) const
 {
     // We will need to edit the option to make sure the header isn't drawned as selected
-    QStyleOptionViewItem *option = 0;
+    QStyleOptionViewItem *option = nullptr;
     if (const QStyleOptionViewItem *v4 = qstyleoption_cast<const QStyleOptionViewItem *>(&_option)) {
         option = new QStyleOptionViewItem(*v4);
     } else {

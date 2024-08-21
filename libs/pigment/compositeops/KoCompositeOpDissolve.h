@@ -63,7 +63,7 @@ public:
 
         //         quint32       ctr       = quint32(reinterpret_cast<quint64>(dstRowStart) % 256);
         qint32 srcInc = (srcRowStride == 0) ? 0 : channels_nb;
-        bool useMask = maskRowStart != 0;
+        bool useMask = maskRowStart != nullptr;
         channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
         channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
 

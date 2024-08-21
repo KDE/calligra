@@ -64,7 +64,7 @@ public:
      *  Uses the factory of the component to create
      *  a part. If that is not possible, 0 is returned.
      */
-    KoPart *createKoPart(QString *errorMsg = 0) const;
+    KoPart *createKoPart(QString *errorMsg = nullptr) const;
 
     /**
      *  This function will query ksycoca to find all available components for the requested mimetype.

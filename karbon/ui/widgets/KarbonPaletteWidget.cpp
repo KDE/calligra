@@ -16,7 +16,7 @@ KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     : QWidget(parent)
     , m_orientation(Qt::Horizontal)
     , m_scrollOffset(0)
-    , m_palette(0)
+    , m_palette(nullptr)
     , m_pressedIndex(-1)
     , m_hasDragged(false)
 {

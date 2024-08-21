@@ -33,7 +33,7 @@ class CALLIGRA_SHEETS_CORE_EXPORT SheetPrint : public QObject
 {
     Q_OBJECT
 public:
-    explicit SheetPrint(Sheet *sheet = 0);
+    explicit SheetPrint(Sheet *sheet = nullptr);
     SheetPrint(const SheetPrint &other);
     ~SheetPrint();
 

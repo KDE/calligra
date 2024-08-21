@@ -29,9 +29,9 @@ public:
 
     ParsedPresentation()
     {
-        documentContainer = 0;
-        notesMaster = 0;
-        handoutMaster = 0;
+        documentContainer = nullptr;
+        notesMaster = nullptr;
+        handoutMaster = nullptr;
     }
 
     const MSO::MasterOrSlideContainer *getMaster(const MSO::SlideContainer *slide) const;

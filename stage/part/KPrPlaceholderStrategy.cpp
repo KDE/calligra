@@ -71,7 +71,7 @@ KPrPlaceholderStrategy *KPrPlaceholderStrategy::create(const QString &presentati
         fillPlaceholderMap();
     }
 
-    KPrPlaceholderStrategy *strategy = 0;
+    KPrPlaceholderStrategy *strategy = nullptr;
     if (presentationClass == "graphic") {
         strategy = new KPrPlaceholderPictureStrategy();
     }
@@ -108,7 +108,7 @@ KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
 
 KoShape *KPrPlaceholderStrategy::createShape(KoDocumentResourceManager *rm)
 {
-    KoShape *shape = 0;
+    KoShape *shape = nullptr;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(m_placeholderData->m_shapeId);
     Q_ASSERT(factory);
     if (factory) {
@@ -161,5 +161,5 @@ void KPrPlaceholderStrategy::init(KoDocumentResourceManager *)
 
 KoShapeUserData *KPrPlaceholderStrategy::userData() const
 {
-    return 0;
+    return nullptr;
 }

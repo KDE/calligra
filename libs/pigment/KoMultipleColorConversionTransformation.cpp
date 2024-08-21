@@ -41,7 +41,7 @@ void KoMultipleColorConversionTransformation::transform(const quint8 *src, quint
 {
     Q_ASSERT(d->transfos.size() > 1); // Be sure to have a more than one transformation
     quint8 *buff1 = new quint8[d->maxPixelSize * nPixels];
-    quint8 *buff2 = 0;
+    quint8 *buff2 = nullptr;
     if (d->transfos.size() > 2) {
         buff2 = new quint8[d->maxPixelSize * nPixels]; // a second buffer is needed
     }

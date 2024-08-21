@@ -109,7 +109,7 @@ void TestPACopyPastePage::copyPasteSinglePage()
     QVERIFY(page1 != page3);
     QVERIFY(page2 != page3);
 
-    copyAndPaste(&doc, pages, 0);
+    copyAndPaste(&doc, pages, nullptr);
 
     QCOMPARE(doc.pages(true).size(), 1);
     QCOMPARE(doc.pages(false).size(), 4);
@@ -164,7 +164,7 @@ void TestPACopyPastePage::copyPasteSingleMasterPage()
     QVERIFY(master1 != master3);
     QVERIFY(master2 != master3);
 
-    copyAndPaste(&doc, pages, 0);
+    copyAndPaste(&doc, pages, nullptr);
 
     QCOMPARE(doc.pages(false).size(), 1);
     QCOMPARE(doc.pages(true).size(), 4);
@@ -208,9 +208,9 @@ void TestPACopyPastePage::copyPasteMultiplePages()
     KoPAPage *page4 = dynamic_cast<KoPAPage *>(doc.pages(false)[2]);
     KoPAPage *page5 = dynamic_cast<KoPAPage *>(doc.pages(false)[3]);
 
-    QVERIFY(page4 != 0);
+    QVERIFY(page4 != nullptr);
     QVERIFY(page4->masterPage() == master1);
-    QVERIFY(page5 != 0);
+    QVERIFY(page5 != nullptr);
     QVERIFY(page5->masterPage() == master2);
 
     QList<KoPAPageBase *> masterPages;
@@ -222,7 +222,7 @@ void TestPACopyPastePage::copyPasteMultiplePages()
     QVERIFY(doc.pages(true)[1] == master2);
 
     KoPAMasterPage *master3 = dynamic_cast<KoPAMasterPage *>(doc.pages(true)[2]);
-    QVERIFY(master3 != 0);
+    QVERIFY(master3 != nullptr);
 
     KoPAPage *page6 = new KoPAPage(master3);
     doc.insertPage(page6, page3);
@@ -246,13 +246,13 @@ void TestPACopyPastePage::copyPasteMultiplePages()
     KoPAPage *page9 = dynamic_cast<KoPAPage *>(doc.pages(false)[8]);
 
     KoPAMasterPage *master4 = dynamic_cast<KoPAMasterPage *>(doc.pages(true)[3]);
-    QVERIFY(master4 != 0);
+    QVERIFY(master4 != nullptr);
 
-    QVERIFY(page7 != 0);
+    QVERIFY(page7 != nullptr);
     QVERIFY(page7->masterPage() == master1);
-    QVERIFY(page8 != 0);
+    QVERIFY(page8 != nullptr);
     QVERIFY(page8->masterPage() == master4);
-    QVERIFY(page9 != 0);
+    QVERIFY(page9 != nullptr);
     QVERIFY(page9->masterPage() == master1);
 }
 
@@ -280,9 +280,9 @@ void TestPACopyPastePage::copyPasteMultipleMasterPages()
     QVERIFY(doc.pages(true)[1] == master2);
 
     KoPAMasterPage *master3 = dynamic_cast<KoPAMasterPage *>(doc.pages(true)[2]);
-    QVERIFY(master3 != 0);
+    QVERIFY(master3 != nullptr);
     KoPAMasterPage *master4 = dynamic_cast<KoPAMasterPage *>(doc.pages(true)[3]);
-    QVERIFY(master4 != 0);
+    QVERIFY(master4 != nullptr);
 }
 
 void TestPACopyPastePage::copyPasteMixedPages()

@@ -146,7 +146,7 @@ public:
      * @param selectionHandles if true; find out if the shape is selected and repaint its
      *   selection handles at the same time.
      */
-    void update(QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false);
+    void update(QRectF &rect, const KoShape *shape = nullptr, bool selectionHandles = false);
 
     /**
      * Update the tree for finding the shapes.

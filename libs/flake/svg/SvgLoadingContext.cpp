@@ -22,7 +22,7 @@ class Q_DECL_HIDDEN SvgLoadingContext::Private
 public:
     Private()
         : zIndex(0)
-        , styleParser(0)
+        , styleParser(nullptr)
     {
     }
 
@@ -60,7 +60,7 @@ SvgLoadingContext::~SvgLoadingContext()
 SvgGraphicsContext *SvgLoadingContext::currentGC() const
 {
     if (d->gcStack.isEmpty())
-        return 0;
+        return nullptr;
 
     return d->gcStack.top();
 }

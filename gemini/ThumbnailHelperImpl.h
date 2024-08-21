@@ -17,7 +17,7 @@ class ThumbnailHelperImpl : public QObject
 {
     Q_OBJECT
 public:
-    explicit ThumbnailHelperImpl(QObject *parent = 0);
+    explicit ThumbnailHelperImpl(QObject *parent = nullptr);
     ~ThumbnailHelperImpl() override;
 
     bool convert(const QString &in, const QString &out, int width, int height);

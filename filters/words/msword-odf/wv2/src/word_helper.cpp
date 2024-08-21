@@ -30,14 +30,14 @@ STTBF::STTBF(U16 lid, OLEStreamReader *reader, bool preservePos)
 {
     if (preservePos)
         reader->push();
-    init(lid, reader, 0);
+    init(lid, reader, nullptr);
     if (preservePos)
         reader->pop();
 }
 
 STTBF::STTBF(U16 lid, const U8 *ptr)
 {
-    init(lid, 0, ptr);
+    init(lid, nullptr, ptr);
 }
 
 STTBF::STTBF(const STTBF &rhs)
@@ -113,23 +113,23 @@ const U8 *STTBF::firstExtra() const
     m_extraIt = m_extraData.begin();
     if (m_extraIt != m_extraData.end())
         return *m_extraIt;
-    return 0;
+    return nullptr;
 }
 
 const U8 *STTBF::nextExtra() const
 {
     if (m_extraIt == m_extraData.end())
-        return 0;
+        return nullptr;
     ++m_extraIt;
     if (m_extraIt != m_extraData.end())
         return *m_extraIt;
-    return 0;
+    return nullptr;
 }
 
 const U8 *STTBF::prevExtra() const
 {
     if (m_extraData.size() == 0)
-        return 0;
+        return nullptr;
     if (m_extraIt != m_extraData.begin())
         --m_extraIt;
     return *m_extraIt;
@@ -139,7 +139,7 @@ const U8 *STTBF::lastExtra() const
 {
     m_extraIt = m_extraData.end();
     if (m_extraIt == m_extraData.begin())
-        return 0;
+        return nullptr;
     --m_extraIt;
     return *m_extraIt;
 }
@@ -148,7 +148,7 @@ const U8 *STTBF::extraAt(unsigned int index) const
 {
     if (index < m_extraData.size())
         return m_extraData[index];
-    return 0;
+    return nullptr;
 }
 
 void STTBF::dumpStrings() const
@@ -173,7 +173,7 @@ void STTBF::init(U16 lid, OLEStreamReader *reader, const U8 *ptr)
     m_extraDataLength = readU16(reader, &ptr);
 
     // If we don't read unicode strings we have to set up a text converter
-    TextConverter *textconverter = 0;
+    TextConverter *textconverter = nullptr;
     if (!extended)
         textconverter = new TextConverter(lid);
 

@@ -25,7 +25,7 @@ MergeCommand::MergeCommand(KUndo2Command *parent)
     , m_merge(true)
     , m_mergeHorizontal(false)
     , m_mergeVertical(false)
-    , m_selection(0)
+    , m_selection(nullptr)
 {
     m_checkLock = true;
 }
@@ -93,7 +93,7 @@ KUndo2MagicString MergeCommand::name() const
 bool MergeCommand::preProcess()
 {
     if (isColumnOrRowSelected()) {
-        KMessageBox::information(0, i18n("Merging of columns or rows is not supported."));
+        KMessageBox::information(nullptr, i18n("Merging of columns or rows is not supported."));
         return false;
     }
 

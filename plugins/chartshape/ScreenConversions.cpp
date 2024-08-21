@@ -59,7 +59,7 @@ void ScreenConversions::scaleFromPtToPx(QPainter &painter)
     const qreal inPerPt = KoUnit::toInch(1.0);
     int dpiX;
     int dpiY;
-    if (dynamic_cast<QWidget *>(painter.device()) != 0) {
+    if (dynamic_cast<QWidget *>(painter.device()) != nullptr) {
         dpiX = KoDpi::dpiX();
         dpiY = KoDpi::dpiY();
     } else {
@@ -77,8 +77,8 @@ QSize ScreenConversions::scaleFromPtToPx(const QSizeF &size, const QPaintDevice 
 QSize ScreenConversions::scaleFromPtToPx(const QSizeF &size, QPainter &painter)
 {
     QPaintDevice *paintDevice = painter.device();
-    if (dynamic_cast<QWidget *>(paintDevice) != 0) {
-        paintDevice = 0;
+    if (dynamic_cast<QWidget *>(paintDevice) != nullptr) {
+        paintDevice = nullptr;
     }
 
     return scaleFromPtToPx(size, paintDevice);
@@ -102,8 +102,8 @@ QPoint ScreenConversions::scaleFromPtToPx(const QPointF &point, const QPaintDevi
 QRect ScreenConversions::scaleFromPtToPx(const QRectF &rect, QPainter &painter)
 {
     QPaintDevice *paintDevice = painter.device();
-    if (dynamic_cast<QWidget *>(paintDevice) != 0) {
-        paintDevice = 0;
+    if (dynamic_cast<QWidget *>(paintDevice) != nullptr) {
+        paintDevice = nullptr;
     }
 
     return QRect(scaleFromPtToPx(rect.topLeft(), paintDevice), scaleFromPtToPx(rect.size(), paintDevice));

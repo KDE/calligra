@@ -22,7 +22,7 @@ void TestSelection::initialize()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -100,7 +100,7 @@ void TestSelection::update()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -170,7 +170,7 @@ void TestSelection::extend()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -275,7 +275,7 @@ void TestSelection::activeElement()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -322,7 +322,7 @@ void TestSelection::referenceSelectionMode()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -378,7 +378,7 @@ void TestSelection::covering()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 
@@ -419,7 +419,7 @@ void TestSelection::splitting()
     map.addSheet(sheet1);
     Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
-    Canvas canvas(0);
+    Canvas canvas(nullptr);
     Selection selection(&canvas);
     selection.setActiveSheet(sheet1);
 

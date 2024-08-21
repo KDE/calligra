@@ -67,8 +67,8 @@ wvWare::U8 WordsReplacementHandler::nonRequiredHyphen()
 }
 
 WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter *bodyWriter, KoGenStyles *mainStyles)
-    : m_mainStyles(0)
-    , m_document(0)
+    : m_mainStyles(nullptr)
+    , m_document(nullptr)
     , m_parser(parser)
     , m_sectionNumber(0)
     , m_tocNumber(0)
@@ -77,23 +77,23 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_hasStoredDropCap(false)
     , m_breakBeforePage(false)
     , m_insideFootnote(false)
-    , m_footnoteWriter(0)
-    , m_footnoteBuffer(0)
+    , m_footnoteWriter(nullptr)
+    , m_footnoteBuffer(nullptr)
     , m_insideAnnotation(false)
-    , m_annotationWriter(0)
-    , m_annotationBuffer(0)
+    , m_annotationWriter(nullptr)
+    , m_annotationBuffer(nullptr)
     , m_insideDrawing(false)
-    , m_drawingWriter(0)
-    , m_paragraph(0)
-    , m_currentTable(0)
-    , m_tableWriter(0)
-    , m_tableBuffer(0)
+    , m_drawingWriter(nullptr)
+    , m_paragraph(nullptr)
+    , m_currentTable(nullptr)
+    , m_tableWriter(nullptr)
+    , m_tableBuffer(nullptr)
     , m_currentListLevel(-1)
     , m_currentListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
-    , m_fldChp(0)
+    , m_fldChp(nullptr)
     , m_textBoxX(0)
     , m_textBoxY(0)
 //     , m_index(0)
@@ -459,13 +459,13 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
     m_insideFootnote = false;
 
     QString contents = QString::fromUtf8(m_footnoteBuffer->buffer(), m_footnoteBuffer->buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+    m_paragraph->addRunOfText(contents, nullptr, QString(""), m_parser->styleSheet());
 
     // cleanup
     delete m_footnoteWriter;
-    m_footnoteWriter = 0;
+    m_footnoteWriter = nullptr;
     delete m_footnoteBuffer;
-    m_footnoteBuffer = 0;
+    m_footnoteBuffer = nullptr;
 
     // bool autoNumbered = (character.unicode() == 2);
     // QDomElement varElem = insertVariable( 11 /*Words code for footnotes*/, chp, "STRI" );
@@ -521,7 +521,7 @@ void WordsTextHandler::bookmarkStart(const wvWare::BookmarkData &data)
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
+        m_paragraph->addRunOfText(content, nullptr, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
@@ -558,7 +558,7 @@ void WordsTextHandler::bookmarkEnd(const wvWare::BookmarkData &data)
 
     if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), true);
+        m_paragraph->addRunOfText(content, nullptr, QString(""), m_parser->styleSheet(), true);
         delete writer;
     }
 }
@@ -599,13 +599,13 @@ void WordsTextHandler::annotationFound(wvWare::UString characters,
     m_insideAnnotation = false;
 
     QString contents = QString::fromUtf8(m_annotationBuffer->buffer(), m_annotationBuffer->buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+    m_paragraph->addRunOfText(contents, nullptr, QString(""), m_parser->styleSheet());
 
     // cleanup
     delete m_annotationWriter;
-    m_annotationWriter = 0;
+    m_annotationWriter = nullptr;
     delete m_annotationBuffer;
-    m_annotationBuffer = 0;
+    m_annotationBuffer = nullptr;
 }
 
 void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor &functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
@@ -681,14 +681,14 @@ void WordsTextHandler::tableEndFound()
 
     // must delete table in Document!
     Q_EMIT tableFound(m_currentTable);
-    m_currentTable = 0L;
+    m_currentTable = nullptr;
 
     if (floating) {
         m_floatingTable = QString::fromUtf8(m_tableBuffer->buffer(), m_tableBuffer->buffer().size());
         delete m_tableWriter;
-        m_tableWriter = 0;
+        m_tableWriter = nullptr;
         delete m_tableBuffer;
-        m_tableBuffer = 0;
+        m_tableBuffer = nullptr;
     }
 }
 
@@ -708,7 +708,7 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
     saveState();
 
     // Create temporary writer for the picture tags.
-    KoXmlWriter *writer = 0;
+    KoXmlWriter *writer = nullptr;
     QBuffer buf;
 
     buf.open(QIODevice::WriteOnly);
@@ -738,7 +738,7 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
     }
     // cleanup
     delete m_drawingWriter;
-    m_drawingWriter = 0;
+    m_drawingWriter = nullptr;
     m_insideDrawing = false;
 
     // restore the state
@@ -746,7 +746,7 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
 
     // now add content to our current paragraph
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
+    m_paragraph->addRunOfText(contents, nullptr, QString(""), m_parser->styleSheet(), true);
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
@@ -768,7 +768,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     bool inStylesDotXml = document()->writingHeader();
 
     const wvWare::StyleSheet &styles = m_parser->styleSheet();
-    const wvWare::Style *paragraphStyle = 0;
+    const wvWare::Style *paragraphStyle = nullptr;
 
     // Check list information, because that's bigger than a paragraph, and
     // we'll track that here in the TextHandler.
@@ -887,7 +887,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     // insert the floating table at the beginning
     if (!m_floatingTable.isEmpty()) {
-        m_paragraph->addRunOfText(m_floatingTable, 0, QString(""), m_parser->styleSheet());
+        m_paragraph->addRunOfText(m_floatingTable, nullptr, QString(""), m_parser->styleSheet());
         m_floatingTable.clear();
     }
 
@@ -982,7 +982,7 @@ void WordsTextHandler::paragraphEnd()
     m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
     delete m_paragraph;
-    m_paragraph = 0;
+    m_paragraph = nullptr;
 } // end paragraphEnd()
 
 void WordsTextHandler::fieldStart(const wvWare::FLD *fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
@@ -1671,7 +1671,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD *fld, wvWare::SharedPtr<const 
 
     // reset
     delete m_fld;
-    m_fld = 0;
+    m_fld = nullptr;
     m_fldEnd++;
 
     // nested field
@@ -1684,7 +1684,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD *fld, wvWare::SharedPtr<const 
             // add writer content to m_paragraph as a runOfText with text style
             m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
-        m_fldChp = 0;
+        m_fldChp = nullptr;
     }
 } // end fieldEnd()
 
@@ -2191,7 +2191,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
             m_mainStyles->insertFontFace(KoFontFace(fontName));
             textStyle.addProperty("style:font-name", fontName, KoGenStyle::TextType);
         }
-        m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
+        m_paragraph->applyCharacterProperties(chp, &textStyle, nullptr);
     } else {
         debugMsDoc << "Missing CHPs for the label!";
     }
@@ -2241,12 +2241,12 @@ void WordsTextHandler::saveState()
 {
     debugMsDoc;
     m_oldStates.push(State(m_currentTable, m_paragraph, m_currentListLevel, m_currentListID, m_drawingWriter, m_insideDrawing));
-    m_currentTable = 0;
-    m_paragraph = 0;
+    m_currentTable = nullptr;
+    m_paragraph = nullptr;
     m_currentListLevel = -1;
     m_currentListID = 0;
 
-    m_drawingWriter = 0;
+    m_drawingWriter = nullptr;
     m_insideDrawing = false;
 }
 
@@ -2262,13 +2262,13 @@ void WordsTextHandler::restoreState()
     m_oldStates.pop();
 
     // warn if pointers weren't reset properly, but restore state anyway
-    if (m_paragraph != 0) {
+    if (m_paragraph != nullptr) {
         warnMsDoc << "Warning: m_paragraph pointer wasn't reset!";
     }
-    if (m_currentTable != 0) {
+    if (m_currentTable != nullptr) {
         warnMsDoc << "Warning: m_currentTable pointer wasn't reset!";
     }
-    if (m_drawingWriter != 0) {
+    if (m_drawingWriter != nullptr) {
         warnMsDoc << "Warning: m_drawingWriter pointer wasn't reset!";
     }
 
@@ -2286,7 +2286,7 @@ void WordsTextHandler::fld_saveState()
     m_fldStates.push(m_fld);
 
     // reset fields related variables
-    m_fld = 0;
+    m_fld = nullptr;
 }
 
 void WordsTextHandler::fld_restoreState()
@@ -2298,10 +2298,10 @@ void WordsTextHandler::fld_restoreState()
     }
 
     // warn if pointers weren't reset properly, but restore state anyway
-    if (m_fld && m_fld->m_writer != 0) {
+    if (m_fld && m_fld->m_writer != nullptr) {
         warnMsDoc << "m_fld->m_writer pointer wasn't reset";
     }
-    if (m_fld && m_fld->m_buffer != 0) {
+    if (m_fld && m_fld->m_buffer != nullptr) {
         warnMsDoc << "m_fld->m_buffer pointer wasn't reset";
     }
 

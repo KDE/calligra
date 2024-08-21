@@ -41,7 +41,7 @@ TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
     : KUndo2Command(parent)
     , m_mimeData(mimeData)
     , m_document(document)
-    , m_rdf(0)
+    , m_rdf(nullptr)
     , m_shapeController(shapeController)
     , m_canvas(canvas)
     , m_pasteAsText(pasteAsText)

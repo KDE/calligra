@@ -31,7 +31,7 @@ class KOMSOOXML_EXPORT VmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit VmlDrawingReader(KoOdfWriters *writers);
     ~VmlDrawingReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
     QMap<QString, QString> content();
     QMap<QString, QString> frames();

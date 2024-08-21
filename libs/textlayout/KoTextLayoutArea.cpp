@@ -80,7 +80,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 {
     QPointF point = p - QPointF(0, d->verticalAlignOffset);
 
-    if (d->startOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == nullptr) // We have not been layouted yet
         return KoPointedAt();
 
     KoPointedAt pointedAt;
@@ -141,7 +141,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
         ++next;
-        if (next != stop && next.currentFrame() == 0 && point.y() > layout->boundingRect().bottom()) {
+        if (next != stop && next.currentFrame() == nullptr && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
         }
@@ -208,7 +208,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 QVector<KoCharAreaInfo> KoTextLayoutArea::generateCharAreaInfos() const
 {
     QVector<KoCharAreaInfo> result;
-    if (d->startOfArea == 0 || d->endOfArea == 0) { // We have not been completely layouted yet
+    if (d->startOfArea == nullptr || d->endOfArea == nullptr) { // We have not been completely layouted yet
         debugTextLayout << "called when not completely layouted yet";
         return result;
     }
@@ -295,9 +295,9 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval(-5E6, top(), 105E6, 0);
 
-    if (d->startOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == nullptr) // We have not been layouted yet
         return QRectF();
-    if (d->endOfArea == 0) // no end area yet
+    if (d->endOfArea == nullptr) // no end area yet
         return QRectF();
 
     QTextFrame::iterator it = d->startOfArea->it;
@@ -480,10 +480,10 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->generatedDocAreas.clear();
     d->blockRects.clear();
     delete d->endNotesArea;
-    d->endNotesArea = 0;
+    d->endNotesArea = nullptr;
     if (d->copyEndOfArea && !d->copyEndOfArea->isValid()) {
         delete d->copyEndOfArea;
-        d->copyEndOfArea = 0;
+        d->copyEndOfArea = nullptr;
     }
     if (d->endOfArea && d->endOfArea->isValid()) {
         delete d->copyEndOfArea;
@@ -495,7 +495,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->dropCapsDistance = 0;
 
     d->startOfArea = new FrameIterator(cursor);
-    d->endOfArea = 0;
+    d->endOfArea = nullptr;
     d->y = top();
     d->neededWidth = 0;
     setBottom(top());
@@ -503,7 +503,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->footNoteAutoCount = 0;
     d->footNotesHeight = 0;
     d->preregisteredFootNotesHeight = 0;
-    d->prevBorder = 0;
+    d->prevBorder = nullptr;
     d->prevBorderPadding = 0;
 
     if (d->footNoteCursorFromPrevious) {
@@ -565,10 +565,10 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             d->bottomSpacing = 0;
             d->y = tableArea->bottom();
             delete cursor->currentTableIterator;
-            cursor->currentTableIterator = 0;
+            cursor->currentTableIterator = nullptr;
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
-                Q_ASSERT(d->endNotesArea == 0);
+                Q_ASSERT(d->endNotesArea == nullptr);
                 d->endNotesArea = new KoTextLayoutEndNotesArea(this, d->documentLayout);
                 d->y += d->bottomSpacing;
                 if (!d->blockRects.isEmpty()) {
@@ -592,7 +592,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 d->bottomSpacing = 0;
                 d->y = d->endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
-                cursor->currentSubFrameIterator = 0;
+                cursor->currentSubFrameIterator = nullptr;
 
                 // we have layouted till the end of the document except for a blank block
                 // which we should ignore
@@ -641,7 +641,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 d->y = area->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->lineTextStart = -1; // fake we are done
-                cursor->currentSubFrameIterator = 0;
+                cursor->currentSubFrameIterator = nullptr;
             } else {
                 // FIXME this doesn't work for cells inside tables. We probably should make it more
                 // generic to handle such cases too.
@@ -969,7 +969,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 dropCapsHeight += lineHeight * dropCapsLines;
 
                 int dropCapsStyleId = pStyle.dropCapsTextStyleId();
-                KoCharacterStyle *dropCapsCharStyle = 0;
+                KoCharacterStyle *dropCapsCharStyle = nullptr;
                 if (dropCapsStyleId > 0 && d->documentLayout->styleManager()) {
                     dropCapsCharStyle = d->documentLayout->styleManager()->characterStyle(dropCapsStyleId);
                     dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
@@ -1930,7 +1930,7 @@ void KoTextLayoutArea::setBottom(qreal bottom)
 
 void KoTextLayoutArea::findFootNotes(const QTextBlock &block, const QTextLine &line, qreal bottomOfText)
 {
-    if (d->documentLayout->inlineTextObjectManager() == 0) {
+    if (d->documentLayout->inlineTextObjectManager() == nullptr) {
         return;
     }
     QString text = block.text();
@@ -1952,7 +1952,7 @@ void KoTextLayoutArea::findFootNotes(const QTextBlock &block, const QTextLine &l
 
 qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, qreal bottomOfText)
 {
-    if (d->parent == 0) {
+    if (d->parent == nullptr) {
         // TODO to support footnotes at end of document this is
         // where we need to add some extra condition
         if (note->autoNumbering()) {
@@ -1974,8 +1974,8 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, qreal bottomOfTe
             bool contNotNeeded = footNoteArea->layout(d->footNoteCursorToNext);
             if (contNotNeeded) {
                 delete d->footNoteCursorToNext;
-                d->footNoteCursorToNext = 0;
-                d->continuedNoteToNext = 0;
+                d->footNoteCursorToNext = nullptr;
+                d->continuedNoteToNext = nullptr;
             } else {
                 d->continuedNoteToNext = note;
                 // layout again now it has set up a continuationObstruction
@@ -1983,7 +1983,7 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, qreal bottomOfTe
                 d->footNoteCursorToNext = new FrameIterator(subFrame);
                 footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottomOfText);
                 footNoteArea->layout(d->footNoteCursorToNext);
-                documentLayout()->setContinuationObstruction(0); // remove it again
+                documentLayout()->setContinuationObstruction(nullptr); // remove it again
             }
             d->preregisteredFootNotesHeight += footNoteArea->bottom() - footNoteArea->top();
             d->preregisteredFootNoteAreas.append(footNoteArea);
@@ -2142,7 +2142,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData &blockData, QText
             d->y += d->prevBorderPadding;
             d->y += d->prevBorder->inset(KoTextBlockBorderData::Bottom);
         }
-        blockData.setBorder(0); // remove an old one, if there was one.
+        blockData.setBorder(nullptr); // remove an old one, if there was one.
         if (!d->blockRects.isEmpty()) {
             d->blockRects.last().setBottom(d->y);
         }

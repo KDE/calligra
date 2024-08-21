@@ -42,7 +42,7 @@ using namespace Calligra::Sheets;
 AbstractRegionCommand::AbstractRegionCommand(KUndo2Command *parent)
     : Region()
     , KUndo2Command(parent)
-    , m_sheet(0)
+    , m_sheet(nullptr)
     , m_firstrun(true)
     , m_register(true)
     , m_success(true)

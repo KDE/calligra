@@ -16,9 +16,9 @@
 QGradient *KoFlake::cloneGradient(const QGradient *gradient)
 {
     if (!gradient)
-        return 0;
+        return nullptr;
 
-    QGradient *clone = 0;
+    QGradient *clone = nullptr;
 
     switch (gradient->type()) {
     case QGradient::LinearGradient: {
@@ -37,7 +37,7 @@ QGradient *KoFlake::cloneGradient(const QGradient *gradient)
         break;
     }
     default:
-        return 0;
+        return nullptr;
     }
 
     clone->setCoordinateMode(gradient->coordinateMode());

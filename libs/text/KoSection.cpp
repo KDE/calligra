@@ -28,11 +28,11 @@ public:
     explicit KoSectionPrivate(const QTextCursor &cursor, const QString &_name, KoSection *_parent)
         : document(cursor.block().document())
         , name(_name)
-        , sectionStyle(0)
+        , sectionStyle(nullptr)
         , boundingCursorStart(cursor)
         , boundingCursorEnd(cursor)
         , parent(_parent)
-        , inlineRdf(0)
+        , inlineRdf(nullptr)
     {
     }
 
@@ -136,7 +136,7 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
                 d->inlineRdf = inlineRdf;
             } else {
                 delete inlineRdf;
-                inlineRdf = 0;
+                inlineRdf = nullptr;
             }
         }
 

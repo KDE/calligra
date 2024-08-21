@@ -16,10 +16,10 @@
 TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::TableOfContentsStyleConfigure)
-    , m_stylesTree(0)
+    , m_stylesTree(nullptr)
     , m_styleManager(manager)
-    , m_tocInfo(0)
-    , m_stylesModel(0)
+    , m_tocInfo(nullptr)
+    , m_stylesModel(nullptr)
 {
     ui->setupUi(this);
     setWindowTitle(i18n("Table of Contents - Configure Styles"));
@@ -64,7 +64,7 @@ void TableOfContentsStyleConfigure::save()
     if (m_stylesModel) {
         m_stylesModel->saveData();
         delete m_stylesModel;
-        m_stylesModel = 0;
+        m_stylesModel = nullptr;
     }
 
     disconnect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);
@@ -75,7 +75,7 @@ void TableOfContentsStyleConfigure::discardChanges()
 {
     if (m_stylesModel) {
         delete m_stylesModel;
-        m_stylesModel = 0;
+        m_stylesModel = nullptr;
     }
 
     disconnect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);

@@ -47,8 +47,8 @@ public:
     /// destructor
     virtual ~VideoData();
 
-    void setExternalVideo(const QUrl &location, bool saveInternal, VideoCollection *collection = 0);
-    void setVideo(const QString &location, KoStore *store, VideoCollection *collection = 0);
+    void setExternalVideo(const QUrl &location, bool saveInternal, VideoCollection *collection = nullptr);
+    void setVideo(const QString &location, KoStore *store, VideoCollection *collection = nullptr);
     // void setVideo(const QUrl &location);
 
     /**

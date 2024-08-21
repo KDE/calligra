@@ -20,7 +20,7 @@
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)
-    , m_effect(0)
+    , m_effect(nullptr)
 {
     QGridLayout *g = new QGridLayout(this);
 
@@ -51,7 +51,7 @@ void ImageEffectConfigWidget::selectImage()
     if (!m_effect)
         return;
 
-    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select image"));
     dialog.setImageFilters();
 

@@ -89,25 +89,25 @@ public:
     KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *) const override
     {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
-        return 0;
+        return nullptr;
     }
 
     virtual KoColorTransformation *createDesaturateAdjustment() const
     {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
-        return 0;
+        return nullptr;
     }
 
     KoColorTransformation *createPerChannelAdjustment(const quint16 *const *) const override
     {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
-        return 0;
+        return nullptr;
     }
 
     KoColorTransformation *createDarkenAdjustment(qint32, bool, qreal) const override
     {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
-        return 0;
+        return nullptr;
     }
 
     virtual void invertColor(quint8 *, qint32) const

@@ -81,7 +81,7 @@ private:
 
 WebToolWidget::WebToolWidget(WebTool *_tool)
     : m_tool(_tool)
-    , m_shape(0)
+    , m_shape(nullptr)
 {
     m_widget.setupUi(this);
     connect(m_widget.urlEdit, SIGNAL(editingFinished()), SLOT(save()));
@@ -129,7 +129,7 @@ KUndo2Command *WebToolWidget::createCommand()
 {
     save();
 
-    return 0;
+    return nullptr;
 }
 
 WebShape *WebToolWidget::shape()

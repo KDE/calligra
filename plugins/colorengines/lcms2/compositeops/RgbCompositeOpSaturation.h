@@ -50,7 +50,7 @@ public:
                 srcAlpha = qMin(srcAlpha, dstAlpha);
 
                 // apply the alphamask
-                if (mask != 0) {
+                if (mask != nullptr) {
                     if (*mask != OPACITY_OPAQUE_U8) {
                         channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(*mask);
                         srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);

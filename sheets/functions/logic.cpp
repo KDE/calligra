@@ -78,7 +78,7 @@ QString LogicModule::descriptionFileName() const
 }
 
 // helper for most logical functions
-static bool asBool(Value val, ValueCalc *calc, bool *ok = 0)
+static bool asBool(Value val, ValueCalc *calc, bool *ok = nullptr)
 {
     return calc->conv()->asBoolean(val, ok).asBoolean();
 }

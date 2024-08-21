@@ -58,7 +58,7 @@ bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
 
 CropWidget::CropWidget(QWidget *parent)
     : QWidget(parent)
-    , m_pictureShape(0)
+    , m_pictureShape(nullptr)
     , m_isMousePressed(false)
     , m_undoLast(false)
 {

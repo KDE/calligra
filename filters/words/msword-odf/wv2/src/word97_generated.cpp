@@ -8142,7 +8142,7 @@ void SEPX::clear()
 void SEPX::clearInternal()
 {
     cb = 0;
-    grpprl = 0;
+    grpprl = nullptr;
 }
 
 bool operator==(const SEPX &lhs, const SEPX &rhs)

@@ -287,7 +287,7 @@ qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise
 
 KoPathPoint *EnhancedPathCommand::lastPathPoint() const
 {
-    KoPathPoint *lastPoint = 0;
+    KoPathPoint *lastPoint = nullptr;
     int subpathCount = m_parent->subpathCount();
     if (subpathCount) {
         int subpathPointCount = m_parent->subpathPointCount(subpathCount - 1);

@@ -46,14 +46,14 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
     }
     m_start = clicked;
 
-    KoShape *shp = 0;
+    KoShape *shp = nullptr;
     if (tool->canvas()->shapeManager()->selection()->count() > 1)
         shp = tool->canvas()->shapeManager()->selection();
     if (tool->canvas()->shapeManager()->selection()->count() == 1)
         shp = tool->canvas()->shapeManager()->selection()->firstSelectedShape();
 
     if (shp) {
-        m_windMatrix = shp->absoluteTransformation(0);
+        m_windMatrix = shp->absoluteTransformation(nullptr);
         m_unwindMatrix = m_windMatrix.inverted();
         m_initialSize = shp->size();
         m_initialPosition = m_windMatrix.map(QPointF());
@@ -276,7 +276,7 @@ void ShapeResizeStrategy::resizeBy(const QPointF &center, qreal zoomX, qreal zoo
         shape->applyAbsoluteTransformation(m_transformations[i].inverted());
 
         // save the shapes transformation matrix
-        QTransform shapeMatrix = shape->absoluteTransformation(0);
+        QTransform shapeMatrix = shape->absoluteTransformation(nullptr);
 
         // calculate the matrix we would apply to the local shape matrix
         // that tells us the effective scale values we have to use for the resizing
@@ -302,7 +302,7 @@ void ShapeResizeStrategy::resizeBy(const QPointF &center, qreal zoomX, qreal zoo
         shape->applyAbsoluteTransformation(mirrorMatrix);
 
         // and remember the applied transformation later for later undoing
-        m_transformations[i] = shapeMatrix.inverted() * shape->absoluteTransformation(0);
+        m_transformations[i] = shapeMatrix.inverted() * shape->absoluteTransformation(nullptr);
 
         shape->applyAbsoluteTransformation(m_windMatrix);
         if (container && container->model()) {

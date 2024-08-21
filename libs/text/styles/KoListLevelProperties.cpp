@@ -263,7 +263,7 @@ QSharedPointer<KoCharacterStyle> KoListLevelProperties::characterProperties() co
 {
     const QVariant v = d->stylesPrivate.value(KoListStyle::CharacterProperties);
     if (v.isNull()) {
-        return QSharedPointer<KoCharacterStyle>(0);
+        return QSharedPointer<KoCharacterStyle>(nullptr);
     }
     return v.value<QSharedPointer<KoCharacterStyle>>();
 }
@@ -502,12 +502,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext &scontext, const KoXml
     const QString displayLevel = style.attributeNS(KoXmlNS::text, "display-levels", QString());
 
     const QString styleName = style.attributeNS(KoXmlNS::text, "style-name", QString());
-    KoCharacterStyle *cs = 0;
+    KoCharacterStyle *cs = nullptr;
     if (!styleName.isEmpty()) {
         //         debugText << "Should use the style =>" << styleName << "<=";
 
         KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
-        KoTextSharedLoadingData *textSharedData = 0;
+        KoTextSharedLoadingData *textSharedData = nullptr;
         if (sharedData) {
             textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
         }
@@ -732,7 +732,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }
 
-    KoTextSharedSavingData *sharedSavingData = 0;
+    KoTextSharedSavingData *sharedSavingData = nullptr;
     if (d->stylesPrivate.contains(KoListStyle::CharacterStyleId) && (characterStyleId() != 0)
         && (sharedSavingData = static_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
         QString styleName = sharedSavingData->styleName(characterStyleId());

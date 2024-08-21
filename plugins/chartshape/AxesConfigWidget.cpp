@@ -132,7 +132,7 @@ AxesConfigWidget::~AxesConfigWidget()
 
 Axis *AxesConfigWidget::axis(int index) const
 {
-    Axis *a = 0;
+    Axis *a = nullptr;
     switch (index) {
     case 0:
         a = chart->plotArea()->xAxis();
@@ -232,7 +232,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
         warnChartUiAxes << "Invalid axis index" << index;
         return;
     }
-    Axis *axis = 0;
+    Axis *axis = nullptr;
     switch (index) {
     case 0:
         axis = chart->plotArea()->xAxis();

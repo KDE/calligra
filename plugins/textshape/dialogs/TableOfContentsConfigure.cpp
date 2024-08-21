@@ -18,12 +18,12 @@
 TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent)
     : QDialog(parent)
     , m_textEditor(editor)
-    , m_tocStyleConfigure(0)
-    , m_tocInfo(0)
+    , m_tocStyleConfigure(nullptr)
+    , m_tocInfo(nullptr)
     , m_block(block)
-    , m_document(0)
-    , m_tocEntryStyleModel(0)
-    , m_tocEntryConfigureDelegate(0)
+    , m_document(nullptr)
+    , m_tocEntryStyleModel(nullptr)
+    , m_tocEntryConfigureDelegate(nullptr)
 {
     init();
 
@@ -36,11 +36,11 @@ TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBl
 TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent)
     : QDialog(parent)
     , m_textEditor(editor)
-    , m_tocStyleConfigure(0)
-    , m_tocInfo(0)
-    , m_document(0)
-    , m_tocEntryStyleModel(0)
-    , m_tocEntryConfigureDelegate(0)
+    , m_tocStyleConfigure(nullptr)
+    , m_tocInfo(nullptr)
+    , m_document(nullptr)
+    , m_tocEntryStyleModel(nullptr)
+    , m_tocEntryConfigureDelegate(nullptr)
 {
     init();
     m_tocInfo = info->clone();
@@ -169,12 +169,12 @@ void TableOfContentsConfigure::cleanUp()
 
     if (m_tocEntryStyleModel) {
         delete m_tocEntryStyleModel;
-        m_tocEntryStyleModel = 0;
+        m_tocEntryStyleModel = nullptr;
     }
 
     if (m_tocEntryConfigureDelegate) {
         delete m_tocEntryConfigureDelegate;
-        m_tocEntryConfigureDelegate = 0;
+        m_tocEntryConfigureDelegate = nullptr;
     }
 }
 

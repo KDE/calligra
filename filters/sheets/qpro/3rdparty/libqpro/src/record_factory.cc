@@ -48,7 +48,7 @@ static Record gRecord[] = {
     {QpBop,                0,  NEW_QpRecBop},
     {QpPageName,           0,  NEW_QpRecPageName},
     {QpPassword,           0,  NEW_QpRecPassword},
-    {0,                    0,  0}
+    {0,                    0,  nullptr}
 };
 
 QpRecFactory::QpRecFactory(QpIStream& pIn)
@@ -65,12 +65,12 @@ QpRecFactory::nextRecord()
 {
     QP_INT16  lType;
     QP_INT16  lLen;
-    QpRec* lResult = 0;
+    QpRec* lResult = nullptr;
 
     cIn >> lType >> lLen;
 
-    for (Record* lRecord = gRecord; lResult == 0 ; ++lRecord) {
-        if (lRecord->Func == 0) {
+    for (Record* lRecord = gRecord; lResult == nullptr ; ++lRecord) {
+        if (lRecord->Func == nullptr) {
             lResult = new QpRecUnknown(lType, lLen, cIn);
         } else if (lRecord->Type == lType) {
             // ??? check length

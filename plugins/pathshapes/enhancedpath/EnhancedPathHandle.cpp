@@ -18,16 +18,16 @@
 
 EnhancedPathHandle::EnhancedPathHandle(EnhancedPathShape *parent)
     : m_parent(parent)
-    , m_positionX(0)
-    , m_positionY(0)
-    , m_minimumX(0)
-    , m_minimumY(0)
-    , m_maximumX(0)
-    , m_maximumY(0)
-    , m_polarX(0)
-    , m_polarY(0)
-    , m_minRadius(0)
-    , m_maxRadius(0)
+    , m_positionX(nullptr)
+    , m_positionY(nullptr)
+    , m_minimumX(nullptr)
+    , m_minimumY(nullptr)
+    , m_maximumX(nullptr)
+    , m_maximumY(nullptr)
+    , m_polarX(nullptr)
+    , m_polarY(nullptr)
+    , m_minRadius(nullptr)
+    , m_maxRadius(nullptr)
 {
     Q_ASSERT(m_parent);
 }

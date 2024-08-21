@@ -27,7 +27,7 @@
 
 /* Static variable */
 const char Config::SPACE_CHAR = ' ';
-Config* Config::_instance = 0;
+Config* Config::_instance = nullptr;
 
 /*******************************************/
 /* Constructor                             */
@@ -85,7 +85,7 @@ void Config::writeIndent(QTextStream& out)
 
 Config* Config::instance()
 {
-    if (_instance == 0)
+    if (_instance == nullptr)
         _instance = new Config();
     return _instance;
 }

@@ -148,7 +148,7 @@ public:
     KoGenStyle *fontStyle(int id) const
     {
         if (id < 0 || id >= fontStyles.size())
-            return 0;
+            return nullptr;
         return fontStyles[id];
     }
 
@@ -156,7 +156,7 @@ public:
     KoGenStyle *fillStyle(int id) const
     {
         if (id < 0 || id >= fillStyles.size())
-            return 0;
+            return nullptr;
         return fillStyles[id];
     }
 
@@ -164,7 +164,7 @@ public:
     KoGenStyle *borderStyle(int id) const
     {
         if (id < 0 || id >= borderStyles.size())
-            return 0;
+            return nullptr;
         return borderStyles[id];
     }
 
@@ -172,7 +172,7 @@ public:
     XlsxCellFormat *cellFormat(int id) const
     {
         if (id < 0 || id >= cellFormats.size())
-            return 0;
+            return nullptr;
         return cellFormats[id];
     }
 
@@ -236,7 +236,7 @@ public:
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
     enum DiagonalDirection { DiagonalUp = 1, DiagonalDown = 2 };
     Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)

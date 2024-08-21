@@ -32,10 +32,10 @@
 
 KoM2MMLFormulaTool::KoM2MMLFormulaTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_lineEdit(0)
-    , m_errorLabel(0)
-    , m_formulaShape(0)
-    , m_comboBox(0)
+    , m_lineEdit(nullptr)
+    , m_errorLabel(nullptr)
+    , m_formulaShape(nullptr)
+    , m_comboBox(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ void KoM2MMLFormulaTool::activate(KoToolBase::ToolActivation toolActivation, con
             break;
     }
 
-    if (m_formulaShape == 0) // none found
+    if (m_formulaShape == nullptr) // none found
     {
         Q_EMIT done();
         return;
@@ -170,7 +170,7 @@ void KoM2MMLFormulaTool::textEdited()
         if (mathml) {
             setMathML(mathml, "LaTeX");
             itex2MML_free_string(mathml);
-            mathml = 0;
+            mathml = nullptr;
         } else {
             m_errorLabel->setText(i18n("Parse error."));
         }
@@ -182,7 +182,7 @@ void KoM2MMLFormulaTool::textEdited()
 void KoM2MMLFormulaTool::setMathML(const QString &mathml, const QString &mode)
 {
     KoXmlDocument tmpDocument;
-    tmpDocument.setContent(QString(mathml), false, 0, 0, 0);
+    tmpDocument.setContent(QString(mathml), false, nullptr, nullptr, nullptr);
     FormulaElement *formulaElement = new FormulaElement(); // create a new root element
     formulaElement->readMathML(tmpDocument.documentElement()); // and load the new formula
 

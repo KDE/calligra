@@ -105,7 +105,7 @@ void KoDocumentResourceManager::clearResource(int key)
 KUndo2Stack *KoDocumentResourceManager::undoStack() const
 {
     if (!hasResource(UndoStack))
-        return 0;
+        return nullptr;
     return static_cast<KUndo2Stack *>(resource(UndoStack).value<void *>());
 }
 
@@ -168,7 +168,7 @@ void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
 KoImageCollection *KoDocumentResourceManager::imageCollection() const
 {
     if (!hasResource(ImageCollection))
-        return 0;
+        return nullptr;
     return static_cast<KoImageCollection *>(resource(ImageCollection).value<void *>());
 }
 
@@ -182,7 +182,7 @@ void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
 KoDocumentBase *KoDocumentResourceManager::odfDocument() const
 {
     if (!hasResource(OdfDocument))
-        return 0;
+        return nullptr;
     return static_cast<KoDocumentBase *>(resource(OdfDocument).value<void *>());
 }
 
@@ -196,7 +196,7 @@ void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
 KoShapeController *KoDocumentResourceManager::shapeController() const
 {
     if (!hasResource(ShapeController))
-        return 0;
+        return nullptr;
     return resource(ShapeController).value<KoShapeController *>();
 }
 

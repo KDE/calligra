@@ -64,7 +64,7 @@ using namespace Calligra::Sheets;
 RowHeaderWidget::RowHeaderWidget(QWidget *_parent, Canvas *_canvas, View *_view)
     : QWidget(_parent)
     , RowHeader(_canvas)
-    , m_rubberband(0)
+    , m_rubberband(nullptr)
 {
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
@@ -177,7 +177,7 @@ void RowHeaderWidget::paintSizeIndicator(int mouseY)
 void RowHeaderWidget::removeSizeIndicator()
 {
     delete m_rubberband;
-    m_rubberband = 0;
+    m_rubberband = nullptr;
 }
 
 void RowHeaderWidget::updateRows(int from, int to)
@@ -216,7 +216,7 @@ void RowHeaderWidget::toolChanged(const QString &toolId)
 ColumnHeaderWidget::ColumnHeaderWidget(QWidget *_parent, Canvas *_canvas, View *_view)
     : QWidget(_parent)
     , ColumnHeader(_canvas)
-    , m_rubberband(0)
+    , m_rubberband(nullptr)
 {
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
@@ -344,7 +344,7 @@ void ColumnHeaderWidget::paintSizeIndicator(int mouseX)
 void ColumnHeaderWidget::removeSizeIndicator()
 {
     delete m_rubberband;
-    m_rubberband = 0;
+    m_rubberband = nullptr;
 }
 
 void ColumnHeaderWidget::updateColumns(int from, int to)

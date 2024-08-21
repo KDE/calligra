@@ -58,7 +58,7 @@ public:
     }
     bool operator==(const KoImageData &other) const;
 
-    void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
+    void setImage(const QString &location, KoStore *store, KoImageCollection *collection = nullptr);
 
     /**
      * Renders a pixmap the first time you request it is called and returns it.
@@ -117,8 +117,8 @@ private:
     /// returns true only if image() would return immediately with a cached image
     bool hasCachedImage() const;
 
-    void setImage(const QImage &image, KoImageCollection *collection = 0);
-    void setImage(const QByteArray &imageData, KoImageCollection *collection = 0);
+    void setImage(const QImage &image, KoImageCollection *collection = nullptr);
+    void setImage(const QByteArray &imageData, KoImageCollection *collection = nullptr);
 
 private:
     KoImageDataPrivate *d;

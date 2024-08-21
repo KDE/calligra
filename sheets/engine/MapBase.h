@@ -171,7 +171,7 @@ public:
      * @param expression a string representing the region (e.g. "A1:B3")
      * @param sheet the fallback sheet, if \p expression does not contain one
      */
-    Region regionFromName(const QString &expression, SheetBase *sheet = 0) const;
+    Region regionFromName(const QString &expression, SheetBase *sheet = nullptr) const;
     /**
      * @param sRegion will be modified, if a valid sheet was found. The sheetname
      * will be removed

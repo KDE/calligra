@@ -58,7 +58,7 @@ K_PLUGIN_FACTORY_WITH_JSON(OpenCalcExportFactory, "calligra_filter_sheets2openca
     } while(0)
 
 OpenCalcExport::OpenCalcExport(QObject* parent, const QVariantList &)
-        : KoFilter(parent), m_locale(0)
+        : KoFilter(parent), m_locale(nullptr)
 {
 }
 
@@ -145,7 +145,7 @@ bool OpenCalcExport::writeFile(const DocBase * ksdoc)
 
     // writes zip file to disc
     delete store;
-    store = 0;
+    store = nullptr;
 
     return true;
 }
@@ -266,7 +266,7 @@ bool OpenCalcExport::exportSettings(KoStore * store, const DocBase * ksdoc)
     attribute.setAttribute("config:type", "string");
 
     DocBase *docbase = const_cast<DocBase*>(ksdoc);
-    View *view = docbase->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(docbase->documentPart()->views().first());
+    View *view = docbase->documentPart()->views().isEmpty() ? nullptr : static_cast<View*>(docbase->documentPart()->views().first());
     QString activeTable;
     if (view) { // no view if embedded document
         Canvas * canvas = view->canvasWidget();

@@ -371,7 +371,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement &element)
             if (!tag.isNull()) {
                 const QString localName = tag.localName();
                 if (localName == "changed-region") {
-                    KoChangeTrackerElement *changeElement = 0;
+                    KoChangeTrackerElement *changeElement = nullptr;
                     KoXmlElement region;
                     forEachElement(region, tag)
                     {
@@ -416,7 +416,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement &element)
             if (!tag.isNull()) {
                 const QString localName = tag.localName();
                 if (localName == "change-transaction") {
-                    KoChangeTrackerElement *changeElement = 0;
+                    KoChangeTrackerElement *changeElement = nullptr;
                     // Set the change element as an insertion element for now
                     // Will be changed to the correct type when actual changes referencing this change-id are encountered
                     changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::delta, "change-id")), KoGenChange::InsertChange);

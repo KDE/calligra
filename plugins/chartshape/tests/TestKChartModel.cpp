@@ -17,10 +17,10 @@
 using namespace KoChart;
 
 TestKChartModel::TestKChartModel()
-    : m_model(0)
-    , m_testModel(0)
+    : m_model(nullptr)
+    , m_testModel(nullptr)
     , m_source()
-    , m_table(0)
+    , m_table(nullptr)
 {
 }
 
@@ -74,7 +74,7 @@ void TestKChartModel::initTestCase()
 
 void TestKChartModel::init()
 {
-    m_model = new KChartModel(0);
+    m_model = new KChartModel(nullptr);
     m_testModel = new ModelObserver(m_model);
 }
 

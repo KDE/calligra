@@ -135,12 +135,12 @@ const QList<BasicElement *> BasicElement::childElements() const
 BasicElement *BasicElement::childElementAt(const QPointF &p)
 {
     if (!m_boundingRect.contains(p))
-        return 0;
+        return nullptr;
 
     if (childElements().isEmpty())
         return this;
 
-    BasicElement *ownerElement = 0;
+    BasicElement *ownerElement = nullptr;
     foreach (BasicElement *tmpElement, childElements()) {
         ownerElement = tmpElement->childElementAt(p);
 
@@ -372,13 +372,13 @@ void BasicElement::setScaleLevel(int scaleLevel)
 BasicElement *BasicElement::elementBefore(int position) const
 {
     Q_UNUSED(position)
-    return 0;
+    return nullptr;
 }
 
 BasicElement *BasicElement::elementAfter(int position) const
 {
     Q_UNUSED(position)
-    return 0;
+    return nullptr;
 }
 
 QList<BasicElement *> BasicElement::elementsBetween(int pos1, int pos2) const
@@ -422,13 +422,13 @@ BasicElement *BasicElement::emptyDescendant()
             return tmp;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // TODO: This should be cached
 BasicElement *BasicElement::formulaElement()
 {
-    if (parentElement() == 0) {
+    if (parentElement() == nullptr) {
         return this;
     } else {
         return parentElement()->formulaElement();
@@ -504,6 +504,6 @@ TableDataElement *BasicElement::parentTableData()
     } else if (parentElement()) {
         return parentElement()->parentTableData();
     } else {
-        return 0;
+        return nullptr;
     }
 }

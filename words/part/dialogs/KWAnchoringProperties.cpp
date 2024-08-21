@@ -477,7 +477,7 @@ void KWAnchoringProperties::open(KoShape *shape)
 
 void KWAnchoringProperties::save()
 {
-    save(0, 0);
+    save(nullptr, nullptr);
 }
 
 void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
@@ -504,12 +504,12 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
                 anchor->setVerticalPos(KoShapeAnchor::VFromTop);
                 shape->setAnchor(anchor);
             }
-            KoShapeContainer *container = 0;
+            KoShapeContainer *container = nullptr;
             // we change from page anchored to text shape anchored.
             if (type != KoShapeAnchor::AnchorPage && anchor->anchorType() == KoShapeAnchor::AnchorPage) {
                 KoShape *targetShape = m_state->document()->findTargetTextShape(anchor->shape());
 
-                if (targetShape != 0) {
+                if (targetShape != nullptr) {
                     KoTextShapeData *textData = qobject_cast<KoTextShapeData *>(targetShape->userData());
                     if (textData) {
                         container = static_cast<KoShapeContainer *>(targetShape);
@@ -532,7 +532,7 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
                 offset.setY(widget.sVOffset->value());
             }
 
-            KoShapeAnchor anchorProperties(0);
+            KoShapeAnchor anchorProperties(nullptr);
             anchorProperties.setAnchorType(type);
             anchorProperties.setOffset(offset);
             anchorProperties.setHorizontalRel(KoShapeAnchor::HorizontalRel(m_horizRel));
@@ -540,7 +540,7 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
             anchorProperties.setHorizontalPos(KoShapeAnchor::HorizontalPos(m_horizPos));
             anchorProperties.setVerticalPos(KoShapeAnchor::VerticalPos(m_vertPos));
 
-            KoTextShapeDataBase *textData = 0;
+            KoTextShapeDataBase *textData = nullptr;
             KoShape *oldParent = anchor->shape()->parent();
             if (oldParent) {
                 textData = qobject_cast<KoTextShapeDataBase *>(oldParent->userData());

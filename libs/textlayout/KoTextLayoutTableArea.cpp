@@ -34,7 +34,7 @@ class Q_DECL_HIDDEN KoTextLayoutTableArea::Private
 {
 public:
     Private()
-        : startOfArea(0)
+        : startOfArea(nullptr)
     {
     }
     QVector<QVector<KoTextLayoutArea *>> cellAreas;
@@ -249,7 +249,7 @@ QVector<KoCharAreaInfo> KoTextLayoutTableArea::generateCharAreaInfos() const
 {
     QVector<KoCharAreaInfo> result;
 
-    if (d->startOfArea == 0) { // We have not been layouted yet
+    if (d->startOfArea == nullptr) { // We have not been layouted yet
         return result;
     }
 
@@ -849,7 +849,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
 
 void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (d->startOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == nullptr) // We have not been layouted yet
         return;
 
     int lastRow = d->endOfArea->row;

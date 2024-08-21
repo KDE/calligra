@@ -24,13 +24,13 @@ public:
 VoiceElement::VoiceElement(int length)
     : d(new Private)
 {
-    d->staff = 0;
+    d->staff = nullptr;
     d->length = length;
     d->x = 0;
     d->y = 0;
     d->width = 0;
     d->height = 0;
-    d->voiceBar = 0;
+    d->voiceBar = nullptr;
     d->beatline = 0;
 }
 

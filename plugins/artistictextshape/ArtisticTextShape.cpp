@@ -34,7 +34,7 @@
 #include <QPen>
 
 ArtisticTextShape::ArtisticTextShape()
-    : m_path(0)
+    : m_path(nullptr)
     , m_startOffset(0.0)
     , m_textAnchor(AnchorStart)
     , m_textUpdateCounter(0)
@@ -552,7 +552,7 @@ bool ArtisticTextShape::putOnPath(KoPathShape *path)
     m_path = path;
 
     // use the paths outline converted to document coordinates as the baseline
-    m_baseline = m_path->absoluteTransformation(0).map(m_path->outline());
+    m_baseline = m_path->absoluteTransformation(nullptr).map(m_path->outline());
 
     // reset transformation
     setTransformation(QTransform());
@@ -572,7 +572,7 @@ bool ArtisticTextShape::putOnPath(const QPainterPath &path)
     update();
     if (m_path)
         m_path->removeDependee(this);
-    m_path = 0;
+    m_path = nullptr;
     m_baseline = path;
 
     // reset transformation
@@ -590,7 +590,7 @@ void ArtisticTextShape::removeFromPath()
     update();
     if (m_path)
         m_path->removeDependee(this);
-    m_path = 0;
+    m_path = nullptr;
     m_baseline = QPainterPath();
     updateSizeAndPosition();
     update();
@@ -598,7 +598,7 @@ void ArtisticTextShape::removeFromPath()
 
 bool ArtisticTextShape::isOnPath() const
 {
-    return (m_path != 0 || !m_baseline.isEmpty());
+    return (m_path != nullptr || !m_baseline.isEmpty());
 }
 
 ArtisticTextShape::LayoutMode ArtisticTextShape::layout() const
@@ -881,7 +881,7 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
 
 void ArtisticTextShape::updateSizeAndPosition(bool global)
 {
-    QTransform shapeTransform = absoluteTransformation(0);
+    QTransform shapeTransform = absoluteTransformation(nullptr);
 
     // determine baseline position in document coordinates
     QPointF oldBaselinePosition = shapeTransform.map(QPointF(0, baselineOffset()));
@@ -929,15 +929,15 @@ void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
     if (m_path && shape == m_path) {
         if (type == KoShape::Deleted) {
             // baseline shape was deleted
-            m_path = 0;
+            m_path = nullptr;
         } else if (type == KoShape::ParentChanged && !shape->parent()) {
             // baseline shape was probably removed from the document
             m_path->removeDependee(this);
-            m_path = 0;
+            m_path = nullptr;
         } else {
             update();
             // use the paths outline converted to document coordinates as the baseline
-            m_baseline = m_path->absoluteTransformation(0).map(m_path->outline());
+            m_baseline = m_path->absoluteTransformation(nullptr).map(m_path->outline());
             updateSizeAndPosition(true);
             update();
         }
@@ -1022,7 +1022,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         QString id = context.createUID("baseline");
         context.styleWriter().startElement("path");
         context.styleWriter().addAttribute("id", id);
-        context.styleWriter().addAttribute("d", baselineShape->toString(baselineShape->absoluteTransformation(0) * context.userSpaceTransform()));
+        context.styleWriter().addAttribute("d", baselineShape->toString(baselineShape->absoluteTransformation(nullptr) * context.userSpaceTransform()));
         context.styleWriter().endElement();
 
         context.shapeWriter().startElement("textPath");
@@ -1138,7 +1138,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
         }
     }
 
-    KoPathShape *path = 0;
+    KoPathShape *path = nullptr;
     bool pathInDocument = false;
     double offset = 0.0;
 
@@ -1209,7 +1209,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
             if (pathInDocument) {
                 putOnPath(path);
             } else {
-                putOnPath(path->absoluteTransformation(0).map(path->outline()));
+                putOnPath(path->absoluteTransformation(nullptr).map(path->outline()));
                 delete path;
             }
 

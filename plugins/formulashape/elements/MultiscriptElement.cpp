@@ -239,7 +239,7 @@ ElementType MultiscriptElement::elementType() const
 
 bool MultiscriptElement::readMathMLContent(const KoXmlElement &parent)
 {
-    BasicElement *tmpElement = 0;
+    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     bool prescript = false; // When we see a mprescripts tag, we enable this
     bool baseElement = false; // True when the base element is read.

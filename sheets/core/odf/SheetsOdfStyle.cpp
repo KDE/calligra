@@ -329,7 +329,7 @@ void Odf::loadDataStyle(Style *style,
         style = new Style();
         for (QList<QPair<QString, QString>>::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
             const Conditional c = loadCondition(&conditions, it->first, it->second, QString());
-            if (styleManager->style(c.styleName) == 0) {
+            if (styleManager->style(c.styleName) == nullptr) {
                 CustomStyle *s = new CustomStyle(c.styleName);
                 loadDataStyle(s, stylesReader, c.styleName, conditions, styleManager, locale);
                 const_cast<StyleManager *>(styleManager)->insertStyle(s);

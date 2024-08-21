@@ -104,7 +104,7 @@ void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetLi
 
 void ToolDocker::resizeEvent(QResizeEvent *)
 {
-    int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
+    int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, this) : 0;
     d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);
     d->tabButton->move(d->lockButton->x() - d->tabButton->width() - 2, d->lockButton->y());
 }

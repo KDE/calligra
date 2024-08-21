@@ -154,7 +154,7 @@ void KoList::remove(const QTextBlock &block)
 
 void KoList::setStyle(KoListStyle *style)
 {
-    if (style == 0) {
+    if (style == nullptr) {
         KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
         Q_ASSERT(styleManager);
         style = styleManager->defaultListStyle();
@@ -162,7 +162,7 @@ void KoList::setStyle(KoListStyle *style)
 
     if (style != d->style) {
         if (d->style)
-            disconnect(d->style, 0, this, 0);
+            disconnect(d->style, nullptr, this, nullptr);
         d->style = style->clone(this);
         connect(d->style, &KoListStyle::styleChanged, this, [this](int level) {
             d->styleChanged(level);

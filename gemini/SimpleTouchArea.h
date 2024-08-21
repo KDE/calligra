@@ -13,7 +13,7 @@ class SimpleTouchArea : public QQuickItem
 {
     Q_OBJECT
 public:
-    explicit SimpleTouchArea(QQuickItem *parent = 0);
+    explicit SimpleTouchArea(QQuickItem *parent = nullptr);
     ~SimpleTouchArea() override;
 
 Q_SIGNALS:

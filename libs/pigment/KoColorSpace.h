@@ -259,7 +259,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const = 0;
+    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = nullptr) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -270,7 +270,7 @@ public:
      * @param c the QColor that will be filled with the color at src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = nullptr) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.

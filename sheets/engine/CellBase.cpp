@@ -45,7 +45,7 @@ class Q_DECL_HIDDEN CellBase::Private : public QSharedData
 {
 public:
     Private()
-        : sheet(0)
+        : sheet(nullptr)
         , column(0)
         , row(0)
     {
@@ -57,14 +57,14 @@ public:
 };
 
 CellBase::CellBase()
-    : d(0)
+    : d(nullptr)
 {
 }
 
 CellBase::CellBase(SheetBase *sheet, unsigned int col, unsigned int row)
     : d(new Private)
 {
-    Q_ASSERT(sheet != 0);
+    Q_ASSERT(sheet != nullptr);
     Q_ASSERT_X(1 <= col && col <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(col).toLocal8Bit());
     Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
     d->sheet = sheet;
@@ -75,7 +75,7 @@ CellBase::CellBase(SheetBase *sheet, unsigned int col, unsigned int row)
 CellBase::CellBase(SheetBase *sheet, const QPoint &pos)
     : d(new Private)
 {
-    Q_ASSERT(sheet != 0);
+    Q_ASSERT(sheet != nullptr);
     Q_ASSERT_X(1 <= pos.x() && pos.x() <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.x()).toLocal8Bit());
     Q_ASSERT_X(1 <= pos.y() && pos.y() <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.y()).toLocal8Bit());
     d->sheet = sheet;

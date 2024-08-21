@@ -45,9 +45,9 @@ static int debugIndent = 0;
 #endif
 
 OdfTextReader::OdfTextReader()
-    : m_parent(0)
-    , m_backend(0)
-    , m_context(0)
+    : m_parent(nullptr)
+    , m_backend(nullptr)
+    , m_context(nullptr)
 {
 }
 

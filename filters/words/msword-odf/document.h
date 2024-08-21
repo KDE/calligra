@@ -162,7 +162,7 @@ public:
     }
     bool hasParser(void) const
     {
-        return m_parser != 0L;
+        return m_parser != nullptr;
     }
     bool bodyFound(void) const
     {

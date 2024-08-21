@@ -28,12 +28,12 @@
 using namespace KoChart;
 
 TableEditorDialog::TableEditorDialog()
-    : QDialog(0)
+    : QDialog(nullptr)
     , m_tableView(new ChartTableView)
 {
     setupUi(this);
 
-    m_proxyModel = 0;
+    m_proxyModel = nullptr;
     init();
 }
 

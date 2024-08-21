@@ -27,12 +27,9 @@
 OkularOdpGenerator::OkularOdpGenerator(QObject *parent, const QVariantList &args)
     : Okular::Generator(parent, args)
 {
-    m_doc = 0;
 }
 
-OkularOdpGenerator::~OkularOdpGenerator()
-{
-}
+OkularOdpGenerator::~OkularOdpGenerator() = default;
 
 bool OkularOdpGenerator::loadDocument(const QString &fileName, QVector<Okular::Page *> &pages)
 {
@@ -44,10 +41,10 @@ bool OkularOdpGenerator::loadDocument(const QString &fileName, QVector<Okular::P
 
     if (!error.isEmpty()) {
         qWarning() << "Error creating document" << mimetype << error;
-        return 0;
+        return false;
     }
 
-    KoPADocument *doc = qobject_cast<KoPADocument *>(part->document());
+    auto doc = qobject_cast<KoPADocument *>(part->document());
     m_doc = doc;
     const QUrl url = QUrl::fromLocalFile(fileName);
     doc->setCheckAutoSaveFile(false);
@@ -66,7 +63,7 @@ bool OkularOdpGenerator::loadDocument(const QString &fileName, QVector<Okular::P
         }
         QSize size = kprpage->size().toSize();
 
-        Okular::Page *page = new Okular::Page(i, size.width(), size.height(), Okular::Rotation0);
+        auto page = new Okular::Page(i, size.width(), size.height(), Okular::Rotation0);
         pages.append(page);
     }
 
@@ -99,7 +96,7 @@ bool OkularOdpGenerator::loadDocument(const QString &fileName, QVector<Okular::P
 bool OkularOdpGenerator::doCloseDocument()
 {
     delete m_doc;
-    m_doc = 0;
+    m_doc = nullptr;
 
     m_documentInfo = Okular::DocumentInfo();
 

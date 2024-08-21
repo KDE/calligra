@@ -62,7 +62,7 @@ Hexout(char* pChar, int pLen)
     }
 
     delete lOStr;
-    lOStr = 0;
+    lOStr = nullptr;
 
     return 0;
 }
@@ -121,14 +121,14 @@ QpRecCell::QpRecCell(QpRecType pType)
         , cColumn(0)
         , cPage(0)
         , cRow(0)
-        , cCellRef(0)
+        , cCellRef(nullptr)
 {
 }
 
 QpRecCell::~QpRecCell()
 {
     delete [] cCellRef;
-    cCellRef = 0;
+    cCellRef = nullptr;
 }
 
 
@@ -488,7 +488,7 @@ QpRecLabelCell::QpRecLabelCell(QP_INT16 pLen, QpIStream& pIn)
 QpRecLabelCell::~QpRecLabelCell()
 {
     delete [] cLabel;
-    cLabel =  0;
+    cLabel =  nullptr;
 }
 
 char
@@ -507,7 +507,7 @@ QpRecLabelCell::label()
 
 QpRecFormulaCell::QpRecFormulaCell(QP_INT16 pLen, QpIStream& pIn)
         : QpRecCell(QpFormulaCell)
-        , cFormula(0)
+        , cFormula(nullptr)
 {
     QP_DEBUG("Formula Cell - ");
 
@@ -540,7 +540,7 @@ QpRecFormulaCell::QpRecFormulaCell(QP_INT16 pLen, QpIStream& pIn)
 QpRecFormulaCell::~QpRecFormulaCell()
 {
     delete [] cFormula;
-    cFormula = 0;
+    cFormula = nullptr;
 }
 
 const char*
@@ -574,7 +574,7 @@ QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
         pIn.read(lBuf, pLen);
 
         delete [] lBuf;
-        lBuf = 0;
+        lBuf = nullptr;
     }
 }
 
@@ -644,7 +644,7 @@ QpRecPassword::QpRecPassword(QP_INT16 pLen, QpIStream& pIn)
 QpRecPassword::~QpRecPassword()
 {
     delete [] cPassword;
-    cPassword = 0;
+    cPassword = nullptr;
 }
 
 const QP_UINT8*

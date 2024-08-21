@@ -29,7 +29,7 @@ public:
                                         Intent renderingIntent,
                                         ConversionFlags conversionFlags)
         : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
-        , m_transform(0)
+        , m_transform(nullptr)
     {
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);

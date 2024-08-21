@@ -80,12 +80,12 @@ QList<QAction *> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBas
 KoInlineObject *KoInlineObjectRegistry::createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     KoInlineObjectFactoryBase *factory = d->factories.value(QPair<QString, QString>(element.namespaceURI(), element.tagName()));
-    if (factory == 0) {
+    if (factory == nullptr) {
         debugText << "No factory for" << element.namespaceURI() << ":" << element.tagName();
-        return 0;
+        return nullptr;
     }
 
-    KoInlineObject *object = factory->createInlineObject(0);
+    KoInlineObject *object = factory->createInlineObject(nullptr);
     if (object) {
         object->loadOdf(element, context);
     }

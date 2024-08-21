@@ -13,7 +13,7 @@
 
 StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent)
     : AbstractStylesModel(parent)
-    , m_sourceModel(0)
+    , m_sourceModel(nullptr)
 {
 }
 

@@ -327,8 +327,8 @@ class XFigLineEndable
 {
 protected:
     XFigLineEndable()
-        : m_ForwardArrow(0)
-        , m_BackwardArrow(0)
+        : m_ForwardArrow(nullptr)
+        , m_BackwardArrow(nullptr)
         , m_CapType(XFigCapButt)
     {
     }

@@ -134,7 +134,7 @@ public:
 };
 
 SizeChooserAction::SizeChooserAction(QuickTableButton *button)
-    : QWidgetAction(0)
+    : QWidgetAction(nullptr)
 {
     m_widget = new SizeChooserGrid(button, this);
     setDefaultWidget(m_widget);

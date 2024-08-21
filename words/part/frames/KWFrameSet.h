@@ -35,7 +35,7 @@ public:
     static KWFrameSet *from(KoShape *shape)
     {
         KWFrame *f = dynamic_cast<KWFrame *>(shape->applicationData());
-        return f ? f->frameSetxx() : 0;
+        return f ? f->frameSetxx() : nullptr;
     }
 
     /**

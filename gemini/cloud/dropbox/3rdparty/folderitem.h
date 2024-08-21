@@ -65,7 +65,7 @@ public:
                         const QString &icon,
                         const QString &mime_type,
                         const QString &size,
-                        QObject *parent = 0)
+                        QObject *parent = nullptr)
         : ListItem(parent)
         , m_revision(revision)
         , m_thumb_exists(thumb_exists)
@@ -80,7 +80,7 @@ public:
     {
     }
 
-    FolderItem(QObject *parent = 0)
+    FolderItem(QObject *parent = nullptr)
         : ListItem(parent)
     {
     }

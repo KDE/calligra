@@ -30,7 +30,7 @@ XlsxXmlTableReaderContext::XlsxXmlTableReaderContext()
 
 XlsxXmlTableReader::XlsxXmlTableReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
 {
 }
 

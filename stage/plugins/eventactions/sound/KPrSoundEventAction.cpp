@@ -34,8 +34,8 @@
 KPrSoundEventAction::KPrSoundEventAction()
     : QObject()
     , KoEventAction()
-    , m_media(0)
-    , m_soundData(0)
+    , m_media(nullptr)
+    , m_soundData(nullptr)
 {
     setId(KPrSoundEventActionId);
 }
@@ -120,5 +120,5 @@ KPrSoundData *KPrSoundEventAction::soundData() const
 void KPrSoundEventAction::finished()
 {
     delete m_media;
-    m_media = 0;
+    m_media = nullptr;
 }

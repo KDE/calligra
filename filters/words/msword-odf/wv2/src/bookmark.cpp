@@ -28,10 +28,10 @@
 using namespace wvWare;
 
 Bookmarks::Bookmarks(OLEStreamReader *tableStream, const Word97::FIB &fib)
-    : m_start(0)
-    , m_startIt(0)
-    , m_end(0)
-    , m_endIt(0)
+    : m_start(nullptr)
+    , m_startIt(nullptr)
+    , m_end(nullptr)
+    , m_endIt(nullptr)
     , m_nFib(fib.nFib)
 {
 #ifdef WV2_DEBUG_BOOKMARK
@@ -181,7 +181,7 @@ BookmarkData Bookmarks::bookmark(const UString &name, bool &ok) const
     std::vector<UString>::const_iterator nameIt = m_name.begin();
     PLCFIterator<Word97::BKF> startIt(*m_start);
 
-    PLCFIterator<Word97::BKL> *endIt = 0;
+    PLCFIterator<Word97::BKL> *endIt = nullptr;
     if (m_nFib < Word8nFib) {
         endIt = new PLCFIterator<Word97::BKL>(*m_end);
     }

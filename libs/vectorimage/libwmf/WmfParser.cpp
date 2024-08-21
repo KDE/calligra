@@ -159,20 +159,20 @@ WmfParser::WmfParser()
     mStandard = false;
     mPlaceable = false;
     mEnhanced = false;
-    mBuffer = 0;
-    mObjHandleTab = 0;
+    mBuffer = nullptr;
+    mObjHandleTab = nullptr;
 }
 
 WmfParser::~WmfParser()
 {
-    if (mObjHandleTab != 0) {
+    if (mObjHandleTab != nullptr) {
         for (int i = 0; i < mNbrObject; i++) {
-            if (mObjHandleTab[i] != 0)
+            if (mObjHandleTab[i] != nullptr)
                 delete mObjHandleTab[i];
         }
         delete[] mObjHandleTab;
     }
-    if (mBuffer != 0) {
+    if (mBuffer != nullptr) {
         mBuffer->close();
         delete mBuffer;
     }
@@ -181,10 +181,10 @@ WmfParser::~WmfParser()
 bool WmfParser::load(const QByteArray &array)
 {
     // delete previous buffer
-    if (mBuffer != 0) {
+    if (mBuffer != nullptr) {
         mBuffer->close();
         delete mBuffer;
-        mBuffer = 0;
+        mBuffer = nullptr;
     }
 
     if (array.size() == 0)
@@ -364,7 +364,7 @@ bool WmfParser::play(WmfAbstractBackend *backend)
     // Stack of handles
     mObjHandleTab = new KoWmfHandle *[mNbrObject];
     for (int i = 0; i < mNbrObject; i++) {
-        mObjHandleTab[i] = 0;
+        mObjHandleTab[i] = nullptr;
     }
 
     mDeviceContext.reset();
@@ -775,7 +775,7 @@ bool WmfParser::play(WmfAbstractBackend *backend)
                 quint16 idx;
 
                 stream >> idx;
-                if ((idx < mNbrObject) && (mObjHandleTab[idx] != 0))
+                if ((idx < mNbrObject) && (mObjHandleTab[idx] != nullptr))
                     mObjHandleTab[idx]->apply(&mDeviceContext);
                 else
                     debugVectorImage << "WmfParser::selectObject : selection of an empty object";
@@ -1156,11 +1156,11 @@ bool WmfParser::play(WmfAbstractBackend *backend)
     }
 
     for (int i = 0; i < mNbrObject; i++) {
-        if (mObjHandleTab[i] != 0)
+        if (mObjHandleTab[i] != nullptr)
             delete mObjHandleTab[i];
     }
     delete[] mObjHandleTab;
-    mObjHandleTab = 0;
+    mObjHandleTab = nullptr;
 
     return true;
 }
@@ -1452,7 +1452,7 @@ bool WmfParser::addHandle(KoWmfHandle *handle)
     int idx;
 
     for (idx = 0; idx < mNbrObject; idx++) {
-        if (mObjHandleTab[idx] == 0)
+        if (mObjHandleTab[idx] == nullptr)
             break;
     }
 
@@ -1469,9 +1469,9 @@ bool WmfParser::addHandle(KoWmfHandle *handle)
 
 void WmfParser::deleteHandle(int idx)
 {
-    if ((idx < mNbrObject) && (mObjHandleTab[idx] != 0)) {
+    if ((idx < mNbrObject) && (mObjHandleTab[idx] != nullptr)) {
         delete mObjHandleTab[idx];
-        mObjHandleTab[idx] = 0;
+        mObjHandleTab[idx] = nullptr;
     } else {
         debugVectorImage << "WmfParser::deletehandle() : bad index number";
     }

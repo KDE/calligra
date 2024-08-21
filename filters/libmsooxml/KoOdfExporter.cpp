@@ -22,11 +22,11 @@
 #include <memory>
 
 KoOdfWriters::KoOdfWriters()
-    : content(0)
-    , body(0)
-    , meta(0)
-    , manifest(0)
-    , mainStyles(0)
+    : content(nullptr)
+    , body(nullptr)
+    , meta(nullptr)
+    , manifest(nullptr)
+    , mainStyles(nullptr)
 {
 }
 

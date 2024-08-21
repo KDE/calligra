@@ -164,31 +164,31 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
 
     selectedDataSet = 0;
 
-    dataSetBarChartMenu = 0;
-    dataSetLineChartMenu = 0;
-    dataSetAreaChartMenu = 0;
-    dataSetRadarChartMenu = 0;
-    dataSetStockChartMenu = 0;
-    dataSetNormalBarChartAction = 0;
-    dataSetStackedBarChartAction = 0;
-    dataSetPercentBarChartAction = 0;
-    dataSetNormalLineChartAction = 0;
-    dataSetStackedLineChartAction = 0;
-    dataSetPercentLineChartAction = 0;
-    dataSetNormalAreaChartAction = 0;
-    dataSetStackedAreaChartAction = 0;
-    dataSetPercentAreaChartAction = 0;
-    dataSetCircleChartAction = 0;
-    dataSetRingChartAction = 0;
-    dataSetScatterChartAction = 0;
-    dataSetRadarChartAction = 0;
-    dataSetFilledRadarChartAction = 0;
-    dataSetHLCStockChartAction = 0;
-    dataSetOHLCStockChartAction = 0;
-    dataSetCandlestickStockChartAction = 0;
-    dataSetBubbleChartAction = 0;
-    dataSetSurfaceChartAction = 0;
-    dataSetGanttChartAction = 0;
+    dataSetBarChartMenu = nullptr;
+    dataSetLineChartMenu = nullptr;
+    dataSetAreaChartMenu = nullptr;
+    dataSetRadarChartMenu = nullptr;
+    dataSetStockChartMenu = nullptr;
+    dataSetNormalBarChartAction = nullptr;
+    dataSetStackedBarChartAction = nullptr;
+    dataSetPercentBarChartAction = nullptr;
+    dataSetNormalLineChartAction = nullptr;
+    dataSetStackedLineChartAction = nullptr;
+    dataSetPercentLineChartAction = nullptr;
+    dataSetNormalAreaChartAction = nullptr;
+    dataSetStackedAreaChartAction = nullptr;
+    dataSetPercentAreaChartAction = nullptr;
+    dataSetCircleChartAction = nullptr;
+    dataSetRingChartAction = nullptr;
+    dataSetScatterChartAction = nullptr;
+    dataSetRadarChartAction = nullptr;
+    dataSetFilledRadarChartAction = nullptr;
+    dataSetHLCStockChartAction = nullptr;
+    dataSetOHLCStockChartAction = nullptr;
+    dataSetCandlestickStockChartAction = nullptr;
+    dataSetBubbleChartAction = nullptr;
+    dataSetSurfaceChartAction = nullptr;
+    dataSetGanttChartAction = nullptr;
 
     // Data set chart type button
     QMenu *dataSetChartTypeMenu = new QMenu(i18n("Chart Type"), parent);
@@ -332,7 +332,7 @@ void DataSetConfigWidget::open(ChartShape *shape)
 
 QAction *DataSetConfigWidget::createAction()
 {
-    return 0;
+    return nullptr;
 }
 
 void DataSetConfigWidget::ui_dataSetAxisSelectionChanged(int index)

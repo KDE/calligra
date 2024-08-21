@@ -54,11 +54,11 @@ public:
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, MsooXmlReaderContext *context = 0);
+    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, MsooXmlReaderContext *context = nullptr);
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, QString &errorMessage, MsooXmlReaderContext *context = 0);
+    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, QString &errorMessage, MsooXmlReaderContext *context = nullptr);
 
     //! Loads a file from a device
     KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader *reader, QIODevice *device, MsooXmlReaderContext *context);
@@ -100,8 +100,11 @@ protected:
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus
-    loadAndParseDocument(const QByteArray &contentType, MsooXmlReader *reader, KoOdfWriters *writers, QString &errorMessage, MsooXmlReaderContext *context = 0);
+    KoFilter::ConversionStatus loadAndParseDocument(const QByteArray &contentType,
+                                                    MsooXmlReader *reader,
+                                                    KoOdfWriters *writers,
+                                                    QString &errorMessage,
+                                                    MsooXmlReaderContext *context = nullptr);
 
     //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but file name is provided directly instead of content type
@@ -114,7 +117,7 @@ protected:
                                                             MsooXmlReader *reader,
                                                             KoOdfWriters *writers,
                                                             QString &errorMessage,
-                                                            MsooXmlReaderContext *context = 0);
+                                                            MsooXmlReaderContext *context = nullptr);
 
     //! Like @ref loadAndParseDocumentIfExists(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but file name is provided directly instead of content type
@@ -122,7 +125,7 @@ protected:
                                                                     MsooXmlReader *reader,
                                                                     KoOdfWriters *writers,
                                                                     QString &errorMessage,
-                                                                    MsooXmlReaderContext *context = 0);
+                                                                    MsooXmlReaderContext *context = nullptr);
 
     //! @return all part names.
     QMultiHash<QByteArray, QByteArray> partNames() const

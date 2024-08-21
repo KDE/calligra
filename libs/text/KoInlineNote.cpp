@@ -36,7 +36,7 @@ class Q_DECL_HIDDEN KoInlineNote::Private
 {
 public:
     Private(KoInlineNote::Type t)
-        : textFrame(0)
+        : textFrame(nullptr)
         , autoNumbering(false)
         , type(t)
     {
@@ -75,7 +75,7 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
     d->textFrame = cursor.insertFrame(format);
 
     // Now let's make sure it has the right paragraph
-    KoOdfNotesConfiguration *notesConfig = 0;
+    KoOdfNotesConfiguration *notesConfig = nullptr;
     if (d->type == KoInlineNote::Footnote) {
         notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->type == KoInlineNote::Endnote) {
@@ -101,7 +101,7 @@ void KoInlineNote::setLabel(const QString &text)
 void KoInlineNote::setAutoNumber(int autoNumber)
 {
     if (d->autoNumbering) {
-        KoOdfNotesConfiguration *notesConfig = 0;
+        KoOdfNotesConfiguration *notesConfig = nullptr;
         if (d->type == KoInlineNote::Footnote) {
             notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
         } else if (d->type == KoInlineNote::Endnote) {
@@ -181,7 +181,7 @@ void KoInlineNote::paint(QPainter &painter,
         return;
 
     QTextCharFormat format = originalFormat;
-    KoOdfNotesConfiguration *notesConfig = 0;
+    KoOdfNotesConfiguration *notesConfig = nullptr;
     if (d->type == KoInlineNote::Footnote) {
         notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->type == KoInlineNote::Endnote) {

@@ -55,5 +55,5 @@ Section *Utils::sectionForLayer(KoShapeLayer *_layer, SectionGroup *_sectionGrou
             return ls;
         }
     }
-    return 0;
+    return nullptr;
 }

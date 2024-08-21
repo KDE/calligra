@@ -87,7 +87,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // Load the profiles
     if (!profileFilenames.empty()) {
-        KoColorProfile *profile = 0;
+        KoColorProfile *profile = nullptr;
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
             profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
@@ -105,7 +105,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // ------------------- LAB ---------------------------------
 
-    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(0));
+    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(nullptr));
     registry->addProfile(labProfile);
 
     registry->add(new LabU8ColorSpaceFactory());
@@ -163,7 +163,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // ------------------- GRAY ---------------------------------
 
-    cmsToneCurve *Gamma = cmsBuildGamma(0, 2.2);
+    cmsToneCurve *Gamma = cmsBuildGamma(nullptr, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeToneCurve(Gamma);
     KoColorProfile *defProfile = LcmsColorProfileContainer::createFromLcmsProfile(hProfile);

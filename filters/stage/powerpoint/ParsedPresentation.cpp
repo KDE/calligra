@@ -153,7 +153,7 @@ const T *get(const PowerPointStructs &pps, quint32 offset)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 void parsePersistDirectory(const PowerPointStructs &pps, const UserEditAtom *userEditAtom, QMap<quint32, quint32> &persistDirectory)
 {
@@ -180,8 +180,8 @@ void parsePersistDirectory(const PowerPointStructs &pps, const UserEditAtom *use
 
 bool ParsedPresentation::parse(POLE::Storage &storage)
 {
-    handoutMaster = 0;
-    notesMaster = 0;
+    handoutMaster = nullptr;
+    notesMaster = nullptr;
 
     // read the CurrentUserStream and PowerPointStructs
     if (!parsePowerPointStructs(storage, presentation)) {
@@ -266,7 +266,7 @@ bool ParsedPresentation::parse(POLE::Storage &storage)
         size = documentContainer->slideList->rgChildRec.size();
         slides.resize(size);
         notes.resize(size);
-        notes.fill(0);
+        notes.fill(nullptr);
         for (int i = 0; i < size; ++i) {
             persistId = documentContainer->slideList->rgChildRec[i].slidePersistAtom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
@@ -328,12 +328,12 @@ const MSO::MasterOrSlideContainer *ParsedPresentation::getMaster(const SlideCont
     // masterIdRef MUST be 0x00000000 if the record that contains this SlideAtom
     // record is a MainMasterContainer record (MS-PPT 2.5.10)
     if (!slide)
-        return 0;
+        return nullptr;
     foreach (const MasterPersistAtom &m, documentContainer->masterList.rgMasterPersistAtom) {
         if (m.masterId == slide->slideAtom.masterIdRef) {
             quint32 offset = persistDirectory[m.persistIdRef];
             return get<MasterOrSlideContainer>(presentation, offset);
         }
     }
-    return 0;
+    return nullptr;
 }

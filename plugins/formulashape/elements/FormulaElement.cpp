@@ -14,7 +14,7 @@
 #include <KoXmlWriter.h>
 
 FormulaElement::FormulaElement()
-    : RowElement(0)
+    : RowElement(nullptr)
 {
 }
 

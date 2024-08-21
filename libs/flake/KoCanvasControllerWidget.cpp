@@ -236,7 +236,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     if (d->canvas) {
         d->unsetCanvas();
         proxyObject->emitCanvasRemoved(this);
-        canvas->setCanvasController(0);
+        canvas->setCanvasController(nullptr);
         d->canvas->canvasWidget()->removeEventFilter(this);
     }
     canvas->setCanvasController(this);
@@ -272,12 +272,12 @@ void KoCanvasControllerWidget::changeCanvasWidget(QWidget *widget)
 
 int KoCanvasControllerWidget::visibleHeight() const
 {
-    if (d->canvas == 0)
+    if (d->canvas == nullptr)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int height1;
-    if (canvasWidget == 0)
+    if (canvasWidget == nullptr)
         height1 = viewport()->height();
     else
         height1 = qMin(viewport()->height(), canvasWidget->height());
@@ -287,12 +287,12 @@ int KoCanvasControllerWidget::visibleHeight() const
 
 int KoCanvasControllerWidget::visibleWidth() const
 {
-    if (d->canvas == 0)
+    if (d->canvas == nullptr)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int width1;
-    if (canvasWidget == 0)
+    if (canvasWidget == nullptr)
         width1 = viewport()->width();
     else
         width1 = qMin(viewport()->width(), canvasWidget->width());

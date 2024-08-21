@@ -48,7 +48,7 @@ void StockConfigWidget::init()
 {
     setObjectName("StockConfigWidget");
     m_ui.setupUi(this);
-    m_plotArea = 0;
+    m_plotArea = nullptr;
 
     connect(m_ui.gainMarker, &KColorButton::changed, this, &StockConfigWidget::gainClicked);
     connect(m_ui.lossMarker, &KColorButton::changed, this, &StockConfigWidget::lossClicked);
@@ -57,7 +57,7 @@ void StockConfigWidget::init()
 void StockConfigWidget::open(ChartShape *shape)
 {
     ConfigSubWidgetBase::open(shape);
-    m_plotArea = 0;
+    m_plotArea = nullptr;
     if (!chart) {
         return;
     }

@@ -91,28 +91,28 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
     XlsRecordOutputStream o(a);
     d->out = &o;
     {
-        BOFRecord b(0);
+        BOFRecord b(nullptr);
         b.setType(BOFRecord::Workbook);
         b.setRecordSize(16);
         o.writeRecord(b);
     }
 
-    o.writeRecord(InterfaceHdrRecord(0));
-    o.writeRecord(MmsReservedRecord(0));
-    o.writeRecord(InterfaceEndRecord(0));
+    o.writeRecord(InterfaceHdrRecord(nullptr));
+    o.writeRecord(MmsReservedRecord(nullptr));
+    o.writeRecord(InterfaceEndRecord(nullptr));
 
     {
-        LastWriteAccessRecord lwar(0);
+        LastWriteAccessRecord lwar(nullptr);
         lwar.setUserName("  "); // TODO: figure out real username
         lwar.setUnusedBlob(QByteArray(112 - 3 - 2 * lwar.userName().length(), ' '));
         o.writeRecord(lwar);
     }
 
-    o.writeRecord(CodePageRecord(0));
-    o.writeRecord(DSFReservedRecord(0));
+    o.writeRecord(CodePageRecord(nullptr));
+    o.writeRecord(DSFReservedRecord(nullptr));
 
     {
-        RRTabIdRecord rrti(0);
+        RRTabIdRecord rrti(nullptr);
         rrti.setSheetCount(d->inputDoc->map()->count());
         for (int i = 0; i < d->inputDoc->map()->count(); i++) {
             rrti.setSheetId(i, i + 1);
@@ -120,24 +120,24 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
         o.writeRecord(rrti);
     }
 
-    o.writeRecord(WinProtectRecord(0));
-    o.writeRecord(ProtectRecord(0));
-    o.writeRecord(PasswordRecord(0));
-    o.writeRecord(Prot4RevRecord(0));
-    o.writeRecord(Prot4RevPassRecord(0));
+    o.writeRecord(WinProtectRecord(nullptr));
+    o.writeRecord(ProtectRecord(nullptr));
+    o.writeRecord(PasswordRecord(nullptr));
+    o.writeRecord(Prot4RevRecord(nullptr));
+    o.writeRecord(Prot4RevPassRecord(nullptr));
 
-    o.writeRecord(Window1Record(0));
-    o.writeRecord(BackupRecord(0));
-    o.writeRecord(HideObjRecord(0));
-    o.writeRecord(DateModeRecord(0));
-    o.writeRecord(CalcPrecisionRecord(0));
-    o.writeRecord(RefreshAllRecord(0));
-    o.writeRecord(BookBoolRecord(0));
+    o.writeRecord(Window1Record(nullptr));
+    o.writeRecord(BackupRecord(nullptr));
+    o.writeRecord(HideObjRecord(nullptr));
+    o.writeRecord(DateModeRecord(nullptr));
+    o.writeRecord(CalcPrecisionRecord(nullptr));
+    o.writeRecord(RefreshAllRecord(nullptr));
+    o.writeRecord(BookBoolRecord(nullptr));
 
     QHash<QPair<QFont, QColor>, unsigned> fonts;
     fonts[qMakePair(QFont(), QColor())] = 0;
     {
-        FontRecord fnt(0);
+        FontRecord fnt(nullptr);
         fnt.setFontName("Arial");
         d->fontRecords.append(fnt);
         fnt.setFontWeight(700);
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
     formats.insert(43, QString::fromUtf8("_-* #,##0.00\\ _€_-;\\-* #,##0.00\\ _€_-;_-* \"-\"??\\ _€_-;_-@_-"));
     formats.insert(44, QString::fromUtf8("_-* #,##0.00\\ \"€\"_-;\\-* #,##0.00\\ \"€\"_-;_-* \"-\"??\\ \"€\"_-;_-@_-"));
     for (QMap<int, QString>::ConstIterator i = formats.constBegin(); i != formats.constEnd(); ++i) {
-        FormatRecord fr(0);
+        FormatRecord fr(nullptr);
         fr.setIndex(i.key());
         fr.setFormatString(i.value());
         o.writeRecord(fr);
@@ -176,10 +176,10 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
 
     // 15 style xfs, followed by one cell xf and then our own xfs
     for (int i = 0; i < 15; i++) {
-        o.writeRecord(XFRecord(0));
+        o.writeRecord(XFRecord(nullptr));
     }
     {
-        XFRecord xf(0);
+        XFRecord xf(nullptr);
         xf.setIsStyleXF(false);
         xf.setParentStyle(0);
         o.writeRecord(xf);
@@ -190,26 +190,26 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
 
     // XLS requires 16 XF records for some reason
     for (int i = xfs.size() + 1; i < 16; i++) {
-        o.writeRecord(XFRecord(0));
+        o.writeRecord(XFRecord(nullptr));
     }
 
-    o.writeRecord(StyleRecord(0));
-    o.writeRecord(UsesELFsRecord(0));
+    o.writeRecord(StyleRecord(nullptr));
+    o.writeRecord(UsesELFsRecord(nullptr));
 
     QList<BoundSheetRecord> boundSheets;
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
-        boundSheets.append(BoundSheetRecord(0));
+        boundSheets.append(BoundSheetRecord(nullptr));
         BoundSheetRecord &bsr = boundSheets.last();
         bsr.setSheetName(d->inputDoc->map()->sheet(i)->sheetName());
         o.writeRecord(bsr);
     }
 
-    o.writeRecord(CountryRecord(0));
+    o.writeRecord(CountryRecord(nullptr));
 
     QHash<QString, unsigned> stringTable;
     {
-        SSTRecord sst(0);
-        ExtSSTRecord esst(0);
+        SSTRecord sst(nullptr);
+        ExtSSTRecord esst(nullptr);
         sst.setExtSSTRecord(&esst);
         for (int i = 0; i < d->inputDoc->map()->count(); i++) {
             Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(d->inputDoc->map()->sheet(i));
@@ -219,7 +219,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray &from, const QB
         o.writeRecord(esst);
     }
 
-    o.writeRecord(EOFRecord(0));
+    o.writeRecord(EOFRecord(nullptr));
 
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
         boundSheets[i].setBofPosition(o.pos());
@@ -258,7 +258,7 @@ void ExcelExport::collectStyles(Calligra::Sheets::Sheet *sheet, QList<XFRecord> 
             Calligra::Sheets::Style s = sheet->fullCellStorage()->style(col, row);
             unsigned &idx = d->styles[s];
             if (!idx) {
-                XFRecord xfr(0);
+                XFRecord xfr(nullptr);
                 d->convertStyle(s, xfr, fontMap);
                 idx = xfRecords.size() + 16;
                 xfRecords.append(xfr);
@@ -288,7 +288,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
 {
     XlsRecordOutputStream &o = *d->out;
     {
-        BOFRecord b(0);
+        BOFRecord b(nullptr);
         b.setType(BOFRecord::Worksheet);
         b.setRecordSize(16);
         o.writeRecord(b);
@@ -301,37 +301,37 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
         area.setRight(0x100);
     }
 
-    IndexRecord ir(0);
+    IndexRecord ir(nullptr);
     ir.setRowMin(area.top() - 1);
     ir.setRowMaxPlus1(area.bottom());
     int dbCellCount = (area.height() + 31) / 32;
     ir.setRowBlockCount(dbCellCount);
     o.writeRecord(ir);
 
-    o.writeRecord(CalcModeRecord(0));
-    o.writeRecord(CalcCountRecord(0));
-    o.writeRecord(CalcRefModeRecord(0));
-    o.writeRecord(CalcIterRecord(0));
-    o.writeRecord(CalcDeltaRecord(0));
-    o.writeRecord(CalcSaveRecalcRecord(0));
-    o.writeRecord(PrintRowColRecord(0));
-    o.writeRecord(PrintGridRecord(0));
-    o.writeRecord(GridSetReservedRecord(0));
-    o.writeRecord(GutsRecord(0));
+    o.writeRecord(CalcModeRecord(nullptr));
+    o.writeRecord(CalcCountRecord(nullptr));
+    o.writeRecord(CalcRefModeRecord(nullptr));
+    o.writeRecord(CalcIterRecord(nullptr));
+    o.writeRecord(CalcDeltaRecord(nullptr));
+    o.writeRecord(CalcSaveRecalcRecord(nullptr));
+    o.writeRecord(PrintRowColRecord(nullptr));
+    o.writeRecord(PrintGridRecord(nullptr));
+    o.writeRecord(GridSetReservedRecord(nullptr));
+    o.writeRecord(GutsRecord(nullptr));
 
-    o.writeRecord(DefaultRowHeightRecord(0));
-    o.writeRecord(WsBoolRecord(0));
+    o.writeRecord(DefaultRowHeightRecord(nullptr));
+    o.writeRecord(WsBoolRecord(nullptr));
 
-    o.writeRecord(HeaderRecord(0));
-    o.writeRecord(FooterRecord(0));
-    o.writeRecord(HCenterRecord(0));
-    o.writeRecord(VCenterRecord(0));
-    o.writeRecord(SetupRecord(0));
+    o.writeRecord(HeaderRecord(nullptr));
+    o.writeRecord(FooterRecord(nullptr));
+    o.writeRecord(HCenterRecord(nullptr));
+    o.writeRecord(VCenterRecord(nullptr));
+    o.writeRecord(SetupRecord(nullptr));
 
     ir.setDefColWidthPosition(o.pos());
-    o.writeRecord(DefaultColWidthRecord(0)); // TODO: real defaultColWidthRecord
+    o.writeRecord(DefaultColWidthRecord(nullptr)); // TODO: real defaultColWidthRecord
     {
-        ColInfoRecord cir(0);
+        ColInfoRecord cir(nullptr);
         for (int i = 1; i <= area.right(); ++i) {
             Calligra::Sheets::ColFormatStorage *cf = sheet->columnFormats();
             unsigned w = convertColumnWidth(cf->colWidth(i));
@@ -350,7 +350,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
     }
 
     {
-        DimensionRecord dr(0);
+        DimensionRecord dr(nullptr);
         dr.setFirstRow(area.top() - 1);
         dr.setFirstColumn(area.left() - 1);
         dr.setLastRowPlus1(area.bottom());
@@ -366,7 +366,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
 
         qint64 lastStart = -1;
         for (int row = firstRow; row < lastRowP1; row++) {
-            RowRecord rr(0);
+            RowRecord rr(nullptr);
 
             Calligra::Sheets::Cell first = sheet->fullCellStorage()->firstInRow(row);
             if (first.isNull())
@@ -385,7 +385,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
                 lastStart = o.pos();
         }
 
-        DBCellRecord db(0);
+        DBCellRecord db(nullptr);
         db.setRowCount(lastRowP1 - firstRow);
         for (int row = firstRow; row < lastRowP1; row++) {
             db.setCellOffset(row - firstRow, o.pos() - lastStart);
@@ -405,7 +405,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
                 unsigned xfi = d->styles[style];
 
                 if (cell.isFormula()) {
-                    FormulaRecord fr(0);
+                    FormulaRecord fr(nullptr);
                     fr.setRow(row - 1);
                     fr.setColumn(col - 1);
                     fr.setXfIndex(xfi);
@@ -448,21 +448,21 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
 
                     o.writeRecord(fr);
                 } else if (val.isNumber()) {
-                    NumberRecord nr(0);
+                    NumberRecord nr(nullptr);
                     nr.setRow(row - 1);
                     nr.setColumn(col - 1);
                     nr.setXfIndex(xfi);
                     nr.setNumber(cell.value().asFloat());
                     o.writeRecord(nr);
                 } else if (val.isString()) {
-                    LabelSSTRecord lr(0);
+                    LabelSSTRecord lr(nullptr);
                     lr.setRow(row - 1);
                     lr.setColumn(col - 1);
                     lr.setXfIndex(xfi);
                     lr.setSstIndex(sst[cell.value().asString()]);
                     o.writeRecord(lr);
                 } else if (val.isBoolean() || val.isError()) {
-                    BoolErrRecord br(0);
+                    BoolErrRecord br(nullptr);
                     br.setRow(row - 1);
                     br.setColumn(col - 1);
                     br.setXfIndex(xfi);
@@ -495,7 +495,7 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
                     }
                     o.writeRecord(br);
                 } else /*if (cell.isEmpty())*/ {
-                    BlankRecord br(0);
+                    BlankRecord br(nullptr);
                     br.setRow(row - 1);
                     br.setColumn(col - 1);
                     br.setXfIndex(xfi);
@@ -512,14 +512,14 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QStri
     o.rewriteRecord(ir);
 
     {
-        Window2Record w2(0);
+        Window2Record w2(nullptr);
         w2.setHasSheetFields(true);
         o.writeRecord(w2);
     }
 
     // MergeCells
 
-    o.writeRecord(EOFRecord(0));
+    o.writeRecord(EOFRecord(nullptr));
 }
 
 /**********************
@@ -1177,7 +1177,7 @@ unsigned ExcelExport::Private::fontIndex(const QFont &f, const QColor &c, QHash<
     unsigned &idx = fontMap[qMakePair(f, c)];
     if (idx)
         return idx;
-    FontRecord fr(0);
+    FontRecord fr(nullptr);
     fr.setHeight(f.pointSizeF() * 20);
     fr.setItalic(f.italic());
     fr.setStrikeout(f.strikeOut());

@@ -28,7 +28,7 @@ void KoResourceTaggingTest::testInitialization()
 {
     KoResourceTagStore tagStore(KoResourceServerProvider::instance()->patternServer());
     QVERIFY(tagStore.tagNamesList().isEmpty());
-    QVERIFY(tagStore.assignedTagsList(0).isEmpty());
+    QVERIFY(tagStore.assignedTagsList(nullptr).isEmpty());
     QVERIFY(tagStore.searchTag("bla").isEmpty());
 }
 
@@ -98,7 +98,7 @@ void KoResourceTaggingTest::testReadWriteXML()
     tagStore.addTag(patterns[5], "test5");
     tagStore.addTag(patterns[5], "test5.1");
     tagStore.addTag(patterns[5], "test5.2");
-    tagStore.addTag(0, "dummytest");
+    tagStore.addTag(nullptr, "dummytest");
 
     QVERIFY(tagStore.tagNamesList().size() == 9);
 

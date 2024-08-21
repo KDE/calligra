@@ -147,7 +147,7 @@ Clef *Staff::lastClefChange(int bar, int time, Clef *oldClef)
             return oldClef;
         time = INT_MAX;
     }
-    return 0;
+    return nullptr;
 }
 
 Clef *Staff::lastClefChange(Bar *bar, int time, Clef *oldClef)
@@ -169,7 +169,7 @@ KeySignature *Staff::lastKeySignatureChange(int bar)
                 return ks;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KeySignature *Staff::lastKeySignatureChange(Bar *bar)
@@ -191,7 +191,7 @@ TimeSignature *Staff::lastTimeSignatureChange(int bar)
                 return ts;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 TimeSignature *Staff::lastTimeSignatureChange(Bar *bar)

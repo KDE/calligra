@@ -122,7 +122,7 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
         // So far we only have support for text-, paragraph- and graphic-properties
         const QString propertiesType = reader.qualifiedName().toString();
         // Create a new propertyset variable depending on the type of properties.
-        KoOdfStyleProperties *properties = 0;
+        KoOdfStyleProperties *properties = nullptr;
         if (propertiesType == "style:text-properties") {
             properties = new KoOdfTextProperties();
         } else if (propertiesType == "style:paragraph-properties") {

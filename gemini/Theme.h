@@ -111,7 +111,7 @@ class Theme : public QObject
      */
     Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
 public:
-    explicit Theme(QObject *parent = 0);
+    explicit Theme(QObject *parent = nullptr);
     ~Theme() override;
 
     /**
@@ -228,7 +228,7 @@ public:
      */
     Q_INVOKABLE int adjustedPixel(const int &pixel) const;
 
-    static Theme *load(const QString &id, QObject *parent = 0);
+    static Theme *load(const QString &id, QObject *parent = nullptr);
 
 Q_SIGNALS:
     void idChanged();

@@ -31,7 +31,7 @@ private:
     XFigDocument *takeDocument()
     {
         XFigDocument *result = m_Document;
-        m_Document = 0;
+        m_Document = nullptr;
         return result;
     }
 

@@ -24,13 +24,13 @@
 
 struct View {
     View()
-        : quickView(0)
-        , widget(0)
+        : quickView(nullptr)
+        , widget(nullptr)
     {
     }
     QQuickView *quickView;
     QWidget *widget;
-    QWidget *getWidget(QWidget *parent = 0)
+    QWidget *getWidget(QWidget *parent = nullptr)
     {
         QWidget *view;
         if (widget) {
@@ -141,7 +141,7 @@ void GeminiMainWindow::changeState(GeminiMainWindow::GeminiState newState, bool 
                                                  d->syncObject);
         QApplication::sendEvent(d->eventReceivers[d->currentState], &aboutToSwitchEvent);
 
-        centralWidget()->setParent(0);
+        centralWidget()->setParent(nullptr);
     }
 
     View *view = d->views[newState];
@@ -168,7 +168,7 @@ void GeminiMainWindow::stateChanging()
                                         d->eventReceivers[d->currentState],
                                         d->syncObject);
     QApplication::sendEvent(d->eventReceivers[d->currentState], &switchedEvent);
-    d->syncObject = 0;
+    d->syncObject = nullptr;
     qApp->processEvents();
 }
 
@@ -186,7 +186,7 @@ void GeminiMainWindow::setStateLocked(bool locked)
 void GeminiMainWindow::setViewForState(QWidget *widget, GeminiMainWindow::GeminiState state)
 {
     View *view = d->views[state];
-    view->quickView = 0;
+    view->quickView = nullptr;
     view->widget = widget;
 }
 
@@ -194,7 +194,7 @@ void GeminiMainWindow::setViewForState(QQuickView *quickView, GeminiMainWindow::
 {
     View *view = d->views[state];
     view->quickView = quickView;
-    view->widget = 0;
+    view->widget = nullptr;
 }
 
 void GeminiMainWindow::setEventReceiverForState(QObject *receiver, GeminiMainWindow::GeminiState state)

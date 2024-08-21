@@ -99,7 +99,7 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements(RowElement *owner,
     m_placeholderPosition = 0;
 
     // we have to remember to which descendant of m_added the elements got moved
-    BasicElement *placeholder = 0;
+    BasicElement *placeholder = nullptr;
     foreach (BasicElement *tmp, m_added) {
         if ((placeholder = tmp->emptyDescendant())) {
             break;
@@ -117,7 +117,7 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements(RowElement *owner,
             setRedoCursorPosition(FormulaCursor(m_placeholderParent, m_placeholderPosition));
         }
     } else {
-        m_placeholderParent = 0;
+        m_placeholderParent = nullptr;
         setRedoCursorPosition(FormulaCursor(m_ownerElement, m_position + m_added.length()));
     }
     setUndoCursorPosition(FormulaCursor(m_ownerElement, m_position + m_removed.length()));
@@ -144,7 +144,7 @@ void FormulaCommandReplaceElements::redo()
     for (int i = 0; i < m_length; ++i) {
         m_ownerElement->removeChild(m_removed[i]);
     }
-    if (m_wrap && m_placeholderParent != 0) {
+    if (m_wrap && m_placeholderParent != nullptr) {
         int counter = 0;
         foreach (BasicElement *tmp, m_removed) {
             m_placeholderParent->insertChild(m_placeholderPosition + counter, tmp);
@@ -162,7 +162,7 @@ void FormulaCommandReplaceElements::undo()
     for (int i = 0; i < m_added.length(); ++i) {
         m_ownerElement->removeChild(m_added[i]);
     }
-    if (m_wrap && m_placeholderParent != 0) {
+    if (m_wrap && m_placeholderParent != nullptr) {
         foreach (BasicElement *tmp, m_removed) {
             m_placeholderParent->removeChild(tmp);
         }
@@ -206,7 +206,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow(FormulaData *data, FormulaCur
     m_data = data;
     m_table = table;
     m_number = number;
-    m_empty = 0;
+    m_empty = nullptr;
     int columnnumber = m_table->childElements()[0]->childElements().count();
     TableRowElement *tmpRow;
     for (int i = 0; i < newlength; i++) {
@@ -293,7 +293,7 @@ FormulaCommandReplaceColumn::FormulaCommandReplaceColumn(FormulaData *data,
     m_data = data;
     m_table = table;
     m_position = position;
-    m_empty = 0;
+    m_empty = nullptr;
     int rownumber = m_table->childElements().count();
     QList<BasicElement *> tmp;
 

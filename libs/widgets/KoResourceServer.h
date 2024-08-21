@@ -438,7 +438,7 @@ public:
         if (m_resourcesByFilename.contains(filename)) {
             return m_resourcesByFilename[filename];
         }
-        return 0;
+        return nullptr;
     }
 
     PointerType resourceByName(const QString &name) const

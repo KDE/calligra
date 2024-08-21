@@ -615,7 +615,7 @@ void KoCsvImportDialog::updateClicked()
 bool KoCsvImportDialog::Private::checkUpdateRange()
 {
     if ((dialog->m_rowStart->value() > dialog->m_rowEnd->value()) || (dialog->m_colStart->value() > dialog->m_colEnd->value())) {
-        KMessageBox::error(0, i18n("Please check the ranges you specified. The start value must be lower than the end value."));
+        KMessageBox::error(nullptr, i18n("Please check the ranges you specified. The start value must be lower than the end value."));
         return false;
     }
     return true;

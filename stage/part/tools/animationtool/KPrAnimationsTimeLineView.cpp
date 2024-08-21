@@ -45,8 +45,8 @@ const int END_COLUMN = (int)KPrShapeAnimations::StartTime;
 
 KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     : QWidget(parent)
-    , m_model(0)
-    , m_shapeModel(0)
+    , m_model(nullptr)
+    , m_shapeModel(nullptr)
     , m_selectedRow(INVALID)
     , m_selectedColumn(INVALID)
     , m_rowsHeight(50)

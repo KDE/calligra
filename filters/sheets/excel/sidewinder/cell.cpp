@@ -16,10 +16,10 @@ using namespace Swinder;
 
 Cell::Cell(Sheet *sheet, unsigned column, unsigned row)
     : m_sheet(sheet)
-    , m_value(0)
-    , m_formula(0)
-    , m_note(0)
-    , m_format(0)
+    , m_value(nullptr)
+    , m_formula(nullptr)
+    , m_note(nullptr)
+    , m_format(nullptr)
     , m_row(row)
     , m_column(column)
     , m_rowSpan(1)
@@ -98,7 +98,7 @@ void Cell::setValue(const Value &value)
 {
     if (value.isEmpty()) {
         delete m_value;
-        m_value = 0;
+        m_value = nullptr;
     } else {
         if (m_value)
             *m_value = value;
@@ -116,7 +116,7 @@ void Cell::setFormula(const QString &formula)
 {
     if (formula.isNull()) {
         delete m_formula;
-        m_formula = 0;
+        m_formula = nullptr;
     } else {
         if (m_formula)
             *(m_formula) = formula;
@@ -224,7 +224,7 @@ void Cell::setNote(const QString &n)
 {
     if (n.isNull()) {
         delete m_note;
-        m_note = 0;
+        m_note = nullptr;
     } else {
         if (m_note)
             *(m_note) = n;

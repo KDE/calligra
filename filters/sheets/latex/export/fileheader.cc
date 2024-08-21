@@ -28,7 +28,7 @@
 
 #include <QTextStream>
 
-FileHeader* FileHeader::_instance = 0;
+FileHeader* FileHeader::_instance = nullptr;
 
 /*******************************************/
 /* Constructor                             */
@@ -313,7 +313,7 @@ void FileHeader::generatePackage(QTextStream &out)
 
 FileHeader* FileHeader::instance()
 {
-    if (_instance == 0)
+    if (_instance == nullptr)
         _instance = new FileHeader();
     return _instance;
 }

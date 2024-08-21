@@ -78,7 +78,7 @@ KoPADocument::KoPADocument(KoPart *part)
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
     // this is needed so the text shape have a shape controller set when loaded, it is needed for copy and paste
-    new KoShapeController(0, this);
+    new KoShapeController(nullptr, this);
     QVariant variant;
     d->pageProvider = new KoPAPageProvider();
     variant.setValue<void *>(d->pageProvider);
@@ -573,7 +573,7 @@ void KoPADocument::pageRemoved(KoPAPageBase *page, KUndo2Command *parent)
 KoPAPageBase *KoPADocument::pageByShape(KoShape *shape) const
 {
     KoShape *parent = shape;
-    KoPAPageBase *page = 0;
+    KoPAPageBase *page = nullptr;
     while (!page && (parent = parent->parent())) {
         page = dynamic_cast<KoPAPageBase *>(parent);
     }
@@ -659,7 +659,7 @@ void KoPADocument::insertPage(KoPAPageBase *page, KoPAPageBase *after)
 
     int index = 0;
 
-    if (after != 0) {
+    if (after != nullptr) {
         index = pages.indexOf(after) + 1;
 
         // Append the page if after wasn't found in pages

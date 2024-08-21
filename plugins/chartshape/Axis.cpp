@@ -215,10 +215,10 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     : q(axis)
     , dimension(dim)
     , kdAxis(new CartesianAxis(axis))
-    , kdPlane(0)
-    , kdPolarPlane(0)
-    , kdRadarPlane(0)
-    , numericStyleFormat(0)
+    , kdPlane(nullptr)
+    , kdPolarPlane(nullptr)
+    , kdRadarPlane(nullptr)
+    , numericStyleFormat(nullptr)
 {
     centerDataPoints = false;
 
@@ -248,8 +248,8 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     showOverlappingDataLabels = false;
     showLabels = true;
 
-    title = 0;
-    titleData = 0;
+    title = nullptr;
+    titleData = nullptr;
 
     KChart::RulerAttributes attr = kdAxis->rulerAttributes();
     attr.setShowRulerLine(true);
@@ -280,7 +280,7 @@ Axis::Private::~Private()
     delete kdAxis;
 
     foreach (DataSet *dataSet, dataSets)
-        dataSet->setAttachedAxis(0);
+        dataSet->setAttachedAxis(nullptr);
 }
 
 void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
@@ -298,7 +298,7 @@ void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
 
 KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
 {
-    KChart::AbstractDiagram *diagram = 0;
+    KChart::AbstractDiagram *diagram = nullptr;
 
     switch (chartType) {
     case BarChartType:
@@ -395,11 +395,11 @@ KChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
     case GanttChartType:
         return kdGanttDiagram;
     case LastChartType:
-        return 0;
+        return nullptr;
         // Compiler warning for unhandled chart type is intentional.
     }
     Q_ASSERT(!"Unhandled chart type");
-    return 0;
+    return nullptr;
 }
 
 void Axis::Private::deleteDiagram(KChart::AbstractDiagram *diagram)
@@ -422,7 +422,7 @@ void Axis::Private::deleteDiagram(ChartType chartType)
 
 void Axis::Private::createBarDiagram()
 {
-    Q_ASSERT(kdBarDiagram == 0);
+    Q_ASSERT(kdBarDiagram == nullptr);
 
     kdBarDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
     KChartModel *model = new KChartModel(plotArea, kdBarDiagram);
@@ -474,7 +474,7 @@ void Axis::Private::createBarDiagram()
 
 void Axis::Private::createLineDiagram()
 {
-    Q_ASSERT(kdLineDiagram == 0);
+    Q_ASSERT(kdLineDiagram == nullptr);
 
     kdLineDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
     KChartModel *model = new KChartModel(plotArea, kdLineDiagram);
@@ -517,7 +517,7 @@ void Axis::Private::createLineDiagram()
 
 void Axis::Private::createAreaDiagram()
 {
-    Q_ASSERT(kdAreaDiagram == 0);
+    Q_ASSERT(kdAreaDiagram == nullptr);
 
     kdAreaDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
     KChartModel *model = new KChartModel(plotArea, kdAreaDiagram);
@@ -566,7 +566,7 @@ void Axis::Private::createAreaDiagram()
 
 void Axis::Private::createCircleDiagram()
 {
-    Q_ASSERT(kdCircleDiagram == 0);
+    Q_ASSERT(kdCircleDiagram == nullptr);
 
     kdCircleDiagram = new KChart::PieDiagram(plotArea->kdChart(), kdPolarPlane);
     KChartModel *model = new KChartModel(plotArea, kdCircleDiagram);
@@ -591,7 +591,7 @@ void Axis::Private::createCircleDiagram()
 
 void Axis::Private::createRingDiagram()
 {
-    Q_ASSERT(kdRingDiagram == 0);
+    Q_ASSERT(kdRingDiagram == nullptr);
 
     kdRingDiagram = new KChart::RingDiagram(plotArea->kdChart(), kdPolarPlane);
     KChartModel *model = new KChartModel(plotArea, kdRingDiagram);
@@ -616,7 +616,7 @@ void Axis::Private::createRingDiagram()
 
 void Axis::Private::createRadarDiagram(bool filled)
 {
-    Q_ASSERT(kdRadarDiagram == 0);
+    Q_ASSERT(kdRadarDiagram == nullptr);
 
     // kdRadarDiagramModel->setDataDimensions(2);
     // kdRadarDiagramModel->setDataDirection(Qt::Horizontal);
@@ -648,7 +648,7 @@ void Axis::Private::createRadarDiagram(bool filled)
 
 void Axis::Private::createScatterDiagram()
 {
-    Q_ASSERT(kdScatterDiagram == 0);
+    Q_ASSERT(kdScatterDiagram == nullptr);
     Q_ASSERT(plotArea);
 
     kdScatterDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
@@ -684,7 +684,7 @@ void Axis::Private::createScatterDiagram()
 
 void Axis::Private::createStockDiagram()
 {
-    Q_ASSERT(kdStockDiagram == 0);
+    Q_ASSERT(kdStockDiagram == nullptr);
 
     kdStockDiagram = new KChart::StockDiagram(plotArea->kdChart(), kdPlane);
     KChartModel *model = new KChartModel(plotArea, kdStockDiagram);
@@ -731,7 +731,7 @@ void Axis::Private::createStockDiagram()
 
 void Axis::Private::createBubbleDiagram()
 {
-    Q_ASSERT(kdBubbleDiagram == 0);
+    Q_ASSERT(kdBubbleDiagram == nullptr);
     Q_ASSERT(plotArea);
 
     kdBubbleDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
@@ -796,7 +796,7 @@ void Axis::Private::adjustAllDiagrams()
 {
     // If at least one dataset is attached that belongs to a
     // horizontal bar chart, set centerDataPoints to true.
-    centerDataPoints = kdBarDiagram != 0;
+    centerDataPoints = kdBarDiagram != nullptr;
     if (kdLineDiagram)
         kdLineDiagram->setCenterDataPoints(centerDataPoints);
     if (kdAreaDiagram)
@@ -837,7 +837,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
         d->title = textShapeFactory->createDefaultShape(parent->parent()->resourceManager());
     if (d->title) {
         d->titleData = qobject_cast<TextLabelData *>(d->title->userData());
-        if (d->titleData == 0) {
+        if (d->titleData == nullptr) {
             d->titleData = new TextLabelData;
             d->title->setUserData(d->titleData);
         }
@@ -979,8 +979,8 @@ bool Axis::detachDataSet(DataSet *dataSet, bool silent)
         else
             oldModel->removeDataSet(dataSet, silent);
 
-        dataSet->setKdChartModel(0);
-        dataSet->setAttachedAxis(0);
+        dataSet->setKdChartModel(nullptr);
+        dataSet->setAttachedAxis(nullptr);
 
         if (!silent) {
             layoutPlanes();

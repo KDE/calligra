@@ -77,7 +77,7 @@ void FindReplaceAction::execute(Selection *selection, Sheet *sheet, QWidget *can
     delete m_replace;
     m_find = new KFind(dialog->pattern(), dialog->options(), canvasWidget);
     m_replace = nullptr;
-    m_replaceCommand = 0;
+    m_replaceCommand = nullptr;
 
     m_currentSheet = sheet;
     m_firstSheet = sheet;
@@ -163,7 +163,7 @@ void FindReplaceAction::initFindReplace()
 void FindReplaceAction::slotHighlight(const QString & /*text*/, int /*matchingIndex*/, int /*matchedLength*/)
 {
     m_selection->initialize(m_findPos);
-    QDialog *dialog = 0;
+    QDialog *dialog = nullptr;
     if (m_find)
         dialog = m_find->findNextDialog();
     else
@@ -343,7 +343,7 @@ void FindReplaceAction::findNext()
                 m_find->closeFindNextDialog();
             else {
                 m_selection->canvas()->addCommand(m_replaceCommand);
-                m_replaceCommand = 0;
+                m_replaceCommand = nullptr;
                 m_replace->closeReplaceNextDialog();
             }
         }

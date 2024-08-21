@@ -31,8 +31,8 @@ public:
     KoPatternBackgroundPrivate()
         : repeat(KoPatternBackground::Tiled)
         , refPoint(KoPatternBackground::TopLeft)
-        , imageCollection(0)
-        , imageData(0)
+        , imageCollection(nullptr)
+        , imageData(nullptr)
     {
     }
 

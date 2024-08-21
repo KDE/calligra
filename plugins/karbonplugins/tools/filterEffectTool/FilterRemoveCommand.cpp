@@ -13,7 +13,7 @@
 
 FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent)
     : KUndo2Command(parent)
-    , m_filterEffect(0)
+    , m_filterEffect(nullptr)
     , m_filterStack(filterStack)
     , m_shape(shape)
     , m_isRemoved(false)

@@ -76,19 +76,19 @@
 View::View(RootSection *document, MainWindow *parent)
     : QWidget(parent)
     , m_doc(document)
-    , m_canvas(0)
-    , m_activeSection(0)
+    , m_canvas(nullptr)
+    , m_activeSection(nullptr)
     , m_mainWindow(parent)
-    , m_cutController(0)
-    , m_copyController(0)
+    , m_cutController(nullptr)
+    , m_copyController(nullptr)
 {
     setXMLFile("braindumpview.rc");
 
     m_doc->viewManager()->addView(this);
 
     m_editPaste = actionCollection()->addAction(KStandardAction::Paste, "edit_paste", this, SLOT(editPaste()));
-    m_editCut = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", 0, 0);
-    m_editCopy = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", 0, 0);
+    m_editCut = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", nullptr, nullptr);
+    m_editCopy = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", nullptr, nullptr);
     initGUI();
     initActions();
     loadExtensions();
@@ -96,7 +96,7 @@ View::View(RootSection *document, MainWindow *parent)
     if (m_doc->sections().count() > 0) {
         setActiveSection(m_doc->sections()[0]);
     } else {
-        setActiveSection(0);
+        setActiveSection(nullptr);
     }
 
     m_doc->viewManager()->viewHasFocus(this);
@@ -132,7 +132,7 @@ void View::initGUI()
     m_canvasController = new KoCanvasControllerWidget(actionCollection(), this);
     m_canvasController->setCanvasMode(KoCanvasController::Infinite);
 
-    createCanvas(0);
+    createCanvas(nullptr);
 
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_canvasController);

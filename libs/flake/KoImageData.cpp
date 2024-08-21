@@ -28,7 +28,7 @@
 #define MAX_MEMORY_IMAGESIZE 90000
 
 KoImageData::KoImageData()
-    : d(0)
+    : d(nullptr)
 {
 }
 
@@ -170,12 +170,12 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         this->operator=(*other);
         delete other;
     } else {
-        if (d == 0) {
+        if (d == nullptr) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }
         delete d->temporaryFile;
-        d->temporaryFile = 0;
+        d->temporaryFile = nullptr;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (image.sizeInBytes() > MAX_MEMORY_IMAGESIZE) {
@@ -186,7 +186,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
                 warnFlake << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
-                d->temporaryFile = 0;
+                d->temporaryFile = nullptr;
                 return;
             }
             buffer.close();
@@ -220,7 +220,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
         this->operator=(*other);
         delete other;
     } else {
-        if (d == 0) {
+        if (d == nullptr) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
         } else {
@@ -277,7 +277,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         this->operator=(*other);
         delete other;
     } else {
-        if (d == 0) {
+        if (d == nullptr) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }

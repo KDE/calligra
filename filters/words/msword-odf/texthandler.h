@@ -419,8 +419,8 @@ private:
             , m_afterSeparator(false)
             , m_hyperLinkActive(false)
             , m_tabLeader(QChar::Null)
-            , m_writer(0)
-            , m_buffer(0)
+            , m_writer(nullptr)
+            , m_buffer(nullptr)
         {
             m_buffer = new QBuffer();
             m_buffer->open(QIODevice::WriteOnly);
@@ -430,9 +430,9 @@ private:
         ~fld_State()
         {
             delete m_writer;
-            m_writer = 0;
+            m_writer = nullptr;
             delete m_buffer;
-            m_buffer = 0;
+            m_buffer = nullptr;
         }
 
         // Set to UNSUPPORTED for a field we can't handle.

@@ -268,8 +268,8 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
         QDomElement element = resourceNodesList.at(i).toElement();
         if (element.tagName() == "resource") {
-            KoResource *resByMd5 = 0;
-            KoResource *resByFileName = 0;
+            KoResource *resByMd5 = nullptr;
+            KoResource *resByFileName = nullptr;
 
             if (element.hasAttribute("md5")) {
                 resourceMD5 = QByteArray::fromBase64(element.attribute("md5").toLatin1());
@@ -293,13 +293,13 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                         KoResource *res = d->resourceServer->byFileName(fi.fileName());
                         addTag(res, tagEl.text());
                     } else {
-                        addTag(0, tagEl.text());
+                        addTag(nullptr, tagEl.text());
                     }
                     d->md5ToTag.insert(resourceMD5, tagEl.text());
                     d->identifierToTag.insert(identifier, tagEl.text());
                 }
             } else {
-                KoResource *res = 0;
+                KoResource *res = nullptr;
 
                 if (resByMd5 && resByFileName && (resByMd5 != resByFileName)) {
                     warnWidgets << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";

@@ -49,13 +49,13 @@ public:
     /// reimplemented method from superclass
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
 
     /// reimplemented method from superclass
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
 
     /// reimplemented method from superclass
@@ -117,7 +117,7 @@ protected: // QGraphicsWidget
     void keyReleaseEvent(QKeyEvent *e) override;
 
     /// reimplemented method from superclass
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     /// reimplemented method from superclass
     //    virtual void tabletEvent(QTabletEvent *e);

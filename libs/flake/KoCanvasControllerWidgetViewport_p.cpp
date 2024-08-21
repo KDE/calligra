@@ -34,9 +34,9 @@
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasControllerWidget *parent)
     : QWidget(parent)
-    , m_draggedShape(0)
+    , m_draggedShape(nullptr)
     , m_drawShadow(false)
-    , m_canvas(0)
+    , m_canvas(nullptr)
     , m_documentOffset(QPoint(0, 0))
     , m_margin(0)
 {
@@ -187,7 +187,7 @@ void Viewport::handleDropEvent(QDropEvent *event)
     } else
         delete m_draggedShape;
 
-    m_draggedShape = 0;
+    m_draggedShape = nullptr;
 }
 
 QPointF Viewport::correctPosition(const QPoint &point) const
@@ -230,7 +230,7 @@ void Viewport::handleDragLeaveEvent(QDragLeaveEvent *event)
         repaint(m_draggedShape);
         m_parent->canvas()->shapeManager()->remove(m_draggedShape);
         delete m_draggedShape;
-        m_draggedShape = 0;
+        m_draggedShape = nullptr;
     } else {
         m_parent->canvas()->toolProxy()->dragLeaveEvent(event);
     }

@@ -10,7 +10,7 @@
 
 KoPAPageProvider::KoPAPageProvider()
     : m_pageNumber(0)
-    , m_page(0)
+    , m_page(nullptr)
 {
 }
 

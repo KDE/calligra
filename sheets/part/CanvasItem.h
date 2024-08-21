@@ -61,11 +61,11 @@ public:
 
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
 
     /**
@@ -120,7 +120,7 @@ protected:
     {
         CanvasBase::keyPressed(_ev);
     }
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *_ev) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
     void focusInEvent(QFocusEvent *_ev) override

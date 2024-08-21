@@ -75,7 +75,7 @@ void TestPathShape::pathPointIndex()
     KoPathPointIndex p3Index(1, 0);
     KoPathPoint *point4 = path.lineTo(QPointF(40, 40));
     KoPathPointIndex p4Index(1, 1);
-    KoPathPoint *point5 = 0;
+    KoPathPoint *point5 = nullptr;
     KoPathPointIndex p5Index(-1, -1);
 
     QCOMPARE(p1Index, path.pathPointIndex(point1));
@@ -98,7 +98,7 @@ void TestPathShape::pointByIndex()
     KoPathPoint *point2 = path.lineTo(QPointF(20, 20));
     KoPathPoint *point3 = path.moveTo(QPointF(30, 30));
     KoPathPoint *point4 = path.lineTo(QPointF(40, 40));
-    KoPathPoint *point5 = 0;
+    KoPathPoint *point5 = nullptr;
 
     QVERIFY(point1 == path.pointByIndex(path.pathPointIndex(point1)));
     QVERIFY(point2 == path.pointByIndex(path.pathPointIndex(point2)));
@@ -128,12 +128,12 @@ void TestPathShape::segmentByIndex()
 
     QVERIFY(KoPathSegment(point1, point2) == path.segmentByIndex(path.pathPointIndex(point1)));
     // test last point in a open path
-    QVERIFY(KoPathSegment(0, 0) == path.segmentByIndex(path.pathPointIndex(point3)));
+    QVERIFY(KoPathSegment(nullptr, nullptr) == path.segmentByIndex(path.pathPointIndex(point3)));
     // test last point in a closed path
     QVERIFY(KoPathSegment(point5, point4) == path.segmentByIndex(path.pathPointIndex(point5)));
     // test out of bounds
-    QVERIFY(KoPathSegment(0, 0) == path.segmentByIndex(KoPathPointIndex(3, 4)));
-    QVERIFY(KoPathSegment(0, 0) == path.segmentByIndex(KoPathPointIndex(4, 0)));
+    QVERIFY(KoPathSegment(nullptr, nullptr) == path.segmentByIndex(KoPathPointIndex(3, 4)));
+    QVERIFY(KoPathSegment(nullptr, nullptr) == path.segmentByIndex(KoPathPointIndex(4, 0)));
 }
 
 void TestPathShape::pointCount()
@@ -284,7 +284,7 @@ void TestPathShape::insertPoint()
 
     KoPathShape path2;
     path2.moveTo(QPointF(0, 0));
-    KoPathPoint *p = new KoPathPoint(0, QPointF(100, 100));
+    KoPathPoint *p = new KoPathPoint(nullptr, QPointF(100, 100));
     QVERIFY(path2.insertPoint(p, KoPathPointIndex(0, 1)) == true);
     QVERIFY(p->parent() == &path2);
 }
@@ -659,9 +659,9 @@ void TestPathShape::removeSubpath()
     path.curveTo(QPointF(40, 45), QPointF(30, 45), QPointF(30, 40));
     path.close();
 
-    QVERIFY(path.removeSubpath(0) != 0);
-    QVERIFY(path.removeSubpath(1) != 0);
-    QVERIFY(path.removeSubpath(1) == 0);
+    QVERIFY(path.removeSubpath(0) != nullptr);
+    QVERIFY(path.removeSubpath(1) != nullptr);
+    QVERIFY(path.removeSubpath(1) == nullptr);
 
     QPainterPath ppath(QPointF(15, 25));
     ppath.lineTo(10, 20);

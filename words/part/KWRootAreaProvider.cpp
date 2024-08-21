@@ -89,8 +89,8 @@ void KWRootAreaProvider::clearPages(int pageNumber)
                 lay->removeRootArea(area);
             }
         } else {
-            releaseAllAfter(0);
-            lay->removeRootArea(0);
+            releaseAllAfter(nullptr);
+            lay->removeRootArea(nullptr);
         }
     } while (false);
 }
@@ -176,7 +176,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                 KWRootAreaProvider *provider = (KWRootAreaProvider *)kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider();
                 provider->addDependentProvider(this, pageNumber);
             }
-            return 0; // not ready to layout this yet
+            return nullptr; // not ready to layout this yet
         }
 
         KWPage page = pageManager->page(pageNumber);
@@ -288,7 +288,7 @@ KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootArea
     KWPageManager *pageManager = frameSet()->wordsDocument()->pageManager();
     Q_ASSERT(pageManager);
     if (pageManager->pageCount() == 0) // not ready yet (may happen e.g. on loading a document)
-        return 0;
+        return nullptr;
 
     QString reallyNeededPageStyle = constraints.masterPageName;
     int visiblePageNumber = constraints.visiblePageNumber;
@@ -343,7 +343,7 @@ KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootArea
     realConstraints.masterPageName = reallyNeededPageStyle;
     realConstraints.visiblePageNumber = visiblePageNumber;
     realConstraints.newPageForced = newPageForced;
-    KoTextLayoutRootArea *area = 0;
+    KoTextLayoutRootArea *area = nullptr;
     do {
         area = provideNext(documentLayout, realConstraints);
         if (m_rootAreaCache.size() <= requestedPosition)
@@ -352,7 +352,7 @@ KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootArea
 
     Q_ASSERT(m_rootAreaCache.size() > requestedPosition);
 
-    if (area == 0 && (frameSet()->textFrameSetType() != Words::MainTextFrameSet) && requestedPosition == 0)
+    if (area == nullptr && (frameSet()->textFrameSetType() != Words::MainTextFrameSet) && requestedPosition == 0)
         m_rootAreaCache.clear();
     *isNewArea = true;
 

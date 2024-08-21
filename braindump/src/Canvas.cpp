@@ -43,7 +43,7 @@
 
 Canvas::Canvas(View *view, RootSection *doc, Section *currentSection)
     : QWidget(view)
-    , KoCanvasBase(currentSection ? currentSection->sectionContainer() : 0)
+    , KoCanvasBase(currentSection ? currentSection->sectionContainer() : nullptr)
     , m_origin(0, 0)
     , m_view(view)
     , m_doc(doc)

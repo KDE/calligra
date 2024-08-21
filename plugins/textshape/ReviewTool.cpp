@@ -35,11 +35,11 @@
 
 ReviewTool::ReviewTool(KoCanvasBase *canvas)
     : TextTool(canvas)
-    , m_textEditor(0)
-    , m_textShapeData(0)
+    , m_textEditor(nullptr)
+    , m_textShapeData(nullptr)
     , m_canvas(canvas)
-    , m_textShape(0)
-    , m_currentAnnotationShape(0)
+    , m_textShape(nullptr)
+    , m_currentAnnotationShape(nullptr)
 {
     createActions();
 }
@@ -90,8 +90,8 @@ void ReviewTool::paint(QPainter &painter, const KoViewConverter &converter)
 QList<QPointer<QWidget>> ReviewTool::createOptionWidgets()
 {
     QList<QPointer<QWidget>> widgets;
-    SimpleSpellCheckingWidget *sscw = new SimpleSpellCheckingWidget(this, 0);
-    SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
+    SimpleSpellCheckingWidget *sscw = new SimpleSpellCheckingWidget(this, nullptr);
+    SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, nullptr);
 
     connect(saw, &SimpleAnnotationWidget::doneWithFocus, this, &ReviewTool::returnFocusToCanvas);
 
@@ -110,6 +110,6 @@ void ReviewTool::removeAnnotation()
         QList<KoShape *> shapes;
         shapes << m_currentAnnotationShape;
         canvas()->addCommand(canvas()->shapeController()->removeShapes(shapes));
-        m_currentAnnotationShape = 0;
+        m_currentAnnotationShape = nullptr;
     }
 }

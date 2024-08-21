@@ -33,7 +33,9 @@ private:
     const MSO::OfficeArtSpContainer *sp;
 
 public:
-    explicit DrawStyle(const MSO::OfficeArtDggContainer *d_ = 0, const MSO::OfficeArtSpContainer *mastersp_ = 0, const MSO::OfficeArtSpContainer *sp_ = 0)
+    explicit DrawStyle(const MSO::OfficeArtDggContainer *d_ = nullptr,
+                       const MSO::OfficeArtSpContainer *mastersp_ = nullptr,
+                       const MSO::OfficeArtSpContainer *sp_ = nullptr)
         : d(d_)
         , mastersp(mastersp_)
         , sp(sp_)
@@ -287,7 +289,7 @@ const A *get(const B &b)
         if (ptr)
             return ptr;
     }
-    return 0;
+    return nullptr;
 }
 /**
  * Retrieve an option from an OfficeArtSpContainer
@@ -299,7 +301,7 @@ const A *get(const B &b)
 template<typename A>
 const A *get(const MSO::OfficeArtSpContainer &o)
 {
-    const A *a = 0;
+    const A *a = nullptr;
     if (o.shapePrimaryOptions)
         a = get<A>(*o.shapePrimaryOptions);
     if (!a && o.shapeSecondaryOptions1)
@@ -322,7 +324,7 @@ const A *get(const MSO::OfficeArtSpContainer &o)
 template<typename A>
 const A *get(const MSO::OfficeArtDggContainer &o)
 {
-    const A *a = 0;
+    const A *a = nullptr;
     if (o.drawingPrimaryOptions) {
         a = get<A>(*o.drawingPrimaryOptions);
     }
@@ -340,7 +342,7 @@ const A *get(const MSO::OfficeArtDggContainer &o)
 template<typename A, typename T>
 const A *get(const T *o)
 {
-    return (o) ? get<A>(*o) : 0;
+    return (o) ? get<A>(*o) : nullptr;
 }
 /**
  * Retrieve the complex data from an options containing class B

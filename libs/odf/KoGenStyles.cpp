@@ -37,17 +37,17 @@ static const struct {
                  {KoGenStyle::PresentationStyle, "style:style", "style:graphic-properties", false},
                  {KoGenStyle::DrawingPageStyle, "style:style", "style:drawing-page-properties", false},
                  {KoGenStyle::ChartStyle, "style:style", "style:chart-properties", false},
-                 {KoGenStyle::ListStyle, "text:list-style", 0, false},
-                 {KoGenStyle::LinearGradientStyle, "svg:linearGradient", 0, true},
-                 {KoGenStyle::RadialGradientStyle, "svg:radialGradient", 0, true},
-                 {KoGenStyle::ConicalGradientStyle, "calligra:conicalGradient", 0, true},
-                 {KoGenStyle::StrokeDashStyle, "draw:stroke-dash", 0, true},
-                 {KoGenStyle::FillImageStyle, "draw:fill-image", 0, true},
+                 {KoGenStyle::ListStyle, "text:list-style", nullptr, false},
+                 {KoGenStyle::LinearGradientStyle, "svg:linearGradient", nullptr, true},
+                 {KoGenStyle::RadialGradientStyle, "svg:radialGradient", nullptr, true},
+                 {KoGenStyle::ConicalGradientStyle, "calligra:conicalGradient", nullptr, true},
+                 {KoGenStyle::StrokeDashStyle, "draw:stroke-dash", nullptr, true},
+                 {KoGenStyle::FillImageStyle, "draw:fill-image", nullptr, true},
                  {KoGenStyle::HatchStyle, "draw:hatch", "style:graphic-properties", true},
                  {KoGenStyle::GradientStyle, "draw:gradient", "style:graphic-properties", true},
                  {KoGenStyle::MarkerStyle, "draw:marker", "style:graphic-properties", true},
-                 {KoGenStyle::PresentationPageLayoutStyle, "style:presentation-page-layout", 0, false},
-                 {KoGenStyle::OutlineLevelStyle, "text:outline-style", 0, false}};
+                 {KoGenStyle::PresentationPageLayoutStyle, "style:presentation-page-layout", nullptr, false},
+                 {KoGenStyle::OutlineLevelStyle, "text:outline-style", nullptr, false}};
 
 static const unsigned int numStyleData = sizeof(styleData) / sizeof(*styleData);
 
@@ -69,16 +69,16 @@ static const struct {
                      {KoGenStyle::DrawingPageAutoStyle, "style:style", "style:drawing-page-properties", false},
                      {KoGenStyle::ChartAutoStyle, "style:style", "style:chart-properties", false},
                      {KoGenStyle::PageLayoutStyle, "style:page-layout", "style:page-layout-properties", false},
-                     {KoGenStyle::ListAutoStyle, "text:list-style", 0, false},
-                     {KoGenStyle::NumericNumberStyle, "number:number-style", 0, false},
-                     {KoGenStyle::NumericFractionStyle, "number:number-style", 0, false},
-                     {KoGenStyle::NumericScientificStyle, "number:number-style", 0, false},
-                     {KoGenStyle::NumericDateStyle, "number:date-style", 0, false},
-                     {KoGenStyle::NumericTimeStyle, "number:time-style", 0, false},
-                     {KoGenStyle::NumericPercentageStyle, "number:percentage-style", 0, false},
-                     {KoGenStyle::NumericCurrencyStyle, "number:currency-style", 0, false},
-                     {KoGenStyle::NumericBooleanStyle, "number:boolean-style", 0, false},
-                     {KoGenStyle::NumericTextStyle, "number:text-style", 0, false}};
+                     {KoGenStyle::ListAutoStyle, "text:list-style", nullptr, false},
+                     {KoGenStyle::NumericNumberStyle, "number:number-style", nullptr, false},
+                     {KoGenStyle::NumericFractionStyle, "number:number-style", nullptr, false},
+                     {KoGenStyle::NumericScientificStyle, "number:number-style", nullptr, false},
+                     {KoGenStyle::NumericDateStyle, "number:date-style", nullptr, false},
+                     {KoGenStyle::NumericTimeStyle, "number:time-style", nullptr, false},
+                     {KoGenStyle::NumericPercentageStyle, "number:percentage-style", nullptr, false},
+                     {KoGenStyle::NumericCurrencyStyle, "number:currency-style", nullptr, false},
+                     {KoGenStyle::NumericBooleanStyle, "number:boolean-style", nullptr, false},
+                     {KoGenStyle::NumericTextStyle, "number:text-style", nullptr, false}};
 
 static const unsigned int numAutoStyleData = sizeof(autoStyleData) / sizeof(*autoStyleData);
 
@@ -237,7 +237,7 @@ void KoGenStyles::Private::saveOdfMasterStyles(KoXmlWriter *xmlWriter) const
     QVector<KoGenStyles::NamedStyle> stylesList = styles(false, KoGenStyle::MasterPageStyle);
     QVector<KoGenStyles::NamedStyle>::const_iterator it = stylesList.constBegin();
     for (; it != stylesList.constEnd(); ++it) {
-        (*it).style->writeStyle(xmlWriter, *q, "style:master-page", (*it).name, 0);
+        (*it).style->writeStyle(xmlWriter, *q, "style:master-page", (*it).name, nullptr);
     }
 
     if (!rawOdfMasterStyles.isEmpty()) {
@@ -398,7 +398,7 @@ const KoGenStyle *KoGenStyles::style(const QString &name, const QByteArray &fami
             return (*it).style;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KoGenStyle *KoGenStyles::styleForModification(const QString &name, const QByteArray &family)

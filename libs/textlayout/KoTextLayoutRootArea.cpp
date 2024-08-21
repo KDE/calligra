@@ -16,10 +16,10 @@ class Q_DECL_HIDDEN KoTextLayoutRootArea::Private
 {
 public:
     Private()
-        : shape(0)
+        : shape(nullptr)
         , dirty(true)
-        , textpage(0)
-        , nextStartOfArea(0)
+        , textpage(nullptr)
+        , nextStartOfArea(nullptr)
     {
     }
     KoShape *shape;
@@ -29,7 +29,7 @@ public:
 };
 
 KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
-    : KoTextLayoutArea(0, documentLayout)
+    : KoTextLayoutArea(nullptr, documentLayout)
     , d(new Private)
 {
 }
@@ -39,7 +39,7 @@ KoTextLayoutRootArea::~KoTextLayoutRootArea()
     if (d->shape) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData *>(d->shape->userData());
         if (data)
-            data->setRootArea(0);
+            data->setRootArea(nullptr);
     }
     delete d->nextStartOfArea;
     delete d->textpage;
@@ -83,8 +83,8 @@ KoTextPage *KoTextLayoutRootArea::page() const
     // If this root area has no KoTextPage then walk up the shape-hierarchy and look if we
     // have a textshape-parent that has a valid KoTextPage. This handles the in Words valid
     // case that the associatedShape is nested in another shape.
-    KoTextPage *p = 0;
-    for (KoShape *shape = associatedShape() ? associatedShape()->parent() : 0; shape; shape = shape->parent()) {
+    KoTextPage *p = nullptr;
+    for (KoShape *shape = associatedShape() ? associatedShape()->parent() : nullptr; shape; shape = shape->parent()) {
         if (KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData())) {
             if (KoTextLayoutRootArea *r = data->rootArea())
                 p = r->page();

@@ -53,7 +53,7 @@ public:
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
         textDoc.setTextRangeManager(&m_rangeManager);
-        textDoc.setStyleManager(new KoStyleManager(0));
+        textDoc.setStyleManager(new KoStyleManager(nullptr));
         textDoc.setTextEditor(editor);
     }
 
@@ -223,7 +223,7 @@ void TestKoTextEditor::formSectionTestDocument(TestDocument *doc)
     KoSection *sec[TOTAL_SECTIONS];
     KoSectionEnd *secEnd[TOTAL_SECTIONS];
 
-    sec[0] = doc->sectionModel()->createSection(editor->constCursor(), 0, QString::number(0));
+    sec[0] = doc->sectionModel()->createSection(editor->constCursor(), nullptr, QString::number(0));
     pushSectionStart(0, sec[0], editor);
 
     sec[1] = doc->sectionModel()->createSection(editor->constCursor(), sec[0], QString::number(1));

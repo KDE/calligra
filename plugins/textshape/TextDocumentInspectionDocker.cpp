@@ -40,7 +40,7 @@ TextDocumentInspectionDocker::~TextDocumentInspectionDocker()
 
 void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
@@ -48,7 +48,7 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 
     m_canvas = canvas;
     if (!m_canvas) {
-        m_textDocumentStructureModel->setTextDocument(0);
+        m_textDocumentStructureModel->setTextDocument(nullptr);
         return;
     }
 
@@ -60,13 +60,13 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 void TextDocumentInspectionDocker::unsetCanvas()
 {
     setEnabled(false);
-    m_textDocumentStructureModel->setTextDocument(0);
-    m_canvas = 0;
+    m_textDocumentStructureModel->setTextDocument(nullptr);
+    m_canvas = nullptr;
 }
 
 void TextDocumentInspectionDocker::onShapeSelectionChanged()
 {
-    QTextDocument *textDocument = 0;
+    QTextDocument *textDocument = nullptr;
 
     // TODO: big fail: shapeManager of a canvas still emits signals after unsetCanvas()
     // was called on us. And at least by the current API dox there is no way in unsetCanvas()

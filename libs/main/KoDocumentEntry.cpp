@@ -78,7 +78,7 @@ bool KoDocumentEntry::supportsMimeType(const QString &_mimetype) const
 KoPart *KoDocumentEntry::createKoPart(QString *errorMsg) const
 {
     if (!m_metaData.isValid()) {
-        return 0;
+        return nullptr;
     }
 
     auto result = KPluginFactory::instantiatePlugin<KoPart>(m_metaData, nullptr, {});

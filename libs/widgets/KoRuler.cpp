@@ -617,7 +617,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     , rightToLeft(false)
     , selected(None)
     , selectOffset(0)
-    , tabChooser(0)
+    , tabChooser(nullptr)
     , normalPaintingStrategy(o == Qt::Horizontal ? (PaintingStrategy *)new HorizontalPaintingStrategy() : (PaintingStrategy *)new VerticalPaintingStrategy())
     , distancesPaintingStrategy((PaintingStrategy *)new HorizontalDistancesPaintingStrategy())
     , paintingStrategy(normalPaintingStrategy)
@@ -742,7 +742,7 @@ void KoRulerPrivate::emitTabChanged()
     KoRuler::Tab tab;
     if (currentIndex >= 0)
         tab = tabs[currentIndex];
-    Q_EMIT ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
+    Q_EMIT ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : nullptr);
 }
 
 KoRuler::KoRuler(QWidget *parent, Qt::Orientation orientation, const KoViewConverter *viewConverter)
@@ -899,7 +899,7 @@ qreal KoRuler::endIndent() const
 
 QWidget *KoRuler::tabChooser()
 {
-    if ((d->tabChooser == 0) && (d->orientation == Qt::Horizontal)) {
+    if ((d->tabChooser == nullptr) && (d->orientation == Qt::Horizontal)) {
         d->tabChooser = new RulerTabChooser(parentWidget());
         d->tabChooser->setShowTabs(d->showTabs);
     }

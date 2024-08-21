@@ -22,9 +22,9 @@ struct KoColorConversionSystem::Node {
         , referenceDepth(0)
         , isGray(false)
         , crossingCost(1)
-        , colorSpaceFactory(0)
+        , colorSpaceFactory(nullptr)
         , isEngine(false)
-        , engine(0)
+        , engine(nullptr)
     {
     }
 
@@ -78,8 +78,8 @@ struct KoColorConversionSystem::Vertex {
     Vertex(Node *_srcNode, Node *_dstNode)
         : srcNode(_srcNode)
         , dstNode(_dstNode)
-        , factoryFromSrc(0)
-        , factoryFromDst(0)
+        , factoryFromSrc(nullptr)
+        , factoryFromDst(nullptr)
     {
     }
 
@@ -209,14 +209,14 @@ struct KoColorConversionSystem::Path {
     {
         QList<node2factory> nodes;
         nodes.push_back(node2factory(vertexes.first()->srcNode, vertexes.first()->factory()));
-        const KoColorConversionTransformationAbstractFactory *previousFactory = 0;
+        const KoColorConversionTransformationAbstractFactory *previousFactory = nullptr;
         foreach (Vertex *vertex, vertexes) { // Unless the node is the icc node, add it to the path
             Node *n = vertex->dstNode;
             if (n->isEngine) {
                 previousFactory = n->engine;
             } else {
                 nodes.push_back(node2factory(n, previousFactory ? previousFactory : vertex->factory()));
-                previousFactory = 0;
+                previousFactory = nullptr;
             }
         }
         return nodes;

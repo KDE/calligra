@@ -182,7 +182,7 @@ private:
     void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
     // For class Axis
-    KChart::CartesianCoordinatePlane *kdCartesianPlane(Axis *axis = 0) const;
+    KChart::CartesianCoordinatePlane *kdCartesianPlane(Axis *axis = nullptr) const;
     KChart::PolarCoordinatePlane *kdPolarPlane() const;
     KChart::RadarCoordinatePlane *kdRadarPlane() const;
     KChart::Chart *kdChart() const;

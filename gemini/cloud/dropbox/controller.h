@@ -24,7 +24,7 @@ class Controller : public QObject
     Q_OBJECT
     Q_PROPERTY(bool needAuthenticate READ need_authenticate NOTIFY needAuthenticateChanged)
 public:
-    explicit Controller(QObject *parent = 0);
+    explicit Controller(QObject *parent = nullptr);
     ~Controller() override;
 
     ListModel *folder_model;

@@ -422,7 +422,7 @@ RTree<T>::RTree()
     : KoRTree<T>(128, 64)
 {
     delete this->m_root;
-    this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
+    this->m_root = new LeafNode(this->m_capacity + 1, 0, nullptr);
     m_castRoot = dynamic_cast<Node *>(this->m_root);
 }
 
@@ -472,7 +472,7 @@ void RTree<T>::load(const QList<QPair<Region, T>> &data)
     QList<QPair<Node *, qreal>> nodes;
     // create LeafNodes
     for (int i = 0; i < indices.size(); i += this->m_capacity) {
-        LeafNode *n = createLeafNode(this->m_capacity + 1, 0, 0);
+        LeafNode *n = createLeafNode(this->m_capacity + 1, 0, nullptr);
         for (int j = 0; j < this->m_capacity && i + j < indices.size(); j++) {
             const LoadData &d = rectData[indices[i + j]];
             n->insert(QRectF(d.rect).normalized().adjusted(0, 0, -0.1, -0.1), *d.data, LeafNode::dataIdCounter + indices[i + j]);
@@ -492,7 +492,7 @@ void RTree<T>::load(const QList<QPair<Region, T>> &data)
         QList<QPair<Node *, qreal>> newNodes;
 
         for (int i = 0; i < indices.size(); i += this->m_capacity) {
-            NonLeafNode *n = createNonLeafNode(this->m_capacity + 1, 0, 0);
+            NonLeafNode *n = createNonLeafNode(this->m_capacity + 1, 0, nullptr);
             for (int j = 0; j < this->m_capacity && i + j < indices.size(); j++) {
                 Node *oldNode = nodes[indices[i + j]].first;
                 n->insert(oldNode->boundingBox(), oldNode);
@@ -770,10 +770,10 @@ void RTree<T>::operator=(const RTree<T> &other)
     this->m_minimum = other.m_minimum;
     delete this->m_root;
     if (other.m_root->isLeaf()) {
-        this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
+        this->m_root = new LeafNode(this->m_capacity + 1, 0, nullptr);
         *dynamic_cast<LeafNode *>(this->m_root) = *dynamic_cast<LeafNode *>(other.m_root);
     } else {
-        this->m_root = new NonLeafNode(this->m_capacity + 1, 0, 0);
+        this->m_root = new NonLeafNode(this->m_capacity + 1, 0, nullptr);
         *dynamic_cast<NonLeafNode *>(this->m_root) = *dynamic_cast<NonLeafNode *>(other.m_root);
     }
     m_castRoot = dynamic_cast<Node *>(this->m_root);

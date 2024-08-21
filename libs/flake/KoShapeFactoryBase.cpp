@@ -30,7 +30,7 @@ class Q_DECL_HIDDEN KoShapeFactoryBase::Private
 {
 public:
     Private(const QString &_id, const QString &_name, const QString &_deferredPluginName)
-        : deferredFactory(0)
+        : deferredFactory(nullptr)
         , deferredPluginName(_deferredPluginName)
         , id(_id)
         , name(_name)
@@ -190,7 +190,7 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *docum
             return d->deferredFactory->createDefaultShape(documentResources);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KoShape *KoShapeFactoryBase::createShape(const KoProperties *properties, KoDocumentResourceManager *documentResources) const
@@ -209,7 +209,7 @@ KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoS
 {
     KoShape *shape = createDefaultShape(context.documentResourceManager());
     if (!shape)
-        return 0;
+        return nullptr;
 
     if (shape->shapeId().isEmpty())
         shape->setShapeId(id());
@@ -220,7 +220,7 @@ KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoS
 
     if (!loaded) {
         delete shape;
-        return 0;
+        return nullptr;
     }
 
     return shape;

@@ -55,12 +55,12 @@ Properties97::Properties97(OLEStreamReader *wordDocument, OLEStreamReader *table
     : m_version(fib.nFib < Word8nFib ? Word67 : Word8)
     , m_wordDocument(wordDocument)
     , m_table(table)
-    , m_stylesheet(0)
-    , m_plcfsed(0)
-    , m_plcfbtePapx(0)
-    , m_plcfbteChpx(0)
-    , m_papxFkp(0)
-    , m_chpxFkp(0)
+    , m_stylesheet(nullptr)
+    , m_plcfsed(nullptr)
+    , m_plcfbtePapx(nullptr)
+    , m_plcfbteChpx(nullptr)
+    , m_papxFkp(nullptr)
+    , m_chpxFkp(nullptr)
 {
     // First create the whole stylesheet information.
     m_stylesheet = new StyleSheet(m_table, fib.fcStshf, fib.lcbStshf);
@@ -146,7 +146,7 @@ SharedPtr<const Word97::SEP> Properties97::sepForCP(U32 cp) const
 {
     // Did we find a page break? If we don't have any PLCFSED entries it has to be one
     if (m_plcfsed->isEmpty())
-        return SharedPtr<const Word97::SEP>(0);
+        return SharedPtr<const Word97::SEP>(nullptr);
 
     // The documentation says that it's a page break if this PLCF doesn't have an entry
     // for this CP -- at least I read it that way
@@ -167,13 +167,13 @@ SharedPtr<const Word97::SEP> Properties97::sepForCP(U32 cp) const
         U8 *grpprl = new U8[count];
         m_wordDocument->read(grpprl, count);
 
-        sep->apply(grpprl, count, 0, m_stylesheet, 0, m_version);
+        sep->apply(grpprl, count, nullptr, m_stylesheet, nullptr, m_version);
 
         delete[] grpprl;
         m_wordDocument->pop();
         return SharedPtr<const Word97::SEP>(sep);
     }
-    return SharedPtr<const Word97::SEP>(0);
+    return SharedPtr<const Word97::SEP>(nullptr);
 }
 
 ParagraphProperties *Properties97::fullSavedPap(U32 fc, OLEStreamReader *dataStream)
@@ -193,7 +193,7 @@ ParagraphProperties *Properties97::fullSavedPap(U32 fc, OLEStreamReader *dataStr
         PAPXFKPIterator fkpit(*m_papxFkp);
         if (fkpit.currentStart() != it.currentStart()) {
             delete m_papxFkp;
-            m_papxFkp = 0;
+            m_papxFkp = nullptr;
         }
     }
 
@@ -250,7 +250,7 @@ Word97::TAP *Properties97::fullSavedTap(U32 fc, OLEStreamReader *dataStream)
         PAPXFKPIterator fkpit(*m_papxFkp);
         if (fkpit.currentStart() != it.currentStart()) {
             delete m_papxFkp;
-            m_papxFkp = 0;
+            m_papxFkp = nullptr;
         }
     }
 
@@ -289,7 +289,7 @@ U32 Properties97::fullSavedChp(const U32 fc, Word97::CHP *chp, const Style *para
         const Style *style = m_stylesheet->styleByIndex(chp->istd);
         if (style && style->type() == sgcChp) {
             const UPECHPX &upechpx(style->upechpx());
-            chp->apply(upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, 0, m_version);
+            chp->apply(upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, nullptr, m_version);
         } else {
             wvlog << "Couldn't find the character style with istd " << chp->istd << Qt::endl;
         }
@@ -311,7 +311,7 @@ U32 Properties97::fullSavedChp(const U32 fc, Word97::CHP *chp, const Style *para
         CHPXFKPIterator fkpit(*m_chpxFkp);
         if (fkpit.currentStart() != it.currentStart()) {
             delete m_chpxFkp;
-            m_chpxFkp = 0;
+            m_chpxFkp = nullptr;
         }
     }
 
@@ -332,7 +332,7 @@ U32 Properties97::fullSavedChp(const U32 fc, Word97::CHP *chp, const Style *para
     // Step 5: Now that we are at the correct place let's apply the CHPX
     // grpprl.  The built-in character style referred to by the istd provided
     // by sprmCIstd will be applied recursively.
-    chp->applyExceptions(fkpit.current(), paragraphStyle, m_stylesheet, 0, m_version);
+    chp->applyExceptions(fkpit.current(), paragraphStyle, m_stylesheet, nullptr, m_version);
     return fkpit.currentLim() - fc;
 }
 
@@ -369,7 +369,7 @@ void Properties97::applyClxGrpprlImpl(const Word97::PCD *pcd, U32 fcClx, P *prop
             // wvlog << "Found the right clxtGrpprl (size=" << size << ")" << Qt::endl;
             U8 *grpprl = new U8[size];
             m_table->read(grpprl, size);
-            properties->apply(grpprl, size, style, m_stylesheet, 0, m_version); // dataStream shouldn't be necessary in a clx
+            properties->apply(grpprl, size, style, m_stylesheet, nullptr, m_version); // dataStream shouldn't be necessary in a clx
             delete[] grpprl;
         }
         m_table->pop();
@@ -382,7 +382,7 @@ void Properties97::applyClxGrpprlImpl(const Word97::PCD *pcd, U32 fcClx, P *prop
             grpprl[0] = static_cast<U8>(sprm & 0x00ff);
             grpprl[1] = static_cast<U8>((sprm & 0xff00) >> 8);
             grpprl[2] = pcd->prm.val;
-            properties->apply(grpprl, 3, style, m_stylesheet, 0, Word8); // dataStream shouldn't be necessary in a clx
+            properties->apply(grpprl, 3, style, m_stylesheet, nullptr, Word8); // dataStream shouldn't be necessary in a clx
         }
     }
 }

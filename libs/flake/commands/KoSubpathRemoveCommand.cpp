@@ -14,7 +14,7 @@ KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpa
     : KUndo2Command(parent)
     , m_pathShape(pathShape)
     , m_subpathIndex(subpathIndex)
-    , m_subpath(0)
+    , m_subpath(nullptr)
 {
     setText(kundo2_i18n("Remove subpath"));
 }
@@ -51,6 +51,6 @@ void KoSubpathRemoveCommand::undo()
         m_pathShape->addSubpath(m_subpath, m_subpathIndex);
         m_pathShape->normalize();
         m_pathShape->update();
-        m_subpath = 0;
+        m_subpath = nullptr;
     }
 }

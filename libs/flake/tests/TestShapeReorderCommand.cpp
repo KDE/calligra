@@ -519,33 +519,33 @@ void TestShapeReorderCommand::testNoCommand()
     selectedShapes.append(&shape3);
 
     KUndo2Command *cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     selectedShapes.append(&shape1);
     selectedShapes.append(&shape2);
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     selectedShapes.clear();
     selectedShapes.append(&shape1);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
-    QVERIFY(cmd == 0);
+    QVERIFY(cmd == nullptr);
 }
 
 QTEST_MAIN(TestShapeReorderCommand)

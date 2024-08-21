@@ -29,7 +29,7 @@ class OdfLoadingContext
 public:
     explicit OdfLoadingContext(KoOdfLoadingContext &odfContext)
         : odfContext(odfContext)
-        , shapeContext(0)
+        , shapeContext(nullptr)
     {
     }
 

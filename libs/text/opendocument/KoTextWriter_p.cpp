@@ -57,11 +57,11 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 typedef QPair<QString, QString> Attribute;
 
 KoTextWriter::Private::Private(KoShapeSavingContext &context)
-    : rdfData(0)
-    , sharedData(0)
-    , styleManager(0)
-    , document(0)
-    , writer(0)
+    : rdfData(nullptr)
+    , sharedData(nullptr)
+    , styleManager(nullptr)
+    , document(nullptr)
+    , writer(nullptr)
     , context(context)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject *>();
@@ -519,7 +519,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             }
 
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
-            KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
+            KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : nullptr;
             // If we are in an inline object
             if (currentFragment.length() == 1 && inlineObject && currentFragment.text().at(0).unicode() == QChar::ObjectReplacementCharacter) {
                 bool saveInlineObject = true;
@@ -559,7 +559,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
                 }
 
-                bool saveSpan = dynamic_cast<KoVariable *>(inlineObject) != 0;
+                bool saveSpan = dynamic_cast<KoVariable *>(inlineObject) != nullptr;
 
                 if (saveSpan) {
                     QString styleName = saveCharacterStyle(charFormat, blockCharFormat);

@@ -37,7 +37,7 @@ const QAbstractItemModel *BindingManager::createModel(const QString &regionName)
 {
     const Region region = d->map->regionFromName(regionName, nullptr);
     if (!region.isValid() || !region.isContiguous() || !region.firstSheet()) {
-        return 0;
+        return nullptr;
     }
     Binding binding(region);
     SheetBase *sheet = region.firstSheet();

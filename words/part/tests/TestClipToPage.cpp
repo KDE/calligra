@@ -17,7 +17,7 @@ void TestClipToPage::testClipToPage()
     layout.width = 300;
     layout.height = 410;
     page1.pageStyle().setPageLayout(layout);
-    KWCanvas canvas("bla", &doc, 0, 0);
+    KWCanvas canvas("bla", &doc, nullptr, nullptr);
 
     MockShape shape;
     shape.setPosition(QPointF(50, 50));

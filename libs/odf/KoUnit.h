@@ -77,7 +77,7 @@ public:
     /// Convert a unit symbol string into a KoUnit
     /// @param symbol symbol to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit fromSymbol(const QString &symbol, bool *ok = 0);
+    static KoUnit fromSymbol(const QString &symbol, bool *ok = nullptr);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
     explicit KoUnit(Type unit = Point, qreal factor = 1.0)
@@ -211,7 +211,7 @@ public:
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a qreal, and to false otherwise.
     /// @return the value converted to points for internal use
-    qreal fromUserValue(const QString &value, bool *ok = 0) const;
+    qreal fromUserValue(const QString &value, bool *ok = nullptr) const;
 
     /// Get the description string of the given unit
     static QString unitDescription(KoUnit::Type type);

@@ -412,7 +412,7 @@ public:
      * @param flags
      * @return the created caption
      */
-    static QString makeStandardCaption(const QString &userCaption, QWidget *window = 0, CaptionFlags flags = HIGCompliantCaption);
+    static QString makeStandardCaption(const QString &userCaption, QWidget *window = nullptr, CaptionFlags flags = HIGCompliantCaption);
 
     /**
      * Resize every layout manager used in @p widget and its nested children.

@@ -37,8 +37,8 @@ public:
 
 VideoTool::VideoTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_videoToolUI(0)
-    , m_videoShape(0)
+    , m_videoToolUI(nullptr)
+    , m_videoShape(nullptr)
 {
 }
 
@@ -106,7 +106,7 @@ void VideoTool::changeUrlPressed()
 
     if (diag->exec() == KoDialog::Accepted) {
         fileSelectionWidget->accept();
-        VideoData *data = 0;
+        VideoData *data = nullptr;
         data = m_videoShape->videoCollection()->createExternalVideoData(fileSelectionWidget->selectedUrl(), fileSelectionWidget->saveEmbedded());
 
         ChangeVideoCommand *command = new ChangeVideoCommand(m_videoShape, data);

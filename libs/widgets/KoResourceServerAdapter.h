@@ -113,7 +113,7 @@ public:
 
     void unsetResourceServer() override
     {
-        m_resourceServer = 0;
+        m_resourceServer = nullptr;
     }
 
     void connectToResourceServer() override
@@ -240,7 +240,7 @@ public:
 
     void updateServer() override
     {
-        emitRemovingResource(0);
+        emitRemovingResource(nullptr);
     }
 
     QStringList assignedTagsList(KoResource *resource) override
@@ -255,7 +255,7 @@ public:
 
     void addTag(const QString &tag) override
     {
-        m_resourceServer->addTag(0, tag);
+        m_resourceServer->addTag(nullptr, tag);
     }
 
     void addTag(KoResource *resource, const QString &tag) override

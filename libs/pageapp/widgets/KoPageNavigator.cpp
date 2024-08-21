@@ -202,7 +202,7 @@ void KoPageNavigator::updateDisplayLabel()
     const int pageNumber = kopaDocument->pageIndex(activePage) + 1;
 
     if (pageNumber > 0) {
-        const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == 0);
+        const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == nullptr);
 
         const int pageCount = d->view->kopaDocument()->pages(isMasterPage).size();
 
@@ -227,7 +227,7 @@ void KoPageNavigator::onPageNumberEntered()
     KoPADocument *const kopaDocument = d->view->kopaDocument();
     KoPAPageBase *const activePage = d->view->activePage();
 
-    const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == 0);
+    const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == nullptr);
 
     const QList<KoPAPageBase *> pages = kopaDocument->pages(isMasterPage);
 

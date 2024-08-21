@@ -158,7 +158,7 @@ void MusicRenderer::renderStaff(QPainter &painter, Staff *staff, int firstBar, i
 void MusicRenderer::renderVoice(QPainter &painter, Voice *voice, int firstBar, int lastBar, const QColor &color)
 {
     RenderState state;
-    state.clef = 0;
+    state.clef = nullptr;
     for (int b = firstBar; b <= lastBar && b < voice->part()->sheet()->barCount(); b++) {
         Bar *bar = voice->part()->sheet()->bar(b);
         QPointF p = bar->position();
@@ -342,7 +342,7 @@ void MusicRenderer::renderChord(QPainter &painter, Chord *chord, Voice *voice, c
     Sheet *sheet = voice->part()->sheet();
     int barIdx = bar->sheet()->indexOfBar(bar);
     qreal topy = 1e9, bottomy = -1e9;
-    Staff *topStaff = 0, *bottomStaff = 0;
+    Staff *topStaff = nullptr, *bottomStaff = nullptr;
 
     qreal mainNoteX = (chord->stemDirection() == StemUp ? chord->stemX() - 6 : chord->stemX());
     qreal alternateNoteX = mainNoteX + (chord->stemDirection() == StemUp ? 6 : -6);
@@ -351,7 +351,7 @@ void MusicRenderer::renderChord(QPainter &painter, Chord *chord, Voice *voice, c
 
     QMultiMap<Staff *, int> dots;
 
-    Chord *nextChord = 0;
+    Chord *nextChord = nullptr;
 
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);

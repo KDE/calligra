@@ -228,7 +228,7 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
         if (str) {
             if (str->deref())
                 delete str;
-            setStroke(0);
+            setStroke(nullptr);
         }
         break;
     }

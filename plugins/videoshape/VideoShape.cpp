@@ -32,12 +32,12 @@
 
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
-    , m_videoCollection(0)
+    , m_videoCollection(nullptr)
     , m_videoEventAction(new VideoEventAction(this))
 #ifdef SHOULD_BUILD_THUMBNAIL
     , m_thumbnailer(new VideoThumbnailer())
 #endif
-    , m_oldVideoData(0)
+    , m_oldVideoData(nullptr)
     , m_icon(koIcon("video-x-generic"))
 {
     setKeepAspectRatio(true);
@@ -85,7 +85,7 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
 {
     // make sure we have a valid image data pointer before saving
     VideoData *videoData = qobject_cast<VideoData *>(userData());
-    if (videoData == 0)
+    if (videoData == nullptr)
         return;
 
     KoXmlWriter &writer = context.xmlWriter();
@@ -126,7 +126,7 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         // this can happen in case it is a presentation:placeholder
         if (!href.isEmpty()) {
             QUrl url = QUrl::fromUserInput(href);
-            VideoData *data = 0;
+            VideoData *data = nullptr;
 
             if (href.startsWith("../")) {
                 // file is outside store

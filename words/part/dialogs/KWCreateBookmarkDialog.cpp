@@ -12,7 +12,7 @@ KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &s
     : QWidget(parent)
 {
     widget.setupUi(this);
-    widget.bookmarkName->setCompleter(0);
+    widget.bookmarkName->setCompleter(nullptr);
     widget.bookmarkName->insertItems(0, nameList);
     widget.bookmarkName->setEditText(suggestedName);
     connect(widget.bookmarkName, &QComboBox::editTextChanged, this, &KWCreateBookmark::bookmarkNameChanged);

@@ -61,7 +61,7 @@ public:
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded, QTextStream *output = 0);
+    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded, QTextStream *output = nullptr);
 
     /// destructor
     ~KoProgressUpdater() override;

@@ -1027,32 +1027,32 @@ void TestLoad::encloseElement()
 
 void TestLoad::subElement()
 {
-    test(new SubSupElement(0, SubScript));
+    test(new SubSupElement(nullptr, SubScript));
 }
 
 void TestLoad::supElement()
 {
-    test(new SubSupElement(0, SupScript));
+    test(new SubSupElement(nullptr, SupScript));
 }
 
 void TestLoad::subsupElement()
 {
-    test(new SubSupElement(0, SubSupScript));
+    test(new SubSupElement(nullptr, SubSupScript));
 }
 
 void TestLoad::underElement()
 {
-    test(new UnderOverElement(0, Under));
+    test(new UnderOverElement(nullptr, Under));
 }
 
 void TestLoad::overElement()
 {
-    test(new UnderOverElement(0, Over));
+    test(new UnderOverElement(nullptr, Over));
 }
 
 void TestLoad::underOverElement()
 {
-    test(new UnderOverElement(0, UnderOver));
+    test(new UnderOverElement(nullptr, UnderOver));
 }
 
 void TestLoad::multiscriptsElement()

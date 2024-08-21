@@ -212,7 +212,7 @@ class PptxXmlSlideReader::Private
 {
 public:
     Private()
-        : tableStyleList(0)
+        : tableStyleList(nullptr)
     {
     }
     ~Private()
@@ -235,9 +235,9 @@ public:
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
-    , m_currentShapeProperties(0)
-    , m_placeholderElWriter(0)
+    , m_context(nullptr)
+    , m_currentShapeProperties(nullptr)
+    , m_placeholderElWriter(nullptr)
     , d(new Private)
 {
     init();
@@ -278,7 +278,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
         break;
     }
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
 
     return result;
 }
@@ -655,8 +655,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                                                   0,
                                                   &m_context->notesMasterProperties->theme,
                                                   PptxXmlSlideReader::Notes,
-                                                  0,
-                                                  0,
+                                                  nullptr,
+                                                  nullptr,
                                                   m_context->notesMasterProperties,
                                                   *m_context->relationships,
                                                   dummyAuthors,
@@ -722,7 +722,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
 
     delete m_currentDrawStyle;
-    m_currentDrawStyle = 0;
+    m_currentDrawStyle = nullptr;
 
     return KoFilter::OK;
 }
@@ -1438,8 +1438,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0 /*indentation*/);
     bool potentiallyAddToLayoutFrames = false;
 
-    QBuffer *shapeBuf = 0;
-    KoXmlWriter *shapeWriter = 0;
+    QBuffer *shapeBuf = nullptr;
+    KoXmlWriter *shapeWriter = nullptr;
     KoXmlWriter *bodyBackup = body;
 
     while (!atEnd()) {
@@ -1499,7 +1499,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
 
     delete m_placeholderElWriter;
-    m_placeholderElWriter = 0;
+    m_placeholderElWriter = nullptr;
 
     READ_EPILOGUE
 }
@@ -2146,7 +2146,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle &targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    QMap<QString, QMap<int, KoGenStyle>> *map = 0;
+    QMap<QString, QMap<int, KoGenStyle>> *map = nullptr;
     QString id = d->phIdx;
     QString type = d->phType;
 
@@ -2252,7 +2252,7 @@ void PptxXmlSlideReader::inheritAllTextAndParagraphStyles()
 
 void PptxXmlSlideReader::inheritListStyles()
 {
-    QMap<QString, QMap<int, MSOOXML::Utils::ParagraphBulletProperties>> *map = 0;
+    QMap<QString, QMap<int, MSOOXML::Utils::ParagraphBulletProperties>> *map = nullptr;
     QString id = d->phIdx;
     QString type = d->phType;
 
@@ -2427,11 +2427,11 @@ void PptxXmlSlideReader::inheritShapePosition()
 {
     // TODO: Why DO NOT overwrite props by phIdx?
 
-    QMap<QString, PptxShapeProperties *> *map = 0;
+    QMap<QString, PptxShapeProperties *> *map = nullptr;
 
     // Inheriting shape placement information
     if (!m_xfrm_read) {
-        PptxShapeProperties *props = 0;
+        PptxShapeProperties *props = nullptr;
 
         // Loading from notes master
         if (m_context->type == Notes) {
@@ -2584,7 +2584,7 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle &targetStyle)
 {
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    QMap<QString, QMap<int, KoGenStyle>> *map = 0;
+    QMap<QString, QMap<int, KoGenStyle>> *map = nullptr;
     QString id = d->phIdx;
     QString type = d->phType;
 
@@ -2776,7 +2776,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
     debugPptx << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
 
     if (m_context->type == SlideLayout) {
-        PptxShapeProperties *masterShapeProperties = 0;
+        PptxShapeProperties *masterShapeProperties = nullptr;
         masterShapeProperties = m_context->slideMasterProperties->shapesMap.value(d->phType);
         if (!masterShapeProperties) {
             masterShapeProperties = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
@@ -2880,7 +2880,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         }
     }
 
-    m_currentShapeProperties = 0; // Making sure that nothing uses them.
+    m_currentShapeProperties = nullptr; // Making sure that nothing uses them.
     return KoFilter::OK;
 }
 

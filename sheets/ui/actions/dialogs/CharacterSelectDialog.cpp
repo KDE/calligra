@@ -18,7 +18,7 @@ class CharacterSelectDialog::Private
 {
 public:
     Private()
-        : charSelect(0)
+        : charSelect(nullptr)
     {
     }
     KCharSelect *charSelect;
@@ -40,7 +40,7 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &_fo
     QGridLayout *grid = new QGridLayout(page);
     grid->setContentsMargins({});
 
-    d->charSelect = new KCharSelect(page, 0);
+    d->charSelect = new KCharSelect(page, nullptr);
     d->charSelect->setCurrentChar(QChar(' '));
     d->charSelect->setCurrentFont(QFont(_font));
     connect(d->charSelect, &KCharSelect::charSelected, this, &CharacterSelectDialog::slotDoubleClicked);

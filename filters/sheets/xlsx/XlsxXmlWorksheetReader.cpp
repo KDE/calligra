@@ -131,7 +131,7 @@ static void splitToRowAndColumn(const char *source, int sourceStart, int sourceL
         pos++;
     }
 
-    char *pEnd = 0;
+    char *pEnd = nullptr;
     column = strtol(source + sourceStart + pos, &pEnd, 10);
 }
 
@@ -231,7 +231,7 @@ public:
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
     , d(new Private(this))
 {
     init();
@@ -257,7 +257,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderCo
     m_context = dynamic_cast<XlsxXmlWorksheetReaderContext *>(context);
     Q_ASSERT(m_context);
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
 
     return result;
 }
@@ -1405,7 +1405,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 }
             }
             const KoGenStyle *const style = mainStyles->style(formattedStyle, "");
-            if (style == 0 || valueIsNumeric(m_value)) {
+            if (style == nullptr || valueIsNumeric(m_value)) {
                 //            body->addTextSpan(m_value);
                 cell->valueType = Cell::ConstFloat;
                 cell->valueAttr = Cell::OfficeValue;
@@ -1486,7 +1486,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     delete cell->valueAttrValue;
     if (m_value.isEmpty()) {
-        cell->valueAttrValue = 0;
+        cell->valueAttrValue = nullptr;
     } else {
         cell->valueAttrValue = new QString(m_value);
     }

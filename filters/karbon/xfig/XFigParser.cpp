@@ -344,10 +344,10 @@ XFigDocument *XFigParser::parse(QIODevice *device)
 }
 
 XFigParser::XFigParser(QIODevice *device)
-    : m_Document(0)
+    : m_Document(nullptr)
     , m_XFigStreamLineReader(device)
 {
-    if ((device == 0) || (m_XFigStreamLineReader.hasError()))
+    if ((device == nullptr) || (m_XFigStreamLineReader.hasError()))
         return;
 
     m_TextDecoder = QStringDecoder(QStringConverter::Latin1);
@@ -372,7 +372,7 @@ XFigParser::XFigParser(QIODevice *device)
                 : (objectCode == XFig3_2ArcObjectId)                            ? parseArc()
                                                                                 :
                                                      /*else XFig3_2CompoundObjectId)*/ parseCompoundObject();
-            if (object != 0) {
+            if (object != nullptr) {
                 object->setComment(objectComment);
                 page->addObject(object);
             }
@@ -518,7 +518,7 @@ bool XFigParser::parseHeader()
 
     if (!isHeaderCorrect) {
         delete m_Document;
-        m_Document = 0;
+        m_Document = nullptr;
     }
 
     return isHeaderCorrect;
@@ -586,7 +586,7 @@ XFigAbstractObject *XFigParser::parseArc()
     if (forwardArrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
         arcObject->setForwardArrow(arrowHead.take());
     }
@@ -594,7 +594,7 @@ XFigAbstractObject *XFigParser::parseArc()
     if (backwardArrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
         arcObject->setBackwardArrow(arrowHead.take());
     }
@@ -669,7 +669,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
 {
     // qDebug()<<"polyline";
 
-    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
+    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color, depth, pen_style, area_fill, join_style, cap_style, radius, forward_arrow, backward_arrow,
         npoints;
@@ -685,7 +685,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
 
     // ignore line with useless point number
     if (npoints < 1) {
-        return 0;
+        return nullptr;
     }
 
     if (sub_type == XFig3_2PolylinePolylineId) {
@@ -703,7 +703,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
     } else if (sub_type == XFig3_2PolylinePictureBoundingBoxId) {
         XFigPictureBoxObject *pictureBoxObject = new XFigPictureBoxObject;
         if (!m_XFigStreamLineReader.readNextLine()) {
-            return 0;
+            return nullptr;
         }
 
         QString line = m_XFigStreamLineReader.line();
@@ -723,7 +723,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
     if (forward_arrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
@@ -735,7 +735,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
     if (backward_arrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
@@ -747,13 +747,13 @@ XFigAbstractObject *XFigParser::parsePolyline()
     // points line
     const QVector<XFigPoint> points = parsePoints(npoints);
     if (points.count() != npoints) {
-        return 0;
+        return nullptr;
     }
 
     // check box:
     if ((abstractPolylineObject->typeId() == XFigAbstractObject::BoxId) && (points.count() != 5)) {
         qWarning() << "box object does not have 5 points, but points:" << points.count();
-        return 0;
+        return nullptr;
     }
     abstractPolylineObject->setPoints(points);
     abstractPolylineObject->setDepth(depth);
@@ -789,12 +789,12 @@ XFigAbstractObject *XFigParser::parseSpline()
 
     // ignore line with useless point number
     if (npoints < 1) {
-        return 0;
+        return nullptr;
     }
 
     // TODO: no idea yet how to translate the xfig splines to odf ones
     // thus simply creating polygones/polylines for now :/
-    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
+    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
 
     if ((sub_type == XFig3_2SplineOpenApproximatedId) || (sub_type == XFig3_2SplineOpenInterpolatedId) || (sub_type == XFig3_2SplineOpenXId)) {
         XFigPolylineObject *polylineObject = new XFigPolylineObject;
@@ -807,7 +807,7 @@ XFigAbstractObject *XFigParser::parseSpline()
     if (forward_arrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
@@ -819,7 +819,7 @@ XFigAbstractObject *XFigParser::parseSpline()
     if (backward_arrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
         if (arrowHead.isNull()) {
-            return 0;
+            return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
@@ -831,7 +831,7 @@ XFigAbstractObject *XFigParser::parseSpline()
     // points line
     const QVector<XFigPoint> points = parsePoints(npoints);
     if (points.count() != npoints) {
-        return 0;
+        return nullptr;
     }
 
     // control points line
@@ -995,7 +995,7 @@ XFigAbstractObject *XFigParser::parseCompoundObject()
                 : (objectCode == XFig3_2ArcObjectId)                            ? parseArc()
                                                                                 :
                                                      /*else XFig3_2CompoundObjectId)*/ parseCompoundObject();
-            if (object != 0) {
+            if (object != nullptr) {
                 object->setComment(objectComment);
                 compoundObject->addObject(object);
             }
@@ -1012,7 +1012,7 @@ XFigAbstractObject *XFigParser::parseCompoundObject()
 XFigArrowHead *XFigParser::parseArrowHead()
 {
     if (!m_XFigStreamLineReader.readNextLine()) {
-        return 0;
+        return nullptr;
     }
 
     QString line = m_XFigStreamLineReader.line();

@@ -62,20 +62,20 @@ Parser9x::Position::Position(U32 cp, const PLCF<Word97::PCD> *plcfpcd)
 Parser9x::Parser9x(OLEStorage *storage, OLEStreamReader *wordDocument, const Word97::FIB &fib)
     : Parser(storage, wordDocument)
     , m_fib(fib)
-    , m_table(0)
-    , m_data(0)
-    , m_properties(0)
-    , m_headers(0)
-    , m_lists(0)
-    , m_textconverter(0)
-    , m_fields(0)
-    , m_footnotes(0)
-    , m_annotations(0)
-    , m_fonts(0)
-    , m_drawings(0)
-    , m_bookmarks(0)
-    , m_plcfpcd(0)
-    , m_tableRowStart(0)
+    , m_table(nullptr)
+    , m_data(nullptr)
+    , m_properties(nullptr)
+    , m_headers(nullptr)
+    , m_lists(nullptr)
+    , m_textconverter(nullptr)
+    , m_fields(nullptr)
+    , m_footnotes(nullptr)
+    , m_annotations(nullptr)
+    , m_fonts(nullptr)
+    , m_drawings(nullptr)
+    , m_bookmarks(nullptr)
+    , m_plcfpcd(nullptr)
+    , m_tableRowStart(nullptr)
     , m_tableRowLength(0)
     , m_cellMarkFound(false)
     , m_remainingCells(0)
@@ -100,7 +100,7 @@ Parser9x::Parser9x(OLEStorage *storage, OLEStreamReader *wordDocument, const Wor
     if (!m_data || !m_data->isValid()) {
         wvlog << "Information: Couldn't open the Data stream, no big deal" << Qt::endl;
         delete m_data;
-        m_data = 0;
+        m_data = nullptr;
     }
 
     // validate FIB, keep going even if it's not perfect
@@ -317,7 +317,7 @@ void Parser9x::parseTableRow(const TableRowData &data)
 
 void Parser9x::parseTextBox(unsigned int index, bool stylesxml)
 {
-    const PLCF<Word97::FTXBXS> *plcftxbxTxt = 0;
+    const PLCF<Word97::FTXBXS> *plcftxbxTxt = nullptr;
     if (stylesxml) {
         plcftxbxTxt = m_drawings->getHdrTxbxTxt();
     } else {
@@ -485,7 +485,7 @@ bool Parser9x::parseBody()
     m_textHandler->sectionStart(sep); // First section, starting at CP 0
 
     emitHeaderData(sep);
-    sep = 0; // get rid of the huge SEP
+    sep = nullptr; // get rid of the huge SEP
 
     // Process all the pieces belonging to the main document text
     parseHelper(Position(0, static_cast<U32>(0)));
@@ -710,7 +710,7 @@ void Parser9x::processParagraph(U32 fc)
             m_textHandler->tableRowFound(make_functor(*this, &Parser9x::parseTableRow, data), sharedTap);
 
             delete m_tableRowStart;
-            m_tableRowStart = 0;
+            m_tableRowStart = nullptr;
         }
         delete props;
     } else {
@@ -751,7 +751,7 @@ void Parser9x::processParagraph(U32 fc)
 #endif
 
         // Parse the bullet picture data.
-        const Word97::CHP *bulletChp = 0;
+        const Word97::CHP *bulletChp = nullptr;
         if (props->listInfo()) {
             bulletChp = (props->listInfo()->text()).chp;
         }
@@ -768,7 +768,7 @@ void Parser9x::processParagraph(U32 fc)
                 fc += unicode ? pos.offset * 2 : pos.offset;
 
                 Word97::CHP *bulletPicChp = new Word97::CHP();
-                m_properties->fullSavedChp(fc, bulletPicChp, 0);
+                m_properties->fullSavedChp(fc, bulletPicChp, nullptr);
 
                 if (bulletPicChp->fSpec) {
                     m_wordDocument->push();
@@ -1009,7 +1009,7 @@ void Parser9x::emitSpecialCharacter(UChar character, U32 globalCP, SharedPtr<con
         break;
     case TextHandler::DrawnObject:
         // Only globalCP is required to process floating MS-ODRAW objects.
-        m_textHandler->msodrawObjectFound(globalCP, 0);
+        m_textHandler->msodrawObjectFound(globalCP, nullptr);
         break;
     case TextHandler::FootnoteAuto:
         if (m_subDocument == Footnote || m_subDocument == Endnote) {
@@ -1177,7 +1177,7 @@ QString Parser9x::emitPictureData(const U32 globalCP, SharedPtr<const Word97::CH
     stream->push();
     stream->seek(chp->fcPic_fcObj_lTagObj, WV2_SEEK_SET);
 
-    Word97::PICF *picf(0);
+    Word97::PICF *picf(nullptr);
     if (m_fib.nFib < Word8nFib) {
         picf = new Word97::PICF(Word95::toWord97(Word95::PICF(stream, false)));
     } else {
@@ -1289,7 +1289,7 @@ void Parser9x::saveState(U32 newRemainingChars, SubDocument newSubDocument, Pars
                                        m_sectionNumber,
                                        m_subDocument,
                                        m_parsingMode));
-    m_tableRowStart = 0;
+    m_tableRowStart = nullptr;
     m_cellMarkFound = false;
     m_table_skimming = false;
     m_currentParagraph = new Paragraph;

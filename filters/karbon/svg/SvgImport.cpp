@@ -47,7 +47,7 @@ const QLoggingCategory &SVG_LOG()
 
 SvgImport::SvgImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
-    , m_document(0)
+    , m_document(nullptr)
 {
 }
 
@@ -156,7 +156,7 @@ void SvgImport::buildDocument(const QList<KoShape *> &toplevelShapes, const QLis
             break;
         }
     }
-    KoShapeLayer *oldLayer = 0;
+    KoShapeLayer *oldLayer = nullptr;
     if (page->shapeCount()) {
         oldLayer = dynamic_cast<KoShapeLayer *>(page->shapes().first());
     }

@@ -219,7 +219,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         return KoFilter::WrongFormat;
     }
 
-    m_context = 0;
+    m_context = nullptr;
     m_type = InvalidType;
     return KoFilter::OK;
 }

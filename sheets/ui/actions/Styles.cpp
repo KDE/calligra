@@ -64,7 +64,7 @@ void StyleFromCell::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
             continue;
         }
 
-        if (manager->style(styleName) != 0) {
+        if (manager->style(styleName) != nullptr) {
             KMessageBox::error(canvasWidget, i18n("A style with this name already exists."));
             continue;
         }

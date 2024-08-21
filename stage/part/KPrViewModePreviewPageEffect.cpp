@@ -41,11 +41,11 @@
 
 KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
-    , m_savedViewMode(0)
-    , m_pageEffect(0)
-    , m_pageEffectRunner(0)
-    , m_page(0)
-    , m_prevpage(0)
+    , m_savedViewMode(nullptr)
+    , m_pageEffect(nullptr)
+    , m_pageEffectRunner(nullptr)
+    , m_page(nullptr)
+    , m_prevpage(nullptr)
 {
     connect(&m_timeLine, &QTimeLine::valueChanged, this, &KPrViewModePreviewPageEffect::animate);
     connect(&m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewPageEffect::activateSavedViewMode);
@@ -130,7 +130,7 @@ void KPrViewModePreviewPageEffect::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModePreviewPageEffect::deactivate()
 {
-    m_savedViewMode = 0; // store the previous view mode
+    m_savedViewMode = nullptr; // store the previous view mode
 }
 
 void KPrViewModePreviewPageEffect::updateActivePage(KoPAPageBase *page)
@@ -153,7 +153,7 @@ void KPrViewModePreviewPageEffect::setPageEffect(KPrPageEffect *pageEffect, KPrP
     delete m_pageEffect;
     m_pageEffect = pageEffect;
     delete m_pageEffectRunner;
-    m_pageEffectRunner = 0;
+    m_pageEffectRunner = nullptr;
 
     m_page = page;
     m_prevpage = prevpage;

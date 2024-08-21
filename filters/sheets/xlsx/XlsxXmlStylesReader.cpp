@@ -394,7 +394,7 @@ private:
 
 XlsxXmlStylesReader::XlsxXmlStylesReader(KoOdfWriters *writers)
     : XlsxXmlCommonReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
     , d(new Private)
 {
     init();
@@ -409,9 +409,9 @@ void XlsxXmlStylesReader::init()
 {
     m_defaultNamespace = "";
     m_cellFormatIndex = 0;
-    m_currentFontStyle = 0;
-    m_currentFillStyle = 0;
-    m_currentCellFormat = 0;
+    m_currentFontStyle = nullptr;
+    m_currentFillStyle = nullptr;
+    m_currentCellFormat = nullptr;
 }
 
 KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext *context)
@@ -421,7 +421,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
     if (result == KoFilter::OK)
         return KoFilter::OK;
     return result;
@@ -572,7 +572,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
                 }
                 TRY_READ(font)
                 m_context->styles->fontStyles[fontStyleIndex] = m_currentFontStyle;
-                m_currentFontStyle = 0;
+                m_currentFontStyle = nullptr;
                 fontStyleIndex++;
             }
             ELSE_WRONG_FORMAT
@@ -723,7 +723,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     m_currentTextStyleProperties->saveOdf(*m_currentFontStyle);
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 
     currentFontStyleSetter.release();
 
@@ -831,13 +831,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
     m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1, mainStyles->insert(cellStyle, "ConditionalStyle"));
 
     delete m_currentFontStyle;
-    m_currentFontStyle = 0;
+    m_currentFontStyle = nullptr;
     delete m_currentFillStyle;
-    m_currentFillStyle = 0;
+    m_currentFillStyle = nullptr;
     delete m_currentBorderStyle;
-    m_currentBorderStyle = 0;
+    m_currentBorderStyle = nullptr;
     delete m_currentCellFormat;
-    m_currentCellFormat = 0;
+    m_currentCellFormat = nullptr;
 
     READ_EPILOGUE
 }
@@ -974,7 +974,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 
     currentCellFormatSetter.release();
     m_context->styles->setCellFormat(m_currentCellFormat, m_cellFormatIndex);
-    m_currentCellFormat = 0;
+    m_currentCellFormat = nullptr;
     m_cellFormatIndex++;
 
     READ_EPILOGUE
@@ -1055,7 +1055,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
                 }
                 TRY_READ(fill)
                 m_context->styles->fillStyles[fillStyleIndex] = m_currentFillStyle;
-                m_currentFillStyle = 0;
+                m_currentFillStyle = nullptr;
                 fillStyleIndex++;
             }
             ELSE_WRONG_FORMAT
@@ -1376,7 +1376,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
                 }
                 TRY_READ(border)
                 m_context->styles->borderStyles[borderStyleIndex] = m_currentBorderStyle;
-                m_currentBorderStyle = 0;
+                m_currentBorderStyle = nullptr;
                 borderStyleIndex++;
             }
             ELSE_WRONG_FORMAT

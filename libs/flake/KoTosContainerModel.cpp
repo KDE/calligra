@@ -13,7 +13,7 @@
 #include <QSizeF>
 
 KoTosContainerModel::KoTosContainerModel()
-    : m_textShape(0)
+    : m_textShape(nullptr)
 {
 }
 
@@ -25,7 +25,7 @@ void KoTosContainerModel::add(KoShape *shape)
 {
     // make sure shape is a text shape
     KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(shape->userData());
-    Q_ASSERT(shapeData != 0);
+    Q_ASSERT(shapeData != nullptr);
     if (shapeData) {
         m_textShape = shape;
     }
@@ -33,9 +33,9 @@ void KoTosContainerModel::add(KoShape *shape)
 
 void KoTosContainerModel::remove(KoShape *shape)
 {
-    Q_ASSERT(m_textShape == 0 || shape == m_textShape);
+    Q_ASSERT(m_textShape == nullptr || shape == m_textShape);
     if (shape == m_textShape) {
-        m_textShape = 0;
+        m_textShape = nullptr;
     }
 }
 
@@ -73,7 +73,7 @@ bool KoTosContainerModel::isChildLocked(const KoShape *child) const
 
 int KoTosContainerModel::count() const
 {
-    return m_textShape != 0 ? 1 : 0;
+    return m_textShape != nullptr ? 1 : 0;
 }
 
 QList<KoShape *> KoTosContainerModel::shapes() const

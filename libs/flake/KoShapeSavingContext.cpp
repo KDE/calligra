@@ -301,7 +301,7 @@ void KoShapeSavingContext::addSharedData(const QString &id, KoSharedSavingData *
 
 KoSharedSavingData *KoShapeSavingContext::sharedData(const QString &id) const
 {
-    KoSharedSavingData *data = 0;
+    KoSharedSavingData *data = nullptr;
     QMap<QString, KoSharedSavingData *>::const_iterator it(d->sharedData.constFind(id));
     if (it != d->sharedData.constEnd()) {
         data = it.value();

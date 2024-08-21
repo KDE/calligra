@@ -29,7 +29,7 @@
 #include <QTextDocument>
 
 KPrPlaceholders::KPrPlaceholders()
-    : m_layout(0)
+    : m_layout(nullptr)
 {
 }
 
@@ -195,7 +195,7 @@ QMap<QString, KoTextShapeData *> KPrPlaceholders::styles() const
     QMap<QString, KoTextShapeData *> styles;
     Placeholders::iterator it(m_placeholders.begin());
     for (; it != m_placeholders.end(); ++it) {
-        KoTextShapeData *data = 0;
+        KoTextShapeData *data = nullptr;
         // this is done like that as userData is not virtual
         if (KPrPlaceholderShape *shape = dynamic_cast<KPrPlaceholderShape *>(it->shape)) {
             data = qobject_cast<KoTextShapeData *>(shape->userData());

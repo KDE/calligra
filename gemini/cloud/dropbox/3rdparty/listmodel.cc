@@ -91,7 +91,7 @@ ListItem * ListModel::find(const QString &id) const
   foreach(ListItem* item, m_list) {
     if(item->id() == id) return item;
   }
-  return 0;
+  return nullptr;
 }
 
 QModelIndex ListModel::indexFromItem(const ListItem *item) const

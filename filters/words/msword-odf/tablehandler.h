@@ -55,8 +55,8 @@ typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
  */
 struct Row {
     Row()
-        : functorPtr(0L)
-        , tap(0L)
+        : functorPtr(nullptr)
+        , tap(nullptr)
     {
     } // QValueList wants that one
     Row(TableRowFunctorPtr ptr, TAPptr _tap)

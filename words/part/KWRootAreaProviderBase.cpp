@@ -180,8 +180,8 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             if (isChild) {
                 continue;
             }
-            QTransform matrix = shape->absoluteTransformation(0);
-            matrix = matrix * currentShape->absoluteTransformation(0).inverted();
+            QTransform matrix = shape->absoluteTransformation(nullptr);
+            matrix = matrix * currentShape->absoluteTransformation(nullptr).inverted();
             matrix.translate(0, rootArea->top());
             KoTextLayoutObstruction *obstruction = new KoTextLayoutObstruction(shape, matrix);
             obstructions.append(obstruction);

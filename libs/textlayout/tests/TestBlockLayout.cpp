@@ -30,8 +30,8 @@
 
 void TestBlockLayout::initTestCase()
 {
-    m_doc = 0;
-    m_layout = 0;
+    m_doc = nullptr;
+    m_layout = nullptr;
 
     m_loremIpsum = QString(
         "Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut "
@@ -51,7 +51,7 @@ void TestBlockLayout::setupTest(const QString &initText)
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12.0, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager(0);
+    m_styleManager = new KoStyleManager(nullptr);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);

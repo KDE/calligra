@@ -19,13 +19,13 @@ class Q_DECL_HIDDEN KoPointerEvent::Private
 {
 public:
     Private()
-        : tabletEvent(0)
-        , mouseEvent(0)
-        , wheelEvent(0)
-        , touchEvent(0)
-        , gsMouseEvent(0)
-        , gsWheelEvent(0)
-        , deviceEvent(0)
+        : tabletEvent(nullptr)
+        , mouseEvent(nullptr)
+        , wheelEvent(nullptr)
+        , touchEvent(nullptr)
+        , gsMouseEvent(nullptr)
+        , gsWheelEvent(nullptr)
+        , deviceEvent(nullptr)
         , tabletButton(Qt::NoButton)
         , globalPos(0, 0)
         , pos(0, 0)
@@ -312,7 +312,7 @@ Qt::Orientation KoPointerEvent::orientation() const
 
 bool KoPointerEvent::isTabletEvent()
 {
-    return dynamic_cast<QTabletEvent *>(m_event) != 0;
+    return dynamic_cast<QTabletEvent *>(m_event) != nullptr;
 }
 
 void KoPointerEvent::setTabletButton(Qt::MouseButton button)

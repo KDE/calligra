@@ -26,7 +26,7 @@ class Settings::Private
 public:
     Private()
         : temporaryFile(false)
-        , focusItem(0)
+        , focusItem(nullptr)
     {
     }
 
@@ -134,7 +134,7 @@ void Settings::setThemeID(const QString &id)
     if (!d->theme || id != d->theme->id()) {
         if (d->theme) {
             delete d->theme;
-            d->theme = 0;
+            d->theme = nullptr;
         }
 
         d->theme = Theme::load(id, this);

@@ -288,7 +288,7 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
         if (!textShapeData->rootArea()) {
             return false; // not layouted yet
         }
-        QPointF p = shape->absoluteTransformation(0).inverted().map(event->point);
+        QPointF p = shape->absoluteTransformation(nullptr).inverted().map(event->point);
         p = p + QPointF(0.0, textShapeData->documentOffset());
 
         KoPointedAt pointedAt = textShapeData->rootArea()->hitTest(p, Qt::ExactHit);

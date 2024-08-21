@@ -29,12 +29,12 @@
 #include "KPrPlaceholderStrategy.h"
 
 KPrPlaceholderShape::KPrPlaceholderShape()
-    : m_strategy(0)
+    : m_strategy(nullptr)
 {
 }
 
 KPrPlaceholderShape::KPrPlaceholderShape(const QString &presentationClass)
-    : m_strategy(0)
+    : m_strategy(nullptr)
 {
     m_strategy = KPrPlaceholderStrategy::create(presentationClass);
 }
@@ -68,7 +68,7 @@ bool KPrPlaceholderShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     delete m_strategy;
 
     m_strategy = KPrPlaceholderStrategy::create(additionalAttribute("presentation:class"));
-    if (m_strategy == 0) {
+    if (m_strategy == nullptr) {
         return false;
     }
 
@@ -94,7 +94,7 @@ void KPrPlaceholderShape::saveOdf(KoShapeSavingContext &context) const
 KoShape *KPrPlaceholderShape::createShape(KoDocumentResourceManager *documentResources)
 {
     Q_ASSERT(m_strategy);
-    KoShape *shape = 0;
+    KoShape *shape = nullptr;
     if (m_strategy) {
         shape = m_strategy->createShape(documentResources);
     }
@@ -112,5 +112,5 @@ void KPrPlaceholderShape::initStrategy(KoDocumentResourceManager *documentResour
 KoShapeUserData *KPrPlaceholderShape::userData() const
 {
     Q_ASSERT(m_strategy);
-    return m_strategy ? m_strategy->userData() : 0;
+    return m_strategy ? m_strategy->userData() : nullptr;
 }

@@ -284,7 +284,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
     if (!e)
         return QBrush();
 
-    QGradient *gradient = 0;
+    QGradient *gradient = nullptr;
     QTransform transform;
 
     if (e->namespaceURI() == KoXmlNS::draw && e->localName() == "gradient") {

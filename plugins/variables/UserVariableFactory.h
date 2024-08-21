@@ -14,7 +14,7 @@ class UserVariableFactory : public KoInlineObjectFactoryBase
 public:
     UserVariableFactory();
 
-    KoInlineObject *createInlineObject(const KoProperties *properties = 0) const override;
+    KoInlineObject *createInlineObject(const KoProperties *properties = nullptr) const override;
 };
 
 #endif

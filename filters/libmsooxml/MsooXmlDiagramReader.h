@@ -45,7 +45,7 @@ class KOMSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReade
 public:
     explicit MsooXmlDiagramReader(KoOdfWriters *writers);
     ~MsooXmlDiagramReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     // KoFilter::ConversionStatus read_layoutNode();

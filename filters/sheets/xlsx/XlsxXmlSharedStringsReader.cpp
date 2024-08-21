@@ -48,7 +48,7 @@ private:
 
 XlsxXmlSharedStringsReader::XlsxXmlSharedStringsReader(KoOdfWriters *writers)
     : XlsxXmlCommonReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
     , d(new Private)
 {
     init();
@@ -72,7 +72,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlRead
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
     if (result == KoFilter::OK)
         return KoFilter::OK;
     return result;

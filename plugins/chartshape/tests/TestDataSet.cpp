@@ -33,9 +33,9 @@ using namespace KoChart;
 
 TestDataSet::TestDataSet()
     : m_source()
-    , m_proxyModel(0, &m_source)
+    , m_proxyModel(nullptr, &m_source)
     , m_sourceModel1()
-    , m_table1(0)
+    , m_table1(nullptr)
 {
 }
 

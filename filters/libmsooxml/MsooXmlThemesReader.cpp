@@ -267,8 +267,8 @@ MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme &t,
 
 MsooXmlThemesReader::MsooXmlThemesReader(KoOdfWriters *writers)
     : MsooXmlCommonReader(writers)
-    , m_currentColor_local(0)
-    , m_context(0)
+    , m_currentColor_local(nullptr)
+    , m_context(nullptr)
 {
     init();
 }
@@ -293,7 +293,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read(MsooXmlReaderContext *conte
     m_relationships = m_context->relationships;
     *m_context->theme = DrawingMLTheme(); // clear
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
     if (result == KoFilter::OK)
         return KoFilter::OK;
     *dynamic_cast<MsooXmlThemesReaderContext *>(context)->theme = DrawingMLTheme(); // clear
@@ -567,7 +567,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
                     m_context->theme->colorScheme.insert(colorIndex, m_currentColor_local);
                 }
 
-                m_currentColor_local = 0;
+                m_currentColor_local = nullptr;
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
         }
@@ -725,7 +725,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
 KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr_local()
 {
     std::unique_ptr<DrawingMLColorSchemeItem> color(new DrawingMLColorSchemeItem);
-    m_currentColor_local = 0;
+    m_currentColor_local = nullptr;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
@@ -830,7 +830,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr_local()
 KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr_local()
 {
     std::unique_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem);
-    m_currentColor_local = 0;
+    m_currentColor_local = nullptr;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 

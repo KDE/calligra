@@ -50,7 +50,7 @@ SharedPtr<Parser> setupParser(OLEStorage *storage)
         std::cerr << "Error: No 'WordDocument' stream found. Are you sure this is a Word document?" << std::endl;
         delete wordDocument;
         delete storage;
-        return 0;
+        return nullptr;
     }
 
     U16 magic = wordDocument->readU16();
@@ -65,7 +65,7 @@ SharedPtr<Parser> setupParser(OLEStorage *storage)
         std::cerr << "+++ Don't know how to handle nFib=" << nFib << std::endl;
         delete wordDocument;
         delete storage;
-        return 0;
+        return nullptr;
     }
     // (0x0065)
     else if (nFib == 101) {
@@ -116,13 +116,13 @@ SharedPtr<Parser> ParserFactory::createParser(const std::string &fileName)
         FILE *file = fopen(fileName.c_str(), "r");
         if (!file) {
             std::cerr << "Couldn't open " << fileName.c_str() << " for reading." << std::endl;
-            return 0;
+            return nullptr;
         }
         unsigned char buffer[4];
         fread(buffer, 1, 4, file);
         diagnose(buffer);
         fclose(file);
-        return 0;
+        return nullptr;
     }
 
     return setupParser(storage);

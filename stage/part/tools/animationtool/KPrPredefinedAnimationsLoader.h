@@ -53,7 +53,7 @@ public:
      * @param context KoShapeLoadingContext class
      * @param animShape Shape that holds the animation
      */
-    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape = 0);
+    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape = nullptr);
 
 private:
     /**

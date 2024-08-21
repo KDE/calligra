@@ -18,7 +18,7 @@
 
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent)
-    , m_stylesModel(0)
+    , m_stylesModel(nullptr)
     , m_view(new QListView())
     , m_selectedItem(-1)
     , m_originalStyle(true)

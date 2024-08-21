@@ -32,7 +32,7 @@ MergeStrategy::~MergeStrategy()
 KUndo2Command *MergeStrategy::createCommand()
 {
     if (d->initialSelection == selection()->lastRange()) {
-        return 0;
+        return nullptr;
     }
     MergeCommand *command = new MergeCommand();
     command->setSheet(selection()->activeSheet());

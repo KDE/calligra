@@ -27,8 +27,8 @@
 using namespace wvWare;
 
 Annotations::Annotations(OLEStreamReader *tableStream, const Word97::FIB &fib)
-    : m_annotationRef(0)
-    , m_annotationRefIt(0)
+    : m_annotationRef(nullptr)
+    , m_annotationRefIt(nullptr)
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << Qt::endl

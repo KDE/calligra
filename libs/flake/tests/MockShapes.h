@@ -45,7 +45,7 @@ public:
 class MockContainer : public KoShapeContainer
 {
 public:
-    MockContainer(KoShapeContainerModel *model = 0)
+    MockContainer(KoShapeContainerModel *model = nullptr)
         : KoShapeContainer(model)
         , paintedCount(0)
     {
@@ -82,10 +82,10 @@ class KoToolProxy;
 class MockCanvas : public KoCanvasBase
 {
 public:
-    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase = 0) // made for TestSnapStrategy.cpp
+    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase = nullptr) // made for TestSnapStrategy.cpp
         : KoCanvasBase(aKoShapeBasedDocumentBase)
         , m_shapeManager(new KoShapeManager(this))
-        , m_guideData(0)
+        , m_guideData(nullptr)
     {
     }
     ~MockCanvas() override
@@ -124,19 +124,19 @@ public:
     }
     KoToolProxy *toolProxy() const override
     {
-        return 0;
+        return nullptr;
     }
     KoViewConverter *viewConverter() const override
     {
-        return 0;
+        return nullptr;
     }
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
     KoUnit unit() const override
     {

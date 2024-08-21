@@ -61,7 +61,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
     if (result != KoFilter::OK) {
         qCWarning(lcXlsxImport) << "Failure reading the comments";
     }
@@ -246,7 +246,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
     READ_ATTR_WITHOUT_NS(authorId)
     int authorIdInt = -1;
     STRING_TO_INT(authorId, authorIdInt, "comment@authorId")
-    std::unique_ptr<XlsxComment> comment(authorIdInt < 0 ? 0 : new XlsxComment(authorIdInt));
+    std::unique_ptr<XlsxComment> comment(authorIdInt < 0 ? nullptr : new XlsxComment(authorIdInt));
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)

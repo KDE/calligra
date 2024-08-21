@@ -57,7 +57,7 @@
 
 void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
-    m_currentDoubleValue = 0;
+    m_currentDoubleValue = nullptr;
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
@@ -214,7 +214,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_rot = 0;
 
 #ifdef XLSXXMLDRAWINGREADER_CPP
-    KoXmlWriter *tempBodyHolder = 0;
+    KoXmlWriter *tempBodyHolder = nullptr;
     if (m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
         tempBodyHolder = body;
         body = m_currentDrawingObject->pictureWriter();
@@ -1072,7 +1072,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
         m_currentShapeProperties = new PptxShapeProperties();
     } else if (m_context->type == SlideLayout) {
         // moved down
-        m_currentShapeProperties = 0;
+        m_currentShapeProperties = nullptr;
     }
 #endif
 
@@ -2040,7 +2040,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
     TRY_READ_ATTR_WITHOUT_NS(idx)
 
     const QList<KoGenStyle> *lst = &m_context->themes->formatScheme.lnStyleLst;
-    const KoGenStyle *lnStyle = 0;
+    const KoGenStyle *lnStyle = nullptr;
 
     if (!idx.isEmpty() && !lst->empty()) {
         int index = idx.toInt();
@@ -2338,7 +2338,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 TRY_READ(endParaRPr)
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
-                m_currentTextStyleProperties = 0;
+                m_currentTextStyleProperties = nullptr;
 
                 if (brLastElement || !rRead) {
                     body->startElement("text:span");
@@ -2692,7 +2692,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 
     // elements
 
@@ -2807,7 +2807,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     body->endElement(); // text:span
 
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 
     READ_EPILOGUE
 }
@@ -3184,7 +3184,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     READ_EPILOGUE
@@ -3233,7 +3233,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 
 #if defined(PPTXXMLSLIDEREADER_CPP)
     // Where there is a hyperlink, hlink value should be used by default
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = nullptr;
     QString valTransformed = m_context->colorMap.value("hlink");
     colorItem = m_context->themes->colorScheme.value(valTransformed);
     if (colorItem) {
@@ -5003,7 +5003,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString &level
 {
     const QXmlStreamAttributes attrs(attributes());
 
-    Q_ASSERT(m_currentTextStyleProperties == 0);
+    Q_ASSERT(m_currentTextStyleProperties == nullptr);
     m_currentTextStyleProperties = new KoCharacterStyle();
 
     // Number 3 makes eg. lvl4 -> 4
@@ -5102,7 +5102,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString &level
     m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties;
 
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 
     return KoFilter::OK;
 }
@@ -5671,7 +5671,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
                 textStyleName = mainStyles->insert(m_currentTextStyle);
 
                 delete m_currentTextStyleProperties;
-                m_currentTextStyleProperties = 0;
+                m_currentTextStyleProperties = nullptr;
             } else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
             }

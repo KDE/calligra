@@ -117,7 +117,7 @@ protected:
     QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
 
 private:
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
 
     KoTextShapeData *m_textShapeData;
     KoPageProvider *m_pageProvider;

@@ -68,12 +68,12 @@ void TestChartLayout::initTestCase()
     QVERIFY(!chartTitle->isVisible());
     QVERIFY(!chartSubTitle->isVisible());
     QVERIFY(!chartFooter->isVisible());
-    QVERIFY(plotArea->xAxis() != 0 && xAxisTitle != 0);
-    QVERIFY(plotArea->yAxis() != 0 && yAxisTitle != 0);
+    QVERIFY(plotArea->xAxis() != nullptr && xAxisTitle != nullptr);
+    QVERIFY(plotArea->yAxis() != nullptr && yAxisTitle != nullptr);
     QVERIFY(xAxisTitle->isVisible());
     QVERIFY(yAxisTitle->isVisible());
-    QVERIFY(secondaryXAxisTitle == 0);
-    QVERIFY(secondaryYAxisTitle == 0);
+    QVERIFY(secondaryXAxisTitle == nullptr);
+    QVERIFY(secondaryYAxisTitle == nullptr);
 
     QCOMPARE(xAxisTitleRect.bottom(), area.bottom() - 1);
     QCOMPARE(yAxisTitleRect.left(), area.left() + 1);
@@ -127,9 +127,9 @@ void TestChartLayout::init()
     xAxisTitleRect = itemRect(xAxisTitle);
     yAxisTitleRect = itemRect(yAxisTitle);
 
-    secondaryXAxisTitle = plotArea->secondaryXAxis() ? plotArea->secondaryXAxis()->title() : 0;
+    secondaryXAxisTitle = plotArea->secondaryXAxis() ? plotArea->secondaryXAxis()->title() : nullptr;
     secondaryXAxisTitleRect = secondaryXAxisTitle ? itemRect(secondaryXAxisTitle) : QRectF();
-    secondaryYAxisTitle = plotArea->secondaryYAxis() ? plotArea->secondaryYAxis()->title() : 0;
+    secondaryYAxisTitle = plotArea->secondaryYAxis() ? plotArea->secondaryYAxis()->title() : nullptr;
     secondaryYAxisTitleRect = secondaryYAxisTitle ? itemRect(secondaryYAxisTitle) : QRectF();
 }
 

@@ -24,9 +24,9 @@
 
 KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     : QWidget(parent)
-    , m_document(0)
-    , m_canvas(0)
-    , m_layout(0)
+    , m_document(nullptr)
+    , m_canvas(nullptr)
+    , m_layout(nullptr)
     , m_updateTimer(new QTimer(this))
 {
     m_model = new QStandardItemModel(this);
@@ -104,7 +104,7 @@ void KWNavigationWidget::updateData()
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
-        if (tfs == 0)
+        if (tfs == nullptr)
             continue;
 
         tfs->wordsDocument();
@@ -156,16 +156,16 @@ void KWNavigationWidget::setCanvas(KWCanvas *canvas)
         m_layout = qobject_cast<KoTextDocumentLayout *>(m_document->mainFrameSet()->document()->documentLayout());
         connect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     } else {
-        m_layout = 0;
+        m_layout = nullptr;
     }
     m_canvas = canvas;
 }
 
 void KWNavigationWidget::unsetCanvas()
 {
-    m_document = 0;
+    m_document = nullptr;
     if (m_layout) {
         disconnect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     }
-    m_layout = 0;
+    m_layout = nullptr;
 }

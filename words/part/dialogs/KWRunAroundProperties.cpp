@@ -158,7 +158,7 @@ void KWRunAroundProperties::open(KoShape *shape)
 
 void KWRunAroundProperties::save()
 {
-    save(0);
+    save(nullptr);
 }
 
 void KWRunAroundProperties::save(KUndo2Command *macro)

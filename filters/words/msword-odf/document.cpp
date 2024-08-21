@@ -68,31 +68,31 @@ Document::Document(const std::string &fileName,
                    POLE::Stream &table,
                    LEInputStream *data,
                    LEInputStream *si)
-    : m_textHandler(0)
-    , m_tableHandler(0)
+    : m_textHandler(nullptr)
+    , m_tableHandler(nullptr)
     , m_replacementHandler(new WordsReplacementHandler)
-    , m_graphicsHandler(0)
+    , m_graphicsHandler(nullptr)
     , m_filter(filter)
     //         , m_chain(chain)
     , m_parser(wvWare::ParserFactory::createParser(fileName))
     , m_bodyFound(false)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_bodyWriter(0)
-    , m_mainStyles(0)
-    , m_metaWriter(0)
-    , m_headerWriter(0)
+    , m_bodyWriter(nullptr)
+    , m_mainStyles(nullptr)
+    , m_metaWriter(nullptr)
+    , m_headerWriter(nullptr)
     , m_headerCount(0)
     , m_writingHeader(false)
     , m_evenOpen(false)
     , m_firstOpen(false)
-    , m_buffer(0)
-    , m_bufferEven(0)
+    , m_buffer(nullptr)
+    , m_bufferEven(nullptr)
     , m_writeMasterPageName(false)
     , m_omittMasterPage(false)
     , m_useLastMasterPage(false)
     , m_wdstm(wordDocument)
-    , m_tblstm(0)
+    , m_tblstm(nullptr)
     , m_datastm(data)
     , m_sistm(si)
     , m_tblstm_pole(table)
@@ -105,9 +105,9 @@ Document::Document(const std::string &fileName,
         m_bodyWriter = bodyWriter; // pointer for writing to the body
         m_mainStyles = mainStyles; // KoGenStyles object for collecting styles
         m_metaWriter = metaWriter; // pointer for writing to meta.xml
-        m_buffer = 0; // set pointers to 0
-        m_bufferEven = 0;
-        m_headerWriter = 0;
+        m_buffer = nullptr; // set pointers to 0
+        m_bufferEven = nullptr;
+        m_headerWriter = nullptr;
 
         m_textHandler = new WordsTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
@@ -215,7 +215,7 @@ void Document::processAssociatedStrings()
 {
     debugMsDoc;
 
-    MSO::SummaryInformationPropertySetStream *si = 0;
+    MSO::SummaryInformationPropertySetStream *si = nullptr;
     if (m_sistm) {
         si = new MSO::SummaryInformationPropertySetStream();
         try {
@@ -236,7 +236,7 @@ void Document::processAssociatedStrings()
     QString author;
     QString lastRevBy;
     QString comments;
-    QString *p_str = 0;
+    QString *p_str = nullptr;
 
     if (si) {
         MSO::PropertySet &ps = si->propertySet.propertySet1;
@@ -283,7 +283,7 @@ void Document::processAssociatedStrings()
                 if (ps.property.at(i).vt_lpstr) {
                     *p_str = decoder(ps.property.at(i).vt_lpstr->characters.data());
                 }
-                p_str = 0;
+                p_str = nullptr;
             }
         }
     }
@@ -393,7 +393,7 @@ void Document::processStyles()
             }
 
             // Process the paragraph and character properties.
-            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle, false, 0, 0, QString());
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle, false, nullptr, nullptr, QString());
             Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor());
 
             // Add style to main collection, using the name that it
@@ -618,8 +618,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     debugMsDoc;
-    KoGenStyle *masterPageStyle = 0;
-    KoGenStyle *pageLayoutStyle = 0;
+    KoGenStyle *masterPageStyle = nullptr;
+    KoGenStyle *pageLayoutStyle = nullptr;
     QString pageLayoutName;
 
     for (int i = 0; i < m_masterPageName_list.size(); i++) {
@@ -807,8 +807,8 @@ void Document::headerEnd()
         m_headerWriter->endElement(); // style:header-left/footer-left
         m_evenOpen = false;
     } else {
-        KoGenStyle *masterPageStyle = 0;
-        QString name = 0;
+        KoGenStyle *masterPageStyle = nullptr;
+        QString name = nullptr;
         if (m_firstOpen) {
             name = m_masterPageName_list.first();
             masterPageStyle = m_masterPageStyle_list.first();
@@ -824,18 +824,18 @@ void Document::headerEnd()
         if (m_bufferEven) {
             m_headerWriter->addCompleteElement(m_bufferEven);
             delete m_bufferEven;
-            m_bufferEven = 0;
+            m_bufferEven = nullptr;
         }
         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
         masterPageStyle->addChildElement(QString::number(m_headerCount), contents);
         debugMsDoc << "updating master-page style:" << name;
 
         delete m_buffer;
-        m_buffer = 0;
+        m_buffer = nullptr;
     }
 
     delete m_headerWriter;
-    m_headerWriter = 0;
+    m_headerWriter = nullptr;
 
     // we're done with this header, so reset to false
     m_writingHeader = false;
@@ -908,7 +908,7 @@ void Document::slotTableFound(Words::Table *table)
 
     // cleanup table
     delete table;
-    table = 0;
+    table = nullptr;
 
     // m_tableQueue.push( table );
 }

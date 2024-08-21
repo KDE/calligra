@@ -27,7 +27,7 @@ Controller::Controller(QObject *parent) :
     m_networkcontroller(new NetworkController(parent)),
     m_multi_selection(false),
     m_current_filetransferitem(0),
-    m_uploadMostRecentAction(0)
+    m_uploadMostRecentAction(nullptr)
 {
     folder_model = new ListModel(new FolderItem, parent);
     filestransfer_model = new ListModel(new FileTransferItem, parent);

@@ -40,7 +40,7 @@ OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
     , m_insideComment(false)
     , m_insideDcCreator(false)
     , m_insideDcDate(false)
-    , m_currentParagraphTextProperties(0)
+    , m_currentParagraphTextProperties(nullptr)
 {
 }
 
@@ -112,7 +112,7 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
         return;
     }
 
-    m_currentParagraphTextProperties = 0;
+    m_currentParagraphTextProperties = nullptr;
     m_currentParagraphParent.clear();
 
     KoXmlWriter *writer = docxContext->m_documentWriter;
@@ -255,7 +255,7 @@ void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfRead
     if (!m_currentParagraphParent.isEmpty()) {
         DocxStyleHelper::inheritTextStyles(&properties, m_currentParagraphParent, docxContext->styleManager());
     }
-    if (m_currentParagraphTextProperties != 0) {
+    if (m_currentParagraphTextProperties != nullptr) {
         properties.copyPropertiesFrom(*m_currentParagraphTextProperties);
     }
 
@@ -263,7 +263,7 @@ void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfRead
     if (!textStyle.isEmpty()) {
         KoOdfStyle *style = docxContext->styleManager()->style(textStyle, "text");
         KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
-        if (textProperties != 0) {
+        if (textProperties != nullptr) {
             properties.copyPropertiesFrom(*textProperties);
         }
         QString parent = style->parent();

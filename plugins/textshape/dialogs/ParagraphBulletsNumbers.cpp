@@ -25,8 +25,8 @@
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     : QWidget(parent)
     , m_alignmentMode(false)
-    , m_imageCollection(0)
-    , m_data(0)
+    , m_imageCollection(nullptr)
+    , m_data(nullptr)
     , m_fontSize(0)
 {
     widget.setupUi(this);
@@ -166,10 +166,10 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::LabelType labelType = m_mapping[currentRow];
     if (labelType == KoListStyle::None) {
-        savingStyle->setListStyle(0);
+        savingStyle->setListStyle(nullptr);
         return;
     }
-    if (savingStyle->listStyle() == 0) {
+    if (savingStyle->listStyle() == nullptr) {
         KoListStyle *listStyle = new KoListStyle(savingStyle);
         savingStyle->setListStyle(listStyle);
     }
@@ -300,7 +300,7 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
     KCharSelect *kcs =
         new KCharSelect(dialog,
-                        0,
+                        nullptr,
                         KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
 
     dialog->setMainWidget(kcs);
@@ -343,7 +343,7 @@ void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollect
 
 void ParagraphBulletsNumbers::selectListImage()
 {
-    KoFileDialog dlg(0, KoFileDialog::OpenFile, "bullets");
+    KoFileDialog dlg(nullptr, KoFileDialog::OpenFile, "bullets");
     dlg.setCaption(i18n("Select a list image"));
     QUrl url = QUrl::fromLocalFile(dlg.filename());
     if (!url.isEmpty()) {

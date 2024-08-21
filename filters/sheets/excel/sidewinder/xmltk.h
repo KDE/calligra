@@ -223,7 +223,7 @@ public:
         : XmlTk(data)
     {
         m_cchValue = readU32(data + 4);
-        m_value = readUnicodeChars(data + 8, m_cchValue, -1, 0, &m_size);
+        m_value = readUnicodeChars(data + 8, m_cchValue, -1, nullptr, &m_size);
     }
 
 private:
@@ -349,7 +349,7 @@ XmlTk *parseXmlTk(const unsigned char *data)
         qCDebug(lcSidewinder) << "Error in " << __FUNCTION__ << ": Unhandled drType " << QString::number(drType, 16);
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 QList<XmlTk *> parseXmlTkChain(const unsigned char *data, int size)

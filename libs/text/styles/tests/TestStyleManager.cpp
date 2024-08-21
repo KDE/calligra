@@ -49,7 +49,7 @@ void TestStyleManager::init()
     m_doc = new QTextDocument();
     m_koDoc = new KoTextDocument(m_doc);
     QTextCursor(m_doc).insertText("foo\nbar");
-    m_styleManager = new KoStyleManager(0);
+    m_styleManager = new KoStyleManager(nullptr);
     m_koDoc->setStyleManager(m_styleManager);
     debugText << "init done";
 }

@@ -23,9 +23,9 @@ class Q_DECL_HIDDEN KoZoomController::Private
 {
 public:
     Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
-        : canvasController(0)
-        , zoomHandler(0)
-        , action(0)
+        : canvasController(nullptr)
+        , zoomHandler(nullptr)
+        , action(nullptr)
         , textMinX(1)
         , textMaxX(600)
         , fitMargin(0)

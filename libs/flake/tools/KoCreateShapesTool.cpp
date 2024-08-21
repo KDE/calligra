@@ -20,7 +20,7 @@ class KoCreateShapesToolPrivate : public KoInteractionToolPrivate
 public:
     KoCreateShapesToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
         : KoInteractionToolPrivate(qq, canvas)
-        , newShapeProperties(0)
+        , newShapeProperties(nullptr)
     {
     }
 

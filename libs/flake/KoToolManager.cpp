@@ -126,11 +126,11 @@ class CanvasData
 {
 public:
     CanvasData(KoCanvasController *cc, const KoInputDevice &id)
-        : activeTool(0)
+        : activeTool(nullptr)
         , canvas(cc)
         , inputDevice(id)
-        , dummyToolWidget(0)
-        , dummyToolLabel(0)
+        , dummyToolWidget(nullptr)
+        , dummyToolLabel(nullptr)
     {
     }
 
@@ -243,7 +243,7 @@ public:
 
 KoToolManager::Private::Private(KoToolManager *qq)
     : q(qq)
-    , canvasData(0)
+    , canvasData(nullptr)
     , layerExplicitlyDisabled(false)
 {
 }
@@ -332,7 +332,7 @@ void KoToolManager::Private::disconnectActiveTool()
 void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 {
     Q_ASSERT(tool);
-    if (canvasData == 0)
+    if (canvasData == nullptr)
         return;
 
     if (canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
@@ -428,7 +428,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             }
         }
         toolWidget = canvasData->dummyToolWidget;
-        if (toolWidget == 0) {
+        if (toolWidget == nullptr) {
             toolWidget = new QWidget();
             toolWidget->setObjectName("DummyToolWidget");
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
@@ -458,7 +458,7 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
 {
     Q_ASSERT(cd);
 
-    KoCanvasBase *oldCanvas = 0;
+    KoCanvasBase *oldCanvas = nullptr;
     KoInputDevice oldInputDevice;
 
     if (canvasData) {
@@ -471,7 +471,7 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
 
         KoToolProxy *proxy = proxies.value(oldCanvas);
         Q_ASSERT(proxy);
-        proxy->setActiveTool(0);
+        proxy->setActiveTool(nullptr);
     }
 
     canvasData = cd;
@@ -512,7 +512,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
     Q_ASSERT(controller);
     // check if we are removing the active canvas controller
     if (canvasData && canvasData->canvas == controller) {
-        KoCanvasController *newCanvas = 0;
+        KoCanvasController *newCanvas = nullptr;
         // try to find another canvas controller beside the one we are removing
         foreach (KoCanvasController *canvas, canvasses.keys()) {
             if (canvas != controller) {
@@ -529,13 +529,13 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
                 canvasControllerWidget->setToolOptionWidgets(QList<QPointer<QWidget>>());
             }
             // as a last resort just set a blank one
-            canvasData = 0;
+            canvasData = nullptr;
         }
     }
 
     KoToolProxy *proxy = proxies.value(controller->canvas());
     if (proxy)
-        proxy->setActiveTool(0);
+        proxy->setActiveTool(nullptr);
 
     QList<KoToolBase *> tools;
     foreach (CanvasData *canvasData, canvasses.value(controller)) {
@@ -551,7 +551,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         delete tool;
     }
     canvasses.remove(controller);
-    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : nullptr);
 }
 
 void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
@@ -571,10 +571,10 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     if (tp)
         tp->priv()->setCanvasController(controller);
 
-    if (cd->activeTool == 0) {
+    if (cd->activeTool == nullptr) {
         // no active tool, so we activate the highest priority main tool
         int highestPriority = INT_MAX;
-        ToolHelper *helper = 0;
+        ToolHelper *helper = nullptr;
         foreach (ToolHelper *th, tools) {
             if (th->toolType() == KoToolFactoryBase::mainToolType()) {
                 if (th->priority() < highestPriority) {
@@ -596,14 +596,14 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
         currentLayerChanged(layer);
     });
 
-    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : nullptr);
 }
 
 void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
 {
     Q_UNUSED(from);
     // no canvas anyway or no focus set anyway?
-    if (!canvasData || to == 0) {
+    if (!canvasData || to == nullptr) {
         return;
     }
 
@@ -627,7 +627,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
 
     // for code simplicity the current canvas will be checked again,
     // but would have been caught already in the lines above, so no issue
-    KoCanvasController *newCanvas = 0;
+    KoCanvasController *newCanvas = nullptr;
     foreach (KoCanvasController *canvas, canvasses.keys()) {
         if (canvas->canvas()->canvasWidget() == to) {
             newCanvas = canvas;
@@ -636,7 +636,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     }
 
     // none of our canvasWidgets got focus?
-    if (newCanvas == 0) {
+    if (newCanvas == nullptr) {
         return;
     }
 
@@ -723,7 +723,7 @@ void KoToolManager::Private::updateToolForProxy()
         return;
 
     bool canUseTool = !layerExplicitlyDisabled || canvasData->activationShapeId.endsWith(QLatin1String("/always"));
-    proxy->setActiveTool(canUseTool ? canvasData->activeTool : 0);
+    proxy->setActiveTool(canUseTool ? canvasData->activeTool : nullptr);
 }
 
 void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
@@ -969,7 +969,7 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
         }
     }
     Q_ASSERT(0); // this should not happen
-    return 0;
+    return nullptr;
 }
 
 KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) const
@@ -979,13 +979,13 @@ KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) con
         if (controller->canvas() == canvas)
             return d->canvasData->allTools.value(id);
     }
-    return 0;
+    return nullptr;
 }
 
 KoCanvasController *KoToolManager::activeCanvasController() const
 {
     if (!d->canvasData)
-        return 0;
+        return nullptr;
     return d->canvasData->canvas;
 }
 

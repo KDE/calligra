@@ -470,7 +470,7 @@ public:
     }
     KoCanvasBase *canvas() const override
     {
-        return 0;
+        return nullptr;
     }
     int visibleHeight() const override
     {

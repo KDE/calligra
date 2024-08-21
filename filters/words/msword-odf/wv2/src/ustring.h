@@ -209,7 +209,7 @@ class WV2_EXPORT CString
 {
 public:
     CString()
-        : data(0L)
+        : data(nullptr)
     {
     }
     explicit CString(const char *c);
@@ -410,7 +410,7 @@ public:
      * Attempts an conversion to an unsigned long integer. ok will be set
      * according to the success.
      */
-    unsigned long toULong(bool *ok = 0L) const;
+    unsigned long toULong(bool *ok = nullptr) const;
     /**
      * @return Position of first occurrence of f starting at position pos.
      * -1 if the search was not successful.

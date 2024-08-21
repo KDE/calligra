@@ -177,7 +177,7 @@ void SortDesc::execute(Selection *selection, Sheet *sheet, QWidget *)
 
 SortManipulator::SortManipulator()
     : AbstractDFManipulator()
-    , m_cellStorage(0)
+    , m_cellStorage(nullptr)
 {
     m_changeformat = false;
     m_rows = true;
@@ -231,7 +231,7 @@ bool SortManipulator::preProcess()
 bool SortManipulator::postProcess()
 {
     delete m_cellStorage;
-    m_cellStorage = 0;
+    m_cellStorage = nullptr;
     m_styles.clear();
     m_formulas.clear();
 

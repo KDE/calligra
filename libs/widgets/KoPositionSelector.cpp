@@ -113,7 +113,7 @@ public:
         if (index < count())
             return items.at(index).child;
         else
-            return 0;
+            return nullptr;
     }
 
     QLayoutItem *takeAt(int index) override

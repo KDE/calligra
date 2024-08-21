@@ -134,7 +134,7 @@ public:
     KoIDMap getCompositeOps() const;
     KoIDList getCategories() const;
     KoIDList getCompositeOps(const KoColorSpace *colorSpace) const;
-    KoIDList getCompositeOps(const KoID &category, const KoColorSpace *colorSpace = 0) const;
+    KoIDList getCompositeOps(const KoID &category, const KoColorSpace *colorSpace = nullptr) const;
     bool colorSpaceHasCompositeOp(const KoColorSpace *colorSpace, const KoID &compositeOp) const;
 
     template<class TKoIdIterator>

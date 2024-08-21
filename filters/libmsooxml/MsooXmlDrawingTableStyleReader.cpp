@@ -26,8 +26,8 @@ using namespace MSOOXML;
 
 MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters *writers)
     : MsooXmlCommonReader(writers)
-    , m_context(0)
-    , m_currentStyle(0)
+    , m_context(nullptr)
+    , m_currentStyle(nullptr)
     , m_currentTableStyleProperties()
 {
 }
@@ -176,7 +176,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblBg()
     READ_PROLOGUE
 
     m_currentTableStyleProperties = m_currentStyle->properties(DrawingTableStyle::WholeTbl);
-    if (m_currentTableStyleProperties == 0) {
+    if (m_currentTableStyleProperties == nullptr) {
         m_currentTableStyleProperties = new TableStyleProperties;
     }
 
@@ -494,7 +494,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
     READ_PROLOGUE
 
     m_currentTableStyleProperties = m_currentStyle->properties(DrawingTableStyle::WholeTbl);
-    if (m_currentTableStyleProperties == 0) {
+    if (m_currentTableStyleProperties == nullptr) {
         m_currentTableStyleProperties = new TableStyleProperties;
     }
 

@@ -105,13 +105,13 @@ void BibliographyGenerator::generate()
     }
 
     foreach (KoInlineCite *cite, citeList) {
-        KoParagraphStyle *bibTemplateStyle = 0;
+        KoParagraphStyle *bibTemplateStyle = nullptr;
         BibliographyEntryTemplate bibEntryTemplate;
         if (m_bibInfo->m_entryTemplate.contains(cite->bibliographyType())) {
             bibEntryTemplate = m_bibInfo->m_entryTemplate[cite->bibliographyType()];
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
-            if (bibTemplateStyle == 0) {
+            if (bibTemplateStyle == nullptr) {
                 bibTemplateStyle = styleManager->defaultBibliographyEntryStyle(bibEntryTemplate.bibliographyType);
                 bibEntryTemplate.styleName = bibTemplateStyle->name();
             }

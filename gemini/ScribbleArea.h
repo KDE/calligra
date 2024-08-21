@@ -18,7 +18,7 @@ class ScribbleArea : public QQuickPaintedItem
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    explicit ScribbleArea(QQuickItem *parent = 0);
+    explicit ScribbleArea(QQuickItem *parent = nullptr);
     ~ScribbleArea() override;
 
     Q_INVOKABLE void clear();

@@ -99,7 +99,8 @@ public:
     /**
      * Paints the cells.
      */
-    virtual void paintCells(QPainter &painter, const QRectF &paintRect, const QPointF &topLeft, CanvasBase *canvas = 0, const QRect &visibleRect = QRect());
+    virtual void
+    paintCells(QPainter &painter, const QRectF &paintRect, const QPointF &topLeft, CanvasBase *canvas = nullptr, const QRect &visibleRect = QRect());
 
     QPoint obscuringCell(const QPoint &obscuredCell) const;
     QSize obscuredRange(const QPoint &obscuringCell) const;

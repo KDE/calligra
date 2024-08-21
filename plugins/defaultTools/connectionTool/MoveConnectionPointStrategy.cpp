@@ -52,7 +52,7 @@ KUndo2Command *MoveConnectionPointStrategy::createCommand()
     const qreal dy = m_newPoint.position.y() - m_oldPoint.position.y();
     // check if we have moved the connection point at least a little bit
     if (dx * dx + dy * dy < grabDistance * grabDistance)
-        return 0;
+        return nullptr;
 
     return new ChangeConnectionPointCommand(m_shape, m_connectionPointId, m_oldPoint, m_newPoint);
 }

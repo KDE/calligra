@@ -31,7 +31,7 @@ class WORDS_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage()
-        : priv(0)
+        : priv(nullptr)
         , n(0)
     {
     }

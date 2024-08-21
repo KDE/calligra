@@ -23,12 +23,12 @@ SubSupElement::SubSupElement(BasicElement *parent, ElementType elementType)
     if (elementType != SupScript) {
         m_subScript = new RowElement(this);
     } else {
-        m_subScript = 0;
+        m_subScript = nullptr;
     }
     if (elementType != SubScript) {
         m_superScript = new RowElement(this);
     } else {
-        m_superScript = 0;
+        m_superScript = nullptr;
     }
     m_elementType = elementType;
 }

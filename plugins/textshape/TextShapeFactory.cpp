@@ -49,8 +49,8 @@ TextShapeFactory::TextShapeFactory()
 
 KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    KoInlineTextObjectManager *manager = 0;
-    KoTextRangeManager *locationManager = 0;
+    KoInlineTextObjectManager *manager = nullptr;
+    KoTextRangeManager *locationManager = nullptr;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
         if (variant.isValid()) {

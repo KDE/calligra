@@ -53,7 +53,7 @@ public:
      * @return the name of the last KoGenStyle inserted into the styles
      * collection.
      */
-    QString writeToFile(KoXmlWriter *writer, bool openNewTextBox, QChar *tabLeader = 0);
+    QString writeToFile(KoXmlWriter *writer, bool openNewTextBox, QChar *tabLeader = nullptr);
 
     void addRunOfText(QString text,
                       wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
@@ -167,7 +167,7 @@ public:
                                          const wvWare::Style *parentStyle,
                                          bool setDefaultAlign,
                                          Paragraph *paragraph,
-                                         QChar *tabLeader = 0,
+                                         QChar *tabLeader = nullptr,
                                          const QString &bgColor = QString());
 
     static void applyCharacterProperties(const wvWare::Word97::CHP *chp,

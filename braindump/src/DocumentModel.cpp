@@ -163,12 +163,12 @@ QMimeData *DocumentModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
     if (!indexes.count())
-        return 0;
+        return nullptr;
 
     // check if we support a format
     QStringList types = mimeTypes();
     if (types.isEmpty())
-        return 0;
+        return nullptr;
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -255,7 +255,7 @@ void DocumentModel::removeSection(Section *section)
 
 void DocumentModel::insertSection(Section *section, SectionGroup *parentGrp, Section *before)
 {
-    Q_ASSERT(before == 0 || parentGrp == before->sectionParent());
+    Q_ASSERT(before == nullptr || parentGrp == before->sectionParent());
     int idx = (before) ? parentGrp->sections().indexOf(before) : parentGrp->sections().count();
     insertSection(section, parentGrp, idx);
 }

@@ -43,13 +43,13 @@
 
 KPrViewModePresentation::KPrViewModePresentation(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
-    , m_savedParent(0)
+    , m_savedParent(nullptr)
     , m_tool(new KPrPresentationTool(*this))
-    , m_animationDirector(0)
-    , m_pvAnimationDirector(0)
-    , m_presenterViewCanvas(0)
-    , m_presenterViewWidget(0)
-    , m_endOfSlideShowPage(0)
+    , m_animationDirector(nullptr)
+    , m_pvAnimationDirector(nullptr)
+    , m_presenterViewCanvas(nullptr)
+    , m_presenterViewWidget(nullptr)
+    , m_endOfSlideShowPage(nullptr)
     , m_view(static_cast<KPrView *>(view))
 {
     // TODO: make this viewmode work with non-QWidget-based canvases as well
@@ -152,7 +152,7 @@ void KPrViewModePresentation::activate(KoPAViewMode *previousViewMode)
 
     m_savedViewMode = previousViewMode; // store the previous view mode
     m_savedParent = m_baseCanvas->parentWidget();
-    m_baseCanvas->setParent((QWidget *)0, Qt::Window); // set parent to 0 and
+    m_baseCanvas->setParent((QWidget *)nullptr, Qt::Window); // set parent to 0 and
 
     KPrDocument *document = static_cast<KPrDocument *>(m_view->kopaDocument());
     bool presenterViewEnabled = document->isPresenterViewEnabled();
@@ -240,19 +240,19 @@ void KPrViewModePresentation::deactivate()
 
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
-    m_endOfSlideShowPage = 0;
+    m_endOfSlideShowPage = nullptr;
 
     delete m_animationDirector;
-    m_animationDirector = 0;
+    m_animationDirector = nullptr;
 
     if (m_presenterViewWidget) {
         m_presenterViewWidget->setWindowState(m_presenterViewWidget->windowState() & ~Qt::WindowFullScreen);
         delete m_pvAnimationDirector;
-        m_pvAnimationDirector = 0;
+        m_pvAnimationDirector = nullptr;
 
         delete m_presenterViewWidget;
-        m_presenterViewWidget = 0;
-        m_presenterViewCanvas = 0;
+        m_presenterViewWidget = nullptr;
+        m_presenterViewCanvas = nullptr;
     }
     // make sure the page does not have an offset after finishing a presentation
     m_baseCanvas->setDocumentOffset(QPoint(0, 0));
@@ -262,7 +262,7 @@ void KPrViewModePresentation::updateActivePage(KoPAPageBase *page)
 {
     m_view->setActivePage(page);
     if (m_presenterViewWidget) {
-        if (0 != m_animationDirector) {
+        if (nullptr != m_animationDirector) {
             m_presenterViewWidget->setActivePage(m_animationDirector->currentPage());
         } else {
             m_presenterViewWidget->setActivePage(page);
@@ -282,38 +282,38 @@ KPrAnimationDirector *KPrViewModePresentation::animationDirector()
 
 int KPrViewModePresentation::numPages() const
 {
-    Q_ASSERT(0 != m_animationDirector);
+    Q_ASSERT(nullptr != m_animationDirector);
     return m_animationDirector ? m_animationDirector->numPages() : -1;
 }
 
 int KPrViewModePresentation::currentPage() const
 {
-    Q_ASSERT(0 != m_animationDirector);
+    Q_ASSERT(nullptr != m_animationDirector);
     return m_animationDirector ? m_animationDirector->currentPage() : -1;
 }
 
 int KPrViewModePresentation::numStepsInPage() const
 {
-    Q_ASSERT(0 != m_animationDirector);
+    Q_ASSERT(nullptr != m_animationDirector);
     return m_animationDirector ? m_animationDirector->numStepsInPage() : -1;
 }
 
 int KPrViewModePresentation::currentStep() const
 {
-    Q_ASSERT(0 != m_animationDirector);
+    Q_ASSERT(nullptr != m_animationDirector);
     return m_animationDirector ? m_animationDirector->currentStep() : -1;
 }
 
 KPrPresentationTool *KPrViewModePresentation::presentationTool() const
 {
-    Q_ASSERT(0 != m_animationDirector);
+    Q_ASSERT(nullptr != m_animationDirector);
     return m_tool;
 }
 
 void KPrViewModePresentation::navigate(KPrAnimationDirector::Navigation navigation)
 {
-    Q_ASSERT(0 != m_animationDirector);
-    if (0 == m_animationDirector) {
+    Q_ASSERT(nullptr != m_animationDirector);
+    if (nullptr == m_animationDirector) {
         return;
     }
     int previousPage = m_animationDirector->currentPage();
@@ -335,8 +335,8 @@ void KPrViewModePresentation::navigate(KPrAnimationDirector::Navigation navigati
 
 void KPrViewModePresentation::navigateToPage(int index)
 {
-    Q_ASSERT(0 != m_animationDirector);
-    if (0 == m_animationDirector) {
+    Q_ASSERT(nullptr != m_animationDirector);
+    if (nullptr == m_animationDirector) {
         return;
     }
     m_animationDirector->navigateToPage(index);

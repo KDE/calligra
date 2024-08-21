@@ -21,7 +21,7 @@
 VideoEventAction::VideoEventAction(VideoShape *parent)
     : KoEventAction()
     , m_shape(parent)
-    , m_player(0)
+    , m_player(nullptr)
 {
     setId(QString("videoeventaction"));
 }

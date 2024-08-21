@@ -18,7 +18,7 @@
 
 MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)
-    , m_effect(0)
+    , m_effect(nullptr)
 {
     QGridLayout *g = new QGridLayout(this);
 

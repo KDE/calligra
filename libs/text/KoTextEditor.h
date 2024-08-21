@@ -381,7 +381,7 @@ public:
      * @param width the width.
      * @param parentCommand the parent command for stacking.
      */
-    void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
+    void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = nullptr);
 
     /**
      * Sets the height of a table row.
@@ -390,7 +390,7 @@ public:
      * @param height the height.
      * @param parentCommand the parent command for stacking.
      */
-    void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
+    void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = nullptr);
 
     /**
      * Changes the width of a table by adjusting the margins.

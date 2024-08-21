@@ -171,14 +171,14 @@ WordsGraphicsHandler::WordsGraphicsHandler(Document *doc,
     , m_mainStyles(mainStyles)
     , m_drawings(p_drawings)
     , m_fib(fib)
-    , m_pOfficeArtHeaderDgContainer(0)
-    , m_pOfficeArtBodyDgContainer(0)
+    , m_pOfficeArtHeaderDgContainer(nullptr)
+    , m_pOfficeArtBodyDgContainer(nullptr)
     , m_processingGroup(false)
     , m_objectType(Inline)
-    , m_rgbUid(0)
+    , m_rgbUid(nullptr)
     , m_zIndex(0)
-    , m_picf(0)
-    , m_pSpa(0)
+    , m_picf(nullptr)
+    , m_pSpa(nullptr)
 {
     debugMsDoc;
     init();
@@ -202,7 +202,7 @@ void WordsGraphicsHandler::init()
     // create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
 
-    const OfficeArtBStoreContainer *blipStore = 0;
+    const OfficeArtBStoreContainer *blipStore = nullptr;
     blipStore = m_officeArtDggContainer.blipStore.data();
 
     if (!blipStore) {
@@ -221,11 +221,11 @@ void WordsGraphicsHandler::init()
 
 DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
-    const OfficeArtSpContainer *shape = 0;
+    const OfficeArtSpContainer *shape = nullptr;
     if (m_pOfficeArtBodyDgContainer) {
         shape = (m_pOfficeArtBodyDgContainer->shape).data();
     }
-    return DrawStyle(&m_officeArtDggContainer, 0, shape);
+    return DrawStyle(&m_officeArtDggContainer, nullptr, shape);
 }
 
 void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
@@ -356,8 +356,8 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
         return;
     }
 
-    const PLCF<Word97::FSPA> *plcfSpa = 0;
-    MSO::OfficeArtDgContainer *dg = 0;
+    const PLCF<Word97::FSPA> *plcfSpa = nullptr;
+    MSO::OfficeArtDgContainer *dg = nullptr;
     uint threshold = 0;
 
     if (m_document->writingHeader()) {
@@ -397,7 +397,7 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             locateDrawing((dg->groupShape).data(), it.current(), (uint)it.current()->spid, out);
 
             // reset global attributes
-            m_pSpa = 0;
+            m_pSpa = nullptr;
             return;
         }
     }
@@ -453,7 +453,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         if (!a) {
             return QRect();
         }
-        const PLCF<wvWare::Word97::FSPA> *plcfSpa = 0;
+        const PLCF<wvWare::Word97::FSPA> *plcfSpa = nullptr;
         if (m_document->writingHeader()) {
             plcfSpa = m_drawings->getSpaHdr();
         } else {
@@ -493,7 +493,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer &
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, sp);
+    DrawStyle ds(&m_officeArtDggContainer, nullptr, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -525,7 +525,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer 
 {
     debugMsDoc;
 
-    DrawStyle ds(0, 0, &o);
+    DrawStyle ds(nullptr, nullptr, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
@@ -633,7 +633,7 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
     }
 
     // parse OfficeArfDgContainer from msdoc
-    OfficeArtDgContainer *pDgContainer = 0;
+    OfficeArtDgContainer *pDgContainer = nullptr;
     try {
         pDgContainer = new OfficeArtDgContainer();
         if (drawingsVariable == 0) {
@@ -669,16 +669,16 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
     }
 
     // parse OfficeArfDgContainer from msdoc
-    pDgContainer = 0;
+    pDgContainer = nullptr;
     try {
         pDgContainer = new OfficeArtDgContainer();
         if (drawingsVariable == 0) {
-            if (m_pOfficeArtBodyDgContainer != 0) {
+            if (m_pOfficeArtBodyDgContainer != nullptr) {
                 delete m_pOfficeArtBodyDgContainer;
             }
             m_pOfficeArtBodyDgContainer = pDgContainer;
         } else {
-            if (m_pOfficeArtHeaderDgContainer != 0) {
+            if (m_pOfficeArtHeaderDgContainer != nullptr) {
                 delete m_pOfficeArtHeaderDgContainer;
             }
             m_pOfficeArtHeaderDgContainer = pDgContainer;
@@ -829,7 +829,7 @@ void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle &style, const Dra
     // style:wrap-contour
     // style:wrap-contour-mode
     // style:wrap-dynamic-threshold
-    if (spa != 0) {
+    if (spa != nullptr) {
         bool check_wrk = false;
         switch (spa->wr) {
         case 0: // wrap around the object
@@ -941,12 +941,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer &o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    const MSO::OfficeArtDggContainer *dgg = 0;
+    const MSO::OfficeArtDggContainer *dgg = nullptr;
 #ifdef USE_OFFICEARTDGG_CONTAINER
     dgg = &m_officeArtDggContainer;
 #endif
 
-    DrawStyle ds(dgg, 0, &o);
+    DrawStyle ds(dgg, nullptr, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1024,12 +1024,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    const MSO::OfficeArtDggContainer *dgg = 0;
+    const MSO::OfficeArtDggContainer *dgg = nullptr;
 #ifdef USE_OFFICEARTDGG_CONTAINER
     dgg = &m_officeArtDggContainer;
 #endif
 
-    DrawStyle ds(dgg, 0, &o);
+    DrawStyle ds(dgg, nullptr, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1088,11 +1088,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     debugMsDoc;
 
-    const MSO::OfficeArtDggContainer *dgg = 0;
+    const MSO::OfficeArtDggContainer *dgg = nullptr;
 #ifdef USE_OFFICEARTDGG_CONTAINER
     dgg = &m_officeArtDggContainer;
 #endif
-    DrawStyle ds(dgg, 0, &o);
+    DrawStyle ds(dgg, nullptr, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib())
@@ -1175,12 +1175,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer &o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    const MSO::OfficeArtDggContainer *dgg = 0;
+    const MSO::OfficeArtDggContainer *dgg = nullptr;
 #ifdef USE_OFFICEARTDGG_CONTAINER
     dgg = &m_officeArtDggContainer;
 #endif
 
-    DrawStyle ds(dgg, 0, &o);
+    DrawStyle ds(dgg, nullptr, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

@@ -104,5 +104,5 @@ const QColor *XFigDocument::color(int id) const
 {
     QHash<int, QColor>::ConstIterator it = m_ColorTable.constFind(id);
 
-    return (it != m_ColorTable.constEnd()) ? &it.value() : 0;
+    return (it != m_ColorTable.constEnd()) ? &it.value() : nullptr;
 }

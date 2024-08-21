@@ -62,7 +62,7 @@ QVector<QPointF> KoSnapProxy::pointsFromShape(KoShape *shape) const
 
     KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
     if (path) {
-        QTransform m = path->absoluteTransformation(0);
+        QTransform m = path->absoluteTransformation(nullptr);
 
         QList<KoPathPoint *> ignoredPoints = m_snapGuide->ignoredPathPoints();
 
@@ -113,7 +113,7 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect) const
             }
         }
 
-        QTransform m = shape->absoluteTransformation(0);
+        QTransform m = shape->absoluteTransformation(nullptr);
         // transform segments to document coordinates
         for (const KoPathSegment &s : shapeSegments) {
             if (ignoredPoints.contains(s.first()) || ignoredPoints.contains(s.second()))

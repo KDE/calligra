@@ -41,7 +41,7 @@ static void soakBytes(QDataStream &stream, int numBytes)
 
 SvmParser::SvmParser()
     : mContext()
-    , mBackend(0)
+    , mBackend(nullptr)
 {
 }
 
@@ -284,7 +284,7 @@ bool SvmParser::parse(const QByteArray &data)
             quint16 startIndex;
             quint16 len;
             quint32 dxArrayLen;
-            qint32 *dxArray = 0;
+            qint32 *dxArray = nullptr;
 
             stream >> startPoint;
             parseString(stream, string);

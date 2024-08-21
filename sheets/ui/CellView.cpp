@@ -91,7 +91,7 @@ public:
         , filterButton(false)
         , obscuredCellsX(0)
         , obscuredCellsY(0)
-        , richText(0)
+        , richText(nullptr)
 #ifdef CALLIGRA_SHEETS_MT
         , mutex(new QMutex())
 #endif

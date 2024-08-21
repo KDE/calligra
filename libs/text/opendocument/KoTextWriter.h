@@ -31,7 +31,7 @@ public:
      * @param context The context the KoTextWriter is called in
      * @param rdfData The RDF data of the document
      */
-    explicit KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData = 0);
+    explicit KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData = nullptr);
 
     /**
      * Destructor.

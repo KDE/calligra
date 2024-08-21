@@ -44,7 +44,7 @@ static QIcon getIcon(Duration duration, bool isRest)
         : (duration == ThirtySecondNote)           ? (isRest ? koIconNameCStr("music-rest-32nd") : koIconNameCStr("music-note-32nd"))
         : (duration == SixtyFourthNote)            ? (isRest ? koIconNameCStr("music-rest-64th") : koIconNameCStr("music-note-64th"))
         : (duration == HundredTwentyEighthNote)    ? (isRest ? koIconNameCStr("music-rest-128th") : koIconNameCStr("music-note-128th"))
-                                                   : 0;
+                                                   : nullptr;
 
     return QIcon::fromTheme(QLatin1String(id));
 }
@@ -211,7 +211,7 @@ void NoteEntryAction::keyPress(QKeyEvent *event, const MusicCursor &cursor)
             }
         }
 
-        Chord *join = 0;
+        Chord *join = nullptr;
         if (cursor.element() < vb->elementCount())
             join = dynamic_cast<Chord *>(vb->element(cursor.element()));
         if (event->modifiers() & Qt::ShiftModifier || !join) {

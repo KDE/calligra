@@ -316,7 +316,7 @@ KoShape *ChartShapeFactory::createShape(const KoProperties *properties, KoDocume
         return createDefaultShape(documentResources);
     }
     Q_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -332,7 +332,7 @@ KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoSh
 
     if (!loaded) {
         delete shape;
-        return 0;
+        return nullptr;
     }
 
     return shape;

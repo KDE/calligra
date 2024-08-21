@@ -28,16 +28,16 @@
 /// Small helper to keep track of a path point and its parent path shape
 struct PathConnectionPoint {
     PathConnectionPoint()
-        : path(0)
-        , point(0)
+        : path(nullptr)
+        , point(nullptr)
     {
     }
 
     // reset state to invalid
     void reset()
     {
-        path = 0;
-        point = 0;
+        path = nullptr;
+        point = nullptr;
     }
 
     PathConnectionPoint &operator=(KoPathPoint *pathPoint)
@@ -184,19 +184,19 @@ public:
     KoCreatePathToolPrivate(KoCreatePathTool *const qq, KoCanvasBase *canvas)
         : KoToolBasePrivate(qq, canvas)
         , q(qq)
-        , shape(0)
-        , activePoint(0)
-        , firstPoint(0)
+        , shape(nullptr)
+        , activePoint(nullptr)
+        , firstPoint(nullptr)
         , handleRadius(3)
         , mouseOverFirstPoint(false)
         , pointIsDragged(false)
         , finishAfterThisPoint(false)
-        , hoveredPoint(0)
+        , hoveredPoint(nullptr)
         , listeningToModifiers(false)
-        , angleSnapStrategy(0)
+        , angleSnapStrategy(nullptr)
         , angleSnappingDelta(15)
         , angleSnapStatus(false)
-        , strokeWidget(0)
+        , strokeWidget(nullptr)
     {
     }
 
@@ -253,7 +253,7 @@ public:
         QRectF roi = q->handleGrabRect(position);
         QList<KoShape *> shapes = q->canvas()->shapeManager()->shapesAt(roi);
 
-        KoPathPoint *nearestPoint = 0;
+        KoPathPoint *nearestPoint = nullptr;
         qreal minDistance = HUGE_VAL;
         uint grabSensitivity = q->grabSensitivity();
         qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
@@ -266,7 +266,7 @@ public:
             if (paramShape && paramShape->isParametricShape())
                 continue;
 
-            KoPathPoint *p = 0;
+            KoPathPoint *p = nullptr;
             uint subpathCount = path->subpathCount();
             for (uint i = 0; i < subpathCount; ++i) {
                 if (path->isClosedSubpath(i))
@@ -294,10 +294,10 @@ public:
     /// Connects given path with the ones we hit when starting/finishing
     bool connectPaths(KoPathShape *pathShape, const PathConnectionPoint &pointAtStart, const PathConnectionPoint &pointAtEnd) const
     {
-        KoPathShape *startShape = 0;
-        KoPathShape *endShape = 0;
-        KoPathPoint *startPoint = 0;
-        KoPathPoint *endPoint = 0;
+        KoPathShape *startShape = nullptr;
+        KoPathShape *endShape = nullptr;
+        KoPathPoint *startPoint = nullptr;
+        KoPathPoint *endPoint = nullptr;
 
         if (pointAtStart.isValid()) {
             startShape = pointAtStart.path;
@@ -313,7 +313,7 @@ public:
             return false;
         // do not allow connecting to the same point twice
         if (startPoint == endPoint)
-            endPoint = 0;
+            endPoint = nullptr;
 
         // we have hit an existing path point on start/finish
         // what we now do is:
@@ -395,7 +395,7 @@ public:
 
         // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
         KoPathShape *pathShape = shape;
-        shape = 0;
+        shape = nullptr;
 
         q->addPathShape(pathShape);
 
@@ -409,13 +409,13 @@ public:
         // reset snap guide
         q->canvas()->updateCanvas(q->canvas()->snapGuide()->boundingRect());
         q->canvas()->snapGuide()->reset();
-        angleSnapStrategy = 0;
+        angleSnapStrategy = nullptr;
 
         delete shape;
-        shape = 0;
-        existingStartPoint = 0;
-        existingEndPoint = 0;
-        hoveredPoint = 0;
+        shape = nullptr;
+        existingStartPoint = nullptr;
+        existingEndPoint = nullptr;
+        hoveredPoint = nullptr;
         listeningToModifiers = false;
     }
 

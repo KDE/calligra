@@ -140,7 +140,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int threshold)
 
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image")
-    , m_imageCollection(0)
+    , m_imageCollection(nullptr)
     , m_mirrorMode(MirrorNone)
     , m_colorMode(Standard)
     , m_proxy(this)
@@ -251,7 +251,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     Q_UNUSED(paintContext);
 
     QRectF viewRect = converter.documentToView(QRectF(QPointF(0, 0), size()));
-    if (imageData() == 0) {
+    if (imageData() == nullptr) {
         painter.fillRect(viewRect, QColor(Qt::gray));
         return;
     }
@@ -337,7 +337,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
     KoImageData *imageData = qobject_cast<KoImageData *>(userData());
-    if (imageData == 0) {
+    if (imageData == nullptr) {
         return;
     }
 
@@ -367,7 +367,7 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
 {
     // make sure we have a valid image data pointer before saving
     KoImageData *imageData = qobject_cast<KoImageData *>(userData());
-    if (imageData == 0) {
+    if (imageData == nullptr) {
         return;
     }
 
@@ -544,7 +544,7 @@ QString PictureShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context
 
     KoImageData *imageData = qobject_cast<KoImageData *>(userData());
 
-    if (imageData != 0) {
+    if (imageData != nullptr) {
         QSizeF imageSize = imageData->imageSize();
         ClippingRect rect = m_clippingRect;
 

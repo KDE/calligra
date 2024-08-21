@@ -41,7 +41,7 @@ TestLoadingBase::TestLoadingBase()
 {
     // No message boxes please.
     ChartShape::setEnableUserInteraction(false);
-    m_chart = new ChartShape(0);
+    m_chart = new ChartShape(nullptr);
 }
 
 void TestLoadingBase::initTestCase()
@@ -183,7 +183,7 @@ Table *LoadingTests::internalTable()
 {
     QAbstractItemModel *internalModel = m_chart->internalModel();
     if (!internalModel)
-        return 0;
+        return nullptr;
     return m_chart->tableSource()->get(internalModel);
 }
 

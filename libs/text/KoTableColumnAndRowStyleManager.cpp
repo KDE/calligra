@@ -207,7 +207,7 @@ void KoTableColumnAndRowStyleManager::setDefaultColumnCellStyle(int column, KoTa
     }
 
     while (column > d->defaultColumnCellStyles.size())
-        d->defaultColumnCellStyles.append(0);
+        d->defaultColumnCellStyles.append(nullptr);
 
     d->defaultColumnCellStyles.append(cellStyle);
 }
@@ -228,7 +228,7 @@ void KoTableColumnAndRowStyleManager::setDefaultRowCellStyle(int row, KoTableCel
     }
 
     while (row > d->defaultRowCellStyles.size())
-        d->defaultRowCellStyles.append(0);
+        d->defaultRowCellStyles.append(nullptr);
 
     d->defaultRowCellStyles.append(cellStyle);
 }

@@ -35,7 +35,7 @@ AutoFillStrategy::~AutoFillStrategy()
 KUndo2Command *AutoFillStrategy::createCommand()
 {
     if (d->autoFillSource == selection()->lastRange()) {
-        return 0;
+        return nullptr;
     }
     AutoFillCommand *command = new AutoFillCommand();
     command->setSheet(selection()->activeSheet());

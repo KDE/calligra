@@ -27,23 +27,23 @@ static QPainter::CompositionMode rasteropToQtComposition(long rop);
 //                         Class OutputPainterStrategy
 
 OutputPainterStrategy::OutputPainterStrategy()
-    : m_header(0)
-    , m_path(0)
+    : m_header(nullptr)
+    , m_path(nullptr)
     , m_currentlyBuildingPath(false)
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
-    m_painter = 0;
+    m_painter = nullptr;
     m_painterSaves = 0;
     m_outputSize = QSize();
     m_keepAspectRatio = true;
 }
 
 OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size, bool keepAspectRatio)
-    : m_header(0)
-    , m_path(0)
+    : m_header(nullptr)
+    , m_path(nullptr)
     , m_currentlyBuildingPath(false)
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)

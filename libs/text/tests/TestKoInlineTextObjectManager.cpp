@@ -36,7 +36,7 @@ void TestKoInlineTextObjectManager::testInsertInlineObject()
 
     DummyInlineObject *obj = new DummyInlineObject(false);
     Q_ASSERT(obj->id() == -1);
-    Q_ASSERT(obj->manager() == 0);
+    Q_ASSERT(obj->manager() == nullptr);
     manager.insertInlineObject(*editor.cursor(), obj);
     Q_ASSERT(obj->id() == 1);
     Q_ASSERT(obj->manager() == &manager);
@@ -71,7 +71,7 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
 
     DummyInlineObject *obj = new DummyInlineObject(false);
     Q_ASSERT(obj->id() == -1);
-    Q_ASSERT(obj->manager() == 0);
+    Q_ASSERT(obj->manager() == nullptr);
     manager.insertInlineObject(*editor.cursor(), obj);
     Q_ASSERT(obj->id() == 1);
     Q_ASSERT(obj->manager() == &manager);
@@ -116,7 +116,7 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
-    Q_ASSERT(obj2 == 0);
+    Q_ASSERT(obj2 == nullptr);
     Q_UNUSED(obj2);
 
     // this should not crash, even though we were a listener

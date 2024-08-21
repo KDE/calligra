@@ -44,7 +44,7 @@ public:
         , m_handler(static_cast<ChartSubStreamHandler *>(arg))
     {
         m_worksheetHandler = dynamic_cast<WorksheetSubStreamHandler *>(m_handler->parentHandler());
-        m_value = 0;
+        m_value = nullptr;
     }
     ~BRAIRecord() override
     {
@@ -242,12 +242,12 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler *globals, S
     : SubStreamHandler()
     , m_globals(globals)
     , m_parentHandler(parentHandler)
-    , m_sheet(0)
-    , m_chartObject(0)
-    , m_chart(0)
-    , m_currentSeries(0)
-    , m_currentObj(0)
-    , m_internalDataCache(0)
+    , m_sheet(nullptr)
+    , m_chartObject(nullptr)
+    , m_chart(nullptr)
+    , m_currentSeries(nullptr)
+    , m_currentObj(nullptr)
+    , m_internalDataCache(nullptr)
     , m_defaultTextId(-1)
     , m_axisId(-1)
     , m_disableAutoMarker(false)
@@ -346,7 +346,7 @@ void ChartSubStreamHandler::handleRecord(Record *record)
 
     if (m_internalDataCache && type != NumberRecord::id) {
         delete m_internalDataCache;
-        m_internalDataCache = 0;
+        m_internalDataCache = nullptr;
     }
 
     if (type == BOFRecord::id)
@@ -687,7 +687,7 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
         // FIXME: Is it ok to only accept the first or should we merge them somehow?
         if (!m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
             m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
-            record->m_value = 0; // take over ownership
+            record->m_value = nullptr; // take over ownership
         }
     }
 }
@@ -700,7 +700,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
     DEBUG << "xi=" << record->xi() << "yi=" << record->yi() << "iss=" << record->iss();
     if (record->yi() >= uint(m_chart->m_series.count())) {
         DEBUG << "Invalid series index=" << record->yi();
-        m_currentObj = 0; // be sure to ignore all defined sub-elements
+        m_currentObj = nullptr; // be sure to ignore all defined sub-elements
         return;
     }
     m_seriesStack.push(m_currentSeries);
@@ -708,7 +708,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
     if (record->xi() == 0xFFFF) { // applies to series
         m_currentObj = m_currentSeries;
     } else { // applies to data-point
-        KoChart::DataPoint *dataPoint = 0;
+        KoChart::DataPoint *dataPoint = nullptr;
         if (record->xi() > uint(m_currentSeries->m_dataPoints.count())) {
             DEBUG << "Invalid data-point index=" << record->yi();
         } else if (record->xi() == uint(m_currentSeries->m_dataPoints.count())) {

@@ -61,7 +61,7 @@ public:
         if (rows <= 0 || cols <= 0)
             return;
 
-        if (maskRowStart == 0) {
+        if (maskRowStart == nullptr) {
             linesize = sizeof(quint8) * cols;
             d = dst;
             while (rows-- > 0) {
@@ -77,7 +77,7 @@ public:
                 for (qint32 i = cols; i > 0; --i, ++d) {
                     // If the mask tells us to completely not
                     // blend this pixel, continue.
-                    if (mask != 0) {
+                    if (mask != nullptr) {
                         if (mask[0] == OPACITY_TRANSPARENT_U8) {
                             ++mask;
                             continue;
@@ -135,7 +135,7 @@ public:
             for (i = cols; i > 0; --i, ++d, ++s) {
                 // If the mask tells us to completely not
                 // blend this pixel, continue.
-                if (mask != 0) {
+                if (mask != nullptr) {
                     if (mask[0] == OPACITY_TRANSPARENT_U8) {
                         ++mask;
                         continue;
@@ -200,7 +200,7 @@ public:
             for (i = cols; i > 0; --i, ++destination, ++source) {
                 // If the mask tells us to completely not
                 // blend this pixel, continue.
-                if (mask != 0) {
+                if (mask != nullptr) {
                     if (mask[0] == OPACITY_TRANSPARENT_U8) {
                         ++mask;
                         continue;
@@ -242,7 +242,7 @@ KoAlphaColorSpace::KoAlphaColorSpace()
 KoAlphaColorSpace::~KoAlphaColorSpace()
 {
     delete m_profile;
-    m_profile = 0;
+    m_profile = nullptr;
 }
 
 void KoAlphaColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const

@@ -26,7 +26,7 @@
 Q_GLOBAL_STATIC(KoToolRegistry, s_instance)
 
 KoToolRegistry::KoToolRegistry()
-    : d(0)
+    : d(nullptr)
 {
 }
 

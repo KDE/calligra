@@ -383,7 +383,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
             if (layout)
                 style = *layout;
 
-            KoXmlElement * st = 0;
+            KoXmlElement * st = nullptr;
             if (e.hasAttributeNS(ooNS::table, "style-name")) {
                 qDebug() << "Style:" << e.attributeNS(ooNS::table, "style-name", QString());
                 st = m_styles[ e.attributeNS(ooNS::table, "style-name", QString())];
@@ -721,7 +721,7 @@ bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
     int row = 1;
     int columns = 1;
     int backupRow = 1;
-    KoXmlElement * rowStyle = 0;
+    KoXmlElement * rowStyle = nullptr;
     //Cell cell;
     //Cell cellDest;
     //Cell defCell = table->defaultCell();
@@ -783,7 +783,7 @@ bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
             */
         }
 
-        rowStyle = 0;
+        rowStyle = nullptr;
         columns = 1;
     }
 
@@ -855,7 +855,7 @@ bool OpenCalcImport::readColLayouts(KoXmlElement & content, Sheet * table)
             }
         }
 
-        KoXmlElement * colStyle = 0;
+        KoXmlElement * colStyle = nullptr;
         if (e.hasAttributeNS(ooNS::table, "style-name")) {
             QString style = e.attributeNS(ooNS::table, "style-name", QString());
             colStyle = m_styles[ style ];
@@ -1195,7 +1195,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
     while (!sheet.isNull()) {
         KoXmlElement t = sheet.toElement();
         if (t.isNull()) {
-            KMessageBox::error(0, i18n("The file seems to be corrupt. Skipping a table."));
+            KMessageBox::error(nullptr, i18n("The file seems to be corrupt. Skipping a table."));
             sheet = sheet.nextSibling();
             continue;
         }
@@ -1207,7 +1207,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         SheetBase *btable = m_doc->map()->findSheet(t.attributeNS(ooNS::table, "name", QString()));
         Sheet *table = dynamic_cast<Sheet *>(btable);
         if (!table) {
-            KMessageBox::error(0, i18n("Skipping a table."));
+            KMessageBox::error(nullptr, i18n("Skipping a table."));
             sheet = sheet.nextSibling();
             continue;
         }
@@ -1377,12 +1377,12 @@ QString * OpenCalcImport::loadFormat(KoXmlElement * element,
                                      QString name)
 {
     if (!element)
-        return 0;
+        return nullptr;
 
     int  i;
     bool ok;
 
-    QString * format = 0;
+    QString * format = nullptr;
     KoXmlElement e = element->firstChild().toElement();
     int precision = 0;
     int leadingZ  = 1;
@@ -1854,7 +1854,7 @@ void OpenCalcImport::readInStyle(Style * layout, KoXmlElement const & style)
             = m_defaultStyles.value(style.attributeNS(ooNS::style, "parent-style-name", QString()));
             qDebug() << "Copying layout from" << style.attributeNS(ooNS::style, "parent-style-name", QString());
 
-            if (cp != 0)
+            if (cp != nullptr)
                 layout = cp;
         } else if (style.hasAttributeNS(ooNS::style, "family")) {
             QString name = style.attribute("style-family") + "default";
@@ -1862,7 +1862,7 @@ void OpenCalcImport::readInStyle(Style * layout, KoXmlElement const & style)
 
             qDebug() << "Copying layout from" << name << "," << !cp;
 
-            if (cp != 0)
+            if (cp != nullptr)
                 layout = cp;
         }
 
@@ -1907,7 +1907,7 @@ bool OpenCalcImport::createStyleMap(KoXmlDocument const & styles)
             qDebug() << "OpenCalc version:" << d;
             if (d > 1.0) {
                 QString message(i18n("This document was created with OpenOffice.org version '%1'. This filter was written for version 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?", content.attributeNS(ooNS::office, "version", QString())));
-                if (KMessageBox::warningTwoActions(0, message, i18n("Unsupported document version"), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::SecondaryAction)
+                if (KMessageBox::warningTwoActions(nullptr, message, i18n("Unsupported document version"), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::SecondaryAction)
                     return false;
             }
         }

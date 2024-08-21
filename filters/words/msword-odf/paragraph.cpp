@@ -40,14 +40,14 @@ const char *getTextUnderlineType(const uint kul);
 const char *getTextUnderlineWidth(const uint kul);
 
 Paragraph::Paragraph(KoGenStyles *mainStyles, const QString &bgColor, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
-    : m_paragraphProperties(0)
-    , m_paragraphProperties2(0)
-    , m_characterProperties(0)
-    , m_odfParagraphStyle(0)
-    , m_odfParagraphStyle2(0)
-    , m_mainStyles(0)
-    , m_paragraphStyle(0)
-    , m_paragraphStyle2(0)
+    : m_paragraphProperties(nullptr)
+    , m_paragraphProperties2(nullptr)
+    , m_characterProperties(nullptr)
+    , m_odfParagraphStyle(nullptr)
+    , m_odfParagraphStyle2(nullptr)
+    , m_mainStyles(nullptr)
+    , m_paragraphStyle(nullptr)
+    , m_paragraphStyle2(nullptr)
     , m_inStylesDotXml(inStylesDotXml)
     , m_isHeading(isHeading)
     , m_inHeaderFooter(inHeaderFooter)
@@ -89,7 +89,7 @@ Paragraph::Paragraph(KoGenStyles *mainStyles, const QString &bgColor, bool inSty
 Paragraph::~Paragraph()
 {
     delete m_odfParagraphStyle;
-    m_odfParagraphStyle = 0;
+    m_odfParagraphStyle = nullptr;
 
     m_bgColors.clear();
 }
@@ -104,7 +104,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
 {
     m_paragraphProperties = props;
 
-    const wvWare::Word97::PAP *refPap = 0;
+    const wvWare::Word97::PAP *refPap = nullptr;
     if (m_paragraphStyle) {
         refPap = &m_paragraphStyle->paragraphProperties().pap();
     }
@@ -187,9 +187,9 @@ void Paragraph::addRunOfText(QString text,
 
     // Now find out what style to associate with the string.
 
-    if (chp == 0) {
+    if (chp == nullptr) {
         // if inner paragraph - just add a null style & return from function
-        KoGenStyle *style = 0;
+        KoGenStyle *style = nullptr;
         m_textStyles.push_back(style);
         return;
     }
@@ -204,7 +204,7 @@ void Paragraph::addRunOfText(QString text,
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     debugMsDoc << "text based on characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle = 0;
+    KoGenStyle *textStyle = nullptr;
 
     bool suppresFontSize = false;
     if (m_textStyles.size() == 0 && m_paragraphProperties->pap().dcs.lines > 1) {
@@ -497,7 +497,7 @@ void Paragraph::openInnerParagraph()
     m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_paragraphStyle2 = m_paragraphStyle;
     m_paragraphProperties2 = m_paragraphProperties;
-    m_paragraphProperties = 0;
+    m_paragraphProperties = nullptr;
 
     // move m_textStyles and m_textStrings content to
     // m_textStyles2 and m_textStrings2
@@ -516,11 +516,11 @@ void Paragraph::closeInnerParagraph()
     // clear temp variables and restore originals
     delete m_odfParagraphStyle;
     m_odfParagraphStyle = m_odfParagraphStyle2;
-    m_odfParagraphStyle2 = 0;
+    m_odfParagraphStyle2 = nullptr;
     m_paragraphStyle = m_paragraphStyle2;
-    m_paragraphStyle2 = 0;
+    m_paragraphStyle2 = nullptr;
     m_paragraphProperties = m_paragraphProperties2;
-    m_paragraphProperties2 = 0;
+    m_paragraphProperties2 = nullptr;
     m_textStyles.clear();
     m_textStrings.clear();
     m_addCompleteElement.clear();
@@ -546,7 +546,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties &prop
     if (parentStyle) {
         refPap = &parentStyle->paragraphProperties().pap();
     } else {
-        refPap = 0;
+        refPap = nullptr;
     }
 
     if (!bgColor.isNull()) {
@@ -851,7 +851,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP *chp,
     if (parentStyle) {
         refChp = &parentStyle->chp();
     } else {
-        refChp = 0;
+        refChp = nullptr;
     }
 
     // initialize the colors
@@ -1063,7 +1063,7 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
     debugMsDoc << "size: " << m_textStrings.size();
     if (m_textStrings.isEmpty()) {
         m_textStrings.append(string);
-        KoGenStyle *style = 0;
+        KoGenStyle *style = nullptr;
         m_textStyles.insert(m_textStyles.begin(), style);
     } else {
         m_textStrings[0].prepend(string);

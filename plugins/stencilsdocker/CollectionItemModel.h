@@ -23,7 +23,7 @@ class KoProperties;
 struct KoCollectionItem {
     KoCollectionItem()
     {
-        properties = 0;
+        properties = nullptr;
     }
 
     QString id;

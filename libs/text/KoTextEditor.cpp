@@ -122,18 +122,18 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     }
     KoTextDocument textDocument(document);
     KoStyleManager *styleManager = textDocument.styleManager();
-    KoParagraphStyle *nextStyle = 0;
-    KoParagraphStyle *currentStyle = 0;
+    KoParagraphStyle *nextStyle = nullptr;
+    KoParagraphStyle *currentStyle = nullptr;
     if (styleManager) {
         int id = caret.blockFormat().intProperty(KoParagraphStyle::StyleId);
         currentStyle = styleManager->paragraphStyle(id);
-        if (currentStyle == 0) // not a style based parag.  Lets make the next one correct.
+        if (currentStyle == nullptr) // not a style based parag.  Lets make the next one correct.
             nextStyle = styleManager->defaultParagraphStyle();
         else
             nextStyle = styleManager->paragraphStyle(currentStyle->nextStyle());
         Q_ASSERT(nextStyle);
         if (currentStyle == nextStyle)
-            nextStyle = 0;
+            nextStyle = nullptr;
     }
 
     QTextCharFormat format = caret.charFormat();
@@ -232,7 +232,7 @@ KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QTextCursor *KoTextEditor::cursor()
@@ -506,20 +506,20 @@ KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
 KoInlineObject *KoTextEditor::insertIndexMarker()
 { // TODO changeTracking
     if (isEditProtected()) {
-        return 0;
+        return nullptr;
     }
 
     d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Index"));
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->newLine(0);
+        d->newLine(nullptr);
     }
 
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
-        return 0; // can't insert one at end of text
+        return nullptr; // can't insert one at end of text
     if (block.text().at(d->caret.position() - block.position()).isSpace())
-        return 0; // can't insert one on a whitespace as that does not indicate a word.
+        return nullptr; // can't insert one on a whitespace as that does not indicate a word.
 
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
@@ -544,7 +544,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     d->caret.beginEditBlock();
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->newLine(0);
+        d->newLine(nullptr);
     }
 
     QTextCharFormat format = d->caret.charFormat();
@@ -629,7 +629,7 @@ void KoTextEditor::paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool p
 
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
-    addCommand(new TextPasteCommand(mimeData, d->document, shapeController, canvas, 0, pasteAsText));
+    addCommand(new TextPasteCommand(mimeData, d->document, shapeController, canvas, nullptr, pasteAsText));
 }
 
 void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
@@ -689,7 +689,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp, ChangeLis
         return;
     }
 
-    if (flags & AutoListStyle && d->caret.block().textList() == 0) {
+    if (flags & AutoListStyle && d->caret.block().textList() == nullptr) {
         flags = MergeWithAdjacentList;
     }
 
@@ -1142,7 +1142,7 @@ void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column, Ko
 KoInlineNote *KoTextEditor::insertFootNote()
 {
     if (isEditProtected()) {
-        return 0;
+        return nullptr;
     }
 
     InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
@@ -1155,7 +1155,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
 KoInlineNote *KoTextEditor::insertEndNote()
 {
     if (isEditProtected()) {
-        return 0;
+        return nullptr;
     }
 
     InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
@@ -1350,7 +1350,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     int startPosition = d->caret.position();
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->newLine(0);
+        d->newLine(nullptr);
         startPosition = d->caret.position();
     }
 
@@ -1485,7 +1485,7 @@ void KoTextEditor::newLine()
     }
     d->caret.beginEditBlock();
 
-    d->newLine(0);
+    d->newLine(nullptr);
 
     d->caret.endEditBlock();
 

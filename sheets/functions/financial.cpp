@@ -1247,7 +1247,7 @@ Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     const Value pay = getPay(calc, rate, nper, pv, Value(0.0), type);
-    const Value cumipmt = func_cumipmt(args, calc, 0);
+    const Value cumipmt = func_cumipmt(args, calc, nullptr);
 
     return calc->sub(calc->mul(pay, Value(end - start + 1)), cumipmt);
 }
@@ -1512,7 +1512,7 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
     param.append(args[4]);
     param.append(Value(basis));
 
-    int numOfCoups = Value(func_coupnum(param, calc, 0)).asInteger();
+    int numOfCoups = Value(func_coupnum(param, calc, nullptr)).asInteger();
 
     debugSheetsFormula << "DURATION";
     debugSheetsFormula << "numOfCoup =" << numOfCoups;
@@ -1786,7 +1786,7 @@ Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
     param.append(args[4]);
     param.append(Value(basis));
 
-    int numOfCoups = Value(func_coupnum(param, calc, 0)).asInteger();
+    int numOfCoups = Value(func_coupnum(param, calc, nullptr)).asInteger();
 
     double res = duration(settlement, maturity, coup, yield, freq, basis, numOfCoups, calc);
     res /= 1.0 + (yield / double(freq));
@@ -2085,7 +2085,7 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     debugSheets << "Type=" << type;
 
     Value pay = getPay(calc, rate, nper, pv, fv, type);
-    Value ipmt = func_ipmt(args, calc, 0);
+    Value ipmt = func_ipmt(args, calc, nullptr);
     return calc->sub(pay, ipmt);
 }
 

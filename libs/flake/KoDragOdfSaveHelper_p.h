@@ -13,7 +13,7 @@ class KoDragOdfSaveHelperPrivate
 {
 public:
     KoDragOdfSaveHelperPrivate()
-        : context(0)
+        : context(nullptr)
     {
     }
     ~KoDragOdfSaveHelperPrivate()

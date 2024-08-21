@@ -38,7 +38,7 @@ private Q_SLOTS:
     // void slotAutoScroll(const QPoint& distance);
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *_ev) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *_ev) override;
@@ -87,7 +87,7 @@ private Q_SLOTS:
     // void slotAutoScroll(const QPoint& distance);
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *_ev) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *_ev) override;
@@ -131,7 +131,7 @@ public:
     ~SelectAllButtonItem() override;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent *event) override;

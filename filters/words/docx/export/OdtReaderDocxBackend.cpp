@@ -49,7 +49,7 @@ void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReade
 
     KoXmlWriter *writer = docxContext->m_documentWriter;
     if (reader.isStartElement()) {
-        writer->startDocument(0);
+        writer->startDocument(nullptr);
 
         // Start the document and add all necessary namespaces to it.
         writer->startElement("w:document");

@@ -313,7 +313,7 @@ QStringList CharacterHighlighting::fontLayoutPositionList()
 }
 void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directFormattingMode)
 {
-    if (style == 0)
+    if (style == nullptr)
         return;
 
     QFont font = style->font();
@@ -400,7 +400,7 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directForma
 
 void CharacterHighlighting::save(KoCharacterStyle *style)
 {
-    if (style == 0)
+    if (style == nullptr)
         return;
 
     KFontChooser::FontDiffFlags fontDiff = m_fontChooser->fontDiffFlags();

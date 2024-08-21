@@ -29,7 +29,7 @@ class KoDragPrivate
 {
 public:
     KoDragPrivate()
-        : mimeData(0)
+        : mimeData(nullptr)
     {
     }
     ~KoDragPrivate()
@@ -116,7 +116,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
     }
 
     delete store; // make sure the buffer if fully flushed.
-    finally.store = 0;
+    finally.store = nullptr;
     setData(mimeType, buffer.buffer());
 
     return true;
@@ -124,7 +124,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 
 void KoDrag::setData(const QString &mimeType, const QByteArray &data)
 {
-    if (d->mimeData == 0) {
+    if (d->mimeData == nullptr) {
         d->mimeData = new QMimeData();
     }
     d->mimeData->setData(mimeType, data);
@@ -134,13 +134,13 @@ void KoDrag::addToClipboard()
 {
     if (d->mimeData) {
         QApplication::clipboard()->setMimeData(d->mimeData);
-        d->mimeData = 0;
+        d->mimeData = nullptr;
     }
 }
 
 QMimeData *KoDrag::mimeData()
 {
     QMimeData *mimeData = d->mimeData;
-    d->mimeData = 0;
+    d->mimeData = nullptr;
     return mimeData;
 }

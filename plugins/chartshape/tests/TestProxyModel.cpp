@@ -33,9 +33,9 @@ using namespace KoChart;
 
 TestProxyModel::TestProxyModel()
     : m_source()
-    , m_proxyModel(0, &m_source)
+    , m_proxyModel(nullptr, &m_source)
     , m_sourceModel()
-    , m_table(0)
+    , m_table(nullptr)
 {
 }
 

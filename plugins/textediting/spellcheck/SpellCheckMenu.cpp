@@ -19,10 +19,10 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     : QObject(spellCheck)
     , m_spellCheck(spellCheck)
     , m_speller(speller)
-    , m_suggestionsMenuAction(0)
-    , m_ignoreWordAction(0)
-    , m_addToDictionaryAction(0)
-    , m_suggestionsMenu(0)
+    , m_suggestionsMenuAction(nullptr)
+    , m_ignoreWordAction(nullptr)
+    , m_addToDictionaryAction(nullptr)
+    , m_suggestionsMenu(nullptr)
     , m_currentMisspelledPosition(-1)
 {
     m_suggestionsMenuAction = new KActionMenu(i18n("Spelling"), this);

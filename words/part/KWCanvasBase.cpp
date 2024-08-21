@@ -44,15 +44,15 @@
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     : KoCanvasBase(document)
     , m_document(document)
-    , m_shapeManager(0)
-    , m_toolProxy(0)
-    , m_viewMode(0)
-    , m_viewConverter(0)
+    , m_shapeManager(nullptr)
+    , m_toolProxy(nullptr)
+    , m_viewMode(nullptr)
+    , m_viewConverter(nullptr)
     , m_showAnnotations(false)
     , m_cacheEnabled(false)
     , m_currentZoom(0.0)
     , m_maxZoom(2.0)
-    , m_pageCacheManager(0)
+    , m_pageCacheManager(nullptr)
 {
     m_shapeManager = new KoShapeManager(this);
     m_toolProxy = new KoToolProxy(this, parent);
@@ -114,7 +114,7 @@ void KWCanvasBase::clipToDocument(const KoShape *shape, QPointF &move) const
         return;
     }
     QRectF pageRect(page.rect().adjusted(5, 5, -5, -5));
-    QPainterPath path(shape->absoluteTransformation(0).map(shape->outline()));
+    QPainterPath path(shape->absoluteTransformation(nullptr).map(shape->outline()));
     QRectF shapeBounds = path.boundingRect();
     shapeBounds.moveTopLeft(shapeBounds.topLeft() + move);
     if (!shapeBounds.intersects(pageRect)) {

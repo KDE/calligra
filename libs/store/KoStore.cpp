@@ -74,7 +74,7 @@ KoStore *KoStore::createStore(const QString &fileName, Mode mode, const QByteArr
         return new KoEncryptedStore(fileName, mode, appIdentification, writeMimetype);
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
-        return 0;
+        return nullptr;
     }
 }
 
@@ -108,7 +108,7 @@ KoStore *KoStore::createStore(QIODevice *device, Mode mode, const QByteArray &ap
         return new KoEncryptedStore(device, mode, appIdentification, writeMimetype);
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
-        return 0;
+        return nullptr;
     }
 }
 
@@ -150,7 +150,7 @@ KoStore *KoStore::createStore(QWidget *window, const QUrl &url, Mode mode, const
     default:
         warnStore << "Unsupported backend requested for KoStore (QUrl) : " << backend;
         KMessageBox::error(window, i18n("The directory mode is not supported for remote locations."), i18n("Calligra Storage"));
-        return 0;
+        return nullptr;
     }
 }
 
@@ -240,7 +240,7 @@ bool KoStore::close()
     bool ret = d->mode == Write ? closeWrite() : closeRead();
 
     delete d->stream;
-    d->stream = 0;
+    d->stream = nullptr;
     d->isOpen = false;
     return ret;
 }

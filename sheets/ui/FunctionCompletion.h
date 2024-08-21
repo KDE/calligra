@@ -53,7 +53,7 @@ public Q_SLOTS:
     void doneCompletion();
 
 private Q_SLOTS:
-    void itemSelected(QListWidgetItem *item = 0);
+    void itemSelected(QListWidgetItem *item = nullptr);
 
 Q_SIGNALS:
     /**

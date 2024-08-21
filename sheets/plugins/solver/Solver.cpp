@@ -35,8 +35,8 @@ using namespace Calligra::Sheets::Plugins;
 // make the plugin available
 K_PLUGIN_FACTORY_WITH_JSON(SolverFactory, "sheetssolver.json", registerPlugin<Calligra::Sheets::Plugins::Solver>();)
 
-Calligra::Sheets::View *s_view = 0;
-Calligra::Sheets::Formula *s_formula = 0;
+Calligra::Sheets::View *s_view = nullptr;
+Calligra::Sheets::Formula *s_formula = nullptr;
 double _function(const gsl_vector *vector, void *params);
 
 class Q_DECL_HIDDEN Solver::Private
@@ -53,7 +53,7 @@ Solver::Solver(QObject *parent, const QVariantList &args)
 
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrasheets/viewplugins/solver.rc"), true);
 
-    d->dialog = 0;
+    d->dialog = nullptr;
     d->view = qobject_cast<View *>(parent);
     if (!d->view) {
         errorSheets << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << Qt::endl;

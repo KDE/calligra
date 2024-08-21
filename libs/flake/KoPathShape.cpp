@@ -111,7 +111,7 @@ void KoPathShape::saveContourOdf(KoShapeSavingContext &context, const QSizeF &sc
         KoSubpath *subPath = m_subpaths.first();
         KoSubpath::const_iterator pointIt(subPath->constBegin());
 
-        KoPathPoint *currPoint = 0;
+        KoPathPoint *currPoint = nullptr;
         // iterate over all points
         for (; pointIt != subPath->constEnd(); ++pointIt) {
             currPoint = *pointIt;
@@ -486,7 +486,7 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    QTransform transform = absoluteTransformation(0);
+    QTransform transform = absoluteTransformation(nullptr);
     // calculate the bounding rect of the transformed outline
     QRectF bb;
     KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke *>(stroke());
@@ -823,8 +823,8 @@ KoPathPoint *KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) const
     Q_D(const KoPathShape);
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
-        return 0;
+    if (subpath == nullptr || pointIndex.second < 0 || pointIndex.second >= subpath->size())
+        return nullptr;
 
     return subpath->at(pointIndex.second);
 }
@@ -832,11 +832,11 @@ KoPathPoint *KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) const
 KoPathSegment KoPathShape::segmentByIndex(const KoPathPointIndex &pointIndex) const
 {
     Q_D(const KoPathShape);
-    KoPathSegment segment(0, 0);
+    KoPathSegment segment(nullptr, nullptr);
 
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
-    if (subpath != 0 && pointIndex.second >= 0 && pointIndex.second < subpath->size()) {
+    if (subpath != nullptr && pointIndex.second >= 0 && pointIndex.second < subpath->size()) {
         KoPathPoint *point = subpath->at(pointIndex.second);
         int index = pointIndex.second;
         // check if we have a (closing) segment starting from the last point
@@ -873,7 +873,7 @@ int KoPathShape::subpathPointCount(int subpathIndex) const
     Q_D(const KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
-    if (subpath == 0)
+    if (subpath == nullptr)
         return -1;
 
     return subpath->size();
@@ -884,7 +884,7 @@ bool KoPathShape::isClosedSubpath(int subpathIndex) const
     Q_D(const KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
-    if (subpath == 0)
+    if (subpath == nullptr)
         return false;
 
     const bool firstClosed = subpath->first()->properties() & KoPathPoint::CloseSubpath;
@@ -898,7 +898,7 @@ bool KoPathShape::insertPoint(KoPathPoint *point, const KoPathPointIndex &pointI
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size())
+    if (subpath == nullptr || pointIndex.second < 0 || pointIndex.second > subpath->size())
         return false;
 
     KoPathPoint::PointProperties properties = point->properties();
@@ -939,8 +939,8 @@ KoPathPoint *KoPathShape::removePoint(const KoPathPointIndex &pointIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
-        return 0;
+    if (subpath == nullptr || pointIndex.second < 0 || pointIndex.second >= subpath->size())
+        return nullptr;
 
     KoPathPoint *point = subpath->takeAt(pointIndex.second);
 
@@ -1029,7 +1029,7 @@ bool KoPathShape::moveSubpath(int oldSubpathIndex, int newSubpathIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(oldSubpathIndex);
 
-    if (subpath == 0 || newSubpathIndex >= m_subpaths.size())
+    if (subpath == nullptr || newSubpathIndex >= m_subpaths.size())
         return false;
 
     if (oldSubpathIndex == newSubpathIndex)
@@ -1097,7 +1097,7 @@ bool KoPathShape::reverseSubpath(int subpathIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
-    if (subpath == 0)
+    if (subpath == nullptr)
         return false;
 
     int size = subpath->size();
@@ -1133,7 +1133,7 @@ KoSubpath *KoPathShape::removeSubpath(int subpathIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
-    if (subpath != 0)
+    if (subpath != nullptr)
         m_subpaths.removeAt(subpathIndex);
 
     return subpath;
@@ -1154,8 +1154,8 @@ bool KoPathShape::combine(KoPathShape *path)
     if (!path)
         return false;
 
-    QTransform pathMatrix = path->absoluteTransformation(0);
-    QTransform myMatrix = absoluteTransformation(0).inverted();
+    QTransform pathMatrix = path->absoluteTransformation(nullptr);
+    QTransform myMatrix = absoluteTransformation(nullptr).inverted();
 
     foreach (KoSubpath *subpath, path->m_subpaths) {
         KoSubpath *newSubpath = new KoSubpath();
@@ -1178,7 +1178,7 @@ bool KoPathShape::separate(QList<KoPathShape *> &separatedPaths)
     if (!m_subpaths.size())
         return false;
 
-    QTransform myMatrix = absoluteTransformation(0);
+    QTransform myMatrix = absoluteTransformation(nullptr);
 
     foreach (KoSubpath *subpath, m_subpaths) {
         KoPathShape *shape = new KoPathShape();
@@ -1242,7 +1242,7 @@ KoSubpath *KoPathShapePrivate::subPath(int subpathIndex) const
 {
     Q_Q(const KoPathShape);
     if (subpathIndex < 0 || subpathIndex >= q->m_subpaths.size())
-        return 0;
+        return nullptr;
 
     return q->m_subpaths.at(subpathIndex);
 }
@@ -1433,7 +1433,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
     if (parent() && parent()->isClipped(this) && !parent()->hitTest(position))
         return false;
 
-    QPointF point = absoluteTransformation(0).inverted().map(position);
+    QPointF point = absoluteTransformation(nullptr).inverted().map(position);
     const QPainterPath outlinePath = outline();
     if (stroke()) {
         KoInsets insets;
@@ -1453,7 +1453,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
     // the shadow has an offset to the shape, so we simply
     // check if the position minus the shadow offset hits the shape
-    point = absoluteTransformation(0).inverted().map(position - shadow()->offset());
+    point = absoluteTransformation(nullptr).inverted().map(position - shadow()->offset());
 
     return outlinePath.contains(point);
 }
@@ -1522,10 +1522,10 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     QPair<KoPathSegment, KoPathSegment> firstSegments;
     QPair<KoPathSegment, KoPathSegment> lastSegments;
 
-    KoPathPoint *firstPoint = 0;
-    KoPathPoint *lastPoint = 0;
-    KoPathPoint *secondPoint = 0;
-    KoPathPoint *preLastPoint = 0;
+    KoPathPoint *firstPoint = nullptr;
+    KoPathPoint *lastPoint = nullptr;
+    KoPathPoint *secondPoint = nullptr;
+    KoPathPoint *preLastPoint = nullptr;
 
     KoSubpath *firstSubpath = m_subpaths.first();
     bool twoPointPath = subpathPointCount(0) == 2;

@@ -52,7 +52,7 @@ XlsxXmlCommonReader::~XlsxXmlCommonReader()
 
 void XlsxXmlCommonReader::init()
 {
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 }
 
 QColor XlsxXmlCommonReader::tintedColor(const QColor &color, qreal tint)
@@ -215,7 +215,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
     READ_EPILOGUE
 }
 

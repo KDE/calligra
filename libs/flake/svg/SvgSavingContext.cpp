@@ -29,8 +29,8 @@ class Q_DECL_HIDDEN SvgSavingContext::Private
 public:
     Private(QIODevice &outputDevice)
         : output(outputDevice)
-        , styleWriter(0)
-        , shapeWriter(0)
+        , styleWriter(nullptr)
+        , shapeWriter(nullptr)
         , saveInlineImages(true)
     {
         styleWriter = new KoXmlWriter(&styleBuffer, 1);

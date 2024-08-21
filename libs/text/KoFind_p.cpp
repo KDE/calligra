@@ -43,18 +43,18 @@ private:
 };
 
 KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget *w)
-    : findNext(0)
-    , findPrev(0)
+    : findNext(nullptr)
+    , findPrev(nullptr)
     , q(find)
     , provider(crp)
     , findStrategy(w)
     , replaceStrategy(w)
     , strategy(&findStrategy)
-    , document(0)
+    , document(nullptr)
     , restarted(false)
     , start(false)
     , inFind(false)
-    , findDirection(0)
+    , findDirection(nullptr)
     , findForward(crp)
     , findBackward(crp)
 {
@@ -155,7 +155,7 @@ void KoFindPrivate::findDocumentSetPrevious(QTextDocument *document)
 
 void KoFindPrivate::parseSettingsAndFind()
 {
-    if (document == 0)
+    if (document == nullptr)
         return;
 
     InUse used(inFind);

@@ -48,7 +48,7 @@ inline bool operator<(const struct KoShapeTemplate &a, const struct KoShapeTempl
 struct KoCollectionItem {
     KoCollectionItem()
     {
-        properties = 0;
+        properties = nullptr;
     };
 
     QString id;
@@ -136,15 +136,15 @@ void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem> &ne
 QMimeData *CollectionItemModel::mimeData(const QModelIndexList &indexes) const
 {
     if (indexes.isEmpty())
-        return 0;
+        return nullptr;
 
     QModelIndex index = indexes.first();
 
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     if (m_shapeTemplateList.isEmpty())
-        return 0;
+        return nullptr;
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
@@ -181,7 +181,7 @@ Qt::ItemFlags CollectionItemModel::flags(const QModelIndex &index) const
 const KoProperties *CollectionItemModel::properties(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() > m_shapeTemplateList.count())
-        return 0;
+        return nullptr;
 
     return m_shapeTemplateList[index.row()].properties;
 }
@@ -332,7 +332,7 @@ void KoShapeCollectionMenu::loadDefaultShapes()
             temp.toolTip = tempShape.toolTip = factory->toolTip();
             temp.icon = QIcon::fromTheme(factory->iconName());
             tempShape.iconName = factory->iconName();
-            temp.properties = tempShape.properties = 0;
+            temp.properties = tempShape.properties = nullptr;
             if (factory->family() == "funny")
                 funnyList[tempShape] = temp;
             else if (factory->family() == "arrow")

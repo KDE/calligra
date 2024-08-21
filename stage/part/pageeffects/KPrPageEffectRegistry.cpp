@@ -48,7 +48,7 @@ KPrPageEffect *KPrPageEffectRegistry::createPageEffect(const KoXmlElement &eleme
 {
     Q_UNUSED(element);
 
-    KPrPageEffect *pageEffect = 0;
+    KPrPageEffect *pageEffect = nullptr;
     if (element.hasAttributeNS(KoXmlNS::smil, "type")) {
         QString smilType(element.attributeNS(KoXmlNS::smil, "type"));
         bool reverse = false;

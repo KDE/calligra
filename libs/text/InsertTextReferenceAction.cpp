@@ -29,7 +29,7 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     const QList<KoTextLocator *> textLocators = m_manager->textLocators();
     if (textLocators.isEmpty()) {
         KMessageBox::information(m_canvas->canvasWidget(), i18n("Please create an index to reference first."));
-        return 0;
+        return nullptr;
     }
 
     QWidget *widget = new QWidget();
@@ -50,7 +50,7 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     dialog.setWindowTitle(i18n("%1 Options", i18n("Text Reference"))); // reuse the text passed in the constructor
     dialog.addPage(widget, QString());
 
-    KoVariable *variable = 0;
+    KoVariable *variable = nullptr;
     if (dialog.exec() == KPageDialog::Accepted && list->currentRow() >= 0) {
         KoTextLocator *locator = textLocators[list->currentRow()];
         Q_ASSERT(locator);

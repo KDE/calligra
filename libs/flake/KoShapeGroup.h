@@ -59,7 +59,7 @@ public:
     void invalidateSizeCache();
 
 private:
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
 
     Q_DECLARE_PRIVATE(KoShapeGroup)
 };

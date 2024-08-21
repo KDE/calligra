@@ -129,7 +129,7 @@ KoShape *KoShapeRegistry::createShapeFromOdf(const KoXmlElement &e, KoShapeLoadi
 {
     debugFlake << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
-    KoShape *shape = 0;
+    KoShape *shape = nullptr;
 
     // Handle the case where the element is a draw:frame differently from other cases.
     if (e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw) {
@@ -197,7 +197,7 @@ KoShape *KoShapeRegistry::createShapeFromOdf(const KoXmlElement &e, KoShapeLoadi
 
                 // Check whether we can load a shape to fit the current object.
                 KoXmlElement child;
-                KoShape *childShape = 0;
+                KoShape *childShape = nullptr;
                 bool first = true;
                 forEachElement(child, e)
                 {
@@ -262,7 +262,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
     // Remove duplicate lookup.
     if (!factoryMap.contains(p))
-        return 0;
+        return nullptr;
 
     QMultiMap<int, KoShapeFactoryBase *> priorityMap = factoryMap.value(p);
     QList<KoShapeFactoryBase *> factories = priorityMap.values();
@@ -295,7 +295,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
                 // but don't go past a KoShapeLayer as KoShape adds those from the context
                 // during loading and those are already added.
-                while (shape->parent() && dynamic_cast<KoShapeLayer *>(shape->parent()) == 0)
+                while (shape->parent() && dynamic_cast<KoShapeLayer *>(shape->parent()) == nullptr)
                     shape = shape->parent();
 
                 return shape;
@@ -307,7 +307,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 QList<KoShapeFactoryBase *> KoShapeRegistry::factoriesForElement(const QString &nameSpace, const QString &elementName)

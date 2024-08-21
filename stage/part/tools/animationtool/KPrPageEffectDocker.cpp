@@ -41,8 +41,8 @@ bool orderFactoryByName(const KPrPageEffectFactory *factory1, const KPrPageEffec
 
 KPrPageEffectDocker::KPrPageEffectDocker(QWidget *parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
-    , m_view(0)
-    , m_previewMode(0)
+    , m_view(nullptr)
+    , m_previewMode(nullptr)
 {
     setObjectName("KPrPageEffectDocker");
     QGridLayout *optionLayout = new QGridLayout();
@@ -186,7 +186,7 @@ void KPrPageEffectDocker::slotActivePageChanged()
 void KPrPageEffectDocker::slotEffectChanged(int index)
 {
     // provide a preview of the chosen page effect
-    KPrPageEffect *pageEffect = 0;
+    KPrPageEffect *pageEffect = nullptr;
     QString effectId = m_effectCombo->itemData(index).toString();
     const KPrPageEffectFactory *factory = effectId != "" ? KPrPageEffectRegistry::instance()->value(effectId) : 0;
     updateSubTypes(factory);
@@ -198,7 +198,7 @@ void KPrPageEffectDocker::slotEffectChanged(int index)
         // same effect twice.
         // TODO
         KPrPageApplicationData *pageData = KPrPage::pageData(m_view->activePage());
-        if (pageData->pageEffect() == 0) {
+        if (pageData->pageEffect() == nullptr) {
             return;
         }
     }
@@ -320,5 +320,5 @@ void KPrPageEffectDocker::cleanup(QObject *object)
     if (object != m_view->proxyObject)
         return;
 
-    m_view = 0;
+    m_view = nullptr;
 }

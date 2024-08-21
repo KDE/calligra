@@ -156,8 +156,8 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
 {
     KoTextDocument document(m_blocks.first().document());
 
-    KoList *mergeableList = 0;
-    KoList *newList = 0;
+    KoList *mergeableList = nullptr;
+    KoList *newList = nullptr;
     // First check if we could merge with previous or next list
     if (m_flags & KoTextEditor::MergeWithAdjacentList) {
         const auto levelValues = m_levels.values();

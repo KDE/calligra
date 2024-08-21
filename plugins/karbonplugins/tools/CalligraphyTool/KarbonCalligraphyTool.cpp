@@ -37,12 +37,12 @@ using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_shape(0)
+    , m_shape(nullptr)
     , m_angle(0)
-    , m_selectedPath(0)
+    , m_selectedPath(nullptr)
     , m_isDrawing(false)
     , m_speed(0, 0)
-    , m_lastShape(0)
+    , m_lastShape(nullptr)
 {
     connect(canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &KarbonCalligraphyTool::updateSelectedPath);
 
@@ -111,14 +111,14 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         if (event->point == m_lastPoint) {
             KoShapeManager *shapeManager = canvas()->shapeManager();
             KoShape *selectedShape = shapeManager->shapeAt(event->point);
-            if (selectedShape != 0) {
+            if (selectedShape != nullptr) {
                 shapeManager->selection()->deselectAll();
                 shapeManager->selection()->select(selectedShape);
             }
         }
 
         delete m_shape;
-        m_shape = 0;
+        m_shape = nullptr;
         m_isDrawing = false;
         return;
     } else {
@@ -139,7 +139,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         delete m_shape;
     }
 
-    m_shape = 0;
+    m_shape = nullptr;
 }
 
 void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
@@ -311,7 +311,7 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
 void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     useCursor(Qt::CrossCursor);
-    m_lastShape = 0;
+    m_lastShape = nullptr;
 }
 
 void KarbonCalligraphyTool::deactivate()
@@ -328,7 +328,7 @@ QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
     // if the widget don't exists yet create it
     QList<QPointer<QWidget>> widgets;
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(nullptr);
     fillWidget->setWindowTitle(i18n("Fill"));
     fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);
@@ -450,14 +450,14 @@ void KarbonCalligraphyTool::updateSelectedPath()
 
     // or if it's a KoPathShape but with no or more than one subpaths
     if (m_selectedPath && m_selectedPath->subpathCount() != 1)
-        m_selectedPath = 0;
+        m_selectedPath = nullptr;
 
     // or if there ora none or more than 1 shapes selected
     if (selection->count() != 1)
-        m_selectedPath = 0;
+        m_selectedPath = nullptr;
 
     // emit signal it there wasn't a selected path and now there is
     // or the other way around
-    if ((m_selectedPath != 0) != (oldSelectedPath != 0))
-        Q_EMIT pathSelectedChanged(m_selectedPath != 0);
+    if ((m_selectedPath != nullptr) != (oldSelectedPath != nullptr))
+        Q_EMIT pathSelectedChanged(m_selectedPath != nullptr);
 }

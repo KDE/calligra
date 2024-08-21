@@ -28,7 +28,7 @@ class Q_DECL_HIDDEN KoTextLayoutEndNotesArea::Private
 {
 public:
     Private()
-        : startOfArea(0)
+        : startOfArea(nullptr)
     {
     }
     QList<KoTextLayoutNoteArea *> endNoteAreas;
@@ -58,7 +58,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     d->endNoteFrames.clear();
 
     d->startOfArea = new FrameIterator(cursor);
-    d->endOfArea = 0;
+    d->endOfArea = nullptr;
     int shiftDown = 15;
     qreal y = top() + shiftDown;
     setBottom(y);
@@ -84,7 +84,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
         y = noteArea->bottom();
         setBottom(y);
         delete cursor->currentSubFrameIterator;
-        cursor->currentSubFrameIterator = 0;
+        cursor->currentSubFrameIterator = nullptr;
         cursor->endNoteIndex++;
     }
     if (cursor->endNoteIndex == 0) {
@@ -112,7 +112,7 @@ QVector<KoCharAreaInfo> KoTextLayoutEndNotesArea::generateCharAreaInfos() const
 {
     QVector<KoCharAreaInfo> result;
 
-    if (d->startOfArea == 0) { // We have not been layouted yet
+    if (d->startOfArea == nullptr) { // We have not been layouted yet
         return result;
     }
 
@@ -129,7 +129,7 @@ QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
     int endNoteIndex = 0;
     while (endNoteIndex < d->endNoteFrames.length()) {
         subFrame = d->endNoteFrames[endNoteIndex];
-        if (subFrame != 0) {
+        if (subFrame != nullptr) {
             if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
                 return d->endNoteAreas[endNoteIndex]->selectionBoundingBox(cursor);
             }
@@ -141,7 +141,7 @@ QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (d->startOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == nullptr) // We have not been layouted yet
         return;
 
     if (!d->endNoteAreas.isEmpty()) {

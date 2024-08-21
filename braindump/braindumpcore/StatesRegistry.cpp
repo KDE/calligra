@@ -23,7 +23,7 @@ struct Q_DECL_HIDDEN StatesRegistry::Private {
     void parseStatesRC(const QString &_filename);
 };
 
-StatesRegistry *StatesRegistry::Private::s_instance = 0;
+StatesRegistry *StatesRegistry::Private::s_instance = nullptr;
 
 void StatesRegistry::Private::parseStatesRC(const QString &_filename)
 {
@@ -55,7 +55,7 @@ void StatesRegistry::Private::parseStatesRC(const QString &_filename)
             QString catId = eCat.attribute("id");
             QString catName = eCat.attribute("name");
             int catPriority = eCat.attribute("priority", "1000").toInt();
-            StateCategory *category = 0;
+            StateCategory *category = nullptr;
             if (catId.isEmpty()) {
                 qCritical() << "Missing category id";
             } else {
@@ -153,7 +153,7 @@ const State *StatesRegistry::state(const QString &_category, const QString &_sta
     if (d->categories.contains(_category))
         return d->categories[_category]->state(_state);
     qWarning() << "No category " << _category << " found among " << d->categories.keys();
-    return 0;
+    return nullptr;
 }
 
 const State *StatesRegistry::nextState(const State *_state) const
@@ -166,5 +166,5 @@ const State *StatesRegistry::nextState(const State *_state) const
             idx = 0;
         return states[idx];
     }
-    return 0;
+    return nullptr;
 }

@@ -36,7 +36,7 @@ FunctionCompletion::FunctionCompletion(CellEditor *editor)
     , d(new Private)
 {
     d->editor = editor;
-    d->hintLabel = 0;
+    d->hintLabel = nullptr;
 
     d->completionPopup = new QFrame(editor->topLevelWidget(), Qt::Popup);
     d->completionPopup->setFrameStyle(QFrame::Box | QFrame::Plain);
@@ -57,7 +57,7 @@ FunctionCompletion::FunctionCompletion(CellEditor *editor)
     });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help (with the mouse) without inserting the function
-    if (d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, d->completionListBox)) {
+    if (d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, d->completionListBox)) {
         connect(d->completionListBox, &QListWidget::itemEntered, this, &FunctionCompletion::itemSelected);
         d->completionListBox->setMouseTracking(true);
     }
@@ -65,7 +65,7 @@ FunctionCompletion::FunctionCompletion(CellEditor *editor)
     connect(d->completionListBox, &QListWidget::itemActivated, this, &FunctionCompletion::doneCompletion);
     layout->addWidget(d->completionListBox);
 
-    d->hintLabel = new QLabel(0, Qt::FramelessWindowHint | Qt::Tool | Qt::X11BypassWindowManagerHint);
+    d->hintLabel = new QLabel(nullptr, Qt::FramelessWindowHint | Qt::Tool | Qt::X11BypassWindowManagerHint);
     d->hintLabel->setFrameStyle(QFrame::Plain | QFrame::Box);
     d->hintLabel->setPalette(QToolTip::palette());
     d->hintLabel->setWordWrap(true);
@@ -175,7 +175,7 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
 
     d->completionListBox->clear();
     d->completionListBox->addItems(choices);
-    d->completionListBox->setCurrentItem(0);
+    d->completionListBox->setCurrentItem(nullptr);
 
     // size of the pop-up
     d->completionPopup->setMaximumHeight(100);

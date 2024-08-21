@@ -27,7 +27,7 @@ KoView *ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
     Q_UNUSED(document);
     Q_UNUSED(parent);
 
-    return 0;
+    return nullptr;
 }
 
 KoMainWindow *ChartPart::createMainWindow()

@@ -30,7 +30,7 @@
 #include "View.h"
 
 ViewManager::ViewManager(RootSection *_rootSection)
-    : m_lastViewInFocus(0)
+    : m_lastViewInFocus(nullptr)
     , m_rootSection(_rootSection)
 {
 }

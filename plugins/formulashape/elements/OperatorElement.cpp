@@ -74,7 +74,7 @@ void OperatorElement::stretch()
     default:
         // There are many element types that inherit Row, so just try casting to
         // a row to see if it inherits from a row
-        if (dynamic_cast<RowElement *>(parentElement()) != 0)
+        if (dynamic_cast<RowElement *>(parentElement()) != nullptr)
             m_stretchVertically = true;
         else
             return;
@@ -98,7 +98,7 @@ Form OperatorElement::determineOperatorForm() const
     // parent's element list. This is with the assumption that the parent is an
     // ( inferred ) row element. If that is not the case return standard Prefix ( ? )
 
-    if (dynamic_cast<RowElement *>(parentElement()) == 0)
+    if (dynamic_cast<RowElement *>(parentElement()) == nullptr)
         return Prefix;
     if (parentElement()->childElements().isEmpty())
         return Prefix;

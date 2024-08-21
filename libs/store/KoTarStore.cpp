@@ -106,7 +106,7 @@ QByteArray KoTarStore::completeMagic(const QByteArray &appMimetype)
 void KoTarStore::init(const QByteArray &appIdentification)
 {
     Q_D(KoStore);
-    m_currentDir = 0;
+    m_currentDir = nullptr;
     d->good = m_pTar->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
     if (!d->good)
@@ -116,7 +116,7 @@ void KoTarStore::init(const QByteArray &appIdentification)
         debugStore << "appIdentification :" << appIdentification;
         m_pTar->setOrigFileName(completeMagic(appIdentification));
     } else {
-        d->good = m_pTar->directory() != 0;
+        d->good = m_pTar->directory() != nullptr;
     }
 }
 
@@ -142,7 +142,7 @@ bool KoTarStore::openRead(const QString &name)
 {
     Q_D(KoStore);
     const KArchiveEntry *entry = m_pTar->directory()->entry(name);
-    if (entry == 0) {
+    if (entry == nullptr) {
         return false;
     }
     if (entry->isDirectory()) {
@@ -181,7 +181,7 @@ bool KoTarStore::enterRelativeDirectory(const QString &dirName)
         const KArchiveEntry *entry = m_currentDir->entry(dirName);
         if (entry && entry->isDirectory()) {
             m_currentDir = dynamic_cast<const KArchiveDirectory *>(entry);
-            return m_currentDir != 0;
+            return m_currentDir != nullptr;
         }
         return false;
     } else // Write, no checking here
@@ -192,18 +192,18 @@ bool KoTarStore::enterAbsoluteDirectory(const QString &path)
 {
     Q_D(KoStore);
     if (path.isEmpty()) {
-        m_currentDir = 0;
+        m_currentDir = nullptr;
         return true;
     }
     if (d->mode == Read) {
         m_currentDir = dynamic_cast<const KArchiveDirectory *>(m_pTar->directory()->entry(path));
         Q_ASSERT(m_currentDir);
-        return m_currentDir != 0;
+        return m_currentDir != nullptr;
     } else
         return true;
 }
 
 bool KoTarStore::fileExists(const QString &absPath) const
 {
-    return m_pTar->directory()->entry(absPath) != 0;
+    return m_pTar->directory()->entry(absPath) != nullptr;
 }

@@ -88,7 +88,7 @@ void TestShapeContainer::testSetParent2()
     shape->setParent(&container);
     QCOMPARE(model->shapes().count(), 1);
 
-    shape->setParent(0);
+    shape->setParent(nullptr);
     QCOMPARE(model->shapes().count(), 0);
 }
 
@@ -122,7 +122,7 @@ void TestShapeContainer::testScaling()
     foreach (const KoShape *shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        QTransform globalTransform = shape->absoluteTransformation(0);
+        QTransform globalTransform = shape->absoluteTransformation(nullptr);
         QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
         newTransformations.append(localTransform * oldTransform);
     }

@@ -17,10 +17,10 @@
 
 KoPointedAt::KoPointedAt()
     : position(-1)
-    , bookmark(0)
-    , note(0)
+    , bookmark(nullptr)
+    , note(nullptr)
     , noteReference(-1)
-    , table(0)
+    , table(nullptr)
     , tableHit(None)
 {
 }
@@ -42,9 +42,9 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
 
 void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager, KoTextRangeManager *rangeManager)
 {
-    bookmark = 0;
+    bookmark = nullptr;
     externalHRef.clear();
-    note = 0;
+    note = nullptr;
 
     if (!inlineManager)
         return;

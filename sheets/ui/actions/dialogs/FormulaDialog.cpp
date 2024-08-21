@@ -53,8 +53,8 @@ FormulaDialog::FormulaDialog(QWidget *parent, Selection *selection, CellEditorBa
 
     m_selection = selection;
     m_editor = editor;
-    m_focus = 0;
-    m_desc = 0;
+    m_focus = nullptr;
+    m_desc = nullptr;
 
     CellBase cell(m_selection->activeSheet(), m_selection->cursor());
     m_oldText = cell.userInput();
@@ -104,7 +104,7 @@ FormulaDialog::FormulaDialog(QWidget *parent, Selection *selection, CellEditorBa
     });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help without inserting the function
-    if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, functions)) {
+    if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, functions)) {
         connect(functions, &QAbstractItemView::entered, this, &FormulaDialog::slotIndexSelected);
         functions->setMouseTracking(true);
     }
@@ -306,7 +306,7 @@ void FormulaDialog::onApply()
 {
     // Pretend none of the text edits have focus; otherwise the next line will change the
     // value of whatever parameter has focus to the name of the cell we're editing
-    m_focus = 0;
+    m_focus = nullptr;
 
     m_selection->endReferenceSelection();
 
@@ -339,7 +339,7 @@ void FormulaDialog::onClose()
 
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.
-    if (m_editor != 0) {
+    if (m_editor != nullptr) {
         Q_ASSERT(m_editor);
         m_editor->setText(m_oldText);
         m_editor->widget()->setFocus();
@@ -362,7 +362,7 @@ void FormulaDialog::slotChangeText(const QString &)
     if (!refresh_result)
         return;
 
-    if (m_focus == 0)
+    if (m_focus == nullptr)
         return;
 
     QString tmp = m_leftText + m_funcName + '(' + createFormula() + ')' + m_rightText;
@@ -507,7 +507,7 @@ static void showEntry(KLineEdit *edit, QLabel *label, FunctionDescription *desc,
     case KSpread_Boolean:
     case KSpread_Any:
     case KSpread_Date:
-        edit->setValidator(0);
+        edit->setValidator(nullptr);
         break;
     case KSpread_Float:
         edit->setValidator(new QDoubleValidator(edit));
@@ -533,7 +533,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
         return;
     }
 
-    m_focus = 0;
+    m_focus = nullptr;
     int old_length = result->text().length();
 
     // Do not change order of these function calls due to a bug in Qt 2.2
@@ -655,7 +655,7 @@ void FormulaDialog::slotSelected(const QString &afunction)
     m_browser->setText(m_desc->toQML());
     // m_browser->setContentsPos( 0, 0 );
 
-    m_focus = 0;
+    m_focus = nullptr;
 
     m_tabwidget->setCurrentIndex(0);
     m_tabwidget->setTabEnabled(m_tabwidget->indexOf(m_input), false);

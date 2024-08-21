@@ -70,7 +70,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     widget.open->setIcon(koIcon("document-open"));
     widget.save->setIcon(koIcon("document-save"));
 
-    setEnabled(m_activeColorSet != 0);
+    setEnabled(m_activeColorSet != nullptr);
     setActiveColorSet(index);
     widget.remove->setEnabled(false); // initially no color selected
 
@@ -107,7 +107,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     m_gridLayout->setSpacing(2);
 
     m_activeColorSet = m_colorSets.value(index);
-    setEnabled(m_activeColorSet != 0);
+    setEnabled(m_activeColorSet != nullptr);
     if (m_activeColorSet) {
         widget.remove->setEnabled(false);
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {

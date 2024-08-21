@@ -38,7 +38,7 @@ public:
      * @a store An optional implementation of the Store class
      * that is used to write content like images to.
      */
-    explicit Workbook(KoStore *store = 0);
+    explicit Workbook(KoStore *store = nullptr);
 
     /**
      * Destroys the workbook.

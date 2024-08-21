@@ -38,9 +38,9 @@ KoOdfNotesConfiguration::KoOdfNotesConfiguration(NoteClass noteClass)
     d->numberingScheme = BeginAtDocument;
     d->footnotesPosition = Page;
 
-    d->defaultNoteParagraphStyle = 0;
-    d->citationTextStyle = 0;
-    d->citationBodyTextStyle = 0;
+    d->defaultNoteParagraphStyle = nullptr;
+    d->citationTextStyle = nullptr;
+    d->citationBodyTextStyle = nullptr;
 
     if (noteClass == KoOdfNotesConfiguration::Footnote) {
         d->numberFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);

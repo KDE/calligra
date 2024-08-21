@@ -17,7 +17,7 @@
 AnchorStrategy::AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea)
     : m_anchor(anchor)
     , m_rootArea(rootArea)
-    , m_model(0)
+    , m_model(nullptr)
     , m_pageRect(0, 0, 10, 10)
     , m_pageContentRect(0, 0, 10, 10)
     , m_paragraphRect(0, 0, 0, 0)
@@ -33,7 +33,7 @@ AnchorStrategy::~AnchorStrategy()
 
 void AnchorStrategy::detachFromModel()
 {
-    m_model = 0;
+    m_model = nullptr;
 }
 
 QRectF AnchorStrategy::pageRect() const
@@ -101,11 +101,11 @@ void AnchorStrategy::updateContainerModel()
     KoShape *shape = m_anchor->shape();
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(m_rootArea->associatedShape());
-    if (container == 0) {
+    if (container == nullptr) {
         if (m_model)
             m_model->removeAnchor(m_anchor);
-        m_model = 0;
-        shape->setParent(0);
+        m_model = nullptr;
+        shape->setParent(nullptr);
         return;
     }
 

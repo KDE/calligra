@@ -17,8 +17,8 @@ const QMap<KoRow::Visibility, QString> visibilityMap{{KoRow::Collapse, "collapse
 }
 
 KoRow::KoRow()
-    : m_defaultCellStyle(0)
-    , m_style(0)
+    : m_defaultCellStyle(nullptr)
+    , m_style(nullptr)
     , m_visibility(Visible)
 {
 }

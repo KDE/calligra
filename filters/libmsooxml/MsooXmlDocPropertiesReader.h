@@ -26,7 +26,7 @@ public:
     explicit MsooXmlDocPropertiesReader(KoOdfWriters *writers);
 
     //! Reads/parses the file. The output goes to KoGenStyles* KoOdfWriters::meta
-    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = nullptr) override;
 
     KoFilter::ConversionStatus read_coreProperties();
 

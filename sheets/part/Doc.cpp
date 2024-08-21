@@ -188,7 +188,7 @@ void Doc::addIgnoreWordAllList(const QStringList &_lst)
 
 void Doc::paintContent(QPainter &painter, const QRect &rect)
 {
-    paintContent(painter, rect, 0);
+    paintContent(painter, rect, nullptr);
 }
 
 void Doc::paintContent(QPainter &painter, const QRect &rect, Sheet *_sheet)

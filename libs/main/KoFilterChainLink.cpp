@@ -21,7 +21,7 @@ const int SLOT_PREFIX_LEN = 8;
 
 KoUpdater *createUpdater(KoFilterChain *chain)
 {
-    QPointer<KoUpdater> updater = 0;
+    QPointer<KoUpdater> updater = nullptr;
     Q_ASSERT(chain);
     Q_ASSERT(chain->manager());
     KoProgressUpdater *pu = chain->manager()->progressUpdater();
@@ -42,7 +42,7 @@ ChainLink::ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry, const
     , m_filterEntry(filterEntry)
     , m_from(from)
     , m_to(to)
-    , m_filter(0)
+    , m_filter(nullptr)
     , m_updater(createUpdater(chain))
 {
 }
@@ -76,7 +76,7 @@ KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parent
 
     KoFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
     delete m_filter;
-    m_filter = 0;
+    m_filter = nullptr;
     if (m_updater) {
         m_updater->setProgress(100);
     }

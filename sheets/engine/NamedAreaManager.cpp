@@ -103,7 +103,7 @@ Calligra::Sheets::Region NamedAreaManager::namedArea(const QString &name) const
 SheetBase *NamedAreaManager::sheet(const QString &name) const
 {
     if (!d->namedAreas.contains(name))
-        return 0;
+        return nullptr;
     return d->namedAreas.value(name).sheet;
 }
 

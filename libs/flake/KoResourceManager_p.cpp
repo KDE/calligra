@@ -66,7 +66,7 @@ KoColor KoResourceManager::koColorResource(int key) const
 KoShape *KoResourceManager::koShapeResource(int key) const
 {
     if (!m_resources.contains(key))
-        return 0;
+        return nullptr;
 
     return resource(key).value<KoShape *>();
 }

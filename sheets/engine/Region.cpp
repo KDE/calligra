@@ -34,7 +34,7 @@ class Q_DECL_HIDDEN Region::Private : public QSharedData
 {
 public:
     Private()
-        : map(0)
+        : map(nullptr)
         , cells(QList<Element *>())
     {
     }
@@ -191,7 +191,7 @@ Region::Element *Region::add(const QRect &range, SheetBase *sheet, bool fixedTop
 {
     const QRect normalizedRange = normalized(range);
     if (normalizedRange.width() == 0 || normalizedRange.height() == 0) {
-        return 0;
+        return nullptr;
     }
     if (normalizedRange.size() == QSize(1, 1)) {
         return add(normalizedRange.topLeft(), sheet, fixedTop, fixedLeft, allowMulti);
@@ -410,13 +410,13 @@ Region::Element *Region::eor(const QPoint &point, SheetBase *sheet)
     if (!containsPoint) {
         return add(point, sheet);
     }
-    return 0;
+    return nullptr;
 }
 
 Region::Element *Region::insert(int pos, const QPoint &point, SheetBase *sheet, bool multi, bool fixedColumn, bool fixedRow)
 {
     if (point.x() < 1 || point.y() < 1) {
-        return 0;
+        return nullptr;
     }
     // Keep boundaries.
     pos = qBound(0, pos, cells().count());
@@ -461,7 +461,7 @@ Region::Element *Region::insert(int pos, const QPoint &point, SheetBase *sheet, 
         d->cells.insert(pos, rpoint);
         return d->cells[pos];
     }
-    return 0;
+    return nullptr;
 }
 
 Region::Element *Region::insert(int pos, const QRect &range, SheetBase *sheet, bool multi, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight)
@@ -503,7 +503,7 @@ Region::Element *Region::insert(int pos, const QRect &range, SheetBase *sheet, b
         d->cells.insert(pos, rrange);
         return d->cells[pos];
     }
-    return 0;
+    return nullptr;
 }
 
 bool Region::isRowAffected(int row) const
@@ -621,14 +621,14 @@ QRect Region::lastRange() const
 SheetBase *Region::firstSheet() const
 {
     if (!isValid())
-        return 0;
+        return nullptr;
     return d->cells.value(0)->sheet();
 }
 
 SheetBase *Region::lastSheet() const
 {
     if (!isValid())
-        return 0;
+        return nullptr;
     return d->cells.value(d->cells.count() - 1)->sheet();
 }
 
@@ -787,7 +787,7 @@ Region::Range *Region::createRange(const Range &range) const
 ****************************************************************************/
 
 Region::Element::Element()
-    : m_sheet(0)
+    : m_sheet(nullptr)
 {
 }
 

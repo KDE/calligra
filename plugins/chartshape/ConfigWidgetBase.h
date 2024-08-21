@@ -59,7 +59,7 @@ public:
             deleteSubDialogs();
             disconnect(chart, &ChartShape::chartTypeChanged, this, &ConfigWidgetBase::removeSubDialogs);
         }
-        chart = 0;
+        chart = nullptr;
     }
 
     /// reimplemented from KoShapeConfigWidgetBase

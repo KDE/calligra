@@ -99,7 +99,7 @@ bool TableRowElement::acceptCursor(const FormulaCursor &cursor)
 int TableRowElement::positionOfChild(BasicElement *child) const
 {
     TableDataElement *temp = dynamic_cast<TableDataElement *>(child);
-    if (temp == 0) {
+    if (temp == nullptr) {
         return -1;
     } else {
         return m_data.indexOf(temp);
@@ -255,7 +255,7 @@ QList<Align> TableRowElement::alignments(Qt::Orientation orientation)
 
 bool TableRowElement::readMathMLContent(const KoXmlElement &element)
 {
-    BasicElement *tmpElement = 0;
+    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, element)
     {
@@ -304,7 +304,7 @@ bool TableRowElement::removeChild(BasicElement *child)
         return false;
     } else {
         m_data.removeAll(tmp);
-        tmp->setParentElement(0);
+        tmp->setParentElement(nullptr);
     }
     return true;
 }

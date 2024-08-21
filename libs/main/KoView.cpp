@@ -68,9 +68,9 @@ class KoViewPrivate
 public:
     KoViewPrivate()
     {
-        tempActiveWidget = 0;
+        tempActiveWidget = nullptr;
         documentDeleted = false;
-        actionAuthor = 0;
+        actionAuthor = nullptr;
     }
     ~KoViewPrivate()
     {
@@ -309,7 +309,7 @@ void KoView::removeStatusBarItem(QWidget *widget)
 KoPrintJob *KoView::createPrintJob()
 {
     warnMain << "Printing not implemented in this application";
-    return 0;
+    return nullptr;
 }
 
 KoPrintJob *KoView::createPdfPrintJob()

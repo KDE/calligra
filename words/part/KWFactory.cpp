@@ -33,7 +33,7 @@
 #include "dockers/KWDebugDockerFactory.h"
 #endif
 
-KoComponentData *KWFactory::s_componentData = 0;
+KoComponentData *KWFactory::s_componentData = nullptr;
 
 KWFactory::KWFactory()
     : KPluginFactory()
@@ -46,7 +46,7 @@ KWFactory::KWFactory()
 KWFactory::~KWFactory()
 {
     delete s_componentData;
-    s_componentData = 0;
+    s_componentData = nullptr;
 }
 
 QObject *KWFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)

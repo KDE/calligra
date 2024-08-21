@@ -120,7 +120,7 @@ bool RowElement::removeChild(BasicElement *child)
 {
     bool tmp = m_childElements.removeOne(child);
     if (tmp) {
-        child->setParentElement(0);
+        child->setParentElement(nullptr);
     }
     return tmp;
 }
@@ -232,7 +232,7 @@ bool RowElement::readMathMLContent(const KoXmlElement &parent)
     }
 
     // Read the actual content.
-    BasicElement *tmpElement = 0;
+    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, realParent)
     {
@@ -290,7 +290,7 @@ BasicElement *RowElement::elementAfter(int position) const
     if (position < endPosition()) {
         return m_childElements[position];
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -299,7 +299,7 @@ BasicElement *RowElement::elementBefore(int position) const
     if (position > 1) {
         return m_childElements[position - 1];
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -315,7 +315,7 @@ bool RowElement::replaceChild(BasicElement *oldelement, BasicElement *newelement
         return false;
 
     m_childElements.replace(oldElementIndex, newelement);
-    oldelement->setParentElement(0);
+    oldelement->setParentElement(nullptr);
     newelement->setParentElement(this);
 
     return true;

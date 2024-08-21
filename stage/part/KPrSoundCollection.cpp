@@ -54,7 +54,7 @@ KPrSoundData *KPrSoundCollection::findSound(const QString &title)
             return sound;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QStringList KPrSoundCollection::titles()

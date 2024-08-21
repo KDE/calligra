@@ -25,7 +25,7 @@ class ComponentsKoCanvasController::Private
 {
 public:
     Private()
-        : canvas(0)
+        : canvas(nullptr)
     {
     }
     KoCanvasBase *canvas;

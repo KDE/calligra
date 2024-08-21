@@ -462,7 +462,7 @@ Formula::Formula()
     : d(new Private)
 {
     d->cell = CellBase();
-    d->sheet = 0;
+    d->sheet = nullptr;
     clear();
 }
 

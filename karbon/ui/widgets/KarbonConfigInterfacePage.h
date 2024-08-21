@@ -21,7 +21,7 @@ class KarbonConfigInterfacePage : public KoVBox
     Q_OBJECT
 
 public:
-    explicit KarbonConfigInterfacePage(KarbonView *view, char *name = 0L);
+    explicit KarbonConfigInterfacePage(KarbonView *view, char *name = nullptr);
 
     void apply();
 

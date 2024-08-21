@@ -61,7 +61,7 @@ KWPageCacheManager::~KWPageCacheManager()
 
 KWPageCache *KWPageCacheManager::take(const KWPage &page)
 {
-    KWPageCache *cache = 0;
+    KWPageCache *cache = nullptr;
     if (m_cache.contains(page)) {
         cache = m_cache.take(page);
     }
@@ -77,7 +77,7 @@ void KWPageCacheManager::insert(const KWPage &page, KWPageCache *cache)
 
 KWPageCache *KWPageCacheManager::cache(const QSize &size)
 {
-    KWPageCache *cache = 0;
+    KWPageCache *cache = nullptr;
     if (!cache) {
         cache = new KWPageCache(this, size.width(), size.height());
     }

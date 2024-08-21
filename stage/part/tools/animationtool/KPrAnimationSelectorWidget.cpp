@@ -40,13 +40,13 @@
 KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData, QWidget *parent)
     : QWidget(parent)
     , m_docker(docker)
-    , m_previewAnimation(0)
+    , m_previewAnimation(nullptr)
     , m_showAutomaticPreview(false)
     , m_animationsData(animationsData)
-    , m_collectionContextBar(0)
-    , m_collectionPreviewButton(0)
-    , m_subTypeContextBar(0)
-    , m_subTypePreviewButton(0)
+    , m_collectionContextBar(nullptr)
+    , m_collectionPreviewButton(nullptr)
+    , m_subTypeContextBar(nullptr)
+    , m_subTypePreviewButton(nullptr)
 {
     QGridLayout *containerLayout = new QGridLayout;
 
@@ -149,8 +149,8 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &in
     }
 
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext context(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(context, 0);
+    KoOdfLoadingContext context(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(context, nullptr);
 
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
@@ -182,8 +182,8 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested()
         return;
     }
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext context(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(context, 0);
+    KoOdfLoadingContext context(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(context, nullptr);
 
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
@@ -202,7 +202,7 @@ void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
     }
     QString id = item->data(Qt::UserRole).toString();
     m_collectionView->setModel(m_animationsData->modelById(id));
-    m_subTypeView->setModel(0);
+    m_subTypeView->setModel(nullptr);
     m_subTypeView->hide();
 }
 
@@ -231,8 +231,8 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
     }
 
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext context(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(context, 0);
+    KoOdfLoadingContext context(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(context, nullptr);
 
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
@@ -263,13 +263,13 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
     } else {
         delete m_collectionContextBar;
         delete m_collectionPreviewButton;
-        m_collectionContextBar = 0;
-        m_collectionPreviewButton = 0;
+        m_collectionContextBar = nullptr;
+        m_collectionPreviewButton = nullptr;
 
         delete m_subTypeContextBar;
         delete m_subTypePreviewButton;
-        m_subTypeContextBar = 0;
-        m_subTypePreviewButton = 0;
+        m_subTypeContextBar = nullptr;
+        m_subTypePreviewButton = nullptr;
     }
     Q_EMIT previousStateChanged(isEnable);
 }

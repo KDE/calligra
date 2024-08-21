@@ -23,7 +23,7 @@ class KoGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoGradientBackgroundPrivate()
-        : gradient(0)
+        : gradient(nullptr)
     {
     }
 

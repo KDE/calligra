@@ -108,7 +108,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell &cell, ApplicationSettings
         m_value = cell.value();
         m_type = VALUE;
 
-        if (AutoFillCommand::month == 0) {
+        if (AutoFillCommand::month == nullptr) {
             AutoFillCommand::month = new QStringList();
             AutoFillCommand::month->append(i18n("January"));
             AutoFillCommand::month->append(i18n("February"));
@@ -124,7 +124,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell &cell, ApplicationSettings
             AutoFillCommand::month->append(i18n("December"));
         }
 
-        if (AutoFillCommand::shortMonth == 0) {
+        if (AutoFillCommand::shortMonth == nullptr) {
             AutoFillCommand::shortMonth = new QStringList();
             AutoFillCommand::shortMonth->append(i18n("Jan"));
             AutoFillCommand::shortMonth->append(i18n("Feb"));
@@ -140,7 +140,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell &cell, ApplicationSettings
             AutoFillCommand::shortMonth->append(i18n("Dec"));
         }
 
-        if (AutoFillCommand::day == 0) {
+        if (AutoFillCommand::day == nullptr) {
             AutoFillCommand::day = new QStringList();
             AutoFillCommand::day->append(i18n("Monday"));
             AutoFillCommand::day->append(i18n("Tuesday"));
@@ -151,7 +151,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell &cell, ApplicationSettings
             AutoFillCommand::day->append(i18n("Sunday"));
         }
 
-        if (AutoFillCommand::shortDay == 0) {
+        if (AutoFillCommand::shortDay == nullptr) {
             AutoFillCommand::shortDay = new QStringList();
             AutoFillCommand::shortDay->append(i18n("Mon"));
             AutoFillCommand::shortDay->append(i18n("Tue"));

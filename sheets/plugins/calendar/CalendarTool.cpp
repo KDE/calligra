@@ -59,12 +59,12 @@ void CalendarTool::deactivate()
 void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 {
     if (end < start) {
-        KMessageBox::error(0, i18n("End date is before start date! Please make sure that end date comes after start date."), i18n("Error"));
+        KMessageBox::error(nullptr, i18n("End date is before start date! Please make sure that end date comes after start date."), i18n("Error"));
         return;
     }
 
     if (start.daysTo(end) > 3652) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            i18n("Calendars should not be longer than 10 years. If you really need such long periods you need to split them up."),
                            i18n("Error"));
         return;
@@ -105,7 +105,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     if (!sheet->areaIsEmpty(Region(QRect(marker, QSize(sizeX, sizeY))))) {
         if (KMessageBox::SecondaryAction
             == KMessageBox::warningTwoActions(
-                0,
+                nullptr,
                 i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the "
                      "area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),
                 i18n("Warning"),

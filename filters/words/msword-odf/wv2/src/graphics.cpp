@@ -22,12 +22,12 @@
 using namespace wvWare;
 
 Drawings::Drawings(OLEStreamReader *table, const Word97::FIB &fib)
-    : m_plcfspaMom(0)
-    , m_plcfspaHdr(0)
-    , m_plcftxbxTxt(0)
-    , m_plcfHdrtxbxTxt(0)
-    , m_plcftxbxBkd(0)
-    , m_plcfHdrtxbxBkd(0)
+    : m_plcfspaMom(nullptr)
+    , m_plcfspaHdr(nullptr)
+    , m_plcftxbxTxt(nullptr)
+    , m_plcfHdrtxbxTxt(nullptr)
+    , m_plcftxbxBkd(nullptr)
+    , m_plcfHdrtxbxBkd(nullptr)
 {
     table->push();
 

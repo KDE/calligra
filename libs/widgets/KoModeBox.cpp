@@ -471,7 +471,7 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
 void KoModeBox::unsetCanvas()
 {
-    d->canvas = 0;
+    d->canvas = nullptr;
 }
 
 void KoModeBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)

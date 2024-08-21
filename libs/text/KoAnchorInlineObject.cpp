@@ -26,7 +26,7 @@ class KoAnchorInlineObjectPrivate : public KoInlineObjectPrivate
 public:
     KoAnchorInlineObjectPrivate(KoShapeAnchor *p)
         : parent(p)
-        , document(0)
+        , document(nullptr)
         , position(-1)
         , inlineObjectAscent(0)
         , inlineObjectDescent(0)
@@ -64,7 +64,7 @@ void KoAnchorInlineObject::updatePosition(const QTextDocument *document, int pos
     d->document = document;
     d->position = posInDocument;
     d->format = format;
-    if (d->parent->placementStrategy() != 0) {
+    if (d->parent->placementStrategy() != nullptr) {
         d->parent->placementStrategy()->updateContainerModel();
     }
 }

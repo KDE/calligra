@@ -74,7 +74,7 @@ public:
 
 Canvas::Canvas(View *view)
     : QWidget(view)
-    , CanvasBase(view ? view->doc() : 0)
+    , CanvasBase(view ? view->doc() : nullptr)
     , cd(new Private)
 {
     cd->view = view;

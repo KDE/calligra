@@ -14,8 +14,8 @@
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
 
-KoComponentData *KPrFactory::s_instance = 0;
-KAboutData *KPrFactory::s_aboutData = 0;
+KoComponentData *KPrFactory::s_instance = nullptr;
+KAboutData *KPrFactory::s_aboutData = nullptr;
 
 static int factoryCount = 0;
 
@@ -37,9 +37,9 @@ KPrFactory::KPrFactory()
 KPrFactory::~KPrFactory()
 {
     delete s_aboutData;
-    s_aboutData = 0;
+    s_aboutData = nullptr;
     delete s_instance;
-    s_instance = 0;
+    s_instance = nullptr;
 }
 
 QObject *KPrFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)

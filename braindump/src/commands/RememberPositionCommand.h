@@ -38,7 +38,7 @@ class KoShape;
 class RememberPositionCommand : public KUndo2Command
 {
 public:
-    explicit RememberPositionCommand(const QList<KoShape *> &_shapes, KUndo2Command *cmd = 0);
+    explicit RememberPositionCommand(const QList<KoShape *> &_shapes, KUndo2Command *cmd = nullptr);
     virtual ~RememberPositionCommand();
 
 public:

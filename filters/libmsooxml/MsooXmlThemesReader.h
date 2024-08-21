@@ -54,7 +54,7 @@ public:
     ~MsooXmlThemesReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();

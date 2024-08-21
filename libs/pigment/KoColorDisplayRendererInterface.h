@@ -51,7 +51,7 @@ public:
     virtual KoColor approximateFromRenderedQColor(const QColor &c) const = 0;
 
     virtual KoColor fromHsv(int h, int s, int v, int a = 255) const = 0;
-    virtual void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const = 0;
+    virtual void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = nullptr) const = 0;
 
     /**
      * \return the minimum value of a floating point channel that can
@@ -85,7 +85,7 @@ public:
     QColor toQColor(const KoColor &c) const override;
     KoColor approximateFromRenderedQColor(const QColor &c) const override;
     KoColor fromHsv(int h, int s, int v, int a = 255) const override;
-    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const override;
+    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = nullptr) const override;
 
     qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
     qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override;

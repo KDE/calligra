@@ -38,7 +38,7 @@ public:
     static RegionSelector *s_focussedSelector;
 };
 
-RegionSelector *RegionSelector::Private::s_focussedSelector = 0;
+RegionSelector *RegionSelector::Private::s_focussedSelector = nullptr;
 
 RegionSelector::RegionSelector(QWidget *parent)
     : QWidget(parent)
@@ -47,13 +47,13 @@ RegionSelector::RegionSelector(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     d->displayMode = Widget;
-    d->parentDialog = 0;
-    d->selection = 0;
-    d->dialog = 0;
+    d->parentDialog = nullptr;
+    d->selection = nullptr;
+    d->dialog = nullptr;
     d->button = new QToolButton(this);
     d->button->setCheckable(true);
     d->button->setIcon(koIcon("selection"));
-    d->highlighter = 0;
+    d->highlighter = nullptr;
     d->textEdit = new KTextEdit(this);
     d->textEdit->setLineWrapMode(QTextEdit::NoWrap);
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
@@ -167,7 +167,7 @@ void RegionSelector::switchDisplayMode(bool state)
         d->parentDialog->move(d->dialog->pos());
         d->parentDialog->show();
         delete d->dialog;
-        d->dialog = 0;
+        d->dialog = nullptr;
     }
 }
 

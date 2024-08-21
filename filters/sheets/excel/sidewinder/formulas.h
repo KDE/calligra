@@ -197,7 +197,7 @@ public:
     }
     virtual DataTableRecord *tableRecord(const std::pair<unsigned, unsigned> & /*formulaCellPos*/) const
     {
-        return 0;
+        return nullptr;
     }
 
 protected:

@@ -20,14 +20,14 @@ public:
     QPointer<KoUpdater> updater;
 
     Private()
-        : updater(0)
+        : updater(nullptr)
     {
     }
 };
 
 KoFilter::KoFilter(QObject *parent)
     : QObject(parent)
-    , m_chain(0)
+    , m_chain(nullptr)
     , d(new Private)
 {
 }

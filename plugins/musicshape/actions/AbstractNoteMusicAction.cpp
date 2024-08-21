@@ -48,8 +48,8 @@ void AbstractNoteMusicAction::mousePress(Staff *staff, int barIdx, const QPointF
 
     // loop over all noteheads
     qreal closestDist = 1e9;
-    Note *closestNote = 0;
-    Chord *chord = 0;
+    Note *closestNote = nullptr;
+    Chord *chord = nullptr;
 
     // outer loop, loop over all voices
     for (int v = 0; v < part->voiceCount(); v++) {
@@ -94,7 +94,7 @@ void AbstractNoteMusicAction::mousePress(Staff *staff, int barIdx, const QPointF
         }
     }
 
-    StaffElement *se = 0;
+    StaffElement *se = nullptr;
     for (int e = 0; e < bar->staffElementCount(staff); e++) {
         StaffElement *elem = bar->staffElement(staff, e);
         qreal centerX = elem->x() + (elem->width() / 2);
@@ -128,8 +128,8 @@ void AbstractNoteMusicAction::mouseMove(Staff *staff, int barIdx, const QPointF 
 
     // loop over all noteheads
     qreal closestDist = 1e9;
-    Note *closestNote = 0;
-    Chord *chord = 0;
+    Note *closestNote = nullptr;
+    Chord *chord = nullptr;
 
     // outer loop, loop over all voices
     for (int v = 0; v < part->voiceCount(); v++) {
@@ -174,7 +174,7 @@ void AbstractNoteMusicAction::mouseMove(Staff *staff, int barIdx, const QPointF 
         }
     }
 
-    StaffElement *se = 0;
+    StaffElement *se = nullptr;
     for (int e = 0; e < bar->staffElementCount(staff); e++) {
         StaffElement *elem = bar->staffElement(staff, e);
         qreal centerX = elem->x() + (elem->width() / 2);

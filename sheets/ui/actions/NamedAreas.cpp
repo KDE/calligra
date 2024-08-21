@@ -45,7 +45,7 @@ void AddNamedArea::addArea(const QString &name)
         return; // nothing to do
     }
 
-    NamedAreaCommand *command = 0;
+    NamedAreaCommand *command = nullptr;
     bool okay = true;
     bool replace = false;
 

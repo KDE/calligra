@@ -26,7 +26,7 @@
 
 VectorTool::VectorTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_shape(0)
+    , m_shape(nullptr)
 {
 }
 
@@ -48,7 +48,7 @@ void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &
 
 void VectorTool::deactivate()
 {
-    m_shape = 0;
+    m_shape = nullptr;
 }
 
 QWidget *VectorTool::createOptionWidget()
@@ -56,7 +56,7 @@ QWidget *VectorTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
 
-    QToolButton *button = 0;
+    QToolButton *button = nullptr;
 
     button = new QToolButton(optionWidget);
     button->setIcon(koIcon("document-open"));
@@ -69,7 +69,7 @@ QWidget *VectorTool::createOptionWidget()
 
 void VectorTool::changeUrlPressed()
 {
-    if (m_shape == 0)
+    if (m_shape == nullptr)
         return;
     const QUrl url = QFileDialog::getOpenFileUrl(/*QT5TODO: QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml")*/);
     if (!url.isEmpty()) {
@@ -90,7 +90,7 @@ void VectorTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void VectorTool::setImageData(KJob *job)
 {
-    if (m_shape == 0) {
+    if (m_shape == nullptr) {
         return;
     }
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);

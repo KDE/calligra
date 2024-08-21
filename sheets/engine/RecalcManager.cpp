@@ -37,7 +37,7 @@ public:
      * \see RecalcManager::recalcMap
      * \see RecalcManager::recalcSheet
      */
-    void cellsToCalculate(SheetBase *sheet = 0);
+    void cellsToCalculate(SheetBase *sheet = nullptr);
 
     /**
      * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(SheetBase*).

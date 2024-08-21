@@ -104,7 +104,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                 setInlineRdf(inlineRdf);
             } else {
                 delete inlineRdf;
-                inlineRdf = 0;
+                inlineRdf = nullptr;
             }
         }
         // debugText << "****** End Load ******";

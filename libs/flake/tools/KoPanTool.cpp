@@ -20,7 +20,7 @@
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_controller(0)
+    , m_controller(nullptr)
     , m_temporary(false)
 {
 }
@@ -85,7 +85,7 @@ void KoPanTool::keyPressEvent(QKeyEvent *event)
 
 void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &)
 {
-    if (m_controller == 0) {
+    if (m_controller == nullptr) {
         Q_EMIT done();
         return;
     }

@@ -35,7 +35,7 @@ QMap<QString, bool> KoFilterManager::m_filterAvailable;
 
 KoFilterManager::KoFilterManager(KoDocument *document, KoProgressUpdater *progressUpdater)
     : m_document(document)
-    , m_parentChain(0)
+    , m_parentChain(nullptr)
     , m_graph("")
     , d(new Private(progressUpdater))
 {
@@ -43,7 +43,7 @@ KoFilterManager::KoFilterManager(KoDocument *document, KoProgressUpdater *progre
 }
 
 KoFilterManager::KoFilterManager(const QString &url, const QByteArray &mimetypeHint, KoFilterChain *const parentChain)
-    : m_document(0)
+    : m_document(nullptr)
     , m_parentChain(parentChain)
     , m_importUrl(url)
     , m_importUrlMimetypeHint(mimetypeHint)
@@ -54,8 +54,8 @@ KoFilterManager::KoFilterManager(const QString &url, const QByteArray &mimetypeH
 }
 
 KoFilterManager::KoFilterManager(const QByteArray &mimeType)
-    : m_document(0)
-    , m_parentChain(0)
+    : m_document(nullptr)
+    , m_parentChain(nullptr)
     , m_graph("")
     , d(new Private)
 {
@@ -93,7 +93,10 @@ QString KoFilterManager::importDocument(const QString &url, const QString &docum
             QByteArray nativeFormat = m_document->nativeFormatMimeType();
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
-            KoFilterChooser chooser(0, KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()), nativeFormat, u);
+            KoFilterChooser chooser(nullptr,
+                                    KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
+                                    nativeFormat,
+                                    u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
                 if (f == nativeFormat) {
@@ -116,7 +119,7 @@ QString KoFilterManager::importDocument(const QString &url, const QString &docum
         }
     }
 
-    KoFilterChain::Ptr chain(0);
+    KoFilterChain::Ptr chain(nullptr);
     // Are we owned by a KoDocument?
     if (m_document) {
         QByteArray mimeType = m_document->nativeFormatMimeType();
@@ -127,7 +130,7 @@ QString KoFilterManager::importDocument(const QString &url, const QString &docum
         while (i < n) {
             QByteArray extraMime = extraMimes[i].toUtf8();
             // TODO check if its the same target mime then continue
-            KoFilterChain::Ptr newChain(0);
+            KoFilterChain::Ptr newChain(nullptr);
             newChain = m_graph.chain(this, extraMime);
             if (!chain || (newChain && newChain->weight() < chain->weight()))
                 chain = newChain;
@@ -201,7 +204,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString &url, Q
             warnFilter << "Can't open" << t.name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
-            KoFilterChooser chooser(0, KoFilterManager::mimeFilter(), QString(), u);
+            KoFilterChooser chooser(nullptr, KoFilterManager::mimeFilter(), QString(), u);
             if (chooser.exec())
                 m_graph.setSourceMimeType(chooser.filterSelected().toLatin1());
             else
@@ -214,7 +217,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString &url, Q
     if (!m_graph.isValid()) {
         errorFilter << "Couldn't create a valid graph for this source mimetype.";
         if (!d->batch && !userCancelled)
-            KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+            KMessageBox::error(nullptr, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -224,7 +227,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString &url, Q
     if (!chain) {
         errorFilter << "Couldn't create a valid filter chain to " << mimeType << " !" << Qt::endl;
         if (!d->batch)
-            KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+            KMessageBox::error(nullptr, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -530,7 +533,7 @@ void KoFilterManager::importErrorHelper(const QString &mimeType, const bool supp
     QString tmp = i18n("Could not import file of type\n%1", mimeType);
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
     if (!suppressDialog)
-        KMessageBox::error(0, tmp, i18n("Missing Import Filter"));
+        KMessageBox::error(nullptr, tmp, i18n("Missing Import Filter"));
 }
 
 void KoFilterManager::setBatchMode(const bool batch)
@@ -552,7 +555,7 @@ KoProgressUpdater *KoFilterManager::progressUpdater() const
 {
     if (d->progressUpdater.isNull()) {
         // somebody, probably its parent, deleted our progress updater for us
-        return 0;
+        return nullptr;
     }
     return d->progressUpdater.data();
 }

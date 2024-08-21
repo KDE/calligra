@@ -84,7 +84,7 @@ void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KPrPart::showErrorAndDie()
 {
-    KMessageBox::error(0, m_errorMessage, i18n("Installation Error"));
+    KMessageBox::error(nullptr, m_errorMessage, i18n("Installation Error"));
     // This means "the environment is incorrect" on Windows
     // FIXME: Is this uniform on all platforms?
     QCoreApplication::exit(10);

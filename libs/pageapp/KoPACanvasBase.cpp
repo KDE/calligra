@@ -21,11 +21,11 @@ class Q_DECL_HIDDEN KoPACanvasBase::Private
 {
 public:
     Private(KoPADocument *doc)
-        : view(0)
+        : view(nullptr)
         , doc(doc)
-        , shapeManager(0)
-        , masterShapeManager(0)
-        , toolProxy(0)
+        , shapeManager(nullptr)
+        , masterShapeManager(nullptr)
+        , toolProxy(nullptr)
         , showPageMargins(false)
     {
     }

@@ -17,7 +17,7 @@
 
 struct Q_DECL_HIDDEN KoTextOdfSaveHelper::Private {
     Private(const QTextDocument *document, int from, int to)
-        : context(0)
+        : context(nullptr)
         , document(document)
         , from(from)
         , to(to)
@@ -58,7 +58,7 @@ bool KoTextOdfSaveHelper::writeBody()
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-    KoTextWriter writer(*d->context, 0);
+    KoTextWriter writer(*d->context, nullptr);
     writer.write(d->document, d->from, d->to);
 
     bodyWriter.endElement(); // office:element

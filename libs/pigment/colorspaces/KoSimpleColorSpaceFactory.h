@@ -83,7 +83,7 @@ public:
 protected:
     KoColorProfile *createColorProfile(const QByteArray & /*rawData*/) const override
     {
-        return 0;
+        return nullptr;
     }
 
 private:

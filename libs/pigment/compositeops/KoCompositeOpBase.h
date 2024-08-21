@@ -49,7 +49,7 @@ public:
         const QBitArray &flags = params.channelFlags.isEmpty() ? QBitArray(channels_nb, true) : params.channelFlags;
         bool allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb, true);
         bool alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
-        bool useMask = params.maskRowStart != 0;
+        bool useMask = params.maskRowStart != nullptr;
 
         if (useMask) {
             if (alphaLocked) {

@@ -25,7 +25,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
 
     if (childShape->parent()) {
         childShape->parent()->addShape(this);
-        childShape->setParent(0);
+        childShape->setParent(nullptr);
     }
 
     childShape->setPosition(QPointF(0.0, 0.0)); // since its relative to my position, this won't move it

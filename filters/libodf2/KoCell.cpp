@@ -13,7 +13,7 @@
 
 KoCell::KoCell()
     : m_value(new KoDummyCellValue)
-    , m_style(0)
+    , m_style(nullptr)
     , m_rowSpan(1)
     , m_columnSpan(1)
     , m_protected(false)

@@ -45,10 +45,10 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
-    d->transfoToRGBA16 = 0;
-    d->transfoFromRGBA16 = 0;
-    d->transfoToLABA16 = 0;
-    d->transfoFromLABA16 = 0;
+    d->transfoToRGBA16 = nullptr;
+    d->transfoFromRGBA16 = nullptr;
+    d->transfoToLABA16 = nullptr;
+    d->transfoFromLABA16 = nullptr;
     d->gamutXYY = QPolygonF();
     d->TRCXYY = QPolygonF();
     d->colorants = QVector<qreal>(0);
@@ -535,7 +535,7 @@ void KoColorSpace::bitBlt(const KoColorSpace *srcSpace,
 
 QVector<quint8> *KoColorSpace::threadLocalConversionCache(quint32 size) const
 {
-    QVector<quint8> *ba = 0;
+    QVector<quint8> *ba = nullptr;
     if (!d->conversionCache.hasLocalData()) {
         ba = new QVector<quint8>(size, '0');
         d->conversionCache.setLocalData(ba);
@@ -551,7 +551,7 @@ KoColorTransformation *KoColorSpace::createColorTransformation(const QString &id
 {
     KoColorTransformationFactory *factory = KoColorTransformationFactoryRegistry::instance()->get(id);
     if (!factory)
-        return 0;
+        return nullptr;
     QPair<KoID, KoID> model(colorModelId(), colorDepthId());
     QList<QPair<KoID, KoID>> models = factory->supportedModels();
     if (models.isEmpty() || models.contains(model)) {
@@ -559,8 +559,8 @@ KoColorTransformation *KoColorSpace::createColorTransformation(const QString &id
     } else {
         // Find the best solution
         // TODO use the color conversion cache
-        KoColorConversionTransformation *csToFallBack = 0;
-        KoColorConversionTransformation *fallBackToCs = 0;
+        KoColorConversionTransformation *csToFallBack = nullptr;
+        KoColorConversionTransformation *fallBackToCs = nullptr;
         KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverters(this, models, csToFallBack, fallBackToCs);
         Q_ASSERT(csToFallBack);
         Q_ASSERT(fallBackToCs);

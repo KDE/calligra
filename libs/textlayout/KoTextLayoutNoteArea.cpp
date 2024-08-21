@@ -44,7 +44,7 @@ KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea 
 
     d->note = note;
     d->isContinuedArea = false;
-    d->postLayout = 0;
+    d->postLayout = nullptr;
 }
 
 KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
@@ -69,7 +69,7 @@ void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 {
-    KoOdfNotesConfiguration *notesConfig = 0;
+    KoOdfNotesConfiguration *notesConfig = nullptr;
     if (d->note->type() == KoInlineNote::Footnote) {
         notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->note->type() == KoInlineNote::Endnote) {
@@ -111,7 +111,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->textLayout->endLayout();
 
     KoParagraphStyle pStyle(block.blockFormat(), QTextCharFormat());
-    d->labelIndent = textIndent(d->note->textFrame()->begin().currentBlock(), 0, pStyle);
+    d->labelIndent = textIndent(d->note->textFrame()->begin().currentBlock(), nullptr, pStyle);
     if (line.naturalTextWidth() > -d->labelIndent) {
         KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
     } else {

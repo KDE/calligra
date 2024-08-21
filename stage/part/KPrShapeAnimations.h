@@ -241,7 +241,7 @@ public:
      */
     void setDuration(const QModelIndex &index, const int duration);
 
-    KPrShapeAnimation *animationByRow(int row, int *pGroup = 0, KPrShapeAnimation::NodeType *pNodeType = 0) const;
+    KPrShapeAnimation *animationByRow(int row, int *pGroup = nullptr, KPrShapeAnimation::NodeType *pNodeType = nullptr) const;
 
     /**
      * @brief add new animation after index

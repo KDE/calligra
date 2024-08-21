@@ -20,7 +20,7 @@ class KoVariablePrivate : public KoInlineObjectPrivate
 public:
     KoVariablePrivate()
         : modified(true)
-        , document(0)
+        , document(nullptr)
         , lastPositionInDocument(-1)
     {
     }

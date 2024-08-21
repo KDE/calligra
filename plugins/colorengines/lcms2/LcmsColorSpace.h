@@ -67,12 +67,12 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             : KoColorTransformation()
             , m_colorSpace(colorSpace)
         {
-            csProfile = 0;
-            cmstransform = 0;
-            cmsAlphaTransform = 0;
-            profiles[0] = 0;
-            profiles[1] = 0;
-            profiles[2] = 0;
+            csProfile = nullptr;
+            cmstransform = nullptr;
+            cmsAlphaTransform = nullptr;
+            profiles[0] = nullptr;
+            profiles[1] = nullptr;
+            profiles[2] = nullptr;
         }
 
         ~KoLcmsColorTransformation() override
@@ -157,11 +157,11 @@ protected:
         d->profile = asLcmsProfile(p);
         Q_ASSERT(d->profile);
         d->colorProfile = p;
-        d->qcolordata = 0;
-        d->lastRGBProfile = 0;
-        d->lastToRGB = 0;
-        d->lastFromRGB = 0;
-        d->defaultTransformations = 0;
+        d->qcolordata = nullptr;
+        d->lastRGBProfile = nullptr;
+        d->lastToRGB = nullptr;
+        d->lastFromRGB = nullptr;
+        d->defaultTransformations = nullptr;
     }
 
     ~LcmsColorSpace() override
@@ -180,7 +180,7 @@ protected:
 
         Q_ASSERT(d->profile);
 
-        if (KoLcmsDefaultTransformations::s_RGBProfile == 0) {
+        if (KoLcmsDefaultTransformations::s_RGBProfile == nullptr) {
             KoLcmsDefaultTransformations::s_RGBProfile = cmsCreate_sRGBProfile();
         }
         d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[this->id()][d->profile];
@@ -221,20 +221,20 @@ public:
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const override
+    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = nullptr) const override
     {
         d->qcolordata[2] = color.red();
         d->qcolordata[1] = color.green();
         d->qcolordata[0] = color.blue();
 
         LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
-        if (profile == 0) {
+        if (profile == nullptr) {
             // Default sRGB
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
 
             cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata, dst, 1);
         } else {
-            if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
+            if (d->lastFromRGB == nullptr || (d->lastFromRGB != nullptr && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastFromRGB = cmsCreateTransform(profile->lcmsProfile(),
                                                     TYPE_BGR_8,
                                                     d->profile->lcmsProfile(),
@@ -249,15 +249,15 @@ public:
         this->setOpacity(dst, (quint8)(color.alpha()), 1);
     }
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const override
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = nullptr) const override
     {
         LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
-        if (profile == 0) {
+        if (profile == nullptr) {
             // Default sRGB transform
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
             cmsDoTransform(d->defaultTransformations->toRGB, const_cast<quint8 *>(src), d->qcolordata, 1);
         } else {
-            if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
+            if (d->lastToRGB == nullptr || (d->lastToRGB != nullptr && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(),
                                                   this->colorSpaceType(),
                                                   profile->lcmsProfile(),
@@ -275,13 +275,13 @@ public:
     KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const override
     {
         if (!d->profile) {
-            return 0;
+            return nullptr;
         }
 
         cmsToneCurve *transferFunctions[3];
-        transferFunctions[0] = cmsBuildTabulatedToneCurve16(0, 256, transferValues);
-        transferFunctions[1] = cmsBuildGamma(0, 1.0);
-        transferFunctions[2] = cmsBuildGamma(0, 1.0);
+        transferFunctions[0] = cmsBuildTabulatedToneCurve16(nullptr, 256, transferValues);
+        transferFunctions[1] = cmsBuildGamma(nullptr, 1.0);
+        transferFunctions[2] = cmsBuildGamma(nullptr, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[1] = cmsCreateLinearizationDeviceLink(cmsSigLabData, transferFunctions);
@@ -302,34 +302,35 @@ public:
     KoColorTransformation *createPerChannelAdjustment(const quint16 *const *transferValues) const override
     {
         if (!d->profile) {
-            return 0;
+            return nullptr;
         }
 
         cmsToneCurve **transferFunctions = new cmsToneCurve *[this->colorChannelCount()];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
-            transferFunctions[ch] = transferValues[ch] ? cmsBuildTabulatedToneCurve16(0, 256, transferValues[ch]) : cmsBuildGamma(0, 1.0);
+            transferFunctions[ch] = transferValues[ch] ? cmsBuildTabulatedToneCurve16(nullptr, 256, transferValues[ch]) : cmsBuildGamma(nullptr, 1.0);
         }
 
         cmsToneCurve **alphaTransferFunctions = new cmsToneCurve *[1];
-        alphaTransferFunctions[0] =
-            transferValues[this->colorChannelCount()] ? cmsBuildTabulatedToneCurve16(0, 256, transferValues[this->colorChannelCount()]) : cmsBuildGamma(0, 1.0);
+        alphaTransferFunctions[0] = transferValues[this->colorChannelCount()]
+            ? cmsBuildTabulatedToneCurve16(nullptr, 256, transferValues[this->colorChannelCount()])
+            : cmsBuildGamma(nullptr, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
         adj->profiles[1] = cmsCreateLinearizationDeviceLink(cmsSigGrayData, alphaTransferFunctions);
-        adj->profiles[2] = 0;
+        adj->profiles[2] = nullptr;
         adj->csProfile = d->profile->lcmsProfile();
         adj->cmstransform = cmsCreateTransform(adj->profiles[0],
                                                this->colorSpaceType(),
-                                               0,
+                                               nullptr,
                                                this->colorSpaceType(),
                                                KoColorConversionTransformation::adjustmentRenderingIntent(),
                                                KoColorConversionTransformation::adjustmentConversionFlags());
 
         adj->cmsAlphaTransform = cmsCreateTransform(adj->profiles[1],
                                                     TYPE_GRAY_DBL,
-                                                    0,
+                                                    nullptr,
                                                     TYPE_GRAY_DBL,
                                                     KoColorConversionTransformation::adjustmentRenderingIntent(),
                                                     KoColorConversionTransformation::adjustmentConversionFlags());
@@ -410,13 +411,13 @@ private:
     inline static LcmsColorProfileContainer *asLcmsProfile(const KoColorProfile *p)
     {
         if (!p) {
-            return 0;
+            return nullptr;
         }
 
         const IccColorProfile *iccp = dynamic_cast<const IccColorProfile *>(p);
 
         if (!iccp) {
-            return 0;
+            return nullptr;
         }
 
         Q_ASSERT(iccp->asLcms());

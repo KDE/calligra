@@ -22,11 +22,11 @@
 struct Q_DECL_HIDDEN KoOdfWriteStore::Private {
     Private(KoStore *store)
         : store(store)
-        , storeDevice(0)
-        , contentWriter(0)
-        , bodyWriter(0)
-        , manifestWriter(0)
-        , contentTmpFile(0)
+        , storeDevice(nullptr)
+        , contentWriter(nullptr)
+        , bodyWriter(nullptr)
+        , manifestWriter(nullptr)
+        , contentTmpFile(nullptr)
     {
     }
 
@@ -122,7 +122,7 @@ KoXmlWriter *KoOdfWriteStore::contentWriter()
 {
     if (!d->contentWriter) {
         if (!d->store->open("content.xml")) {
-            return 0;
+            return nullptr;
         }
         d->storeDevice = new KoStoreDevice(d->store);
         d->contentWriter = createOasisXmlWriter(d->storeDevice, "office:document-content");
@@ -138,8 +138,8 @@ KoXmlWriter *KoOdfWriteStore::bodyWriter()
         if (!d->contentTmpFile->open()) {
             warnOdf << "Failed to open the temporary content file";
             delete d->contentTmpFile;
-            d->contentTmpFile = 0;
-            return 0;
+            d->contentTmpFile = nullptr;
+            return nullptr;
         }
         d->bodyWriter = new KoXmlWriter(d->contentTmpFile, 1);
     }
@@ -152,7 +152,7 @@ bool KoOdfWriteStore::closeContentWriter()
     Q_ASSERT(d->contentTmpFile);
 
     delete d->bodyWriter;
-    d->bodyWriter = 0;
+    d->bodyWriter = nullptr;
 
     // copy over the contents from the tempfile to the real one
     d->contentTmpFile->close(); // does not really close but seeks to the beginning of the file
@@ -161,17 +161,17 @@ bool KoOdfWriteStore::closeContentWriter()
     }
     d->contentTmpFile->close(); // seek again to the beginning
     delete d->contentTmpFile;
-    d->contentTmpFile = 0; // and finally close and remove the QTemporaryFile
+    d->contentTmpFile = nullptr; // and finally close and remove the QTemporaryFile
 
     if (d->contentWriter) {
         d->contentWriter->endElement(); // document-content
         d->contentWriter->endDocument();
         delete d->contentWriter;
-        d->contentWriter = 0;
+        d->contentWriter = nullptr;
     }
 
     delete d->storeDevice;
-    d->storeDevice = 0;
+    d->storeDevice = nullptr;
     if (!d->store->close()) { // done with content.xml
         return false;
     }
@@ -217,6 +217,6 @@ bool KoOdfWriteStore::closeManifestWriter(bool writeMainfest)
         delete buffer;
     }
     delete d->manifestWriter;
-    d->manifestWriter = 0;
+    d->manifestWriter = nullptr;
     return ok;
 }

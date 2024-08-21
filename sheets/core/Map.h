@@ -51,7 +51,7 @@ public:
     /**
      * Created an empty map.
      */
-    explicit Map(DocBase *doc = 0, int syntaxVersion = 1);
+    explicit Map(DocBase *doc = nullptr, int syntaxVersion = 1);
 
     /**
      * This deletes all sheets contained in this map.

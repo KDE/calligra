@@ -595,7 +595,7 @@ void XFigOdgWriter::writeFill(KoGenStyle &odfStyle, const XFigFillable *fillable
             } else {
                 // TODO: tint blackness/whiteness of color
                 const QColor *const color = m_Document->color(fillColorId);
-                if (color != 0) {
+                if (color != nullptr) {
                     colorString = color->name();
                 }
             }
@@ -609,7 +609,7 @@ void XFigOdgWriter::writeFill(KoGenStyle &odfStyle, const XFigFillable *fillable
             // * use pixmaps (needs pixmaps created with given colors)
             // Decision for now: just do the hatch
             const QColor *const color = m_Document->color(penColorId);
-            if (color != 0) {
+            if (color != nullptr) {
                 colorString = color->name();
             }
 
@@ -624,9 +624,9 @@ void XFigOdgWriter::writeDotDash(KoGenStyle &odfStyle, int lineType, double dist
     odfStyle.addAttribute(QLatin1String("draw:style"), "rect");
     odfStyle.addAttribute(QLatin1String("draw:distance"), m_CLocale.toString(odfDistance) + QLatin1String("pt"));
 
-    const char *displayName = 0;
+    const char *displayName = nullptr;
     bool isFirstDot = false;
-    const char *secondDotsNumber = 0;
+    const char *secondDotsNumber = nullptr;
 
     switch (lineType) {
     case XFigLineDashed:
@@ -653,7 +653,7 @@ void XFigOdgWriter::writeDotDash(KoGenStyle &odfStyle, int lineType, double dist
     odfStyle.addAttribute(QLatin1String("draw:display-name"), displayName);
     odfStyle.addAttribute(QLatin1String("draw:dots1"), "1");
     odfStyle.addAttribute(QLatin1String("draw:dots1-length"), isFirstDot ? QString::fromLatin1("100%") : m_CLocale.toString(odfDistance) + QLatin1String("pt"));
-    if (secondDotsNumber != 0) {
+    if (secondDotsNumber != nullptr) {
         odfStyle.addAttribute(QLatin1String("draw:dots2"), QLatin1String(secondDotsNumber));
         odfStyle.addAttribute(QLatin1String("draw:dots2-length"), "100%");
     }
@@ -664,7 +664,7 @@ void XFigOdgWriter::writeStroke(KoGenStyle &odfStyle, const XFigLineable *lineab
     const qint32 colorId = lineable->lineColorId();
     if (colorId >= 0) {
         const QColor *color = m_Document->color(colorId);
-        if (color != 0) {
+        if (color != nullptr) {
             odfStyle.addProperty(QLatin1String("svg:stroke-color"), color->name());
         }
     }
@@ -819,7 +819,7 @@ static const int arrowDataMap[XFigArrowHeadTypeCount] = {
 
 void XFigOdgWriter::writeArrow(KoGenStyle &odfStyle, const XFigArrowHead *arrow, LineEndType lineEndType)
 {
-    if (arrow == 0) {
+    if (arrow == nullptr) {
         return;
     }
 
@@ -842,10 +842,10 @@ void XFigOdgWriter::writeHatch(KoGenStyle &odfStyle, int patternType, const QStr
 {
     KoGenStyle hatchStyle(KoGenStyle::HatchStyle);
 
-    const char *displayName = 0;
-    const char *style = 0;
-    const char *distance = 0;
-    const char *rotation = 0;
+    const char *displayName = nullptr;
+    const char *style = nullptr;
+    const char *distance = nullptr;
+    const char *rotation = nullptr;
 
     // Shingles, bricks, tire treads cannot be done, are mapped to horizontal/vertical lines
     // Fish, circles, hexagons, octagons cannot be done, are mapped to cross hatchess

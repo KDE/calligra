@@ -46,10 +46,10 @@ KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
     , m_combineAngle(15.0)
     , m_fittingError(5.0)
     , m_close(false)
-    , m_shape(0)
-    , m_existingStartPoint(0)
-    , m_existingEndPoint(0)
-    , m_hoveredPoint(0)
+    , m_shape(nullptr)
+    , m_existingStartPoint(nullptr)
+    , m_existingEndPoint(nullptr)
+    , m_hoveredPoint(nullptr)
 {
 }
 
@@ -144,14 +144,14 @@ void KoPencilTool::mouseReleaseEvent(KoPointerEvent *event)
     addPoint(point);
     finish(event->modifiers() & Qt::ShiftModifier);
 
-    m_existingStartPoint = 0;
-    m_existingEndPoint = 0;
-    m_hoveredPoint = 0;
+    m_existingStartPoint = nullptr;
+    m_existingEndPoint = nullptr;
+    m_hoveredPoint = nullptr;
 
     // the original path may be different from the one added
     canvas()->updateCanvas(m_shape->boundingRect());
     delete m_shape;
-    m_shape = 0;
+    m_shape = nullptr;
     m_points.clear();
 }
 
@@ -175,10 +175,10 @@ void KoPencilTool::deactivate()
 {
     m_points.clear();
     delete m_shape;
-    m_shape = 0;
-    m_existingStartPoint = 0;
-    m_existingEndPoint = 0;
-    m_hoveredPoint = 0;
+    m_shape = nullptr;
+    m_existingStartPoint = nullptr;
+    m_existingEndPoint = nullptr;
+    m_hoveredPoint = nullptr;
 }
 
 void KoPencilTool::addPoint(const QPointF &point)
@@ -213,7 +213,7 @@ void KoPencilTool::finish(bool closePath)
     if (m_points.count() < 2)
         return;
 
-    KoPathShape *path = 0;
+    KoPathShape *path = nullptr;
     QVector<QPointF> complete;
     QVector<QPointF> *points = &m_points;
 
@@ -337,7 +337,7 @@ QList<QPointer<QWidget>> KoPencilTool::createOptionWidgets()
     optionWidget->setWindowTitle(i18n("Pencil"));
     widgets.append(optionWidget);
 
-    m_strokeWidget = new KoStrokeConfigWidget(0);
+    m_strokeWidget = new KoStrokeConfigWidget(nullptr);
     m_strokeWidget->setWindowTitle(i18n("Line"));
     m_strokeWidget->setCanvas(canvas());
     widgets.append(m_strokeWidget);
@@ -346,8 +346,8 @@ QList<QPointer<QWidget>> KoPencilTool::createOptionWidgets()
 
 void KoPencilTool::addPathShape(KoPathShape *path, bool closePath)
 {
-    KoShape *startShape = 0;
-    KoShape *endShape = 0;
+    KoShape *startShape = nullptr;
+    KoShape *endShape = nullptr;
 
     if (closePath) {
         path->close();
@@ -403,7 +403,7 @@ void KoPencilTool::setDelta(double delta)
 
 KoShapeStroke *KoPencilTool::createStroke()
 {
-    KoShapeStroke *stroke = 0;
+    KoShapeStroke *stroke = nullptr;
     if (m_strokeWidget) {
         stroke = m_strokeWidget->createShapeStroke();
     }
@@ -415,7 +415,7 @@ KoPathPoint *KoPencilTool::endPointAtPosition(const QPointF &position)
     QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
 
-    KoPathPoint *nearestPoint = 0;
+    KoPathPoint *nearestPoint = nullptr;
     qreal minDistance = HUGE_VAL;
     qreal maxDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity());
 
@@ -427,7 +427,7 @@ KoPathPoint *KoPencilTool::endPointAtPosition(const QPointF &position)
         if (paramShape && paramShape->isParametricShape())
             continue;
 
-        KoPathPoint *p = 0;
+        KoPathPoint *p = nullptr;
         uint subpathCount = path->subpathCount();
         for (uint i = 0; i < subpathCount; ++i) {
             if (path->isClosedSubpath(i))
@@ -459,7 +459,7 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
         return false;
     // do not allow connecting to the same point twice
     if (pointAtStart == pointAtEnd)
-        pointAtEnd = 0;
+        pointAtEnd = nullptr;
 
     // we have hit an existing path point on start/finish
     // what we now do is:
@@ -472,8 +472,8 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
     KoPathPoint *newStartPoint = pathShape->pointByIndex(newStartPointIndex);
     KoPathPoint *newEndPoint = pathShape->pointByIndex(newEndPointIndex);
 
-    KoPathShape *startShape = pointAtStart ? pointAtStart->parent() : 0;
-    KoPathShape *endShape = pointAtEnd ? pointAtEnd->parent() : 0;
+    KoPathShape *startShape = pointAtStart ? pointAtStart->parent() : nullptr;
+    KoPathShape *endShape = pointAtEnd ? pointAtEnd->parent() : nullptr;
 
     // combine with the path we hit on start
     KoPathPointIndex startIndex(-1, -1);

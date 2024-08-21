@@ -18,10 +18,10 @@ using namespace MusicCore;
 
 StaffElementPreviewWidget::StaffElementPreviewWidget(QWidget *parent)
     : QWidget(parent)
-    , m_style(0)
-    , m_renderer(0)
+    , m_style(nullptr)
+    , m_renderer(nullptr)
 {
-    m_staff = new Staff(0);
+    m_staff = new Staff(nullptr);
     m_clef = new Clef(m_staff, 0, Clef::Trebble, 2, 0);
 }
 

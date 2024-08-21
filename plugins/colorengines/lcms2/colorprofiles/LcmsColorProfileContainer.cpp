@@ -64,14 +64,14 @@ public:
 LcmsColorProfileContainer::LcmsColorProfileContainer()
     : d(new Private())
 {
-    d->profile = 0;
+    d->profile = nullptr;
 }
 
 LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data *data)
     : d(new Private())
 {
     d->data = data;
-    d->profile = 0;
+    d->profile = nullptr;
     init();
 }
 
@@ -79,7 +79,7 @@ QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE p
 {
     cmsUInt32Number bytesNeeded = 0;
     // Make a raw data image ready for saving
-    cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
+    cmsSaveProfileToMem(profile, nullptr, &bytesNeeded); // calc size
     QByteArray rawData;
     rawData.resize(bytesNeeded);
     if (rawData.size() >= (int)bytesNeeded) {

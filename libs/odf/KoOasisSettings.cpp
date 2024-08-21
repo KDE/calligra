@@ -15,7 +15,7 @@ class Q_DECL_HIDDEN KoOasisSettings::Private
 KoOasisSettings::KoOasisSettings(const KoXmlDocument &doc)
     : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), KoXmlNS::office, "settings"))
     , m_configNsUri(KoXmlNS::config)
-    , d(0)
+    , d(nullptr)
 {
     const KoXmlElement contents = doc.documentElement();
     if (m_settingsElement.isNull())
@@ -25,7 +25,7 @@ KoOasisSettings::KoOasisSettings(const KoXmlDocument &doc)
 KoOasisSettings::KoOasisSettings(const KoXmlDocument &doc, const char *officeNSURI, const char *configNSURI)
     : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), officeNSURI, "settings"))
     , m_configNsUri(configNSURI)
-    , d(0)
+    , d(nullptr)
 {
     const KoXmlElement contents = doc.documentElement();
     if (m_settingsElement.isNull())

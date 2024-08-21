@@ -27,7 +27,7 @@ public:
     Private(CheckoutCreator *qq)
         : q(qq)
         , needsPrivateKeyPassphrase(false)
-        , signature(0)
+        , signature(nullptr)
         , progress(0)
     {
     }
@@ -77,7 +77,7 @@ public:
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
             QString newName =
-                QInputDialog::getText(0,
+                QInputDialog::getText(nullptr,
                                       i18n("Enter Name"),
                                       i18n("There is no name set for Git on this system (this is used when committing). Please enter one below and press OK."),
                                       QLineEdit::Normal,
@@ -94,7 +94,7 @@ public:
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
             QString newEmail = QInputDialog::getText(
-                0,
+                nullptr,
                 i18n("Enter Email"),
                 i18n("There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK."),
                 QLineEdit::Normal,
@@ -171,7 +171,7 @@ QString CheckoutCreator::getFile(QString caption, QString filter, QString extraS
     QUrl searchDir;
     if (QDir::home().exists(extraSubDir))
         searchDir = QUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
-    QString url = QFileDialog::getOpenFileName(0, caption, searchDir.toLocalFile(), filter);
+    QString url = QFileDialog::getOpenFileName(nullptr, caption, searchDir.toLocalFile(), filter);
     return url;
 }
 
@@ -192,7 +192,7 @@ bool CheckoutCreator::isGitDir(QString directory) const
 QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject *credentials) const
 {
     if (!d->checkUserDetails()) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            "I'm sorry, we cannot perform git actions without a name and email set, and the git setup on this machine lacks this information. "
                            "As a result, we are aborting this clone. Please try again, and enter your name and email next time.");
         git_libgit2_shutdown();
@@ -202,7 +202,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     if (userVisibleName.isEmpty()) {
         // this should normally not be hit, as the form which calls this checks for this
         // anyway, but let's just be sure
-        KMessageBox::error(0, "You forgot to name your account. Please do that and try again.");
+        KMessageBox::error(nullptr, "You forgot to name your account. Please do that and try again.");
         git_libgit2_shutdown();
         return QString();
     }
@@ -219,7 +219,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
         credentialsOk = false;
     }
     if (!credentialsOk) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            "Something is wrong with your security credentials. Please check them and try again. This is likely due to one or another keyfile "
                            "not existing, or there being no username entered.");
         git_libgit2_shutdown();
@@ -245,7 +245,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     clone_opts.fetch_opts.callbacks.credentials = &Private::acquireCredentialsCallback;
     clone_opts.fetch_opts.callbacks.payload = (void *)this->d;
 
-    git_repository *repo = NULL;
+    git_repository *repo = nullptr;
     int error = git_clone(&repo, url.toLatin1(), checkoutLocation.toLatin1(), &clone_opts);
     if (error != 0) {
         const git_error *err = giterr_last();

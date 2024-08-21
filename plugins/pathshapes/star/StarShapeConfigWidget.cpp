@@ -62,7 +62,7 @@ void StarShapeConfigWidget::save()
 KUndo2Command *StarShapeConfigWidget::createCommand()
 {
     if (!m_star)
-        return 0;
+        return nullptr;
     else
         return new StarShapeConfigCommand(m_star,
                                           widget.corners->value(),

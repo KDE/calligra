@@ -17,7 +17,7 @@ class Q_DECL_HIDDEN KoShapeDistributeCommand::Private
 {
 public:
     Private()
-        : command(0)
+        : command(nullptr)
     {
     }
     ~Private()

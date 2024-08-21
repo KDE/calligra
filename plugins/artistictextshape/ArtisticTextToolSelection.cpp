@@ -18,7 +18,7 @@
 ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent)
     : KoToolSelection(parent)
     , m_canvas(canvas)
-    , m_currentShape(0)
+    , m_currentShape(nullptr)
     , m_selectionStart(-1)
     , m_selectionCount(0)
 {
@@ -162,7 +162,7 @@ QPainterPath ArtisticTextToolSelection::outline()
     }
 
     // transform to document coordinates
-    return m_currentShape->absoluteTransformation(0).map(outline);
+    return m_currentShape->absoluteTransformation(nullptr).map(outline);
 }
 
 void ArtisticTextToolSelection::repaintDecoration()

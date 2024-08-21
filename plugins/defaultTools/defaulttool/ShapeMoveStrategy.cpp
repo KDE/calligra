@@ -129,7 +129,7 @@ void ShapeMoveStrategy::moveSelection()
 KUndo2Command *ShapeMoveStrategy::createCommand()
 {
     if (m_diff.x() == 0 && m_diff.y() == 0) {
-        return 0;
+        return nullptr;
     }
     // get the shapes that has actually been moved
     QVector<QPointF> oldPositions;
@@ -150,7 +150,7 @@ KUndo2Command *ShapeMoveStrategy::createCommand()
         }
     }
     if (movedShapes.isEmpty()) {
-        return 0;
+        return nullptr;
     }
     tool()->canvas()->snapGuide()->reset();
     return new KoShapeMoveCommand(movedShapes, oldPositions, newPositions, oldOffsets, newOffsets);

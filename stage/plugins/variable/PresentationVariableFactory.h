@@ -20,7 +20,7 @@ public:
     PresentationVariableFactory();
 
     /// reimplemented
-    KoInlineObject *createInlineObject(const KoProperties *properties = 0) const override;
+    KoInlineObject *createInlineObject(const KoProperties *properties = nullptr) const override;
 };
 
 #endif

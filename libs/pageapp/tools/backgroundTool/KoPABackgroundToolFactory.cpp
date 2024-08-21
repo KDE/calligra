@@ -40,5 +40,5 @@ KoToolBase *KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
         }
         return new KoPABackgroundTool(canvas);
     }
-    return 0;
+    return nullptr;
 }

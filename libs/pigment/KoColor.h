@@ -70,7 +70,7 @@ public:
 
     /// Replace the existing color data, and colorspace with the specified data.
     /// The data is copied.
-    void setColor(const quint8 *data, const KoColorSpace *colorSpace = 0);
+    void setColor(const quint8 *data, const KoColorSpace *colorSpace = nullptr);
 
     /// Convert the color from src and replace the value of the current color with the converted data.
     /// Don't convert the color if src and this have the same colorspace.

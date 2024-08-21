@@ -72,7 +72,7 @@ public:
     Private()
         : type(Value::Empty)
         , format(Value::fmt_None)
-        , ps(0)
+        , ps(nullptr)
     {
     }
 
@@ -84,7 +84,7 @@ public:
         switch (type) {
         case Value::Empty:
         default:
-            ps = 0;
+            ps = nullptr;
             break;
         case Value::Boolean:
             b = o.b;
@@ -112,7 +112,7 @@ public:
     ~Private()
     {
         if (this == s_null)
-            s_null = 0;
+            s_null = nullptr;
         clear();
     }
 
@@ -184,7 +184,7 @@ void Value::Private::setFormatByType()
 }
 
 // to be shared between all empty value
-Value::Private *Value::Private::s_null = 0;
+Value::Private *Value::Private::s_null = nullptr;
 
 // static things
 namespace

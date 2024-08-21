@@ -10,9 +10,9 @@ class Q_DECL_HIDDEN KoShapeConnectionChangeCommand::Private
 {
 public:
     Private()
-        : connection(0)
-        , newConnectedShape(0)
-        , oldConnectedShape(0)
+        : connection(nullptr)
+        , newConnectedShape(nullptr)
+        , oldConnectedShape(nullptr)
         , newConnectionPointId(-1)
         , oldConnectionPointId(-1)
     {

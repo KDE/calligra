@@ -41,7 +41,7 @@ const State *StateCategory::state(const QString &_id) const
     if (d->states.contains(_id))
         return d->states[_id];
     qWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
-    return 0;
+    return nullptr;
 }
 
 int StateCategory::priority() const

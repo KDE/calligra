@@ -15,7 +15,7 @@ class KWPageStylePrivate : public QSharedData
 {
 public:
     KWPageStylePrivate()
-        : fullPageBackground(0)
+        : fullPageBackground(nullptr)
     {
         clear();
     }

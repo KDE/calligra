@@ -189,7 +189,7 @@ void DefaultToolWidget::sizeHasChanged()
             shape->update();
             QSizeF oldSize = shape->size();
             oldState << shape->transformation();
-            QTransform shapeMatrix = shape->absoluteTransformation(0);
+            QTransform shapeMatrix = shape->absoluteTransformation(nullptr);
 
             // calculate the matrix we would apply to the local shape matrix
             // that tells us the effective scale values we have to use for the resizing

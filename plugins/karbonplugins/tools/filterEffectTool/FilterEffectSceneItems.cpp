@@ -50,10 +50,10 @@ int ConnectorItem::connectorIndex() const
 KoFilterEffect *ConnectorItem::effect() const
 {
     if (!parentItem())
-        return 0;
+        return nullptr;
     EffectItemBase *effectItem = dynamic_cast<EffectItemBase *>(parentItem());
     if (!effectItem)
-        return 0;
+        return nullptr;
 
     return effectItem->effect();
 }
@@ -69,7 +69,7 @@ ConnectorItem *ConnectorMimeData::connector() const
 }
 
 EffectItemBase::EffectItemBase(KoFilterEffect *effect)
-    : QGraphicsRectItem(0)
+    : QGraphicsRectItem(nullptr)
     , m_effect(effect)
 {
     setZValue(1);
@@ -205,7 +205,7 @@ ConnectorItem *EffectItemBase::connectorAtPosition(const QPointF &scenePosition)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 DefaultInputItem::DefaultInputItem(const QString &name, KoFilterEffect *effect)
@@ -260,7 +260,7 @@ EffectItem::EffectItem(KoFilterEffect *effect)
 }
 
 ConnectionItem::ConnectionItem(EffectItemBase *source, EffectItemBase *target, int targetInput)
-    : QGraphicsPathItem(0)
+    : QGraphicsPathItem(nullptr)
     , m_source(source)
     , m_target(target)
     , m_targetInput(targetInput)

@@ -52,8 +52,8 @@ void koAsConst(const T &&) = delete;
 
 KoFormulaTool::KoFormulaTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_formulaShape(0)
-    , m_formulaEditor(0)
+    , m_formulaShape(nullptr)
+    , m_formulaEditor(nullptr)
 {
     setupActions();
     setTextMode(true);
@@ -79,13 +79,13 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *
             break;
     }
 
-    if (m_formulaShape == 0) // none found
+    if (m_formulaShape == nullptr) // none found
     {
         Q_EMIT done();
         return;
     }
     useCursor(Qt::IBeamCursor);
-    m_formulaEditor = 0;
+    m_formulaEditor = nullptr;
     for (int i = 0; i < m_cursorList.count(); i++) {
         FormulaEditor *editor = m_cursorList[i];
         FormulaData *formulaData = m_formulaShape->formulaData();
@@ -103,7 +103,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *
             delete editor;
         }
     }
-    if (m_formulaEditor == 0) {
+    if (m_formulaEditor == nullptr) {
         // TODO: there should be a extra constructor for this
         m_formulaEditor = new FormulaEditor(m_formulaShape->formulaData());
     }
@@ -126,7 +126,7 @@ void KoFormulaTool::deactivate()
         // activated without shape
         return;
     }
-    disconnect(m_formulaShape->formulaData(), 0, this, 0);
+    disconnect(m_formulaShape->formulaData(), nullptr, this, nullptr);
     if (canvas()) {
         m_cursorList.append(m_formulaEditor);
         debugFormula << "Appending cursor";
@@ -134,12 +134,12 @@ void KoFormulaTool::deactivate()
     if (m_cursorList.count() > 20) { // don't let it grow indefinitely
         delete m_cursorList.takeAt(0);
     }
-    m_formulaShape = 0;
+    m_formulaShape = nullptr;
 }
 
 void KoFormulaTool::updateCursor(FormulaCommand *command, bool undo)
 {
-    if (command != 0) {
+    if (command != nullptr) {
         debugFormula << "Going to change cursor";
         command->changeCursor(m_formulaEditor->cursor(), undo);
     } else {
@@ -174,7 +174,7 @@ void KoFormulaTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
     // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map(event->point);
+    QPointF p = m_formulaShape->absoluteTransformation(nullptr).inverted().map(event->point);
     if (event->modifiers() & Qt::ShiftModifier) {
         m_formulaEditor->cursor().setSelecting(true);
     } else {
@@ -193,7 +193,7 @@ void KoFormulaTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
     // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map(event->point);
+    QPointF p = m_formulaShape->absoluteTransformation(nullptr).inverted().map(event->point);
 
     // clear the current selection
     m_formulaEditor->cursor().setSelecting(false);
@@ -215,7 +215,7 @@ void KoFormulaTool::mouseMoveEvent(KoPointerEvent *event)
         debugFormula << "Getting most probably invalid mouseMoveEvent";
 
     // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map(event->point);
+    QPointF p = m_formulaShape->absoluteTransformation(nullptr).inverted().map(event->point);
     // TODO Implement drag and drop of elements
     m_formulaEditor->cursor().setSelecting(true);
     m_formulaEditor->cursor().setCursorTo(p);
@@ -232,7 +232,7 @@ void KoFormulaTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KoFormulaTool::keyPressEvent(QKeyEvent *event)
 {
-    FormulaCommand *command = 0;
+    FormulaCommand *command = nullptr;
     if (!m_formulaEditor)
         return;
 
@@ -281,7 +281,7 @@ void KoFormulaTool::keyPressEvent(QKeyEvent *event)
             command = m_formulaEditor->insertText(event->text());
         }
     }
-    if (command != 0) {
+    if (command != nullptr) {
         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
     repaintCursor();
@@ -306,7 +306,7 @@ void KoFormulaTool::insert(const QString &action)
     FormulaCommand *command;
     m_formulaShape->update();
     command = m_formulaEditor->insertMathML(action);
-    if (command != 0) {
+    if (command != nullptr) {
         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
@@ -318,7 +318,7 @@ void KoFormulaTool::changeTable(QAction *action)
     bool row = action->data().toList()[0].toBool();
     bool insert = action->data().toList()[1].toBool();
     command = m_formulaEditor->changeTable(insert, row);
-    if (command != 0) {
+    if (command != nullptr) {
         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
@@ -328,7 +328,7 @@ void KoFormulaTool::insertSymbol(const QString &symbol)
     FormulaCommand *command;
     m_formulaShape->update();
     command = m_formulaEditor->insertText(symbol);
-    if (command != 0) {
+    if (command != nullptr) {
         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
@@ -375,12 +375,12 @@ void KoFormulaTool::loadFormula()
         return;
 
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
+    KoOdfLoadingContext odfContext(stylesReader, nullptr);
     KoShapeLoadingContext shapeContext(odfContext, canvas()->shapeController()->resourceManager());
 
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
-    tmpDocument.setContent(&file, false, 0, 0, 0);
+    tmpDocument.setContent(&file, false, nullptr, nullptr, nullptr);
     FormulaElement *formulaElement = new FormulaElement(); // create a new root element
     formulaElement->readMathML(tmpDocument.documentElement()); // and load the new formula
     FormulaCommand *command = new FormulaCommandLoad(m_formulaShape->formulaData(), formulaElement);
@@ -502,7 +502,7 @@ bool KoFormulaTool::paste()
     if (data->hasFormat("text/plain")) {
         debugFormula << data->text();
         FormulaCommand *command = m_formulaEditor->insertText(data->text());
-        if (command != 0) {
+        if (command != nullptr) {
             canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
         }
         repaintCursor();

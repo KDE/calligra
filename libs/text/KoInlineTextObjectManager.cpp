@@ -32,7 +32,7 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharForma
 {
     int id = format.intProperty(InlineInstanceId);
     if (id <= 0)
-        return 0;
+        return nullptr;
     return m_objects.value(id, 0);
 }
 

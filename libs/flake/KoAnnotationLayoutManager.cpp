@@ -35,8 +35,8 @@ class Q_DECL_HIDDEN KoAnnotationLayoutManager::Private
 {
 public:
     Private()
-        : shapeManager(0)
-        , canvas(0)
+        : shapeManager(nullptr)
+        , canvas(nullptr)
     {
     }
 

@@ -75,7 +75,7 @@ public:
      *
      * \see recalc()
      */
-    void recalcMap(Updater *updater = 0);
+    void recalcMap(Updater *updater = nullptr);
 
     /**
      * Returns the recalculation state.
@@ -106,7 +106,7 @@ protected:
      *
      * \see recalcCell()
      */
-    void recalc(Updater *updater = 0);
+    void recalc(Updater *updater = nullptr);
 
 private:
     Q_DISABLE_COPY(RecalcManager)

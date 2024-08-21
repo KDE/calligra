@@ -375,7 +375,7 @@ void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement &body)
 
             // Handle the case where the table:base-cell-address does contain the referenced sheetname
             // while it's missing in the table:cell-range-address. See bug #194386 for an example.
-            SheetBase *fallbackSheet = 0;
+            SheetBase *fallbackSheet = nullptr;
             if (!base.isEmpty()) {
                 Region region = manager->map()->regionFromName(loadRegion(base));
                 fallbackSheet = region.lastSheet();

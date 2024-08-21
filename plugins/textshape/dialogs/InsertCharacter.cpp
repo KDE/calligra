@@ -20,7 +20,7 @@ InsertCharacter::InsertCharacter(QWidget *parent)
     lay->setContentsMargins(6, 6, 6, 6);
     m_charSelector =
         new KCharSelect(specialCharacterWidget,
-                        0,
+                        nullptr,
                         KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
     lay->addWidget(m_charSelector, 0, 0, 1, 3);
     QPushButton *insert = new QPushButton(i18n("Insert"), specialCharacterWidget);

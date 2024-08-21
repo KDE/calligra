@@ -61,13 +61,13 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_selection(canvas, this)
-    , m_currentShape(0)
-    , m_hoverText(0)
-    , m_hoverPath(0)
+    , m_currentShape(nullptr)
+    , m_hoverText(nullptr)
+    , m_hoverPath(nullptr)
     , m_hoverHandle(false)
     , m_textCursor(-1)
     , m_showCursor(true)
-    , m_currentStrategy(0)
+    , m_currentStrategy(nullptr)
 {
     m_detachPath = new QAction(koIcon("text-remove-from-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled(false);
@@ -158,7 +158,7 @@ QTransform ArtisticTextTool::cursorTransform() const
         transform.translate(0, metrics.descent());
     }
 
-    return transform * m_currentShape->absoluteTransformation(0);
+    return transform * m_currentShape->absoluteTransformation(nullptr);
 }
 
 void ArtisticTextTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -251,8 +251,8 @@ void ArtisticTextTool::mousePressEvent(KoPointerEvent *event)
 
 void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    m_hoverPath = 0;
-    m_hoverText = 0;
+    m_hoverPath = nullptr;
+    m_hoverText = nullptr;
 
     if (m_currentStrategy) {
         m_currentStrategy->handleMouseMove(event->point, event->modifiers());
@@ -326,7 +326,7 @@ void ArtisticTextTool::mouseReleaseEvent(KoPointerEvent *event)
         if (cmd)
             canvas()->addCommand(cmd);
         delete m_currentStrategy;
-        m_currentStrategy = 0;
+        m_currentStrategy = nullptr;
         event->accept();
         return;
     }
@@ -353,7 +353,7 @@ void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
             canvas()->addCommand(new AttachTextToPathCommand(m_currentShape, m_hoverPath));
             m_blinkingCursor.start(BlinkInterval);
             updateActions();
-            m_hoverPath = 0;
+            m_hoverPath = nullptr;
             m_linefeedPositions.clear();
             return;
         }
@@ -487,8 +487,8 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         return;
     }
     useCursor(Qt::ArrowCursor);
-    m_hoverText = 0;
-    m_hoverPath = 0;
+    m_hoverText = nullptr;
+    m_hoverPath = nullptr;
 
     updateActions();
     Q_EMIT statusTextChanged(i18n("Press return to finish editing."));
@@ -509,10 +509,10 @@ void ArtisticTextTool::deactivate()
         if (m_currentShape->plainText().isEmpty()) {
             canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));
         }
-        setCurrentShape(0);
+        setCurrentShape(nullptr);
     }
-    m_hoverPath = 0;
-    m_hoverText = 0;
+    m_hoverPath = nullptr;
+    m_hoverText = nullptr;
 
     KoShapeManager *manager = canvas()->shapeManager();
     disconnect(manager, &KoShapeManager::selectionChanged, this, &ArtisticTextTool::shapeSelectionChanged);

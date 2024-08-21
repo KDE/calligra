@@ -74,7 +74,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF &documentPos, Qt::
 
 KUndo2Command *AbstractSelectionStrategy::createCommand()
 {
-    return 0;
+    return nullptr;
 }
 
 void AbstractSelectionStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

@@ -8,7 +8,7 @@
 #include "KoTextShapeDataBase_p.h"
 
 KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
-    : document(0)
+    : document(nullptr)
     , textAlignment(Qt::AlignLeft | Qt::AlignTop)
     , resizeMethod(KoTextShapeDataBase::NoResize)
 {

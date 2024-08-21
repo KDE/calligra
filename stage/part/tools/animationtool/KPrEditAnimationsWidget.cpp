@@ -42,7 +42,7 @@
 
 KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent)
     : QWidget(parent)
-    , m_view(0)
+    , m_view(nullptr)
     , m_docker(docker)
 {
     QVBoxLayout *layout = new QVBoxLayout;

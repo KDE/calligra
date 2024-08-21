@@ -29,7 +29,7 @@
 
 KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation)
     : KPrAnimationValue(shapeAnimation)
-    , m_formulaParser(0)
+    , m_formulaParser(nullptr)
 {
 }
 
@@ -130,7 +130,7 @@ bool KPrSmilValues::loadFormula(const QString &values,
     if (!formula.isEmpty()) {
         m_formulaParser = new KPrFormulaParser(formula, m_shape, m_textBlockData, KPrFormulaParser::Formula);
         if (!m_formulaParser->valid()) {
-            m_formulaParser = 0;
+            m_formulaParser = nullptr;
             return false;
         }
     } else {

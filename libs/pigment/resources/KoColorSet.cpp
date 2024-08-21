@@ -65,7 +65,7 @@ KoColorSet::KoColorSet()
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet &rhs)
-    : QObject(0)
+    : QObject(nullptr)
     , KoResource("")
 {
     setFilename(rhs.filename());

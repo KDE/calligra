@@ -18,7 +18,7 @@
 void TestKoShapeFactory::testCreateFactory()
 {
     KoShapeFactoryBase *factory = new KoPathShapeFactory(QStringList());
-    QVERIFY(factory != 0);
+    QVERIFY(factory != nullptr);
     delete factory;
 }
 
@@ -37,7 +37,7 @@ void TestKoShapeFactory::testCreateDefaultShape()
 {
     KoShapeFactoryBase *factory = new KoPathShapeFactory(QStringList());
     KoShape *shape = factory->createDefaultShape();
-    QVERIFY(shape != 0);
+    QVERIFY(shape != nullptr);
     delete shape;
     delete factory;
 }
@@ -45,8 +45,8 @@ void TestKoShapeFactory::testCreateDefaultShape()
 void TestKoShapeFactory::testCreateShape()
 {
     KoShapeFactoryBase *factory = new KoPathShapeFactory(QStringList());
-    KoShape *shape = factory->createShape(0);
-    QVERIFY(shape != 0);
+    KoShape *shape = factory->createShape(nullptr);
+    QVERIFY(shape != nullptr);
     delete shape;
     delete factory;
 }
@@ -101,8 +101,8 @@ void TestKoShapeFactory::testOdfElement()
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoOdfLoadingContext odfContext(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(odfContext, nullptr);
 
     KoXmlElement textElement = bodyElement.firstChild().firstChild().toElement();
     QVERIFY(textElement.tagName() == "p");

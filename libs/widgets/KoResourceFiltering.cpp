@@ -23,7 +23,7 @@ public:
         , hasNewFilters(false)
         , name(true)
         , filename(true)
-        , resourceServer(0)
+        , resourceServer(nullptr)
     {
     }
     QRegularExpression isTag;

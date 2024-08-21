@@ -372,7 +372,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
      */
     KoUnit newUnit(unit);
     if (shape) {
-        newUnit.adjustByPixelTransform(shape->absoluteTransformation(0));
+        newUnit.adjustByPixelTransform(shape->absoluteTransformation(nullptr));
     }
 
     d->lineWidth->setUnit(newUnit);
@@ -489,7 +489,7 @@ void KoStrokeConfigWidget::selectionChanged()
         if (pathShape) {
             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart), pathShape->marker(KoMarkerData::MarkerEnd));
         } else {
-            updateControls(shape->stroke(), 0, 0);
+            updateControls(shape->stroke(), nullptr, nullptr);
         }
     }
 }

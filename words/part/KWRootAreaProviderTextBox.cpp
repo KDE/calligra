@@ -58,7 +58,7 @@ KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *documentLayout, const R
     KWPageManager *pageManager = frameSet()->wordsDocument()->pageManager();
     Q_ASSERT(pageManager);
     if (pageManager->pageCount() == 0) { // not ready yet (may happen e.g. on loading a document)
-        return 0;
+        return nullptr;
     }
 
     if (m_rootAreaCache.size() > requestedPosition) {
@@ -105,7 +105,7 @@ KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *documentLayout, const R
 
     *isNewArea = true;
 
-    return 0;
+    return nullptr;
 }
 
 // afterThis==nullptr means delete everything

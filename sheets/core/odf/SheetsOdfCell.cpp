@@ -799,7 +799,7 @@ void Odf::loadObjects(Cell *cell, const KoXmlElement &parent, OdfLoadingContext 
 Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
 {
     ShapeLoadingData data;
-    data.shape = 0;
+    data.shape = nullptr;
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
         debugSheetsODF << "Unable to load shape with localName=" << element.localName();

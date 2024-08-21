@@ -10,7 +10,7 @@
 
 #include "KoMD5Generator.h"
 
-KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
+KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = nullptr;
 Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
 
 KoHashGeneratorProvider::KoHashGeneratorProvider()

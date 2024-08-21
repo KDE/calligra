@@ -40,8 +40,8 @@ private Q_SLOTS:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override
     {
-        m_canvas = 0;
-        m_view = 0;
+        m_canvas = nullptr;
+        m_view = nullptr;
     }
 
 private:

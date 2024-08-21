@@ -32,7 +32,7 @@ public:
 };
 
 KoOdfParagraphProperties::Private::Private()
-    : dropCap(0)
+    : dropCap(nullptr)
 {
 }
 
@@ -40,7 +40,7 @@ KoOdfParagraphProperties::Private::~Private()
 {
     if (dropCap) {
         delete dropCap;
-        dropCap = 0;
+        dropCap = nullptr;
     }
     qDeleteAll(tabStops);
 }
@@ -65,7 +65,7 @@ void KoOdfParagraphProperties::clear()
     // FIXME: background image
     if (d->dropCap) {
         delete d->dropCap;
-        d->dropCap = 0;
+        d->dropCap = nullptr;
     }
     qDeleteAll(d->tabStops);
 }

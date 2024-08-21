@@ -24,8 +24,8 @@ class SnapGuideDocker::Private
 {
 public:
     Private()
-        : canvas(0)
-        , mainWidget(0)
+        : canvas(nullptr)
+        , mainWidget(nullptr)
     {
     }
 
@@ -46,7 +46,7 @@ SnapGuideDocker::~SnapGuideDocker()
 
 void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
 
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
@@ -63,8 +63,8 @@ void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 void SnapGuideDocker::unsetCanvas()
 {
     setEnabled(false);
-    setWidget(0);
-    d->canvas = 0;
+    setWidget(nullptr);
+    d->canvas = nullptr;
 }
 
 void SnapGuideDocker::locationChanged(Qt::DockWidgetArea area)

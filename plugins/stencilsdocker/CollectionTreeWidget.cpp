@@ -170,7 +170,7 @@ void CollectionTreeWidget::addStencilListView(QTreeWidgetItem *parent, QListView
 
 StencilListView *CollectionTreeWidget::stencilListViewAt(int idx) const
 {
-    StencilListView *rc = 0;
+    StencilListView *rc = nullptr;
     if (QTreeWidgetItem *cat_item = topLevelItem(idx)) {
         if (QTreeWidgetItem *embedItem = cat_item->child(0)) {
             rc = qobject_cast<StencilListView *>(itemWidget(embedItem, 0));
@@ -237,7 +237,7 @@ void CollectionTreeWidget::updateViewMode()
 void CollectionTreeWidget::adjustStencilListSize(QTreeWidgetItem *cat_item)
 {
     QTreeWidgetItem *embedItem = cat_item->child(0);
-    if (embedItem == 0)
+    if (embedItem == nullptr)
         return;
 
     StencilListView *list_widget = static_cast<StencilListView *>(itemWidget(embedItem, 0));

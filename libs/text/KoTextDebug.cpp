@@ -33,7 +33,7 @@
 
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
-const QTextDocument *KoTextDebug::document = 0;
+const QTextDocument *KoTextDebug::document = nullptr;
 
 #define dumpIndent(T)                                                                                                                                          \
     {                                                                                                                                                          \
@@ -102,7 +102,7 @@ void KoTextDebug::dumpDocument(const QTextDocument *doc, QTextStream &out)
     out << QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString());
     dumpFrame(document->rootFrame(), out);
     out << "</document>";
-    document = 0;
+    document = nullptr;
 }
 
 QString KoTextDebug::textAttributes(const KoCharacterStyle &style)
@@ -146,7 +146,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         return attrs;
     }
 
-    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : nullptr;
     if (styleManager && textFormat.hasProperty(KoCharacterStyle::StyleId)) {
         int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = styleManager->characterStyle(id);
@@ -305,7 +305,7 @@ QString KoTextDebug::paraAttributes(const KoParagraphStyle &style)
 QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : nullptr;
     if (styleManager && blockFormat.hasProperty(KoParagraphStyle::StyleId)) {
         int id = blockFormat.intProperty(KoParagraphStyle::StyleId);
         KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(id);
@@ -479,7 +479,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : nullptr;
     if (styleManager && listFormat.hasProperty(KoListStyle::StyleId)) {
         int id = listFormat.intProperty(KoListStyle::StyleId);
         KoListStyle *listStyle = styleManager->listStyle(id);
@@ -612,7 +612,7 @@ QString KoTextDebug::tableAttributes(const KoTableStyle &tableStyle)
 QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : nullptr;
     if (styleManager) {
         int id = tableFormat.intProperty(KoTableStyle::StyleId);
         KoTableStyle *tableStyle = styleManager->tableStyle(id);
@@ -799,7 +799,7 @@ QString KoTextDebug::tableCellAttributes(const KoTableCellStyle &tableCellStyle)
 QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : nullptr;
     if (styleManager) {
         int id = tableCellFormat.intProperty(KoTableCellStyle::StyleId);
         KoTableCellStyle *tableCellStyle = styleManager->tableCellStyle(id);
@@ -950,7 +950,7 @@ void KoTextDebug::dumpTableCell(const QTextTableCell &cell, QTextStream &out)
     // iterate through the cell content.
     QTextFrame::iterator cellIter = cell.begin();
     while (!cellIter.atEnd()) {
-        if (cellIter.currentFrame() != 0) {
+        if (cellIter.currentFrame() != nullptr) {
             // content is a frame or table.
             dumpFrame(cellIter.currentFrame(), out);
         } else {

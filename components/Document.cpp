@@ -222,7 +222,7 @@ QObject *Document::textEditor()
     if (d->impl && d->impl->canvasController()) {
         return KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
     }
-    return 0;
+    return nullptr;
 }
 
 void Document::deselectEverything()

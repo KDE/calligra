@@ -16,7 +16,7 @@ class ParagraphStylesModel::Private
 public:
     Private(ParagraphStylesModel *qq)
         : q(qq)
-        , document(0)
+        , document(nullptr)
     {
     }
     ParagraphStylesModel *q;

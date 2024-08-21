@@ -42,7 +42,7 @@ KoInlineObject::~KoInlineObject()
         d_ptr->manager->removeInlineObject(this);
     }
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 void KoInlineObject::setManager(KoInlineTextObjectManager *manager)

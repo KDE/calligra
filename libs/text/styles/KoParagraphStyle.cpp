@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN KoParagraphStyle::Private
 {
 public:
     Private()
-        : parentStyle(0)
-        , defaultStyle(0)
-        , list(0)
+        : parentStyle(nullptr)
+        , defaultStyle(nullptr)
+        , list(nullptr)
         , m_inUse(false)
     {
     }
@@ -1057,7 +1057,7 @@ KoListStyle *KoParagraphStyle::listStyle() const
 {
     QVariant variant = value(ParagraphListStyleId);
     if (variant.isNull())
-        return 0;
+        return nullptr;
     return variant.value<KoListStyle *>();
 }
 
@@ -1068,7 +1068,7 @@ void KoParagraphStyle::setListStyle(KoListStyle *style)
     if (listStyle() && listStyle()->parent() == this)
         delete listStyle();
     QVariant variant;
-    KoListStyle *cloneStyle = 0;
+    KoListStyle *cloneStyle = nullptr;
     if (style) {
         cloneStyle = style->clone();
         variant.setValue(cloneStyle);
@@ -1719,7 +1719,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         const QString dropstyle = dropCap.attributeNS(KoXmlNS::style, "style-name");
         if (!dropstyle.isEmpty()) {
             KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
-            KoTextSharedLoadingData *textSharedData = 0;
+            KoTextSharedLoadingData *textSharedData = nullptr;
             textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
             if (textSharedData) {
                 KoCharacterStyle *cs = textSharedData->characterStyle(dropstyle, true);

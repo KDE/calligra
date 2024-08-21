@@ -231,14 +231,14 @@ public:
             : name(_name)
             , type(SectionOpen)
             , dataSec(_data)
-            , dataSecEnd(0)
+            , dataSecEnd(nullptr)
         {
         }
 
         SectionHandle(const QString &_name, KoSectionEnd *_data)
             : name(_name)
             , type(SectionClose)
-            , dataSec(0)
+            , dataSec(nullptr)
             , dataSecEnd(_data)
         {
         }
@@ -504,7 +504,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     };
 
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-    if (textEditor == 0)
+    if (textEditor == nullptr)
         return false;
 
     if (command->id() != id())
@@ -547,7 +547,7 @@ bool DeleteCommand::checkMerge(const KUndo2Command *command)
 void DeleteCommand::updateListChanges()
 {
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-    if (textEditor == 0)
+    if (textEditor == nullptr)
         return;
     QTextDocument *document = const_cast<QTextDocument *>(textEditor->document());
     QTextCursor tempCursor(document);

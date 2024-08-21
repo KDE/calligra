@@ -307,7 +307,7 @@ void KoTextInlineRdf::setXmlId(const QString &id)
 KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(const QTextFormat &tf)
 {
     if (!tf.hasProperty(KoCharacterStyle::InlineRdf)) {
-        return 0;
+        return nullptr;
     }
     QVariant v = tf.property(KoCharacterStyle::InlineRdf);
     return v.value<KoTextInlineRdf *>();
@@ -317,7 +317,7 @@ KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextCursor &cursor)
 {
     QTextCharFormat cf = cursor.charFormat();
     if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
-        return 0;
+        return nullptr;
     }
     QVariant v = cf.property(KoCharacterStyle::InlineRdf);
     return v.value<KoTextInlineRdf *>();
@@ -327,7 +327,7 @@ KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(KoTextEditor *handler)
 {
     QTextCharFormat cf = handler->charFormat();
     if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
-        return 0;
+        return nullptr;
     }
     QVariant v = cf.property(KoCharacterStyle::InlineRdf);
     return v.value<KoTextInlineRdf *>();

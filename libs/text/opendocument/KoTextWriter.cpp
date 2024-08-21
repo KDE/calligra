@@ -122,7 +122,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     if (currentList) {
         if (from == 0 && to < 0) {
             // save everything means also save current table and list
-            currentList = 0;
+            currentList = nullptr;
         } else {
             QTextCursor toCursor(toblock);
             toCursor.setPosition(to, QTextCursor::KeepAnchor);
@@ -140,7 +140,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
                 int toindex = currentList->itemNumber(toblock);
                 if ((fromcursor.isNull() || fromcursor.currentList() != currentList) && (toCursor.isNull() || toCursor.currentList() != currentList)
                     && fromindex <= 0 && (toindex < 0 || toindex == currentList->count() - 1)) {
-                    currentList = 0;
+                    currentList = nullptr;
                 }
             }
         }
@@ -149,5 +149,5 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
     d->globalFrom = from;
     d->globalTo = to;
-    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, 0, currentList);
+    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, nullptr, currentList);
 }

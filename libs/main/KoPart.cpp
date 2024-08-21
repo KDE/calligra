@@ -43,9 +43,9 @@ class Q_DECL_HIDDEN KoPart::Private
 public:
     Private(const KoComponentData &componentData_, KoPart *_parent)
         : parent(_parent)
-        , document(0)
-        , proxyWidget(0)
-        , startUpWidget(0)
+        , document(nullptr)
+        , proxyWidget(nullptr)
+        , startUpWidget(nullptr)
         , componentData(componentData_)
     {
     }
@@ -91,7 +91,7 @@ KoPart::~KoPart()
     }
 
     delete d->startUpWidget;
-    d->startUpWidget = 0;
+    d->startUpWidget = nullptr;
 
     delete d;
 }
@@ -138,7 +138,7 @@ void KoPart::addView(KoView *view, KoDocument *document)
 
     if (d->views.size() == 1) {
         KoApplication *app = qobject_cast<KoApplication *>(qApp);
-        if (0 != app) {
+        if (nullptr != app) {
             Q_EMIT app->documentOpened('/' + objectName());
         }
     }
@@ -150,7 +150,7 @@ void KoPart::removeView(KoView *view)
 
     if (d->views.isEmpty()) {
         KoApplication *app = qobject_cast<KoApplication *>(qApp);
-        if (0 != app) {
+        if (nullptr != app) {
             Q_EMIT app->documentClosed('/' + objectName());
         }
     }

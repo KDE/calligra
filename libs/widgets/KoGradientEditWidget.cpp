@@ -353,7 +353,7 @@ void KoGradientEditWidget::addGradientToPredefs()
         fileInfo.setFile(savePath + QString("%1.svg").arg(i++, 4, 10, QChar('0')));
     } while (fileInfo.exists());
 
-    QGradient *gradient = 0;
+    QGradient *gradient = nullptr;
     switch (m_type) {
     case QGradient::LinearGradient:
         gradient = new QLinearGradient();

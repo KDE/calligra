@@ -23,7 +23,7 @@ class DocumentListModel : public QAbstractListModel, public QQmlParserStatus
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    explicit DocumentListModel(QObject *parent = 0);
+    explicit DocumentListModel(QObject *parent = nullptr);
     virtual ~DocumentListModel();
 
     enum CustomRoles {
@@ -118,7 +118,7 @@ class SearchThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    SearchThread(const QHash<QString, DocumentListModel::DocumentType> &docTypes, QString docDir, QObject *parent = 0);
+    SearchThread(const QHash<QString, DocumentListModel::DocumentType> &docTypes, QString docDir, QObject *parent = nullptr);
     ~SearchThread();
 
     void run() override;

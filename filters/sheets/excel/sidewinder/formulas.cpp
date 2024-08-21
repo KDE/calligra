@@ -216,7 +216,7 @@ unsigned FormulaToken::id() const
 
 const char *FormulaToken::idAsString() const
 {
-    const char *s = 0;
+    const char *s = nullptr;
 
     switch (d->id) {
     case Matrix:
@@ -1007,7 +1007,7 @@ static const FunctionEntry *functionEntry(const QString &functionName)
 const char *FormulaToken::functionName() const
 {
     if (functionIndex() > 367)
-        return 0;
+        return nullptr;
     return FunctionEntries[functionIndex()].name;
 }
 

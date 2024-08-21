@@ -60,9 +60,9 @@ KUndo2Command *KoPathPointMoveStrategy::createCommand()
 
     KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection *>(m_tool->selection());
     if (!selection)
-        return 0;
+        return nullptr;
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
     if (!m_move.isNull()) {
         // as the point is already at the new position we need to undo the change
         KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);

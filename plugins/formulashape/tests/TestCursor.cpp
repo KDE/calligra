@@ -23,7 +23,7 @@ public:
     KUndo2QStack *stack;
     KoShapeManager *manager;
     MockCanvas()
-        : KoCanvasBase(0)
+        : KoCanvasBase(nullptr)
     {
         stack = new KUndo2QStack();
         manager = new KoShapeManager(this);
@@ -55,19 +55,19 @@ public:
     }
     KoToolProxy *toolProxy() const override
     {
-        return 0;
+        return nullptr;
     }
     KoViewConverter *viewConverter() const override
     {
-        return 0;
+        return nullptr;
     }
     QWidget *canvasWidget() override
     {
-        return 0;
+        return nullptr;
     }
     const QWidget *canvasWidget() const override
     {
-        return 0;
+        return nullptr;
     }
     KoUnit unit() const override
     {

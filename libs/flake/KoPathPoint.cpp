@@ -25,7 +25,7 @@ class Q_DECL_HIDDEN KoPathPoint::Private
 {
 public:
     Private()
-        : shape(0)
+        : shape(nullptr)
         , properties(Normal)
         , activeControlPoint1(false)
         , activeControlPoint2(false)

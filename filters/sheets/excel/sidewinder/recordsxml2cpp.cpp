@@ -89,7 +89,7 @@ bool hasParentNode(const QDomNode &n, const QString &name)
     return hasParentNode(p, name);
 }
 
-static QMap<QString, Field> getFields(QDomElement record, bool *foundStrings = 0)
+static QMap<QString, Field> getFields(QDomElement record, bool *foundStrings = nullptr)
 {
     QDomNodeList types = record.elementsByTagName("type");
     QMap<QString, QString> extraTypes;

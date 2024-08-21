@@ -24,7 +24,7 @@ using namespace Calligra::Sheets;
 
 LocationComboBox::LocationComboBox(QWidget *_parent)
     : KComboBox(true, _parent)
-    , m_selection(0)
+    , m_selection(nullptr)
 {
     setCompletionObject(&completionList, true);
     setCompletionMode(KCompletion::CompletionAuto);
@@ -110,7 +110,7 @@ void LocationComboBox::updateAddress()
         address = selection->name();
     }
     setItemText(0, address);
-    setCurrentItem(0);
+    setCurrentItem(nullptr);
     lineEdit()->setText(address);
 }
 

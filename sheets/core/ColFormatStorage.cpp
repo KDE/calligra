@@ -20,7 +20,7 @@ class Q_DECL_HIDDEN ColFormatStorage::Private
 {
 public:
     Private();
-    double rawColWidth(int col, int *lastCol = 0, int *firstCol = 0) const;
+    double rawColWidth(int col, int *lastCol = nullptr, int *firstCol = nullptr) const;
 
     Sheet *sheet;
     mdds::flat_segment_tree<int, double> colWidths;
@@ -276,7 +276,7 @@ int ColFormatStorage::lastNonDefaultCol() const
 {
     int col = KS_colMax;
     int firstCol;
-    while (col > 0 && isDefaultCol(col, 0, &firstCol)) {
+    while (col > 0 && isDefaultCol(col, nullptr, &firstCol)) {
         col = firstCol - 1;
     }
     if (col < 1)

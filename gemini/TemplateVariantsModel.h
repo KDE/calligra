@@ -15,7 +15,7 @@ class TemplateVariantsModel : public QAbstractListModel
 
 public:
     enum TemplateVariantRoles { NameRole = Qt::UserRole + 1, ColorRole, ThumbnailRole, SwatchRole, UrlRole };
-    explicit TemplateVariantsModel(QObject *parent = 0);
+    explicit TemplateVariantsModel(QObject *parent = nullptr);
     ~TemplateVariantsModel() override;
 
     QHash<int, QByteArray> roleNames() const override;

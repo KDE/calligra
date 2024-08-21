@@ -18,7 +18,7 @@
 
 KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *document, KWCanvas *canvas)
     : KPageDialog(canvas)
-    , m_frameConnectSelector(0)
+    , m_frameConnectSelector(nullptr)
     , m_canvas(canvas)
 {
     m_state = new FrameConfigSharedState(document);
@@ -41,7 +41,7 @@ KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *documen
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
         } else {
             delete m_frameConnectSelector;
-            m_frameConnectSelector = 0;
+            m_frameConnectSelector = nullptr;
         }
     }
 

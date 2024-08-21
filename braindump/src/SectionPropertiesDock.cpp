@@ -25,8 +25,8 @@
 #include "commands/ChangeLayoutCommand.h"
 
 SectionPropertiesDock::SectionPropertiesDock()
-    : m_currentSection(0)
-    , m_rootSection(0)
+    : m_currentSection(nullptr)
+    , m_rootSection(nullptr)
 {
     QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -47,7 +47,7 @@ SectionPropertiesDock::~SectionPropertiesDock()
 
 void SectionPropertiesDock::setRootSection(RootSection *_rootSection)
 {
-    Q_ASSERT(m_rootSection == 0);
+    Q_ASSERT(m_rootSection == nullptr);
     m_rootSection = _rootSection;
     connect(m_rootSection, SIGNAL(commandExecuted()), SLOT(reload()));
 }

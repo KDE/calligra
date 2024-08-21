@@ -17,14 +17,14 @@ void TestResourceManager::koShapeResource()
     KoPathShape *shape = new KoPathShape();
     int key = 9001;
 
-    KoCanvasResourceManager rp(0);
+    KoCanvasResourceManager rp(nullptr);
     rp.setResource(key, shape);
     QVERIFY(shape == rp.koShapeResource(key));
 }
 
 void TestResourceManager::testUnitChanged()
 {
-    KoCanvasResourceManager rm(0);
+    KoCanvasResourceManager rm(nullptr);
     QSignalSpy spy(&rm, &KoCanvasResourceManager::canvasResourceChanged);
 
     KoUnit a;

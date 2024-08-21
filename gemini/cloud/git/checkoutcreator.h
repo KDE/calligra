@@ -14,7 +14,7 @@ class CheckoutCreator : public QObject
 {
     Q_OBJECT
 public:
-    explicit CheckoutCreator(QObject *parent = 0);
+    explicit CheckoutCreator(QObject *parent = nullptr);
     virtual ~CheckoutCreator();
 
     Q_INVOKABLE QString getFile(QString caption, QString filter, QString extraSubDir = QString()) const;

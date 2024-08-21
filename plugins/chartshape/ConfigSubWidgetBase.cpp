@@ -11,13 +11,13 @@ using namespace KoChart;
 
 ConfigSubWidgetBase::ConfigSubWidgetBase(QWidget *parent)
     : QWidget(parent)
-    , chart(0)
+    , chart(nullptr)
 {
 }
 
 ConfigSubWidgetBase::ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent)
     : QWidget(parent)
-    , chart(0)
+    , chart(nullptr)
     , chartTypes(types)
 {
 }

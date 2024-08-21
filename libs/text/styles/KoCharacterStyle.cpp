@@ -146,8 +146,8 @@ public:
 };
 
 KoCharacterStyle::Private::Private()
-    : parentStyle(0)
-    , defaultStyle(0)
+    : parentStyle(nullptr)
+    , defaultStyle(nullptr)
     , m_inUse(false)
 {
     // set the minimal default properties
@@ -215,23 +215,23 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
 
     // TODO http://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
     //  we should specify slant and weight too
-    FcPattern *font = FcPatternBuild(0, FC_FAMILY, FcTypeString, fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, nullptr);
-    if (font == 0) {
+    FcPattern *font = FcPatternBuild(nullptr, FC_FAMILY, FcTypeString, fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, nullptr);
+    if (font == nullptr) {
         return 1;
     }
 
     // find font
-    FcPattern *matched = 0;
-    matched = FcFontMatch(0, font, &result);
-    if (matched == 0) {
+    FcPattern *matched = nullptr;
+    matched = FcFontMatch(nullptr, font, &result);
+    if (matched == nullptr) {
         FcPatternDestroy(font);
         return 1;
     }
 
     // get font family name
-    char *str = 0;
+    char *str = nullptr;
     result = FcPatternGetString(matched, FC_FAMILY, 0, (FcChar8 **)&str);
-    if (result != FcResultMatch || str == 0) {
+    if (result != FcResultMatch || str == nullptr) {
         FcPatternDestroy(font);
         FcPatternDestroy(matched);
         return 1;
@@ -246,7 +246,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
     }
 
     // get path to font
-    str = 0;
+    str = nullptr;
     result = FcPatternGetString(matched, FC_FILE, 0, (FcChar8 **)&str);
     if (result != FcResultMatch) {
         FcPatternDestroy(font);
@@ -282,7 +282,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
     // get font metric os2 table
     TT_OS2 *os2;
     os2 = (TT_OS2 *)FT_Get_Sfnt_Table(face, ft_sfnt_os2);
-    if (os2 == 0) {
+    if (os2 == nullptr) {
         FT_Done_Face(face);
         FT_Done_FreeType(library);
         FcPatternDestroy(font);
@@ -293,7 +293,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
     // get font metric header table
     TT_Header *header;
     header = (TT_Header *)FT_Get_Sfnt_Table(face, ft_sfnt_head);
-    if (header == 0) {
+    if (header == nullptr) {
         FT_Done_Face(face);
         FT_Done_FreeType(library);
         FcPatternDestroy(font);
@@ -1449,7 +1449,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         // This font name is a reference to a font face declaration.
         KoOdfStylesReader &stylesReader = scontext.odfLoadingContext().stylesReader();
         const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
-        if (fontFace != 0) {
+        if (fontFace != nullptr) {
             fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
 
             KoXmlElement fontFaceElem;

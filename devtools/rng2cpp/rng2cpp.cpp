@@ -591,7 +591,7 @@ RNGItemPtr parseDefine(const QDomElement &defineElement, RNGItems &items, bool i
  */
 RNGItemPtr getDefines(QDomElement e, RNGItems &items)
 {
-    RNGItemPtr start = RNGItemPtr(0);
+    RNGItemPtr start = RNGItemPtr(nullptr);
     e = e.firstChildElement();
     while (!e.isNull()) {
         if (e.localName() == "define") {
@@ -734,7 +734,7 @@ int reduce(RNGItems &items)
     RNGItems toRemove;
     foreach (RNGItemPtr item, items) {
         if (usageCount[item] <= 1 && !item->isStart() && item->isDefine()) {
-            RNGItemPtr user = RNGItemPtr(0);
+            RNGItemPtr user = RNGItemPtr(nullptr);
             foreach (const RNGItemPtr &i, items) {
                 if (i->allowedItems.contains(item)) {
                     Q_ASSERT(!user);
@@ -781,7 +781,7 @@ int expand(RNGItems &items)
  */
 RNGItemPtr getDefine(const QString &name, const RNGItems &items)
 {
-    RNGItemPtr item = RNGItemPtr(0);
+    RNGItemPtr item = RNGItemPtr(nullptr);
     foreach (RNGItemPtr i, items) {
         if (i->name() == name) {
             Q_ASSERT_X(!item, "getDefine", qPrintable("Doubly defined element" + name + "."));

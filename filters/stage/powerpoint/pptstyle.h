@@ -59,10 +59,10 @@ public:
      */
     PptTextPFRun(const MSO::DocumentContainer *d,
                  const MSO::MasterOrSlideContainer *m,
-                 const MSO::SlideListWithTextSubContainerOrAtom *texts = 0,
-                 const MSO::PptOfficeArtClientData *pcd = 0,
-                 const MSO::TextContainer *tc = 0,
-                 const MSO::TextRuler *tr = 0,
+                 const MSO::SlideListWithTextSubContainerOrAtom *texts = nullptr,
+                 const MSO::PptOfficeArtClientData *pcd = nullptr,
+                 const MSO::TextContainer *tc = nullptr,
+                 const MSO::TextRuler *tr = nullptr,
                  quint32 start = 0);
 
     quint16 level() const
@@ -230,8 +230,8 @@ const MSO::TextMasterStyleAtom *getTextMasterStyleAtom(const MSO::MasterOrSlideC
 template<class T>
 const T *getPP(const MSO::DocumentContainer *dc)
 {
-    if (dc == 0 || dc->docInfoList == 0)
-        return 0;
+    if (dc == nullptr || dc->docInfoList == nullptr)
+        return nullptr;
     foreach (const MSO::DocInfoListSubContainerOrAtom &a, dc->docInfoList->rgChildRec) {
         const MSO::DocProgTagsContainer *d = a.anon.get<MSO::DocProgTagsContainer>();
         if (d) {
@@ -245,7 +245,7 @@ const T *getPP(const MSO::DocumentContainer *dc)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 template<class T>
@@ -279,17 +279,17 @@ const T *getPP(const MSO::PptOfficeArtClientData &o)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 template<class T, class C>
 const T *getPP(const C *c)
 {
     if (!c)
-        return 0;
+        return nullptr;
     const MSO::SlideProgTagsContainer *sc = c->slideProgTagsContainer.data();
     if (!sc)
-        return 0;
+        return nullptr;
     foreach (const MSO::SlideProgTagsSubContainerOrAtom &a, sc->rgTypeRec) {
         const MSO::SlideProgBinaryTagContainer *bt = a.anon.get<MSO::SlideProgBinaryTagContainer>();
         if (bt) {
@@ -298,13 +298,13 @@ const T *getPP(const C *c)
                 return t;
         }
     }
-    return 0;
+    return nullptr;
 }
 template<class T>
 const T *getPP(const MSO::MasterOrSlideContainer *m)
 {
     if (!m)
-        return 0;
+        return nullptr;
     const MSO::MainMasterContainer *mm = m->anon.get<MSO::MainMasterContainer>();
     if (mm)
         return getPP<T>(mm);

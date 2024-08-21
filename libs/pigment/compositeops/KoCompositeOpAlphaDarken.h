@@ -33,7 +33,7 @@ public:
 
     void composite(const KoCompositeOp::ParameterInfo &params) const override
     {
-        if (params.maskRowStart != 0)
+        if (params.maskRowStart != nullptr)
             genericComposite<true>(params);
         else
             genericComposite<false>(params);

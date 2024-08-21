@@ -107,7 +107,7 @@ public:
 
 DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_pDocBkgImageWriter(0)
+    , m_pDocBkgImageWriter(nullptr)
     , m_writers(writers)
     , d(new Private)
 {
@@ -124,7 +124,7 @@ DocxXmlDocumentReader::~DocxXmlDocumentReader()
     delete d;
 
     delete m_dropCapWriter;
-    m_dropCapWriter = 0;
+    m_dropCapWriter = nullptr;
 }
 
 void DocxXmlDocumentReader::init()
@@ -135,7 +135,7 @@ void DocxXmlDocumentReader::init()
     m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
     m_dropCapStatus = NoDropCap;
-    m_dropCapWriter = 0;
+    m_dropCapWriter = nullptr;
     m_currentTableNumber = 0;
     m_wasCaption = false;
     m_closeHyperlink = false;
@@ -1357,7 +1357,7 @@ void DocxXmlDocumentReader::createBorderStyle(const QString &size,
         if (color == "auto") {
             // The documentation for auto value says that it leaves the color up to the application
             // to decide, here we make a decision to use window color text
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = nullptr;
             colorItem = m_context->themes->colorScheme.value("dk1");
             QColor col = Qt::black;
             if (colorItem) {
@@ -2664,8 +2664,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         body->addCompleteElement(m_dropCapBuffer);
         delete m_dropCapWriter;
         delete m_dropCapBuffer;
-        m_dropCapBuffer = 0;
-        m_dropCapWriter = 0;
+        m_dropCapBuffer = nullptr;
+        m_dropCapWriter = nullptr;
         m_dropCapStatus = NoDropCap;
     }
 
@@ -2887,7 +2887,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    Q_ASSERT(m_currentTextStyleProperties == 0);
+    Q_ASSERT(m_currentTextStyleProperties == nullptr);
     m_currentTextStyleProperties = new KoCharacterStyle();
 
     while (!atEnd()) {
@@ -2924,7 +2924,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
+    m_currentTextStyleProperties = nullptr;
 
     READ_EPILOGUE
 }
@@ -4261,7 +4261,7 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
 
     // Fallback to theme
     if (!borderData.innerPen.color().isValid() && !themeColor.isEmpty()) {
-        MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+        MSOOXML::DrawingMLColorSchemeItemBase *colorItem = nullptr;
         colorItem = m_context->themes->colorScheme.value(themeColor);
         if (colorItem) {
             borderData.innerPen.setColor(colorItem->value());
@@ -5302,8 +5302,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableRowNumber = 0;
     m_currentTableColumnNumber = 0;
 
-    m_currentDefaultCellStyle = 0;
-    m_currentTableStyleProperties = 0;
+    m_currentDefaultCellStyle = nullptr;
+    m_currentTableStyleProperties = nullptr;
     m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
 
     m_currentTableStyleName.clear();
@@ -5339,7 +5339,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
                 m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tblPr)
                 m_currentDefaultCellStyle = m_currentTableStyleProperties;
-                m_currentTableStyleProperties = 0;
+                m_currentTableStyleProperties = nullptr;
 
                 // debug border information
 #ifdef DOCXXML_DEBUG_TABLES
@@ -5556,7 +5556,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPrEx()
                 debugDocx << "left:" << m_currentTableStyleProperties->left.style;
                 debugDocx << "right:" << m_currentTableStyleProperties->right.style;
 #endif
-                m_currentTableStyleProperties = 0;
+                m_currentTableStyleProperties = nullptr;
             }
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
@@ -5967,7 +5967,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 debugDocx << "left:" << m_currentTableStyleProperties->left.style;
                 debugDocx << "right:" << m_currentTableStyleProperties->right.style;
 #endif
-                m_currentTableStyleProperties = 0;
+                m_currentTableStyleProperties = nullptr;
             }
             //             ELSE_TRY_READ_IF(bookmarkStart)
             //             ELSE_TRY_READ_IF(bookmarkEnd)

@@ -129,7 +129,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
 {
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
     debugStageAnimation << "nodeType:" << nodeType;
-    KPrAnimationSubStep *subStep = 0;
+    KPrAnimationSubStep *subStep = nullptr;
     if (nodeType == "on-click") {
         // if there is already an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
@@ -162,17 +162,17 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     // load preset and id
     // TODO: ole-action, media-call are not supported
 
-    KPrShapeAnimation *shapeAnimation = 0;
+    KPrShapeAnimation *shapeAnimation = nullptr;
     // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
     forEachElement(e, element)
     {
         // TODO add a check that the shape animation is still the correct one
-        if (shapeAnimation == 0) {
+        if (shapeAnimation == nullptr) {
             QString targetElement(e.attributeNS(KoXmlNS::smil, "targetElement", QString()));
             if (!targetElement.isEmpty()) {
-                KoShape *shape = 0;
-                QTextBlockUserData *quData = 0;
+                KoShape *shape = nullptr;
+                QTextBlockUserData *quData = nullptr;
 
                 if (e.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text") {
                     QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
@@ -233,7 +233,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // Register animation in shape
         if (shapeAnimation->shape()) {
             KPrShapeApplicationData *applicationData = dynamic_cast<KPrShapeApplicationData *>(shapeAnimation->shape()->applicationData());
-            if (applicationData == 0) {
+            if (applicationData == nullptr) {
                 applicationData = new KPrShapeApplicationData();
                 shapeAnimation->shape()->setApplicationData(applicationData);
             }

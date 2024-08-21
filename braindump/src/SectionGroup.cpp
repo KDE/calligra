@@ -31,7 +31,7 @@ SectionGroup::SectionGroup(SectionGroup *parent)
 }
 
 SectionGroup::SectionGroup(const SectionGroup &_rhs)
-    : m_parent(0)
+    : m_parent(nullptr)
 {
     foreach (Section *section, _rhs.m_children) {
         insertSection(new Section(*section));
@@ -54,7 +54,7 @@ void SectionGroup::insertSection(Section *page, int index)
 
 void SectionGroup::insertSection(Section *page, Section *before)
 {
-    if (before == 0) {
+    if (before == nullptr) {
         insertSection(page, m_children.count());
     } else {
         insertSection(page, m_children.indexOf(before));
@@ -63,7 +63,7 @@ void SectionGroup::insertSection(Section *page, Section *before)
 
 void SectionGroup::removeSection(Section *page)
 {
-    page->setSectionParent(0);
+    page->setSectionParent(nullptr);
     m_children.removeAll(page);
 }
 
@@ -123,6 +123,6 @@ Section *SectionGroup::nextSection(Section *section)
     if (idx < m_children.count()) {
         return m_children[idx];
     } else {
-        return 0;
+        return nullptr;
     }
 }

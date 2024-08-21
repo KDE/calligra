@@ -38,7 +38,7 @@ class NetAccessPrivate
 {
 public:
     NetAccessPrivate()
-        : m_metaData(0)
+        : m_metaData(nullptr)
         , bJobOK(true)
     {
     }
@@ -63,7 +63,7 @@ using namespace KIO;
  */
 static QStringList *tmpfiles;
 
-static QString *lastErrorMsg = 0;
+static QString *lastErrorMsg = nullptr;
 static int lastErrorCode = 0;
 
 NetAccess::NetAccess()

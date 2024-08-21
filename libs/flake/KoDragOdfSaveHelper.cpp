@@ -25,7 +25,7 @@ KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
 KoShapeSavingContext *KoDragOdfSaveHelper::context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver)
 {
     Q_D(KoDragOdfSaveHelper);
-    Q_ASSERT(d->context == 0);
+    Q_ASSERT(d->context == nullptr);
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return d->context;
 }

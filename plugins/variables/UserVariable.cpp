@@ -26,7 +26,7 @@
 
 UserVariable::UserVariable()
     : KoVariable(true)
-    , m_variableManager(0)
+    , m_variableManager(nullptr)
     , m_property(0)
 {
 }

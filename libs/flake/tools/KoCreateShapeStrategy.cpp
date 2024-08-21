@@ -48,7 +48,7 @@ KUndo2Command *KoCreateShapeStrategy::createCommand()
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if (!factory) {
         warnFlake << "Application requested a shape that is not registered" << parent->shapeId();
-        return 0;
+        return nullptr;
     }
 
     const KoProperties *props = parent->shapeProperties();

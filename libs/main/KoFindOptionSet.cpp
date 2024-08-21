@@ -39,7 +39,7 @@ KoFindOption *KoFindOptionSet::option(const QString &name) const
     if (d->options.contains(name)) {
         return d->options.value(name);
     }
-    return 0;
+    return nullptr;
 }
 
 QList<KoFindOption *> KoFindOptionSet::options() const

@@ -71,7 +71,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
     QFile in(file);
     if (!in.open(QIODevice::ReadOnly)) {
-        KMessageBox::error(0L, i18n("CSV filter cannot open input file - please report."));
+        KMessageBox::error(nullptr, i18n("CSV filter cannot open input file - please report."));
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -90,7 +90,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     QString decimal = locale->decimalSymbol();
     QString thousands = locale->thousandsSeparator();
 
-    KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
+    KoCsvImportDialog* dialog = new KoCsvImportDialog(nullptr);
     dialog->setData(inputFile);
     dialog->setDecimalSymbol(decimal);
     dialog->setThousandsSeparator(thousands);

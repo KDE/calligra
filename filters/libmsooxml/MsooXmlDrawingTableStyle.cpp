@@ -247,7 +247,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
         debugMsooXml << "==> ROW-level:";
 #endif
         TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
-        localProperties = 0;
+        localProperties = nullptr;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         debugMsooXml << "<== [END] ROW-level:";
 #endif
@@ -259,7 +259,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
         debugMsooXml << "==> CELL-level:";
 #endif
         TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
-        localProperties = 0;
+        localProperties = nullptr;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         debugMsooXml << "<== [END] CELL-level:";
 #endif
@@ -269,7 +269,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
     debugMsooXml << "==> [REAPPLY]: TABLE/ROW-level properties";
 #endif
-    TableStyleProperties *tableProperties = 0;
+    TableStyleProperties *tableProperties = nullptr;
     if (m_style) {
         tableProperties = m_style->properties(DrawingTableStyle::WholeTbl);
     }

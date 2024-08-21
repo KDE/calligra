@@ -62,7 +62,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    explicit Region(const QPoint &point, SheetBase *sheet = 0);
+    explicit Region(const QPoint &point, SheetBase *sheet = nullptr);
 
     /**
      * Constructor.
@@ -70,7 +70,7 @@ public:
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    explicit Region(const QRect &range, SheetBase *sheet = 0);
+    explicit Region(const QRect &range, SheetBase *sheet = nullptr);
 
     /**
      * Copy Constructor.
@@ -86,7 +86,7 @@ public:
      * @param row the row of the point
      * @param sheet the sheet the point belongs to
      */
-    Region(int col, int row, SheetBase *sheet = 0);
+    Region(int col, int row, SheetBase *sheet = nullptr);
 
     /**
      * Constructor.
@@ -97,7 +97,7 @@ public:
      * @param height the height of the range
      * @param sheet the sheet the range belongs to
      */
-    Region(int col, int row, int width, int height, SheetBase *sheet = 0);
+    Region(int col, int row, int width, int height, SheetBase *sheet = nullptr);
 
     /**
      * Destructor.
@@ -113,7 +113,7 @@ public:
      * @param originSheet The name is created relative to this sheet.
      * @return the name of the region (e.g. "A1:A2")
      */
-    QString name(SheetBase *originSheet = 0) const;
+    QString name(SheetBase *originSheet = nullptr) const;
 
     /**
      * @return @c true, if this region contains no elements
@@ -182,7 +182,7 @@ public:
      * @param sheet the sheet the point belongs to
      * @return @c true, if the region contains the point @p point
      */
-    bool contains(const QPoint &point, SheetBase *sheet = 0) const;
+    bool contains(const QPoint &point, SheetBase *sheet = nullptr) const;
 
     /* TODO Stefan #2: Optimize! Adjacent Points/Ranges */
     /**
@@ -190,7 +190,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element *add(const QPoint &point, SheetBase *sheet = 0, bool fixedColumn = false, bool fixedRow = false, bool allowMulti = false);
+    Element *add(const QPoint &point, SheetBase *sheet = nullptr, bool fixedColumn = false, bool fixedRow = false, bool allowMulti = false);
 
     /**
      * Adds the range @p range to this region.
@@ -198,7 +198,7 @@ public:
      * @param sheet the sheet the range belongs to
      */
     Element *add(const QRect &range,
-                 SheetBase *sheet = 0,
+                 SheetBase *sheet = nullptr,
                  bool fixedTop = false,
                  bool fixedLeft = false,
                  bool fixedBottom = false,
@@ -210,7 +210,7 @@ public:
      * @param region the region to be added
      * @param sheet the fallback sheet used, if an element has no sheet set
      */
-    Element *add(const Region &region, SheetBase *sheet = 0, bool allowMulti = false);
+    Element *add(const Region &region, SheetBase *sheet = nullptr, bool allowMulti = false);
 
     /**
      * Removes all rectangles that intersect with the point.
@@ -253,7 +253,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    virtual Element *eor(const QPoint &point, SheetBase *sheet = 0);
+    virtual Element *eor(const QPoint &point, SheetBase *sheet = nullptr);
 
     /**
      * Deletes all elements of the region. The result is an empty region.
@@ -421,7 +421,7 @@ public:
         return false;
     }
 
-    virtual QString name(SheetBase * = 0) const
+    virtual QString name(SheetBase * = nullptr) const
     {
         return QString("");
     }
@@ -527,7 +527,7 @@ public:
     bool contains(const QPoint &) const override;
     bool contains(const QRect &) const override;
 
-    QString name(SheetBase *originSheet = 0) const override;
+    QString name(SheetBase *originSheet = nullptr) const override;
 
     QRect rect() const override
     {
@@ -613,7 +613,7 @@ public:
     bool contains(const QPoint &) const override;
     bool contains(const QRect &) const override;
 
-    QString name(SheetBase *originSheet = 0) const override;
+    QString name(SheetBase *originSheet = nullptr) const override;
 
     QRect rect() const override
     {

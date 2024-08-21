@@ -56,7 +56,7 @@ QRectF WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAncho
         debugMsDoc << "INVALID DocOfficeArtClientAnchor, returning QRect(0, 0, 1, 1)";
         return QRect(0, 0, 1, 1);
     }
-    const PLCF<Word97::FSPA> *plcfSpa = 0;
+    const PLCF<Word97::FSPA> *plcfSpa = nullptr;
     if (gh->m_document->writingHeader()) {
         plcfSpa = gh->m_drawings->getSpaHdr();
     } else {
@@ -149,7 +149,7 @@ const MSO::OfficeArtDggContainer *WordsGraphicsHandler::DrawClient::getOfficeArt
 #ifdef USE_OFFICEARTDGG_CONTAINER
     return &gh->m_officeArtDggContainer;
 #else
-    return 0;
+    return nullptr;
 #endif
 }
 
@@ -157,7 +157,7 @@ const MSO::OfficeArtSpContainer *WordsGraphicsHandler::DrawClient::getMasterShap
 {
     // TODO: No support for master shapes at the moment.
     Q_UNUSED(spid);
-    return 0;
+    return nullptr;
 }
 
 QColor WordsGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)

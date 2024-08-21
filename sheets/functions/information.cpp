@@ -286,7 +286,7 @@ Value func_isref(valVector args, ValueCalc * /*calc*/, FuncExtra *e)
     if (args[0].isError())
         return args[0]; // errors pass through
     // no reference ?
-    if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    if ((e == nullptr) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
         return Value(false);
     // if we are here, it is a reference (cell/range)
     return Value(true);

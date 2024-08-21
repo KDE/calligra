@@ -72,7 +72,7 @@ void KoAnchorTextRange::updateContainerModel()
         d->parent->shape()->setVisible(true);
     }
 
-    if (d->parent->placementStrategy() != 0) {
+    if (d->parent->placementStrategy() != nullptr) {
         d->parent->placementStrategy()->updateContainerModel();
     }
 }

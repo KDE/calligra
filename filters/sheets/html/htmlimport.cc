@@ -89,8 +89,8 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
 
     m_store->closeManifestWriter();
     delete storeout;
-    m_manifestWriter = 0;
-    m_store = 0;
+    m_manifestWriter = nullptr;
+    m_store = nullptr;
     return result;
 }
 

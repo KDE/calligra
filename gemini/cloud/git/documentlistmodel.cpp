@@ -65,7 +65,7 @@ void SearchThread::run()
 
 DocumentListModel::DocumentListModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_searchThread(0)
+    , m_searchThread(nullptr)
     , m_groupBy(GroupByName)
     , m_filter(UnknownType)
 {
@@ -127,7 +127,7 @@ void DocumentListModel::searchFinished()
 {
     Q_ASSERT(m_searchThread);
     delete m_searchThread;
-    m_searchThread = 0;
+    m_searchThread = nullptr;
 }
 
 void DocumentListModel::addDocument(const DocumentInfo &info)

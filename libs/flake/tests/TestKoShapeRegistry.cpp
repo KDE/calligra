@@ -27,7 +27,7 @@
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
     KoShapeRegistry *registry = KoShapeRegistry::instance();
-    QVERIFY(registry != 0);
+    QVERIFY(registry != nullptr);
 }
 
 void TestKoShapeRegistry::testCreateShapes()
@@ -74,15 +74,15 @@ void TestKoShapeRegistry::testCreateShapes()
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoOdfLoadingContext odfContext(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(odfContext, nullptr);
 
     KoShape *shape = registry->createShapeFromOdf(bodyElement, shapeContext);
-    QVERIFY(shape == 0);
+    QVERIFY(shape == nullptr);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();
     shape = registry->createShapeFromOdf(pathElement, shapeContext);
-    QVERIFY(shape != 0);
+    QVERIFY(shape != nullptr);
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
 
@@ -130,15 +130,15 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
     KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoOdfLoadingContext odfContext(stylesReader, nullptr);
+    KoShapeLoadingContext shapeContext(odfContext, nullptr);
 
     KoShape *shape = registry->createShapeFromOdf(bodyElement, shapeContext);
-    QVERIFY(shape == 0);
+    QVERIFY(shape == nullptr);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();
     shape = registry->createShapeFromOdf(pathElement, shapeContext);
-    QVERIFY(shape != 0);
+    QVERIFY(shape != nullptr);
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
 

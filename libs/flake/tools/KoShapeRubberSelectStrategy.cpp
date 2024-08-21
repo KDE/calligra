@@ -102,5 +102,5 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
 
 KUndo2Command *KoShapeRubberSelectStrategy::createCommand()
 {
-    return 0;
+    return nullptr;
 }

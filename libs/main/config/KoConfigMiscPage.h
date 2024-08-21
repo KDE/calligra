@@ -21,7 +21,7 @@ class KOMAIN_EXPORT KoConfigMiscPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name = 0L);
+    explicit KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name = nullptr);
     ~KoConfigMiscPage() override;
 
     void apply();

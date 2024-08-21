@@ -37,10 +37,10 @@
 #include <QUrl>
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
-    : activeTool(0)
+    : activeTool(nullptr)
     , tabletPressed(false)
     , hasSelection(false)
-    , controller(0)
+    , controller(nullptr)
     , parent(p)
 {
     scrollTimer.setInterval(100);
@@ -77,7 +77,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 
 void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
 {
-    if (controller == 0)
+    if (controller == nullptr)
         return;
     if (!activeTool)
         return;
@@ -332,7 +332,7 @@ void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
     }
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
+    if (d->activeTool == nullptr) {
         event->ignore();
         return;
     }
@@ -351,7 +351,7 @@ void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
     }
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
+    if (d->activeTool == nullptr) {
         event->ignore();
         return;
     }

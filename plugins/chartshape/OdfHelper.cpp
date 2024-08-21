@@ -122,7 +122,7 @@ void saveOdfFont(KoGenStyle &style, const QFont &font, const QColor &color)
 
 QString saveOdfFont(KoGenStyles &mainStyles, const QFont &font, const QColor &color)
 {
-    KoGenStyle autoStyle(KoGenStyle::ParagraphAutoStyle, "chart", 0);
+    KoGenStyle autoStyle(KoGenStyle::ParagraphAutoStyle, "chart", nullptr);
     saveOdfFont(autoStyle, font, color);
     return mainStyles.insert(autoStyle, "ch");
 }
@@ -182,7 +182,7 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
 
     bodyWriter.startElement(titleType);
 
-    KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
+    KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", nullptr);
     autoStyle.addPropertyPt("style:rotation-angle", 360 - title->rotation());
     saveOdfTitleStyle(title, autoStyle, context);
 
@@ -252,11 +252,11 @@ QSharedPointer<KoShapeBackground> loadOdfFill(KoShape *title, KoShapeLoadingCont
         return bg;
 #endif
     } else {
-        return QSharedPointer<KoShapeBackground>(0);
+        return QSharedPointer<KoShapeBackground>(nullptr);
     }
 
     if (!bg->loadStyle(context.odfLoadingContext(), title->size())) {
-        return QSharedPointer<KoShapeBackground>(0);
+        return QSharedPointer<KoShapeBackground>(nullptr);
     }
 
     return bg;
@@ -310,7 +310,7 @@ KoShapeStrokeModel *loadOdfStroke(KoShape *title, const KoXmlElement &element, K
 #endif
     }
 
-    return 0;
+    return nullptr;
 }
 
 KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context)
@@ -335,7 +335,7 @@ KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context)
 
         return shadow;
     }
-    return 0;
+    return nullptr;
 }
 
 KoBorder *loadOdfBorder(KoShape *title, KoShapeLoadingContext &context)
@@ -348,7 +348,7 @@ KoBorder *loadOdfBorder(KoShape *title, KoShapeLoadingContext &context)
         return border;
     }
     delete border;
-    return 0;
+    return nullptr;
 }
 
 bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingContext &context)
@@ -464,7 +464,7 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
     if (context.documentResourceManager()) {
         const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::calligra, "text");
         if (!textElement.isNull()) {
-            loaded = titleData->loadOdf(textElement, context, 0, title);
+            loaded = titleData->loadOdf(textElement, context, nullptr, title);
             title->setVisible(true);
         }
     }

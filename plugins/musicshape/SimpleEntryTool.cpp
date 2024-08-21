@@ -68,10 +68,10 @@ using namespace MusicCore;
 
 SimpleEntryTool::SimpleEntryTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_musicshape(0)
+    , m_musicshape(nullptr)
     , m_voice(0)
     , m_selectionStart(-1)
-    , m_cursor(0)
+    , m_cursor(nullptr)
 {
     QActionGroup *actionGroup = new QActionGroup(this);
     connect(actionGroup, &QActionGroup::triggered, this, &SimpleEntryTool::activeActionChanged);
@@ -320,8 +320,8 @@ void SimpleEntryTool::activate(ToolActivation toolActivation, const QSet<KoShape
 void SimpleEntryTool::deactivate()
 {
     // debugMusic<<"SimpleEntryTool::deactivate";
-    m_musicshape = 0;
-    m_cursor = 0;
+    m_musicshape = nullptr;
+    m_cursor = nullptr;
 }
 
 void SimpleEntryTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
@@ -417,14 +417,14 @@ void SimpleEntryTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
+    QPointF p = m_musicshape->absoluteTransformation(nullptr).inverted().map(event->point);
     Sheet *sheet = m_musicshape->sheet();
 
     p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
 
     // debugMusic << "pos:" << p;
     //  find closest staff system
-    StaffSystem *system = 0;
+    StaffSystem *system = nullptr;
     for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
         StaffSystem *ss = sheet->staffSystem(i);
         // debugMusic << "system" << i << "has top" << ss->top();
@@ -433,13 +433,13 @@ void SimpleEntryTool::mousePressEvent(KoPointerEvent *event)
         system = ss;
     }
 
-    if (system == 0) {
+    if (system == nullptr) {
         // debugMusic << "no staff system found";
         return;
     }
 
     // find closest staff
-    Staff *closestStaff = 0;
+    Staff *closestStaff = nullptr;
     qreal dist = 1e99;
     qreal yrel = p.y() - system->top();
     for (int prt = 0; prt < sheet->partCount(); prt++) {
@@ -468,7 +468,7 @@ void SimpleEntryTool::mousePressEvent(KoPointerEvent *event)
     }
 
     // find correct bar
-    Bar *bar = 0;
+    Bar *bar = nullptr;
     int barIdx = -1;
     bool inPrefix = false;
     for (int b = system->firstBar(); b < sheet->barCount(); b++) {
@@ -528,15 +528,15 @@ void SimpleEntryTool::mouseMoveEvent(KoPointerEvent *event)
         }
     }
 
-    m_point = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
+    m_point = m_musicshape->absoluteTransformation(nullptr).inverted().map(event->point);
     canvas()->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
     if (event->buttons()) {
-        QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
+        QPointF p = m_musicshape->absoluteTransformation(nullptr).inverted().map(event->point);
         Sheet *sheet = m_musicshape->sheet();
 
         p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
         // find closest staff system
-        StaffSystem *system = 0;
+        StaffSystem *system = nullptr;
         for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
             StaffSystem *ss = sheet->staffSystem(i);
             if (ss->top() > p.y())
@@ -544,12 +544,12 @@ void SimpleEntryTool::mouseMoveEvent(KoPointerEvent *event)
             system = ss;
         }
 
-        if (system == 0) {
+        if (system == nullptr) {
             return;
         }
 
         // find closest staff
-        Staff *closestStaff = 0;
+        Staff *closestStaff = nullptr;
         qreal dist = 1e99;
         qreal yrel = p.y() - system->top();
         for (int prt = 0; prt < sheet->partCount(); prt++) {
@@ -578,7 +578,7 @@ void SimpleEntryTool::mouseMoveEvent(KoPointerEvent *event)
         }
 
         // find correct bar
-        Bar *bar = 0;
+        Bar *bar = nullptr;
         int barIdx = -1;
         bool inPrefix = false;
         for (int b = system->firstBar(); b < sheet->barCount(); b++) {
@@ -678,7 +678,7 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = QInputDialog::getInt(0, i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
+    int barCount = QInputDialog::getInt(nullptr, i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
     if (!ok)
         return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
@@ -740,7 +740,7 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff *startStaff,
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = QFileDialog::getOpenFileName(0, i18nc("@title:window", "Import"), QString(), i18n("MusicXML files (*.xml)"));
+    QString file = QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Import"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull())
         return;
     QFile f(file);
@@ -749,7 +749,7 @@ void SimpleEntryTool::importSheet()
     KoXml::setDocument(doc, &f, true);
     KoXmlElement e = doc.documentElement();
     // debugMusic << e.localName() << e.nodeName();
-    Sheet *sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
+    Sheet *sheet = MusicXmlReader(nullptr).loadSheet(doc.documentElement());
     if (sheet) {
         m_musicshape->setSheet(sheet, 0);
         m_musicshape->update();
@@ -758,7 +758,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = QFileDialog::getSaveFileName(0, i18nc("@title:window", "Export"), QString(), i18n("MusicXML files (*.xml)"));
+    QString file = QFileDialog::getSaveFileName(nullptr, i18nc("@title:window", "Export"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull())
         return;
 

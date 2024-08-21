@@ -42,7 +42,7 @@ VideoCollection::VideoCollection(QObject *parent)
 VideoCollection::~VideoCollection()
 {
     foreach (VideoData *id, d->videos) {
-        id->setCollection(0);
+        id->setCollection(nullptr);
     }
     delete d;
 }

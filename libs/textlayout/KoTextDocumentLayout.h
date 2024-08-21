@@ -49,8 +49,8 @@ public:
     /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
         PaintContext()
-            : viewConverter(0)
-            , imageCollection(0)
+            : viewConverter(nullptr)
+            , imageCollection(nullptr)
             , showFormattingCharacters(false)
             , showSectionBounds(false)
             , showSpellChecking(false)
@@ -74,7 +74,7 @@ public:
     };
 
     /// constructor
-    explicit KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider = 0);
+    explicit KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider = nullptr);
     ~KoTextDocumentLayout() override;
 
     /// return the rootAreaProvider.
@@ -207,7 +207,7 @@ public:
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .
      * \param rootArea root-area to remove. If NULL then all root-areas are removed.
      */
-    void removeRootArea(KoTextLayoutRootArea *rootArea = 0);
+    void removeRootArea(KoTextLayoutRootArea *rootArea = nullptr);
 
     /// reimplemented from QAbstractTextDocumentLayout
     void documentChanged(int position, int charsRemoved, int charsAdded) override;

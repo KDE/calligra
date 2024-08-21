@@ -27,8 +27,8 @@
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q)
-    , shape1(0)
-    , shape2(0)
+    , shape1(nullptr)
+    , shape2(nullptr)
     , connectionPointId1(-1)
     , connectionPointId2(-1)
     , connectionType(KoConnectionShape::Standard)
@@ -124,7 +124,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         }
 
         // transform escape direction by using our own transformation matrix
-        QTransform invMatrix = q->absoluteTransformation(0).inverted();
+        QTransform invMatrix = q->absoluteTransformation(nullptr).inverted();
         direction = invMatrix.map(direction) - invMatrix.map(QPointF());
         direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
     }
@@ -255,7 +255,7 @@ void KoConnectionShape::updateConnections()
     if (d->handleConnected(StartHandle)) {
         if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position));
+            QPointF p = documentToShape(d->shape1->absoluteTransformation(nullptr).map(d->shape1->connectionPoint(d->connectionPointId1).position));
             if (d->handles[StartHandle] != p) {
                 d->handles[StartHandle] = p;
                 updateHandles = true;
@@ -265,7 +265,7 @@ void KoConnectionShape::updateConnections()
     if (d->handleConnected(EndHandle)) {
         if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position));
+            QPointF p = documentToShape(d->shape2->absoluteTransformation(nullptr).map(d->shape2->connectionPoint(d->connectionPointId2).position));
             if (d->handles[EndHandle] != p) {
                 d->handles[EndHandle] = p;
                 updateHandles = true;
@@ -372,8 +372,8 @@ bool KoConnectionShape::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     d->connectionPointId1 = -1;
     d->connectionPointId2 = -1;
     // reset connected shapes
-    d->shape1 = 0;
-    d->shape2 = 0;
+    d->shape1 = nullptr;
+    d->shape2 = nullptr;
 
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
         d->connectionPointId1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
@@ -385,7 +385,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
             d->shape1->addDependee(this);
             if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
                 debugFlake << "connecting to start-shape";
-                d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position);
+                d->handles[StartHandle] = d->shape1->absoluteTransformation(nullptr).map(d->shape1->connectionPoint(d->connectionPointId1).position);
                 debugFlake << "start handle position =" << d->handles[StartHandle];
             }
         } else {
@@ -407,7 +407,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
             d->shape2->addDependee(this);
             if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
                 debugFlake << "connecting to end-shape";
-                d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position);
+                d->handles[EndHandle] = d->shape2->absoluteTransformation(nullptr).map(d->shape2->connectionPoint(d->connectionPointId2).position);
                 debugFlake << "end handle position =" << d->handles[EndHandle];
             }
         } else {
@@ -466,20 +466,20 @@ void KoConnectionShape::finishLoadingConnection()
     Q_D(KoConnectionShape);
 
     if (d->hasCustomPath) {
-        const bool loadingFinished1 = d->connectionPointId1 >= 0 ? d->shape1 != 0 : true;
-        const bool loadingFinished2 = d->connectionPointId2 >= 0 ? d->shape2 != 0 : true;
+        const bool loadingFinished1 = d->connectionPointId1 >= 0 ? d->shape1 != nullptr : true;
+        const bool loadingFinished2 = d->connectionPointId2 >= 0 ? d->shape2 != nullptr : true;
         if (loadingFinished1 && loadingFinished2) {
             QPointF p1, p2;
             if (d->handleConnected(StartHandle)) {
                 if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
-                    p1 = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position);
+                    p1 = d->shape1->absoluteTransformation(nullptr).map(d->shape1->connectionPoint(d->connectionPointId1).position);
                 }
             } else {
                 p1 = d->handles[StartHandle];
             }
             if (d->handleConnected(EndHandle)) {
                 if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
-                    p2 = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position);
+                    p2 = d->shape2->absoluteTransformation(nullptr).map(d->shape2->connectionPoint(d->connectionPointId2).position);
                 }
             } else {
                 p2 = d->handles[EndHandle];
@@ -694,22 +694,22 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     case ScaleChanged:
     case GenericMatrixChange:
     case ParameterChanged:
-        if (isParametricShape() && shape == 0)
+        if (isParametricShape() && shape == nullptr)
             d->forceUpdate = true;
         break;
     case Deleted:
         if (shape != d->shape1 && shape != d->shape2)
             return;
         if (shape == d->shape1)
-            connectFirst(0, -1);
+            connectFirst(nullptr, -1);
         if (shape == d->shape2)
-            connectSecond(0, -1);
+            connectSecond(nullptr, -1);
         break;
     case ConnectionPointChanged:
         if (shape == d->shape1 && !shape->hasConnectionPoint(d->connectionPointId1)) {
-            connectFirst(0, -1);
+            connectFirst(nullptr, -1);
         } else if (shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)) {
-            connectSecond(0, -1);
+            connectSecond(nullptr, -1);
         } else {
             d->forceUpdate = true;
         }
@@ -718,7 +718,7 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
         // connection shape should not have a background
         QSharedPointer<KoShapeBackground> fill = background();
         if (fill) {
-            setBackground(QSharedPointer<KoShapeBackground>(0));
+            setBackground(QSharedPointer<KoShapeBackground>(nullptr));
         }
         return;
     }

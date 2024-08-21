@@ -22,12 +22,12 @@ ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoShapeAnchor *anch
                                                              KUndo2Command *parent)
     : KUndo2Command(kundo2_noi18n("Change Anchor Properties"), parent)
     , m_anchor(anchor)
-    , m_oldAnchor(0)
-    , m_newAnchor(0)
+    , m_oldAnchor(nullptr)
+    , m_newAnchor(nullptr)
     , m_oldParent(anchor->shape()->parent())
     , m_newParent(newParent)
     , m_oldLocation(anchor->textLocation())
-    , m_newLocation(0)
+    , m_newLocation(nullptr)
     , m_first(true)
     , m_undone(false)
 {
@@ -56,7 +56,7 @@ void ChangeAnchorPropertiesCommand::copyLayoutProperties(const KoShapeAnchor *fr
 
 void ChangeAnchorPropertiesCommand::redo()
 {
-    KoTextShapeDataBase *textData = 0;
+    KoTextShapeDataBase *textData = nullptr;
     if (m_oldParent) {
         textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
     } else if (m_newParent) {
@@ -115,7 +115,7 @@ void ChangeAnchorPropertiesCommand::redo()
         // And then set the new location
         switch (m_newAnchor.anchorType()) {
         case KoShapeAnchor::AnchorPage:
-            m_anchor->setTextLocation(0);
+            m_anchor->setTextLocation(nullptr);
             break;
 
         case KoShapeAnchor::AnchorAsCharacter:
@@ -171,7 +171,7 @@ void ChangeAnchorPropertiesCommand::redo()
 
 void ChangeAnchorPropertiesCommand::undo()
 {
-    KoTextShapeDataBase *textData = 0;
+    KoTextShapeDataBase *textData = nullptr;
     if (m_oldParent) {
         textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
     } else if (m_newParent) {
@@ -219,7 +219,7 @@ void ChangeAnchorPropertiesCommand::undo()
         switch (m_oldAnchor.anchorType()) {
         case KoShapeAnchor::AnchorPage:
             // nothing we need to do to clean up old
-            m_anchor->setTextLocation(0);
+            m_anchor->setTextLocation(nullptr);
             break;
 
         case KoShapeAnchor::AnchorAsCharacter:

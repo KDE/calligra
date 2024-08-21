@@ -110,7 +110,7 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
 {
     StarShape *star = new StarShape();
     if (!star)
-        return 0;
+        return nullptr;
 
     star->setCornerCount(params->intProperty("corners", 5));
     star->setConvex(params->boolProperty("convex", false));

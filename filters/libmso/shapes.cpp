@@ -92,7 +92,7 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer &o, Writer &out)
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
     } else {
-        const DrawStyle ds(0, 0, &o);
+        const DrawStyle ds(nullptr, nullptr, &o);
         if (ds.pib()) {
             // see bug https://bugs.kde.org/show_bug.cgi?id=285577
             processPictureFrame(o, out);
@@ -297,12 +297,12 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Wr
  */
 void ODrawToOdf::processConnector(const OfficeArtSpContainer &o, Writer &out, PathArtist drawPath)
 {
-    const OfficeArtDggContainer *drawingGroup = 0;
+    const OfficeArtDggContainer *drawingGroup = nullptr;
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
     }
 
-    const OfficeArtSpContainer *master = 0;
+    const OfficeArtSpContainer *master = nullptr;
     const DrawStyle ds(drawingGroup, master, &o);
     qreal rotation = toQReal(ds.rotation());
 
@@ -379,7 +379,7 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer &o, Writer &out, Pa
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer &o, Writer &out)
 {
-    DrawStyle ds(0, &o);
+    DrawStyle ds(nullptr, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib())
@@ -988,8 +988,8 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
 // Position the shape into the slide or into a group shape
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer &o, Writer &out)
 {
-    const OfficeArtDggContainer *dgg = 0;
-    const OfficeArtSpContainer *master = 0;
+    const OfficeArtDggContainer *dgg = nullptr;
+    const OfficeArtSpContainer *master = nullptr;
     const DrawStyle ds(dgg, master, &o);
     const qreal rotation = toQReal(ds.rotation());
 
@@ -1051,8 +1051,8 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer &o, Writer &out)
 
 void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
-    const OfficeArtDggContainer *drawingGroup = 0;
-    const OfficeArtSpContainer *master = 0;
+    const OfficeArtDggContainer *drawingGroup = nullptr;
+    const OfficeArtSpContainer *master = nullptr;
     const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();

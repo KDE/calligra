@@ -112,7 +112,7 @@ TrackedChangeModel::TrackedChangeModel(QTextDocument *document, QObject *parent)
     : QAbstractItemModel(parent)
     , m_document(document)
 {
-    m_rootItem = new ModelItem(0);
+    m_rootItem = new ModelItem(nullptr);
     setupModelData(m_document, m_rootItem);
 }
 

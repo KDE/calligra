@@ -109,7 +109,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoa
     formulaElement->readMathML(topLevelElement);
     delete m_formulaData->formulaElement();
     m_formulaData->setFormulaElement(formulaElement);
-    m_formulaData->notifyDataChange(0, false);
+    m_formulaData->notifyDataChange(nullptr, false);
 
     m_isInline = true;
 
@@ -196,7 +196,7 @@ bool KoFormulaShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &ob
 
             // For security reasons we need to ask confirmation if the
             // url is remote.
-            int result = KMessageBox::warningTwoActionsCancel(0,
+            int result = KMessageBox::warningTwoActionsCancel(nullptr,
                                                               i18n("This document contains an external link to a remote document\n%1", tmpURL),
                                                               i18n("Confirmation Required"),
                                                               KGuiItem(i18n("Download")),
@@ -240,7 +240,7 @@ bool KoFormulaShape::loadOdfEmbedded(const KoXmlElement &topLevelElement, KoShap
     formulaElement->readMathML(topLevelElement);
     delete m_formulaData->formulaElement();
     m_formulaData->setFormulaElement(formulaElement);
-    m_formulaData->notifyDataChange(0, false);
+    m_formulaData->notifyDataChange(nullptr, false);
 
     return true;
 }

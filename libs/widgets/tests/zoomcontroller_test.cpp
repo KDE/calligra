@@ -19,7 +19,7 @@
 void zoomcontroller_test::testApi()
 {
     KoZoomHandler zoomHandler;
-    KoZoomController zoomController(new KoCanvasControllerWidget(0), &zoomHandler, new KActionCollection(this), KoZoomAction::AspectMode);
+    KoZoomController zoomController(new KoCanvasControllerWidget(nullptr), &zoomHandler, new KActionCollection(this), KoZoomAction::AspectMode);
     Q_UNUSED(zoomController);
 }
 

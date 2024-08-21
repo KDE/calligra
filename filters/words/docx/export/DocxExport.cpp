@@ -100,7 +100,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray &from, const QBy
         QByteArray tempArray;
         QBuffer tempBuffer(&tempArray);
         KoXmlWriter commentWriter(&tempBuffer);
-        commentWriter.startDocument(0);
+        commentWriter.startDocument(nullptr);
         commentWriter.startElement("w:comments");
         commentWriter.addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
         commentWriter.addCompleteElement(docxBackendContext.commentsContent());

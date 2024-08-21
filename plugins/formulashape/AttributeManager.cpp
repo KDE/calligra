@@ -44,7 +44,7 @@
 
 AttributeManager::AttributeManager()
 {
-    m_viewConverter = 0;
+    m_viewConverter = nullptr;
 }
 
 AttributeManager::~AttributeManager()

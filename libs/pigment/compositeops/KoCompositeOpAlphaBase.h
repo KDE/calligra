@@ -68,7 +68,7 @@ public:
                     _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
 
                 // apply the alphamask
-                if (mask != 0) {
+                if (mask != nullptr) {
                     srcAlpha = KoColorSpaceMaths<quint8, channels_type>::multiply(*mask, srcAlpha, opacity);
                     mask++;
                 } else if (opacity != NATIVE_OPACITY_OPAQUE) {

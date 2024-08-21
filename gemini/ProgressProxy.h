@@ -15,7 +15,7 @@ class ProgressProxy : public QObject, public KoProgressProxy
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
 
 public:
-    explicit ProgressProxy(QObject *parent = 0);
+    explicit ProgressProxy(QObject *parent = nullptr);
     ~ProgressProxy() override;
 
     QString taskName() const;

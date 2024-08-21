@@ -128,8 +128,8 @@ void AddSheetCommand::undo()
 
 DuplicateSheetCommand::DuplicateSheetCommand()
     : KUndo2Command(kundo2_i18n("Duplicate Sheet"))
-    , m_oldSheet(0)
-    , m_newSheet(0)
+    , m_oldSheet(nullptr)
+    , m_newSheet(nullptr)
     , m_firstrun(true)
 {
 }

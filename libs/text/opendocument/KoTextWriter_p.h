@@ -39,7 +39,7 @@ class TagInformation
 {
 public:
     TagInformation()
-        : tagName(0)
+        : tagName(nullptr)
         , attributeList()
     {
     }
@@ -92,8 +92,12 @@ public:
     {
     }
 
-    void
-    writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextList *currentList = 0);
+    void writeBlocks(QTextDocument *document,
+                     int from,
+                     int to,
+                     QHash<QTextList *, QString> &listStyles,
+                     QTextTable *currentTable = nullptr,
+                     QTextList *currentList = nullptr);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
 
 private:

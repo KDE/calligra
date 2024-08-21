@@ -43,7 +43,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const = 0;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -57,7 +57,7 @@ public:
      * @see createDefaultShape() newDocumentResourceManager()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const;
 };
 
 #endif

@@ -117,7 +117,7 @@ protected:
     // from KoShape
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     // from KoShape
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
     // from KoParameterShape
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
     // from KoParameterShape

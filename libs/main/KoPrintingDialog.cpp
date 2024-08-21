@@ -82,7 +82,7 @@ void KoPrintingDialog::setPageRange(const QList<int> &pages)
 
 QPainter &KoPrintingDialog::painter() const
 {
-    if (d->painter == 0) {
+    if (d->painter == nullptr) {
         d->painter = new QPainter(d->printer);
         d->painter->save(); // state before page preparation (3)
     }
@@ -127,7 +127,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             d->dialog->show();
         d->stop = false;
         delete d->painter;
-        d->painter = 0;
+        d->painter = nullptr;
         d->zoomer.setZoom(1.0);
         d->zoomer.setDpi(d->printer->resolution(), d->printer->resolution());
 

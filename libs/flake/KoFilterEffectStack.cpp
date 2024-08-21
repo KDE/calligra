@@ -72,7 +72,7 @@ void KoFilterEffectStack::removeFilterEffect(int index)
 KoFilterEffect *KoFilterEffectStack::takeFilterEffect(int index)
 {
     if (index >= d->filterEffects.size())
-        return 0;
+        return nullptr;
     return d->filterEffects.takeAt(index);
 }
 

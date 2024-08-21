@@ -29,29 +29,29 @@ void TestShapeAt::test()
     shape1.setZIndex(0);
     manager.addShape(&shape1);
 
-    QVERIFY(manager.shapeAt(QPointF(90, 90)) == 0);
-    QVERIFY(manager.shapeAt(QPointF(110, 140)) != 0);
-    QVERIFY(manager.shapeAt(QPointF(100, 100)) != 0);
-    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Selected) == 0);
-    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Unselected) != 0);
-    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != 0);
+    QVERIFY(manager.shapeAt(QPointF(90, 90)) == nullptr);
+    QVERIFY(manager.shapeAt(QPointF(110, 140)) != nullptr);
+    QVERIFY(manager.shapeAt(QPointF(100, 100)) != nullptr);
+    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Selected) == nullptr);
+    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Unselected) != nullptr);
+    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != nullptr);
 
     shape2.setPosition(QPointF(80, 80));
     shape2.setSize(QSizeF(50, 50));
     shape2.setZIndex(1);
     manager.addShape(&shape2);
 
-    QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
+    QVERIFY(manager.shapeAt(QPointF(200, 200)) == nullptr);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);
     QCOMPARE(manager.shapeAt(QPointF(105, 105)), &shape2); // the one on top
-    KoShape *dummy = 0;
+    KoShape *dummy = nullptr;
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::Selected), dummy);
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::Unselected), &shape2); // the one on top
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::NextUnselected), &shape2);
 
     manager.selection()->select(&shape2);
 
-    QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
+    QVERIFY(manager.shapeAt(QPointF(200, 200)) == nullptr);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);
     QCOMPARE(manager.shapeAt(QPointF(105, 105)), &shape2); // the one on top
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::Selected), &shape2);
@@ -63,10 +63,10 @@ void TestShapeAt::test()
     shape3.setZIndex(2);
     manager.addShape(&shape3);
 
-    QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
+    QVERIFY(manager.shapeAt(QPointF(200, 200)) == nullptr);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);
 
-    QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
+    QVERIFY(manager.shapeAt(QPointF(200, 200)) == nullptr);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);
     QCOMPARE(manager.shapeAt(QPointF(105, 145)), &shape1);
     QCOMPARE(manager.shapeAt(QPointF(165, 90)), &shape3);

@@ -28,7 +28,7 @@ class Q_DECL_HIDDEN KoTextLocator::Private
 public:
     Private(KoTextLocator *q)
         : q(q)
-        , document(0)
+        , document(nullptr)
         , dirty(false)
         , cursorPosition(0)
         , chapterPosition(-1)
@@ -43,7 +43,7 @@ public:
         chapterPosition = -1;
 
         int pageTmp = pageNumber, chapterTmp = chapterPosition;
-        if (document == 0)
+        if (document == nullptr)
             return;
 
         QTextBlock block = document->findBlock(cursorPosition);
@@ -71,7 +71,7 @@ public:
         */
         if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
             foreach (KoTextReference *reference, listeners)
-                reference->variableMoved(0, 0);
+                reference->variableMoved(nullptr, 0);
         }
     }
 
@@ -145,7 +145,7 @@ int KoTextLocator::indexPosition() const
 
 QString KoTextLocator::word() const
 {
-    if (d->document == 0) // layout never started
+    if (d->document == nullptr) // layout never started
         return QString();
     QTextCursor cursor(const_cast<QTextDocument *>(d->document));
     cursor.setPosition(d->cursorPosition);

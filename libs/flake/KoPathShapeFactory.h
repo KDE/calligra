@@ -24,7 +24,7 @@ public:
     ~KoPathShapeFactory() override
     {
     }
-    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     /// reimplemented
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;

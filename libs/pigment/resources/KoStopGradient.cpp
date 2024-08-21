@@ -107,7 +107,7 @@ QGradient *KoStopGradient::toQGradient() const
         break;
     }
     default:
-        return 0;
+        return nullptr;
     }
     QColor color;
     for (QList<KoGradientStop>::const_iterator i = m_stops.begin(); i != m_stops.end(); ++i) {
@@ -191,7 +191,7 @@ void KoStopGradient::colorAt(KoColor &dst, qreal t) const
 KoStopGradient *KoStopGradient::fromQGradient(QGradient *gradient)
 {
     if (!gradient)
-        return 0;
+        return nullptr;
 
     KoStopGradient *newGradient = new KoStopGradient("");
     newGradient->setType(gradient->type());
@@ -222,7 +222,7 @@ KoStopGradient *KoStopGradient::fromQGradient(QGradient *gradient)
     }
     default:
         delete newGradient;
-        return 0;
+        return nullptr;
     }
 
     foreach (const QGradientStop &stop, gradient->stops()) {
@@ -313,8 +313,8 @@ void KoStopGradient::parseKarbonGradient(const QDomElement &element)
     m_focalPoint = QPointF(element.attribute("focalX", "0.0").toDouble(), element.attribute("focalY", "0.0").toDouble());
     m_stop = QPointF(element.attribute("vectorX", "0.0").toDouble(), element.attribute("vectorY", "0.0").toDouble());
 
-    setType((QGradient::Type)element.attribute("type", 0).toInt());
-    setSpread((QGradient::Spread)element.attribute("repeatMethod", 0).toInt());
+    setType((QGradient::Type)element.attribute("type", nullptr).toInt());
+    setSpread((QGradient::Spread)element.attribute("repeatMethod", nullptr).toInt());
 
     m_stops.clear();
 

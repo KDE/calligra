@@ -157,7 +157,7 @@ void KoToolBase::touchEvent(QTouchEvent *event)
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);
-    if (d->canvas->canvasWidget() == 0)
+    if (d->canvas->canvasWidget() == nullptr)
         return QVariant();
 
     switch (query) {
@@ -238,7 +238,7 @@ QAction *KoToolBase::action(const QString &name) const
 
 QWidget *KoToolBase::createOptionWidget()
 {
-    return 0;
+    return nullptr;
 }
 
 QList<QPointer<QWidget>> KoToolBase::createOptionWidgets()
@@ -389,7 +389,7 @@ bool KoToolBase::hasSelection()
 
 KoToolSelection *KoToolBase::selection()
 {
-    return 0;
+    return nullptr;
 }
 
 void KoToolBase::repaintDecorations()

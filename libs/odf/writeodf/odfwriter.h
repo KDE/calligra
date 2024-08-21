@@ -34,14 +34,14 @@ private:
 
 protected:
     OdfWriter(KoXmlWriter *xml_, const char *tag, bool indent)
-        : child(0)
-        , parent(0)
+        : child(nullptr)
+        , parent(nullptr)
         , xml(xml_)
     {
         xml->startElement(tag, indent);
     }
     OdfWriter(OdfWriter *p, const char *tag, bool indent)
-        : child(0)
+        : child(nullptr)
         , parent(p)
         , xml(parent->xml)
     {
@@ -60,7 +60,7 @@ protected:
         if (child) {
             child->parent = nullptr;
             child->end();
-            child = 0;
+            child = nullptr;
         }
     }
     OdfWriter(const OdfWriter &&o)
@@ -69,7 +69,7 @@ protected:
         , xml(o.xml)
     {
         // disable o and make the parent refer to this new copy
-        o.xml = 0;
+        o.xml = nullptr;
         if (parent && parent->child == &o) {
             parent->child = this;
         }
@@ -82,9 +82,9 @@ public:
             endChild();
             xml->endElement();
             if (parent) {
-                parent->child = 0;
+                parent->child = nullptr;
             }
-            xml = 0;
+            xml = nullptr;
         }
     }
     void addTextNode(const QString &str)

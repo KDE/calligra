@@ -9,7 +9,7 @@
 #include "pageeffects/KPrPageEffect.h"
 
 KPrPageApplicationData::KPrPageApplicationData()
-    : m_pageEffect(0)
+    : m_pageEffect(nullptr)
 {
 }
 

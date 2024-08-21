@@ -12,7 +12,7 @@
 MusicWidget::MusicWidget(QWidget *parent)
     : QWidget(parent)
     , m_renderer(&m_style)
-    , m_sheet(0)
+    , m_sheet(nullptr)
     , m_scale(1.0)
     , m_lastSystem(0)
 {

@@ -243,7 +243,7 @@ void WordsTableHandler::tableEnd()
         writer->endElement(); // draw:frame
     }
 
-    m_currentTable = 0L; // we don't own it, Document does
+    m_currentTable = nullptr; // we don't own it, Document does
 }
 
 void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
@@ -371,7 +371,7 @@ void WordsTableHandler::tableCellStart()
         for (; it != m_currentTable->rows.constEnd(); ++it) {
             // Find cell right below us in row (*it), if any
             Words::TAPptr tapBelow = (*it).tap;
-            const wvWare::Word97::TC *tcBelow = 0L;
+            const wvWare::Word97::TC *tcBelow = nullptr;
             for (int c = 0; !tcBelow && c < tapBelow->itcMac; ++c) {
                 if (qAbs(tapBelow->rgdxaCenter[c] - leftEdgePos) <= 3 && qAbs(tapBelow->rgdxaCenter[c + 1] - rightEdgePos) <= 3) {
                     tcBelow = &tapBelow->rgtc[c];

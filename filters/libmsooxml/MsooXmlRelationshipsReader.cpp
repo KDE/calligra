@@ -46,7 +46,7 @@ public:
 
 MsooXmlRelationshipsReader::MsooXmlRelationshipsReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
+    , m_context(nullptr)
     , d(new Private)
 {
     init();
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlRead
 {
     m_context = dynamic_cast<MsooXmlRelationshipsReaderContext *>(context);
     const KoFilter::ConversionStatus result = readInternal();
-    m_context = 0;
+    m_context = nullptr;
     if (result == KoFilter::OK)
         return KoFilter::OK;
     return result;

@@ -31,8 +31,8 @@ class SvgOutputDev::Private
 public:
     Private(const QString &fname)
         : svgFile(fname)
-        , defs(0)
-        , body(0)
+        , defs(nullptr)
+        , body(nullptr)
         , state(true)
         , brush(Qt::SolidPattern)
     {
@@ -488,10 +488,10 @@ void SvgOutputDev::drawImage(GfxState *state,
     ImageStream *imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
 
-    unsigned int *dest = 0;
+    unsigned int *dest = nullptr;
     unsigned char *buffer = new unsigned char[width * height * 4];
 
-    QImage *image = 0;
+    QImage *image = nullptr;
     if (maskColors) {
         for (int y = 0; y < height; y++) {
             dest = (unsigned int *)(buffer + y * 4 * width);

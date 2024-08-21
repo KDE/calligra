@@ -39,14 +39,14 @@ void TestPAPageInsertCommand::redoUndo()
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(p1 != 0);
-    QVERIFY(m1 != 0);
+    QVERIFY(p1 != nullptr);
+    QVERIFY(m1 != nullptr);
 
     KoPAPage *p2 = new KoPAPage(m1);
     KoPAPage *p3 = new KoPAPage(m1);
 
     KoPAPageInsertCommand cmd(&doc, p2, p1);
-    KoPAPageInsertCommand cmd2(&doc, p3, 0);
+    KoPAPageInsertCommand cmd2(&doc, p3, nullptr);
 
     cmd.redo();
     cmd2.redo();
@@ -90,13 +90,13 @@ void TestPAPageInsertCommand::redoUndoMaster()
 
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(m1 != 0);
+    QVERIFY(m1 != nullptr);
 
     KoPAMasterPage *m2 = new KoPAMasterPage();
     KoPAMasterPage *m3 = new KoPAMasterPage();
 
     KoPAPageInsertCommand cmd(&doc, m2, m1);
-    KoPAPageInsertCommand cmd2(&doc, m3, 0);
+    KoPAPageInsertCommand cmd2(&doc, m3, nullptr);
 
     cmd.redo();
     cmd2.redo();

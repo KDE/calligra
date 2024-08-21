@@ -16,7 +16,7 @@
 
 KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper(KoPADocument *doc, QList<KoPAPageBase *> pages)
     : m_doc(doc)
-    , m_context(0)
+    , m_context(nullptr)
 {
     foreach (KoPAPageBase *page, pages) {
         if (dynamic_cast<KoPAPage *>(page)) {

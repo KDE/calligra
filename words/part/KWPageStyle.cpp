@@ -346,7 +346,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
             d->fullPageBackground = background;
 
             KoImageCollection *imageCollection = documentResources->imageCollection();
-            if (imageCollection != 0) {
+            if (imageCollection != nullptr) {
                 KoImageData *imageData = imageCollection->createImageData(href, context.store());
                 background->setPattern(imageData);
             }
@@ -356,7 +356,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
 
     // Load background color
     QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString());
-    if (!backgroundColor.isNull() && d->fullPageBackground == 0) {
+    if (!backgroundColor.isNull() && d->fullPageBackground == nullptr) {
         if (backgroundColor == "transparent") {
             d->fullPageBackground.clear();
         } else {

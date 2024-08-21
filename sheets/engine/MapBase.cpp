@@ -480,7 +480,7 @@ Region MapBase::regionFromName(const QString &expression, SheetBase *sheet) cons
 // get sheet name from a cell range string
 SheetBase *MapBase::filterSheetName(QString &sRegion) const
 {
-    SheetBase *sheet = 0;
+    SheetBase *sheet = nullptr;
     int delimiterPos = sRegion.lastIndexOf('!');
     if (delimiterPos < 0)
         delimiterPos = sRegion.lastIndexOf('.');

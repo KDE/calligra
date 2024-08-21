@@ -250,7 +250,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach (KoShape *shape, sortedShapes) {
-        if (shape->parent() != 0 && shape->parent()->isClipped(shape))
+        if (shape->parent() != nullptr && shape->parent()->isClipped(shape))
             continue;
 
         painter.save();
@@ -419,7 +419,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
     d->updateTree();
     QList<KoShape *> sortedShapes(d->tree.contains(position));
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
-    KoShape *firstUnselectedShape = 0;
+    KoShape *firstUnselectedShape = nullptr;
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
         if (omitHiddenShapes && !shape->isVisible(true))
@@ -461,7 +461,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
     if (d->selection->hitTest(position))
         return d->selection;
 
-    return 0; // missed everything
+    return nullptr; // missed everything
 }
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
@@ -475,7 +475,7 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
         if (omitHiddenShapes && !shape->isVisible(true)) {
             intersectedShapes.removeAt(count);
         } else {
-            const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
+            const QPainterPath outline = shape->absoluteTransformation(nullptr).map(shape->outline());
             if (!outline.intersects(rect) && !outline.contains(rect)) {
                 intersectedShapes.removeAt(count);
             }
@@ -525,7 +525,7 @@ QList<KoShape *> KoShapeManager::topLevelShapes() const
     QList<KoShape *> shapes;
     // get all toplevel shapes
     foreach (KoShape *shape, d->shapes) {
-        if (shape->parent() == 0) {
+        if (shape->parent() == nullptr) {
             shapes.append(shape);
         }
     }

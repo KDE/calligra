@@ -21,10 +21,10 @@
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     : CharacterGeneral(parent)
     , m_nameHidden(false)
-    , m_style(0)
-    , m_styleManager(0)
+    , m_style(nullptr)
+    , m_styleManager(nullptr)
     , m_thumbnail(new KoStyleThumbnailer())
-    , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    , m_paragraphInheritedStyleModel(new StylesModel(nullptr, StylesModel::ParagraphStyle))
 {
     // Disable for now
     // include in TOC
@@ -146,8 +146,8 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
 {
     KoParagraphStyle *savingStyle;
 
-    if (style == 0) {
-        if (m_style == 0)
+    if (style == nullptr) {
+        if (m_style == nullptr)
             return;
         else
             savingStyle = m_style;

@@ -27,7 +27,7 @@ public:
     QByteArray importMimeType;
     QPointer<KoProgressUpdater> progressUpdater;
 
-    Private(KoProgressUpdater *progressUpdater_ = 0)
+    Private(KoProgressUpdater *progressUpdater_ = nullptr)
         : progressUpdater(progressUpdater_)
     {
     }

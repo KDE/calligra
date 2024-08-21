@@ -27,7 +27,7 @@ using namespace Bubble;
 
 DataColumnDelegate::DataColumnDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
-    , dataModel(0)
+    , dataModel(nullptr)
 {
 }
 
@@ -70,8 +70,8 @@ void DataColumnDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptio
 
 DataSetTableModel::DataSetTableModel(QObject *parent)
     : QAbstractTableModel(parent)
-    , chartModel(0)
-    , tableSource(0)
+    , chartModel(nullptr)
+    , tableSource(nullptr)
 {
 }
 

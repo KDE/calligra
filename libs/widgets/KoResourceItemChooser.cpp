@@ -45,19 +45,19 @@ class Q_DECL_HIDDEN KoResourceItemChooser::Private
 {
 public:
     Private()
-        : model(0)
-        , view(0)
-        , buttonGroup(0)
-        , viewModeButton(0)
+        : model(nullptr)
+        , view(nullptr)
+        , buttonGroup(nullptr)
+        , viewModeButton(nullptr)
         , usePreview(false)
-        , previewScroller(0)
-        , previewLabel(0)
-        , splitter(0)
+        , previewScroller(nullptr)
+        , previewLabel(nullptr)
+        , splitter(nullptr)
         , tiledPreview(false)
         , grayscalePreview(false)
         , synced(false)
         , updatesBlocked(false)
-        , savedResourceWhileReset(0)
+        , savedResourceWhileReset(nullptr)
     {
     }
     KoResourceModel *model;
@@ -186,7 +186,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         QString extensions = d->model->extensions();
         QString filter = QString("%1").arg(extensions.replace(QString(":"), QString(" ")));
 
-        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+        KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setNameFilter(filter);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
@@ -274,7 +274,7 @@ KoResource *KoResourceItemChooser::currentResource() const
     if (index.isValid()) {
         return resourceFromModelIndex(index);
     }
-    return 0;
+    return nullptr;
 }
 
 void KoResourceItemChooser::setCurrentResource(KoResource *resource)
@@ -410,7 +410,7 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     const QAbstractProxyModel *proxyModel = dynamic_cast<const QAbstractProxyModel *>(index.model());
     if (proxyModel) {

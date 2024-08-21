@@ -34,7 +34,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
 void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     shape->removeAdditionalAttribute("text:anchor-type");
-    const KoXmlElement *style = 0;
+    const KoXmlElement *style = nullptr;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(element.attributeNS(KoXmlNS::draw, "style-name"),
                                                                      "graphic",
@@ -90,7 +90,7 @@ void KWOdfSharedLoadingData::connectFlowingTextShapes()
 
         while (shape) {
             QString nextName = m_nextShapeNames[shape];
-            shape = 0;
+            shape = nullptr;
 
             foreach (KoShape *s, m_shapesToProcess) {
                 if (s->name() == nextName) {

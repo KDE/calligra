@@ -47,7 +47,7 @@ KoInlineObject *InsertVariableAction::createInlineObject()
         dialog->addPage(widget, QString());
         if (dialog->exec() != KPageDialog::Accepted) {
             delete variable;
-            variable = 0;
+            variable = nullptr;
         }
         delete dialog;
     }

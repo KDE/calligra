@@ -24,7 +24,7 @@
 KoPAViewModeNormal::KoPAViewModeNormal(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
     , m_masterMode(false)
-    , m_savedPage(0)
+    , m_savedPage(nullptr)
 {
 }
 
@@ -160,7 +160,7 @@ void KoPAViewModeNormal::setMasterMode(bool master)
         }
     } else if (m_savedPage) {
         m_view->doUpdateActivePage(m_savedPage);
-        m_savedPage = 0;
+        m_savedPage = nullptr;
     }
 }
 
@@ -174,12 +174,12 @@ void KoPAViewModeNormal::addShape(KoShape *shape)
     // the KoShapeController sets the active layer as parent
     KoPAPageBase *page(m_view->kopaDocument()->pageByShape(shape));
 
-    bool isMaster = dynamic_cast<KoPAMasterPage *>(page) != 0;
+    bool isMaster = dynamic_cast<KoPAMasterPage *>(page) != nullptr;
 
     KoPAPage *p;
     if (page == m_view->activePage()) {
         m_view->kopaCanvas()->shapeManager()->addShape(shape);
-    } else if (isMaster && (p = dynamic_cast<KoPAPage *>(m_view->activePage())) != 0) {
+    } else if (isMaster && (p = dynamic_cast<KoPAPage *>(m_view->activePage())) != nullptr) {
         if (p->masterPage() == page) {
             m_view->kopaCanvas()->masterShapeManager()->addShape(shape);
         }
@@ -190,12 +190,12 @@ void KoPAViewModeNormal::removeShape(KoShape *shape)
 {
     KoPAPageBase *page(m_view->kopaDocument()->pageByShape(shape));
 
-    bool isMaster = dynamic_cast<KoPAMasterPage *>(page) != 0;
+    bool isMaster = dynamic_cast<KoPAMasterPage *>(page) != nullptr;
 
     KoPAPage *p;
     if (page == m_view->activePage()) {
         m_view->kopaCanvas()->shapeManager()->remove(shape);
-    } else if (isMaster && (p = dynamic_cast<KoPAPage *>(m_view->activePage())) != 0) {
+    } else if (isMaster && (p = dynamic_cast<KoPAPage *>(m_view->activePage())) != nullptr) {
         if (p->masterPage() == page) {
             m_view->kopaCanvas()->masterShapeManager()->remove(shape);
         }

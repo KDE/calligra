@@ -24,8 +24,8 @@ class Q_DECL_HIDDEN KoColor::Private
 {
 public:
     Private()
-        : data(0)
-        , colorSpace(0)
+        : data(nullptr)
+        , colorSpace(nullptr)
     {
     }
 
@@ -41,7 +41,7 @@ public:
 KoColor::KoColor()
     : d(new Private())
 {
-    d->colorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
+    d->colorSpace = KoColorSpaceRegistry::instance()->rgb16(nullptr);
     d->data = new quint8[d->colorSpace->pixelSize()];
     d->colorSpace->fromQColor(Qt::black, d->data);
     d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
@@ -118,7 +118,7 @@ KoColor &KoColor::operator=(const KoColor &rhs)
         return *this;
 
     delete[] d->data;
-    d->data = 0;
+    d->data = nullptr;
     d->colorSpace = rhs.colorSpace();
 
     if (rhs.d->colorSpace && rhs.d->data) {
@@ -306,7 +306,7 @@ KoColor KoColor::fromXML(const QDomElement &elt, const QString &bitDepthId, cons
         }
     }
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
-    if (cs == 0) {
+    if (cs == nullptr) {
         QList<KoID> list = KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
         if (!list.empty()) {
             cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, list[0].id(), profileName);

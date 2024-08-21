@@ -39,8 +39,8 @@ void TestPAPageDeleteCommand::redoUndo()
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(p1 != 0);
-    QVERIFY(m1 != 0);
+    QVERIFY(p1 != nullptr);
+    QVERIFY(m1 != nullptr);
 
     KoPAPage *p2 = new KoPAPage(m1);
     KoPAPage *p3 = new KoPAPage(m1);
@@ -95,7 +95,7 @@ void TestPAPageDeleteCommand::redoUndoMaster()
 
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(m1 != 0);
+    QVERIFY(m1 != nullptr);
 
     KoPAMasterPage *m2 = new KoPAMasterPage();
     KoPAMasterPage *m3 = new KoPAMasterPage();
@@ -150,7 +150,7 @@ void TestPAPageDeleteCommand::redoUndoMultiple()
     KoPAMasterPage *master = new KoPAMasterPage();
     doc.insertPage(master, 0);
     KoPAMasterPage *m = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
-    QVERIFY(m != 0);
+    QVERIFY(m != nullptr);
 
     // Create three regular pages.
     KoPAPage *page1 = new KoPAPage(master);
@@ -162,9 +162,9 @@ void TestPAPageDeleteCommand::redoUndoMultiple()
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
     KoPAPage *p2 = dynamic_cast<KoPAPage *>(doc.pageByIndex(1, false));
     KoPAPage *p3 = dynamic_cast<KoPAPage *>(doc.pageByIndex(2, false));
-    QVERIFY(p1 != 0);
-    QVERIFY(p2 != 0);
-    QVERIFY(p3 != 0);
+    QVERIFY(p1 != nullptr);
+    QVERIFY(p2 != nullptr);
+    QVERIFY(p3 != nullptr);
 
     // Delete the two last ones.
     QList<KoPAPageBase *> pagesToDelete;

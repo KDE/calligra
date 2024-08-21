@@ -39,9 +39,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget *parent, const QString &header, KoTempl
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     connect(m_alwaysUseCheckBox, &QAbstractButton::clicked, this, &KoTemplatesPane::alwaysUseClicked);
 
-    QStandardItem *selectItem = 0;
+    QStandardItem *selectItem = nullptr;
     QStandardItem *rootItem = model()->invisibleRootItem();
-    QStandardItem *defaultItem = 0;
+    QStandardItem *defaultItem = nullptr;
 
     foreach (KoTemplate *t, group->templates()) {
         if (t->isHidden())

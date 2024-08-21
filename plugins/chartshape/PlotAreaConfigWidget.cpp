@@ -170,44 +170,44 @@ public:
 
 PlotAreaConfigWidget::Private::Private(PlotAreaConfigWidget *parent)
     : q(parent)
-    , tableEditorDialog(0)
-    , cellRegionDialog(0)
+    , tableEditorDialog(nullptr)
+    , cellRegionDialog(nullptr)
 {
     selectedDataSet = 0;
-    tableSource = 0;
+    tableSource = nullptr;
 
     type = KoChart::LastChartType;
     subtype = KoChart::NoChartSubtype;
     threeDMode = false;
 
     isExternalDataSource = false;
-    cellRegionStringValidator = 0;
+    cellRegionStringValidator = nullptr;
 
-    dataSetBarChartMenu = 0;
-    dataSetLineChartMenu = 0;
-    dataSetAreaChartMenu = 0;
-    dataSetRadarChartMenu = 0;
-    dataSetStockChartMenu = 0;
-    dataSetNormalBarChartAction = 0;
-    dataSetStackedBarChartAction = 0;
-    dataSetPercentBarChartAction = 0;
-    dataSetNormalLineChartAction = 0;
-    dataSetStackedLineChartAction = 0;
-    dataSetPercentLineChartAction = 0;
-    dataSetNormalAreaChartAction = 0;
-    dataSetStackedAreaChartAction = 0;
-    dataSetPercentAreaChartAction = 0;
-    dataSetCircleChartAction = 0;
-    dataSetRingChartAction = 0;
-    dataSetScatterChartAction = 0;
-    dataSetRadarChartAction = 0;
-    dataSetFilledRadarChartAction = 0;
-    dataSetHLCStockChartAction = 0;
-    dataSetOHLCStockChartAction = 0;
-    dataSetCandlestickStockChartAction = 0;
-    dataSetBubbleChartAction = 0;
-    dataSetSurfaceChartAction = 0;
-    dataSetGanttChartAction = 0;
+    dataSetBarChartMenu = nullptr;
+    dataSetLineChartMenu = nullptr;
+    dataSetAreaChartMenu = nullptr;
+    dataSetRadarChartMenu = nullptr;
+    dataSetStockChartMenu = nullptr;
+    dataSetNormalBarChartAction = nullptr;
+    dataSetStackedBarChartAction = nullptr;
+    dataSetPercentBarChartAction = nullptr;
+    dataSetNormalLineChartAction = nullptr;
+    dataSetStackedLineChartAction = nullptr;
+    dataSetPercentLineChartAction = nullptr;
+    dataSetNormalAreaChartAction = nullptr;
+    dataSetStackedAreaChartAction = nullptr;
+    dataSetPercentAreaChartAction = nullptr;
+    dataSetCircleChartAction = nullptr;
+    dataSetRingChartAction = nullptr;
+    dataSetScatterChartAction = nullptr;
+    dataSetRadarChartAction = nullptr;
+    dataSetFilledRadarChartAction = nullptr;
+    dataSetHLCStockChartAction = nullptr;
+    dataSetOHLCStockChartAction = nullptr;
+    dataSetCandlestickStockChartAction = nullptr;
+    dataSetBubbleChartAction = nullptr;
+    dataSetSurfaceChartAction = nullptr;
+    dataSetGanttChartAction = nullptr;
 }
 
 PlotAreaConfigWidget::Private::~Private()
@@ -348,14 +348,14 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
         case StockChartType:
         case CircleChartType:
             delete d->cellRegionDialog;
-            d->cellRegionDialog = 0;
+            d->cellRegionDialog = nullptr;
             break;
             //             case BubbleChartType:
             //                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
             //                 break;
         default:
             delete d->cellRegionDialog;
-            d->cellRegionDialog = 0;
+            d->cellRegionDialog = nullptr;
             //                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
             break;
         }
@@ -382,7 +382,7 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
             break;
         default:
             delete d->tableEditorDialog;
-            d->tableEditorDialog = 0;
+            d->tableEditorDialog = nullptr;
             delete findChildren<PieDataEditor *>().value(0);
             delete findChildren<BubbleDataEditor *>().value(0);
             delete findChildren<ScatterDataEditor *>().value(0);
@@ -396,7 +396,7 @@ void PlotAreaConfigWidget::deactivate()
 {
     debugChartUiPlotArea;
     disconnect(d->ui.editData);
-    d->tableSource = 0;
+    d->tableSource = nullptr;
     ConfigWidgetBase::deactivate();
 }
 void PlotAreaConfigWidget::open(KoShape *shape)
@@ -432,7 +432,7 @@ void PlotAreaConfigWidget::setupWidgets()
 
 QAction *PlotAreaConfigWidget::createAction()
 {
-    return 0;
+    return nullptr;
 }
 
 void PlotAreaConfigWidget::chartTypeSelected(QAction *action)

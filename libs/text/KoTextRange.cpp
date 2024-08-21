@@ -16,9 +16,9 @@ class KoTextRangePrivate
 {
 public:
     KoTextRangePrivate()
-        : manager(0)
+        : manager(nullptr)
         , id(-1)
-        , rdf(0)
+        , rdf(nullptr)
         , positionOnlyMode(true)
         , initialStartPosition(-1)
         , initialEndPosition(-1)

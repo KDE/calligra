@@ -177,7 +177,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.styleWriter().addAttribute("clipPathUnits", "userSpaceOnUse");
 
     context.styleWriter().startElement("path");
-    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0) * context.userSpaceTransform()));
+    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(nullptr) * context.userSpaceTransform()));
     context.styleWriter().endElement(); // path
 
     context.styleWriter().endElement(); // clipPath
@@ -299,7 +299,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         break;
     }
 
-    offset = shape->absoluteTransformation(0).map(offset);
+    offset = shape->absoluteTransformation(nullptr).map(offset);
 
     context.styleWriter().startElement("pattern");
     context.styleWriter().addAttribute("id", uid);

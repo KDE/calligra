@@ -26,7 +26,7 @@ public:
      * @param original the original shape this one will look like.
      * @param pageManager the page manager
      */
-    explicit KWCopyShape(KoShape *original, const KWPageManager *pageManager = 0);
+    explicit KWCopyShape(KoShape *original, const KWPageManager *pageManager = nullptr);
     ~KWCopyShape() override;
 
     /// reimplemented from KoShape

@@ -26,8 +26,8 @@ class KoDocumentSectionDelegate::Private
 {
 public:
     Private()
-        : view(0)
-        , edit(0)
+        : view(nullptr)
+        , edit(nullptr)
     {
     }
 
@@ -507,7 +507,7 @@ void KoDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionV
             opt.rect = r;
             opt.state = QStyle::State_Horizontal;
             opt.state = option.state;
-            style->drawControl(QStyle::CE_ProgressBar, &opt, p, 0);
+            style->drawControl(QStyle::CE_ProgressBar, &opt, p, nullptr);
         }
         p->restore();
     }

@@ -29,12 +29,12 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
     KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
-    QVERIFY(p1 != 0);
-    QVERIFY(m1 != 0);
+    QVERIFY(p1 != nullptr);
+    QVERIFY(m1 != nullptr);
 
     QString customShowName = "test 1";
 
-    KPrCustomSlideShowsModel model(&doc, 0);
+    KPrCustomSlideShowsModel model(&doc, nullptr);
 
     KPrAddCustomSlideShowCommand cmd(&doc, &model, customShowName);
 

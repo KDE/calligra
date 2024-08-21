@@ -35,9 +35,9 @@ bool KoPAPastePage::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     QList<KoPAPageBase *> newPages(m_doc->loadOdfPages(body, paContext));
 
     // Check where to start inserting pages
-    KoPAPageBase *insertAfterPage = 0;
-    KoPAPageBase *insertAfterMasterPage = 0;
-    if (dynamic_cast<KoPAMasterPage *>(m_activePage) || (m_activePage == 0 && newPages.empty())) {
+    KoPAPageBase *insertAfterPage = nullptr;
+    KoPAPageBase *insertAfterMasterPage = nullptr;
+    if (dynamic_cast<KoPAMasterPage *>(m_activePage) || (m_activePage == nullptr && newPages.empty())) {
         insertAfterMasterPage = m_activePage;
         insertAfterPage = m_doc->pages(false).last();
     } else {
@@ -107,7 +107,7 @@ bool KoPAPastePage::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
         }
     }
 
-    KUndo2Command *cmd = 0;
+    KUndo2Command *cmd = nullptr;
     if (m_doc->pageType() == KoPageApp::Slide) {
         cmd = new KUndo2Command(kundo2_i18np("Paste Slide", "Paste Slides", qMax(newMasterPages.size(), newPages.size())));
     } else {

@@ -12,7 +12,7 @@
 
 QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {
-    QAction *newAction = 0;
+    QAction *newAction = nullptr;
 
     switch (id) {
     case ShowGuides: {
@@ -22,7 +22,7 @@ QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const
         break;
     }
     case ActionNone:
-        return 0;
+        return nullptr;
     }
 
     Q_ASSERT(newAction);
@@ -44,7 +44,7 @@ const char *KoStandardAction::name(StandardAction id)
     case ShowGuides:
         return "view_show_guides";
     default:
-        return 0;
+        return nullptr;
     };
 }
 

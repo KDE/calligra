@@ -1228,7 +1228,7 @@ protected:
      * @param type an indicator which type was changed.
      * @param shape the shape.
      */
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    virtual void shapeChanged(ChangeType type, KoShape *shape = nullptr);
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;

@@ -14,7 +14,7 @@ TableStyleConverterProperties::TableStyleConverterProperties()
     , m_rowBandSize(1)
     , m_columnBandSize(1)
     , m_localStyles()
-    , m_localDefaultCellStyle(0)
+    , m_localDefaultCellStyle(nullptr)
 {
 }
 

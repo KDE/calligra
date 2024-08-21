@@ -1828,7 +1828,7 @@ const static struct control_word_known known_control_words[] = {{"\'", Symbol},
                                                                 {"zwj", Symbol},
                                                                 {"zwnbo", Symbol},
                                                                 {"zwnj", Symbol},
-                                                                {0, Symbol}};
+                                                                {nullptr, Symbol}};
 
 namespace RtfReader
 {
@@ -1858,7 +1858,7 @@ bool ControlWord::isSupportedDestination() const
 
 bool ControlWord::isDestination(const QString &controlword)
 {
-    for (int i = 0; known_control_words[i].controlword != 0; ++i) {
+    for (int i = 0; known_control_words[i].controlword != nullptr; ++i) {
         if (controlword == QString(known_control_words[i].controlword)) {
             if (known_control_words[i].wordtype == Destination) {
                 return true;
@@ -1873,7 +1873,7 @@ bool ControlWord::isDestination(const QString &controlword)
 
 bool ControlWord::isKnown() const
 {
-    for (int i = 0; known_control_words[i].controlword != 0; ++i) {
+    for (int i = 0; known_control_words[i].controlword != nullptr; ++i) {
         if (m_name == QString(known_control_words[i].controlword)) {
             return true;
         }

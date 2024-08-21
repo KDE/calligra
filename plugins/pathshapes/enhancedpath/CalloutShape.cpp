@@ -176,7 +176,7 @@ void PathShape::setParameters(const KoProperties &params)
 
 KoTextShapeDataBase *PathShape::textData() const
 {
-    KoTextShapeDataBase *textData = 0;
+    KoTextShapeDataBase *textData = nullptr;
     KoShape *ts = textShape();
     if (ts) {
         textData = qobject_cast<KoTextShapeDataBase *>(ts->userData());

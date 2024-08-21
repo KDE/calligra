@@ -1022,7 +1022,7 @@ public:
     quint16 recInstance;
     quint16 recType;
     quint32 recLen;
-    RecordHeader(void * /*dummy*/ = 0)
+    RecordHeader(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1044,7 +1044,7 @@ public:
     quint32 relVersion;
     QVector<quint16> unicodeUserName;
     QByteArray unknown;
-    CurrentUserAtom(void * /*dummy*/ = 0)
+    CurrentUserAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1052,7 +1052,7 @@ class TODOS : public StreamOffset
 {
 public:
     QList<Byte> anon;
-    TODOS(void * /*dummy*/ = 0)
+    TODOS(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1060,7 +1060,7 @@ class Byte : public StreamOffset
 {
 public:
     quint8 b;
-    Byte(void * /*dummy*/ = 0)
+    Byte(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1068,7 +1068,7 @@ class ZeroByte : public StreamOffset
 {
 public:
     quint8 b;
-    ZeroByte(void * /*dummy*/ = 0)
+    ZeroByte(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1077,7 +1077,7 @@ class CurrentUserStream : public StreamOffset
 public:
     CurrentUserAtom anon1;
     QList<Byte> trailing;
-    CurrentUserStream(void * /*dummy*/ = 0)
+    CurrentUserStream(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1085,7 +1085,7 @@ class OfficeArtBStoreDelay : public StreamOffset
 {
 public:
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtBStoreDelay(void * /*dummy*/ = 0)
+    OfficeArtBStoreDelay(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1096,7 +1096,7 @@ public:
     quint16 recInstance;
     quint16 recType;
     quint32 recLen;
-    OfficeArtRecordHeader(void * /*dummy*/ = 0)
+    OfficeArtRecordHeader(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1109,7 +1109,7 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipJPEG(void * /*dummy*/ = 0)
+    OfficeArtBlipJPEG(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1122,7 +1122,7 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipPNG(void * /*dummy*/ = 0)
+    OfficeArtBlipPNG(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1135,7 +1135,7 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipDIB(void * /*dummy*/ = 0)
+    OfficeArtBlipDIB(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1148,7 +1148,7 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipTIFF(void * /*dummy*/ = 0)
+    OfficeArtBlipTIFF(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1159,7 +1159,7 @@ public:
     qint32 top;
     qint32 right;
     qint32 bottom;
-    RECT(void * /*dummy*/ = 0)
+    RECT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1168,7 +1168,7 @@ class POINT : public StreamOffset
 public:
     qint32 x;
     qint32 y;
-    POINT(void * /*dummy*/ = 0)
+    POINT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1176,7 +1176,7 @@ class PowerPointStructs : public StreamOffset
 {
 public:
     QList<PowerPointStruct> anon;
-    PowerPointStructs(void * /*dummy*/ = 0)
+    PowerPointStructs(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1185,7 +1185,7 @@ class SoundCollectionAtom : public StreamOffset
 public:
     RecordHeader rh;
     quint32 soundIdSeed;
-    SoundCollectionAtom(void * /*dummy*/ = 0)
+    SoundCollectionAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1202,7 +1202,7 @@ public:
     bool fHasFooter;
     quint8 reserved1;
     quint8 reserved2;
-    HeadersFootersAtom(void * /*dummy*/ = 0)
+    HeadersFootersAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1211,7 +1211,7 @@ class UserDateAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> userDate;
-    UserDateAtom(void * /*dummy*/ = 0)
+    UserDateAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1220,7 +1220,7 @@ class HeaderAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> header;
-    HeaderAtom(void * /*dummy*/ = 0)
+    HeaderAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1229,7 +1229,7 @@ class FooterAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> footer;
-    FooterAtom(void * /*dummy*/ = 0)
+    FooterAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1242,7 +1242,7 @@ public:
     QSharedPointer<HeaderAtom> headerAtom;
     QSharedPointer<FooterAtom> footerAtom;
     QSharedPointer<UserDateAtom> userDateAtom2;
-    PerSlideHeadersFootersContainer(void * /*dummy*/ = 0)
+    PerSlideHeadersFootersContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1250,7 +1250,7 @@ class EndDocumentAtom : public StreamOffset
 {
 public:
     RecordHeader rh;
-    EndDocumentAtom(void * /*dummy*/ = 0)
+    EndDocumentAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1259,7 +1259,7 @@ class DocInfoListContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<DocInfoListSubContainerOrAtom> rgChildRec;
-    DocInfoListContainer(void * /*dummy*/ = 0)
+    DocInfoListContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1270,7 +1270,7 @@ public:
     quint8 unused1;
     quint8 fSnapToGrid;
     quint8 fSnapToShape;
-    SlideViewInfoAtom(void * /*dummy*/ = 0)
+    SlideViewInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1280,7 +1280,7 @@ public:
     RecordHeader rh;
     quint32 type;
     qint32 pos;
-    GuideAtom(void * /*dummy*/ = 0)
+    GuideAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1289,7 +1289,7 @@ class DocProgTagsContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<DocProgTagsSubContainerOrAtom> rgChildRec;
-    DocProgTagsContainer(void * /*dummy*/ = 0)
+    DocProgTagsContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1298,7 +1298,7 @@ class TextAutoNumberScheme : public StreamOffset
 public:
     quint16 scheme;
     quint16 startNum;
-    TextAutoNumberScheme(void * /*dummy*/ = 0)
+    TextAutoNumberScheme(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1307,7 +1307,7 @@ class BlipCollection9Container : public StreamOffset
 public:
     RecordHeader rh;
     QList<BlipEntityAtom> rgBlipEntityAtom;
-    BlipCollection9Container(void * /*dummy*/ = 0)
+    BlipCollection9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1321,7 +1321,7 @@ public:
     quint8 jpnLevel;
     quint8 reserveda;
     quint32 reservedb;
-    Kinsoku9Atom(void * /*dummy*/ = 0)
+    Kinsoku9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1330,7 +1330,7 @@ class ExHyperlink9Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExHyperlink9Container(void * /*dummy*/ = 0)
+    ExHyperlink9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1351,7 +1351,7 @@ public:
     bool fDisablePrintTip;
     quint8 reserveda;
     quint16 reservedb;
-    PresAdvisorFlags9Atom(void * /*dummy*/ = 0)
+    PresAdvisorFlags9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1360,7 +1360,7 @@ class EnvelopeData9Atom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    EnvelopeData9Atom(void * /*dummy*/ = 0)
+    EnvelopeData9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1375,7 +1375,7 @@ public:
     quint8 reserved2a;
     quint8 reserved2b;
     quint16 reserved2c;
-    EnvelopeFlags9Atom(void * /*dummy*/ = 0)
+    EnvelopeFlags9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1398,7 +1398,7 @@ public:
     bool fShowSlideAnimation;
     bool reserved1;
     quint16 unused3;
-    HTMLDocInfo9Atom(void * /*dummy*/ = 0)
+    HTMLDocInfo9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1407,7 +1407,7 @@ class HTMLPublishInfo9Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    HTMLPublishInfo9Container(void * /*dummy*/ = 0)
+    HTMLPublishInfo9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1416,7 +1416,7 @@ class BroadcastDocInfo9Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    BroadcastDocInfo9Container(void * /*dummy*/ = 0)
+    BroadcastDocInfo9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1425,7 +1425,7 @@ class OutlineTextProps9Container : public StreamOffset
 public:
     RecordHeader rh;
     QList<OutlineTextProps9Entry> rgOutlineTextProps9Entry;
-    OutlineTextProps9Container(void * /*dummy*/ = 0)
+    OutlineTextProps9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1435,7 +1435,7 @@ public:
     RecordHeader rh;
     quint32 slideIdRef;
     quint32 txType;
-    OutlineTextPropsHeaderExAtom(void * /*dummy*/ = 0)
+    OutlineTextPropsHeaderExAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1444,7 +1444,7 @@ class StyleTextProp9Atom : public StreamOffset
 public:
     RecordHeader rh;
     QList<StyleTextProp9> rgStyleTextProp9;
-    StyleTextProp9Atom(void * /*dummy*/ = 0)
+    StyleTextProp9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1453,7 +1453,7 @@ class FontCollection10Container : public StreamOffset
 public:
     RecordHeader rh;
     QList<FontCollectionEntry> rgFontCollectionEntry;
-    FontCollection10Container(void * /*dummy*/ = 0)
+    FontCollection10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1463,7 +1463,7 @@ public:
     RecordHeader rh;
     quint32 x;
     quint32 y;
-    GridSpacing10Atom(void * /*dummy*/ = 0)
+    GridSpacing10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1472,7 +1472,7 @@ class AuthorNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray authorName;
-    AuthorNameAtom(void * /*dummy*/ = 0)
+    AuthorNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1482,7 +1482,7 @@ public:
     RecordHeader rh;
     qint32 colorIndex;
     qint32 commentIndexSeed;
-    CommentIndex10Atom(void * /*dummy*/ = 0)
+    CommentIndex10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1494,7 +1494,7 @@ public:
     bool fSubsetOptionConfirmed;
     quint16 unuseda;
     quint16 unusedb;
-    FontEmbedFlags10Atom(void * /*dummy*/ = 0)
+    FontEmbedFlags10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1503,7 +1503,7 @@ class CopyrightAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray copyright;
-    CopyrightAtom(void * /*dummy*/ = 0)
+    CopyrightAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1512,7 +1512,7 @@ class KeywordsAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray keywords;
-    KeywordsAtom(void * /*dummy*/ = 0)
+    KeywordsAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1524,7 +1524,7 @@ public:
     quint8 reserved2a;
     quint8 reserved2b;
     quint16 reserved2c;
-    FilterPrivacyFlags10Atom(void * /*dummy*/ = 0)
+    FilterPrivacyFlags10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1533,7 +1533,7 @@ class OutlineTextProps10Container : public StreamOffset
 public:
     RecordHeader rh;
     QList<OutlineTextProps10Entry> rgOutlineTextProps10Entry;
-    OutlineTextProps10Container(void * /*dummy*/ = 0)
+    OutlineTextProps10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1542,7 +1542,7 @@ class StyleTextProp10Atom : public StreamOffset
 public:
     RecordHeader rh;
     QList<TextCFException10> rgStyleTextProp10;
-    StyleTextProp10Atom(void * /*dummy*/ = 0)
+    StyleTextProp10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1553,7 +1553,7 @@ public:
     bool fShowReviewingToolbar;
     bool fShowReviewingGallery;
     quint8 reserved;
-    DocToolbarStates10Atom(void * /*dummy*/ = 0)
+    DocToolbarStates10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1562,7 +1562,7 @@ class SlideListTable10Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    SlideListTable10Container(void * /*dummy*/ = 0)
+    SlideListTable10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1571,7 +1571,7 @@ class DiffTree10Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    DiffTree10Container(void * /*dummy*/ = 0)
+    DiffTree10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1580,7 +1580,7 @@ class ModifyPasswordAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray modifyPassword;
-    ModifyPasswordAtom(void * /*dummy*/ = 0)
+    ModifyPasswordAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1593,7 +1593,7 @@ public:
     quint8 layout;
     quint8 unused;
     quint16 frameShape;
-    PhotoAlbumInfo10Atom(void * /*dummy*/ = 0)
+    PhotoAlbumInfo10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1602,7 +1602,7 @@ class SmartTagStore11Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    SmartTagStore11Container(void * /*dummy*/ = 0)
+    SmartTagStore11Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1611,7 +1611,7 @@ class OutlineTextProps11Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    OutlineTextProps11Container(void * /*dummy*/ = 0)
+    OutlineTextProps11Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1620,7 +1620,7 @@ class BinaryTagDataBlob : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray data;
-    BinaryTagDataBlob(void * /*dummy*/ = 0)
+    BinaryTagDataBlob(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1631,7 +1631,7 @@ public:
     QByteArray tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP12DocBinaryTagExtension(void * /*dummy*/ = 0)
+    PP12DocBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1640,7 +1640,7 @@ class SorterViewInfoContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    SorterViewInfoContainer(void * /*dummy*/ = 0)
+    SorterViewInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1651,7 +1651,7 @@ public:
     quint32 persistIdRef;
     quint32 fHasMacros;
     quint32 version;
-    VBAInfoAtom(void * /*dummy*/ = 0)
+    VBAInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1660,7 +1660,7 @@ class MasterListWithTextContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<MasterPersistAtom> rgMasterPersistAtom;
-    MasterListWithTextContainer(void * /*dummy*/ = 0)
+    MasterListWithTextContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1677,7 +1677,7 @@ public:
     quint32 reserved5;
     quint32 masterId;
     quint32 reserved6;
-    MasterPersistAtom(void * /*dummy*/ = 0)
+    MasterPersistAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1686,7 +1686,7 @@ class SlideListWithTextContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<SlideListWithTextSubContainerOrAtom> rgChildRec;
-    SlideListWithTextContainer(void * /*dummy*/ = 0)
+    SlideListWithTextContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1695,7 +1695,7 @@ class NotesListWithTextContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<NotesPersistAtom> rgNotesPersistAtom;
-    NotesListWithTextContainer(void * /*dummy*/ = 0)
+    NotesListWithTextContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1712,7 +1712,7 @@ public:
     quint32 reserved3;
     quint32 notesId;
     quint32 reserved4;
-    NotesPersistAtom(void * /*dummy*/ = 0)
+    NotesPersistAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1721,7 +1721,7 @@ class TextHeaderAtom : public StreamOffset
 public:
     RecordHeader rh;
     quint32 textType;
-    TextHeaderAtom(void * /*dummy*/ = 0)
+    TextHeaderAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1730,7 +1730,7 @@ class TextCharsAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> textChars;
-    TextCharsAtom(void * /*dummy*/ = 0)
+    TextCharsAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1739,7 +1739,7 @@ class TextBytesAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray textChars;
-    TextBytesAtom(void * /*dummy*/ = 0)
+    TextBytesAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1748,7 +1748,7 @@ class MasterTextPropAtom : public StreamOffset
 public:
     RecordHeader rh;
     QList<MasterTextPropRun> rgMasterTextPropRun;
-    MasterTextPropAtom(void * /*dummy*/ = 0)
+    MasterTextPropAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1757,7 +1757,7 @@ class MasterTextPropRun : public StreamOffset
 public:
     quint32 count;
     quint16 indentLevel;
-    MasterTextPropRun(void * /*dummy*/ = 0)
+    MasterTextPropRun(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1767,7 +1767,7 @@ public:
     RecordHeader rh;
     QList<TextPFRun> rgTextPFRun;
     QList<TextCFRun> rgTextCFRun;
-    StyleTextPropAtom(void * /*dummy*/ = 0)
+    StyleTextPropAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1776,7 +1776,7 @@ class SlideNumberMCAtom : public StreamOffset
 public:
     RecordHeader rh;
     qint32 position;
-    SlideNumberMCAtom(void * /*dummy*/ = 0)
+    SlideNumberMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1787,7 +1787,7 @@ public:
     qint32 position;
     quint8 index;
     QByteArray unused;
-    DateTimeMCAtom(void * /*dummy*/ = 0)
+    DateTimeMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1796,7 +1796,7 @@ class GenericDateMCAtom : public StreamOffset
 public:
     RecordHeader rh;
     qint32 position;
-    GenericDateMCAtom(void * /*dummy*/ = 0)
+    GenericDateMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1805,7 +1805,7 @@ class HeaderMCAtom : public StreamOffset
 public:
     RecordHeader rh;
     qint32 position;
-    HeaderMCAtom(void * /*dummy*/ = 0)
+    HeaderMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1814,7 +1814,7 @@ class FooterMCAtom : public StreamOffset
 public:
     RecordHeader rh;
     qint32 position;
-    FooterMCAtom(void * /*dummy*/ = 0)
+    FooterMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1824,7 +1824,7 @@ public:
     RecordHeader rh;
     qint32 position;
     QByteArray format;
-    RTFDateTimeMCAtom(void * /*dummy*/ = 0)
+    RTFDateTimeMCAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1835,7 +1835,7 @@ public:
     qint32 begin;
     qint32 end;
     qint32 bookmarkID;
-    TextBookmarkAtom(void * /*dummy*/ = 0)
+    TextBookmarkAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1844,7 +1844,7 @@ class TextRange : public StreamOffset
 public:
     qint32 begin;
     qint32 end;
-    TextRange(void * /*dummy*/ = 0)
+    TextRange(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1853,7 +1853,7 @@ class MouseClickTextInteractiveInfoAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextRange range;
-    MouseClickTextInteractiveInfoAtom(void * /*dummy*/ = 0)
+    MouseClickTextInteractiveInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1862,7 +1862,7 @@ class MouseOverTextInteractiveInfoAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextRange range;
-    MouseOverTextInteractiveInfoAtom(void * /*dummy*/ = 0)
+    MouseOverTextInteractiveInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1870,7 +1870,7 @@ class SlideId : public StreamOffset
 {
 public:
     quint32 slideId;
-    SlideId(void * /*dummy*/ = 0)
+    SlideId(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1879,7 +1879,7 @@ class TabStops : public StreamOffset
 public:
     quint16 count;
     QList<TabStop> rgTabStop;
-    TabStops(void * /*dummy*/ = 0)
+    TabStops(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1888,7 +1888,7 @@ class TabStop : public StreamOffset
 public:
     qint16 position;
     quint16 type;
-    TabStop(void * /*dummy*/ = 0)
+    TabStop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1900,7 +1900,7 @@ public:
     bool overflow;
     quint8 reserved1;
     quint8 reserved2;
-    PFWrapFlags(void * /*dummy*/ = 0)
+    PFWrapFlags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1911,7 +1911,7 @@ public:
     quint8 green;
     quint8 blue;
     quint8 index;
-    ColorIndexStruct(void * /*dummy*/ = 0)
+    ColorIndexStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1923,7 +1923,7 @@ public:
     bool fBulletHasColor;
     bool fBulletHasSize;
     quint16 reserved;
-    BulletFlags(void * /*dummy*/ = 0)
+    BulletFlags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1957,7 +1957,7 @@ public:
     bool bulletScheme;
     bool bulletHasScheme;
     quint8 reserved2;
-    PFMasks(void * /*dummy*/ = 0)
+    PFMasks(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -1988,7 +1988,7 @@ public:
     bool csTypeface;
     bool pp11ext;
     quint8 reserved;
-    CFMasks(void * /*dummy*/ = 0)
+    CFMasks(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2007,7 +2007,7 @@ public:
     bool emboss;
     quint8 pp9rt;
     quint8 unused4;
-    CFStyle(void * /*dummy*/ = 0)
+    CFStyle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2016,7 +2016,7 @@ class FontCollectionContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<FontCollectionEntry> rgFontCollectionEntry;
-    FontCollectionContainer(void * /*dummy*/ = 0)
+    FontCollectionContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2034,7 +2034,7 @@ public:
     bool fNoFontSubstitution;
     quint8 reserved;
     quint8 lfPitchAndFamily;
-    FontEntityAtom(void * /*dummy*/ = 0)
+    FontEntityAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2043,7 +2043,7 @@ class FontEmbedDataBlob : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray data;
-    FontEmbedDataBlob(void * /*dummy*/ = 0)
+    FontEmbedDataBlob(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2052,7 +2052,7 @@ class KinsokuAtom : public StreamOffset
 public:
     RecordHeader rh;
     quint32 level;
-    KinsokuAtom(void * /*dummy*/ = 0)
+    KinsokuAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2061,7 +2061,7 @@ class KinsokuLeadingAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> kinsokuLeading;
-    KinsokuLeadingAtom(void * /*dummy*/ = 0)
+    KinsokuLeadingAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2070,7 +2070,7 @@ class KinsokuFollowingAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> kinsokuFollowing;
-    KinsokuFollowingAtom(void * /*dummy*/ = 0)
+    KinsokuFollowingAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2079,7 +2079,7 @@ class TextSpecialInfoAtom : public StreamOffset
 public:
     RecordHeader rh;
     QList<TextSIRun> rgSIRun;
-    TextSpecialInfoAtom(void * /*dummy*/ = 0)
+    TextSpecialInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2088,7 +2088,7 @@ class SmartTags : public StreamOffset
 public:
     quint32 count;
     QVector<quint32> rgSmartTagIndex;
-    SmartTags(void * /*dummy*/ = 0)
+    SmartTags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2101,7 +2101,7 @@ public:
     quint8 fNoSizeToServer;
     quint8 fIsTable;
     quint8 unused;
-    ExOleEmbedAtom(void * /*dummy*/ = 0)
+    ExOleEmbedAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2110,7 +2110,7 @@ class PointStruct : public StreamOffset
 public:
     qint32 x;
     qint32 y;
-    PointStruct(void * /*dummy*/ = 0)
+    PointStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2119,7 +2119,7 @@ class RatioStruct : public StreamOffset
 public:
     qint32 numer;
     qint32 denom;
-    RatioStruct(void * /*dummy*/ = 0)
+    RatioStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2128,7 +2128,7 @@ class PersistDirectoryAtom : public StreamOffset
 public:
     RecordHeader rh;
     QList<PersistDirectoryEntry> rgPersistDirEntry;
-    PersistDirectoryAtom(void * /*dummy*/ = 0)
+    PersistDirectoryAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2137,7 +2137,7 @@ class UnknownDocumentContainerChild : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownDocumentContainerChild(void * /*dummy*/ = 0)
+    UnknownDocumentContainerChild(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2146,7 +2146,7 @@ class UnknownOfficeArtClientDataChild : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownOfficeArtClientDataChild(void * /*dummy*/ = 0)
+    UnknownOfficeArtClientDataChild(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2155,7 +2155,7 @@ class UnknownSlideContainerChild : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownSlideContainerChild(void * /*dummy*/ = 0)
+    UnknownSlideContainerChild(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2164,7 +2164,7 @@ class UnknownTextContainerChild : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownTextContainerChild(void * /*dummy*/ = 0)
+    UnknownTextContainerChild(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2174,7 +2174,7 @@ public:
     quint32 persistId;
     quint16 cPersist;
     QVector<quint32> rgPersistOffset;
-    PersistDirectoryEntry(void * /*dummy*/ = 0)
+    PersistDirectoryEntry(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2182,7 +2182,7 @@ class PersistIdRef : public StreamOffset
 {
 public:
     quint32 anon;
-    PersistIdRef(void * /*dummy*/ = 0)
+    PersistIdRef(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2191,7 +2191,7 @@ class SchemeListElementColorSchemeAtom : public StreamOffset
 public:
     RecordHeader rh;
     QList<ColorStruct> rgSchemeColor;
-    SchemeListElementColorSchemeAtom(void * /*dummy*/ = 0)
+    SchemeListElementColorSchemeAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2200,7 +2200,7 @@ class RoundTripOArtTextStyles12Atom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripOArtTextStyles12Atom(void * /*dummy*/ = 0)
+    RoundTripOArtTextStyles12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2209,7 +2209,7 @@ class SlideNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> slideName;
-    SlideNameAtom(void * /*dummy*/ = 0)
+    SlideNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2218,7 +2218,7 @@ class SlideProgTagsContainer : public StreamOffset
 public:
     RecordHeader rh;
     QList<SlideProgTagsSubContainerOrAtom> rgTypeRec;
-    SlideProgTagsContainer(void * /*dummy*/ = 0)
+    SlideProgTagsContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2229,7 +2229,7 @@ public:
     QVector<quint16> tagName;
     RecordHeader rhData;
     QList<TextMasterStyle9Atom> rgTextMasterStyleAtom;
-    PP9SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    PP9SlideBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2238,7 +2238,7 @@ class Comment10Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    Comment10Container(void * /*dummy*/ = 0)
+    Comment10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2247,7 +2247,7 @@ class Comment10Atom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    Comment10Atom(void * /*dummy*/ = 0)
+    Comment10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2257,7 +2257,7 @@ public:
     RecordHeader rh;
     quint32 linkedSlideIdRef;
     qint32 clinkedShapes;
-    LinkedSlide10Atom(void * /*dummy*/ = 0)
+    LinkedSlide10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2267,7 +2267,7 @@ public:
     RecordHeader rh;
     quint32 shapeIdRef;
     quint32 linkedShapeIdRef;
-    LinkedShape10Atom(void * /*dummy*/ = 0)
+    LinkedShape10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2279,7 +2279,7 @@ public:
     bool fOverrideMasterAnimatino;
     quint16 unuseda;
     quint16 unusedb;
-    SlideFlags10Atom(void * /*dummy*/ = 0)
+    SlideFlags10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2288,7 +2288,7 @@ class HashCode10Atom : public StreamOffset
 public:
     RecordHeader rh;
     quint32 hash;
-    HashCode10Atom(void * /*dummy*/ = 0)
+    HashCode10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2297,7 +2297,7 @@ class ExtTimeNodeContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExtTimeNodeContainer(void * /*dummy*/ = 0)
+    ExtTimeNodeContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2306,7 +2306,7 @@ class BuildListContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    BuildListContainer(void * /*dummy*/ = 0)
+    BuildListContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2319,7 +2319,7 @@ public:
     bool fIncludeHeader;
     bool fIncludeSlideNumber;
     quint8 reserved;
-    RoundTripHeaderFooterDefaults12Atom(void * /*dummy*/ = 0)
+    RoundTripHeaderFooterDefaults12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2328,7 +2328,7 @@ class TagNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> tagName;
-    TagNameAtom(void * /*dummy*/ = 0)
+    TagNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2337,7 +2337,7 @@ class TagValueAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> tagValue;
-    TagValueAtom(void * /*dummy*/ = 0)
+    TagValueAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2346,7 +2346,7 @@ class RoundTripMainMasterRecord : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripMainMasterRecord(void * /*dummy*/ = 0)
+    RoundTripMainMasterRecord(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2355,7 +2355,7 @@ class TemplateNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QVector<quint16> templateName;
-    TemplateNameAtom(void * /*dummy*/ = 0)
+    TemplateNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2364,7 +2364,7 @@ class RoundTripSlideSyncInfo12Container : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripSlideSyncInfo12Container(void * /*dummy*/ = 0)
+    RoundTripSlideSyncInfo12Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2376,7 +2376,7 @@ public:
     bool fMasterBackground;
     quint8 unused1;
     quint8 unused2;
-    SlideFlags(void * /*dummy*/ = 0)
+    SlideFlags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2385,7 +2385,7 @@ class NotesRoundTripAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    NotesRoundTripAtom(void * /*dummy*/ = 0)
+    NotesRoundTripAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2394,7 +2394,7 @@ class HandoutContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    HandoutContainer(void * /*dummy*/ = 0)
+    HandoutContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2403,7 +2403,7 @@ class ExControlStg : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExControlStg(void * /*dummy*/ = 0)
+    ExControlStg(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2412,7 +2412,7 @@ class ExOleObjStg : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExOleObjStg(void * /*dummy*/ = 0)
+    ExOleObjStg(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2433,7 +2433,7 @@ public:
     quint16 unused;
     quint32 encryptSessionPersistIdRef;
     QList<ZeroByte> zeroPadding;
-    UserEditAtom(void * /*dummy*/ = 0)
+    UserEditAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2442,7 +2442,7 @@ class VbaProjectStg : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    VbaProjectStg(void * /*dummy*/ = 0)
+    VbaProjectStg(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2456,7 +2456,7 @@ public:
     quint32 notesIdRef;
     SlideFlags slideFlags;
     quint16 unused;
-    SlideAtom(void * /*dummy*/ = 0)
+    SlideAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2484,7 +2484,7 @@ public:
     quint8 reserved7;
     quint8 speed;
     QByteArray unused;
-    SlideShowSlideInfoAtom(void * /*dummy*/ = 0)
+    SlideShowSlideInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2508,7 +2508,7 @@ public:
     bool fHideScrollBar;
     quint8 reserved;
     quint16 unused;
-    SlideShowDocInfoAtom(void * /*dummy*/ = 0)
+    SlideShowDocInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2517,7 +2517,7 @@ class SlideSchemeColorSchemeAtom : public StreamOffset
 public:
     RecordHeader rh;
     QList<ColorStruct> rgSchemeColor;
-    SlideSchemeColorSchemeAtom(void * /*dummy*/ = 0)
+    SlideSchemeColorSchemeAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2526,7 +2526,7 @@ class RoundTripSlideRecord : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripSlideRecord(void * /*dummy*/ = 0)
+    RoundTripSlideRecord(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2535,7 +2535,7 @@ class NamedShowsContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    NamedShowsContainer(void * /*dummy*/ = 0)
+    NamedShowsContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2544,7 +2544,7 @@ class SummaryContainer : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    SummaryContainer(void * /*dummy*/ = 0)
+    SummaryContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2553,7 +2553,7 @@ class DocRoutingSlipAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    DocRoutingSlipAtom(void * /*dummy*/ = 0)
+    DocRoutingSlipAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2562,7 +2562,7 @@ class PrintOptionsAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    PrintOptionsAtom(void * /*dummy*/ = 0)
+    PrintOptionsAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2571,7 +2571,7 @@ class RoundTripCustomTableStyles12Atom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripCustomTableStyles12Atom(void * /*dummy*/ = 0)
+    RoundTripCustomTableStyles12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2580,7 +2580,7 @@ class RoundTripCompositeMasterId12Atom : public StreamOffset
 public:
     RecordHeader rh;
     quint32 compositeMasterId;
-    RoundTripCompositeMasterId12Atom(void * /*dummy*/ = 0)
+    RoundTripCompositeMasterId12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2591,7 +2591,7 @@ public:
     quint8 green;
     quint8 blue;
     quint8 unused;
-    ColorStruct(void * /*dummy*/ = 0)
+    ColorStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2600,7 +2600,7 @@ class ExObjListAtom : public StreamOffset
 public:
     RecordHeader rh;
     qint32 exObjIdSeed;
-    ExObjListAtom(void * /*dummy*/ = 0)
+    ExObjListAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2609,7 +2609,7 @@ class ExAviMovieContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExAviMovieContainer(void * /*dummy*/ = 0)
+    ExAviMovieContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2618,7 +2618,7 @@ class ExCDAudioContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExCDAudioContainer(void * /*dummy*/ = 0)
+    ExCDAudioContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2627,7 +2627,7 @@ class ExControlAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 slideIdRef;
-    ExControlAtom(void * /*dummy*/ = 0)
+    ExControlAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2636,7 +2636,7 @@ class ExHyperlinkAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 exHyperLinkId;
-    ExHyperlinkAtom(void * /*dummy*/ = 0)
+    ExHyperlinkAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2645,7 +2645,7 @@ class FriendlyNameAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> friendlyName;
-    FriendlyNameAtom(void * /*dummy*/ = 0)
+    FriendlyNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2654,7 +2654,7 @@ class TargetAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> target;
-    TargetAtom(void * /*dummy*/ = 0)
+    TargetAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2663,7 +2663,7 @@ class LocationAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> location;
-    LocationAtom(void * /*dummy*/ = 0)
+    LocationAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2672,7 +2672,7 @@ class ExMCIMovieContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExMCIMovieContainer(void * /*dummy*/ = 0)
+    ExMCIMovieContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2681,7 +2681,7 @@ class ExMIDIAudioContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExMIDIAudioContainer(void * /*dummy*/ = 0)
+    ExMIDIAudioContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2690,7 +2690,7 @@ class ExWAVAudioEmbeddedContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExWAVAudioEmbeddedContainer(void * /*dummy*/ = 0)
+    ExWAVAudioEmbeddedContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2699,7 +2699,7 @@ class ExWAVAudioLinkContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExWAVAudioLinkContainer(void * /*dummy*/ = 0)
+    ExWAVAudioLinkContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2708,7 +2708,7 @@ class UnknownExObjListSubContainerChild : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    UnknownExObjListSubContainerChild(void * /*dummy*/ = 0)
+    UnknownExObjListSubContainerChild(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2719,7 +2719,7 @@ public:
     quint32 slideIdRef;
     quint32 oleUpdateMode;
     quint32 unused;
-    ExOleLinkAtom(void * /*dummy*/ = 0)
+    ExOleLinkAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2733,7 +2733,7 @@ public:
     quint32 subType;
     quint32 persistIdRef;
     quint32 unused;
-    ExOleObjAtom(void * /*dummy*/ = 0)
+    ExOleObjAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2742,7 +2742,7 @@ class MenuNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray menuName;
-    MenuNameAtom(void * /*dummy*/ = 0)
+    MenuNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2751,7 +2751,7 @@ class ProgIDAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray progId;
-    ProgIDAtom(void * /*dummy*/ = 0)
+    ProgIDAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2760,7 +2760,7 @@ class ClipboardNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray clipboardName;
-    ClipboardNameAtom(void * /*dummy*/ = 0)
+    ClipboardNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2772,7 +2772,7 @@ public:
     qint16 xExt;
     qint16 yExt;
     QByteArray data;
-    MetafileBlob(void * /*dummy*/ = 0)
+    MetafileBlob(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2783,7 +2783,7 @@ public:
     quint32 cidcl;
     quint32 cspSaved;
     quint32 cdgSaved;
-    OfficeArtFDGG(void * /*dummy*/ = 0)
+    OfficeArtFDGG(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2793,7 +2793,7 @@ public:
     OfficeArtRecordHeader rh;
     quint32 csp;
     quint32 spidCur;
-    OfficeArtFDG(void * /*dummy*/ = 0)
+    OfficeArtFDG(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2802,7 +2802,7 @@ class OfficeArtFRITContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFRIT> rgfrit;
-    OfficeArtFRITContainer(void * /*dummy*/ = 0)
+    OfficeArtFRITContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2811,7 +2811,7 @@ class OfficeArtFRIT : public StreamOffset
 public:
     quint16 fridNew;
     quint16 fridOld;
-    OfficeArtFRIT(void * /*dummy*/ = 0)
+    OfficeArtFRIT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2820,7 +2820,7 @@ class OfficeArtBStoreContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtBStoreContainer(void * /*dummy*/ = 0)
+    OfficeArtBStoreContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2829,7 +2829,7 @@ class OfficeArtSpgrContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtSpgrContainerFileBlock> rgfb;
-    OfficeArtSpgrContainer(void * /*dummy*/ = 0)
+    OfficeArtSpgrContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2838,7 +2838,7 @@ class OfficeArtSolverContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtSolverContainerFileBlock> rgfb;
-    OfficeArtSolverContainer(void * /*dummy*/ = 0)
+    OfficeArtSolverContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2852,7 +2852,7 @@ public:
     quint32 spidC;
     quint32 cptiA;
     quint32 cptiB;
-    OfficeArtFConnectorRule(void * /*dummy*/ = 0)
+    OfficeArtFConnectorRule(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2862,7 +2862,7 @@ public:
     OfficeArtRecordHeader rh;
     quint32 ruid;
     quint32 spid;
-    OfficeArtFArcRule(void * /*dummy*/ = 0)
+    OfficeArtFArcRule(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2872,7 +2872,7 @@ public:
     OfficeArtRecordHeader rh;
     quint32 ruid;
     quint32 spid;
-    OfficeArtFCalloutRule(void * /*dummy*/ = 0)
+    OfficeArtFCalloutRule(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2884,7 +2884,7 @@ public:
     qint32 yTop;
     qint32 xRight;
     qint32 yBottom;
-    OfficeArtFSPGR(void * /*dummy*/ = 0)
+    OfficeArtFSPGR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2906,7 +2906,7 @@ public:
     bool fBackground;
     bool fHaveSpt;
     quint32 unused1;
-    OfficeArtFSP(void * /*dummy*/ = 0)
+    OfficeArtFSP(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2916,7 +2916,7 @@ public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtFOPT(void * /*dummy*/ = 0)
+    OfficeArtFOPT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2926,7 +2926,7 @@ public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtSecondaryFOPT(void * /*dummy*/ = 0)
+    OfficeArtSecondaryFOPT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2936,7 +2936,7 @@ public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtTertiaryFOPT(void * /*dummy*/ = 0)
+    OfficeArtTertiaryFOPT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2945,7 +2945,7 @@ class MSOPATHINFO : public StreamOffset
 public:
     quint8 type;
     quint16 segments;
-    MSOPATHINFO(void * /*dummy*/ = 0)
+    MSOPATHINFO(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2954,7 +2954,7 @@ class FixedPoint : public StreamOffset
 public:
     quint16 fractional;
     qint16 integral;
-    FixedPoint(void * /*dummy*/ = 0)
+    FixedPoint(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2965,7 +2965,7 @@ public:
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PVertices_complex(void * /*dummy*/ = 0)
+    PVertices_complex(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2976,7 +2976,7 @@ public:
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PSegmentInfo_complex(void * /*dummy*/ = 0)
+    PSegmentInfo_complex(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2987,7 +2987,7 @@ public:
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    FillShadeColors_complex(void * /*dummy*/ = 0)
+    FillShadeColors_complex(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -2998,7 +2998,7 @@ public:
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PWrapPolygonVertices_complex(void * /*dummy*/ = 0)
+    PWrapPolygonVertices_complex(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3016,7 +3016,7 @@ public:
     bool unused1;
     bool unused2;
     bool unused3;
-    OfficeArtCOLORREF(void * /*dummy*/ = 0)
+    OfficeArtCOLORREF(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3028,7 +3028,7 @@ public:
     qint32 yTop;
     qint32 xRight;
     qint32 yBottom;
-    OfficeArtChildAnchor(void * /*dummy*/ = 0)
+    OfficeArtChildAnchor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3037,7 +3037,7 @@ class DocOfficeArtClientAnchor : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     qint32 clientAnchor;
-    DocOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    DocOfficeArtClientAnchor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3068,7 +3068,7 @@ public:
     qint16 dxR;
     quint16 rwB;
     qint16 dyB;
-    XlsOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    XlsOfficeArtClientAnchor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3079,7 +3079,7 @@ public:
     quint32 spid;
     bool reserved1;
     bool fLast;
-    OfficeArtFPSPL(void * /*dummy*/ = 0)
+    OfficeArtFPSPL(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3090,7 +3090,7 @@ public:
     qint32 left;
     qint32 right;
     qint32 bottom;
-    RectStruct(void * /*dummy*/ = 0)
+    RectStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3101,7 +3101,7 @@ public:
     qint16 left;
     qint16 right;
     qint16 bottom;
-    SmallRectStruct(void * /*dummy*/ = 0)
+    SmallRectStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3110,7 +3110,7 @@ class DocOfficeArtClientData : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 clientData;
-    DocOfficeArtClientData(void * /*dummy*/ = 0)
+    DocOfficeArtClientData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3118,7 +3118,7 @@ class XlsOfficeArtClientData : public StreamOffset
 {
 public:
     OfficeArtRecordHeader rh;
-    XlsOfficeArtClientData(void * /*dummy*/ = 0)
+    XlsOfficeArtClientData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3127,7 +3127,7 @@ class ShapeFlagsAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ShapeFlagsAtom(void * /*dummy*/ = 0)
+    ShapeFlagsAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3136,7 +3136,7 @@ class ShapeFlags10Atom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ShapeFlags10Atom(void * /*dummy*/ = 0)
+    ShapeFlags10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3145,7 +3145,7 @@ class ExObjRefAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 exObjIdRef;
-    ExObjRefAtom(void * /*dummy*/ = 0)
+    ExObjRefAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3154,7 +3154,7 @@ class AnimationInfoAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    AnimationInfoAtom(void * /*dummy*/ = 0)
+    AnimationInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3163,7 +3163,7 @@ class SoundContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    SoundContainer(void * /*dummy*/ = 0)
+    SoundContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3183,7 +3183,7 @@ public:
     quint8 reserved;
     quint8 hyperlinkType;
     QByteArray unused;
-    InteractiveInfoAtom(void * /*dummy*/ = 0)
+    InteractiveInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3192,7 +3192,7 @@ class MacroNameAtom : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray macroName;
-    MacroNameAtom(void * /*dummy*/ = 0)
+    MacroNameAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3204,7 +3204,7 @@ public:
     quint8 placementId;
     quint8 size;
     quint16 unused;
-    PlaceholderAtom(void * /*dummy*/ = 0)
+    PlaceholderAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3213,7 +3213,7 @@ class RecolorInfoAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    RecolorInfoAtom(void * /*dummy*/ = 0)
+    RecolorInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3222,7 +3222,7 @@ class OutlineTextRefAtom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     qint32 index;
-    OutlineTextRefAtom(void * /*dummy*/ = 0)
+    OutlineTextRefAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3231,7 +3231,7 @@ class ShapeProgsTagContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<ShapeProgTagsSubContainerOrAtom> rgChildRec;
-    ShapeProgsTagContainer(void * /*dummy*/ = 0)
+    ShapeProgsTagContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3242,7 +3242,7 @@ public:
     QVector<quint16> tagName;
     RecordHeader rhData;
     StyleTextProp9Atom styleTextProp9Atom;
-    PP9ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    PP9ShapeBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3253,7 +3253,7 @@ public:
     QVector<quint16> tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP10ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    PP10ShapeBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3264,7 +3264,7 @@ public:
     QVector<quint16> tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP11ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    PP11ShapeBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3273,7 +3273,7 @@ class RoundTripNewPlaceHolderId12Atom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint8 newPlaceHolderId;
-    RoundTripNewPlaceHolderId12Atom(void * /*dummy*/ = 0)
+    RoundTripNewPlaceHolderId12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3282,7 +3282,7 @@ class RoundTripShapeId12Atom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 shapeId;
-    RoundTripShapeId12Atom(void * /*dummy*/ = 0)
+    RoundTripShapeId12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3291,7 +3291,7 @@ class RoundTripHFPlaceholder12Atom : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint8 placeHolderId;
-    RoundTripHFPlaceholder12Atom(void * /*dummy*/ = 0)
+    RoundTripHFPlaceholder12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3302,7 +3302,7 @@ public:
     quint32 shapeCheckSum;
     quint32 textCheckSum;
     QByteArray unknown;
-    RoundTripShapeCheckSumForCustomLayouts12Atom(void * /*dummy*/ = 0)
+    RoundTripShapeCheckSumForCustomLayouts12Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3310,7 +3310,7 @@ class XlsOfficeArtClientTextBox : public StreamOffset
 {
 public:
     OfficeArtRecordHeader rh;
-    XlsOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    XlsOfficeArtClientTextBox(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3319,7 +3319,7 @@ class DocOfficeArtClientTextBox : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     quint32 clientTextBox;
-    DocOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    DocOfficeArtClientTextBox(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3328,7 +3328,7 @@ class PptOfficeArtClientTextBox : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<TextClientDataSubContainerOrAtom> rgChildRec;
-    PptOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    PptOfficeArtClientTextBox(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3337,7 +3337,7 @@ class OfficeArtIDCL : public StreamOffset
 public:
     quint32 dgid;
     quint32 cspidCur;
-    OfficeArtIDCL(void * /*dummy*/ = 0)
+    OfficeArtIDCL(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3347,7 +3347,7 @@ public:
     quint16 opid;
     bool fBid;
     bool fComplex;
-    OfficeArtFOPTEOPID(void * /*dummy*/ = 0)
+    OfficeArtFOPTEOPID(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3356,7 +3356,7 @@ class OfficeArtColorMRUContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<MSOCR> rgmsocr;
-    OfficeArtColorMRUContainer(void * /*dummy*/ = 0)
+    OfficeArtColorMRUContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3369,7 +3369,7 @@ public:
     quint8 unused1;
     bool fSchemeIndex;
     quint8 unused2;
-    MSOCR(void * /*dummy*/ = 0)
+    MSOCR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3378,7 +3378,7 @@ class OfficeArtSplitMenuColorContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     QList<MSOCR> smca;
-    OfficeArtSplitMenuColorContainer(void * /*dummy*/ = 0)
+    OfficeArtSplitMenuColorContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3387,7 +3387,7 @@ class todo : public StreamOffset
 public:
     RecordHeader rh;
     QByteArray anon;
-    todo(void * /*dummy*/ = 0)
+    todo(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3425,7 +3425,7 @@ public:
     quint16 reserved4;
     quint32 reserved5;
     quint32 reserved6;
-    FibBase(void * /*dummy*/ = 0)
+    FibBase(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3446,7 +3446,7 @@ public:
     quint16 reserved12;
     quint16 reserved13;
     quint16 lidFE;
-    FibRgW97(void * /*dummy*/ = 0)
+    FibRgW97(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3475,7 +3475,7 @@ public:
     quint32 reserved12;
     quint32 reserved13;
     quint32 reserved14;
-    FibRgLw97(void * /*dummy*/ = 0)
+    FibRgLw97(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3668,7 +3668,7 @@ public:
     quint32 lcbSttbListNames;
     quint32 fcSttbfUssr;
     quint32 lcbSttbfUssr;
-    FibRgFcLcb97(void * /*dummy*/ = 0)
+    FibRgFcLcb97(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3705,7 +3705,7 @@ public:
     quint32 lcbPgdEdnOld;
     quint32 fcBkdEdnOld;
     quint32 lcbBkdEdnOld;
-    FibRgFcLcb2000(void * /*dummy*/ = 0)
+    FibRgFcLcb2000(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3762,7 +3762,7 @@ public:
     quint32 lcbUnused2;
     quint32 fcPlcffactoid;
     quint32 lcbPlcffactoid;
-    FibRgFcLcb2002(void * /*dummy*/ = 0)
+    FibRgFcLcb2002(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3771,7 +3771,7 @@ class LPStshi : public StreamOffset
 public:
     quint16 cbSthi;
     QByteArray stshi;
-    LPStshi(void * /*dummy*/ = 0)
+    LPStshi(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3782,7 +3782,7 @@ public:
     quint16 cbStd;
     QByteArray std;
     quint8 padding;
-    LPStd(void * /*dummy*/ = 0)
+    LPStd(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3791,7 +3791,7 @@ class PlcfSed : public StreamOffset
 public:
     QVector<quint32> aCP;
     QList<Sed> aSed;
-    PlcfSed(void * /*dummy*/ = 0)
+    PlcfSed(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3802,7 +3802,7 @@ public:
     qint32 fcSepx;
     quint16 fnMpr;
     quint32 fcMpr;
-    Sed(void * /*dummy*/ = 0)
+    Sed(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3810,7 +3810,7 @@ class Plcfhdd : public StreamOffset
 {
 public:
     QVector<quint32> aCP;
-    Plcfhdd(void * /*dummy*/ = 0)
+    Plcfhdd(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3819,7 +3819,7 @@ class PlcBteChpx : public StreamOffset
 public:
     QVector<quint32> aCP;
     QVector<quint32> aPnBteChpx;
-    PlcBteChpx(void * /*dummy*/ = 0)
+    PlcBteChpx(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3828,7 +3828,7 @@ class PlcfBtePapx : public StreamOffset
 public:
     QVector<quint32> aCP;
     QVector<quint32> aPnBteChpx;
-    PlcfBtePapx(void * /*dummy*/ = 0)
+    PlcfBtePapx(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3837,7 +3837,7 @@ class Tcg : public StreamOffset
 public:
     quint8 nTcgVer;
     QByteArray todo;
-    Tcg(void * /*dummy*/ = 0)
+    Tcg(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3846,7 +3846,7 @@ class PrcData : public StreamOffset
 public:
     qint16 cbGrpprl;
     QList<Sprm> GrpPrl;
-    PrcData(void * /*dummy*/ = 0)
+    PrcData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3857,7 +3857,7 @@ public:
     bool fSpec;
     quint8 sgc;
     quint8 spra;
-    Sprm(void * /*dummy*/ = 0)
+    Sprm(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3867,7 +3867,7 @@ public:
     quint8 clxt;
     quint32 lcb;
     QList<Pcd> PlcPcd;
-    Pcdt(void * /*dummy*/ = 0)
+    Pcdt(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3877,7 +3877,7 @@ public:
     quint32 fc;
     bool fCompressed;
     bool r1;
-    FCompressed(void * /*dummy*/ = 0)
+    FCompressed(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3887,7 +3887,7 @@ public:
     bool fComplex;
     quint8 isprm;
     quint8 val;
-    Prm0(void * /*dummy*/ = 0)
+    Prm0(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3896,7 +3896,7 @@ class Prm1 : public StreamOffset
 public:
     bool fComplex;
     quint16 igrpprl;
-    Prm1(void * /*dummy*/ = 0)
+    Prm1(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3906,7 +3906,7 @@ public:
     quint16 cData;
     quint16 cbExtra;
     QList<SttbfFfnEntry> data;
-    SttbfFfn(void * /*dummy*/ = 0)
+    SttbfFfn(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3915,7 +3915,7 @@ class SttbfFfnEntry : public StreamOffset
 public:
     quint8 cchData;
     QByteArray Data;
-    SttbfFfnEntry(void * /*dummy*/ = 0)
+    SttbfFfnEntry(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3924,7 +3924,7 @@ class CodePageString : public StreamOffset
 public:
     quint32 size;
     QByteArray characters;
-    CodePageString(void * /*dummy*/ = 0)
+    CodePageString(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3933,7 +3933,7 @@ class FILETIME : public StreamOffset
 public:
     quint32 dwLowDateTime;
     quint32 dwHighDateTime;
-    FILETIME(void * /*dummy*/ = 0)
+    FILETIME(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3943,7 +3943,7 @@ public:
     quint32 size;
     quint32 format;
     QByteArray data;
-    ClipboardData(void * /*dummy*/ = 0)
+    ClipboardData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3952,7 +3952,7 @@ class PropertyIdentifierAndOffset : public StreamOffset
 public:
     quint32 propertyIdentifier;
     quint32 offset;
-    PropertyIdentifierAndOffset(void * /*dummy*/ = 0)
+    PropertyIdentifierAndOffset(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3970,7 +3970,7 @@ public:
     QSharedPointer<CodePageString> vt_lpstr;
     QSharedPointer<FILETIME> vg_FILETIME;
     QSharedPointer<ClipboardData> vg_CF;
-    TypedPropertyValue(void * /*dummy*/ = 0)
+    TypedPropertyValue(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -3981,7 +3981,7 @@ public:
     quint32 numProperties;
     QList<PropertyIdentifierAndOffset> propertyIdentifierAndOffset;
     QList<TypedPropertyValue> property;
-    PropertySet(void * /*dummy*/ = 0)
+    PropertySet(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4002,7 +4002,7 @@ public:
     PropertySet propertySet1;
     QSharedPointer<PropertySet> propertySet2;
     QList<Byte> padding;
-    PropertySetStream(void * /*dummy*/ = 0)
+    PropertySetStream(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4010,7 +4010,7 @@ class SummaryInformationPropertySetStream : public StreamOffset
 {
 public:
     PropertySetStream propertySet;
-    SummaryInformationPropertySetStream(void * /*dummy*/ = 0)
+    SummaryInformationPropertySetStream(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4018,7 +4018,7 @@ class DocumentSummaryInformationPropertySetStream : public StreamOffset
 {
 public:
     PropertySetStream propertySet;
-    DocumentSummaryInformationPropertySetStream(void * /*dummy*/ = 0)
+    DocumentSummaryInformationPropertySetStream(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4027,7 +4027,7 @@ class PicturesStream : public StreamOffset
 public:
     OfficeArtBStoreDelay anon1;
     QList<Byte> trailing;
-    PicturesStream(void * /*dummy*/ = 0)
+    PicturesStream(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4040,7 +4040,7 @@ public:
     quint32 cbsave;
     quint8 compression;
     quint8 filter;
-    OfficeArtMetafileHeader(void * /*dummy*/ = 0)
+    OfficeArtMetafileHeader(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4050,7 +4050,7 @@ public:
     RecordHeader rh;
     SoundCollectionAtom soundCollectionAtom;
     QList<SoundContainer> rgSoundContainer;
-    SoundCollectionContainer(void * /*dummy*/ = 0)
+    SoundCollectionContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4061,7 +4061,7 @@ public:
     HeadersFootersAtom hfAtom;
     QSharedPointer<UserDateAtom> userDateAtom;
     QSharedPointer<FooterAtom> footerAtom;
-    SlideHeadersFootersContainer(void * /*dummy*/ = 0)
+    SlideHeadersFootersContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4073,7 +4073,7 @@ public:
     QSharedPointer<UserDateAtom> userDateAtom;
     QSharedPointer<HeaderAtom> headerAtom;
     QSharedPointer<FooterAtom> footerAtom;
-    NotesHeadersFootersContainer(void * /*dummy*/ = 0)
+    NotesHeadersFootersContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4082,7 +4082,7 @@ class ScalingStruct : public StreamOffset
 public:
     RatioStruct x;
     RatioStruct y;
-    ScalingStruct(void * /*dummy*/ = 0)
+    ScalingStruct(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4095,7 +4095,7 @@ public:
     quint16 bulletBlipRef;
     quint16 fBulletHasAutoNumber;
     QSharedPointer<TextAutoNumberScheme> bulletAutoNumberScheme;
-    TextPFException9(void * /*dummy*/ = 0)
+    TextPFException9(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4109,7 +4109,7 @@ public:
     quint8 pp10runid;
     quint32 unuseda;
     quint8 unusedb;
-    TextCFException9(void * /*dummy*/ = 0)
+    TextCFException9(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4119,7 +4119,7 @@ public:
     RecordHeader rh;
     TextCFException9 cf9;
     TextPFException9 pf9;
-    TextDefaults9Atom(void * /*dummy*/ = 0)
+    TextDefaults9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4130,7 +4130,7 @@ public:
     Kinsoku9Atom kinsoku9Atom;
     QSharedPointer<KinsokuLeadingAtom> kinsokuLeadingAtom;
     QSharedPointer<KinsokuFollowingAtom> kinsokuFollowingAtom;
-    Kinsoku9Container(void * /*dummy*/ = 0)
+    Kinsoku9Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4139,7 +4139,7 @@ class OutlineTextProps9Entry : public StreamOffset
 public:
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp9Atom styleTextProp9Atom;
-    OutlineTextProps9Entry(void * /*dummy*/ = 0)
+    OutlineTextProps9Entry(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4153,7 +4153,7 @@ public:
     quint16 newEAFontRef;
     quint16 csFontRef;
     quint32 pp11ext;
-    TextCFException10(void * /*dummy*/ = 0)
+    TextCFException10(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4162,7 +4162,7 @@ class TextDefaults10Atom : public StreamOffset
 public:
     RecordHeader rh;
     TextCFException10 cf10;
-    TextDefaults10Atom(void * /*dummy*/ = 0)
+    TextDefaults10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4172,7 +4172,7 @@ public:
     RecordHeader rh;
     QSharedPointer<AuthorNameAtom> authorNameAtom;
     QSharedPointer<CommentIndex10Atom> authorIndexAtom;
-    CommentIndex10Container(void * /*dummy*/ = 0)
+    CommentIndex10Container(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4181,7 +4181,7 @@ class OutlineTextProps10Entry : public StreamOffset
 public:
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp10Atom styleTextProp10Atom;
-    OutlineTextProps10Entry(void * /*dummy*/ = 0)
+    OutlineTextProps10Entry(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4193,7 +4193,7 @@ public:
     RecordHeader rhData;
     SmartTagStore11Container smartTagStore11;
     OutlineTextProps11Container outlineTextProps;
-    PP11DocBinaryTagExtension(void * /*dummy*/ = 0)
+    PP11DocBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4202,7 +4202,7 @@ class UnknownBinaryTag : public StreamOffset
 public:
     TagNameAtom tagNameAtom;
     BinaryTagDataBlob tagData;
-    UnknownBinaryTag(void * /*dummy*/ = 0)
+    UnknownBinaryTag(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4216,7 +4216,7 @@ public:
     quint8 unused2;
     quint8 fDraftMode;
     quint16 unused3;
-    NoZoomViewInfoAtom(void * /*dummy*/ = 0)
+    NoZoomViewInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4225,7 +4225,7 @@ class VBAInfoContainer : public StreamOffset
 public:
     RecordHeader rh;
     VBAInfoAtom vbaInfoAtom;
-    VBAInfoContainer(void * /*dummy*/ = 0)
+    VBAInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4241,7 +4241,7 @@ public:
     bool fHideThumbnails;
     bool fBarSnapped;
     quint8 reserved;
-    NormalViewSetInfoAtom(void * /*dummy*/ = 0)
+    NormalViewSetInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4295,7 +4295,7 @@ public:
         }
     };
     choice242357012 meta;
-    TextContainerMeta(void * /*dummy*/ = 0)
+    TextContainerMeta(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4313,7 +4313,7 @@ public:
     qint32 cTexts;
     SlideId slideId;
     quint32 reserved5;
-    SlidePersistAtom(void * /*dummy*/ = 0)
+    SlidePersistAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4360,7 +4360,7 @@ public:
     quint16 indent4;
     quint16 leftMargin5;
     quint16 indent5;
-    TextRuler(void * /*dummy*/ = 0)
+    TextRuler(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4396,7 +4396,7 @@ public:
     quint16 fontAlign;
     QSharedPointer<PFWrapFlags> wrapFlags;
     quint16 textDirection;
-    TextPFException(void * /*dummy*/ = 0)
+    TextPFException(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4418,7 +4418,7 @@ public:
     quint16 fontSize;
     QSharedPointer<ColorIndexStruct> color;
     qint16 position;
-    TextCFException(void * /*dummy*/ = 0)
+    TextCFException(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4430,7 +4430,7 @@ public:
     QSharedPointer<FontEmbedDataBlob> fontEmbedData2;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData3;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData4;
-    FontCollectionEntry(void * /*dummy*/ = 0)
+    FontCollectionEntry(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4441,7 +4441,7 @@ public:
     KinsokuAtom kinsokuAtom;
     QSharedPointer<KinsokuLeadingAtom> kinsokuLeadingAtom;
     QSharedPointer<KinsokuFollowingAtom> kinsokuFollowingAtom;
-    KinsokuContainer(void * /*dummy*/ = 0)
+    KinsokuContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4479,7 +4479,7 @@ public:
     quint8 reserved3bc;
     bool grammarError;
     QSharedPointer<SmartTags> smartTags;
-    TextSIException(void * /*dummy*/ = 0)
+    TextSIException(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4488,7 +4488,7 @@ class TextMasterStyleLevel : public StreamOffset
 public:
     TextPFException pf;
     TextCFException cf;
-    TextMasterStyleLevel(void * /*dummy*/ = 0)
+    TextMasterStyleLevel(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4507,7 +4507,7 @@ public:
     quint8 fOmitTitlePlace;
     quint8 fRightToLeft;
     quint8 fShowComments;
-    DocumentAtom(void * /*dummy*/ = 0)
+    DocumentAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4516,7 +4516,7 @@ class SlideTime10Atom : public StreamOffset
 public:
     RecordHeader rh;
     FILETIME fileTime;
-    SlideTime10Atom(void * /*dummy*/ = 0)
+    SlideTime10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4527,7 +4527,7 @@ public:
     QVector<quint16> tagName;
     RecordHeader rhData;
     QSharedPointer<RoundTripHeaderFooterDefaults12Atom> roundTripHeaderFooterDefaultsAtom;
-    PP12SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    PP12SlideBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4537,7 +4537,7 @@ public:
     RecordHeader rh;
     TagNameAtom tagNameAtom;
     QSharedPointer<TagValueAtom> tagValueAtom;
-    ProgStringTagContainer(void * /*dummy*/ = 0)
+    ProgStringTagContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4548,7 +4548,7 @@ public:
     quint32 slideIdRef;
     SlideFlags slideFlags;
     quint16 unused;
-    NotesAtom(void * /*dummy*/ = 0)
+    NotesAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4558,7 +4558,7 @@ public:
     RecordHeader rh;
     ExObjListAtom exObjListAtom;
     QList<ExObjListSubContainer> rgChildRec;
-    ExObjListContainer(void * /*dummy*/ = 0)
+    ExObjListContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4572,7 +4572,7 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExControlContainer(void * /*dummy*/ = 0)
+    ExControlContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4584,7 +4584,7 @@ public:
     QSharedPointer<FriendlyNameAtom> friendlyNameAtom;
     QSharedPointer<TargetAtom> targetAtom;
     QSharedPointer<LocationAtom> locationAtom;
-    ExHyperlinkContainer(void * /*dummy*/ = 0)
+    ExHyperlinkContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4598,7 +4598,7 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExOleLinkContainer(void * /*dummy*/ = 0)
+    ExOleLinkContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4612,7 +4612,7 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExOleEmbedContainer(void * /*dummy*/ = 0)
+    ExOleEmbedContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4622,7 +4622,7 @@ public:
     OfficeArtRecordHeader rh;
     OfficeArtFDGG head;
     QList<OfficeArtIDCL> Rgidcl;
-    OfficeArtFDGGBlock(void * /*dummy*/ = 0)
+    OfficeArtFDGGBlock(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4664,7 +4664,7 @@ public:
         }
     };
     choice3062460075 anon;
-    OfficeArtSolverContainerFileBlock(void * /*dummy*/ = 0)
+    OfficeArtSolverContainerFileBlock(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4673,7 +4673,7 @@ class Rotation : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint rotation;
-    Rotation(void * /*dummy*/ = 0)
+    Rotation(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4703,7 +4703,7 @@ public:
     bool fUsefLockRotation;
     bool fUsefLockAgainstUngrouping;
     quint8 unused2;
-    ProtectionBooleanProperties(void * /*dummy*/ = 0)
+    ProtectionBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4712,7 +4712,7 @@ class ITxid : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 iTxid;
-    ITxid(void * /*dummy*/ = 0)
+    ITxid(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4721,7 +4721,7 @@ class DxTextLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxTextLeft;
-    DxTextLeft(void * /*dummy*/ = 0)
+    DxTextLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4730,7 +4730,7 @@ class DyTextTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyTextTop;
-    DyTextTop(void * /*dummy*/ = 0)
+    DyTextTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4739,7 +4739,7 @@ class DxTextRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxTextRight;
-    DxTextRight(void * /*dummy*/ = 0)
+    DxTextRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4748,7 +4748,7 @@ class DyTextBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyTextBottom;
-    DyTextBottom(void * /*dummy*/ = 0)
+    DyTextBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4757,7 +4757,7 @@ class WrapText : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 wrapText;
-    WrapText(void * /*dummy*/ = 0)
+    WrapText(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4766,7 +4766,7 @@ class AnchorText : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 anchorText;
-    AnchorText(void * /*dummy*/ = 0)
+    AnchorText(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4775,7 +4775,7 @@ class TxflTextFlow : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 txflTextFlow;
-    TxflTextFlow(void * /*dummy*/ = 0)
+    TxflTextFlow(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4784,7 +4784,7 @@ class CdirFont : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 cdirFont;
-    CdirFont(void * /*dummy*/ = 0)
+    CdirFont(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4793,7 +4793,7 @@ class HspNext : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 hspNext;
-    HspNext(void * /*dummy*/ = 0)
+    HspNext(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4802,7 +4802,7 @@ class Txdir : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 txdir;
-    Txdir(void * /*dummy*/ = 0)
+    Txdir(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4824,7 +4824,7 @@ public:
     bool fUsefSelectText;
     quint8 unused6a;
     quint8 unused6b;
-    TextBooleanProperties(void * /*dummy*/ = 0)
+    TextBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4833,7 +4833,7 @@ class CropFromTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromTop;
-    CropFromTop(void * /*dummy*/ = 0)
+    CropFromTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4842,7 +4842,7 @@ class CropFromBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromBottom;
-    CropFromBottom(void * /*dummy*/ = 0)
+    CropFromBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4851,7 +4851,7 @@ class CropFromLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromLeft;
-    CropFromLeft(void * /*dummy*/ = 0)
+    CropFromLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4860,7 +4860,7 @@ class CropFromRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromRight;
-    CropFromRight(void * /*dummy*/ = 0)
+    CropFromRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4869,7 +4869,7 @@ class Pib : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pib;
-    Pib(void * /*dummy*/ = 0)
+    Pib(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4878,7 +4878,7 @@ class PibName : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pibName;
-    PibName(void * /*dummy*/ = 0)
+    PibName(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4887,7 +4887,7 @@ class PibFlags : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pibFlags;
-    PibFlags(void * /*dummy*/ = 0)
+    PibFlags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4896,7 +4896,7 @@ class PictureTransparent : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF pictureTransparent;
-    PictureTransparent(void * /*dummy*/ = 0)
+    PictureTransparent(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4905,7 +4905,7 @@ class PictureContrast : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 pictureContrast;
-    PictureContrast(void * /*dummy*/ = 0)
+    PictureContrast(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4914,7 +4914,7 @@ class PictureBrightness : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 pictureBrightness;
-    PictureBrightness(void * /*dummy*/ = 0)
+    PictureBrightness(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4940,7 +4940,7 @@ public:
     bool fUsefPicturePreserveGrays;
     bool unused2a;
     quint8 unused2b;
-    BlipBooleanProperties(void * /*dummy*/ = 0)
+    BlipBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4949,7 +4949,7 @@ class GeoLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoLeft;
-    GeoLeft(void * /*dummy*/ = 0)
+    GeoLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4958,7 +4958,7 @@ class GeoTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoTop;
-    GeoTop(void * /*dummy*/ = 0)
+    GeoTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4967,7 +4967,7 @@ class GeoRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoRight;
-    GeoRight(void * /*dummy*/ = 0)
+    GeoRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4976,7 +4976,7 @@ class GeoBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoBottom;
-    GeoBottom(void * /*dummy*/ = 0)
+    GeoBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4985,7 +4985,7 @@ class ShapePath : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 shapePath;
-    ShapePath(void * /*dummy*/ = 0)
+    ShapePath(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -4994,7 +4994,7 @@ class PVertices : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pVertices;
-    PVertices(void * /*dummy*/ = 0)
+    PVertices(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5003,7 +5003,7 @@ class PSegmentInfo : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pSegmentInfo;
-    PSegmentInfo(void * /*dummy*/ = 0)
+    PSegmentInfo(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5012,7 +5012,7 @@ class AdjustValue : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjustvalue;
-    AdjustValue(void * /*dummy*/ = 0)
+    AdjustValue(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5021,7 +5021,7 @@ class Adjust2Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust2value;
-    Adjust2Value(void * /*dummy*/ = 0)
+    Adjust2Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5030,7 +5030,7 @@ class Adjust3Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust3value;
-    Adjust3Value(void * /*dummy*/ = 0)
+    Adjust3Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5039,7 +5039,7 @@ class Adjust4Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust4value;
-    Adjust4Value(void * /*dummy*/ = 0)
+    Adjust4Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5048,7 +5048,7 @@ class Adjust5Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust5value;
-    Adjust5Value(void * /*dummy*/ = 0)
+    Adjust5Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5057,7 +5057,7 @@ class Adjust6Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust6value;
-    Adjust6Value(void * /*dummy*/ = 0)
+    Adjust6Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5066,7 +5066,7 @@ class Adjust7Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust7value;
-    Adjust7Value(void * /*dummy*/ = 0)
+    Adjust7Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5075,7 +5075,7 @@ class Adjust8Value : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust8value;
-    Adjust8Value(void * /*dummy*/ = 0)
+    Adjust8Value(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5101,7 +5101,7 @@ public:
     bool unused3a;
     bool unused3b;
     quint8 unused4;
-    GeometryBooleanProperties(void * /*dummy*/ = 0)
+    GeometryBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5110,7 +5110,7 @@ class FillType : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillType;
-    FillType(void * /*dummy*/ = 0)
+    FillType(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5119,7 +5119,7 @@ class FillColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillColor;
-    FillColor(void * /*dummy*/ = 0)
+    FillColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5128,7 +5128,7 @@ class FillOpacity : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOpacity;
-    FillOpacity(void * /*dummy*/ = 0)
+    FillOpacity(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5137,7 +5137,7 @@ class FillBackColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillBackColor;
-    FillBackColor(void * /*dummy*/ = 0)
+    FillBackColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5146,7 +5146,7 @@ class FillBackOpacity : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillBackOpacity;
-    FillBackOpacity(void * /*dummy*/ = 0)
+    FillBackOpacity(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5155,7 +5155,7 @@ class FillCrMod : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillCrMod;
-    FillCrMod(void * /*dummy*/ = 0)
+    FillCrMod(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5164,7 +5164,7 @@ class FillBlip : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlip;
-    FillBlip(void * /*dummy*/ = 0)
+    FillBlip(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5173,7 +5173,7 @@ class FillBlipName : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlipName;
-    FillBlipName(void * /*dummy*/ = 0)
+    FillBlipName(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5182,7 +5182,7 @@ class FillBlipFlags : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlipFlags;
-    FillBlipFlags(void * /*dummy*/ = 0)
+    FillBlipFlags(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5191,7 +5191,7 @@ class FillWidth : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillWidth;
-    FillWidth(void * /*dummy*/ = 0)
+    FillWidth(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5200,7 +5200,7 @@ class FillHeight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillHeight;
-    FillHeight(void * /*dummy*/ = 0)
+    FillHeight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5209,7 +5209,7 @@ class FillAngle : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillAngle;
-    FillAngle(void * /*dummy*/ = 0)
+    FillAngle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5218,7 +5218,7 @@ class FillFocus : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillFocus;
-    FillFocus(void * /*dummy*/ = 0)
+    FillFocus(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5227,7 +5227,7 @@ class FillToLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToLeft;
-    FillToLeft(void * /*dummy*/ = 0)
+    FillToLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5236,7 +5236,7 @@ class FillToTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToTop;
-    FillToTop(void * /*dummy*/ = 0)
+    FillToTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5245,7 +5245,7 @@ class FillToRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToRight;
-    FillToRight(void * /*dummy*/ = 0)
+    FillToRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5254,7 +5254,7 @@ class FillToBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToBottom;
-    FillToBottom(void * /*dummy*/ = 0)
+    FillToBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5263,7 +5263,7 @@ class FillRectLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectLeft;
-    FillRectLeft(void * /*dummy*/ = 0)
+    FillRectLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5272,7 +5272,7 @@ class FillRectTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectTop;
-    FillRectTop(void * /*dummy*/ = 0)
+    FillRectTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5281,7 +5281,7 @@ class FillRectRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectRight;
-    FillRectRight(void * /*dummy*/ = 0)
+    FillRectRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5290,7 +5290,7 @@ class FillRectBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectBottom;
-    FillRectBottom(void * /*dummy*/ = 0)
+    FillRectBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5299,7 +5299,7 @@ class FillDztype : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillDztype;
-    FillDztype(void * /*dummy*/ = 0)
+    FillDztype(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5308,7 +5308,7 @@ class FillShadePreset : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillShadePreset;
-    FillShadePreset(void * /*dummy*/ = 0)
+    FillShadePreset(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5317,7 +5317,7 @@ class FillShadeColors : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillShadeColors;
-    FillShadeColors(void * /*dummy*/ = 0)
+    FillShadeColors(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5326,7 +5326,7 @@ class FillOriginX : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOriginX;
-    FillOriginX(void * /*dummy*/ = 0)
+    FillOriginX(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5335,7 +5335,7 @@ class FillOriginY : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOriginY;
-    FillOriginY(void * /*dummy*/ = 0)
+    FillOriginY(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5344,7 +5344,7 @@ class FillShapeOriginX : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillShapeOriginX;
-    FillShapeOriginX(void * /*dummy*/ = 0)
+    FillShapeOriginX(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5353,7 +5353,7 @@ class FillShapeOriginY : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillShapeOriginY;
-    FillShapeOriginY(void * /*dummy*/ = 0)
+    FillShapeOriginY(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5362,7 +5362,7 @@ class FillColorExt : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillColorExt;
-    FillColorExt(void * /*dummy*/ = 0)
+    FillColorExt(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5371,7 +5371,7 @@ class FillBackColorExt : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillBackColorExt;
-    FillBackColorExt(void * /*dummy*/ = 0)
+    FillBackColorExt(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5397,7 +5397,7 @@ public:
     bool fUsefRecolorFillAsPicture;
     bool unused2a;
     quint8 unused2b;
-    FillStyleBooleanProperties(void * /*dummy*/ = 0)
+    FillStyleBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5406,7 +5406,7 @@ class LineColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF lineColor;
-    LineColor(void * /*dummy*/ = 0)
+    LineColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5415,7 +5415,7 @@ class LineOpacity : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 lineOpacity;
-    LineOpacity(void * /*dummy*/ = 0)
+    LineOpacity(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5424,7 +5424,7 @@ class LineBackColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF lineBackColor;
-    LineBackColor(void * /*dummy*/ = 0)
+    LineBackColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5433,7 +5433,7 @@ class LineFillBlip : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineFillBlip;
-    LineFillBlip(void * /*dummy*/ = 0)
+    LineFillBlip(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5442,7 +5442,7 @@ class LineWidth : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineWidth;
-    LineWidth(void * /*dummy*/ = 0)
+    LineWidth(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5451,7 +5451,7 @@ class LineStyle : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStyle;
-    LineStyle(void * /*dummy*/ = 0)
+    LineStyle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5460,7 +5460,7 @@ class LineDashing : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineDashing;
-    LineDashing(void * /*dummy*/ = 0)
+    LineDashing(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5469,7 +5469,7 @@ class LineStartArrowhead : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowhead;
-    LineStartArrowhead(void * /*dummy*/ = 0)
+    LineStartArrowhead(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5478,7 +5478,7 @@ class LineEndArrowhead : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowhead;
-    LineEndArrowhead(void * /*dummy*/ = 0)
+    LineEndArrowhead(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5487,7 +5487,7 @@ class LineStartArrowWidth : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowWidth;
-    LineStartArrowWidth(void * /*dummy*/ = 0)
+    LineStartArrowWidth(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5496,7 +5496,7 @@ class LineStartArrowLength : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowLength;
-    LineStartArrowLength(void * /*dummy*/ = 0)
+    LineStartArrowLength(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5505,7 +5505,7 @@ class LineEndArrowWidth : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowWidth;
-    LineEndArrowWidth(void * /*dummy*/ = 0)
+    LineEndArrowWidth(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5514,7 +5514,7 @@ class LineEndArrowLength : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowLength;
-    LineEndArrowLength(void * /*dummy*/ = 0)
+    LineEndArrowLength(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5523,7 +5523,7 @@ class LineJoinStyle : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineJoinStyle;
-    LineJoinStyle(void * /*dummy*/ = 0)
+    LineJoinStyle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5532,7 +5532,7 @@ class LineEndCapStyle : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndCapStyle;
-    LineEndCapStyle(void * /*dummy*/ = 0)
+    LineEndCapStyle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5562,7 +5562,7 @@ public:
     bool unused3;
     bool fUsefLineOpaqueBackColor;
     quint8 unused4;
-    LineStyleBooleanProperties(void * /*dummy*/ = 0)
+    LineStyleBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5571,7 +5571,7 @@ class ShadowType : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 shadowType;
-    ShadowType(void * /*dummy*/ = 0)
+    ShadowType(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5580,7 +5580,7 @@ class ShadowColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF shadowColor;
-    ShadowColor(void * /*dummy*/ = 0)
+    ShadowColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5589,7 +5589,7 @@ class ShadowOpacity : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint shadowOpacity;
-    ShadowOpacity(void * /*dummy*/ = 0)
+    ShadowOpacity(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5598,7 +5598,7 @@ class ShadowOffsetX : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 shadowOffsetX;
-    ShadowOffsetX(void * /*dummy*/ = 0)
+    ShadowOffsetX(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5607,7 +5607,7 @@ class ShadowOffsetY : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 shadowOffsetY;
-    ShadowOffsetY(void * /*dummy*/ = 0)
+    ShadowOffsetY(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5621,7 +5621,7 @@ public:
     bool fUsefShadowObscured;
     bool fUsefShadow;
     quint16 unused2;
-    ShadowStyleBooleanProperties(void * /*dummy*/ = 0)
+    ShadowStyleBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5630,7 +5630,7 @@ class HspMaster : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 hspMaster;
-    HspMaster(void * /*dummy*/ = 0)
+    HspMaster(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5639,7 +5639,7 @@ class Cxstyle : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 cxstyle;
-    Cxstyle(void * /*dummy*/ = 0)
+    Cxstyle(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5648,7 +5648,7 @@ class BWMode : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 bWMode;
-    BWMode(void * /*dummy*/ = 0)
+    BWMode(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5682,7 +5682,7 @@ public:
     bool unused5;
     bool unused6;
     quint8 unused7;
-    ShapeBooleanProperties(void * /*dummy*/ = 0)
+    ShapeBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5691,7 +5691,7 @@ class DxyCalloutGap : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutGap;
-    DxyCalloutGap(void * /*dummy*/ = 0)
+    DxyCalloutGap(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5700,7 +5700,7 @@ class Spcoa : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 spcoa;
-    Spcoa(void * /*dummy*/ = 0)
+    Spcoa(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5709,7 +5709,7 @@ class Spcod : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 spcod;
-    Spcod(void * /*dummy*/ = 0)
+    Spcod(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5718,7 +5718,7 @@ class DxyCalloutDropSpecified : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutDropSpecified;
-    DxyCalloutDropSpecified(void * /*dummy*/ = 0)
+    DxyCalloutDropSpecified(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5727,7 +5727,7 @@ class DxyCalloutLengthSpecified : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutLengthSpecified;
-    DxyCalloutLengthSpecified(void * /*dummy*/ = 0)
+    DxyCalloutLengthSpecified(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5753,7 +5753,7 @@ public:
     bool fUsefCallout;
     bool unused2a;
     quint8 unused2b;
-    CalloutBooleanProperties(void * /*dummy*/ = 0)
+    CalloutBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5762,7 +5762,7 @@ class PWrapPolygonVertices : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pWrapPolygonVertices;
-    PWrapPolygonVertices(void * /*dummy*/ = 0)
+    PWrapPolygonVertices(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5771,7 +5771,7 @@ class DxWrapDistLeft : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWrapDistLeft;
-    DxWrapDistLeft(void * /*dummy*/ = 0)
+    DxWrapDistLeft(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5780,7 +5780,7 @@ class DyWrapDistTop : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyWrapDistTop;
-    DyWrapDistTop(void * /*dummy*/ = 0)
+    DyWrapDistTop(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5789,7 +5789,7 @@ class DxWrapDistRight : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWrapDistRight;
-    DxWrapDistRight(void * /*dummy*/ = 0)
+    DxWrapDistRight(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5798,7 +5798,7 @@ class DyWrapDistBottom : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyWrapDistBottom;
-    DyWrapDistBottom(void * /*dummy*/ = 0)
+    DyWrapDistBottom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5807,7 +5807,7 @@ class LidRegroup : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lidRegroup;
-    LidRegroup(void * /*dummy*/ = 0)
+    LidRegroup(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5816,7 +5816,7 @@ class PosH : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posH;
-    PosH(void * /*dummy*/ = 0)
+    PosH(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5825,7 +5825,7 @@ class PosRelH : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posRelH;
-    PosRelH(void * /*dummy*/ = 0)
+    PosRelH(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5834,7 +5834,7 @@ class PosV : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posV;
-    PosV(void * /*dummy*/ = 0)
+    PosV(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5843,7 +5843,7 @@ class PosRelV : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posRelV;
-    PosRelV(void * /*dummy*/ = 0)
+    PosRelV(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5852,7 +5852,7 @@ class PctHR : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pctHR;
-    PctHR(void * /*dummy*/ = 0)
+    PctHR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5861,7 +5861,7 @@ class AlignHR : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     quint32 alignHR;
-    AlignHR(void * /*dummy*/ = 0)
+    AlignHR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5870,7 +5870,7 @@ class DxHeightHR : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxHeightHR;
-    DxHeightHR(void * /*dummy*/ = 0)
+    DxHeightHR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5879,7 +5879,7 @@ class DxWidthHR : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWidthHR;
-    DxWidthHR(void * /*dummy*/ = 0)
+    DxWidthHR(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5888,7 +5888,7 @@ class BorderTopColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderTopColor;
-    BorderTopColor(void * /*dummy*/ = 0)
+    BorderTopColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5897,7 +5897,7 @@ class BorderLeftColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderLeftColor;
-    BorderLeftColor(void * /*dummy*/ = 0)
+    BorderLeftColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5906,7 +5906,7 @@ class BorderBottomColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderBottomColor;
-    BorderBottomColor(void * /*dummy*/ = 0)
+    BorderBottomColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5915,7 +5915,7 @@ class BorderRightColor : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderRightColor;
-    BorderRightColor(void * /*dummy*/ = 0)
+    BorderRightColor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5955,7 +5955,7 @@ public:
     bool fUsefStandardHR;
     bool fUsefIsBullet;
     bool fUsefLayoutInCell;
-    GroupShapeBooleanProperties(void * /*dummy*/ = 0)
+    GroupShapeBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5964,7 +5964,7 @@ class WzFillId : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 wzFillId;
-    WzFillId(void * /*dummy*/ = 0)
+    WzFillId(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5988,7 +5988,7 @@ public:
     bool unused5;
     quint8 unused6a;
     quint8 unused6b;
-    DiagramBooleanProperties(void * /*dummy*/ = 0)
+    DiagramBooleanProperties(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -5998,7 +5998,7 @@ public:
     OfficeArtRecordHeader rh;
     QSharedPointer<SmallRectStruct> rect1;
     QSharedPointer<RectStruct> rect2;
-    PptOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    PptOfficeArtClientAnchor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6008,7 +6008,7 @@ public:
     OfficeArtRecordHeader rh;
     AnimationInfoAtom animationAtom;
     QSharedPointer<SoundContainer> animationSound;
-    AnimationInfoContainer(void * /*dummy*/ = 0)
+    AnimationInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6018,7 +6018,7 @@ public:
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     QSharedPointer<MacroNameAtom> macroNameAtom;
-    MouseClickInteractiveInfoContainer(void * /*dummy*/ = 0)
+    MouseClickInteractiveInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6028,7 +6028,7 @@ public:
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     QSharedPointer<MacroNameAtom> macroNameAtom;
-    MouseOverInteractiveInfoContainer(void * /*dummy*/ = 0)
+    MouseOverInteractiveInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6078,7 +6078,7 @@ public:
         }
     };
     choice3146562028 anon;
-    ShapeClientRoundtripDataSubcontainerOrAtom(void * /*dummy*/ = 0)
+    ShapeClientRoundtripDataSubcontainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6124,7 +6124,7 @@ public:
         }
     };
     choice2754406405 anon;
-    ShapeProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    ShapeProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6166,7 +6166,7 @@ public:
         }
     };
     choice2757443956 anon;
-    OfficeArtClientTextBox(void * /*dummy*/ = 0)
+    OfficeArtClientTextBox(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6175,7 +6175,7 @@ class TextRulerAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextRuler textRuler;
-    TextRulerAtom(void * /*dummy*/ = 0)
+    TextRulerAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6184,7 +6184,7 @@ class OfficeArtFOPTE : public StreamOffset
 public:
     OfficeArtFOPTEOPID opid;
     qint32 op;
-    OfficeArtFOPTE(void * /*dummy*/ = 0)
+    OfficeArtFOPTE(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6203,7 +6203,7 @@ public:
     quint16 cswNew;
     QByteArray fibRgCswNew;
     QByteArray trail;
-    Fib(void * /*dummy*/ = 0)
+    Fib(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6212,7 +6212,7 @@ class STSH : public StreamOffset
 public:
     LPStshi lpstshi;
     QList<LPStd> rglpstd;
-    STSH(void * /*dummy*/ = 0)
+    STSH(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6221,7 +6221,7 @@ class Clx : public StreamOffset
 public:
     QList<Pcr> RgPrc;
     Pcdt pcdt;
-    Clx(void * /*dummy*/ = 0)
+    Clx(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6230,7 +6230,7 @@ class Pcr : public StreamOffset
 public:
     quint8 clxt;
     PrcData prcData;
-    Pcr(void * /*dummy*/ = 0)
+    Pcr(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6268,7 +6268,7 @@ public:
         }
     };
     choice1129181155 prm;
-    Prm(void * /*dummy*/ = 0)
+    Prm(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6281,7 +6281,7 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipEMF(void * /*dummy*/ = 0)
+    OfficeArtBlipEMF(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6294,7 +6294,7 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipWMF(void * /*dummy*/ = 0)
+    OfficeArtBlipWMF(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6307,7 +6307,7 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipPICT(void * /*dummy*/ = 0)
+    OfficeArtBlipPICT(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6365,7 +6365,7 @@ public:
         }
     };
     choice279968329 anon;
-    OfficeArtBlip(void * /*dummy*/ = 0)
+    OfficeArtBlip(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6379,7 +6379,7 @@ public:
     quint8 fUseVarScale;
     quint8 fDraftMode;
     quint16 unused2;
-    ZoomViewInfoAtom(void * /*dummy*/ = 0)
+    ZoomViewInfoAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6401,7 +6401,7 @@ public:
     QSharedPointer<HTMLPublishInfo9Container> htmlPublishInfoAtom;
     QList<BroadcastDocInfo9Container> rgBroadcastDocInfo9;
     QSharedPointer<OutlineTextProps9Container> outlineTextPropsContainer;
-    PP9DocBinaryTagExtension(void * /*dummy*/ = 0)
+    PP9DocBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6410,7 +6410,7 @@ class TextMasterStyle9Level : public StreamOffset
 public:
     TextPFException9 pf9;
     TextCFException9 cf9;
-    TextMasterStyle9Level(void * /*dummy*/ = 0)
+    TextMasterStyle9Level(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6420,7 +6420,7 @@ public:
     TextPFException9 pf9;
     TextCFException9 cf9;
     TextSIException si;
-    StyleTextProp9(void * /*dummy*/ = 0)
+    StyleTextProp9(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6445,7 +6445,7 @@ public:
     QSharedPointer<DiffTree10Container> rgDiffTree10Container;
     QSharedPointer<ModifyPasswordAtom> modifyPasswordAtom;
     QSharedPointer<PhotoAlbumInfo10Atom> photoAlbumInfoAtom;
-    PP10DocBinaryTagExtension(void * /*dummy*/ = 0)
+    PP10DocBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6453,7 +6453,7 @@ class TextMasterStyle10Level : public StreamOffset
 {
 public:
     TextCFException10 cf10;
-    TextMasterStyle10Level(void * /*dummy*/ = 0)
+    TextMasterStyle10Level(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6462,7 +6462,7 @@ class NotesTextViewInfoContainer : public StreamOffset
 public:
     RecordHeader rh;
     ZoomViewInfoAtom zoomViewInfo;
-    NotesTextViewInfoContainer(void * /*dummy*/ = 0)
+    NotesTextViewInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6471,7 +6471,7 @@ class OutlineViewInfoContainer : public StreamOffset
 public:
     RecordHeader rh;
     NoZoomViewInfoAtom noZoomViewInfo;
-    OutlineViewInfoContainer(void * /*dummy*/ = 0)
+    OutlineViewInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6480,7 +6480,7 @@ class NormalViewSetInfoContainer : public StreamOffset
 public:
     RecordHeader rh;
     NormalViewSetInfoAtom normalViewSetInfoAtom;
-    NormalViewSetInfoContainer(void * /*dummy*/ = 0)
+    NormalViewSetInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6489,7 +6489,7 @@ class SlideListWithTextSubContainerOrAtom : public StreamOffset
 public:
     SlidePersistAtom slidePersistAtom;
     QList<TextContainer> atoms;
-    SlideListWithTextSubContainerOrAtom(void * /*dummy*/ = 0)
+    SlideListWithTextSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6498,7 +6498,7 @@ class OutlineAtom : public StreamOffset
 public:
     OutlineTextRefAtom outlineTextRefAtom;
     QSharedPointer<TextRulerAtom> textRulerAtom;
-    OutlineAtom(void * /*dummy*/ = 0)
+    OutlineAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6547,7 +6547,7 @@ public:
     QSharedPointer<TextSpecialInfoAtom> specialinfo2;
     QSharedPointer<TextRulerAtom> textRulerAtom;
     QList<TextContainerInteractiveInfo> interactive2;
-    TextContainer(void * /*dummy*/ = 0)
+    TextContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6556,7 +6556,7 @@ class MouseClickTextInfo : public StreamOffset
 public:
     MouseClickInteractiveInfoContainer interactive;
     MouseClickTextInteractiveInfoAtom text;
-    MouseClickTextInfo(void * /*dummy*/ = 0)
+    MouseClickTextInfo(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6565,7 +6565,7 @@ class MouseOverTextInfo : public StreamOffset
 public:
     MouseOverInteractiveInfoContainer interactive;
     MouseOverTextInteractiveInfoAtom text;
-    MouseOverTextInfo(void * /*dummy*/ = 0)
+    MouseOverTextInfo(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6575,7 +6575,7 @@ public:
     quint32 count;
     quint16 indentLevel;
     TextPFException pf;
-    TextPFRun(void * /*dummy*/ = 0)
+    TextPFRun(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6584,7 +6584,7 @@ class TextCFRun : public StreamOffset
 public:
     quint32 count;
     TextCFException cf;
-    TextCFRun(void * /*dummy*/ = 0)
+    TextCFRun(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6593,7 +6593,7 @@ class TextCFExceptionAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextCFException cf;
-    TextCFExceptionAtom(void * /*dummy*/ = 0)
+    TextCFExceptionAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6602,7 +6602,7 @@ class DefaultRulerAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextRuler defaultTextRuler;
-    DefaultRulerAtom(void * /*dummy*/ = 0)
+    DefaultRulerAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6612,7 +6612,7 @@ public:
     RecordHeader rh;
     quint16 reserved;
     TextPFException pf;
-    TextPFExceptionAtom(void * /*dummy*/ = 0)
+    TextPFExceptionAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6621,7 +6621,7 @@ class TextSIRun : public StreamOffset
 public:
     quint32 count;
     TextSIException si;
-    TextSIRun(void * /*dummy*/ = 0)
+    TextSIRun(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6630,7 +6630,7 @@ class TextSIExceptionAtom : public StreamOffset
 public:
     RecordHeader rh;
     TextSIException textSIException;
-    TextSIExceptionAtom(void * /*dummy*/ = 0)
+    TextSIExceptionAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6654,7 +6654,7 @@ public:
     QSharedPointer<TextMasterStyleLevel> lstLvl4;
     quint16 lstLvl5level;
     QSharedPointer<TextMasterStyleLevel> lstLvl5;
-    TextMasterStyleAtom(void * /*dummy*/ = 0)
+    TextMasterStyleAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6674,7 +6674,7 @@ public:
     QSharedPointer<HashCode10Atom> hashCodeAtom;
     QSharedPointer<ExtTimeNodeContainer> extTimeNodeContainer;
     QSharedPointer<BuildListContainer> buildListContainer;
-    PP10SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    PP10SlideBinaryTagExtension(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6748,7 +6748,7 @@ public:
         }
     };
     choice2338534801 anon;
-    ExObjListSubContainer(void * /*dummy*/ = 0)
+    ExObjListSubContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -6764,7 +6764,7 @@ public:
     QSharedPointer<OfficeArtSplitMenuColorContainer> splitColors;
     QSharedPointer<OfficeArtBStoreContainer> blipStore2;
     QSharedPointer<OfficeArtTertiaryFOPT> unknown;
-    OfficeArtDggContainer(void * /*dummy*/ = 0)
+    OfficeArtDggContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7298,7 +7298,7 @@ public:
         }
     };
     choice3165202096 anon;
-    OfficeArtFOPTEChoice(void * /*dummy*/ = 0)
+    OfficeArtFOPTEChoice(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7340,7 +7340,7 @@ public:
         }
     };
     choice1726903461 anon;
-    OfficeArtClientAnchor(void * /*dummy*/ = 0)
+    OfficeArtClientAnchor(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7360,7 +7360,7 @@ public:
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown1;
     QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData;
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
-    PptOfficeArtClientData(void * /*dummy*/ = 0)
+    PptOfficeArtClientData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7369,7 +7369,7 @@ class ShapeProgBinaryTagContainer : public StreamOffset
 public:
     OfficeArtRecordHeader rh;
     ShapeProgBinaryTagSubContainerOrAtom rec;
-    ShapeProgBinaryTagContainer(void * /*dummy*/ = 0)
+    ShapeProgBinaryTagContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7377,7 +7377,7 @@ class WordDocument : public StreamOffset
 {
 public:
     Fib fib;
-    WordDocument(void * /*dummy*/ = 0)
+    WordDocument(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7393,7 +7393,7 @@ public:
     Clx clx;
     SttbfFfn sttbfFfn;
     QByteArray dop;
-    Table(void * /*dummy*/ = 0)
+    Table(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7407,7 +7407,7 @@ public:
     quint16 fR3;
     FCompressed fc;
     Prm prm;
-    Pcd(void * /*dummy*/ = 0)
+    Pcd(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7429,7 +7429,7 @@ public:
     quint8 unused3;
     QByteArray nameData;
     QSharedPointer<OfficeArtBlip> embeddedBlip;
-    OfficeArtFBSE(void * /*dummy*/ = 0)
+    OfficeArtFBSE(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7467,7 +7467,7 @@ public:
         }
     };
     choice2043165903 anon;
-    OfficeArtBStoreContainerFileBlock(void * /*dummy*/ = 0)
+    OfficeArtBStoreContainerFileBlock(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7478,7 +7478,7 @@ public:
     SlideViewInfoAtom slideViewInfoAtom;
     QSharedPointer<ZoomViewInfoAtom> zoomViewInfoAtom;
     QList<GuideAtom> rgGuideAtom;
-    SlideViewInfoInstance(void * /*dummy*/ = 0)
+    SlideViewInfoInstance(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7528,7 +7528,7 @@ public:
         }
     };
     choice214961565 anon;
-    DocProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    DocProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7542,7 +7542,7 @@ public:
     QSharedPointer<TextMasterStyle9Level> lstLvl3;
     QSharedPointer<TextMasterStyle9Level> lstLvl4;
     QSharedPointer<TextMasterStyle9Level> lstLvl5;
-    TextMasterStyle9Atom(void * /*dummy*/ = 0)
+    TextMasterStyle9Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7553,7 +7553,7 @@ public:
     quint8 winBlipType;
     quint8 unused;
     OfficeArtBStoreContainerFileBlock blip;
-    BlipEntityAtom(void * /*dummy*/ = 0)
+    BlipEntityAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7577,7 +7577,7 @@ public:
     QSharedPointer<TextMasterStyle10Level> lstLvl4;
     quint16 lstLvl5level;
     QSharedPointer<TextMasterStyle10Level> lstLvl5;
-    TextMasterStyle10Atom(void * /*dummy*/ = 0)
+    TextMasterStyle10Atom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7615,7 +7615,7 @@ public:
         }
     };
     choice2925155378 anon;
-    TextClientDataSubContainerOrAtom(void * /*dummy*/ = 0)
+    TextClientDataSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7653,7 +7653,7 @@ public:
         }
     };
     choice3752530176 interactive;
-    TextContainerInteractiveInfo(void * /*dummy*/ = 0)
+    TextContainerInteractiveInfo(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7669,7 +7669,7 @@ public:
     TextSIExceptionAtom textSIDefaultsAtom;
     TextMasterStyleAtom textMasterStyleAtom;
     QSharedPointer<TextMasterStyleAtom> textMasterStyleAtom2;
-    DocumentTextInfoContainer(void * /*dummy*/ = 0)
+    DocumentTextInfoContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7715,7 +7715,7 @@ public:
         }
     };
     choice4024872665 anon;
-    SlideProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    SlideProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7724,7 +7724,7 @@ class DrawingGroupContainer : public StreamOffset
 public:
     RecordHeader rh;
     OfficeArtDggContainer OfficeArtDgg;
-    DrawingGroupContainer(void * /*dummy*/ = 0)
+    DrawingGroupContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7766,7 +7766,7 @@ public:
         }
     };
     choice2520977885 anon;
-    OfficeArtClientData(void * /*dummy*/ = 0)
+    OfficeArtClientData(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7804,7 +7804,7 @@ public:
         }
     };
     choice42781012 anon;
-    ShapeProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    ShapeProgTagsSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7837,7 +7837,7 @@ public:
     QSharedPointer<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom2;
     QList<UnknownDocumentContainerChild> unknown4;
     QSharedPointer<TextMasterStyle10Atom> unknown5;
-    DocumentContainer(void * /*dummy*/ = 0)
+    DocumentContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7895,7 +7895,7 @@ public:
         }
     };
     choice2631814737 anon;
-    DocInfoListSubContainerOrAtom(void * /*dummy*/ = 0)
+    DocInfoListSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7904,7 +7904,7 @@ class DocProgBinaryTagContainer : public StreamOffset
 public:
     RecordHeader rh;
     DocProgBinaryTagSubContainerOrAtom rec;
-    DocProgBinaryTagContainer(void * /*dummy*/ = 0)
+    DocProgBinaryTagContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7913,7 +7913,7 @@ class SlideProgBinaryTagContainer : public StreamOffset
 public:
     RecordHeader rh;
     SlideProgBinaryTagSubContainerOrAtom rec;
-    SlideProgBinaryTagContainer(void * /*dummy*/ = 0)
+    SlideProgBinaryTagContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7935,7 +7935,7 @@ public:
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
     QSharedPointer<UnknownTextContainerChild> unknown;
-    OfficeArtSpContainer(void * /*dummy*/ = 0)
+    OfficeArtSpContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7944,7 +7944,7 @@ class OfficeArtInlineSpContainer : public StreamOffset
 public:
     OfficeArtSpContainer shape;
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtInlineSpContainer(void * /*dummy*/ = 0)
+    OfficeArtInlineSpContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -7982,7 +7982,7 @@ public:
         }
     };
     choice61655436 anon;
-    DocProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    DocProgTagsSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8020,7 +8020,7 @@ public:
         }
     };
     choice310259039 anon;
-    SlideProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    SlideProgTagsSubContainerOrAtom(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8034,7 +8034,7 @@ public:
     QSharedPointer<OfficeArtSpContainer> shape;
     QList<OfficeArtSpgrContainerFileBlock> deletedShapes;
     QSharedPointer<OfficeArtSolverContainer> solvers;
-    OfficeArtDgContainer(void * /*dummy*/ = 0)
+    OfficeArtDgContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8088,7 +8088,7 @@ public:
         }
     };
     choice4117040 anon;
-    OfficeArtSpgrContainerFileBlock(void * /*dummy*/ = 0)
+    OfficeArtSpgrContainerFileBlock(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8097,7 +8097,7 @@ class DrawingContainer : public StreamOffset
 public:
     RecordHeader rh;
     OfficeArtDgContainer OfficeArtDg;
-    DrawingContainer(void * /*dummy*/ = 0)
+    DrawingContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8119,7 +8119,7 @@ public:
     QList<RoundTripMainMasterRecord> rgRoundTripMainMaster;
     QSharedPointer<TemplateNameAtom> templateNameAtom;
     QSharedPointer<SlideProgTagsContainer> unknown3;
-    MainMasterContainer(void * /*dummy*/ = 0)
+    MainMasterContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8138,7 +8138,7 @@ public:
     QSharedPointer<UnknownSlideContainerChild> unknown;
     QList<RoundTripSlideRecord> rgRoundTripSlide;
     QSharedPointer<UnknownSlideContainerChild> unknown2;
-    SlideContainer(void * /*dummy*/ = 0)
+    SlideContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8154,7 +8154,7 @@ public:
     QSharedPointer<SlideProgTagsContainer> slideProgTagsContainer;
     QSharedPointer<PerSlideHeadersFootersContainer> perSlideHFContainer2;
     QList<NotesRoundTripAtom> rgNotesRoundTripAtom;
-    NotesContainer(void * /*dummy*/ = 0)
+    NotesContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8192,7 +8192,7 @@ public:
         }
     };
     choice2788643208 anon;
-    MasterOrSlideContainer(void * /*dummy*/ = 0)
+    MasterOrSlideContainer(void * /*dummy*/ = nullptr)
     {
     }
 };
@@ -8262,7 +8262,7 @@ public:
         }
     };
     choice394521820 anon;
-    PowerPointStruct(void * /*dummy*/ = 0)
+    PowerPointStruct(void * /*dummy*/ = nullptr)
     {
     }
 };

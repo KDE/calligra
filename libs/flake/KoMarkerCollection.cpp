@@ -30,7 +30,7 @@ KoMarkerCollection::KoMarkerCollection(QObject *parent)
     , d(new Private)
 {
     // Add no marker so the user can remove a marker from the line.
-    d->markers.append(QExplicitlySharedDataPointer<KoMarker>(0));
+    d->markers.append(QExplicitlySharedDataPointer<KoMarker>(nullptr));
     // Add default markers
     loadDefaultMarkers();
 }
@@ -59,8 +59,8 @@ void KoMarkerCollection::loadDefaultMarkers()
     // use the same mechanism for loading the markers that are available
     // per default as when loading the normal markers.
     KoOdfStylesReader markerReader;
-    KoOdfLoadingContext odfContext(markerReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoOdfLoadingContext odfContext(markerReader, nullptr);
+    KoShapeLoadingContext shapeContext(odfContext, nullptr);
     KoXmlDocument doc;
     QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/styles/markers.xml");
 

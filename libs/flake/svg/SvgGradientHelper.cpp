@@ -15,7 +15,7 @@
 #include <cmath>
 
 SvgGradientHelper::SvgGradientHelper()
-    : m_gradient(0)
+    : m_gradient(nullptr)
     , m_gradientUnits(ObjectBoundingBox)
 {
 }
@@ -26,7 +26,7 @@ SvgGradientHelper::~SvgGradientHelper()
 }
 
 SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
-    : m_gradient(0)
+    : m_gradient(nullptr)
     , m_gradientUnits(ObjectBoundingBox)
 {
     m_gradientUnits = other.m_gradientUnits;
@@ -107,9 +107,9 @@ QGradient *SvgGradientHelper::adjustedGradient(const QRectF &bound) const
 QGradient *SvgGradientHelper::duplicateGradient(const QGradient *originalGradient, const QTransform &transform)
 {
     if (!originalGradient)
-        return 0;
+        return nullptr;
 
-    QGradient *duplicatedGradient = 0;
+    QGradient *duplicatedGradient = nullptr;
 
     switch (originalGradient->type()) {
     case QGradient::ConicalGradient: {
@@ -135,7 +135,7 @@ QGradient *SvgGradientHelper::duplicateGradient(const QGradient *originalGradien
         duplicatedGradient = g;
     } break;
     default:
-        return 0;
+        return nullptr;
     }
 
     duplicatedGradient->setCoordinateMode(originalGradient->coordinateMode());
@@ -148,13 +148,13 @@ QGradient *SvgGradientHelper::duplicateGradient(const QGradient *originalGradien
 QGradient *SvgGradientHelper::convertGradient(const QGradient *originalGradient, const QSizeF &size)
 {
     if (!originalGradient)
-        return 0;
+        return nullptr;
 
     if (originalGradient->coordinateMode() != QGradient::LogicalMode) {
         return duplicateGradient(originalGradient, QTransform());
     }
 
-    QGradient *duplicatedGradient = 0;
+    QGradient *duplicatedGradient = nullptr;
 
     switch (originalGradient->type()) {
     case QGradient::ConicalGradient: {
@@ -180,7 +180,7 @@ QGradient *SvgGradientHelper::convertGradient(const QGradient *originalGradient,
         duplicatedGradient = g;
     } break;
     default:
-        return 0;
+        return nullptr;
     }
 
     duplicatedGradient->setCoordinateMode(QGradient::ObjectBoundingMode);

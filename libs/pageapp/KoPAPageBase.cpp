@@ -159,7 +159,7 @@ bool KoPAPageBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &l
     KoXmlElement layerElement;
     forEachElement(layerElement, usedPageLayerSet)
     {
-        KoShapeLayer *layer = 0;
+        KoShapeLayer *layer = nullptr;
         if (first) {
             first = false;
             layer = dynamic_cast<KoShapeLayer *>(shapes().first());
@@ -328,5 +328,5 @@ QString KoPAPageBase::thumbnailKey() const
 
 KoShapeManagerPaintingStrategy *KoPAPageBase::getPaintingStrategy() const
 {
-    return 0;
+    return nullptr;
 }

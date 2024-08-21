@@ -214,13 +214,13 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     connect(d->workbook, &Workbook::sigProgress, this, &KoFilter::sigProgress);
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
-        d->workbook = 0;
+        d->workbook = nullptr;
         return KoFilter::StupidError;
     }
 
     if (d->workbook->isPasswordProtected()) {
         delete d->workbook;
-        d->workbook = 0;
+        d->workbook = nullptr;
         return KoFilter::PasswordProtected;
     }
 
@@ -283,9 +283,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     delete d->storeout;
     d->inputFile.clear();
     d->outputFile.clear();
-    d->workbook = 0;
-    d->styles = 0;
-    d->mainStyles = 0;
+    d->workbook = nullptr;
+    d->styles = nullptr;
+    d->mainStyles = nullptr;
     d->cellStyles.clear();
     d->rowStyles.clear();
     d->colStyles.clear();
@@ -1320,7 +1320,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
     // handle charts
     foreach(ChartObject *chart, cell->charts()) {
         Sheet* const sheet = cell->sheet();
-        if(chart->m_chart->m_impl==0) {
+        if(chart->m_chart->m_impl==nullptr) {
             qCDebug(lcExcelImport) << "Invalid chart to be created, no implementation.";
             continue;
         }

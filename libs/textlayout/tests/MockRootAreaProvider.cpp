@@ -23,7 +23,7 @@ MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAr
     Q_UNUSED(constraint);
     if (maxPosition > 0 && requestedPosition > maxPosition) {
         qInfo() << "To many area requests:" << maxPosition << requestedPosition;
-        return 0; // guard against loop
+        return nullptr; // guard against loop
     }
     m_askedForMoreThenOneArea |= (m_areas.count() > 1);
     *isNewRootArea = !m_areas.contains(requestedPosition);

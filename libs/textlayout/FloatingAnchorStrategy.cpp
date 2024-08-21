@@ -35,8 +35,8 @@ void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 {
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchorRange->document()->documentLayout());
 
-    QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
-    matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(0).inverted();
+    QTransform matrix = m_anchor->shape()->absoluteTransformation(nullptr);
+    matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(nullptr).inverted();
     matrix.translate(0, documentOffset);
     m_obstruction->changeMatrix(matrix);
 

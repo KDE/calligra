@@ -49,26 +49,26 @@ KoShape *StencilShapeFactory::createFromOdf(KoStore *store, KoDocumentResourceMa
     QString errorMessage;
     if (!odfStore.loadAndParse(errorMessage)) {
         errorStencilBox << "loading and parsing failed:" << errorMessage << Qt::endl;
-        return 0;
+        return nullptr;
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
         errorStencilBox << "No body tag found!" << Qt::endl;
-        return 0;
+        return nullptr;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
     if (body.isNull()) {
         errorStencilBox << "No office:drawing tag found!" << Qt::endl;
-        return 0;
+        return nullptr;
     }
 
     KoXmlElement page = KoXml::namedItemNS(body, KoXmlNS::draw, "page");
     if (page.isNull()) {
         errorStencilBox << "No page found!" << Qt::endl;
-        return 0;
+        return nullptr;
     }
 
     KoXmlElement shapeElement = KoXml::namedItemNS(page, KoXmlNS::draw, "g");
@@ -76,7 +76,7 @@ KoShape *StencilShapeFactory::createFromOdf(KoStore *store, KoDocumentResourceMa
         shapeElement = KoXml::namedItemNS(page, KoXmlNS::draw, "custom-shape");
         if (shapeElement.isNull()) {
             errorStencilBox << "draw:g or draw:custom-shape element not found!" << Qt::endl;
-            return 0;
+            return nullptr;
         }
     }
 
@@ -96,7 +96,7 @@ KoShape *StencilShapeFactory::createFromSvg(QIODevice *in, KoDocumentResourceMan
 {
     if (!in->open(QIODevice::ReadOnly)) {
         debugStencilBox << "svg file open error";
-        return 0;
+        return nullptr;
     }
 
     int line, col;
@@ -108,14 +108,14 @@ KoShape *StencilShapeFactory::createFromSvg(QIODevice *in, KoDocumentResourceMan
     if (!parsed) {
         debugStencilBox << "Error while parsing file: "
                         << "at line " << line << " column: " << col << " message: " << errormessage << Qt::endl;
-        return 0;
+        return nullptr;
     }
 
     SvgParser parser(documentRes);
     parser.setXmlBaseDir(id());
     QList<KoShape *> shapes = parser.parseSvg(inputDoc.documentElement());
     if (shapes.isEmpty())
-        return 0;
+        return nullptr;
     if (shapes.count() == 1)
         return shapes.first();
 
@@ -128,9 +128,9 @@ KoShape *StencilShapeFactory::createFromSvg(QIODevice *in, KoDocumentResourceMan
 
 KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    KoShape *shape = 0;
-    KoStore *store = 0;
-    QIODevice *in = 0;
+    KoShape *shape = nullptr;
+    KoStore *store = nullptr;
+    QIODevice *in = nullptr;
     QString ext = id().mid(id().lastIndexOf('.')).toLower();
     if (ext == ".odg") {
         store = KoStore::createStore(id(), KoStore::Read);

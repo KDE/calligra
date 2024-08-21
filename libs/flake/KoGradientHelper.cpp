@@ -11,7 +11,7 @@
 
 QGradient *KoGradientHelper::defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
 {
-    QGradient *gradient = 0;
+    QGradient *gradient = nullptr;
     switch (type) {
     case QGradient::LinearGradient:
         gradient = new QLinearGradient(QPointF(0.0, 0.5), QPointF(1, 0.5));
@@ -23,7 +23,7 @@ QGradient *KoGradientHelper::defaultGradient(QGradient::Type type, QGradient::Sp
         gradient = new QConicalGradient(QPointF(0.5, 0.5), 0.0);
         break;
     default:
-        return 0;
+        return nullptr;
     }
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setSpread(spread);
@@ -61,7 +61,7 @@ QGradient *KoGradientHelper::convertGradient(const QGradient *gradient, QGradien
         stop = QPointF(0.5, 0.5);
     }
 
-    QGradient *newGradient = 0;
+    QGradient *newGradient = nullptr;
     switch (newType) {
     case QGradient::LinearGradient:
         newGradient = new QLinearGradient(start, stop);
@@ -81,7 +81,7 @@ QGradient *KoGradientHelper::convertGradient(const QGradient *gradient, QGradien
         break;
     }
     default:
-        return 0;
+        return nullptr;
     }
     newGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     newGradient->setSpread(gradient->spread());

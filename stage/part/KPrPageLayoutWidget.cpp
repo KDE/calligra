@@ -39,8 +39,8 @@ Q_DECLARE_METATYPE(KPrPageLayout *)
 
 KPrPageLayoutWidget::KPrPageLayoutWidget(QWidget *parent)
     : QWidget(parent)
-    , m_view(0)
-    , m_previousItem(0)
+    , m_view(nullptr)
+    , m_previousItem(nullptr)
 {
     setWindowTitle(i18n("Layout"));
     setObjectName("Slide Layouts");
@@ -65,7 +65,7 @@ void KPrPageLayoutWidget::setView(KPrView *view)
     Q_ASSERT(view);
     if (m_view) {
         // don't disconnect the m_view->proxyObject as the object is already deleted
-        disconnect(m_layoutsView, 0, this, 0);
+        disconnect(m_layoutsView, nullptr, this, nullptr);
     }
     m_view = view;
     connect(m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KPrPageLayoutWidget::slotActivePageChanged);
@@ -101,7 +101,7 @@ void KPrPageLayoutWidget::slotActivePageChanged()
     if (page) {
         KPrPageLayout *layout = page->layout();
         QListWidgetItem *item = m_layout2item.value(layout, 0);
-        if (item == 0 && layout != 0 && layout->type() == KPrPageLayout::Page) {
+        if (item == nullptr && layout != nullptr && layout->type() == KPrPageLayout::Page) {
             item = addLayout(layout);
         }
 

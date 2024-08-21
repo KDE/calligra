@@ -24,7 +24,7 @@ public:
     enum GeminiState { AllStates = -3, UnknownState = -2, NoState = -1, CreateState = 1, EditState = 2, ViewState = 3 };
     Q_ENUM(GeminiState);
 
-    explicit GeminiMainWindow(QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit GeminiMainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~GeminiMainWindow() override;
 
     GeminiState currentState() const;

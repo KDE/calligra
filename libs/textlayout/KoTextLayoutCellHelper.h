@@ -59,7 +59,7 @@ public:
      * @param w the width.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
+    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = nullptr) const;
 
     /**
      * Paint the border that is shared.
@@ -72,7 +72,7 @@ public:
      * @param w the width.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
+    void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = nullptr) const;
 
     /**
      * Paint the bottom border.
@@ -83,7 +83,7 @@ public:
      * @param w the width.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
+    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = nullptr) const;
 
     /**
      * Paint the leftmost border.
@@ -94,7 +94,7 @@ public:
      * @param h the height.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
+    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = nullptr) const;
 
     /**
      * Paint the border that is shared.
@@ -107,7 +107,7 @@ public:
      * @param h the height.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
+    void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = nullptr) const;
 
     /**
      * Paint the rightmost border.
@@ -118,7 +118,7 @@ public:
      * @param h the height.
      * @param blanks a painterpath where blank borders should be added to.
      */
-    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
+    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = nullptr) const;
 
 private:
     const KoTableCellStyle &m_cellStyle;

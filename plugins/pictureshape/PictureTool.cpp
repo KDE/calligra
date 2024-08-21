@@ -56,8 +56,8 @@ struct PictureToolUI : public QWidget, public Ui::PictureTool {
 
 PictureTool::PictureTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_pictureshape(0)
-    , m_pictureToolUI(0)
+    , m_pictureshape(nullptr)
+    , m_pictureToolUI(nullptr)
 {
 }
 
@@ -85,7 +85,7 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape *> 
 
 void PictureTool::deactivate()
 {
-    m_pictureshape = 0;
+    m_pictureshape = nullptr;
 }
 
 QWidget *PictureTool::createOptionWidget()
@@ -138,14 +138,14 @@ void PictureTool::updateControlElements()
         m_pictureToolUI->rightDoubleSpinBox->setValue(clippingRect.right);
         m_pictureToolUI->topDoubleSpinBox->setValue(clippingRect.top);
         m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
-        m_pictureToolUI->cbContour->setChecked(m_pictureshape->clipPath() != 0);
+        m_pictureToolUI->cbContour->setChecked(m_pictureshape->clipPath() != nullptr);
         m_pictureToolUI->blockAllSignals(false);
     }
 }
 
 void PictureTool::changeUrlPressed()
 {
-    if (m_pictureshape == 0)
+    if (m_pictureshape == nullptr)
         return;
     // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
     QFileDialog *dialog = new QFileDialog();
@@ -220,7 +220,7 @@ void PictureTool::fillButtonPressed()
 
 void PictureTool::setImageData(KJob *job)
 {
-    if (m_pictureshape == 0)
+    if (m_pictureshape == nullptr)
         return; // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
 
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);

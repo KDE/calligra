@@ -28,7 +28,7 @@ public:
 
     DataProxy(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
-        , chart(0)
+        , chart(nullptr)
     {
     }
 

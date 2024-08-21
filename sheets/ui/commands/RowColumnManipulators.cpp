@@ -551,7 +551,7 @@ KUndo2MagicString AdjustColumnRowManipulator::name() const
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *parent)
     : AbstractRegionCommand(parent)
     , m_mode(Insert)
-    , m_template(0)
+    , m_template(nullptr)
 {
     setText(kundo2_i18n("Insert Columns"));
 }
@@ -626,7 +626,7 @@ bool InsertDeleteColumnManipulator::preProcess()
 InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
     : AbstractRegionCommand(parent)
     , m_mode(Insert)
-    , m_template(0)
+    , m_template(nullptr)
 {
     setText(kundo2_i18n("Insert Rows"));
 }

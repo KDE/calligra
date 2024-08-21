@@ -46,7 +46,7 @@ public:
     KoParagraphStyle *style() const;
 
 public Q_SLOTS:
-    void save(KoParagraphStyle *style = 0);
+    void save(KoParagraphStyle *style = nullptr);
 
 Q_SIGNALS:
     void nameChanged(const QString &name);

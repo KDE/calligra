@@ -61,7 +61,7 @@ void EllipseShapeConfigWidget::save()
 KUndo2Command *EllipseShapeConfigWidget::createCommand()
 {
     if (!m_ellipse) {
-        return 0;
+        return nullptr;
     } else {
         EllipseShape::EllipseType type = static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex());
         return new EllipseShapeConfigCommand(m_ellipse, type, widget.startAngle->value(), widget.endAngle->value());

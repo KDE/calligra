@@ -37,9 +37,9 @@ public:
 };
 
 KoOdfPageLayout::Private::Private()
-    : pageLayoutProperties(0)
-    , headerProperties(0)
-    , footerProperties(0)
+    : pageLayoutProperties(nullptr)
+    , headerProperties(nullptr)
+    , footerProperties(nullptr)
 {
 }
 
@@ -117,7 +117,7 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
         // Create a new propertyset variable depending on the type of properties.
         const QString propertiesType = reader.qualifiedName().toString();
 
-        KoOdfStyleProperties *properties = 0;
+        KoOdfStyleProperties *properties = nullptr;
         if (propertiesType == "style:page-layout-properties") {
             properties = new KoOdfPageLayoutProperties();
             if (!properties->readOdf(reader)) {

@@ -26,7 +26,7 @@
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
-    , m_savedViewMode(0)
+    , m_savedViewMode(nullptr)
 {
     connect(&m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewShapeAnimations::activateSavedViewMode);
     m_timeLine.setEasingCurve(QEasingCurve(QEasingCurve::Linear));
@@ -152,11 +152,11 @@ void KPrViewModePreviewShapeAnimations::deactivate()
     if (m_timeLine.state() == QTimeLine::Running) { // there are still shape animations running
         m_timeLine.stop();
     }
-    m_savedViewMode = 0;
+    m_savedViewMode = nullptr;
     m_shapeAnimation->deactivate();
     m_canvas->shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(m_canvas->shapeManager()));
     delete (m_animationCache);
-    m_animationCache = 0;
+    m_animationCache = nullptr;
     disconnect(&m_timeLine, &QTimeLine::valueChanged, this, &KPrViewModePreviewShapeAnimations::animate);
 }
 

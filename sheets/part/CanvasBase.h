@@ -137,11 +137,11 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
     virtual ColumnHeader *columnHeader() const
     {
-        return 0;
+        return nullptr;
     };
     virtual RowHeader *rowHeader() const
     {
-        return 0;
+        return nullptr;
     };
 
 public:

@@ -47,9 +47,9 @@ namespace std {}
 using namespace std;
 
 QpIStream::QpIStream(const char* pFileName)
-        : cIn(0)
+        : cIn(nullptr)
         , cOffset(0L)
-        , cStreamBuf(0)
+        , cStreamBuf(nullptr)
 {
     filebuf* lFileBuf = new filebuf;
 
@@ -63,9 +63,9 @@ QpIStream::QpIStream(const char* pFileName)
 }
 
 QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
-        : cIn(0)
+        : cIn(nullptr)
         , cOffset(0L)
-        , cStreamBuf(0)
+        , cStreamBuf(nullptr)
 {
     cStreamBuf = new std::stringbuf(string(reinterpret_cast<char *>(pBuffer), pLen), ios::in);
     cIn = new istream(cStreamBuf);
@@ -74,10 +74,10 @@ QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
 QpIStream::~QpIStream()
 {
     delete cIn;
-    cIn = 0;
+    cIn = nullptr;
 
     delete cStreamBuf;
-    cStreamBuf = 0;
+    cStreamBuf = nullptr;
 }
 
 int
@@ -85,7 +85,7 @@ QpIStream::get()
 {
     int lResult;
 
-    if ((cIn == 0) || cIn->rdstate()) {
+    if ((cIn == nullptr) || cIn->rdstate()) {
         lResult = EOF;
     } else if ((lResult = cIn->get()) == EOF) {
         // note - clear() sets bits! not clears them
@@ -109,10 +109,10 @@ QpIStream::read(char* pBuf, QP_INT16 pLen)
 
 QpIStream::operator void*()
 {
-    if (cIn == 0)
-        return 0;
+    if (cIn == nullptr)
+        return nullptr;
     else
-       return *cIn ? reinterpret_cast<void*>(&cIn) : 0;
+       return *cIn ? reinterpret_cast<void*>(&cIn) : nullptr;
 }
 
 int

@@ -39,7 +39,7 @@ public:
 
     //! Reads/parses the file of format *.xml.rels.
     //! The output goes to MsooXmlRelationships structure.
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
     //! @return key for use in MsooXmlRelationships::target()
     static inline QString relKey(const QString &path, const QString &file, const QString &id)

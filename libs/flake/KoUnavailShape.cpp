@@ -405,7 +405,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
         }
 
         // Get the manifest entry for this object.
-        KoOdfManifestEntry *entry = 0;
+        KoOdfManifestEntry *entry = nullptr;
         QString entryName = isDir ? dirName : objectName;
         for (int j = 0; j < manifest.size(); ++j) {
             KoOdfManifestEntry *temp = manifest.value(j);
@@ -504,7 +504,7 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
         // 3, 4: the isDir and manifestEntry members are not set here,
         // but initialize them anyway. .
         object->isDir = false; // Has to be initialized to something.
-        object->manifestEntry = 0;
+        object->manifestEntry = nullptr;
 
         objectEntries.append(object);
     }

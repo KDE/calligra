@@ -12,7 +12,7 @@
 
 #include "QDebug"
 
-cmsHPROFILE KoLcmsDefaultTransformations::s_RGBProfile = 0;
+cmsHPROFILE KoLcmsDefaultTransformations::s_RGBProfile = nullptr;
 QMap<QString, QMap<LcmsColorProfileContainer *, KoLcmsDefaultTransformations *>> KoLcmsDefaultTransformations::s_transformations;
 
 // -- LcmsColorSpaceFactory --

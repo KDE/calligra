@@ -69,7 +69,7 @@ FLAKE_EXPORT void fixEnhancedPath(QString &path, const KoXmlElement &element, Ko
  */
 FLAKE_EXPORT void fixEnhancedPathPolarHandlePosition(QString &position, const KoXmlElement &element, KoShapeLoadingContext &context);
 
-FLAKE_EXPORT bool fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context, const KoShape *shape = 0);
+FLAKE_EXPORT bool fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context, const KoShape *shape = nullptr);
 FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
 FLAKE_EXPORT bool fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);
 

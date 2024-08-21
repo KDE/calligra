@@ -72,7 +72,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             }
             KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
-            if (data == 0) {
+            if (data == nullptr) {
                 shape->paint(painter, converter, paintcontext);
             } else {
                 // Since the rootArea is shared between the copyShape and the originalShape we need to

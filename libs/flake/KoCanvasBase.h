@@ -48,7 +48,7 @@ public:
      * @param shapeBasedDocument the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager = 0);
+    explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager = nullptr);
     virtual ~KoCanvasBase();
 
 public:
@@ -133,7 +133,7 @@ public:
      */
     virtual QGraphicsObject *canvasItem()
     {
-        return 0;
+        return nullptr;
     }
 
     /**
@@ -141,7 +141,7 @@ public:
      */
     virtual const QGraphicsObject *canvasItem() const
     {
-        return 0;
+        return nullptr;
     }
 
     /**

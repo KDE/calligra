@@ -48,7 +48,7 @@ static const struct {
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet *fs)
 {
-    const char *tag = 0;
+    const char *tag = nullptr;
     switch (fs->textFrameSetType()) {
     case Words::OddPagesHeaderTextFrameSet:
         tag = headerFooterTag[0].tag;
@@ -255,7 +255,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     calculateZindexOffsets();
 
-    KWTextFrameSet *mainTextFrame = 0;
+    KWTextFrameSet *mainTextFrame = nullptr;
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         // For the purpose of saving to ODF we have 3 types of frames.
@@ -333,7 +333,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     }
 
     delete changeWriter;
-    changeWriter = 0;
+    changeWriter = nullptr;
 
     tmpChangeFile.close();
 
@@ -359,7 +359,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     }
 
     delete tmpBodyWriter;
-    tmpBodyWriter = 0;
+    tmpBodyWriter = nullptr;
 
     tmpTextBodyFile.close();
     bodyWriter->addCompleteElement(&tmpTextBodyFile);

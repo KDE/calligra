@@ -53,7 +53,7 @@ void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *
             break;
     }
     Q_EMIT shapeChanged(m_currentShape);
-    if (m_currentShape == 0) {
+    if (m_currentShape == nullptr) {
         // none found
         Q_EMIT done();
         return;
@@ -68,7 +68,7 @@ void StateTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void StateTool::mousePressEvent(KoPointerEvent *event)
 {
-    StateShape *hit = 0;
+    StateShape *hit = nullptr;
     const QRectF roi(event->point, QSizeF(1, 1));
     const QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection *selection = canvas()->shapeManager()->selection();

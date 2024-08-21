@@ -23,7 +23,7 @@ const qreal ConnectionDistance = 10.0;
 
 ConnectionSource::ConnectionSource()
     : m_type(Effect)
-    , m_effect(0)
+    , m_effect(nullptr)
 {
 }
 
@@ -81,7 +81,7 @@ QString ConnectionSource::typeToString(SourceType type)
 
 ConnectionTarget::ConnectionTarget()
     : m_inputIndex(0)
-    , m_effect(0)
+    , m_effect(nullptr)
 {
 }
 
@@ -103,7 +103,7 @@ KoFilterEffect *ConnectionTarget::effect() const
 
 FilterEffectScene::FilterEffectScene(QObject *parent)
     : QGraphicsScene(parent)
-    , m_effectStack(0)
+    , m_effectStack(nullptr)
 {
     m_defaultInputs << "SourceGraphic"
                     << "SourceAlpha";
@@ -298,7 +298,7 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
 
 void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    ConnectorItem *dropTargetItem = 0;
+    ConnectorItem *dropTargetItem = nullptr;
     QList<QGraphicsItem *> itemsAtPositon = items(event->scenePos());
     foreach (QGraphicsItem *item, itemsAtPositon) {
         dropTargetItem = dynamic_cast<ConnectorItem *>(item);
@@ -316,9 +316,9 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     if (!dropSourceItem)
         return;
 
-    EffectItemBase *outputParentItem = 0;
-    KoFilterEffect *inputEffect = 0;
-    KoFilterEffect *outputEffect = 0;
+    EffectItemBase *outputParentItem = nullptr;
+    KoFilterEffect *inputEffect = nullptr;
+    KoFilterEffect *outputEffect = nullptr;
     int inputIndex = 0;
 
     if (dropTargetItem->connectorType() == ConnectorItem::Input) {
@@ -339,7 +339,7 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     // check if item with the output is a predefined one
     if (m_defaultInputs.contains(outputParentItem->outputName())) {
         outputType = ConnectionSource::typeFromString(outputParentItem->outputName());
-        outputEffect = 0;
+        outputEffect = nullptr;
     }
     ConnectionSource source(outputEffect, outputType);
     ConnectionTarget target(inputEffect, inputIndex);

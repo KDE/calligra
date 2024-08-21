@@ -300,7 +300,7 @@ QVariant Json::parseString(const QString &json, int &index, bool &success)
                 {
                     QString unicodeStr = json.mid(index, 4);
 
-                    int symbol = unicodeStr.toInt(0, 16);
+                    int symbol = unicodeStr.toInt(nullptr, 16);
 
                     s.append(QChar(symbol));
 

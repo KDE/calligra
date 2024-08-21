@@ -144,7 +144,7 @@ bool KPrPageLayouts::loadOdf(KoPALoadingContext &context)
 
 KPrPageLayout *KPrPageLayouts::pageLayout(const QString &name, KoPALoadingContext &loadingContext, const QRectF &pageRect)
 {
-    KPrPageLayout *pageLayout = 0;
+    KPrPageLayout *pageLayout = nullptr;
 
     const QHash<QString, KoXmlElement *> layouts = loadingContext.odfLoadingContext().stylesReader().presentationPageLayouts();
     QHash<QString, KoXmlElement *>::ConstIterator it(layouts.find(name));
@@ -161,7 +161,7 @@ KPrPageLayout *KPrPageLayouts::pageLayout(const QString &name, KoPALoadingContex
             }
         } else {
             delete pageLayout;
-            pageLayout = 0;
+            pageLayout = nullptr;
         }
     }
     return pageLayout;

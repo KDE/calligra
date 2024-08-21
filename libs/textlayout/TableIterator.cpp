@@ -93,7 +93,7 @@ bool TableIterator::operator==(const TableIterator &other) const
 
 FrameIterator *TableIterator::frameIterator(int column)
 {
-    FrameIterator *it = 0;
+    FrameIterator *it = nullptr;
     if (row == table->rows()) {
         delete frameIterators[column];
         frameIterators[column] = it;

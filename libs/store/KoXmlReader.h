@@ -270,14 +270,14 @@ public:
     QString nodeName() const override;
     void clear() override;
 
-    bool setContent(QIODevice *device, bool namespaceProcessing, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(QIODevice *device, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(QXmlStreamReader *reader, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(const QByteArray &text, bool namespaceProcessing, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(const QString &text, bool namespaceProcessing, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(QIODevice *device, bool namespaceProcessing, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
+    bool setContent(QIODevice *device, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
+    bool setContent(QXmlStreamReader *reader, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
+    bool setContent(const QByteArray &text, bool namespaceProcessing, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
+    bool setContent(const QString &text, bool namespaceProcessing, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
 
     // no namespace processing
-    bool setContent(const QString &text, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(const QString &text, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
     /**
      * Change the way an XMLDocument will be read:
      * if stripSpaces = true then a will only have one child
@@ -406,7 +406,7 @@ KOSTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument &document);
  * Note: it is assumed that the XML uses UTF-8 encoding.
  */
 KOSTORE_EXPORT bool
-setDocument(KoXmlDocument &doc, QIODevice *device, bool namespaceProcessing, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+setDocument(KoXmlDocument &doc, QIODevice *device, bool namespaceProcessing, QString *errorMsg = nullptr, int *errorLine = nullptr, int *errorColumn = nullptr);
 }
 
 /**

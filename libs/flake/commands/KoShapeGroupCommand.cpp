@@ -107,7 +107,7 @@ void KoShapeGroupCommand::redo()
         }
     }
 
-    QTransform groupTransform = d->container->absoluteTransformation(0).inverted();
+    QTransform groupTransform = d->container->absoluteTransformation(nullptr).inverted();
 
     int zIndex = 0;
     QList<KoShape *> shapes(d->container->shapes());
@@ -142,7 +142,7 @@ void KoShapeGroupCommand::undo()
 {
     KUndo2Command::undo();
 
-    QTransform ungroupTransform = d->container->absoluteTransformation(0);
+    QTransform ungroupTransform = d->container->absoluteTransformation(nullptr);
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape *shape = d->shapes[i];
         const bool inheritedTransform = d->container->inheritsTransform(shape);

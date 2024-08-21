@@ -66,7 +66,7 @@ Thesaurus::Thesaurus()
     m_thesProc = new KProcess;
     m_wnProc = new KProcess;
 
-    m_dialog = new KoDialog(0);
+    m_dialog = new KoDialog(nullptr);
     m_dialog->setButtons(KoDialog::Help | KoDialog::Ok | KoDialog::Cancel);
     m_dialog->setDefaultButton(KoDialog::Ok);
     m_dialog->setHelp(QString(), "thesaurus");
@@ -279,7 +279,7 @@ void Thesaurus::dialogClosed()
 
 void Thesaurus::slotChangeLanguage()
 {
-    QString filename = QFileDialog::getOpenFileName(0, QString(), KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt"));
+    QString filename = QFileDialog::getOpenFileName(nullptr, QString(), KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt"));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();
@@ -402,7 +402,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 void Thesaurus::findTermThesaurus(const QString &searchTerm)
 {
     if (!QFile::exists(m_dataFile)) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            i18n("The thesaurus file '%1' was not found. "
                                 "Please use 'Change Language...' to select a thesaurus file.",
                                 m_dataFile));
@@ -425,7 +425,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 
     m_thesProc->start();
     if (!m_thesProc->waitForFinished()) {
-        KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep."));
+        KMessageBox::error(nullptr, i18n("<b>Error:</b> Failed to execute grep."));
         return;
     }
 

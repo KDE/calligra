@@ -287,7 +287,7 @@ void KoFillConfigWidget::noColorSelected()
         return;
     }
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>(0)));
+    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>(nullptr)));
 }
 
 void KoFillConfigWidget::colorChanged()

@@ -165,7 +165,7 @@ SheetView::SheetView(Sheet *sheet)
     , d(new Private)
 {
     d->sheet = sheet;
-    d->viewConverter = 0;
+    d->viewConverter = nullptr;
     d->visibleRect = QRect(1, 1, 0, 0);
     d->viewSize = QSize(100, 100);
     d->cache.setMaxCost(10000);
@@ -479,7 +479,7 @@ void SheetView::paintCells(QPainter &painter, const QRectF &paintRect, const QPo
     if (hasHighlightedCells()) {
         QPointF active = activeHighlight();
         QPainterPath p;
-        const CellPaintData *activeData = 0;
+        const CellPaintData *activeData = nullptr;
         for (QList<CellPaintData>::ConstIterator it(cached_cells.constBegin()); it != cached_cells.constEnd(); ++it) {
             if (isHighlighted(it->cell.cellPosition())) {
                 p.addRect(it->coordinate.x(), it->coordinate.y(), it->cellView.cellWidth(), it->cellView.cellHeight());

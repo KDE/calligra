@@ -34,8 +34,8 @@ void LoadWaiter::setImageData(KJob *job)
 // ---------------------------------------------------- //
 
 VectorShapeConfigWidget::VectorShapeConfigWidget()
-    : m_shape(0)
-    , m_fileWidget(0)
+    : m_shape(nullptr)
+    , m_fileWidget(nullptr)
 {
 }
 

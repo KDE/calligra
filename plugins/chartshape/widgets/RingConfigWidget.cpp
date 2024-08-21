@@ -160,7 +160,7 @@ void RingConfigWidget::brushChanged(const QColor &color)
 {
     int section = m_ui.categories->currentIndex();
     if (section >= 0) {
-        Q_EMIT brushChanged(0, color, section);
+        Q_EMIT brushChanged(nullptr, color, section);
     }
 }
 

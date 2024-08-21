@@ -160,7 +160,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
     if (expDialog && expDialog->exportSelectionOnly()) {
         qDebug(lcCsvExport) << "Export as selection mode";
-        View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
+        View *view = ksdoc->documentPart()->views().isEmpty() ? nullptr : static_cast<View*>(ksdoc->documentPart()->views().first());
 
         if (!view) { // no view if embedded document
             return KoFilter::StupidError;

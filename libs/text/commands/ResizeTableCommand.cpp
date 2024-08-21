@@ -23,8 +23,8 @@ ResizeTableCommand::ResizeTableCommand(QTextTable *t, bool horizontal, int band,
     , m_horizontal(horizontal)
     , m_band(band)
     , m_size(size)
-    , m_oldColumnStyle(0)
-    , m_oldRowStyle(0)
+    , m_oldColumnStyle(nullptr)
+    , m_oldRowStyle(nullptr)
 {
     if (horizontal) {
         setText(kundo2_i18n("Adjust Column Width"));

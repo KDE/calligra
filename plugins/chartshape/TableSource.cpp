@@ -63,7 +63,7 @@ public:
 
 TableSource::Private::Private(TableSource *parent)
     : q(parent)
-    , sheetAccessModel(0)
+    , sheetAccessModel(nullptr)
 {
 }
 
@@ -90,7 +90,7 @@ void TableSource::Private::updateEmptySamColumn(int col)
 
     QString tableName = sheetAccessModel->headerData(col, Qt::Horizontal).toString();
     QAbstractItemModel *model = getModel(sheetAccessModel, col);
-    if (tableName.isEmpty() || model == 0)
+    if (tableName.isEmpty() || model == nullptr)
         return;
 
     // Ok. Column is valid now. Add table in this column.
@@ -111,14 +111,14 @@ TableSource::~TableSource()
 Table *TableSource::get(const QString &tableName) const
 {
     if (!d->tablesByName.contains(tableName))
-        return 0;
+        return nullptr;
     return d->tablesByName[tableName];
 }
 
 Table *TableSource::get(const QAbstractItemModel *model) const
 {
     if (!d->tablesByModel.contains(model))
-        return 0;
+        return nullptr;
     return d->tablesByModel[model];
 }
 
@@ -171,7 +171,7 @@ void TableSource::remove(const QString &name)
         d->tables.remove(table);
         Q_EMIT tableRemoved(table);
         // Don't delete the Table instance, it might still be in use.
-        table->m_model = 0;
+        table->m_model = nullptr;
     }
 }
 
@@ -191,7 +191,7 @@ void TableSource::clear()
 {
     d->tablesByName.clear();
     d->tablesByModel.clear();
-    setSheetAccessModel(0);
+    setSheetAccessModel(nullptr);
 }
 
 void TableSource::samColumnsInserted(QModelIndex, int first, int last)
@@ -201,7 +201,7 @@ void TableSource::samColumnsInserted(QModelIndex, int first, int last)
     for (int col = first; col <= last; col++) {
         QString tableName = d->sheetAccessModel->headerData(col, Qt::Horizontal).toString();
         QAbstractItemModel *model = getModel(d->sheetAccessModel, col);
-        if (tableName.isEmpty() || model == 0)
+        if (tableName.isEmpty() || model == nullptr)
             d->samEmptyColumns.append(col);
         else
             add(tableName, getModel(d->sheetAccessModel, col));

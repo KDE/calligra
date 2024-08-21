@@ -26,14 +26,14 @@
 
 KWPart::KWPart(QObject *parent)
     : KoPart(KWFactory::componentData(), parent)
-    , m_document(0)
+    , m_document(nullptr)
 {
     setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
 
 KWPart::KWPart(const KoComponentData &componentData, QObject *parent)
     : KoPart(componentData, parent)
-    , m_document(0)
+    , m_document(nullptr)
 {
     setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
@@ -136,6 +136,6 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KWPart::showErrorAndDie()
 {
-    KMessageBox::error(0, i18n("Can not find needed text component, Words will quit now"), i18n("Installation Error"));
+    KMessageBox::error(nullptr, i18n("Can not find needed text component, Words will quit now"), i18n("Installation Error"));
     QCoreApplication::exit(10);
 }

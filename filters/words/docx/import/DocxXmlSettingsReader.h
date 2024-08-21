@@ -29,7 +29,7 @@ class DocxXmlSettingsReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit DocxXmlSettingsReader(KoOdfWriters *writers);
     ~DocxXmlSettingsReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
 protected:
     KoFilter::ConversionStatus read_settings();

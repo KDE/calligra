@@ -156,9 +156,9 @@ public:
     bool isPlainText : 1;
 
     Cell(int columnIndex, int rowIndex)
-        : valueAttrValue(0)
-        , formula(0)
-        , embedded(0)
+        : valueAttrValue(nullptr)
+        , formula(nullptr)
+        , embedded(nullptr)
         , column(columnIndex)
         , row(rowIndex)
         , rowsMerged(1)

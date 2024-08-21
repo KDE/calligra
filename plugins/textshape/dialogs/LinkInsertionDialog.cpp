@@ -16,12 +16,12 @@
 LinkInsertionDialog::LinkInsertionDialog(KoTextEditor *editor, QWidget *parent)
     : QDialog(parent)
     , m_editor(editor)
-    , m_bookmarkManager(0)
+    , m_bookmarkManager(nullptr)
     , m_bookmarkList(0)
-    , m_reply(0)
-    , m_networkAccessManager(0)
-    , m_linkURL(0)
-    , m_timeoutTimer(0)
+    , m_reply(nullptr)
+    , m_networkAccessManager(nullptr)
+    , m_linkURL(nullptr)
+    , m_timeoutTimer(nullptr)
 {
     dlg.setupUi(this);
     setUpdatesEnabled(false);

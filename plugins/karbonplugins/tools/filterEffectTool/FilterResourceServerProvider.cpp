@@ -18,7 +18,7 @@
 #include <KoResourcePaths.h>
 #include <KoResourceServerProvider.h>
 
-FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
+FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = nullptr;
 
 FilterResourceServerProvider::FilterResourceServerProvider()
 {
@@ -40,7 +40,7 @@ FilterResourceServerProvider::~FilterResourceServerProvider()
 
 FilterResourceServerProvider *FilterResourceServerProvider::instance()
 {
-    if (FilterResourceServerProvider::m_singleton == 0) {
+    if (FilterResourceServerProvider::m_singleton == nullptr) {
         FilterResourceServerProvider::m_singleton = new FilterResourceServerProvider();
     }
     return FilterResourceServerProvider::m_singleton;

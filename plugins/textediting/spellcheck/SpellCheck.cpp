@@ -31,13 +31,13 @@
 #include <QTimer>
 
 SpellCheck::SpellCheck()
-    : m_document(0)
-    , m_bgSpellCheck(0)
+    : m_document(nullptr)
+    , m_bgSpellCheck(nullptr)
     , m_enableSpellCheck(true)
     , m_documentIsLoading(false)
     , m_isChecking(false)
-    , m_spellCheckMenu(0)
-    , m_activeSection(0, 0, 0)
+    , m_spellCheckMenu(nullptr)
+    , m_activeSection(nullptr, 0, 0)
     , m_simpleEdit(false)
     , m_cursorPosition(0)
 {
@@ -232,7 +232,7 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
 void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
 {
     QTextDocument *document = qobject_cast<QTextDocument *>(sender());
-    if (document == 0)
+    if (document == nullptr)
         return;
 
     // If a simple edit, we use the cursor position to determine where
@@ -300,7 +300,7 @@ void SpellCheck::runQueue()
 
 void SpellCheck::configureSpellCheck()
 {
-    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
+    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(nullptr);
     connect(dialog, &Sonnet::ConfigDialog::languageChanged, this, &SpellCheck::setDefaultLanguage);
     dialog->exec();
     delete dialog;

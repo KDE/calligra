@@ -32,7 +32,7 @@ class Q_DECL_HIDDEN KoSectionStyle::Private
 {
 public:
     Private()
-        : parentStyle(0)
+        : parentStyle(nullptr)
     {
     }
 

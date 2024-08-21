@@ -21,7 +21,7 @@ static const quint32 FREESECT = 0xFFFFFFFF;
 static const quint32 NOSTREAM = 0xFFFFFFFF;
 
 CFBWriter::CFBWriter(bool largeSectors)
-    : m_device(0)
+    : m_device(nullptr)
     , m_ownsDevice(false)
     , m_sectorSize(largeSectors ? 4096 : 512)
 {
@@ -54,12 +54,12 @@ bool CFBWriter::open(const QString &fileName)
     m_device = new QFile(fileName);
     if (!m_device->open(QIODevice::WriteOnly)) {
         delete m_device;
-        m_device = 0;
+        m_device = nullptr;
         return false;
     }
     if (m_device->isSequential()) {
         delete m_device;
-        m_device = 0;
+        m_device = nullptr;
         return false;
     }
     m_ownsDevice = true;
@@ -254,7 +254,7 @@ static bool compareNames(const QString &a, const QString &b)
 void CFBWriter::DirectoryEntry::buildChildrenTree()
 {
     if (children.size() == 0) {
-        firstChild = 0;
+        firstChild = nullptr;
         return;
     }
     QList<QString> names = children.keys();
@@ -275,13 +275,13 @@ void CFBWriter::DirectoryEntry::buildSiblingTree(const QList<DirectoryEntry *> &
         leftSibling = nodes[h];
         leftSibling->buildSiblingTree(nodes, first, h, middle - 1);
     } else
-        leftSibling = 0;
+        leftSibling = nullptr;
     if (last > middle) {
         int h = ((last - middle + 1) / 2) + middle;
         rightSibling = nodes[h];
         rightSibling->buildSiblingTree(nodes, middle + 1, h, last);
     } else
-        rightSibling = 0;
+        rightSibling = nullptr;
 }
 
 void CFBWriter::close()
@@ -390,7 +390,7 @@ void CFBWriter::close()
 
     if (m_ownsDevice)
         delete m_device;
-    m_device = 0;
+    m_device = nullptr;
 }
 
 void CFBWriter::init()

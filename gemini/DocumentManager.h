@@ -49,7 +49,7 @@ Q_SIGNALS:
     void documentSaved();
 
 private:
-    explicit DocumentManager(QObject *parent = 0);
+    explicit DocumentManager(QObject *parent = nullptr);
     ~DocumentManager() override;
 
     class Private;

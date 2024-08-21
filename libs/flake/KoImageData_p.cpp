@@ -19,12 +19,12 @@
 #include <QTemporaryFile>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
-    : collection(0)
+    : collection(nullptr)
     , errorCode(KoImageData::Success)
     , key(0)
     , refCount(0)
     , dataStoreState(StateEmpty)
-    , temporaryFile(0)
+    , temporaryFile(nullptr)
 {
     cleanCacheTimer.setSingleShot(true);
     cleanCacheTimer.setInterval(1000);

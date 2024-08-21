@@ -31,14 +31,14 @@
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent)
-    , m_styleManager(0)
+    , m_styleManager(nullptr)
     , m_blockSignals(false)
     , m_comboboxHasBidiItems(false)
     , m_tool(tool)
     , m_thumbnailer(new KoStyleThumbnailer())
-    , m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle))
+    , m_stylesModel(new StylesModel(nullptr, StylesModel::CharacterStyle))
     , m_sortedStylesModel(new DockerStylesComboModel())
-    , m_stylesDelegate(0)
+    , m_stylesDelegate(nullptr)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));

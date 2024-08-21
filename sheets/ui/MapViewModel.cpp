@@ -36,7 +36,7 @@ MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGui
     : MapModel(map)
     , d(new Private)
 {
-    d->activeSheet = 0;
+    d->activeSheet = nullptr;
     d->canvas = canvas;
     d->xmlGuiClient = xmlGuiClient;
     d->gotoSheetActionGroup = new QActionGroup(this);
@@ -198,7 +198,7 @@ void MapViewModel::removeSheet(SheetBase *sheet)
     }
 
     // Update the goto sheet action group
-    QAction *action = 0;
+    QAction *action = nullptr;
     const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
     for (int i = 0; i < actions.count(); ++i) {
         if (actions[i]->text() == sheet->sheetName()) {

@@ -207,7 +207,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
     d->name = templateName;
 
     KoSharedLoadingData *sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
-    KoTextSharedLoadingData *textSharedData = 0;
+    KoTextSharedLoadingData *textSharedData = nullptr;
     if (sharedData) {
         textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
@@ -225,7 +225,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
                             styleName = KoOdfWorkaround::fixTableTemplateCellStyleName(styleElem);
                         }
 #endif
-                        KoTableCellStyle *cs = 0;
+                        KoTableCellStyle *cs = nullptr;
                         if (!styleName.isEmpty()) {
                             cs = textSharedData->tableCellStyle(styleName, true);
                             if (!cs) {

@@ -384,7 +384,7 @@ public:
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */
-    Tokens scan(const QString &expr, const Localization *locale = 0) const;
+    Tokens scan(const QString &expr, const Localization *locale = nullptr) const;
 
     // Locale belonging to the current cell/sheet, if any.
     Localization *locale() const;

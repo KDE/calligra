@@ -79,7 +79,7 @@ public:
      * @see the @a KoTextLoader::loadBody() method which got called by this method
      * to load the ODF.
      */
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape = 0);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape = nullptr);
 
     /**
      * Load the TextShape from ODF.
@@ -87,7 +87,7 @@ public:
      */
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override
     {
-        return loadOdf(element, context, 0);
+        return loadOdf(element, context, nullptr);
     }
 
     /**
@@ -102,7 +102,7 @@ public:
      */
     void saveOdf(KoShapeSavingContext &context, int from = 0, int to = -1) const override
     {
-        saveOdf(context, 0, from, to);
+        saveOdf(context, nullptr, from, to);
     }
 
     // reimplemented

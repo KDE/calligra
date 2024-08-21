@@ -28,7 +28,7 @@ class GitController : public QObject
     Q_PROPERTY(QString publicKeyFile READ publicKeyFile WRITE setPublicKeyFile NOTIFY publicKeyFileChanged)
     Q_PROPERTY(QString userForRemote READ userForRemote WRITE setUserForRemote NOTIFY userForRemoteChanged)
 public:
-    explicit GitController(QObject *parent = 0);
+    explicit GitController(QObject *parent = nullptr);
     virtual ~GitController();
 
     QString cloneDir() const;
@@ -95,7 +95,7 @@ public:
                  GitOperation operation,
                  QString currentFile,
                  QString message,
-                 QObject *parent = 0);
+                 QObject *parent = nullptr);
     ~GitOpsThread();
 
     void run() override;

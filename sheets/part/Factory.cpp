@@ -16,8 +16,8 @@
 
 using namespace Calligra::Sheets;
 
-KoComponentData *Factory::s_global = 0;
-KAboutData *Factory::s_aboutData = 0;
+KoComponentData *Factory::s_global = nullptr;
+KAboutData *Factory::s_aboutData = nullptr;
 
 Factory::Factory()
     : KPluginFactory()
@@ -32,9 +32,9 @@ Factory::~Factory()
 {
     // debugSheets <<"Factory::~Factory()";
     delete s_aboutData;
-    s_aboutData = 0;
+    s_aboutData = nullptr;
     delete s_global;
-    s_global = 0;
+    s_global = nullptr;
 }
 
 QObject *Factory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)

@@ -46,7 +46,7 @@ public:
         qDeleteAll(entries);
         entries.clear();
 
-        KoTemplateTree *tree(0);
+        KoTemplateTree *tree(nullptr);
         if (templateType == WORDS_MIME_TYPE)
             tree = new KoTemplateTree("calligrawords/templates/", true);
         else if (templateType == STAGE_MIME_TYPE)
@@ -61,14 +61,14 @@ public:
 
                 QString title = tmplate->name();
 
-                TemplateEntry *found(0);
+                TemplateEntry *found(nullptr);
                 Q_FOREACH (TemplateEntry *otherEntry, entries) {
                     if (otherEntry->title == title) {
                         found = otherEntry;
                         break;
                     }
                 }
-                TemplateEntry *entry(0);
+                TemplateEntry *entry(nullptr);
                 if (found) {
                     entry = found;
                 } else {

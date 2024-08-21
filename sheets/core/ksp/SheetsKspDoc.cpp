@@ -48,7 +48,7 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument &doc)
     int version = spread.attribute("syntaxVersion").toInt(&ok);
     obj->map()->setSyntaxVersion(ok ? version : 0);
     if (obj->map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
-        int ret = KMessageBox::warningContinueCancel(0,
+        int ret = KMessageBox::warningContinueCancel(nullptr,
                                                      i18n("This document was created with a newer version of Calligra Sheets (syntax version: %1)\n"
                                                           "When you open it with this version of Calligra Sheets, some information may be lost.",
                                                           obj->map()->syntaxVersion()),
@@ -173,7 +173,7 @@ void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement
     forEachElement(element, parent)
     {
         if (element.tagName() == "reference") {
-            SheetBase *sheet = 0;
+            SheetBase *sheet = nullptr;
             QString refname;
             int left = 0;
             int right = 0;

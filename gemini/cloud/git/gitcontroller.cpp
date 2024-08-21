@@ -240,7 +240,7 @@ void GitOpsThread::performPush()
         qDebug() << "Push 8, error code from git2 was" << error << "which is described as" << err->message;
         return;
     }
-    git_commit *parent = NULL;
+    git_commit *parent = nullptr;
     error = git_commit_lookup(&parent, repository, &obj);
     if (error != 0) {
         const git_error *err = giterr_last();
@@ -282,7 +282,7 @@ void GitOpsThread::performPush()
     }
 
     // Now find the name of the remote
-    git_buf remote_name = {0, 0, 0};
+    git_buf remote_name = {nullptr, 0, 0};
     error = git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
     if (error != 0) {
         const git_error *err = giterr_last();
@@ -378,7 +378,7 @@ void GitOpsThread::performPull()
     }
 
     // Now find the name of the remote
-    git_buf remote_name = {0, 0, 0};
+    git_buf remote_name = {nullptr, 0, 0};
     error = git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
     if (error != 0) {
         const git_error *err = giterr_last();
@@ -401,7 +401,7 @@ void GitOpsThread::performPull()
     }
     git_fetch_options fetch_options = GIT_FETCH_OPTIONS_INIT;
     fetch_options.callbacks = remoteCallbacks;
-    error = git_remote_fetch(remote, NULL, &fetch_options, NULL);
+    error = git_remote_fetch(remote, nullptr, &fetch_options, nullptr);
     if (error != 0) {
         const git_error *err = giterr_last();
         qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message;
@@ -443,10 +443,10 @@ void GitOpsThread::performPull()
 
             // the code below was modified from an original (GPL2) version by the git2r community
             const git_oid *oid;
-            git_buf log_message = {0, 0, 0};
-            git_commit *commit = NULL;
-            git_tree *tree = NULL;
-            git_reference *reference = NULL;
+            git_buf log_message = {nullptr, 0, 0};
+            git_commit *commit = nullptr;
+            git_tree *tree = nullptr;
+            git_reference *reference = nullptr;
             git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
 
             git_repository_message(&log_message, repository);
@@ -470,7 +470,7 @@ void GitOpsThread::performPull()
                                                                  0, // force
                                                                  log_message.ptr);
                                 } else {
-                                    git_reference *target_ref = NULL;
+                                    git_reference *target_ref = nullptr;
 
                                     error = git_reference_set_target(&target_ref, reference, git_commit_id(commit), log_message.ptr);
 
@@ -498,19 +498,19 @@ void GitOpsThread::performPull()
             // If the analysis says we are able to do a normal merge, let's attempt one of those...
             if (GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
                 // but only if we're not told to not try and not do fast forwards!
-                KMessageBox::error(0,
+                KMessageBox::error(nullptr,
                                    "Fast Forward Only",
                                    "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario "
                                    "and you'll need to handle things yourself...");
             } else {
-                git_merge(repository, (const git_annotated_commit **)merge_heads, 1, NULL, NULL);
+                git_merge(repository, (const git_annotated_commit **)merge_heads, 1, nullptr, nullptr);
                 git_annotated_commit_free(merge_heads[0]);
                 git_index *index;
                 git_repository_index(&index, repository);
                 if (git_index_has_conflicts(index)) {
                     qDebug() << "There were conflicts merging. Please resolve them and commit";
                 } else {
-                    git_buf message = {0, 0, 0};
+                    git_buf message = {nullptr, 0, 0};
                     git_oid commit_id, tree_id;
                     git_commit *parents[2];
                     git_tree *tree;
@@ -529,7 +529,7 @@ void GitOpsThread::performPull()
 #if GIT_VERSION >= QT_VERSION_CHECK(1, 8, 0)
                     git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature, NULL, message.ptr, tree, 2, (git_commit *const *)parents);
 #else
-                    git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature, NULL, message.ptr, tree, 2, (const git_commit **)parents);
+                    git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature, nullptr, message.ptr, tree, 2, (const git_commit **)parents);
 #endif
                     git_tree_free(tree);
                 }
@@ -552,9 +552,9 @@ public:
     Private(GitController *q)
         : needsPrivateKeyPassphrase(false)
         , documents(new DocumentListModel(q))
-        , commitAndPushAction(0)
-        , signature(0)
-        , opThread(0)
+        , commitAndPushAction(nullptr)
+        , signature(nullptr)
+        , opThread(nullptr)
     {
     }
     ~Private()
@@ -631,7 +631,7 @@ public:
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
             QString newName =
-                QInputDialog::getText(0,
+                QInputDialog::getText(nullptr,
                                       i18n("Enter Name"),
                                       i18n("There is no name set for Git on this system (this is used when committing). Please enter one below and press OK."),
                                       QLineEdit::Normal,
@@ -653,7 +653,7 @@ public:
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
             QString newEmail = QInputDialog::getText(
-                0,
+                nullptr,
                 i18n("Enter Email"),
                 i18n("There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK."),
                 QLineEdit::Normal,
@@ -806,7 +806,7 @@ void GitController::commitAndPushCurrentFile()
 
     // Don't allow committing unless the user details are sensible
     if (!d->checkUserDetails()) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            "I'm sorry, we cannot create commits without a username and email set. Please try again, and enter your name and email next time.");
         return;
     }
@@ -814,7 +814,7 @@ void GitController::commitAndPushCurrentFile()
     if (d->currentFile.startsWith(d->cloneDir)) {
         // ask commit message and checkbox for push (default on, remember?)
         bool ok = false;
-        QString message = QInputDialog::getMultiLineText(0,
+        QString message = QInputDialog::getMultiLineText(nullptr,
                                                          i18n("Describe changes"),
                                                          i18n("Please enter a description of your changes (also known as a commit message)."),
                                                          i18n("Commit message"),
@@ -844,7 +844,7 @@ void GitController::commitAndPushCurrentFile()
         }
     } else {
         KMessageBox::error(
-            0,
+            nullptr,
             QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.")
                 .arg(d->currentFile, d->cloneDir));
     }
@@ -852,7 +852,7 @@ void GitController::commitAndPushCurrentFile()
 
 void GitController::clearOpThread()
 {
-    d->opThread = 0;
+    d->opThread = nullptr;
 }
 
 void GitController::disableCommitAndPushAction()
@@ -869,7 +869,7 @@ void GitController::pull()
 
     // Don't allow committing unless the user details are sensible
     if (!d->checkUserDetails()) {
-        KMessageBox::error(0,
+        KMessageBox::error(nullptr,
                            "I'm sorry, we cannot create commits without a name and email set, and we might need to do a merge later, so we are aborting this "
                            "pull. Please try again, and enter your name and email next time.");
         return;

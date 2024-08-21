@@ -86,7 +86,7 @@ private:
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
     , m_writers(writers)
-    , m_context(0)
+    , m_context(nullptr)
     , d(new Private)
 {
     init();
@@ -114,7 +114,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
     const KoFilter::ConversionStatus result = readInternal();
 
-    m_context = 0;
+    m_context = nullptr;
     return result;
 }
 
@@ -172,7 +172,7 @@ PptxSlideProperties *PptxXmlDocumentReader::slideLayoutProperties(const QString 
     debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout";
     debugPptx << "slideLayoutPathAndFile:" << slideLayoutPathAndFile;
     if (slideLayoutPathAndFile.isEmpty())
-        return 0;
+        return nullptr;
 
     QString slideLayoutPath, slideLayoutFile;
     MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideLayoutPath, &slideLayoutFile);
@@ -223,7 +223,7 @@ PptxSlideProperties *PptxXmlDocumentReader::slideLayoutProperties(const QString 
                                       PptxXmlSlideReader::SlideLayout,
                                       result.get(),
                                       &d->slideMasterPageProperties[slideMasterPathAndFile], // PptxSlideMasterPageProperties
-                                      0,
+                                      nullptr,
                                       *m_context->relationships,
                                       d->commentAuthors,
                                       d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
@@ -235,7 +235,7 @@ PptxSlideProperties *PptxXmlDocumentReader::slideLayoutProperties(const QString 
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideLayoutReader.errorString();
-        return 0;
+        return nullptr;
     }
 
     context.initializeContext(d->slideMasterPageProperties[slideMasterPathAndFile].theme,
@@ -250,7 +250,7 @@ PptxSlideProperties *PptxXmlDocumentReader::slideLayoutProperties(const QString 
     status = m_context->import->loadAndParseDocument(&slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideLayoutReader.errorString();
-        return 0;
+        return nullptr;
     }
 
     d->slideLayoutPropertiesMap.insert(slideLayoutPathAndFile, result.get());
@@ -323,7 +323,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     // clrMap from the master slide
     const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
 
-    PptxSlideProperties *notes = 0;
+    PptxSlideProperties *notes = nullptr;
     const QString notesTarget(m_context->relationships->targetForType(m_context->path,
                                                                       m_context->file,
                                                                       "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster"));
@@ -447,8 +447,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
                                       0,
                                       &notesPageProperties.theme,
                                       PptxXmlSlideReader::NotesMaster,
-                                      0,
-                                      0,
+                                      nullptr,
+                                      nullptr,
                                       &notesPageProperties,
                                       *m_context->relationships,
                                       d->commentAuthors,
@@ -561,9 +561,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
                                       0 /*unused*/,
                                       &masterPageProperties.theme,
                                       PptxXmlSlideReader::SlideMaster,
-                                      0,
+                                      nullptr,
                                       &masterPageProperties,
-                                      0,
+                                      nullptr,
                                       *m_context->relationships,
                                       d->commentAuthors,
                                       dummyMap,

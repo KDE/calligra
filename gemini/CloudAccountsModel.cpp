@@ -247,7 +247,7 @@ QObject *CloudAccountsModel::accountDetails(int index)
     if (index > -1 && index < d->entries.count() - 1) {
         return d->entries.at(index)->accountDetails;
     }
-    return 0;
+    return nullptr;
 }
 
 void CloudAccountsModel::setAccountDetails(int index, QObject *newDetails)

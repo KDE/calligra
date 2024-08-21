@@ -18,7 +18,7 @@ public:
     /// constructor
     KarbonCalligraphicShapeFactory();
     ~KarbonCalligraphicShapeFactory() override;
-    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
     // virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

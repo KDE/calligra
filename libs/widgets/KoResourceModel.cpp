@@ -125,7 +125,7 @@ void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
 void KoResourceModel::setColumnCount(int columnCount)
 {
     if (columnCount != m_columnCount) {
-        Q_EMIT beforeResourcesLayoutReset(0);
+        Q_EMIT beforeResourcesLayoutReset(nullptr);
         beginResetModel();
         m_columnCount = columnCount;
         endResetModel();
@@ -137,7 +137,7 @@ void KoResourceModel::resourceAdded(KoResource *resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
     if (newIndex >= 0) {
-        doSafeLayoutReset(0);
+        doSafeLayoutReset(nullptr);
     }
 }
 

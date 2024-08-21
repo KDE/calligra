@@ -89,7 +89,7 @@ KWDocument::KWDocument(KoPart *part)
     , m_isMasterDocument(false)
     , m_frameLayout(&m_pageManager, m_frameSets)
     , m_mainFramesetEverFinished(false)
-    , m_annotationManager(0)
+    , m_annotationManager(nullptr)
 {
     Q_ASSERT(part);
     m_frameLayout.setDocument(this);
@@ -125,7 +125,7 @@ KWDocument::KWDocument(KoPart *part)
         variant.setValue(new KoChangeTracker(resourceManager()));
         resourceManager()->setResource(KoText::ChangeTracker, variant);
     */
-    m_shapeController = new KoShapeController(0, this);
+    m_shapeController = new KoShapeController(nullptr, this);
 
     if (inlineTextObjectManager()) {
         connect(documentInfo(), &KoDocumentInfo::infoUpdated, inlineTextObjectManager(), &KoInlineTextObjectManager::documentInformationUpdated);
@@ -165,7 +165,7 @@ void KWDocument::addShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame *>(shape->applicationData());
     debugWords << "shape=" << shape << "frame=" << frame;
-    if (frame == 0) {
+    if (frame == nullptr) {
         if (shape->shapeId() == TextShape_SHAPEID) {
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
             tfs->setName("Text");
@@ -374,7 +374,7 @@ void KWDocument::layoutFinished()
     disconnect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, &KWDocument::layoutProgressChanged);
     disconnect(lay, &KoTextDocumentLayout::finishedLayout, this, &KWDocument::layoutFinished);
     m_layoutProgressUpdater->setProgress(100);
-    m_layoutProgressUpdater = 0; // free the instance
+    m_layoutProgressUpdater = nullptr; // free the instance
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -458,7 +458,7 @@ KWFrameSet *KWDocument::frameSetByName(const QString &name)
         if (fs->name() == name)
             return fs;
     }
-    return 0;
+    return nullptr;
 }
 
 KWTextFrameSet *KWDocument::mainFrameSet() const
@@ -697,7 +697,7 @@ void KWDocument::saveConfig()
 
 KoShape *KWDocument::findTargetTextShape(KoShape *shape) const
 {
-    KoShape *result = 0;
+    KoShape *result = nullptr;
     int area = 0;
     QRectF br = shape->boundingRect();
 
@@ -709,7 +709,7 @@ KoShape *KWDocument::findTargetTextShape(KoShape *shape) const
         if (intersectArea > area) {
             result = shape;
             area = intersectArea;
-        } else if (result == 0) {
+        } else if (result == nullptr) {
             // TODO check distance between frames or something.
         }
     }
@@ -741,13 +741,13 @@ KWFrame *KWDocument::frameOfShape(KoShape *shape) const
         KWFrame *answer = dynamic_cast<KWFrame *>(shape->applicationData());
         if (answer)
             return answer;
-        if (shape->parent() == 0)
+        if (shape->parent() == nullptr)
             break;
         shape = shape->parent();
     }
 
     KWFrame *answer = dynamic_cast<KWFrame *>(shape->applicationData());
-    if (answer == 0) { // this may be a clipping shape containing the frame-shape
+    if (answer == nullptr) { // this may be a clipping shape containing the frame-shape
         KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
         if (container && container->shapeCount() == 1) {
             answer = dynamic_cast<KWFrame *>(container->shapes().first()->applicationData());

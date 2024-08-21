@@ -32,9 +32,9 @@
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     : QWidget(parent)
     , m_scene(new FilterEffectScene(this))
-    , m_shape(0)
-    , m_canvas(0)
-    , m_effects(0)
+    , m_shape(nullptr)
+    , m_canvas(nullptr)
+    , m_effects(nullptr)
 {
     setupUi(this);
 
@@ -109,7 +109,7 @@ void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase *canvas)
 {
     if (!m_shape) {
         delete m_effects;
-        m_effects = 0;
+        m_effects = nullptr;
     }
 
     m_shape = shape;
@@ -415,11 +415,11 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
     // get the filter effect from the item
     KoFilterEffect *filterEffect = item.effect();
     if (item.type() != ConnectionSource::Effect)
-        filterEffect = 0;
+        filterEffect = nullptr;
 
     KoFilterEffect *currentEffect = m_currentItem.effect();
     if (m_currentItem.type() != ConnectionSource::Effect)
-        currentEffect = 0;
+        currentEffect = nullptr;
 
     m_defaultSourceSelector->hide();
 
@@ -431,7 +431,7 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
 
     m_currentItem = item;
 
-    KoFilterEffectConfigWidgetBase *currentPanel = 0;
+    KoFilterEffectConfigWidgetBase *currentPanel = nullptr;
 
     if (!filterEffect) {
         if (item.type() != ConnectionSource::Effect) {

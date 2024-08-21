@@ -124,7 +124,7 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
         writer->endElement(); // meta:date-string
     }
 
-    m_textShapeData->saveOdf(context, 0, 0, -1);
+    m_textShapeData->saveOdf(context, nullptr, 0, -1);
 }
 
 void AnnotationTextShape::setCreator(const QString &creator)

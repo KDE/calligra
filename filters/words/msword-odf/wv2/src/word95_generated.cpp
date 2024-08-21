@@ -1358,7 +1358,7 @@ void DPPOLYLINE::clearInternal()
     yaFirst = 0;
     xaEnd = 0;
     yaEnd = 0;
-    rgpta = 0;
+    rgpta = nullptr;
 }
 
 bool operator==(const DPPOLYLINE &lhs, const DPPOLYLINE &rhs)
@@ -1614,9 +1614,9 @@ void TAP::clearInternal()
     unused12_4 = 0;
     itcMac = 0;
     dxaAdjust = 0;
-    rgdxaCenter = 0;
-    rgtc = 0;
-    rgshd = 0;
+    rgdxaCenter = nullptr;
+    rgtc = nullptr;
+    rgshd = nullptr;
     for (int _i = 0; _i < (6); ++_i)
         rgbrcTable[_i].clear();
 }
@@ -5585,8 +5585,8 @@ void PAP::clearInternal()
     dcs.clear();
     anld.clear();
     itbdMac = 0;
-    rgdxaTab = 0;
-    rgtbd = 0;
+    rgdxaTab = nullptr;
+    rgtbd = nullptr;
 }
 
 bool operator==(const PAP &lhs, const PAP &rhs)
@@ -6499,7 +6499,7 @@ void SEPX::clear()
 void SEPX::clearInternal()
 {
     cb = 0;
-    grpprl = 0;
+    grpprl = nullptr;
 }
 
 bool operator==(const SEPX &lhs, const SEPX &rhs)

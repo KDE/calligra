@@ -45,7 +45,7 @@ void KoTemplateGroup::setHidden(bool hidden) const
 bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 {
     KoTemplate *myTemplate = find(t->name());
-    if (myTemplate == 0) {
+    if (myTemplate == nullptr) {
         m_templates.append(t);
         m_touched = touch;
         return true;

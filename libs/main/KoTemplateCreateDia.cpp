@@ -57,16 +57,16 @@ public:
         : m_filePath(filePath)
         , m_thumbnail(thumbnail)
     {
-        m_tree = 0;
-        m_name = 0;
-        m_default = 0;
-        m_custom = 0;
-        m_select = 0;
-        m_preview = 0;
-        m_groups = 0;
-        m_add = 0;
-        m_remove = 0;
-        m_defaultTemplate = 0;
+        m_tree = nullptr;
+        m_name = nullptr;
+        m_default = nullptr;
+        m_custom = nullptr;
+        m_select = nullptr;
+        m_preview = nullptr;
+        m_groups = nullptr;
+        m_add = nullptr;
+        m_remove = nullptr;
+        m_defaultTemplate = nullptr;
     }
     ~KoTemplateCreateDiaPrivate()
     {
@@ -472,7 +472,7 @@ void KoTemplateCreateDia::slotRemove()
         }
     }
     delete item;
-    item = 0;
+    item = nullptr;
     enableButtonOk(true);
     d->m_name->setFocus();
     d->m_changed = true;

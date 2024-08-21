@@ -72,7 +72,7 @@ class DockerManager::Private
 {
 public:
     Private(MainWindow *mw)
-        : dockedToolBarsLayout(0)
+        : dockedToolBarsLayout(nullptr)
         , mainWindow(mw)
         , ignore(true)
     {

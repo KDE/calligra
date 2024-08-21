@@ -83,7 +83,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     capGroup = new QButtonGroup(this);
     capGroup->setExclusive(true);
 
-    QToolButton *button = 0;
+    QToolButton *button = nullptr;
 
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-cap-butt"));
@@ -153,8 +153,8 @@ class Q_DECL_HIDDEN StrokeConfigWidget::Private
 {
 public:
     Private()
-        : chart(0)
-        , plotArea(0)
+        : chart(nullptr)
+        , plotArea(nullptr)
     {
     }
 

@@ -43,10 +43,10 @@
 #include <algorithm>
 
 SectionContainer::SectionContainer(Section *section, RootSection *_rootSection)
-    : m_section(0)
-    , m_layer(0)
-    , m_rootSection(0)
-    , m_sectionModel(0)
+    : m_section(nullptr)
+    , m_layer(nullptr)
+    , m_rootSection(nullptr)
+    , m_sectionModel(nullptr)
 {
     initContainer(section, _rootSection);
 }
@@ -85,10 +85,10 @@ private:
 };
 
 SectionContainer::SectionContainer(const SectionContainer &_rhs, Section *_section)
-    : m_section(0)
-    , m_layer(0)
-    , m_rootSection(0)
-    , m_sectionModel(0)
+    : m_section(nullptr)
+    , m_layer(nullptr)
+    , m_rootSection(nullptr)
+    , m_sectionModel(nullptr)
 {
     initContainer(_section, _rhs.m_rootSection);
     KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->shapes());

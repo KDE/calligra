@@ -440,14 +440,14 @@ Value func_dproduct(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_dstdev(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // sqrt (dvar)
-    return calc->sqrt(func_dvar(args, calc, 0));
+    return calc->sqrt(func_dvar(args, calc, nullptr));
 }
 
 // Function: DSTDEVP
 Value func_dstdevp(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // sqrt (dvarp)
-    return calc->sqrt(func_dvarp(args, calc, 0));
+    return calc->sqrt(func_dvarp(args, calc, nullptr));
 }
 
 // Function: DVAR

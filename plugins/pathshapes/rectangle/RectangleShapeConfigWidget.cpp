@@ -56,7 +56,7 @@ void RectangleShapeConfigWidget::save()
 KUndo2Command *RectangleShapeConfigWidget::createCommand()
 {
     if (!m_rectangle)
-        return 0;
+        return nullptr;
     QSizeF size = m_rectangle->size();
 
     qreal cornerRadiusX = 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width());

@@ -66,7 +66,7 @@ public:
     void setSize(unsigned size); // HACKS
 
     static EString
-    fromUnicodeString(const void *p, bool longString, unsigned maxsize = 0, const unsigned *continuePositions = 0, unsigned continuePositionsOffset = 0);
+    fromUnicodeString(const void *p, bool longString, unsigned maxsize = 0, const unsigned *continuePositions = nullptr, unsigned continuePositionsOffset = 0);
 
     static EString fromSheetName(const void *p, unsigned maxsize = 0);
 
@@ -777,7 +777,7 @@ public:
     enum VerticalAlignment { Top = 1, VCentered = 2, Bottom = 3, VJustified = 4, VDistributed = 7 };
 
     static const unsigned id;
-    explicit TxORecord(Workbook *book = 0);
+    explicit TxORecord(Workbook *book = nullptr);
     // allowing copies for the hack for text support in shapes
     TxORecord(const TxORecord &);
     ~TxORecord() override;

@@ -12,7 +12,7 @@
 
 FormulaRenderer::FormulaRenderer()
 {
-    m_dirtyElement = 0;
+    m_dirtyElement = nullptr;
     m_attributeManager = new AttributeManager();
 }
 

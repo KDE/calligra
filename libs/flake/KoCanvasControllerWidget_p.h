@@ -37,7 +37,7 @@ class Q_DECL_HIDDEN KoCanvasControllerWidget::Private
 public:
     Private(KoCanvasControllerWidget *qq)
         : q(qq)
-        , canvas(0)
+        , canvas(nullptr)
         , ignoreScrollSignals(false)
         , zoomWithWheel(false)
         , vastScrollingFactor(0)

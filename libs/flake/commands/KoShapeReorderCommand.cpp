@@ -71,7 +71,7 @@ static void prepare(KoShape *s, QHash<KoShape *, QList<KoShape *>> &newOrder, Ko
     QHash<KoShape *, QList<KoShape *>>::iterator it(newOrder.find(parent));
     if (it == newOrder.end()) {
         QList<KoShape *> children;
-        if (parent != 0) {
+        if (parent != nullptr) {
             children = parent->shapes();
         } else {
             // get all toplevel shapes
@@ -79,8 +79,8 @@ static void prepare(KoShape *s, QHash<KoShape *, QList<KoShape *>> &newOrder, Ko
         }
         std::sort(children.begin(), children.end(), KoShape::compareShapeZIndex);
         // the append and prepend are needed so that the raise/lower of all shapes works as expected.
-        children.append(0);
-        children.prepend(0);
+        children.append(nullptr);
+        children.prepend(nullptr);
         it = newOrder.insert(parent, children);
     }
     QList<KoShape *> &shapes(newOrder[parent]);
@@ -160,5 +160,5 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape 
         }
     }
     Q_ASSERT(changedShapes.count() == newIndexes.count());
-    return changedShapes.isEmpty() ? 0 : new KoShapeReorderCommand(changedShapes, newIndexes, parent);
+    return changedShapes.isEmpty() ? nullptr : new KoShapeReorderCommand(changedShapes, newIndexes, parent);
 }

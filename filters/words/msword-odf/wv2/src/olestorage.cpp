@@ -24,13 +24,13 @@
 using namespace wvWare;
 
 OLEStorage::OLEStorage()
-    : m_storage(0)
+    : m_storage(nullptr)
     , m_fileName("")
 {
 }
 
 OLEStorage::OLEStorage(const std::string &fileName)
-    : m_storage(0)
+    : m_storage(nullptr)
     , m_fileName(fileName)
 {
 }
@@ -56,19 +56,19 @@ void OLEStorage::close()
     if (m_storage) {
         m_storage->close();
         delete m_storage;
-        m_storage = 0;
+        m_storage = nullptr;
     }
 }
 
 bool OLEStorage::isValid() const
 {
-    return (m_storage != 0);
+    return (m_storage != nullptr);
 }
 
 OLEStreamReader *OLEStorage::createStreamReader(const std::string &stream)
 {
     if (!m_storage)
-        return 0;
+        return nullptr;
 
     // the stream is deleted by m_storage
     POLE::Stream *poleStream = new POLE::Stream(m_storage, stream);
@@ -79,5 +79,5 @@ OLEStreamReader *OLEStorage::createStreamReader(const std::string &stream)
 
 OLEStreamWriter *OLEStorage::createStreamWriter(const std::string & /*stream*/)
 {
-    return 0;
+    return nullptr;
 }

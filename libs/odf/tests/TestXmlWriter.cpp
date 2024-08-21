@@ -32,7 +32,7 @@ private Q_SLOTS:
     void speedTest();
 
 private:
-    void setup(const char *publicId = 0, const char *systemId = 0);
+    void setup(const char *publicId = nullptr, const char *systemId = nullptr);
     QString content();
 
     KoXmlWriter *writer;

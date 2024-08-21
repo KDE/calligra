@@ -14,7 +14,7 @@
 
 KPrPresentationStrategyBase::KPrPresentationStrategyBase(KPrPresentationTool *tool)
     : m_tool(tool)
-    , m_widget(0)
+    , m_widget(nullptr)
 {
 }
 

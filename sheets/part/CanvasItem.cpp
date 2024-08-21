@@ -88,13 +88,13 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
     setAcceptDrops(true);
 
     d->doc = doc;
-    d->rowHeader = 0;
-    d->columnHeader = 0;
+    d->rowHeader = nullptr;
+    d->columnHeader = nullptr;
 
     d->selection = new Selection(this);
 
     d->zoomHandler = new KoZoomHandler();
-    d->activeSheet = 0;
+    d->activeSheet = nullptr;
     SheetBase *sheet = doc->map()->sheet(0);
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
     setActiveSheet(fullSheet);
@@ -113,7 +113,7 @@ CanvasItem::~CanvasItem()
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
 
-    d->activeSheet = 0;
+    d->activeSheet = nullptr;
 
     delete d->selection;
     delete d->zoomHandler;
@@ -235,7 +235,7 @@ void CanvasItem::setActiveSheet(Sheet *sheet)
     if (sheet == d->activeSheet)
         return;
 
-    if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
+    if (d->activeSheet != nullptr && !d->selection->referenceSelectionMode()) {
         selection()->emitCloseEditor(true);
         // saveCurrentSheetSelection();
     }
@@ -243,7 +243,7 @@ void CanvasItem::setActiveSheet(Sheet *sheet)
     const Sheet *oldSheet = d->activeSheet;
     d->activeSheet = sheet;
 
-    if (d->activeSheet == 0) {
+    if (d->activeSheet == nullptr) {
         return;
     }
 
@@ -265,7 +265,7 @@ void CanvasItem::setActiveSheet(Sheet *sheet)
         // XXX d->horzScrollBar->setLayoutDirection(direction);
         // Replace the painting strategy for painting shapes.
         KoShapeManager *const shapeManager = this->shapeManager();
-        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        KoShapeManagerPaintingStrategy *paintingStrategy = nullptr;
         if (direction == Qt::LeftToRight) {
             paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
         } else {
@@ -323,14 +323,14 @@ void CanvasItem::setActiveSheet(Sheet *sheet)
 ColumnHeader *CanvasItem::columnHeader() const
 {
     if (!d->columnHeader)
-        d->columnHeader = new ColumnHeaderItem(0, const_cast<CanvasItem *>(this));
+        d->columnHeader = new ColumnHeaderItem(nullptr, const_cast<CanvasItem *>(this));
     return d->columnHeader;
 }
 
 RowHeader *CanvasItem::rowHeader() const
 {
     if (!d->rowHeader)
-        d->rowHeader = new RowHeaderItem(0, const_cast<CanvasItem *>(this));
+        d->rowHeader = new RowHeaderItem(nullptr, const_cast<CanvasItem *>(this));
     return d->rowHeader;
 }
 

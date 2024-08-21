@@ -17,7 +17,7 @@ class GitLogModel : public QAbstractListModel
 public:
     enum CustomRoles { AuthorNameRole = Qt::UserRole + 1, AuthorEmailRole, TimeRole, OIDRole, ShortMessageRole, MessageRole };
 
-    explicit GitLogModel(QObject *parent = 0);
+    explicit GitLogModel(QObject *parent = nullptr);
     virtual ~GitLogModel();
 
     // Reimplemented from QAbstractListModel

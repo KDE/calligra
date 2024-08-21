@@ -192,7 +192,7 @@ void Pdf2OdgImport::buildDocument(const QList<KoShape *> &toplevelShapes, const 
             break;
         }
     }
-    KoShapeLayer *oldLayer = 0;
+    KoShapeLayer *oldLayer = nullptr;
     if (page->shapeCount()) {
         oldLayer = dynamic_cast<KoShapeLayer *>(page->shapes().first());
     }

@@ -139,7 +139,7 @@ void PriorityQueue<T>::insert(T *item)
     if (!item)
         return;
     int i = static_cast<int>(m_vector.size());
-    m_vector.push_back(0); // extend the vector by one item. i == index to the last item
+    m_vector.push_back(nullptr); // extend the vector by one item. i == index to the last item
     bubbleUp(item, i);
 }
 
@@ -155,7 +155,7 @@ template<class T>
 T *PriorityQueue<T>::extractMinimum()
 {
     if (m_vector.size() < 1)
-        return 0;
+        return nullptr;
     T *min = m_vector[0];
     m_vector[0] = m_vector[m_vector.size() - 1];
     // update the index

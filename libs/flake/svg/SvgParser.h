@@ -32,7 +32,7 @@ public:
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes
-    QList<KoShape *> parseSvg(const KoXmlElement &e, QSizeF *fragmentSize = 0);
+    QList<KoShape *> parseSvg(const KoXmlElement &e, QSizeF *fragmentSize = nullptr);
 
     /// Sets the initial xml base directory (the directory form where the file is read)
     void setXmlBaseDir(const QString &baseDir);

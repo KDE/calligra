@@ -73,7 +73,7 @@ void KPrPresenterViewInterface::setActivePage(int pageIndex)
     int pageCount = dynamic_cast<KPrEndOfSlideShowPage *>(m_pages.last()) ? m_pages.count() - 1 : m_pages.count();
 
     // set the thumbnail for next page preview
-    KoPAPageBase *nextPage = 0;
+    KoPAPageBase *nextPage = nullptr;
     if (pageIndex != pageCount) {
         nextPage = m_pages.at(pageIndex + 1);
         m_nextSlidePreview->setPixmap(nextPage->thumbnail(m_previewSize));
@@ -104,7 +104,7 @@ void KPrPresenterViewInterface::setPreviewSize(const QSize &size)
 
     // set the thumbnail for next page preview
     Q_ASSERT(m_activePage != -1);
-    KoPAPageBase *nextPage = 0;
+    KoPAPageBase *nextPage = nullptr;
     if (m_activePage != m_pages.count() - 1) {
         nextPage = m_pages.at(m_activePage + 1);
     } else {

@@ -14,10 +14,10 @@ class KoInlineObjectPrivate
 {
 public:
     KoInlineObjectPrivate()
-        : manager(0)
+        : manager(nullptr)
         , id(-1)
         , propertyChangeListener(0)
-        , rdf(0)
+        , rdf(nullptr)
     {
     }
     virtual ~KoInlineObjectPrivate();

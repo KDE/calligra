@@ -63,7 +63,7 @@ public:
      * or disable one of the features the container normally has (like clipping).
      * @param model the custom model to be used for maintaining the list of children.
      */
-    explicit KoShapeContainer(KoShapeContainerModel *model = 0);
+    explicit KoShapeContainer(KoShapeContainerModel *model = nullptr);
 
     /**
      * Destructor for the shape container.
@@ -217,7 +217,7 @@ protected:
     {
     }
 
-    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+    void shapeChanged(ChangeType type, KoShape *shape = nullptr) override;
 
     /// constructor
     KoShapeContainer(KoShapeContainerPrivate &);

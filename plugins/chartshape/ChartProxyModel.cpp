@@ -397,7 +397,7 @@ QList<DataSet *> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSe
 
     // This is the logic that extracts all the subregions from selection
     // that are later used for the data sets
-    Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
+    Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : nullptr;
     QList<int> sortedDataKeys = sortedDataRegions.keys();
     std::sort(sortedDataKeys.begin(), sortedDataKeys.end());
     foreach (int key, sortedDataKeys) {

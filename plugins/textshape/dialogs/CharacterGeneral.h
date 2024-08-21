@@ -38,7 +38,7 @@ public:
     KoCharacterStyle *style() const;
 
 public Q_SLOTS:
-    void save(KoCharacterStyle *style = 0);
+    void save(KoCharacterStyle *style = nullptr);
 
     void switchToGeneralTab();
 

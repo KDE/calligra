@@ -549,7 +549,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     d->view = this;
     d->doc = _doc;
 
-    d->activeSheet = 0;
+    d->activeSheet = nullptr;
 
     d->loading = true;
 
@@ -619,7 +619,7 @@ View::~View()
 
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
-    d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
+    d->activeSheet = nullptr; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
     // performed.
 
@@ -631,7 +631,7 @@ View::~View()
     delete d->scrollTimer;
 
     delete d->selection;
-    d->selection = 0;
+    d->selection = nullptr;
     delete d->calcLabel;
     delete d->actions;
     delete d->zoomHandler;
@@ -759,7 +759,7 @@ void View::initView()
     setFocusProxy(d->canvas);
 
     // Vert. Scroll Bar
-    d->calcLabel = 0;
+    d->calcLabel = nullptr;
     d->vertScrollBar = new QScrollBar(this);
     canvasController->setVerticalScrollBar(d->vertScrollBar);
     connect(d->vertScrollBar, SIGNAL(valueChanged(int)), canvasController, SLOT(updateCanvasOffsetY()));
@@ -772,9 +772,9 @@ void View::initView()
     d->tabScrollBarLayout->setContentsMargins({});
     d->tabScrollBarLayout->setSpacing(0);
     d->tabScrollBarLayout->setColumnStretch(1, 1);
-    d->tabBar = new TabBar(0);
+    d->tabBar = new TabBar(nullptr);
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
-    d->horzScrollBar = new QScrollBar(0);
+    d->horzScrollBar = new QScrollBar(nullptr);
     canvasController->setHorizontalScrollBar(d->horzScrollBar);
     connect(d->horzScrollBar, SIGNAL(valueChanged(int)), canvasController, SLOT(updateCanvasOffsetX()));
     d->tabScrollBarLayout->addWidget(d->horzScrollBar, 0, 1, 2, 1, Qt::AlignVCenter);
@@ -805,7 +805,7 @@ void View::initView()
     d->viewLayout->setRowMinimumHeight(3, extent);
 
     QStatusBar *sb = statusBar();
-    d->calcLabel = sb ? new QLabel(sb) : 0;
+    d->calcLabel = sb ? new QLabel(sb) : nullptr;
     if (d->calcLabel) {
         d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
         addStatusBarItem(d->calcLabel, 0);
@@ -1047,7 +1047,7 @@ void View::shapeSelectionChanged()
     const ShapeApplicationData *data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
     if (!data) {
         // Container children do not have the application data set, deselect the anchoring action.
-        d->actions->shapeAnchor->setCurrentAction(0);
+        d->actions->shapeAnchor->setCurrentAction(nullptr);
         return;
     }
     bool anchoredToCell = data->isAnchoredToCell();
@@ -1060,7 +1060,7 @@ void View::shapeSelectionChanged()
         Q_ASSERT(data);
         if (anchoredToCell != data->isAnchoredToCell()) {
             // If the anchoring differs between shapes, deselect the anchoring action and stop here.
-            d->actions->shapeAnchor->setCurrentAction(0);
+            d->actions->shapeAnchor->setCurrentAction(nullptr);
             break;
         }
     }
@@ -1182,7 +1182,7 @@ void View::setActiveSheet(Sheet *sheet, bool updateSheet)
     if (sheet == d->activeSheet && (!sheet || d->tabBar->activeTab() == sheet->sheetName()))
         return;
 
-    if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
+    if (d->activeSheet != nullptr && !d->selection->referenceSelectionMode()) {
         selection()->emitCloseEditor(true); // save changes
         saveCurrentSheetSelection();
     }
@@ -1195,7 +1195,7 @@ void View::setActiveSheet(Sheet *sheet, bool updateSheet)
 
     d->activeSheet = sheet;
 
-    if (d->activeSheet == 0) {
+    if (d->activeSheet == nullptr) {
         return;
     }
 
@@ -1217,7 +1217,7 @@ void View::setActiveSheet(Sheet *sheet, bool updateSheet)
         d->horzScrollBar->setLayoutDirection(direction);
         // Replace the painting strategy for painting shapes.
         KoShapeManager *const shapeManager = d->canvas->shapeManager();
-        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        KoShapeManagerPaintingStrategy *paintingStrategy = nullptr;
         if (direction == Qt::LeftToRight) {
             paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
         } else {
@@ -1384,7 +1384,7 @@ void View::sheetProperties()
         d->columnHeader->update();
         // Replace the painting strategy for painting shapes.
         KoShapeManager *const shapeManager = d->canvas->shapeManager();
-        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        KoShapeManagerPaintingStrategy *paintingStrategy = nullptr;
         if (d->activeSheet->layoutDirection() == Qt::LeftToRight) {
             paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
         } else {
@@ -1403,7 +1403,7 @@ void View::sheetProperties()
 void View::insertSheet()
 {
     if (doc()->map()->isProtected()) {
-        KMessageBox::error(0, i18n("You cannot change a protected sheet."));
+        KMessageBox::error(nullptr, i18n("You cannot change a protected sheet."));
         return;
     }
 
@@ -1787,7 +1787,7 @@ void View::setHeaderMinima()
     if (d->loading) // "View Loading" not finished yet
         return;
     QFont font(KoGlobal::defaultFont());
-    QFontMetricsF fm(font, 0);
+    QFontMetricsF fm(font, nullptr);
     qreal h = fm.height() + 3;
     qreal w = fm.boundingRect(QString::fromLatin1("99999")).width() + 3;
     d->columnHeader->setMinimumHeight(qRound(h));
@@ -1849,7 +1849,7 @@ void View::slotRename()
     Sheet *sheet = activeSheet();
 
     if (sheet->isProtected()) {
-        KMessageBox::error(0, i18n("You cannot change a protected sheet."));
+        KMessageBox::error(nullptr, i18n("You cannot change a protected sheet."));
         return;
     }
 
@@ -2087,7 +2087,7 @@ void View::removeSheet(SheetBase *bsheet)
     d->actions->hideSheet->setEnabled(state);
 
     // Disconnect signals.
-    disconnect(sheet, 0, d->mapViewModel, 0);
+    disconnect(sheet, nullptr, d->mapViewModel, nullptr);
 }
 
 QColor View::borderColor() const
@@ -2214,7 +2214,7 @@ void View::handleDamages(const QList<Damage *> &damages)
 KoPrintJob *View::createPrintJob()
 {
     if (!activeSheet())
-        return 0;
+        return nullptr;
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);

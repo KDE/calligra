@@ -21,12 +21,12 @@ UnderOverElement::UnderOverElement(BasicElement *parent, ElementType elementType
     if (elementType != Under) {
         m_overElement = new RowElement(this);
     } else {
-        m_overElement = 0;
+        m_overElement = nullptr;
     }
     if (elementType != Over) {
         m_underElement = new RowElement(this);
     } else {
-        m_underElement = 0;
+        m_underElement = nullptr;
     }
     m_baseElement = new RowElement(this);
     m_elementType = elementType;

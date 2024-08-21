@@ -60,11 +60,11 @@ KPrAnimationDirector::KPrAnimationDirector(KoPAView *view, KoPACanvas *canvas, c
     : m_view(view)
     , m_canvas(canvas)
     , m_pages(pages)
-    , m_pageEffectRunner(0)
+    , m_pageEffectRunner(nullptr)
     , m_stepIndex(0)
     , m_maxShapeDuration(0)
     , m_hasAnimation(false)
-    , m_animationCache(0)
+    , m_animationCache(nullptr)
     , m_state(PresentationState)
 {
     Q_ASSERT(!m_pages.empty());
@@ -118,7 +118,7 @@ void KPrAnimationDirector::paint(QPainter &painter, const QRectF &paintRect)
         bool finished = m_pageEffectRunner->isFinished();
         if (!m_pageEffectRunner->paint(painter)) {
             delete m_pageEffectRunner;
-            m_pageEffectRunner = 0;
+            m_pageEffectRunner = nullptr;
 
             // check if there where a animation to start
             if (hasAnimation()) {
@@ -459,7 +459,7 @@ void KPrAnimationDirector::previousStep()
             m_canvas->update();
             // cancel a running page effect
             delete m_pageEffectRunner;
-            m_pageEffectRunner = 0;
+            m_pageEffectRunner = nullptr;
         }
     }
     // when going back you always go to the end of the effect

@@ -36,8 +36,8 @@ class KoShapeController::Private
 {
 public:
     Private()
-        : canvas(0)
-        , shapeBasedDocument(0)
+        : canvas(nullptr)
+        , shapeBasedDocument(nullptr)
     {
     }
 
@@ -67,7 +67,7 @@ public:
                     if (!panelFactory->showForShapeId(shape->shapeId()))
                         continue;
                     KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-                    if (widget == 0)
+                    if (widget == nullptr)
                         continue;
                     if (!widget->showOnShapeCreate()) {
                         delete widget;
@@ -98,7 +98,7 @@ public:
                         dialog->setFaceType(KPageDialog::Tabbed);
                     if (dialog->exec() != KPageDialog::Accepted) {
                         delete dialog;
-                        return 0;
+                        return nullptr;
                     }
                     foreach (KoShapeConfigWidgetBase *widget, widgets)
                         widget->save();
@@ -120,9 +120,21 @@ public:
             KoConnectionShape *connection = dynamic_cast<KoConnectionShape *>(dependee);
             if (connection) {
                 if (shape == connection->firstShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::StartHandle, shape, connection->firstConnectionId(), 0, -1, parentCmd);
+                    new KoShapeConnectionChangeCommand(connection,
+                                                       KoConnectionShape::StartHandle,
+                                                       shape,
+                                                       connection->firstConnectionId(),
+                                                       nullptr,
+                                                       -1,
+                                                       parentCmd);
                 } else if (shape == connection->secondShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::EndHandle, shape, connection->secondConnectionId(), 0, -1, parentCmd);
+                    new KoShapeConnectionChangeCommand(connection,
+                                                       KoConnectionShape::EndHandle,
+                                                       shape,
+                                                       connection->secondConnectionId(),
+                                                       nullptr,
+                                                       -1,
+                                                       parentCmd);
                 }
             }
         }
@@ -183,7 +195,7 @@ void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBa
 KoDocumentResourceManager *KoShapeController::resourceManager() const
 {
     if (!d->shapeBasedDocument)
-        return 0;
+        return nullptr;
     return d->shapeBasedDocument->resourceManager();
 }
 

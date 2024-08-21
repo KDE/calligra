@@ -110,7 +110,7 @@ private:
 class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const &properties, DrawingTableStyle *style = 0);
+    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const &properties, DrawingTableStyle *style = nullptr);
     ~DrawingTableStyleConverter() override;
 
     KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) override;

@@ -40,7 +40,7 @@ const QLoggingCategory &KARBON1_LOG()
 
 KarbonImport::KarbonImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
-    , m_svgWriter(0)
+    , m_svgWriter(nullptr)
 {
 }
 
@@ -89,7 +89,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray &from, const Q
         warnKarbon1 << "Opening store has failed. Trying raw XML file!";
         // Be sure to undefine store
         delete store;
-        store = 0;
+        store = nullptr;
 
         QFile file(fileName);
         file.open(QIODevice::ReadOnly);
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray &from, const Q
 
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
     delete store;
-    store = 0;
+    store = nullptr;
 
     svgFile.close();
 
@@ -335,8 +335,8 @@ QString KarbonImport::loadGradient(const KoXmlElement &element)
     vector.setX(element.attribute("vectorX", "0.0").toDouble());
     vector.setY(element.attribute("vectorY", "0.0").toDouble());
 
-    const int type = element.attribute("type", 0).toInt();
-    const int spread = element.attribute("repeatMethod", 0).toInt();
+    const int type = element.attribute("type", nullptr).toInt();
+    const int spread = element.attribute("repeatMethod", nullptr).toInt();
 
     const QString spreadMethod[3] = {QString("pad"), QString("reflect"), QString("repeat")};
 

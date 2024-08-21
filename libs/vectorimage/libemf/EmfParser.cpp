@@ -31,7 +31,7 @@ namespace Libemf
 // ================================================================
 
 Parser::Parser()
-    : mOutput(0)
+    : mOutput(nullptr)
 {
 }
 
@@ -71,7 +71,7 @@ bool Parser::load(const QString &fileName)
 bool Parser::load(const QByteArray &contents)
 {
     // Create a QBuffer to read from...
-    QBuffer emfBuffer((QByteArray *)&contents, 0);
+    QBuffer emfBuffer((QByteArray *)&contents, nullptr);
     emfBuffer.open(QIODevice::ReadOnly);
 
     // ...but what we really want is a stream.

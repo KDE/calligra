@@ -52,10 +52,10 @@ void TestValueConverter::initTestCase()
     // If run with 'C' locale translations will fail
     // Setting it to 'C.UTF-8' fixes this
     // HACK: (Since I don't really know why)
-    char *l = setlocale(LC_MESSAGES, 0);
+    char *l = setlocale(LC_MESSAGES, nullptr);
     if (l && strcmp(l, "C") == 0) {
         setlocale(LC_MESSAGES, "C.UTF-8");
-        qDebug() << "Set locale:" << l << "->" << setlocale(LC_MESSAGES, 0);
+        qDebug() << "Set locale:" << l << "->" << setlocale(LC_MESSAGES, nullptr);
     }
 #endif
 #ifdef Q_OS_WIN

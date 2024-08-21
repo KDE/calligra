@@ -17,7 +17,7 @@ static const unsigned NORECORD = 0xFFFFFFFF;
 XlsRecordOutputStream::XlsRecordOutputStream(QIODevice *device)
     : m_dataStream(device)
     , m_currentRecord(NORECORD)
-    , m_buffer(0)
+    , m_buffer(nullptr)
 {
     Q_ASSERT(device->isOpen());
     Q_ASSERT(device->isWritable());

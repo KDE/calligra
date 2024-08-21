@@ -108,7 +108,7 @@ bool saveCell(Cell *cell, int &repeated, OdfSavingContext &tableContext);
  * @return a hash of styles with the OpenDocument internal name as key
  */
 Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader &stylesReader, QHash<QString, Conditions> &conditionalStyles, const Localization *locale);
-void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader &stylesReader, MapBase *map = 0);
+void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader &stylesReader, MapBase *map = nullptr);
 void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
 QString saveStyle(const Style *style, KoGenStyle &xmlstyle, KoGenStyles &mainStyles, const StyleManager *manager, Localization *locale);
 void loadDataStyle(Style *style,

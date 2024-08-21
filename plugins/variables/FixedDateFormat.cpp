@@ -23,7 +23,7 @@ static void createTimeAction(QMenu *parent, const QString &title, const QString 
 
 FixedDateFormat::FixedDateFormat(DateVariable *variable)
     : m_variable(variable)
-    , m_popup(0)
+    , m_popup(nullptr)
 {
     widget.setupUi(this);
 
@@ -111,7 +111,7 @@ void FixedDateFormat::offsetChanged(int offset)
 
 void FixedDateFormat::insertCustomButtonPressed()
 {
-    if (m_popup == 0) {
+    if (m_popup == nullptr) {
         m_popup = new QMenu(this);
         QMenu *day = new QMenu(i18n("Day"), m_popup);
         QMenu *month = new QMenu(i18n("Month"), m_popup);

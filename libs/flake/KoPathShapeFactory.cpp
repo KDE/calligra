@@ -66,7 +66,7 @@ void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *m
     // we want to make sure that there is always an image collection
     // added to the data center map, in case the picture shape plugin
     // is not loaded
-    if (manager->imageCollection() == 0) {
+    if (manager->imageCollection() == nullptr) {
         KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
     }

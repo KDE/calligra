@@ -103,7 +103,7 @@ KoVariable *KoVariableManager::createVariable(const QString &name) const
 {
     int key = d->variableMapping.value(name);
     if (key == 0) {
-        return 0;
+        return nullptr;
     }
     return new KoNamedVariable(static_cast<KoInlineObject::Property>(key), name);
 }

@@ -9,7 +9,7 @@
 void TestAttributeManager::initTestCase()
 {
     m_attributeManager = new AttributeManager();
-    m_basicElement = new BasicElement(0);
+    m_basicElement = new BasicElement(nullptr);
 }
 
 void TestAttributeManager::cleanupTestCase()

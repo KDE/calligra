@@ -18,7 +18,7 @@
 
 ChartResizeStrategy::ChartResizeStrategy(KoShape *shape)
     : m_chart(dynamic_cast<KoShapeContainer *>(shape))
-    , m_plotArea(0)
+    , m_plotArea(nullptr)
 {
     if (m_chart) {
         QRectF rect = m_chart->boundingRect();

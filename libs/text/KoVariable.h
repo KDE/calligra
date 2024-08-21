@@ -62,7 +62,7 @@ public:
      */
     virtual QWidget *createOptionsWidget()
     {
-        return 0;
+        return nullptr;
     }
 
 protected:

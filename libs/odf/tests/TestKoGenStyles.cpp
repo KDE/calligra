@@ -102,10 +102,10 @@ void TestKoGenStyles::testLookup()
     QCOMPARE(first, second); // check that operator== works :)
 
     const KoGenStyle *s = coll.style(firstName, "paragraph"); // check insert of existing style
-    QVERIFY(s != 0);
+    QVERIFY(s != nullptr);
     QCOMPARE(*s, first);
     s = coll.style("foobarblah", "paragraph"); // check insert of non-existing style
-    QVERIFY(s == 0);
+    QVERIFY(s == nullptr);
 
     KoGenStyle third(KoGenStyle::ParagraphAutoStyle, "paragraph", secondName); // inherited style
     third.addProperty("style:margin-left", "1.249cm");
@@ -155,7 +155,7 @@ void TestKoGenStyles::testLookup()
     // QCOMPARE(coll.styles(KoGenStyle::ParagraphStyle).count(), 1);
 
     // XML for first/second style
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     first.writeStyle(&writer, coll, "style:style", firstName, "style:paragraph-properties");
 
     TEST_END_QTTEST("<r>\n <style:style style:name=\"" + firstName + "\" style:family=\"paragraph\" "
@@ -166,7 +166,7 @@ void TestKoGenStyles::testLookup()
         " </style:style>\n</r>\n");
 
     // XML for third style
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     third.writeStyle(&writer, coll, "style:style", thirdName, "style:paragraph-properties");
     TEST_END_QTTEST("<r>\n <style:style style:name=\"" + thirdName + "\""
         " style:parent-style-name=\"" + firstName + "\" style:family=\"paragraph\">\n"
@@ -224,7 +224,7 @@ void TestKoGenStyles::testWriteStyle()
     QString styleName = coll.insert(style, "P");
 
     // XML for style
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     style.writeStyle(&writer, coll, "style:style", styleName, "style:paragraph-properties");
     TEST_END_QTTEST(
         "<r>\n <style:style style:name=\"P1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:foo=\"bar\" style:paragraph=\"property\"/>\n  "
@@ -235,7 +235,7 @@ void TestKoGenStyles::testWriteStyle()
     QString pageLayoutStyleName = coll.insert(pageLayoutStyle, "pm");
 
     // XML for page layout style
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     pageLayoutStyle.writeStyle(&writer, coll, "style:page-layout", pageLayoutStyleName, "style:page-layout-properties");
     TEST_END_QTTEST(
         "<r>\n <style:page-layout style:name=\"pm1\">\n  <style:page-layout-properties style:print-orientation=\"portrait\"/>\n </style:page-layout>\n</r>\n");
@@ -243,8 +243,8 @@ void TestKoGenStyles::testWriteStyle()
     KoGenStyle listStyle(KoGenStyle::ListStyle);
     QString listStyleName = coll.insert(listStyle, "L");
     // XML for list layout style
-    TEST_BEGIN(0, 0);
-    listStyle.writeStyle(&writer, coll, "text:list-style", listStyleName, 0);
+    TEST_BEGIN(nullptr, nullptr);
+    listStyle.writeStyle(&writer, coll, "text:list-style", listStyleName, nullptr);
     TEST_END_QTTEST("<r>\n <text:list-style style:name=\"L1\"/>\n</r>\n");
 }
 
@@ -277,7 +277,7 @@ void TestKoGenStyles::testDefaultStyle()
     QCOMPARE(coll.styles().count(), 1);
 
     // XML for default style
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     defaultStyle.writeStyle(&writer, coll, "style:default-style", defaultStyleName, "style:paragraph-properties");
     TEST_END_QTTEST(
         "<r>\n <style:default-style style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n "
@@ -336,14 +336,14 @@ void TestKoGenStyles::testUserStyles()
     QCOMPARE(coll.styles().count(), 3);
 
     // XML for user style 1
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     user1.writeStyle(&writer, coll, "style:style", user1StyleName, "style:paragraph-properties");
     TEST_END_QTTEST(
         "<r>\n <style:style style:name=\"User1\" style:display-name=\"User 1\" style:family=\"paragraph\">\n  <style:paragraph-properties "
         "myfont=\"isBold\"/>\n </style:style>\n</r>\n");
 
     // XML for user style 2
-    TEST_BEGIN(0, 0);
+    TEST_BEGIN(nullptr, nullptr);
     user2.writeStyle(&writer, coll, "style:style", user2StyleName, "style:paragraph-properties");
     TEST_END_QTTEST(
         "<r>\n <style:style style:name=\"User2\" style:display-name=\"User 2\" style:family=\"paragraph\">\n  <style:paragraph-properties "

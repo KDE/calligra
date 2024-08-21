@@ -15,7 +15,7 @@
 
 SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape)
     : m_textShape(textshape)
-    , m_area(0)
+    , m_area(nullptr)
     , m_textShapeData(data)
     , m_fixAutogrow(false)
 
@@ -25,7 +25,7 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 KoTextLayoutRootArea *
 SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
 {
-    if (m_area == 0) {
+    if (m_area == nullptr) {
         *isNewRootArea = true;
         m_area = new KoTextLayoutRootArea(documentLayout);
         m_area->setAssociatedShape(m_textShape);
@@ -37,7 +37,7 @@ SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const Root
         *isNewRootArea = false;
         return m_area;
     }
-    return 0;
+    return nullptr;
 }
 
 void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)

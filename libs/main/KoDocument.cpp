@@ -146,12 +146,12 @@ public:
     Private(KoDocument *document, KoPart *part)
         : document(document)
         , parentPart(part)
-        , docInfo(0)
-        , docRdf(0)
-        , progressUpdater(0)
-        , progressProxy(0)
-        , profileStream(0)
-        , filterManager(0)
+        , docInfo(nullptr)
+        , docRdf(nullptr)
+        , progressUpdater(nullptr)
+        , progressProxy(nullptr)
+        , profileStream(nullptr)
+        , filterManager(nullptr)
         , specialOutputFlag(0)
         , // default is native format
         isImporting(false)
@@ -165,15 +165,15 @@ public:
         , backupPath(QString())
         , doNotSaveExtDoc(false)
         , isLoading(false)
-        , undoStack(0)
+        , undoStack(nullptr)
         , modified(false)
         , readwrite(true)
         , alwaysAllowSaving(false)
         , disregardAutosaveFailure(false)
     {
-        m_job = 0;
-        m_statJob = 0;
-        m_uploadJob = 0;
+        m_job = nullptr;
+        m_statJob = nullptr;
+        m_uploadJob = nullptr;
         m_saveOk = false;
         m_waitForSave = false;
         m_duringSaveAs = false;
@@ -258,9 +258,9 @@ public:
 
     bool openFile()
     {
-        DocumentProgressProxy *progressProxy = 0;
+        DocumentProgressProxy *progressProxy = nullptr;
         if (!document->progressProxy()) {
-            KoMainWindow *mainWindow = 0;
+            KoMainWindow *mainWindow = nullptr;
             if (parentPart->mainWindows().count() > 0) {
                 mainWindow = parentPart->mainWindows()[0];
             }
@@ -272,7 +272,7 @@ public:
         bool ok = document->openFile();
 
         if (progressProxy) {
-            document->setProgressProxy(0);
+            document->setProgressProxy(nullptr);
             delete progressProxy;
         }
         return ok;
@@ -320,7 +320,7 @@ public:
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
 #ifdef WITH_QTDBUS
-        KJobWidgets::setWindow(m_job, 0);
+        KJobWidgets::setWindow(m_job, nullptr);
         if (m_job->uiDelegate()) {
             KJobWidgets::setWindow(m_job, parentPart->currentMainwindow());
         }
@@ -360,7 +360,7 @@ public:
     void _k_slotJobFinished(KJob *job)
     {
         Q_ASSERT(job == m_job);
-        m_job = 0;
+        m_job = nullptr;
         if (job->error())
             Q_EMIT document->canceled(job->errorString());
         else {
@@ -375,7 +375,7 @@ public:
     void _k_slotStatJobFinished(KJob *job)
     {
         Q_ASSERT(job == m_statJob);
-        m_statJob = 0;
+        m_statJob = nullptr;
 
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
@@ -406,7 +406,7 @@ public:
     {
         if (m_uploadJob->error()) {
             QFile::remove(m_uploadJob->srcUrl().toLocalFile());
-            m_uploadJob = 0;
+            m_uploadJob = nullptr;
             if (m_duringSaveAs) {
                 document->setUrl(m_originalURL);
                 m_file = m_originalFilePath;
@@ -416,7 +416,7 @@ public:
             ::org::kde::KDirNotify::emitFilesAdded(QUrl::fromLocalFile(m_url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).path()));
 #endif
 
-            m_uploadJob = 0;
+            m_uploadJob = nullptr;
             document->setModified(false);
             Q_EMIT document->completed();
             m_saveOk = true;
@@ -588,9 +588,9 @@ bool KoDocument::saveFile()
     if (!ret) {
         if (!suppressErrorDialog) {
             if (errorMessage().isEmpty()) {
-                KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
+                KMessageBox::error(nullptr, i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
-                KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
+                KMessageBox::error(nullptr, i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
         }
 
@@ -1306,7 +1306,7 @@ bool KoDocument::openFile()
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0, i18n("The file %1 does not exist.", localFilePath()));
+            KMessageBox::error(nullptr, i18n("The file %1 does not exist.", localFilePath()));
         d->isLoading = false;
         return false;
     }
@@ -1421,7 +1421,7 @@ bool KoDocument::openFile()
 
     // create the main progress monitoring object for loading, this can
     // contain subtasks for filtering and loading
-    KoProgressProxy *progressProxy = 0;
+    KoProgressProxy *progressProxy = nullptr;
     if (d->progressProxy) {
         progressProxy = d->progressProxy;
     }
@@ -1525,7 +1525,7 @@ bool KoDocument::openFile()
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
-                KMessageBox::error(0, errorMsg);
+                KMessageBox::error(nullptr, errorMsg);
             }
 
             d->isLoading = false;
@@ -1655,7 +1655,7 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString &filename, KoXmlD
                                    filename,
                                    errorLine,
                                    errorColumn,
-                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0));
+                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), nullptr));
         return false;
     }
     debugMain << "File" << filename << " loaded and parsed";
@@ -1723,9 +1723,9 @@ bool KoDocument::loadNativeFormat(const QString &file_)
         KoXmlDocument doc = KoXmlDocument(true);
         bool res;
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
-            res = loadXML(doc, 0);
+            res = loadXML(doc, nullptr);
             if (res)
-                res = completeLoading(0);
+                res = completeLoading(nullptr);
         } else {
             errorMain << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << Qt::endl
                       << "  Line: " << errorLine << " Column: " << errorColumn << Qt::endl
@@ -2060,7 +2060,7 @@ int KoDocument::queryCloseDia()
     if (name.isEmpty())
         name = i18n("Untitled");
 
-    int res = KMessageBox::warningTwoActionsCancel(0,
+    int res = KMessageBox::warningTwoActionsCancel(nullptr,
                                                    i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
                                                    QString{},
                                                    KStandardGuiItem::save(),
@@ -2177,9 +2177,9 @@ QString KoDocument::errorMessage() const
 void KoDocument::showLoadingErrorDialog()
 {
     if (errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
+        KMessageBox::error(nullptr, i18n("Could not open\n%1", localFilePath()));
     } else if (errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
+        KMessageBox::error(nullptr, i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }
 
@@ -2440,9 +2440,9 @@ bool KoDocument::save()
     if (d->m_file.isEmpty()) // document was created empty
         d->prepareSaving();
 
-    DocumentProgressProxy *progressProxy = 0;
+    DocumentProgressProxy *progressProxy = nullptr;
     if (!d->document->progressProxy()) {
-        KoMainWindow *mainWindow = 0;
+        KoMainWindow *mainWindow = nullptr;
         if (d->parentPart->mainwindowCount() > 0) {
             mainWindow = d->parentPart->mainWindows()[0];
         }
@@ -2456,7 +2456,7 @@ bool KoDocument::save()
     bool ok = d->document->saveFile();
 
     if (progressProxy) {
-        d->document->setProgressProxy(0);
+        d->document->setProgressProxy(nullptr);
         delete progressProxy;
     }
 
@@ -2487,12 +2487,12 @@ void KoDocument::abortLoad()
     if (d->m_statJob) {
         // kDebug(1000) << "Aborting job" << d->m_statJob;
         d->m_statJob->kill();
-        d->m_statJob = 0;
+        d->m_statJob = nullptr;
     }
     if (d->m_job) {
         // kDebug(1000) << "Aborting job" << d->m_job;
         d->m_job->kill();
-        d->m_job = 0;
+        d->m_job = nullptr;
     }
 }
 
@@ -2543,7 +2543,7 @@ bool KoDocument::queryClose()
     if (docName.isEmpty())
         docName = i18n("Untitled");
 
-    int res = KMessageBox::warningTwoActionsCancel(0,
+    int res = KMessageBox::warningTwoActionsCancel(nullptr,
                                                    i18n("The document \"%1\" has been modified.\n"
                                                         "Do you want to save your changes or discard them?",
                                                         docName),
@@ -2558,7 +2558,7 @@ bool KoDocument::queryClose()
     case KMessageBox::PrimaryAction:
         if (!handled) {
             if (d->m_url.isEmpty()) {
-                KoMainWindow *mainWindow = 0;
+                KoMainWindow *mainWindow = nullptr;
                 if (d->parentPart->mainWindows().count() > 0) {
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
@@ -2599,7 +2599,7 @@ bool KoDocument::saveToUrl()
         if (d->m_uploadJob) {
             QFile::remove(d->m_uploadJob->srcUrl().toLocalFile());
             d->m_uploadJob->kill();
-            d->m_uploadJob = 0;
+            d->m_uploadJob = nullptr;
         }
         QTemporaryFile *tempFile = new QTemporaryFile();
         tempFile->open();
@@ -2614,7 +2614,7 @@ bool KoDocument::saveToUrl()
         }
         d->m_uploadJob = KIO::file_move(uploadUrl, d->m_url, -1, KIO::Overwrite);
 #ifdef WITH_QTDBUS
-        KJobWidgets::setWindow(d->m_uploadJob, 0);
+        KJobWidgets::setWindow(d->m_uploadJob, nullptr);
 #endif
         connect(d->m_uploadJob, &KIO::FileCopyJob::result, this, [this](KJob *job) {
             d->_k_slotUploadFinished(job);

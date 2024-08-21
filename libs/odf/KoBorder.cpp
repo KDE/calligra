@@ -470,28 +470,35 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, BorderPaintAre
     if (hasBorder(LeftBorder)) {
         start = borderRect.topLeft();
         end = borderRect.bottomLeft();
-        paintBorderSide(painter, start, end, &leftEdge, true, hasBorder(TopBorder) ? &topEdge : 0, hasBorder(BottomBorder) ? &bottomEdge : 0, 1);
+        paintBorderSide(painter, start, end, &leftEdge, true, hasBorder(TopBorder) ? &topEdge : nullptr, hasBorder(BottomBorder) ? &bottomEdge : nullptr, 1);
     }
 
     // Right border
     if (hasBorder(RightBorder)) {
         start = borderRect.topRight();
         end = borderRect.bottomRight();
-        paintBorderSide(painter, start, end, &rightEdge, true, hasBorder(TopBorder) ? &topEdge : 0, hasBorder(BottomBorder) ? &bottomEdge : 0, -1);
+        paintBorderSide(painter, start, end, &rightEdge, true, hasBorder(TopBorder) ? &topEdge : nullptr, hasBorder(BottomBorder) ? &bottomEdge : nullptr, -1);
     }
 
     // Top border
     if (hasBorder(TopBorder)) {
         start = borderRect.topLeft();
         end = borderRect.topRight();
-        paintBorderSide(painter, start, end, &topEdge, false, hasBorder(LeftBorder) ? &leftEdge : 0, hasBorder(RightBorder) ? &rightEdge : 0, 1);
+        paintBorderSide(painter, start, end, &topEdge, false, hasBorder(LeftBorder) ? &leftEdge : nullptr, hasBorder(RightBorder) ? &rightEdge : nullptr, 1);
     }
 
     // Bottom border
     if (hasBorder(BottomBorder)) {
         start = borderRect.bottomLeft();
         end = borderRect.bottomRight();
-        paintBorderSide(painter, start, end, &bottomEdge, false, hasBorder(LeftBorder) ? &leftEdge : 0, hasBorder(RightBorder) ? &rightEdge : 0, -1);
+        paintBorderSide(painter,
+                        start,
+                        end,
+                        &bottomEdge,
+                        false,
+                        hasBorder(LeftBorder) ? &leftEdge : nullptr,
+                        hasBorder(RightBorder) ? &rightEdge : nullptr,
+                        -1);
     }
 
     // FIXME: Diagonal borders

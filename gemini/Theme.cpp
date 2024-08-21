@@ -32,7 +32,7 @@ class Theme::Private
 {
 public:
     Private()
-        : inheritedTheme(0)
+        : inheritedTheme(nullptr)
         , iconPath("icons/")
         , imagePath("images/")
         , fontPath("fonts/")
@@ -123,7 +123,7 @@ void Theme::setInherits(const QString &newValue)
     if (newValue != d->inherits) {
         if (d->inheritedTheme) {
             delete d->inheritedTheme;
-            d->inheritedTheme = 0;
+            d->inheritedTheme = nullptr;
         }
         d->inherits = newValue;
 
@@ -366,13 +366,13 @@ Theme *Theme::load(const QString &id, QObject *parent)
 
     if (themeComponent.isError()) {
         qWarning() << themeComponent.errorString();
-        return 0;
+        return nullptr;
     }
 
     Theme *theme = qobject_cast<Theme *>(themeComponent.create());
     if (!theme) {
         qWarning() << "Failed to create theme instance!";
-        return 0;
+        return nullptr;
     }
 
     return theme;

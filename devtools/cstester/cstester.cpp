@@ -55,12 +55,12 @@ KoDocument *openFile(const QString &filename)
 
     if (!error.isEmpty()) {
         qWarning() << "Error creating document" << mimetype << error;
-        return 0;
+        return nullptr;
     }
 
     KoDocument *document = part->document();
 
-    if (0 != document) {
+    if (nullptr != document) {
         QUrl url = QUrl::fromLocalFile(filename);
 
         document->setCheckAutoSaveFile(false);
@@ -71,7 +71,7 @@ KoDocument *openFile(const QString &filename)
         } else {
             qWarning() << "openUrl failed" << filename << mimetype << error;
             delete document;
-            document = 0;
+            document = nullptr;
         }
     }
     return document;
@@ -105,7 +105,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
 
 QVector<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
-    CSThumbProvider *tp = 0;
+    CSThumbProvider *tp = nullptr;
 
     if (KoPADocument *doc = qobject_cast<KoPADocument *>(document)) {
         tp = new CSThumbProviderStage(doc);

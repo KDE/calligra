@@ -164,7 +164,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO *sectionsIO)
     }
 
     delete store;
-    finaly.store = 0;
+    finaly.store = nullptr;
     delete context;
 
     QDir(fullFileNameTmpOld).removeRecursively();

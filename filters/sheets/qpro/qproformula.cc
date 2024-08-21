@@ -14,7 +14,7 @@ static QpFormulaConv gOverride[] = {
     {22,  QpFormula::func1,         "NOT("},    // (e.g.)  #NOT# 3  => NOT(3)
     {24,  QpFormula::binaryOperand, "+"},       // string concat "&" => "+"
     {32,  QpFormula::func0,         "ERR()"},   // @err => ERR()
-    {33,  QpFormula::absKludge,     0},         // @abs => if( (arg)<0; -(arg); (arg))
+    {33,  QpFormula::absKludge,     nullptr},         // @abs => if( (arg)<0; -(arg); (arg))
     {34,  QpFormula::func1,         "INT("},    // @int => INT
     {38,  QpFormula::func0,         "PI()"},    // @pi => PI()
     {47,  QpFormula::func2,         "MOD("},    // @mod => MOD
@@ -28,7 +28,7 @@ static QpFormulaConv gOverride[] = {
     {87,  QpFormula::funcV,         "variance("},// @var    => variance
     {88,  QpFormula::funcV,         "stddev("},  // @std    => stddev
     {101, QpFormula::func2,         "REPT("},    // @repeat => REPT
-    {0,   0,                        0}
+    {0,   nullptr,                        nullptr}
 };
 
 Calligra::Sheets::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableNames& pTable)

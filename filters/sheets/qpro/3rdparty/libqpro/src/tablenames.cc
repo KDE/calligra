@@ -16,7 +16,7 @@
 QpTableNames::QpTableNames()
 {
     for (int lIdx = 0; lIdx < cNameCnt; ++lIdx) {
-        cName[lIdx] = 0;
+        cName[lIdx] = nullptr;
     }
 }
 
@@ -24,7 +24,7 @@ QpTableNames::~QpTableNames()
 {
     for (int lIdx = 0; lIdx < cNameCnt; ++lIdx) {
         delete [] cName[lIdx];
-        cName[lIdx] = 0;
+        cName[lIdx] = nullptr;
     }
 }
 
@@ -41,10 +41,10 @@ QpTableNames::name(unsigned pIdx, const char* pName)
 const char*
 QpTableNames::name(unsigned pIdx)
 {
-    char* lResult = 0;
+    char* lResult = nullptr;
 
     if (pIdx < cNameCnt) {
-        if ((lResult = cName[pIdx]) == 0) {
+        if ((lResult = cName[pIdx]) == nullptr) {
             if (pIdx < 26) {
                 lResult = cName[pIdx] = new char[2];
                 lResult[0] = (char)('A' + pIdx);
@@ -65,6 +65,6 @@ QpTableNames::name(unsigned pIdx)
 int
 QpTableNames::allocated(unsigned pIdx)
 {
-    return (pIdx >= cNameCnt ? 0 : (cName[pIdx] != 0));
+    return (pIdx >= cNameCnt ? 0 : (cName[pIdx] != nullptr));
 }
 

@@ -8,7 +8,7 @@
 #include "TextChange.h"
 
 TextChanges::TextChanges()
-    : m_root(0)
+    : m_root(nullptr)
 {
 }
 
@@ -20,7 +20,7 @@ TextChanges::~TextChanges()
         change = change->next();
         delete prev;
     }
-    m_root = 0;
+    m_root = nullptr;
 }
 
 void TextChanges::inserted(int position, const QString &text)
@@ -34,7 +34,7 @@ void TextChanges::changed(int position, const QString &former, const QString &la
     change->setPosition(position);
     change->setNewText(latter);
     change->setOldText(former);
-    if (m_root == 0) {
+    if (m_root == nullptr) {
         m_root = change;
         return;
     }

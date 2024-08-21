@@ -23,7 +23,7 @@ class FormulaEditorHighlighter::Private
 public:
     Private()
     {
-        selection = 0;
+        selection = nullptr;
         tokens = Tokens();
         rangeCount = 0;
         rangeChanged = false;
