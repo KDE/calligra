@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-07-19 09:10+0300\n"
+"PO-Revision-Date: 2024-08-20 09:26+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -732,24 +732,21 @@ msgid "Create backup file:"
 msgstr "יצירת קובץ גיבוי:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "הצגת רשת:"
+msgstr "הצגת רשת"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "הצמדה לרשת:"
+msgstr "הצמדה לרשת"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "רשת"
+msgstr "רשת:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -757,20 +754,16 @@ msgid "Grid color:"
 msgstr "צבע הרשת:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&אופקי:"
+msgstr "ריווח אופקי:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "א&נכי:"
+msgstr "ריווח אנכי:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -908,7 +901,7 @@ msgstr "שחזור קבצים"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "התעלמות מהכול"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -927,6 +920,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"בחירה בביטול, כל הקבצים שניתן לשחזר יישמרו.\n"
+"לחיצה על אישור תשחזר את הקבצים שנבחרו, אלו שלא נבחרו יישארו במקומם."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1340,7 +1335,7 @@ msgstr "איתור מהסמן"
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
-msgstr ""
+msgstr "להתחיל לחפש מהסמן הנוכחי"
 
 #: main/KoMainWindow.cpp:158
 #, kde-format
@@ -1598,12 +1593,12 @@ msgstr "ממוצע גאומטרי"
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "חיצים"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "משעשע"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1767,11 +1762,10 @@ msgid "Date: %1"
 msgstr "תאריך: %1"
 
 #: main/KoView.cpp:345
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "צורה"
+msgstr "הוספת צורה"
 
 #: main/KoView.cpp:356
 #, kde-format
@@ -4780,10 +4774,9 @@ msgid "Icon only"
 msgstr "סמל בלבד"
 
 #: widgets/KoModeBox.cpp:504
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "חד־צדדי"
+msgstr "צד סרגל הצד"
 
 #: widgets/KoModeBox.cpp:513
 #, kde-format
@@ -4938,17 +4931,15 @@ msgstr "מימין לשמאל"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "שוליים"
+msgstr "שול עליון:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "תחתון:"
+msgstr "שול תחתון:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format

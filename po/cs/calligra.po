@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-08-14 15:44+0200\n"
+"PO-Revision-Date: 2024-08-15 13:46+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -4756,30 +4756,26 @@ msgid "Apply to document"
 msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Levý okraj:"
+msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Pravý okraj:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Okraj u vazby:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Okraj stránky:"
+msgstr ""
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4888,17 +4884,15 @@ msgstr "Zprava doleva"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Okraje"
+msgstr "Horní okraj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Dole:"
+msgstr "Dolní okraj:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5222,12 +5216,3 @@ msgstr "Všechny podporované formáty"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Top:"
-#~ msgstr "Nahoře:"
-
-#~ msgid "Binding edge:"
-#~ msgstr "Okraj u vazby:"
-
-#~ msgid "Page edge:"
-#~ msgstr "Okraj stránky:"
