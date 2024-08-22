@@ -23,7 +23,7 @@ class KoFilterChain;
 class KOMAIN_TEST_EXPORT KoFilterEntry : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<KoFilterEntry> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<KoFilterEntry>;
 
     // KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
     /**

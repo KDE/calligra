@@ -431,15 +431,16 @@ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction di
     QStringList lst = nativeMimeTypes;
 
     // Now look for filters which output each of those natives mimetypes
-    foreach (const QString &natit, nativeMimeTypes) {
+    for (const QString &natit : std::as_const(nativeMimeTypes)) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
         // debugFilter <<"output formats connected to mime" << natit <<" :" << outMimes;
-        foreach (const QString &mit, outMimes) {
-            if (!lst.contains(mit)) // append only if not there already. Qt4: QSet<QString>?
+        for (const QString &mit : outMimes) {
+            if (!lst.contains(mit)) { // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
+            }
         }
     }
-    foreach (Vertex *vertex, vertices) {
+    for (Vertex *vertex : std::as_const(vertices)) {
         delete vertex;
     }
     vertices.clear();

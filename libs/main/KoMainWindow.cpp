@@ -887,6 +887,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         mimeFilter = mime.globPatterns();
     }
 
+    qWarning() << _native_format << mimeFilter;
+
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         debugMain << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
