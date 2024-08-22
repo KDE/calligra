@@ -1,9 +1,3 @@
-include_directories(
-    ../../../outputhelper/
-    ${LIBWPS_INCLUDE_DIRS}
-    ${KOMAIN_INCLUDES}
-)
-
 set(wps2odt_PART_SRCS
     WPSImport.cpp
     ../../../outputhelper/StringDocumentHandler.cxx
@@ -18,8 +12,7 @@ target_link_libraries(calligra_filter_wps2odt PRIVATE
     LibOdfGen::LibOdfGen
     LibRevenge::LibRevenge
     LibRevenge::LibRevengeStream
-    ${LIBWPS_LIBRARIES}
+    LibWps::LibWps
 )
 
 install(TARGETS calligra_filter_wps2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
-

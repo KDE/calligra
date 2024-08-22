@@ -20,9 +20,9 @@
 #include <librevenge/librevenge.h>
 #include <libwps/libwps.h>
 
-#include <OutputFileHelper.hxx>
-#include <StringDocumentHandler.hxx>
-#include <writerperfect_utils.hxx>
+#include <../../../outputhelper/OutputFileHelper.hxx>
+#include <../../../outputhelper/StringDocumentHandler.hxx>
+#include <../../../outputhelper/writerperfect_utils.hxx>
 
 #include <KoFilterChain.h>
 #include <KoOdf.h>
