@@ -1,7 +1,6 @@
 include_directories(
     ../../../outputhelper/
     ${LIBODFGEN_INCLUDE_DIRS}
-    ${LIBREVENGE_INCLUDE_DIRS}
     ${LIBWPD_INCLUDE_DIRS}
     ${LIBWPG_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
@@ -16,8 +15,13 @@ set(wpd2odt_PART_SRCS
 
 add_library(calligra_filter_wpd2odt MODULE ${wpd2odt_PART_SRCS})
 
-target_link_libraries(calligra_filter_wpd2odt
-    komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
+target_link_libraries(calligra_filter_wpd2odt PRIVATE
+    komain
+    ${LIBODFGEN_LIBRARIES}
+    LibRevenge::LibRevenge
+    ${LIBWPD_LIBRARIES}
+    ${LIBWPG_LIBRARIES}
+)
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 

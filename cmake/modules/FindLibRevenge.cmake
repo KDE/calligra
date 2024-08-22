@@ -1,37 +1,45 @@
-# - Try to find the librevenge
-# Once done this will define
-#
-#  LIBREVENGE_FOUND - system has LIBREVENGE
-#  LIBREVENGE_INCLUDE_DIRS - the LIBREVENGE include directory
-#  LIBREVENGE_LIBRARIES - Link these to use LIBREVENGE
-#  LIBREVENGE_DEFINITIONS - Compiler switches required for using LIBREVENGE
-#
+# SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
+# SPDX-License-Identifier: BSD-3-Clause
 
-include(LibFindMacros)
-libfind_pkg_check_modules(REVENGE_PKGCONF librevenge-0.0)
+find_package(PkgConfig QUIET)
+pkg_check_modules(PKG_LibRevenge QUIET librevenge-0.0 IMPORTED_TARGET)
 
-find_path(REVENGE_INCLUDE_DIR
+set(LibRevenge_VERSION ${PKG_LibRevenge_VERSION})
+set(LibRevenge_PREFIX ${PKG_LibRevenge_PREFIX})
+
+find_path(LibRevenge_INCLUDE_DIRS
     NAMES librevenge/librevenge.h
-    HINTS ${REVENGE_PKGCONF_INCLUDE_DIRS} ${REVENGE_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES librevenge-0.0
+    HINTS ${PKG_LibRevenge_INCLUDE_DIRS}
 )
 
-find_path(REVENGE_STREAM_INCLUDE_DIR
-    NAMES librevenge-stream/librevenge-stream.h
-    HINTS ${REVENGE_STREAM_PKGCONF_INCLUDE_DIRS} ${REVENGE_STREAM_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES librevenge-0.0
-)
-
-find_library(REVENGE_LIBRARY
+find_library(LibRevenge_LIBRARIES
     NAMES revenge librevenge revenge-0.0 librevenge-0.0
-    HINTS ${REVENGE_STREAM_PKGCONF_LIBRARY_DIRS} ${REVENGE_STREAM_PKGCONF_LIBDIR}
+    HINTS ${PKG_LibRevenge_LIBRARY_DIRS}
 )
 
-find_library(REVENGE_STREAM_LIBRARY
-    NAMES revenge-stream librevenge-stream revenge-stream-0.0 librevenge-stream-0.0
-    HINTS ${REVENGE_PKGCONF_LIBRARY_DIRS} ${REVENGE_PKGCONF_LIBDIR}
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(LibRevenge
+    FOUND_VAR LibRevenge_FOUND
+    REQUIRED_VARS LibRevenge_PREFIX LibRevenge_INCLUDE_DIRS
+    VERSION_VAR LibRevenge_VERSION
 )
 
-set(LIBREVENGE_PROCESS_LIBS REVENGE_LIBRARY REVENGE_STREAM_LIBRARY)
-set(LIBREVENGE_PROCESS_INCLUDES REVENGE_INCLUDE_DIR REVENGE_STREAM_INCLUDE_DIR)
-libfind_process(LIBREVENGE)
+if(LibRevenge_FOUND AND NOT TARGET LibRevenge::LibRevenge)
+    add_library(LibRevenge::LibRevenge UNKNOWN IMPORTED)
+    set_target_properties(LibRevenge::LibRevenge PROPERTIES
+        IMPORTED_LOCATION "${LibRevenge_LIBRARIES}"
+        INTERFACE_COMPILE_OPTIONS "${PKG_LibRevenge_CFLAGS}"
+        INTERFACE_INCLUDE_DIRECTORIES "${LibRevenge_INCLUDE_DIRS}"
+    )
+    if (TARGET PkgConfig::PKG_LibRevenge)
+        target_link_libraries(LibRevenge::LibRevenge INTERFACE PkgConfig::PKG_LibRevenge)
+    endif()
+endif()
+
+mark_as_advanced(LibRevenge_LIBRARIES LibRevenge_INCLUDE_DIRS LibRevenge_VERSION)
+
+include(FeatureSummary)
+set_package_properties(LibRevenge PROPERTIES
+    URL "http://sf.net/p/libwpd/librevenge/"
+    DESCRIPTION "A base library for writing document import filters"
+)

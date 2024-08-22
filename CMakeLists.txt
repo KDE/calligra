@@ -617,11 +617,15 @@ set_package_properties(Okular6 PROPERTIES
 ##
 macro_optional_find_package(LibRevenge)
 set_package_properties(LibRevenge PROPERTIES
-    DESCRIPTION "A base library for writing document import filters"
-    URL "http://sf.net/p/libwpd/librevenge/"
     PURPOSE "Required by various import filters"
-    TYPE OPTIONAL
-    )
+    TYPE REQUIRED
+)
+
+macro_optional_find_package(LibRevengeStream)
+set_package_properties(LibRevengeStream PROPERTIES
+    PURPOSE "Required by various import filters"
+    TYPE REQUIRED
+)
 
 ##
 ## Test for libodfgen
@@ -672,11 +676,9 @@ set_package_properties(LibWps PROPERTIES
 ##
 macro_optional_find_package(LibVisio)
 set_package_properties(LibVisio PROPERTIES
-    DESCRIPTION "Visio Import Filter Library"
-    URL "https://wiki.documentfoundation.org/DLP/Libraries/libvisio"
     PURPOSE "Required by the visio import filter"
     TYPE OPTIONAL
-    )
+)
 
 ##
 ## Test for Apple Keynote Document Library
