@@ -267,7 +267,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler *globals, S
         }
         const unsigned long id = charts.back();
 
-        std::map<unsigned long, Object *>::iterator it = worksheetHandler->sharedObjects().find(id);
+        auto it = worksheetHandler->sharedObjects().find(id);
         if (it == worksheetHandler->sharedObjects().end()) {
             qCWarning(lcSidewinder) << "Got a chart substream without having a chart in the worksheet";
             return;
@@ -275,7 +275,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler *globals, S
         m_chartObject = dynamic_cast<ChartObject *>(it->second);
         worksheetHandler->sharedObjects().erase(id); // remove from the sharedObjects and take over ownership
         Q_ASSERT(m_chartObject);
-        m_chart = m_chartObject->m_chart;
+        m_chart = m_chartObject->m_chart.get();
         Q_ASSERT(m_chart);
         m_currentObj = m_chart;
 

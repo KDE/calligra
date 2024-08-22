@@ -1325,10 +1325,10 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
             continue;
         }
 
-        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
-        c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
-        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
+        auto writer = new KoOdfChartWriter(chart->m_chart.get());
+        writer->m_href = QString("Chart%1").arg(this->charts.count()+1);
+        writer->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
+        writer->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
         const unsigned long colL = chart->m_colL;
         const unsigned long dxL = chart->m_dxL;
@@ -1339,16 +1339,16 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
         const unsigned long rwT = chart->m_rwT;
         //const unsigned long dyB = chart->m_dyB;
 
-        c->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
-        c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
+        writer->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
+        writer->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
+            writer->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
                                     encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
 
-        this->charts << c;
+        this->charts << writer;
 
-        c->saveIndex(xmlWriter);
+        writer->saveIndex(xmlWriter);
     }
 
     // handle graphics objects

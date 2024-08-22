@@ -998,7 +998,7 @@ void ExcelImport::Private::processCellObjects(Cell *ic, Calligra::Sheets::Cell o
             hasObjects = true;
         }
 
-        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart.get());
         c->setSheetReplacement(false);
         c->m_href = QString("Chart%1").arg(this->charts.count() + 1);
         c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
