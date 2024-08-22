@@ -86,7 +86,7 @@ public Q_SLOTS:
 
 protected:
     /// Create default option widget
-    QWidget *createOptionWidget() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
     void copy() const override;
 

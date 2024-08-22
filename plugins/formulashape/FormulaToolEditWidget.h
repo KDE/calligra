@@ -4,10 +4,10 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef FORMULATOOLWIDGET_H
-#define FORMULATOOLWIDGET_H
+#ifndef FormulaToolEditWidget_H
+#define FormulaToolEditWidget_H
 
-#include "ui_FormulaToolWidget.h"
+#include "ui_FormulaToolEditWidget.h"
 #include <QMenu>
 #include <QTabWidget>
 
@@ -22,26 +22,21 @@ class QTableWidgetItem;
  * widget provides two buttons - save and load formula. For saving and loading it
  * uses the loadOdf() and saveOdf() methods of KoFormulaShape.
  */
-class FormulaToolWidget : public QWidget, Ui::FormulaToolWidget
+class FormulaToolEditWidget : public QWidget, Ui::FormulaToolEditWidget
 {
     Q_OBJECT
 public:
     /// Standard constructor
-    explicit FormulaToolWidget(KoFormulaTool *tool, QWidget *parent = nullptr);
+    explicit FormulaToolEditWidget(KoFormulaTool *tool, QWidget *parent = nullptr);
 
     /// Standard destructor
-    ~FormulaToolWidget() override;
+    ~FormulaToolEditWidget() override;
 
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool(KoFormulaTool *tool);
 
 public Q_SLOTS:
     void insertSymbol(QTableWidgetItem *item);
-
-private:
-    void setupButton(QToolButton *button, QMenu &menu, const QString &text, QList<QString>, int length = 8);
-
-    static QList<QString> symbolsInRange(int start, int length);
 
 private:
     /// The KoFormulaTool this options widget belongs to
@@ -61,4 +56,4 @@ private:
     QMenu m_rowMenu;
 };
 
-#endif // FORMULATOOLWIDGET_H
+#endif // FormulaToolEditWidget_H

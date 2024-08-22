@@ -10,6 +10,7 @@
 #include "BasicElement.h"
 #include "FormulaDebug.h"
 #include "FormulaEditor.h"
+#include "FormulaToolEditWidget.h"
 #include "FormulaToolWidget.h"
 #include "KoFormulaShape.h"
 
@@ -40,16 +41,6 @@
 #include <KoXmlWriter.h>
 #include <QClipboard>
 
-// this adds const to non-const objects (like std::as_const)
-template<typename T>
-Q_DECL_CONSTEXPR typename std::add_const<T>::type &koAsConst(T &t) noexcept
-{
-    return t;
-}
-// prevent rvalue arguments:
-template<typename T>
-void koAsConst(const T &&) = delete;
-
 KoFormulaTool::KoFormulaTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_formulaShape(nullptr)
@@ -73,14 +64,14 @@ KoFormulaTool::~KoFormulaTool()
 void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
-    foreach (KoShape *shape, shapes) {
+    for (KoShape *shape : shapes) {
         m_formulaShape = dynamic_cast<KoFormulaShape *>(shape);
-        if (m_formulaShape)
+        if (m_formulaShape) {
             break;
+        }
     }
 
-    if (m_formulaShape == nullptr) // none found
-    {
+    if (m_formulaShape == nullptr) { // none found
         Q_EMIT done();
         return;
     }
@@ -108,7 +99,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *
         m_formulaEditor = new FormulaEditor(m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), &FormulaData::dataChanged, this, &KoFormulaTool::updateCursor);
-    for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
+    for (const TemplateAction &templateAction : std::as_const(m_templateActions)) {
         connect(templateAction.action, &QAction::triggered, this, [this, templateAction] {
             insert(templateAction.data);
         });
@@ -119,7 +110,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape *
 
 void KoFormulaTool::deactivate()
 {
-    for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
+    for (const TemplateAction &templateAction : std::as_const(m_templateActions)) {
         disconnect(templateAction.action, &QAction::triggered, this, nullptr);
     }
     if (!m_formulaShape) {
@@ -333,11 +324,14 @@ void KoFormulaTool::insertSymbol(const QString &symbol)
     }
 }
 
-QWidget *KoFormulaTool::createOptionWidget()
+QList<QPointer<QWidget>> KoFormulaTool::createOptionWidgets()
 {
-    FormulaToolWidget *options = new FormulaToolWidget(this);
-    options->setFormulaTool(this);
-    return options;
+    auto insertOption = new FormulaToolWidget(this);
+    insertOption->setFormulaTool(this);
+
+    auto editOption = new FormulaToolEditWidget(this);
+    editOption->setFormulaTool(this);
+    return {insertOption, editOption};
 }
 
 KoFormulaShape *KoFormulaTool::shape()

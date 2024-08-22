@@ -96,6 +96,7 @@ set( formulashape_PART_SRCS
    FormulaCommand.cpp
    KoFormulaToolFactory.cpp
    FormulaToolWidget.cpp
+   FormulaToolEditWidget.cpp
    FormulaDocument.cpp
    FormulaPart.cpp
 )
@@ -112,6 +113,7 @@ endif ()
 
 ki18n_wrap_ui( formulashape_PART_SRCS
     FormulaToolWidget.ui
+    FormulaToolEditWidget.ui
 )
 
 add_library(calligra_shape_formula MODULE ${formulashape_PART_SRCS})

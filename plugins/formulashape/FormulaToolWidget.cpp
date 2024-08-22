@@ -21,10 +21,11 @@
 #include <QWidgetAction>
 
 FormulaToolWidget::FormulaToolWidget(KoFormulaTool *tool, QWidget *parent)
-    : QTabWidget(parent)
+    : QWidget(parent)
+    , m_tool(tool)
 {
-    m_tool = tool;
     setupUi(this);
+    setWindowTitle(i18nc("@title:group", "Insert"));
     // setup the element insert menus
     m_fractionMenu.addAction(m_tool->action("insert_fraction"));
     m_fractionMenu.addAction(m_tool->action("insert_bevelled_fraction"));

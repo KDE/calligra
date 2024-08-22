@@ -46,6 +46,7 @@ TestCursor.cpp
    ../KoFormulaShape.cpp
    ../FormulaDocument.cpp
    ../FormulaToolWidget.cpp
+   ../FormulaToolEditWidget.cpp
    ../FormulaCommandUpdate.cpp
    ../KoFormulaShapeFactory.cpp
    ../KoFormulaTool.cpp
