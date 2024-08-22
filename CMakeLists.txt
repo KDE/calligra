@@ -635,8 +635,8 @@ set_package_properties(LibOdfGen PROPERTIES
     DESCRIPTION "Open Document Format Generation Library"
     URL "http://sf.net/p/libwpd/libodfgen/"
     PURPOSE "Required by various import filters"
-    TYPE OPTIONAL
-    )
+    TYPE REQUIRED
+)
 
 ##
 ## Test for WordPerfect Document Library

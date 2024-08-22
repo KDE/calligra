@@ -1,6 +1,5 @@
 include_directories(
     ../../../outputhelper/
-    ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBWPS_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
@@ -16,7 +15,7 @@ add_library(calligra_filter_wps2odt MODULE ${wps2odt_PART_SRCS})
 
 target_link_libraries(calligra_filter_wps2odt PRIVATE
     komain
-    ${LIBODFGEN_LIBRARIES} 
+    LibOdfGen::LibOdfGen
     LibRevenge::LibRevenge
     ${LIBWPS_LIBRARIES}
 )
