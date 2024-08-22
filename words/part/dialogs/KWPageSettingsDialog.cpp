@@ -20,6 +20,8 @@
 #include <QListWidget>
 #include <QPushButton>
 
+using namespace Qt::StringLiterals;
+
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
     : KoPageLayoutDialog(parent, page.pageStyle().pageLayout())
     , m_document(document)
@@ -35,24 +37,40 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
     KPageWidgetItem *columnsPage = addPage(m_columns, i18n("Columns"));
 
-    QWidget *pageStyleWidget = new QWidget(this);
-    QHBoxLayout *pageStyleLayout = new QHBoxLayout(pageStyleWidget);
+    auto pageStyleWidget = new QWidget(this);
+    auto pageStyleLayout = new QHBoxLayout(pageStyleWidget);
     pageStyleLayout->setContentsMargins({});
+    pageStyleLayout->setSpacing({});
     KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
+    auto separator = new QFrame(this);
+    separator->setFrameStyle(QFrame::VLine);
+    separator->setFixedWidth(1);
+    pageStyleLayout->addWidget(separator);
     connect(m_pageStylesView, &QListWidget::currentRowChanged, this, &KWPageSettingsDialog::pageStyleCurrentRowChanged);
-    QVBoxLayout *pageStyleLayout2 = new QVBoxLayout();
+    auto pageStyleLayout2 = new QVBoxLayout();
+    pageStyleLayout2->setContentsMargins(style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+                                         style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                         style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+                                         style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+    pageStyleLayout2->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     pageStyleLayout->addLayout(pageStyleLayout2);
+
     m_clonePageStyleButton = new QPushButton(i18n("Clone"), pageStyleWidget);
+    m_clonePageStyleButton->setIcon(QIcon::fromTheme(u"edit-clone-symbolic"_s));
     connect(m_clonePageStyleButton, &QAbstractButton::clicked, this, &KWPageSettingsDialog::pageStyleCloneClicked);
     pageStyleLayout2->addWidget(m_clonePageStyleButton);
+
     m_deletePageStyleButton = new QPushButton(i18n("Delete"), pageStyleWidget);
+    m_deletePageStyleButton->setIcon(QIcon::fromTheme(u"delete-symbolic"_s));
     connect(m_deletePageStyleButton, &QAbstractButton::clicked, this, &KWPageSettingsDialog::pageStyleDeleteClicked);
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
-    foreach (KPageWidgetItem *item, QList<KPageWidgetItem *>() << columnsPage << stylePage)
+
+    for (const auto item : {columnsPage, stylePage}) {
         m_pages[item->name()] = item;
+    }
 
     reloadPageStyles();
 
