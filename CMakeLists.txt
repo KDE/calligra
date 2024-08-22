@@ -609,7 +609,7 @@ set_package_properties(Okular6 PROPERTIES
     DESCRIPTION "A unified document viewer"
     URL "https://okular.kde.org/"
     PURPOSE "Required to build the plugins for Okular"
-    TYPE OPTIONAL
+    TYPE RECOMMENDED
 )
 
 ##
@@ -618,13 +618,13 @@ set_package_properties(Okular6 PROPERTIES
 macro_optional_find_package(LibRevenge)
 set_package_properties(LibRevenge PROPERTIES
     PURPOSE "Required by various import filters"
-    TYPE REQUIRED
+    TYPE RECOMMENDED
 )
 
 macro_optional_find_package(LibRevengeStream)
 set_package_properties(LibRevengeStream PROPERTIES
     PURPOSE "Required by various import filters"
-    TYPE REQUIRED
+    TYPE RECOMMENDED
 )
 
 ##
@@ -635,7 +635,7 @@ set_package_properties(LibOdfGen PROPERTIES
     DESCRIPTION "Open Document Format Generation Library"
     URL "http://sf.net/p/libwpd/libodfgen/"
     PURPOSE "Required by various import filters"
-    TYPE REQUIRED
+    TYPE RECOMMENDED
 )
 
 ##
@@ -646,8 +646,8 @@ set_package_properties(LibWpd PROPERTIES
     DESCRIPTION "WordPerfect Document Library"
     URL "http://libwpd.sourceforge.net/"
     PURPOSE "Required by the Words WPD import filter"
-    TYPE OPTIONAL
-    )
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for WordPerfect Graphics Library
@@ -657,8 +657,8 @@ set_package_properties(LibWpg PROPERTIES
     DESCRIPTION "WordPerfect Graphics Library"
     URL "http://libwpg.sourceforge.net/"
     PURPOSE "Required by the Karbon WPG import filter"
-    TYPE OPTIONAL
-    )
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for Microsoft Works Document Library
@@ -668,8 +668,8 @@ set_package_properties(LibWps PROPERTIES
     DESCRIPTION "Microsoft Works Document Library"
     URL "http://libwps.sourceforge.net/"
     PURPOSE "Required by the Words WPS import filter"
-    TYPE OPTIONAL
-    )
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for Microsoft Visio Document Library
@@ -688,8 +688,8 @@ set_package_properties(LibEtonyek PROPERTIES
     DESCRIPTION "Apple Keynote Document Library"
     URL "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek"
     PURPOSE "Required by the Stage keynote import filter"
-    TYPE OPTIONAL
-    )
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for qt-poppler
@@ -699,7 +699,7 @@ set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"
     PURPOSE "Required by the Karbon PDF import filter and CSTester PDF feature"
-    TYPE OPTIONAL
+    TYPE RECOMMENDED
 )
 
 ##
