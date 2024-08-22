@@ -123,17 +123,15 @@ private:
 class ChartObject : public Object
 {
 public:
-    KoChart::Chart *m_chart;
+    std::unique_ptr<KoChart::Chart> m_chart;
 
     explicit ChartObject(unsigned long id)
         : Object(Chart, id)
-        , m_chart(new KoChart::Chart)
+        , m_chart(std::make_unique<KoChart::Chart>())
     {
     }
-    ~ChartObject() override
-    {
-        delete m_chart;
-    }
+    ~ChartObject() override = default;
+
     bool operator==(const ChartObject &other) const
     {
         return this == &other;
@@ -143,9 +141,8 @@ public:
         return !(*this == other);
     }
 
-private:
-    ChartObject(const ChartObject &co) = delete = delete;
-    ChartObject &operator=(const ChartObject &co) = delete = delete;
+    ChartObject(const ChartObject &co) = delete;
+    ChartObject &operator=(const ChartObject &co) = delete;
 };
 
 /**

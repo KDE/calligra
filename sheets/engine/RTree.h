@@ -203,6 +203,9 @@ public:
 
     QStringList dataDescription() const;
 
+    // disable copy constructor
+    RTree(const RTree &other) = delete;
+
 protected:
     class Node;
     class NonLeafNode;
@@ -231,9 +234,6 @@ protected:
     }
 
 private:
-    // disable copy constructor
-    RTree(const RTree &other) = delete = delete = delete = delete = delete = delete = delete;
-
     struct LoadData {
         QRect rect;
         const T *data;
@@ -311,9 +311,10 @@ public:
     }
     virtual QStringList dataDescription() const = 0;
 
-private:
     // disable copy constructor
-    Node(const Node &other) = delete = delete = delete = delete = delete = delete = delete;
+    Node(const Node &other) = delete;
+
+private:
     friend class NonLeafNode;
 };
 
@@ -359,9 +360,10 @@ public:
     virtual void operator=(const LeafNode &other);
     virtual QStringList dataDescription() const override;
 
-private:
     // disable copy constructor
-    LeafNode(const LeafNode &other) = delete = delete = delete = delete = delete = delete = delete;
+    LeafNode(const LeafNode &other) = delete;
+
+private:
 };
 
 /**
@@ -402,9 +404,8 @@ public:
     virtual bool validate() override;
     virtual QStringList dataDescription() const override;
 
-private:
     // disable copy constructor
-    NonLeafNode(const NonLeafNode &other) = delete = delete = delete = delete = delete = delete = delete;
+    NonLeafNode(const NonLeafNode &other) = delete;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -139,11 +139,11 @@ public:
         return 0;
     }
 
-private:
     // don't copy or assign it
-    PLF(const PLF<T, shortCount> &rhs) = delete = delete;
-    PLF<T, shortCount> &operator=(const PLF<T, shortCount> &rhs) = delete = delete;
+    PLF(const PLF<T, shortCount> &rhs) = delete;
+    PLF<T, shortCount> &operator=(const PLF<T, shortCount> &rhs) = delete;
 
+private:
     std::vector<T *> m_items;
     mutable typename std::vector<T *>::const_iterator it;
 };
@@ -248,10 +248,10 @@ public:
 
     void dumpCPs() const;
 
-private:
     // don't assign it
-    PLCF<T> &operator=(const PLCF<T> &rhs) = delete = delete;
+    PLCF<T> &operator=(const PLCF<T> &rhs) = delete;
 
+private:
     // An empty default constructor for the convertPLCF friend. Don't use it
     // unless you know what you are doing :-)
     PLCF() = default;
@@ -563,10 +563,10 @@ public:
         return m_crun == 0;
     }
 
-private:
     // don't assign it
-    FKP<Offset> &operator=(const FKP<Offset> &rhs) = delete = delete;
+    FKP<Offset> &operator=(const FKP<Offset> &rhs) = delete;
 
+private:
     // An empty default constructor for the convertFKP friend. Don't use it
     // unless you know what you are doing :-)
     FKP() = default;
@@ -655,7 +655,6 @@ class FKPIterator
 public:
     FKPIterator(const FKP<Offset> &fkp)
         : m_fkp(fkp)
-        , m_index(0)
     {
     }
 
@@ -720,13 +719,13 @@ public:
         return m_index >= m_fkp.m_crun;
     }
 
-private:
     // don't copy or assign it
-    FKPIterator(const FKPIterator<Offset> &rhs) = delete = delete;
-    FKPIterator<Offset> &operator=(const FKPIterator<Offset> &rhs) = delete = delete;
+    FKPIterator(const FKPIterator<Offset> &rhs) = delete;
+    FKPIterator<Offset> &operator=(const FKPIterator<Offset> &rhs) = delete;
 
+private:
     const FKP<Offset> &m_fkp;
-    U8 m_index;
+    U8 m_index{0};
 };
 
 template<class Offset>
