@@ -1,11 +1,13 @@
+# SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
+# SPDX-License-Identifier: BSD-3-Clause
 
-include_directories(${CMAKE_BINARY_DIR}/filters/ ${LIBWPG_INCLUDE_DIR}/)
+add_library(calligra_filter_wpg2svg MODULE WPGImport.cpp)
 
-set(wpg2svg_PART_SRCS WPGImport.cpp)
-
-add_library(calligra_filter_wpg2svg MODULE ${wpg2svg_PART_SRCS})
-
-target_link_libraries(calligra_filter_wpg2svg komain ${LIBWPG_LIBRARIES} LibRevenge::LibRevenge LibRevenge::LibRevengeStream)
+target_link_libraries(calligra_filter_wpg2svg
+    komain
+    LibWpg::LibWpg
+    LibRevenge::LibRevenge
+    LibRevenge::LibRevengeStream
+)
 
 install(TARGETS calligra_filter_wpg2svg DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
-

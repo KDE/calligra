@@ -19,9 +19,9 @@
 #include <libodfgen/libodfgen.hxx>
 #include <libwpg/libwpg.h>
 
-#include <OutputFileHelper.hxx>
-#include <StringDocumentHandler.hxx>
-#include <writerperfect_utils.hxx>
+#include <../../../outputhelper/OutputFileHelper.hxx>
+#include <../../../outputhelper/StringDocumentHandler.hxx>
+#include <../../../outputhelper/writerperfect_utils.hxx>
 
 #include <KoFilterChain.h>
 #include <KoOdf.h>
@@ -31,7 +31,7 @@
 #include <QByteArray>
 #include <QString>
 
-#include <stdio.h>
+#include <cstdio>
 
 class OdgOutputFileHelper : public OutputFileHelper
 {
@@ -40,9 +40,7 @@ public:
         : OutputFileHelper(outFileName, password)
     {
     }
-    ~OdgOutputFileHelper() override
-    {
-    }
+    ~OdgOutputFileHelper() override = default;
 
     bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {

@@ -1,29 +1,45 @@
-# - Try to find LibWpg
-# Once done this will define
-#
-#  LIBWPG_FOUND       - libwpg is available
-#  LIBWPG_INCLUDE_DIRS - include directory, e.g. /usr/include
-#  LIBWPG_LIBRARIES   - the libraries needed to use LibWpg
-#  LIBWPG_DEFINITIONS - Compiler switches required for using LibWpg
-#
-# SPDX-FileCopyrightText: 2007 Ariya Hidayat <ariya@kde.org>
-# Redistribution and use is allowed according to the terms of the BSD license.
+# SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
+# SPDX-License-Identifier: BSD-3-Clause
 
-include(LibFindMacros)
-libfind_package(LIBWPG LibWpd)
-libfind_pkg_check_modules(LIBWPG_PKGCONF libwpg-0.3)
+find_package(PkgConfig QUIET)
+pkg_check_modules(PKG_LibWpg QUIET libwpg-0.3 IMPORTED_TARGET)
 
-find_path(LIBWPG_INCLUDE_DIR
+set(LibWpg_VERSION ${PKG_LibWpg_VERSION})
+set(LibWpg_PREFIX ${PKG_LibWpg_PREFIX})
+
+find_path(LibWpg_INCLUDE_DIRS
     NAMES libwpg/libwpg.h
-    HINTS ${LIBWPG_PKGCONF_INCLUDE_DIRS} ${LIBWPG_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libwpg-0.3
+    HINTS ${PKG_LibWpg_INCLUDE_DIRS}
 )
 
-find_library(LIBWPG_LIBRARY
-    NAMES wpg wpg-0.3
-    HINTS ${LIBWPG_PKGCONF_LIBRARY_DIRS} ${LIBWPG_PKGCONF_LIBDIR}
+find_library(LibWpg_LIBRARIES
+    NAMES wpg-0.3
+    HINTS ${PKG_LibWpg_LIBRARY_DIRS}
 )
 
-set(LIBWPG_PROCESS_LIBS LIBWPG_LIBRARY LIBWPD_LIBRARIES)
-set(LIBWPG_PROCESS_INCLUDES LIBWPG_INCLUDE_DIR LIBWPD_INCLUDE_DIRS)
-libfind_process(LIBWPG)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(LibWpg
+    FOUND_VAR LibWpg_FOUND
+    REQUIRED_VARS LibWpg_PREFIX LibWpg_INCLUDE_DIRS
+    VERSION_VAR LibWpg_VERSION
+)
+
+if(LibWpg_FOUND AND NOT TARGET LibWpg::LibWpg)
+    add_library(LibWpg::LibWpg UNKNOWN IMPORTED)
+    set_target_properties(LibWpg::LibWpg PROPERTIES
+        IMPORTED_LOCATION "${LibWpg_LIBRARIES}"
+        INTERFACE_COMPILE_OPTIONS "${PKG_LibWpg_CFLAGS}"
+        INTERFACE_INCLUDE_DIRECTORIES "${LibWpg_INCLUDE_DIRS}"
+    )
+    if (TARGET PkgConfig::PKG_LibWpg)
+        target_link_libraries(LibWpg::LibWpg INTERFACE PkgConfig::PKG_LibWpg)
+    endif()
+endif()
+
+mark_as_advanced(LibWpg_LIBRARIES LibWpg_INCLUDE_DIRS LibWpg_VERSION)
+
+include(FeatureSummary)
+set_package_properties(LibWpg PROPERTIES
+    URL http://libwpg.sourceforge.net/
+    DESCRIPTION "WordPerfect Graphics Library"
+)

@@ -1,7 +1,6 @@
 include_directories(
     ../../../outputhelper/
     ${LIBWPD_INCLUDE_DIRS}
-    ${LIBWPG_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
 
@@ -17,10 +16,10 @@ add_library(calligra_filter_wpd2odt MODULE ${wpd2odt_PART_SRCS})
 target_link_libraries(calligra_filter_wpd2odt PRIVATE
     komain
     LibOdfGen::LibOdfGen
+    LibWpg::LibWpg
     LibRevenge::LibRevenge
     LibRevenge::LibRevengeStream
     ${LIBWPD_LIBRARIES}
-    ${LIBWPG_LIBRARIES}
 )
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
@@ -35,6 +34,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
         kookularGenerator_odt
     )
 
-    install( FILES okularWpd_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_wpd_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

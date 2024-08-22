@@ -1,8 +1,5 @@
-include_directories(
-    ../../../outputhelper/
-    ${LIBWPG_INCLUDE_DIRS}
-    ${KOMAIN_INCLUDES}
-)
+# SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
+# SPDX-License-Identifier: BSD-3-Clause
 
 set(wpg2odg_PART_SRCS
     WPGImport.cpp
@@ -18,8 +15,7 @@ target_link_libraries(calligra_filter_wpg2odg PRIVATE
     LibOdfGen::LibOdfGen
     LibRevenge::LibRevenge
     LibRevenge::LibRevengeStream
-    ${LIBWPG_LIBRARIES}
+    LibWpg::LibWpg
 )
 
 install(TARGETS calligra_filter_wpg2odg DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
-
