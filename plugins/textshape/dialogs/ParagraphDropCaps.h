@@ -42,6 +42,8 @@ private Q_SLOTS:
     void dropedCharacterCountChanged(int count);
 
 private:
+    void setSettingEnabled(bool enabled);
+
     Ui::ParagraphDropCaps widget;
 
     bool m_dropCapsInherited;

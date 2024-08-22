@@ -15,6 +15,8 @@ ParagraphDropCaps::ParagraphDropCaps(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+    widget.mainLayout->insertStretch(2);
 
     widget.distance->changeValue(0);
     widget.characters->setSpecialValueText(i18n("Whole Word"));
@@ -27,23 +29,34 @@ ParagraphDropCaps::ParagraphDropCaps(QWidget *parent)
     connect(widget.lines, &QSpinBox::valueChanged, this, &ParagraphDropCaps::dropsLineSpanChanged);
 }
 
+void ParagraphDropCaps::setSettingEnabled(bool enabled)
+{
+    widget.distanceLabel->setEnabled(enabled);
+    widget.distance->setEnabled(enabled);
+    widget.charactersLabel->setEnabled(enabled);
+    widget.characters->setEnabled(enabled);
+    widget.linesLabel->setEnabled(enabled);
+    widget.lines->setEnabled(enabled);
+}
+
 void ParagraphDropCaps::dropCapsStateChanged()
 {
     if (widget.capsState->isChecked()) {
-        widget.setting->setEnabled(true);
+        setSettingEnabled(true);
         m_dropCapsInherited = false;
     } else {
-        widget.setting->setEnabled(false);
+        setSettingEnabled(false);
     }
     Q_EMIT parStyleChanged();
 }
 
 void ParagraphDropCaps::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
-    if (!style)
+    if (!style) {
         return;
+    }
     if (!style->dropCaps()) {
-        widget.setting->setEnabled(false);
+        setSettingEnabled(false);
         return;
     }
 
