@@ -28,9 +28,7 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool *tool, QWidget *parent)
     zoomInButton->click();
 }
 
-KoZoomToolWidget::~KoZoomToolWidget()
-{
-}
+KoZoomToolWidget::~KoZoomToolWidget() = default;
 
 void KoZoomToolWidget::paintBirdEye()
 {

@@ -158,9 +158,7 @@ ConditionalWidget::ConditionalWidget(QWidget *parent, const char * /*name*/, Qt:
     connect(m_condition_3, &QComboBox::textHighlighted, this, &ConditionalWidget::slotTextChanged3);
 }
 
-ConditionalWidget::~ConditionalWidget()
-{
-}
+ConditionalWidget::~ConditionalWidget() = default;
 
 void ConditionalWidget::slotTextChanged1(const QString &text)
 {

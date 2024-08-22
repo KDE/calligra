@@ -30,9 +30,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {
@@ -51,19 +49,12 @@ KoTableRowStyle::KoTableRowStyle()
 }
 
 KoTableRowStyle::KoTableRowStyle(const KoTableRowStyle &rhs)
-    : d(rhs.d)
-{
-}
 
-KoTableRowStyle &KoTableRowStyle::operator=(const KoTableRowStyle &rhs)
-{
-    d = rhs.d;
-    return *this;
-}
+    = default;
 
-KoTableRowStyle::~KoTableRowStyle()
-{
-}
+KoTableRowStyle &KoTableRowStyle::operator=(const KoTableRowStyle &rhs) = default;
+
+KoTableRowStyle::~KoTableRowStyle() = default;
 
 void KoTableRowStyle::copyProperties(const KoTableRowStyle *style)
 {

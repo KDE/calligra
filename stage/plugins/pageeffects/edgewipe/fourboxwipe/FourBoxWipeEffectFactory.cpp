@@ -22,9 +22,7 @@ FourBoxWipeEffectFactory::FourBoxWipeEffectFactory()
     addStrategy(new CornersOutWipeStrategy(true));
 }
 
-FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory()
-{
-}
+FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Corners In"), kli18n("Corners In Reverse"), kli18n("Corners Out"), kli18n("Corners Out Reverse")};
 

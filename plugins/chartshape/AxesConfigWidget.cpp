@@ -95,9 +95,7 @@ AxesConfigWidget::Private::Private(AxesConfigWidget *parent)
     connect(ui.gapBetweenSets, &QAbstractSpinBox::editingFinished, parent, &AxesConfigWidget::slotGapBetweenSets);
 }
 
-AxesConfigWidget::Private::~Private()
-{
-}
+AxesConfigWidget::Private::~Private() = default;
 
 // ================================================================
 //                     class AxesConfigWidget

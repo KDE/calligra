@@ -38,8 +38,8 @@ namespace Libemf
 class KOVECTORIMAGE_EXPORT AbstractOutput
 {
 public:
-    AbstractOutput(){};
-    virtual ~AbstractOutput(){};
+    AbstractOutput() = default;
+    virtual ~AbstractOutput() = default;
 
     /**
        Initialisation routine

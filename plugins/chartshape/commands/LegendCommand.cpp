@@ -32,9 +32,7 @@ LegendCommand::LegendCommand(KoChart::Legend *legend)
     m_newExpansion = legend->expansion();
 }
 
-LegendCommand::~LegendCommand()
-{
-}
+LegendCommand::~LegendCommand() = default;
 
 void LegendCommand::redo()
 {

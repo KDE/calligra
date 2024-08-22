@@ -41,9 +41,7 @@ KoAnchorTextRange::KoAnchorTextRange(KoShapeAnchor *parent, QTextDocument *docum
     Q_ASSERT(parent);
     parent->setTextLocation(this);
 }
-KoAnchorTextRange::~KoAnchorTextRange()
-{
-}
+KoAnchorTextRange::~KoAnchorTextRange() = default;
 
 KoShapeAnchor *KoAnchorTextRange::anchor() const
 {

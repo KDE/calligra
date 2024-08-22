@@ -46,9 +46,7 @@ public:
         setToolTip(i18n("Press to apply fill to selection"));
     }
 
-    ~KarbonFillStyleWidget() override
-    {
-    }
+    ~KarbonFillStyleWidget() override = default;
 
     void setFill(QSharedPointer<KoShapeBackground> fill)
     {
@@ -207,9 +205,7 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget *parent)
     connect(m_fillFrame, &QAbstractButton::clicked, this, &KarbonSmallStylePreview::fillApplied);
 }
 
-KarbonSmallStylePreview::~KarbonSmallStylePreview()
-{
-}
+KarbonSmallStylePreview::~KarbonSmallStylePreview() = default;
 
 void KarbonSmallStylePreview::canvasChanged(const KoCanvasBase *canvas)
 {

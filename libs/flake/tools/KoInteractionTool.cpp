@@ -17,9 +17,7 @@ KoInteractionTool::KoInteractionTool(KoCanvasBase *canvas)
 {
 }
 
-KoInteractionTool::~KoInteractionTool()
-{
-}
+KoInteractionTool::~KoInteractionTool() = default;
 
 void KoInteractionTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

@@ -16,13 +16,9 @@
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
 
-KoTextSoftPageBreak::KoTextSoftPageBreak()
-{
-}
+KoTextSoftPageBreak::KoTextSoftPageBreak() = default;
 
-KoTextSoftPageBreak::~KoTextSoftPageBreak()
-{
-}
+KoTextSoftPageBreak::~KoTextSoftPageBreak() = default;
 
 bool KoTextSoftPageBreak::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

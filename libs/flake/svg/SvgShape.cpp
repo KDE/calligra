@@ -6,9 +6,7 @@
 
 #include "SvgShape.h"
 
-SvgShape::~SvgShape()
-{
-}
+SvgShape::~SvgShape() = default;
 
 bool SvgShape::saveSvg(SvgSavingContext & /*context*/)
 {

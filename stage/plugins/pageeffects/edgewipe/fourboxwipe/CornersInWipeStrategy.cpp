@@ -17,9 +17,7 @@ CornersInWipeStrategy::CornersInWipeStrategy(bool reverse)
 {
 }
 
-CornersInWipeStrategy::~CornersInWipeStrategy()
-{
-}
+CornersInWipeStrategy::~CornersInWipeStrategy() = default;
 
 void CornersInWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

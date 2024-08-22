@@ -22,9 +22,7 @@ ConnectionToolFactory::ConnectionToolFactory()
     setActivationShapeId("flake/always");
 }
 
-ConnectionToolFactory::~ConnectionToolFactory()
-{
-}
+ConnectionToolFactory::~ConnectionToolFactory() = default;
 
 KoToolBase *ConnectionToolFactory::createTool(KoCanvasBase *canvas)
 {

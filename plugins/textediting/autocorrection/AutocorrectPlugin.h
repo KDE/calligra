@@ -15,9 +15,7 @@ class AutocorrectPlugin : public QObject
 
 public:
     AutocorrectPlugin(QObject *parent, const QVariantList &);
-    ~AutocorrectPlugin() override
-    {
-    }
+    ~AutocorrectPlugin() override = default;
 };
 
 #endif

@@ -17,9 +17,7 @@ CornersOutWipeStrategy::CornersOutWipeStrategy(bool reverse)
 {
 }
 
-CornersOutWipeStrategy::~CornersOutWipeStrategy()
-{
-}
+CornersOutWipeStrategy::~CornersOutWipeStrategy() = default;
 
 void CornersOutWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

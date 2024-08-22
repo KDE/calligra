@@ -19,9 +19,7 @@ KPrSaloonDoorWipeStrategy::KPrSaloonDoorWipeStrategy(int subType, const char *sm
 {
 }
 
-KPrSaloonDoorWipeStrategy::~KPrSaloonDoorWipeStrategy()
-{
-}
+KPrSaloonDoorWipeStrategy::~KPrSaloonDoorWipeStrategy() = default;
 
 void KPrSaloonDoorWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

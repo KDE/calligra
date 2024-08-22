@@ -31,9 +31,7 @@ public:
     {
     }
 
-    ~KoFileListItem() override
-    {
-    }
+    ~KoFileListItem() override = default;
 
     const KFileItem &fileItem() const
     {
@@ -47,9 +45,7 @@ private:
 class KoRecentDocumentsPanePrivate
 {
 public:
-    KoRecentDocumentsPanePrivate()
-    {
-    }
+    KoRecentDocumentsPanePrivate() = default;
 
     ~KoRecentDocumentsPanePrivate()
     {

@@ -21,9 +21,7 @@ VeeWipeEffectFactory::VeeWipeEffectFactory()
     addStrategy(new VeeWipeStrategy(FromLeft, "right", false));
 }
 
-VeeWipeEffectFactory::~VeeWipeEffectFactory()
-{
-}
+VeeWipeEffectFactory::~VeeWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom"), kli18n("From Left")};
 

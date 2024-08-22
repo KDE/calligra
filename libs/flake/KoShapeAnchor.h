@@ -56,8 +56,8 @@ public:
     class PlacementStrategy
     {
     public:
-        PlacementStrategy(){};
-        virtual ~PlacementStrategy(){};
+        PlacementStrategy() = default;
+        virtual ~PlacementStrategy() = default;
 
         /**
          * Reparent the anchored shape to not have a parent shape container (and model)
@@ -77,8 +77,8 @@ public:
     class TextLocation
     {
     public:
-        TextLocation(){};
-        virtual ~TextLocation(){};
+        TextLocation() = default;
+        virtual ~TextLocation() = default;
         virtual const QTextDocument *document() const = 0;
         virtual int position() const = 0;
     };

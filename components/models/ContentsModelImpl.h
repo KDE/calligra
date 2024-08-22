@@ -27,12 +27,8 @@ namespace Components
 class ContentsModelImpl
 {
 public:
-    ContentsModelImpl()
-    {
-    }
-    virtual ~ContentsModelImpl()
-    {
-    }
+    ContentsModelImpl() = default;
+    virtual ~ContentsModelImpl() = default;
 
     virtual int rowCount() const = 0;
     virtual QVariant data(int index, ContentsModel::Role role) const = 0;

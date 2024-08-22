@@ -63,9 +63,7 @@ KPrTriangleWipeEffectFactory::KPrTriangleWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, LeftReverse, "triangleWipe", "left", true));
 }
 
-KPrTriangleWipeEffectFactory::~KPrTriangleWipeEffectFactory()
-{
-}
+KPrTriangleWipeEffectFactory::~KPrTriangleWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Up"),
                                                   kli18n("Up Reverse"),

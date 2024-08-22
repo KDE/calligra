@@ -22,13 +22,9 @@
 // ================================================================
 //                         class HtmlFile
 
-HtmlFile::HtmlFile()
-{
-}
+HtmlFile::HtmlFile() = default;
 
-HtmlFile::~HtmlFile()
-{
-}
+HtmlFile::~HtmlFile() = default;
 
 KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
 {

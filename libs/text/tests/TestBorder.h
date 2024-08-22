@@ -14,9 +14,7 @@ class TestBorder : public QObject
 {
     Q_OBJECT
 public:
-    TestBorder()
-    {
-    }
+    TestBorder() = default;
 
 private Q_SLOTS:
     void testBorder();

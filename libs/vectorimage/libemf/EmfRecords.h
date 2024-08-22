@@ -111,8 +111,8 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and BitBltRecord(BitBltRecord&).
-    explicit BitBltRecord(BitBltRecord &);
-    BitBltRecord &operator=(BitBltRecord &);
+    explicit BitBltRecord(BitBltRecord &) = delete;
+    BitBltRecord &operator=(BitBltRecord &) = delete;
 
 private:
     QRect m_bounds;
@@ -275,8 +275,8 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and StretchDiBitsRecord(StretchDiBitsRecord&).
-    explicit StretchDiBitsRecord(StretchDiBitsRecord &);
-    StretchDiBitsRecord &operator=(StretchDiBitsRecord &);
+    explicit StretchDiBitsRecord(StretchDiBitsRecord &) = delete;
+    StretchDiBitsRecord &operator=(StretchDiBitsRecord &) = delete;
 
 private:
     QRect m_Bounds;

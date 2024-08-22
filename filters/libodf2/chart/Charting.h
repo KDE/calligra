@@ -50,9 +50,7 @@ public:
         , m_formula(formula)
     {
     }
-    virtual ~Value()
-    {
-    }
+    virtual ~Value() = default;
 };
 
 // ----------------------------------------------------------------
@@ -61,12 +59,8 @@ public:
 class Format
 {
 public:
-    Format()
-    {
-    }
-    virtual ~Format()
-    {
-    }
+    Format() = default;
+    virtual ~Format() = default;
 };
 
 class LineFormat : public Format
@@ -202,12 +196,8 @@ public:
 class ChartImpl
 {
 public:
-    ChartImpl()
-    {
-    }
-    virtual ~ChartImpl()
-    {
-    }
+    ChartImpl() = default;
+    virtual ~ChartImpl() = default;
     virtual QByteArray name() const = 0;
 };
 
@@ -419,9 +409,7 @@ public:
         , m_text(text)
     {
     }
-    ~Text() override
-    {
-    }
+    ~Text() override = default;
 };
 
 class Axis : public Obj
@@ -466,9 +454,7 @@ public:
         , m_maximum(0)
     {
     }
-    ~Axis() override
-    {
-    }
+    ~Axis() override = default;
 };
 
 class Cell
@@ -651,9 +637,7 @@ public:
         : Obj()
     {
     }
-    ~PlotArea() override
-    {
-    }
+    ~PlotArea() override = default;
 };
 
 class Legend : public Obj
@@ -663,9 +647,7 @@ public:
         : Obj()
     {
     }
-    ~Legend() override
-    {
-    }
+    ~Legend() override = default;
 };
 
 /// The main charting class that represents a single chart.

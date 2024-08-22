@@ -19,12 +19,8 @@ class QSize;
 class CSThumbProvider
 {
 public:
-    CSThumbProvider()
-    {
-    }
-    virtual ~CSThumbProvider()
-    {
-    }
+    CSThumbProvider() = default;
+    virtual ~CSThumbProvider() = default;
 
     virtual QVector<QImage> createThumbnails(const QSize &thumbSize) = 0;
 };

@@ -12,9 +12,7 @@ class TestSectionStyle : public QObject
 {
     Q_OBJECT
 public:
-    TestSectionStyle()
-    {
-    }
+    TestSectionStyle() = default;
 
 private Q_SLOTS:
     void testSectionStyle();

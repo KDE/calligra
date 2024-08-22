@@ -46,9 +46,7 @@ KoOdfChartWriter::KoOdfChartWriter(KoChart::Chart *chart)
     m_drawLayer = false;
 }
 
-KoOdfChartWriter::~KoOdfChartWriter()
-{
-}
+KoOdfChartWriter::~KoOdfChartWriter() = default;
 
 // Takes a Excel cellrange and translates it into a ODF cellrange
 QString KoOdfChartWriter::normalizeCellRange(QString range)

@@ -14,9 +14,7 @@ SimpleTouchArea::SimpleTouchArea(QQuickItem *parent)
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
-SimpleTouchArea::~SimpleTouchArea()
-{
-}
+SimpleTouchArea::~SimpleTouchArea() = default;
 
 bool SimpleTouchArea::event(QEvent *event)
 {

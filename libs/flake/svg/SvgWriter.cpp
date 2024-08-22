@@ -57,9 +57,7 @@ SvgWriter::SvgWriter(const QList<KoShape *> &toplevelShapes, const QSizeF &pageS
 {
 }
 
-SvgWriter::~SvgWriter()
-{
-}
+SvgWriter::~SvgWriter() = default;
 
 bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 {

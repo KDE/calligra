@@ -32,9 +32,7 @@
 
 using namespace MusicCore;
 
-Engraver::Engraver()
-{
-}
+Engraver::Engraver() = default;
 
 void Engraver::engraveSheet(Sheet *sheet, int firstSystem, QSizeF size, bool doEngraveBars, int *lastSystem)
 {

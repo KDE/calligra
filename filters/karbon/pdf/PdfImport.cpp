@@ -40,9 +40,7 @@ PdfImport::PdfImport(QObject *parent, const QVariantList &)
     debugPdf << "PDF Import Filter";
 }
 
-PdfImport::~PdfImport()
-{
-}
+PdfImport::~PdfImport() = default;
 
 KoFilter::ConversionStatus PdfImport::convert(const QByteArray &from, const QByteArray &to)
 {

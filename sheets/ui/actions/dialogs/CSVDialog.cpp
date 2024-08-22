@@ -18,9 +18,7 @@ CSVDialog::CSVDialog(QWidget *parent)
 {
 }
 
-CSVDialog::~CSVDialog()
-{
-}
+CSVDialog::~CSVDialog() = default;
 
 QList<KoCsvImportDialog::DataType> CSVDialog::dataTypes()
 {

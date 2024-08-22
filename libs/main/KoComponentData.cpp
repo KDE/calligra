@@ -14,19 +14,12 @@ KoComponentData::KoComponentData(const KAboutData &aboutData)
 }
 
 KoComponentData::KoComponentData(const KoComponentData &other)
-    : d(other.d)
-{
-}
 
-KoComponentData::~KoComponentData()
-{
-}
+    = default;
 
-KoComponentData &KoComponentData::operator=(const KoComponentData &other)
-{
-    d = other.d;
-    return *this;
-}
+KoComponentData::~KoComponentData() = default;
+
+KoComponentData &KoComponentData::operator=(const KoComponentData &other) = default;
 
 bool KoComponentData::operator==(const KoComponentData &other) const
 {

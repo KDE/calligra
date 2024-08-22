@@ -26,9 +26,7 @@ Goto::Goto(Actions *actions)
 {
 }
 
-Goto::~Goto()
-{
-}
+Goto::~Goto() = default;
 
 QAction *Goto::createAction()
 {

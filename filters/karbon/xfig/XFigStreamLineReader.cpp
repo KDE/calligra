@@ -18,9 +18,7 @@ XFigStreamLineReader::XFigStreamLineReader(QIODevice *device)
 {
 }
 
-XFigStreamLineReader::~XFigStreamLineReader()
-{
-}
+XFigStreamLineReader::~XFigStreamLineReader() = default;
 
 bool XFigStreamLineReader::atEnd() const
 {

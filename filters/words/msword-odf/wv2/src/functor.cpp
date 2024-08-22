@@ -20,9 +20,7 @@
 
 using namespace wvWare;
 
-FunctorBase::~FunctorBase()
-{
-}
+FunctorBase::~FunctorBase() = default;
 
 void FunctorBase::operator()() const
 {

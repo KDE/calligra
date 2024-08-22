@@ -82,9 +82,7 @@ KoTextShapeData::KoTextShapeData()
     setDocument(new QTextDocument, true);
 }
 
-KoTextShapeData::~KoTextShapeData()
-{
-}
+KoTextShapeData::~KoTextShapeData() = default;
 
 void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership)
 {

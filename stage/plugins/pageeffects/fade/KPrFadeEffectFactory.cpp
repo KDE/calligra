@@ -21,9 +21,7 @@ KPrFadeEffectFactory::KPrFadeEffectFactory()
     addStrategy(new KPrFadeOverColorStrategy());
 }
 
-KPrFadeEffectFactory::~KPrFadeEffectFactory()
-{
-}
+KPrFadeEffectFactory::~KPrFadeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Crossfade"), kli18n("Fade over Color")};
 

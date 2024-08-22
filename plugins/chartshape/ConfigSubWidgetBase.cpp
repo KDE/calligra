@@ -22,9 +22,7 @@ ConfigSubWidgetBase::ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent
 {
 }
 
-ConfigSubWidgetBase::~ConfigSubWidgetBase()
-{
-}
+ConfigSubWidgetBase::~ConfigSubWidgetBase() = default;
 
 void ConfigSubWidgetBase::setChartTypes(QList<ChartType> types)
 {

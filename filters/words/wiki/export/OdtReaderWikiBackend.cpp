@@ -35,9 +35,7 @@ OdtReaderWikiBackend::OdtReaderWikiBackend()
 {
 }
 
-OdtReaderWikiBackend::~OdtReaderWikiBackend()
-{
-}
+OdtReaderWikiBackend::~OdtReaderWikiBackend() = default;
 
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc

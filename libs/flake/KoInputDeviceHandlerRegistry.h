@@ -30,8 +30,8 @@ public:
     static KoInputDeviceHandlerRegistry *instance();
 
 private:
-    KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry &);
-    KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry &);
+    KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry &) = delete;
+    KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry &) = delete;
     void init();
 
     class Private;

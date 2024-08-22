@@ -131,8 +131,8 @@ public:
     void applyGrpprlChpx(Word97::CHP *chp, const Style *style, const StyleSheet *styleSheet) const;
 
 private:
-    ListLevel(const ListLevel &rhs);
-    ListLevel &operator=(const ListLevel &rhs);
+    ListLevel(const ListLevel &rhs) = delete;
+    ListLevel &operator=(const ListLevel &rhs) = delete;
 
     int writeCharProperty(U16 sprm, U8 value, U8 **grpprl);
     int writeCharProperty(U16 sprm, U16 value, U8 **grpprl);
@@ -162,8 +162,8 @@ public:
     void applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const;
 
 private:
-    ListData(const ListData &rhs);
-    ListData &operator=(const ListData &rhs);
+    ListData(const ListData &rhs) = delete;
+    ListData &operator=(const ListData &rhs) = delete;
 
     Word97::LSTF m_lstf;
     std::vector<ListLevel *> m_listLevels;
@@ -187,8 +187,8 @@ public:
     void dump() const;
 
 private:
-    ListFormatOverrideLVL(const ListFormatOverrideLVL &rhs);
-    ListFormatOverrideLVL &operator=(const ListFormatOverrideLVL &rhs);
+    ListFormatOverrideLVL(const ListFormatOverrideLVL &rhs) = delete;
+    ListFormatOverrideLVL &operator=(const ListFormatOverrideLVL &rhs) = delete;
 
     Word97::LFOLVL m_lfolvl;
     ListLevel *m_level;
@@ -209,8 +209,8 @@ public:
     void appendListFormatOverrideLVL(ListFormatOverrideLVL *listFormatOverrideLVL);
 
 private:
-    ListFormatOverride(const ListFormatOverride &rhs);
-    ListFormatOverride &operator=(const ListFormatOverride &rhs);
+    ListFormatOverride(const ListFormatOverride &rhs) = delete;
+    ListFormatOverride &operator=(const ListFormatOverride &rhs) = delete;
 
     Word97::LFO m_lfo;
     std::vector<ListFormatOverrideLVL *> m_lfoLevels;
@@ -600,9 +600,7 @@ ListText::ListText()
 {
 }
 
-ListText::~ListText()
-{
-}
+ListText::~ListText() = default;
 
 ListInfo::ListInfo(Word97::PAP &pap, Word97::CHP &chp, ListInfoProvider &listInfoProvider)
     : m_linkedIstd(istdNil)

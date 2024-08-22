@@ -46,9 +46,7 @@ TextDocumentStructureModel::TextDocumentStructureModel(QObject *parent)
     connect(this, &QAbstractItemModel::modelReset, this, &TextDocumentStructureModel::onModelReset);
 }
 
-TextDocumentStructureModel::~TextDocumentStructureModel()
-{
-}
+TextDocumentStructureModel::~TextDocumentStructureModel() = default;
 
 int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 {

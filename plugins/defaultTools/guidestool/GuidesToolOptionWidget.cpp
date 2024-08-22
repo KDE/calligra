@@ -30,9 +30,7 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     connect(widget.addButton, &QAbstractButton::clicked, this, &GuidesToolOptionWidget::addLine);
 }
 
-GuidesToolOptionWidget::~GuidesToolOptionWidget()
-{
-}
+GuidesToolOptionWidget::~GuidesToolOptionWidget() = default;
 
 void GuidesToolOptionWidget::setHorizontalGuideLines(const QList<qreal> &lines)
 {

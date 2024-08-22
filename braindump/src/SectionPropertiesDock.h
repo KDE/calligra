@@ -49,9 +49,7 @@ private:
 class SectionPropertiesDockFactory : public KoDockFactoryBase
 {
 public:
-    SectionPropertiesDockFactory()
-    {
-    }
+    SectionPropertiesDockFactory() = default;
 
     QString id() const override
     {

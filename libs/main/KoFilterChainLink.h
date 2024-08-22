@@ -46,8 +46,8 @@ public:
     }
 
 private:
-    ChainLink(const ChainLink &rhs);
-    ChainLink &operator=(const ChainLink &rhs);
+    ChainLink(const ChainLink &rhs) = delete;
+    ChainLink &operator=(const ChainLink &rhs) = delete;
 
     void setupCommunication(const KoFilter *const parentFilter) const;
     void setupConnections(const KoFilter *sender, const KoFilter *receiver) const;

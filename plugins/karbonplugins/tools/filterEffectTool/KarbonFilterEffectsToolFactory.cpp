@@ -19,9 +19,7 @@ KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
     setPriority(3);
 }
 
-KarbonFilterEffectsToolFactory::~KarbonFilterEffectsToolFactory()
-{
-}
+KarbonFilterEffectsToolFactory::~KarbonFilterEffectsToolFactory() = default;
 
 KoToolBase *KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -29,9 +29,8 @@ KoElementReference::KoElementReference(const QString &prefix, int counter)
 }
 
 KoElementReference::KoElementReference(const KoElementReference &other)
-    : d(other.d)
-{
-}
+
+    = default;
 
 KoElementReference &KoElementReference::operator=(const KoElementReference &rhs)
 {

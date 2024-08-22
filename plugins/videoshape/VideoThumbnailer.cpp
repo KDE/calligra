@@ -26,9 +26,7 @@ VideoThumbnailer::VideoThumbnailer()
     connect(this, &VideoThumbnailer::signalCreateThumbnail, this, &VideoThumbnailer::slotCreateThumbnail, Qt::QueuedConnection);
 }
 
-VideoThumbnailer::~VideoThumbnailer()
-{
-}
+VideoThumbnailer::~VideoThumbnailer() = default;
 
 void VideoThumbnailer::createThumbnail(VideoData *videoData, const QSize &size)
 {

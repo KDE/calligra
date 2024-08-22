@@ -85,9 +85,7 @@ FormulaToolWidget::FormulaToolWidget(KoFormulaTool *tool, QWidget *parent)
     connect(buttonAlterTable, &QToolButton::triggered, m_tool, &KoFormulaTool::changeTable);
 }
 
-FormulaToolWidget::~FormulaToolWidget()
-{
-}
+FormulaToolWidget::~FormulaToolWidget() = default;
 
 void FormulaToolWidget::setFormulaTool(KoFormulaTool *tool)
 {

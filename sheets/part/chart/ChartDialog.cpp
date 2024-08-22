@@ -17,9 +17,7 @@ ChartDialog::ChartDialog(const QList<KoChart::ChartShape *> &charts, QWidget *pa
     Q_UNUSED(charts);
 }
 
-ChartDialog::~ChartDialog()
-{
-}
+ChartDialog::~ChartDialog() = default;
 
 // static
 QList<KoShapeConfigFactoryBase *> ChartDialog::panels(Map *map)

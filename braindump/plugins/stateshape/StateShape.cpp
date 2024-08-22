@@ -41,9 +41,7 @@ StateShape::StateShape()
     setSize(QSizeF(10, 10));
 }
 
-StateShape::~StateShape()
-{
-}
+StateShape::~StateShape() = default;
 
 void StateShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

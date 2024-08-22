@@ -100,9 +100,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     QVector<KoGenStyles::NamedStyle> styles(bool autoStylesInStylesDotXml, KoGenStyle::Type type) const;
     void saveOdfAutomaticStyles(KoXmlWriter *xmlWriter, bool autoStylesInStylesDotXml, const QByteArray &rawOdfAutomaticStyles) const;

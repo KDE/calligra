@@ -26,9 +26,7 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace()
 {
 }
 
-KoRgbU16ColorSpace::~KoRgbU16ColorSpace()
-{
-}
+KoRgbU16ColorSpace::~KoRgbU16ColorSpace() = default;
 
 QString KoRgbU16ColorSpace::colorSpaceId()
 {

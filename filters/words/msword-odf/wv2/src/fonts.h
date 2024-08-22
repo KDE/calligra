@@ -58,8 +58,8 @@ public:
     void dump() const;
 
 private:
-    FontCollection(const FontCollection &rhs);
-    FontCollection &operator=(const FontCollection &rhs);
+    FontCollection(const FontCollection &rhs) = delete;
+    FontCollection &operator=(const FontCollection &rhs) = delete;
 
     std::vector<Word97::FFN *> m_fonts;
     Word97::FFN *m_fallbackFont;

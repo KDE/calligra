@@ -14,9 +14,7 @@ KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
 {
 }
 
-KoTextShapeDataBasePrivate::~KoTextShapeDataBasePrivate()
-{
-}
+KoTextShapeDataBasePrivate::~KoTextShapeDataBasePrivate() = default;
 
 KoTextShapeDataBase::KoTextShapeDataBase(KoTextShapeDataBasePrivate &dd)
     : d_ptr(&dd)

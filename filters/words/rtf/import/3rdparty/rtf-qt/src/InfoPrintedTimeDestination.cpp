@@ -12,9 +12,7 @@ InfoPrintedTimeDestination::InfoPrintedTimeDestination(Reader *reader, AbstractR
 {
 }
 
-InfoPrintedTimeDestination::~InfoPrintedTimeDestination()
-{
-}
+InfoPrintedTimeDestination::~InfoPrintedTimeDestination() = default;
 
 void InfoPrintedTimeDestination::aboutToEndDestination()
 {

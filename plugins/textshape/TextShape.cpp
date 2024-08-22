@@ -73,9 +73,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     QObject::connect(m_layout, &KoTextDocumentLayout::layoutIsDirty, m_layout, &KoTextDocumentLayout::scheduleLayout);
 }
 
-TextShape::~TextShape()
-{
-}
+TextShape::~TextShape() = default;
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {

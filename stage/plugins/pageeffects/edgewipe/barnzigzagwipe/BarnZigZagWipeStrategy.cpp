@@ -17,9 +17,7 @@ BarnZigZagWipeStrategy::BarnZigZagWipeStrategy(int subtype, const char *smilSubT
 {
 }
 
-BarnZigZagWipeStrategy::~BarnZigZagWipeStrategy()
-{
-}
+BarnZigZagWipeStrategy::~BarnZigZagWipeStrategy() = default;
 
 void BarnZigZagWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

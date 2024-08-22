@@ -29,9 +29,7 @@ KPrDoubleSweepWipeEffectFactory::KPrDoubleSweepWipeEffectFactory()
     addStrategy(new KPrDoubleSweepWipeStrategy(ParallelDiagonalBottomLeftReverse, "doubleSweepWipe", "parallelDiagonalBottomLeft", true));
 }
 
-KPrDoubleSweepWipeEffectFactory::~KPrDoubleSweepWipeEffectFactory()
-{
-}
+KPrDoubleSweepWipeEffectFactory::~KPrDoubleSweepWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Parallel Vertical"),
                                                   kli18n("Parallel Diagonal"),

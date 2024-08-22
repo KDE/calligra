@@ -24,9 +24,7 @@ MusicTool::MusicTool(KoCanvasBase *canvas)
 {
 }
 
-MusicTool::~MusicTool()
-{
-}
+MusicTool::~MusicTool() = default;
 
 void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {

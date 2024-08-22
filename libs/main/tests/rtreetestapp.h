@@ -51,9 +51,7 @@ class Canvas : public QWidget
 
 public:
     Canvas();
-    ~Canvas() override
-    {
-    }
+    ~Canvas() override = default;
 
     void updateCanvas();
     void insert(QRectF &rect);

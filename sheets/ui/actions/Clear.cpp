@@ -24,9 +24,7 @@ ClearAll::ClearAll(Actions *actions)
 {
 }
 
-ClearAll::~ClearAll()
-{
-}
+ClearAll::~ClearAll() = default;
 
 void ClearAll::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -41,9 +39,7 @@ ClearContents::ClearContents(Actions *actions)
 {
 }
 
-ClearContents::~ClearContents()
-{
-}
+ClearContents::~ClearContents() = default;
 
 void ClearContents::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -69,9 +65,7 @@ DeleteCommand::DeleteCommand(KUndo2Command *parent)
     m_checkLock = true;
 }
 
-DeleteCommand::~DeleteCommand()
-{
-}
+DeleteCommand::~DeleteCommand() = default;
 
 void DeleteCommand::setMode(Mode mode)
 {

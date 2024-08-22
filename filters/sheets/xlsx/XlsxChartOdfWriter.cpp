@@ -48,9 +48,7 @@ XlsxChartOdfWriter::XlsxChartOdfWriter(KoChart::Chart *chart, const MSOOXML::Dra
     m_drawLayer = false;
 }
 
-XlsxChartOdfWriter::~XlsxChartOdfWriter()
-{
-}
+XlsxChartOdfWriter::~XlsxChartOdfWriter() = default;
 
 QColor XlsxChartOdfWriter::calculateColorFromGradientStop(const KoChart::Gradient::GradientStop &grad)
 {

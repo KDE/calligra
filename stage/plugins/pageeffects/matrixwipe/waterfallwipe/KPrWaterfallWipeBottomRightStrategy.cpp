@@ -18,9 +18,7 @@ KPrWaterfallWipeBottomRightStrategy::KPrWaterfallWipeBottomRightStrategy(Directi
 {
 }
 
-KPrWaterfallWipeBottomRightStrategy::~KPrWaterfallWipeBottomRightStrategy()
-{
-}
+KPrWaterfallWipeBottomRightStrategy::~KPrWaterfallWipeBottomRightStrategy() = default;
 
 int KPrWaterfallWipeBottomRightStrategy::squareIndex(int x, int y, int columns, int rows)
 {

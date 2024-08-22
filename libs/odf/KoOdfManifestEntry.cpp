@@ -12,7 +12,7 @@
 class Q_DECL_HIDDEN KoOdfManifestEntry::Private
 {
 public:
-    Private(){};
+    Private() = default;
 
     QString fullPath; // manifest:full-path
     QString mediaType; // manifest:media-type

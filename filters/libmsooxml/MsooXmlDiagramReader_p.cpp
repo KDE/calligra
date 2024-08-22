@@ -536,9 +536,7 @@ AbstractAtom::AbstractAtom(const QString &tagName)
     , m_tagName(tagName)
 {
 }
-AbstractAtom::~AbstractAtom()
-{
-}
+AbstractAtom::~AbstractAtom() = default;
 
 void AbstractAtom::dump(Context *context, int level)
 {

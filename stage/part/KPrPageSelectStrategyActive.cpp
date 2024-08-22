@@ -14,9 +14,7 @@ KPrPageSelectStrategyActive::KPrPageSelectStrategyActive(KoPACanvasBase *canvas)
 {
 }
 
-KPrPageSelectStrategyActive::~KPrPageSelectStrategyActive()
-{
-}
+KPrPageSelectStrategyActive::~KPrPageSelectStrategyActive() = default;
 
 const KoPAPageBase *KPrPageSelectStrategyActive::page() const
 {

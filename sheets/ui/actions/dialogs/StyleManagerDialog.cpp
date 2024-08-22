@@ -77,9 +77,7 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent, Selection *selection, St
     connect(m_styleList, &QTreeWidget::currentItemChanged, this, &StyleManagerDialog::selectionChanged);
 }
 
-StyleManagerDialog::~StyleManagerDialog()
-{
-}
+StyleManagerDialog::~StyleManagerDialog() = default;
 
 void StyleManagerDialog::fillComboBox()
 {

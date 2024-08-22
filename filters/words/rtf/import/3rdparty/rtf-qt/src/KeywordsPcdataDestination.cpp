@@ -12,9 +12,7 @@ KeywordsPcdataDestination::KeywordsPcdataDestination(Reader *reader, AbstractRtf
 {
 }
 
-KeywordsPcdataDestination::~KeywordsPcdataDestination()
-{
-}
+KeywordsPcdataDestination::~KeywordsPcdataDestination() = default;
 
 void KeywordsPcdataDestination::aboutToEndDestination()
 {

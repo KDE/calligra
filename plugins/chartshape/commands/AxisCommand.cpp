@@ -31,9 +31,7 @@ AxisCommand::AxisCommand(Axis *axis, ChartShape *chart)
     m_newLabelsPosition = m_axis->odfAxisLabelsPosition();
 }
 
-AxisCommand::~AxisCommand()
-{
-}
+AxisCommand::~AxisCommand() = default;
 
 void AxisCommand::redo()
 {

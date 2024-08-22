@@ -40,9 +40,7 @@ StockConfigWidget::StockConfigWidget(QList<ChartType> types, QWidget *parent)
     init();
 }
 
-StockConfigWidget::~StockConfigWidget()
-{
-}
+StockConfigWidget::~StockConfigWidget() = default;
 
 void StockConfigWidget::init()
 {

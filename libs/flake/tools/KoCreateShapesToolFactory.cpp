@@ -18,9 +18,7 @@ KoCreateShapesToolFactory::KoCreateShapesToolFactory()
     setPriority(1);
 }
 
-KoCreateShapesToolFactory::~KoCreateShapesToolFactory()
-{
-}
+KoCreateShapesToolFactory::~KoCreateShapesToolFactory() = default;
 
 KoToolBase *KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
 {

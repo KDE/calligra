@@ -95,6 +95,4 @@ PptxXmlCommentAuthorsReaderContext::PptxXmlCommentAuthorsReaderContext()
 {
 }
 
-PptxXmlCommentAuthorsReaderContext::~PptxXmlCommentAuthorsReaderContext()
-{
-}
+PptxXmlCommentAuthorsReaderContext::~PptxXmlCommentAuthorsReaderContext() = default;

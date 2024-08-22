@@ -7,9 +7,7 @@
 
 #include "kundo2magicstring.h"
 
-KUndo2MagicString::KUndo2MagicString()
-{
-}
+KUndo2MagicString::KUndo2MagicString() = default;
 
 KUndo2MagicString::KUndo2MagicString(const QString &text)
     : m_text(text)

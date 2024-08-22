@@ -22,9 +22,7 @@ NewSectionCommand::NewSectionCommand(QTextDocument *document)
     setText(kundo2_i18n("New Section"));
 }
 
-NewSectionCommand::~NewSectionCommand()
-{
-}
+NewSectionCommand::~NewSectionCommand() = default;
 
 void NewSectionCommand::undo()
 {

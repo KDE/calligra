@@ -21,9 +21,7 @@ PageBreakCommand::PageBreakCommand(KUndo2Command *parent)
 {
 }
 
-PageBreakCommand::~PageBreakCommand()
-{
-}
+PageBreakCommand::~PageBreakCommand() = default;
 
 void PageBreakCommand::setMode(Mode mode)
 {

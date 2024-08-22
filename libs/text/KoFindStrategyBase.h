@@ -18,12 +18,8 @@ class FindDirection;
 class KoFindStrategyBase
 {
 public:
-    KoFindStrategyBase()
-    {
-    }
-    virtual ~KoFindStrategyBase()
-    {
-    }
+    KoFindStrategyBase() = default;
+    virtual ~KoFindStrategyBase() = default;
 
     /**
      * Get the find dialog

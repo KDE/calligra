@@ -18,13 +18,9 @@
 #include "StageDebug.h"
 #include <KPrDocument.h>
 
-KPrCustomSlideShows::KPrCustomSlideShows()
-{
-}
+KPrCustomSlideShows::KPrCustomSlideShows() = default;
 
-KPrCustomSlideShows::~KPrCustomSlideShows()
-{
-}
+KPrCustomSlideShows::~KPrCustomSlideShows() = default;
 
 void KPrCustomSlideShows::insert(const QString &name, const QList<KoPAPageBase *> &slideShow)
 {

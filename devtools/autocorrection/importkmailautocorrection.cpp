@@ -10,9 +10,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 
-ImportKMailAutocorrection::ImportKMailAutocorrection()
-{
-}
+ImportKMailAutocorrection::ImportKMailAutocorrection() = default;
 
 ImportKMailAutocorrection::~ImportKMailAutocorrection() = default;
 

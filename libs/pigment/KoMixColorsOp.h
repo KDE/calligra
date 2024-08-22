@@ -17,9 +17,7 @@
 class KoMixColorsOp
 {
 public:
-    virtual ~KoMixColorsOp()
-    {
-    }
+    virtual ~KoMixColorsOp() = default;
     /**
      * Mix the colors.
      * @param colors a pointer toward the source pixels

@@ -40,9 +40,7 @@ AsciiExport::AsciiExport(QObject *parent, const QVariantList &)
 {
 }
 
-AsciiExport::~AsciiExport()
-{
-}
+AsciiExport::~AsciiExport() = default;
 
 KoFilter::ConversionStatus AsciiExport::convert(const QByteArray &from, const QByteArray &to)
 {

@@ -51,9 +51,7 @@ SvgImport::SvgImport(QObject *parent, const QVariantList &)
 {
 }
 
-SvgImport::~SvgImport()
-{
-}
+SvgImport::~SvgImport() = default;
 
 KoFilter::ConversionStatus SvgImport::convert(const QByteArray &from, const QByteArray &to)
 {

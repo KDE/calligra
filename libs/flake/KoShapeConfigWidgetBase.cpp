@@ -11,9 +11,7 @@ KoShapeConfigWidgetBase::KoShapeConfigWidgetBase()
 {
 }
 
-KoShapeConfigWidgetBase::~KoShapeConfigWidgetBase()
-{
-}
+KoShapeConfigWidgetBase::~KoShapeConfigWidgetBase() = default;
 
 void KoShapeConfigWidgetBase::setUnit(const KoUnit &)
 {

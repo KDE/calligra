@@ -24,9 +24,7 @@ KoDirectoryStore::KoDirectoryStore(const QString &path, Mode mode, bool writeMim
     init();
 }
 
-KoDirectoryStore::~KoDirectoryStore()
-{
-}
+KoDirectoryStore::~KoDirectoryStore() = default;
 
 void KoDirectoryStore::init()
 {

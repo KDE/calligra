@@ -29,9 +29,7 @@ class GNUMERICFilter : public KoFilter
     Q_OBJECT
 public:
     GNUMERICFilter(QObject *parent, const QVariantList &);
-    ~GNUMERICFilter() override
-    {
-    }
+    ~GNUMERICFilter() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

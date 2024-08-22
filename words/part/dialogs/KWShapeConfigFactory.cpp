@@ -73,9 +73,7 @@ FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
 {
 }
 
-FrameConfigSharedState::~FrameConfigSharedState()
-{
-}
+FrameConfigSharedState::~FrameConfigSharedState() = default;
 
 void FrameConfigSharedState::removeUser()
 {

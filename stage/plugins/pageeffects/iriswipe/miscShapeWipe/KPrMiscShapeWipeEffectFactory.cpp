@@ -38,9 +38,7 @@ KPrMiscShapeWipeEffectFactory::KPrMiscShapeWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, KeyholeReverse, "miscShapeWipe", "keyhole", true));
 }
 
-KPrMiscShapeWipeEffectFactory::~KPrMiscShapeWipeEffectFactory()
-{
-}
+KPrMiscShapeWipeEffectFactory::~KPrMiscShapeWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Heart"), kli18n("Heart Reverse"), kli18n("Keyhole"), kli18n("Keyhole Reverse")};
 

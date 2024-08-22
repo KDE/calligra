@@ -28,9 +28,7 @@ KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData &poin
     setText(kundo2_i18n("Break subpath"));
 }
 
-KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()
-{
-}
+KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand() = default;
 
 void KoPathSegmentBreakCommand::redo()
 {

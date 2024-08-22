@@ -10,9 +10,7 @@
 
 using namespace Calligra::Sheets;
 
-ProtectableObject::ProtectableObject()
-{
-}
+ProtectableObject::ProtectableObject() = default;
 
 ProtectableObject::ProtectableObject(const ProtectableObject &other)
 {

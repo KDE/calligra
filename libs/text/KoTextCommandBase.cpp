@@ -13,9 +13,7 @@ KoTextCommandBase::KoTextCommandBase(KUndo2Command *parent)
 {
 }
 
-KoTextCommandBase::~KoTextCommandBase()
-{
-}
+KoTextCommandBase::~KoTextCommandBase() = default;
 
 void KoTextCommandBase::redo()
 {

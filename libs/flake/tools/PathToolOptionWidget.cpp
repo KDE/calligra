@@ -29,9 +29,7 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     connect(widget.convertToPath, &QAbstractButton::released, tool->action("convert-to-path"), &QAction::trigger);
 }
 
-PathToolOptionWidget::~PathToolOptionWidget()
-{
-}
+PathToolOptionWidget::~PathToolOptionWidget() = default;
 
 void PathToolOptionWidget::setSelectionType(int type)
 {

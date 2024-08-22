@@ -27,9 +27,7 @@
 #include <QImageReader>
 #include <QUrl>
 
-KPrPicturesImport::KPrPicturesImport()
-{
-}
+KPrPicturesImport::KPrPicturesImport() = default;
 
 void KPrPicturesImport::import(KPrView *view)
 {

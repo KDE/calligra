@@ -38,13 +38,9 @@
 #include "KPrShapeApplicationData.h"
 #include "StageDebug.h"
 
-KPrAnimationLoader::KPrAnimationLoader()
-{
-}
+KPrAnimationLoader::KPrAnimationLoader() = default;
 
-KPrAnimationLoader::~KPrAnimationLoader()
-{
-}
+KPrAnimationLoader::~KPrAnimationLoader() = default;
 
 void debugXml(const QString &pos, const KoXmlElement &element)
 {

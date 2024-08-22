@@ -25,9 +25,7 @@ TableElement::TableElement(BasicElement *parent)
     m_framePenStyle = Qt::NoPen;
 }
 
-TableElement::~TableElement()
-{
-}
+TableElement::~TableElement() = default;
 
 void TableElement::paint(QPainter &painter, AttributeManager *am)
 {

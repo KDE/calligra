@@ -21,9 +21,7 @@ KPrMatrixWipeStrategy::KPrMatrixWipeStrategy(int subType, const char *smilType, 
 {
 }
 
-KPrMatrixWipeStrategy::~KPrMatrixWipeStrategy()
-{
-}
+KPrMatrixWipeStrategy::~KPrMatrixWipeStrategy() = default;
 
 void KPrMatrixWipeStrategy::setNeedEvenSquares(bool hor, bool vert)
 {

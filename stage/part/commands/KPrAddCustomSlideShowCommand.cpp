@@ -19,9 +19,7 @@ KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPr
     setText(kundo2_i18n("Add custom slide show"));
 }
 
-KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand()
-{
-}
+KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand() = default;
 
 void KPrAddCustomSlideShowCommand::redo()
 {

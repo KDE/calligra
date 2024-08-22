@@ -28,9 +28,7 @@ public:
      * @param shearHandles if true; the shearhandles will be drawn
      */
     SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
-    ~SelectionDecorator()
-    {
-    }
+    ~SelectionDecorator() = default;
 
     /**
      * paint the decorations.

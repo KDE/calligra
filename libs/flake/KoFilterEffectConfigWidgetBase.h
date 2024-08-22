@@ -18,7 +18,7 @@ class FLAKE_EXPORT KoFilterEffectConfigWidgetBase : public QWidget
     Q_OBJECT
 public:
     explicit KoFilterEffectConfigWidgetBase(QWidget *parent = nullptr);
-    ~KoFilterEffectConfigWidgetBase() override{};
+    ~KoFilterEffectConfigWidgetBase() override = default;
 
     /// Sets the filter effect to be edited by the config widget
     virtual bool editFilterEffect(KoFilterEffect *filterEffect) = 0;

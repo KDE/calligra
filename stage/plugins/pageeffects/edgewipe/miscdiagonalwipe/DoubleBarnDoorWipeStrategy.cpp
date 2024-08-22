@@ -17,9 +17,7 @@ DoubleBarnDoorWipeStrategy::DoubleBarnDoorWipeStrategy()
 {
 }
 
-DoubleBarnDoorWipeStrategy::~DoubleBarnDoorWipeStrategy()
-{
-}
+DoubleBarnDoorWipeStrategy::~DoubleBarnDoorWipeStrategy() = default;
 
 void DoubleBarnDoorWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

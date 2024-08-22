@@ -29,9 +29,7 @@ InsertSeries::InsertSeries(Actions *actions)
     m_closeEditor = true;
 }
 
-InsertSeries::~InsertSeries()
-{
-}
+InsertSeries::~InsertSeries() = default;
 
 ActionDialog *InsertSeries::createDialog(QWidget *canvasWidget)
 {
@@ -65,9 +63,7 @@ SeriesManipulator::SeriesManipulator()
     m_last = -2;
 }
 
-SeriesManipulator::~SeriesManipulator()
-{
-}
+SeriesManipulator::~SeriesManipulator() = default;
 
 void SeriesManipulator::setupSeries(const QPoint &_marker, double start, double end, double step, Series mode, Series type)
 {

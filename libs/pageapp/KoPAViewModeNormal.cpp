@@ -28,9 +28,7 @@ KoPAViewModeNormal::KoPAViewModeNormal(KoPAViewBase *view, KoPACanvasBase *canva
 {
 }
 
-KoPAViewModeNormal::~KoPAViewModeNormal()
-{
-}
+KoPAViewModeNormal::~KoPAViewModeNormal() = default;
 
 void KoPAViewModeNormal::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {

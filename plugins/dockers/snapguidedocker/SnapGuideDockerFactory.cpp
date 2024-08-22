@@ -7,9 +7,7 @@
 #include "SnapGuideDockerFactory.h"
 #include "SnapGuideDocker.h"
 
-SnapGuideDockerFactory::SnapGuideDockerFactory()
-{
-}
+SnapGuideDockerFactory::SnapGuideDockerFactory() = default;
 
 QString SnapGuideDockerFactory::id() const
 {

@@ -6,10 +6,6 @@
 
 #include "KoSharedLoadingData.h"
 
-KoSharedLoadingData::KoSharedLoadingData()
-{
-}
+KoSharedLoadingData::KoSharedLoadingData() = default;
 
-KoSharedLoadingData::~KoSharedLoadingData()
-{
-}
+KoSharedLoadingData::~KoSharedLoadingData() = default;

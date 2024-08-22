@@ -30,9 +30,7 @@ XlsxComment::XlsxComment(uint authorId)
 {
 }
 
-XlsxComments::XlsxComments()
-{
-}
+XlsxComments::XlsxComments() = default;
 
 XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments &_comments, MSOOXML::DrawingMLTheme *_themes, QVector<QString> &_colorIndices)
     : comments(&_comments)
@@ -41,18 +39,14 @@ XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments &_commen
 {
 }
 
-XlsxXmlCommentsReaderContext::~XlsxXmlCommentsReaderContext()
-{
-}
+XlsxXmlCommentsReaderContext::~XlsxXmlCommentsReaderContext() = default;
 
 XlsxXmlCommentsReader::XlsxXmlCommentsReader(KoOdfWriters *writers)
     : XlsxXmlCommonReader(writers)
 {
 }
 
-XlsxXmlCommentsReader::~XlsxXmlCommentsReader()
-{
-}
+XlsxXmlCommentsReader::~XlsxXmlCommentsReader() = default;
 
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {

@@ -33,9 +33,7 @@ KarbonPatternEditStrategyBase::KarbonPatternEditStrategyBase(KoShape *s, KoImage
     m_matrix = shape()->absoluteTransformation(nullptr);
 }
 
-KarbonPatternEditStrategyBase::~KarbonPatternEditStrategyBase()
-{
-}
+KarbonPatternEditStrategyBase::~KarbonPatternEditStrategyBase() = default;
 
 void KarbonPatternEditStrategyBase::setEditing(bool on)
 {
@@ -134,9 +132,7 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy(KoShape *s, KoImageCollecti
     m_handles.append(brushMatrix.map(dirVec));
 }
 
-KarbonPatternEditStrategy::~KarbonPatternEditStrategy()
-{
-}
+KarbonPatternEditStrategy::~KarbonPatternEditStrategy() = default;
 
 void KarbonPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &converter) const
 {
@@ -234,9 +230,7 @@ KarbonOdfPatternEditStrategy::KarbonOdfPatternEditStrategy(KoShape *s, KoImageCo
     updateHandles(qSharedPointerDynamicCast<KoPatternBackground>(shape()->background()));
 }
 
-KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy()
-{
-}
+KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy() = default;
 
 void KarbonOdfPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &converter) const
 {

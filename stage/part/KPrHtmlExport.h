@@ -21,9 +21,7 @@ class KPrHtmlExport : public QObject
     Q_OBJECT
 public:
     struct Parameter {
-        Parameter()
-        {
-        }
+        Parameter() = default;
 
         Parameter(const QUrl &styleUrl,
                   KPrView *kprView,

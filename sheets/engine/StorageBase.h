@@ -23,7 +23,7 @@ public:
     {
         m_storingUndo = false;
     };
-    virtual ~StorageBase(){};
+    virtual ~StorageBase() = default;
 
     virtual void insertColumns(int position, int number) = 0;
     virtual void removeColumns(int position, int number) = 0;

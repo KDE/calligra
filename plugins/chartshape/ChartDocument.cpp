@@ -43,13 +43,9 @@ public:
     ChartShape *parent;
 };
 
-ChartDocument::Private::Private()
-{
-}
+ChartDocument::Private::Private() = default;
 
-ChartDocument::Private::~Private()
-{
-}
+ChartDocument::Private::~Private() = default;
 
 ChartDocument::ChartDocument(ChartShape *parent)
     : KoDocument(new ChartPart(nullptr))

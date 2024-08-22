@@ -15,6 +15,4 @@ AxisScalingDialog::AxisScalingDialog(QWidget *parent)
     setupUi(this);
 }
 
-AxisScalingDialog::~AxisScalingDialog()
-{
-}
+AxisScalingDialog::~AxisScalingDialog() = default;

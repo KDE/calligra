@@ -18,9 +18,7 @@ SelectTextStrategy::SelectTextStrategy(ArtisticTextTool *textTool, int cursor)
     Q_ASSERT(m_selection);
 }
 
-SelectTextStrategy::~SelectTextStrategy()
-{
-}
+SelectTextStrategy::~SelectTextStrategy() = default;
 
 void SelectTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
 {

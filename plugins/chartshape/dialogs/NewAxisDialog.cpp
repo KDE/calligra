@@ -15,6 +15,4 @@ NewAxisDialog::NewAxisDialog(QWidget *parent)
     setupUi(this);
 }
 
-NewAxisDialog::~NewAxisDialog()
-{
-}
+NewAxisDialog::~NewAxisDialog() = default;

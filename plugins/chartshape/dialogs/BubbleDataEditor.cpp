@@ -183,9 +183,7 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     resize(sizeHint().expandedTo(QSize(600, 300)));
 }
 
-BubbleDataEditor::~BubbleDataEditor()
-{
-}
+BubbleDataEditor::~BubbleDataEditor() = default;
 
 void BubbleDataEditor::slotInsertColumnBefore()
 {

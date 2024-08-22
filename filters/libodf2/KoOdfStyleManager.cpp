@@ -29,7 +29,7 @@
 class Q_DECL_HIDDEN KoOdfStyleManager::Private
 {
 public:
-    Private(){};
+    Private() = default;
 
     QHash<QPair<QString, QString>, KoOdfStyle *> styles; // <name, family>, style
     QHash<QString, KoOdfStyle *> defaultStyles; // family, style

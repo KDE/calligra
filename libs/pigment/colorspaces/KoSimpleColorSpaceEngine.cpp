@@ -29,9 +29,7 @@ public:
     {
     }
 
-    ~KoSimpleColorConversionTransformation() override
-    {
-    }
+    ~KoSimpleColorConversionTransformation() override = default;
 
     void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const override
     {
@@ -59,9 +57,7 @@ KoSimpleColorSpaceEngine::KoSimpleColorSpaceEngine()
 {
 }
 
-KoSimpleColorSpaceEngine::~KoSimpleColorSpaceEngine()
-{
-}
+KoSimpleColorSpaceEngine::~KoSimpleColorSpaceEngine() = default;
 
 KoColorConversionTransformation *KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace *srcColorSpace,
                                                                                      const KoColorSpace *dstColorSpace,

@@ -50,9 +50,7 @@ AbstractRegionCommand::AbstractRegionCommand(KUndo2Command *parent)
 {
 }
 
-AbstractRegionCommand::~AbstractRegionCommand()
-{
-}
+AbstractRegionCommand::~AbstractRegionCommand() = default;
 
 bool AbstractRegionCommand::execute(KoCanvasBase *canvas)
 {

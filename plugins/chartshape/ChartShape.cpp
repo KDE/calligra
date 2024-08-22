@@ -225,9 +225,7 @@ ChartShape::Private::Private(ChartShape *shape)
     document = nullptr;
 }
 
-ChartShape::Private::~Private()
-{
-}
+ChartShape::Private::~Private() = default;
 
 //
 // Show a child, which means either the Title, Subtitle, Footer or Axis Title.

@@ -11,6 +11,4 @@ KPrEventActionWidget::KPrEventActionWidget(QWidget *parent)
 {
 }
 
-KPrEventActionWidget::~KPrEventActionWidget()
-{
-}
+KPrEventActionWidget::~KPrEventActionWidget() = default;

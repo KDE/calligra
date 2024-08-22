@@ -23,8 +23,8 @@
 class Q_DECL_HIDDEN KoOdfTextProperties::Private
 {
 public:
-    Private(){};
-    ~Private(){};
+    Private() = default;
+    ~Private() = default;
 
     int dummy; // This class is currently empty
 };

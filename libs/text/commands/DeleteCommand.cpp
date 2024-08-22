@@ -577,6 +577,4 @@ void DeleteCommand::updateListChanges()
     }
 }
 
-DeleteCommand::~DeleteCommand()
-{
-}
+DeleteCommand::~DeleteCommand() = default;

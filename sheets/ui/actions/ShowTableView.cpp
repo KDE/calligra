@@ -24,9 +24,7 @@ ShowTableView::ShowTableView(Actions *actions)
 {
 }
 
-ShowTableView::~ShowTableView()
-{
-}
+ShowTableView::~ShowTableView() = default;
 
 QAction *ShowTableView::createAction()
 {

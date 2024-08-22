@@ -19,9 +19,7 @@ KPrPdfPrintJob::KPrPdfPrintJob(KPrView *view)
 {
 }
 
-KPrPdfPrintJob::~KPrPdfPrintJob()
-{
-}
+KPrPdfPrintJob::~KPrPdfPrintJob() = default;
 
 void KPrPdfPrintJob::startPrinting(RemovePolicy removePolicy)
 {

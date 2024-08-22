@@ -44,9 +44,7 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     setVisible(false);
 }
 
-SpellCheckMenu::~SpellCheckMenu()
-{
-}
+SpellCheckMenu::~SpellCheckMenu() = default;
 
 QPair<QString, QAction *> SpellCheckMenu::menuAction()
 {

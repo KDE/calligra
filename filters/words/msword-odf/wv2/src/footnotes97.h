@@ -76,8 +76,8 @@ public:
     void check(U32 globalCP);
 
 private:
-    Footnotes97(const Footnotes97 &rhs);
-    Footnotes97 &operator=(const Footnotes97 &rhs);
+    Footnotes97(const Footnotes97 &rhs) = delete;
+    Footnotes97 &operator=(const Footnotes97 &rhs) = delete;
 
     // Ugly, but helps to avoid code duplication
     void init(U32 fcRef,

@@ -16,9 +16,7 @@
 class Q_DECL_HIDDEN KoShapeStrokeCommand::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         foreach (KoShapeStrokeModel *stroke, oldStrokes) {

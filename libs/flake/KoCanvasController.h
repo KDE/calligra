@@ -450,9 +450,7 @@ public:
     {
     }
 
-    ~KoDummyCanvasController() override
-    {
-    }
+    ~KoDummyCanvasController() override = default;
 
     void scrollContentsBy(int /*dx*/, int /*dy*/) override
     {

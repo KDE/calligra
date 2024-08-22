@@ -27,9 +27,7 @@ ManageCustomLists::ManageCustomLists(Actions *actions)
 {
 }
 
-ManageCustomLists::~ManageCustomLists()
-{
-}
+ManageCustomLists::~ManageCustomLists() = default;
 
 ActionDialog *ManageCustomLists::createDialog(QWidget *canvasWidget)
 {

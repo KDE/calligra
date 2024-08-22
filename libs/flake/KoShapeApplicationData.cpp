@@ -6,6 +6,4 @@
 
 #include "KoShapeApplicationData.h"
 
-KoShapeApplicationData::~KoShapeApplicationData()
-{
-}
+KoShapeApplicationData::~KoShapeApplicationData() = default;

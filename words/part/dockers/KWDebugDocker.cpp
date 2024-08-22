@@ -20,9 +20,7 @@ KWDebugDocker::KWDebugDocker()
     setWidget(m_debugWidget);
 }
 
-KWDebugDocker::~KWDebugDocker()
-{
-}
+KWDebugDocker::~KWDebugDocker() = default;
 
 void KWDebugDocker::setCanvas(KoCanvasBase *_canvas)
 {

@@ -39,9 +39,7 @@ ChartTextShapeCommand::ChartTextShapeCommand(KoShape *textShape, ChartShape *cha
     }
 }
 
-ChartTextShapeCommand::~ChartTextShapeCommand()
-{
-}
+ChartTextShapeCommand::~ChartTextShapeCommand() = default;
 
 void ChartTextShapeCommand::redo()
 {

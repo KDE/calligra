@@ -54,9 +54,7 @@ CalendarToolWidget::CalendarToolWidget(QWidget *parent)
     connect(this->m_insertButton, &QAbstractButton::clicked, this, &CalendarToolWidget::emitInsertCalendar);
 }
 
-CalendarToolWidget::~CalendarToolWidget()
-{
-}
+CalendarToolWidget::~CalendarToolWidget() = default;
 
 void CalendarToolWidget::emitInsertCalendar()
 {

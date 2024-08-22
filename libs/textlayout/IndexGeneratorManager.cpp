@@ -38,9 +38,7 @@ IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)
     m_doneTimer.setSingleShot(true);
 }
 
-IndexGeneratorManager::~IndexGeneratorManager()
-{
-}
+IndexGeneratorManager::~IndexGeneratorManager() = default;
 
 IndexGeneratorManager *IndexGeneratorManager::instance(QTextDocument *document)
 {

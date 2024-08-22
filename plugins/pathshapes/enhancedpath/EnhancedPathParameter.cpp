@@ -34,9 +34,7 @@ EnhancedPathParameter::EnhancedPathParameter(EnhancedPathShape *parent)
     Q_ASSERT(m_parent);
 }
 
-EnhancedPathParameter::~EnhancedPathParameter()
-{
-}
+EnhancedPathParameter::~EnhancedPathParameter() = default;
 
 EnhancedPathShape *EnhancedPathParameter::parent()
 {

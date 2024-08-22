@@ -42,9 +42,7 @@ KPrBoxSnakesWipeStrategy::KPrBoxSnakesWipeStrategy(int horRepeat, int verRepeat,
     setNeedEvenSquares();
 }
 
-KPrBoxSnakesWipeStrategy::~KPrBoxSnakesWipeStrategy()
-{
-}
+KPrBoxSnakesWipeStrategy::~KPrBoxSnakesWipeStrategy() = default;
 
 static int getFirstLeg(bool clockwise, int verrepeat, int horrepeat)
 {

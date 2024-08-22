@@ -269,20 +269,11 @@ Token::Token(Type type, const QString &text, int pos)
 
 // copy constructor
 Token::Token(const Token &token)
-    : m_type(token.m_type)
-    , m_text(token.m_text)
-    , m_pos(token.m_pos)
-{
-}
+
+    = default;
 
 // assignment operator
-Token &Token::operator=(const Token &token)
-{
-    m_type = token.m_type;
-    m_text = token.m_text;
-    m_pos = token.m_pos;
-    return *this;
-}
+Token &Token::operator=(const Token &token) = default;
 
 bool Token::asBoolean() const
 {
@@ -473,15 +464,12 @@ Formula Formula::empty()
 }
 
 Formula::Formula(const Formula &other)
-    : d(other.d)
-{
-}
+
+    = default;
 
 // Destructor
 
-Formula::~Formula()
-{
-}
+Formula::~Formula() = default;
 
 const CellBase &Formula::cell() const
 {
@@ -1827,11 +1815,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
     return res;
 }
 
-Formula &Formula::operator=(const Formula &other)
-{
-    d = other.d;
-    return *this;
-}
+Formula &Formula::operator=(const Formula &other) = default;
 
 bool Formula::operator==(const Formula &other) const
 {

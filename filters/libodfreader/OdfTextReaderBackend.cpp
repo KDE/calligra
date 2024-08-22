@@ -28,13 +28,9 @@ public:
                 // needed for forward binary compatibility.
 };
 
-OdfTextReaderBackend::Private::Private()
-{
-}
+OdfTextReaderBackend::Private::Private() = default;
 
-OdfTextReaderBackend::Private::~Private()
-{
-}
+OdfTextReaderBackend::Private::~Private() = default;
 
 // ================================================================
 //                 class OdfTextReaderBackend

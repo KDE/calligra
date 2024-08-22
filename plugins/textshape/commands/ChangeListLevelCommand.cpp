@@ -46,9 +46,7 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, Change
     }
 }
 
-ChangeListLevelCommand::~ChangeListLevelCommand()
-{
-}
+ChangeListLevelCommand::~ChangeListLevelCommand() = default;
 
 int ChangeListLevelCommand::effectiveLevel(int level)
 {

@@ -54,9 +54,7 @@ class Q_DECL_HIDDEN KoCharacterStyle::Private
 {
 public:
     Private();
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {
@@ -516,9 +514,7 @@ struct FragmentData {
         , length(length)
     {
     }
-    FragmentData()
-    {
-    }
+    FragmentData() = default;
 
     QTextCharFormat format;
     int position;

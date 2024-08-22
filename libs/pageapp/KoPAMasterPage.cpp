@@ -29,9 +29,7 @@ KoPAMasterPage::KoPAMasterPage()
     setName("Standard");
 }
 
-KoPAMasterPage::~KoPAMasterPage()
-{
-}
+KoPAMasterPage::~KoPAMasterPage() = default;
 
 void KoPAMasterPage::saveOdf(KoShapeSavingContext &context) const
 {

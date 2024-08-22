@@ -82,8 +82,8 @@ public:
 
 private:
     KoPAPixmapCache();
-    KoPAPixmapCache(const KoPAPixmapCache &);
-    KoPAPixmapCache operator=(const KoPAPixmapCache &);
+    KoPAPixmapCache(const KoPAPixmapCache &) = delete;
+    KoPAPixmapCache operator=(const KoPAPixmapCache &) = delete;
 
     QString generateKey(const QString &key, const QSize &size);
     QMap<QString, QVector<QSize>> m_keySize;

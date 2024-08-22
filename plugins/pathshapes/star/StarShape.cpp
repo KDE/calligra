@@ -31,9 +31,7 @@ StarShape::StarShape()
     updatePath(QSize(100, 100));
 }
 
-StarShape::~StarShape()
-{
-}
+StarShape::~StarShape() = default;
 
 void StarShape::setCornerCount(uint cornerCount)
 {

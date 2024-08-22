@@ -91,9 +91,7 @@ WebTool::WebTool(KoCanvasBase *canvas)
 {
 }
 
-WebTool::~WebTool()
-{
-}
+WebTool::~WebTool() = default;
 
 void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> & /*shapes*/)
 {

@@ -18,9 +18,7 @@ public:
         , m_showTabs(false)
     {
     }
-    ~RulerTabChooser() override
-    {
-    }
+    ~RulerTabChooser() override = default;
 
     inline QTextOption::TabType type()
     {
@@ -46,13 +44,9 @@ class PaintingStrategy
 {
 public:
     /// constructor
-    PaintingStrategy()
-    {
-    }
+    PaintingStrategy() = default;
     /// destructor
-    virtual ~PaintingStrategy()
-    {
-    }
+    virtual ~PaintingStrategy() = default;
 
     /**
      * Draw the background of the ruler.
@@ -132,9 +126,7 @@ private:
 class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy
 {
 public:
-    HorizontalDistancesPaintingStrategy()
-    {
-    }
+    HorizontalDistancesPaintingStrategy() = default;
 
     void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
 

@@ -23,13 +23,9 @@
 #include "KoXmlWriter.h"
 #include <KoPASavingContext.h>
 
-KPrAnimationStep::KPrAnimationStep()
-{
-}
+KPrAnimationStep::KPrAnimationStep() = default;
 
-KPrAnimationStep::~KPrAnimationStep()
-{
-}
+KPrAnimationStep::~KPrAnimationStep() = default;
 
 void KPrAnimationStep::init(KPrAnimationCache *animationCache, int step)
 {

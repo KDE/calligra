@@ -31,9 +31,7 @@ public:
         , m_map(map)
     {
     }
-    ~ChartDatabaseSelectorFactory() override
-    {
-    }
+    ~ChartDatabaseSelectorFactory() override = default;
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;

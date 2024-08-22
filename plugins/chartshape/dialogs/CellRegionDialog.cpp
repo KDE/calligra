@@ -15,6 +15,4 @@ CellRegionDialog::CellRegionDialog(QWidget *parent)
     setupUi(this);
 }
 
-CellRegionDialog::~CellRegionDialog()
-{
-}
+CellRegionDialog::~CellRegionDialog() = default;

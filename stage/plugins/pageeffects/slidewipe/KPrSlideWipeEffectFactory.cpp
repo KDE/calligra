@@ -32,9 +32,7 @@ KPrSlideWipeEffectFactory::KPrSlideWipeEffectFactory()
     addStrategy(new KPrSlideWipeToRightStrategy());
 }
 
-KPrSlideWipeEffectFactory::~KPrSlideWipeEffectFactory()
-{
-}
+KPrSlideWipeEffectFactory::~KPrSlideWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"),
                                                   kli18n("From Right"),

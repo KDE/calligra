@@ -22,13 +22,9 @@ KoPAPixmapCache *KoPAPixmapCache::instance()
     return &(singleton->q);
 }
 
-KoPAPixmapCache::KoPAPixmapCache()
-{
-}
+KoPAPixmapCache::KoPAPixmapCache() = default;
 
-KoPAPixmapCache::~KoPAPixmapCache()
-{
-}
+KoPAPixmapCache::~KoPAPixmapCache() = default;
 
 int KoPAPixmapCache::cacheLimit()
 {

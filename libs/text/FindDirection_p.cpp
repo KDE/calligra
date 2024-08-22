@@ -17,18 +17,14 @@ FindDirection::FindDirection(KoCanvasResourceManager *provider)
 {
 }
 
-FindDirection::~FindDirection()
-{
-}
+FindDirection::~FindDirection() = default;
 
 FindForward::FindForward(KoCanvasResourceManager *provider)
     : FindDirection(provider)
 {
 }
 
-FindForward::~FindForward()
-{
-}
+FindForward::~FindForward() = default;
 
 bool FindForward::positionReached(const QTextCursor &currentPos, const QTextCursor &endPos)
 {
@@ -56,9 +52,7 @@ FindBackward::FindBackward(KoCanvasResourceManager *provider)
 {
 }
 
-FindBackward::~FindBackward()
-{
-}
+FindBackward::~FindBackward() = default;
 
 bool FindBackward::positionReached(const QTextCursor &currentPos, const QTextCursor &endPos)
 {

@@ -22,9 +22,7 @@ class KOWIDGETUTILS_EXPORT KoProgressProxy
 public:
     KoProgressProxy() = default;
 
-    virtual ~KoProgressProxy()
-    {
-    }
+    virtual ~KoProgressProxy() = default;
 
     virtual int maximum() const = 0;
     virtual void setValue(int value) = 0;

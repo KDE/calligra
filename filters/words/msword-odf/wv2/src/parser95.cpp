@@ -33,9 +33,7 @@ Parser95::Parser95(OLEStorage *storage, OLEStreamReader *wordDocument)
     init();
 }
 
-Parser95::~Parser95()
-{
-}
+Parser95::~Parser95() = default;
 
 void Parser95::init()
 {

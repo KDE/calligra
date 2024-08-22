@@ -21,9 +21,7 @@ KoPADisplayMasterShapesCommand::KoPADisplayMasterShapesCommand(KoPAPage *page, b
     }
 }
 
-KoPADisplayMasterShapesCommand::~KoPADisplayMasterShapesCommand()
-{
-}
+KoPADisplayMasterShapesCommand::~KoPADisplayMasterShapesCommand() = default;
 
 void KoPADisplayMasterShapesCommand::redo()
 {

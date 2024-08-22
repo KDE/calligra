@@ -216,7 +216,7 @@ public:
             update_node();
     }
 
-    ~const_segment_iterator() {}
+    ~const_segment_iterator() = default;
 
     bool operator== (const const_segment_iterator& other) const
     {

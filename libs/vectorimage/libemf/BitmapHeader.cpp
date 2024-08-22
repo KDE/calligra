@@ -95,8 +95,6 @@ BitmapHeader::BitmapHeader(QDataStream &stream, int size)
         soakBytes(stream, size - read);
 }
 
-BitmapHeader::~BitmapHeader()
-{
-}
+BitmapHeader::~BitmapHeader() = default;
 
 } // namespace Libemf

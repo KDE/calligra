@@ -24,9 +24,7 @@ Merge::Merge(Actions *actions, bool horizontal, bool vertical)
 {
 }
 
-Merge::~Merge()
-{
-}
+Merge::~Merge() = default;
 
 QAction *Merge::createAction()
 {
@@ -69,9 +67,7 @@ RemoveMerge::RemoveMerge(Actions *actions)
 {
 }
 
-RemoveMerge::~RemoveMerge()
-{
-}
+RemoveMerge::~RemoveMerge() = default;
 
 void RemoveMerge::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

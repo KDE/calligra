@@ -31,9 +31,7 @@ Indent::Indent(Actions *actions, bool negative)
     m_negative = negative;
 }
 
-Indent::~Indent()
-{
-}
+Indent::~Indent() = default;
 
 QAction *Indent::createAction()
 {

@@ -232,7 +232,7 @@ protected:
 
 private:
     // disable copy constructor
-    RTree(const RTree &other);
+    RTree(const RTree &other) = delete = delete = delete = delete = delete = delete = delete;
 
     struct LoadData {
         QRect rect;
@@ -282,9 +282,7 @@ public:
         : KoRTree<T>::Node(capacity, level, parent)
     {
     }
-    ~Node() override
-    {
-    }
+    ~Node() override = default;
 
     void remove(int index) override
     {
@@ -315,7 +313,7 @@ public:
 
 private:
     // disable copy constructor
-    Node(const Node &other);
+    Node(const Node &other) = delete = delete = delete = delete = delete = delete = delete;
     friend class NonLeafNode;
 };
 
@@ -332,9 +330,7 @@ public:
         , KoRTree<T>::LeafNode(capacity, level, parent)
     {
     }
-    ~LeafNode() override
-    {
-    }
+    ~LeafNode() override = default;
 
     void remove(int index) override
     {
@@ -365,7 +361,7 @@ public:
 
 private:
     // disable copy constructor
-    LeafNode(const LeafNode &other);
+    LeafNode(const LeafNode &other) = delete = delete = delete = delete = delete = delete = delete;
 };
 
 /**
@@ -381,9 +377,7 @@ public:
         , KoRTree<T>::NonLeafNode(capacity, level, parent)
     {
     }
-    ~NonLeafNode() override
-    {
-    }
+    ~NonLeafNode() override = default;
 
     void remove(int index) override
     {
@@ -410,7 +404,7 @@ public:
 
 private:
     // disable copy constructor
-    NonLeafNode(const NonLeafNode &other);
+    NonLeafNode(const NonLeafNode &other) = delete = delete = delete = delete = delete = delete = delete;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -427,9 +421,7 @@ RTree<T>::RTree()
 }
 
 template<typename T>
-RTree<T>::~RTree()
-{
-}
+RTree<T>::~RTree() = default;
 
 template<typename T>
 void RTree<T>::insert(const QRectF &rect, const T &data)

@@ -22,9 +22,7 @@ SetValidity::SetValidity(Actions *actions)
 {
 }
 
-SetValidity::~SetValidity()
-{
-}
+SetValidity::~SetValidity() = default;
 
 ActionDialog *SetValidity::createDialog(QWidget *canvasWidget)
 {
@@ -58,9 +56,7 @@ ClearValidity::ClearValidity(Actions *actions)
 {
 }
 
-ClearValidity::~ClearValidity()
-{
-}
+ClearValidity::~ClearValidity() = default;
 
 QAction *ClearValidity::createAction()
 {

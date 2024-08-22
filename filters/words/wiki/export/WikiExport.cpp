@@ -37,9 +37,7 @@ WikiExport::WikiExport(QObject *parent, const QVariantList &)
 {
 }
 
-WikiExport::~WikiExport()
-{
-}
+WikiExport::~WikiExport() = default;
 
 KoFilter::ConversionStatus WikiExport::convert(const QByteArray &from, const QByteArray &to)
 {

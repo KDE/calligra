@@ -19,9 +19,7 @@
 
 struct LogEntry {
 public:
-    LogEntry()
-    {
-    }
+    LogEntry() = default;
     QString authorName;
     QString authorEmail;
     QDateTime time;
@@ -33,9 +31,7 @@ public:
 class GitLogModel::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         qDeleteAll(entries);

@@ -25,9 +25,7 @@ Link::Link(Actions *actions)
     m_closeEditor = true;
 }
 
-Link::~Link()
-{
-}
+Link::~Link() = default;
 
 ActionDialog *Link::createDialog(QWidget *canvasWidget)
 {
@@ -68,9 +66,7 @@ ClearLink::ClearLink(Actions *actions)
 {
 }
 
-ClearLink::~ClearLink()
-{
-}
+ClearLink::~ClearLink() = default;
 
 QAction *ClearLink::createAction()
 {

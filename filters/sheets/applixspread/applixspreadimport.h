@@ -20,9 +20,7 @@ class APPLIXSPREADImport : public KoFilter
 
 public:
     APPLIXSPREADImport(QObject *parent, const QVariantList &);
-    ~APPLIXSPREADImport() override
-    {
-    }
+    ~APPLIXSPREADImport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

@@ -27,9 +27,7 @@ XFigImportFilter::XFigImportFilter(QObject *parent, const QVariantList &)
 {
 }
 
-XFigImportFilter::~XFigImportFilter()
-{
-}
+XFigImportFilter::~XFigImportFilter() = default;
 
 KoFilter::ConversionStatus XFigImportFilter::convert(const QByteArray &from, const QByteArray &to)
 {

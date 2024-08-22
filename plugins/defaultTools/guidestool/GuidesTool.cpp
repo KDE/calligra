@@ -33,9 +33,7 @@ GuidesTool::GuidesTool(KoCanvasBase *canvas)
 {
 }
 
-GuidesTool::~GuidesTool()
-{
-}
+GuidesTool::~GuidesTool() = default;
 
 void GuidesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

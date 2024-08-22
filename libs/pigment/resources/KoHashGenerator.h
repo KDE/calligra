@@ -14,8 +14,6 @@ class KoHashGenerator
 public:
     virtual QByteArray generateHash(const QString &filename) = 0;
     virtual QByteArray generateHash(const QByteArray &array) = 0;
-    virtual ~KoHashGenerator()
-    {
-    }
+    virtual ~KoHashGenerator() = default;
 };
 #endif

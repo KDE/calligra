@@ -39,8 +39,7 @@ HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
 }
 
 HTMLImport::~HTMLImport()
-{
-}
+= default;
 
 KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QByteArray& to)
 {

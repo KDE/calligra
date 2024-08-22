@@ -22,9 +22,7 @@ AutoFilter::AutoFilter(Actions *actions)
 {
 }
 
-AutoFilter::~AutoFilter()
-{
-}
+AutoFilter::~AutoFilter() = default;
 
 void AutoFilter::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -54,9 +52,7 @@ AutoFilterCommand::AutoFilterCommand()
     setText(kundo2_i18n("Auto-Filter"));
 }
 
-AutoFilterCommand::~AutoFilterCommand()
-{
-}
+AutoFilterCommand::~AutoFilterCommand() = default;
 
 bool AutoFilterCommand::performCommands()
 {

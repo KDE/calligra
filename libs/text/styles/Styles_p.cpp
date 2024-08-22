@@ -9,24 +9,15 @@
 
 #include "TextDebug.h"
 
-StylePrivate::StylePrivate()
-{
-}
+StylePrivate::StylePrivate() = default;
 
 StylePrivate::StylePrivate(const StylePrivate &other)
-    : m_properties(other.m_properties)
-{
-}
 
-StylePrivate &StylePrivate::operator=(const StylePrivate &other)
-{
-    m_properties = other.m_properties;
-    return *this;
-}
+    = default;
 
-StylePrivate::~StylePrivate()
-{
-}
+StylePrivate &StylePrivate::operator=(const StylePrivate &other) = default;
+
+StylePrivate::~StylePrivate() = default;
 
 StylePrivate::StylePrivate(const QMap<int, QVariant> &other)
     : m_properties(other)

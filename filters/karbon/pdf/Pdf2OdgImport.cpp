@@ -48,9 +48,7 @@ Pdf2OdgImport::Pdf2OdgImport(QObject *parent, const QVariantList &)
     debugPdf << "PDF Import Filter";
 }
 
-Pdf2OdgImport::~Pdf2OdgImport()
-{
-}
+Pdf2OdgImport::~Pdf2OdgImport() = default;
 
 KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray &from, const QByteArray &to)
 {

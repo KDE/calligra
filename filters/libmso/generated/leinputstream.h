@@ -15,16 +15,12 @@ class IOException : public std::exception
 {
 public:
     const QString msg;
-    IOException()
-    {
-    }
+    IOException() = default;
     explicit IOException(const QString &m)
         : msg(m)
     {
     }
-    ~IOException() throw() override
-    {
-    }
+    ~IOException() throw() override = default;
 };
 
 class IncorrectValueException : public IOException
@@ -38,9 +34,7 @@ public:
         : IOException(errMsg)
     {
     }
-    ~IncorrectValueException() throw() override
-    {
-    }
+    ~IncorrectValueException() throw() override = default;
 };
 
 class EOFException : public IOException
@@ -50,9 +44,7 @@ public:
         : IOException(msg)
     {
     }
-    ~EOFException() throw() override
-    {
-    }
+    ~EOFException() throw() override = default;
 };
 
 class LEInputStream

@@ -31,9 +31,7 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons);
-    ~ShapeRotateStrategy() override
-    {
-    }
+    ~ShapeRotateStrategy() override = default;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;

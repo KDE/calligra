@@ -791,9 +791,7 @@ Region::Element::Element()
 {
 }
 
-Region::Element::~Element()
-{
-}
+Region::Element::~Element() = default;
 
 /***************************************************************************
   class Point
@@ -904,9 +902,7 @@ Region::Point::Point(const QString &string)
     m_point = QPoint(x, y);
 }
 
-Region::Point::~Point()
-{
-}
+Region::Point::~Point() = default;
 
 QString Region::Point::name(SheetBase *originSheet) const
 {
@@ -995,9 +991,7 @@ Region::Range::Range(const QString &sRange)
     m_fixedRight = lr.isColumnFixed();
 }
 
-Region::Range::~Range()
-{
-}
+Region::Range::~Range() = default;
 
 bool Region::Range::isColumn() const
 {

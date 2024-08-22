@@ -18,9 +18,7 @@ ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
 {
 }
 
-ArtisticTextRange::~ArtisticTextRange()
-{
-}
+ArtisticTextRange::~ArtisticTextRange() = default;
 
 void ArtisticTextRange::setText(const QString &text)
 {

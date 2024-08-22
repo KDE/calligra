@@ -20,9 +20,7 @@ Fill::Fill(Actions *actions, FillManipulator::Direction dir)
 {
 }
 
-Fill::~Fill()
-{
-}
+Fill::~Fill() = default;
 
 void Fill::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -81,9 +79,7 @@ FillManipulator::FillManipulator()
     setText(kundo2_i18n("Fill Selection"));
 }
 
-FillManipulator::~FillManipulator()
-{
-}
+FillManipulator::~FillManipulator() = default;
 
 Value FillManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType)
 {

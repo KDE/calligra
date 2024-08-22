@@ -62,8 +62,8 @@ private:
     Private *const d;
 
     // no copy or assign
-    FunctionRepository(const FunctionRepository &);
-    FunctionRepository &operator=(const FunctionRepository &);
+    FunctionRepository(const FunctionRepository &) = delete;
+    FunctionRepository &operator=(const FunctionRepository &) = delete;
 };
 
 } // namespace Sheets

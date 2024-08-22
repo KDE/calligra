@@ -25,12 +25,8 @@ using namespace MSOOXML;
 class Q_DECL_HIDDEN MsooXmlRelationships::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
     KoFilter::ConversionStatus loadRels(const QString &path, const QString &file);
 
     MsooXmlImport *importer;

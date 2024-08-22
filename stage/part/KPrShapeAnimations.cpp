@@ -63,9 +63,7 @@ KPrShapeAnimations::KPrShapeAnimations(KPrDocument *document, QObject *parent)
 {
 }
 
-KPrShapeAnimations::~KPrShapeAnimations()
-{
-}
+KPrShapeAnimations::~KPrShapeAnimations() = default;
 
 Qt::ItemFlags KPrShapeAnimations::flags(const QModelIndex &index) const
 {

@@ -45,9 +45,7 @@ ExportHtml::ExportHtml(QObject *parent, const QVariantList &)
 {
 }
 
-ExportHtml::~ExportHtml()
-{
-}
+ExportHtml::~ExportHtml() = default;
 
 KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QByteArray &to)
 {

@@ -38,9 +38,7 @@ PasteCommand::PasteCommand(KUndo2Command *parent)
 {
 }
 
-PasteCommand::~PasteCommand()
-{
-}
+PasteCommand::~PasteCommand() = default;
 
 bool PasteCommand::setMimeData(const QMimeData *mimeData, bool sameApp)
 {

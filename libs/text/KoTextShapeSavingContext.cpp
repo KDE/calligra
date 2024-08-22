@@ -19,9 +19,7 @@ KoTextShapeSavingContext::KoTextShapeSavingContext(KoXmlWriter &xmlWriter,
 {
 }
 
-KoTextShapeSavingContext::~KoTextShapeSavingContext()
-{
-}
+KoTextShapeSavingContext::~KoTextShapeSavingContext() = default;
 
 KoGenChanges &KoTextShapeSavingContext::changes()
 {

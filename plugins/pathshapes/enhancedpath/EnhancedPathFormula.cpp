@@ -117,9 +117,7 @@ EnhancedPathFormula::EnhancedPathFormula(const QString &text, EnhancedPathShape 
     Q_ASSERT(m_parent);
 }
 
-EnhancedPathFormula::~EnhancedPathFormula()
-{
-}
+EnhancedPathFormula::~EnhancedPathFormula() = default;
 
 qreal EnhancedPathFormula::evaluate()
 {

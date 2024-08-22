@@ -54,9 +54,7 @@ PieConfigWidget::PieConfigWidget(QList<ChartType> types, QWidget *parent)
     init();
 }
 
-PieConfigWidget::~PieConfigWidget()
-{
-}
+PieConfigWidget::~PieConfigWidget() = default;
 
 void PieConfigWidget::init()
 {

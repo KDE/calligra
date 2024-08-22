@@ -83,9 +83,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void compileClipPath(KoShape *clippedShape)
     {

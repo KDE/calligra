@@ -36,9 +36,7 @@ KoColumnStyle::KoColumnStyle()
 {
 }
 
-KoColumnStyle::~KoColumnStyle()
-{
-}
+KoColumnStyle::~KoColumnStyle() = default;
 
 qreal KoColumnStyle::width() const
 {

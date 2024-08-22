@@ -87,8 +87,8 @@ private:
     StorageIO *io;
 
     // no copy or assign
-    Storage(const Storage &);
-    Storage &operator=(const Storage &);
+    Storage(const Storage &) = delete;
+    Storage &operator=(const Storage &) = delete;
 };
 
 class Stream
@@ -152,8 +152,8 @@ private:
     StreamIO *io;
 
     // no copy or assign
-    Stream(const Stream &);
-    Stream &operator=(const Stream &);
+    Stream(const Stream &) = delete;
+    Stream &operator=(const Stream &) = delete;
 };
 
 }

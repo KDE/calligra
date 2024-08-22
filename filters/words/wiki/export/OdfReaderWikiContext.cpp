@@ -25,9 +25,7 @@ OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
 {
 }
 
-OdfReaderWikiContext::~OdfReaderWikiContext()
-{
-}
+OdfReaderWikiContext::~OdfReaderWikiContext() = default;
 
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
 {

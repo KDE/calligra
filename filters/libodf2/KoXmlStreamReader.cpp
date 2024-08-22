@@ -65,9 +65,7 @@ KoXmlStreamReader::Private::Private(KoXmlStreamReader *qq)
     clear();
 }
 
-KoXmlStreamReader::Private::~Private()
-{
-}
+KoXmlStreamReader::Private::~Private() = default;
 
 void KoXmlStreamReader::Private::clear()
 {
@@ -394,16 +392,10 @@ KoXmlStreamAttribute::Private::Private(const QXmlStreamAttribute *attr, const Ko
 }
 
 KoXmlStreamAttribute::Private::Private(const KoXmlStreamAttribute::Private &other)
-    : qAttr(other.qAttr)
-    , reader(other.reader)
-    , qName(other.qName)
-    , prefixLen(other.prefixLen)
-{
-}
 
-KoXmlStreamAttribute::Private::~Private()
-{
-}
+    = default;
+
+KoXmlStreamAttribute::Private::~Private() = default;
 
 void KoXmlStreamAttribute::Private::generateQName()
 {
@@ -525,9 +517,7 @@ KoXmlStreamAttributes::Private::Private(const KoXmlStreamReader *r, const QXmlSt
 {
 }
 
-KoXmlStreamAttributes::Private::~Private()
-{
-}
+KoXmlStreamAttributes::Private::~Private() = default;
 
 // ----------------------------------------------------------------
 
@@ -540,20 +530,15 @@ KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamReader *r, const Q
 }
 
 KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamAttributes &other)
-    : d(other.d)
-{
-}
+
+    = default;
 
 KoXmlStreamAttributes::~KoXmlStreamAttributes()
 {
     // No delete because d is a QSharedDataPointer;
 }
 
-KoXmlStreamAttributes &KoXmlStreamAttributes::operator=(const KoXmlStreamAttributes &other)
-{
-    d = other.d;
-    return *this;
-}
+KoXmlStreamAttributes &KoXmlStreamAttributes::operator=(const KoXmlStreamAttributes &other) = default;
 
 // Relevant parts of the QVector API
 const KoXmlStreamAttribute &KoXmlStreamAttributes::at(int i) const

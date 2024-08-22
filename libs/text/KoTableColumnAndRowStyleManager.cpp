@@ -20,12 +20,8 @@
 class Q_DECL_HIDDEN KoTableColumnAndRowStyleManager::Private : public QSharedData
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
     QVector<KoTableColumnStyle> tableColumnStyles;
     QVector<KoTableRowStyle> tableRowStyles;
 
@@ -39,20 +35,12 @@ KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
 }
 
 KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager(const KoTableColumnAndRowStyleManager &rhs)
-    : d(rhs.d)
-{
-}
 
-KoTableColumnAndRowStyleManager &KoTableColumnAndRowStyleManager::operator=(const KoTableColumnAndRowStyleManager &rhs)
-{
-    d = rhs.d;
+    = default;
 
-    return *this;
-}
+KoTableColumnAndRowStyleManager &KoTableColumnAndRowStyleManager::operator=(const KoTableColumnAndRowStyleManager &rhs) = default;
 
-KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
-{
-}
+KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager() = default;
 
 KoTableColumnAndRowStyleManager KoTableColumnAndRowStyleManager::getManager(QTextTable *table)
 {

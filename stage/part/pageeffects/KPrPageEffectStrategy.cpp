@@ -20,9 +20,7 @@ KPrPageEffectStrategy::KPrPageEffectStrategy(int subType, const char *smilType, 
 {
 }
 
-KPrPageEffectStrategy::~KPrPageEffectStrategy()
-{
-}
+KPrPageEffectStrategy::~KPrPageEffectStrategy() = default;
 
 int KPrPageEffectStrategy::subType() const
 {

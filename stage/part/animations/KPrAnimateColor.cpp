@@ -30,9 +30,7 @@ KPrAnimateColor::KPrAnimateColor(KPrShapeAnimation *shapeAnimation)
 {
 }
 
-KPrAnimateColor::~KPrAnimateColor()
-{
-}
+KPrAnimateColor::~KPrAnimateColor() = default;
 
 bool KPrAnimateColor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

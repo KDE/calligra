@@ -22,9 +22,7 @@ KoViewAdaptor::KoViewAdaptor(KoView *view)
     m_pView = view;
 }
 
-KoViewAdaptor::~KoViewAdaptor()
-{
-}
+KoViewAdaptor::~KoViewAdaptor() = default;
 
 QStringList KoViewAdaptor::actions()
 {

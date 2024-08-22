@@ -20,9 +20,7 @@ class ImageExport : public KoFilter
 
 public:
     ImageExport(QObject *parent, const QVariantList &);
-    ~ImageExport() override
-    {
-    }
+    ~ImageExport() override = default;
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 

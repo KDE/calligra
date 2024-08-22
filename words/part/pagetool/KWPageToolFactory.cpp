@@ -21,9 +21,7 @@ KWPageToolFactory::KWPageToolFactory()
     setActivationShapeId("flake/always");
 }
 
-KWPageToolFactory::~KWPageToolFactory()
-{
-}
+KWPageToolFactory::~KWPageToolFactory() = default;
 
 KoToolBase *KWPageToolFactory::createTool(KoCanvasBase *canvas)
 {

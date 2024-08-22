@@ -24,7 +24,7 @@ class FLAKE_EXPORT KoSnapStrategy
 {
 public:
     explicit KoSnapStrategy(KoSnapGuide::Strategy type);
-    virtual ~KoSnapStrategy(){};
+    virtual ~KoSnapStrategy() = default;
 
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) = 0;
 

@@ -90,9 +90,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *sty
     setText(kundo2_i18n("Change List"));
 }
 
-ChangeListCommand::~ChangeListCommand()
-{
-}
+ChangeListCommand::~ChangeListCommand() = default;
 
 bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, KoListStyle::LabelType newLabelType)
 {

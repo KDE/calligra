@@ -140,19 +140,7 @@ Time &Time::operator+=(const Time &other)
     return *this;
 }
 
-Time &Time::operator=(const Time &other)
-{
-    m_duration = other.m_duration;
-    m_valid = other.m_valid;
-    m_hours = other.m_hours;
-    m_minutes = other.m_minutes;
-    m_seconds = other.m_seconds;
-    m_hour = other.m_hour;
-    m_minute = other.m_minute;
-    m_second = other.m_second;
-    m_msecs = other.m_msecs;
-    return *this;
-}
+Time &Time::operator=(const Time &other) = default;
 
 bool Time::operator==(const Time &other) const
 {

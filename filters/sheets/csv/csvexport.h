@@ -30,9 +30,7 @@ class CSVExport : public KoFilter
 
 public:
     CSVExport(QObject *parent, const QVariantList &);
-    ~CSVExport() override
-    {
-    }
+    ~CSVExport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

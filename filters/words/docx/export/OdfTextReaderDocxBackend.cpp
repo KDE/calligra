@@ -44,9 +44,7 @@ OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
 {
 }
 
-OdfTextReaderDocxBackend::~OdfTextReaderDocxBackend()
-{
-}
+OdfTextReaderDocxBackend::~OdfTextReaderDocxBackend() = default;
 
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc

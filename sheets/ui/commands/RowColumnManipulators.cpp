@@ -35,9 +35,7 @@ ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command *parent)
     setText(kundo2_i18n("Resize Column"));
 }
 
-ResizeColumnManipulator::~ResizeColumnManipulator()
-{
-}
+ResizeColumnManipulator::~ResizeColumnManipulator() = default;
 
 bool ResizeColumnManipulator::performNonCommandActions()
 {
@@ -93,9 +91,7 @@ ResizeRowManipulator::ResizeRowManipulator(KUndo2Command *parent)
     setText(kundo2_i18n("Resize Row"));
 }
 
-ResizeRowManipulator::~ResizeRowManipulator()
-{
-}
+ResizeRowManipulator::~ResizeRowManipulator() = default;
 
 bool ResizeRowManipulator::performNonCommandActions()
 {
@@ -158,9 +154,7 @@ HideShowManipulator::HideShowManipulator(KUndo2Command *parent)
 {
 }
 
-HideShowManipulator::~HideShowManipulator()
-{
-}
+HideShowManipulator::~HideShowManipulator() = default;
 
 void HideShowManipulator::setHide(bool hide)
 {
@@ -308,9 +302,7 @@ AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command *parent)
 {
 }
 
-AdjustColumnRowManipulator::~AdjustColumnRowManipulator()
-{
-}
+AdjustColumnRowManipulator::~AdjustColumnRowManipulator() = default;
 
 bool AdjustColumnRowManipulator::performNonCommandActions()
 {

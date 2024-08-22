@@ -41,9 +41,7 @@ KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory()
     setHidden(true);
 }
 
-KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory()
-{
-}
+KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory() = default;
 
 KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {

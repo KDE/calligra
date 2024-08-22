@@ -22,9 +22,7 @@ PageBreakRow::PageBreakRow(Actions *actions)
 {
 }
 
-PageBreakRow::~PageBreakRow()
-{
-}
+PageBreakRow::~PageBreakRow() = default;
 
 QAction *PageBreakRow::createAction()
 {
@@ -77,9 +75,7 @@ PageBreakColumn::PageBreakColumn(Actions *actions)
 {
 }
 
-PageBreakColumn::~PageBreakColumn()
-{
-}
+PageBreakColumn::~PageBreakColumn() = default;
 
 QAction *PageBreakColumn::createAction()
 {

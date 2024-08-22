@@ -10,9 +10,7 @@ KoDeferredShapeFactoryBase::KoDeferredShapeFactoryBase(QObject *parent)
 {
 }
 
-KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase()
-{
-}
+KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase() = default;
 
 KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoDocumentResourceManager *documentResources) const
 {

@@ -42,9 +42,7 @@ KoVariable::KoVariable(bool propertyChangeListener)
 {
 }
 
-KoVariable::~KoVariable()
-{
-}
+KoVariable::~KoVariable() = default;
 
 void KoVariable::setValue(const QString &value)
 {

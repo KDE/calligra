@@ -35,8 +35,7 @@ Column::Column(): Format()
 /* Destructor                              */
 /*******************************************/
 Column::~Column()
-{
-}
+= default;
 
 void Column::analyze(const QDomNode node)
 {

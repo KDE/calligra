@@ -57,9 +57,7 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent)
     setAboutInfo("creation-date", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
-KoDocumentInfo::~KoDocumentInfo()
-{
-}
+KoDocumentInfo::~KoDocumentInfo() = default;
 
 bool KoDocumentInfo::load(const KoXmlDocument &doc)
 {

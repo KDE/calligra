@@ -9,13 +9,9 @@
 #include "KoDeletedColumnData.h"
 #include "KoDeletedRowData.h"
 
-KoDeletedRowColumnDataStore::KoDeletedRowColumnDataStore()
-{
-}
+KoDeletedRowColumnDataStore::KoDeletedRowColumnDataStore() = default;
 
-KoDeletedRowColumnDataStore::~KoDeletedRowColumnDataStore()
-{
-}
+KoDeletedRowColumnDataStore::~KoDeletedRowColumnDataStore() = default;
 
 KoDeletedRowData *KoDeletedRowColumnDataStore::addDeletedRow(QTextTable *table, int rowNumber, int changeId)
 {

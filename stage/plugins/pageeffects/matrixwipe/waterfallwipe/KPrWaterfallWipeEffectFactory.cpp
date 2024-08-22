@@ -28,9 +28,7 @@ KPrWaterfallWipeEffectFactory::KPrWaterfallWipeEffectFactory()
     addStrategy(new KPrWaterfallWipeBottomRightStrategy(KPrMatrixWipeStrategy::RightToLeft));
 }
 
-KPrWaterfallWipeEffectFactory::~KPrWaterfallWipeEffectFactory()
-{
-}
+KPrWaterfallWipeEffectFactory::~KPrWaterfallWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Top Left Vertical"),
                                                   kli18n("Top Left Horizontal"),

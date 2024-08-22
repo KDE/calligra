@@ -30,9 +30,7 @@ KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
 {
 }
 
-KoTosContainerPrivate::~KoTosContainerPrivate()
-{
-}
+KoTosContainerPrivate::~KoTosContainerPrivate() = default;
 
 KoTosContainer::KoTosContainer()
     : KoShapeContainer(*(new KoTosContainerPrivate(this)))

@@ -24,9 +24,7 @@ namespace KoChart
 class ChartInterface
 {
 public:
-    virtual ~ChartInterface()
-    {
-    }
+    virtual ~ChartInterface() = default;
 
     /**
      * Sets the SheetAccessModel to be used by this chart. Use this method if

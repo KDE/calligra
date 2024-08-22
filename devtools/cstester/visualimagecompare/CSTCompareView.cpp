@@ -39,9 +39,7 @@ CSTCompareView::CSTCompareView(QWidget *parent)
     setLayout(layout);
 }
 
-CSTCompareView::~CSTCompareView()
-{
-}
+CSTCompareView::~CSTCompareView() = default;
 
 bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile)
 {

@@ -38,9 +38,7 @@ RejectChangeCommand::RejectChangeCommand(int changeId, const QList<QPair<int, in
     m_layout = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
 }
 
-RejectChangeCommand::~RejectChangeCommand()
-{
-}
+RejectChangeCommand::~RejectChangeCommand() = default;
 
 void RejectChangeCommand::redo()
 {

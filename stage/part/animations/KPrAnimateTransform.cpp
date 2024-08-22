@@ -31,9 +31,7 @@ KPrAnimateTransform::KPrAnimateTransform(KPrShapeAnimation *shapeAnimation)
     m_duration = 1;
 }
 
-KPrAnimateTransform::~KPrAnimateTransform()
-{
-}
+KPrAnimateTransform::~KPrAnimateTransform() = default;
 
 bool KPrAnimateTransform::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

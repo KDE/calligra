@@ -29,9 +29,7 @@ SvgShapeFactory::SvgShapeFactory()
     setHidden(true);
 }
 
-SvgShapeFactory::~SvgShapeFactory()
-{
-}
+SvgShapeFactory::~SvgShapeFactory() = default;
 
 void SvgShapeFactory::addToRegistry()
 {

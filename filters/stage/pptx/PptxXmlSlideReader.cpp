@@ -67,21 +67,11 @@ PptxShapeProperties::PptxShapeProperties(const PptxShapeProperties &other)
     *this = other;
 }
 
-PptxShapeProperties &PptxShapeProperties::operator=(const PptxShapeProperties &other)
-{
-    x = other.x;
-    y = other.y;
-    width = other.width;
-    height = other.height;
-    rot = other.rot;
-    return *this;
-}
+PptxShapeProperties &PptxShapeProperties::operator=(const PptxShapeProperties &other) = default;
 
 // -------------------
 
-PptxPlaceholder::PptxPlaceholder()
-{
-}
+PptxPlaceholder::PptxPlaceholder() = default;
 
 PptxPlaceholder::PptxPlaceholder(const PptxShapeProperties &other)
     : x(other.x)
@@ -93,9 +83,7 @@ PptxPlaceholder::PptxPlaceholder(const PptxShapeProperties &other)
     debugPptx << x << y << width << height;
 }
 
-PptxPlaceholder::~PptxPlaceholder()
-{
-}
+PptxPlaceholder::~PptxPlaceholder() = default;
 
 // -------------------
 
@@ -105,9 +93,7 @@ PptxSlideProperties::PptxSlideProperties()
     m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 }
 
-PptxSlideProperties::~PptxSlideProperties()
-{
-}
+PptxSlideProperties::~PptxSlideProperties() = default;
 
 // -------------------
 

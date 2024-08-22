@@ -74,6 +74,4 @@ void SimpleLinksWidget::manageBookmarks()
     }
 }
 
-SimpleLinksWidget::~SimpleLinksWidget()
-{
-}
+SimpleLinksWidget::~SimpleLinksWidget() = default;

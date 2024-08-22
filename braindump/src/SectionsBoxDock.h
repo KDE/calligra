@@ -73,9 +73,7 @@ private:
 class SectionsBoxDockFactory : public KoDockFactoryBase
 {
 public:
-    SectionsBoxDockFactory()
-    {
-    }
+    SectionsBoxDockFactory() = default;
 
     virtual QString id() const override
     {

@@ -39,9 +39,7 @@ struct KoColumns {
         /** The relative width */
         int relativeWidth;
 
-        ColumnDatum()
-        {
-        }
+        ColumnDatum() = default;
         ColumnDatum(qreal lm, qreal rm, qreal tm, qreal bm, int rw)
             : leftMargin(lm)
             , rightMargin(rm)

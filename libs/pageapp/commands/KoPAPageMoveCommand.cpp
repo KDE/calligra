@@ -48,9 +48,7 @@ void KoPAPageMoveCommand::init(const QList<KoPAPageBase *> &pages)
     }
 }
 
-KoPAPageMoveCommand::~KoPAPageMoveCommand()
-{
-}
+KoPAPageMoveCommand::~KoPAPageMoveCommand() = default;
 
 void KoPAPageMoveCommand::redo()
 {

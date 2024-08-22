@@ -47,9 +47,7 @@ ExportEpub2::ExportEpub2(QObject *parent, const QVariantList &)
 {
 }
 
-ExportEpub2::~ExportEpub2()
-{
-}
+ExportEpub2::~ExportEpub2() = default;
 
 KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QByteArray &to)
 {

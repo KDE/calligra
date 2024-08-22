@@ -13,9 +13,7 @@ InfoTimeDestination::InfoTimeDestination(Reader *reader, AbstractRtfOutput *outp
 {
 }
 
-InfoTimeDestination::~InfoTimeDestination()
-{
-}
+InfoTimeDestination::~InfoTimeDestination() = default;
 
 void InfoTimeDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

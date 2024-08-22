@@ -14,9 +14,7 @@ ColorDisplayLabel::ColorDisplayLabel(QWidget *parent)
 {
 }
 
-ColorDisplayLabel::~ColorDisplayLabel()
-{
-}
+ColorDisplayLabel::~ColorDisplayLabel() = default;
 
 void ColorDisplayLabel::paintEvent(QPaintEvent *event)
 {
@@ -158,6 +156,4 @@ void ChangeConfigureDialog::updatePreviewText(void)
     }
 }
 
-ChangeConfigureDialog::~ChangeConfigureDialog()
-{
-}
+ChangeConfigureDialog::~ChangeConfigureDialog() = default;

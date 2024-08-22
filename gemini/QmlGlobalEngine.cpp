@@ -32,6 +32,4 @@ QmlGlobalEngine::QmlGlobalEngine()
 {
 }
 
-QmlGlobalEngine::~QmlGlobalEngine()
-{
-}
+QmlGlobalEngine::~QmlGlobalEngine() = default;

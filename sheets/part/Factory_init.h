@@ -23,9 +23,7 @@ public:
         : Factory()
     {
     }
-    ~FactoryInit() override
-    {
-    }
+    ~FactoryInit() override = default;
 };
 }
 }

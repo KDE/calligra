@@ -19,10 +19,6 @@
 
 #include "KPrAnimationData.h"
 
-KPrAnimationData::KPrAnimationData()
-{
-}
+KPrAnimationData::KPrAnimationData() = default;
 
-KPrAnimationData::~KPrAnimationData()
-{
-}
+KPrAnimationData::~KPrAnimationData() = default;

@@ -54,9 +54,7 @@ KPrHexagonWipeEffectFactory::KPrHexagonWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, VerticalReverse, "hexagonWipe", "vertical", true));
 }
 
-KPrHexagonWipeEffectFactory::~KPrHexagonWipeEffectFactory()
-{
-}
+KPrHexagonWipeEffectFactory::~KPrHexagonWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Horizontal"), kli18n("Horizontal Reverse"), kli18n("Vertical"), kli18n("Vertical Reverse")};
 

@@ -35,9 +35,7 @@ KoOdfWriters::KoOdfWriters()
 class Q_DECL_HIDDEN KoOdfExporter::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     QByteArray bodyContentElement;
 };
 

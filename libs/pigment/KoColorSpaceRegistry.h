@@ -329,8 +329,8 @@ private:
     QString idsToCacheName(const QString &csId, const QString &profileName) const;
 
 private:
-    KoColorSpaceRegistry(const KoColorSpaceRegistry &);
-    KoColorSpaceRegistry operator=(const KoColorSpaceRegistry &);
+    KoColorSpaceRegistry(const KoColorSpaceRegistry &) = delete;
+    KoColorSpaceRegistry operator=(const KoColorSpaceRegistry &) = delete;
     void init();
 
 private:

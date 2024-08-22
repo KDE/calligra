@@ -349,9 +349,7 @@ CellRegion::Private::Private()
     table = nullptr;
 }
 
-CellRegion::Private::~Private()
-{
-}
+CellRegion::Private::~Private() = default;
 
 // ================================================================
 //                         Class CellRegion

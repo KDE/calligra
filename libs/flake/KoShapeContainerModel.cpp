@@ -8,13 +8,9 @@
 
 #include "KoShapeContainer.h"
 
-KoShapeContainerModel::KoShapeContainerModel()
-{
-}
+KoShapeContainerModel::KoShapeContainerModel() = default;
 
-KoShapeContainerModel::~KoShapeContainerModel()
-{
-}
+KoShapeContainerModel::~KoShapeContainerModel() = default;
 
 void KoShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 {

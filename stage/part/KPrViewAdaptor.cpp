@@ -44,9 +44,7 @@ KPrViewAdaptor::KPrViewAdaptor(KPrView *view)
     connect(m_view->presentationMode(), &KPrViewModePresentation::stepChanged, this, &KPrViewAdaptor::presentationStepChanged);
 }
 
-KPrViewAdaptor::~KPrViewAdaptor()
-{
-}
+KPrViewAdaptor::~KPrViewAdaptor() = default;
 
 // custom slideshows
 

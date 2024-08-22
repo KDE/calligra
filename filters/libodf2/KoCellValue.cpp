@@ -10,13 +10,9 @@
 
 #include <QMap>
 
-KoCellValue::KoCellValue()
-{
-}
+KoCellValue::KoCellValue() = default;
 
-KoCellValue::~KoCellValue()
-{
-}
+KoCellValue::~KoCellValue() = default;
 
 void KoCellValue::saveOdf(KoXmlWriter &writer) const
 {

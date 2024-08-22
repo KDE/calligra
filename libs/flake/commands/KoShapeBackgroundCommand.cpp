@@ -14,9 +14,7 @@
 class Q_DECL_HIDDEN KoShapeBackgroundCommand::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         oldFills.clear();

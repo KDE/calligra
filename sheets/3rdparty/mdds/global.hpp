@@ -82,7 +82,7 @@ class general_error : public ::std::exception
 {
 public:
     general_error(const ::std::string& msg) : m_msg(msg) {}
-    virtual ~general_error() throw() {}
+    virtual ~general_error() throw() = default;
 
     virtual const char* what() const throw()
     {

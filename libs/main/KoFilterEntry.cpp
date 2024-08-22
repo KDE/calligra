@@ -29,9 +29,7 @@ KoFilterEntry::KoFilterEntry(const KPluginMetaData &metaData)
     available = metadata.value("X-KDE-Available").toString();
 }
 
-KoFilterEntry::~KoFilterEntry()
-{
-}
+KoFilterEntry::~KoFilterEntry() = default;
 
 QString KoFilterEntry::fileName() const
 {

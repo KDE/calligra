@@ -32,9 +32,7 @@ KoPABackgroundTool::KoPABackgroundTool(KoCanvasBase *canvas)
     m_view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 }
 
-KoPABackgroundTool::~KoPABackgroundTool()
-{
-}
+KoPABackgroundTool::~KoPABackgroundTool() = default;
 
 void KoPABackgroundTool::paint(QPainter & /*painter*/, const KoViewConverter & /*converter*/)
 {

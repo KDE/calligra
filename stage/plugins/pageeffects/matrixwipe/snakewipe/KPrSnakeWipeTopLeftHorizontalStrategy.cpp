@@ -12,9 +12,7 @@ KPrSnakeWipeTopLeftHorizontalStrategy::KPrSnakeWipeTopLeftHorizontalStrategy()
 {
 }
 
-KPrSnakeWipeTopLeftHorizontalStrategy::~KPrSnakeWipeTopLeftHorizontalStrategy()
-{
-}
+KPrSnakeWipeTopLeftHorizontalStrategy::~KPrSnakeWipeTopLeftHorizontalStrategy() = default;
 
 int KPrSnakeWipeTopLeftHorizontalStrategy::squareIndex(int x, int y, int columns, int rows)
 {

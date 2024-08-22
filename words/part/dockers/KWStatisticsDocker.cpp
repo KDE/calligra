@@ -24,9 +24,7 @@ KWStatisticsDocker::KWStatisticsDocker()
     setWidget(m_statisticsWidget);
 }
 
-KWStatisticsDocker::~KWStatisticsDocker()
-{
-}
+KWStatisticsDocker::~KWStatisticsDocker() = default;
 
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {
@@ -48,9 +46,7 @@ void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
     }
 }
 
-KWStatisticsDockerFactory::KWStatisticsDockerFactory()
-{
-}
+KWStatisticsDockerFactory::KWStatisticsDockerFactory() = default;
 
 QString KWStatisticsDockerFactory::id() const
 {

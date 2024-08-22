@@ -24,9 +24,7 @@ KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     setPriority(3);
 }
 
-KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
-{
-}
+KoPABackgroundToolFactory::~KoPABackgroundToolFactory() = default;
 
 KoToolBase *KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {

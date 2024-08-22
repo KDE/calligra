@@ -38,9 +38,7 @@ KPrIrisWipeEffectFactory::KPrIrisWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, DiamondReverse, "irisWipe", "diamond", true));
 }
 
-KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory()
-{
-}
+KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Rectangular"), kli18n("Rectangular Reverse"), kli18n("Diamond"), kli18n("Diamond Reverse")};
 

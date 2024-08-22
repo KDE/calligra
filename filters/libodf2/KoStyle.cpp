@@ -13,9 +13,7 @@ KoStyle::KoStyle()
 {
 }
 
-KoStyle::~KoStyle()
-{
-}
+KoStyle::~KoStyle() = default;
 
 void KoStyle::setName(const QString &name)
 {

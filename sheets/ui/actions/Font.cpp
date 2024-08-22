@@ -31,9 +31,7 @@ Font::Font(Actions *actions)
 {
 }
 
-Font::~Font()
-{
-}
+Font::~Font() = default;
 
 QAction *Font::createAction()
 {
@@ -80,9 +78,7 @@ FontSize::FontSize(Actions *actions)
 {
 }
 
-FontSize::~FontSize()
-{
-}
+FontSize::~FontSize() = default;
 
 QAction *FontSize::createAction()
 {
@@ -130,9 +126,7 @@ FontColor::FontColor(Actions *actions)
 {
 }
 
-FontColor::~FontColor()
-{
-}
+FontColor::~FontColor() = default;
 
 QAction *FontColor::createAction()
 {

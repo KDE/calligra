@@ -13,9 +13,7 @@ KPrPresentationToolEventForwarder::KPrPresentationToolEventForwarder(KoPACanvasB
 {
 }
 
-KPrPresentationToolEventForwarder::~KPrPresentationToolEventForwarder()
-{
-}
+KPrPresentationToolEventForwarder::~KPrPresentationToolEventForwarder() = default;
 
 void KPrPresentationToolEventForwarder::receiveMousePressEvent(QMouseEvent *event)
 {

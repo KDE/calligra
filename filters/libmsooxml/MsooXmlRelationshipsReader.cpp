@@ -35,12 +35,8 @@ MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(const QStri
 class MsooXmlRelationshipsReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
     QString pathAndFile;
 };
 

@@ -46,9 +46,7 @@ static QRectF itemRect(const KoShape *shape)
     return ChartLayout::itemRect(shape);
 }
 
-TestChartLayout::TestChartLayout()
-{
-}
+TestChartLayout::TestChartLayout() = default;
 
 void TestChartLayout::initTestCase()
 {

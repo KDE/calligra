@@ -22,9 +22,7 @@ public:
         : changes(nullptr)
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     KoGenChanges *changes;
     QMap<QString, QString> m_rdfIdMapping; //< This lets the RDF system know old->new xml:id
@@ -39,9 +37,7 @@ KoTextSharedSavingData::KoTextSharedSavingData()
 {
 }
 
-KoTextSharedSavingData::~KoTextSharedSavingData()
-{
-}
+KoTextSharedSavingData::~KoTextSharedSavingData() = default;
 
 void KoTextSharedSavingData::setGenChanges(KoGenChanges &changes)
 {

@@ -105,9 +105,7 @@ KoSelection::KoSelection()
 {
 }
 
-KoSelection::~KoSelection()
-{
-}
+KoSelection::~KoSelection() = default;
 
 void KoSelection::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {

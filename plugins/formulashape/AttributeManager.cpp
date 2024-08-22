@@ -47,9 +47,7 @@ AttributeManager::AttributeManager()
     m_viewConverter = nullptr;
 }
 
-AttributeManager::~AttributeManager()
-{
-}
+AttributeManager::~AttributeManager() = default;
 
 QString AttributeManager::findValue(const QString &attribute, const BasicElement *element) const
 {

@@ -450,18 +450,14 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-AutoFillSequence::AutoFillSequence()
-{
-}
+AutoFillSequence::AutoFillSequence() = default;
 
 AutoFillSequence::AutoFillSequence(const QList<AutoFillSequenceItem *> &list)
     : QList<AutoFillSequenceItem *>(list)
 {
 }
 
-AutoFillSequence::~AutoFillSequence()
-{
-}
+AutoFillSequence::~AutoFillSequence() = default;
 
 QList<Value> AutoFillSequence::createDeltaSequence(int intervalLength) const
 {
@@ -673,9 +669,7 @@ AutoFillCommand::AutoFillCommand()
     setText(kundo2_i18n("Autofill"));
 }
 
-AutoFillCommand::~AutoFillCommand()
-{
-}
+AutoFillCommand::~AutoFillCommand() = default;
 
 void AutoFillCommand::setSourceRange(const QRect &range)
 {

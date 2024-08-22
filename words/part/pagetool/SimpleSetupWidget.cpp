@@ -13,6 +13,4 @@ SimpleSetupWidget::SimpleSetupWidget(KWView *view, QWidget *parent)
     widget.setup->setDefaultAction(view->action("format_page"));
 }
 
-SimpleSetupWidget::~SimpleSetupWidget()
-{
-}
+SimpleSetupWidget::~SimpleSetupWidget() = default;

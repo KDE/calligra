@@ -38,9 +38,7 @@ SectionGroup::SectionGroup(const SectionGroup &_rhs)
     }
 }
 
-SectionGroup::~SectionGroup()
-{
-}
+SectionGroup::~SectionGroup() = default;
 
 void SectionGroup::insertSection(Section *page, int index)
 {

@@ -8,13 +8,9 @@
 
 #include <QPointF>
 
-KoSnapData::KoSnapData()
-{
-}
+KoSnapData::KoSnapData() = default;
 
-KoSnapData::~KoSnapData()
-{
-}
+KoSnapData::~KoSnapData() = default;
 
 QVector<QPointF> KoSnapData::snapPoints() const
 {

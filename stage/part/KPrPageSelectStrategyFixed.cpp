@@ -11,9 +11,7 @@ KPrPageSelectStrategyFixed::KPrPageSelectStrategyFixed(const KoPAPageBase *page)
 {
 }
 
-KPrPageSelectStrategyFixed::~KPrPageSelectStrategyFixed()
-{
-}
+KPrPageSelectStrategyFixed::~KPrPageSelectStrategyFixed() = default;
 
 const KoPAPageBase *KPrPageSelectStrategyFixed::page() const
 {

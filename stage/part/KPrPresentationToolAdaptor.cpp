@@ -25,9 +25,7 @@ KPrPresentationToolAdaptor::KPrPresentationToolAdaptor(KPrPresentationTool *tool
 {
 }
 
-KPrPresentationToolAdaptor::~KPrPresentationToolAdaptor()
-{
-}
+KPrPresentationToolAdaptor::~KPrPresentationToolAdaptor() = default;
 
 void KPrPresentationToolAdaptor::blankPresentation()
 {

@@ -35,7 +35,7 @@ public:
         , angle(0)
         , border(0)
         , opacity(1.0){};
-    ~KoOdfGradientBackgroundPrivate() override{};
+    ~KoOdfGradientBackgroundPrivate() override = default;
     // data
     QString style;
     int cx;
@@ -54,9 +54,7 @@ KoOdfGradientBackground::KoOdfGradientBackground()
 {
 }
 
-KoOdfGradientBackground::~KoOdfGradientBackground()
-{
-}
+KoOdfGradientBackground::~KoOdfGradientBackground() = default;
 
 bool KoOdfGradientBackground::loadOdf(const KoXmlElement &e)
 {

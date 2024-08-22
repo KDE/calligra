@@ -46,13 +46,10 @@ Validity::Validity()
 }
 
 Validity::Validity(const Validity &other)
-    : d(other.d)
-{
-}
 
-Validity::~Validity()
-{
-}
+    = default;
+
+Validity::~Validity() = default;
 
 bool Validity::isEmpty() const
 {

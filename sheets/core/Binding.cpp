@@ -35,13 +35,10 @@ Binding::Binding(const Region &region)
 }
 
 Binding::Binding(const Binding &other)
-    : d(other.d)
-{
-}
 
-Binding::~Binding()
-{
-}
+    = default;
+
+Binding::~Binding() = default;
 
 bool Binding::isEmpty() const
 {

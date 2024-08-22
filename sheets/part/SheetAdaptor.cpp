@@ -43,9 +43,7 @@ SheetAdaptor::SheetAdaptor(Sheet *t)
     connect(m_sheet->map(), &MapBase::damagesFlushed, this, &SheetAdaptor::handleDamages);
 }
 
-SheetAdaptor::~SheetAdaptor()
-{
-}
+SheetAdaptor::~SheetAdaptor() = default;
 
 QString SheetAdaptor::cellName(int x, int y)
 {

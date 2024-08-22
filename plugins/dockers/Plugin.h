@@ -15,9 +15,7 @@ class Plugin : public QObject
 
 public:
     Plugin(QObject *parent, const QVariantList &);
-    ~Plugin() override
-    {
-    }
+    ~Plugin() override = default;
 };
 
 #endif

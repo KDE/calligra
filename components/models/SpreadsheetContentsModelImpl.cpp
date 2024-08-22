@@ -22,9 +22,7 @@ using namespace Calligra::Components;
 class SpreadsheetContentsModelImpl::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
     QImage renderThumbnail(Calligra::Sheets::Sheet *sheet, int width, int height);
 

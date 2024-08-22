@@ -104,9 +104,7 @@ static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 class MarkerPainterDummyDiagram : public KChart::AbstractDiagram
 {
 public:
-    MarkerPainterDummyDiagram()
-    {
-    }
+    MarkerPainterDummyDiagram() = default;
     void doPaintMarker(QPainter *painter,
                        const KChart::MarkerAttributes &markerAttributes,
                        const QBrush &brush,

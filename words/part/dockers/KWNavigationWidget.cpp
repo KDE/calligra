@@ -37,9 +37,7 @@ KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     initLayout();
 }
 
-KWNavigationWidget::~KWNavigationWidget()
-{
-}
+KWNavigationWidget::~KWNavigationWidget() = default;
 
 void KWNavigationWidget::initUi()
 {

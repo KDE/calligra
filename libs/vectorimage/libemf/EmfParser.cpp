@@ -35,9 +35,7 @@ Parser::Parser()
 {
 }
 
-Parser::~Parser()
-{
-}
+Parser::~Parser() = default;
 
 bool Parser::load(const QString &fileName)
 {

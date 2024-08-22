@@ -31,9 +31,7 @@ CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonDocument *doc)
 {
 }
 
-CSThumbProviderKarbon::~CSThumbProviderKarbon()
-{
-}
+CSThumbProviderKarbon::~CSThumbProviderKarbon() = default;
 
 QVector<QImage> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
 {

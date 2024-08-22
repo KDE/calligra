@@ -23,9 +23,7 @@
 class Q_DECL_HIDDEN KoMarker::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
     QString name;
     QString d;

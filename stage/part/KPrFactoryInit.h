@@ -19,9 +19,7 @@ public:
         : KPrFactory()
     {
     }
-    ~KPrFactoryInit() override
-    {
-    }
+    ~KPrFactoryInit() override = default;
 };
 
 #endif

@@ -18,9 +18,7 @@ class KoConnectionShapeFactory : public KoShapeFactoryBase
     Q_OBJECT
 public:
     KoConnectionShapeFactory();
-    ~KoConnectionShapeFactory() override
-    {
-    }
+    ~KoConnectionShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

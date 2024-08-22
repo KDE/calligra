@@ -102,9 +102,7 @@ SectionsBoxDock::SectionsBoxDock()
     connect(m_wdgSectionsBox.bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 }
 
-SectionsBoxDock::~SectionsBoxDock()
-{
-}
+SectionsBoxDock::~SectionsBoxDock() = default;
 
 void SectionsBoxDock::updateGUI()
 {

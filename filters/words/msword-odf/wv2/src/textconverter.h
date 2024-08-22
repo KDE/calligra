@@ -104,11 +104,11 @@ private:
     /**
      * Don't copy us
      */
-    TextConverter(const TextConverter &rhs);
+    TextConverter(const TextConverter &rhs) = delete;
     /**
      * Don't assign us
      */
-    TextConverter &operator=(const TextConverter &rhs);
+    TextConverter &operator=(const TextConverter &rhs) = delete;
 
     /**
      * Closes the old converter

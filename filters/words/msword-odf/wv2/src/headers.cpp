@@ -160,9 +160,7 @@ Headers::Headers(U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 l
     tableStream->pop();
 }
 
-Headers::~Headers()
-{
-}
+Headers::~Headers() = default;
 
 QList<bool> Headers::headersMask(void)
 {

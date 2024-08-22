@@ -27,13 +27,9 @@
 // ================================================================
 //                         class DocxFile
 
-DocxFile::DocxFile()
-{
-}
+DocxFile::DocxFile() = default;
 
-DocxFile::~DocxFile()
-{
-}
+DocxFile::~DocxFile() = default;
 
 // todo: commentsexist should be probably replaced with qlist qpair later
 KoFilter::ConversionStatus

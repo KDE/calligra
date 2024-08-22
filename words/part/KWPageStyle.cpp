@@ -20,9 +20,7 @@
 #include <QBuffer>
 #include <QColor>
 
-KWPageStylePrivate::~KWPageStylePrivate()
-{
-}
+KWPageStylePrivate::~KWPageStylePrivate() = default;
 
 void KWPageStylePrivate::clear()
 {
@@ -53,28 +51,19 @@ KWPageStyle::KWPageStyle(const QString &name, const QString &displayname)
 }
 
 KWPageStyle::KWPageStyle(const KWPageStyle &ps)
-    : d(ps.d)
-{
-}
 
-KWPageStyle::KWPageStyle()
-{
-}
+    = default;
+
+KWPageStyle::KWPageStyle() = default;
 
 bool KWPageStyle::isValid() const
 {
     return d && !d->name.isEmpty();
 }
 
-KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
-{
-    d = ps.d;
-    return *this;
-}
+KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps) = default;
 
-KWPageStyle::~KWPageStyle()
-{
-}
+KWPageStyle::~KWPageStyle() = default;
 
 KWPageStyle::PageUsageType KWPageStyle::pageUsage() const
 {

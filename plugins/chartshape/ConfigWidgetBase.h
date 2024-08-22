@@ -23,12 +23,8 @@ namespace KoChart
 class ConfigWidgetBase : public KoShapeConfigWidgetBase
 {
 public:
-    ConfigWidgetBase()
-    {
-    }
-    ~ConfigWidgetBase()
-    {
-    }
+    ConfigWidgetBase() = default;
+    ~ConfigWidgetBase() = default;
 
     /// Calling open() with @p shape will call deactivate()
     /// reimplemented from KoShapeConfigWidgetBase

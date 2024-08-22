@@ -20,9 +20,7 @@ KarbonPatternToolFactory::KarbonPatternToolFactory()
     setPriority(3);
 }
 
-KarbonPatternToolFactory::~KarbonPatternToolFactory()
-{
-}
+KarbonPatternToolFactory::~KarbonPatternToolFactory() = default;
 
 KoToolBase *KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -51,9 +51,7 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget(KoPABackgroundTool *tool, QWi
     slotActivePageChanged();
 }
 
-KoPABackgroundToolWidget::~KoPABackgroundToolWidget()
-{
-}
+KoPABackgroundToolWidget::~KoPABackgroundToolWidget() = default;
 
 void KoPABackgroundToolWidget::slotActivePageChanged()
 {

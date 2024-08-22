@@ -7,9 +7,7 @@
 #include "KWNavigationDockerFactory.h"
 #include <dockers/KWNavigationDocker.h>
 
-KWNavigationDockerFactory::KWNavigationDockerFactory()
-{
-}
+KWNavigationDockerFactory::KWNavigationDockerFactory() = default;
 
 QString KWNavigationDockerFactory::id() const
 {

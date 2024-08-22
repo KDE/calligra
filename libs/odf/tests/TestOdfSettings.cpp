@@ -9,9 +9,7 @@ class TestOdfSettings : public QObject
 {
     Q_OBJECT
 public:
-    TestOdfSettings()
-    {
-    }
+    TestOdfSettings() = default;
 
 private Q_SLOTS:
     void initTestCase();

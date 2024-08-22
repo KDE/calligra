@@ -108,11 +108,11 @@ private:
     /**
      * we don't want to allow copying
      */
-    OLEStorage(const OLEStorage &rhs);
+    OLEStorage(const OLEStorage &rhs) = delete;
     /**
      * we don't want to allow assigning
      */
-    OLEStorage &operator=(const OLEStorage &rhs);
+    OLEStorage &operator=(const OLEStorage &rhs) = delete;
 
     /**
      *  Pointer to a Storage object which we are providing a Facade for.

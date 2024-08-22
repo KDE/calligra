@@ -56,8 +56,7 @@ Config::Config(const Config &config)
 /* Destructor                              */
 /*******************************************/
 Config::~Config()
-{
-}
+= default;
 
 void Config::indent()
 {

@@ -33,9 +33,7 @@ AcceptChangeCommand::AcceptChangeCommand(int changeId, const QList<QPair<int, in
     m_changeTracker = KoTextDocument(m_document).changeTracker();
 }
 
-AcceptChangeCommand::~AcceptChangeCommand()
-{
-}
+AcceptChangeCommand::~AcceptChangeCommand() = default;
 
 void AcceptChangeCommand::redo()
 {

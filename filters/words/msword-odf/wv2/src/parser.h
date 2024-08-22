@@ -202,8 +202,8 @@ protected:
     bool m_okay; // Still alright?
 
 private:
-    Parser(const Parser &rhs);
-    Parser &operator=(const Parser &rhs);
+    Parser(const Parser &rhs) = delete;
+    Parser &operator=(const Parser &rhs) = delete;
 
     template<typename Handler>
     void setHandler(Handler *newHandler, Handler **handler, bool &ourHandler)

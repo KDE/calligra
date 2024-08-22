@@ -17,8 +17,7 @@
 using namespace Calligra::Sheets;
 
 OpenCalcStyles::OpenCalcStyles()
-{
-}
+= default;
 
 OpenCalcStyles::~OpenCalcStyles()
 {

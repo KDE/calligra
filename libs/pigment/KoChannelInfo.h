@@ -70,9 +70,7 @@ public:
     };
 
 public:
-    KoChannelInfo()
-    {
-    }
+    KoChannelInfo() = default;
     /**
      * @param name of the channel
      * @param npos position of the channel in the pixel (in bytes)

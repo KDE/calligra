@@ -28,13 +28,9 @@ public:
                 // needed for forward binary compatibility.
 };
 
-OdsReaderBackend::Private::Private()
-{
-}
+OdsReaderBackend::Private::Private() = default;
 
-OdsReaderBackend::Private::~Private()
-{
-}
+OdsReaderBackend::Private::~Private() = default;
 
 // ================================================================
 //                 class OdsReaderBackend

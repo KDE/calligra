@@ -76,8 +76,8 @@ public:
     const FLD *fldForCP(Parser::SubDocument subDocument, U32 cp) const;
 
 private:
-    Fields(const Fields &rhs);
-    Fields &operator=(const Fields &rhs);
+    Fields(const Fields &rhs) = delete;
+    Fields &operator=(const Fields &rhs) = delete;
 
     void read(U32 fc, U32 lcb, OLEStreamReader *tableStream, PLCFMap<FLD> **plcf);
     void sanityCheck(const OLEStreamReader *tableStream, U32 nextFC, U32 lcb) const;

@@ -18,9 +18,7 @@ PalmDocCompression::PalmDocCompression()
 {
 }
 
-PalmDocCompression::~PalmDocCompression()
-{
-}
+PalmDocCompression::~PalmDocCompression() = default;
 
 void PalmDocCompression::compressContent(QByteArray input, QByteArray &output, QList<qint32> &recordOffset)
 {

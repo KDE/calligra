@@ -178,8 +178,8 @@ private:
     KoStyleStackPrivate *const d;
 
     // forbidden
-    void operator=(const KoStyleStack &);
-    KoStyleStack(const KoStyleStack &);
+    void operator=(const KoStyleStack &) = delete;
+    KoStyleStack(const KoStyleStack &) = delete;
 };
 
 #endif /* KOSTYLESTACK_H */

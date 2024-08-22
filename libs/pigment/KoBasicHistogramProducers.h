@@ -23,9 +23,7 @@ class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
 public:
     explicit KoBasicHistogramProducer(const KoID &id, int channelCount, int nrOfBins);
     explicit KoBasicHistogramProducer(const KoID &id, int nrOfBins, const KoColorSpace *colorSpace);
-    ~KoBasicHistogramProducer() override
-    {
-    }
+    ~KoBasicHistogramProducer() override = default;
 
     void clear() override;
 
@@ -160,9 +158,7 @@ public:
         , m_depthId(depthId)
     {
     }
-    ~KoBasicHistogramProducerFactory() override
-    {
-    }
+    ~KoBasicHistogramProducerFactory() override = default;
 
     KoHistogramProducer *generate() override
     {
@@ -211,9 +207,7 @@ class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogra
 public:
     KoGenericRGBHistogramProducerFactory();
 
-    ~KoGenericRGBHistogramProducerFactory() override
-    {
-    }
+    ~KoGenericRGBHistogramProducerFactory() override = default;
 
     KoHistogramProducer *generate() override
     {
@@ -255,9 +249,7 @@ class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHist
 {
 public:
     KoGenericLabHistogramProducerFactory();
-    ~KoGenericLabHistogramProducerFactory() override
-    {
-    }
+    ~KoGenericLabHistogramProducerFactory() override = default;
 
     KoHistogramProducer *generate() override
     {

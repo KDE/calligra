@@ -9,13 +9,9 @@
 
 #include <QBrush>
 
-KoTextBlockPaintStrategyBase::KoTextBlockPaintStrategyBase()
-{
-}
+KoTextBlockPaintStrategyBase::KoTextBlockPaintStrategyBase() = default;
 
-KoTextBlockPaintStrategyBase::~KoTextBlockPaintStrategyBase()
-{
-}
+KoTextBlockPaintStrategyBase::~KoTextBlockPaintStrategyBase() = default;
 
 QBrush KoTextBlockPaintStrategyBase::background(const QBrush &defaultBackground) const
 {

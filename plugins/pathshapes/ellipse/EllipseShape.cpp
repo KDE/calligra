@@ -40,9 +40,7 @@ EllipseShape::EllipseShape()
     updatePath(size);
 }
 
-EllipseShape::~EllipseShape()
-{
-}
+EllipseShape::~EllipseShape() = default;
 
 void EllipseShape::saveOdf(KoShapeSavingContext &context) const
 {

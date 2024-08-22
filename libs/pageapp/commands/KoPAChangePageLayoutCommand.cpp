@@ -33,9 +33,7 @@ KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand(KoPADocument *document,
     }
 }
 
-KoPAChangePageLayoutCommand::~KoPAChangePageLayoutCommand()
-{
-}
+KoPAChangePageLayoutCommand::~KoPAChangePageLayoutCommand() = default;
 
 void KoPAChangePageLayoutCommand::redo()
 {

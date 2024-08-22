@@ -26,9 +26,7 @@ Copy::Copy(Actions *actions)
 {
 }
 
-Copy::~Copy()
-{
-}
+Copy::~Copy() = default;
 
 QAction *Copy::createAction()
 {
@@ -60,9 +58,7 @@ Cut::Cut(Actions *actions)
 {
 }
 
-Cut::~Cut()
-{
-}
+Cut::~Cut() = default;
 
 QAction *Cut::createAction()
 {

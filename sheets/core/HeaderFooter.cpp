@@ -31,9 +31,7 @@ HeaderFooter::HeaderFooter(Sheet *sheet)
 {
 }
 
-HeaderFooter::~HeaderFooter()
-{
-}
+HeaderFooter::~HeaderFooter() = default;
 
 void HeaderFooter::replaceHeadFootLineMacro(QString &_text, const QString &_search, const QString &_replace) const
 {

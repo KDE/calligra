@@ -169,8 +169,8 @@ private:
     StreamIO *io;
 
     // no copy or assign
-    Stream(const Stream &);
-    Stream &operator=(const Stream &);
+    Stream(const Stream &) = delete;
+    Stream &operator=(const Stream &) = delete;
 };
 
 }

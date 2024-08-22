@@ -26,12 +26,8 @@
 class DocxXmlNumberingReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 };
 
 DocxXmlNumberingReader::DocxXmlNumberingReader(KoOdfWriters *writers)

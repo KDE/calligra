@@ -19,13 +19,9 @@
 // ================================================================
 //                         class OpcRelSet
 
-OpcRelSet::OpcRelSet()
-{
-}
+OpcRelSet::OpcRelSet() = default;
 
-OpcRelSet::~OpcRelSet()
-{
-}
+OpcRelSet::~OpcRelSet() = default;
 
 QString OpcRelSet::addRelationship(const QString &type, const QString &target)
 {

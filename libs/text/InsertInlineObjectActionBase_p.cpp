@@ -21,9 +21,7 @@ InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas,
     connect(this, &QAction::triggered, this, &InsertInlineObjectActionBase::activated);
 }
 
-InsertInlineObjectActionBase::~InsertInlineObjectActionBase()
-{
-}
+InsertInlineObjectActionBase::~InsertInlineObjectActionBase() = default;
 
 void InsertInlineObjectActionBase::activated()
 {

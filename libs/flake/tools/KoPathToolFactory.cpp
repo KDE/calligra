@@ -21,9 +21,7 @@ KoPathToolFactory::KoPathToolFactory()
     setActivationShapeId(KoPathShapeId);
 }
 
-KoPathToolFactory::~KoPathToolFactory()
-{
-}
+KoPathToolFactory::~KoPathToolFactory() = default;
 
 KoToolBase *KoPathToolFactory::createTool(KoCanvasBase *canvas)
 {

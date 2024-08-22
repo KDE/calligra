@@ -17,9 +17,7 @@ class EnhancedPathShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     EnhancedPathShapeFactory();
-    ~EnhancedPathShapeFactory() override
-    {
-    }
+    ~EnhancedPathShapeFactory() override = default;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

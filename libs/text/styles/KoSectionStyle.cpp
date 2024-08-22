@@ -36,9 +36,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {

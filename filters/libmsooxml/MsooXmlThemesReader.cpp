@@ -104,13 +104,9 @@ void DrawingMLSolidFill::writeStyles(KoGenStyles &styles, KoGenStyle *graphicSty
     }
 }
 
-DrawingMLColorSchemeItem::DrawingMLColorSchemeItem()
-{
-}
+DrawingMLColorSchemeItem::DrawingMLColorSchemeItem() = default;
 
-DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
-{
-}
+DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem() = default;
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
@@ -146,13 +142,9 @@ QColor DrawingMLColorSchemeSystemItem::value() const
     return QColor(Qt::black); // TODO; better default?
 }
 
-DrawingMLColorSchemeItemBase::DrawingMLColorSchemeItemBase()
-{
-}
+DrawingMLColorSchemeItemBase::DrawingMLColorSchemeItemBase() = default;
 
-DrawingMLColorSchemeItemBase::~DrawingMLColorSchemeItemBase()
-{
-}
+DrawingMLColorSchemeItemBase::~DrawingMLColorSchemeItemBase() = default;
 
 DrawingMLColorSchemeItem *DrawingMLColorSchemeItemBase::toColorItem()
 {
@@ -164,9 +156,7 @@ DrawingMLColorSchemeSystemItem *DrawingMLColorSchemeItemBase::toSystemItem()
     return dynamic_cast<DrawingMLColorSchemeSystemItem *>(this);
 }
 
-DrawingMLColorScheme::DrawingMLColorScheme()
-{
-}
+DrawingMLColorScheme::DrawingMLColorScheme() = default;
 
 DrawingMLColorScheme::~DrawingMLColorScheme()
 {
@@ -200,26 +190,18 @@ DrawingMLColorSchemeItemBase *DrawingMLColorScheme::value(int index) const
     return DrawingMLColorSchemeItemHash::value(QString::number(index));
 }
 
-DrawingMLFontScheme::DrawingMLFontScheme()
-{
-}
+DrawingMLFontScheme::DrawingMLFontScheme() = default;
 
-DrawingMLFontSet::DrawingMLFontSet()
-{
-}
+DrawingMLFontSet::DrawingMLFontSet() = default;
 
-DrawingMLFillBase::~DrawingMLFillBase()
-{
-}
+DrawingMLFillBase::~DrawingMLFillBase() = default;
 
 DrawingMLFormatScheme::~DrawingMLFormatScheme()
 {
     qDeleteAll(fillStyles);
 }
 
-DrawingMLFormatScheme::DrawingMLFormatScheme()
-{
-}
+DrawingMLFormatScheme::DrawingMLFormatScheme() = default;
 
 DrawingMLFormatScheme::DrawingMLFormatScheme(const DrawingMLFormatScheme &format)
 {
@@ -243,9 +225,7 @@ DrawingMLFormatScheme &DrawingMLFormatScheme::operator=(const DrawingMLFormatSch
     return *this;
 }
 
-DrawingMLTheme::DrawingMLTheme()
-{
-}
+DrawingMLTheme::DrawingMLTheme() = default;
 
 // ---------------------------------------------------
 
@@ -273,9 +253,7 @@ MsooXmlThemesReader::MsooXmlThemesReader(KoOdfWriters *writers)
     init();
 }
 
-MsooXmlThemesReader::~MsooXmlThemesReader()
-{
-}
+MsooXmlThemesReader::~MsooXmlThemesReader() = default;
 
 void MsooXmlThemesReader::init()
 {

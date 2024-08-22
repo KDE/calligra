@@ -16,9 +16,7 @@ StyleSheetDestination::StyleSheetDestination(Reader *reader, AbstractRtfOutput *
     m_currentStyleHandleNumber = 0; /* default */
 }
 
-StyleSheetDestination::~StyleSheetDestination()
-{
-}
+StyleSheetDestination::~StyleSheetDestination() = default;
 
 void StyleSheetDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

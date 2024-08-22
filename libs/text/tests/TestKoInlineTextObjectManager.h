@@ -29,9 +29,7 @@ public:
     {
     }
 
-    ~DummyInlineObject() override
-    {
-    }
+    ~DummyInlineObject() override = default;
 
     void saveOdf(KoShapeSavingContext &context) override
     {

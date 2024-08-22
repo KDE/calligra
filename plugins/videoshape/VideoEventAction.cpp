@@ -26,9 +26,7 @@ VideoEventAction::VideoEventAction(VideoShape *parent)
     setId(QString("videoeventaction"));
 }
 
-VideoEventAction::~VideoEventAction()
-{
-}
+VideoEventAction::~VideoEventAction() = default;
 
 bool VideoEventAction::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

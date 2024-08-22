@@ -18,9 +18,7 @@ class VectorShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     VectorShapeFactory();
-    ~VectorShapeFactory() override
-    {
-    }
+    ~VectorShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
 

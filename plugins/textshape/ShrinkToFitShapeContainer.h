@@ -34,9 +34,7 @@ public:
         , childShape(childShape)
     {
     }
-    ~ShrinkToFitShapeContainerPrivate() override
-    {
-    }
+    ~ShrinkToFitShapeContainerPrivate() override = default;
     KoShape *childShape; // the original shape not owned by us
 };
 

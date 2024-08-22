@@ -21,9 +21,7 @@ KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(QTextBlockUserData *blockUs
 {
 }
 
-KPrTextBlockPaintStrategy::~KPrTextBlockPaintStrategy()
-{
-}
+KPrTextBlockPaintStrategy::~KPrTextBlockPaintStrategy() = default;
 
 void KPrTextBlockPaintStrategy::setAnimationCache(KPrAnimationCache *animationCache)
 {

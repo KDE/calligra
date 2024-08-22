@@ -39,13 +39,9 @@ static const unsigned int numTemplateStyles = sizeof(templateStyles) / sizeof(*t
 class Q_DECL_HIDDEN KoTextTableTemplate::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {

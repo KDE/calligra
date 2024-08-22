@@ -21,9 +21,7 @@ KoParameterShape::KoParameterShape(KoParameterShapePrivate &dd)
 {
 }
 
-KoParameterShape::~KoParameterShape()
-{
-}
+KoParameterShape::~KoParameterShape() = default;
 
 void KoParameterShape::moveHandle(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {

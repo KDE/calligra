@@ -24,9 +24,7 @@ KPrAnimationAttribute::KPrAnimationAttribute(const QString &attributeName)
 {
 }
 
-KPrAnimationAttribute::~KPrAnimationAttribute()
-{
-}
+KPrAnimationAttribute::~KPrAnimationAttribute() = default;
 
 QString KPrAnimationAttribute::attributeName() const
 {

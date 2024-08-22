@@ -41,9 +41,7 @@ DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice *io, KoOdfWriters *writ
 {
 }
 
-DocxXmlFontTableReader::~DocxXmlFontTableReader()
-{
-}
+DocxXmlFontTableReader::~DocxXmlFontTableReader() = default;
 
 KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {

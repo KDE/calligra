@@ -99,9 +99,7 @@ public:
     }
 
 protected:
-    virtual ~Shared()
-    {
-    }
+    virtual ~Shared() = default;
 
 private:
     mutable int count;

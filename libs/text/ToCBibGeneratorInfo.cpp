@@ -22,9 +22,7 @@ IndexEntry *IndexEntry::clone()
     return newIndexEntry;
 }
 
-IndexEntry::~IndexEntry()
-{
-}
+IndexEntry::~IndexEntry() = default;
 
 void IndexEntry::addAttributes(KoXmlWriter *writer) const
 {
@@ -173,9 +171,7 @@ void IndexSourceStyle::saveOdf(KoXmlWriter *writer) const
     writer->endElement();
 }
 
-IndexSourceStyles::IndexSourceStyles()
-{
-}
+IndexSourceStyles::IndexSourceStyles() = default;
 
 IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
 {
@@ -308,9 +304,7 @@ void IndexEntryChapter::addAttributes(KoXmlWriter *writer) const
     writer->addAttribute("text:outline-level", outlineLevel);
 }
 
-BibliographyEntryTemplate::BibliographyEntryTemplate()
-{
-}
+BibliographyEntryTemplate::BibliographyEntryTemplate() = default;
 
 BibliographyEntryTemplate::BibliographyEntryTemplate(const QString &type, const QList<IndexEntry *> &entries)
     : indexEntries(entries)

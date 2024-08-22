@@ -84,7 +84,7 @@ public:
     UString headerDocument() const;
 
 private:
-    AssociatedStrings &operator=(const AssociatedStrings &rhs);
+    AssociatedStrings &operator=(const AssociatedStrings &rhs) = delete;
 
     STTBF *m_sttbf;
 };

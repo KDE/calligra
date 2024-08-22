@@ -23,8 +23,8 @@ static QVector3D odfToVector3D(const QString &string);
 class Q_DECL_HIDDEN Ko3dScene::Private
 {
 public:
-    Private(){};
-    ~Private(){};
+    Private() = default;
+    ~Private() = default;
 
     // Camera attributes
     QVector3D vrp; // Camera origin
@@ -48,13 +48,9 @@ public:
 // ----------------------------------------------------------------
 //                         Lightsource
 
-Ko3dScene::Lightsource::Lightsource()
-{
-}
+Ko3dScene::Lightsource::Lightsource() = default;
 
-Ko3dScene::Lightsource::~Lightsource()
-{
-}
+Ko3dScene::Lightsource::~Lightsource() = default;
 
 // getters
 QColor Ko3dScene::Lightsource::diffuseColor() const

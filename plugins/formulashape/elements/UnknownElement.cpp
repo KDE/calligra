@@ -22,9 +22,7 @@ UnknownElement::UnknownElement(BasicElement *parent)
 {
 }
 
-UnknownElement::~UnknownElement()
-{
-}
+UnknownElement::~UnknownElement() = default;
 
 void UnknownElement::paint(QPainter &painter, AttributeManager *am)
 {

@@ -13,9 +13,7 @@
 class Q_DECL_HIDDEN KoShapeShadowCommand::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         foreach (KoShapeShadow *shadow, oldShadows) {

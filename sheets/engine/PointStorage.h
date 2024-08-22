@@ -66,9 +66,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~PointStorage()
-    {
-    }
+    virtual ~PointStorage() = default;
 
     /**
      * Clears the storage.

@@ -28,7 +28,7 @@ class KOODF2_EXPORT KoCell
     friend class KoTable;
 
     KoCell();
-    KoCell &operator=(KoCell &);
+    KoCell &operator=(KoCell &) = delete;
 
 public:
     ~KoCell();

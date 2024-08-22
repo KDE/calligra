@@ -381,9 +381,7 @@ FindAction::FindAction(Actions *actions, const QString &actionName)
     m_findAction = nullptr;
 }
 
-FindAction::~FindAction()
-{
-}
+FindAction::~FindAction() = default;
 
 FindReplaceAction *FindAction::findAction()
 {
@@ -401,9 +399,7 @@ FindNext::FindNext(Actions *actions)
 {
 }
 
-FindNext::~FindNext()
-{
-}
+FindNext::~FindNext() = default;
 
 QAction *FindNext::createAction()
 {
@@ -425,9 +421,7 @@ FindPrevious::FindPrevious(Actions *actions)
 {
 }
 
-FindPrevious::~FindPrevious()
-{
-}
+FindPrevious::~FindPrevious() = default;
 
 QAction *FindPrevious::createAction()
 {
@@ -449,9 +443,7 @@ Replace::Replace(Actions *actions)
 {
 }
 
-Replace::~Replace()
-{
-}
+Replace::~Replace() = default;
 
 QAction *Replace::createAction()
 {

@@ -107,9 +107,7 @@ RenderThread::RenderThread(const QByteArray &contents, VectorShape::VectorType t
     setAutoDelete(true);
 }
 
-RenderThread::~RenderThread()
-{
-}
+RenderThread::~RenderThread() = default;
 
 void RenderThread::run()
 {

@@ -28,9 +28,7 @@ SectionShapeContainerModel::SectionShapeContainerModel(Section *_section)
 {
 }
 
-SectionShapeContainerModel::~SectionShapeContainerModel()
-{
-}
+SectionShapeContainerModel::~SectionShapeContainerModel() = default;
 
 void SectionShapeContainerModel::add(KoShape *child)
 {

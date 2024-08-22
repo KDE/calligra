@@ -8,13 +8,9 @@
 */
 namespace RtfReader
 {
-AbstractRtfOutput::AbstractRtfOutput()
-{
-}
+AbstractRtfOutput::AbstractRtfOutput() = default;
 
-AbstractRtfOutput::~AbstractRtfOutput()
-{
-}
+AbstractRtfOutput::~AbstractRtfOutput() = default;
 
 QString AbstractRtfOutput::author() const
 {

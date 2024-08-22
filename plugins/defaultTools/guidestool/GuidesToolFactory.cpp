@@ -17,9 +17,7 @@ GuidesToolFactory::GuidesToolFactory()
     setActivationShapeId("itShouldNeverBeActivated");
 }
 
-GuidesToolFactory::~GuidesToolFactory()
-{
-}
+GuidesToolFactory::~GuidesToolFactory() = default;
 
 KoToolBase *GuidesToolFactory::createTool(KoCanvasBase *canvas)
 {

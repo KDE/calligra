@@ -42,9 +42,7 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const
     m_originalSegmentDegree = m_segment.degree();
 }
 
-KoPathSegmentChangeStrategy::~KoPathSegmentChangeStrategy()
-{
-}
+KoPathSegmentChangeStrategy::~KoPathSegmentChangeStrategy() = default;
 
 void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {

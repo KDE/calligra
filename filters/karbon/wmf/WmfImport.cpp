@@ -24,9 +24,7 @@ WMFImport::WMFImport(QObject *parent, const QVariantList &)
 {
 }
 
-WMFImport::~WMFImport()
-{
-}
+WMFImport::~WMFImport() = default;
 
 KoFilter::ConversionStatus WMFImport::convert(const QByteArray &from, const QByteArray &to)
 {

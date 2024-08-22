@@ -28,13 +28,9 @@ public:
                 // needed for forward binary compatibility.
 };
 
-OdfChartReaderBackend::Private::Private()
-{
-}
+OdfChartReaderBackend::Private::Private() = default;
 
-OdfChartReaderBackend::Private::~Private()
-{
-}
+OdfChartReaderBackend::Private::~Private() = default;
 
 // ================================================================
 //                 class OdfChartReaderBackend

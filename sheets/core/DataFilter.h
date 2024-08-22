@@ -39,9 +39,7 @@ public:
         BottomPercent
     };
 
-    virtual ~AbstractCondition()
-    {
-    }
+    virtual ~AbstractCondition() = default;
     enum Type { And, Or, Condition };
     virtual Type type() const = 0;
     virtual bool evaluate(const Database &database, int index) const = 0;
@@ -135,9 +133,7 @@ public:
     class And : public AbstractCondition
     {
     public:
-        And()
-        {
-        }
+        And() = default;
         And(const And &other);
         And &operator=(const And &other);
         ~And() override;
@@ -168,9 +164,7 @@ public:
     class Or : public AbstractCondition
     {
     public:
-        Or()
-        {
-        }
+        Or() = default;
         Or(const Or &other);
         Or &operator=(const Or &other);
         ~Or();

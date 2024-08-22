@@ -14,9 +14,7 @@ ArtisticTextShapeLoadingUpdater::ArtisticTextShapeLoadingUpdater(ArtisticTextSha
 {
 }
 
-ArtisticTextShapeLoadingUpdater::~ArtisticTextShapeLoadingUpdater()
-{
-}
+ArtisticTextShapeLoadingUpdater::~ArtisticTextShapeLoadingUpdater() = default;
 
 void ArtisticTextShapeLoadingUpdater::update(KoShape *shape)
 {

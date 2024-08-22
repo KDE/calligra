@@ -59,9 +59,7 @@ MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships *_relat
 {
 }
 
-MsooXmlReaderContext::~MsooXmlReaderContext()
-{
-}
+MsooXmlReaderContext::~MsooXmlReaderContext() = default;
 
 enum State { Start, InsideDocument };
 
@@ -79,9 +77,7 @@ MsooXmlReader::MsooXmlReader(QIODevice *io, KoOdfWriters *writers)
     init();
 }
 
-MsooXmlReader::~MsooXmlReader()
-{
-}
+MsooXmlReader::~MsooXmlReader() = default;
 
 const char MsooXmlReader::constOn[] = "on";
 const char MsooXmlReader::constOff[] = "off";

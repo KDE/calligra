@@ -40,9 +40,7 @@ Qt::DropActions KPrSlidesSorterDocumentModel::supportedDragActions() const
     return Qt::MoveAction;
 }
 
-KPrSlidesSorterDocumentModel::~KPrSlidesSorterDocumentModel()
-{
-}
+KPrSlidesSorterDocumentModel::~KPrSlidesSorterDocumentModel() = default;
 
 void KPrSlidesSorterDocumentModel::setDocument(KoPADocument *document)
 {

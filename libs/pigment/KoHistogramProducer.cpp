@@ -17,9 +17,7 @@
 
 Q_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance)
 
-KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry()
-{
-}
+KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry() = default;
 
 KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry()
 {

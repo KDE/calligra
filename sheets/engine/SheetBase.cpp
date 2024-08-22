@@ -25,9 +25,7 @@ class Q_DECL_HIDDEN SheetBase::Private
 {
 public:
     Private(SheetBase *sheet);
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     MapBase *workbook;
     QString name;

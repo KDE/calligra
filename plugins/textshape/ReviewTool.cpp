@@ -44,9 +44,7 @@ ReviewTool::ReviewTool(KoCanvasBase *canvas)
     createActions();
 }
 
-ReviewTool::~ReviewTool()
-{
-}
+ReviewTool::~ReviewTool() = default;
 
 void ReviewTool::createActions()
 {

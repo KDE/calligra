@@ -35,9 +35,7 @@ KarbonFactory::KarbonFactory()
     (void)global();
 }
 
-KarbonFactory::~KarbonFactory()
-{
-}
+KarbonFactory::~KarbonFactory() = default;
 
 QObject *KarbonFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)
 {

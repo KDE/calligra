@@ -244,7 +244,7 @@ public:
 
 private:
     // we need a KoShapeBasedDocumentBase so that it can work
-    KoCanvasBase();
+    KoCanvasBase() = delete;
 
     class Private;
     Private *const d;

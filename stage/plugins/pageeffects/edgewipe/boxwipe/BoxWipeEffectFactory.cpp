@@ -25,9 +25,7 @@ BoxWipeEffectFactory::BoxWipeEffectFactory()
     addStrategy(new BoxWipeStrategy(CenterLeft, "leftCenter", false));
 }
 
-BoxWipeEffectFactory::~BoxWipeEffectFactory()
-{
-}
+BoxWipeEffectFactory::~BoxWipeEffectFactory() = default;
 
 static const KLocalizedString s_subTypes[] = {kli18n("From Top Left"),
                                               kli18n("From Top Right"),

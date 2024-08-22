@@ -63,8 +63,8 @@ public:
     U32 nextAnnotation() const;
 
 private:
-    Annotations(const Annotations &rhs);
-    Annotations &operator=(const Annotations &rhs);
+    Annotations(const Annotations &rhs) = delete;
+    Annotations &operator=(const Annotations &rhs) = delete;
 
     // Ugly, but helps to avoid code duplication
     void init(U32 fcRef,

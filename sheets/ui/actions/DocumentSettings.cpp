@@ -25,9 +25,7 @@ DocumentSettings::DocumentSettings(Actions *actions)
 {
 }
 
-DocumentSettings::~DocumentSettings()
-{
-}
+DocumentSettings::~DocumentSettings() = default;
 
 ActionDialog *DocumentSettings::createDialog(QWidget *canvasWidget)
 {

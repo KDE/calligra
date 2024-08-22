@@ -14,9 +14,7 @@ KoRawCellChild::KoRawCellChild(const QByteArray &content)
 {
 }
 
-KoRawCellChild::~KoRawCellChild()
-{
-}
+KoRawCellChild::~KoRawCellChild() = default;
 
 void KoRawCellChild::saveOdf(KoXmlWriter &writer, KoGenStyles &styles) const
 {

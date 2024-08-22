@@ -14,9 +14,7 @@ KPrPresentationStrategy::KPrPresentationStrategy(KPrPresentationTool *tool)
 {
 }
 
-KPrPresentationStrategy::~KPrPresentationStrategy()
-{
-}
+KPrPresentationStrategy::~KPrPresentationStrategy() = default;
 
 bool KPrPresentationStrategy::keyPressEvent(QKeyEvent *event)
 {

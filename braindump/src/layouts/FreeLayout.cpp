@@ -30,9 +30,7 @@ FreeLayout::FreeLayout()
 {
 }
 
-FreeLayout::~FreeLayout()
-{
-}
+FreeLayout::~FreeLayout() = default;
 
 QRectF FreeLayout::boundingBox() const
 {
@@ -63,9 +61,7 @@ FreeLayoutFactory::FreeLayoutFactory()
 {
 }
 
-FreeLayoutFactory::~FreeLayoutFactory()
-{
-}
+FreeLayoutFactory::~FreeLayoutFactory() = default;
 
 Layout *FreeLayoutFactory::createLayout() const
 {

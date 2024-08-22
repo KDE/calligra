@@ -17,18 +17,14 @@ class MusicShapePlugin : public QObject
 
 public:
     MusicShapePlugin(QObject *parent, const QVariantList &);
-    ~MusicShapePlugin() override
-    {
-    }
+    ~MusicShapePlugin() override = default;
 };
 
 class MusicShapeFactory : public KoShapeFactoryBase
 {
 public:
     MusicShapeFactory();
-    ~MusicShapeFactory() override
-    {
-    }
+    ~MusicShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

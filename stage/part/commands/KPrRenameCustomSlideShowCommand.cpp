@@ -24,9 +24,7 @@ KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *do
     setText(kundo2_i18n("Rename custom slide show"));
 }
 
-KPrRenameCustomSlideShowCommand::~KPrRenameCustomSlideShowCommand()
-{
-}
+KPrRenameCustomSlideShowCommand::~KPrRenameCustomSlideShowCommand() = default;
 
 void KPrRenameCustomSlideShowCommand::redo()
 {

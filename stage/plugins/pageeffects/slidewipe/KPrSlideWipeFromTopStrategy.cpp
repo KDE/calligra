@@ -15,9 +15,7 @@ KPrSlideWipeFromTopStrategy::KPrSlideWipeFromTopStrategy()
 {
 }
 
-KPrSlideWipeFromTopStrategy::~KPrSlideWipeFromTopStrategy()
-{
-}
+KPrSlideWipeFromTopStrategy::~KPrSlideWipeFromTopStrategy() = default;
 
 void KPrSlideWipeFromTopStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

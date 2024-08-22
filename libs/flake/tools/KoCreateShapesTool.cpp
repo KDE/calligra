@@ -33,9 +33,7 @@ KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
 {
 }
 
-KoCreateShapesTool::~KoCreateShapesTool()
-{
-}
+KoCreateShapesTool::~KoCreateShapesTool() = default;
 
 void KoCreateShapesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

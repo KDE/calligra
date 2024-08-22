@@ -46,5 +46,4 @@ Calligra::Sheets::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableN
 }
 
 Calligra::Sheets::QuattroPro::Formula::~Formula()
-{
-}
+= default;

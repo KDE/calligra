@@ -91,9 +91,7 @@ KoZoomWidget::KoZoomWidget(QWidget *parent, KoZoomAction::SpecialButtons special
     connect(d->slider, &QAbstractSlider::valueChanged, this, &KoZoomWidget::sliderValueChanged);
 }
 
-KoZoomWidget::~KoZoomWidget()
-{
-}
+KoZoomWidget::~KoZoomWidget() = default;
 
 void KoZoomWidget::setZoomLevels(const QStringList &values)
 {

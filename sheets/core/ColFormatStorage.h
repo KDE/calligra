@@ -91,7 +91,7 @@ public:
     ColFormatStorage &operator=(const ColFormatStorage &r);
 
 private:
-    ColFormatStorage(const ColFormatStorage &);
+    ColFormatStorage(const ColFormatStorage &) = delete;
     class Private;
     Private *const d;
 };

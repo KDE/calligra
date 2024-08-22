@@ -33,9 +33,7 @@ public:
     {
     }
 
-    ~KoListPrivate()
-    {
-    }
+    ~KoListPrivate() = default;
 
     static void invalidate(const QTextBlock &block)
     {

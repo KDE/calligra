@@ -32,9 +32,7 @@ KoPathPointTypeCommand::KoPathPointTypeCommand(const QList<KoPathPointData> &poi
     setText(kundo2_i18n("Set point type"));
 }
 
-KoPathPointTypeCommand::~KoPathPointTypeCommand()
-{
-}
+KoPathPointTypeCommand::~KoPathPointTypeCommand() = default;
 
 void KoPathPointTypeCommand::redo()
 {

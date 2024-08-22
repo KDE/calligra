@@ -12,9 +12,7 @@ DocumentCommentPcdataDestination::DocumentCommentPcdataDestination(Reader *reade
 {
 }
 
-DocumentCommentPcdataDestination::~DocumentCommentPcdataDestination()
-{
-}
+DocumentCommentPcdataDestination::~DocumentCommentPcdataDestination() = default;
 
 void DocumentCommentPcdataDestination::aboutToEndDestination()
 {

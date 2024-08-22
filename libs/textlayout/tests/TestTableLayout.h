@@ -25,9 +25,7 @@ class TestTableLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestTableLayout()
-    {
-    }
+    TestTableLayout() = default;
 
 private Q_SLOTS:
     void initTestCase();

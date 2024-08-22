@@ -73,9 +73,7 @@ KoTextDocument::KoTextDocument(QPointer<QTextDocument> document)
     Q_ASSERT(m_document);
 }
 
-KoTextDocument::~KoTextDocument()
-{
-}
+KoTextDocument::~KoTextDocument() = default;
 
 QTextDocument *KoTextDocument::document() const
 {

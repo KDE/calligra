@@ -69,9 +69,7 @@ public:
     QString style;
     QSharedPointer<text_list> list;
     QSharedPointer<text_list_item> item;
-    TextListTag()
-    {
-    }
+    TextListTag() = default;
     TextListTag(const QString &style_, KoXmlWriter &out)
         : style(style_)
         , list(new text_list(&out))

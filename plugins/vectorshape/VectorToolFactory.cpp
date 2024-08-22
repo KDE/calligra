@@ -23,9 +23,7 @@ VectorToolFactory::VectorToolFactory()
     setActivationShapeId(VectorShape_SHAPEID);
 }
 
-VectorToolFactory::~VectorToolFactory()
-{
-}
+VectorToolFactory::~VectorToolFactory() = default;
 
 KoToolBase *VectorToolFactory::createTool(KoCanvasBase *canvas)
 {

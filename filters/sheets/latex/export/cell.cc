@@ -43,8 +43,7 @@ Cell::Cell(): Format()
 /* Destructor                              */
 /*******************************************/
 Cell::~Cell()
-{
-}
+= default;
 
 void Cell::analyze(const QDomNode node)
 {

@@ -17,9 +17,7 @@ SquareRootElement::SquareRootElement(BasicElement *parent)
 {
 }
 
-SquareRootElement::~SquareRootElement()
-{
-}
+SquareRootElement::~SquareRootElement() = default;
 
 void SquareRootElement::paint(QPainter &painter, AttributeManager *am)
 {

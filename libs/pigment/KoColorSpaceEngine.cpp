@@ -37,9 +37,7 @@ const QString &KoColorSpaceEngine::name() const
     return d->name;
 }
 
-KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry()
-{
-}
+KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry() = default;
 
 KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
 {

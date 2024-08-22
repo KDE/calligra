@@ -200,9 +200,7 @@ CalloutShape::CalloutShape(const KoProperties *params)
     setInheritsTransform(m_path, true);
 }
 
-CalloutShape::~CalloutShape()
-{
-}
+CalloutShape::~CalloutShape() = default;
 
 void CalloutShape::saveOdf(KoShapeSavingContext &context) const
 {

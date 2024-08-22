@@ -20,8 +20,8 @@
 class Q_DECL_HIDDEN KoOdfStyleProperties::Private
 {
 public:
-    Private(){};
-    ~Private(){};
+    Private() = default;
+    ~Private() = default;
 
     AttributeSet attributes; // name, value
 };

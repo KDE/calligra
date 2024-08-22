@@ -12,9 +12,7 @@ TitlePcdataDestination::TitlePcdataDestination(Reader *reader, AbstractRtfOutput
 {
 }
 
-TitlePcdataDestination::~TitlePcdataDestination()
-{
-}
+TitlePcdataDestination::~TitlePcdataDestination() = default;
 
 void TitlePcdataDestination::aboutToEndDestination()
 {

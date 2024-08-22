@@ -105,9 +105,7 @@ ReferencesTool::ReferencesTool(KoCanvasBase *canvas)
     createActions();
 }
 
-ReferencesTool::~ReferencesTool()
-{
-}
+ReferencesTool::~ReferencesTool() = default;
 
 void ReferencesTool::createActions()
 {

@@ -13,9 +13,7 @@ DrawingTableStyleConverterProperties::DrawingTableStyleConverterProperties()
 {
 }
 
-DrawingTableStyleConverterProperties::~DrawingTableStyleConverterProperties()
-{
-}
+DrawingTableStyleConverterProperties::~DrawingTableStyleConverterProperties() = default;
 
 DrawingTableStyleConverterProperties::Roles DrawingTableStyleConverterProperties::roles() const
 {
@@ -34,9 +32,7 @@ DrawingTableStyleConverter::DrawingTableStyleConverter(MSOOXML::DrawingTableStyl
 {
 }
 
-DrawingTableStyleConverter::~DrawingTableStyleConverter()
-{
-}
+DrawingTableStyleConverter::~DrawingTableStyleConverter() = default;
 
 void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr &style, int row, int column, const QPair<int, int> &spans)
 {

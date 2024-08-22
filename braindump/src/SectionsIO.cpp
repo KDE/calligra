@@ -58,9 +58,7 @@ SectionsIO::SectionsIO(RootSection *rootSection)
     load();
 }
 
-SectionsIO::~SectionsIO()
-{
-}
+SectionsIO::~SectionsIO() = default;
 
 void SectionsIO::push(Section *_section, PushMode _pushMode)
 {

@@ -118,9 +118,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
     }
 }
 
-KWStatisticsWidget::~KWStatisticsWidget()
-{
-}
+KWStatisticsWidget::~KWStatisticsWidget() = default;
 
 void KWStatisticsWidget::initUi()
 {

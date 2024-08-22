@@ -21,9 +21,7 @@
 class KOTEXTLAYOUT_EXPORT KoCharAreaInfo
 {
 public:
-    KoCharAreaInfo()
-    {
-    }
+    KoCharAreaInfo() = default;
 
     KoCharAreaInfo(const QRectF &_rect, const QChar &_character)
         : rect(_rect)

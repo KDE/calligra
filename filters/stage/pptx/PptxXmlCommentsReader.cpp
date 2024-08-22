@@ -198,6 +198,4 @@ PptxXmlCommentsReaderContext::PptxXmlCommentsReaderContext()
 {
 }
 
-PptxXmlCommentsReaderContext::~PptxXmlCommentsReaderContext()
-{
-}
+PptxXmlCommentsReaderContext::~PptxXmlCommentsReaderContext() = default;

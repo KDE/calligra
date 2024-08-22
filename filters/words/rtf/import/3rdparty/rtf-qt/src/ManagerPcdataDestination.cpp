@@ -12,9 +12,7 @@ ManagerPcdataDestination::ManagerPcdataDestination(Reader *reader, AbstractRtfOu
 {
 }
 
-ManagerPcdataDestination::~ManagerPcdataDestination()
-{
-}
+ManagerPcdataDestination::~ManagerPcdataDestination() = default;
 
 void ManagerPcdataDestination::aboutToEndDestination()
 {

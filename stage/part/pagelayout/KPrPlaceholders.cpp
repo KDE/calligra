@@ -33,9 +33,7 @@ KPrPlaceholders::KPrPlaceholders()
 {
 }
 
-KPrPlaceholders::~KPrPlaceholders()
-{
-}
+KPrPlaceholders::~KPrPlaceholders() = default;
 
 void KPrPlaceholders::setLayout(KPrPageLayout *layout,
                                 KoPADocument *document,

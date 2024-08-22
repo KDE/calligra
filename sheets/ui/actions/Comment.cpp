@@ -22,9 +22,7 @@ Comment::Comment(Actions *actions)
     m_closeEditor = true;
 }
 
-Comment::~Comment()
-{
-}
+Comment::~Comment() = default;
 
 ActionDialog *Comment::createDialog(QWidget *canvasWidget)
 {
@@ -54,9 +52,7 @@ ClearComment::ClearComment(Actions *actions)
 {
 }
 
-ClearComment::~ClearComment()
-{
-}
+ClearComment::~ClearComment() = default;
 
 QAction *ClearComment::createAction()
 {

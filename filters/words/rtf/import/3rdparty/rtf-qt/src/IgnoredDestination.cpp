@@ -12,9 +12,7 @@ IgnoredDestination::IgnoredDestination(Reader *reader, AbstractRtfOutput *output
 {
 }
 
-IgnoredDestination::~IgnoredDestination()
-{
-}
+IgnoredDestination::~IgnoredDestination() = default;
 
 void IgnoredDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

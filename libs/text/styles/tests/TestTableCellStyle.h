@@ -7,9 +7,7 @@ class TestTableCellStyle : public QObject
 {
     Q_OBJECT
 public:
-    TestTableCellStyle()
-    {
-    }
+    TestTableCellStyle() = default;
 
 private Q_SLOTS:
     void testPen();

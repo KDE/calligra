@@ -37,9 +37,7 @@ Inspector::Inspector(Actions *actions)
 {
 }
 
-Inspector::~Inspector()
-{
-}
+Inspector::~Inspector() = default;
 
 QAction *Inspector::createAction()
 {

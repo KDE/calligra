@@ -11,9 +11,7 @@ KoProgressBar::KoProgressBar(QWidget *parent)
 {
 }
 
-KoProgressBar::~KoProgressBar()
-{
-}
+KoProgressBar::~KoProgressBar() = default;
 
 int KoProgressBar::maximum() const
 {

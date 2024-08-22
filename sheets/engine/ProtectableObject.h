@@ -62,7 +62,7 @@ public:
 
 private:
     // disable assignment operator
-    void operator=(const ProtectableObject &);
+    void operator=(const ProtectableObject &) = delete;
 
     QByteArray passwordHash(const QString &password) const;
     QByteArray m_password;

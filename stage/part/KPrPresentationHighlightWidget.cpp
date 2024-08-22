@@ -29,9 +29,7 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvasBase *c
     update();
 }
 
-KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
-{
-}
+KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget() = default;
 
 /** paintEvent call with the update in the mouseMoveEvent */
 void KPrPresentationHighlightWidget::paintEvent(QPaintEvent *event)

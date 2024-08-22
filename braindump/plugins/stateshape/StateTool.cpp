@@ -39,9 +39,7 @@ StateTool::StateTool(KoCanvasBase *canvas)
 {
 }
 
-StateTool::~StateTool()
-{
-}
+StateTool::~StateTool() = default;
 
 void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> & /*shapes*/)
 {

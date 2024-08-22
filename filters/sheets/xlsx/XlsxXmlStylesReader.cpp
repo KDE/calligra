@@ -150,9 +150,7 @@ XlsxCellFormat::XlsxCellFormat()
 {
 }
 
-XlsxCellFormat::~XlsxCellFormat()
-{
-}
+XlsxCellFormat::~XlsxCellFormat() = default;
 
 class ST_HorizontalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::ST_HorizontalAlignment>
 {
@@ -382,12 +380,8 @@ XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles &_styles, bool
 class XlsxXmlStylesReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
 private:
 };

@@ -102,9 +102,7 @@ KPrPlaceholderStrategy::KPrPlaceholderStrategy(const QString &presentationClass)
 {
 }
 
-KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
-{
-}
+KPrPlaceholderStrategy::~KPrPlaceholderStrategy() = default;
 
 KoShape *KPrPlaceholderStrategy::createShape(KoDocumentResourceManager *rm)
 {

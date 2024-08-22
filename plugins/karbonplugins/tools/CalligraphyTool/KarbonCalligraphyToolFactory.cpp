@@ -23,9 +23,7 @@ KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
     setActivationShapeId("flake/edit");
 }
 
-KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory()
-{
-}
+KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory() = default;
 
 KoToolBase *KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -33,9 +33,7 @@ public:
     /// constructs new strategy on the specified shape and target
     explicit GradientStrategy(KoShape *shape, const QGradient *gradient, Target target);
 
-    virtual ~GradientStrategy()
-    {
-    }
+    virtual ~GradientStrategy() = default;
 
     /// painting of the gradient editing handles
     void paint(QPainter &painter, const KoViewConverter &converter, bool selected);

@@ -28,9 +28,7 @@ AcceptRejectChangeDialog::AcceptRejectChangeDialog(KoChangeTracker *changeTracke
     connect(ui.cancelButton, &QAbstractButton::released, this, &AcceptRejectChangeDialog::dialogCancelled);
 }
 
-AcceptRejectChangeDialog::~AcceptRejectChangeDialog()
-{
-}
+AcceptRejectChangeDialog::~AcceptRejectChangeDialog() = default;
 
 void AcceptRejectChangeDialog::changeAccepted()
 {

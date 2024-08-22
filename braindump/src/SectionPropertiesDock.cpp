@@ -41,9 +41,7 @@ SectionPropertiesDock::SectionPropertiesDock()
     connect(m_wdgSectionProperties.comboBoxLayout, SIGNAL(currentIndexChanged(int)), SLOT(layoutChanged(int)));
 }
 
-SectionPropertiesDock::~SectionPropertiesDock()
-{
-}
+SectionPropertiesDock::~SectionPropertiesDock() = default;
 
 void SectionPropertiesDock::setRootSection(RootSection *_rootSection)
 {

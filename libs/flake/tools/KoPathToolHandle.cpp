@@ -29,9 +29,7 @@ KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
 {
 }
 
-KoPathToolHandle::~KoPathToolHandle()
-{
-}
+KoPathToolHandle::~KoPathToolHandle() = default;
 
 uint KoPathToolHandle::handleRadius() const
 {

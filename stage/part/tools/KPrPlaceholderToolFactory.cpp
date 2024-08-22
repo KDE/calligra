@@ -18,9 +18,7 @@ KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     setActivationShapeId(KPrPlaceholderShapeId);
 }
 
-KPrPlaceholderToolFactory::~KPrPlaceholderToolFactory()
-{
-}
+KPrPlaceholderToolFactory::~KPrPlaceholderToolFactory() = default;
 
 KoToolBase *KPrPlaceholderToolFactory::createTool(KoCanvasBase *canvas)
 {

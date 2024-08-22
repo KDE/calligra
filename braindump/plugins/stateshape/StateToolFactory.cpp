@@ -36,9 +36,7 @@ StateToolFactory::StateToolFactory()
     setActivationShapeId(STATESHAPEID);
 }
 
-StateToolFactory::~StateToolFactory()
-{
-}
+StateToolFactory::~StateToolFactory() = default;
 
 KoToolBase *StateToolFactory::createTool(KoCanvasBase *canvas)
 {

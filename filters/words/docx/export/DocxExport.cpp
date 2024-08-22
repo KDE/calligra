@@ -42,9 +42,7 @@ DocxExport::DocxExport(QObject *parent, const QVariantList &)
 {
 }
 
-DocxExport::~DocxExport()
-{
-}
+DocxExport::~DocxExport() = default;
 
 KoFilter::ConversionStatus DocxExport::convert(const QByteArray &from, const QByteArray &to)
 {

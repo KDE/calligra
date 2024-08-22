@@ -42,9 +42,7 @@ RootSection::RootSection()
     }
 }
 
-RootSection::~RootSection()
-{
-}
+RootSection::~RootSection() = default;
 
 ViewManager *RootSection::viewManager()
 {

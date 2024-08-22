@@ -27,9 +27,7 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked);
-    ~KoCreateShapeStrategy() override
-    {
-    }
+    ~KoCreateShapeStrategy() override = default;
 
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;

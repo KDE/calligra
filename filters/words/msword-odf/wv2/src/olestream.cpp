@@ -33,9 +33,7 @@ OLEStream::OLEStream(OLEStorage *storage)
 {
 }
 
-OLEStream::~OLEStream()
-{
-}
+OLEStream::~OLEStream() = default;
 
 void OLEStream::push()
 {
@@ -194,9 +192,7 @@ OLEStreamWriter::OLEStreamWriter(OLEStorage *storage)
 {
 }
 
-OLEStreamWriter::~OLEStreamWriter()
-{
-}
+OLEStreamWriter::~OLEStreamWriter() = default;
 
 bool OLEStreamWriter::isValid() const
 {

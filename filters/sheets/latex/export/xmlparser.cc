@@ -63,8 +63,7 @@ XmlParser::XmlParser(const KoStore* in)
 }
 
 XmlParser::XmlParser()
-{
-}
+= default;
 
 XmlParser::~XmlParser()
 {

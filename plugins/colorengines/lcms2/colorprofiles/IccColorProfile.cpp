@@ -31,9 +31,7 @@ IccColorProfile::Data::Data(const QByteArray &rawData)
     d->rawData = rawData;
 }
 
-IccColorProfile::Data::~Data()
-{
-}
+IccColorProfile::Data::~Data() = default;
 
 QByteArray IccColorProfile::Data::rawData()
 {
@@ -45,13 +43,9 @@ void IccColorProfile::Data::setRawData(const QByteArray &rawData)
     d->rawData = rawData;
 }
 
-IccColorProfile::Container::Container()
-{
-}
+IccColorProfile::Container::Container() = default;
 
-IccColorProfile::Container::~Container()
-{
-}
+IccColorProfile::Container::~Container() = default;
 
 struct IccColorProfile::Private {
     struct Shared {

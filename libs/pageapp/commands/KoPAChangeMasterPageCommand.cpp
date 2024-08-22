@@ -24,9 +24,7 @@ KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand(KoPADocument *document,
     }
 }
 
-KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand()
-{
-}
+KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand() = default;
 
 void KoPAChangeMasterPageCommand::redo()
 {

@@ -6,10 +6,6 @@
 
 #include "KPrPageSelectStrategyBase.h"
 
-KPrPageSelectStrategyBase::KPrPageSelectStrategyBase()
-{
-}
+KPrPageSelectStrategyBase::KPrPageSelectStrategyBase() = default;
 
-KPrPageSelectStrategyBase::~KPrPageSelectStrategyBase()
-{
-}
+KPrPageSelectStrategyBase::~KPrPageSelectStrategyBase() = default;

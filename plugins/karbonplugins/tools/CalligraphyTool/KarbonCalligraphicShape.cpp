@@ -32,9 +32,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
     setStroke(nullptr);
 }
 
-KarbonCalligraphicShape::~KarbonCalligraphicShape()
-{
-}
+KarbonCalligraphicShape::~KarbonCalligraphicShape() = default;
 
 void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qreal width)
 {

@@ -78,9 +78,7 @@ LayoutPageGeneral::LayoutPageGeneral(QWidget *parent, StyleManager *manager)
     resize(QSize(534, 447).expandedTo(minimumSizeHint()));
 }
 
-LayoutPageGeneral::~LayoutPageGeneral()
-{
-}
+LayoutPageGeneral::~LayoutPageGeneral() = default;
 
 void LayoutPageGeneral::styleNameChanged(const QString &name)
 {

@@ -22,9 +22,7 @@ KPrPresentationBlackWidget::KPrPresentationBlackWidget(KoPACanvasBase *canvas)
     update();
 }
 
-KPrPresentationBlackWidget::~KPrPresentationBlackWidget()
-{
-}
+KPrPresentationBlackWidget::~KPrPresentationBlackWidget() = default;
 
 void KPrPresentationBlackWidget::paintEvent(QPaintEvent *event)
 {

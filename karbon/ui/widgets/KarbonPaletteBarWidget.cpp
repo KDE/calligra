@@ -86,9 +86,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
     }
 }
 
-KarbonPaletteBarWidget::~KarbonPaletteBarWidget()
-{
-}
+KarbonPaletteBarWidget::~KarbonPaletteBarWidget() = default;
 
 void KarbonPaletteBarWidget::setOrientation(Qt::Orientation orientation)
 {

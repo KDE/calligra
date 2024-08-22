@@ -26,9 +26,7 @@ KPrAnimationValue::KPrAnimationValue(KPrShapeAnimation *shapeAnimation)
 {
 }
 
-KPrAnimationValue::~KPrAnimationValue()
-{
-}
+KPrAnimationValue::~KPrAnimationValue() = default;
 
 void KPrAnimationValue::setCache(KPrAnimationCache *cache)
 {

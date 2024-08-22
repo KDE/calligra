@@ -118,9 +118,7 @@ public:
             , extraName(extra)
         {
         }
-        ~SubDocument()
-        {
-        }
+        ~SubDocument() = default;
         FunctorPtr functorPtr;
         int data;
         QString name;

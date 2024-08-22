@@ -35,9 +35,7 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace()
     addStandardCompositeOps<KoBgrU8Traits>(this);
 }
 
-KoRgbU8ColorSpace::~KoRgbU8ColorSpace()
-{
-}
+KoRgbU8ColorSpace::~KoRgbU8ColorSpace() = default;
 
 QString KoRgbU8ColorSpace::colorSpaceId()
 {

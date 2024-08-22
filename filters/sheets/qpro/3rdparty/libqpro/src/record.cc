@@ -75,8 +75,7 @@ QpRec::QpRec(QpRecType pType)
 }
 
 QpRec::~QpRec()
-{
-}
+= default;
 
 QP_INT16
 QpRec::type()
@@ -309,8 +308,7 @@ QpRecBof::QpRecBof(QP_INT16, QpIStream& pIn)
 }
 
 QpRecBof::~QpRecBof()
-{
-}
+= default;
 
 // -----------------------------------------------------------------------
 
@@ -321,8 +319,7 @@ QpRecEof::QpRecEof(QP_INT16, QpIStream&)
 }
 
 QpRecEof::~QpRecEof()
-{
-}
+= default;
 
 
 // -----------------------------------------------------------------------
@@ -347,8 +344,7 @@ QpRecRecalcMode::QpRecRecalcMode(QP_INT16, QpIStream& pIn)
 }
 
 QpRecRecalcMode::~QpRecRecalcMode()
-{
-}
+= default;
 
 
 void
@@ -386,8 +382,7 @@ QpRecRecalcOrder::QpRecRecalcOrder(QP_INT16, QpIStream& pIn)
 }
 
 QpRecRecalcOrder::~QpRecRecalcOrder()
-{
-}
+= default;
 
 
 void
@@ -416,8 +411,7 @@ QpRecEmptyCell::QpRecEmptyCell(QP_INT16, QpIStream& pIn)
 }
 
 QpRecEmptyCell::~QpRecEmptyCell()
-{
-}
+= default;
 
 
 // -----------------------------------------------------------------------
@@ -435,8 +429,7 @@ QpRecIntegerCell::QpRecIntegerCell(QP_INT16, QpIStream& pIn)
 }
 
 QpRecIntegerCell::~QpRecIntegerCell()
-{
-}
+= default;
 
 QP_INT16
 QpRecIntegerCell::integer()
@@ -459,8 +452,7 @@ QpRecFloatingPointCell::QpRecFloatingPointCell(QP_INT16, QpIStream& pIn)
 }
 
 QpRecFloatingPointCell::~QpRecFloatingPointCell()
-{
-}
+= default;
 
 QP_INT64
 QpRecFloatingPointCell::value()
@@ -579,8 +571,7 @@ QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
 }
 
 QpRecUnknown::~QpRecUnknown()
-{
-}
+= default;
 
 // -----------------------------------------------------------------------
 
@@ -592,8 +583,7 @@ QpRecBop::QpRecBop(QP_INT16, QpIStream& pIn)
 }
 
 QpRecBop::~QpRecBop()
-{
-}
+= default;
 
 
 QP_UINT8

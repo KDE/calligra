@@ -50,9 +50,7 @@ LayoutDialog::LayoutDialog(QWidget *parent, Sheet *sheet, StyleManager *manager,
     init(isStyle);
 }
 
-LayoutDialog::~LayoutDialog()
-{
-}
+LayoutDialog::~LayoutDialog() = default;
 
 Style LayoutDialog::style(bool multicell)
 {

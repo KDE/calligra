@@ -26,9 +26,7 @@ KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimati
 {
 }
 
-KPrAnimTransitionFilter::~KPrAnimTransitionFilter()
-{
-}
+KPrAnimTransitionFilter::~KPrAnimTransitionFilter() = default;
 
 bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

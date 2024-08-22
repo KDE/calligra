@@ -38,9 +38,7 @@ KPrPlaceholderTool::KPrPlaceholderTool(KoCanvasBase *canvas)
 {
 }
 
-KPrPlaceholderTool::~KPrPlaceholderTool()
-{
-}
+KPrPlaceholderTool::~KPrPlaceholderTool() = default;
 
 void KPrPlaceholderTool::paint(QPainter & /*painter*/, const KoViewConverter & /*converter*/)
 {

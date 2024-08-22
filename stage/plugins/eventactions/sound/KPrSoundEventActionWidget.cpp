@@ -35,9 +35,7 @@ KPrSoundEventActionWidget::KPrSoundEventActionWidget(QWidget *parent)
     updateCombo("");
 }
 
-KPrSoundEventActionWidget::~KPrSoundEventActionWidget()
-{
-}
+KPrSoundEventActionWidget::~KPrSoundEventActionWidget() = default;
 
 void KPrSoundEventActionWidget::setData(KPrEventActionData *eventActionData)
 {

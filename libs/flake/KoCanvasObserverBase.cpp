@@ -16,9 +16,7 @@ public:
     {
     }
 
-    ~KoCanvasObserverBasePrivate()
-    {
-    }
+    ~KoCanvasObserverBasePrivate() = default;
 
     KoCanvasBase *canvas;
 };

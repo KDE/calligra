@@ -31,9 +31,7 @@ KoGenChange::KoGenChange(KoGenChange::ChangeFormat changeFormat)
 {
 }
 
-KoGenChange::~KoGenChange()
-{
-}
+KoGenChange::~KoGenChange() = default;
 
 void KoGenChange::writeChangeMetaData(KoXmlWriter *writer) const
 {

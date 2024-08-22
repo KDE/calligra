@@ -19,9 +19,7 @@ SvgPatternHelper::SvgPatternHelper()
 {
 }
 
-SvgPatternHelper::~SvgPatternHelper()
-{
-}
+SvgPatternHelper::~SvgPatternHelper() = default;
 
 void SvgPatternHelper::setPatternUnits(Units units)
 {

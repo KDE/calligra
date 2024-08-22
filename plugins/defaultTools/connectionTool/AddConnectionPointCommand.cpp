@@ -17,9 +17,7 @@ AddConnectionPointCommand::AddConnectionPointCommand(KoShape *shape, const QPoin
     Q_ASSERT(m_shape);
 }
 
-AddConnectionPointCommand::~AddConnectionPointCommand()
-{
-}
+AddConnectionPointCommand::~AddConnectionPointCommand() = default;
 
 void AddConnectionPointCommand::redo()
 {

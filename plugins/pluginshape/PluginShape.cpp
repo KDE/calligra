@@ -23,9 +23,7 @@ PluginShape::PluginShape()
     setKeepAspectRatio(true);
 }
 
-PluginShape::~PluginShape()
-{
-}
+PluginShape::~PluginShape() = default;
 
 void PluginShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

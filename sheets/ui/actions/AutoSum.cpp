@@ -24,9 +24,7 @@ AutoSum::AutoSum(Actions *actions)
     m_closeEditor = true;
 }
 
-AutoSum::~AutoSum()
-{
-}
+AutoSum::~AutoSum() = default;
 
 void AutoSum::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

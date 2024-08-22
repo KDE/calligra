@@ -22,9 +22,7 @@ KoPartAdaptor::KoPartAdaptor(KoPart *doc)
     m_pDoc = doc;
 }
 
-KoPartAdaptor::~KoPartAdaptor()
-{
-}
+KoPartAdaptor::~KoPartAdaptor() = default;
 
 void KoPartAdaptor::openUrl(const QString &url)
 {

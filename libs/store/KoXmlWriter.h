@@ -285,8 +285,8 @@ private:
     class Private;
     Private *const d;
 
-    KoXmlWriter(const KoXmlWriter &); // forbidden
-    KoXmlWriter &operator=(const KoXmlWriter &); // forbidden
+    KoXmlWriter(const KoXmlWriter &) = delete; // forbidden
+    KoXmlWriter &operator=(const KoXmlWriter &) = delete; // forbidden
 };
 
 #endif /* XMLWRITER_H */

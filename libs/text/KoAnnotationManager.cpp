@@ -15,9 +15,7 @@
 class KoAnnotationManagerPrivate
 {
 public:
-    KoAnnotationManagerPrivate()
-    {
-    }
+    KoAnnotationManagerPrivate() = default;
     QHash<QString, KoAnnotation *> annotationHash;
     QList<QString> annotationNameList;
     int lastId;

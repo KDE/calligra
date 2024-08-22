@@ -37,9 +37,7 @@ SvmPainterBackend::SvmPainterBackend(QPainter *painter, const QSize &outputSize)
 {
 }
 
-SvmPainterBackend::~SvmPainterBackend()
-{
-}
+SvmPainterBackend::~SvmPainterBackend() = default;
 
 void SvmPainterBackend::init(const SvmHeader &header)
 {

@@ -12,9 +12,7 @@ CategoryPcdataDestination::CategoryPcdataDestination(Reader *reader, AbstractRtf
 {
 }
 
-CategoryPcdataDestination::~CategoryPcdataDestination()
-{
-}
+CategoryPcdataDestination::~CategoryPcdataDestination() = default;
 
 void CategoryPcdataDestination::aboutToEndDestination()
 {

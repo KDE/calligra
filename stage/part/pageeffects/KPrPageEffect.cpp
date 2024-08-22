@@ -22,9 +22,7 @@ KPrPageEffect::KPrPageEffect(int duration, const QString &id, KPrPageEffectStrat
     Q_ASSERT(strategy);
 }
 
-KPrPageEffect::~KPrPageEffect()
-{
-}
+KPrPageEffect::~KPrPageEffect() = default;
 
 void KPrPageEffect::setup(const Data &data, QTimeLine &timeLine)
 {

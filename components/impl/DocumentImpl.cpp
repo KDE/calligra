@@ -50,9 +50,7 @@ DocumentImpl::DocumentImpl(QObject *parent)
 {
 }
 
-DocumentImpl::~DocumentImpl()
-{
-}
+DocumentImpl::~DocumentImpl() = default;
 
 DocumentType::Type DocumentImpl::documentType() const
 {

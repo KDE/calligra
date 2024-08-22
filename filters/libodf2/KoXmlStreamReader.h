@@ -90,8 +90,8 @@ public:
 
 private:
     // No copying
-    KoXmlStreamReader(const KoXmlStreamReader &other);
-    KoXmlStreamReader &operator=(const KoXmlStreamReader &other);
+    KoXmlStreamReader(const KoXmlStreamReader &other) = delete;
+    KoXmlStreamReader &operator=(const KoXmlStreamReader &other) = delete;
 
     // Only for friend classes KoXmlStreamAttributes and KoXmlStreamAttribute.
     bool isSound() const;

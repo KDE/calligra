@@ -8,9 +8,7 @@
 #include "TextDocumentInspectionDockerFactory.h"
 #include "TextDocumentInspectionDocker.h"
 
-TextDocumentInspectionDockerFactory::TextDocumentInspectionDockerFactory()
-{
-}
+TextDocumentInspectionDockerFactory::TextDocumentInspectionDockerFactory() = default;
 
 QString TextDocumentInspectionDockerFactory::id() const
 {

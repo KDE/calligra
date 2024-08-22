@@ -39,9 +39,7 @@ KPrParallelSnakesWipeEffectFactory::KPrParallelSnakesWipeEffectFactory()
     addStrategy(new KPrParallelSnakesWipeDiagonalStrategy(true, false));
 }
 
-KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory()
-{
-}
+KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Vertical Top Same In"),
                                                   kli18n("Vertical Top Same Out"),

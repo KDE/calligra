@@ -20,9 +20,7 @@ TextCase::TextCase(Actions *actions, CaseManipulator::CaseMode mode)
 {
 }
 
-TextCase::~TextCase()
-{
-}
+TextCase::~TextCase() = default;
 
 QAction *TextCase::createAction()
 {
@@ -122,9 +120,7 @@ CaseManipulator::CaseManipulator()
     setText(kundo2_i18n("Change Case"));
 }
 
-CaseManipulator::~CaseManipulator()
-{
-}
+CaseManipulator::~CaseManipulator() = default;
 
 Value CaseManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *)
 {

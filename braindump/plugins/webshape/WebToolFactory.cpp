@@ -35,9 +35,7 @@ WebToolFactory::WebToolFactory()
     setActivationShapeId(WEBSHAPEID);
 }
 
-WebToolFactory::~WebToolFactory()
-{
-}
+WebToolFactory::~WebToolFactory() = default;
 
 KoToolBase *WebToolFactory::createTool(KoCanvasBase *canvas)
 {

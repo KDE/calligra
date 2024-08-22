@@ -90,7 +90,7 @@ public:
     RowFormatStorage &operator=(const RowFormatStorage &r);
 
 private:
-    RowFormatStorage(const RowFormatStorage &);
+    RowFormatStorage(const RowFormatStorage &) = delete;
     class Private;
     Private *const d;
 };

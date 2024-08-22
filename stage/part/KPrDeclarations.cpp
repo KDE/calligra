@@ -20,13 +20,9 @@
 #include <QDateTime>
 #include <QVariant>
 
-KPrDeclarations::KPrDeclarations()
-{
-}
+KPrDeclarations::KPrDeclarations() = default;
 
-KPrDeclarations::~KPrDeclarations()
-{
-}
+KPrDeclarations::~KPrDeclarations() = default;
 
 bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &context)
 {

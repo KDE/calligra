@@ -49,9 +49,7 @@ KarbonPart::KarbonPart(QObject *parent)
     setTemplatesResourcePath(QLatin1String("karbon/templates/"));
 }
 
-KarbonPart::~KarbonPart()
-{
-}
+KarbonPart::~KarbonPart() = default;
 
 KoView *KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {

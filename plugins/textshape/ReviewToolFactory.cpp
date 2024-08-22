@@ -35,9 +35,7 @@ ReviewToolFactory::ReviewToolFactory()
     }
 }
 
-ReviewToolFactory::~ReviewToolFactory()
-{
-}
+ReviewToolFactory::~ReviewToolFactory() = default;
 
 KoToolBase *ReviewToolFactory::createTool(KoCanvasBase *canvas)
 {

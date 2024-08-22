@@ -27,9 +27,7 @@ KPrPart::KPrPart(QObject *parent)
     setTemplatesResourcePath(QLatin1String("calligrastage/templates/"));
 }
 
-KPrPart::~KPrPart()
-{
-}
+KPrPart::~KPrPart() = default;
 
 void KPrPart::setDocument(KPrDocument *document)
 {

@@ -39,9 +39,7 @@ KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 {
 }
 
-KPrAnimationBase::~KPrAnimationBase()
-{
-}
+KPrAnimationBase::~KPrAnimationBase() = default;
 
 int KPrAnimationBase::duration() const
 {

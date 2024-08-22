@@ -7,9 +7,7 @@
 #include "KWDebugDockerFactory.h"
 #include <dockers/KWDebugDocker.h>
 
-KWDebugDockerFactory::KWDebugDockerFactory()
-{
-}
+KWDebugDockerFactory::KWDebugDockerFactory() = default;
 
 QString KWDebugDockerFactory::id() const
 {

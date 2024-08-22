@@ -26,9 +26,7 @@ KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
     addStrategy(new KPrBarWipeFromRightStrategy());
 }
 
-KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
-{
-}
+KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"), kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom")};
 

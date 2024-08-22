@@ -15,9 +15,7 @@ KPrSlideWipeFromRightStrategy::KPrSlideWipeFromRightStrategy()
 {
 }
 
-KPrSlideWipeFromRightStrategy::~KPrSlideWipeFromRightStrategy()
-{
-}
+KPrSlideWipeFromRightStrategy::~KPrSlideWipeFromRightStrategy() = default;
 
 void KPrSlideWipeFromRightStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

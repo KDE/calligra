@@ -32,9 +32,7 @@ StyleFromCell::StyleFromCell(Actions *actions)
 {
 }
 
-StyleFromCell::~StyleFromCell()
-{
-}
+StyleFromCell::~StyleFromCell() = default;
 
 QAction *StyleFromCell::createAction()
 {
@@ -89,9 +87,7 @@ ShowStyleManager::ShowStyleManager(Actions *actions)
 {
 }
 
-ShowStyleManager::~ShowStyleManager()
-{
-}
+ShowStyleManager::~ShowStyleManager() = default;
 
 ActionDialog *ShowStyleManager::createDialog(QWidget *canvasWidget)
 {
@@ -127,9 +123,7 @@ SetStyle::SetStyle(Actions *actions)
 {
 }
 
-SetStyle::~SetStyle()
-{
-}
+SetStyle::~SetStyle() = default;
 
 void SetStyle::init()
 {

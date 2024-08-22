@@ -41,9 +41,7 @@ ViewAdaptor::ViewAdaptor(View *t)
     connect(t->selection(), &Selection::changed, this, &ViewAdaptor::selectionChanged);
 }
 
-ViewAdaptor::~ViewAdaptor()
-{
-}
+ViewAdaptor::~ViewAdaptor() = default;
 
 QString ViewAdaptor::doc() const
 {

@@ -36,8 +36,8 @@ public:
 
 private:
     // don't copy or assign us
-    Parser95(const Parser95 &rhs);
-    Parser95 &operator=(const Parser95 &rhs);
+    Parser95(const Parser95 &rhs) = delete;
+    Parser95 &operator=(const Parser95 &rhs) = delete;
 
     void init();
 };

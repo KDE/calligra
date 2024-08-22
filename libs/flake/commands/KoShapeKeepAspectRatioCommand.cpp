@@ -21,9 +21,7 @@ KoShapeKeepAspectRatioCommand::KoShapeKeepAspectRatioCommand(const QList<KoShape
     m_newKeepAspectRatio = newKeepAspectRatio;
 }
 
-KoShapeKeepAspectRatioCommand::~KoShapeKeepAspectRatioCommand()
-{
-}
+KoShapeKeepAspectRatioCommand::~KoShapeKeepAspectRatioCommand() = default;
 
 void KoShapeKeepAspectRatioCommand::redo()
 {

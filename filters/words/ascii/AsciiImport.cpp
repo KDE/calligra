@@ -55,9 +55,7 @@ AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
 {
 }
 
-AsciiImport::~AsciiImport()
-{
-}
+AsciiImport::~AsciiImport() = default;
 
 KoFilter::ConversionStatus AsciiImport::convert(const QByteArray &from, const QByteArray &to)
 {

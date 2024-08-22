@@ -123,9 +123,7 @@ private:
          *
          */
         QString list;
-        StyleName()
-        {
-        }
+        StyleName() = default;
         StyleName(const QString &t, const QString &p, const QString &l)
             : text(t)
             , paragraph(p)

@@ -27,9 +27,7 @@ CSThumbProviderTables::CSThumbProviderTables(Calligra::Sheets::Doc *doc)
 {
 }
 
-CSThumbProviderTables::~CSThumbProviderTables()
-{
-}
+CSThumbProviderTables::~CSThumbProviderTables() = default;
 
 QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {

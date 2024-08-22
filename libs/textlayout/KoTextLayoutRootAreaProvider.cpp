@@ -6,10 +6,6 @@
 
 #include "KoTextLayoutRootAreaProvider.h"
 
-KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider()
-{
-}
+KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider() = default;
 
-KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider()
-{
-}
+KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider() = default;

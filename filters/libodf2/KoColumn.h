@@ -42,8 +42,8 @@ public:
 private:
     void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
-    KoColumn(const KoColumn &);
-    KoColumn &operator=(const KoColumn &);
+    KoColumn(const KoColumn &) = delete;
+    KoColumn &operator=(const KoColumn &) = delete;
 
     KoCellStyle::Ptr m_defaultCellStyle;
     KoColumnStyle::Ptr m_style;

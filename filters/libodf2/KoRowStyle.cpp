@@ -49,9 +49,7 @@ KoRowStyle::KoRowStyle()
 {
 }
 
-KoRowStyle::~KoRowStyle()
-{
-}
+KoRowStyle::~KoRowStyle() = default;
 
 void KoRowStyle::setBackgroundColor(const QColor &color)
 {

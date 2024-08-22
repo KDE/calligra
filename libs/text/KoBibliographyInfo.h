@@ -16,12 +16,8 @@ class KoXmlWriter;
 class KOTEXT_EXPORT BibliographyGeneratorInterface
 {
 public:
-    BibliographyGeneratorInterface()
-    {
-    }
-    virtual ~BibliographyGeneratorInterface()
-    {
-    }
+    BibliographyGeneratorInterface() = default;
+    virtual ~BibliographyGeneratorInterface() = default;
     // virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
 };
 

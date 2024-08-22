@@ -68,9 +68,7 @@ public:
     class DetectCollision
     {
     public:
-        DetectCollision()
-        {
-        }
+        DetectCollision() = default;
         void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex)
         {
             foreach (KoShape *shape, tree.intersects(s->boundingRect())) {

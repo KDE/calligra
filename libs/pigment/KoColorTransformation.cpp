@@ -8,9 +8,7 @@
 #include <QDebug>
 #include <QVariant>
 
-KoColorTransformation::~KoColorTransformation()
-{
-}
+KoColorTransformation::~KoColorTransformation() = default;
 
 QList<QString> KoColorTransformation::parameters() const
 {

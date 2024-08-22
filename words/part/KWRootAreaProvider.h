@@ -22,8 +22,8 @@ class KWPage;
 class KWRootAreaPage
 {
 public:
-    KWRootAreaPage(){};
-    ~KWRootAreaPage(){};
+    KWRootAreaPage() = default;
+    ~KWRootAreaPage() = default;
     KWPage page;
     QList<KoTextLayoutRootArea *> rootAreas;
     explicit KWRootAreaPage(const KWPage &p)

@@ -66,9 +66,7 @@ MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)
 {
 }
 
-MsooXmlDiagramReader::~MsooXmlDiagramReader()
-{
-}
+MsooXmlDiagramReader::~MsooXmlDiagramReader() = default;
 
 KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderContext *context)
 {

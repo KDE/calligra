@@ -15,9 +15,7 @@ KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase(QPainterPath shape,
 {
 }
 
-KPrIrisWipeEffectStrategyBase::~KPrIrisWipeEffectStrategyBase()
-{
-}
+KPrIrisWipeEffectStrategyBase::~KPrIrisWipeEffectStrategyBase() = default;
 
 int KPrIrisWipeEffectStrategyBase::findMaxScaling(const KPrPageEffect::Data &data)
 {

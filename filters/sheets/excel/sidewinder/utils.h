@@ -285,7 +285,7 @@ public:
     static Record *createRecord(unsigned id, Workbook *book);
 
 private:
-    RecordRegistry(){};
+    RecordRegistry() = default;
     static RecordRegistry *instance();
 
     std::map<unsigned, RecordFactory> records;

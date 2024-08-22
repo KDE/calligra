@@ -270,9 +270,9 @@ public:
     static QString inlineObjectAttributes(const QTextCharFormat &textFormat);
 
 private:
-    KoTextDebug();
-    KoTextDebug(const KoTextDebug &);
-    KoTextDebug operator=(const KoTextDebug &);
+    KoTextDebug() = delete;
+    KoTextDebug(const KoTextDebug &) = delete;
+    KoTextDebug operator=(const KoTextDebug &) = delete;
 
     static const QTextDocument *document; /**< Pointer to the debugged document. */
     static int depth; /**< Current indentation depth. */

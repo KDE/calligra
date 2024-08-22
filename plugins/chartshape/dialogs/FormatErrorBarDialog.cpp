@@ -23,9 +23,7 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     connect(widget.errorType, &QComboBox::currentIndexChanged, this, &FormatErrorBarDialog::errorTypeChanged);
 }
 
-FormatErrorBarDialog::~FormatErrorBarDialog()
-{
-}
+FormatErrorBarDialog::~FormatErrorBarDialog() = default;
 
 void FormatErrorBarDialog::errorIndicatorChanged()
 {

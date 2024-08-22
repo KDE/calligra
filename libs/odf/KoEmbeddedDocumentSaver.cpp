@@ -32,9 +32,7 @@ struct FileEntry {
 class Q_DECL_HIDDEN KoEmbeddedDocumentSaver::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
     QHash<QString, int> prefixes; // Used in getFilename();
 

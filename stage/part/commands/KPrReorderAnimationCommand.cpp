@@ -34,9 +34,7 @@ KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shape
     setText(kundo2_i18n("Reorder animations"));
 }
 
-KPrReorderAnimationCommand::~KPrReorderAnimationCommand()
-{
-}
+KPrReorderAnimationCommand::~KPrReorderAnimationCommand() = default;
 
 void KPrReorderAnimationCommand::redo()
 {

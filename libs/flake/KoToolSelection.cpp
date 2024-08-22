@@ -11,6 +11,4 @@ KoToolSelection::KoToolSelection(QObject *parent)
 {
 }
 
-KoToolSelection::~KoToolSelection()
-{
-}
+KoToolSelection::~KoToolSelection() = default;

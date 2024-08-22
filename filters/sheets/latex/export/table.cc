@@ -42,8 +42,7 @@ Table::Table()
 /* Destructor                              */
 /*******************************************/
 Table::~Table()
-{
-}
+= default;
 
 void Table::setMaxColumn(int col)
 {

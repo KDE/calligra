@@ -28,14 +28,10 @@ public:
     }
 
     KoElementReferenceData(const KoElementReferenceData &other)
-        : QSharedData(other)
-        , xmlid(other.xmlid)
-    {
-    }
 
-    ~KoElementReferenceData()
-    {
-    }
+        = default;
+
+    ~KoElementReferenceData() = default;
 
     QString xmlid;
 };

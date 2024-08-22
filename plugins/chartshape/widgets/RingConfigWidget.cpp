@@ -54,9 +54,7 @@ RingConfigWidget::RingConfigWidget(QList<ChartType> types, QWidget *parent)
     init();
 }
 
-RingConfigWidget::~RingConfigWidget()
-{
-}
+RingConfigWidget::~RingConfigWidget() = default;
 
 void RingConfigWidget::init()
 {

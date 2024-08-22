@@ -368,9 +368,7 @@ private:
         {
         }
 
-        DocumentReaderState()
-        {
-        }
+        DocumentReaderState() = default;
 
         QMap<QString, QString> usedListStyles;
         QMap<QString, QPair<int, bool>> continueListNum;

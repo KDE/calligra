@@ -32,9 +32,7 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
-    ~ShapeMoveStrategy() override
-    {
-    }
+    ~ShapeMoveStrategy() override = default;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;

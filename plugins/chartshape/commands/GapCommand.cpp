@@ -27,9 +27,7 @@ GapCommand::GapCommand(Axis *axis, ChartShape *chart)
     m_newGapBetweenSets = 0;
 }
 
-GapCommand::~GapCommand()
-{
-}
+GapCommand::~GapCommand() = default;
 
 void GapCommand::redo()
 {

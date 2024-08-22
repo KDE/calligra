@@ -51,9 +51,7 @@ MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList &)
 {
 }
 
-MSWordOdfImport::~MSWordOdfImport()
-{
-}
+MSWordOdfImport::~MSWordOdfImport() = default;
 
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {

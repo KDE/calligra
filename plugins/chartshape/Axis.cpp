@@ -197,9 +197,7 @@ public:
         , axis(_axis)
     {
     }
-    virtual ~CartesianAxis()
-    {
-    }
+    virtual ~CartesianAxis() = default;
     const QString customizedLabel(const QString &label) const override
     {
         if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())

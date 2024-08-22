@@ -11,9 +11,7 @@ SvgClipPathHelper::SvgClipPathHelper()
 {
 }
 
-SvgClipPathHelper::~SvgClipPathHelper()
-{
-}
+SvgClipPathHelper::~SvgClipPathHelper() = default;
 
 void SvgClipPathHelper::setClipPathUnits(Units clipPathUnits)
 {

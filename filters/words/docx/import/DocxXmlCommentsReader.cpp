@@ -32,9 +32,7 @@ public:
         : counter(0)
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
     QString pathAndFile;
     int counter;
 };

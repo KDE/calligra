@@ -13,12 +13,8 @@
 class SimpleShapeContainerModel : public KoShapeContainerModel
 {
 public:
-    SimpleShapeContainerModel()
-    {
-    }
-    ~SimpleShapeContainerModel() override
-    {
-    }
+    SimpleShapeContainerModel() = default;
+    ~SimpleShapeContainerModel() override = default;
     void add(KoShape *child) override
     {
         if (m_members.contains(child))

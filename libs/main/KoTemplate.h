@@ -58,9 +58,7 @@ public:
                         bool wide = false,
                         bool hidden = false,
                         bool touched = false);
-    ~KoTemplate()
-    {
-    }
+    ~KoTemplate() = default;
 
     QString name() const
     {

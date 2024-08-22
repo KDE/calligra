@@ -74,9 +74,7 @@ EscherHeader::EscherHeader(OLEStreamReader *stream)
     recLen = stream->readU32();
 }
 
-EscherHeader::~EscherHeader()
-{
-}
+EscherHeader::~EscherHeader() = default;
 
 bool EscherHeader::isAtom()
 {
@@ -197,9 +195,7 @@ FBSE::FBSE(OLEStreamReader *stream)
     unused3 = stream->readU8();
 }
 
-FBSE::~FBSE()
-{
-}
+FBSE::~FBSE() = default;
 
 void FBSE::dump()
 {
@@ -277,9 +273,7 @@ Blip::Blip(OLEStreamReader *stream, string blipType)
     }
 }
 
-Blip::~Blip()
-{
-}
+Blip::~Blip() = default;
 
 bool Blip::isMetafileBlip()
 {

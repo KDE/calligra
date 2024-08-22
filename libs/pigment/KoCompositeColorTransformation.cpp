@@ -24,9 +24,7 @@ KoCompositeColorTransformation::KoCompositeColorTransformation(Mode mode)
     Q_UNUSED(mode)
 }
 
-KoCompositeColorTransformation::~KoCompositeColorTransformation()
-{
-}
+KoCompositeColorTransformation::~KoCompositeColorTransformation() = default;
 
 void KoCompositeColorTransformation::appendTransform(KoColorTransformation *transform)
 {

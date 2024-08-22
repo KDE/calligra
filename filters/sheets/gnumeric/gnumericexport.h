@@ -28,9 +28,7 @@ class GNUMERICExport : public KoFilter
 
 public:
     GNUMERICExport(QObject *parent, const QVariantList &);
-    ~GNUMERICExport() override
-    {
-    }
+    ~GNUMERICExport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

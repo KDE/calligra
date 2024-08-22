@@ -15,9 +15,7 @@ ChartTableView::ChartTableView(QWidget *parent /* = 0 */)
 {
 }
 
-ChartTableView::~ChartTableView()
-{
-}
+ChartTableView::~ChartTableView() = default;
 
 /**
  * \reimpl

@@ -44,9 +44,7 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     });
 }
 
-ParagraphSettingsDialog::~ParagraphSettingsDialog()
-{
-}
+ParagraphSettingsDialog::~ParagraphSettingsDialog() = default;
 
 void ParagraphSettingsDialog::initTabs()
 {

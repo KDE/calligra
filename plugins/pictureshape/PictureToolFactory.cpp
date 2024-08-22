@@ -22,9 +22,7 @@ PictureToolFactory::PictureToolFactory()
     setActivationShapeId(PICTURESHAPEID);
 }
 
-PictureToolFactory::~PictureToolFactory()
-{
-}
+PictureToolFactory::~PictureToolFactory() = default;
 
 KoToolBase *PictureToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -167,12 +167,8 @@ typedef std::vector<FormulaToken> FormulaTokens;
 class FormulaDecoder
 {
 public:
-    FormulaDecoder()
-    {
-    }
-    virtual ~FormulaDecoder()
-    {
-    }
+    FormulaDecoder() = default;
+    virtual ~FormulaDecoder() = default;
 
     FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char *data, unsigned version);
 

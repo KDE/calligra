@@ -22,13 +22,9 @@
 
 using namespace MusicCore;
 
-MusicXmlWriter::MusicXmlWriter()
-{
-}
+MusicXmlWriter::MusicXmlWriter() = default;
 
-MusicXmlWriter::~MusicXmlWriter()
-{
-}
+MusicXmlWriter::~MusicXmlWriter() = default;
 
 static void writePartGroup(KoXmlWriter &w, int id, PartGroup *group)
 {

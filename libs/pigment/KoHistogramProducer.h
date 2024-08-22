@@ -43,9 +43,7 @@ public:
         , m_skipUnselected(true)
     {
     }
-    virtual ~KoHistogramProducer()
-    {
-    }
+    virtual ~KoHistogramProducer() = default;
 
     // Methods to change the bins
 
@@ -102,9 +100,7 @@ public:
         : m_id(id)
     {
     }
-    virtual ~KoHistogramProducerFactory()
-    {
-    }
+    virtual ~KoHistogramProducerFactory() = default;
 
     /// Factory method, generates a new KoHistogramProducer
     virtual KoHistogramProducer *generate() = 0;
@@ -139,8 +135,8 @@ public:
     QList<QString> keysCompatibleWith(const KoColorSpace *colorSpace) const;
 
 private:
-    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry &);
-    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry &);
+    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry &) = delete;
+    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry &) = delete;
 };
 
 #endif // _KO_HISTOGRAM_PRODUCER

@@ -88,13 +88,9 @@ exthHeader::exthHeader()
 {
 }
 
-MobiHeaderGenerator::MobiHeaderGenerator()
-{
-}
+MobiHeaderGenerator::MobiHeaderGenerator() = default;
 
-MobiHeaderGenerator::~MobiHeaderGenerator()
-{
-}
+MobiHeaderGenerator::~MobiHeaderGenerator() = default;
 
 void MobiHeaderGenerator::generateMobiHeaders(QHash<QString, QString> metaData,
                                               int compressedTextSize,

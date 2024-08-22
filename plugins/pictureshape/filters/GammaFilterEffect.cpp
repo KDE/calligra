@@ -18,9 +18,7 @@ GammaFilterEffect::GammaFilterEffect()
 {
 }
 
-GammaFilterEffect::~GammaFilterEffect()
-{
-}
+GammaFilterEffect::~GammaFilterEffect() = default;
 
 void GammaFilterEffect::save(KoXmlWriter & /*writer*/)
 {

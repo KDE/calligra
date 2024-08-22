@@ -22,9 +22,7 @@
 class Q_DECL_HIDDEN KoEmbeddedDocumentLoader::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
     KoDocumentBase *doc;
 };

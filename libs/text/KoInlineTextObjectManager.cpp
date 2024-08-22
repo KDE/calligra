@@ -24,9 +24,7 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
 {
 }
 
-KoInlineTextObjectManager::~KoInlineTextObjectManager()
-{
-}
+KoInlineTextObjectManager::~KoInlineTextObjectManager() = default;
 
 KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const
 {

@@ -1518,9 +1518,7 @@ KoXmlDocumentData::KoXmlDocumentData(unsigned long initialRefCount)
 {
 }
 
-KoXmlDocumentData::~KoXmlDocumentData()
-{
-}
+KoXmlDocumentData::~KoXmlDocumentData() = default;
 
 bool KoXmlDocumentData::setContent(QXmlStreamReader *reader, QString *errorMsg, int *errorLine, int *errorColumn)
 {
@@ -1896,9 +1894,7 @@ KoXmlElement::KoXmlElement()
 {
 }
 
-KoXmlElement::~KoXmlElement()
-{
-}
+KoXmlElement::~KoXmlElement() = default;
 
 // Creates a shallow copy of another element
 KoXmlElement::KoXmlElement(const KoXmlElement &element)
@@ -1912,11 +1908,7 @@ KoXmlElement::KoXmlElement(KoXmlNodeData *data)
 }
 
 // Copies another element
-KoXmlElement &KoXmlElement::operator=(const KoXmlElement &element)
-{
-    KoXmlNode::operator=(element);
-    return *this;
-}
+KoXmlElement &KoXmlElement::operator=(const KoXmlElement &element) = default;
 
 bool KoXmlElement::operator==(const KoXmlElement &element) const
 {
@@ -2007,9 +1999,7 @@ KoXmlText::KoXmlText()
 {
 }
 
-KoXmlText::~KoXmlText()
-{
-}
+KoXmlText::~KoXmlText() = default;
 
 KoXmlText::KoXmlText(const KoXmlText &text)
     : KoXmlNode(text.d)
@@ -2031,11 +2021,7 @@ QString KoXmlText::data() const
     return d->data();
 }
 
-KoXmlText &KoXmlText::operator=(const KoXmlText &element)
-{
-    KoXmlNode::operator=(element);
-    return *this;
-}
+KoXmlText &KoXmlText::operator=(const KoXmlText &element) = default;
 
 // ==================================================================
 //
@@ -2049,13 +2035,10 @@ KoXmlCDATASection::KoXmlCDATASection()
 }
 
 KoXmlCDATASection::KoXmlCDATASection(const KoXmlCDATASection &cdata)
-    : KoXmlText(cdata)
-{
-}
 
-KoXmlCDATASection::~KoXmlCDATASection()
-{
-}
+    = default;
+
+KoXmlCDATASection::~KoXmlCDATASection() = default;
 
 KoXmlCDATASection::KoXmlCDATASection(KoXmlNodeData *cdata)
     : KoXmlText(cdata)
@@ -2084,9 +2067,7 @@ KoXmlDocumentType::KoXmlDocumentType()
 {
 }
 
-KoXmlDocumentType::~KoXmlDocumentType()
-{
-}
+KoXmlDocumentType::~KoXmlDocumentType() = default;
 
 KoXmlDocumentType::KoXmlDocumentType(const KoXmlDocumentType &dt)
     : KoXmlNode(dt.d)
@@ -2103,11 +2084,7 @@ KoXmlDocumentType::KoXmlDocumentType(KoXmlNodeData *dt)
 {
 }
 
-KoXmlDocumentType &KoXmlDocumentType::operator=(const KoXmlDocumentType &dt)
-{
-    KoXmlNode::operator=(dt);
-    return *this;
-}
+KoXmlDocumentType &KoXmlDocumentType::operator=(const KoXmlDocumentType &dt) = default;
 
 // ==================================================================
 //
@@ -2122,9 +2099,7 @@ KoXmlDocument::KoXmlDocument(bool stripSpaces)
     KOXMLDOCDATA(d)->stripSpaces = stripSpaces;
 }
 
-KoXmlDocument::~KoXmlDocument()
-{
-}
+KoXmlDocument::~KoXmlDocument() = default;
 
 KoXmlDocument::KoXmlDocument(KoXmlDocumentData *data)
     : KoXmlNode(data)
@@ -2139,11 +2114,7 @@ KoXmlDocument::KoXmlDocument(const KoXmlDocument &doc)
 }
 
 // Creates a shallow copy of another document
-KoXmlDocument &KoXmlDocument::operator=(const KoXmlDocument &doc)
-{
-    KoXmlNode::operator=(doc);
-    return *this;
-}
+KoXmlDocument &KoXmlDocument::operator=(const KoXmlDocument &doc) = default;
 
 // Checks if this document and doc are equals
 bool KoXmlDocument::operator==(const KoXmlDocument &doc) const

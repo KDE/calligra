@@ -83,9 +83,7 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
     soakBytes(stream, size);
 }
 
-EmrTextObject::~EmrTextObject()
-{
-}
+EmrTextObject::~EmrTextObject() = default;
 
 QPoint EmrTextObject::referencePoint() const
 {

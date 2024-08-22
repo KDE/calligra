@@ -52,9 +52,7 @@ MsooXmlImport::MsooXmlImport(const QString &bodyContentElement, QObject *parent)
 {
 }
 
-MsooXmlImport::~MsooXmlImport()
-{
-}
+MsooXmlImport::~MsooXmlImport() = default;
 
 void MsooXmlImport::reportProgress(unsigned progress)
 {

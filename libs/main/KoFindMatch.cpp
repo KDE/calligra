@@ -12,18 +12,11 @@
 class Q_DECL_HIDDEN KoFindMatch::Private : public QSharedData
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
     Private(const Private &other)
-        : QSharedData(other)
-        , container(other.container)
-        , location(other.location)
-    {
-    }
+
+        = default;
 
     QVariant container;
     QVariant location;
@@ -42,19 +35,12 @@ KoFindMatch::KoFindMatch(const QVariant &container, const QVariant &location)
 }
 
 KoFindMatch::KoFindMatch(const KoFindMatch &other)
-    : d(other.d)
-{
-}
 
-KoFindMatch::~KoFindMatch()
-{
-}
+    = default;
 
-KoFindMatch &KoFindMatch::operator=(const KoFindMatch &other)
-{
-    d = other.d;
-    return *this;
-}
+KoFindMatch::~KoFindMatch() = default;
+
+KoFindMatch &KoFindMatch::operator=(const KoFindMatch &other) = default;
 
 bool KoFindMatch::operator==(const KoFindMatch &other) const
 {

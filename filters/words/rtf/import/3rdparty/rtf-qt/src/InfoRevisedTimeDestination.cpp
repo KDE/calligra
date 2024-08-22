@@ -12,9 +12,7 @@ InfoRevisedTimeDestination::InfoRevisedTimeDestination(Reader *reader, AbstractR
 {
 }
 
-InfoRevisedTimeDestination::~InfoRevisedTimeDestination()
-{
-}
+InfoRevisedTimeDestination::~InfoRevisedTimeDestination() = default;
 
 void InfoRevisedTimeDestination::aboutToEndDestination()
 {

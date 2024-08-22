@@ -17,9 +17,7 @@ DiagonalWipeStrategy::DiagonalWipeStrategy(int subtype, const char *smilSubType,
 {
 }
 
-DiagonalWipeStrategy::~DiagonalWipeStrategy()
-{
-}
+DiagonalWipeStrategy::~DiagonalWipeStrategy() = default;
 
 void DiagonalWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

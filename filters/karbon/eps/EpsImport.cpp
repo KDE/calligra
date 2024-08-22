@@ -36,9 +36,7 @@ EpsImport::EpsImport(QObject *parent, const QVariantList &)
     debugEps << "###   ###   EPS Import Filter";
 }
 
-EpsImport::~EpsImport()
-{
-}
+EpsImport::~EpsImport() = default;
 
 KoFilter::ConversionStatus EpsImport::convert(const QByteArray &from, const QByteArray &to)
 {

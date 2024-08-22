@@ -47,9 +47,7 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
     m_oldProperties2 = point2->properties();
 }
 
-KoSubpathJoinCommand::~KoSubpathJoinCommand()
-{
-}
+KoSubpathJoinCommand::~KoSubpathJoinCommand() = default;
 
 void KoSubpathJoinCommand::redo()
 {

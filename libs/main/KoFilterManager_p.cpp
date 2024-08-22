@@ -64,9 +64,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     resize(QSize(520, 400)); //.expandedTo(minimumSizeHint()));
 }
 
-KoFilterChooser::~KoFilterChooser()
-{
-}
+KoFilterChooser::~KoFilterChooser() = default;
 
 QString KoFilterChooser::filterSelected()
 {

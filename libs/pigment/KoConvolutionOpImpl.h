@@ -20,13 +20,9 @@ class KoConvolutionOpImpl : public KoConvolutionOp
     typedef typename _CSTrait::channels_type channels_type;
 
 public:
-    KoConvolutionOpImpl()
-    {
-    }
+    KoConvolutionOpImpl() = default;
 
-    ~KoConvolutionOpImpl() override
-    {
-    }
+    ~KoConvolutionOpImpl() override = default;
 
     /**
      * Calculates a weighted average of the pixels, mentioned in @p colors

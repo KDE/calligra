@@ -72,9 +72,7 @@ RowHeader::RowHeader(CanvasBase *_canvas)
 {
 }
 
-RowHeader::~RowHeader()
-{
-}
+RowHeader::~RowHeader() = default;
 
 void RowHeader::mousePress(KoPointerEvent *_ev)
 {
@@ -505,9 +503,7 @@ ColumnHeader::ColumnHeader(CanvasBase *_canvas)
 {
 }
 
-ColumnHeader::~ColumnHeader()
-{
-}
+ColumnHeader::~ColumnHeader() = default;
 
 void ColumnHeader::mousePress(KoPointerEvent *_ev)
 {
@@ -1070,9 +1066,7 @@ SelectAllButton::SelectAllButton(CanvasBase *canvasBase)
 {
 }
 
-SelectAllButton::~SelectAllButton()
-{
-}
+SelectAllButton::~SelectAllButton() = default;
 
 void SelectAllButton::paint(QPainter *painter, const QRectF &painterRect)
 {

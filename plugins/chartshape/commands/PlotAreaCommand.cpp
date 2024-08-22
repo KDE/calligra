@@ -27,9 +27,7 @@ PlotAreaCommand::PlotAreaCommand(PlotArea *plotArea)
     m_newOrientation = m_oldOrientation = plotArea->isVertical() ? Qt::Vertical : Qt::Horizontal;
 }
 
-PlotAreaCommand::~PlotAreaCommand()
-{
-}
+PlotAreaCommand::~PlotAreaCommand() = default;
 
 void PlotAreaCommand::redo()
 {

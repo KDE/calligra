@@ -21,9 +21,7 @@ class KoShape;
 class KoResourceManager
 {
 public:
-    KoResourceManager()
-    {
-    }
+    KoResourceManager() = default;
 
     /**
      * Set a resource of any type.
@@ -129,8 +127,8 @@ public:
     void clearResource(int key);
 
 private:
-    KoResourceManager(const KoResourceManager &);
-    KoResourceManager &operator=(const KoResourceManager &);
+    KoResourceManager(const KoResourceManager &) = delete;
+    KoResourceManager &operator=(const KoResourceManager &) = delete;
 
     QHash<int, QVariant> m_resources;
 };

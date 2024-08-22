@@ -29,9 +29,7 @@ KPrBoxSnakesWipeEffectFactory::KPrBoxSnakesWipeEffectFactory()
     addStrategy(new KPrBoxSnakesWipeStrategy(2, 2, false, true));
 }
 
-KPrBoxSnakesWipeEffectFactory::~KPrBoxSnakesWipeEffectFactory()
-{
-}
+KPrBoxSnakesWipeEffectFactory::~KPrBoxSnakesWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Two Box Top In"),
                                                   kli18n("Two Box Bottom In"),

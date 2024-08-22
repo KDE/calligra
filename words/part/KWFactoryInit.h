@@ -19,9 +19,7 @@ public:
         : KWFactory()
     {
     }
-    ~KWFactoryInit() override
-    {
-    }
+    ~KWFactoryInit() override = default;
 };
 
 #endif // KWFACTORYINIT_H

@@ -58,8 +58,8 @@ public:
     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
 private:
-    KoInlineObjectRegistry(const KoInlineObjectRegistry &);
-    KoInlineObjectRegistry operator=(const KoInlineObjectRegistry &);
+    KoInlineObjectRegistry(const KoInlineObjectRegistry &) = delete;
+    KoInlineObjectRegistry operator=(const KoInlineObjectRegistry &) = delete;
 
     class Private;
     Private *const d;

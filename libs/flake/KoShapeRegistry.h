@@ -61,8 +61,8 @@ public:
     QList<KoShapeFactoryBase *> factoriesForElement(const QString &nameSpace, const QString &elementName);
 
 private:
-    KoShapeRegistry(const KoShapeRegistry &);
-    KoShapeRegistry operator=(const KoShapeRegistry &);
+    KoShapeRegistry(const KoShapeRegistry &) = delete;
+    KoShapeRegistry operator=(const KoShapeRegistry &) = delete;
 
     class Private;
     Private *const d;

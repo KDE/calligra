@@ -20,18 +20,14 @@
 
 #include <limits.h> // UINT_MAX
 
-KoDocumentEntry::KoDocumentEntry()
-{
-}
+KoDocumentEntry::KoDocumentEntry() = default;
 
 KoDocumentEntry::KoDocumentEntry(const KPluginMetaData &metaData)
     : m_metaData(metaData)
 {
 }
 
-KoDocumentEntry::~KoDocumentEntry()
-{
-}
+KoDocumentEntry::~KoDocumentEntry() = default;
 
 QJsonObject KoDocumentEntry::metaData() const
 {

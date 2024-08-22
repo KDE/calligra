@@ -28,12 +28,8 @@
 class XlsxXmlCommonReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
 private:
 };

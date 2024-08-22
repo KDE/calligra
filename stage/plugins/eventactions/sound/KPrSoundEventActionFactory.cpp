@@ -12,9 +12,7 @@ KPrSoundEventActionFactory::KPrSoundEventActionFactory()
 {
 }
 
-KPrSoundEventActionFactory::~KPrSoundEventActionFactory()
-{
-}
+KPrSoundEventActionFactory::~KPrSoundEventActionFactory() = default;
 
 KoEventAction *KPrSoundEventActionFactory::createEventAction()
 {

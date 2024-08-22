@@ -12,12 +12,8 @@
 class Q_DECL_HIDDEN KoShapeTransparencyCommand::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
     QList<KoShape *> shapes; ///< the shapes to set background for
     QList<qreal> oldTransparencies; ///< the old transparencies

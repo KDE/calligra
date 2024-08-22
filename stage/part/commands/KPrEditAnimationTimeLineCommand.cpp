@@ -35,9 +35,7 @@ KPrEditAnimationTimeLineCommand::KPrEditAnimationTimeLineCommand(KPrShapeAnimati
     setText(kundo2_i18n("Edit animation delay/duration"));
 }
 
-KPrEditAnimationTimeLineCommand::~KPrEditAnimationTimeLineCommand()
-{
-}
+KPrEditAnimationTimeLineCommand::~KPrEditAnimationTimeLineCommand() = default;
 
 void KPrEditAnimationTimeLineCommand::redo()
 {

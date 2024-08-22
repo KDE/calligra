@@ -14,9 +14,7 @@ class FilterEffectsPlugin : public QObject
     Q_OBJECT
 public:
     FilterEffectsPlugin(QObject *parent, const QList<QVariant> &);
-    ~FilterEffectsPlugin() override
-    {
-    }
+    ~FilterEffectsPlugin() override = default;
 };
 
 #endif // FILTEREFFECTSPLUGIN_H

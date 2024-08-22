@@ -70,9 +70,7 @@ public:
             , value(value_)
         {
         }
-        TimePoint()
-        {
-        }
+        TimePoint() = default;
     };
 
     void addPoint(int value)

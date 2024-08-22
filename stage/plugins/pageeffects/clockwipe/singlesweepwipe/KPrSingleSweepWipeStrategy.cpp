@@ -29,9 +29,7 @@ KPrSingleSweepWipeStrategy::KPrSingleSweepWipeStrategy(double rotationX,
     m_rotationAngle = static_cast<double>(rotationAngle) / 180 * M_PI;
 }
 
-KPrSingleSweepWipeStrategy::~KPrSingleSweepWipeStrategy()
-{
-}
+KPrSingleSweepWipeStrategy::~KPrSingleSweepWipeStrategy() = default;
 
 void KPrSingleSweepWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

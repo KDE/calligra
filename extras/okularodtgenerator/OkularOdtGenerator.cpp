@@ -37,9 +37,7 @@ OkularOdtGenerator::OkularOdtGenerator(QObject *parent, const QVariantList &args
     setFeature(TextExtraction);
 }
 
-OkularOdtGenerator::~OkularOdtGenerator()
-{
-}
+OkularOdtGenerator::~OkularOdtGenerator() = default;
 
 static Okular::DocumentViewport calculateViewport(const QTextBlock &block, KoTextDocumentLayout *textDocumentLayout)
 {

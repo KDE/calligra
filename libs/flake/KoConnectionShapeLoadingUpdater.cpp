@@ -14,9 +14,7 @@ KoConnectionShapeLoadingUpdater::KoConnectionShapeLoadingUpdater(KoConnectionSha
 {
 }
 
-KoConnectionShapeLoadingUpdater::~KoConnectionShapeLoadingUpdater()
-{
-}
+KoConnectionShapeLoadingUpdater::~KoConnectionShapeLoadingUpdater() = default;
 
 void KoConnectionShapeLoadingUpdater::update(KoShape *shape)
 {

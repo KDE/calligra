@@ -74,11 +74,11 @@ private:
     /**
      * we don't want to allow copying and assigning streams
      */
-    OLEStream(const OLEStream &rhs);
+    OLEStream(const OLEStream &rhs) = delete;
     /**
      * we don't want to allow copying and assigning streams
      */
-    OLEStream &operator=(const OLEStream &rhs);
+    OLEStream &operator=(const OLEStream &rhs) = delete;
 
     std::stack<int> m_positions;
     /**
@@ -148,8 +148,8 @@ public:
 
 private:
     // we don't want to allow copying and assigning streams
-    OLEStreamReader(const OLEStreamReader &rhs);
-    OLEStreamReader &operator=(const OLEStreamReader &rhs);
+    OLEStreamReader(const OLEStreamReader &rhs) = delete;
+    OLEStreamReader &operator=(const OLEStreamReader &rhs) = delete;
 
     POLE::Stream *m_stream;
     unsigned long m_pos;
@@ -216,8 +216,8 @@ public:
 
 private:
     // we don't want to allow copying and assigning streams
-    OLEStreamWriter(const OLEStreamWriter &rhs);
-    OLEStreamWriter &operator=(const OLEStreamWriter &rhs);
+    OLEStreamWriter(const OLEStreamWriter &rhs) = delete;
+    OLEStreamWriter &operator=(const OLEStreamWriter &rhs) = delete;
 };
 
 } // namespace wvWare

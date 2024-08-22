@@ -20,9 +20,7 @@ template<class T, class Policy = PointerStoragePolicy<T>>
 class KoResourceServerObserver
 {
 public:
-    virtual ~KoResourceServerObserver()
-    {
-    }
+    virtual ~KoResourceServerObserver() = default;
     typedef typename Policy::PointerType PointerType;
 
     virtual void unsetResourceServer() = 0;

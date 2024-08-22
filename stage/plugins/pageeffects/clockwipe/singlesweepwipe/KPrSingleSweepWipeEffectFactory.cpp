@@ -34,9 +34,7 @@ KPrSingleSweepWipeEffectFactory::KPrSingleSweepWipeEffectFactory()
     addStrategy(new KPrSingleSweepWipeStrategy(1.0, 0.0, 270, -90, ClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", true));
 }
 
-KPrSingleSweepWipeEffectFactory::~KPrSingleSweepWipeEffectFactory()
-{
-}
+KPrSingleSweepWipeEffectFactory::~KPrSingleSweepWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Clockwise Top"),
                                                   kli18n("Clockwise Right"),

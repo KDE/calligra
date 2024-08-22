@@ -18,9 +18,7 @@ KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainSt
 {
 }
 
-KoPASavingContext::~KoPASavingContext()
-{
-}
+KoPASavingContext::~KoPASavingContext() = default;
 
 void KoPASavingContext::addMasterPage(const KoPAMasterPage *masterPage, const QString &name)
 {

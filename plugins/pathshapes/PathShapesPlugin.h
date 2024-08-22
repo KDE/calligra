@@ -16,9 +16,7 @@ class PathShapesPlugin : public QObject
 
 public:
     PathShapesPlugin(QObject *parent, const QVariantList &);
-    ~PathShapesPlugin() override
-    {
-    }
+    ~PathShapesPlugin() override = default;
 };
 
 #endif

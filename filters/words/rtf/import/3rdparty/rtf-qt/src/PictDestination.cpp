@@ -17,9 +17,7 @@ PictDestination::PictDestination(Reader *reader, AbstractRtfOutput *output, cons
 {
 }
 
-PictDestination::~PictDestination()
-{
-}
+PictDestination::~PictDestination() = default;
 
 void PictDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

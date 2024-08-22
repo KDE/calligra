@@ -26,9 +26,7 @@ Angle::Angle(Actions *actions)
 {
 }
 
-Angle::~Angle()
-{
-}
+Angle::~Angle() = default;
 
 QAction *Angle::createAction()
 {

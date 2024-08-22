@@ -66,9 +66,7 @@ public:
     {
         Q_UNUSED(_layer)
     }
-    virtual ~SectionContainerShapePaste()
-    {
-    }
+    virtual ~SectionContainerShapePaste() = default;
     virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override
     {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());

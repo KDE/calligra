@@ -48,9 +48,7 @@ KoAnchorInlineObject::KoAnchorInlineObject(KoShapeAnchor *parent)
     parent->setTextLocation(this);
 }
 
-KoAnchorInlineObject::~KoAnchorInlineObject()
-{
-}
+KoAnchorInlineObject::~KoAnchorInlineObject() = default;
 
 KoShapeAnchor *KoAnchorInlineObject::anchor() const
 {

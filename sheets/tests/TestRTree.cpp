@@ -18,9 +18,7 @@ public:
         : member(m)
     {
     }
-    virtual ~TestClass()
-    {
-    }
+    virtual ~TestClass() = default;
     virtual int type() const
     {
         return 0;

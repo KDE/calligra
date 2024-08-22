@@ -13,9 +13,7 @@ KoColorPatch::KoColorPatch(QWidget *parent)
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
-KoColorPatch::~KoColorPatch()
-{
-}
+KoColorPatch::~KoColorPatch() = default;
 
 QSize KoColorPatch::sizeHint() const
 {

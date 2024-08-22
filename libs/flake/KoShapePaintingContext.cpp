@@ -51,6 +51,4 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
     showAnnotations = !forPrint;
 }
 
-KoShapePaintingContext::~KoShapePaintingContext()
-{
-}
+KoShapePaintingContext::~KoShapePaintingContext() = default;

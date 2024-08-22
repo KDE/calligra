@@ -18,9 +18,7 @@ class DBaseImport : public KoFilter
 
 public:
     DBaseImport(QObject *parent, const QVariantList &);
-    ~DBaseImport() override
-    {
-    }
+    ~DBaseImport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };

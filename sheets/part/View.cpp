@@ -488,9 +488,7 @@ SheetsCanvasControllerWidget::SheetsCanvasControllerWidget(KActionCollection *ac
 {
 }
 
-SheetsCanvasControllerWidget::~SheetsCanvasControllerWidget()
-{
-}
+SheetsCanvasControllerWidget::~SheetsCanvasControllerWidget() = default;
 
 void SheetsCanvasControllerWidget::recenterPreferred()
 {

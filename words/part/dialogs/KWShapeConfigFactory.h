@@ -55,9 +55,7 @@ public:
         : m_state(state)
     {
     }
-    ~KWFrameConnectSelectorFactory() override
-    {
-    }
+    ~KWFrameConnectSelectorFactory() override = default;
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
@@ -85,9 +83,7 @@ public:
         : m_state(state)
     {
     }
-    ~KWAnchoringFactory() override
-    {
-    }
+    ~KWAnchoringFactory() override = default;
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
@@ -114,9 +110,7 @@ public:
         : m_state(state)
     {
     }
-    ~KWRunAroundPropertiesFactory() override
-    {
-    }
+    ~KWRunAroundPropertiesFactory() override = default;
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;

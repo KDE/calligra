@@ -25,9 +25,7 @@ class SvgExport : public KoFilter
 
 public:
     SvgExport(QObject *parent, const QVariantList &);
-    ~SvgExport() override
-    {
-    }
+    ~SvgExport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };

@@ -17,9 +17,7 @@ ZigZagWipeStrategy::ZigZagWipeStrategy(int subtype, const char *smilSubType, boo
 {
 }
 
-ZigZagWipeStrategy::~ZigZagWipeStrategy()
-{
-}
+ZigZagWipeStrategy::~ZigZagWipeStrategy() = default;
 
 void ZigZagWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

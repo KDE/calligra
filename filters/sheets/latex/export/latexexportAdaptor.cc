@@ -18,8 +18,7 @@ LatexExportAdaptor::LatexExportAdaptor(LatexExportDialog* dia)
 }
 
 LatexExportAdaptor::~LatexExportAdaptor()
-{
-}
+= default;
 
 void LatexExportAdaptor::useDefaultConfig()
 {

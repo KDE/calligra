@@ -35,9 +35,7 @@ KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
     d->color = color;
 }
 
-KoColorBackground::~KoColorBackground()
-{
-}
+KoColorBackground::~KoColorBackground() = default;
 
 QColor KoColorBackground::color() const
 {

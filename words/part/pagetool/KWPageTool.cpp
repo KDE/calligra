@@ -33,9 +33,7 @@ KWPageTool::KWPageTool(KoCanvasBase *canvas)
     }
 }
 
-KWPageTool::~KWPageTool()
-{
-}
+KWPageTool::~KWPageTool() = default;
 
 void KWPageTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

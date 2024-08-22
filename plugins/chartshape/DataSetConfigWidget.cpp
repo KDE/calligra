@@ -281,9 +281,7 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     connect(ui.dataSetAxes, &QComboBox::currentIndexChanged, parent, &DataSetConfigWidget::ui_dataSetAxisSelectionChanged);
 }
 
-DataSetConfigWidget::Private::~Private()
-{
-}
+DataSetConfigWidget::Private::~Private() = default;
 
 // ================================================================
 //                     class DataSetConfigWidget

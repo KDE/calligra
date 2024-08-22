@@ -32,9 +32,7 @@ DateVariable::DateVariable(DateType type)
     m_datetime = QDateTime::currentDateTime();
 }
 
-DateVariable::~DateVariable()
-{
-}
+DateVariable::~DateVariable() = default;
 
 void DateVariable::saveOdf(KoShapeSavingContext &context)
 {

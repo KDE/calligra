@@ -44,9 +44,7 @@ template<typename T>
 class KoGenericRegistry
 {
 public:
-    KoGenericRegistry()
-    {
-    }
+    KoGenericRegistry() = default;
     virtual ~KoGenericRegistry()
     {
         m_hash.clear();

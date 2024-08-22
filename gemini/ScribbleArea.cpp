@@ -20,9 +20,7 @@ ScribbleArea::ScribbleArea(QQuickItem *parent)
     image.fill(Qt::transparent);
 }
 
-ScribbleArea::~ScribbleArea()
-{
-}
+ScribbleArea::~ScribbleArea() = default;
 
 void ScribbleArea::clear()
 {

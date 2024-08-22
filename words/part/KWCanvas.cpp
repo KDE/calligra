@@ -50,9 +50,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     m_viewMode = KWViewMode::create(viewMode, document);
 }
 
-KWCanvas::~KWCanvas()
-{
-}
+KWCanvas::~KWCanvas() = default;
 
 void KWCanvas::pageSetupChanged()
 {

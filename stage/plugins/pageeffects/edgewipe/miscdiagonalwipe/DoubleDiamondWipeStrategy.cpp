@@ -17,9 +17,7 @@ DoubleDiamondWipeStrategy::DoubleDiamondWipeStrategy()
 {
 }
 
-DoubleDiamondWipeStrategy::~DoubleDiamondWipeStrategy()
-{
-}
+DoubleDiamondWipeStrategy::~DoubleDiamondWipeStrategy() = default;
 
 void DoubleDiamondWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

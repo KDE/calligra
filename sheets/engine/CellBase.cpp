@@ -84,13 +84,10 @@ CellBase::CellBase(SheetBase *sheet, const QPoint &pos)
 }
 
 CellBase::CellBase(const CellBase &other)
-    : d(other.d)
-{
-}
 
-CellBase::~CellBase()
-{
-}
+    = default;
+
+CellBase::~CellBase() = default;
 
 bool CellBase::isNull() const
 {
@@ -539,11 +536,7 @@ QString CellBase::columnName(unsigned int column)
     return str;
 }
 
-CellBase &CellBase::operator=(const CellBase &other)
-{
-    d = other.d;
-    return *this;
-}
+CellBase &CellBase::operator=(const CellBase &other) = default;
 
 bool CellBase::operator<(const CellBase &other) const
 {

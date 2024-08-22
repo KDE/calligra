@@ -6,10 +6,6 @@
 
 #include "KoCellChild.h"
 
-KoCellChild::KoCellChild()
-{
-}
+KoCellChild::KoCellChild() = default;
 
-KoCellChild::~KoCellChild()
-{
-}
+KoCellChild::~KoCellChild() = default;

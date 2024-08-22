@@ -112,9 +112,7 @@ SortInc::SortInc(Actions *actions)
 {
 }
 
-SortInc::~SortInc()
-{
-}
+SortInc::~SortInc() = default;
 
 void SortInc::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -148,9 +146,7 @@ SortDesc::SortDesc(Actions *actions)
 {
 }
 
-SortDesc::~SortDesc()
-{
-}
+SortDesc::~SortDesc() = default;
 
 void SortDesc::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -187,9 +183,7 @@ SortManipulator::SortManipulator()
     setText(kundo2_i18n("Sort Data"));
 }
 
-SortManipulator::~SortManipulator()
-{
-}
+SortManipulator::~SortManipulator() = default;
 
 bool SortManipulator::process(Element *element)
 {

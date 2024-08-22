@@ -9,13 +9,9 @@
 #include <QFile>
 #include <QIODevice>
 
-KoMD5Generator::KoMD5Generator()
-{
-}
+KoMD5Generator::KoMD5Generator() = default;
 
-KoMD5Generator::~KoMD5Generator()
-{
-}
+KoMD5Generator::~KoMD5Generator() = default;
 
 QByteArray KoMD5Generator::generateHash(const QByteArray &array)
 {

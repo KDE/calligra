@@ -184,8 +184,8 @@ public:
 #endif
 private:
     // no copy or assign
-    Sheet(const Sheet &);
-    Sheet &operator=(const Sheet &);
+    Sheet(const Sheet &) = delete;
+    Sheet &operator=(const Sheet &) = delete;
 
     class Private;
     Private *d;
@@ -249,8 +249,8 @@ public:
 
 private:
     // no copy or assign
-    Column(const Column &);
-    Column &operator=(const Column &);
+    Column(const Column &) = delete;
+    Column &operator=(const Column &) = delete;
 
     class Private;
     Private *d;
@@ -286,8 +286,8 @@ public:
 
 private:
     // no copy or assign
-    Row(const Row &);
-    Row &operator=(const Row &);
+    Row(const Row &) = delete;
+    Row &operator=(const Row &) = delete;
 
     class Private;
     Private *d;

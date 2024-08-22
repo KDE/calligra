@@ -17,9 +17,7 @@ KPrSpaceRotationFromBottomStrategy::KPrSpaceRotationFromBottomStrategy()
 {
 }
 
-KPrSpaceRotationFromBottomStrategy::~KPrSpaceRotationFromBottomStrategy()
-{
-}
+KPrSpaceRotationFromBottomStrategy::~KPrSpaceRotationFromBottomStrategy() = default;
 
 void KPrSpaceRotationFromBottomStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

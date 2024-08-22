@@ -34,9 +34,7 @@ KPrMasterPage::KPrMasterPage(KPrDocument *document)
 {
 }
 
-KPrMasterPage::~KPrMasterPage()
-{
-}
+KPrMasterPage::~KPrMasterPage() = default;
 
 KoPageApp::PageType KPrMasterPage::pageType() const
 {

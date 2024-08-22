@@ -65,13 +65,10 @@ Conditions::Conditions()
 }
 
 Conditions::Conditions(const Conditions &other)
-    : d(other.d)
-{
-}
 
-Conditions::~Conditions()
-{
-}
+    = default;
+
+Conditions::~Conditions() = default;
 
 bool Conditions::isEmpty() const
 {

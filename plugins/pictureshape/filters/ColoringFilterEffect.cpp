@@ -21,9 +21,7 @@ ColoringFilterEffect::ColoringFilterEffect()
 {
 }
 
-ColoringFilterEffect::~ColoringFilterEffect()
-{
-}
+ColoringFilterEffect::~ColoringFilterEffect() = default;
 
 void ColoringFilterEffect::save(KoXmlWriter & /*writer*/)
 {

@@ -22,9 +22,7 @@ EnhancedPathCommand::EnhancedPathCommand(const QChar &command, EnhancedPathShape
     Q_ASSERT(m_parent);
 }
 
-EnhancedPathCommand::~EnhancedPathCommand()
-{
-}
+EnhancedPathCommand::~EnhancedPathCommand() = default;
 
 bool EnhancedPathCommand::execute()
 {

@@ -12,9 +12,7 @@ PropertyContainer::PropertyContainer(QString name, QObject *parent)
 {
 }
 
-PropertyContainer::~PropertyContainer()
-{
-}
+PropertyContainer::~PropertyContainer() = default;
 
 void PropertyContainer::writeProperty(QString name, QVariant value)
 {

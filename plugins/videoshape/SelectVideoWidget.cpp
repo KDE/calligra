@@ -29,9 +29,7 @@ SelectVideoWidget::SelectVideoWidget(QWidget *parent)
     setLayout(layout);
 }
 
-SelectVideoWidget::~SelectVideoWidget()
-{
-}
+SelectVideoWidget::~SelectVideoWidget() = default;
 
 void SelectVideoWidget::accept()
 {

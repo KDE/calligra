@@ -47,8 +47,7 @@ public:
 #ifdef CALLIGRA_SHEETS_MT
         : cacheMutex(QMutex::Recursive)
 #endif
-    {
-    }
+        = default;
     Sheet *sheet;
     const KoViewConverter *viewConverter;
     QRect visibleRect;

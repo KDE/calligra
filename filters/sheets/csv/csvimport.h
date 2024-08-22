@@ -16,9 +16,7 @@ class CSVFilter : public KoFilter
 
 public:
     CSVFilter(QObject *parent, const QVariantList &);
-    ~CSVFilter() override
-    {
-    }
+    ~CSVFilter() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };

@@ -13,9 +13,7 @@ class PictureShapeFactory : public KoShapeFactoryBase
 {
 public:
     PictureShapeFactory();
-    ~PictureShapeFactory() override
-    {
-    }
+    ~PictureShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const override;

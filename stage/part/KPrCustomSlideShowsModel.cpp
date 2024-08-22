@@ -36,9 +36,7 @@ KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(KPrDocument *document, QObjec
     connect(m_customSlideShows, &KPrCustomSlideShows::updated, this, &KPrCustomSlideShowsModel::updateModel);
 }
 
-KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel()
-{
-}
+KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel() = default;
 
 QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) const
 {

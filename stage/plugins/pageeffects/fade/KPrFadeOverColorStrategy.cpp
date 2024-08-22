@@ -24,9 +24,7 @@ KPrFadeOverColorStrategy::KPrFadeOverColorStrategy()
 {
 }
 
-KPrFadeOverColorStrategy::~KPrFadeOverColorStrategy()
-{
-}
+KPrFadeOverColorStrategy::~KPrFadeOverColorStrategy() = default;
 
 void KPrFadeOverColorStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

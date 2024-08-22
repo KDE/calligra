@@ -70,12 +70,8 @@ static const Transition transitions[] = {{State_Comment, '\n', State_Start, Acti
                                          {State_Start, CATEGORY_ANY, State_Start, Action_Ignore},
                                          {State_Start, STOP, State_Start, Action_Abort}};
 
-PSCommentLexer::PSCommentLexer()
-{
-}
-PSCommentLexer::~PSCommentLexer()
-{
-}
+PSCommentLexer::PSCommentLexer() = default;
+PSCommentLexer::~PSCommentLexer() = default;
 
 bool PSCommentLexer::parse(QIODevice &fin)
 {
@@ -326,9 +322,7 @@ BoundingBoxExtractor::BoundingBoxExtractor()
     , m_ury(0)
 {
 }
-BoundingBoxExtractor::~BoundingBoxExtractor()
-{
-}
+BoundingBoxExtractor::~BoundingBoxExtractor() = default;
 
 void BoundingBoxExtractor::gotComment(const char *value)
 {

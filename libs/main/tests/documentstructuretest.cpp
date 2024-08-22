@@ -16,13 +16,9 @@
 #include <KoXmlReader.h>
 
 // May the testing begin
-DocumentStructureTest::DocumentStructureTest()
-{
-}
+DocumentStructureTest::DocumentStructureTest() = default;
 
-DocumentStructureTest::~DocumentStructureTest()
-{
-}
+DocumentStructureTest::~DocumentStructureTest() = default;
 
 // initTestCase/cleanupTestCase are called beginning and end of test suite
 void DocumentStructureTest::initTestCase()

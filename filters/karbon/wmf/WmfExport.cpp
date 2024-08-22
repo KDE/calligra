@@ -39,9 +39,7 @@ WmfExport::WmfExport(QObject *parent, const QVariantList &)
 {
 }
 
-WmfExport::~WmfExport()
-{
-}
+WmfExport::~WmfExport() = default;
 
 KoFilter::ConversionStatus WmfExport::convert(const QByteArray &from, const QByteArray &to)
 {

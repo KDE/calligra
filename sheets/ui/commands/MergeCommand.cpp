@@ -30,9 +30,7 @@ MergeCommand::MergeCommand(KUndo2Command *parent)
     m_checkLock = true;
 }
 
-MergeCommand::~MergeCommand()
-{
-}
+MergeCommand::~MergeCommand() = default;
 
 bool MergeCommand::process(Element *element)
 {

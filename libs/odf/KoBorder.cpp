@@ -27,13 +27,9 @@ public:
     QMap<KoBorder::BorderSide, KoBorder::BorderData> data;
 };
 
-KoBorderPrivate::KoBorderPrivate()
-{
-}
+KoBorderPrivate::KoBorderPrivate() = default;
 
-KoBorderPrivate::~KoBorderPrivate()
-{
-}
+KoBorderPrivate::~KoBorderPrivate() = default;
 
 KoBorder::BorderData::BorderData()
     : style(KoBorder::BorderNone)
@@ -83,9 +79,8 @@ KoBorder::KoBorder()
 }
 
 KoBorder::KoBorder(const KoBorder &kb)
-    : d(kb.d)
-{
-}
+
+    = default;
 
 KoBorder::~KoBorder()
 {
@@ -95,12 +90,7 @@ KoBorder::~KoBorder()
 // ----------------------------------------------------------------
 //                             operators
 
-KoBorder &KoBorder::operator=(const KoBorder &other)
-{
-    d = other.d;
-
-    return *this;
-}
+KoBorder &KoBorder::operator=(const KoBorder &other) = default;
 
 bool KoBorder::operator==(const KoBorder &other) const
 {

@@ -18,9 +18,7 @@ KPrSwapEffectFactory::KPrSwapEffectFactory()
     addStrategy(new KPrSwapEffectHorizontalStrategy());
 }
 
-KPrSwapEffectFactory::~KPrSwapEffectFactory()
-{
-}
+KPrSwapEffectFactory::~KPrSwapEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Horizontal")};
 

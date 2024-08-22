@@ -37,9 +37,7 @@ ChartTableModel::ChartTableModel(QObject *parent /* = 0 */)
 {
 }
 
-ChartTableModel::~ChartTableModel()
-{
-}
+ChartTableModel::~ChartTableModel() = default;
 
 QVariant ChartTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {

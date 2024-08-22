@@ -54,9 +54,7 @@ public:
      *
      * Nothing to do
      */
-    ~Pen() override
-    {
-    }
+    ~Pen() override = default;
 
     /**
      * getters

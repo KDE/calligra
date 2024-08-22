@@ -35,9 +35,7 @@ KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase *canvas)
     resize(canvas->canvasWidget()->size());
 }
 
-KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
-{
-}
+KPrPresentationDrawWidget::~KPrPresentationDrawWidget() = default;
 
 void KPrPresentationDrawWidget::paintEvent(QPaintEvent *event)
 {

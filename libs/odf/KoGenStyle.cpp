@@ -93,9 +93,7 @@ KoGenStyle::KoGenStyle(Type type, const char *familyName, const QString &parentN
     }
 }
 
-KoGenStyle::~KoGenStyle()
-{
-}
+KoGenStyle::~KoGenStyle() = default;
 
 /*
  * The order of this list is important; e.g. a graphic-properties must

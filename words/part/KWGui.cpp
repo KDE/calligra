@@ -98,9 +98,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     QTimer::singleShot(0, this, &KWGui::setupUnitActions);
 }
 
-KWGui::~KWGui()
-{
-}
+KWGui::~KWGui() = default;
 
 int KWGui::visibleWidth() const
 {

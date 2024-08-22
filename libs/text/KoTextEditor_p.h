@@ -34,9 +34,7 @@ public:
 
     explicit Private(KoTextEditor *qq, QTextDocument *document);
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void documentCommandAdded();
     void updateState(State newState, const KUndo2MagicString &title = KUndo2MagicString());
@@ -76,9 +74,7 @@ public:
     {
     }
 
-    virtual ~KoTextVisitor()
-    {
-    }
+    virtual ~KoTextVisitor() = default;
     // called whenever a visit was prevented by editprotection
     virtual void nonVisit()
     {
@@ -147,12 +143,8 @@ private:
 class BlockFormatVisitor
 {
 public:
-    BlockFormatVisitor()
-    {
-    }
-    virtual ~BlockFormatVisitor()
-    {
-    }
+    BlockFormatVisitor() = default;
+    virtual ~BlockFormatVisitor() = default;
 
     virtual void visit(QTextBlock &block) const = 0;
 
@@ -193,12 +185,8 @@ public:
 class CharFormatVisitor
 {
 public:
-    CharFormatVisitor()
-    {
-    }
-    virtual ~CharFormatVisitor()
-    {
-    }
+    CharFormatVisitor() = default;
+    virtual ~CharFormatVisitor() = default;
 
     virtual void visit(QTextCharFormat &format) const = 0;
 

@@ -24,9 +24,7 @@ KPrDoubleFanWipeEffectFactory::KPrDoubleFanWipeEffectFactory()
     addStrategy(new KPrSideFanWipeStrategy(180, 2, FanInHorizontalReverse, "doubleFanWipe", "fanInHorizontal", true));
 }
 
-KPrDoubleFanWipeEffectFactory::~KPrDoubleFanWipeEffectFactory()
-{
-}
+KPrDoubleFanWipeEffectFactory::~KPrDoubleFanWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Fan Out Vertical"),
                                                   kli18n("Fan Out Horizontal"),

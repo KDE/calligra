@@ -40,9 +40,7 @@ KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
 {
 }
 
-KPrAnimSet::~KPrAnimSet()
-{
-}
+KPrAnimSet::~KPrAnimSet() = default;
 
 bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

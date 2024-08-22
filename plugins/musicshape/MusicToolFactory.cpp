@@ -22,9 +22,7 @@ MusicToolFactory::MusicToolFactory()
     setActivationShapeId(MusicShapeId);
 }
 
-MusicToolFactory::~MusicToolFactory()
-{
-}
+MusicToolFactory::~MusicToolFactory() = default;
 
 KoToolBase *MusicToolFactory::createTool(KoCanvasBase *canvas)
 {

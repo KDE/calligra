@@ -38,9 +38,7 @@ Document::Document(const KoStore* in, QString fileOut):
 }
 
 Document::~Document()
-{
-
-}
+= default;
 
 void Document::analyze()
 {

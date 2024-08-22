@@ -15,12 +15,8 @@ template<class _CSTrait>
 class KoMixColorsOpImpl : public KoMixColorsOp
 {
 public:
-    KoMixColorsOpImpl()
-    {
-    }
-    ~KoMixColorsOpImpl() override
-    {
-    }
+    KoMixColorsOpImpl() = default;
+    ~KoMixColorsOpImpl() override = default;
     void mixColors(const quint8 *const *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override
     {
         mixColorsImpl(ArrayOfPointers(colors), weights, nColors, dst);

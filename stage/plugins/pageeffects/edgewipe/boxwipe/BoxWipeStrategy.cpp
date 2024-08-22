@@ -17,9 +17,7 @@ BoxWipeStrategy::BoxWipeStrategy(int subtype, const char *smilSubType, bool reve
 {
 }
 
-BoxWipeStrategy::~BoxWipeStrategy()
-{
-}
+BoxWipeStrategy::~BoxWipeStrategy() = default;
 
 void BoxWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

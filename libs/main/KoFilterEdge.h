@@ -20,9 +20,7 @@ class Edge
 public:
     // creates a new edge to "vertex" with the given weight.
     Edge(Vertex *vertex, KoFilterEntry::Ptr filterEntry);
-    ~Edge()
-    {
-    }
+    ~Edge() = default;
 
     unsigned int weight() const
     {
@@ -48,8 +46,8 @@ public:
     void dump(const QByteArray &indent) const;
 
 private:
-    Edge(const Edge &rhs);
-    Edge &operator=(const Edge &rhs);
+    Edge(const Edge &rhs) = delete;
+    Edge &operator=(const Edge &rhs) = delete;
 
     Vertex *m_vertex;
     KoFilterEntry::Ptr m_filterEntry;

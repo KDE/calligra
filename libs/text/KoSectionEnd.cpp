@@ -30,9 +30,7 @@ KoSectionEnd::KoSectionEnd(KoSection *section)
     d->section->setSectionEnd(this);
 }
 
-KoSectionEnd::~KoSectionEnd()
-{
-}
+KoSectionEnd::~KoSectionEnd() = default;
 
 QString KoSectionEnd::name() const
 {

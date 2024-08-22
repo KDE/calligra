@@ -57,9 +57,7 @@ OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
             QOverload<int, const KoParagraphStyle *, const KoParagraphStyle *>::of(&OdfTextTrackStyles::recordStyleChange));
 }
 
-OdfTextTrackStyles::~OdfTextTrackStyles()
-{
-}
+OdfTextTrackStyles::~OdfTextTrackStyles() = default;
 
 void OdfTextTrackStyles::beginEdit()
 {

@@ -88,9 +88,7 @@ public:
         , m_guideData(nullptr)
     {
     }
-    ~MockCanvas() override
-    {
-    }
+    ~MockCanvas() override = default;
     void setHorz(qreal pHorz)
     {
         m_horz = pHorz;

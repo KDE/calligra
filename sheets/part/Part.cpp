@@ -28,9 +28,7 @@ Part::Part(QObject *parent)
     setTemplatesResourcePath(QLatin1String("calligrasheets/templates/"));
 }
 
-Part::~Part()
-{
-}
+Part::~Part() = default;
 
 void Part::setDocument(Doc *document)
 {

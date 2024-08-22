@@ -49,9 +49,7 @@ public:
      * @param frameSets all the framesets registered in the document.
      */
     KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet *> &frameSets);
-    ~KWFrameLayout() override
-    {
-    }
+    ~KWFrameLayout() override = default;
     /**
      * As soon as a new page is created you should call this method to auto-create all frames
      * needed on that new page, with a call to layoutFramesOnPage done directly afterwards.

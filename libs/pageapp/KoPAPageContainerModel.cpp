@@ -9,13 +9,9 @@
 #include "KoPAPageBase.h"
 #include <PageAppDebug.h>
 
-KoPAPageContainerModel::KoPAPageContainerModel()
-{
-}
+KoPAPageContainerModel::KoPAPageContainerModel() = default;
 
-KoPAPageContainerModel::~KoPAPageContainerModel()
-{
-}
+KoPAPageContainerModel::~KoPAPageContainerModel() = default;
 
 void KoPAPageContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {

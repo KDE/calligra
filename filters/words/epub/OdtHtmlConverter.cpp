@@ -47,8 +47,7 @@ OdtHtmlConverter::OdtHtmlConverter()
 
 OdtHtmlConverter::~OdtHtmlConverter()
 
-{
-}
+    = default;
 
 // ================================================================
 //                         HTML conversion

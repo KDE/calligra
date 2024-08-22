@@ -26,9 +26,7 @@ KoPAPrintJob::KoPAPrintJob(KoPAView *view)
     printer().setFromTo(1, m_pages.size());
 }
 
-KoPAPrintJob::~KoPAPrintJob()
-{
-}
+KoPAPrintJob::~KoPAPrintJob() = default;
 
 QPrinter &KoPAPrintJob::printer()
 {

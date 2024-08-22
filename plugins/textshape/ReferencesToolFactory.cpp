@@ -23,9 +23,7 @@ ReferencesToolFactory::ReferencesToolFactory()
     setActivationShapeId(TextShape_SHAPEID);
 }
 
-ReferencesToolFactory::~ReferencesToolFactory()
-{
-}
+ReferencesToolFactory::~ReferencesToolFactory() = default;
 
 KoToolBase *ReferencesToolFactory::createTool(KoCanvasBase *canvas)
 {

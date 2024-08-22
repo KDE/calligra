@@ -25,9 +25,7 @@ KoPADisplayMasterBackgroundCommand::KoPADisplayMasterBackgroundCommand(KoPAPage 
     }
 }
 
-KoPADisplayMasterBackgroundCommand::~KoPADisplayMasterBackgroundCommand()
-{
-}
+KoPADisplayMasterBackgroundCommand::~KoPADisplayMasterBackgroundCommand() = default;
 
 void KoPADisplayMasterBackgroundCommand::redo()
 {

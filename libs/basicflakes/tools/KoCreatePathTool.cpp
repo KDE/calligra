@@ -30,9 +30,7 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
 {
 }
 
-KoCreatePathTool::~KoCreatePathTool()
-{
-}
+KoCreatePathTool::~KoCreatePathTool() = default;
 
 void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

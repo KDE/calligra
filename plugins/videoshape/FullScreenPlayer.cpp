@@ -104,9 +104,7 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     unmute();
 }
 
-FullScreenPlayer::~FullScreenPlayer()
-{
-}
+FullScreenPlayer::~FullScreenPlayer() = default;
 
 void FullScreenPlayer::play()
 {

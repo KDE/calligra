@@ -21,9 +21,7 @@ ArtisticTextToolFactory::ArtisticTextToolFactory()
     setActivationShapeId(ArtisticTextShapeID);
 }
 
-ArtisticTextToolFactory::~ArtisticTextToolFactory()
-{
-}
+ArtisticTextToolFactory::~ArtisticTextToolFactory() = default;
 
 KoToolBase *ArtisticTextToolFactory::createTool(KoCanvasBase *canvas)
 {

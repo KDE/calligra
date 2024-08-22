@@ -28,13 +28,9 @@ public:
                 // needed for forward binary compatibility.
 };
 
-OdfDrawReaderBackend::Private::Private()
-{
-}
+OdfDrawReaderBackend::Private::Private() = default;
 
-OdfDrawReaderBackend::Private::~Private()
-{
-}
+OdfDrawReaderBackend::Private::~Private() = default;
 
 // ================================================================
 //                 class OdfDrawReaderBackend

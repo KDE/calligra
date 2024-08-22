@@ -14,9 +14,7 @@ class ThreedShapeFactory : public KoShapeFactoryBase
 {
 public:
     ThreedShapeFactory();
-    ~ThreedShapeFactory() override
-    {
-    }
+    ~ThreedShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const override;

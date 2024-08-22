@@ -86,8 +86,8 @@ public:
     void check(U32 globalCP);
 
 private:
-    Bookmarks(const Bookmarks &rhs);
-    Bookmarks &operator=(const Bookmarks &rhs);
+    Bookmarks(const Bookmarks &rhs) = delete;
+    Bookmarks &operator=(const Bookmarks &rhs) = delete;
 
     /**
      * Validate bookmarks.

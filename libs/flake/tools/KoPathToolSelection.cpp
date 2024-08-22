@@ -25,9 +25,7 @@ KoPathToolSelection::KoPathToolSelection(KoPathTool *tool)
 {
 }
 
-KoPathToolSelection::~KoPathToolSelection()
-{
-}
+KoPathToolSelection::~KoPathToolSelection() = default;
 
 void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter)
 {

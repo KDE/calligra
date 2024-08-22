@@ -21,9 +21,7 @@ ClipCommand::ClipCommand(PictureShape *shape, bool clip)
     }
 }
 
-ClipCommand::~ClipCommand()
-{
-}
+ClipCommand::~ClipCommand() = default;
 
 void ClipCommand::redo()
 {

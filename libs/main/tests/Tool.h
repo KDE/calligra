@@ -16,9 +16,7 @@ public:
         , m_buttonPressed(false)
     {
     }
-    virtual ~Tool()
-    {
-    }
+    virtual ~Tool() = default;
 
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void mousePressEvent(QMouseEvent *e);

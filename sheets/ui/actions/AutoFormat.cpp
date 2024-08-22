@@ -31,9 +31,7 @@ AutoFormat::AutoFormat(Actions *actions)
 {
 }
 
-AutoFormat::~AutoFormat()
-{
-}
+AutoFormat::~AutoFormat() = default;
 
 ActionDialog *AutoFormat::createDialog(QWidget *canvasWidget)
 {
@@ -133,9 +131,7 @@ AutoFormatCommand::AutoFormatCommand()
     setText(kundo2_i18n("Auto-Format"));
 }
 
-AutoFormatCommand::~AutoFormatCommand()
-{
-}
+AutoFormatCommand::~AutoFormatCommand() = default;
 
 void AutoFormatCommand::setStyles(const QList<Style> &styles)
 {

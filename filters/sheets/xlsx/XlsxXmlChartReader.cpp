@@ -39,9 +39,7 @@
 class SpPr
 {
 public:
-    SpPr()
-    {
-    }
+    SpPr() = default;
 };
 
 class NumCache
@@ -307,9 +305,7 @@ public:
 class LineSeries : public ValSeries
 {
 public:
-    LineSeries()
-    {
-    }
+    LineSeries() = default;
 };
 
 class PieSeries : public ValSeries
@@ -325,33 +321,25 @@ public:
 class BarSeries : public ValSeries
 {
 public:
-    BarSeries()
-    {
-    }
+    BarSeries() = default;
 };
 
 class AreaSeries : public ValSeries
 {
 public:
-    AreaSeries()
-    {
-    }
+    AreaSeries() = default;
 };
 
 class RadarSeries : public ValSeries
 {
 public:
-    RadarSeries()
-    {
-    }
+    RadarSeries() = default;
 };
 
 class SurfaceSeries : public ValSeries
 {
 public:
-    SurfaceSeries()
-    {
-    }
+    SurfaceSeries() = default;
 };
 
 class XlsxXmlChartReader::Private

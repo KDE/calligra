@@ -36,9 +36,7 @@ ColumnLayout::ColumnLayout()
 {
 }
 
-ColumnLayout::~ColumnLayout()
-{
-}
+ColumnLayout::~ColumnLayout() = default;
 
 QRectF ColumnLayout::boundingBox() const
 {
@@ -129,9 +127,7 @@ ColumnLayoutFactory::ColumnLayoutFactory()
 {
 }
 
-ColumnLayoutFactory::~ColumnLayoutFactory()
-{
-}
+ColumnLayoutFactory::~ColumnLayoutFactory() = default;
 
 Layout *ColumnLayoutFactory::createLayout() const
 {

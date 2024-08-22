@@ -215,7 +215,7 @@ protected:
 
 private:
     // do not allow assignment
-    CellBaseStorage &operator=(const CellBaseStorage &);
+    CellBaseStorage &operator=(const CellBaseStorage &) = delete;
 
     class Private;
     Private *const d;

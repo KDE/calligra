@@ -26,9 +26,7 @@ KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const QList<KoPathPointData> 
     initialize(pointDataList);
 }
 
-KoPathSegmentTypeCommand::~KoPathSegmentTypeCommand()
-{
-}
+KoPathSegmentTypeCommand::~KoPathSegmentTypeCommand() = default;
 
 void KoPathSegmentTypeCommand::redo()
 {

@@ -25,9 +25,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory()
     setActivationShapeId("flake/edit");
 }
 
-KPrAnimationToolFactory::~KPrAnimationToolFactory()
-{
-}
+KPrAnimationToolFactory::~KPrAnimationToolFactory() = default;
 
 KoToolBase *KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
 {

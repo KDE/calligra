@@ -26,9 +26,7 @@ class Region;
 class CALLIGRA_SHEETS_ENGINE_EXPORT Damage
 {
 public:
-    virtual ~Damage()
-    {
-    }
+    virtual ~Damage() = default;
 
     typedef enum { Nothing = 0, Document, Workbook, Sheet, Range, Cell, Selection } Type;
 

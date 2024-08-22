@@ -30,7 +30,7 @@ public:
 class OdfWriter
 {
 private:
-    void operator=(const OdfWriter &);
+    void operator=(const OdfWriter &) = delete;
 
 protected:
     OdfWriter(KoXmlWriter *xml_, const char *tag, bool indent)

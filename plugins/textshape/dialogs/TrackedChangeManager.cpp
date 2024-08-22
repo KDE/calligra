@@ -22,9 +22,7 @@ TrackedChangeManager::TrackedChangeManager(QWidget *parent)
     widget.setupUi(this);
 }
 
-TrackedChangeManager::~TrackedChangeManager()
-{
-}
+TrackedChangeManager::~TrackedChangeManager() = default;
 
 void TrackedChangeManager::setModel(TrackedChangeModel *model)
 {

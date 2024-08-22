@@ -20,9 +20,7 @@ AlignLeft::AlignLeft(Actions *actions)
 {
 }
 
-AlignLeft::~AlignLeft()
-{
-}
+AlignLeft::~AlignLeft() = default;
 
 QAction *AlignLeft::createAction()
 {
@@ -54,9 +52,7 @@ AlignRight::AlignRight(Actions *actions)
 {
 }
 
-AlignRight::~AlignRight()
-{
-}
+AlignRight::~AlignRight() = default;
 
 QAction *AlignRight::createAction()
 {
@@ -88,9 +84,7 @@ AlignCenter::AlignCenter(Actions *actions)
 {
 }
 
-AlignCenter::~AlignCenter()
-{
-}
+AlignCenter::~AlignCenter() = default;
 
 QAction *AlignCenter::createAction()
 {
@@ -122,9 +116,7 @@ AlignTop::AlignTop(Actions *actions)
 {
 }
 
-AlignTop::~AlignTop()
-{
-}
+AlignTop::~AlignTop() = default;
 
 QAction *AlignTop::createAction()
 {
@@ -160,9 +152,7 @@ AlignBottom::AlignBottom(Actions *actions)
 {
 }
 
-AlignBottom::~AlignBottom()
-{
-}
+AlignBottom::~AlignBottom() = default;
 
 QAction *AlignBottom::createAction()
 {
@@ -198,9 +188,7 @@ AlignMiddle::AlignMiddle(Actions *actions)
 {
 }
 
-AlignMiddle::~AlignMiddle()
-{
-}
+AlignMiddle::~AlignMiddle() = default;
 
 QAction *AlignMiddle::createAction()
 {

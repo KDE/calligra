@@ -23,9 +23,7 @@ CSThumbProviderStage::CSThumbProviderStage(KoPADocument *doc)
 {
 }
 
-CSThumbProviderStage::~CSThumbProviderStage()
-{
-}
+CSThumbProviderStage::~CSThumbProviderStage() = default;
 
 QVector<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {

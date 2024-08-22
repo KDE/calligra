@@ -15,9 +15,7 @@ class VideoShapeFactory : public KoShapeFactoryBase
 {
 public:
     VideoShapeFactory();
-    ~VideoShapeFactory()
-    {
-    }
+    ~VideoShapeFactory() = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

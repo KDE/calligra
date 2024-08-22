@@ -79,8 +79,8 @@ public:
     void dump(const QByteArray &indent) const;
 
 private:
-    Vertex(const Vertex &rhs);
-    Vertex &operator=(const Vertex &rhs);
+    Vertex(const Vertex &rhs) = delete;
+    Vertex &operator=(const Vertex &rhs) = delete;
 
     QList<Edge *> m_edges;
     const Vertex *m_predecessor;

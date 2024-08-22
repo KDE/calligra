@@ -17,9 +17,7 @@ KPrSpaceRotationFromRightStrategy::KPrSpaceRotationFromRightStrategy()
 {
 }
 
-KPrSpaceRotationFromRightStrategy::~KPrSpaceRotationFromRightStrategy()
-{
-}
+KPrSpaceRotationFromRightStrategy::~KPrSpaceRotationFromRightStrategy() = default;
 
 void KPrSpaceRotationFromRightStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

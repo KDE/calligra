@@ -21,9 +21,7 @@ InlineAnchorStrategy::InlineAnchorStrategy(KoAnchorInlineObject *anchorObject, K
 {
 }
 
-InlineAnchorStrategy::~InlineAnchorStrategy()
-{
-}
+InlineAnchorStrategy::~InlineAnchorStrategy() = default;
 
 bool InlineAnchorStrategy::moveSubject()
 {

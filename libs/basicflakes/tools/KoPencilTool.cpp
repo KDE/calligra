@@ -53,9 +53,7 @@ KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
 {
 }
 
-KoPencilTool::~KoPencilTool()
-{
-}
+KoPencilTool::~KoPencilTool() = default;
 
 void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

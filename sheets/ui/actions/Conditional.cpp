@@ -27,9 +27,7 @@ SetCondition::SetCondition(Actions *actions)
 {
 }
 
-SetCondition::~SetCondition()
-{
-}
+SetCondition::~SetCondition() = default;
 
 ActionDialog *SetCondition::createDialog(QWidget *canvasWidget)
 {
@@ -91,9 +89,7 @@ ClearCondition::ClearCondition(Actions *actions)
 {
 }
 
-ClearCondition::~ClearCondition()
-{
-}
+ClearCondition::~ClearCondition() = default;
 
 QAction *ClearCondition::createAction()
 {

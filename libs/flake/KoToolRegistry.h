@@ -37,8 +37,8 @@ public:
     void addDeferred(KoToolFactoryBase *toolFactory);
 
 private:
-    KoToolRegistry(const KoToolRegistry &);
-    KoToolRegistry operator=(const KoToolRegistry &);
+    KoToolRegistry(const KoToolRegistry &) = delete;
+    KoToolRegistry operator=(const KoToolRegistry &) = delete;
     void init();
 
     class Private;

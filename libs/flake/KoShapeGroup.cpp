@@ -32,9 +32,7 @@ public:
         : m_group(group)
     {
     }
-    ~ShapeGroupContainerModel() override
-    {
-    }
+    ~ShapeGroupContainerModel() override = default;
 
     void add(KoShape *child) override
     {
@@ -82,9 +80,7 @@ public:
         model = new ShapeGroupContainerModel(q);
     }
 
-    ~KoShapeGroupPrivate() override
-    {
-    }
+    ~KoShapeGroupPrivate() override = default;
 
     mutable bool sizeCached;
 };
@@ -95,9 +91,7 @@ KoShapeGroup::KoShapeGroup()
     setSize(QSizeF(0, 0));
 }
 
-KoShapeGroup::~KoShapeGroup()
-{
-}
+KoShapeGroup::~KoShapeGroup() = default;
 
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

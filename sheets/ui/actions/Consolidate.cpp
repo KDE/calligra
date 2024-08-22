@@ -68,9 +68,7 @@ ConsolidateManipulator::ConsolidateManipulator()
     setText(kundo2_i18n("Consolidate"));
 }
 
-ConsolidateManipulator::~ConsolidateManipulator()
-{
-}
+ConsolidateManipulator::~ConsolidateManipulator() = default;
 
 bool ConsolidateManipulator::preProcess()
 {

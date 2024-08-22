@@ -17,9 +17,7 @@ KPrSwapEffectHorizontalStrategy::KPrSwapEffectHorizontalStrategy()
 {
 }
 
-KPrSwapEffectHorizontalStrategy::~KPrSwapEffectHorizontalStrategy()
-{
-}
+KPrSwapEffectHorizontalStrategy::~KPrSwapEffectHorizontalStrategy() = default;
 
 void KPrSwapEffectHorizontalStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

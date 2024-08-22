@@ -13,13 +13,9 @@
 
 Q_GLOBAL_STATIC(KoDumbColorDisplayRenderer, s_instance)
 
-KoColorDisplayRendererInterface::KoColorDisplayRendererInterface()
-{
-}
+KoColorDisplayRendererInterface::KoColorDisplayRendererInterface() = default;
 
-KoColorDisplayRendererInterface::~KoColorDisplayRendererInterface()
-{
-}
+KoColorDisplayRendererInterface::~KoColorDisplayRendererInterface() = default;
 
 QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c) const
 {

@@ -23,9 +23,7 @@ StyleCommand::StyleCommand(KUndo2Command *parent)
 {
 }
 
-StyleCommand::~StyleCommand()
-{
-}
+StyleCommand::~StyleCommand() = default;
 
 bool StyleCommand::process(Element *element)
 {

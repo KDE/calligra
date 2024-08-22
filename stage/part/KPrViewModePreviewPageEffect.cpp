@@ -51,9 +51,7 @@ KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect(KoPAViewBase *view, K
     connect(&m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewPageEffect::activateSavedViewMode);
 }
 
-KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()
-{
-}
+KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect() = default;
 
 void KPrViewModePreviewPageEffect::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {

@@ -19,9 +19,7 @@ public:
     {
     }
 
-    ~KoFontFacePrivate()
-    {
-    }
+    ~KoFontFacePrivate() = default;
 
     void saveOdf(KoXmlWriter *xmlWriter) const
     {
@@ -49,19 +47,12 @@ KoFontFace::KoFontFace(const QString &_name)
 }
 
 KoFontFace::KoFontFace(const KoFontFace &other)
-    : d(other.d)
-{
-}
 
-KoFontFace::~KoFontFace()
-{
-}
+    = default;
 
-KoFontFace &KoFontFace::operator=(const KoFontFace &other)
-{
-    d = other.d;
-    return *this;
-}
+KoFontFace::~KoFontFace() = default;
+
+KoFontFace &KoFontFace::operator=(const KoFontFace &other) = default;
 
 bool KoFontFace::operator==(const KoFontFace &other) const
 {

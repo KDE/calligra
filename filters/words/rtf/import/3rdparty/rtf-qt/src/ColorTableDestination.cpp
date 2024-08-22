@@ -15,9 +15,7 @@ ColorTableDestination::ColorTableDestination(Reader *reader, AbstractRtfOutput *
 {
 }
 
-ColorTableDestination::~ColorTableDestination()
-{
-}
+ColorTableDestination::~ColorTableDestination() = default;
 
 void ColorTableDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

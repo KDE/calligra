@@ -28,9 +28,7 @@ KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape *> &s
     }
 }
 
-KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand()
-{
-}
+KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand() = default;
 
 void KoPathShapeMarkerCommand::redo()
 {

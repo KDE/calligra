@@ -31,9 +31,7 @@ Parser97::Parser97(OLEStorage *storage, OLEStreamReader *wordDocument)
     init();
 }
 
-Parser97::~Parser97()
-{
-}
+Parser97::~Parser97() = default;
 
 void Parser97::init()
 {

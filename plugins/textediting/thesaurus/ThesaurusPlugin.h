@@ -16,9 +16,7 @@ class ThesaurusPlugin : public QObject
 
 public:
     ThesaurusPlugin(QObject *parent, const QVariantList &);
-    ~ThesaurusPlugin() override
-    {
-    }
+    ~ThesaurusPlugin() override = default;
 };
 
 #endif

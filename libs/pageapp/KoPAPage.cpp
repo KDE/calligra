@@ -30,9 +30,7 @@ KoPAPage::KoPAPage(KoPAMasterPage *masterPage)
     Q_ASSERT(masterPage);
 }
 
-KoPAPage::~KoPAPage()
-{
-}
+KoPAPage::~KoPAPage() = default;
 
 void KoPAPage::saveOdf(KoShapeSavingContext &context) const
 {

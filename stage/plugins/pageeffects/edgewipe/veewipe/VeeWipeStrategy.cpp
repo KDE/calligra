@@ -17,9 +17,7 @@ VeeWipeStrategy::VeeWipeStrategy(int subtype, const char *smilSubType, bool reve
 {
 }
 
-VeeWipeStrategy::~VeeWipeStrategy()
-{
-}
+VeeWipeStrategy::~VeeWipeStrategy() = default;
 
 void VeeWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

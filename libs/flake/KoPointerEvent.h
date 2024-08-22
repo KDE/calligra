@@ -249,7 +249,7 @@ protected:
     void setTabletButton(Qt::MouseButton button);
 
 private:
-    KoPointerEvent &operator=(const KoPointerEvent &rhs);
+    KoPointerEvent &operator=(const KoPointerEvent &rhs) = delete;
 
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QEvent *m_event;

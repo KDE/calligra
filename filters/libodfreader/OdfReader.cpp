@@ -56,9 +56,7 @@ OdfReader::OdfReader()
 {
 }
 
-OdfReader::~OdfReader()
-{
-}
+OdfReader::~OdfReader() = default;
 
 OdfTextReader *OdfReader::textReader() const
 {

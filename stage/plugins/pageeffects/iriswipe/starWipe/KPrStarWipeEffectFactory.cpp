@@ -78,9 +78,7 @@ KPrStarWipeEffectFactory::KPrStarWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, SixPointReverse, "starWipe", "sixPoint", true));
 }
 
-KPrStarWipeEffectFactory::~KPrStarWipeEffectFactory()
-{
-}
+KPrStarWipeEffectFactory::~KPrStarWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Four Point Star"),
                                                   kli18n("Four Point Star Reverse"),

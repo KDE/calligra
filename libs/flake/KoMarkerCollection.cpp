@@ -18,9 +18,7 @@
 class Q_DECL_HIDDEN KoMarkerCollection::Private
 {
 public:
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     QList<QExplicitlySharedDataPointer<KoMarker>> markers;
 };

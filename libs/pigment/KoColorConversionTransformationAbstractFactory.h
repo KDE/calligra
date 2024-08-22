@@ -14,12 +14,8 @@
 class PIGMENTCMS_EXPORT KoColorConversionTransformationAbstractFactory
 {
 public:
-    KoColorConversionTransformationAbstractFactory()
-    {
-    }
-    virtual ~KoColorConversionTransformationAbstractFactory()
-    {
-    }
+    KoColorConversionTransformationAbstractFactory() = default;
+    virtual ~KoColorConversionTransformationAbstractFactory() = default;
     /**
      * Creates a color transformation between the source color space and the destination
      * color space.

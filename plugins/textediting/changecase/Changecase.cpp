@@ -15,9 +15,7 @@
 #include <KLocalizedString>
 #include <KoDialog.h>
 
-Changecase::Changecase()
-{
-}
+Changecase::Changecase() = default;
 
 void Changecase::finishedWord(QTextDocument *document, int cursorPosition)
 {

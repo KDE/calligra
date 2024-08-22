@@ -23,9 +23,7 @@ KPrPinWheelWipeEffectFactory::KPrPinWheelWipeEffectFactory()
     addStrategy(new KPrClockWipeStrategy(0, 4, FourBladeCounterClockwise, "pinWheelWipe", "fourBlade", true));
 }
 
-KPrPinWheelWipeEffectFactory::~KPrPinWheelWipeEffectFactory()
-{
-}
+KPrPinWheelWipeEffectFactory::~KPrPinWheelWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Two Blades Vertical Clockwise"),
                                                   kli18n("Two Blades Horizontal Clockwise"),

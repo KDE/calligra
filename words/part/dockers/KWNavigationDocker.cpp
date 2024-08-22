@@ -22,9 +22,7 @@ KWNavigationDocker::KWNavigationDocker()
     setWidget(m_navigationWidget);
 }
 
-KWNavigationDocker::~KWNavigationDocker()
-{
-}
+KWNavigationDocker::~KWNavigationDocker() = default;
 
 void KWNavigationDocker::setCanvas(KoCanvasBase *_canvas)
 {

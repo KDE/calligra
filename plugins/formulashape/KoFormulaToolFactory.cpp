@@ -21,9 +21,7 @@ KoFormulaToolFactory::KoFormulaToolFactory()
     setActivationShapeId(KoFormulaShapeId);
 }
 
-KoFormulaToolFactory::~KoFormulaToolFactory()
-{
-}
+KoFormulaToolFactory::~KoFormulaToolFactory() = default;
 
 KoToolBase *KoFormulaToolFactory::createTool(KoCanvasBase *canvas)
 {

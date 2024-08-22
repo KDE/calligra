@@ -62,9 +62,7 @@ KoTableCellStylePrivate::KoTableCellStylePrivate()
 {
 }
 
-KoTableCellStylePrivate::~KoTableCellStylePrivate()
-{
-}
+KoTableCellStylePrivate::~KoTableCellStylePrivate() = default;
 
 void KoTableCellStylePrivate::setProperty(int key, const QVariant &value)
 {

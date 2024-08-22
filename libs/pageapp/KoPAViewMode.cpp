@@ -21,9 +21,7 @@ KoPAViewMode::KoPAViewMode(KoPAViewBase *view, KoPACanvasBase *canvas, const QSt
 {
 }
 
-KoPAViewMode::~KoPAViewMode()
-{
-}
+KoPAViewMode::~KoPAViewMode() = default;
 
 void KoPAViewMode::closeEvent(QCloseEvent *event)
 {

@@ -26,7 +26,7 @@ class Q_DECL_HIDDEN KoOdfListLevelProperties::Private
 public:
     Private()
         : hasLabelAlignment(false){};
-    ~Private(){};
+    ~Private() = default;
 
     bool hasLabelAlignment;
     AttributeSet propertiesAttributes; // name, value

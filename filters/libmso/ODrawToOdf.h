@@ -20,9 +20,7 @@ public:
     class Client
     {
     public:
-        virtual ~Client()
-        {
-        }
+        virtual ~Client() = default;
         /**
          * Get the bounding rect that defines the position and dimensions of
          * the shape in the hosting document.

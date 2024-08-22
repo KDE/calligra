@@ -61,9 +61,7 @@ FileCollectorPrivate::FileCollectorPrivate()
 {
 }
 
-FileCollectorPrivate::~FileCollectorPrivate()
-{
-}
+FileCollectorPrivate::~FileCollectorPrivate() = default;
 
 // ================================================================
 //                         class FileCollector

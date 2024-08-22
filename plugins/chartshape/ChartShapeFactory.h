@@ -28,18 +28,14 @@ class ChartShapePlugin : public QObject
     Q_OBJECT
 public:
     ChartShapePlugin(QObject *parent, const QVariantList &);
-    ~ChartShapePlugin()
-    {
-    }
+    ~ChartShapePlugin() = default;
 };
 
 class ChartShapeFactory : public KoShapeFactoryBase
 {
 public:
     ChartShapeFactory();
-    ~ChartShapeFactory()
-    {
-    }
+    ~ChartShapeFactory() = default;
 
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
 

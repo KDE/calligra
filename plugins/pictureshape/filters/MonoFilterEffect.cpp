@@ -14,9 +14,7 @@ MonoFilterEffect::MonoFilterEffect()
 {
 }
 
-MonoFilterEffect::~MonoFilterEffect()
-{
-}
+MonoFilterEffect::~MonoFilterEffect() = default;
 
 void MonoFilterEffect::save(KoXmlWriter & /*writer*/)
 {

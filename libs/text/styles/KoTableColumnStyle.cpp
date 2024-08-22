@@ -34,9 +34,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {
@@ -55,19 +53,12 @@ KoTableColumnStyle::KoTableColumnStyle()
 }
 
 KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)
-    : d(rhs.d)
-{
-}
 
-KoTableColumnStyle &KoTableColumnStyle::operator=(const KoTableColumnStyle &rhs)
-{
-    d = rhs.d;
-    return *this;
-}
+    = default;
 
-KoTableColumnStyle::~KoTableColumnStyle()
-{
-}
+KoTableColumnStyle &KoTableColumnStyle::operator=(const KoTableColumnStyle &rhs) = default;
+
+KoTableColumnStyle::~KoTableColumnStyle() = default;
 
 void KoTableColumnStyle::copyProperties(const KoTableColumnStyle *style)
 {

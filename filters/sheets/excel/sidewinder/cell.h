@@ -133,8 +133,8 @@ public:
 
 private:
     // no copy or assign
-    Cell(const Cell &);
-    Cell &operator=(const Cell &);
+    Cell(const Cell &) = delete;
+    Cell &operator=(const Cell &) = delete;
 
     Sheet *m_sheet;
     Value *m_value;

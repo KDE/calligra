@@ -12,9 +12,7 @@ namespace MSO
 class StreamOffset
 {
 public:
-    virtual ~StreamOffset()
-    {
-    }
+    virtual ~StreamOffset() = default;
     quint32 streamOffset;
 };
 class RecordHeader;
@@ -4251,9 +4249,7 @@ public:
     class choice242357012 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice242357012()
-        {
-        }
+        choice242357012() = default;
         explicit choice242357012(SlideNumberMCAtom *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -4632,9 +4628,7 @@ public:
     class choice3062460075 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice3062460075()
-        {
-        }
+        choice3062460075() = default;
         explicit choice3062460075(OfficeArtFConnectorRule *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6038,9 +6032,7 @@ public:
     class choice3146562028 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice3146562028()
-        {
-        }
+        choice3146562028() = default;
         explicit choice3146562028(ShapeProgsTagContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6088,9 +6080,7 @@ public:
     class choice2754406405 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2754406405()
-        {
-        }
+        choice2754406405() = default;
         explicit choice2754406405(PP9ShapeBinaryTagExtension *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6134,9 +6124,7 @@ public:
     class choice2757443956 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2757443956()
-        {
-        }
+        choice2757443956() = default;
         explicit choice2757443956(XlsOfficeArtClientTextBox *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6240,9 +6228,7 @@ public:
     class choice1129181155 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice1129181155()
-        {
-        }
+        choice1129181155() = default;
         explicit choice1129181155(Prm0 *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6317,9 +6303,7 @@ public:
     class choice279968329 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice279968329()
-        {
-        }
+        choice279968329() = default;
         explicit choice279968329(OfficeArtBlipEMF *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6509,9 +6493,7 @@ public:
     class choice1060411409 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice1060411409()
-        {
-        }
+        choice1060411409() = default;
         explicit choice1060411409(TextCharsAtom *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6684,9 +6666,7 @@ public:
     class choice2338534801 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2338534801()
-        {
-        }
+        choice2338534801() = default;
         explicit choice2338534801(ExAviMovieContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -6774,9 +6754,7 @@ public:
     class choice3165202096 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice3165202096()
-        {
-        }
+        choice3165202096() = default;
         explicit choice3165202096(Rotation *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7308,9 +7286,7 @@ public:
     class choice1726903461 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice1726903461()
-        {
-        }
+        choice1726903461() = default;
         explicit choice1726903461(PptOfficeArtClientAnchor *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7439,9 +7415,7 @@ public:
     class choice2043165903 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2043165903()
-        {
-        }
+        choice2043165903() = default;
         explicit choice2043165903(OfficeArtFBSE *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7488,9 +7462,7 @@ public:
     class choice214961565 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice214961565()
-        {
-        }
+        choice214961565() = default;
         explicit choice214961565(PP9DocBinaryTagExtension *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7587,9 +7559,7 @@ public:
     class choice2925155378 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2925155378()
-        {
-        }
+        choice2925155378() = default;
         explicit choice2925155378(OutlineAtom *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7625,9 +7595,7 @@ public:
     class choice3752530176 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice3752530176()
-        {
-        }
+        choice3752530176() = default;
         explicit choice3752530176(MouseClickTextInfo *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7679,9 +7647,7 @@ public:
     class choice4024872665 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice4024872665()
-        {
-        }
+        choice4024872665() = default;
         explicit choice4024872665(PP9SlideBinaryTagExtension *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7734,9 +7700,7 @@ public:
     class choice2520977885 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2520977885()
-        {
-        }
+        choice2520977885() = default;
         explicit choice2520977885(DocOfficeArtClientData *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7776,9 +7740,7 @@ public:
     class choice42781012 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice42781012()
-        {
-        }
+        choice42781012() = default;
         explicit choice42781012(ProgStringTagContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7847,9 +7809,7 @@ public:
     class choice2631814737 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2631814737()
-        {
-        }
+        choice2631814737() = default;
         explicit choice2631814737(DocProgTagsContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7954,9 +7914,7 @@ public:
     class choice61655436 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice61655436()
-        {
-        }
+        choice61655436() = default;
         explicit choice61655436(ProgStringTagContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -7992,9 +7950,7 @@ public:
     class choice310259039 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice310259039()
-        {
-        }
+        choice310259039() = default;
         explicit choice310259039(ProgStringTagContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -8044,9 +8000,7 @@ public:
     class choice4117040 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice4117040()
-        {
-        }
+        choice4117040() = default;
         explicit choice4117040(OfficeArtSpContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -8164,9 +8118,7 @@ public:
     class choice2788643208 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice2788643208()
-        {
-        }
+        choice2788643208() = default;
         explicit choice2788643208(MainMasterContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {
@@ -8202,9 +8154,7 @@ public:
     class choice394521820 : public QSharedPointer<StreamOffset>
     {
     public:
-        choice394521820()
-        {
-        }
+        choice394521820() = default;
         explicit choice394521820(DocumentContainer *a)
             : QSharedPointer<StreamOffset>(a)
         {

@@ -67,9 +67,7 @@ KPrArrowHeadWipeEffectFactory::KPrArrowHeadWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, LeftReverse, "arrowHeadWipe", "left", true));
 }
 
-KPrArrowHeadWipeEffectFactory::~KPrArrowHeadWipeEffectFactory()
-{
-}
+KPrArrowHeadWipeEffectFactory::~KPrArrowHeadWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Up"),
                                                   kli18n("Up Reverse"),

@@ -15,9 +15,7 @@ public:
         : paths(p)
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void reverse()
     {

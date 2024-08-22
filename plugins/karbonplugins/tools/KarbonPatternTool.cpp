@@ -37,9 +37,7 @@ KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
 {
 }
 
-KarbonPatternTool::~KarbonPatternTool()
-{
-}
+KarbonPatternTool::~KarbonPatternTool() = default;
 
 void KarbonPatternTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

@@ -47,9 +47,7 @@ ChainLink::ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry, const
 {
 }
 
-ChainLink::~ChainLink()
-{
-}
+ChainLink::~ChainLink() = default;
 
 KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
 {

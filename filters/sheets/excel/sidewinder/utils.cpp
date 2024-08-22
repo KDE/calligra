@@ -285,9 +285,7 @@ Record::Record(Workbook *book)
     m_size = 0;
 }
 
-Record::~Record()
-{
-}
+Record::~Record() = default;
 
 Record *Record::create(unsigned type, Workbook *book)
 {

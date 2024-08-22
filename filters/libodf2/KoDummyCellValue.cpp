@@ -6,13 +6,9 @@
 
 #include "KoDummyCellValue.h"
 
-KoDummyCellValue::KoDummyCellValue()
-{
-}
+KoDummyCellValue::KoDummyCellValue() = default;
 
-KoDummyCellValue::~KoDummyCellValue()
-{
-}
+KoDummyCellValue::~KoDummyCellValue() = default;
 
 QString KoDummyCellValue::type() const
 {

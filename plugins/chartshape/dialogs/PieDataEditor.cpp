@@ -81,9 +81,7 @@ PieDataEditor::PieDataEditor(QWidget *parent)
     m_deleteAction->setEnabled(false);
 }
 
-PieDataEditor::~PieDataEditor()
-{
-}
+PieDataEditor::~PieDataEditor() = default;
 
 void PieDataEditor::setModel(QAbstractItemModel *model)
 {

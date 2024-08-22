@@ -32,9 +32,7 @@ WMFImportParser::WMFImportParser(KoXmlWriter &svgWriter)
 {
 }
 
-WMFImportParser::~WMFImportParser()
-{
-}
+WMFImportParser::~WMFImportParser() = default;
 
 //-----------------------------------------------------------------------------
 // Virtual Painter

@@ -57,9 +57,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void setProperty(int key, const QVariant &value)
     {
@@ -1265,12 +1263,8 @@ struct ParagraphBorderData {
     }
 
     ParagraphBorderData(const ParagraphBorderData &other)
-        : values(other.values)
-        , style(other.style)
-        , color(other.color)
-        , width(other.width)
-    {
-    }
+
+        = default;
 
     // flag defining which data is set
     int values;

@@ -30,9 +30,7 @@ class WmfDeviceContext;
 class KoWmfHandle
 {
 public:
-    virtual ~KoWmfHandle()
-    {
-    }
+    virtual ~KoWmfHandle() = default;
     virtual void apply(WmfDeviceContext *) = 0;
 };
 

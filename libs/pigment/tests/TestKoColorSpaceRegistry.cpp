@@ -11,9 +11,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 
-TestColorSpaceRegistry::TestColorSpaceRegistry()
-{
-}
+TestColorSpaceRegistry::TestColorSpaceRegistry() = default;
 
 void TestColorSpaceRegistry::testLab16()
 {

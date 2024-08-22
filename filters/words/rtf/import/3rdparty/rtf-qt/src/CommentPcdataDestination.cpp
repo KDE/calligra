@@ -12,9 +12,7 @@ CommentPcdataDestination::CommentPcdataDestination(Reader *reader, AbstractRtfOu
 {
 }
 
-CommentPcdataDestination::~CommentPcdataDestination()
-{
-}
+CommentPcdataDestination::~CommentPcdataDestination() = default;
 
 void CommentPcdataDestination::aboutToEndDestination()
 {

@@ -16,9 +16,7 @@ LayoutCheckbox::LayoutCheckbox(QWidget *parent)
 {
 }
 
-LayoutCheckbox::~LayoutCheckbox()
-{
-}
+LayoutCheckbox::~LayoutCheckbox() = default;
 
 void LayoutCheckbox::setStyleKey(const Style::Key &key, bool defaultValue)
 {

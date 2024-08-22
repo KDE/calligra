@@ -24,9 +24,7 @@ KoColumn::KoColumn()
 {
 }
 
-KoColumn::~KoColumn()
-{
-}
+KoColumn::~KoColumn() = default;
 
 void KoColumn::setStyle(KoColumnStyle::Ptr style)
 {

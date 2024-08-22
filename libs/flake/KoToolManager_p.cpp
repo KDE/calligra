@@ -161,9 +161,7 @@ ShortcutToolAction::ShortcutToolAction(const QString &id, const QString &name, Q
     connect(this, &QAction::triggered, this, &ShortcutToolAction::actionTriggered);
 }
 
-ShortcutToolAction::~ShortcutToolAction()
-{
-}
+ShortcutToolAction::~ShortcutToolAction() = default;
 
 void ShortcutToolAction::actionTriggered()
 {

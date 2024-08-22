@@ -12,9 +12,7 @@ InfoCreatedTimeDestination::InfoCreatedTimeDestination(Reader *reader, AbstractR
 {
 }
 
-InfoCreatedTimeDestination::~InfoCreatedTimeDestination()
-{
-}
+InfoCreatedTimeDestination::~InfoCreatedTimeDestination() = default;
 
 void InfoCreatedTimeDestination::aboutToEndDestination()
 {

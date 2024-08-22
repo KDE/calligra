@@ -26,9 +26,7 @@ KPrSaloonDoorWipeEffectFactory::KPrSaloonDoorWipeEffectFactory()
     addStrategy(new KPrSaloonDoorWipeStrategy(ToRight, "saloonDoorWipe", "right", true));
 }
 
-KPrSaloonDoorWipeEffectFactory::~KPrSaloonDoorWipeEffectFactory()
-{
-}
+KPrSaloonDoorWipeEffectFactory::~KPrSaloonDoorWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top"),
                                                   kli18n("From Left"),

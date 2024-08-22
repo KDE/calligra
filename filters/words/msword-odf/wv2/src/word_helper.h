@@ -76,7 +76,7 @@ public:
     void dumpStrings() const;
 
 private:
-    STTBF &operator=(const STTBF &rhs);
+    STTBF &operator=(const STTBF &rhs) = delete;
 
     // Internal helper methods to avoid code duplication in the CTORs
     void init(U16 lid, OLEStreamReader *reader, const U8 *ptr);
@@ -141,8 +141,8 @@ public:
 
 private:
     // don't copy or assign it
-    PLF(const PLF<T, shortCount> &rhs);
-    PLF<T, shortCount> &operator=(const PLF<T, shortCount> &rhs);
+    PLF(const PLF<T, shortCount> &rhs) = delete = delete;
+    PLF<T, shortCount> &operator=(const PLF<T, shortCount> &rhs) = delete = delete;
 
     std::vector<T *> m_items;
     mutable typename std::vector<T *>::const_iterator it;
@@ -250,13 +250,11 @@ public:
 
 private:
     // don't assign it
-    PLCF<T> &operator=(const PLCF<T> &rhs);
+    PLCF<T> &operator=(const PLCF<T> &rhs) = delete = delete;
 
     // An empty default constructor for the convertPLCF friend. Don't use it
     // unless you know what you are doing :-)
-    PLCF()
-    {
-    }
+    PLCF() = default;
 
     U32 calculateCount(U32 length);
 
@@ -567,13 +565,11 @@ public:
 
 private:
     // don't assign it
-    FKP<Offset> &operator=(const FKP<Offset> &rhs);
+    FKP<Offset> &operator=(const FKP<Offset> &rhs) = delete = delete;
 
     // An empty default constructor for the convertFKP friend. Don't use it
     // unless you know what you are doing :-)
-    FKP()
-    {
-    }
+    FKP() = default;
 
     U8 m_crun;
     U32 *m_rgfc; // array of FCs (crun+1)
@@ -726,8 +722,8 @@ public:
 
 private:
     // don't copy or assign it
-    FKPIterator(const FKPIterator<Offset> &rhs);
-    FKPIterator<Offset> &operator=(const FKPIterator<Offset> &rhs);
+    FKPIterator(const FKPIterator<Offset> &rhs) = delete = delete;
+    FKPIterator<Offset> &operator=(const FKPIterator<Offset> &rhs) = delete = delete;
 
     const FKP<Offset> &m_fkp;
     U8 m_index;

@@ -24,9 +24,7 @@ CellToolFactory::CellToolFactory(const QString &id)
     setActivationShapeId("flake/always");
 }
 
-CellToolFactory::~CellToolFactory()
-{
-}
+CellToolFactory::~CellToolFactory() = default;
 
 KoToolBase *CellToolFactory::createTool(KoCanvasBase *canvas)
 {

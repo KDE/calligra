@@ -63,9 +63,7 @@ public:
 class NumberStyle
 {
 public:
-    NumberStyle()
-    {
-    }
+    NumberStyle() = default;
 
     enum NumberType { Boolean, Date, Number, Percentage, Time };
 

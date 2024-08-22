@@ -26,9 +26,7 @@ KPrWindShieldWipeEffectFactory::KPrWindShieldWipeEffectFactory()
     addStrategy(new KPrWindShieldWipeStrategy(HorizontalReverse, "windshieldWipe", "horizontal", true));
 }
 
-KPrWindShieldWipeEffectFactory::~KPrWindShieldWipeEffectFactory()
-{
-}
+KPrWindShieldWipeEffectFactory::~KPrWindShieldWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Right"),
                                                   kli18n("Up"),

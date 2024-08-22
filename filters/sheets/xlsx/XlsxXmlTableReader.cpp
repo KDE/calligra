@@ -34,9 +34,7 @@ XlsxXmlTableReader::XlsxXmlTableReader(KoOdfWriters *writers)
 {
 }
 
-XlsxXmlTableReader::~XlsxXmlTableReader()
-{
-}
+XlsxXmlTableReader::~XlsxXmlTableReader() = default;
 
 KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {

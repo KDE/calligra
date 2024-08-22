@@ -45,9 +45,7 @@ KPrPentagonWipeEffectFactory::KPrPentagonWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, DownReverse, "pentagonWipe", "down", true));
 }
 
-KPrPentagonWipeEffectFactory::~KPrPentagonWipeEffectFactory()
-{
-}
+KPrPentagonWipeEffectFactory::~KPrPentagonWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Up"), kli18n("Up Reverse"), kli18n("Down"), kli18n("Down Reverse")};
 

@@ -131,13 +131,7 @@ Token::Token(const Token &token)
 }
 
 // assignment operator
-Token &Token::operator=(const Token &token)
-{
-    m_type = token.m_type;
-    m_text = token.m_text;
-    m_pos = token.m_pos;
-    return *this;
-}
+Token &Token::operator=(const Token &token) = default;
 
 QString Token::asIdentifierName() const
 {

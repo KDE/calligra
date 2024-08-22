@@ -35,9 +35,7 @@ PasteRegular::PasteRegular(Actions *actions)
 {
 }
 
-PasteRegular::~PasteRegular()
-{
-}
+PasteRegular::~PasteRegular() = default;
 
 QAction *PasteRegular::createAction()
 {
@@ -99,9 +97,7 @@ PasteSpecial::PasteSpecial(Actions *actions)
 {
 }
 
-PasteSpecial::~PasteSpecial()
-{
-}
+PasteSpecial::~PasteSpecial() = default;
 
 ActionDialog *PasteSpecial::createDialog(QWidget *canvasWidget)
 {

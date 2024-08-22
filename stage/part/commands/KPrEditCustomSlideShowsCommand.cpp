@@ -21,9 +21,7 @@ KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(KPrDocument *doc,
     setText(kundo2_i18n("Edit custom slide show"));
 }
 
-KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()
-{
-}
+KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand() = default;
 
 void KPrEditCustomSlideShowsCommand::redo()
 {

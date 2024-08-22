@@ -20,9 +20,7 @@ KPrClockWipeStrategy::KPrClockWipeStrategy(int startAngle, int bladeCount, int s
     m_startAngle = static_cast<double>(startAngle) / 180 * M_PI;
 }
 
-KPrClockWipeStrategy::~KPrClockWipeStrategy()
-{
-}
+KPrClockWipeStrategy::~KPrClockWipeStrategy() = default;
 
 void KPrClockWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

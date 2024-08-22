@@ -13,13 +13,9 @@
 
 #include <algorithm>
 
-TestShapeReorderCommand::TestShapeReorderCommand()
-{
-}
+TestShapeReorderCommand::TestShapeReorderCommand() = default;
 
-TestShapeReorderCommand::~TestShapeReorderCommand()
-{
-}
+TestShapeReorderCommand::~TestShapeReorderCommand() = default;
 
 void TestShapeReorderCommand::testZIndexSorting()
 {

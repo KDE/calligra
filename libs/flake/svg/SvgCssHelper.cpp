@@ -22,9 +22,7 @@ typedef QPair<CssTokenType, QString> CssToken;
 class CssSelectorBase
 {
 public:
-    virtual ~CssSelectorBase()
-    {
-    }
+    virtual ~CssSelectorBase() = default;
     /// Matches the given element
     virtual bool match(const KoXmlElement &) = 0;
     /// Returns string representation of selector

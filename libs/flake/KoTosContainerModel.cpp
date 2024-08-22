@@ -17,9 +17,7 @@ KoTosContainerModel::KoTosContainerModel()
 {
 }
 
-KoTosContainerModel::~KoTosContainerModel()
-{
-}
+KoTosContainerModel::~KoTosContainerModel() = default;
 
 void KoTosContainerModel::add(KoShape *shape)
 {

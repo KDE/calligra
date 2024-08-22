@@ -12,9 +12,7 @@ KPrAnimationGroupProxyModel::KPrAnimationGroupProxyModel(QObject *parent)
 {
 }
 
-KPrAnimationGroupProxyModel::~KPrAnimationGroupProxyModel()
-{
-}
+KPrAnimationGroupProxyModel::~KPrAnimationGroupProxyModel() = default;
 
 bool KPrAnimationGroupProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {

@@ -34,9 +34,7 @@ CSThumbProviderWords::CSThumbProviderWords(KWDocument *doc)
 {
 }
 
-CSThumbProviderWords::~CSThumbProviderWords()
-{
-}
+CSThumbProviderWords::~CSThumbProviderWords() = default;
 
 QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {

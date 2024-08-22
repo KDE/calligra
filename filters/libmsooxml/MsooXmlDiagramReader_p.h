@@ -190,9 +190,7 @@ public:
         : AbstractNode("dgm:pt")
     {
     }
-    ~PointNode() override
-    {
-    }
+    ~PointNode() override = default;
     void dump(Context *context, int level) override;
     void dump(QTextStream &device) override;
     void readElement(Context *context, MsooXmlDiagramReader *reader) override;
@@ -210,9 +208,7 @@ public:
         : AbstractNode("dgm:ptLst")
     {
     }
-    ~PointListNode() override
-    {
-    }
+    ~PointListNode() override = default;
     void dump(Context *context, int level) override;
     void dump(QTextStream &device) override;
     void readElement(Context *context, MsooXmlDiagramReader *reader) override;
@@ -237,9 +233,7 @@ public:
         , m_destOrd(0)
     {
     }
-    ~ConnectionNode() override
-    {
-    }
+    ~ConnectionNode() override = default;
     void dump(Context *, int level) override;
     void dump(QTextStream &device) override;
     void readElement(Context *context, MsooXmlDiagramReader *reader) override;
@@ -254,9 +248,7 @@ public:
         : AbstractNode("dgm:cxnLst")
     {
     }
-    ~ConnectionListNode() override
-    {
-    }
+    ~ConnectionListNode() override = default;
     void dump(Context *context, int level) override;
     void dump(QTextStream &device) override;
     void readElement(Context *context, MsooXmlDiagramReader *reader) override;
@@ -341,9 +333,7 @@ public:
         , m_type(UnknownAlg)
     {
     }
-    ~AlgorithmAtom() override
-    {
-    }
+    ~AlgorithmAtom() override = default;
     AlgorithmAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -374,9 +364,7 @@ public:
         , m_algorithmImpl(nullptr)
     {
     }
-    ~LayoutNodeAtom() override
-    {
-    }
+    ~LayoutNodeAtom() override = default;
     LayoutNodeAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -458,9 +446,7 @@ public:
         : AbstractAtom("dgm:constr")
     {
     }
-    ~ConstraintAtom() override
-    {
-    }
+    ~ConstraintAtom() override = default;
     ConstraintAtom *clone(Context *context) override;
     void dump(Context *, int level) override;
     void readAll(Context *, MsooXmlDiagramReader *reader) override;
@@ -484,9 +470,7 @@ public:
         , m_index(-1)
     {
     }
-    ~AdjustAtom() override
-    {
-    }
+    ~AdjustAtom() override = default;
     AdjustAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -509,9 +493,7 @@ public:
         : AbstractAtom("dgm:rule")
     {
     }
-    ~RuleAtom() override
-    {
-    }
+    ~RuleAtom() override = default;
     RuleAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -529,9 +511,7 @@ public:
         : AbstractAtom(tagName.toString())
     {
     }
-    ~ListAtom() override
-    {
-    }
+    ~ListAtom() override = default;
     ListAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readElement(Context *context, MsooXmlDiagramReader *reader) override;
@@ -549,9 +529,7 @@ public:
         , m_hideGeom(false)
     {
     }
-    ~ShapeAtom() override
-    {
-    }
+    ~ShapeAtom() override = default;
     QList<QExplicitlySharedDataPointer<AdjustAtom>> adjustments() const;
     ShapeAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
@@ -575,9 +553,7 @@ public:
         : AbstractAtom("dgm:presOf")
     {
     }
-    ~PresentationOfAtom() override
-    {
-    }
+    ~PresentationOfAtom() override = default;
     PresentationOfAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -608,9 +584,7 @@ public:
         , m_isTrue(isTrue)
     {
     }
-    ~IfAtom() override
-    {
-    }
+    ~IfAtom() override = default;
     IfAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -630,9 +604,7 @@ public:
         : AbstractAtom("dgm:choose")
     {
     }
-    ~ChooseAtom() override
-    {
-    }
+    ~ChooseAtom() override = default;
     ChooseAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -656,9 +628,7 @@ public:
         : AbstractAtom("dgm:forEach")
     {
     }
-    ~ForEachAtom() override
-    {
-    }
+    ~ForEachAtom() override = default;
     ForEachAtom *clone(Context *context) override;
     void dump(Context *context, int level) override;
     void readAll(Context *context, MsooXmlDiagramReader *reader) override;
@@ -708,9 +678,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~CompositeAlgorithm() override
-    {
-    }
+    ~CompositeAlgorithm() override = default;
     QString name() const override
     {
         return "Composite";
@@ -728,9 +696,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~ConnectorAlgorithm() override
-    {
-    }
+    ~ConnectorAlgorithm() override = default;
     QString name() const override
     {
         return "Connector";
@@ -752,9 +718,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~CycleAlgorithm() override
-    {
-    }
+    ~CycleAlgorithm() override = default;
     QString name() const override
     {
         return "Cycle";
@@ -773,9 +737,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~LinearAlgorithm() override
-    {
-    }
+    ~LinearAlgorithm() override = default;
     QString name() const override
     {
         return "Linear";
@@ -794,9 +756,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~SnakeAlgorithm() override
-    {
-    }
+    ~SnakeAlgorithm() override = default;
     QString name() const override
     {
         return "Snake";
@@ -816,9 +776,7 @@ public:
         , m_isRoot(isRoot)
     {
     }
-    ~HierarchyAlgorithm() override
-    {
-    }
+    ~HierarchyAlgorithm() override = default;
     QString name() const override
     {
         return "Hierarchy";
@@ -840,9 +798,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~PyramidAlgorithm() override
-    {
-    }
+    ~PyramidAlgorithm() override = default;
     QString name() const override
     {
         return "Pyramid";
@@ -862,9 +818,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~SpaceAlg() override
-    {
-    }
+    ~SpaceAlg() override = default;
     QString name() const override
     {
         return "Space";
@@ -883,9 +837,7 @@ public:
         : AbstractAlgorithm()
     {
     }
-    ~TextAlgorithm() override
-    {
-    }
+    ~TextAlgorithm() override = default;
     QString name() const override
     {
         return "Text";

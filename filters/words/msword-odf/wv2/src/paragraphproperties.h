@@ -65,7 +65,7 @@ public:
     void createListInfo(ListInfoProvider &listInfoProvider, Word97::CHP &chp);
 
 private:
-    ParagraphProperties &operator=(const ParagraphProperties &rhs);
+    ParagraphProperties &operator=(const ParagraphProperties &rhs) = delete;
 
     Word97::PAP m_pap;
     ListInfo *m_listInfo;

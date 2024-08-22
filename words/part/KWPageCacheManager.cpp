@@ -45,9 +45,7 @@ KWPageCache::KWPageCache(KWPageCacheManager *manager, int w, int h)
     }
 }
 
-KWPageCache::~KWPageCache()
-{
-}
+KWPageCache::~KWPageCache() = default;
 
 KWPageCacheManager::KWPageCacheManager(int cacheSize)
     : m_cache(cacheSize)

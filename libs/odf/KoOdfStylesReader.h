@@ -161,8 +161,8 @@ private:
     void insertOfficeStyles(const KoXmlElement &styles);
     void insertStyle(const KoXmlElement &style, TypeAndLocation typeAndLocation);
 
-    KoOdfStylesReader(const KoOdfStylesReader &); // forbidden
-    KoOdfStylesReader &operator=(const KoOdfStylesReader &); // forbidden
+    KoOdfStylesReader(const KoOdfStylesReader &) = delete; // forbidden
+    KoOdfStylesReader &operator=(const KoOdfStylesReader &) = delete; // forbidden
 
     class Private;
     Private *const d;

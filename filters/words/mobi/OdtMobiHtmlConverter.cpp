@@ -51,8 +51,7 @@ OdtMobiHtmlConverter::OdtMobiHtmlConverter()
 
 OdtMobiHtmlConverter::~OdtMobiHtmlConverter()
 
-{
-}
+    = default;
 
 // ================================================================
 //                         HTML conversion

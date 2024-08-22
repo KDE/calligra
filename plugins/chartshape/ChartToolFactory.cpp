@@ -30,9 +30,7 @@ ChartToolFactory::ChartToolFactory()
     setActivationShapeId(ChartShapeId);
 }
 
-ChartToolFactory::~ChartToolFactory()
-{
-}
+ChartToolFactory::~ChartToolFactory() = default;
 
 KoToolBase *ChartToolFactory::createTool(KoCanvasBase *canvas)
 {

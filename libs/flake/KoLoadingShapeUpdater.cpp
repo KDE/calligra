@@ -6,10 +6,6 @@
 
 #include "KoLoadingShapeUpdater.h"
 
-KoLoadingShapeUpdater::KoLoadingShapeUpdater()
-{
-}
+KoLoadingShapeUpdater::KoLoadingShapeUpdater() = default;
 
-KoLoadingShapeUpdater::~KoLoadingShapeUpdater()
-{
-}
+KoLoadingShapeUpdater::~KoLoadingShapeUpdater() = default;

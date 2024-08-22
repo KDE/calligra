@@ -6,9 +6,7 @@
 
 #include "importabstractautocorrection.h"
 
-ImportAbstractAutocorrection::ImportAbstractAutocorrection()
-{
-}
+ImportAbstractAutocorrection::ImportAbstractAutocorrection() = default;
 
 ImportAbstractAutocorrection::~ImportAbstractAutocorrection() = default;
 

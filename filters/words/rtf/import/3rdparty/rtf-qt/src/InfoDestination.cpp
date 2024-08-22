@@ -13,9 +13,7 @@ InfoDestination::InfoDestination(Reader *reader, AbstractRtfOutput *output, cons
 {
 }
 
-InfoDestination::~InfoDestination()
-{
-}
+InfoDestination::~InfoDestination() = default;
 
 void InfoDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

@@ -38,9 +38,7 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
     setAllowedInteraction(KoShape::RotationAllowed, false);
 }
 
-AnnotationTextShape::~AnnotationTextShape()
-{
-}
+AnnotationTextShape::~AnnotationTextShape() = default;
 
 void AnnotationTextShape::setAnnotationTextData(KoTextShapeData *textShapeData)
 {

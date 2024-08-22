@@ -27,9 +27,7 @@
 class Q_DECL_HIDDEN KoShadowConfigWidget::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     Ui_KoShadowConfigWidget widget;
     KoColorPopupAction *actionShadowColor;
     KoCanvasBase *canvas;

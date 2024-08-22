@@ -19,13 +19,9 @@ public:
     QVector<KoShadowStyle::ShadowData> shadows;
 };
 
-KoShadowStylePrivate::KoShadowStylePrivate()
-{
-}
+KoShadowStylePrivate::KoShadowStylePrivate() = default;
 
-KoShadowStylePrivate::~KoShadowStylePrivate()
-{
-}
+KoShadowStylePrivate::~KoShadowStylePrivate() = default;
 
 // KoShadowStyle::ShadowData structure
 KoShadowStyle::ShadowData::ShadowData()
@@ -47,13 +43,10 @@ KoShadowStyle::KoShadowStyle()
 }
 
 KoShadowStyle::KoShadowStyle(const KoShadowStyle &other)
-    : d(other.d)
-{
-}
 
-KoShadowStyle::~KoShadowStyle()
-{
-}
+    = default;
+
+KoShadowStyle::~KoShadowStyle() = default;
 
 bool KoShadowStyle::operator==(const KoShadowStyle &other) const
 {

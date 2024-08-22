@@ -18,9 +18,7 @@ class EllipseShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     EllipseShapeFactory();
-    ~EllipseShapeFactory() override
-    {
-    }
+    ~EllipseShapeFactory() override = default;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
     QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;

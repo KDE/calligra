@@ -15,9 +15,7 @@ class AutocorrectFactory : public KoTextEditingFactory
 {
 public:
     explicit AutocorrectFactory();
-    ~AutocorrectFactory() override
-    {
-    }
+    ~AutocorrectFactory() override = default;
 
     KoTextEditingPlugin *create() const override;
 };

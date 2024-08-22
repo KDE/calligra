@@ -36,8 +36,8 @@ namespace Libsvm
 class KOVECTORIMAGE_EXPORT SvmAbstractBackend
 {
 public:
-    SvmAbstractBackend(){};
-    virtual ~SvmAbstractBackend(){};
+    SvmAbstractBackend() = default;
+    virtual ~SvmAbstractBackend() = default;
 
     /**
        Initialisation routine

@@ -39,9 +39,7 @@ KPrEllipseWipeEffectFactory::KPrEllipseWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, VerticalReverse, "ellipseWipe", "vertical", true));
 }
 
-KPrEllipseWipeEffectFactory::~KPrEllipseWipeEffectFactory()
-{
-}
+KPrEllipseWipeEffectFactory::~KPrEllipseWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] =
     {kli18n("Circle"), kli18n("Circle Reverse"), kli18n("Horizontal"), kli18n("Horizontal Reverse"), kli18n("Vertical"), kli18n("Vertical Reverse")};

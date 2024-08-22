@@ -12,9 +12,7 @@ HLinkBasePcdataDestination::HLinkBasePcdataDestination(Reader *reader, AbstractR
 {
 }
 
-HLinkBasePcdataDestination::~HLinkBasePcdataDestination()
-{
-}
+HLinkBasePcdataDestination::~HLinkBasePcdataDestination() = default;
 
 void HLinkBasePcdataDestination::aboutToEndDestination()
 {

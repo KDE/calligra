@@ -32,9 +32,7 @@ KPrSnakeWipeEffectFactory::KPrSnakeWipeEffectFactory()
     addStrategy(new KPrSnakeWipeBottomLeftDiagonalStrategy());
 }
 
-KPrSnakeWipeEffectFactory::~KPrSnakeWipeEffectFactory()
-{
-}
+KPrSnakeWipeEffectFactory::~KPrSnakeWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"),
                                                   kli18n("From Right"),

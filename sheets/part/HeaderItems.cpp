@@ -74,9 +74,7 @@ RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
     setFlag(ItemClipsToShape, true);
 }
 
-RowHeaderItem::~RowHeaderItem()
-{
-}
+RowHeaderItem::~RowHeaderItem() = default;
 
 void RowHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent *_ev)
 {
@@ -231,9 +229,7 @@ ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
     setFlag(ItemClipsToShape, true);
 }
 
-ColumnHeaderItem::~ColumnHeaderItem()
-{
-}
+ColumnHeaderItem::~ColumnHeaderItem() = default;
 
 void ColumnHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent *_ev)
 {
@@ -404,9 +400,7 @@ SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase *can
     connect(canvasBase->toolProxy(), &KoToolProxy::toolChanged, this, &SelectAllButtonItem::toolChanged);
 }
 
-SelectAllButtonItem::~SelectAllButtonItem()
-{
-}
+SelectAllButtonItem::~SelectAllButtonItem() = default;
 
 void SelectAllButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

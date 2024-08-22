@@ -23,9 +23,7 @@ KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
 }
 
-KarbonPaletteWidget::~KarbonPaletteWidget()
-{
-}
+KarbonPaletteWidget::~KarbonPaletteWidget() = default;
 
 void KarbonPaletteWidget::setOrientation(Qt::Orientation orientation)
 {

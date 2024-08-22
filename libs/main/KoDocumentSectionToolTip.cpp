@@ -12,13 +12,9 @@
 #include <QTextDocument>
 #include <QUrl>
 
-KoDocumentSectionToolTip::KoDocumentSectionToolTip()
-{
-}
+KoDocumentSectionToolTip::KoDocumentSectionToolTip() = default;
 
-KoDocumentSectionToolTip::~KoDocumentSectionToolTip()
-{
-}
+KoDocumentSectionToolTip::~KoDocumentSectionToolTip() = default;
 
 QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index)
 {

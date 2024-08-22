@@ -22,9 +22,7 @@ InsertFormula::InsertFormula(Actions *actions)
 {
 }
 
-InsertFormula::~InsertFormula()
-{
-}
+InsertFormula::~InsertFormula() = default;
 
 ActionDialog *InsertFormula::createDialog(QWidget *canvasWidget)
 {
@@ -54,9 +52,7 @@ FormulaSelection::FormulaSelection(Actions *actions)
 {
 }
 
-FormulaSelection::~FormulaSelection()
-{
-}
+FormulaSelection::~FormulaSelection() = default;
 
 QAction *FormulaSelection::createAction()
 {

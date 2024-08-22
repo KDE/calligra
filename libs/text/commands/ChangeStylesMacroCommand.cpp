@@ -27,9 +27,7 @@ ChangeStylesMacroCommand::ChangeStylesMacroCommand(const QList<QTextDocument *> 
 {
 }
 
-ChangeStylesMacroCommand::~ChangeStylesMacroCommand()
-{
-}
+ChangeStylesMacroCommand::~ChangeStylesMacroCommand() = default;
 
 // on first pass the subcommands are created (where they collect needed info)
 //     then styles are changed in the styleManager

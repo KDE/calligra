@@ -15,9 +15,7 @@ SvgFilterHelper::SvgFilterHelper()
 {
 }
 
-SvgFilterHelper::~SvgFilterHelper()
-{
-}
+SvgFilterHelper::~SvgFilterHelper() = default;
 
 void SvgFilterHelper::setFilterUnits(Units filterUnits)
 {

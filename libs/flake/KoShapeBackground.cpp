@@ -8,13 +8,9 @@
 
 #include "KoShapeBackground_p.h"
 
-KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
-{
-}
+KoShapeBackgroundPrivate::KoShapeBackgroundPrivate() = default;
 
-KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
-{
-}
+KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate() = default;
 
 KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
     : d_ptr(&dd)

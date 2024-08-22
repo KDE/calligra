@@ -41,13 +41,9 @@ public:
     KoFormulaShape *parent;
 };
 
-FormulaDocument::Private::Private()
-{
-}
+FormulaDocument::Private::Private() = default;
 
-FormulaDocument::Private::~Private()
-{
-}
+FormulaDocument::Private::~Private() = default;
 
 FormulaDocument::FormulaDocument(KoFormulaShape *parent)
     : KoDocument(new FormulaPart(nullptr))

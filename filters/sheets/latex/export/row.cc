@@ -35,8 +35,7 @@ Row::Row(): Format()
 /* Destructor                              */
 /*******************************************/
 Row::~Row()
-{
-}
+= default;
 
 void Row::analyze(const QDomNode node)
 {

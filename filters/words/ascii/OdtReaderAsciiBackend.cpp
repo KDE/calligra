@@ -29,9 +29,7 @@ OdtReaderAsciiBackend::OdtReaderAsciiBackend()
 {
 }
 
-OdtReaderAsciiBackend::~OdtReaderAsciiBackend()
-{
-}
+OdtReaderAsciiBackend::~OdtReaderAsciiBackend() = default;
 
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc

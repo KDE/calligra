@@ -27,8 +27,7 @@
 #include <QTextStream>
 
 Pen::Pen()
-{
-}
+= default;
 
 /* Get the set of info about a text format */
 void Pen::analyze(const QDomNode node)

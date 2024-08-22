@@ -91,9 +91,7 @@ public:
     {
     }
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     // These were originally private in the .h file
     KoPADocumentStructureDocker *documentStructureDocker;

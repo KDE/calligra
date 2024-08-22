@@ -42,8 +42,8 @@ public:
     static QFont dockFont();
 
 private:
-    KoDockRegistry(const KoDockRegistry &);
-    KoDockRegistry operator=(const KoDockRegistry &);
+    KoDockRegistry(const KoDockRegistry &) = delete;
+    KoDockRegistry operator=(const KoDockRegistry &) = delete;
     void init();
 
     class Private;

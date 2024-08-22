@@ -11,9 +11,7 @@ KPrSnakeWipeDiagonalStrategy::KPrSnakeWipeDiagonalStrategy(int subType, const ch
 {
 }
 
-KPrSnakeWipeDiagonalStrategy::~KPrSnakeWipeDiagonalStrategy()
-{
-}
+KPrSnakeWipeDiagonalStrategy::~KPrSnakeWipeDiagonalStrategy() = default;
 
 int KPrSnakeWipeDiagonalStrategy::maxIndex(int columns, int rows)
 {

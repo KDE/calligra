@@ -36,9 +36,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *pa
     widget.useSnapGuides->setChecked(snapGuide->isSnapping());
 }
 
-SnapGuideConfigWidget::~SnapGuideConfigWidget()
-{
-}
+SnapGuideConfigWidget::~SnapGuideConfigWidget() = default;
 
 void SnapGuideConfigWidget::snappingEnabled(bool isEnabled)
 {

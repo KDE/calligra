@@ -32,9 +32,7 @@ KPrFanWipeEffectFactory::KPrFanWipeEffectFactory()
     addStrategy(new KPrSideFanWipeStrategy(180, 1, FanInLeft, "fanWipe", "left", true));
 }
 
-KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory()
-{
-}
+KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Center Right"),
                                                   kli18n("Center Top"),

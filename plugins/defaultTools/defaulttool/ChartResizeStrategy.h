@@ -30,9 +30,7 @@ public:
     /// The @p shape must be a ChartShape.
     explicit ChartResizeStrategy(KoShape *shape);
     /// Destructor
-    ~ChartResizeStrategy()
-    {
-    }
+    ~ChartResizeStrategy() = default;
 
     /// Relayouts the contents of the chart shape
     /// @p startSize is the start size of the chart shape,

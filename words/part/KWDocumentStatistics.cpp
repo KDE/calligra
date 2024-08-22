@@ -68,9 +68,7 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
     reset();
 }
 
-KWDocumentStatistics::~KWDocumentStatistics()
-{
-}
+KWDocumentStatistics::~KWDocumentStatistics() = default;
 
 void KWDocumentStatistics::reset()
 {

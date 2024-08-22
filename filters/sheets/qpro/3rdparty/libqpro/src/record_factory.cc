@@ -57,8 +57,7 @@ QpRecFactory::QpRecFactory(QpIStream& pIn)
 }
 
 QpRecFactory::~QpRecFactory()
-{
-}
+= default;
 
 QpRec*
 QpRecFactory::nextRecord()

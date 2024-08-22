@@ -300,9 +300,7 @@ CSVDataCommand::CSVDataCommand()
 {
 }
 
-CSVDataCommand::~CSVDataCommand()
-{
-}
+CSVDataCommand::~CSVDataCommand() = default;
 
 void CSVDataCommand::setValue(const Value &value)
 {

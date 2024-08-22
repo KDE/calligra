@@ -20,9 +20,7 @@ RenameSectionCommand::RenameSectionCommand(KoSection *section, const QString &ne
     setText(kundo2_i18n("Rename Section"));
 }
 
-RenameSectionCommand::~RenameSectionCommand()
-{
-}
+RenameSectionCommand::~RenameSectionCommand() = default;
 
 void RenameSectionCommand::undo()
 {

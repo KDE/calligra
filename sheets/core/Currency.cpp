@@ -39,9 +39,7 @@ Currency::Currency(QString const &code, Format format)
     m_code = symbolToCode(m_code); // ensure that we have the code (e.g. USD) and not the code (e.g. $)
 }
 
-Currency::~Currency()
-{
-}
+Currency::~Currency() = default;
 
 void Currency::loadSymbols()
 {

@@ -22,9 +22,7 @@
 class Q_DECL_HIDDEN KoTextLayoutNoteArea::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     KoInlineNote *note;
     QTextLayout *textLayout;
     QTextLayout *postLayout;

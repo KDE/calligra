@@ -6,13 +6,9 @@
 
 #include "Importabstractautocorrection.h"
 
-ImportAbstractAutocorrection::ImportAbstractAutocorrection()
-{
-}
+ImportAbstractAutocorrection::ImportAbstractAutocorrection() = default;
 
-ImportAbstractAutocorrection::~ImportAbstractAutocorrection()
-{
-}
+ImportAbstractAutocorrection::~ImportAbstractAutocorrection() = default;
 
 const QSet<QString> &ImportAbstractAutocorrection::upperCaseExceptions() const
 {

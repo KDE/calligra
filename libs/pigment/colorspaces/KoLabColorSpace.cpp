@@ -52,9 +52,7 @@ KoLabColorSpace::KoLabColorSpace()
     addStandardCompositeOps<KoLabU16Traits>(this);
 }
 
-KoLabColorSpace::~KoLabColorSpace()
-{
-}
+KoLabColorSpace::~KoLabColorSpace() = default;
 
 QString KoLabColorSpace::colorSpaceId()
 {

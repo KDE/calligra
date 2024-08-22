@@ -33,9 +33,7 @@ public:
      * Constructor; please use KWViewMode::create()
      */
     KWViewModeNormal();
-    ~KWViewModeNormal() override
-    {
-    }
+    ~KWViewModeNormal() override = default;
 
     using KWViewMode::documentToView;
 

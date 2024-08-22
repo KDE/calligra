@@ -14,9 +14,7 @@
 class KoBookmarkManagerPrivate
 {
 public:
-    KoBookmarkManagerPrivate()
-    {
-    }
+    KoBookmarkManagerPrivate() = default;
     QHash<QString, KoBookmark *> bookmarkHash;
     QList<QString> bookmarkNameList;
     int lastId;

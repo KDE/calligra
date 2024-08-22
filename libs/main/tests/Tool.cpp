@@ -31,9 +31,7 @@ CreateTool::CreateTool(Canvas *canvas)
 {
 }
 
-CreateTool::~CreateTool()
-{
-}
+CreateTool::~CreateTool() = default;
 
 void CreateTool::mouseReleaseEvent(QMouseEvent *e)
 {
@@ -60,9 +58,7 @@ SelectTool::SelectTool(Canvas *canvas)
 {
 }
 
-SelectTool::~SelectTool()
-{
-}
+SelectTool::~SelectTool() = default;
 
 void SelectTool::mouseReleaseEvent(QMouseEvent *e)
 {
@@ -90,9 +86,7 @@ RemoveTool::RemoveTool(Canvas *canvas)
 {
 }
 
-RemoveTool::~RemoveTool()
-{
-}
+RemoveTool::~RemoveTool() = default;
 
 void RemoveTool::mouseReleaseEvent(QMouseEvent *e)
 {

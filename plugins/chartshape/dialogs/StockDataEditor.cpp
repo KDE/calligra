@@ -131,9 +131,7 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     resize(sizeHint().expandedTo(QSize(600, 300)));
 }
 
-StockDataEditor::~StockDataEditor()
-{
-}
+StockDataEditor::~StockDataEditor() = default;
 
 void StockDataEditor::slotInsertRowAbove()
 {

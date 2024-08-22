@@ -146,8 +146,8 @@ public:
 
 private:
     // no copy or assign
-    CellInfo(const CellInfo &);
-    CellInfo &operator=(const CellInfo &);
+    CellInfo(const CellInfo &) = delete;
+    CellInfo &operator=(const CellInfo &) = delete;
 
     class Private;
     Private *info;
@@ -205,8 +205,8 @@ public:
 
 private:
     // no copy or assign
-    ColumnSpanInfo(const ColumnSpanInfo &);
-    ColumnSpanInfo &operator=(const ColumnSpanInfo &);
+    ColumnSpanInfo(const ColumnSpanInfo &) = delete;
+    ColumnSpanInfo &operator=(const ColumnSpanInfo &) = delete;
 
     class Private;
     Private *spaninfo;
@@ -286,8 +286,8 @@ public:
 
 private:
     // no copy or assign
-    ExternNameRecord(const ExternNameRecord &);
-    ExternNameRecord &operator=(const ExternNameRecord &);
+    ExternNameRecord(const ExternNameRecord &) = delete;
+    ExternNameRecord &operator=(const ExternNameRecord &) = delete;
 
     class Private;
     Private *d;
@@ -349,8 +349,8 @@ public:
 
 private:
     // no copy or assign
-    FormulaRecord(const FormulaRecord &);
-    FormulaRecord &operator=(const FormulaRecord &);
+    FormulaRecord(const FormulaRecord &) = delete;
+    FormulaRecord &operator=(const FormulaRecord &) = delete;
 
     class Private;
     Private *d;
@@ -394,8 +394,8 @@ public:
 
 private:
     // no copy or assign
-    SharedFormulaRecord(const SharedFormulaRecord &);
-    SharedFormulaRecord &operator=(const SharedFormulaRecord &);
+    SharedFormulaRecord(const SharedFormulaRecord &) = delete;
+    SharedFormulaRecord &operator=(const SharedFormulaRecord &) = delete;
 
     class Private;
     Private *d;
@@ -469,8 +469,8 @@ public:
 
 private:
     // no copy or assign
-    MulRKRecord(const MulRKRecord &);
-    MulRKRecord &operator=(const MulRKRecord &);
+    MulRKRecord(const MulRKRecord &) = delete;
+    MulRKRecord &operator=(const MulRKRecord &) = delete;
 
     class Private;
     Private *d;
@@ -522,8 +522,8 @@ public:
 
 private:
     // no copy or assign
-    NameRecord(const NameRecord &);
-    NameRecord &operator=(const NameRecord &);
+    NameRecord(const NameRecord &) = delete;
+    NameRecord &operator=(const NameRecord &) = delete;
 
     class Private;
     Private *d;
@@ -611,8 +611,8 @@ public:
 
 private:
     // no copy or assign
-    RKRecord(const RKRecord &);
-    RKRecord &operator=(const RKRecord &);
+    RKRecord(const RKRecord &) = delete;
+    RKRecord &operator=(const RKRecord &) = delete;
 
     class Private;
     Private *d;
@@ -673,8 +673,8 @@ public:
 
 private:
     // no copy or assign
-    RStringRecord(const RStringRecord &);
-    RStringRecord &operator=(const RStringRecord &);
+    RStringRecord(const RStringRecord &) = delete;
+    RStringRecord &operator=(const RStringRecord &) = delete;
 
     class Private;
     Private *d;
@@ -744,8 +744,8 @@ public:
 
 private:
     // no copy or assign
-    SSTRecord(const SSTRecord &);
-    SSTRecord &operator=(const SSTRecord &);
+    SSTRecord(const SSTRecord &) = delete;
+    SSTRecord &operator=(const SSTRecord &) = delete;
 
     class Private;
     Private *d;
@@ -824,8 +824,8 @@ public:
 
 private:
     // no copy or assign
-    MsoDrawingRecord(const MsoDrawingRecord &);
-    MsoDrawingRecord &operator=(const MsoDrawingRecord &);
+    MsoDrawingRecord(const MsoDrawingRecord &) = delete;
+    MsoDrawingRecord &operator=(const MsoDrawingRecord &) = delete;
 
     class Private;
     Private *d;
@@ -853,8 +853,8 @@ public:
 
 private:
     // no copy or assign
-    MsoDrawingGroupRecord(const MsoDrawingGroupRecord &);
-    MsoDrawingGroupRecord &operator=(const MsoDrawingGroupRecord &);
+    MsoDrawingGroupRecord(const MsoDrawingGroupRecord &) = delete;
+    MsoDrawingGroupRecord &operator=(const MsoDrawingGroupRecord &) = delete;
 
     class Private;
     Private *d;
@@ -875,8 +875,8 @@ private:
     void handleEOF(EOFRecord *record);
 
     // no copy or assign
-    ExcelReader(const ExcelReader &);
-    ExcelReader &operator=(const ExcelReader &);
+    ExcelReader(const ExcelReader &) = delete;
+    ExcelReader &operator=(const ExcelReader &) = delete;
 
     class Private;
     Private *d;

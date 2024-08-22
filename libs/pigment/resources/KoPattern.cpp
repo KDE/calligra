@@ -64,9 +64,7 @@ KoPattern::KoPattern(const QImage &image, const QString &name, const QString &fo
     setFilename(fileInfo.filePath());
 }
 
-KoPattern::~KoPattern()
-{
-}
+KoPattern::~KoPattern() = default;
 
 bool KoPattern::load()
 {

@@ -12,9 +12,7 @@ KoPATextPage::KoPATextPage(int pageNumber, KoPAPageBase *page)
 {
 }
 
-KoPATextPage::~KoPATextPage()
-{
-}
+KoPATextPage::~KoPATextPage() = default;
 
 int KoPATextPage::pageNumber() const
 {

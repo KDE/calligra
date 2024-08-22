@@ -36,12 +36,8 @@ XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QSt
 class XlsxXmlSharedStringsReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
 private:
 };

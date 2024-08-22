@@ -12,9 +12,7 @@
 
 Q_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
 
-KoInputDeviceHandlerRegistry::KoInputDeviceHandlerRegistry()
-{
-}
+KoInputDeviceHandlerRegistry::KoInputDeviceHandlerRegistry() = default;
 
 void KoInputDeviceHandlerRegistry::init()
 {

@@ -57,9 +57,7 @@ RoundCornersPlugin::RoundCornersPlugin(QObject *parent, const QVariantList &)
     m_roundCornersDlg->setRadius(10.0);
 }
 
-RoundCornersPlugin::~RoundCornersPlugin()
-{
-}
+RoundCornersPlugin::~RoundCornersPlugin() = default;
 
 void RoundCornersPlugin::slotRoundCorners()
 {

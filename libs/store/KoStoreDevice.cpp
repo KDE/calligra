@@ -6,6 +6,4 @@
 
 #include "KoStoreDevice.h"
 
-KoStoreDevice::~KoStoreDevice()
-{
-}
+KoStoreDevice::~KoStoreDevice() = default;

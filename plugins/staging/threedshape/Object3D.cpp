@@ -33,9 +33,7 @@ Object3D::Object3D(Object3D *parent)
 {
 }
 
-Object3D::~Object3D()
-{
-}
+Object3D::~Object3D() = default;
 
 QString Object3D::transform()
 {

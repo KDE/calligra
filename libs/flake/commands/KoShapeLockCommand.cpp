@@ -23,9 +23,7 @@ KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape *> &shapes, const QLi
     setText(kundo2_i18n("Lock shapes"));
 }
 
-KoShapeLockCommand::~KoShapeLockCommand()
-{
-}
+KoShapeLockCommand::~KoShapeLockCommand() = default;
 
 void KoShapeLockCommand::redo()
 {

@@ -129,9 +129,7 @@ public:
     {
         m_xmlTkTag = readU16(data + 2);
     }
-    virtual ~XmlTk()
-    {
-    }
+    virtual ~XmlTk() = default;
 };
 
 class XmlTkBool : public XmlTk

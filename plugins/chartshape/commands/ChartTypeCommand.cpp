@@ -35,9 +35,7 @@ ChartTypeCommand::ChartTypeCommand(ChartShape *chart)
 {
 }
 
-ChartTypeCommand::~ChartTypeCommand()
-{
-}
+ChartTypeCommand::~ChartTypeCommand() = default;
 
 void ChartTypeCommand::redo()
 {

@@ -106,9 +106,7 @@ ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc,
     delete memento; // we always have one that is unused
 }
 
-ChangeStylesCommand::~ChangeStylesCommand()
-{
-}
+ChangeStylesCommand::~ChangeStylesCommand() = default;
 
 void ChangeStylesCommand::redo()
 {

@@ -19,8 +19,8 @@ namespace Sheets
 class CALLIGRA_SHEETS_ENGINE_EXPORT Updater
 {
 public:
-    Updater(){};
-    virtual ~Updater(){};
+    Updater() = default;
+    virtual ~Updater() = default;
 
     virtual void setProgress(int percent) = 0;
 };

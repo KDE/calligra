@@ -21,9 +21,7 @@ TitlesConfigWidget::TitlesConfigWidget()
     ui.setupUi(this);
 }
 
-TitlesConfigWidget::~TitlesConfigWidget()
-{
-}
+TitlesConfigWidget::~TitlesConfigWidget() = default;
 
 void TitlesConfigWidget::updateData()
 {

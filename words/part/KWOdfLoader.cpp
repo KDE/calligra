@@ -53,9 +53,7 @@ KWOdfLoader::KWOdfLoader(KWDocument *document)
     connect(this, &KWOdfLoader::progressUpdate, m_document.data(), &KoDocument::sigProgress);
 }
 
-KWOdfLoader::~KWOdfLoader()
-{
-}
+KWOdfLoader::~KWOdfLoader() = default;
 
 KWDocument *KWOdfLoader::document() const
 {

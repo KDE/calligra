@@ -23,9 +23,7 @@
 class VideoCollection::Private
 {
 public:
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     QMap<qint64, VideoData *> videos;
     // an extra map to find all dataObjects based on the key of a store.

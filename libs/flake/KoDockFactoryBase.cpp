@@ -6,10 +6,6 @@
 
 #include "KoDockFactoryBase.h"
 
-KoDockFactoryBase::KoDockFactoryBase()
-{
-}
+KoDockFactoryBase::KoDockFactoryBase() = default;
 
-KoDockFactoryBase::~KoDockFactoryBase()
-{
-}
+KoDockFactoryBase::~KoDockFactoryBase() = default;

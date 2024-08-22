@@ -22,9 +22,7 @@ InsertFromDatabase::InsertFromDatabase(Actions *actions)
     m_closeEditor = true;
 }
 
-InsertFromDatabase::~InsertFromDatabase()
-{
-}
+InsertFromDatabase::~InsertFromDatabase() = default;
 
 QAction *InsertFromDatabase::createAction()
 {

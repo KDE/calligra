@@ -218,13 +218,10 @@ Style::Style()
 }
 
 Style::Style(const Style &style)
-    : d(style.d)
-{
-}
 
-Style::~Style()
-{
-}
+    = default;
+
+Style::~Style() = default;
 
 Style::StyleType Style::type() const
 {
@@ -844,21 +841,12 @@ CustomStyle::CustomStyle(QString const &name, CustomStyle *parent)
 }
 
 CustomStyle::CustomStyle(const CustomStyle &style)
-    : Style(style)
-    , d(style.d)
-{
-}
 
-CustomStyle::~CustomStyle()
-{
-}
+    = default;
 
-CustomStyle &CustomStyle::operator=(const CustomStyle &style)
-{
-    Style::operator=(style);
-    d = style.d;
-    return *this;
-}
+CustomStyle::~CustomStyle() = default;
+
+CustomStyle &CustomStyle::operator=(const CustomStyle &style) = default;
 
 Style::StyleType CustomStyle::type() const
 {

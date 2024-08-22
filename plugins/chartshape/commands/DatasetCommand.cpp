@@ -36,9 +36,7 @@ DatasetCommand::DatasetCommand(DataSet *dataSet, ChartShape *chart, int section,
     m_newAxis = dataSet->attachedAxis();
 }
 
-DatasetCommand::~DatasetCommand()
-{
-}
+DatasetCommand::~DatasetCommand() = default;
 
 void DatasetCommand::redo()
 {

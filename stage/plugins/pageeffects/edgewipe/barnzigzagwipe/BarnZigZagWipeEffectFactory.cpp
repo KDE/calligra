@@ -20,9 +20,7 @@ BarnZigZagWipeEffectFactory::BarnZigZagWipeEffectFactory()
     addStrategy(new BarnZigZagWipeStrategy(HorizontalReversed, "horizontal", true));
 }
 
-BarnZigZagWipeEffectFactory::~BarnZigZagWipeEffectFactory()
-{
-}
+BarnZigZagWipeEffectFactory::~BarnZigZagWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Vertical"), kli18n("Horizontal"), kli18n("Vertical Reversed"), kli18n("Horizontal Reversed")};
 

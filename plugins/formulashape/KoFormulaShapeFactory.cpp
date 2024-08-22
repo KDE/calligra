@@ -46,9 +46,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
         addTemplate( t );*/
 }
 
-KoFormulaShapeFactory::~KoFormulaShapeFactory()
-{
-}
+KoFormulaShapeFactory::~KoFormulaShapeFactory() = default;
 
 KoShape *KoFormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *resourceManager) const
 {

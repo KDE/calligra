@@ -25,9 +25,7 @@ BarnDoorWipeEffectFactory::BarnDoorWipeEffectFactory()
     addStrategy(new BarnDoorWipeStrategy(DiagonalTopLeftReverse, "diagonalTopLeft", true));
 }
 
-BarnDoorWipeEffectFactory::~BarnDoorWipeEffectFactory()
-{
-}
+BarnDoorWipeEffectFactory::~BarnDoorWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Vertical"),
                                                   kli18n("Vertical Reverse"),

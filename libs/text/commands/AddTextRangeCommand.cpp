@@ -31,6 +31,4 @@ void AddTextRangeCommand::redo()
     m_range->manager()->insert(m_range);
 }
 
-AddTextRangeCommand::~AddTextRangeCommand()
-{
-}
+AddTextRangeCommand::~AddTextRangeCommand() = default;

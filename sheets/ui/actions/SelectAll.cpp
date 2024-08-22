@@ -21,9 +21,7 @@ SelectAll::SelectAll(Actions *actions)
 {
 }
 
-SelectAll::~SelectAll()
-{
-}
+SelectAll::~SelectAll() = default;
 
 QAction *SelectAll::createAction()
 {

@@ -27,9 +27,7 @@ public:
      * Return an instance of the KoTextEditingRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    KoTextEditingRegistry()
-    {
-    }
+    KoTextEditingRegistry() = default;
     ~KoTextEditingRegistry() override;
     static KoTextEditingRegistry *instance();
 

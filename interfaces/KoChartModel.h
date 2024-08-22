@@ -47,9 +47,7 @@ const int HEADER_AREA_ROLE = 33;
 class ChartModel
 {
 public:
-    virtual ~ChartModel()
-    {
-    }
+    virtual ~ChartModel() = default;
 
     /**
      * \return the cell region in ranges ordered by sheet name

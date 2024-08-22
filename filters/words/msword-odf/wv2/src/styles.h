@@ -236,8 +236,8 @@ struct UPECHPX {
     U8 *grpprl;
 
 private:
-    UPECHPX(const UPECHPX &rhs);
-    UPECHPX &operator=(const UPECHPX &rhs);
+    UPECHPX(const UPECHPX &rhs) = delete;
+    UPECHPX &operator=(const UPECHPX &rhs) = delete;
 };
 
 /**
@@ -338,8 +338,8 @@ public:
     const UPECHPX &upechpx() const;
 
 private:
-    Style(const Style &rhs);
-    Style &operator=(const Style &rhs);
+    Style(const Style &rhs) = delete;
+    Style &operator=(const Style &rhs) = delete;
 
     /**
      * This helper method merges two CHPX structures to one (needed for
@@ -415,8 +415,8 @@ public:
     U16 indexByID(U16 sti, bool &ok) const;
 
 private:
-    StyleSheet(const StyleSheet &rhs);
-    StyleSheet &operator=(const StyleSheet &rhs);
+    StyleSheet(const StyleSheet &rhs) = delete;
+    StyleSheet &operator=(const StyleSheet &rhs) = delete;
 
     Word97::STSHI m_stsh;
     std::vector<Style *> m_styles;

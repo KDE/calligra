@@ -27,13 +27,9 @@
 #include "KPrPlaceholderStrategy.h"
 #include "StageDebug.h"
 
-KPrPlaceholder::KPrPlaceholder()
-{
-}
+KPrPlaceholder::KPrPlaceholder() = default;
 
-KPrPlaceholder::~KPrPlaceholder()
-{
-}
+KPrPlaceholder::~KPrPlaceholder() = default;
 
 bool KPrPlaceholder::loadOdf(const KoXmlElement &element, const QRectF &pageSize)
 {

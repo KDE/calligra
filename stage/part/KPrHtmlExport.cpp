@@ -22,13 +22,9 @@
 #include "KPrPage.h"
 #include "KPrView.h"
 
-KPrHtmlExport::KPrHtmlExport()
-{
-}
+KPrHtmlExport::KPrHtmlExport() = default;
 
-KPrHtmlExport::~KPrHtmlExport()
-{
-}
+KPrHtmlExport::~KPrHtmlExport() = default;
 
 void KPrHtmlExport::exportHtml(const KPrHtmlExport::Parameter &parameters)
 {

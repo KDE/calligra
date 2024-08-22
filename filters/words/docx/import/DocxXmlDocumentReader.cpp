@@ -97,12 +97,8 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(DocxImport &_import,
 class DocxXmlDocumentReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 };
 
 DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)

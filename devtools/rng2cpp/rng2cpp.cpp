@@ -35,9 +35,7 @@ private:
     QString msg;
 
 public:
-    fatal()
-    {
-    }
+    fatal() = default;
     ~fatal()
     {
         qFatal("%s", qPrintable(msg));
@@ -109,8 +107,8 @@ public:
     enum ItemType { Define, Start, Element, Attribute };
 
 private:
-    RNGItem(const RNGItem &);
-    void operator=(const RNGItem &);
+    RNGItem(const RNGItem &) = delete;
+    void operator=(const RNGItem &) = delete;
 
 protected:
     /**

@@ -47,17 +47,13 @@ template<class T>
 class PriorityQueue
 {
 public:
-    PriorityQueue()
-    {
-    }
+    PriorityQueue() = default;
     PriorityQueue(const PriorityQueue<T> &rhs)
         : m_vector(rhs.m_vector)
     {
     }
     PriorityQueue(const QHash<QByteArray, T *> &items);
-    ~PriorityQueue()
-    {
-    }
+    ~PriorityQueue() = default;
 
     PriorityQueue<T> &operator=(const PriorityQueue<T> &rhs)
     {

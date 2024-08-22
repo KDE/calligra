@@ -46,9 +46,7 @@ KPrParallelSnakesWipeVerticalStrategy::KPrParallelSnakesWipeVerticalStrategy(boo
     setNeedEvenSquares();
 }
 
-KPrParallelSnakesWipeVerticalStrategy::~KPrParallelSnakesWipeVerticalStrategy()
-{
-}
+KPrParallelSnakesWipeVerticalStrategy::~KPrParallelSnakesWipeVerticalStrategy() = default;
 
 int KPrParallelSnakesWipeVerticalStrategy::squareIndex(int x, int y, int columns, int rows)
 {

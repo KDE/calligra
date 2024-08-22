@@ -6,10 +6,6 @@
 
 #include "KoSharedSavingData.h"
 
-KoSharedSavingData::KoSharedSavingData()
-{
-}
+KoSharedSavingData::KoSharedSavingData() = default;
 
-KoSharedSavingData::~KoSharedSavingData()
-{
-}
+KoSharedSavingData::~KoSharedSavingData() = default;

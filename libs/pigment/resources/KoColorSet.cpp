@@ -77,9 +77,7 @@ KoColorSet::KoColorSet(const KoColorSet &rhs)
     setValid(true);
 }
 
-KoColorSet::~KoColorSet()
-{
-}
+KoColorSet::~KoColorSet() = default;
 
 bool KoColorSet::load()
 {

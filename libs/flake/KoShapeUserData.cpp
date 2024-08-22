@@ -11,6 +11,4 @@ KoShapeUserData::KoShapeUserData(QObject *parent)
 {
 }
 
-KoShapeUserData::~KoShapeUserData()
-{
-}
+KoShapeUserData::~KoShapeUserData() = default;

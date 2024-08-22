@@ -7,10 +7,6 @@
 
 #include "KoCanvasSupervisor.h"
 
-KoCanvasSupervisor::KoCanvasSupervisor()
-{
-}
+KoCanvasSupervisor::KoCanvasSupervisor() = default;
 
-KoCanvasSupervisor::~KoCanvasSupervisor()
-{
-}
+KoCanvasSupervisor::~KoCanvasSupervisor() = default;

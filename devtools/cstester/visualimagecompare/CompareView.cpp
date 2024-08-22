@@ -30,9 +30,7 @@ CompareView::CompareView(const QImage &image1, const QImage &image2, const QStri
     update(image1, image2, name1, name2, QImage());
 }
 
-CompareView::~CompareView()
-{
-}
+CompareView::~CompareView() = default;
 
 void CompareView::init()
 {

@@ -49,9 +49,7 @@ KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *documen
     connect(this, &QDialog::rejected, this, &KWFrameDialog::cancelClicked);
 }
 
-KWFrameDialog::~KWFrameDialog()
-{
-}
+KWFrameDialog::~KWFrameDialog() = default;
 
 void KWFrameDialog::okClicked()
 {

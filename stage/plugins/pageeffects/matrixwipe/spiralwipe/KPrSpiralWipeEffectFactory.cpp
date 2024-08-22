@@ -33,9 +33,7 @@ KPrSpiralWipeEffectFactory::KPrSpiralWipeEffectFactory()
     addStrategy(new KPrSpiralWipeStrategy(1, false, true));
 }
 
-KPrSpiralWipeEffectFactory::~KPrSpiralWipeEffectFactory()
-{
-}
+KPrSpiralWipeEffectFactory::~KPrSpiralWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Clockwise Top Left In"),
                                                   kli18n("Clockwise Top Left Out"),

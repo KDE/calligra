@@ -14,9 +14,7 @@ WatermarkFilterEffect::WatermarkFilterEffect()
 {
 }
 
-WatermarkFilterEffect::~WatermarkFilterEffect()
-{
-}
+WatermarkFilterEffect::~WatermarkFilterEffect() = default;
 
 void WatermarkFilterEffect::save(KoXmlWriter & /*writer*/)
 {

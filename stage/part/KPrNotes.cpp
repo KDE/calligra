@@ -28,9 +28,7 @@
 class ShapeLoaderHelper : public KoShape
 {
 public:
-    ShapeLoaderHelper()
-    {
-    }
+    ShapeLoaderHelper() = default;
 
     void paint(QPainter &, const KoViewConverter &, KoShapePaintingContext &) override
     {

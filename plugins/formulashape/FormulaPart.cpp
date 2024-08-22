@@ -18,9 +18,7 @@ FormulaPart::FormulaPart(QObject *parent)
 {
 }
 
-FormulaPart::~FormulaPart()
-{
-}
+FormulaPart::~FormulaPart() = default;
 
 KoView *FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
 {

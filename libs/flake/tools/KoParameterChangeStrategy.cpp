@@ -19,9 +19,7 @@ KoParameterChangeStrategy::KoParameterChangeStrategy(KoParameterChangeStrategyPr
 {
 }
 
-KoParameterChangeStrategy::~KoParameterChangeStrategy()
-{
-}
+KoParameterChangeStrategy::~KoParameterChangeStrategy() = default;
 
 void KoParameterChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {

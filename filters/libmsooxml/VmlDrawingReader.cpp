@@ -39,12 +39,8 @@ VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport &_import
 class Q_DECL_HIDDEN VmlDrawingReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 };
 
 VmlDrawingReader::VmlDrawingReader(KoOdfWriters *writers)

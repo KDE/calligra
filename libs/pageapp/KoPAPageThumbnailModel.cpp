@@ -19,9 +19,7 @@ KoPAPageThumbnailModel::KoPAPageThumbnailModel(const QList<KoPAPageBase *> &page
 {
 }
 
-KoPAPageThumbnailModel::~KoPAPageThumbnailModel()
-{
-}
+KoPAPageThumbnailModel::~KoPAPageThumbnailModel() = default;
 
 int KoPAPageThumbnailModel::rowCount(const QModelIndex &parent) const
 {

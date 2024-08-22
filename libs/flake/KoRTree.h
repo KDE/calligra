@@ -139,9 +139,7 @@ protected:
         static int nodeIdCnt;
 #endif
         Node(int capacity, int level, Node *parent);
-        virtual ~Node()
-        {
-        }
+        virtual ~Node() = default;
 
         virtual void remove(int index);
         // move node between nodes of the same type from node

@@ -71,9 +71,7 @@ void TestLoadingBase::cleanupTestCase()
     delete m_chart;
 }
 
-LoadingTests::LoadingTests()
-{
-}
+LoadingTests::LoadingTests() = default;
 
 void LoadingTests::testElementIsVisible(KoShape *element, bool shouldBeVisible)
 {

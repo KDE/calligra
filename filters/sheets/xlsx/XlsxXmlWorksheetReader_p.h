@@ -26,9 +26,7 @@ class Cell;
 class EmbeddedCellObjects
 {
 public:
-    EmbeddedCellObjects()
-    {
-    }
+    EmbeddedCellObjects() = default;
     ~EmbeddedCellObjects()
     {
         qDeleteAll(drawings);
@@ -43,14 +41,10 @@ public:
 class Formula
 {
 protected:
-    explicit Formula()
-    {
-    }
+    explicit Formula() = default;
 
 public:
-    virtual ~Formula()
-    {
-    }
+    virtual ~Formula() = default;
     virtual bool isShared() const = 0;
 };
 
@@ -67,9 +61,7 @@ public:
     {
         return false;
     }
-    ~FormulaImpl() override
-    {
-    }
+    ~FormulaImpl() override = default;
 };
 
 class SharedFormula : public Formula
@@ -85,9 +77,7 @@ public:
     {
         return true;
     }
-    ~SharedFormula() override
-    {
-    }
+    ~SharedFormula() override = default;
 };
 
 class Cell
@@ -188,9 +178,7 @@ public:
         , hidden(false)
     {
     }
-    ~Row()
-    {
-    }
+    ~Row() = default;
 };
 
 class Column
@@ -205,9 +193,7 @@ public:
         , hidden(false)
     {
     }
-    ~Column()
-    {
-    }
+    ~Column() = default;
 };
 
 class Sheet

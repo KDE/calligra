@@ -57,9 +57,7 @@ public:
         : worksheetNumber(0)
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
     uint worksheetNumber;
 
 private:

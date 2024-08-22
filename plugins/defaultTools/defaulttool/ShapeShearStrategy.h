@@ -32,9 +32,7 @@ public:
      * @param direction the handle that was grabbed
      */
     ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    ~ShapeShearStrategy() override
-    {
-    }
+    ~ShapeShearStrategy() override = default;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;

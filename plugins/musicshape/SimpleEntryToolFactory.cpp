@@ -21,9 +21,7 @@ SimpleEntryToolFactory::SimpleEntryToolFactory()
     setActivationShapeId(MusicShapeId);
 }
 
-SimpleEntryToolFactory::~SimpleEntryToolFactory()
-{
-}
+SimpleEntryToolFactory::~SimpleEntryToolFactory() = default;
 
 KoToolBase *SimpleEntryToolFactory::createTool(KoCanvasBase *canvas)
 {

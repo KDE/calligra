@@ -19,9 +19,7 @@ ProgressProxy::ProgressProxy(QObject *parent)
 {
 }
 
-ProgressProxy::~ProgressProxy()
-{
-}
+ProgressProxy::~ProgressProxy() = default;
 
 QString ProgressProxy::taskName() const
 {

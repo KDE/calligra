@@ -59,9 +59,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     setLineEdit(preview);
 }
 
-StylesCombo::~StylesCombo()
-{
-}
+StylesCombo::~StylesCombo() = default;
 
 void StylesCombo::setStyleIsOriginal(bool original)
 {

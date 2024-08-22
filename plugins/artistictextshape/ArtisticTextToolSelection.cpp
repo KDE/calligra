@@ -25,9 +25,7 @@ ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObje
     Q_ASSERT(m_canvas);
 }
 
-ArtisticTextToolSelection::~ArtisticTextToolSelection()
-{
-}
+ArtisticTextToolSelection::~ArtisticTextToolSelection() = default;
 
 bool ArtisticTextToolSelection::hasSelection()
 {

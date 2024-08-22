@@ -40,9 +40,7 @@ Header::Header(QDataStream &stream)
     soakBytes(stream, mSize - 88);
 }
 
-Header::~Header()
-{
-}
+Header::~Header() = default;
 
 bool Header::isValid() const
 {

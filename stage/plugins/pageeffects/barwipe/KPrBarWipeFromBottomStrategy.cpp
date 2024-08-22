@@ -16,9 +16,7 @@ KPrBarWipeFromBottomStrategy::KPrBarWipeFromBottomStrategy()
 {
 }
 
-KPrBarWipeFromBottomStrategy::~KPrBarWipeFromBottomStrategy()
-{
-}
+KPrBarWipeFromBottomStrategy::~KPrBarWipeFromBottomStrategy() = default;
 
 void KPrBarWipeFromBottomStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

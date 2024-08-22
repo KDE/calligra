@@ -15,12 +15,8 @@
 class Q_DECL_HIDDEN KoChangeTrackerElement::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
     KUndo2MagicString title;
     KoGenChange::Type type;

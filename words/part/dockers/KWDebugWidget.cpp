@@ -30,9 +30,7 @@ KWDebugWidget::KWDebugWidget(QWidget *parent)
     updateData();
 }
 
-KWDebugWidget::~KWDebugWidget()
-{
-}
+KWDebugWidget::~KWDebugWidget() = default;
 
 void KWDebugWidget::initUi()
 {

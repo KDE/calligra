@@ -62,9 +62,7 @@ template<typename T>
 class IntervalMap
 {
 public:
-    IntervalMap()
-    {
-    }
+    IntervalMap() = default;
     // from and to are inclusive, assumes no overlapping ranges
     // even though no checks are done
     void insert(int from, int to, const T &data)

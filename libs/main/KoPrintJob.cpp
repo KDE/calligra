@@ -14,9 +14,7 @@ KoPrintJob::KoPrintJob(QObject *parent)
 {
 }
 
-KoPrintJob::~KoPrintJob()
-{
-}
+KoPrintJob::~KoPrintJob() = default;
 
 void KoPrintJob::startPrinting(RemovePolicy removePolicy)
 {

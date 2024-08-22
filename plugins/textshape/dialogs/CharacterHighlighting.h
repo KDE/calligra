@@ -22,9 +22,7 @@ class CharacterHighlighting : public QWidget
 
 public:
     explicit CharacterHighlighting(QWidget *parent = nullptr);
-    ~CharacterHighlighting() override
-    {
-    }
+    ~CharacterHighlighting() override = default;
 
     void setDisplay(KoCharacterStyle *style, bool directFormattingMode);
     void save(KoCharacterStyle *style);

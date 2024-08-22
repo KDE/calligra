@@ -39,9 +39,7 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
     printer().setFromTo(documentFirstPage(), documentLastPage());
 }
 
-KWPrintingDialog::~KWPrintingDialog()
-{
-}
+KWPrintingDialog::~KWPrintingDialog() = default;
 
 QRectF KWPrintingDialog::preparePage(int pageNumber)
 {

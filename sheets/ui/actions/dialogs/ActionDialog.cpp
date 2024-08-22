@@ -26,9 +26,7 @@ ActionDialog::ActionDialog(QWidget *parent, ButtonCodes extraButtons)
     connect(this, &KoDialog::closeClicked, this, &ActionDialog::slotClose);
 }
 
-ActionDialog::~ActionDialog()
-{
-}
+ActionDialog::~ActionDialog() = default;
 
 void ActionDialog::slotApply()
 {

@@ -24,9 +24,7 @@ KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoToolBase *tool, K
 {
 }
 
-KoPathConnectionPointStrategy::~KoPathConnectionPointStrategy()
-{
-}
+KoPathConnectionPointStrategy::~KoPathConnectionPointStrategy() = default;
 
 void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {

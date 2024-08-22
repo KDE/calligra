@@ -10,9 +10,7 @@
 #include <QDebug>
 #include <kicontheme.h>
 struct TemplateVariant {
-    TemplateVariant()
-    {
-    }
+    TemplateVariant() = default;
 
     QString name;
     QColor color;
@@ -24,9 +22,7 @@ struct TemplateVariant {
 class TemplateVariantsModel::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         qDeleteAll(entries);

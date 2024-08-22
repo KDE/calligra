@@ -25,9 +25,7 @@ BorderLeft::BorderLeft(Actions *actions)
 {
 }
 
-BorderLeft::~BorderLeft()
-{
-}
+BorderLeft::~BorderLeft() = default;
 
 QAction *BorderLeft::createAction()
 {
@@ -59,9 +57,7 @@ BorderRight::BorderRight(Actions *actions)
 {
 }
 
-BorderRight::~BorderRight()
-{
-}
+BorderRight::~BorderRight() = default;
 
 QAction *BorderRight::createAction()
 {
@@ -93,9 +89,7 @@ BorderTop::BorderTop(Actions *actions)
 {
 }
 
-BorderTop::~BorderTop()
-{
-}
+BorderTop::~BorderTop() = default;
 
 QAction *BorderTop::createAction()
 {
@@ -124,9 +118,7 @@ BorderBottom::BorderBottom(Actions *actions)
 {
 }
 
-BorderBottom::~BorderBottom()
-{
-}
+BorderBottom::~BorderBottom() = default;
 
 QAction *BorderBottom::createAction()
 {
@@ -155,9 +147,7 @@ BorderAll::BorderAll(Actions *actions)
 {
 }
 
-BorderAll::~BorderAll()
-{
-}
+BorderAll::~BorderAll() = default;
 
 QAction *BorderAll::createAction()
 {
@@ -191,9 +181,7 @@ BorderNone::BorderNone(Actions *actions)
 {
 }
 
-BorderNone::~BorderNone()
-{
-}
+BorderNone::~BorderNone() = default;
 
 QAction *BorderNone::createAction()
 {
@@ -228,9 +216,7 @@ BorderOutline::BorderOutline(Actions *actions)
 {
 }
 
-BorderOutline::~BorderOutline()
-{
-}
+BorderOutline::~BorderOutline() = default;
 
 QAction *BorderOutline::createAction()
 {
@@ -262,9 +248,7 @@ BorderColor::BorderColor(Actions *actions)
 {
 }
 
-BorderColor::~BorderColor()
-{
-}
+BorderColor::~BorderColor() = default;
 
 QAction *BorderColor::createAction()
 {

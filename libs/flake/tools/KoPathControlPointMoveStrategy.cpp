@@ -25,9 +25,7 @@ KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool,
 {
 }
 
-KoPathControlPointMoveStrategy::~KoPathControlPointMoveStrategy()
-{
-}
+KoPathControlPointMoveStrategy::~KoPathControlPointMoveStrategy() = default;
 
 void KoPathControlPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {

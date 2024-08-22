@@ -15,9 +15,7 @@ class AnnotationTextShapeFactory : public KoShapeFactoryBase
 {
 public:
     AnnotationTextShapeFactory();
-    ~AnnotationTextShapeFactory() override
-    {
-    }
+    ~AnnotationTextShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const override;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const override;

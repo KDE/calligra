@@ -12,9 +12,7 @@ GeneratorPcdataDestination::GeneratorPcdataDestination(Reader *reader, AbstractR
 {
 }
 
-GeneratorPcdataDestination::~GeneratorPcdataDestination()
-{
-}
+GeneratorPcdataDestination::~GeneratorPcdataDestination() = default;
 
 void GeneratorPcdataDestination::aboutToEndDestination()
 {

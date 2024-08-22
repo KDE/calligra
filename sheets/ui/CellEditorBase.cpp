@@ -9,10 +9,6 @@
 
 using namespace Calligra::Sheets;
 
-CellEditorBase::CellEditorBase()
-{
-}
+CellEditorBase::CellEditorBase() = default;
 
-CellEditorBase::~CellEditorBase()
-{
-}
+CellEditorBase::~CellEditorBase() = default;

@@ -21,9 +21,7 @@ NamedAreaCommand::NamedAreaCommand(KUndo2Command *parent)
     setText(kundo2_i18n("Add Named Area"));
 }
 
-NamedAreaCommand::~NamedAreaCommand()
-{
-}
+NamedAreaCommand::~NamedAreaCommand() = default;
 
 void NamedAreaCommand::setAreaName(const QString &name)
 {

@@ -15,9 +15,7 @@ KPrSlideWipeToBottomStrategy::KPrSlideWipeToBottomStrategy()
 {
 }
 
-KPrSlideWipeToBottomStrategy::~KPrSlideWipeToBottomStrategy()
-{
-}
+KPrSlideWipeToBottomStrategy::~KPrSlideWipeToBottomStrategy() = default;
 
 void KPrSlideWipeToBottomStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

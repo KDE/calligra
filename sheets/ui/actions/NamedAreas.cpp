@@ -29,9 +29,7 @@ AddNamedArea::AddNamedArea(Actions *actions)
 {
 }
 
-AddNamedArea::~AddNamedArea()
-{
-}
+AddNamedArea::~AddNamedArea() = default;
 
 void AddNamedArea::addArea(const QString &name)
 {
@@ -84,9 +82,7 @@ ManageNamedAreas::ManageNamedAreas(Actions *actions)
 {
 }
 
-ManageNamedAreas::~ManageNamedAreas()
-{
-}
+ManageNamedAreas::~ManageNamedAreas() = default;
 
 QAction *ManageNamedAreas::createAction()
 {

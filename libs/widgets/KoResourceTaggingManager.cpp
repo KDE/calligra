@@ -32,9 +32,7 @@
 class TaggedResourceSet
 {
 public:
-    TaggedResourceSet()
-    {
-    }
+    TaggedResourceSet() = default;
 
     TaggedResourceSet(const QString &tagName, const QList<KoResource *> &resources)
         : tagName(tagName)

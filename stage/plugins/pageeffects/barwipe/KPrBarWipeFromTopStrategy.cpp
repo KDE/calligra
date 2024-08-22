@@ -15,9 +15,7 @@ KPrBarWipeFromTopStrategy::KPrBarWipeFromTopStrategy()
 {
 }
 
-KPrBarWipeFromTopStrategy::~KPrBarWipeFromTopStrategy()
-{
-}
+KPrBarWipeFromTopStrategy::~KPrBarWipeFromTopStrategy() = default;
 
 void KPrBarWipeFromTopStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

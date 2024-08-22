@@ -10,9 +10,7 @@ class TestAttributeManager : public QObject
 {
     Q_OBJECT
 public:
-    TestAttributeManager()
-    {
-    }
+    TestAttributeManager() = default;
 
 private Q_SLOTS:
     void initTestCase();

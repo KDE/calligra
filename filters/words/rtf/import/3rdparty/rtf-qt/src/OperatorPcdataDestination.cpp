@@ -12,9 +12,7 @@ OperatorPcdataDestination::OperatorPcdataDestination(Reader *reader, AbstractRtf
 {
 }
 
-OperatorPcdataDestination::~OperatorPcdataDestination()
-{
-}
+OperatorPcdataDestination::~OperatorPcdataDestination() = default;
 
 void OperatorPcdataDestination::aboutToEndDestination()
 {

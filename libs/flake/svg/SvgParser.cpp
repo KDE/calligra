@@ -46,9 +46,7 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 {
 }
 
-SvgParser::~SvgParser()
-{
-}
+SvgParser::~SvgParser() = default;
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)
 {

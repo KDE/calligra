@@ -55,9 +55,7 @@ WebShape::WebShape()
     m_webView->show();
 }
 
-WebShape::~WebShape()
-{
-}
+WebShape::~WebShape() = default;
 
 void WebShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

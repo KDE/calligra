@@ -44,8 +44,8 @@ private:
     void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
     void finishSaveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
-    KoRow(const KoRow &);
-    KoRow &operator=(const KoRow &);
+    KoRow(const KoRow &) = delete;
+    KoRow &operator=(const KoRow &) = delete;
 
     KoCellStyle::Ptr m_defaultCellStyle;
     KoRowStyle::Ptr m_style;

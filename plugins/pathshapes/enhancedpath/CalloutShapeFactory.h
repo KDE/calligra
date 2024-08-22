@@ -16,9 +16,7 @@ class CalloutShapeFactory : public KoShapeFactoryBase
 {
 public:
     CalloutShapeFactory();
-    ~CalloutShapeFactory() override
-    {
-    }
+    ~CalloutShapeFactory() override = default;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

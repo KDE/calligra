@@ -19,9 +19,7 @@ FixedElement::FixedElement(BasicElement *parent)
 {
 }
 
-FixedElement::~FixedElement()
-{
-}
+FixedElement::~FixedElement() = default;
 
 BasicElement *FixedElement::elementAfter(int position) const
 {

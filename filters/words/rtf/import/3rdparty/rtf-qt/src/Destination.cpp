@@ -15,9 +15,7 @@ Destination::Destination(Reader *reader, AbstractRtfOutput *output, const QStrin
 {
 }
 
-Destination::~Destination()
-{
-}
+Destination::~Destination() = default;
 
 bool Destination::hasName(const QString &name)
 {

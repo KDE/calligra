@@ -32,9 +32,7 @@ RectangleShape::RectangleShape()
     updatePath(size);
 }
 
-RectangleShape::~RectangleShape()
-{
-}
+RectangleShape::~RectangleShape() = default;
 
 bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

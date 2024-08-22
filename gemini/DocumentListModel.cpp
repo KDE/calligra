@@ -34,9 +34,7 @@ SearchThread::SearchThread(const QHash<QString, DocumentListModel::DocumentType>
 {
 }
 
-SearchThread::~SearchThread()
-{
-}
+SearchThread::~SearchThread() = default;
 
 void SearchThread::run()
 {

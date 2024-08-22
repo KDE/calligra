@@ -15,9 +15,7 @@ KPrBarWipeFromLeftStrategy::KPrBarWipeFromLeftStrategy()
 {
 }
 
-KPrBarWipeFromLeftStrategy::~KPrBarWipeFromLeftStrategy()
-{
-}
+KPrBarWipeFromLeftStrategy::~KPrBarWipeFromLeftStrategy() = default;
 
 void KPrBarWipeFromLeftStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

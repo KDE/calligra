@@ -20,9 +20,7 @@ InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
     connect(m_widget.m_createButton, &QAbstractButton::clicked, this, &InsertGuidesToolOptionWidget::onCreateButtonClicked);
 }
 
-InsertGuidesToolOptionWidget::~InsertGuidesToolOptionWidget()
-{
-}
+InsertGuidesToolOptionWidget::~InsertGuidesToolOptionWidget() = default;
 
 void InsertGuidesToolOptionWidget::onCreateButtonClicked(bool checked)
 {

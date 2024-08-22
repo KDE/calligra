@@ -150,9 +150,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
     resetEditMode();
 }
 
-ConnectionTool::~ConnectionTool()
-{
-}
+ConnectionTool::~ConnectionTool() = default;
 
 void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

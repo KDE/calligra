@@ -18,9 +18,7 @@ ChartPart::ChartPart(QObject *parent)
 {
 }
 
-ChartPart::~ChartPart()
-{
-}
+ChartPart::~ChartPart() = default;
 
 KoView *ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 {

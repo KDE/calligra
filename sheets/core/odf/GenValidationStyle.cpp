@@ -19,13 +19,9 @@
 
 using namespace Calligra::Sheets::Odf;
 
-GenValidationStyles::GenValidationStyles()
-{
-}
+GenValidationStyles::GenValidationStyles() = default;
 
-GenValidationStyles::~GenValidationStyles()
-{
-}
+GenValidationStyles::~GenValidationStyles() = default;
 
 QString GenValidationStyles::insert(const GenValidationStyle &style)
 {

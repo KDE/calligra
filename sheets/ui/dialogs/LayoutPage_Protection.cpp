@@ -35,9 +35,7 @@ LayoutPageProtection::LayoutPageProtection(QWidget *parent)
     m_bHideFormula->setStyleKey(Style::HideFormula);
 }
 
-LayoutPageProtection::~LayoutPageProtection()
-{
-}
+LayoutPageProtection::~LayoutPageProtection() = default;
 
 void LayoutPageProtection::apply(Style *style, bool partial)
 {

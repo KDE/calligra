@@ -16,9 +16,7 @@ DocumentDestination::DocumentDestination(Reader *reader, AbstractRtfOutput *outp
 {
 }
 
-DocumentDestination::~DocumentDestination()
-{
-}
+DocumentDestination::~DocumentDestination() = default;
 
 void DocumentDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

@@ -21,9 +21,7 @@ DiagonalWipeEffectFactory::DiagonalWipeEffectFactory()
     addStrategy(new DiagonalWipeStrategy(FromBottomLeft, "topRight", true));
 }
 
-DiagonalWipeEffectFactory::~DiagonalWipeEffectFactory()
-{
-}
+DiagonalWipeEffectFactory::~DiagonalWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top Left"), kli18n("From Bottom Right"), kli18n("From Top Right"), kli18n("From Bottom Left")};
 

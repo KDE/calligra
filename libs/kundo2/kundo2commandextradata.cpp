@@ -6,6 +6,4 @@
 
 #include "kundo2commandextradata.h"
 
-KUndo2CommandExtraData::~KUndo2CommandExtraData()
-{
-}
+KUndo2CommandExtraData::~KUndo2CommandExtraData() = default;

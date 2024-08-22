@@ -36,9 +36,7 @@ public:
         : QObject(parent)
     {
     }
-    ~ListItem() override
-    {
-    }
+    ~ListItem() override = default;
     virtual QString id() const = 0;
     virtual QVariant data(int role) const = 0;
 

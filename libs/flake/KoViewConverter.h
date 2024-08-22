@@ -30,9 +30,7 @@ class FLAKE_EXPORT KoViewConverter
 {
 public:
     KoViewConverter();
-    virtual ~KoViewConverter()
-    {
-    }
+    virtual ~KoViewConverter() = default;
 
     /**
      * Convert a coordinate in pt to pixels.

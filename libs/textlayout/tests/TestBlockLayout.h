@@ -22,9 +22,7 @@ class TestBlockLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestBlockLayout()
-    {
-    }
+    TestBlockLayout() = default;
 
     /// FIXME: fix these broken tests
 

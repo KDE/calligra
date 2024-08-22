@@ -30,9 +30,7 @@ class QpImport : public KoFilter
 
 public:
     QpImport(QObject *parent, const QVariantList &);
-    ~QpImport() override
-    {
-    }
+    ~QpImport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
     void InitTableName(int pIdx, QString &pResult);

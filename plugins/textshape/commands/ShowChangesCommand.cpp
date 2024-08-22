@@ -169,6 +169,4 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
     }
 }
 
-ShowChangesCommand::~ShowChangesCommand()
-{
-}
+ShowChangesCommand::~ShowChangesCommand() = default;

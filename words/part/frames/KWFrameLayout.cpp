@@ -43,9 +43,7 @@ public:
         setSelectable(false);
         setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
     }
-    ~KWPageBackground() override
-    {
-    }
+    ~KWPageBackground() override = default;
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override
     {
         applyConversion(painter, converter);

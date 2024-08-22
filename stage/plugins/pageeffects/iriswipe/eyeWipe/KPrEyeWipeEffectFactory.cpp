@@ -38,9 +38,7 @@ KPrEyeWipeEffectFactory::KPrEyeWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, HorizontalReverse, "eyeWipe", "horizontal", true));
 }
 
-KPrEyeWipeEffectFactory::~KPrEyeWipeEffectFactory()
-{
-}
+KPrEyeWipeEffectFactory::~KPrEyeWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {
     kli18n("Vertical"),

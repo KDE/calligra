@@ -23,12 +23,8 @@ class QFileInfo;
 class AutoCorrection
 {
 public:
-    AutoCorrection()
-    {
-    }
-    ~AutoCorrection()
-    {
-    }
+    AutoCorrection() = default;
+    ~AutoCorrection() = default;
 
     enum ImportFileType {
         LibreOffice,

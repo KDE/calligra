@@ -88,9 +88,7 @@ class Q_DECL_HIDDEN KoTextWriter::Private
 public:
     explicit Private(KoShapeSavingContext &context);
 
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     void writeBlocks(QTextDocument *document,
                      int from,

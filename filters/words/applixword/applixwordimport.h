@@ -27,9 +27,7 @@ class APPLIXWORDImport : public KoFilter
 
 public:
     APPLIXWORDImport(QObject *parent, const QVariantList &);
-    ~APPLIXWORDImport() override
-    {
-    }
+    ~APPLIXWORDImport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

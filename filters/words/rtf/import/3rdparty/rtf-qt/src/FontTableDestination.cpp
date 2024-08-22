@@ -48,9 +48,7 @@ FontTableDestination::FontTableDestination(Reader *reader, AbstractRtfOutput *ou
 {
 }
 
-FontTableDestination::~FontTableDestination()
-{
-}
+FontTableDestination::~FontTableDestination() = default;
 
 void FontTableDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

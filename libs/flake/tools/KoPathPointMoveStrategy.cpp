@@ -22,9 +22,7 @@ KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF
 {
 }
 
-KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
-{
-}
+KoPathPointMoveStrategy::~KoPathPointMoveStrategy() = default;
 
 void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {

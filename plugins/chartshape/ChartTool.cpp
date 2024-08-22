@@ -85,9 +85,7 @@ ChartTool::Private::Private()
 {
 }
 
-ChartTool::Private::~Private()
-{
-}
+ChartTool::Private::~Private() = default;
 
 ChartTool::ChartTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)

@@ -19,13 +19,9 @@
 
 #include "KPrPageLayoutSharedSavingData.h"
 
-KPrPageLayoutSharedSavingData::KPrPageLayoutSharedSavingData()
-{
-}
+KPrPageLayoutSharedSavingData::KPrPageLayoutSharedSavingData() = default;
 
-KPrPageLayoutSharedSavingData::~KPrPageLayoutSharedSavingData()
-{
-}
+KPrPageLayoutSharedSavingData::~KPrPageLayoutSharedSavingData() = default;
 
 void KPrPageLayoutSharedSavingData::addPageLayoutStyle(KPrPageLayout *pageLayout, const QString &styleName)
 {

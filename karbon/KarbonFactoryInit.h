@@ -20,9 +20,7 @@ public:
         : KarbonFactory()
     {
     }
-    ~KarbonFactoryInit() override
-    {
-    }
+    ~KarbonFactoryInit() override = default;
 };
 
 #endif

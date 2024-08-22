@@ -15,13 +15,9 @@
 
 #include "OdfReaderDebug.h"
 
-OdfParser::OdfParser()
-{
-}
+OdfParser::OdfParser() = default;
 
-OdfParser::~OdfParser()
-{
-}
+OdfParser::~OdfParser() = default;
 
 KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
                                                     // out parameters:

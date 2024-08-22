@@ -31,9 +31,7 @@ KPrRoundRectWipeEffectFactory::KPrRoundRectWipeEffectFactory()
     addStrategy(new KPrIrisWipeEffectStrategyBase(shape, VerticalReverse, "RoundRect", "vertical", true));
 }
 
-KPrRoundRectWipeEffectFactory::~KPrRoundRectWipeEffectFactory()
-{
-}
+KPrRoundRectWipeEffectFactory::~KPrRoundRectWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("Horizontal"), kli18n("Horizontal Reverse"), kli18n("Vertical"), kli18n("Vertical Reverse")};
 

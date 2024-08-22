@@ -305,8 +305,8 @@ public:
     bool isValid(S16 ilfo, U8 nLvlAnm) const;
 
 private:
-    ListInfoProvider(const ListInfoProvider &rhs);
-    ListInfoProvider &operator=(const ListInfoProvider &rhs);
+    ListInfoProvider(const ListInfoProvider &rhs) = delete;
+    ListInfoProvider &operator=(const ListInfoProvider &rhs) = delete;
 
     /**
      * @internal

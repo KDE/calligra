@@ -15,9 +15,7 @@ class ArtisticTextShapeFactory : public KoShapeFactoryBase
 {
 public:
     ArtisticTextShapeFactory();
-    ~ArtisticTextShapeFactory() override
-    {
-    }
+    ~ArtisticTextShapeFactory() override = default;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     // reimplemented from KoShapeFactoryBase

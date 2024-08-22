@@ -18,9 +18,7 @@ KPrFadeCrossStrategy::KPrFadeCrossStrategy()
 {
 }
 
-KPrFadeCrossStrategy::~KPrFadeCrossStrategy()
-{
-}
+KPrFadeCrossStrategy::~KPrFadeCrossStrategy() = default;
 
 void KPrFadeCrossStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

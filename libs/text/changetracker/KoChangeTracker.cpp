@@ -53,9 +53,7 @@ public:
 
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     QMultiHash<int, int> children;
     QMultiHash<int, int> duplicateIds;

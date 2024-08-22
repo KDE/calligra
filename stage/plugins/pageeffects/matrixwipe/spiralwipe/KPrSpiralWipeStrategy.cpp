@@ -58,9 +58,7 @@ KPrSpiralWipeStrategy::KPrSpiralWipeStrategy(int firstLeg, bool clockwise, bool 
 {
 }
 
-KPrSpiralWipeStrategy::~KPrSpiralWipeStrategy()
-{
-}
+KPrSpiralWipeStrategy::~KPrSpiralWipeStrategy() = default;
 
 int KPrSpiralWipeStrategy::squareIndex(int x, int y, int columns, int rows)
 {

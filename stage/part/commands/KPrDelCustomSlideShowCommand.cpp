@@ -20,9 +20,7 @@ KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPr
     setText(kundo2_i18n("Delete custom slide show"));
 }
 
-KPrDelCustomSlideShowCommand::~KPrDelCustomSlideShowCommand()
-{
-}
+KPrDelCustomSlideShowCommand::~KPrDelCustomSlideShowCommand() = default;
 
 void KPrDelCustomSlideShowCommand::redo()
 {

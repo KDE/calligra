@@ -195,7 +195,7 @@ public:
 
 private:
     // not implemented, can only be constructed from UString
-    UCharReference();
+    UCharReference() = delete;
 
     UChar &ref() const;
     UString *str;

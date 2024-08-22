@@ -21,9 +21,7 @@ BarnVeeWipeEffectFactory::BarnVeeWipeEffectFactory()
     addStrategy(new BarnVeeWipeStrategy(FromLeft, "right", false));
 }
 
-BarnVeeWipeEffectFactory::~BarnVeeWipeEffectFactory()
-{
-}
+BarnVeeWipeEffectFactory::~BarnVeeWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom"), kli18n("From Left")};
 

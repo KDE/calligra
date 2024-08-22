@@ -14,9 +14,7 @@ KoPAPageProvider::KoPAPageProvider()
 {
 }
 
-KoPAPageProvider::~KoPAPageProvider()
-{
-}
+KoPAPageProvider::~KoPAPageProvider() = default;
 
 KoTextPage *KoPAPageProvider::page(KoShape *shape)
 {

@@ -56,7 +56,7 @@ public:
     static const QString ac;
 
 private:
-    KoXmlNS(); // don't create an instance of me :)
+    KoXmlNS() = delete; // don't create an instance of me :)
 };
 
 #endif /* KOXMLNS_H */

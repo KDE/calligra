@@ -63,9 +63,7 @@ Surface::Private::Private(PlotArea *parent)
 {
 }
 
-Surface::Private::~Private()
-{
-}
+Surface::Private::~Private() = default;
 
 // ================================================================
 

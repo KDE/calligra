@@ -28,9 +28,7 @@ Object::Object(Type t, unsigned long id)
 {
 }
 
-Object::~Object()
-{
-}
+Object::~Object() = default;
 
 bool Object::applyDrawing(const MSO::OfficeArtDgContainer &container)
 {
@@ -102,9 +100,7 @@ OfficeArtObject::OfficeArtObject(const MSO::OfficeArtSpContainer &object, quint3
 {
 }
 
-OfficeArtObject::~OfficeArtObject()
-{
-}
+OfficeArtObject::~OfficeArtObject() = default;
 
 MSO::OfficeArtSpContainer OfficeArtObject::object() const
 {

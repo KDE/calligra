@@ -115,9 +115,7 @@ RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     connect(ui.dataSets, &QComboBox::currentIndexChanged, parent, &RadarDataSetConfigWidget::ui_dataSetSelectionChanged);
 }
 
-RadarDataSetConfigWidget::Private::~Private()
-{
-}
+RadarDataSetConfigWidget::Private::~Private() = default;
 
 // ================================================================
 //                     class RadarDataSetConfigWidget

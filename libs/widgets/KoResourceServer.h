@@ -50,9 +50,7 @@ public:
     {
     }
 
-    virtual ~KoResourceServerBase()
-    {
-    }
+    virtual ~KoResourceServerBase() = default;
 
     virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;

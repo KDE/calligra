@@ -82,9 +82,7 @@ ParagraphFormattingCommand::ParagraphFormattingCommand(KoTextEditor *editor,
     setText(kundo2_i18n("Direct Paragraph Formatting"));
 }
 
-ParagraphFormattingCommand::~ParagraphFormattingCommand()
-{
-}
+ParagraphFormattingCommand::~ParagraphFormattingCommand() = default;
 
 void ParagraphFormattingCommand::undo()
 {

@@ -14,9 +14,7 @@
 class KOTEXT_EXPORT KoUndoableTool
 {
 public:
-    virtual ~KoUndoableTool()
-    {
-    }
+    virtual ~KoUndoableTool() = default;
     virtual void setAddUndoCommandAllowed(bool allowed) = 0;
 };
 

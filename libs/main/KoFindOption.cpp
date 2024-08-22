@@ -10,12 +10,8 @@
 class Q_DECL_HIDDEN KoFindOption::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 
     QString name;
     QString title;

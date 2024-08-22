@@ -22,13 +22,9 @@
 #include <KoPASavingContext.h>
 #include <KoXmlWriter.h>
 
-KPrAnimationSubStep::KPrAnimationSubStep()
-{
-}
+KPrAnimationSubStep::KPrAnimationSubStep() = default;
 
-KPrAnimationSubStep::~KPrAnimationSubStep()
-{
-}
+KPrAnimationSubStep::~KPrAnimationSubStep() = default;
 
 void KPrAnimationSubStep::init(KPrAnimationCache *animationCache, int step)
 {

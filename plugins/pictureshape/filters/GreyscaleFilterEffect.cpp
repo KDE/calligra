@@ -15,9 +15,7 @@ GreyscaleFilterEffect::GreyscaleFilterEffect()
 {
 }
 
-GreyscaleFilterEffect::~GreyscaleFilterEffect()
-{
-}
+GreyscaleFilterEffect::~GreyscaleFilterEffect() = default;
 
 void GreyscaleFilterEffect::save(KoXmlWriter & /*writer*/)
 {

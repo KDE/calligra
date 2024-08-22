@@ -7,10 +7,6 @@
 
 #include "KoPageProvider.h"
 
-KoPageProvider::KoPageProvider()
-{
-}
+KoPageProvider::KoPageProvider() = default;
 
-KoPageProvider::~KoPageProvider()
-{
-}
+KoPageProvider::~KoPageProvider() = default;

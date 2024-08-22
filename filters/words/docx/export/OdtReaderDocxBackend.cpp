@@ -32,9 +32,7 @@ OdtReaderDocxBackend::OdtReaderDocxBackend()
 {
 }
 
-OdtReaderDocxBackend::~OdtReaderDocxBackend()
-{
-}
+OdtReaderDocxBackend::~OdtReaderDocxBackend() = default;
 
 // ----------------------------------------------------------------
 // ODT document level functions

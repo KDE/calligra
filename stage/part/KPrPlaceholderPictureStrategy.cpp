@@ -23,9 +23,7 @@ KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()
 {
 }
 
-KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy()
-{
-}
+KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy() = default;
 
 KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *rm)
 {

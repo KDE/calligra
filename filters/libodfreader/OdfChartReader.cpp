@@ -52,9 +52,7 @@ OdfChartReader::OdfChartReader()
 {
 }
 
-OdfChartReader::~OdfChartReader()
-{
-}
+OdfChartReader::~OdfChartReader() = default;
 
 // ----------------------------------------------------------------
 

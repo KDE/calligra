@@ -32,9 +32,7 @@ EnhancedPathHandle::EnhancedPathHandle(EnhancedPathShape *parent)
     Q_ASSERT(m_parent);
 }
 
-EnhancedPathHandle::~EnhancedPathHandle()
-{
-}
+EnhancedPathHandle::~EnhancedPathHandle() = default;
 
 bool EnhancedPathHandle::hasPosition() const
 {

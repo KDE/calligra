@@ -42,9 +42,7 @@ VideoTool::VideoTool(KoCanvasBase *canvas)
 {
 }
 
-VideoTool::~VideoTool()
-{
-}
+VideoTool::~VideoTool() = default;
 
 void VideoTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {

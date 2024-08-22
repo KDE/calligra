@@ -17,9 +17,7 @@ RemoveConnectionPointCommand::RemoveConnectionPointCommand(KoShape *shape, int c
     m_connectionPoint = m_shape->connectionPoint(m_connectionPointId);
 }
 
-RemoveConnectionPointCommand::~RemoveConnectionPointCommand()
-{
-}
+RemoveConnectionPointCommand::~RemoveConnectionPointCommand() = default;
 
 void RemoveConnectionPointCommand::redo()
 {

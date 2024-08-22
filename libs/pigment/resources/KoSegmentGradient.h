@@ -75,12 +75,8 @@ protected:
     class ColorInterpolationStrategy
     {
     public:
-        ColorInterpolationStrategy()
-        {
-        }
-        virtual ~ColorInterpolationStrategy()
-        {
-        }
+        ColorInterpolationStrategy() = default;
+        virtual ~ColorInterpolationStrategy() = default;
 
         virtual void colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const = 0;
         virtual int type() const = 0;
@@ -146,12 +142,8 @@ protected:
     class InterpolationStrategy
     {
     public:
-        InterpolationStrategy()
-        {
-        }
-        virtual ~InterpolationStrategy()
-        {
-        }
+        InterpolationStrategy() = default;
+        virtual ~InterpolationStrategy() = default;
 
         virtual qreal valueAt(qreal t, qreal middle) const = 0;
         virtual int type() const = 0;
@@ -174,9 +166,7 @@ protected:
         static qreal calcValueAt(qreal t, qreal middle);
 
     private:
-        LinearInterpolationStrategy()
-        {
-        }
+        LinearInterpolationStrategy() = default;
 
         static LinearInterpolationStrategy *m_instance;
     };
@@ -211,9 +201,7 @@ protected:
         }
 
     private:
-        SphereIncreasingInterpolationStrategy()
-        {
-        }
+        SphereIncreasingInterpolationStrategy() = default;
 
         static SphereIncreasingInterpolationStrategy *m_instance;
     };
@@ -230,9 +218,7 @@ protected:
         }
 
     private:
-        SphereDecreasingInterpolationStrategy()
-        {
-        }
+        SphereDecreasingInterpolationStrategy() = default;
 
         static SphereDecreasingInterpolationStrategy *m_instance;
     };
@@ -249,9 +235,7 @@ protected:
         }
 
     private:
-        SineInterpolationStrategy()
-        {
-        }
+        SineInterpolationStrategy() = default;
 
         static SineInterpolationStrategy *m_instance;
     };

@@ -21,9 +21,7 @@ EditCell::EditCell(Actions *actions)
 {
 }
 
-EditCell::~EditCell()
-{
-}
+EditCell::~EditCell() = default;
 
 QAction *EditCell::createAction()
 {
@@ -43,9 +41,7 @@ PermuteFixation::PermuteFixation(Actions *actions)
 {
 }
 
-PermuteFixation::~PermuteFixation()
-{
-}
+PermuteFixation::~PermuteFixation() = default;
 
 QAction *PermuteFixation::createAction()
 {

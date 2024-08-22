@@ -12,9 +12,7 @@ AuthorPcdataDestination::AuthorPcdataDestination(Reader *reader, AbstractRtfOutp
 {
 }
 
-AuthorPcdataDestination::~AuthorPcdataDestination()
-{
-}
+AuthorPcdataDestination::~AuthorPcdataDestination() = default;
 
 void AuthorPcdataDestination::aboutToEndDestination()
 {

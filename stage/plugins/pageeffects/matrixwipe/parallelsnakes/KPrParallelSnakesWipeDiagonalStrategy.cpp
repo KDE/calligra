@@ -20,9 +20,7 @@ KPrParallelSnakesWipeDiagonalStrategy::KPrParallelSnakesWipeDiagonalStrategy(boo
     setNeedEvenSquares(true, false);
 }
 
-KPrParallelSnakesWipeDiagonalStrategy::~KPrParallelSnakesWipeDiagonalStrategy()
-{
-}
+KPrParallelSnakesWipeDiagonalStrategy::~KPrParallelSnakesWipeDiagonalStrategy() = default;
 
 int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int columns, int rows)
 {

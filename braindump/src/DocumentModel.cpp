@@ -36,9 +36,7 @@ DocumentModel::DocumentModel(QObject *parent, RootSection *document)
     Q_ASSERT(m_document);
 }
 
-DocumentModel::~DocumentModel()
-{
-}
+DocumentModel::~DocumentModel() = default;
 
 int DocumentModel::rowCount(const QModelIndex &parent) const
 {

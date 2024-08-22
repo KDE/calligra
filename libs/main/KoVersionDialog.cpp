@@ -76,9 +76,7 @@ KoVersionDialog::KoVersionDialog(QWidget *parent, KoDocument *doc)
     resize(600, 250);
 }
 
-KoVersionDialog::~KoVersionDialog()
-{
-}
+KoVersionDialog::~KoVersionDialog() = default;
 
 void KoVersionDialog::updateVersionList()
 {

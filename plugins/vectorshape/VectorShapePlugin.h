@@ -18,9 +18,7 @@ class VectorShapePlugin : public QObject
 
 public:
     VectorShapePlugin(QObject *parent, const QVariantList &);
-    ~VectorShapePlugin() override
-    {
-    }
+    ~VectorShapePlugin() override = default;
 };
 
 #endif

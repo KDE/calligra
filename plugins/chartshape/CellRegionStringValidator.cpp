@@ -30,9 +30,7 @@ CellRegionStringValidator::Private::Private()
 {
 }
 
-CellRegionStringValidator::Private::~Private()
-{
-}
+CellRegionStringValidator::Private::~Private() = default;
 
 CellRegionStringValidator::CellRegionStringValidator(KoChart::ChartModel *model)
     : QValidator(nullptr)

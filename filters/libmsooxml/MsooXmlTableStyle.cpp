@@ -18,9 +18,7 @@ TableStyleConverterProperties::TableStyleConverterProperties()
 {
 }
 
-TableStyleConverterProperties::~TableStyleConverterProperties()
-{
-}
+TableStyleConverterProperties::~TableStyleConverterProperties() = default;
 
 void TableStyleConverterProperties::setRowCount(int rowCount)
 {
@@ -89,9 +87,7 @@ TableStyleConverter::TableStyleConverter(int row, int column)
 {
 }
 
-TableStyleConverter::~TableStyleConverter()
-{
-}
+TableStyleConverter::~TableStyleConverter() = default;
 // TODO: Table-level exception properties, tblCellSpacing
 //
 // ECMA-376:
@@ -615,9 +611,7 @@ QString TableStyle::id() const
     return m_id;
 }
 
-LocalTableStyles::LocalTableStyles()
-{
-}
+LocalTableStyles::LocalTableStyles() = default;
 
 LocalTableStyles::~LocalTableStyles()
 {

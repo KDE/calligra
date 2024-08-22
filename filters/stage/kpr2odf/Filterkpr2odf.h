@@ -42,9 +42,7 @@ class Filterkpr2odf : public KoFilter
 public:
     Filterkpr2odf(QObject *parent, const QVariantList &);
 
-    ~Filterkpr2odf() override
-    {
-    }
+    ~Filterkpr2odf() override = default;
 
     // reimplemented from KoFilter
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;

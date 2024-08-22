@@ -23,8 +23,8 @@
 class Q_DECL_HIDDEN KoOdfHeaderFooterProperties::Private
 {
 public:
-    Private(){};
-    ~Private(){};
+    Private() = default;
+    ~Private() = default;
 
     // NYI: Background Image
 };

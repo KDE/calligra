@@ -29,9 +29,7 @@ MusicStyle::MusicStyle()
     m_noteDotPen.setColor(Qt::black);
 }
 
-MusicStyle::~MusicStyle()
-{
-}
+MusicStyle::~MusicStyle() = default;
 
 QPen MusicStyle::staffLinePen(const QColor &color)
 {

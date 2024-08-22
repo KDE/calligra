@@ -32,9 +32,7 @@ MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters *wri
 {
 }
 
-MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
-{
-}
+MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader() = default;
 
 MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport *_import,
                                                                  const QString &_path,
@@ -51,9 +49,7 @@ MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport *
 {
 }
 
-MsooXmlDrawingTableStyleContext::~MsooXmlDrawingTableStyleContext()
-{
-}
+MsooXmlDrawingTableStyleContext::~MsooXmlDrawingTableStyleContext() = default;
 
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderContext *context)
 {

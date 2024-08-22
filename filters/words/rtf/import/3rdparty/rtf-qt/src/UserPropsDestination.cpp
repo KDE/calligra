@@ -15,9 +15,7 @@ UserPropsDestination::UserPropsDestination(Reader *reader, AbstractRtfOutput *ou
 {
 }
 
-UserPropsDestination::~UserPropsDestination()
-{
-}
+UserPropsDestination::~UserPropsDestination() = default;
 
 void UserPropsDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

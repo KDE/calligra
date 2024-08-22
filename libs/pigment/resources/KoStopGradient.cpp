@@ -29,9 +29,7 @@ KoStopGradient::KoStopGradient(const QString &filename)
 {
 }
 
-KoStopGradient::~KoStopGradient()
-{
-}
+KoStopGradient::~KoStopGradient() = default;
 
 KoAbstractGradient *KoStopGradient::clone() const
 {

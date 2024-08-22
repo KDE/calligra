@@ -22,9 +22,7 @@ VideoToolFactory::VideoToolFactory()
     setActivationShapeId(VIDEOSHAPEID);
 }
 
-VideoToolFactory::~VideoToolFactory()
-{
-}
+VideoToolFactory::~VideoToolFactory() = default;
 
 KoToolBase *VideoToolFactory::createTool(KoCanvasBase *canvas)
 {

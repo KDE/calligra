@@ -39,9 +39,7 @@ TableRowElement::TableRowElement(BasicElement *parent)
 {
 }
 
-TableRowElement::~TableRowElement()
-{
-}
+TableRowElement::~TableRowElement() = default;
 
 void TableRowElement::paint(QPainter &painter, AttributeManager *am)
 {

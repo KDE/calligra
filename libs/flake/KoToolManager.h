@@ -306,8 +306,8 @@ Q_SIGNALS:
     void addedTool(KoToolAction *toolAction, KoCanvasController *canvas);
 
 private:
-    KoToolManager(const KoToolManager &);
-    KoToolManager operator=(const KoToolManager &);
+    KoToolManager(const KoToolManager &) = delete;
+    KoToolManager operator=(const KoToolManager &) = delete;
 
     Q_PRIVATE_SLOT(d, void toolActivated(ToolHelper *tool))
     Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))

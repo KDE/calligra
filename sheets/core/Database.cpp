@@ -45,9 +45,7 @@ public:
     {
     }
 
-    virtual ~Private()
-    {
-    }
+    virtual ~Private() = default;
 
     Filter filter;
     QString name;
@@ -62,7 +60,7 @@ public:
     int refreshDelay;
 
 private:
-    void operator=(const Private &);
+    void operator=(const Private &) = delete;
 };
 
 Database::Database()
@@ -77,13 +75,10 @@ Database::Database(const QString &name)
 }
 
 Database::Database(const Database &other)
-    : d(other.d)
-{
-}
 
-Database::~Database()
-{
-}
+    = default;
+
+Database::~Database() = default;
 
 bool Database::isEmpty() const
 {

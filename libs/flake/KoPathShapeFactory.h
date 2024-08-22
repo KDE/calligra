@@ -21,9 +21,7 @@ class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     explicit KoPathShapeFactory(const QStringList &);
-    ~KoPathShapeFactory() override
-    {
-    }
+    ~KoPathShapeFactory() override = default;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     /// reimplemented

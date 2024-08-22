@@ -21,6 +21,4 @@ OdfReaderAsciiContext::OdfReaderAsciiContext(KoStore *store, QFile &file)
 {
 }
 
-OdfReaderAsciiContext::~OdfReaderAsciiContext()
-{
-}
+OdfReaderAsciiContext::~OdfReaderAsciiContext() = default;

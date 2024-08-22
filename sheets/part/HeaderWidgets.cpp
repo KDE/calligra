@@ -73,9 +73,7 @@ RowHeaderWidget::RowHeaderWidget(QWidget *_parent, Canvas *_canvas, View *_view)
     connect(m_pCanvas->toolProxy(), &KoToolProxy::toolChanged, this, &RowHeaderWidget::toolChanged);
 }
 
-RowHeaderWidget::~RowHeaderWidget()
-{
-}
+RowHeaderWidget::~RowHeaderWidget() = default;
 
 void RowHeaderWidget::mousePressEvent(QMouseEvent *_ev)
 {
@@ -225,9 +223,7 @@ ColumnHeaderWidget::ColumnHeaderWidget(QWidget *_parent, Canvas *_canvas, View *
     connect(m_pCanvas->toolProxy(), &KoToolProxy::toolChanged, this, &ColumnHeaderWidget::toolChanged);
 }
 
-ColumnHeaderWidget::~ColumnHeaderWidget()
-{
-}
+ColumnHeaderWidget::~ColumnHeaderWidget() = default;
 
 void ColumnHeaderWidget::mousePressEvent(QMouseEvent *_ev)
 {
@@ -387,9 +383,7 @@ SelectAllButtonWidget::SelectAllButtonWidget(CanvasBase *canvasBase)
     connect(canvasBase->toolProxy(), &KoToolProxy::toolChanged, this, &SelectAllButtonWidget::toolChanged);
 }
 
-SelectAllButtonWidget::~SelectAllButtonWidget()
-{
-}
+SelectAllButtonWidget::~SelectAllButtonWidget() = default;
 
 void SelectAllButtonWidget::paintEvent(QPaintEvent *event)
 {

@@ -24,13 +24,9 @@
 // ================================================================
 //                         class EpubFile
 
-EpubFile::EpubFile()
-{
-}
+EpubFile::EpubFile() = default;
 
-EpubFile::~EpubFile()
-{
-}
+EpubFile::~EpubFile() = default;
 
 KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName, const QByteArray &appIdentification, QHash<QString, QString> metadata)
 {

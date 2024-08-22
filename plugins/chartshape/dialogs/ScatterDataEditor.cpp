@@ -190,9 +190,7 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     resize(sizeHint().expandedTo(QSize(600, 300)));
 }
 
-ScatterDataEditor::~ScatterDataEditor()
-{
-}
+ScatterDataEditor::~ScatterDataEditor() = default;
 
 void ScatterDataEditor::slotInsertColumnBefore()
 {

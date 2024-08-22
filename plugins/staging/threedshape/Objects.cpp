@@ -40,9 +40,7 @@ Sphere::Sphere(Object3D *parent)
 {
 }
 
-Sphere::~Sphere()
-{
-}
+Sphere::~Sphere() = default;
 
 void Sphere::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
@@ -98,9 +96,7 @@ Cube::Cube(Object3D *parent)
 {
 }
 
-Cube::~Cube()
-{
-}
+Cube::~Cube() = default;
 
 void Cube::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
@@ -161,9 +157,7 @@ Extrude::Extrude(Object3D *parent)
 {
 }
 
-Extrude::~Extrude()
-{
-}
+Extrude::~Extrude() = default;
 
 void Extrude::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
@@ -274,9 +268,7 @@ Rotate::Rotate(Object3D *parent)
 {
 }
 
-Rotate::~Rotate()
-{
-}
+Rotate::~Rotate() = default;
 
 void Rotate::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {

@@ -19,9 +19,7 @@ KPrWindShieldWipeStrategy::KPrWindShieldWipeStrategy(int subType, const char *sm
 {
 }
 
-KPrWindShieldWipeStrategy::~KPrWindShieldWipeStrategy()
-{
-}
+KPrWindShieldWipeStrategy::~KPrWindShieldWipeStrategy() = default;
 
 void KPrWindShieldWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

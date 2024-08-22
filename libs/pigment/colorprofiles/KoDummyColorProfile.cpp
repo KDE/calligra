@@ -11,9 +11,7 @@ KoDummyColorProfile::KoDummyColorProfile()
     setName("default");
 }
 
-KoDummyColorProfile::~KoDummyColorProfile()
-{
-}
+KoDummyColorProfile::~KoDummyColorProfile() = default;
 
 KoColorProfile *KoDummyColorProfile::clone() const
 {

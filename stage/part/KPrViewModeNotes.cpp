@@ -36,9 +36,7 @@ KPrViewModeNotes::KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas)
     setName(i18n("Notes"));
 }
 
-KPrViewModeNotes::~KPrViewModeNotes()
-{
-}
+KPrViewModeNotes::~KPrViewModeNotes() = default;
 
 void KPrViewModeNotes::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {

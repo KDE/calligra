@@ -22,9 +22,7 @@ TextToolFactory::TextToolFactory()
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }
 
-TextToolFactory::~TextToolFactory()
-{
-}
+TextToolFactory::~TextToolFactory() = default;
 
 KoToolBase *TextToolFactory::createTool(KoCanvasBase *canvas)
 {

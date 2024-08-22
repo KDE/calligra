@@ -18,9 +18,7 @@ KPrSweepWipeStrategy::KPrSweepWipeStrategy(int subType, const char *smilType, co
 {
 }
 
-KPrSweepWipeStrategy::~KPrSweepWipeStrategy()
-{
-}
+KPrSweepWipeStrategy::~KPrSweepWipeStrategy() = default;
 
 void KPrSweepWipeStrategy::next(const KPrPageEffect::Data &data)
 {

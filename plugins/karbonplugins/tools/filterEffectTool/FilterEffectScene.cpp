@@ -115,9 +115,7 @@ FilterEffectScene::FilterEffectScene(QObject *parent)
     connect(this, &FilterEffectScene::selectionChanged, this, &FilterEffectScene::slotSelectionChanged);
 }
 
-FilterEffectScene::~FilterEffectScene()
-{
-}
+FilterEffectScene::~FilterEffectScene() = default;
 
 void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
 {

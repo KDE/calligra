@@ -61,9 +61,7 @@ PresentationKoPAView::PresentationKoPAView(KoCanvasController *canvasController,
     setViewMode(mode);
 }
 
-PresentationKoPAView::~PresentationKoPAView()
-{
-}
+PresentationKoPAView::~PresentationKoPAView() = default;
 
 void PresentationKoPAView::setShowRulers(bool show)
 {

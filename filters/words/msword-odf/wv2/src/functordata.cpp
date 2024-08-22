@@ -30,9 +30,7 @@ TableRowData::TableRowData(unsigned int sp, unsigned int so, unsigned int len, i
 {
 }
 
-TableRowData::~TableRowData()
-{
-}
+TableRowData::~TableRowData() = default;
 
 PictureData::PictureData(U32 fc, SharedPtr<const Word97::PICF> sharedPicf)
     : fcPic(fc)
@@ -40,6 +38,4 @@ PictureData::PictureData(U32 fc, SharedPtr<const Word97::PICF> sharedPicf)
 {
 }
 
-PictureData::~PictureData()
-{
-}
+PictureData::~PictureData() = default;

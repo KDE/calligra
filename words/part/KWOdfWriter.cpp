@@ -181,9 +181,7 @@ KWOdfWriter::KWOdfWriter(KWDocument *document)
 {
 }
 
-KWOdfWriter::~KWOdfWriter()
-{
-}
+KWOdfWriter::~KWOdfWriter() = default;
 
 // 1.6: KWDocument::saveOasisHelper()
 bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)

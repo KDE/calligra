@@ -11,9 +11,7 @@
 #include <QDataStream>
 #include <QFile>
 
-MobiFile::MobiFile()
-{
-}
+MobiFile::MobiFile() = default;
 
 void MobiFile::addContentRawText(const QByteArray &content)
 {

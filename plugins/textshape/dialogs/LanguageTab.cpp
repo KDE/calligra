@@ -48,9 +48,7 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/ bool uniqueFormat, QWi
     connect(widget.languageList, &QListWidget::currentItemChanged, this, &LanguageTab::languageChanged);
 }
 
-LanguageTab::~LanguageTab()
-{
-}
+LanguageTab::~LanguageTab() = default;
 
 void LanguageTab::save(KoCharacterStyle *style) const
 {

@@ -58,9 +58,7 @@ PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(PptxImport &_import,
 class PptxXmlDocumentReader::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
     ~Private()
     {
         qDeleteAll(slideLayoutPropertiesMap);

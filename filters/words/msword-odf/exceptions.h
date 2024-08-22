@@ -28,16 +28,12 @@ class InvalidFormatException : public std::exception
 {
 public:
     const QString msg;
-    InvalidFormatException()
-    {
-    }
+    InvalidFormatException() = default;
     explicit InvalidFormatException(const QString &m)
         : msg(m)
     {
     }
-    ~InvalidFormatException() throw() override
-    {
-    }
+    ~InvalidFormatException() throw() override = default;
 };
 
 #endif

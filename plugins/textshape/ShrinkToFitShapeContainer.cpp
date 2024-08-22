@@ -48,9 +48,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
                      &ShrinkToFitShapeContainerModel::finishedLayout);
 }
 
-ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer()
-{
-}
+ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer() = default;
 
 void ShrinkToFitShapeContainer::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

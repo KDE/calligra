@@ -101,9 +101,7 @@ public:
         : Object(Note, id)
     {
     }
-    ~NoteObject() override
-    {
-    }
+    ~NoteObject() override = default;
     /// Returns the comment.
     QString note() const
     {
@@ -146,8 +144,8 @@ public:
     }
 
 private:
-    ChartObject(const ChartObject &co);
-    ChartObject &operator=(const ChartObject &co);
+    ChartObject(const ChartObject &co) = delete = delete;
+    ChartObject &operator=(const ChartObject &co) = delete = delete;
 };
 
 /**

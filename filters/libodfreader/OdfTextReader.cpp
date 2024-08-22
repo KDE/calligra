@@ -51,9 +51,7 @@ OdfTextReader::OdfTextReader()
 {
 }
 
-OdfTextReader::~OdfTextReader()
-{
-}
+OdfTextReader::~OdfTextReader() = default;
 
 // ----------------------------------------------------------------
 

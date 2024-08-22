@@ -18,9 +18,7 @@
 class KoConvolutionOp
 {
 public:
-    virtual ~KoConvolutionOp()
-    {
-    }
+    virtual ~KoConvolutionOp() = default;
     /**
      * Convolve the colors.
      *

@@ -22,13 +22,9 @@
 // ================================================================
 //                         class OpcContentTypes
 
-OpcContentTypes::OpcContentTypes()
-{
-}
+OpcContentTypes::OpcContentTypes() = default;
 
-OpcContentTypes::~OpcContentTypes()
-{
-}
+OpcContentTypes::~OpcContentTypes() = default;
 
 void OpcContentTypes::addDefault(const QString &extension, const QString &contentType)
 {

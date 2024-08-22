@@ -24,9 +24,7 @@
 
 using namespace wvWare;
 
-InlineReplacementHandler::~InlineReplacementHandler()
-{
-}
+InlineReplacementHandler::~InlineReplacementHandler() = default;
 
 U8 InlineReplacementHandler::tab()
 {
@@ -58,9 +56,7 @@ U8 InlineReplacementHandler::nonBreakingSpace()
     return NON_BREAKING_SPACE;
 }
 
-SubDocumentHandler::~SubDocumentHandler()
-{
-}
+SubDocumentHandler::~SubDocumentHandler() = default;
 
 void SubDocumentHandler::setProgress(const int /*value*/)
 {
@@ -110,9 +106,7 @@ void SubDocumentHandler::headerEnd()
 {
 }
 
-TableHandler::~TableHandler()
-{
-}
+TableHandler::~TableHandler() = default;
 
 void TableHandler::tableRowStart(SharedPtr<const Word97::TAP> /*tap*/)
 {
@@ -130,9 +124,7 @@ void TableHandler::tableCellEnd()
 {
 }
 
-GraphicsHandler::~GraphicsHandler()
-{
-}
+GraphicsHandler::~GraphicsHandler() = default;
 
 void GraphicsHandler::handleFloatingObject(unsigned int /*globalCP*/)
 {
@@ -143,9 +135,7 @@ QString GraphicsHandler::handleInlineObject(const PictureData & /*data*/, const 
     return QString();
 }
 
-TextHandler::~TextHandler()
-{
-}
+TextHandler::~TextHandler() = default;
 
 void TextHandler::sectionStart(SharedPtr<const Word97::SEP> /*sep*/)
 {

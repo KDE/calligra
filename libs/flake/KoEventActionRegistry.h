@@ -59,8 +59,8 @@ public:
     QList<KoEventActionFactoryBase *> scriptEventActions();
 
 private:
-    KoEventActionRegistry(const KoEventActionRegistry &);
-    KoEventActionRegistry operator=(const KoEventActionRegistry &);
+    KoEventActionRegistry(const KoEventActionRegistry &) = delete;
+    KoEventActionRegistry operator=(const KoEventActionRegistry &) = delete;
 
     void init();
 

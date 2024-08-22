@@ -49,9 +49,7 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     updateSelectedPath();
 }
 
-KarbonCalligraphyTool::~KarbonCalligraphyTool()
-{
-}
+KarbonCalligraphyTool::~KarbonCalligraphyTool() = default;
 
 void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

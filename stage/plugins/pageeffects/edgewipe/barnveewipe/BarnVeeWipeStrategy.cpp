@@ -17,9 +17,7 @@ BarnVeeWipeStrategy::BarnVeeWipeStrategy(int subtype, const char *smilSubType, b
 {
 }
 
-BarnVeeWipeStrategy::~BarnVeeWipeStrategy()
-{
-}
+BarnVeeWipeStrategy::~BarnVeeWipeStrategy() = default;
 
 void BarnVeeWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

@@ -21,9 +21,7 @@ AbstractDataManipulator::AbstractDataManipulator(KUndo2Command *parent)
     m_checkLock = true;
 }
 
-AbstractDataManipulator::~AbstractDataManipulator()
-{
-}
+AbstractDataManipulator::~AbstractDataManipulator() = default;
 
 bool AbstractDataManipulator::process(Element *element)
 {
@@ -72,9 +70,7 @@ AbstractDFManipulator::AbstractDFManipulator(KUndo2Command *parent)
     m_changeformat = true;
 }
 
-AbstractDFManipulator::~AbstractDFManipulator()
-{
-}
+AbstractDFManipulator::~AbstractDFManipulator() = default;
 
 bool AbstractDFManipulator::process(Element *element)
 {
@@ -108,9 +104,7 @@ DataManipulator::DataManipulator(KUndo2Command *parent)
     setText(kundo2_i18n("Change Value"));
 }
 
-DataManipulator::~DataManipulator()
-{
-}
+DataManipulator::~DataManipulator() = default;
 
 bool DataManipulator::preProcess()
 {
@@ -178,9 +172,7 @@ ShiftManipulator::ShiftManipulator(KUndo2Command *parent)
     setText(kundo2_i18n("Insert Cells"));
 }
 
-ShiftManipulator::~ShiftManipulator()
-{
-}
+ShiftManipulator::~ShiftManipulator() = default;
 
 void ShiftManipulator::setRemove(bool remove)
 {

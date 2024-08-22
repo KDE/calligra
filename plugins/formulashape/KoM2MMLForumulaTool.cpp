@@ -211,9 +211,7 @@ KoM2MMLFormulaToolFactory::KoM2MMLFormulaToolFactory()
     setActivationShapeId(KoFormulaShapeId);
 }
 
-KoM2MMLFormulaToolFactory::~KoM2MMLFormulaToolFactory()
-{
-}
+KoM2MMLFormulaToolFactory::~KoM2MMLFormulaToolFactory() = default;
 
 KoToolBase *KoM2MMLFormulaToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -34,9 +34,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     setText(kundo2_i18n("Edit animation trigger event"));
 }
 
-KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
-{
-}
+KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand() = default;
 
 void KPrAnimationEditNodeTypeCommand::redo()
 {

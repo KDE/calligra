@@ -28,12 +28,8 @@ DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVarian
 class DocxXmlSettingsReader::Private
 {
 public:
-    Private()
-    {
-    }
-    ~Private()
-    {
-    }
+    Private() = default;
+    ~Private() = default;
 };
 
 DocxXmlSettingsReader::DocxXmlSettingsReader(KoOdfWriters *writers)

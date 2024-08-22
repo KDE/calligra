@@ -52,9 +52,7 @@ OdfDrawReader::OdfDrawReader()
 {
 }
 
-OdfDrawReader::~OdfDrawReader()
-{
-}
+OdfDrawReader::~OdfDrawReader() = default;
 
 // ----------------------------------------------------------------
 //                             setters

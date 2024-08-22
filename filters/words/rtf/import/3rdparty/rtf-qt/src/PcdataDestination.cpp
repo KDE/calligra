@@ -13,9 +13,7 @@ PcdataDestination::PcdataDestination(Reader *reader, AbstractRtfOutput *output, 
 {
 }
 
-PcdataDestination::~PcdataDestination()
-{
-}
+PcdataDestination::~PcdataDestination() = default;
 
 void PcdataDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
 {

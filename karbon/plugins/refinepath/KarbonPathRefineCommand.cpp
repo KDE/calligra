@@ -19,9 +19,7 @@ public:
         , initialized(false)
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     KoPathShape *path; ///< the path to refine
     uint insertCount; ///< the number of points to insert into segments

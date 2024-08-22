@@ -34,9 +34,7 @@ TestShapeGroupCommand::TestShapeGroupCommand()
 {
 }
 
-TestShapeGroupCommand::~TestShapeGroupCommand()
-{
-}
+TestShapeGroupCommand::~TestShapeGroupCommand() = default;
 
 void TestShapeGroupCommand::init()
 {

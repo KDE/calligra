@@ -36,9 +36,7 @@ public:
     QHash<QString, KoOdfStyleProperties *> properties; // e.g. "text-properties",
 };
 
-KoOdfStyle::Private::Private()
-{
-}
+KoOdfStyle::Private::Private() = default;
 
 KoOdfStyle::Private::~Private()
 {

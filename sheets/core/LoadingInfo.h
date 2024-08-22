@@ -31,9 +31,7 @@ public:
         , m_loadTemplate(false)
     {
     }
-    ~LoadingInfo()
-    {
-    }
+    ~LoadingInfo() = default;
 
     FileFormat fileFormat() const
     {

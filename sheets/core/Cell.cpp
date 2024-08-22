@@ -70,9 +70,7 @@ Cell::Cell(const Cell &other)
     cs = other.isNull() ? nullptr : other.fullSheet()->fullCellStorage();
 }
 
-Cell::~Cell()
-{
-}
+Cell::~Cell() = default;
 
 Cell &Cell::operator=(const Cell &other)
 {

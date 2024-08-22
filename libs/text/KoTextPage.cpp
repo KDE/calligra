@@ -8,13 +8,9 @@
 
 #include <QString>
 
-KoTextPage::KoTextPage()
-{
-}
+KoTextPage::KoTextPage() = default;
 
-KoTextPage::~KoTextPage()
-{
-}
+KoTextPage::~KoTextPage() = default;
 
 QString KoTextPage::masterPageName() const
 {

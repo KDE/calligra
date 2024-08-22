@@ -12,9 +12,7 @@ SubjectPcdataDestination::SubjectPcdataDestination(Reader *reader, AbstractRtfOu
 {
 }
 
-SubjectPcdataDestination::~SubjectPcdataDestination()
-{
-}
+SubjectPcdataDestination::~SubjectPcdataDestination() = default;
 
 void SubjectPcdataDestination::aboutToEndDestination()
 {

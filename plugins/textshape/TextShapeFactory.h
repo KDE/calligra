@@ -17,9 +17,7 @@ class TextShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     TextShapeFactory();
-    ~TextShapeFactory() override
-    {
-    }
+    ~TextShapeFactory() override = default;
 
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = nullptr) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;

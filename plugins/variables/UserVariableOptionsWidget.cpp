@@ -85,9 +85,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable *userVariable,
     updateNameEdit();
 }
 
-UserVariableOptionsWidget::~UserVariableOptionsWidget()
-{
-}
+UserVariableOptionsWidget::~UserVariableOptionsWidget() = default;
 
 KoVariableManager *UserVariableOptionsWidget::variableManager()
 {

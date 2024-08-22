@@ -19,9 +19,7 @@ public:
         : KoFilter(parent)
     {
     }
-    ~PowerPointImport() override
-    {
-    }
+    ~PowerPointImport() override = default;
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
     void setProgress(const int percent);

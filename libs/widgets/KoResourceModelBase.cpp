@@ -12,6 +12,4 @@ KoResourceModelBase::KoResourceModelBase(QObject *parent)
 {
 }
 
-KoResourceModelBase::~KoResourceModelBase()
-{
-}
+KoResourceModelBase::~KoResourceModelBase() = default;

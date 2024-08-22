@@ -483,12 +483,8 @@ private:
 class CALLIGRA_SHEETS_CORE_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
-    SubStyle()
-    {
-    }
-    virtual ~SubStyle()
-    {
-    }
+    SubStyle() = default;
+    virtual ~SubStyle() = default;
     virtual Style::Key type() const
     {
         return Style::DefaultStyleKey;

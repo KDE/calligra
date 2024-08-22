@@ -27,9 +27,7 @@ SpiralShape::SpiralShape()
     createPath(QSizeF(m_radii.x(), m_radii.y()));
 }
 
-SpiralShape::~SpiralShape()
-{
-}
+SpiralShape::~SpiralShape() = default;
 
 void SpiralShape::saveOdf(KoShapeSavingContext &context) const
 {

@@ -17,9 +17,7 @@ BarnDoorWipeStrategy::BarnDoorWipeStrategy(int subtype, const char *smilSubType,
 {
 }
 
-BarnDoorWipeStrategy::~BarnDoorWipeStrategy()
-{
-}
+BarnDoorWipeStrategy::~BarnDoorWipeStrategy() = default;
 
 void BarnDoorWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

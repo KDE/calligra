@@ -20,9 +20,7 @@ DummyDocumentLayout::DummyDocumentLayout(QTextDocument *doc)
     setPaintDevice(new KoPostscriptPaintDevice());
 }
 
-DummyDocumentLayout::~DummyDocumentLayout()
-{
-}
+DummyDocumentLayout::~DummyDocumentLayout() = default;
 
 QRectF DummyDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 {

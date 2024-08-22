@@ -108,9 +108,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     QTimer::singleShot(700, this, &KPrEditAnimationsWidget::initializeView);
 }
 
-KPrEditAnimationsWidget::~KPrEditAnimationsWidget()
-{
-}
+KPrEditAnimationsWidget::~KPrEditAnimationsWidget() = default;
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
 {

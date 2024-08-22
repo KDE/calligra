@@ -10,13 +10,9 @@
 #include <float.h>
 #include <math.h>
 
-KPrClockWipeSubpathHelper::KPrClockWipeSubpathHelper()
-{
-}
+KPrClockWipeSubpathHelper::KPrClockWipeSubpathHelper() = default;
 
-KPrClockWipeSubpathHelper::~KPrClockWipeSubpathHelper()
-{
-}
+KPrClockWipeSubpathHelper::~KPrClockWipeSubpathHelper() = default;
 
 void KPrClockWipeSubpathHelper::addSubpathForCircularArc(QPainterPath *clipPath, QRect &boundingRect, double startAngle, double endAngle)
 {

@@ -21,9 +21,7 @@ KoVBox::KoVBox(QWidget *parent)
     setLayout(layout);
 }
 
-KoVBox::~KoVBox()
-{
-}
+KoVBox::~KoVBox() = default;
 
 void KoVBox::childEvent(QChildEvent *event)
 {

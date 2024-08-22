@@ -45,9 +45,7 @@ DateTimeFormat::DateTimeFormat(int dateTimeFormatId)
 #endif
 }
 
-DateTimeFormat::~DateTimeFormat()
-{
-}
+DateTimeFormat::~DateTimeFormat() = default;
 
 void DateTimeFormat::addDateStyle(KoGenStyles &styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, const QString &separator)
 {

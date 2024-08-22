@@ -65,9 +65,7 @@ KPrPresenterViewWidget::KPrPresenterViewWidget(KPrViewModePresentation *viewMode
     m_activeWidget->setActivePage(activePage);
 }
 
-KPrPresenterViewWidget::~KPrPresenterViewWidget()
-{
-}
+KPrPresenterViewWidget::~KPrPresenterViewWidget() = default;
 
 void KPrPresenterViewWidget::setActivePage(KoPAPageBase *page)
 {

@@ -129,8 +129,8 @@ public:
 
 private:
     std::vector<DirEntry> entries;
-    DirTree(const DirTree &);
-    DirTree &operator=(const DirTree &);
+    DirTree(const DirTree &) = delete;
+    DirTree &operator=(const DirTree &) = delete;
 };
 
 class StorageIO
@@ -173,8 +173,8 @@ public:
 
 private:
     // no copy or assign
-    StorageIO(const StorageIO &);
-    StorageIO &operator=(const StorageIO &);
+    StorageIO(const StorageIO &) = delete;
+    StorageIO &operator=(const StorageIO &) = delete;
 };
 
 class StreamIO

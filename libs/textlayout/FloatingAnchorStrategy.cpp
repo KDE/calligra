@@ -27,9 +27,7 @@ FloatingAnchorStrategy::FloatingAnchorStrategy(KoAnchorTextRange *anchorRange, K
 {
 }
 
-FloatingAnchorStrategy::~FloatingAnchorStrategy()
-{
-}
+FloatingAnchorStrategy::~FloatingAnchorStrategy() = default;
 
 void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 {

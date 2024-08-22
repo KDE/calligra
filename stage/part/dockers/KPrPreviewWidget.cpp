@@ -26,9 +26,7 @@ KPrPreviewWidget::KPrPreviewWidget(QWidget *parent)
     connect(&m_timeLine, &QTimeLine::valueChanged, this, &KPrPreviewWidget::animate);
 }
 
-KPrPreviewWidget::~KPrPreviewWidget()
-{
-}
+KPrPreviewWidget::~KPrPreviewWidget() = default;
 
 void KPrPreviewWidget::paintEvent(QPaintEvent *event)
 {

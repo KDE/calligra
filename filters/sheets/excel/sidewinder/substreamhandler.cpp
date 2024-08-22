@@ -8,8 +8,6 @@
 namespace Swinder
 {
 
-SubStreamHandler::~SubStreamHandler()
-{
-}
+SubStreamHandler::~SubStreamHandler() = default;
 
 } // namespace Swinder

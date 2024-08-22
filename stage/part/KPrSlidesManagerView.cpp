@@ -35,9 +35,7 @@ KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     viewport()->installEventFilter(this);
 }
 
-KPrSlidesManagerView::~KPrSlidesManagerView()
-{
-}
+KPrSlidesManagerView::~KPrSlidesManagerView() = default;
 
 void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 {

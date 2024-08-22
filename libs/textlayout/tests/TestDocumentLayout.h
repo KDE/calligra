@@ -20,9 +20,7 @@ class TestDocumentLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestDocumentLayout()
-    {
-    }
+    TestDocumentLayout() = default;
 
 private Q_SLOTS:
     void initTestCase();

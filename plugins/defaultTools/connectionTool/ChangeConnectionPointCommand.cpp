@@ -22,9 +22,7 @@ ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape *shape,
     Q_ASSERT(m_shape);
 }
 
-ChangeConnectionPointCommand::~ChangeConnectionPointCommand()
-{
-}
+ChangeConnectionPointCommand::~ChangeConnectionPointCommand() = default;
 
 void ChangeConnectionPointCommand::redo()
 {

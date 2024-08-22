@@ -49,8 +49,8 @@ public:
     void dump() const;
 
 private:
-    Graph(const Graph &rhs);
-    Graph &operator=(const Graph &rhs);
+    Graph(const Graph &rhs) = delete;
+    Graph &operator=(const Graph &rhs) = delete;
 
     void buildGraph();
     void shortestPaths();

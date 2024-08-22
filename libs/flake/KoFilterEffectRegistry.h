@@ -36,8 +36,8 @@ public:
     KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
 
 private:
-    KoFilterEffectRegistry(const KoFilterEffectRegistry &);
-    KoFilterEffectRegistry operator=(const KoFilterEffectRegistry &);
+    KoFilterEffectRegistry(const KoFilterEffectRegistry &) = delete;
+    KoFilterEffectRegistry operator=(const KoFilterEffectRegistry &) = delete;
     void init();
 
     class Private;

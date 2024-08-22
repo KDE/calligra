@@ -21,9 +21,7 @@ KarbonGradientToolFactory::KarbonGradientToolFactory()
     setPriority(3);
 }
 
-KarbonGradientToolFactory::~KarbonGradientToolFactory()
-{
-}
+KarbonGradientToolFactory::~KarbonGradientToolFactory() = default;
 
 KoToolBase *KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
 {

@@ -12,9 +12,7 @@ KoDeletedCellData::KoDeletedCellData(int rowNumber, int columnNumber)
     this->column_number = columnNumber;
 }
 
-KoDeletedCellData::~KoDeletedCellData()
-{
-}
+KoDeletedCellData::~KoDeletedCellData() = default;
 
 int KoDeletedCellData::rowNumber() const
 {

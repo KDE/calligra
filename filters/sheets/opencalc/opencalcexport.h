@@ -34,9 +34,7 @@ class OpenCalcExport : public KoFilter
 
 public:
     OpenCalcExport(QObject *parent, const QVariantList &);
-    ~OpenCalcExport() override
-    {
-    }
+    ~OpenCalcExport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 

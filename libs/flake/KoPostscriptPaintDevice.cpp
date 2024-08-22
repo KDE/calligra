@@ -8,9 +8,7 @@
 
 #include <limits.h>
 
-KoPostscriptPaintDevice::KoPostscriptPaintDevice()
-{
-}
+KoPostscriptPaintDevice::KoPostscriptPaintDevice() = default;
 
 QPaintEngine *KoPostscriptPaintDevice::paintEngine() const
 {

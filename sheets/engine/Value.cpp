@@ -149,7 +149,7 @@ public:
     void setFormatByType();
 
 private:
-    void operator=(const Value::Private &o);
+    void operator=(const Value::Private &o) = delete;
 
     static Private *s_null;
 };
@@ -210,9 +210,7 @@ Value::Value()
 }
 
 // destructor
-Value::~Value()
-{
-}
+Value::~Value() = default;
 
 // create value of certain type
 Value::Value(Value::Type _type)
@@ -224,16 +222,11 @@ Value::Value(Value::Type _type)
 
 // copy constructor
 Value::Value(const Value &_value)
-    : d(_value.d)
-{
-}
+
+    = default;
 
 // assignment operator
-Value &Value::operator=(const Value &_value)
-{
-    d = _value.d;
-    return *this;
-}
+Value &Value::operator=(const Value &_value) = default;
 
 // comparison operator - returns true only if strictly identical, unlike equal()/compare()
 bool Value::operator==(const Value &o) const

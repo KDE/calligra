@@ -20,9 +20,7 @@ KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory()
     setHidden(true);
 }
 
-KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()
-{
-}
+KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory() = default;
 
 KoShape *KarbonCalligraphicShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {

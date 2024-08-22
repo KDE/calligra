@@ -28,9 +28,7 @@ RememberPositionCommand::RememberPositionCommand(const QList<KoShape *> &_shapes
     }
 }
 
-RememberPositionCommand::~RememberPositionCommand()
-{
-}
+RememberPositionCommand::~RememberPositionCommand() = default;
 
 void RememberPositionCommand::undo()
 {

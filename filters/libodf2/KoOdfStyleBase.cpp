@@ -47,9 +47,7 @@ KoOdfStyleBase::Private::Private(KoOdfStyleBase::StyleType type)
 {
 }
 
-KoOdfStyleBase::Private::~Private()
-{
-}
+KoOdfStyleBase::Private::~Private() = default;
 
 // ----------------------------------------------------------------
 

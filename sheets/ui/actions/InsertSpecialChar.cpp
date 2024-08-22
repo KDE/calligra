@@ -33,9 +33,7 @@ InsertSpecialChar::InsertSpecialChar(Actions *actions)
 {
 }
 
-InsertSpecialChar::~InsertSpecialChar()
-{
-}
+InsertSpecialChar::~InsertSpecialChar() = default;
 
 ActionDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
 {

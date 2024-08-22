@@ -29,9 +29,7 @@ ExportMobi::ExportMobi(QObject *parent, const QVariantList &)
 {
 }
 
-ExportMobi::~ExportMobi()
-{
-}
+ExportMobi::~ExportMobi() = default;
 
 KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QByteArray &to)
 {

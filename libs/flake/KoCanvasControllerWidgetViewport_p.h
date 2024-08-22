@@ -20,9 +20,7 @@ class Viewport : public QWidget
 
 public:
     explicit Viewport(KoCanvasControllerWidget *parent);
-    ~Viewport() override
-    {
-    }
+    ~Viewport() override = default;
 
     void setCanvas(QWidget *canvas);
     QWidget *canvas() const

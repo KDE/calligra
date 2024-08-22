@@ -72,9 +72,7 @@ public:
         documentDeleted = false;
         actionAuthor = nullptr;
     }
-    ~KoViewPrivate()
-    {
-    }
+    ~KoViewPrivate() = default;
 
     QPointer<KoDocument> document; // our KoDocument
     QPointer<KoPart> part; // our part

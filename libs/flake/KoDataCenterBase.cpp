@@ -7,10 +7,6 @@
 
 #include "KoDataCenterBase.h"
 
-KoDataCenterBase::KoDataCenterBase()
-{
-}
+KoDataCenterBase::KoDataCenterBase() = default;
 
-KoDataCenterBase::~KoDataCenterBase()
-{
-}
+KoDataCenterBase::~KoDataCenterBase() = default;

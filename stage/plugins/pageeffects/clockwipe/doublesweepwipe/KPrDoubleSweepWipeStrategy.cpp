@@ -19,9 +19,7 @@ KPrDoubleSweepWipeStrategy::KPrDoubleSweepWipeStrategy(int subType, const char *
 {
 }
 
-KPrDoubleSweepWipeStrategy::~KPrDoubleSweepWipeStrategy()
-{
-}
+KPrDoubleSweepWipeStrategy::~KPrDoubleSweepWipeStrategy() = default;
 
 void KPrDoubleSweepWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

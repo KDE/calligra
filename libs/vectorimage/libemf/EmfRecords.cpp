@@ -365,9 +365,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord(QDataStream &stream, 
     soakBytes(stream, size); // rest of the record.
 }
 
-ExtCreateFontIndirectWRecord::~ExtCreateFontIndirectWRecord()
-{
-}
+ExtCreateFontIndirectWRecord::~ExtCreateFontIndirectWRecord() = default;
 
 void ExtCreateFontIndirectWRecord::soakBytes(QDataStream &stream, int numBytes)
 {

@@ -18,9 +18,7 @@ using namespace Calligra::Components;
 class PresentationContentsModelImpl::Private
 {
 public:
-    Private()
-    {
-    }
+    Private() = default;
 
     KPrDocument *document;
 

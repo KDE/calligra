@@ -22,9 +22,7 @@ CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList &)
     setToolTip(i18n("Calendar"));
 }
 
-CalendarToolFactory::~CalendarToolFactory()
-{
-}
+CalendarToolFactory::~CalendarToolFactory() = default;
 
 KoToolBase *CalendarToolFactory::createTool(KoCanvasBase *canvas)
 {

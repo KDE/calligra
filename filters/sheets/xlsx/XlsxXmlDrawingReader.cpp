@@ -187,9 +187,7 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
 {
 }
 
-XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
-{
-}
+XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext() = default;
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)

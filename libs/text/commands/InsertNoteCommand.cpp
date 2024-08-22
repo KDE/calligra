@@ -24,9 +24,7 @@ InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *doc
     m_inlineNote = new KoInlineNote(type);
 }
 
-InsertNoteCommand::~InsertNoteCommand()
-{
-}
+InsertNoteCommand::~InsertNoteCommand() = default;
 
 void InsertNoteCommand::undo()
 {

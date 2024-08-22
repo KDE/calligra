@@ -12,9 +12,7 @@ CompanyPcdataDestination::CompanyPcdataDestination(Reader *reader, AbstractRtfOu
 {
 }
 
-CompanyPcdataDestination::~CompanyPcdataDestination()
-{
-}
+CompanyPcdataDestination::~CompanyPcdataDestination() = default;
 
 void CompanyPcdataDestination::aboutToEndDestination()
 {

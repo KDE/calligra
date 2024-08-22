@@ -27,9 +27,7 @@ CalloutToolFactory::CalloutToolFactory()
     setActivationShapeId(CalloutPathShapeId);
 }
 
-CalloutToolFactory::~CalloutToolFactory()
-{
-}
+CalloutToolFactory::~CalloutToolFactory() = default;
 
 KoToolBase *CalloutToolFactory::createTool(KoCanvasBase *canvas)
 {

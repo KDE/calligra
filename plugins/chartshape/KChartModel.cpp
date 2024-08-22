@@ -129,9 +129,7 @@ KChartModel::Private::Private(KChartModel *parent, PlotArea *_plotArea)
     biggestDataSetSize = 0;
 }
 
-KChartModel::Private::~Private()
-{
-}
+KChartModel::Private::~Private() = default;
 
 int KChartModel::Private::maxDataSetSize() const
 {

@@ -26,9 +26,7 @@ KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *sha
     setText(kundo2_i18n("Change parameter"));
 }
 
-KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand()
-{
-}
+KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand() = default;
 
 /// redo the command
 void KoParameterHandleMoveCommand::redo()

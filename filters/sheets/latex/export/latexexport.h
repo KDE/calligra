@@ -23,9 +23,7 @@ class LATEXExport : public KoFilter
 
 public:
     LATEXExport(QObject *parent, const QVariantList &);
-    ~LATEXExport() override
-    {
-    }
+    ~LATEXExport() override = default;
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };

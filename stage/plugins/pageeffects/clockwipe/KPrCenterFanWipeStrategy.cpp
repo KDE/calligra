@@ -20,9 +20,7 @@ KPrCenterFanWipeStrategy::KPrCenterFanWipeStrategy(int startAngle, int fanCount,
     m_startAngle = static_cast<double>(startAngle) / 180 * M_PI;
 }
 
-KPrCenterFanWipeStrategy::~KPrCenterFanWipeStrategy()
-{
-}
+KPrCenterFanWipeStrategy::~KPrCenterFanWipeStrategy() = default;
 
 void KPrCenterFanWipeStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {

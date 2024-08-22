@@ -27,9 +27,7 @@ SplitSectionsCommand::SplitSectionsCommand(QTextDocument *document, SplitType ty
     }
 }
 
-SplitSectionsCommand::~SplitSectionsCommand()
-{
-}
+SplitSectionsCommand::~SplitSectionsCommand() = default;
 
 void SplitSectionsCommand::undo()
 {

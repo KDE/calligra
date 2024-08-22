@@ -34,9 +34,7 @@ TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget *parent)
     m_mainWidget->setModel(m_textDocumentStructureModel);
 }
 
-TextDocumentInspectionDocker::~TextDocumentInspectionDocker()
-{
-}
+TextDocumentInspectionDocker::~TextDocumentInspectionDocker() = default;
 
 void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 {

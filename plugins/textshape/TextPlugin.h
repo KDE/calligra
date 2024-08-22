@@ -15,8 +15,6 @@ class TextPlugin : public QObject
 
 public:
     TextPlugin(QObject *parent, const QVariantList &);
-    ~TextPlugin() override
-    {
-    }
+    ~TextPlugin() override = default;
 };
 #endif

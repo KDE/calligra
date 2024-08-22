@@ -18,13 +18,9 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 
-KoOdfPaste::KoOdfPaste()
-{
-}
+KoOdfPaste::KoOdfPaste() = default;
 
-KoOdfPaste::~KoOdfPaste()
-{
-}
+KoOdfPaste::~KoOdfPaste() = default;
 
 bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QMimeData *data)
 {

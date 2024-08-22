@@ -32,9 +32,7 @@ KPrAnimationCache::KPrAnimationCache()
     clear();
 }
 
-KPrAnimationCache::~KPrAnimationCache()
-{
-}
+KPrAnimationCache::~KPrAnimationCache() = default;
 
 bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id) const
 {

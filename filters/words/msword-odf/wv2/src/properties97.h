@@ -66,8 +66,8 @@ public:
     void applyClxGrpprl(const Word97::PCD *pcd, U32 fcClx, Word97::CHP *chp, const Style *style);
 
 private:
-    Properties97(const Properties97 &rhs);
-    Properties97 &operator=(const Properties97 &rhs);
+    Properties97(const Properties97 &rhs) = delete;
+    Properties97 &operator=(const Properties97 &rhs) = delete;
 
     // This should have been called "applyClxGrpprl" too, but VC7 doesn't like that
     template<class P>

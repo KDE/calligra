@@ -21,9 +21,7 @@ ApplyFilterCommand::ApplyFilterCommand()
     setText(kundo2_i18n("Apply Filter"));
 }
 
-ApplyFilterCommand::~ApplyFilterCommand()
-{
-}
+ApplyFilterCommand::~ApplyFilterCommand() = default;
 
 void ApplyFilterCommand::redo()
 {

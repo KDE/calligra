@@ -23,9 +23,7 @@ KoRow::KoRow()
 {
 }
 
-KoRow::~KoRow()
-{
-}
+KoRow::~KoRow() = default;
 
 void KoRow::setStyle(KoRowStyle::Ptr style)
 {

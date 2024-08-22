@@ -142,13 +142,11 @@ protected:
     }
 
 private:
-    XFigAbstractObject(const XFigAbstractObject &);
-    XFigAbstractObject &operator=(const XFigAbstractObject &);
+    XFigAbstractObject(const XFigAbstractObject &) = delete;
+    XFigAbstractObject &operator=(const XFigAbstractObject &) = delete;
 
 public:
-    virtual ~XFigAbstractObject()
-    {
-    }
+    virtual ~XFigAbstractObject() = default;
 
     void setComment(const QString &comment)
     {
@@ -286,9 +284,7 @@ enum XFigLineType {
 class XFigLineable
 {
 protected:
-    XFigLineable()
-    {
-    }
+    XFigLineable() = default;
 
 public:
     void setLine(XFigLineType type, qint32 thickness, float styleValue, qint32 colorId)
@@ -798,9 +794,7 @@ private:
 class XFigBoundingBox
 {
 public:
-    XFigBoundingBox()
-    {
-    }
+    XFigBoundingBox() = default;
     XFigBoundingBox(XFigPoint upperLeft, XFigPoint lowerRight)
         : m_UpperLeft(upperLeft)
         , m_LowerRight(lowerRight)
@@ -868,9 +862,7 @@ private:
 class XFigPage
 {
 public:
-    XFigPage()
-    {
-    }
+    XFigPage() = default;
     ~XFigPage()
     {
         qDeleteAll(m_Objects);

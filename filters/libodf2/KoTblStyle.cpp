@@ -70,9 +70,7 @@ KoTblStyle::KoTblStyle()
 {
 }
 
-KoTblStyle::~KoTblStyle()
-{
-}
+KoTblStyle::~KoTblStyle() = default;
 
 void KoTblStyle::setAllowBreakBetweenRows(bool allow)
 {

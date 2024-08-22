@@ -20,9 +20,7 @@ MiscDiagonalWipeEffectFactory::MiscDiagonalWipeEffectFactory()
     addStrategy(new DoubleDiamondWipeStrategy());
 }
 
-MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory()
-{
-}
+MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {
     kli18n("Double Barn Door"),

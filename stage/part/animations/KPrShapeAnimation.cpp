@@ -47,9 +47,7 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlo
     }
 }
 
-KPrShapeAnimation::~KPrShapeAnimation()
-{
-}
+KPrShapeAnimation::~KPrShapeAnimation() = default;
 
 bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

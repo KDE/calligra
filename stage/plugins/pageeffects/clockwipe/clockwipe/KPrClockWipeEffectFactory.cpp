@@ -26,9 +26,7 @@ KPrClockWipeEffectFactory::KPrClockWipeEffectFactory()
     addStrategy(new KPrClockWipeStrategy(180, 1, FromNineCounterClockwise, "clockWipe", "clockwiseNine", true));
 }
 
-KPrClockWipeEffectFactory::~KPrClockWipeEffectFactory()
-{
-}
+KPrClockWipeEffectFactory::~KPrClockWipeEffectFactory() = default;
 
 static const KLazyLocalizedString s_subTypes[] = {kli18n("From Twelve Clockwise"),
                                                   kli18n("From Three Clockwise"),

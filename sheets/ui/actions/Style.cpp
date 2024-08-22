@@ -30,9 +30,7 @@ CellStyle::CellStyle(Actions *actions)
 {
 }
 
-CellStyle::~CellStyle()
-{
-}
+CellStyle::~CellStyle() = default;
 
 ActionDialog *CellStyle::createDialog(QWidget *canvasWidget)
 {
@@ -79,9 +77,7 @@ Bold::Bold(Actions *actions)
 {
 }
 
-Bold::~Bold()
-{
-}
+Bold::~Bold() = default;
 
 QAction *Bold::createAction()
 {
@@ -117,9 +113,7 @@ Italic::Italic(Actions *actions)
 {
 }
 
-Italic::~Italic()
-{
-}
+Italic::~Italic() = default;
 
 QAction *Italic::createAction()
 {
@@ -155,9 +149,7 @@ Underline::Underline(Actions *actions)
 {
 }
 
-Underline::~Underline()
-{
-}
+Underline::~Underline() = default;
 
 QAction *Underline::createAction()
 {
@@ -193,9 +185,7 @@ Strikeout::Strikeout(Actions *actions)
 {
 }
 
-Strikeout::~Strikeout()
-{
-}
+Strikeout::~Strikeout() = default;
 
 void Strikeout::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -224,9 +214,7 @@ WrapText::WrapText(Actions *actions)
 {
 }
 
-WrapText::~WrapText()
-{
-}
+WrapText::~WrapText() = default;
 
 QAction *WrapText::createAction()
 {
@@ -260,9 +248,7 @@ VerticalText::VerticalText(Actions *actions)
 {
 }
 
-VerticalText::~VerticalText()
-{
-}
+VerticalText::~VerticalText() = default;
 
 void VerticalText::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -289,9 +275,7 @@ NumberFormat::NumberFormat(Actions *actions)
 {
 }
 
-NumberFormat::~NumberFormat()
-{
-}
+NumberFormat::~NumberFormat() = default;
 
 QAction *NumberFormat::createAction()
 {
@@ -324,9 +308,7 @@ ScientificFormat::ScientificFormat(Actions *actions)
 {
 }
 
-ScientificFormat::~ScientificFormat()
-{
-}
+ScientificFormat::~ScientificFormat() = default;
 
 QAction *ScientificFormat::createAction()
 {
@@ -363,9 +345,7 @@ PercentFormat::PercentFormat(Actions *actions)
 {
 }
 
-PercentFormat::~PercentFormat()
-{
-}
+PercentFormat::~PercentFormat() = default;
 
 QAction *PercentFormat::createAction()
 {
@@ -402,9 +382,7 @@ MoneyFormat::MoneyFormat(Actions *actions)
 {
 }
 
-MoneyFormat::~MoneyFormat()
-{
-}
+MoneyFormat::~MoneyFormat() = default;
 
 QAction *MoneyFormat::createAction()
 {
@@ -437,9 +415,7 @@ DateFormat::DateFormat(Actions *actions)
 {
 }
 
-DateFormat::~DateFormat()
-{
-}
+DateFormat::~DateFormat() = default;
 
 QAction *DateFormat::createAction()
 {
@@ -472,9 +448,7 @@ TimeFormat::TimeFormat(Actions *actions)
 {
 }
 
-TimeFormat::~TimeFormat()
-{
-}
+TimeFormat::~TimeFormat() = default;
 
 QAction *TimeFormat::createAction()
 {
@@ -507,9 +481,7 @@ IncreaseFontSize::IncreaseFontSize(Actions *actions)
 {
 }
 
-IncreaseFontSize::~IncreaseFontSize()
-{
-}
+IncreaseFontSize::~IncreaseFontSize() = default;
 
 void IncreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -533,9 +505,7 @@ DecreaseFontSize::DecreaseFontSize(Actions *actions)
 {
 }
 
-DecreaseFontSize::~DecreaseFontSize()
-{
-}
+DecreaseFontSize::~DecreaseFontSize() = default;
 
 void DecreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -563,9 +533,7 @@ IncreasePrecision::IncreasePrecision(Actions *actions)
 {
 }
 
-IncreasePrecision::~IncreasePrecision()
-{
-}
+IncreasePrecision::~IncreasePrecision() = default;
 
 void IncreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -584,9 +552,7 @@ DecreasePrecision::DecreasePrecision(Actions *actions)
 {
 }
 
-DecreasePrecision::~DecreasePrecision()
-{
-}
+DecreasePrecision::~DecreasePrecision() = default;
 
 void DecreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -638,9 +604,7 @@ DefaultStyle::DefaultStyle(Actions *actions)
 {
 }
 
-DefaultStyle::~DefaultStyle()
-{
-}
+DefaultStyle::~DefaultStyle() = default;
 
 void DefaultStyle::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -659,9 +623,7 @@ FillColor::FillColor(Actions *actions)
 {
 }
 
-FillColor::~FillColor()
-{
-}
+FillColor::~FillColor() = default;
 
 QAction *FillColor::createAction()
 {

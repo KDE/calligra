@@ -61,8 +61,8 @@ public:
     };
 
 private:
-    Drawings(const Drawings &rhs);
-    Drawings &operator=(const Drawings &rhs);
+    Drawings(const Drawings &rhs) = delete;
+    Drawings &operator=(const Drawings &rhs) = delete;
 
     PLCF<Word97::FSPA> *m_plcfspaMom;
     PLCF<Word97::FSPA> *m_plcfspaHdr;

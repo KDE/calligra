@@ -161,8 +161,8 @@ private:
     enum Whole { Beginning = 1, Middle = 2, End = 4, Done = 8 };
 
     // Don't copy or assign filter chains
-    KoFilterChain(const KoFilterChain &rhs);
-    KoFilterChain &operator=(const KoFilterChain &rhs);
+    KoFilterChain(const KoFilterChain &rhs) = delete;
+    KoFilterChain &operator=(const KoFilterChain &rhs) = delete;
 
     const KoFilterManager *const m_manager;
 

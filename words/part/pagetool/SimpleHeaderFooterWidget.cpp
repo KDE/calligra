@@ -14,6 +14,4 @@ SimpleHeaderFooterWidget::SimpleHeaderFooterWidget(KWView *view, QWidget *parent
     widget.insertHeader->setDefaultAction(view->action("insert_header"));
 }
 
-SimpleHeaderFooterWidget::~SimpleHeaderFooterWidget()
-{
-}
+SimpleHeaderFooterWidget::~SimpleHeaderFooterWidget() = default;

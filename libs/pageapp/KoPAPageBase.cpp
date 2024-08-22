@@ -39,9 +39,7 @@ KoPAPageBase::KoPAPageBase()
     addShape(layer);
 }
 
-KoPAPageBase::~KoPAPageBase()
-{
-}
+KoPAPageBase::~KoPAPageBase() = default;
 
 void KoPAPageBase::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {

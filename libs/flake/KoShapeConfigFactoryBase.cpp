@@ -6,10 +6,6 @@
 
 #include "KoShapeConfigFactoryBase.h"
 
-KoShapeConfigFactoryBase::KoShapeConfigFactoryBase()
-{
-}
+KoShapeConfigFactoryBase::KoShapeConfigFactoryBase() = default;
 
-KoShapeConfigFactoryBase::~KoShapeConfigFactoryBase()
-{
-}
+KoShapeConfigFactoryBase::~KoShapeConfigFactoryBase() = default;

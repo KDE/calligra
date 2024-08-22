@@ -64,9 +64,7 @@ struct Row {
         , tap(_tap)
     {
     }
-    ~Row()
-    {
-    }
+    ~Row() = default;
 
     TableRowFunctorPtr functorPtr; // a functor called to parse the content
     TAPptr tap; // Table Properties

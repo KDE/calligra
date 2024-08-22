@@ -37,9 +37,7 @@ InsertRemoveRowCol::InsertRemoveRowCol(Actions *actions, bool insert, bool row)
 {
 }
 
-InsertRemoveRowCol::~InsertRemoveRowCol()
-{
-}
+InsertRemoveRowCol::~InsertRemoveRowCol() = default;
 
 QAction *InsertRemoveRowCol::createAction()
 {
@@ -100,9 +98,7 @@ ShowHideRowCol::ShowHideRowCol(Actions *actions, bool show, bool row)
 {
 }
 
-ShowHideRowCol::~ShowHideRowCol()
-{
-}
+ShowHideRowCol::~ShowHideRowCol() = default;
 
 QAction *ShowHideRowCol::createAction()
 {
@@ -190,9 +186,7 @@ EqualizeRowCol::EqualizeRowCol(Actions *actions, bool row)
 {
 }
 
-EqualizeRowCol::~EqualizeRowCol()
-{
-}
+EqualizeRowCol::~EqualizeRowCol() = default;
 
 QAction *EqualizeRowCol::createAction()
 {
@@ -263,9 +257,7 @@ AdjustRowCol::AdjustRowCol(Actions *actions, bool row, bool col)
 {
 }
 
-AdjustRowCol::~AdjustRowCol()
-{
-}
+AdjustRowCol::~AdjustRowCol() = default;
 
 QAction *AdjustRowCol::createAction()
 {

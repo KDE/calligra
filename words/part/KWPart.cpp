@@ -38,9 +38,7 @@ KWPart::KWPart(const KoComponentData &componentData, QObject *parent)
     setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
 
-KWPart::~KWPart()
-{
-}
+KWPart::~KWPart() = default;
 
 void KWPart::setDocument(KWDocument *document)
 {

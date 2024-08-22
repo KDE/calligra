@@ -22,9 +22,7 @@ ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool
     setText(kundo2_i18n("Change List Numbering"));
 }
 
-ListItemNumberingCommand::~ListItemNumberingCommand()
-{
-}
+ListItemNumberingCommand::~ListItemNumberingCommand() = default;
 
 void ListItemNumberingCommand::setNumbered(bool numbered)
 {

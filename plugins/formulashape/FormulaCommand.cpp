@@ -61,9 +61,7 @@ FormulaCommandReplaceText::FormulaCommandReplaceText(TokenElement *owner, int po
     setRedoCursorPosition(FormulaCursor(m_ownerElement, m_position + m_added.length()));
 }
 
-FormulaCommandReplaceText::~FormulaCommandReplaceText()
-{
-}
+FormulaCommandReplaceText::~FormulaCommandReplaceText() = default;
 
 void FormulaCommandReplaceText::redo()
 {

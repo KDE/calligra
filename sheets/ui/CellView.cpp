@@ -97,9 +97,7 @@ public:
 #endif
     {
     }
-    ~Private()
-    {
-    }
+    ~Private() = default;
 
     Style style;
     qreal width;
@@ -272,19 +270,12 @@ CellView::CellView(SheetView *sheetView, int col, int row)
 }
 
 CellView::CellView(const CellView &other)
-    : d(other.d)
-{
-}
 
-CellView &CellView::operator=(const CellView &other)
-{
-    d = other.d;
-    return *this;
-}
+    = default;
 
-CellView::~CellView()
-{
-}
+CellView &CellView::operator=(const CellView &other) = default;
+
+CellView::~CellView() = default;
 
 void CellView::detach()
 {

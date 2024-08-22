@@ -20,9 +20,7 @@ MoveConnectionPointStrategy::MoveConnectionPointStrategy(KoShape *shape, int con
     m_oldPoint = m_newPoint = m_shape->connectionPoint(m_connectionPointId);
 }
 
-MoveConnectionPointStrategy::~MoveConnectionPointStrategy()
-{
-}
+MoveConnectionPointStrategy::~MoveConnectionPointStrategy() = default;
 
 void MoveConnectionPointStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {

@@ -27,9 +27,7 @@ ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape,
     setText(kundo2_i18n("Change Vector Data"));
 }
 
-ChangeVectorDataCommand::~ChangeVectorDataCommand()
-{
-}
+ChangeVectorDataCommand::~ChangeVectorDataCommand() = default;
 
 void ChangeVectorDataCommand::redo()
 {

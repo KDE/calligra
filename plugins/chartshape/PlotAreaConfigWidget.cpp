@@ -210,9 +210,7 @@ PlotAreaConfigWidget::Private::Private(PlotAreaConfigWidget *parent)
     dataSetGanttChartAction = nullptr;
 }
 
-PlotAreaConfigWidget::Private::~Private()
-{
-}
+PlotAreaConfigWidget::Private::~Private() = default;
 
 // ================================================================
 //                     class PlotAreaConfigWidget
