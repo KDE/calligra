@@ -18,6 +18,7 @@ target_link_libraries(calligra_filter_wpd2odt PRIVATE
     komain
     LibOdfGen::LibOdfGen
     LibRevenge::LibRevenge
+    LibRevenge::LibRevengeStream
     ${LIBWPD_LIBRARIES}
     ${LIBWPG_LIBRARIES}
 )

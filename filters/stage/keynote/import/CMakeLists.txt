@@ -16,6 +16,7 @@ add_library(calligra_filter_key2odp MODULE ${key2odp_PART_SRCS})
 target_link_libraries(calligra_filter_key2odp PRIVATE
     komain
     LibRevenge::LibRevenge
+    LibRevenge::LibRevengeStream
     LibOdfGen::LibOdfGen
     ${LIBETONYEK_LIBRARIES}
 )
