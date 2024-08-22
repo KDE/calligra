@@ -50,7 +50,7 @@ install(FILES financial.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/fu
 
 add_library(kspreadinformationmodule MODULE InformationModule.h information.cpp)
 target_include_directories( kspreadinformationmodule PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ )
-target_link_libraries(kspreadinformationmodule calligrasheetsengine koversion)
+target_link_libraries(kspreadinformationmodule calligrasheetsengine)
 install(TARGETS kspreadinformationmodule DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/functions)
 install(FILES information.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/functions)
 

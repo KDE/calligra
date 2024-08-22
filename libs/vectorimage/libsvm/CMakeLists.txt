@@ -15,7 +15,7 @@ set(libsvm_LIB_SRCS
 
 #target_link_libraries(libsvm   Qt6::Gui )
 
-#set_target_properties(libsvm PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+#set_target_properties(libsvm PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 
 
 ########### install files ###############

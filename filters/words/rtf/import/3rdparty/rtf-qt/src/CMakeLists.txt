@@ -54,5 +54,5 @@ generate_export_header( RtfReader )
 
 target_link_libraries(RtfReader Qt6::Gui)
 
-set_target_properties(RtfReader PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(RtfReader PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 install(TARGETS RtfReader ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

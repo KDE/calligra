@@ -15,6 +15,6 @@ target_link_libraries(braindumpcore
         Qt6::Xml
 )
 
-set_target_properties(braindumpcore PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
+set_target_properties(braindumpcore PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION})
 
 install(TARGETS braindumpcore ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP )

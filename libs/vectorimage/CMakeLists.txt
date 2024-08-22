@@ -44,7 +44,7 @@ target_link_libraries(kovectorimage
 )
 
 set_target_properties(kovectorimage PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 if(LIBEMF_DEBUG)
     target_compile_definitions(kovectorimage PUBLIC -DLIBEMF_DEBUG=true)

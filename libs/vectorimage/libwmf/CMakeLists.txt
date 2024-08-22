@@ -12,7 +12,7 @@ include_directories( ${KOMAIN_INCLUDES} )
 #
 #target_link_libraries(kwmf   Qt6::Gui)
 #
-#set_target_properties(kwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+#set_target_properties(kwmf PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 #install(TARGETS kwmf  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
@@ -32,6 +32,6 @@ add_library(libwmf SHARED ${libwmf_LIB_SRCS})
 
 target_link_libraries(libwmf   Qt6::Gui)
 
-set_target_properties(libwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(libwmf PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 install(TARGETS libwmf  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

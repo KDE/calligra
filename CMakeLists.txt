@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(calligra)
+# KDE Applications version, managed by release script.
+set(RELEASE_SERVICE_VERSION_MAJOR "4")
+set(RELEASE_SERVICE_VERSION_MINOR "0")
+set(RELEASE_SERVICE_VERSION_MICRO "0")
+set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
 
-message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+string(TIMESTAMP CALLIGRA_YEAR "%Y")
+add_compile_options("-DCALLIGRA_YEAR=${CALLIGRA_YEAR}")
+
+project(calligra VERSION ${RELEASE_SERVICE_VERSION})
 
 if (POLICY CMP0022)
     cmake_policy(SET CMP0022 OLD)
@@ -20,74 +27,52 @@ if(isBuildInSource)
     message(FATAL_ERROR "Compiling Calligra inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommitted changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
 endif()
 
-######################
-#######################
-## Constants defines ##
-#######################
-######################
+set(REQUIRED_KF6_VERSION "6.0.0")
+set(REQUIRED_QT_VERSION "6.5.0")
 
-# define common versions of Calligra applications, used to generate calligraversion.h
-# update these version for every release:
-set(CALLIGRA_VERSION_STRING "3.3.89")
-set(CALLIGRA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(CALLIGRA_STABLE_VERSION_MINOR 3) # 0 for 3.0, 1 for 3.1, etc.
-set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
-# set(CALLIGRA_BETA 1) # uncomment only for Beta
-#set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2021) # update every year
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
-    set(CALLIGRA_STABLE 1) # do not edit
-endif()
+find_package(ECM ${REQUIRED_KF6_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
+# ECM KDE macros (include first, to have their policies and settings effect all other macros)
+include(KDEInstallDirs)
+include(KDECMakeSettings NO_POLICY_SCOPE)
+set(KDE_COMPILERSETTINGS_LEVEL 5.84.0) # set before including
+include(KDECompilerSettings NO_POLICY_SCOPE)
+# CMake macros
+include(CMakePackageConfigHelpers)
+include(WriteBasicConfigVersionFile)
+include(CheckFunctionExists)
+include(CheckTypeSize)
+include(CheckIncludeFile)
+include(GenerateExportHeader)
+include(FeatureSummary)
+# ECM macros
+include(ECMOptionalAddSubdirectory)
+include(ECMInstallIcons)
+include(ECMAddAppIcon)
+include(ECMSetupVersion)
+include(ECMAddTests)
+include(ECMMarkAsTest)
+include(ECMMarkNonGuiExecutable)
+include(ECMGenerateHeaders)
+include(KDEClangFormat)
+include(KDEGitCommitHooks)
+# own macros
+include(MacroBoolTo01)
+include(MacroOptionalFindPackage)
+include(MacroEnsureVersion)
 
-# Define the generic version of the Calligra libraries here
-# This makes it easy to advance it when the next Calligra release comes.
-# 14 was the last GENERIC_CALLIGRA_LIB_VERSION_MAJOR of the previous Calligra series
-# (2.x) so we're starting with 15 in 3.x series.
-if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
-else()
-    # let's make sure we won't forget to update the "15"
-    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
-endif()
-set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
+math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${RELEASE_SERVICE_VERSION_MAJOR} + 15")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-    "${CMAKE_SOURCE_DIR}/cmake/modules")
-
-message("Module path:" ${CMAKE_MODULE_PATH})
-
-# fetch git revision for the current build
-
-set(CALLIGRA_GIT_SHA1_STRING "")
-set(CALLIGRA_GIT_BRANCH_STRING "")
-
-include(GetGitRevisionDescription)
-get_git_head_revision(GIT_REFSPEC GIT_SHA1)
-get_git_branch(GIT_BRANCH)
-
-if(GIT_SHA1 AND GIT_BRANCH)
-    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
-    set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
-    set(CALLIGRA_GIT_BRANCH_STRING ${GIT_BRANCH})
-endif()
-
-if(NOT DEFINED RELEASE_BUILD)
-    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
-    if (INDEX EQUAL -1)
-	set(RELEASE_BUILD FALSE)
-    else()
-	set(RELEASE_BUILD TRUE)
-    endif()
-endif()
-message(STATUS "Release build: ${RELEASE_BUILD}")
+ecm_setup_version(${PROJECT_VERSION}
+    VARIABLE_PREFIX CALLIGRA
+    VERSION_HEADER ${CMAKE_CURRENT_BINARY_DIR}/calligra-version.h
+    SOVERSION ${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}
+)
 
 ############
 #############
@@ -126,7 +111,7 @@ if(NOT PRODUCTSET)
 endif()
 
 if (RELEASE_BUILD)
-    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
+    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
     set(CALLIGRA_SHOULD_BUILD_GEMINI FALSE)
     set(CALLIGRA_SHOULD_BUILD_BRAINDUMP FALSE)
     if(BUILD_UNMAINTAINED)
@@ -149,44 +134,6 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for ECM, Qt, KF6 ##
 ###########################
 ##########################
-set(REQUIRED_KF6_VERSION "6.0.0")
-set(REQUIRED_QT_VERSION "6.5.0")
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-find_package(ECM ${REQUIRED_KF6_VERSION} REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
-
-# ECM KDE macros (include first, to have their policies and settings effect all other macros)
-include(KDEInstallDirs)
-include(KDECMakeSettings NO_POLICY_SCOPE)
-set(KDE_COMPILERSETTINGS_LEVEL 5.84.0) # set before including
-include(KDECompilerSettings NO_POLICY_SCOPE)
-# CMake macros
-include(CMakePackageConfigHelpers)
-include(WriteBasicConfigVersionFile)
-include(CheckFunctionExists)
-include(CheckTypeSize)
-include(CheckIncludeFile)
-include(GenerateExportHeader)
-include(FeatureSummary)
-# ECM macros
-include(ECMOptionalAddSubdirectory)
-include(ECMInstallIcons)
-include(ECMAddAppIcon)
-include(ECMSetupVersion)
-include(ECMAddTests)
-include(ECMMarkAsTest)
-include(ECMMarkNonGuiExecutable)
-include(ECMGenerateHeaders)
-include(KDEClangFormat)
-include(KDEGitCommitHooks)
-# own macros
-include(MacroBoolTo01)
-include(MacroOptionalFindPackage)
-include(MacroEnsureVersion)
 
 find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     COMPONENTS

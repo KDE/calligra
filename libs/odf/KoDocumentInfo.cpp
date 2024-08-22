@@ -22,7 +22,7 @@
 #include <KUser>
 #include <OdfDebug.h>
 
-#include <CalligraVersionWrapper.h>
+#include "calligra-version.h"
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent)
     : QObject(parent)
@@ -118,7 +118,7 @@ bool KoDocumentInfo::saveOasis(KoStore *store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("Calligra/%1").arg(CalligraVersionWrapper::versionString()));
+    xmlWriter->addTextNode(QString("Calligra/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     if (!saveOasisAboutInfo(*xmlWriter))

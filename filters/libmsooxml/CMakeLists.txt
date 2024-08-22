@@ -45,7 +45,7 @@ target_link_libraries(komsooxml
         KF6::Archive
     )
 
-set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(komsooxml PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 install(TARGETS komsooxml ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (FALSE) # these headers are private for now

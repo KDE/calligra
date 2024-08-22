@@ -25,7 +25,7 @@
 #include "KoResourcePaths.h"
 #include "KoVersionDialog.h"
 #include "KoView.h"
-#include "calligraversion.h"
+#include "calligra-version.h"
 #include <KoConfig.h>
 #include <KoDockRegistry.h>
 #include <KoIcon.h>
@@ -50,12 +50,8 @@
 #include <ktoggleaction.h>
 #include <kxmlguifactory.h>
 
-#include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 87, 0)
 #include <KEMailClientLauncherJob>
-#else
-#include <KToolInvocation>
-#endif
+#include <kio_version.h>
 
 //   // qt includes
 #include <QApplication>
@@ -1628,20 +1624,10 @@ void KoMainWindow::slotEmailFile()
     debugMain << "(" << fileURL << ")";
 
     if (!fileURL.isEmpty()) {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 87, 0)
         auto *job = new KEMailClientLauncherJob;
         job->setSubject(theSubject);
         job->setAttachments(urls);
         job->start();
-#else
-        KToolInvocation::invokeMailer(QString(),
-                                      QString(),
-                                      QString(),
-                                      theSubject,
-                                      QString(), // body
-                                      QString(),
-                                      QUrl::toStringList(urls)); // attachments
-#endif
     }
 }
 
@@ -1649,7 +1635,7 @@ void KoMainWindow::slotVersionsFile()
 {
     if (!rootDocument())
         return;
-    KoVersionDialog *dlg = new KoVersionDialog(this, rootDocument());
+    auto dlg = new KoVersionDialog(this, rootDocument());
     dlg->exec();
     delete dlg;
 }

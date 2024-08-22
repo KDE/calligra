@@ -105,7 +105,7 @@ target_link_libraries(calligrasheetscore
 )
 
 set_target_properties(calligrasheetscore PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 install(TARGETS calligrasheetscore ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

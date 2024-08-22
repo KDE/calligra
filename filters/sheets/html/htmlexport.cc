@@ -8,17 +8,12 @@
 
 #include "htmlexport.h"
 #include "exportdialog.h"
-
-// #include <QFile>
-// #include <QTextStream>
-// #include <QByteArray>
-// #include <QUrl>
+#include "calligra-version.h"
 
 #include <KPluginFactory>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
-#include <CalligraVersionWrapper.h>
 
 #include <sheets/engine/CellBaseStorage.h>
 #include <sheets/engine/Util.h>
@@ -174,9 +169,7 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
           "<meta http-equiv=\"Content-Type\" " +
           QString("content=\"text/html; charset=\"UTF-8\">\n") +
           "<meta name=\"Generator\" "
-          "content=\"KSpread HTML Export Filter Version = " +
-          CalligraVersionWrapper::versionString() +
-          "\">\n";
+          "content=\"KSpread HTML Export Filter Version = " + QLatin1StringView(CALLIGRA_VERSION_STRING) + "\">\n";
 
     // Insert stylesheet
     if (!m_dialog->customStyleURL().isEmpty()) {

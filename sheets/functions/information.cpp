@@ -13,7 +13,7 @@
 #include <sys/utsname.h>
 #endif
 
-#include <CalligraVersionWrapper.h>
+#include "../../calligra-version.h"
 
 #include <KLocalizedString>
 #include <QDir>
@@ -168,8 +168,9 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
     if (type == "directory")
         return Value(QDir::currentPath());
 
-    if (type == "release")
-        return Value(CalligraVersionWrapper::versionString());
+    if (type == "release") {
+        return Value(CALLIGRA_VERSION_STRING);
+    }
 
     if (type == "numfile") {
         /*

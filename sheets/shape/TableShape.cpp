@@ -26,7 +26,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <calligraversion.h>
+#include <calligra-version.h>
 
 #include <core/DocBase.h>
 #include <core/Map.h>

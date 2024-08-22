@@ -24,7 +24,7 @@
 #include <KoPart.h>
 #include <KoPrintJob.h>
 #include <KoView.h>
-#include <calligraversion.h>
+#include <calligra-version.h>
 
 bool convertPdf(const QUrl &uIn,
                 const QString &inputFormat,
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
                          QStringLiteral(CALLIGRA_VERSION_STRING),
                          i18n("Calligra Document Converter"),
                          KAboutLicense::GPL,
-                         i18n("Copyright 2001-%1 Calligra developers", QStringLiteral(CALLIGRA_YEAR)));
+                         i18n("Copyright 2001-%1 Calligra developers", QString::number(CALLIGRA_YEAR)));
     aboutData.addAuthor(i18n("David Faure"), QString(), "faure@kde.org");
     aboutData.addAuthor(i18n("Nicolas Goutte"), QString(), "goutte@kde.org");
     aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), QString(), "admin@leinir.dk");

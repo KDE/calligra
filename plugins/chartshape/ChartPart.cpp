@@ -9,7 +9,7 @@
 
 #include <KoComponentData.h>
 
-#include <calligraversion.h>
+#include <calligra-version.h>
 
 #include <KAboutData>
 

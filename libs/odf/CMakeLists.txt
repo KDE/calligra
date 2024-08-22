@@ -55,14 +55,13 @@ target_link_libraries(koodf
         Qt6::PrintSupport
         Qt6::Xml
     PRIVATE
-        koversion
         KF6::I18n
         KF6::ConfigCore
         KF6::CoreAddons
 )
 
 set_target_properties(koodf PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 install(TARGETS koodf ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 

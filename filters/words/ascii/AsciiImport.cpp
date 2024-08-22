@@ -17,7 +17,6 @@
 
 #include <KPluginFactory>
 
-#include <CalligraVersionWrapper.h>
 #include <KoCharacterStyle.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoFilterChain.h>
@@ -38,6 +37,7 @@
 
 #include "AsciiImportDebug.h"
 #include "ImportDialog.h"
+#include "calligra-version.h"
 
 #include <KWDocument.h>
 #include <KWPage.h>
@@ -269,7 +269,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray &from, const QB
         KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
         xmlWriter->startElement("office:meta");
         xmlWriter->startElement("meta:generator");
-        xmlWriter->addTextNode(QString("Calligra %1").arg(CalligraVersionWrapper::versionString()));
+        xmlWriter->addTextNode(QString("Calligra %1").arg(CALLIGRA_VERSION_STRING));
         xmlWriter->endElement();
         xmlWriter->startElement("meta:creation-date");
         xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));

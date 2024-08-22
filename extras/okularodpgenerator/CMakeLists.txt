@@ -18,7 +18,7 @@ target_link_libraries(kookularGenerator_odp
 )
 
 set_target_properties(kookularGenerator_odp PROPERTIES
-   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+   VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
 install(TARGETS kookularGenerator_odp  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

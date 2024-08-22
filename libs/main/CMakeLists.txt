@@ -91,7 +91,6 @@ target_link_libraries(komain
     PUBLIC
         kowidgets
         kotextlayout
-        koversion
     PRIVATE
         koplugin
         KF6::Notifications
@@ -115,7 +114,7 @@ if (APPLE)
 endif ()
 
 set_target_properties(komain PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 install(TARGETS komain ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 

@@ -237,7 +237,7 @@ target_link_libraries(flake
 )
 
 set_target_properties(flake PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
 ########### install files ###############

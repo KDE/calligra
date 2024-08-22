@@ -10,7 +10,7 @@
 #include <KLocalizedString>
 #include <kcoreaddons_version.h>
 
-#include <calligraversion.h>
+#include <calligra-version.h>
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.
@@ -21,7 +21,7 @@ KAboutData *newKarbonAboutData()
                                            QStringLiteral(CALLIGRA_VERSION_STRING),
                                            i18n("A Vector Graphics Drawing Application."),
                                            KAboutLicense::LGPL,
-                                           i18n("(c) 2001-%1, The Karbon Developers", QStringLiteral(CALLIGRA_YEAR)),
+                                           i18n("(c) 2001-%1, The Karbon Developers", QString::number(CALLIGRA_YEAR)),
                                            QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");

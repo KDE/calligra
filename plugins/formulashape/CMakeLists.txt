@@ -65,7 +65,7 @@ generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
 target_link_libraries(koformula  PUBLIC komain)
 
-set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(koformula PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 
 install(TARGETS koformula ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -119,7 +119,7 @@ add_library(calligra_shape_formula MODULE ${formulashape_PART_SRCS})
 target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 
 
-#set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+#set_target_properties(koformula PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 install(TARGETS calligra_shape_formula  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 add_subdirectory( pics ) 

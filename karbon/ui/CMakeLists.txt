@@ -44,7 +44,7 @@ target_link_libraries(karbonui
         KF6::GuiAddons
 )
 
-set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(karbonui PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 
 install(TARGETS karbonui  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

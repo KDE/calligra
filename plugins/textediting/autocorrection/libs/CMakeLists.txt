@@ -35,7 +35,7 @@ target_link_libraries(autocorrection
 )
 
 set_target_properties(autocorrection PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
 install(TARGETS autocorrection  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

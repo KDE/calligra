@@ -10,6 +10,7 @@
 #define SHOW_ANNOTATIONS 1
 #include "KWView.h"
 
+#include "../../calligra-version.h"
 #include "KWCanvas.h"
 #include "KWDocument.h"
 #include "KWFactory.h"
@@ -32,7 +33,6 @@
 #include "widgets/KoFindToolbar.h"
 
 // calligra libs includes
-#include <CalligraVersionWrapper.h>
 #include <KoAnnotation.h>
 #include <KoAnnotationLayoutManager.h>
 #include <KoAnnotationManager.h>
@@ -549,9 +549,9 @@ void KWView::editFrameProperties()
 
 KoPrintJob *KWView::createPrintJob()
 {
-    KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
+    auto dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CalligraVersionWrapper::versionString()));
+    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CALLIGRA_VERSION));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

@@ -37,8 +37,8 @@ target_link_libraries(koodfreader
         KF6::I18n
 )
 set_target_properties(koodfreader PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION}
-    SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION}
+    SOVERSION ${CALLIGRA_SOVERSION}
 )
 install(TARGETS koodfreader ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 

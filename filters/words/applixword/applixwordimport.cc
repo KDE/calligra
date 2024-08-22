@@ -6,6 +6,7 @@
 */
 
 #include "applixwordimport.h"
+#include "calligra-version.h"
 
 #include <QMessageBox>
 #include <QList>
@@ -23,8 +24,6 @@
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-
-#include <CalligraVersionWrapper.h>
 
 const QLoggingCategory &AW_LOG()
 {
@@ -775,7 +774,7 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CalligraVersionWrapper::versionString()));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

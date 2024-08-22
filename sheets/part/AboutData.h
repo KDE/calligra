@@ -11,7 +11,7 @@
 #include <KLocalizedString>
 #include <kcoreaddons_version.h>
 
-#include <calligraversion.h>
+#include <calligra-version.h>
 
 namespace Calligra
 {
@@ -28,7 +28,7 @@ static KAboutData *newAboutData()
                                            QStringLiteral(CALLIGRA_VERSION_STRING),
                                            i18n("Spreadsheet Application"),
                                            KAboutLicense::LGPL,
-                                           i18n("Copyright 1998-%1, The Calligra Sheets Team", QStringLiteral(CALLIGRA_YEAR)),
+                                           i18n("Copyright 1998-%1, The Calligra Sheets Team", QString::number(CALLIGRA_YEAR)),
                                            QString(),
                                            QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org

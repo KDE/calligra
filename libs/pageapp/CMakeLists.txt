@@ -67,7 +67,7 @@ target_link_libraries(kopageapp
         kotextlayout
 )
 set_target_properties(kopageapp PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 install(TARGETS kopageapp  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
