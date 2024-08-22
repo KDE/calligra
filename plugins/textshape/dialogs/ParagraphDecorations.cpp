@@ -13,6 +13,9 @@ ParagraphDecorations::ParagraphDecorations(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+    widget.mainLayout->insertStretch(2);
+    widget.resetBackgroundColor->setAccessibleName(i18nc("@action:button", "Reset background color"));
 
     connect(widget.backgroundColor, &KColorButton::changed, this, &ParagraphDecorations::slotBackgroundColorChanged);
     connect(widget.resetBackgroundColor, &QAbstractButton::clicked, this, &ParagraphDecorations::clearBackgroundColor);
