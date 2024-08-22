@@ -13,6 +13,8 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+    widget.mainLayout->insertStretch(2);
 
     connect(widget.right, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
     connect(widget.center, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
