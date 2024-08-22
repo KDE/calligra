@@ -42,6 +42,7 @@
 #include <sheets/part/View.h>
 
 using namespace Calligra::Sheets;
+using namespace Qt::StringLiterals;
 
 K_PLUGIN_FACTORY_WITH_JSON(GNUMERICExportFactory, "calligra_filter_sheets2gnumeric.json",
                            registerPlugin<GNUMERICExport>();)
@@ -62,7 +63,7 @@ bool GNUMERICExport::hasBorder(const Cell& cell, int currentcolumn, int currentr
     Q_UNUSED(currentcolumn);
     Q_UNUSED(currentrow);
     const Style style = cell.style();
-    if (((style.leftBorderPen().width() != 0) &&
+    return ((style.leftBorderPen().width() != 0) &&
             (style.leftBorderPen().style() != Qt::NoPen)) ||
             ((style.rightBorderPen().width() != 0) &&
              (style.rightBorderPen().style() != Qt::NoPen)) ||
@@ -73,22 +74,11 @@ bool GNUMERICExport::hasBorder(const Cell& cell, int currentcolumn, int currentr
             ((style.fallDiagonalPen().width() != 0) &&
              (style.fallDiagonalPen().style() != Qt::NoPen)) ||
             ((style.goUpDiagonalPen().width() != 0) &&
-             (style.goUpDiagonalPen().style() != Qt::NoPen)))
-        return true;
-    else
-        return false;
+             (style.goUpDiagonalPen().style() != Qt::NoPen));
 }
 
-const QString GNUMERICExport::ColorToString(int red, int green, int blue)
+static QDomElement getBorderStyle(QDomDocument gnumeric_doc, const Cell& cell)
 {
-    return QString::number(red, 16) + ':' + QString::number(green, 16) + ':' + QString::number(blue, 16);
-}
-
-QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc, const Cell& cell, int currentcolumn, int currentrow)
-{
-    Q_UNUSED(currentcolumn);
-    Q_UNUSED(currentrow);
-
     QDomElement border_style;
     QDomElement border;
 
@@ -725,10 +715,10 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
         stringFormat = "# ?/?";
         break;
     case Format::fraction_two_digits:
-        stringFormat = "# ?\?/?\?";
+        stringFormat = u"# ?\?/?\?"_s;
         break;
     case Format::fraction_three_digits:
-        stringFormat = "# ?\?\?/?\?\?";
+        stringFormat = u"# ?\?\?/?\?\?"_s;
         break;
     case Format::Custom:
         stringFormat = style.customFormat();
@@ -748,7 +738,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     cell_style.setAttribute("Format", stringFormat);
 
     if (hasBorder(cell, currentcolumn, currentrow))
-        cell_style.appendChild(GetBorderStyle(gnumeric_doc, cell, currentcolumn, currentrow));
+        cell_style.appendChild(getBorderStyle(gnumeric_doc, cell));
 
     return cell_style;
 }
@@ -803,6 +793,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const QByteArray& to)
 {
     qDebug() << "Exporting GNUmeric";
+    const QString kspreadMimeType = u"application/x-kspread"_s;
 
     QDomDocument gnumeric_doc = QDomDocument();
 
@@ -815,14 +806,14 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         qWarning() << "document isn't a Calligra::Sheets::DocBase but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
-    if (to != "application/x-gnumeric" || from != "application/x-kspread") {
-        qWarning() << "Invalid mimetypes " << to << " " << from;
+    if (to != "application/x-gnumeric" || from != kspreadMimeType) {
+        qWarning() << "Invalid mimetypes" << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
-    DocBase* ksdoc = dynamic_cast<DocBase*>(document);
+    auto ksdoc = dynamic_cast<DocBase*>(document);
 
-    if (ksdoc->mimeType() != "application/x-kspread") {
+    if (ksdoc->mimeType() != kspreadMimeType && !ksdoc->extraNativeMimeTypes().contains(kspreadMimeType)) {
         qWarning() << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
