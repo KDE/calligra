@@ -25,10 +25,13 @@ KAboutData *newKarbonAboutData()
                                            QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-#if KCOREADDONS_VERSION >= 0x051600
     aboutData->setDesktopFileName(QStringLiteral("org.kde.karbon"));
-#endif
     aboutData->addAuthor(i18n("Anthony Fieroni"), i18n("Maintainer"), QString());
+    aboutData->addAuthor(i18n("Carl Schwan"),
+                         i18n("Port to Qt6"),
+                         QStringLiteral("carl@carlschwan.eu"),
+                         QStringLiteral("https://carlschwan.eu"),
+                         QUrl(QStringLiteral("https://carlschwan.eu/avatar.png")));
     aboutData->addAuthor(i18n("Rob Buis"), QString(), "buis@kde.org");
     aboutData->addAuthor(i18n("Tomislav Lukman"), QString(), "tomislav.lukman@ck.t-com.hr");
     aboutData->addAuthor(i18n("Benoît Vautrin"), QString(), "benoit.vautrin@free.fr");

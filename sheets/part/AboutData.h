@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef CALLIGRA_SHEETS_ABOUTDATA
-#define CALLIGRA_SHEETS_ABOUTDATA
+#pragma once
 
 #include <KAboutData>
 #include <KLocalizedString>
@@ -23,21 +22,24 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 
 static KAboutData *newAboutData()
 {
-    KAboutData *aboutData = new KAboutData(QStringLiteral("calligrasheets"),
-                                           i18nc("application name", "Calligra Sheets"),
-                                           QStringLiteral(CALLIGRA_VERSION_STRING),
-                                           i18n("Spreadsheet Application"),
-                                           KAboutLicense::LGPL,
-                                           i18n("Copyright 1998-%1, The Calligra Sheets Team", QString::number(CALLIGRA_YEAR)),
-                                           QString(),
-                                           QStringLiteral("https://www.calligra.org/sheets/"));
+    auto aboutData = new KAboutData(QStringLiteral("calligrasheets"),
+                                    i18nc("application name", "Calligra Sheets"),
+                                    QStringLiteral(CALLIGRA_VERSION_STRING),
+                                    i18n("Spreadsheet Application"),
+                                    KAboutLicense::LGPL,
+                                    i18n("Copyright 1998-%1, The Calligra Sheets Team", QString::number(CALLIGRA_YEAR)),
+                                    QString(),
+                                    QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-#if KCOREADDONS_VERSION >= 0x051600
     aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrasheets"));
-#endif
+    aboutData->addAuthor(i18n("Carl Schwan"),
+                         i18n("Maintainer/Port to Qt6"),
+                         QStringLiteral("carl@carlschwan.eu"),
+                         QStringLiteral("https://carlschwan.eu"),
+                         QUrl(QStringLiteral("https://carlschwan.eu/avatar.png")));
     aboutData->addAuthor(i18n("Torben Weis"), i18n("Original Author"), "weis@kde.org");
-    aboutData->addAuthor(i18n("Marijn Kruisselbrink"), i18n("Maintainer"), "mkruisselbrink@kde.org");
+    aboutData->addAuthor(i18n("Marijn Kruisselbrink"), i18n("Former Maintainer"), "mkruisselbrink@kde.org");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("ODS and Excel, functions, scripting"), "mail@dipe.org");
     aboutData->addAuthor(i18n("Laurent Montel"), QString(), "montel@kde.org");
     aboutData->addAuthor(i18n("John Dailey"), QString(), "dailey@vt.edu");
@@ -69,5 +71,3 @@ static KAboutData *newAboutData()
 
 } // namespace Sheets
 } // namespace Calligra
-
-#endif

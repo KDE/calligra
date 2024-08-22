@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KWABOUTDATA_H
-#define KWABOUTDATA_H
+#pragma once
 
 #include <KAboutData>
 #include <KLocalizedString>
@@ -15,19 +14,23 @@
 
 KAboutData *newWordsAboutData()
 {
-    KAboutData *aboutData = new KAboutData(QStringLiteral("calligrawords"),
-                                           i18nc("application name", "Calligra Words"),
-                                           QStringLiteral(CALLIGRA_VERSION_STRING),
-                                           i18n("Word processor"),
-                                           KAboutLicense::LGPL,
-                                           i18n("Copyright 1998-%1, The Words Team", QString::number(CALLIGRA_YEAR)),
-                                           QString(),
-                                           QStringLiteral("https://www.calligra.org/words/"));
+    auto aboutData = new KAboutData(QStringLiteral("calligrawords"),
+                                    i18nc("application name", "Calligra Words"),
+                                    QStringLiteral(CALLIGRA_VERSION_STRING),
+                                    i18n("Word processor"),
+                                    KAboutLicense::LGPL,
+                                    i18n("Copyright 1998-%1, The Words Team", QString::number(CALLIGRA_YEAR)),
+                                    QString(),
+                                    QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-#if KCOREADDONS_VERSION >= 0x051600
     aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrawords"));
-#endif
+    aboutData->addAuthor(i18n("Carl Schwan"),
+                         i18n("Co Maintainer/Port to Qt6"),
+                         QStringLiteral("carl@carlschwan.eu"),
+                         QStringLiteral("https://carlschwan.eu"),
+                         QUrl(QStringLiteral("https://carlschwan.eu/avatar.png")));
+    aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
     aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
     aboutData->addAuthor(i18n("C. Boemann"), i18n("Co maintainer"), "cbo@boemann.dk");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("Everything"), "mail@dipe.org");
@@ -70,5 +73,3 @@ KAboutData *newWordsAboutData()
     aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"), i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
-
-#endif
