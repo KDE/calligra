@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2015-01-29 09:07+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -1314,17 +1314,17 @@ msgstr "Nei"
 msgid "Yes"
 msgstr "Já"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, fuzzy, kde-format
 msgid "Could not export file."
 msgstr "Gat ekki flutt út skrá."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, fuzzy, kde-format
 msgid "Missing Export Filter"
 msgstr "Vantar útflutningssíu"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, fuzzy, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1333,7 +1333,7 @@ msgstr ""
 "Gat ekki flutt inn skrá af tegund\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, fuzzy, kde-format
 msgid "Missing Import Filter"
 msgstr "Vantar innflutningssíu"
@@ -2437,7 +2437,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "Líma skyggnu"
 msgstr[1] "Líma skyggnu"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Áhöld"
@@ -4292,7 +4292,7 @@ msgid "Generic"
 msgstr "Almennt"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Texti"
@@ -4880,27 +4880,27 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Texti"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 msgid "Sidebar side"
 msgstr "Einföld"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Vinstri inndráttur"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Hægri inndráttur"
@@ -5149,6 +5149,18 @@ msgstr ""
 msgid "Distance:"
 msgstr ""
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+msgctxt "@info"
+msgid "No properties available"
+msgstr "Engin mynd til."
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5273,18 +5285,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "eyða"
 
-#: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
-msgid "Icon Size"
-msgstr "Stærð"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Sjálfgefið"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5301,20 +5308,44 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, fuzzy, kde-format
 msgid "Toolbox"
 msgstr "Áhöld"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, fuzzy, kde-format
+msgid "Icon Size"
+msgstr "Stærð"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Síðuupsetning"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Sjálfvirkt"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Frá vinstri til hægri"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Frá hægri til vinstri"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Valkostir áhalda"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr ""
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format

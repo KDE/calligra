@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1688081 2024-08-19 01:13:54Z scripty $
+# $Id: calligra.po 1688311 2024-08-22 01:13:59Z scripty $
 # $Source$
 #
 #
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2024-08-15 07:02+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1286,17 +1286,17 @@ msgstr "Ne"
 msgid "Yes"
 msgstr "Da"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "Ni moč izvoziti datoteke."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Manjkajoč izvozni filter"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1305,7 +1305,7 @@ msgstr ""
 "Ni moč uvoziti datoteke vrste\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Manjkajoč uvozni filter"
@@ -2368,7 +2368,7 @@ msgstr[1] "Prilepi strani"
 msgstr[2] "Prilepi strani"
 msgstr[3] "Prilepi strani"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "Orodja"
@@ -4244,7 +4244,7 @@ msgid "Generic"
 msgstr "Splošno"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Besedilo"
@@ -4842,27 +4842,27 @@ msgstr "Postanek barve."
 msgid "&Add to Predefined Gradients"
 msgstr "Dodaj v vnaprej določene gradiente"
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "Ikona in besedilo"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr "Samo ikona"
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, kde-format
 msgid "Sidebar side"
 msgstr "Stran stranske vrstice"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "Na levi"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "Na desni"
@@ -5111,6 +5111,19 @@ msgstr "Zamegli:"
 msgid "Distance:"
 msgstr "Razdalja:"
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "Slika ni na voljo."
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5258,18 +5271,13 @@ msgstr "Očisti seznam obnovitev"
 msgid "Undelete"
 msgstr "Obnovi že zbrisano"
 
-#: widgets/KoToolBox.cpp:270
-#, kde-format
-msgid "Icon Size"
-msgstr "Velikost ikone"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Privzeto"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -5286,20 +5294,48 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
 msgid "Toolbox"
 msgstr "Orodjarna"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, kde-format
+msgid "Icon Size"
+msgstr "Velikost ikone"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Podoba strani"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Samodejno"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Z leve na desno"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Z desne na levo"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Možnosti orodja"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr "Preklaplja organizacijo možnosti po zavihkih ali ne"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5363,6 +5399,9 @@ msgstr "Vsi podprti formati"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr "Preklaplja organizacijo možnosti po zavihkih ali ne"
 
 #~ msgid "Top:"
 #~ msgstr "Zgoraj:"

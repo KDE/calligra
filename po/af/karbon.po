@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -96,22 +96,29 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, fuzzy, kde-format
 msgid "Object"
 msgstr "Voorwerp"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, fuzzy, kde-format
 msgid "Align"
 msgstr "Opvul Objekte"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr ""
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, fuzzy, kde-format
+#| msgid "Shear"
+msgid "Add Shape"
+msgstr "Steilheid"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -717,11 +724,6 @@ msgstr "Opvul"
 #, fuzzy
 #~ msgid "Layer"
 #~ msgstr "Laag"
-
-#, fuzzy
-#~| msgid "Shear"
-#~ msgid "Shape"
-#~ msgstr "Steilheid"
 
 #, fuzzy
 #~| msgid "Opacity"

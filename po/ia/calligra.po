@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2024-04-29 14:48+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -1263,17 +1263,17 @@ msgstr "No"
 msgid "Yes"
 msgstr "Si"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "Non pote exportar file"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Mancante filtro de exportar"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1282,7 +1282,7 @@ msgstr ""
 "Non pote importar file de typo\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Mancante filtro de importar"
@@ -2329,7 +2329,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "Colla pagina"
 msgstr[1] "Colla paginas"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "Instrumentos"
@@ -4123,7 +4123,7 @@ msgid "Generic"
 msgstr "Generic"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Texto"
@@ -4706,28 +4706,28 @@ msgstr "Stoppa color."
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "Icone e texto"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr "Solmente icone"
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Sur un singule latere"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "Bordo sinistre"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "Bordo dextere"
@@ -4980,6 +4980,18 @@ msgstr "Obscura (Blur):"
 msgid "Distance:"
 msgstr "Distantia:"
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, kde-format
+msgctxt "@info"
+msgid "No properties available"
+msgstr ""
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5104,18 +5116,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "Annulla operation de deler"
 
-#: widgets/KoToolBox.cpp:270
-#, kde-format
-msgid "Icon Size"
-msgstr "Dimension de Icone"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Predefinite"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -5132,20 +5139,48 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
 msgid "Toolbox"
 msgstr "Instrumentario (Cassetta de instrumentos)"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, kde-format
+msgid "Icon Size"
+msgstr "Dimension de Icone"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Disposition de pagina"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Automatic"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Sinistra a dextera"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Dextera a Sinistra"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Optiones de instrumento"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr "Commutatores organisante le optiones in schedas o no"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5209,6 +5244,9 @@ msgstr "Omne formatos supportate"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr "Commutatores organisante le optiones in schedas o no"
 
 #~ msgid "Left Edge:"
 #~ msgstr "Bordo sinistre:"

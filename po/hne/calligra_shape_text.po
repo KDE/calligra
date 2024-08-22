@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2009-03-03 11:17+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -2223,7 +2223,7 @@ msgstr "विसय-चीज टेबल मं सामिल करव"
 msgid "Set Border Color..."
 msgstr "पाठ रंग..."
 
-#: dialogs/SimpleTableWidget.cpp:169
+#: dialogs/SimpleTableWidget.cpp:173
 #, fuzzy, kde-format
 #| msgctxt "Inherit style"
 #| msgid "None"
@@ -2231,7 +2231,7 @@ msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "कुछ नइ"
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:174
 #, kde-format
 msgid "No Border"
 msgstr ""

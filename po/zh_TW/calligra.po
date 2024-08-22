@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2024-05-21 01:57+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -1275,24 +1275,24 @@ msgstr "否"
 msgid "Yes"
 msgstr "是"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "無法匯出檔案。"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "缺乏匯出過濾程式"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr "無法匯入此類型的檔案：%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "遺失匯入過濾器"
@@ -2349,7 +2349,7 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "貼上頁面"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "工具"
@@ -4219,7 +4219,7 @@ msgid "Generic"
 msgstr "一般"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "文字"
@@ -4812,28 +4812,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "圖示與文字"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr "僅圖示"
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "單頁"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "左側"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "右側"
@@ -5086,6 +5086,19 @@ msgstr "模糊："
 msgid "Distance:"
 msgstr "距離："
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "沒有可用的圖片。"
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5210,18 +5223,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "復原刪除"
 
-#: widgets/KoToolBox.cpp:270
-#, kde-format
-msgid "Icon Size"
-msgstr "圖示大小"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "預設"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5238,20 +5246,48 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
 msgid "Toolbox"
 msgstr "工具箱"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, kde-format
+msgid "Icon Size"
+msgstr "圖示大小"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "頁面配置"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "自動"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "左到右"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "右到左"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "工具選項"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr "切換是否要在分頁內組織選項"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5315,6 +5351,9 @@ msgstr "所有支援的格式"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr "切換是否要在分頁內組織選項"
 
 #~ msgid "Top:"
 #~ msgstr "頂端："

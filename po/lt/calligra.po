@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2017-06-25 14:28+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -1378,19 +1378,19 @@ msgstr "Ne"
 msgid "Yes"
 msgstr "Taip"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, fuzzy, kde-format
 #| msgid "Could not remove file \"%1\"."
 msgid "Could not export file."
 msgstr "Negalima pašalinti failo „%1“."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, fuzzy, kde-format
 #| msgid "Import Data"
 msgid "Missing Export Filter"
 msgstr "Importuoti duomenis"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -1402,7 +1402,7 @@ msgstr ""
 "Nepavyko atverti\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, fuzzy, kde-format
 #| msgid "Import Data"
 msgid "Missing Import Filter"
@@ -2521,7 +2521,7 @@ msgstr[1] "Įklijuoti puslapį"
 msgstr[2] ""
 msgstr[3] "Įklijuoti puslapį"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "Įrankiai"
@@ -4452,7 +4452,7 @@ msgid "Generic"
 msgstr "Paprastas"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Tekstas"
@@ -5059,28 +5059,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "Ženkliukas ir tekstas"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Vienpusis"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "Kairė pusė"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "Dešinė pusė"
@@ -5340,6 +5340,18 @@ msgstr "Suliejimas:"
 msgid "Distance:"
 msgstr "Atstumas:"
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, kde-format
+msgctxt "@info"
+msgid "No properties available"
+msgstr ""
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5468,21 +5480,14 @@ msgstr ""
 msgid "Undelete"
 msgstr "ištrinti"
 
-#: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Font Size"
-msgid "Icon Size"
-msgstr "Nustatyti šrifto dydį"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, fuzzy, kde-format
 #| msgid "Default"
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Numatyta"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5501,22 +5506,51 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, fuzzy, kde-format
 #| msgid "Tools"
 msgid "Toolbox"
 msgstr "Įrankiai"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Set Font Size"
+msgid "Icon Size"
+msgstr "Nustatyti šrifto dydį"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Puslapių išdėstymas"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Automatinis"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Iš kairės į dešinę"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Iš dešinės į kairę"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Įrankio parinktys"
-
-#: widgets/KoToolDocker.cpp:217
-#, fuzzy, kde-format
-#| msgid "Toggles organising the options in tabs or not"
-msgid "Toggles organizing the options in tabs or not"
-msgstr "Perjungia organizuoti pasirinktis kortelėse ar ne"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5584,6 +5618,11 @@ msgstr "Visi palaikomi formatai"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#, fuzzy
+#~| msgid "Toggles organising the options in tabs or not"
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr "Perjungia organizuoti pasirinktis kortelėse ar ne"
 
 #~ msgid "Left Edge:"
 #~ msgstr "Kairysis kraštas:"

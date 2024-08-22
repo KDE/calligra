@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-12-18 22:08+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -2149,13 +2149,13 @@ msgstr "Sisu"
 msgid "Set Border Color..."
 msgstr "Määra piirde värv..."
 
-#: dialogs/SimpleTableWidget.cpp:169
+#: dialogs/SimpleTableWidget.cpp:173
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Puudub"
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:174
 #, kde-format
 msgid "No Border"
 msgstr "Piireteta"

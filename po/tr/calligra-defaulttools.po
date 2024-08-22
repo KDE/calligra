@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2023-06-16 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -169,7 +169,7 @@ msgstr "Yeni bağlantı oluşturmak için sürükleyin."
 msgid "Connection"
 msgstr "Bağlantı"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "Satır"
@@ -184,72 +184,72 @@ msgstr "Bağlantı Noktası"
 msgid "Connect shapes"
 msgstr "Şekilleri bağla"
 
-#: defaulttool/DefaultTool.cpp:219
+#: defaulttool/DefaultTool.cpp:220
 #, kde-format
 msgid "Bring to &Front"
 msgstr "&En Öne Getir"
 
-#: defaulttool/DefaultTool.cpp:224
+#: defaulttool/DefaultTool.cpp:225
 #, kde-format
 msgid "&Raise"
 msgstr "&Üste Çıkar"
 
-#: defaulttool/DefaultTool.cpp:229
+#: defaulttool/DefaultTool.cpp:230
 #, kde-format
 msgid "&Lower"
 msgstr "&Alta Gönder"
 
-#: defaulttool/DefaultTool.cpp:234
+#: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
 msgstr "En Alta &Gönder"
 
-#: defaulttool/DefaultTool.cpp:239
+#: defaulttool/DefaultTool.cpp:240
 #, kde-format
 msgid "Align Left"
 msgstr "Sola Yasla"
 
-#: defaulttool/DefaultTool.cpp:243
+#: defaulttool/DefaultTool.cpp:244
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Yatay olarak Ortala"
 
-#: defaulttool/DefaultTool.cpp:247
+#: defaulttool/DefaultTool.cpp:248
 #, kde-format
 msgid "Align Right"
 msgstr "Sağa Yasla"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:252
 #, kde-format
 msgid "Align Top"
 msgstr "Yukarıya Hizala"
 
-#: defaulttool/DefaultTool.cpp:255
+#: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
 msgstr "Dikey olarak Ortala"
 
-#: defaulttool/DefaultTool.cpp:259
+#: defaulttool/DefaultTool.cpp:260
 #, kde-format
 msgid "Align Bottom"
 msgstr "Aşağıya Hizala"
 
-#: defaulttool/DefaultTool.cpp:263
+#: defaulttool/DefaultTool.cpp:264
 #, kde-format
 msgid "Group"
 msgstr "Gruplandır"
 
-#: defaulttool/DefaultTool.cpp:267
+#: defaulttool/DefaultTool.cpp:268
 #, kde-format
 msgid "Ungroup"
 msgstr "Gruplandırmayı Çöz"
 
-#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
+#: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Kılavuz çizgisini taşımak için tıkla ve sürükleyin."
 
-#: defaulttool/DefaultTool.cpp:467
+#: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -257,22 +257,22 @@ msgstr ""
 "Sol tıklamak merkez çevresinde döndürürken, sağ tıklamak vurgulanan konumda "
 "döndürür."
 
-#: defaulttool/DefaultTool.cpp:469
+#: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Seçimi kırpmak için tıklayın ve sürükleyin."
 
-#: defaulttool/DefaultTool.cpp:471
+#: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin."
 
-#: defaulttool/DefaultTool.cpp:523
+#: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Seçimi taşımak için tıklayın ve sürükleyin."
 
-#: defaulttool/DefaultTool.cpp:528
+#: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -280,32 +280,32 @@ msgstr ""
 "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin. Vurgulanmış konum "
 "için farenin orta düğmesi ile tıklayın."
 
-#: defaulttool/DefaultTool.cpp:1043
+#: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Şekilleri gruplandır"
 
-#: defaulttool/DefaultTool.cpp:1075
+#: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Şekil grubunu çöz"
 
-#: defaulttool/DefaultTool.cpp:1163
+#: defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Arrange"
 msgstr "Düzenle"
 
-#: defaulttool/DefaultTool.cpp:1166
+#: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Geometry"
 msgstr "Yerleşim"
 
-#: defaulttool/DefaultTool.cpp:1174
+#: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
 msgstr "Dolgu"
 
-#: defaulttool/DefaultTool.cpp:1179
+#: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
 msgstr "Gölge"

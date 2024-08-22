@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2023-08-29 15:28+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -21,15 +21,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 23.04.3\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:37
-#, kde-format
-msgid "Shape Properties"
-msgstr "Formaren propietateak"
-
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
 msgstr "Atxikitze ezarpenak"
+
+#~ msgid "Shape Properties"
+#~ msgstr "Formaren propietateak"
 
 #~ msgid "Found no shapes in the collection! %1"
 #~ msgstr "Bilduman ez du formarik aurkitu! %1"

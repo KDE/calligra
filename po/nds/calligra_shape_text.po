@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2014-03-27 22:44+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -2271,13 +2271,13 @@ msgstr "Kommentaren"
 msgid "Set Border Color..."
 msgstr "Textklöör..."
 
-#: dialogs/SimpleTableWidget.cpp:169
+#: dialogs/SimpleTableWidget.cpp:173
 #, fuzzy, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "Keen"
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:174
 #, kde-format
 msgid "No Border"
 msgstr ""

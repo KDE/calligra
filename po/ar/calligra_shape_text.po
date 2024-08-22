@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2007-10-14 16:07+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: <en@li.org>\n"
@@ -2101,13 +2101,13 @@ msgstr "تضمين بوصة جدول من"
 msgid "Set Border Color..."
 msgstr "لون النص:"
 
-#: dialogs/SimpleTableWidget.cpp:169
+#: dialogs/SimpleTableWidget.cpp:173
 #, fuzzy, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
 msgstr "لا شيء"
 
-#: dialogs/SimpleTableWidget.cpp:170
+#: dialogs/SimpleTableWidget.cpp:174
 #, kde-format
 msgid "No Border"
 msgstr ""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2023-02-27 22:47+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,15 +22,13 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:37
-#, kde-format
-msgid "Shape Properties"
-msgstr "Propietats de forma"
-
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
 msgstr "Configureu l'ajust"
+
+#~ msgid "Shape Properties"
+#~ msgstr "Propietats de forma"
 
 #~ msgid "Found no shapes in the collection! %1"
 #~ msgstr "No s'ha trobat cap forma en la col·lecció! %1"

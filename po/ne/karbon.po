@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2007-07-18 14:39+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -95,22 +95,29 @@ msgid "Edit"
 msgstr "सम्पादन"
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, kde-format
 msgid "Object"
 msgstr "वस्तु"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, kde-format
 msgid "Align"
 msgstr "पङ्क्तिबद्ध"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr "प्रभाव"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, fuzzy, kde-format
+#| msgid "Spoke"
+msgid "Add Shape"
+msgstr "तार"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -751,11 +758,6 @@ msgstr "भर्नुहोस्"
 #~ msgctxt "A group of shapes"
 #~ msgid "Group"
 #~ msgstr "समूह"
-
-#, fuzzy
-#~| msgid "Spoke"
-#~ msgid "Shape"
-#~ msgstr "तार"
 
 #, fuzzy
 #~| msgid "Opacity"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2020-01-23 15:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20,15 +20,13 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:37
-#, kde-format
-msgid "Shape Properties"
-msgstr "Lastnosti oblike"
-
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
 msgstr "Nastavitve priklepanja"
+
+#~ msgid "Shape Properties"
+#~ msgstr "Lastnosti oblike"
 
 #~ msgid "Found no shapes in the collection! %1"
 #~ msgstr "V zbirki ni bilo najdenih oblik! %1"

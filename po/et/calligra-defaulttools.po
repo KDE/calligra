@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-12-15 22:57+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -165,7 +165,7 @@ msgstr "Lohista uue ühenduse loomiseks."
 msgid "Connection"
 msgstr "Ühendus"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "Joon"
@@ -180,94 +180,94 @@ msgstr "Ühenduspunkt"
 msgid "Connect shapes"
 msgstr "Kujundide ühendamine"
 
-#: defaulttool/DefaultTool.cpp:219
+#: defaulttool/DefaultTool.cpp:220
 #, kde-format
 msgid "Bring to &Front"
 msgstr "&Too esiplaanile"
 
-#: defaulttool/DefaultTool.cpp:224
+#: defaulttool/DefaultTool.cpp:225
 #, kde-format
 msgid "&Raise"
 msgstr "Too &ettepoole"
 
-#: defaulttool/DefaultTool.cpp:229
+#: defaulttool/DefaultTool.cpp:230
 #, kde-format
 msgid "&Lower"
 msgstr "&Vii tahapoole"
 
-#: defaulttool/DefaultTool.cpp:234
+#: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
 msgstr "&Saada tagaplaanile"
 
-#: defaulttool/DefaultTool.cpp:239
+#: defaulttool/DefaultTool.cpp:240
 #, kde-format
 msgid "Align Left"
 msgstr "Vasakjoondus"
 
-#: defaulttool/DefaultTool.cpp:243
+#: defaulttool/DefaultTool.cpp:244
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Rõhtsuunas keskele"
 
-#: defaulttool/DefaultTool.cpp:247
+#: defaulttool/DefaultTool.cpp:248
 #, kde-format
 msgid "Align Right"
 msgstr "Paremjoondus"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:252
 #, kde-format
 msgid "Align Top"
 msgstr "Ülajoondus"
 
-#: defaulttool/DefaultTool.cpp:255
+#: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
 msgstr "Püstsuunas keskele"
 
-#: defaulttool/DefaultTool.cpp:259
+#: defaulttool/DefaultTool.cpp:260
 #, kde-format
 msgid "Align Bottom"
 msgstr "Alajoondus"
 
-#: defaulttool/DefaultTool.cpp:263
+#: defaulttool/DefaultTool.cpp:264
 #, kde-format
 msgid "Group"
 msgstr "Rühmita"
 
-#: defaulttool/DefaultTool.cpp:267
+#: defaulttool/DefaultTool.cpp:268
 #, kde-format
 msgid "Ungroup"
 msgstr "Lõhu rühm"
 
-#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
+#: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Klõps ja lohista juhtjoone liigutamiseks."
 
-#: defaulttool/DefaultTool.cpp:467
+#: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 "Vasakklõps pöörab ümber keskpunkti, paremklõps ümber esile tõstetud asukoha."
 
-#: defaulttool/DefaultTool.cpp:469
+#: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klõpsa ja lohista valiku nihutamiseks."
 
-#: defaulttool/DefaultTool.cpp:471
+#: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klõpsa ja lohista valiku suuruse muutmiseks."
 
-#: defaulttool/DefaultTool.cpp:523
+#: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klõpsa ja lohista valiku liigutamiseks."
 
-#: defaulttool/DefaultTool.cpp:528
+#: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -275,32 +275,32 @@ msgstr ""
 "Klõpsa ja lohista valiku suuruse muutmiseks. Klõps hiire keskmise nupuga "
 "määrab esile tõstetud asukoha."
 
-#: defaulttool/DefaultTool.cpp:1043
+#: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Rühmita kujundid"
 
-#: defaulttool/DefaultTool.cpp:1075
+#: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lõhu kujundite rühmad"
 
-#: defaulttool/DefaultTool.cpp:1163
+#: defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Arrange"
 msgstr "Korraldamine"
 
-#: defaulttool/DefaultTool.cpp:1166
+#: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Geometry"
 msgstr "Geomeetria"
 
-#: defaulttool/DefaultTool.cpp:1174
+#: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
 msgstr "Täitmine"
 
-#: defaulttool/DefaultTool.cpp:1179
+#: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
 msgstr "Vari"

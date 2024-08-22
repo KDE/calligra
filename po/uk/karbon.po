@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-11-06 07:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -101,22 +101,28 @@ msgid "Edit"
 msgstr "Редагувати"
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, kde-format
 msgid "Object"
 msgstr "Об'єкт"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, kde-format
 msgid "Align"
 msgstr "Вирівняти"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr "Ефекти"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, kde-format
+msgid "Add Shape"
+msgstr ""
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25

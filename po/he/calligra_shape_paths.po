@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2024-07-02 22:50+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -185,19 +185,19 @@ msgid "Change rectangle"
 msgstr "החלפת מרובע"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
-#: rectangle/RectangleShapeConfigWidget.ui:13
+#: rectangle/RectangleShapeConfigWidget.ui:5
 #, kde-format
 msgid "Rectangle Shape"
 msgstr "צורה מרובעת"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rectangle/RectangleShapeConfigWidget.ui:19
+#: rectangle/RectangleShapeConfigWidget.ui:21
 #, kde-format
 msgid "Corner radius x:"
 msgstr "x רדיוס פינה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rectangle/RectangleShapeConfigWidget.ui:29
+#: rectangle/RectangleShapeConfigWidget.ui:34
 #, kde-format
 msgid "Corner radius y:"
 msgstr "y רדיוס פינה:"

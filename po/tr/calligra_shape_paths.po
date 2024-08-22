@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2022-08-11 12:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -188,19 +188,19 @@ msgid "Change rectangle"
 msgstr "Dikdörtgeni değiştir"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
-#: rectangle/RectangleShapeConfigWidget.ui:13
+#: rectangle/RectangleShapeConfigWidget.ui:5
 #, kde-format
 msgid "Rectangle Shape"
 msgstr "Dikdörtgen Şekli"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rectangle/RectangleShapeConfigWidget.ui:19
+#: rectangle/RectangleShapeConfigWidget.ui:21
 #, kde-format
 msgid "Corner radius x:"
 msgstr "Köşe yarıçapı x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rectangle/RectangleShapeConfigWidget.ui:29
+#: rectangle/RectangleShapeConfigWidget.ui:34
 #, kde-format
 msgid "Corner radius y:"
 msgstr "Köşe yarıçapı y:"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PathShapes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2015-03-14 21:28-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -193,19 +193,19 @@ msgid "Change rectangle"
 msgstr "四角形を変更"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
-#: rectangle/RectangleShapeConfigWidget.ui:13
+#: rectangle/RectangleShapeConfigWidget.ui:5
 #, kde-format
 msgid "Rectangle Shape"
 msgstr "四角形図形"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rectangle/RectangleShapeConfigWidget.ui:19
+#: rectangle/RectangleShapeConfigWidget.ui:21
 #, kde-format
 msgid "Corner radius x:"
 msgstr "コーナー半径 x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rectangle/RectangleShapeConfigWidget.ui:29
+#: rectangle/RectangleShapeConfigWidget.ui:34
 #, kde-format
 msgid "Corner radius y:"
 msgstr "コーナー半径 y:"

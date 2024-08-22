@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PathShapes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:20+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -203,20 +203,20 @@ msgid "Change rectangle"
 msgstr "आरंभिक कोण:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
-#: rectangle/RectangleShapeConfigWidget.ui:13
+#: rectangle/RectangleShapeConfigWidget.ui:5
 #, kde-format
 msgid "Rectangle Shape"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rectangle/RectangleShapeConfigWidget.ui:19
+#: rectangle/RectangleShapeConfigWidget.ui:21
 #, fuzzy, kde-format
 #| msgid "Inner radius:"
 msgid "Corner radius x:"
 msgstr "आंतरिक त्रिज्या:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rectangle/RectangleShapeConfigWidget.ui:29
+#: rectangle/RectangleShapeConfigWidget.ui:34
 #, fuzzy, kde-format
 #| msgid "Inner radius:"
 msgid "Corner radius y:"

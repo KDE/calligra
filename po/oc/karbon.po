@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -100,22 +100,29 @@ msgid "Edit"
 msgstr "Edicion"
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, kde-format
 msgid "Object"
 msgstr "Objècte"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, kde-format
 msgid "Align"
 msgstr "Alinhar"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr "Efièches"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Add Shape"
+msgstr "Forma"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -720,9 +727,6 @@ msgstr "Emplenar"
 #~ msgctxt "A group of shapes"
 #~ msgid "Group"
 #~ msgstr "Grop"
-
-#~ msgid "Shape"
-#~ msgstr "Forma"
 
 #~ msgctxt "Visibility state of the shape"
 #~ msgid "Visible"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -17,15 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:37
-#, kde-format
-msgid "Shape Properties"
-msgstr "شەكىل خاسلىقى"
-
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
 msgstr ""
+
+#~ msgid "Shape Properties"
+#~ msgstr "شەكىل خاسلىقى"
 
 #~ msgid "Found no shapes in the collection! %1"
 #~ msgstr "توپلامدىن شەكىل تېپىلمىدى! %1"

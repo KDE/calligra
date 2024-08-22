@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2020-12-06 07:56+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -1289,24 +1289,24 @@ msgstr "Ez"
 msgid "Yes"
 msgstr "Bai"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "Ezin izan da fitxategia esportatu."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Esportazio-iragazkia falta da"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr "Ezin izan da %1 motako fitxategia inportatu"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Inportazio-iragazkia falta da"
@@ -2374,7 +2374,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "Itsatsi orria"
 msgstr[1] "Itsatsi orriak"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "Tresnak"
@@ -4322,7 +4322,7 @@ msgid "Generic"
 msgstr "Generikoa"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Testua"
@@ -4939,28 +4939,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "Ikonoa eta testua"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr "Ikonoa soilik"
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Orrialde bakarra"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "Ezkerreko aldea"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "Eskuineko aldea"
@@ -5215,6 +5215,19 @@ msgstr "Lausotu:"
 msgid "Distance:"
 msgstr ""
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "Ez dago irudirik erabilgarri."
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5342,21 +5355,14 @@ msgstr "Ezin da etiketa ezabatzea desegin"
 msgid "Undelete"
 msgstr "Ezabatu testua"
 
-#: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Font Size"
-msgid "Icon Size"
-msgstr "Ezarri letra-tamaina"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, fuzzy, kde-format
 #| msgid "Default"
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5374,22 +5380,50 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, fuzzy, kde-format
 #| msgid "Tools"
 msgid "Toolbox"
 msgstr "Tresnak"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Set Font Size"
+msgid "Icon Size"
+msgstr "Ezarri letra-tamaina"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Orriaren diseinua"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Automatikoa"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Ezkerretik eskuinera"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Eskuinetik ezkerrera"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Tresna-aukerak"
-
-#: widgets/KoToolDocker.cpp:217
-#, fuzzy, kde-format
-#| msgid "Toggles organising the options in tabs or not"
-msgid "Toggles organizing the options in tabs or not"
-msgstr "Aukerak fitxatan edo fitxarik gabe antolatzeko modua txandakatzen du"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5455,6 +5489,12 @@ msgstr "Onartutako formatu guztiak"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "% %1"
+
+#, fuzzy
+#~| msgid "Toggles organising the options in tabs or not"
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr ""
+#~ "Aukerak fitxatan edo fitxarik gabe antolatzeko modua txandakatzen du"
 
 #~ msgid "Left Edge:"
 #~ msgstr "Ezkerreko ertza:"
@@ -13286,10 +13326,6 @@ msgstr "% %1"
 #, fuzzy
 #~ msgid "Highlighting"
 #~ msgstr "Sintaxiaren nabarmentzea"
-
-#, fuzzy
-#~ msgid "Layout"
-#~ msgstr "Orriaren diseinua"
 
 #~ msgid "Short locale date format"
 #~ msgstr "Eskualdeko konfigurazioko dataren formatua laburra"

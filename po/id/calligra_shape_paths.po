@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-07-24 21:22+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -183,19 +183,19 @@ msgid "Change rectangle"
 msgstr "Ubah persegi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
-#: rectangle/RectangleShapeConfigWidget.ui:13
+#: rectangle/RectangleShapeConfigWidget.ui:5
 #, kde-format
 msgid "Rectangle Shape"
 msgstr "Bentuk Persegi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rectangle/RectangleShapeConfigWidget.ui:19
+#: rectangle/RectangleShapeConfigWidget.ui:21
 #, kde-format
 msgid "Corner radius x:"
 msgstr "X radius sudut:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rectangle/RectangleShapeConfigWidget.ui:29
+#: rectangle/RectangleShapeConfigWidget.ui:34
 #, kde-format
 msgid "Corner radius y:"
 msgstr "Y radius sudut:"

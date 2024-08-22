@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-09-29 12:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <kde-i18n-doc@kde.org>\n"
@@ -1345,17 +1345,17 @@ msgstr "Эзоҳ"
 msgid "Yes"
 msgstr ""
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "Наметавонам файлро содир кунам."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Филтри содирот ҳозир нест"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1364,7 +1364,7 @@ msgstr ""
 "Наметавонам файли намуди \n"
 "%1-ро ворид кунам"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Филтри воридот ғоиб аст"
@@ -2541,7 +2541,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "Гузориши матн аз буфери иввазот"
 msgstr[1] "Гузориши матн аз буфери иввазот"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Ранги пешфарзӣ"
@@ -4487,7 +4487,7 @@ msgid "Generic"
 msgstr "Умумӣ"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Афзудани матн"
@@ -5084,28 +5084,28 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, fuzzy, kde-format
 msgid "Icon and Text"
 msgstr "Афзудани матн"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single"
 msgid "Sidebar side"
 msgstr "Яктага"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 msgid "Left side"
 msgstr "Зағирӣ"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, fuzzy, kde-format
 msgid "Right side"
 msgstr "Сабзи равшан"
@@ -5370,6 +5370,19 @@ msgstr ""
 msgid "Distance:"
 msgstr ""
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "Суратҳои дастрасӣ вуҷуд нест."
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5496,19 +5509,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "Ҳузфи матн"
 
-#: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
-#| msgid "Select Font"
-msgid "Icon Size"
-msgstr "Интихоби ҳарф"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "&Пешфарзӣ"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5526,20 +5533,46 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, fuzzy, kde-format
 msgid "Toolbox"
 msgstr "Ранги пешфарзӣ"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, fuzzy, kde-format
+#| msgid "Select Font"
+msgid "Icon Size"
+msgstr "Интихоби ҳарф"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Хосиятҳои саҳифа"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Autoinclude"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Худфаъолсозӣ"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Яктага"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Сабзи равшан"
+
+#: widgets/KoToolDocker.cpp:117
 #, fuzzy, kde-format
 msgid "Tool Options"
 msgstr "Худитмомӣ"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr ""
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, fuzzy, kde-format
@@ -10432,10 +10465,6 @@ msgstr "%1%"
 #, fuzzy
 #~ msgid "Highlighting"
 #~ msgstr "Зерравшании синтаксис"
-
-#, fuzzy
-#~ msgid "Layout"
-#~ msgstr "Хосиятҳои саҳифа"
 
 #~ msgid "Short locale date format"
 #~ msgstr "Андозаи кӯтоҳи локалии сана"

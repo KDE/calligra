@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2024-08-02 05:45+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -168,7 +168,7 @@ msgstr "Povlecite, da ustvarite novo povezavo."
 msgid "Connection"
 msgstr "Povezava"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "Črta"
@@ -183,93 +183,93 @@ msgstr "Točka povezave"
 msgid "Connect shapes"
 msgstr "Poveži oblike"
 
-#: defaulttool/DefaultTool.cpp:219
+#: defaulttool/DefaultTool.cpp:220
 #, kde-format
 msgid "Bring to &Front"
 msgstr "V ospredje"
 
-#: defaulttool/DefaultTool.cpp:224
+#: defaulttool/DefaultTool.cpp:225
 #, kde-format
 msgid "&Raise"
 msgstr "Dvigni"
 
-#: defaulttool/DefaultTool.cpp:229
+#: defaulttool/DefaultTool.cpp:230
 #, kde-format
 msgid "&Lower"
 msgstr "Spusti"
 
-#: defaulttool/DefaultTool.cpp:234
+#: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
 msgstr "V ozadje"
 
-#: defaulttool/DefaultTool.cpp:239
+#: defaulttool/DefaultTool.cpp:240
 #, kde-format
 msgid "Align Left"
 msgstr "Poravnaj levo"
 
-#: defaulttool/DefaultTool.cpp:243
+#: defaulttool/DefaultTool.cpp:244
 #, kde-format
 msgid "Horizontally Center"
 msgstr "Vodoravno centriraj"
 
-#: defaulttool/DefaultTool.cpp:247
+#: defaulttool/DefaultTool.cpp:248
 #, kde-format
 msgid "Align Right"
 msgstr "Poravnaj desno"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:252
 #, kde-format
 msgid "Align Top"
 msgstr "Poravnaj navzgor"
 
-#: defaulttool/DefaultTool.cpp:255
+#: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
 msgstr "Navpično centriraj"
 
-#: defaulttool/DefaultTool.cpp:259
+#: defaulttool/DefaultTool.cpp:260
 #, kde-format
 msgid "Align Bottom"
 msgstr "Poravnaj na dno"
 
-#: defaulttool/DefaultTool.cpp:263
+#: defaulttool/DefaultTool.cpp:264
 #, kde-format
 msgid "Group"
 msgstr "Združi"
 
-#: defaulttool/DefaultTool.cpp:267
+#: defaulttool/DefaultTool.cpp:268
 #, kde-format
 msgid "Ungroup"
 msgstr "Razdruži"
 
-#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
+#: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr "Kliknite in povlecite, da premaknete vodilo."
 
-#: defaulttool/DefaultTool.cpp:467
+#: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "Levi klik zavrti okrog centra, desni klik okrog osvetljenega mesta."
 
-#: defaulttool/DefaultTool.cpp:469
+#: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Kliknite in povlecite za izbiro striženja."
 
-#: defaulttool/DefaultTool.cpp:471
+#: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Kliknite in povlecite da spremenite velikost izbire."
 
-#: defaulttool/DefaultTool.cpp:523
+#: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Kliknite in povlecite da premaknete izbiro."
 
-#: defaulttool/DefaultTool.cpp:528
+#: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -277,32 +277,32 @@ msgstr ""
 "Kliknite in povlecite da spremenite velikost izbire. Kliknite s srednjo "
 "tipko da nastavite položaj poudarka."
 
-#: defaulttool/DefaultTool.cpp:1043
+#: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Združi oblike"
 
-#: defaulttool/DefaultTool.cpp:1075
+#: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Razdruži oblike"
 
-#: defaulttool/DefaultTool.cpp:1163
+#: defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Arrange"
 msgstr "Razvrsti"
 
-#: defaulttool/DefaultTool.cpp:1166
+#: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Geometry"
 msgstr "Geometrija"
 
-#: defaulttool/DefaultTool.cpp:1174
+#: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
 msgstr "Napolni"
 
-#: defaulttool/DefaultTool.cpp:1179
+#: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
 msgstr "Senca"

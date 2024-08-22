@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:16+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -172,7 +172,7 @@ msgstr ""
 msgid "Connection"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1169
+#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr ""
@@ -188,130 +188,130 @@ msgstr ""
 msgid "Connect shapes"
 msgstr "विसमूह"
 
-#: defaulttool/DefaultTool.cpp:219
+#: defaulttool/DefaultTool.cpp:220
 #, kde-format
 msgid "Bring to &Front"
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:224
+#: defaulttool/DefaultTool.cpp:225
 #, kde-format
 msgid "&Raise"
 msgstr "उठाबू (&R)"
 
-#: defaulttool/DefaultTool.cpp:229
+#: defaulttool/DefaultTool.cpp:230
 #, kde-format
 msgid "&Lower"
 msgstr "निचला (&L)"
 
-#: defaulttool/DefaultTool.cpp:234
+#: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:239
+#: defaulttool/DefaultTool.cpp:240
 #, kde-format
 msgid "Align Left"
 msgstr "बामाँ संरेखण"
 
-#: defaulttool/DefaultTool.cpp:243
+#: defaulttool/DefaultTool.cpp:244
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Horizontally Center"
 msgstr "क्षैतिज"
 
-#: defaulttool/DefaultTool.cpp:247
+#: defaulttool/DefaultTool.cpp:248
 #, kde-format
 msgid "Align Right"
 msgstr "दहिन्ना संरेखण"
 
-#: defaulttool/DefaultTool.cpp:251
+#: defaulttool/DefaultTool.cpp:252
 #, kde-format
 msgid "Align Top"
 msgstr "उप्पर संरेखण"
 
-#: defaulttool/DefaultTool.cpp:255
+#: defaulttool/DefaultTool.cpp:256
 #, fuzzy, kde-format
 #| msgid "Vertical"
 msgid "Vertically Center"
 msgstr "लम्बवत"
 
-#: defaulttool/DefaultTool.cpp:259
+#: defaulttool/DefaultTool.cpp:260
 #, kde-format
 msgid "Align Bottom"
 msgstr "तल संरेखण"
 
-#: defaulttool/DefaultTool.cpp:263
+#: defaulttool/DefaultTool.cpp:264
 #, kde-format
 msgid "Group"
 msgstr "समूह"
 
-#: defaulttool/DefaultTool.cpp:267
+#: defaulttool/DefaultTool.cpp:268
 #, kde-format
 msgid "Ungroup"
 msgstr "विसमूह"
 
-#: defaulttool/DefaultTool.cpp:461 defaulttool/DefaultTool.cpp:533
+#: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:467
+#: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:469
+#: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:471
+#: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:523
+#: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:528
+#: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:1043
+#: defaulttool/DefaultTool.cpp:1044
 #, fuzzy
 #| msgid "Ungroup"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "विसमूह"
 
-#: defaulttool/DefaultTool.cpp:1075
+#: defaulttool/DefaultTool.cpp:1076
 #, fuzzy
 #| msgid "Ungroup"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "विसमूह"
 
-#: defaulttool/DefaultTool.cpp:1163
+#: defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Arrange"
 msgstr "क्रममे राखू"
 
-#: defaulttool/DefaultTool.cpp:1166
+#: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Geometry"
 msgstr "ज्यामिति"
 
-#: defaulttool/DefaultTool.cpp:1174
+#: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
 msgstr ""
 
-#: defaulttool/DefaultTool.cpp:1179
+#: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
 msgstr ""

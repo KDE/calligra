@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2019-09-29 12:21+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -103,22 +103,29 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, kde-format
 msgid "Object"
 msgstr "Мавзӯъ"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, fuzzy, kde-format
 msgid "Align"
 msgstr "Саф &кашондан"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr "Таъсирҳо"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, fuzzy, kde-format
+#| msgid "Spoke"
+msgid "Add Shape"
+msgstr "Шуоъҳо ба қуллаҳои ситора"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -757,11 +764,6 @@ msgstr "Пур кунед"
 #~ msgctxt "A group of shapes"
 #~ msgid "Group"
 #~ msgstr "гурӯҳ"
-
-#, fuzzy
-#~| msgid "Spoke"
-#~ msgid "Shape"
-#~ msgstr "Шуоъҳо ба қуллаҳои ситора"
 
 #, fuzzy
 #~| msgid "Opacity"

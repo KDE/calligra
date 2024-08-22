@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1426,17 +1426,17 @@ msgstr "छैनटव्य"
 msgid "Yes"
 msgstr "ठीक"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "फाइल निर्यात गर्न सकिएन ।"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "निर्यात फाइल हराइरहेको छ"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1445,7 +1445,7 @@ msgstr ""
 "यसप्रकारको फाइल आयात गर्न सकिएन\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "आयात फिल्टर हराइरहेको छ"
@@ -2658,7 +2658,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "पाठ टाँस्नुहोस्"
 msgstr[1] "पाठ टाँस्नुहोस्"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Pan Tool"
 msgid "Tools"
@@ -4714,7 +4714,7 @@ msgid "Generic"
 msgstr "साधारण"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -5346,31 +5346,31 @@ msgstr ""
 msgid "&Add to Predefined Gradients"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Icon and Text"
 msgstr "पाठ"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr ""
 
-#: widgets/KoModeBox.cpp:504
+#: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
 #| msgid "Single"
 msgid "Sidebar side"
 msgstr "एकल"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Linen"
 msgid "Left side"
 msgstr "लिनेन"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, fuzzy, kde-format
 #| msgid "Lighten"
 msgid "Right side"
@@ -5649,6 +5649,19 @@ msgstr ""
 msgid "Distance:"
 msgstr "दुरी:"
 
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "कुनै तस्वीर उपलब्ध छैन।"
+
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
@@ -5781,20 +5794,14 @@ msgstr ""
 msgid "Undelete"
 msgstr " मेट्नुहोस्"
 
-#: widgets/KoToolBox.cpp:270
-#, fuzzy, kde-format
-#| msgid "Set point type"
-msgid "Icon Size"
-msgstr "बिन्दु प्रकार सेट गर्नुहोस्।"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, fuzzy, kde-format
 #| msgid "Default"
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "पूर्वनिर्धारित्धारितर्र्र"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -5812,21 +5819,50 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, fuzzy, kde-format
 #| msgid "Pan Tool"
 msgid "Toolbox"
 msgstr "प्यान उपकरण"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, fuzzy, kde-format
+#| msgid "Set point type"
+msgid "Icon Size"
+msgstr "बिन्दु प्रकार सेट गर्नुहोस्।"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "सजावट"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Autoinclude"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "स्वत: समावेश गर्नुहोस्"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "String:"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "स्ट्रिङ:"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "हल्काो"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "उपकरण्ति विकल्प"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr ""
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, fuzzy, kde-format
@@ -12493,9 +12529,6 @@ msgstr "%1%"
 
 #~ msgid "Highlighting"
 #~ msgstr "हाइलाइट"
-
-#~ msgid "Layout"
-#~ msgstr "सजावट"
 
 #~ msgid "Short locale date format"
 #~ msgstr "छोटो लोकेलय मिति ढाँचा"

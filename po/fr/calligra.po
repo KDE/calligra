@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 15:24+0200\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"PO-Revision-Date: 2024-08-16 10:46+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -25,9 +25,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -736,24 +736,21 @@ msgid "Create backup file:"
 msgstr "Créer un fichier de sauvegarde : "
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Afficher la grille : "
+msgstr "Afficher la grille"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
 msgstr "Aimanter à la grille"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Grille"
+msgstr "Grille :"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -761,20 +758,16 @@ msgid "Grid color:"
 msgstr "Couleur de la grille"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontal : "
+msgstr "Espacement horizontal :"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertical : "
+msgstr "Espacement vertical :"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -917,7 +910,7 @@ msgstr "Restaurer les fichiers"
 #: main/KoAutoSaveRecoveryDialog.cpp:168
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Tout annuler"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:173
 #, kde-format
@@ -936,6 +929,10 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Si vous sélectionnez « Annuler », tous les fichiers récupérables seront "
+"conservés.\n"
+"Si vous appuyez sur « Ok », les fichiers sélectionnés seront récupérés, les "
+"fichiers non sélectionnés seront supprimés."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1296,17 +1293,17 @@ msgstr "Non"
 msgid "Yes"
 msgstr "Oui"
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Could not export file."
 msgstr "Impossible d'exporter le fichier."
 
-#: main/KoFilterManager.cpp:217 main/KoFilterManager.cpp:227
+#: main/KoFilterManager.cpp:220 main/KoFilterManager.cpp:230
 #, kde-format
 msgid "Missing Export Filter"
 msgstr "Filtre d'exportation absent"
 
-#: main/KoFilterManager.cpp:530
+#: main/KoFilterManager.cpp:533
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1315,7 +1312,7 @@ msgstr ""
 "Impossible d'importer un fichier de type\n"
 "%1"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:536
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Filtre d'importation absent"
@@ -1604,20 +1601,19 @@ msgid "Default"
 msgstr "Défaut"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Moyenne géométrique"
+msgstr "Forme géométrique"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Flèches"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Amusant"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1781,11 +1777,10 @@ msgid "Date: %1"
 msgstr "Date : %1"
 
 #: main/KoView.cpp:345
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Forme"
+msgstr "Ajouter une forme"
 
 #: main/KoView.cpp:356
 #, kde-format
@@ -2370,7 +2365,7 @@ msgid_plural "Paste Pages"
 msgstr[0] "Coller une page"
 msgstr[1] "Coller des pages"
 
-#: pageapp/KoPAView.cpp:299 widgets/KoToolBoxDocker.cpp:30
+#: pageapp/KoPAView.cpp:299
 #, kde-format
 msgid "Tools"
 msgstr "Outils"
@@ -4236,7 +4231,7 @@ msgid "Generic"
 msgstr "Générique"
 
 #: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
-#: widgets/KoModeBox.cpp:497
+#: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Texte"
@@ -4838,28 +4833,27 @@ msgstr "Couleur d'arrêt"
 msgid "&Add to Predefined Gradients"
 msgstr "&Ajouter aux dégradés prédéfinis"
 
-#: widgets/KoModeBox.cpp:500
+#: widgets/KoModeBox.cpp:501
 #, kde-format
 msgid "Icon and Text"
 msgstr "Icône et texte"
 
-#: widgets/KoModeBox.cpp:501
+#: widgets/KoModeBox.cpp:502
 #, kde-format
 msgid "Icon only"
 msgstr "Icône seulement"
 
-#: widgets/KoModeBox.cpp:504
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#: widgets/KoModeBox.cpp:505
+#, kde-format
 msgid "Sidebar side"
-msgstr "Simple côté"
+msgstr "Côté pour la barre latérale"
 
-#: widgets/KoModeBox.cpp:513
+#: widgets/KoModeBox.cpp:514
 #, kde-format
 msgid "Left side"
 msgstr "Côté gauche"
 
-#: widgets/KoModeBox.cpp:514
+#: widgets/KoModeBox.cpp:515
 #, kde-format
 msgid "Right side"
 msgstr "Côté droit"
@@ -4875,30 +4869,26 @@ msgid "Apply to document"
 msgstr "Appliquer au document"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Marge de gauche"
+msgstr "Marge du bord gauche :"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Marge de droite"
+msgstr "Marge du bord droit :"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Bord de la reliure"
+msgstr "Bord de la reliure :"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Bord de page"
+msgstr "Marge de la page :"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5007,17 +4997,15 @@ msgstr "Droite à gauche"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Marge supérieure"
+msgstr "Marge supérieure :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Marge inférieure"
+msgstr "Marge inférieure :"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5113,6 +5101,19 @@ msgstr "Flou"
 #, kde-format
 msgid "Distance:"
 msgstr "Distance : "
+
+#: widgets/KoShapePropertyWidget.cpp:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Shape Properties"
+msgstr ""
+
+#: widgets/KoShapePropertyWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No properties available"
+msgstr "Aucune image disponible"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5265,18 +5266,13 @@ msgstr "Effacer la liste de restauration"
 msgid "Undelete"
 msgstr "Restaurer"
 
-#: widgets/KoToolBox.cpp:270
-#, kde-format
-msgid "Icon Size"
-msgstr "Taille d'icône"
-
-#: widgets/KoToolBox.cpp:271
+#: widgets/KoToolBox.cpp:310
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Par défaut"
 
-#: widgets/KoToolBox.cpp:277
+#: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -5293,20 +5289,48 @@ msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: widgets/KoToolBoxDocker.cpp:20
+#: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
 msgid "Toolbox"
 msgstr "Boîte à outils"
 
-#: widgets/KoToolDocker.cpp:183
+#: widgets/KoToolBoxDocker.cpp:134
+#, kde-format
+msgid "Icon Size"
+msgstr "Taille d'icône"
+
+#: widgets/KoToolBoxDocker.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgctxt "Toolbox layout"
+msgid "Layout"
+msgstr "Mise en page"
+
+#: widgets/KoToolBoxDocker.cpp:140
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Automatic"
+msgstr "Automatique"
+
+#: widgets/KoToolBoxDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Left to right"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Left-to-right"
+msgstr "Gauche à droite"
+
+#: widgets/KoToolBoxDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Right to left"
+msgctxt "@item:inmenu Toolbox layout direction"
+msgid "&Right-to-left"
+msgstr "Droite à gauche"
+
+#: widgets/KoToolDocker.cpp:117
 #, kde-format
 msgid "Tool Options"
 msgstr "Préférences d'outils"
-
-#: widgets/KoToolDocker.cpp:217
-#, kde-format
-msgid "Toggles organizing the options in tabs or not"
-msgstr "Organise ou non les options en onglets"
 
 #: widgets/KoViewItemContextBar.cpp:176
 #, kde-format
@@ -5370,6 +5394,9 @@ msgstr "Tous les formats pris en charge"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Toggles organizing the options in tabs or not"
+#~ msgstr "Organise ou non les options en onglets"
 
 #~ msgid "Left Edge:"
 #~ msgstr "Bord gauche"

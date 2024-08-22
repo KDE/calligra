@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-dockers\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-19 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2015-02-15 15:18+0100\n"
 "Last-Translator: Timothée Giet <animtim@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -23,15 +23,13 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: shapeproperties/ShapePropertiesDocker.cpp:37
-#, kde-format
-msgid "Shape Properties"
-msgstr "Propriétés de forme"
-
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
 msgstr "Configuration du magnétisme"
+
+#~ msgid "Shape Properties"
+#~ msgstr "Propriétés de forme"
 
 #~ msgid "Found no shapes in the collection! %1"
 #~ msgstr "Impossible de trouver des formes dans la collection ! %1"

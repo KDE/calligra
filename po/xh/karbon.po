@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
 "PO-Revision-Date: 2002-11-02 14:53+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -106,22 +106,28 @@ msgid "Edit"
 msgstr ""
 
 #. i18n: ectx: ToolBar (object_toolbar)
-#: data/karbon.rc:162
+#: data/karbon.rc:156
 #, fuzzy, kde-format
 msgid "Object"
 msgstr "&Injongo"
 
 #. i18n: ectx: ToolBar (align_toolbar)
-#: data/karbon.rc:171
+#: data/karbon.rc:165
 #, fuzzy, kde-format
 msgid "Align"
 msgstr "Ubeko ngokuhambelana:"
 
 #. i18n: ectx: ToolBar (Effects)
-#: data/karbon.rc:180
+#: data/karbon.rc:174
 #, kde-format
 msgid "Effects"
 msgstr "Iziqhano"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, fuzzy, kde-format
+msgid "Add Shape"
+msgstr "Chukumisa"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -730,10 +736,6 @@ msgstr "Gcwalisa"
 #, fuzzy
 #~ msgid "Layer"
 #~ msgstr "Ulwaleko"
-
-#, fuzzy
-#~ msgid "Shape"
-#~ msgstr "Chukumisa"
 
 #, fuzzy
 #~| msgid "Opacity"
