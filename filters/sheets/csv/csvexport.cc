@@ -122,7 +122,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
     Doc *ksdoc = qobject_cast<Doc *>(document);
 
     if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
-        qWarning(lcCsvExport) << "Invalid document mimetype " << ksdoc->mimeType();
+        qWarning(lcCsvExport) << "Invalid document mimetype" << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 

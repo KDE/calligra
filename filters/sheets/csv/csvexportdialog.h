@@ -5,11 +5,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef CSVEXPORTDIALOG_H
-#define CSVEXPORTDIALOG_H
+#pragma once
 
-#include <KoDialog.h>
 #include <ui_exportdialogui.h>
+
+#include <QDialog>
 
 class ExportDialogUI;
 class QValidator;
@@ -22,37 +22,27 @@ class Map;
 }
 }
 
-class ExportDialogUI : public QWidget, public Ui::ExportDialogUI
-{
-public:
-    explicit ExportDialogUI(QWidget *parent)
-        : QWidget(parent)
-    {
-        setupUi(this);
-    }
-};
-
-class CSVExportDialog : public KoDialog
+class CSVExportDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit CSVExportDialog(QWidget *parent);
     ~CSVExportDialog() override;
 
-    QChar getDelimiter() const;
-    QChar getTextQuote() const;
-    bool exportSheet(QString const &sheetName) const;
-    bool printAlwaysSheetDelimiter() const;
-    QString getSheetDelimiter() const;
-    bool exportSelectionOnly() const;
+    [[nodiscard]] QChar getDelimiter() const;
+    [[nodiscard]] QChar getTextQuote() const;
+    [[nodiscard]] bool exportSheet(QString const &sheetName) const;
+    [[nodiscard]] bool printAlwaysSheetDelimiter() const;
+    [[nodiscard]] QString getSheetDelimiter() const;
+    [[nodiscard]] bool exportSelectionOnly() const;
 
     void fillSheet(Calligra::Sheets::Map *map);
-    QString getEndOfLine(void) const;
+    [[nodiscard]] QString getEndOfLine() const;
 
 private:
     void loadSettings();
     void saveSettings();
-    ExportDialogUI *m_dialog;
+    Ui::ExportDialogUI m_dialog;
 
     QValidator *m_delimiterValidator;
     QString m_delimiter;
@@ -68,5 +58,3 @@ private Q_SLOTS:
     void textquoteSelected(const QString &mark);
     void selectionOnlyChanged(bool);
 };
-
-#endif
