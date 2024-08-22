@@ -1,6 +1,5 @@
 include_directories(
     ../../../outputhelper/
-    ${LIBETONYEK_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
 
@@ -17,8 +16,8 @@ target_link_libraries(calligra_filter_key2odp PRIVATE
     komain
     LibRevenge::LibRevenge
     LibRevenge::LibRevengeStream
+    LibEtonyek::LibEtonyek
     LibOdfGen::LibOdfGen
-    ${LIBETONYEK_LIBRARIES}
 )
 
 install(TARGETS calligra_filter_key2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

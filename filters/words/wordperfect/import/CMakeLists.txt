@@ -1,6 +1,5 @@
 include_directories(
     ../../../outputhelper/
-    ${LIBWPD_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
 
@@ -19,7 +18,7 @@ target_link_libraries(calligra_filter_wpd2odt PRIVATE
     LibWpg::LibWpg
     LibRevenge::LibRevenge
     LibRevenge::LibRevengeStream
-    ${LIBWPD_LIBRARIES}
+    LibWpd::LibWpd
 )
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

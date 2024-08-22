@@ -24,7 +24,7 @@ find_package_handle_standard_args(LibOdfGen
     VERSION_VAR LibOdfGen_VERSION
 )
 
-if(LibOdfGen_FOUND AND NOT TARGET LibRevenge::LibOdfGen)
+if(LibOdfGen_FOUND AND NOT TARGET LibOdfGen::LibOdfGen)
     add_library(LibOdfGen::LibOdfGen UNKNOWN IMPORTED)
     set_target_properties(LibOdfGen::LibOdfGen PROPERTIES
         IMPORTED_LOCATION "${LibOdfGen_LIBRARIES}"
@@ -43,32 +43,3 @@ set_package_properties(LibOdfGen PROPERTIES
     URL "http://sf.net/p/libwpd/libodfgen/"
     DESCRIPTION "Library to generate ODF documents from librevenge's api calls"
 )
-
-
-# - Try to find LibOdfGen
-# Once done this will define
-#
-#  LIBODFGEN_FOUND       - libodfgen is available
-#  LIBODFGEN_INCLUDE_DIRS - include directory, e.g. /usr/include
-#  LIBODFGEN_LIBRARIES   - the libraries needed to use LibOdfGen
-#
-# SPDX-FileCopyrightText: 2013 Yue Liu <yue.liu@mail.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-
-include(LibFindMacros)
-libfind_pkg_check_modules(LIBODFGEN_PKGCONF libodfgen-0.1)
-
-find_path(LIBODFGEN_INCLUDE_DIR
-    NAMES libodfgen/libodfgen.hxx
-    HINTS ${LIBODFGEN_PKGCONF_INCLUDE_DIRS} ${LIBODFGEN_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libodfgen-0.1
-)
-
-find_library(LIBODFGEN_LIBRARY
-    NAMES odfgen-0.1
-    HINTS ${LIBODFGEN_PKGCONF_LIBRARY_DIRS} ${LIBODFGEN_PKGCONF_LIBDIR}
-)
-
-set(LIBODFGEN_PROCESS_LIBS LIBODFGEN_LIBRARY)
-set(LIBODFGEN_PROCESS_INCLUDES LIBODFGEN_INCLUDE_DIR)
-libfind_process(LIBODFGEN)
