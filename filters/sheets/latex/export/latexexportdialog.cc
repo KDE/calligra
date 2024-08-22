@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QApplication>
 #include <QDBusConnection>
+#include <QButtonGroup>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -20,9 +21,7 @@
 
 #include "document.h"
 
-/*#ifdef __FreeBSD__
-#include <unistd.h>
-#endif*/
+using namespace Qt::StringLiterals;
 
 /*
  *  Constructs a LatexExportDialog which is a child of 'parent', with the
@@ -32,18 +31,17 @@
  *  true to construct a modal dialog.
  */
 LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
-  : KoDialog(parent)
+  : QDialog(parent)
   , m_inputStore(inputStore)
+  , m_config(std::make_unique<KConfig>("kspreadlatexexportdialog"))
 {
-    QWidget *mainWidget = new QWidget();
-    m_ui.setupUi(mainWidget);
+    m_ui.setupUi(this);
 
     int i = 0;
 
     QApplication::restoreOverrideCursor();
 
     /* Recent files */
-    m_config = new KConfig("kspreadlatexexportdialog");
     //m_config->setGroup( "KSpread latex export filter" );
     //QString value;
     while (i < 10) {
@@ -131,21 +129,36 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     connect(m_ui.addLanguageBtn, &QAbstractButton::clicked, this, &LatexExportDialog::addLanguage);
     connect(m_ui.rmLanguageBtn, &QAbstractButton::clicked, this, &LatexExportDialog::removeLanguage);
 
-    setMainWidget(mainWidget);
+    m_ui._tab->tabBar()->setExpanding(true);
+    m_ui.buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    m_ui.buttonBox->setProperty("_breeze_force_frame", true);
+    m_ui.buttonBox->setContentsMargins(style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+                                             style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                             style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+                                             style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setModal(true);
-    setCaption(i18n("Latex Export Filter Configuration"));
+    auto styleGroup = new QButtonGroup(this);
+    styleGroup->addButton(m_ui.latexStyleButton);
+    styleGroup->addButton(m_ui.wordsStyleButton);
+
+    auto typeGroup = new QButtonGroup(this);
+    typeGroup->addButton(m_ui.fullDocButton);
+    typeGroup->addButton(m_ui.embededButton);
+
+    m_ui.documentLayout->insertStretch(0);
+    m_ui.documentLayout->insertStretch(2);
+
+    auto okButton = m_ui.buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setText(i18nc("@action:button", "Export"));
+    okButton->setIcon(QIcon::fromTheme(u"document-export-symbolic"_s));
+    okButton->setDefault(true);
+    setWindowTitle(i18n("Latex Export Filter Configuration"));
+
+    connect(m_ui.buttonBox, &QDialogButtonBox::accepted, this, &LatexExportDialog::accept);
+    connect(m_ui.buttonBox, &QDialogButtonBox::rejected, this, &LatexExportDialog::reject);
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
-LatexExportDialog::~LatexExportDialog()
-{
-    delete m_config;
-}
+LatexExportDialog::~LatexExportDialog() = default;
 
 /**
  * Called when the cancel button is clicked.

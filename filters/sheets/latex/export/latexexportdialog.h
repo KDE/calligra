@@ -4,19 +4,17 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef __LATEXEXPORTDIALOG_H__
-#define __LATEXEXPORTDIALOG_H__
+#pragma once
 
 #include <ui_latexexportwidget.h>
 
-#include <KoDialog.h>
-// Qt
+#include <QDialog>
 #include <QStringList>
 
 class KoStore;
 class KConfig;
 
-class LatexExportDialog : public KoDialog
+class LatexExportDialog : public QDialog
 {
     Q_OBJECT
 
@@ -40,7 +38,5 @@ private:
 
     QString m_fileOut;
     KoStore *m_inputStore;
-    KConfig *m_config;
+    std::unique_ptr<KConfig> const m_config;
 };
-
-#endif /* __LATEXEXPORTDIALOG_H__ */
