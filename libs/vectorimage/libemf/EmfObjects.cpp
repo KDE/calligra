@@ -9,11 +9,49 @@
 
 #include <VectorImageDebug.h>
 
+namespace
+{
+
+// Routine to throw away a specific number of bytes
+void soakBytes(QDataStream &stream, quint32 numBytes)
+{
+    quint8 scratch;
+    for (quint32 i = 0; i < numBytes; ++i) {
+        stream >> scratch;
+    }
+}
+
+// Convenience function to handle a 2-byte wide char stream
+QString recordWChars(QDataStream &stream, quint32 numChars)
+{
+    QString text;
+    QChar myChar;
+    for (quint32 i = 0; i < numChars; ++i) {
+        stream >> myChar;
+        text.append(myChar);
+    }
+    return text;
+}
+
+// Convenience function to handle a 1-byte wide char stream
+QString recordChars(QDataStream &stream, quint32 numChars)
+{
+    QString text;
+    quint8 myChar;
+    for (quint32 i = 0; i < numChars; ++i) {
+        stream >> myChar;
+        text.append(QChar(myChar));
+    }
+    return text;
+}
+}
+
 namespace Libemf
 {
 
 // ================================================================
 //                         class EmrTextObject
+//
 
 // See MS-EMF section 2.2.5.
 
@@ -49,7 +87,6 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
 
     soakBytes(stream, offString); // skips over UndefinedSpace1.
     size -= offString;
-    offDx -= offString;
 
     if (textType == SixteenBitChars) {
         m_textString = recordWChars(stream, m_charCount);
@@ -67,7 +104,7 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
 
         // If the number of characters is not a multiple of 4, then we need to soak some
         // bytes to make it a full word.
-        int rest = m_charCount % 4;
+        quint32 rest = m_charCount % 4;
         if (rest != 0) {
             soakBytes(stream, 4 - rest);
             size -= 4 - rest;
@@ -98,35 +135,5 @@ quint32 EmrTextObject::options() const
 QRect EmrTextObject::rectangle() const
 {
     return m_rectangle;
-}
-
-QString EmrTextObject::recordWChars(QDataStream &stream, int numChars)
-{
-    QString text;
-    QChar myChar;
-    for (int i = 0; i < numChars; ++i) {
-        stream >> myChar;
-        text.append(myChar);
-    }
-    return text;
-}
-
-QString EmrTextObject::recordChars(QDataStream &stream, int numChars)
-{
-    QString text;
-    quint8 myChar;
-    for (int i = 0; i < numChars; ++i) {
-        stream >> myChar;
-        text.append(QChar(myChar));
-    }
-    return text;
-}
-
-void EmrTextObject::soakBytes(QDataStream &stream, int numBytes)
-{
-    quint8 scratch;
-    for (int i = 0; i < numBytes; ++i) {
-        stream >> scratch;
-    }
 }
 }

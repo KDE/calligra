@@ -55,16 +55,16 @@ public:
     ~EmrTextObject();
 
     /// The reference point for the text output
-    QPoint referencePoint() const;
+    [[nodiscard]] QPoint referencePoint() const;
 
     /// Options for rectangle
-    quint32 options() const;
+    [[nodiscard]] quint32 options() const;
 
     // Clipping and/or opaquing rectangle
-    QRect rectangle() const;
+    [[nodiscard]] QRect rectangle() const;
 
     /// The text to be output
-    QString textString() const;
+    [[nodiscard]] QString textString() const;
 
 private:
     QPoint m_referencePoint; // reference point used to position the string
@@ -74,15 +74,6 @@ private:
     QRect m_rectangle; // clipping and/or opaquing rectangle
     quint32 m_offDx; // offset to intercharacter spacing array (internal use only)
     QString m_textString; // the text string to output
-
-    // Convenience function to handle a 2-byte wide char stream
-    QString recordWChars(QDataStream &stream, int numChars);
-
-    // Convenience function to handle a 1-byte wide char stream
-    QString recordChars(QDataStream &stream, int numChars);
-
-    // Routine to throw away a specific number of bytes
-    void soakBytes(QDataStream &stream, int numBytes);
 };
 
 }
