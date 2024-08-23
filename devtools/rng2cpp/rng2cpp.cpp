@@ -22,9 +22,9 @@ static QString ns()
 
 class RNGItem;
 // typedef QSharedPointer<RNGItem> RNGItemPtr;
-typedef RNGItem *RNGItemPtr;
-typedef QSet<RNGItemPtr> RNGItems;
-typedef QVector<RNGItemPtr> RNGItemList;
+using RNGItemPtr = RNGItem *;
+using RNGItems = QSet<RNGItemPtr>;
+using RNGItemList = QVector<RNGItemPtr>;
 
 /**
  * Helper class for writing fatal messages of the form fatal() << "error!";
