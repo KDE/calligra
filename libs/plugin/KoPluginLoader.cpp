@@ -62,7 +62,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
         if (firstStart) {
             configChanged = true;
         }
-        for (KPluginMetaData metaData : offers) {
+        for (const KPluginMetaData &metaData : std::as_const(offers)) {
             const QString pluginName = metaData.pluginId();
             if (pluginName.isEmpty()) {
                 warnPlugin << "Loading plugin" << metaData.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
@@ -82,7 +82,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
     }
 
     QMap<QString, KPluginMetaData> serviceNames;
-    for (KPluginMetaData loader : plugins) {
+    for (const KPluginMetaData &loader : std::as_const(plugins)) {
         if (serviceNames.contains(loader.fileName())) { // duplicate
             const QJsonObject json2 = loader.rawData();
             const QVariant pluginVersion2 = json2.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
@@ -92,7 +92,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
             const KPluginMetaData currentLoader = serviceNames.value(loader.fileName());
             const QJsonObject json = currentLoader.rawData();
             const QVariant pluginVersion = json.value(QLatin1StringView("X-Flake-PluginVersion")).toVariant();
-            if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
+            if (!pluginVersion.isNull() && pluginVersion.toInt() >= pluginVersion2.toInt()) {
                 continue; // replace the old one with this one, since its newer.
             }
         }
@@ -100,7 +100,7 @@ void KoPluginLoader::load(const QString &directory, const PluginsConfig &config,
     }
 
     QList<QString> whiteList;
-    for (KPluginMetaData metaData : serviceNames) {
+    for (const KPluginMetaData &metaData : std::as_const(serviceNames)) {
         auto result = KPluginFactory::instantiatePlugin<QObject>(metaData, owner ? owner : pluginLoaderInstance, {});
         if (result.plugin) {
             const QString pluginName = metaData.pluginId();
@@ -127,7 +127,7 @@ QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString
 
     const QVector<KPluginMetaData> offers = KoPluginLoader::pluginLoaders(directory);
 
-    for (KPluginMetaData metaData : offers) {
+    for (const KPluginMetaData &metaData : offers) {
         auto result = KPluginFactory::loadFactory(metaData);
 
         if (!result.plugin) {
