@@ -17,12 +17,7 @@ set( LT_VERSION_AGE 0 )
 set( VERSION ${WV2_VERSION} )
 set( PACKAGE wv2 )
 
-option( WITH_ZLIB "Build wv2 with zlib (with compression features)" ON )
-if( WITH_ZLIB )
-  find_package( ZLIB REQUIRED )
-endif()
-
-include_directories( ${LIBMSO_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} )
+include_directories(${LIBMSO_INCLUDE_DIR})
 
 #
 # Various checks
@@ -66,38 +61,6 @@ add_definitions( -DHAVE_FUNC_ISFINITE )
 endif()
 check_symbol_exists( finite math.h HAVE_FUNC_FINITE )
 check_symbol_exists( _finite math.h HAVE_FUNC__FINITE )
-
-#
-# Check zlib is modern enough
-#
-
-set( NEON_ZLIB 0 ) # By default, we are not modern enough
-set( CMAKE_REQUIRED_LIBRARIES ${ZLIB_LIBRARIES} )
-
-check_symbol_exists( inflate zlib.h ZLIB_HAS_INFLATE )
-
-if( ZLIB_HAS_INFLATE )
-  try_run( MODERN_ZLIB_RUN MODERN_ZLIB_COMPILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp ${CMAKE_SOURCE_DIR}/cmake/TestModernZlib.c )
-endif()
-
-if( MODERN_ZLIB_RUN GREATER 0 AND WITH_ZLIB )
-  message( FATAL_ERROR "Your version of zlib is too old for wv2" )
-endif()
-
-#
-# Set cflags and ldflags
-#
-
-if( ZLIB_FOUND )
-  set( _WV2_LDFLAGS ${_WV2_LDFLAGS} ${ZLIB_LIBRARIES} )
-  set( _WV2_CFLAGS ${_WV2_CFLAGS} ${ZLIB_INCLUDE_DIR} )
-endif()
-
-if( ICONV_FOUND )
-  set( _WV2_LDFLAGS ${_WV2_LDFLAGS} ${ICONV_LIBRARIES} )
-  set( _WV2_CFLAGS ${_WV2_CFLAGS} ${ICONV_INCLUDE_DIR} )
-endif()
-
 #
 # Clean and prepare
 #

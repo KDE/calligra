@@ -86,16 +86,14 @@ add_definitions("-DMAKE_WV2_LIB")
 add_library( kowv2 SHARED ${wv2_SOURCES} ${wv2_HEADERS} ${wv2_GENERATED} )
 generate_export_header(kowv2 BASE_NAME wv2)
 include_directories(  ../../../../libmso)
-target_link_libraries( kowv2 mso ${ZLIB_LIBRARIES} ${ICONV_LIBRARIES} )
+target_link_libraries( kowv2 mso ZLIB::ZLIB Iconv::Iconv)
 set_target_properties( kowv2 PROPERTIES
                   SOVERSION ${LT_VERSION_CURRENT}
                   VERSION ${LT_VERSION_CURRENT}.${LT_VERSION_AGE}.${LT_VERSION_REVISION}
                   LT_VERSION_CURRENT ${LT_VERSION_CURRENT}
                   LT_VERSION_AGE ${LT_VERSION_AGE}
                   LT_VERSION_REVISION ${LT_VERSION_REVISION}
-                  LT_DEPENDENCY_LIBS ${WV2_LDFLAGS}
-            )
-
-install( TARGETS kowv2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS}
 )
+
+install(TARGETS kowv2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
