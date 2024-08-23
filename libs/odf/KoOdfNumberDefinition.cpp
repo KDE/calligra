@@ -76,7 +76,7 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
 {
     const QString format = element.attributeNS(KoXmlNS::style, "num-format", QString());
     if (format.isEmpty()) {
-        // do nothing fall back to what we had.
+        d->formatSpecification = Empty;
     } else if (format[0] == '1') {
         d->formatSpecification = Numeric;
     } else if (format[0] == 'a') {
