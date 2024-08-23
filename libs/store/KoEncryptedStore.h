@@ -81,13 +81,6 @@ protected:
      */
     void savePasswordInKWallet();
 
-private:
-    QByteArray decryptFile(QByteArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QByteArray &password);
-
-    /** returns true if the file should be encrypted, false otherwise **/
-    bool isToBeEncrypted(const QString &fullpath);
-
-protected:
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
     QByteArray m_password;
     QString m_filename;
