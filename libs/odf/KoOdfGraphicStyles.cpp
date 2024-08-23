@@ -12,6 +12,7 @@
 #include <QBrush>
 #include <QBuffer>
 #include <QPen>
+#include <QRegularExpression>
 
 #include <OdfDebug.h>
 

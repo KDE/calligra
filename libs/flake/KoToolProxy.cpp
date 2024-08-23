@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QMimeData>
 #include <QTimer>
 #include <QTouchEvent>
 #include <QUrl>

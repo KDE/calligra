@@ -57,6 +57,7 @@
 #include <QMap>
 #include <QPainter>
 #include <QPainterPath>
+#include <QRegularExpression>
 #include <QVariant>
 
 #include "KoOdfGradientBackground.h"

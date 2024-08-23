@@ -49,6 +49,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QDomDocument>
+#include <QFileInfo>
 #include <QGlobalStatic>
 #include <QImage>
 #include <QImageReader>

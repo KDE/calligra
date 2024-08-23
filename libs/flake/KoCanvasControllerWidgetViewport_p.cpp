@@ -26,10 +26,11 @@
 #include <FlakeDebug.h>
 
 #include <QDragEnterEvent>
+#include <QMimeData>
 #include <QPainter>
 
-#include <limits.h>
-#include <stdlib.h>
+#include <climits>
+#include <cstdlib>
 
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasControllerWidget *parent)

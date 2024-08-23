@@ -20,6 +20,7 @@
 #include "SectionContainer.h"
 
 #include <QMimeData>
+#include <QRectF>
 
 #include <KoDocumentResourceManager.h>
 #include <KoDrag.h>

@@ -31,6 +31,8 @@
 
 #include <MsooXmlTableStyle.h>
 
+#include <QRandomGenerator>
+
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS DocxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS

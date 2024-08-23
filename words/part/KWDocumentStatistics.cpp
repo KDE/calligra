@@ -11,9 +11,12 @@
 #include "frames/KWTextFrameSet.h"
 
 #include <QDebug>
+#include <QMetaMethod>
 #include <QPointer>
+#include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextDocument>
+#include <QTimer>
 
 class KWDocumentStatisticsPrivate
 {

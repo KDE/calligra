@@ -12,6 +12,7 @@
 #include "Styles_p.h"
 
 #include <QFontDatabase>
+#include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
 
@@ -31,9 +32,9 @@
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <fontconfig/fontconfig.h>
 
+#include <cstring>
 #include <fontconfig/fcfreetype.h>
 #include <ft2build.h>
-#include <string.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 #include FT_TYPES_H

@@ -12,7 +12,8 @@
 #include <KoXmlWriter.h>
 #include <QImage>
 #include <QRect>
-#include <math.h>
+#include <QRegularExpression>
+#include <cmath>
 
 ComponentTransferEffect::ComponentTransferEffect()
     : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))

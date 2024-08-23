@@ -12,6 +12,8 @@
 #include <KoOdfStyleManager.h>
 #include <KoXmlReader.h>
 
+#include <QFile>
+
 // ----------------------------------------------------------------
 //                     class OdfReaderAsciiContext
 

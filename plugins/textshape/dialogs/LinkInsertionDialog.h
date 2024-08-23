@@ -10,10 +10,12 @@
 #include <KoTextRangeManager.h>
 #include <QDialog>
 #include <QListWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QTimer>
 #include <QWidget>
-#include <qnetworkaccessmanager.h>
-#include <qnetworkreply.h>
 #include <ui_LinkInsertionDialog.h>
+
 #define FETCH_TIMEOUT 5000
 
 class LinkInsertionDialog : public QDialog

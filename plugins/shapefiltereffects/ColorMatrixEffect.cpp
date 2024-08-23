@@ -10,9 +10,12 @@
 #include <KoFilterEffectRenderContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+
 #include <QImage>
 #include <QRect>
-#include <math.h>
+#include <QRegularExpression>
+
+#include <cmath>
 
 const int MatrixSize = 20;
 const int MatrixRows = 4;

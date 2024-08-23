@@ -1,5 +1,6 @@
 #include <QTest>
 
+#include <QLoggingCategory>
 #include <QObject>
 
 #include <KoOasisSettings.h>

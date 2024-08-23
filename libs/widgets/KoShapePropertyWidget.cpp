@@ -18,6 +18,7 @@
 #include <KLocalizedString>
 
 #include <QLabel>
+#include <QPointer>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 

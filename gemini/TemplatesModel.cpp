@@ -6,6 +6,9 @@
 
 #include "TemplatesModel.h"
 #include "TemplateVariantsModel.h"
+
+#include <QApplication>
+
 #include <KWDocument.h>
 #include <KWFactory.h>
 #include <KoTemplate.h>

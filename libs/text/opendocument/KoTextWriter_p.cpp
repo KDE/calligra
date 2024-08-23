@@ -37,6 +37,7 @@
 
 #include "TextDebug.h"
 
+#include <QBuffer>
 #include <QTextTable>
 
 #include <algorithm>

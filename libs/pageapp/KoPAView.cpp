@@ -14,6 +14,7 @@
 #include <QClipboard>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMimeData>
 #include <QTabBar>
 
 #include <KoCanvasControllerWidget.h>

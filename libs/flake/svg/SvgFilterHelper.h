@@ -8,6 +8,7 @@
 #define SVGFILTERHELPER_H
 
 #include <KoXmlReader.h>
+#include <QPointF>
 #include <QSizeF>
 
 class QRectF;

@@ -11,6 +11,8 @@
 
 // Qt
 #include <QBuffer>
+#include <QRegularExpression>
+#include <QSizeF>
 #include <QStringList>
 
 // KF5

@@ -15,6 +15,8 @@
 #include <KoOdfStyleProperties.h>
 #include <KoXmlReader.h>
 
+#include <QFile>
+
 // ----------------------------------------------------------------
 //                     class OdfReaderWikiContext
 

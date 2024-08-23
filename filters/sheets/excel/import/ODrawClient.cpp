@@ -14,6 +14,7 @@
 #include <KoXmlWriter.h>
 #include <QColor>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "sheet.h"
 #include "workbook.h"

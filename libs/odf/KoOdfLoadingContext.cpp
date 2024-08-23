@@ -20,6 +20,7 @@
 #include <KoXmlNS.h>
 
 // Qt
+#include <QFile>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QStandardPaths>

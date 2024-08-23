@@ -24,6 +24,8 @@
 
 #include <KMessageBox>
 
+#include <QTimer>
+
 KWPart::KWPart(QObject *parent)
     : KoPart(KWFactory::componentData(), parent)
     , m_document(nullptr)

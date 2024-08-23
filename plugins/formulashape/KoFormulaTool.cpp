@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QPainter>
 
 #include "FormulaCommand.h"

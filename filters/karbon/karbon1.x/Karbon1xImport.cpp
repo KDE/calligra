@@ -19,12 +19,13 @@
 #include <QBuffer>
 #include <QColor>
 #include <QDebug>
+#include <QFile>
 #include <QFont>
 #include <QFontMetrics>
 #include <QImage>
 #include <QLoggingCategory>
 
-#include <math.h>
+#include <cmath>
 
 K_PLUGIN_FACTORY_WITH_JSON(KarbonImportFactory, "calligra_filter_karbon1x2karbon.json", registerPlugin<KarbonImport>();)
 

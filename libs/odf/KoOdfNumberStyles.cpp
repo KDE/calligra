@@ -13,6 +13,7 @@
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QRegularExpression>
 #include <QTime>
 
 #include <KLocalizedString>
@@ -22,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include <writeodf/writeodfnumber.h>
 
-#include <math.h>
+#include <cmath>
 
 using namespace writeodf;
 

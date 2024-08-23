@@ -15,6 +15,7 @@
 #include "animations/KPrShapeAnimation.h"
 
 // Qt Headers
+#include <QFile>
 #include <QFont>
 #include <QImage>
 #include <QListWidget>

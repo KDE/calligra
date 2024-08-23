@@ -20,6 +20,8 @@
 
 #include "TextDebug.h"
 
+#include <QUrl>
+
 static const struct {
     KoTextTableTemplate::Property m_property;
     const char *m_element;

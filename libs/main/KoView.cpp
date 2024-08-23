@@ -47,6 +47,8 @@
 #include <QDropEvent>
 #include <QImage>
 #include <QList>
+#include <QMimeData>
+#include <QPointer>
 #include <QPrintDialog>
 #include <QStatusBar>
 #include <QToolBar>

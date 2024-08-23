@@ -14,6 +14,7 @@
 
 #include <FlakeDebug.h>
 
+#include <QDir>
 #include <QFileInfo>
 #include <QStack>
 

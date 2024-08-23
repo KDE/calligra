@@ -14,6 +14,7 @@
 #include <KoStore.h>
 #include <QHash>
 #include <QList>
+#include <QSizeF>
 #include <QVariantList>
 
 class MobiFile;

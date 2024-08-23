@@ -20,6 +20,7 @@
 #include <core/odf/SheetsOdf.h>
 #include <engine/Value.h>
 
+#include <QBuffer>
 #include <QTest>
 
 using namespace Calligra::Sheets;

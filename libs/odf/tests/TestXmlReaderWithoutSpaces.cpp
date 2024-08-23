@@ -3,6 +3,7 @@
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
+#include <QLoggingCategory>
 #include <QProcess>
 #include <QString>
 #include <QTextStream>

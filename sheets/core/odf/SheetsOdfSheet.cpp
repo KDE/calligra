@@ -49,6 +49,8 @@
 #include "StyleStorage.h"
 #include "engine/CalculationSettings.h"
 
+#include <QBuffer>
+
 // This file contains functionality to load/save a Sheet
 
 namespace Calligra

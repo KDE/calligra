@@ -16,6 +16,7 @@
 #include <QByteArray>
 #include <QDomDocument>
 #include <QHash>
+#include <QPoint>
 #include <QVariantList>
 
 class KoStyleStack;

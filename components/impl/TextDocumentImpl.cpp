@@ -26,10 +26,13 @@
 #include <KoZoomHandler.h>
 
 #include <QDebug>
+#include <QMimeDatabase>
 #include <QPointer>
+#include <QRegularExpression>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QTimer>
 #include <QUrlQuery>
 
 #include "ComponentsKoCanvasController.h"

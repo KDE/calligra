@@ -8,8 +8,10 @@
 #include "DocumentListModel.h"
 
 #include <QApplication>
+#include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>
+#include <QUrlQuery>
 
 #include <KConfigGroup>
 #include <KSharedConfig>

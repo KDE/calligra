@@ -9,6 +9,7 @@
 
 #include <QList>
 #include <QMetaType>
+#include <QStack>
 #include <QString>
 #include <QTest>
 #include <QTextCharFormat>
@@ -47,8 +48,8 @@ public:
         m_document = new QTextDocument();
 
         KoTextDocument textDoc(m_document);
-        KoTextEditor *editor = new KoTextEditor(m_document);
-        KUndo2Stack *undoStack = new KUndo2Stack();
+        auto editor = new KoTextEditor(m_document);
+        auto undoStack = new KUndo2Stack();
         textDoc.setUndoStack(undoStack);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);

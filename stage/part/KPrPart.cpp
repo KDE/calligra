@@ -21,6 +21,8 @@
 
 #include <KMessageBox>
 
+#include <QTimer>
+
 KPrPart::KPrPart(QObject *parent)
     : KoPart(KPrFactory::componentData(), parent)
 {

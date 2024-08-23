@@ -8,6 +8,7 @@
 
 #include "KoXmlReader.h"
 
+#include <QLoggingCategory>
 #include <QTest>
 
 static QString const KoXmlNS_office()

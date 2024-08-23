@@ -59,6 +59,7 @@
 
 #include <KLocalizedString>
 
+#include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>

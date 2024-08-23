@@ -91,7 +91,7 @@ QMimeData *CollectionItemModel::mimeData(const QModelIndexList &indexes) const
         return nullptr;
 
     QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+    QDataStream dataStream(&itemData, QIODeviceBase::WriteOnly);
     dataStream << m_shapeTemplateList[index.row()].id;
     const KoProperties *props = m_shapeTemplateList[index.row()].properties;
 

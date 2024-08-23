@@ -35,6 +35,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QFontMetricsF>
+#include <QVariant>
 
 class SpPr
 {

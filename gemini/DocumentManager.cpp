@@ -19,7 +19,9 @@
 #include <part/KWDocument.h>
 #include <stage/part/KPrDocument.h>
 
+#include <QMimeDatabase>
 #include <QMimeType>
+#include <QTimer>
 
 class DocumentManager::Private
 {

@@ -16,6 +16,8 @@
 #include <KoResourcePaths.h>
 #include <KoXmlReader.h>
 
+#include <QFile>
+
 #include "core/Cell.h"
 #include "core/CellStorage.h"
 #include "core/Database.h"

@@ -8,6 +8,7 @@
 #ifndef ODTHTMLCONVERTER_H
 #define ODTHTMLCONVERTER_H
 
+#include <QBuffer>
 #include <QHash>
 #include <QList>
 #include <QString>

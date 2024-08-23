@@ -51,7 +51,9 @@
 #include "StyleManager.h"
 #include "ValueFormatter.h"
 
-#include <float.h>
+#include <QRegularExpression>
+
+#include <cfloat>
 
 // This file contains functionality to load/save a Cell
 

@@ -20,8 +20,10 @@
 #include "SectionsIO.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QDomDocument>
 #include <QFileInfo>
+#include <QStandardPaths>
 #include <QTimer>
 
 #include <KoEmbeddedDocumentSaver.h>

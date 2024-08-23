@@ -8,8 +8,10 @@
 #ifndef ODTMOBIHTMLCONVERTER_H
 #define ODTMOBIHTMLCONVERTER_H
 
+#include <QBuffer>
 #include <QHash>
 #include <QList>
+#include <QSizeF>
 #include <QString>
 
 #include <KoFilter.h>

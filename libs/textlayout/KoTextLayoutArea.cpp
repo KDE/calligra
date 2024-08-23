@@ -43,6 +43,7 @@
 #include <TextLayoutDebug.h>
 
 #include <QFontMetrics>
+#include <QRegularExpression>
 #include <QStyle>
 #include <QTextCursor>
 #include <QTextFragment>

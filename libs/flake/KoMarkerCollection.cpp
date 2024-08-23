@@ -15,6 +15,8 @@
 #include <KoXmlReader.h>
 #include <QStandardPaths>
 
+#include <QFile>
+
 class Q_DECL_HIDDEN KoMarkerCollection::Private
 {
 public:

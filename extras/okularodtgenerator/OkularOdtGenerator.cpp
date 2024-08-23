@@ -9,10 +9,12 @@
 #include "OkularOdtGenerator.h"
 
 #include <QDebug>
+#include <QDomNode>
 #include <QImage>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QPainter>
+#include <QStack>
 #include <QTextDocument>
 
 #include <KWCanvasItem.h>

@@ -20,6 +20,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include <QDate>
 #include <QFont>
 #include <QPainter>
 #include <QPen>

@@ -40,6 +40,8 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include <QBuffer>
+
 // This file contains functionality to load/save a DocBase
 
 // Define the protocol used here for embedded documents' URL

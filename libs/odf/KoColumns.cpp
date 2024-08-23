@@ -13,6 +13,8 @@
 #include "KoXmlWriter.h"
 #include "OdfDebug.h"
 
+#include <QBuffer>
+
 static const int defaultColumnCount = 1;
 static const KoColumns::SeparatorStyle defaultSeparatorStyle = KoColumns::None;
 static const int defaultSeparatorHeight = 100;

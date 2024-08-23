@@ -12,6 +12,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include <QRectF>
+
 #include <algorithm>
 
 KoShapeLayer::KoShapeLayer()

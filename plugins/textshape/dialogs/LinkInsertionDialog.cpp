@@ -12,6 +12,7 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QString>
+#include <QTimer>
 
 LinkInsertionDialog::LinkInsertionDialog(KoTextEditor *editor, QWidget *parent)
     : QDialog(parent)

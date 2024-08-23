@@ -9,8 +9,12 @@
 #include "PdfImportDebug.h"
 #include "SvgOutputDev.h"
 
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QString>
+#include <QTemporaryDir>
+#include <QTemporaryFile>
 
 #include <KoFilterChain.h>
 #include <KoPAMasterPage.h>

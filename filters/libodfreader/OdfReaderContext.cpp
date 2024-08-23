@@ -12,6 +12,8 @@
 #include <KoOdfStyleManager.h>
 #include <KoXmlReader.h>
 
+#include <QSizeF>
+
 // Odftraverse library
 #include "OdfParser.h"
 

@@ -8,6 +8,7 @@
 #include <FlakeDebug.h>
 #include <KoXmlReader.h>
 #include <QPair>
+#include <QRegularExpression>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {

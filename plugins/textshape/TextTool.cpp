@@ -81,6 +81,7 @@
 #include <QLinearGradient>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMimeData>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QTextList>
