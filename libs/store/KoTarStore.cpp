@@ -22,7 +22,6 @@ KoTarStore::KoTarStore(const QString &_filename, Mode mode, const QByteArray &ap
     : KoStore(mode, writeMimetype)
 {
     debugStore << "KoTarStore Constructor filename =" << _filename << " mode = " << int(mode) << Qt::endl;
-    Q_D(KoStore);
 
     d->localFileName = _filename;
 
@@ -43,7 +42,6 @@ KoTarStore::KoTarStore(QWidget *window, const QUrl &_url, const QString &_filena
     : KoStore(mode, writeMimetype)
 {
     debugStore << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile) << " filename = " << _filename << " mode = " << int(mode) << Qt::endl;
-    Q_D(KoStore);
 
     d->url = _url;
     d->window = window;
@@ -64,7 +62,6 @@ KoTarStore::KoTarStore(QWidget *window, const QUrl &_url, const QString &_filena
 
 KoTarStore::~KoTarStore()
 {
-    Q_D(KoStore);
     if (!d->finalized)
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pTar;
@@ -105,7 +102,6 @@ QByteArray KoTarStore::completeMagic(const QByteArray &appMimetype)
 
 void KoTarStore::init(const QByteArray &appIdentification)
 {
-    Q_D(KoStore);
     m_currentDir = nullptr;
     d->good = m_pTar->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
@@ -130,17 +126,15 @@ bool KoTarStore::doFinalize()
 
 bool KoTarStore::openWrite(const QString & /*name*/)
 {
-    Q_D(KoStore);
     // Prepare memory buffer for writing
     m_byteArray.resize(0);
-    d->stream = new QBuffer(&m_byteArray);
+    d->stream = std::unique_ptr<QIODevice>(new QBuffer(&m_byteArray));
     d->stream->open(QIODevice::WriteOnly);
     return true;
 }
 
 bool KoTarStore::openRead(const QString &name)
 {
-    Q_D(KoStore);
     const KArchiveEntry *entry = m_pTar->directory()->entry(name);
     if (entry == nullptr) {
         return false;
@@ -149,17 +143,15 @@ bool KoTarStore::openRead(const QString &name)
         warnStore << name << " is a directory !";
         return false;
     }
-    KArchiveFile *f = (KArchiveFile *)entry;
+    auto f = (KArchiveFile *)entry;
     m_byteArray.resize(0);
-    delete d->stream;
-    d->stream = f->createDevice();
+    d->stream = std::unique_ptr<QIODevice>(f->createDevice());
     d->size = f->size();
     return true;
 }
 
 bool KoTarStore::closeWrite()
 {
-    Q_D(KoStore);
     // write the whole bytearray at once into the tar file
 
     debugStore << "Writing file" << d->fileName << " into TAR archive. size" << d->size;
@@ -172,7 +164,6 @@ bool KoTarStore::closeWrite()
 
 bool KoTarStore::enterRelativeDirectory(const QString &dirName)
 {
-    Q_D(KoStore);
     if (d->mode == Read) {
         if (!m_currentDir) {
             m_currentDir = m_pTar->directory(); // initialize
@@ -184,13 +175,12 @@ bool KoTarStore::enterRelativeDirectory(const QString &dirName)
             return m_currentDir != nullptr;
         }
         return false;
-    } else // Write, no checking here
-        return true;
+    }
+    return true;
 }
 
 bool KoTarStore::enterAbsoluteDirectory(const QString &path)
 {
-    Q_D(KoStore);
     if (path.isEmpty()) {
         m_currentDir = nullptr;
         return true;
@@ -199,8 +189,8 @@ bool KoTarStore::enterAbsoluteDirectory(const QString &path)
         m_currentDir = dynamic_cast<const KArchiveDirectory *>(m_pTar->directory()->entry(path));
         Q_ASSERT(m_currentDir);
         return m_currentDir != nullptr;
-    } else
-        return true;
+    }
+    return true;
 }
 
 bool KoTarStore::fileExists(const QString &absPath) const

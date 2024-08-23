@@ -5,8 +5,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef __koStore_h_
-#define __koStore_h_
+#pragma once
 
 #include "kostore_export.h"
 #include <QByteArray>
@@ -355,15 +354,10 @@ protected:
      */
     virtual bool fileExists(const QString &absPath) const = 0;
 
-protected:
-    KoStorePrivate *d_ptr;
-
-private:
-    Q_DECLARE_PRIVATE(KoStore)
-
-private:
     KoStore(const KoStore &store) = delete; ///< don't copy
     KoStore &operator=(const KoStore &store) = delete; ///< don't assign
-};
 
-#endif
+    std::unique_ptr<KoStorePrivate> d;
+
+    friend KoStorePrivate;
+};

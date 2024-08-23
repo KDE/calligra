@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef koTarStore_h
-#define koTarStore_h
+#pragma once
 
 #include "KoStore.h"
 
@@ -54,9 +53,4 @@ protected:
 
     /// Buffer used when writing
     QByteArray m_byteArray;
-
-private:
-    Q_DECLARE_PRIVATE(KoStore)
 };
-
-#endif

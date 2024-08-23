@@ -21,7 +21,6 @@ KoZipStore::KoZipStore(const QString &_filename, Mode mode, const QByteArray &ap
     : KoStore(mode, writeMimetype)
 {
     debugStore << "KoZipStore Constructor filename =" << _filename << " mode = " << int(mode) << " mimetype = " << appIdentification << Qt::endl;
-    Q_D(KoStore);
 
     d->localFileName = _filename;
 
@@ -42,7 +41,6 @@ KoZipStore::KoZipStore(QWidget *window, const QUrl &_url, const QString &_filena
 {
     debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile) << " filename = " << _filename << " mode = " << int(mode)
                << " mimetype = " << appIdentification << Qt::endl;
-    Q_D(KoStore);
 
     d->url = _url;
     d->window = window;
@@ -62,7 +60,6 @@ KoZipStore::KoZipStore(QWidget *window, const QUrl &_url, const QString &_filena
 
 KoZipStore::~KoZipStore()
 {
-    Q_D(KoStore);
     debugStore << "KoZipStore::~KoZipStore";
     if (!d->finalized)
         finalize(); // ### no error checking when the app forgot to call finalize itself
@@ -79,8 +76,6 @@ KoZipStore::~KoZipStore()
 
 void KoZipStore::init(const QByteArray &appIdentification)
 {
-    Q_D(KoStore);
-
     m_currentDir = nullptr;
     d->good = m_pZip->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
@@ -121,14 +116,12 @@ bool KoZipStore::doFinalize()
 
 bool KoZipStore::openWrite(const QString &name)
 {
-    Q_D(KoStore);
     d->stream = nullptr; // Don't use!
     return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
 
 bool KoZipStore::openRead(const QString &name)
 {
-    Q_D(KoStore);
     const KArchiveEntry *entry = m_pZip->directory()->entry(name);
     if (entry == nullptr) {
         return false;
@@ -138,16 +131,14 @@ bool KoZipStore::openRead(const QString &name)
         return false;
     }
     // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual!
-    const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
-    delete d->stream;
-    d->stream = f->createDevice();
+    const auto f = static_cast<const KZipFileEntry *>(entry);
+    d->stream = std::unique_ptr<QIODevice>(f->createDevice());
     d->size = f->size();
     return true;
 }
 
 qint64 KoZipStore::write(const char *_data, qint64 _len)
 {
-    Q_D(KoStore);
     if (_len == 0)
         return 0;
     // debugStore <<"KoZipStore::write" << _len;
@@ -182,14 +173,12 @@ QStringList KoZipStore::directoryList() const
 
 bool KoZipStore::closeWrite()
 {
-    Q_D(KoStore);
     debugStore << "Wrote file" << d->fileName << " into ZIP archive. size" << d->size;
     return m_pZip->finishWriting(d->size);
 }
 
 bool KoZipStore::enterRelativeDirectory(const QString &dirName)
 {
-    Q_D(KoStore);
     if (d->mode == Read) {
         if (!m_currentDir) {
             m_currentDir = m_pZip->directory(); // initialize
@@ -201,8 +190,8 @@ bool KoZipStore::enterRelativeDirectory(const QString &dirName)
             return m_currentDir != nullptr;
         }
         return false;
-    } else // Write, no checking here
-        return true;
+    }
+    return true;
 }
 
 bool KoZipStore::enterAbsoluteDirectory(const QString &path)

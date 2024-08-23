@@ -50,7 +50,6 @@ private:
 
     // Current File
     QFile *m_file;
-    Q_DECLARE_PRIVATE(KoStore)
 };
 
 #endif

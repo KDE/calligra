@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QFile>
 #include <StoreDebug.h>
+#include <qtypes.h>
 
 // HMMM... I used QFile and QDir.... but maybe this should be made network transparent?
 
@@ -28,8 +29,6 @@ KoDirectoryStore::~KoDirectoryStore() = default;
 
 void KoDirectoryStore::init()
 {
-    Q_D(KoStore);
-
     if (!m_basePath.endsWith('/'))
         m_basePath += '/';
     m_currentPath = m_basePath;
@@ -48,9 +47,8 @@ void KoDirectoryStore::init()
 
 bool KoDirectoryStore::openReadOrWrite(const QString &name, QIODevice::OpenModeFlag iomode)
 {
-    Q_D(KoStore);
     // debugStore <<"KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath <<" name=" << name;
-    int pos = name.lastIndexOf('/');
+    qsizetype pos = name.lastIndexOf('/');
     if (pos != -1) { // there are subdirs in the name -> maybe need to create them, when writing
         pushDirectory(); // remember where we were
         enterAbsoluteDirectory(QString());
@@ -60,10 +58,9 @@ bool KoDirectoryStore::openReadOrWrite(const QString &name, QIODevice::OpenModeF
         if (!ret)
             return false;
     }
-    d->stream = new QFile(m_basePath + name);
+    d->stream = std::make_unique<QFile>(m_basePath + name);
     if (!d->stream->open(iomode)) {
-        delete d->stream;
-        d->stream = nullptr;
+        d->stream.reset();
         return false;
     }
     if (iomode == QIODevice::ReadOnly)

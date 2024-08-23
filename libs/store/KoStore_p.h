@@ -82,7 +82,7 @@ public:
     qint64 size;
 
     /// The stream for the current read or write operation
-    QIODevice *stream;
+    std::unique_ptr<QIODevice> stream;
 
     bool isOpen;
     /// Must be set by the constructor.

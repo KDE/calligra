@@ -163,20 +163,14 @@ const char MAINNAME[] = "maindoc.xml";
 }
 
 KoStore::KoStore(Mode mode, bool writeMimetype)
-    : d_ptr(new KoStorePrivate(this, mode, writeMimetype))
+    : d(std::make_unique<KoStorePrivate>(this, mode, writeMimetype))
 {
 }
 
-KoStore::~KoStore()
-{
-    Q_D(KoStore);
-    delete d->stream;
-    delete d_ptr;
-}
+KoStore::~KoStore() = default;
 
 QUrl KoStore::urlOfStore() const
 {
-    Q_D(const KoStore);
     if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite) {
         return d->url;
     }
@@ -185,7 +179,6 @@ QUrl KoStore::urlOfStore() const
 
 bool KoStore::open(const QString &_name)
 {
-    Q_D(KoStore);
     // This also converts from relative to absolute, i.e. merges the currentPath()
     d->fileName = d->toExternalNaming(_name);
 
@@ -223,13 +216,11 @@ bool KoStore::open(const QString &_name)
 
 bool KoStore::isOpen() const
 {
-    Q_D(const KoStore);
     return d->isOpen;
 }
 
 bool KoStore::close()
 {
-    Q_D(KoStore);
     debugStore << "Closing";
 
     if (!d->isOpen) {
@@ -239,27 +230,24 @@ bool KoStore::close()
 
     bool ret = d->mode == Write ? closeWrite() : closeRead();
 
-    delete d->stream;
-    d->stream = nullptr;
+    d->stream.reset();
     d->isOpen = false;
     return ret;
 }
 
 QIODevice *KoStore::device() const
 {
-    Q_D(const KoStore);
     if (!d->isOpen) {
         warnStore << "You must open before asking for a device";
     }
     if (d->mode != Read) {
         warnStore << "Can not get device from store that is opened for writing";
     }
-    return d->stream;
+    return d->stream.get();
 }
 
 QByteArray KoStore::read(qint64 max)
 {
-    Q_D(KoStore);
     QByteArray data;
 
     if (!d->isOpen) {
@@ -281,7 +269,6 @@ qint64 KoStore::write(const QByteArray &data)
 
 qint64 KoStore::read(char *buffer, qint64 len)
 {
-    Q_D(KoStore);
     if (!d->isOpen) {
         errorStore << "KoStore: You must open before reading" << Qt::endl;
         return -1;
@@ -296,7 +283,6 @@ qint64 KoStore::read(char *buffer, qint64 len)
 
 qint64 KoStore::write(const char *data, qint64 len)
 {
-    Q_D(KoStore);
     if (len == 0) {
         return 0;
     }
@@ -319,7 +305,6 @@ qint64 KoStore::write(const char *data, qint64 len)
 
 qint64 KoStore::size() const
 {
-    Q_D(const KoStore);
     if (!d->isOpen) {
         warnStore << "You must open before asking for a size";
         return static_cast<qint64>(-1);
@@ -333,7 +318,6 @@ qint64 KoStore::size() const
 
 bool KoStore::enterDirectory(const QString &directory)
 {
-    Q_D(KoStore);
     // debugStore <<"enterDirectory" << directory;
     qint64 pos;
     bool success = true;
@@ -351,7 +335,6 @@ bool KoStore::enterDirectory(const QString &directory)
 
 bool KoStore::leaveDirectory()
 {
-    Q_D(KoStore);
     if (d->currentPath.isEmpty()) {
         return false;
     }
@@ -363,7 +346,6 @@ bool KoStore::leaveDirectory()
 
 QString KoStore::currentPath() const
 {
-    Q_D(const KoStore);
     QString path;
     QStringList::ConstIterator it = d->currentPath.begin();
     QStringList::ConstIterator end = d->currentPath.end();
@@ -376,13 +358,11 @@ QString KoStore::currentPath() const
 
 void KoStore::pushDirectory()
 {
-    Q_D(KoStore);
     d->directoryStack.push(currentPath());
 }
 
 void KoStore::popDirectory()
 {
-    Q_D(KoStore);
     d->currentPath.clear();
     enterAbsoluteDirectory(QString());
     enterDirectory(d->directoryStack.pop());
@@ -455,14 +435,12 @@ bool KoStore::addDataToFile(QByteArray &buffer, const QString &destName)
 
 bool KoStore::extractFile(const QString &sourceName, const QString &fileName)
 {
-    Q_D(KoStore);
     QFile file(fileName);
     return d->extractFile(sourceName, file);
 }
 
 bool KoStore::extractFile(const QString &sourceName, QByteArray &data)
 {
-    Q_D(KoStore);
     QBuffer buffer(&data);
     return d->extractFile(sourceName, buffer);
 }
@@ -498,19 +476,16 @@ bool KoStorePrivate::extractFile(const QString &sourceName, QIODevice &buffer)
 
 bool KoStore::seek(qint64 pos)
 {
-    Q_D(KoStore);
     return d->stream->seek(pos);
 }
 
 qint64 KoStore::pos() const
 {
-    Q_D(const KoStore);
     return d->stream->pos();
 }
 
 bool KoStore::atEnd() const
 {
-    Q_D(const KoStore);
     return d->stream->atEnd();
 }
 
@@ -542,13 +517,11 @@ bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
 
 bool KoStore::hasFile(const QString &fileName) const
 {
-    Q_D(const KoStore);
     return fileExists(d->toExternalNaming(fileName));
 }
 
 bool KoStore::finalize()
 {
-    Q_D(KoStore);
     Q_ASSERT(!d->finalized); // call this only once!
     d->finalized = true;
     return doFinalize();
@@ -575,13 +548,11 @@ QString KoStore::password()
 
 bool KoStore::bad() const
 {
-    Q_D(const KoStore);
     return !d->good;
 }
 
 KoStore::Mode KoStore::mode() const
 {
-    Q_D(const KoStore);
     return d->mode;
 }
 

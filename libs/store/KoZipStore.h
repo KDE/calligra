@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef koZipStore_h
-#define koZipStore_h
+#pragma once
 
 #include "KoStore.h"
 
@@ -51,8 +50,4 @@ private:
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory *m_currentDir;
-
-    Q_DECLARE_PRIVATE(KoStore)
 };
-
-#endif
