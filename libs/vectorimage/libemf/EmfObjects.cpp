@@ -46,7 +46,6 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
     size -= 4;
     offString -= 4;
     // as for offString. 36 bytes for parent, then the earlier parts of EmrText
-    quint32 offDx = m_offDx - 36 - 8 - 4 - 4 - 4 - 16 - 4;
 
     soakBytes(stream, offString); // skips over UndefinedSpace1.
     size -= offString;
@@ -55,19 +54,16 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
     if (textType == SixteenBitChars) {
         m_textString = recordWChars(stream, m_charCount);
         size -= 2 * m_charCount;
-        offDx -= 2 * m_charCount;
 
         // If the number of characters is uneven, then we need to soak 2
         // bytes to make it a full word.
         if (m_charCount & 0x01) {
             soakBytes(stream, 2);
             size -= 2;
-            offDx -= 2;
         }
     } else {
         m_textString = recordChars(stream, m_charCount);
         size -= m_charCount;
-        offDx -= m_charCount;
 
         // If the number of characters is not a multiple of 4, then we need to soak some
         // bytes to make it a full word.
@@ -75,7 +71,6 @@ EmrTextObject::EmrTextObject(QDataStream &stream, quint32 size, TextType textTyp
         if (rest != 0) {
             soakBytes(stream, 4 - rest);
             size -= 4 - rest;
-            offDx -= 4 - rest;
         }
     }
 

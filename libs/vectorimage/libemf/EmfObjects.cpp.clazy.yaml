@@ -1,0 +1,12 @@
+---
+MainSourceFile:  '/home/carl/kde6/src/calligra/libs/vectorimage/libemf/EmfObjects.cpp'
+Diagnostics:
+  - DiagnosticName:  unused-but-set-variable
+    DiagnosticMessage:
+      Message:         'variable ''offDx'' set but not used'
+      FilePath:        '/home/carl/kde6/src/calligra/libs/vectorimage/libemf/EmfObjects.cpp'
+      FileOffset:      1237
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  ''
+...
