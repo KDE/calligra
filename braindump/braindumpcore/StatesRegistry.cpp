@@ -79,7 +79,7 @@ void StatesRegistry::Private::parseStatesRC(const QString &_filename)
                                 qCritical() << "Missing attribute: id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
                             } else {
                                 QString file = directory.absoluteFilePath(stateFilename);
-                                if (QFileInfo(file).exists()) {
+                                if (QFileInfo::exists(file)) {
                                     if (category->d->states.contains(stateId)) {
                                         delete category->d->states[stateId];
                                     }
