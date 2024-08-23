@@ -228,14 +228,15 @@ KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoS
 
 void KoShapeFactoryBase::getDeferredPlugin()
 {
-    QMutexLocker(&d->pluginLoadingMutex);
-    if (d->deferredFactory)
+    QMutexLocker lock(&d->pluginLoadingMutex);
+    if (d->deferredFactory) {
         return;
+    }
 
     const QList<KPluginFactory *> pluginFactories = KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligra/deferred"));
     Q_ASSERT(pluginFactories.size() > 0);
-    foreach (KPluginFactory *factory, pluginFactories) {
-        KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
+    for (KPluginFactory *factory : pluginFactories) {
+        auto plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
 
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
