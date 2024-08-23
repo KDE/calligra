@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2020-01-23 15:50+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -138,33 +138,33 @@ msgstr "Miška"
 msgid "Graphics Pen"
 msgstr "Grafično pisalo"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Zapolni"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr "Kaligrafija: povečaj širino"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr "Kaligrafija: zmanjšaj širino"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr "Kaligrafija: povečaj kot"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr "Kaligrafija: zmanjšaj kot"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
@@ -399,12 +399,12 @@ msgstr "Na dno"
 msgid "Bottom Right"
 msgstr "Spodaj desno"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, kde-format
 msgid "Pattern Options"
 msgstr "Možnosti vzorca"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Vzorci"

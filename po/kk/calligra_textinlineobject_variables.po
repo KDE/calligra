@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2012-07-29 09:39+0600\n"
 "Last-Translator: Sairan Kikkarin\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -337,22 +337,22 @@ msgstr "Белгісіз"
 msgid "Value:"
 msgstr "Мәні:"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "New Variable"
 msgstr "Жаңа айнымалы"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
 msgstr "Жаңа айнымалының атауы:"
 
-#: UserVariableOptionsWidget.cpp:168
+#: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr "<b>%1</b> айнымалысы өшірілсін бе?"
 
-#: UserVariableOptionsWidget.cpp:169
+#: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
 msgstr "Айнымалыны өшіру"

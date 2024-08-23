@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2019-12-15 23:03+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -91,110 +91,110 @@ msgid "Opacity"
 msgstr "Läbipaistmatus"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:164 libmsooxml/MsooXmlThemesReader.cpp:356
-#: sheets/xlsx/XlsxXmlCommentsReader.cpp:97
-#: sheets/xlsx/XlsxXmlDocumentReader.cpp:128
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:107
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:456
-#: sheets/xlsx/XlsxXmlTableReader.cpp:68
+#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:450
+#: sheets/xlsx/XlsxXmlTableReader.cpp:66
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:295
-#: stage/pptx/PptxXmlDocumentReader.cpp:150
-#: stage/pptx/PptxXmlSlideReader.cpp:330
-#: words/docx/import/DocxXmlCommentsReader.cpp:84
-#: words/docx/import/DocxXmlDocumentReader.cpp:187
-#: words/docx/import/DocxXmlEndnoteReader.cpp:85
-#: words/docx/import/DocxXmlFontTableReader.cpp:80
-#: words/docx/import/DocxXmlFooterReader.cpp:90
-#: words/docx/import/DocxXmlFootnoteReader.cpp:85
-#: words/docx/import/DocxXmlHeaderReader.cpp:90
-#: words/docx/import/DocxXmlNumberingReader.cpp:79
-#: words/docx/import/DocxXmlSettingsReader.cpp:79
+#: stage/pptx/PptxXmlDocumentReader.cpp:148
+#: stage/pptx/PptxXmlSlideReader.cpp:316
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:78
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:75
+#: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
 msgstr "Nimeruumi \"%1\" ei leitud"
 
-#: libmsooxml/MsooXmlImport.cpp:92
+#: libmsooxml/MsooXmlImport.cpp:90
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "Vajaliku faili %1 avamine nurjus"
 
-#: libmsooxml/MsooXmlImport.cpp:115
+#: libmsooxml/MsooXmlImport.cpp:113
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Vajaliku faili %1 ZIP-kataloogi lugemine nurjus"
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
 #, kde-format
 msgid "Enter password"
 msgstr "Parooli sisestamine"
 
-#: libmsooxml/MsooXmlImport.cpp:328 libmsooxml/MsooXmlImport.cpp:447
+#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "Dokument on krüptitud, palun sisesta lahtikrüptimiseks parool:"
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "Parool on vale, palun anna dokumendi lahtikrüptimiseks parool:"
 
-#: libmsooxml/MsooXmlImport.cpp:622
+#: libmsooxml/MsooXmlImport.cpp:620
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Tüübi %1 asukohta ei leitud"
 
-#: libmsooxml/MsooXmlReader.cpp:131
+#: libmsooxml/MsooXmlReader.cpp:127
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1 (rida %2, veerg %3)"
 
-#: libmsooxml/MsooXmlReader.cpp:132
+#: libmsooxml/MsooXmlReader.cpp:128
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1 (%2, rida %3, veerg %4)"
 
-#: libmsooxml/MsooXmlReader.cpp:154
+#: libmsooxml/MsooXmlReader.cpp:150
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "Elementi \"%1\" ei leitud"
 
-#: libmsooxml/MsooXmlReader.cpp:159
+#: libmsooxml/MsooXmlReader.cpp:155
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "Atribuuti \"%1\" ei leitud"
 
-#: libmsooxml/MsooXmlReader.cpp:169
+#: libmsooxml/MsooXmlReader.cpp:165
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "Atribuudi \"%2\" ootamatu väärtus \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:174
+#: libmsooxml/MsooXmlReader.cpp:170
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "\"%1\" elemendi ootamatu teistkordne esinemine"
 
-#: libmsooxml/MsooXmlReader.cpp:191 libmsooxml/MsooXmlReader.cpp:242
+#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "Oodati elemendi \"%1\" sulgemist"
 
-#: libmsooxml/MsooXmlReader.cpp:233
+#: libmsooxml/MsooXmlReader.cpp:229
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "Ühtegi oodatud elementi ei leitud: %1"
 
-#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:85
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
 msgstr "Failis \"%2\" ei leitud ID \"%1\" sihtmärki"
 
-#: libmsooxml/MsooXmlRelationships.cpp:93
-#: libmsooxml/MsooXmlRelationships.cpp:112
+#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find relationships file \"%1\""
 msgstr "Seostefaili \"%1\" ei leitud"
 
-#: libmsooxml/MsooXmlRelationships.cpp:108
+#: libmsooxml/MsooXmlRelationships.cpp:104
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "Failis \"%2\" ei leitud seose \"%1\" sihtmärki"
@@ -235,135 +235,156 @@ msgstr "Ploki kirjutamine nurjus"
 msgid "<SHEETNAME>"
 msgstr "<TABELINIMI>"
 
+#: sheets/csv/csvexportdialog.cpp:37
+#, fuzzy, kde-format
+#| msgid "Export to Image"
+msgctxt "@title:dialog"
+msgid "Export to CVS"
+msgstr "Eksport pildina"
+
+#: sheets/csv/csvexportdialog.cpp:46
+#: sheets/latex/export/latexexportdialog.cc:152
+#, fuzzy, kde-format
+#| msgid "EPS Export"
+msgctxt "@action:button"
+msgid "Export"
+msgstr "EPS-i eksport"
+
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
 msgstr "CSV filter ei suuda avada sisendfaili - palun saada vearaport."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
-#: sheets/csv/exportdialogui.ui:27 sheets/csv/exportdialogui.ui:33
+#: sheets/csv/exportdialogui.ui:48
 #, kde-format
 msgid "End of Line"
 msgstr "Rea lõpp"
 
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:56
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End of Line:"
+msgstr "Rea lõpp"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
-#: sheets/csv/exportdialogui.ui:39
+#: sheets/csv/exportdialogui.ui:63
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
 msgstr "&UNIX-i stiil (soovitatav, ainult reavahetus)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
-#: sheets/csv/exportdialogui.ui:49
+#: sheets/csv/exportdialogui.ui:73
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
 msgstr "&Windows'i stiil (kelgu tagastamine ja reavahetus)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
-#: sheets/csv/exportdialogui.ui:59
+#: sheets/csv/exportdialogui.ui:83
 #, kde-format
 msgid "&MacOS style (carriage return only)"
 msgstr "&MacOS'i stiil (ainult kelgu tagastamine)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: sheets/csv/exportdialogui.ui:89
+#: sheets/csv/exportdialogui.ui:96
 #, kde-format
 msgid "Sheets"
 msgstr "Tabelid"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
-#: sheets/csv/exportdialogui.ui:102
+#: sheets/csv/exportdialogui.ui:109
 #, kde-format
 msgid "Select sheets to export:"
 msgstr "Eksporditavad tabelid:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
-#: sheets/csv/exportdialogui.ui:118
+#: sheets/csv/exportdialogui.ui:125
 #, kde-format
 msgid "Delimiter Line"
 msgstr "Eraldav joon"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
-#: sheets/csv/exportdialogui.ui:124
+#: sheets/csv/exportdialogui.ui:131
 #, kde-format
 msgid "********<SHEETNAME>********"
 msgstr "********<TABELINIMI>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
-#: sheets/csv/exportdialogui.ui:137
+#: sheets/csv/exportdialogui.ui:144
 #, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 msgstr "<TABELINIMI> asendatakse järgmise tabeli nimega."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
-#: sheets/csv/exportdialogui.ui:156
+#: sheets/csv/exportdialogui.ui:163
 #, kde-format
 msgid "Print delimiter line above every sheet"
 msgstr "Eraldav joon trükitakse iga tabeli kohal"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
-#: sheets/csv/exportdialogui.ui:167 sheets/csv/exportdialogui.ui:251
+#: sheets/csv/exportdialogui.ui:174
 #, kde-format
 msgid "Cells"
 msgstr "Lahtrid"
 
-#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: sheets/csv/exportdialogui.ui:179
-#, kde-format
-msgid "Delimiter"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:182
+#, fuzzy, kde-format
+#| msgid "Delimiter"
+msgid "Delimiter:"
 msgstr "Eraldaja"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: sheets/csv/exportdialogui.ui:185
+#: sheets/csv/exportdialogui.ui:189
 #, kde-format
 msgid "Comma"
 msgstr "Koma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: sheets/csv/exportdialogui.ui:195
+#: sheets/csv/exportdialogui.ui:199
 #, kde-format
 msgid "Semicolon"
 msgstr "Semikoolon"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: sheets/csv/exportdialogui.ui:202
+#: sheets/csv/exportdialogui.ui:206
 #, kde-format
 msgid "Tabulator"
 msgstr "Tabeldusmärk"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: sheets/csv/exportdialogui.ui:209
+#: sheets/csv/exportdialogui.ui:213
 #, kde-format
 msgid "Space"
 msgstr "Tühik"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: sheets/csv/exportdialogui.ui:216
+#: sheets/csv/exportdialogui.ui:222
 #, kde-format
 msgid "Other:"
 msgstr "Muu:"
 
-#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
-#: sheets/csv/exportdialogui.ui:266
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:250
 #, kde-format
 msgid "Quotes:"
 msgstr "Jutumärgid:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:286
+#: sheets/csv/exportdialogui.ui:270
 #, kde-format
 msgid "\""
 msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:291
+#: sheets/csv/exportdialogui.ui:275
 #, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
-#: sheets/csv/exportdialogui.ui:322
+#: sheets/csv/exportdialogui.ui:301
 #, kde-format
 msgid "Export selection only"
 msgstr "Eksporditakse ainult valik"
@@ -504,54 +525,56 @@ msgstr ""
 msgid "Pi&xels between cells:"
 msgstr "Laht&rite vahe pikslites:"
 
-#: sheets/html/htmlexport.cc:198 sheets/html/htmlexport.cc:373
+#: sheets/html/htmlexport.cc:191 sheets/html/htmlexport.cc:366
 #, kde-format
 msgid "Top"
 msgstr "Ülemine"
 
-#: sheets/latex/export/latexexportdialog.cc:139
+#: sheets/latex/export/latexexportdialog.cc:155
 #, kde-format
 msgid "Latex Export Filter Configuration"
 msgstr "LaTeXi ekspordifiltri seadistused"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
-#: sheets/latex/export/latexexportwidget.ui:24
+#: sheets/latex/export/latexexportwidget.ui:36
 #, kde-format
 msgid "Document"
 msgstr "Dokument"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: sheets/latex/export/latexexportwidget.ui:32
-#, kde-format
-msgid "Document Style"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:44
+#, fuzzy, kde-format
+#| msgid "Document Style"
+msgid "Document style:"
 msgstr "Dokumendi stiil"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:38
+#: sheets/latex/export/latexexportwidget.ui:51
 #, kde-format
 msgid "Latex style"
 msgstr "LaTeXi stiil"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:45
+#: sheets/latex/export/latexexportwidget.ui:58
 #, kde-format
 msgid "Words style"
 msgstr "Wordsi stiil"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: sheets/latex/export/latexexportwidget.ui:58
-#, kde-format
-msgid "Document Type"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:68
+#, fuzzy, kde-format
+#| msgid "Document Type"
+msgid "Document type:"
 msgstr "Dokumendi tüüp"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:64
+#: sheets/latex/export/latexexportwidget.ui:75
 #, kde-format
 msgid "The document will be able to be compiled alone"
 msgstr "Dokument on üksikuna kompileeritav"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:67
+#: sheets/latex/export/latexexportwidget.ui:78
 #, kde-format
 msgid ""
 "The document will be generated as a full latex document since all the "
@@ -562,19 +585,19 @@ msgstr ""
 "moodustatakse enne käskude \\begin{document} ja \\end{document} lisamist."
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:70
+#: sheets/latex/export/latexexportwidget.ui:81
 #, kde-format
 msgid "Independent document"
 msgstr "Sõltumatu dokument"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:80
+#: sheets/latex/export/latexexportwidget.ui:91
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
 msgstr "Ei moodustata LaTeXi päist ega dokumendi keskkonda"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:83
+#: sheets/latex/export/latexexportwidget.ui:94
 #, kde-format
 msgid ""
 "The document will be generated as a latex document which will have to be "
@@ -585,123 +608,124 @@ msgstr ""
 "võimaldab luua iga peatüki jaoks erineva väiksema faili."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:86
+#: sheets/latex/export/latexexportwidget.ui:97
 #, kde-format
 msgid "Document to include"
 msgstr "Kaasatav dokument"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
-#: sheets/latex/export/latexexportwidget.ui:98
+#: sheets/latex/export/latexexportwidget.ui:104
 #, kde-format
 msgid "Document class:"
 msgstr "Dokumendiklass:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
-#: sheets/latex/export/latexexportwidget.ui:111
+#: sheets/latex/export/latexexportwidget.ui:124
 #, kde-format
 msgid "Quality:"
 msgstr "Kvaliteet:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:122
+#: sheets/latex/export/latexexportwidget.ui:141
 #, kde-format
 msgid "Final"
 msgstr "Lõplik"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:127
+#: sheets/latex/export/latexexportwidget.ui:146
 #, kde-format
 msgid "Draft"
 msgstr "Mustand"
 
 #. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
-#: sheets/latex/export/latexexportwidget.ui:135
+#: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
 msgstr "Fondi vaikesuurus:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
-#: sheets/latex/export/latexexportwidget.ui:176
+#: sheets/latex/export/latexexportwidget.ui:186
 #, kde-format
 msgid "Pictures"
 msgstr "Pildid"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: sheets/latex/export/latexexportwidget.ui:182
+#: sheets/latex/export/latexexportwidget.ui:192
 #, kde-format
 msgid "Convert the pictures:"
 msgstr "Pildid teisendatakse:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
-#: sheets/latex/export/latexexportwidget.ui:199
+#: sheets/latex/export/latexexportwidget.ui:209
 #, kde-format
 msgid "Pictures directory:"
 msgstr "Piltide kataloog:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: sheets/latex/export/latexexportwidget.ui:213
-#: sheets/latex/export/latexexportwidget.ui:244
+#: sheets/latex/export/latexexportwidget.ui:223
+#: sheets/latex/export/latexexportwidget.ui:269
 #, kde-format
 msgid "Language"
 msgstr "Keel"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: sheets/latex/export/latexexportwidget.ui:219
-#, kde-format
-msgid "Encoding"
-msgstr "Kodeering"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/latex/export/latexexportwidget.ui:244
+#, fuzzy, kde-format
+#| msgid "E&ncoding:"
+msgid "Encoding:"
+msgstr "Kodeeri&ng:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:261
+#: sheets/latex/export/latexexportwidget.ui:289
 #, kde-format
 msgid "Add"
 msgstr "Lisa"
 
 #. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:268
+#: sheets/latex/export/latexexportwidget.ui:296
 #, kde-format
 msgid "Remove"
 msgstr "Eemalda"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: sheets/latex/export/latexexportwidget.ui:293
+#: sheets/latex/export/latexexportwidget.ui:321
 #, kde-format
 msgid "Contents"
 msgstr "Sisu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: sheets/latex/export/latexexportwidget.ui:301
+#: sheets/latex/export/latexexportwidget.ui:329
 #, kde-format
 msgid "Export information about author:"
 msgstr "Eksporditakse teave autori kohta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: sheets/latex/export/latexexportwidget.ui:321
+#: sheets/latex/export/latexexportwidget.ui:349
 #, kde-format
 msgid "Add a table of content:"
 msgstr "Lisatakse sisukord:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: sheets/latex/export/latexexportwidget.ui:340
+#: sheets/latex/export/latexexportwidget.ui:368
 #, kde-format
 msgid "Notes"
 msgstr "Märkused"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
-#: sheets/latex/export/latexexportwidget.ui:346
+#: sheets/latex/export/latexexportwidget.ui:374
 #, kde-format
 msgid "Don't export"
 msgstr "Ei ekspordita"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
-#: sheets/latex/export/latexexportwidget.ui:353
+#: sheets/latex/export/latexexportwidget.ui:381
 #, kde-format
 msgid "Export notes in margin notes"
 msgstr "Eksporditakse märkused ääremärkustest"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
-#: sheets/latex/export/latexexportwidget.ui:360
+#: sheets/latex/export/latexexportwidget.ui:388
 #, kde-format
 msgid "Export notes in comments"
 msgstr "Eksporditakse märkused kommentaaridest"
@@ -759,23 +783,23 @@ msgstr ""
 msgid "Unable to find part for type %1"
 msgstr "Tüübile %1 ei leitud komponenti"
 
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:175
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
 msgstr "Ühiste stringide deklareeritud arv on liiga väike (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:570
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
 msgstr "Fondistiilide deklareeritud arv on liiga väike (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:926
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
 msgstr "Lahtri vormingute deklareeritud arv on liiga väike (%1)"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1053
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1374
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
 msgstr "Täitmise stiilide deklareeritud arv on liiga väike (%1)"
@@ -794,12 +818,12 @@ msgstr ""
 msgid "Expected integer or floating point number"
 msgstr "Oodati täis- või murdarvu"
 
-#: stage/pptx/PptxXmlDocumentReader.cpp:291
+#: stage/pptx/PptxXmlDocumentReader.cpp:289
 #, kde-format
 msgid "Slide layout \"%1\" not found"
 msgstr "Slaidipaigutust \"%1\" ei leitud"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:603
+#: stage/pptx/PptxXmlSlideReader.cpp:589
 #, kde-format
 msgid "Slide %1"
 msgstr "Slaid %1"
@@ -839,7 +863,7 @@ msgstr "&Lause: kui rea lõpp on ka lause lõpp"
 msgid "&Empty Line: If the line is empty"
 msgstr "&Tühi rida: kui rida on tühi"
 
-#: words/epub/OdtHtmlConverter.cpp:258 words/mobi/OdtMobiHtmlConverter.cpp:285
+#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
 msgstr "Lõpumärkused"
@@ -895,6 +919,9 @@ msgstr "Wordsi RTF-i impordifilter"
 msgid "The file cannot be loaded."
 msgstr "Faili ei saa laadida."
 
+#~ msgid "Encoding"
+#~ msgstr "Kodeering"
+
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"
 #~ msgstr "Soovitatav ( %1 )"
@@ -909,9 +936,6 @@ msgstr "Faili ei saa laadida."
 
 #~ msgid "Cannot find encoding: %1"
 #~ msgstr "Kodeeringut %1 ei leitud"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "Kodeeri&ng:"
 
 #~ msgid "Recommended: UTF-8"
 #~ msgstr "Soovitatav: UTF-8"
@@ -937,9 +961,6 @@ msgstr "Faili ei saa laadida."
 
 #~ msgid "Malformed XML data."
 #~ msgstr "Vigased XML-andmed."
-
-#~ msgid "Export to Image"
-#~ msgstr "Eksport pildina"
 
 #~ msgid "Complete Page"
 #~ msgstr "Kogu leht"
@@ -2050,9 +2071,6 @@ msgstr "Faili ei saa laadida."
 
 #~ msgid "PNG Export Error"
 #~ msgstr "PNG ekspordi viga"
-
-#~ msgid "EPS Export"
-#~ msgstr "EPS-i eksport"
 
 #~ msgid "Options"
 #~ msgstr "Valikud"

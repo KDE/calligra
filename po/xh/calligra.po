@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2002-11-09 11:12+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -50,64 +50,64 @@ msgstr "Umbala wokungagqibekanga:"
 msgid "Freehand path"
 msgstr "Susa Iqela"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:444
+#: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:451
+#: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:459
+#: basicflakes/tools/KoCreatePathTool.cpp:457
 #, fuzzy, kde-format
 #| msgid "Change Indent"
 msgid "Angle Constraints"
 msgstr "Tsintsha uphawu"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
-#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
+#: basicflakes/tools/KoCreatePathTool.cpp:461
+#: basicflakes/tools/KoPencilTool.cpp:339 widgets/KoGradientEditWidget.cpp:150
 #, fuzzy, kde-format
 msgid "Line"
 msgstr "i Linen"
 
-#: basicflakes/tools/KoPencilTool.cpp:278
+#: basicflakes/tools/KoPencilTool.cpp:276
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "Indawo"
 
-#: basicflakes/tools/KoPencilTool.cpp:280
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, fuzzy, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Gainsboro"
 
-#: basicflakes/tools/KoPencilTool.cpp:281
+#: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, fuzzy, kde-format
 msgid "Curve"
 msgstr "Ukhetho Lwangoku"
 
-#: basicflakes/tools/KoPencilTool.cpp:282
+#: basicflakes/tools/KoPencilTool.cpp:280
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, fuzzy, kde-format
 msgid "Straight"
 msgstr "triangleq"
 
-#: basicflakes/tools/KoPencilTool.cpp:291
-#: basicflakes/tools/KoPencilTool.cpp:297
+#: basicflakes/tools/KoPencilTool.cpp:289
+#: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:303
+#: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:336
-#: basicflakes/tools/KoPencilTool.cpp:337
+#: basicflakes/tools/KoPencilTool.cpp:334
+#: basicflakes/tools/KoPencilTool.cpp:335
 #, kde-format
 msgid "Pencil"
 msgstr ""
@@ -188,7 +188,7 @@ msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Khetha ubukhulu begama"
 
-#: flake/commands/KoPathReverseCommand.cpp:41
+#: flake/commands/KoPathReverseCommand.cpp:39
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
@@ -200,13 +200,13 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Susa Iqela"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:120
+#: flake/commands/KoPathSegmentTypeCommand.cpp:118
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Itshintsha ichar iyisa Eluphawini"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:122
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
@@ -224,9 +224,9 @@ msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Ukwenziwa kwemigca"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:51
-#: flake/commands/KoShapeBackgroundCommand.cpp:62
-#: flake/commands/KoShapeBackgroundCommand.cpp:77
+#: flake/commands/KoShapeBackgroundCommand.cpp:49
+#: flake/commands/KoShapeBackgroundCommand.cpp:60
+#: flake/commands/KoShapeBackgroundCommand.cpp:75
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set background"
@@ -313,9 +313,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Susa isichwethezi"
 
-#: flake/commands/KoShapeShadowCommand.cpp:57
-#: flake/commands/KoShapeShadowCommand.cpp:74
-#: flake/commands/KoShapeShadowCommand.cpp:85
+#: flake/commands/KoShapeShadowCommand.cpp:55
+#: flake/commands/KoShapeShadowCommand.cpp:72
+#: flake/commands/KoShapeShadowCommand.cpp:83
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
@@ -333,17 +333,17 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Cima Okubhaliweyo"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:61
-#: flake/commands/KoShapeStrokeCommand.cpp:78
-#: flake/commands/KoShapeStrokeCommand.cpp:89
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:76
+#: flake/commands/KoShapeStrokeCommand.cpp:87
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Umzuzwana"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:37
-#: flake/commands/KoShapeTransparencyCommand.cpp:48
-#: flake/commands/KoShapeTransparencyCommand.cpp:61
+#: flake/commands/KoShapeTransparencyCommand.cpp:33
+#: flake/commands/KoShapeTransparencyCommand.cpp:44
+#: flake/commands/KoShapeTransparencyCommand.cpp:57
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
@@ -524,7 +524,7 @@ msgstr "Vula Uxwebhu"
 msgid "Pan"
 msgstr "Tan"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:127
 #, fuzzy
 #| msgid "Change Alignment"
 msgctxt "(qtundo-format)"
@@ -732,13 +732,13 @@ msgstr "Layisha ezantsi"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "Layisha ezantsi"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -1073,7 +1073,7 @@ msgstr ""
 "Ifayile egcinwe ngokuzenzekela yolu xwebhu ikhona.\n"
 "Ufuna ukuyivula mhlawumbi? "
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "Ifayile %1 ayisekho."
@@ -1237,12 +1237,12 @@ msgid ""
 msgstr ""
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
-#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
+#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Iwonga"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1319,12 +1319,12 @@ msgstr "Vula Uxwebhu"
 msgid "%1 %"
 msgstr ""
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, fuzzy, kde-format
 msgid "No"
 msgstr "Qaphela"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "Yes"
 msgstr ""
@@ -1339,7 +1339,7 @@ msgstr "Ayinakurhwebela ngaphandle ifayile"
 msgid "Missing Export Filter"
 msgstr "Icebo lokucoca ulwelo Olurhwetyelwe Ngaphandle Lulahlekile"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:534
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1348,7 +1348,7 @@ msgstr ""
 "Ayinakulurhwebela ngaphakathi ifayile yohlobo\n"
 "%1"
 
-#: main/KoFilterManager.cpp:536
+#: main/KoFilterManager.cpp:537
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Icebo lokucoca ulwelo Olurhwebelwe ngaphakathi Lulahlekile"
@@ -1388,181 +1388,181 @@ msgstr ""
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:158
+#: main/KoMainWindow.cpp:154
 #, fuzzy, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "Gcina Uxwebhu Njenge"
 
-#: main/KoMainWindow.cpp:263
+#: main/KoMainWindow.cpp:259
 #, fuzzy, kde-format
 msgid "Export as PDF..."
 msgstr "&Susa..."
 
-#: main/KoMainWindow.cpp:275
+#: main/KoMainWindow.cpp:271
 #, fuzzy, kde-format
 msgid "Reload"
 msgstr "Layisha ezantsi"
 
-#: main/KoMainWindow.cpp:279
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
 msgstr ""
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:279
 #, fuzzy, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Vula uxwebhu olukhoyo"
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:283
 #, fuzzy, kde-format
 msgid "E&xport..."
 msgstr "&Susa..."
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:287
 #, fuzzy, kde-format
 msgid "En&crypt Document"
 msgstr "Vula Uxwebhu"
 
-#: main/KoMainWindow.cpp:296
+#: main/KoMainWindow.cpp:292
 #, fuzzy, kde-format
 msgid "&Uncompress to Directory"
 msgstr "Vula Uxwebhu"
 
-#: main/KoMainWindow.cpp:301
+#: main/KoMainWindow.cpp:297
 #, fuzzy, kde-format
 msgid "&New View"
 msgstr "&Susa imboniselo"
 
-#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Ulwazi olukwixwebhu"
 
-#: main/KoMainWindow.cpp:331
+#: main/KoMainWindow.cpp:327
 #, kde-format
 msgid "Full Screen Mode"
 msgstr ""
 
-#: main/KoMainWindow.cpp:336
+#: main/KoMainWindow.cpp:332
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Show Dockers"
 msgstr "Bonisa isixhobo sebar %1"
 
-#: main/KoMainWindow.cpp:341
+#: main/KoMainWindow.cpp:337
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Bonisa isixhobo sebar %1"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:344
 #, fuzzy, kde-format
 msgid "Dockers"
 msgstr "Ilayini Eqinileyo"
 
-#: main/KoMainWindow.cpp:632
+#: main/KoMainWindow.cpp:628
 #, fuzzy, kde-format
 msgid "(write protected)"
 msgstr "Isalathiso:"
 
-#: main/KoMainWindow.cpp:637
+#: main/KoMainWindow.cpp:633
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Pale Green"
 
-#: main/KoMainWindow.cpp:639
+#: main/KoMainWindow.cpp:635
 #, fuzzy, kde-format
 msgid "Save"
 msgstr "Dibanisa Isithuba"
 
-#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
 #, fuzzy, kde-format
 msgid "%1 (unknown file type)"
 msgstr "Udidi lwefayile olungaziwayo %1"
 
-#: main/KoMainWindow.cpp:825
+#: main/KoMainWindow.cpp:821
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:828
+#: main/KoMainWindow.cpp:824
 #, fuzzy, kde-format
 msgid "Confirm Save"
 msgstr "Uhombiso"
 
-#: main/KoMainWindow.cpp:834
+#: main/KoMainWindow.cpp:830
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:837
+#: main/KoMainWindow.cpp:833
 #, fuzzy, kde-format
 msgid "Confirm Export"
 msgstr "Uhombiso"
 
-#: main/KoMainWindow.cpp:838
+#: main/KoMainWindow.cpp:834
 #, fuzzy, kde-format
 msgid "Export"
 msgstr "&Susa..."
 
-#: main/KoMainWindow.cpp:936
+#: main/KoMainWindow.cpp:934
 #, fuzzy, kde-format
 msgid "untitled"
 msgstr "Iwonga"
 
-#: main/KoMainWindow.cpp:1200
+#: main/KoMainWindow.cpp:1198
 #, kde-format
 msgid "Open Document"
 msgstr "Vula Uxwebhu"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
 #, fuzzy, kde-format
 msgid "Import Document"
 msgstr "Vula Uxwebhu"
 
-#: main/KoMainWindow.cpp:1374
+#: main/KoMainWindow.cpp:1372
 #, fuzzy, kde-format
 msgid "Export as PDF"
 msgstr "&Susa..."
 
-#: main/KoMainWindow.cpp:1416
+#: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "Vula Uxwebhu"
 
-#: main/KoMainWindow.cpp:1622
+#: main/KoMainWindow.cpp:1620
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "Iwonga loxwebhu"
 
-#: main/KoMainWindow.cpp:1662
+#: main/KoMainWindow.cpp:1650
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1664
+#: main/KoMainWindow.cpp:1652
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Dark Orange"
 
-#: main/KoMainWindow.cpp:2027
+#: main/KoMainWindow.cpp:2015
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Bonisa isixhobo sebar %1"
 
-#: main/KoMainWindow.cpp:2029
+#: main/KoMainWindow.cpp:2017
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Bonisa isixhobo sebar %1"
@@ -1610,18 +1610,18 @@ msgstr "Imibala:"
 msgid "Stopped"
 msgstr ""
 
-#: main/KoRecentDocumentsPane.cpp:68
+#: main/KoRecentDocumentsPane.cpp:64
 #, fuzzy, kde-format
 msgid "Open This Document"
 msgstr "Vula Uxwebhu"
 
-#: main/KoRecentDocumentsPane.cpp:167
+#: main/KoRecentDocumentsPane.cpp:163
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr ""
 
-#: main/KoRecentDocumentsPane.cpp:170
+#: main/KoRecentDocumentsPane.cpp:166
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1782,7 +1782,7 @@ msgstr "Umhla Wangoku (Ulungisiwe)"
 msgid "Saved By"
 msgstr "Dibanisa Isithuba"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
 #, kde-format
 msgid "Comment"
 msgstr "Gqabaza"
@@ -1802,35 +1802,35 @@ msgstr "Phakathi:"
 msgid "&Open"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:116
+#: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
+#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, fuzzy, kde-format
 msgid "Date: %1"
 msgstr "Umhla"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Add Space"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Dibanisa Isithuba"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Umbala wokungagqibekanga"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:368 main/KoView.cpp:421
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Umbala wokungagqibekanga"
@@ -2240,13 +2240,13 @@ msgid "Select a master page design:"
 msgstr ""
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page"
 msgstr "Buyisela okubhaliweyo"
 
-#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:52
 #, fuzzy, kde-format
 msgid "Slide %1"
 msgstr "Bonisa isixhobo sebar %1"
@@ -2450,7 +2450,7 @@ msgstr "Inkampani"
 msgid "Paste"
 msgstr "Umhla"
 
-#: pageapp/KoPAPageThumbnailModel.cpp:56
+#: pageapp/KoPAPageThumbnailModel.cpp:54
 #, fuzzy, kde-format
 msgid "Page %1"
 msgstr "Umhla"
@@ -2473,110 +2473,110 @@ msgid_plural "Paste Pages"
 msgstr[0] "Buyisela okubhaliweyo"
 msgstr[1] "Buyisela okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:299
+#: pageapp/KoPAView.cpp:297
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Umbala wokungagqibekanga"
 
-#: pageapp/KoPAView.cpp:351
+#: pageapp/KoPAView.cpp:349
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "Cima Okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:359
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Ilayini Eqinileyo"
 
-#: pageapp/KoPAView.cpp:370
+#: pageapp/KoPAView.cpp:368
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "Yenza i Template"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:372
 #, fuzzy, kde-format
 msgid "Show Rulers"
 msgstr "Bonisa isixhobo sebar %1"
 
-#: pageapp/KoPAView.cpp:376
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:378
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "Yenza i Template"
 
-#: pageapp/KoPAView.cpp:382
+#: pageapp/KoPAView.cpp:380
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:386
+#: pageapp/KoPAView.cpp:384
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "Faka injongo"
 
-#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
+#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:392
+#: pageapp/KoPAView.cpp:390
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Page"
 msgstr "Igama lenkampani"
 
-#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
+#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "Cima Okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:398
+#: pageapp/KoPAView.cpp:396
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "Cima Okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
+#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "Cima Okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:405
+#: pageapp/KoPAView.cpp:403
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page..."
 msgstr "Buyisela okubhaliweyo"
 
-#: pageapp/KoPAView.cpp:409
+#: pageapp/KoPAView.cpp:407
 #, kde-format
 msgid "Page Layout..."
 msgstr "Ubeko lwephepha..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Umahluko"
 
-#: pageapp/KoPAView.cpp:424
+#: pageapp/KoPAView.cpp:422
 #, fuzzy, kde-format
 msgid "Import Document..."
 msgstr "Vula Uxwebhu"
 
-#: pageapp/KoPAView.cpp:428
+#: pageapp/KoPAView.cpp:426
 #, kde-format
 msgid "Configure..."
 msgstr ""
 
-#: pageapp/KoPAView.cpp:518
+#: pageapp/KoPAView.cpp:516
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "Rhweba angaphakathi Uhlobo"
 
-#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
+#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2588,7 +2588,7 @@ msgstr ""
 "Ayikwazi ukuvula\n"
 "i-%1"
 
-#: pageapp/KoPAView.cpp:660
+#: pageapp/KoPAView.cpp:658
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -2600,24 +2600,24 @@ msgstr "Susa isichwethezi"
 msgid "Set image ..."
 msgstr "Umzuzwana"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, fuzzy, kde-format
 msgid "Background"
 msgstr "Umzuzwana"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #, fuzzy, kde-format
 msgid "Page Background"
 msgstr "Umzuzwana"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Page Design"
 msgstr "Imboniso yephepha"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 msgid "Slide Design"
 msgstr "Bonisa isixhobo sebar %1"
@@ -2644,13 +2644,13 @@ msgstr "Tshintsha Udidi Loluhlu"
 msgid "Display shapes of master slide"
 msgstr "Tshintsha Udidi Loluhlu"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "Umzuzwana"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
@@ -2799,7 +2799,7 @@ msgstr ""
 msgid "Undefined operation in the %1 color space"
 msgstr ""
 
-#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr ""
@@ -3430,7 +3430,7 @@ msgstr ""
 msgid "Combine Normal Map"
 msgstr "Imbumbulu yesiko"
 
-#: pigment/resources/KoStopGradient.cpp:419
+#: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
 msgid "SVG Gradient"
 msgstr ""
@@ -4261,7 +4261,7 @@ msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Ifomati Yomhla"
 
-#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
+#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format"
@@ -5220,19 +5220,19 @@ msgstr "Susa Ugqabazo"
 msgid "Tags"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:133
+#: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:134
+#: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:142
+#: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr ""
@@ -5252,7 +5252,7 @@ msgstr "Ilayini"
 msgid "Right indent"
 msgstr "Light Pink"
 
-#: widgets/KoShadowConfigWidget.cpp:55
+#: widgets/KoShadowConfigWidget.cpp:53
 #, kde-format
 msgid "Change the color of the shadow"
 msgstr ""

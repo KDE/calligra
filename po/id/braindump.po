@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2019-08-27 10:19+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -104,7 +104,7 @@ msgstr "Bentuk Keadaan"
 msgid "A state shape"
 msgstr "Sebuah bentuk keadaan"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Opsi alat keadaan"
@@ -255,12 +255,12 @@ msgstr "Jungkitan menampilkan sebuah bilah judul"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Jungkitan mengorganisir opsi dalam tab atau tidak"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Kolom"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Bebas"
@@ -270,7 +270,7 @@ msgstr "Bebas"
 msgid "Dockers"
 msgstr "Docker"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "%1 tak berjudul"

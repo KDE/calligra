@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_plugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2015-06-07 22:06-0300\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: PluginShape.cpp:35
+#: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: PluginShape.cpp:39
+#: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Plugin com tipo MIME: %1"

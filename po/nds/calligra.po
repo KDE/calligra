@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2014-07-02 23:21+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -42,66 +42,66 @@ msgstr "Ünnerlien opbreken"
 msgid "Freehand path"
 msgstr "Ünnerlien opbreken"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:444
+#: basicflakes/tools/KoCreatePathTool.cpp:442
 #, fuzzy, kde-format
 #| msgid "Angle snapping delta"
 msgid "Angle snapping delta:"
 msgstr "Winkelandockverscheel"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:451
+#: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:459
+#: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
 msgid "Angle Constraints"
 msgstr "Winkelbedingen"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
-#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
+#: basicflakes/tools/KoCreatePathTool.cpp:461
+#: basicflakes/tools/KoPencilTool.cpp:339 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
 msgstr "Lien"
 
-#: basicflakes/tools/KoPencilTool.cpp:278
+#: basicflakes/tools/KoPencilTool.cpp:276
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgid "Precision:"
 msgstr "Positschoon:"
 
-#: basicflakes/tools/KoPencilTool.cpp:280
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, fuzzy, kde-format
 #| msgid "Rainbow"
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Regenbagen"
 
-#: basicflakes/tools/KoPencilTool.cpp:281
+#: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Curve"
 msgstr "Bagen"
 
-#: basicflakes/tools/KoPencilTool.cpp:282
+#: basicflakes/tools/KoPencilTool.cpp:280
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, kde-format
 msgid "Straight"
 msgstr "Graad"
 
-#: basicflakes/tools/KoPencilTool.cpp:291
-#: basicflakes/tools/KoPencilTool.cpp:297
+#: basicflakes/tools/KoPencilTool.cpp:289
+#: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:303
+#: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
 msgstr ""
 
-#: basicflakes/tools/KoPencilTool.cpp:336
-#: basicflakes/tools/KoPencilTool.cpp:337
+#: basicflakes/tools/KoPencilTool.cpp:334
+#: basicflakes/tools/KoPencilTool.cpp:335
 #, kde-format
 msgid "Pencil"
 msgstr ""
@@ -169,7 +169,7 @@ msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Punkttyp fastleggen"
 
-#: flake/commands/KoPathReverseCommand.cpp:41
+#: flake/commands/KoPathReverseCommand.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
 msgstr "Ümdreiht Bagenbahnen"
@@ -179,12 +179,12 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Ünnerlien opbreken"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:120
+#: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Streken na Bagens ännern"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:122
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Streken na Lienen ännern"
@@ -202,9 +202,9 @@ msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Formen utrichten"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:51
-#: flake/commands/KoShapeBackgroundCommand.cpp:62
-#: flake/commands/KoShapeBackgroundCommand.cpp:77
+#: flake/commands/KoShapeBackgroundCommand.cpp:49
+#: flake/commands/KoShapeBackgroundCommand.cpp:60
+#: flake/commands/KoShapeBackgroundCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "Achtergrund fastleggen"
@@ -291,9 +291,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Sietutsehn ännern"
 
-#: flake/commands/KoShapeShadowCommand.cpp:57
-#: flake/commands/KoShapeShadowCommand.cpp:74
-#: flake/commands/KoShapeShadowCommand.cpp:85
+#: flake/commands/KoShapeShadowCommand.cpp:55
+#: flake/commands/KoShapeShadowCommand.cpp:72
+#: flake/commands/KoShapeShadowCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "Schadden fastleggen"
@@ -308,9 +308,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Formengrött ännern"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:61
-#: flake/commands/KoShapeStrokeCommand.cpp:78
-#: flake/commands/KoShapeStrokeCommand.cpp:89
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:76
+#: flake/commands/KoShapeStrokeCommand.cpp:87
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set border"
@@ -318,9 +318,9 @@ msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Rand fastleggen"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:37
-#: flake/commands/KoShapeTransparencyCommand.cpp:48
-#: flake/commands/KoShapeTransparencyCommand.cpp:61
+#: flake/commands/KoShapeTransparencyCommand.cpp:33
+#: flake/commands/KoShapeTransparencyCommand.cpp:44
+#: flake/commands/KoShapeTransparencyCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "Deckstärk fastleggen"
@@ -497,7 +497,7 @@ msgstr "Objekt opstellen"
 msgid "Pan"
 msgstr "Verschuven"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Streek ännern"
@@ -708,13 +708,13 @@ msgstr "%1 wedderhalen"
 msgid "<empty>"
 msgstr "Leddig"
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Wedderhalen"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1063,7 +1063,7 @@ msgstr ""
 "Dat gifft en automaatsche Sekerheitkopie vun dit Dokment.\n"
 "Wullt Du ehr ansteed opmaken?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "De Datei \"%1\" gifft dat nich."
@@ -1239,12 +1239,12 @@ msgstr ""
 "\"Verschonen\", wenn Du en ole Verschoon opmaken wullt."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
-#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
+#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Ahn Titel"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1317,12 +1317,12 @@ msgstr "Egen Dokment"
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "No"
 msgstr "Nee"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "Yes"
 msgstr "Jo"
@@ -1337,7 +1337,7 @@ msgstr "Datei lett sik nich exporteren."
 msgid "Missing Export Filter"
 msgstr "Exportfilter fehlt"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:534
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1346,7 +1346,7 @@ msgstr ""
 "Datei vun den Typ \"%1\"\n"
 "lett sik nich importeren"
 
-#: main/KoFilterManager.cpp:536
+#: main/KoFilterManager.cpp:537
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Importfilter fehlt"
@@ -1386,102 +1386,102 @@ msgstr ""
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:158
+#: main/KoMainWindow.cpp:154
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 nich sekert Dokment (%2)"
 
-#: main/KoMainWindow.cpp:263
+#: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
 msgstr "As PDF exporteren..."
 
-#: main/KoMainWindow.cpp:275
+#: main/KoMainWindow.cpp:271
 #, kde-format
 msgid "Reload"
 msgstr "Nieg laden"
 
-#: main/KoMainWindow.cpp:279
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
 msgstr "Verschonen..."
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:279
 #, fuzzy, kde-format
 #| msgid "Open This Document"
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Dit Dokment opmaken"
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "E&xport..."
 msgstr "&Exporteren..."
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:287
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "En&crypt Document"
 msgstr "Dokment importeren"
 
-#: main/KoMainWindow.cpp:296
+#: main/KoMainWindow.cpp:292
 #, fuzzy, kde-format
 #| msgid "Import Resource"
 msgid "&Uncompress to Directory"
 msgstr "Ressource importeren"
 
-#: main/KoMainWindow.cpp:301
+#: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&New View"
 msgstr "&Nieg Ansicht"
 
-#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Dokment-Informatschonen"
 
-#: main/KoMainWindow.cpp:331
+#: main/KoMainWindow.cpp:327
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Heelschirmbedrief"
 
-#: main/KoMainWindow.cpp:336
+#: main/KoMainWindow.cpp:332
 #, kde-format
 msgid "Show Dockers"
 msgstr "Andockers wiesen"
 
-#: main/KoMainWindow.cpp:341
+#: main/KoMainWindow.cpp:337
 #, fuzzy, kde-format
 #| msgid "Show Dockers"
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Andockers wiesen"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Dockers"
 msgstr "Andockers"
 
-#: main/KoMainWindow.cpp:632
+#: main/KoMainWindow.cpp:628
 #, kde-format
 msgid "(write protected)"
 msgstr "(schrievschuult)"
 
-#: main/KoMainWindow.cpp:637
+#: main/KoMainWindow.cpp:633
 #, kde-format
 msgid "Save as %1"
 msgstr "Sekern as %1"
 
-#: main/KoMainWindow.cpp:639
+#: main/KoMainWindow.cpp:635
 #, kde-format
 msgid "Save"
 msgstr "Sekern"
 
-#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (nich begäng Dateityp)"
 
-#: main/KoMainWindow.cpp:825
+#: main/KoMainWindow.cpp:821
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1490,12 +1490,12 @@ msgstr ""
 "<qt>Mit dat Sekern as %1 gaht villicht en poor Formateren verloren.<p>Wullt "
 "Du liekers na dit Formaat sekern?</qt>"
 
-#: main/KoMainWindow.cpp:828
+#: main/KoMainWindow.cpp:824
 #, kde-format
 msgid "Confirm Save"
 msgstr "Sekern beglöven"
 
-#: main/KoMainWindow.cpp:834
+#: main/KoMainWindow.cpp:830
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1504,54 +1504,54 @@ msgstr ""
 "<qt>Mit den Export as %1 gaht villicht en poor Formateren verloren.<p>Wullt "
 "Du liekers na dit Formaat exporteren?</qt>"
 
-#: main/KoMainWindow.cpp:837
+#: main/KoMainWindow.cpp:833
 #, kde-format
 msgid "Confirm Export"
 msgstr "Exporteren beglöven"
 
-#: main/KoMainWindow.cpp:838
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid "Export"
 msgstr "Exporteren"
 
-#: main/KoMainWindow.cpp:936
+#: main/KoMainWindow.cpp:934
 #, fuzzy, kde-format
 #| msgid "Untitled"
 msgid "untitled"
 msgstr "Ahn Titel"
 
-#: main/KoMainWindow.cpp:1200
+#: main/KoMainWindow.cpp:1198
 #, kde-format
 msgid "Open Document"
 msgstr "Dokment opmaken"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Document"
 msgstr "Dokment importeren"
 
-#: main/KoMainWindow.cpp:1374
+#: main/KoMainWindow.cpp:1372
 #, fuzzy, kde-format
 #| msgid "Export as PDF..."
 msgid "Export as PDF"
 msgstr "As PDF exporteren..."
 
-#: main/KoMainWindow.cpp:1416
+#: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Dokment"
 
-#: main/KoMainWindow.cpp:1622
+#: main/KoMainWindow.cpp:1620
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokment - %1"
 
-#: main/KoMainWindow.cpp:1662
+#: main/KoMainWindow.cpp:1650
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1560,17 +1560,17 @@ msgstr ""
 "Di warrt all Ännern na't verleden Sekern wegkamen.\n"
 "Wullt Du wiedermaken?"
 
-#: main/KoMainWindow.cpp:1664
+#: main/KoMainWindow.cpp:1652
 #, kde-format
 msgid "Warning"
 msgstr "Wohrschoen"
 
-#: main/KoMainWindow.cpp:2027
+#: main/KoMainWindow.cpp:2015
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Warktüüchbalken %1 wiesen"
 
-#: main/KoMainWindow.cpp:2029
+#: main/KoMainWindow.cpp:2017
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Warktüüchbalken %1 versteken"
@@ -1618,18 +1618,18 @@ msgstr "Tomaken"
 msgid "Stopped"
 msgstr "Anhollen"
 
-#: main/KoRecentDocumentsPane.cpp:68
+#: main/KoRecentDocumentsPane.cpp:64
 #, kde-format
 msgid "Open This Document"
 msgstr "Dit Dokment opmaken"
 
-#: main/KoRecentDocumentsPane.cpp:167
+#: main/KoRecentDocumentsPane.cpp:163
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Ännert:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:170
+#: main/KoRecentDocumentsPane.cpp:166
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1790,7 +1790,7 @@ msgstr "Datum un Tiet"
 msgid "Saved By"
 msgstr "Sekert vun"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
 #, kde-format
 msgid "Comment"
 msgstr "Kommentar"
@@ -1810,36 +1810,36 @@ msgstr "Ä&nnern"
 msgid "&Open"
 msgstr "&Opmaken"
 
-#: main/KoVersionDialog.cpp:116
+#: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
 msgstr "A nieg Verschoon lett sik nich tofögen"
 
-#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
+#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, kde-format
 msgid "Date: %1"
 msgstr "Datum: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Form"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:354
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "Aktiv Warktüüch: %1"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:368 main/KoView.cpp:421
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Default Author Profile"
@@ -2207,12 +2207,12 @@ msgid "Select a master page design:"
 msgstr "Hööftsiet-Utsehn kören:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
 #, kde-format
 msgid "Master Page"
 msgstr "Hööftsiet"
 
-#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:52
 #, kde-format
 msgid "Slide %1"
 msgstr "Dia %1"
@@ -2407,7 +2407,7 @@ msgstr "Koperen"
 msgid "Paste"
 msgstr "Infögen"
 
-#: pageapp/KoPAPageThumbnailModel.cpp:56
+#: pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Page %1"
 msgstr "Siet %1"
@@ -2426,110 +2426,110 @@ msgid_plural "Paste Pages"
 msgstr[0] "Siet infögen"
 msgstr[1] "Sieden infögen"
 
-#: pageapp/KoPAView.cpp:299
+#: pageapp/KoPAView.cpp:297
 #, kde-format
 msgid "Tools"
 msgstr "Warktüüch"
 
-#: pageapp/KoPAView.cpp:351
+#: pageapp/KoPAView.cpp:349
 #, kde-format
 msgid "D&elete"
 msgstr "&Wegdoon"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:359
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Backig Gadder"
 
-#: pageapp/KoPAView.cpp:370
+#: pageapp/KoPAView.cpp:368
 #, kde-format
 msgid "Show Master Pages"
 msgstr "Hööftsieden wiesen"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:372
 #, kde-format
 msgid "Show Rulers"
 msgstr "Linealen wiesen"
 
-#: pageapp/KoPAView.cpp:376
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "Linealen wiesen oder versteken"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:378
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Show Page Margins"
 msgstr "Hööftsieden wiesen"
 
-#: pageapp/KoPAView.cpp:382
+#: pageapp/KoPAView.cpp:380
 #, fuzzy, kde-format
 #| msgid "Show/hide the view's rulers"
 msgid "Show/hide the page margins"
 msgstr "Linealen wiesen oder versteken"
 
-#: pageapp/KoPAView.cpp:386
+#: pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert Page"
 msgstr "Siet infögen"
 
-#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
+#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "Nieg Siet na aktuell Siet infögen"
 
-#: pageapp/KoPAView.cpp:392
+#: pageapp/KoPAView.cpp:390
 #, kde-format
 msgid "Copy Page"
 msgstr "Siet koperen"
 
-#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
+#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
 #, kde-format
 msgid "Copy the current page"
 msgstr "Aktuell Siet koperen"
 
-#: pageapp/KoPAView.cpp:398
+#: pageapp/KoPAView.cpp:396
 #, kde-format
 msgid "Delete Page"
 msgstr "Siet wegdoon"
 
-#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
+#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Delete the current page"
 msgstr "Aktuell Siet wegdoon"
 
-#: pageapp/KoPAView.cpp:405
+#: pageapp/KoPAView.cpp:403
 #, kde-format
 msgid "Master Page..."
 msgstr "Hööftsiet..."
 
-#: pageapp/KoPAView.cpp:409
+#: pageapp/KoPAView.cpp:407
 #, kde-format
 msgid "Page Layout..."
 msgstr "Siet-Utsehn..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Variable"
 
-#: pageapp/KoPAView.cpp:424
+#: pageapp/KoPAView.cpp:422
 #, kde-format
 msgid "Import Document..."
 msgstr "Dokment importeren..."
 
-#: pageapp/KoPAView.cpp:428
+#: pageapp/KoPAView.cpp:426
 #, kde-format
 msgid "Configure..."
 msgstr "Instellen..."
 
-#: pageapp/KoPAView.cpp:518
+#: pageapp/KoPAView.cpp:516
 #, kde-format
 msgid "Import Slideshow"
 msgstr "Diaschau importeren"
 
-#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
+#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2538,7 +2538,7 @@ msgstr ""
 "%1\n"
 "lett sik nich importeren"
 
-#: pageapp/KoPAView.cpp:660
+#: pageapp/KoPAView.cpp:658
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "Sietutsehn ännern"
@@ -2550,7 +2550,7 @@ msgstr "Sietutsehn ännern"
 msgid "Set image ..."
 msgstr "Achtergrundbild fastleggen..."
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -2558,20 +2558,20 @@ msgstr "Achtergrundbild fastleggen..."
 msgid "Background"
 msgstr "Achtergrund fastleggen"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set background"
 msgid "Page Background"
 msgstr "Achtergrund fastleggen"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 #| msgid "Page edge:"
 msgid "Page Design"
 msgstr "Sietkant:"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 #| msgid "Slide %1"
 msgid "Slide Design"
@@ -2602,7 +2602,7 @@ msgstr "Hööftformen wiesen"
 msgid "Display shapes of master slide"
 msgstr "Hööftformen wiesen"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change background image"
@@ -2610,7 +2610,7 @@ msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "Achtergrund ännern"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change background image"
@@ -2762,7 +2762,7 @@ msgstr "Nich fastleggt Akschoon binnen %1ruum"
 msgid "Undefined operation in the %1 color space"
 msgstr "Nich fastleggt Akschoon binnen %1-Klörenruum"
 
-#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr "Eenfach Klöörwannelnkarn"
@@ -3418,7 +3418,7 @@ msgstr "Bumpmap"
 msgid "Combine Normal Map"
 msgstr "Bagenbahnen tosamensetten"
 
-#: pigment/resources/KoStopGradient.cpp:419
+#: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG-Övergang"
@@ -4356,7 +4356,7 @@ msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Formaat"
 
-#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
+#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
@@ -5350,19 +5350,19 @@ msgstr "Punkt wegdoon"
 msgid "Tags"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:133
+#: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:134
+#: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:142
+#: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr ""
@@ -5382,7 +5382,7 @@ msgstr "Links inrücken"
 msgid "Right indent"
 msgstr "Rechts inrücken"
 
-#: widgets/KoShadowConfigWidget.cpp:55
+#: widgets/KoShadowConfigWidget.cpp:53
 #, kde-format
 msgid "Change the color of the shadow"
 msgstr ""

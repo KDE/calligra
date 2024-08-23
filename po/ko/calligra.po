@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -39,63 +39,63 @@ msgstr "경로 그리기"
 msgid "Freehand path"
 msgstr "자유형 경로"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:444
+#: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr "각도 스냅 델타:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:451
+#: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
 msgstr "각도 스냅 활성화:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:459
+#: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
 msgid "Angle Constraints"
 msgstr "각도 고정"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
-#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
+#: basicflakes/tools/KoCreatePathTool.cpp:461
+#: basicflakes/tools/KoPencilTool.cpp:339 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
 msgstr "선"
 
-#: basicflakes/tools/KoPencilTool.cpp:278
+#: basicflakes/tools/KoPencilTool.cpp:276
 #, kde-format
 msgid "Precision:"
 msgstr "정밀도:"
 
-#: basicflakes/tools/KoPencilTool.cpp:280
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "원시"
 
-#: basicflakes/tools/KoPencilTool.cpp:281
+#: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Curve"
 msgstr "곡선"
 
-#: basicflakes/tools/KoPencilTool.cpp:282
+#: basicflakes/tools/KoPencilTool.cpp:280
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, kde-format
 msgid "Straight"
 msgstr "직선"
 
-#: basicflakes/tools/KoPencilTool.cpp:291
-#: basicflakes/tools/KoPencilTool.cpp:297
+#: basicflakes/tools/KoPencilTool.cpp:289
+#: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
 msgstr "최적화"
 
-#: basicflakes/tools/KoPencilTool.cpp:303
+#: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
 msgstr "정확성:"
 
-#: basicflakes/tools/KoPencilTool.cpp:336
-#: basicflakes/tools/KoPencilTool.cpp:337
+#: basicflakes/tools/KoPencilTool.cpp:334
+#: basicflakes/tools/KoPencilTool.cpp:335
 #, kde-format
 msgid "Pencil"
 msgstr "연필"
@@ -163,7 +163,7 @@ msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "점 종류 설정"
 
-#: flake/commands/KoPathReverseCommand.cpp:41
+#: flake/commands/KoPathReverseCommand.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
 msgstr "경로 반전"
@@ -173,12 +173,12 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "하위 경로 끊기"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:120
+#: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "세그먼트를 곡선으로 변경"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:122
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "세그먼트를 선으로 변경"
@@ -193,9 +193,9 @@ msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "모양 정렬"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:51
-#: flake/commands/KoShapeBackgroundCommand.cpp:62
-#: flake/commands/KoShapeBackgroundCommand.cpp:77
+#: flake/commands/KoShapeBackgroundCommand.cpp:49
+#: flake/commands/KoShapeBackgroundCommand.cpp:60
+#: flake/commands/KoShapeBackgroundCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "배경 설정"
@@ -268,9 +268,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "RunAround 모양 변경"
 
-#: flake/commands/KoShapeShadowCommand.cpp:57
-#: flake/commands/KoShapeShadowCommand.cpp:74
-#: flake/commands/KoShapeShadowCommand.cpp:85
+#: flake/commands/KoShapeShadowCommand.cpp:55
+#: flake/commands/KoShapeShadowCommand.cpp:72
+#: flake/commands/KoShapeShadowCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "그림자 설정"
@@ -285,16 +285,16 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "모양 크기 변경"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:61
-#: flake/commands/KoShapeStrokeCommand.cpp:78
-#: flake/commands/KoShapeStrokeCommand.cpp:89
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:76
+#: flake/commands/KoShapeStrokeCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "획 그리기 설정"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:37
-#: flake/commands/KoShapeTransparencyCommand.cpp:48
-#: flake/commands/KoShapeTransparencyCommand.cpp:61
+#: flake/commands/KoShapeTransparencyCommand.cpp:33
+#: flake/commands/KoShapeTransparencyCommand.cpp:44
+#: flake/commands/KoShapeTransparencyCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "불투명도 설정"
@@ -463,7 +463,7 @@ msgstr "개체 생성"
 msgid "Pan"
 msgstr "팬"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "세그먼트 변경"
@@ -671,13 +671,13 @@ msgstr "%1 다시 실행"
 msgid "<empty>"
 msgstr "<비어 있음>"
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "다시 실행"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1022,7 +1022,7 @@ msgstr ""
 "이 문서에는 자동 저장된 파일이 있습니다.\n"
 "대신 열어 보시겠습니까?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "파일 %1이(가) 없습니다."
@@ -1191,12 +1191,12 @@ msgstr ""
 "버전을 열 수 있습니다."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
-#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
+#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1267,12 +1267,12 @@ msgstr "문서 닫기"
 msgid "%1 %"
 msgstr "%1%"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "No"
 msgstr "아니요"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "Yes"
 msgstr "예"
@@ -1287,7 +1287,7 @@ msgstr "파일을 내보낼 수 없습니다."
 msgid "Missing Export Filter"
 msgstr "내보내기 필터가 없음"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:534
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1296,7 +1296,7 @@ msgstr ""
 "다음 형식의 파일을 가져올 수 없습니다\n"
 "%1"
 
-#: main/KoFilterManager.cpp:536
+#: main/KoFilterManager.cpp:537
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "가져오기 필터가 없음"
@@ -1336,98 +1336,98 @@ msgstr "커서에서 찾기"
 msgid "Start searching from the current cursor"
 msgstr "현재 커서에서 검색 시작"
 
-#: main/KoMainWindow.cpp:158
+#: main/KoMainWindow.cpp:154
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "저장되지 않은 문서 %1개(%2)"
 
-#: main/KoMainWindow.cpp:263
+#: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
 msgstr "PDF로 내보내기..."
 
-#: main/KoMainWindow.cpp:275
+#: main/KoMainWindow.cpp:271
 #, kde-format
 msgid "Reload"
 msgstr "새로 고침"
 
-#: main/KoMainWindow.cpp:279
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
 msgstr "버전..."
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "기존 문서를 제목 없는 문서로 열기(&I)..."
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "E&xport..."
 msgstr "내보내기(&X)..."
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "En&crypt Document"
 msgstr "문서 암호화(&C)"
 
-#: main/KoMainWindow.cpp:296
+#: main/KoMainWindow.cpp:292
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "디렉터리에 압축 풀기(&U)"
 
-#: main/KoMainWindow.cpp:301
+#: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&New View"
 msgstr "새 보기(&N)"
 
-#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "문서 정보"
 
-#: main/KoMainWindow.cpp:331
+#: main/KoMainWindow.cpp:327
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "전체 화면 모드"
 
-#: main/KoMainWindow.cpp:336
+#: main/KoMainWindow.cpp:332
 #, kde-format
 msgid "Show Dockers"
 msgstr "도커 표시"
 
-#: main/KoMainWindow.cpp:341
+#: main/KoMainWindow.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "도커 이름 표시"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Dockers"
 msgstr "도커"
 
-#: main/KoMainWindow.cpp:632
+#: main/KoMainWindow.cpp:628
 #, kde-format
 msgid "(write protected)"
 msgstr "(쓰기 금지됨)"
 
-#: main/KoMainWindow.cpp:637
+#: main/KoMainWindow.cpp:633
 #, kde-format
 msgid "Save as %1"
 msgstr "%1(으)로 저장"
 
-#: main/KoMainWindow.cpp:639
+#: main/KoMainWindow.cpp:635
 #, kde-format
 msgid "Save"
 msgstr "저장"
 
-#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1(알 수 없는 파일 형식)"
 
-#: main/KoMainWindow.cpp:825
+#: main/KoMainWindow.cpp:821
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1436,12 +1436,12 @@ msgstr ""
 "<qt>%1 형식으로 저장하면 서식이 약간 손실될 수 있습니다.<p>이 형식으로 저장하"
 "시겠습니까?</qt>"
 
-#: main/KoMainWindow.cpp:828
+#: main/KoMainWindow.cpp:824
 #, kde-format
 msgid "Confirm Save"
 msgstr "저장 확인"
 
-#: main/KoMainWindow.cpp:834
+#: main/KoMainWindow.cpp:830
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1450,52 +1450,52 @@ msgstr ""
 "<qt>%1 형식으로 내보내면 형식이 약간 손실될 수 있습니다.<p>그래도 이 형식으"
 "로 내보내시겠습니까?</qt>"
 
-#: main/KoMainWindow.cpp:837
+#: main/KoMainWindow.cpp:833
 #, kde-format
 msgid "Confirm Export"
 msgstr "내보내기 확인"
 
-#: main/KoMainWindow.cpp:838
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid "Export"
 msgstr "내보내기"
 
-#: main/KoMainWindow.cpp:936
+#: main/KoMainWindow.cpp:934
 #, kde-format
 msgid "untitled"
 msgstr "제목 없음"
 
-#: main/KoMainWindow.cpp:1200
+#: main/KoMainWindow.cpp:1198
 #, kde-format
 msgid "Open Document"
 msgstr "문서 열기"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Document"
 msgstr "문서 가져오기"
 
-#: main/KoMainWindow.cpp:1374
+#: main/KoMainWindow.cpp:1372
 #, kde-format
 msgid "Export as PDF"
 msgstr "PDF로 내보내기"
 
-#: main/KoMainWindow.cpp:1416
+#: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "지정한 파일로 내보낼 수 없음"
 
-#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "문서"
 
-#: main/KoMainWindow.cpp:1622
+#: main/KoMainWindow.cpp:1620
 #, kde-format
 msgid "Document - %1"
 msgstr "문서 - %1"
 
-#: main/KoMainWindow.cpp:1662
+#: main/KoMainWindow.cpp:1650
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1504,17 +1504,17 @@ msgstr ""
 "마지막 저장 이후 변경 사항이 손실됩니다.\n"
 "계속하시겠습니까?"
 
-#: main/KoMainWindow.cpp:1664
+#: main/KoMainWindow.cpp:1652
 #, kde-format
 msgid "Warning"
 msgstr "경고"
 
-#: main/KoMainWindow.cpp:2027
+#: main/KoMainWindow.cpp:2015
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 도구 모음 표시"
 
-#: main/KoMainWindow.cpp:2029
+#: main/KoMainWindow.cpp:2017
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 도구 모음 숨기기"
@@ -1560,18 +1560,18 @@ msgstr "닫기"
 msgid "Stopped"
 msgstr "중지됨"
 
-#: main/KoRecentDocumentsPane.cpp:68
+#: main/KoRecentDocumentsPane.cpp:64
 #, kde-format
 msgid "Open This Document"
 msgstr "이 문서 열기"
 
-#: main/KoRecentDocumentsPane.cpp:167
+#: main/KoRecentDocumentsPane.cpp:163
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>수정됨:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:170
+#: main/KoRecentDocumentsPane.cpp:166
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1730,7 +1730,7 @@ msgstr "날짜와 시간"
 msgid "Saved By"
 msgstr "저장자"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
 #, kde-format
 msgid "Comment"
 msgstr "주석"
@@ -1750,35 +1750,35 @@ msgstr "수정(&M)"
 msgid "&Open"
 msgstr "열기(&O)"
 
-#: main/KoVersionDialog.cpp:116
+#: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
 msgstr "새 버전을 추가할 수 없음"
 
-#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
+#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, kde-format
 msgid "Date: %1"
 msgstr "날짜: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "모양"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:354
 #, kde-format
 msgid "Active Author Profile"
 msgstr "활성 작성자 프로필"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:368 main/KoView.cpp:421
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "익명"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "기본 작성자 프로필"
@@ -2132,12 +2132,12 @@ msgid "Select a master page design:"
 msgstr "마스터 쪽 디자인 선택:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
 #, kde-format
 msgid "Master Page"
 msgstr "마스터 쪽"
 
-#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:52
 #, kde-format
 msgid "Slide %1"
 msgstr "슬라이드 %1"
@@ -2326,7 +2326,7 @@ msgstr "복사"
 msgid "Paste"
 msgstr "붙여넣기"
 
-#: pageapp/KoPAPageThumbnailModel.cpp:56
+#: pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Page %1"
 msgstr "%1쪽"
@@ -2343,108 +2343,108 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "쪽 붙여넣기"
 
-#: pageapp/KoPAView.cpp:299
+#: pageapp/KoPAView.cpp:297
 #, kde-format
 msgid "Tools"
 msgstr "도구"
 
-#: pageapp/KoPAView.cpp:351
+#: pageapp/KoPAView.cpp:349
 #, kde-format
 msgid "D&elete"
 msgstr "삭제(&E)"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:359
 #, kde-format
 msgid "Snap to Grid"
 msgstr "격자에 맞추기"
 
-#: pageapp/KoPAView.cpp:370
+#: pageapp/KoPAView.cpp:368
 #, kde-format
 msgid "Show Master Pages"
 msgstr "마스터 쪽 표시"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:372
 #, kde-format
 msgid "Show Rulers"
 msgstr "눈금자 표시"
 
-#: pageapp/KoPAView.cpp:376
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "보기의 눈금자 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:378
 #, kde-format
 msgid "Show Page Margins"
 msgstr "쪽 여백 표시"
 
-#: pageapp/KoPAView.cpp:382
+#: pageapp/KoPAView.cpp:380
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "쪽 여백 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:386
+#: pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert Page"
 msgstr "쪽 삽입"
 
-#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
+#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "현재 쪽 다음에 새 쪽 삽입"
 
-#: pageapp/KoPAView.cpp:392
+#: pageapp/KoPAView.cpp:390
 #, kde-format
 msgid "Copy Page"
 msgstr "쪽 복사"
 
-#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
+#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
 #, kde-format
 msgid "Copy the current page"
 msgstr "현재 쪽 복사"
 
-#: pageapp/KoPAView.cpp:398
+#: pageapp/KoPAView.cpp:396
 #, kde-format
 msgid "Delete Page"
 msgstr "쪽 삭제"
 
-#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
+#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Delete the current page"
 msgstr "현재 쪽 삭제"
 
-#: pageapp/KoPAView.cpp:405
+#: pageapp/KoPAView.cpp:403
 #, kde-format
 msgid "Master Page..."
 msgstr "마스터 쪽..."
 
-#: pageapp/KoPAView.cpp:409
+#: pageapp/KoPAView.cpp:407
 #, kde-format
 msgid "Page Layout..."
 msgstr "쪽 레이아웃..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "변수"
 
-#: pageapp/KoPAView.cpp:424
+#: pageapp/KoPAView.cpp:422
 #, kde-format
 msgid "Import Document..."
 msgstr "문서 가져오기..."
 
-#: pageapp/KoPAView.cpp:428
+#: pageapp/KoPAView.cpp:426
 #, kde-format
 msgid "Configure..."
 msgstr "설정..."
 
-#: pageapp/KoPAView.cpp:518
+#: pageapp/KoPAView.cpp:516
 #, kde-format
 msgid "Import Slideshow"
 msgstr "슬라이드 쇼 가져오기"
 
-#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
+#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2453,7 +2453,7 @@ msgstr ""
 "가져올 수 없음\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:660
+#: pageapp/KoPAView.cpp:658
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "쪽 레이아웃 변경"
@@ -2464,23 +2464,23 @@ msgstr "쪽 레이아웃 변경"
 msgid "Set image ..."
 msgstr "이미지 설정..."
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, kde-format
 msgid "Background"
 msgstr "배경"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #, kde-format
 msgid "Page Background"
 msgstr "쪽 배경"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, kde-format
 msgid "Page Design"
 msgstr "쪽 디자인"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, kde-format
 msgid "Slide Design"
 msgstr "슬라이드 디자인"
@@ -2505,12 +2505,12 @@ msgstr "마스터 쪽의 모양 표시"
 msgid "Display shapes of master slide"
 msgstr "마스터 슬라이드의 모양 표시"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "쪽 배경 이미지 변경"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
 msgstr "슬라이드 배경 이미지 변경"
@@ -2655,7 +2655,7 @@ msgstr "%1 공간에서 정의되지 않은 작업"
 msgid "Undefined operation in the %1 color space"
 msgstr "%1 색 공간에서 정의되지 않은 작업"
 
-#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr "단순 색상 변환 엔진"
@@ -3264,7 +3264,7 @@ msgstr "범프맵"
 msgid "Combine Normal Map"
 msgstr "노멀 맵 합치기"
 
-#: pigment/resources/KoStopGradient.cpp:419
+#: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG 그라디언트"
@@ -4077,7 +4077,7 @@ msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "서식"
 
-#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
+#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "형식"
@@ -5028,12 +5028,12 @@ msgstr "다른 태그에서 삭제"
 msgid "Tags"
 msgstr "태그"
 
-#: widgets/KoResourceTaggingManager.cpp:133
+#: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr "태그를 삭제 취소할 수 없음"
 
-#: widgets/KoResourceTaggingManager.cpp:134
+#: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
@@ -5042,7 +5042,7 @@ msgstr ""
 "<qt>삭제 취소하려는 태그가 태그 목록에 이미 있습니다.<br>새로운 유일한 이름"
 "을 입력하십시오.</qt>"
 
-#: widgets/KoResourceTaggingManager.cpp:142
+#: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr "태그가 삭제 취소되지 않았습니다."
@@ -5062,7 +5062,7 @@ msgstr "왼쪽 들여쓰기"
 msgid "Right indent"
 msgstr "오른쪽 들여쓰기"
 
-#: widgets/KoShadowConfigWidget.cpp:55
+#: widgets/KoShadowConfigWidget.cpp:53
 #, kde-format
 msgid "Change the color of the shadow"
 msgstr "그림자 색상 변경"

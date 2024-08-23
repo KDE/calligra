@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2022-08-11 11:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -109,7 +109,7 @@ msgstr "Durum Şekli"
 msgid "A state shape"
 msgstr "Bir durum şekli"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Durum aracı seçenekleri"
@@ -260,12 +260,12 @@ msgstr "Başlık çubuğu gösterimini açar/kapatır"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Seçenekleri sekmeler halinde düzenlemeyi açar/kapatır"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Sütun"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Serbest"
@@ -275,7 +275,7 @@ msgstr "Serbest"
 msgid "Dockers"
 msgstr "Tutturucular"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Adsız %1"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2009-03-02 21:11+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: Changecase.cpp:51 Changecase.cpp:79
+#: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
 msgid "Change case"
 msgstr "केस बदलव"
 
-#: Changecase.cpp:56
+#: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
 msgstr "वाक्य के केस"
 
-#: Changecase.cpp:57
+#: Changecase.cpp:55
 #, kde-format
 msgid "lowercase"
 msgstr "लोअरकेस"
 
-#: Changecase.cpp:58
+#: Changecase.cpp:56
 #, kde-format
 msgid "UPPER CASE"
 msgstr "अपर केस"
 
-#: Changecase.cpp:59
+#: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
 msgstr "कैप्स चालू में"
 
-#: Changecase.cpp:60
+#: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
 msgstr "टागल केस"

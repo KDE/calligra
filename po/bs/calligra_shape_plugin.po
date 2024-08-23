@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2012-10-03 13:33+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: PluginShape.cpp:35
+#: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: PluginShape.cpp:39
+#: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Priključak za mimetype: %1"

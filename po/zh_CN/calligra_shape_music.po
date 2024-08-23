@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -492,7 +492,7 @@ msgstr "音乐形状"
 msgid "A shape which provides a music editor"
 msgstr "提供音乐编辑器的形状"
 
-#: MusicTool.cpp:83
+#: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
 msgstr "部件"

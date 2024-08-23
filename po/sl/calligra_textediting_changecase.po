@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2020-01-23 15:49+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -18,32 +18,32 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 
-#: Changecase.cpp:51 Changecase.cpp:79
+#: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
 msgid "Change case"
 msgstr "Spremeni velikost črk"
 
-#: Changecase.cpp:56
+#: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
 msgstr "Stavčni način (prva črka je velika)"
 
-#: Changecase.cpp:57
+#: Changecase.cpp:55
 #, kde-format
 msgid "lowercase"
 msgstr "male črke"
 
-#: Changecase.cpp:58
+#: Changecase.cpp:56
 #, kde-format
 msgid "UPPER CASE"
 msgstr "VELIKE ČRKE"
 
-#: Changecase.cpp:59
+#: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
 msgstr "Velike Začetnice"
 
-#: Changecase.cpp:60
+#: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
 msgstr "pREKLOPI vELIKOST"

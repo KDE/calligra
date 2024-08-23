@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2017-04-28 13:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -108,7 +108,7 @@ msgstr "Σχήμα κατάστασης"
 msgid "A state shape"
 msgstr "Ένα σχήμα κατάστασης"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Επιλογές εργαλείου κατάστασης"
@@ -259,12 +259,12 @@ msgstr "Η εναλλαγή εμφανίζει μια γραμμή τίτλου"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Η εναλλαγή οργανώνει ή όχι τις επιλογές σε καρτέλες"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Στήλη"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Ελεύθερο"
@@ -274,7 +274,7 @@ msgstr "Ελεύθερο"
 msgid "Dockers"
 msgstr "Οδηγοί πρόσδεσης"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Χωρίς τίτλο %1"

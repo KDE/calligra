@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin.po-தமிழில்\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2008-06-23 14:27+0530\n"
 "Last-Translator: ஆமாச்சு <amachu@ubuntu.com>\n"
 "Language-Team: en_US <kde-i18n-doc@lists.kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: KAider 0.1\n"
 
-#: Changecase.cpp:51 Changecase.cpp:79
+#: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
 msgid "Change case"
 msgstr "எழுத்துவடிவத்தை மாற்று"
 
-#: Changecase.cpp:56
+#: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
 msgstr "வரியின் எழுத்துவடிவம்"
 
-#: Changecase.cpp:57
+#: Changecase.cpp:55
 #, kde-format
 msgid "lowercase"
 msgstr "குறைந்த எழுத்துவடிவம்"
 
-#: Changecase.cpp:58
+#: Changecase.cpp:56
 #, kde-format
 msgid "UPPER CASE"
 msgstr "உயர்ந்த எழுத்துவடிவம்"
 
-#: Changecase.cpp:59
+#: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
 msgstr "முதலெழுத்து உயர்ந்த"
 
-#: Changecase.cpp:60
+#: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
 msgstr "மாறும் எழுத்துவடிவம் "

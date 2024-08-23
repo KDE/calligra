@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2022-05-11 21:23+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -59,8 +59,8 @@ msgstr "Рядом с осью"
 msgid "Other-side"
 msgstr "С другой стороны"
 
-#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
-#: DataSetConfigWidget.cpp:347
+#: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
+#: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
 msgstr "Название оси"
@@ -180,18 +180,18 @@ msgstr "Вторичная ось X"
 msgid "Secondary Y Axis"
 msgstr "Вторичная ось Y"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
 msgstr "Модуль отсутствует"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr "Модуль, который требуется для показа подписи на диаграмме, недоступен."
 
-#: ChartShape.cpp:305
+#: ChartShape.cpp:303
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
@@ -200,31 +200,31 @@ msgstr ""
 "Модуль, который требуется для показа подписи, несовместим с текущей версией "
 "диаграммы."
 
-#: ChartShape.cpp:306
+#: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "Несовместимый модуль"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
 msgstr "Заголовок"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
-#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
+#: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
 msgstr "Подзаголовок"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
-#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
+#: ChartShape.cpp:382 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
 msgstr "Нижний колонтитул"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:752
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -233,17 +233,17 @@ msgstr ""
 "Этот документ содержит внешние ссылки на удалённый документ\n"
 "%1"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Требуется подтверждение"
 
-#: ChartShape.cpp:756
+#: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
 msgstr "Загрузить"
 
-#: ChartShape.cpp:757
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
 msgstr "Пропустить"
@@ -259,7 +259,7 @@ msgid "Business charts"
 msgstr "Бизнес-диаграммы"
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
-#: PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:230
 #, kde-format
 msgid "Bar Chart"
 msgstr "Гистограмма"
@@ -290,7 +290,7 @@ msgid "Percent bar chart"
 msgstr "Процентная гистограмма"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
-#: PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:236
 #, kde-format
 msgid "Line Chart"
 msgstr "Линейная диаграмма"
@@ -321,7 +321,7 @@ msgid "Percent line chart"
 msgstr "Процентная линейная диаграмма"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
-#: PlotAreaConfigWidget.cpp:244
+#: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
 msgstr "Комбинированная диаграмма"
@@ -352,7 +352,7 @@ msgid "Percent area chart"
 msgstr "Процентная комбинированная диаграмма"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
-#: PlotAreaConfigWidget.cpp:252
+#: PlotAreaConfigWidget.cpp:250
 #, kde-format
 msgid "Pie Chart"
 msgstr "Круговая диаграмма"
@@ -363,7 +363,7 @@ msgid "Pie chart"
 msgstr "Круговая диаграмма"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
-#: PlotAreaConfigWidget.cpp:253
+#: PlotAreaConfigWidget.cpp:251
 #, kde-format
 msgid "Ring Chart"
 msgstr "Кольцевая диаграмма"
@@ -374,7 +374,7 @@ msgid "Ring chart"
 msgstr "Кольцевая диаграмма"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
-#: PlotAreaConfigWidget.cpp:266
+#: PlotAreaConfigWidget.cpp:264
 #, kde-format
 msgid "Bubble Chart"
 msgstr "Пузырьковая диаграмма"
@@ -385,7 +385,7 @@ msgid "Bubble chart"
 msgstr "Пузырьковая диаграмма"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
-#: PlotAreaConfigWidget.cpp:265
+#: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
 msgstr "Точечная диаграмма"
@@ -523,37 +523,37 @@ msgstr "Закрытие"
 msgid "Growth"
 msgstr "Рост"
 
-#: ChartTool.cpp:99
+#: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
 msgstr "Сделать что-то"
 
-#: ChartTool.cpp:104
+#: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
 msgstr "Сделать что-то ещё"
 
-#: ChartTool.cpp:271
+#: ChartTool.cpp:269
 #, kde-format
 msgid "Titles"
 msgstr "Заголовки"
 
-#: ChartTool.cpp:286
+#: ChartTool.cpp:284
 #, kde-format
 msgid "Legend"
 msgstr "Легенда"
 
-#: ChartTool.cpp:299
+#: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
 msgstr "Область диаграммы"
 
-#: ChartTool.cpp:1063
+#: ChartTool.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "Показать легенду"
 
-#: ChartTool.cpp:1065
+#: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
 msgstr "Скрыть легенду"
@@ -573,139 +573,139 @@ msgctxt "(qtundo-format)"
 msgid "Remove Axis"
 msgstr "Удалить ось"
 
-#: commands/AxisCommand.cpp:113
+#: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
 msgstr ""
 "Показать заголовок оси\n"
 "отображение заголовка оси"
 
-#: commands/AxisCommand.cpp:115
+#: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
 msgstr ""
 "Скрыть заголовок оси\n"
 "скрытие заголовка оси"
 
-#: commands/AxisCommand.cpp:140
+#: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
 msgstr "Показать ось"
 
-#: commands/AxisCommand.cpp:142
+#: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
 msgstr "Скрыть ось"
 
-#: commands/AxisCommand.cpp:151
+#: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
 msgstr "Показывать метки на осях"
 
-#: commands/AxisCommand.cpp:153
+#: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
 msgstr "Показывать метки на осях"
 
-#: commands/AxisCommand.cpp:162
+#: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
 msgstr ""
 "Показывать основные линии сетки оси\n"
 "отображение основных линий сеток оси"
 
-#: commands/AxisCommand.cpp:164
+#: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
 msgstr ""
 "Скрывать основные линии сетки оси\n"
 "скрытие основных линий сеток оси"
 
-#: commands/AxisCommand.cpp:173
+#: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
 msgstr ""
 "Показывать вторичные линии сетки оси\n"
 "отображение вторичных линий сеток оси"
 
-#: commands/AxisCommand.cpp:175
+#: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
 msgstr ""
 "Скрывать вторичные линии сетки оси\n"
 "скрытие вторичных линий сеток оси"
 
-#: commands/AxisCommand.cpp:184
+#: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
 msgstr ""
 "Логарифмическое масштабирование\n"
 "логарифмическое масштабирование"
 
-#: commands/AxisCommand.cpp:186
+#: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
 msgstr ""
 "Линейное масштабирование\n"
 "линейное масштабирование"
 
-#: commands/AxisCommand.cpp:194
+#: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
 msgstr ""
 "Указать ширину шага на оси\n"
 "указание ширины шага на оси"
 
-#: commands/AxisCommand.cpp:201
+#: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
 msgstr ""
 "Указать ширину подшага на оси\n"
 "указание ширины подшага на оси"
 
-#: commands/AxisCommand.cpp:209
+#: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
 msgstr ""
 "Указать автоматическую ширину шага\n"
 "указание автоматической ширины шага"
 
-#: commands/AxisCommand.cpp:211
+#: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
 msgstr ""
 "Указать ширину шага на оси вручную\n"
 "указание ширины шага на оси вручную"
 
-#: commands/AxisCommand.cpp:220
+#: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
 msgstr ""
 "Автоматическая ширина подшага\n"
 "автоматическую ширину подшага"
 
-#: commands/AxisCommand.cpp:222
+#: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
 msgstr ""
 "Ручная ширина подшага\n"
 "ручную ширину подшага"
 
-#: commands/AxisCommand.cpp:230
+#: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
 msgstr ""
 "Установить шрифт метки оси\n"
 "установку шрифта метки оси"
 
-#: commands/AxisCommand.cpp:236
+#: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
 msgstr ""
 "Установить положение оси\n"
 "установку положения оси"
 
-#: commands/AxisCommand.cpp:257
+#: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
 msgstr ""
@@ -726,307 +726,307 @@ msgstr ""
 "Скрыть текстовый объект\n"
 "скрытие текстового объекта"
 
-#: commands/ChartTypeCommand.cpp:77
+#: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
 msgstr ""
 "Обычная гистограмма\n"
 "обычную гистограмму"
 
-#: commands/ChartTypeCommand.cpp:80
+#: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
 msgstr ""
 "Составная гистограмма\n"
 "составную гистограмму"
 
-#: commands/ChartTypeCommand.cpp:83
+#: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
 msgstr ""
 "Процентная гистограмма\n"
 "процентную гистограмму"
 
-#: commands/ChartTypeCommand.cpp:92
+#: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
 msgstr ""
 "Обычная линейная диаграмма\n"
 "обычную линейную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:95
+#: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
 msgstr ""
 "Составная линейная диаграмма\n"
 "составную линейную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:98
+#: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
 msgstr ""
 "Процентная линейная диаграмма\n"
 "процентную линейную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:107
+#: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
 msgstr ""
 "Обычная комбинированная диаграмма\n"
 "обычную комбинированную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:110
+#: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
 msgstr ""
 "Составная комбинированная диаграмма\n"
 "составную комбинированную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:113
+#: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
 msgstr ""
 "Процентная комбинированная диаграмма\n"
 "процентную комбинированную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:120
+#: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
 msgstr ""
 "Круговая диаграмма\n"
 "круговую диаграмму"
 
-#: commands/ChartTypeCommand.cpp:123
+#: commands/ChartTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
 msgstr ""
 "Кольцевая диаграмма\n"
 "кольцевую диаграмму"
 
-#: commands/ChartTypeCommand.cpp:126
+#: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
 msgstr ""
 "Точечная диаграмма\n"
 "точечную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:129
+#: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
 msgstr ""
 "Лепестковая диаграмма\n"
 "лепестковую диаграмму"
 
-#: commands/ChartTypeCommand.cpp:132
+#: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
 msgstr ""
 "Лепестковая диаграмма с заливкой\n"
 "лепестковую диаграмму с заливкой"
 
-#: commands/ChartTypeCommand.cpp:135
+#: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
 msgstr ""
 "Диаграмма продаж\n"
 "диаграмму продаж"
 
-#: commands/ChartTypeCommand.cpp:138
+#: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr ""
 "Пузырьковая диаграмма\n"
 "пузырьковую диаграмму"
 
-#: commands/ChartTypeCommand.cpp:141
+#: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
 msgstr ""
 "Поверхностная диаграмма\n"
 "поверхностную диаграмму"
 
-#: commands/ChartTypeCommand.cpp:144
+#: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
 msgstr ""
 "Диаграмма Ганта\n"
 "диаграмму ганта"
 
-#: commands/DatasetCommand.cpp:137
+#: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
 msgstr ""
 "Указать тип диаграммы набора данных\n"
 "тип диаграммы набора данных"
 
-#: commands/DatasetCommand.cpp:145
+#: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
 msgstr ""
 "Показать категорию набора данных\n"
 "отображение категории набора данных"
 
-#: commands/DatasetCommand.cpp:147
+#: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
 msgstr ""
 "Скрыть категорию набора данных\n"
 "скрытие категории набора данных"
 
-#: commands/DatasetCommand.cpp:156
+#: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
 msgstr ""
 "Показать номер набора данных\n"
 "отображение номера набора данных"
 
-#: commands/DatasetCommand.cpp:158
+#: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
 msgstr ""
 "Скрыть номер набора данных\n"
 "скрытие номера набора данных"
 
-#: commands/DatasetCommand.cpp:167
+#: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
 msgstr ""
 "Показать процент набора данных\n"
 "отображение процента набора данных"
 
-#: commands/DatasetCommand.cpp:169
+#: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
 msgstr ""
 "Скрыть процент набора данных\n"
 "скрытие процента набора данных"
 
-#: commands/DatasetCommand.cpp:178
+#: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
 msgstr ""
 "Показать символ набора данных\n"
 "отображение символа набора данных"
 
-#: commands/DatasetCommand.cpp:180
+#: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
 msgstr ""
 "Скрыть символ набора данных\n"
 "скрытие символа набора данных"
 
-#: commands/DatasetCommand.cpp:188
+#: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
 msgstr ""
 "Выбрать цвет кисти набора данных\n"
 "выбор цвета кисти набора данных"
 
-#: commands/DatasetCommand.cpp:195
+#: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
 msgstr ""
 "Выбрать цвет пера набора данных\n"
 "выбор цвета пера набора данных"
 
-#: commands/DatasetCommand.cpp:204
+#: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
 msgstr ""
 "Скрыть маркер набора данных\n"
 "скрытие маркера набора данных"
 
-#: commands/DatasetCommand.cpp:206
+#: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
 msgstr ""
 "Показать символ маркера набора данных\n"
 "отображение символа маркера набора данных"
 
-#: commands/DatasetCommand.cpp:214
+#: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
 msgstr ""
 "Указать ось набора данных\n"
 "указание оси набора данных"
 
-#: commands/GapCommand.cpp:60
+#: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
 msgstr ""
 "Указать расстояние между столбцами\n"
 "указание расстояния между столбцами"
 
-#: commands/GapCommand.cpp:67
+#: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
 msgstr ""
 "Установить расстояние между наборами\n"
 "установка расстояния между наборами"
 
-#: commands/LegendCommand.cpp:75
+#: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
 msgstr ""
 "Установить заголовок легенды\n"
 "установку заголовка легенды"
 
-#: commands/LegendCommand.cpp:83
+#: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
 msgstr ""
 "Установить шрифт легенды\n"
 "установку шрифта легенды"
 
-#: commands/LegendCommand.cpp:90
+#: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
 msgstr ""
 "Установить размер шрифта легенды \n"
 "установку размера шрифта легенды"
 
-#: commands/LegendCommand.cpp:97
+#: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
 msgstr ""
 "Установить ориентацию легенды\n"
 "установку ориентации легенды"
 
-#: commands/PlotAreaCommand.cpp:58
+#: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
 msgstr ""
 "Установить горизонтальные столбцы\n"
 "установку горизонтальных столбцов"
 
-#: commands/PlotAreaCommand.cpp:60
+#: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
 msgstr ""
 "Установить вертикальные столбцы\n"
 "установку вертикальных столбцов"
 
-#: DataSet.cpp:274
+#: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
 msgstr "Последовательность %1"
 
-#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, kde-format
 msgid "Chart Type"
 msgstr "Тип диаграммы"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
-#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
-#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
+#: PlotAreaConfigWidget.cpp:231 PlotAreaConfigWidget.cpp:237
+#: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
 msgstr "Обычная"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
-#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
-#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
 msgstr "Составная"
@@ -1036,47 +1036,47 @@ msgstr "Составная"
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
 #: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
 #: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
-#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
-#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:233
+#: PlotAreaConfigWidget.cpp:239 PlotAreaConfigWidget.cpp:245
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
 msgstr "Процентная"
 
-#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, kde-format
 msgid "Polar Chart"
 msgstr "Полярная диаграмма"
 
-#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Filled"
 msgstr "С заливкой"
 
-#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
 msgstr "Диаграмма продаж"
 
-#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
 msgstr "Японские свечи"
 
-#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
 msgstr "Склеенная"
 
-#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
 msgstr "Склеенная"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
-#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
 #: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
-#: widgets/RadarDataSetConfigWidget.cpp:182
+#: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
 msgstr "Нет"
@@ -1100,17 +1100,17 @@ msgstr "Выбрать"
 #. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
-#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
+#: DataSetConfigWidget.cpp:388 TitlesConfigWidget.ui:52
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
-#: widgets/RadarDataSetConfigWidget.cpp:191
+#: widgets/RadarDataSetConfigWidget.cpp:189
 #, kde-format
 msgid "Auto"
 msgstr "Авто"
 
-#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
-#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
-#: widgets/RadarDataSetConfigWidget.cpp:297
+#: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
+#: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
+#: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
 msgstr "Ряд данных %1"
@@ -1669,7 +1669,7 @@ msgstr "Редактор круговых данных"
 msgid "Del"
 msgstr "Удалить"
 
-#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
 msgstr "Строка %1"
@@ -1821,7 +1821,7 @@ msgstr "Ориентация:"
 msgid "Fonts..."
 msgstr "Шрифты..."
 
-#: PieConfigWidget.cpp:100
+#: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
 msgstr "Точка данных %1"
@@ -1832,12 +1832,12 @@ msgstr "Точка данных %1"
 msgid "E&xplode Factor"
 msgstr "К&оэффициент резкого увеличения"
 
-#: PlotAreaConfigWidget.cpp:277
+#: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
 msgstr "Поверхностная диаграмма"
 
-#: PlotAreaConfigWidget.cpp:279
+#: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Gantt Chart"
 msgstr "Диаграмма Ганта"

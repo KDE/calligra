@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2004-09-07 14:09+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -183,141 +183,152 @@ msgstr "Cyflwyniad"
 msgid "Copyright 1998-%1, The Stage Team"
 msgstr "(h)(c) 1998-2003, Y Tîm KPresenter"
 
-#: part/KPrAboutData.h:31 part/KPrAboutData.h:32
+#: part/KPrAboutData.h:29
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/KPrAboutData.h:30
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Maintainer/Port to Qt6"
+msgstr "cynhaliwr cyfredol"
+
+#: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, fuzzy, kde-format
 #| msgid "current maintainer"
 msgid "Former maintainer"
 msgstr "cynhaliwr cyfredol"
 
-#: part/KPrAboutData.h:31
+#: part/KPrAboutData.h:34
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr ""
 
-#: part/KPrAboutData.h:32
+#: part/KPrAboutData.h:35
 #, kde-format
 msgid "Laurent Montel"
 msgstr ""
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:36
 #, fuzzy, kde-format
 #| msgid "original author"
 msgid "Original author"
 msgstr "awdur gwreiddiol"
 
-#: part/KPrAboutData.h:33
+#: part/KPrAboutData.h:36
 #, kde-format
 msgid "Reginald Stadlbauer"
 msgstr ""
 
-#: part/KPrAboutData.h:34
+#: part/KPrAboutData.h:37
 #, fuzzy, kde-format
 #| msgid "Centered"
 msgid "Werner Trobin"
 msgstr "Wedi'i ganoli"
 
-#: part/KPrAboutData.h:35
+#: part/KPrAboutData.h:38
 #, kde-format
 msgid "David Faure"
 msgstr ""
 
-#: part/KPrAboutData.h:36
+#: part/KPrAboutData.h:39
 #, kde-format
 msgid "Toshitaka Fujioka"
 msgstr ""
 
-#: part/KPrAboutData.h:37
+#: part/KPrAboutData.h:40
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr ""
 
-#: part/KPrAboutData.h:38
+#: part/KPrAboutData.h:41
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr ""
 
-#: part/KPrAboutData.h:39
+#: part/KPrAboutData.h:42
 #, kde-format
 msgid "Percy Leonhardt"
 msgstr ""
 
-#: part/KPrAboutData.h:40
+#: part/KPrAboutData.h:43
 #, kde-format
 msgid "Thomas Zander"
 msgstr ""
 
-#: part/KPrAboutData.h:41
+#: part/KPrAboutData.h:44
 #, fuzzy, kde-format
 msgid "Peter Simonsson"
 msgstr "Cyflwyniad"
 
-#: part/KPrAboutData.h:42
+#: part/KPrAboutData.h:45
 #, kde-format
 msgid "Boudewijn Rempt "
 msgstr ""
 
-#: part/KPrAboutData.h:43
+#: part/KPrAboutData.h:46
 #, fuzzy, kde-format
 #| msgid "&Closed Line"
 msgid "Carlos Licea "
 msgstr "Llinell &Gaëedig"
 
-#: part/KPrAboutData.h:44
+#: part/KPrAboutData.h:47
 #, kde-format
 msgid "C. Boemann "
 msgstr ""
 
-#: part/KPrAboutData.h:45
+#: part/KPrAboutData.h:48
 #, kde-format
 msgid "Fredy Yanardi "
 msgstr ""
 
-#: part/KPrAboutData.h:46
+#: part/KPrAboutData.h:49
 #, kde-format
 msgid "Jan Hambrecht "
 msgstr ""
 
-#: part/KPrAboutData.h:47
+#: part/KPrAboutData.h:50
 #, kde-format
 msgid "Marijn Kruisselbrink "
 msgstr ""
 
-#: part/KPrAboutData.h:48
+#: part/KPrAboutData.h:51
 #, kde-format
 msgid "Martin Pfeiffer "
 msgstr ""
 
-#: part/KPrAboutData.h:49
+#: part/KPrAboutData.h:52
 #, kde-format
 msgid "Sven Langkamp "
 msgstr ""
 
-#: part/KPrAboutData.h:50
+#: part/KPrAboutData.h:53
 #, kde-format
 msgid "Timothée Lacroix "
 msgstr ""
 
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:55
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kyfieithu@dotmon.com,"
 
 #. i18n translator strings
-#: part/KPrAboutData.h:52
+#: part/KPrAboutData.h:55
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Kyfieithu: KD,jr"
 
-#: part/KPrCustomSlideShowsModel.cpp:54
-#: part/KPrSlidesSorterDocumentModel.cpp:85
+#: part/KPrCustomSlideShowsModel.cpp:52
+#: part/KPrSlidesSorterDocumentModel.cpp:83
 #, kde-format
 msgid "Unknown"
 msgstr ""
 
-#: part/KPrCustomSlideShowsModel.cpp:59
-#: part/KPrSlidesSorterDocumentModel.cpp:90 part/ui/KPrHtmlExportDialog.cpp:114
+#: part/KPrCustomSlideShowsModel.cpp:57
+#: part/KPrSlidesSorterDocumentModel.cpp:88 part/ui/KPrHtmlExportDialog.cpp:114
 #, kde-format
 msgid "Slide %1"
 msgstr "Tryloywder %1"
@@ -333,22 +344,22 @@ msgstr "Diwedd y Cyflwyniad.  Cliciwch i adael."
 msgid "Layout"
 msgstr "&Haenlun Tudalen..."
 
-#: part/KPrPart.cpp:69
+#: part/KPrPart.cpp:67
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:74
+#: part/KPrPart.cpp:72
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:87
+#: part/KPrPart.cpp:85
 #, kde-format
 msgid "Installation Error"
 msgstr ""
 
-#: part/KPrPicturesImport.cpp:61
+#: part/KPrPicturesImport.cpp:59
 #, fuzzy
 #| msgid "Insert Picture"
 msgctxt "(qtundo-format)"
@@ -388,44 +399,44 @@ msgstr ""
 msgid "Double click to add an object"
 msgstr ""
 
-#: part/KPrPresentationDrawWidget.cpp:88
+#: part/KPrPresentationDrawWidget.cpp:86
 #, fuzzy, kde-format
 #| msgid "Color"
 msgid "Pen Color"
 msgstr "Lliw"
 
-#: part/KPrPresentationDrawWidget.cpp:89
+#: part/KPrPresentationDrawWidget.cpp:87
 #, fuzzy, kde-format
 msgid "Pen Size"
 msgstr "Cynyddu Maint Wynebfath"
 
-#: part/KPrPresentationDrawWidget.cpp:91
+#: part/KPrPresentationDrawWidget.cpp:89
 #, fuzzy, kde-format
 #| msgid "C&olors:"
 msgid "Black"
 msgstr "L&liwiau:"
 
-#: part/KPrPresentationDrawWidget.cpp:92
+#: part/KPrPresentationDrawWidget.cpp:90
 #, fuzzy, kde-format
 msgid "White"
 msgstr "Lled:"
 
-#: part/KPrPresentationDrawWidget.cpp:93
+#: part/KPrPresentationDrawWidget.cpp:91
 #, kde-format
 msgid "Green"
 msgstr "Gwyrdd"
 
-#: part/KPrPresentationDrawWidget.cpp:94
+#: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "Red"
 msgstr "Coch"
 
-#: part/KPrPresentationDrawWidget.cpp:95
+#: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Blue"
 msgstr "Glas"
 
-#: part/KPrPresentationDrawWidget.cpp:96
+#: part/KPrPresentationDrawWidget.cpp:94
 #, fuzzy, kde-format
 #| msgid "Slow"
 msgid "Yellow"
@@ -455,59 +466,59 @@ msgstr "Creu Cyflwyniad HTML"
 msgid "End of Slide Show"
 msgstr "Sioe Tryloywderau"
 
-#: part/KPrShapeAnimations.cpp:193
-#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/KPrShapeAnimations.cpp:191
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:195
-#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/KPrShapeAnimations.cpp:193
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "start after previous animation"
 msgstr "Creu Cyflwyniad HTML"
 
-#: part/KPrShapeAnimations.cpp:197
-#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "start with previous animation"
 msgstr "Creu Cyflwyniad HTML"
 
-#: part/KPrShapeAnimations.cpp:208
+#: part/KPrShapeAnimations.cpp:206
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:227
+#: part/KPrShapeAnimations.cpp:225
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "Animation"
 msgstr "Creu Cyflwyniad HTML"
 
-#: part/KPrShapeAnimations.cpp:231
+#: part/KPrShapeAnimations.cpp:229
 #, kde-format
 msgid "Shape"
 msgstr "Siâp"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:281
+#: part/KPrSlidesSorterDocumentModel.cpp:279
 #, fuzzy, kde-format
 #| msgid "Move Slide"
 msgid "&Move Here"
 msgstr "Symud Tryloywder"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:285
+#: part/KPrSlidesSorterDocumentModel.cpp:283
 #, fuzzy, kde-format
 #| msgid "Copy Slide"
 msgid "&Copy Here"
 msgstr "Copïo Tryloywder"
 
-#: part/KPrSlidesSorterDocumentModel.cpp:289
+#: part/KPrSlidesSorterDocumentModel.cpp:287
 #, kde-format
 msgid "C&ancel"
 msgstr ""
@@ -816,8 +827,8 @@ msgstr "Saeth"
 msgid "There cannot be two slideshows with the same name."
 msgstr ""
 
-#: part/pagelayout/KPrPlaceholders.cpp:48
-#: part/pagelayout/KPrPlaceholders.cpp:49
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
 #, fuzzy
 #| msgid "Page &Layout..."
 msgctxt "(qtundo-format)"
@@ -1106,7 +1117,7 @@ msgstr "&Tudalen"
 msgid "&Crop"
 msgstr "&Pen:"
 
-#: part/tools/KPrPlaceholderTool.cpp:92
+#: part/tools/KPrPlaceholderTool.cpp:90
 #, fuzzy
 #| msgid "Shape"
 msgctxt "(qtundo-format)"
@@ -1310,20 +1321,20 @@ msgstr "Cadw Ffurfweddiad..."
 msgid "Are you sure you want to remove \"%1\"?"
 msgstr "Hoffech waredu'r tryloywder cyfredol?"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:78
 #, fuzzy
 #| msgid "Change Rotation"
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
 msgstr "Newid Cylchdroi"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:101
 #, fuzzy, kde-format
 #| msgid " seconds"
 msgid "No sound"
 msgstr " eiliad(au)"
 
-#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, fuzzy, kde-format
 msgid "Import..."
 msgstr "Mewnforio Arddull..."
@@ -1333,95 +1344,95 @@ msgstr "Mewnforio Arddull..."
 msgid "Bar"
 msgstr ""
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:37
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Come From Left"
 msgid "From Left"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:38
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Right"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:28
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:31
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:26
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:39
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Come From Top"
 msgid "From Top"
 msgstr "Dod o'r Pen"
 
-#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:40
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:47
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:43
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:54
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:57
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:42
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:47
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:47
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:46
-#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:46
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
-#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:34
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:88
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:57
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:68
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:59
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:45
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:97
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:84
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:54
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:72
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:53
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:62
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:49
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:53
-#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:38
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:32
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:52
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:55
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:45
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:44
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:44
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:32
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:86
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:95
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:82
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:52
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:70
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:60
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:47
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:51
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:36
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:30
 #, kde-format
 msgid "Unknown subtype"
 msgstr ""
@@ -1432,49 +1443,49 @@ msgstr ""
 msgid "Clock"
 msgstr "L&liwiau:"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:31
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Twelve Clockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:32
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Three Clockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Six Clockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Nine Clockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Twelve Counterclockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Three Counterclockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Six Counterclockwise"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Nine Counterclockwise"
@@ -1486,37 +1497,37 @@ msgstr "Dod o'r Dde"
 msgid "Double Fan"
 msgstr "Saeth Ddwbl"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan Out Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:30
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan In Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan In Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Fan In Vertical Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Fan In Horizontal Reverse"
@@ -1528,73 +1539,73 @@ msgstr "Llinellau Llorweddol"
 msgid "Double Sweep"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Parallel Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:35
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Parallel Diagonal"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Opposite Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Opposite Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 #, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Parallel Vertical Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Parallel Diagonal Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Opposite Vertical Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Opposite Horizontal Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Image &effect:"
 msgid "Parallel Diagonal Top Left Reverse"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Parallel Diagonal Bottom Left Reverse"
@@ -1606,77 +1617,77 @@ msgstr "Dod o'r Gwaelod"
 msgid "Fan"
 msgstr "Gwastadu"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
 #, fuzzy
 #| msgid "Uncover Right"
 msgid "Center Right"
 msgstr "Llusgo i'r Dde"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:38
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Centered"
 msgid "Center Top"
 msgstr "Wedi'i ganoli"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Centered"
 msgid "Center Left"
 msgstr "Wedi'i ganoli"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Center Bottom"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Top"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan Out Right"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Fan Out Bottom"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Fan Out Left"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Fan In Top"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Fan In Right"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Fan In Bottom"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
 #, fuzzy
 #| msgid "Come From Left"
 msgid "Fan In Left"
@@ -1688,37 +1699,37 @@ msgstr "Dod o'r Chwith"
 msgid "Pin Wheel"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:28
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Two Blades Vertical Clockwise"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:29
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Two Blades Horizontal Clockwise"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Four Blades Horizontal Clockwise"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Two Blades Vertical Counterclockwise"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Two Blades Horizontal Counterclockwise"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Four Blades Horizontal Counterclockwise"
@@ -1730,28 +1741,28 @@ msgstr "Cysgodlenni Llorweddol"
 msgid "Saloon Door"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Top"
 msgid "To Top"
 msgstr "Dod o'r Pen"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Cover Left"
 msgid "To Left"
 msgstr "Gorchuddio i'r Chwith"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
 #, fuzzy
 msgid "To Bottom"
 msgstr "&Gwaelod:"
 
-#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
-#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Cover Right"
 msgid "To Right"
@@ -1763,97 +1774,97 @@ msgstr "Gorchuddio i'r Dde"
 msgid "Single Sweep"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:39
 #, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:40
 #, fuzzy
 #| msgid "Cover Right-Up"
 msgid "Clockwise Right"
 msgstr "Gorchuddio o'r Dde i Fyny"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Align Bottom"
 msgid "Clockwise Bottom"
 msgstr "Alinio Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Image &effect:"
 msgid "Clockwise Left"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Right"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:55
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right"
@@ -1865,78 +1876,78 @@ msgstr "Dod o'r Dde"
 msgid "Windshield"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:31
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 #, fuzzy
 #| msgid "Rig&ht:"
 msgid "Right"
 msgstr "D&e:"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:32
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:72
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:68
 msgid "Up"
 msgstr ""
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:44
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 #, fuzzy
 msgid "Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
-#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:25
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:23
 #, fuzzy
 msgid "Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Right Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:73
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:69
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Up Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:31
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Vertical Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
-#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
-#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:61
-#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:38
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Reverse"
@@ -1948,25 +1959,25 @@ msgstr "Llinellau Llorweddol"
 msgid "Barn Door"
 msgstr "Saeth Ddwbl"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Diagonal Bottom Left Reverse"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Image &effect:"
 msgid "Diagonal Top Left Reverse"
@@ -1983,13 +1994,13 @@ msgstr ""
 msgid "Barn Zig Zag"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Horizontal Reversed"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:27
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Vertical Reversed"
@@ -2000,33 +2011,33 @@ msgstr "Llinellau Fertigol"
 msgid "Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Come From Left"
 msgid "From Top Left"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Come From Right"
 msgid "From Top Right"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom Left"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:28
-#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "From Bottom Right"
@@ -2042,25 +2053,25 @@ msgstr "Graddiant Croeslinol 1"
 msgid "Four Box"
 msgstr ""
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 #, fuzzy
 #| msgid "Corn&ers:"
 msgid "Corners In"
 msgstr "Corn&eli:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 #, fuzzy
 #| msgid "Corn&ers:"
 msgid "Corners In Reverse"
 msgstr "Corn&eli:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 #, fuzzy
 #| msgid "Corn&ers:"
 msgid "Corners Out"
 msgstr "Corn&eli:"
 
-#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 #, fuzzy
 #| msgid "Corn&ers:"
 msgid "Corners Out Reverse"
@@ -2071,13 +2082,13 @@ msgstr "Corn&eli:"
 msgid "Misc Diagonal"
 msgstr "Graddiant Croeslinol 1"
 
-#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:26
 #, fuzzy
 #| msgid "Double Arrow"
 msgid "Double Barn Door"
 msgstr "Saeth Ddwbl"
 
-#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:27
 #, fuzzy
 #| msgid "Double Arrow"
 msgid "Double Diamond"
@@ -2099,11 +2110,11 @@ msgstr "&Effaith ddelwedd:"
 msgid "Fade"
 msgstr "Pylu"
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:26
 msgid "Crossfade"
 msgstr ""
 
-#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:28
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:26
 #, fuzzy
 #| msgid "Set Text Color"
 msgid "Fade over Color"
@@ -2115,31 +2126,31 @@ msgstr "Gosod Lliw Testun"
 msgid "ArrowHead"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
 #, fuzzy
 #| msgid "Done"
 msgid "Down"
 msgstr "Wedi gorffen"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
-#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:52
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Down Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
 #, fuzzy
 #| msgid "&Length:"
 msgid "Left"
 msgstr "&Hyd:"
 
-#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
-#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Left Reverse"
@@ -2150,11 +2161,11 @@ msgstr "Llinellau Fertigol"
 msgid "Ellipse"
 msgstr "Hirgylch"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
 msgid "Circle"
 msgstr "Cylch"
 
-#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:47
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Circle Reverse"
@@ -2176,25 +2187,25 @@ msgstr "Cyflwyniad"
 msgid "Iris"
 msgstr ""
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Double Arrow"
 msgid "Diamond"
 msgstr "Saeth Ddwbl"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Diamond Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Rectangle"
 msgid "Rectangular"
 msgstr "Petryal"
 
-#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Rectangle"
 msgid "Rectangular Reverse"
@@ -2205,25 +2216,25 @@ msgstr "Petryal"
 msgid "Misc"
 msgstr "Amrywiol"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Header"
 msgid "Heart"
 msgstr "Pennawd"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Heart Reverse"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Keyhole"
 msgstr "Llinellau Fertigol"
 
-#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:45
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Keyhole Reverse"
@@ -2246,37 +2257,37 @@ msgstr "Effaith sŵn"
 msgid "Star"
 msgstr "S&iart"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:83
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Four Point Star"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:84
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Four Point Star Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Five Point Star"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Five Point Star Reverse"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Six Point Star"
 msgstr "Llinellau Llorweddol"
 
-#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 #, fuzzy
 #| msgid "Horizontal Lines"
 msgid "Six Point Star Reverse"
@@ -2294,71 +2305,71 @@ msgstr "Wedi'i deilio"
 msgid "Box Snakes"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Box In"
 msgid "Two Box Top In"
 msgstr "Blwch i Mewn"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:35
 #, fuzzy
 msgid "Two Box Bottom In"
 msgstr "&Gwaelod:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Cover Left"
 msgid "Two Box Left In"
 msgstr "Gorchuddio i'r Chwith"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Cover Right"
 msgid "Two Box Right In"
 msgstr "Gorchuddio i'r Dde"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Four Box Vertical In"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Four Box Horizontal In"
 msgstr "Cysgodlenni Llorweddol"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 #, fuzzy
 #| msgid "Box Out"
 msgid "Two Box Top Out"
 msgstr "Blwch Allan"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 #, fuzzy
 msgid "Two Box Bottom Out"
 msgstr "&Gwaelod:"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Two Box Left Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Two Box Right Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Four Box Vertical Out"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Blinds Horizontal"
 msgid "Four Box Horizontal Out"
@@ -2370,121 +2381,121 @@ msgstr "Cysgodlenni Llorweddol"
 msgid "Parallel Snakes"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Vertical Gradient"
 msgid "Vertical Top Same In"
 msgstr "Graddiant Fertigol"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Vertical Gradient"
 msgid "Vertical Top Same Out"
 msgstr "Graddiant Fertigol"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
 #, fuzzy
 #| msgid "Vertical Gradient"
 msgid "Vertical Bottom Same In"
 msgstr "Graddiant Fertigol"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
 #, fuzzy
 #| msgid "Vertical Gradient"
 msgid "Vertical Bottom Same Out"
 msgstr "Graddiant Fertigol"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Vertical Top Left Opposite In"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Vertical Top Left Opposite Out"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 #, fuzzy
 #| msgid "Vertical Gradient"
 msgid "Vertical Bottom Left Opposite In"
 msgstr "Graddiant Fertigol"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Vertical Bottom Left Opposite Out"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
 #, fuzzy
 #| msgid "Horizontal Gradient"
 msgid "Horizontal Left Same In"
 msgstr "Graddiant Llorweddol "
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
 #, fuzzy
 #| msgid "Horizontal Gradient"
 msgid "Horizontal Left Same Out"
 msgstr "Graddiant Llorweddol "
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
 #, fuzzy
 #| msgid "Horizontal Gradient"
 msgid "Horizontal Right Same In"
 msgstr "Graddiant Llorweddol "
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
 #, fuzzy
 #| msgid "Horizontal Gradient"
 msgid "Horizontal Right Same Out"
 msgstr "Graddiant Llorweddol "
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Horizontal Top Left Opposite In"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Horizontal Top Left Opposite Out"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Horizontal Top Right Opposite In"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Horizontal Top Right Opposite Out"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Diagonal Bottom Left Opposite In"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Diagonal Top Left Opposite In"
 msgstr "Maint llorweddol y grid:"
 
-#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
 #, fuzzy
 #| msgid "Horizontal grid size:"
 msgid "Diagonal Top Left Opposite Out"
@@ -2502,97 +2513,97 @@ msgstr "Siâp"
 msgid "Spiral"
 msgstr "Chwyrlïad"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:38
 #, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left In"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:39
 #, fuzzy
 #| msgid "Come From Left"
 msgid "Clockwise Top Left Out"
 msgstr "Dod o'r Chwith"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right In"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Clockwise Top Right Out"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left In"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Left Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right In"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Clockwise Bottom Right Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left In"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Top Left Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right In"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
 #, fuzzy
 #| msgid "Come From Right"
 msgid "Counterclockwise Top Right Out"
 msgstr "Dod o'r Dde"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left In"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Left Out"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right In"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Counterclockwise Bottom Right Out"
@@ -2604,49 +2615,49 @@ msgstr "Dod o'r Gwaelod"
 msgid "Waterfall"
 msgstr "&Effaith ddelwedd:"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:33
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Top Left Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:34
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Top Left Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 #, fuzzy
 #| msgid "Open Vertical"
 msgid "Top Right Vertical"
 msgstr "Agor Fertigol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 #, fuzzy
 #| msgid "Open Horizontal"
 msgid "Top Right Horizontal"
 msgstr "Agor Llorweddol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
 #, fuzzy
 #| msgid "Close Vertical"
 msgid "Bottom Left Vertical"
 msgstr "Cau Fertigol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 #, fuzzy
 #| msgid "Close Horizontal"
 msgid "Bottom Left Horizontal"
 msgstr "Cau Llorweddol"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
 #, fuzzy
 #| msgid "Come From Bottom"
 msgid "Bottom Right Vertical"
 msgstr "Dod o'r Gwaelod"
 
-#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 #, fuzzy
 #| msgid "Interlocking Horizontal 1"
 msgid "Bottom Right Horizontal"
@@ -4386,11 +4397,6 @@ msgstr "Troedyn"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Footer"
 #~ msgstr "Troedyn"
-
-#, fuzzy
-#~| msgid "current maintainer"
-#~ msgid "Maintainer"
-#~ msgstr "cynhaliwr cyfredol"
 
 #, fuzzy
 #~| msgid "KOffice Presentation Tool"

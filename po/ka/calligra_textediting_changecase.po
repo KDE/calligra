@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2022-09-23 16:28+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: Changecase.cpp:51 Changecase.cpp:79
+#: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
 msgid "Change case"
 msgstr "რეგისტრის შეცვლა"
 
-#: Changecase.cpp:56
+#: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
 msgstr "წინადადების რეგისტრი"
 
-#: Changecase.cpp:57
+#: Changecase.cpp:55
 #, kde-format
 msgid "lowercase"
 msgstr "დაბალი რეგისტრი"
 
-#: Changecase.cpp:58
+#: Changecase.cpp:56
 #, kde-format
 msgid "UPPER CASE"
 msgstr "მაღალი რეგისტრი"
 
-#: Changecase.cpp:59
+#: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
 msgstr "პირველი სიმბოლო მაღალ რეგისტრში"
 
-#: Changecase.cpp:60
+#: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
 msgstr "რეგისტრის გადართვა"

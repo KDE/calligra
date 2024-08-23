@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2024-06-29 16:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -400,7 +400,7 @@ msgstr "גלישת טקסט מסביב"
 msgid "Connect Text Frames"
 msgstr "חיבור מסגרות טקסט"
 
-#: part/dialogs/KWFrameDialog.cpp:66
+#: part/dialogs/KWFrameDialog.cpp:64
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
 msgstr "החלפת מאפייני צורה"
@@ -538,37 +538,37 @@ msgid "Distance Between Shape and Text:"
 msgstr "מרחק בין צורה לטקסט:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
+#: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "עמודות"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:41
+#: part/dialogs/KWPageSettingsDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "סגנון"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:47
+#: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
 msgid "Clone"
 msgstr "שכפול"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
+#: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "מחיקה"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:136
+#: part/dialogs/KWPageSettingsDialog.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "החלפת סגנון עמוד"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:217
+#: part/dialogs/KWPageSettingsDialog.cpp:235
 #, kde-format
 msgid "Clone Page Style"
 msgstr "שכפול סגנון עמוד"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:218
+#: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
 msgstr "הוספת סגנון עמוד חדש עם השם:"
@@ -686,12 +686,12 @@ msgstr "ניפוי שגיאות"
 msgid "Navigation"
 msgstr "ניווט"
 
-#: part/dockers/KWNavigationWidget.cpp:94
+#: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Page #"
 msgstr "עמוד מס׳"
 
-#: part/dockers/KWNavigationWidget.cpp:94
+#: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Section"
 msgstr "סעיף"
@@ -706,47 +706,47 @@ msgstr "RDF"
 msgid "Statistics"
 msgstr "סטטיסטיקה"
 
-#: part/dockers/KWStatisticsWidget.cpp:127
+#: part/dockers/KWStatisticsWidget.cpp:125
 #, kde-format
 msgid "Words:"
 msgstr "מילים:"
 
-#: part/dockers/KWStatisticsWidget.cpp:130
+#: part/dockers/KWStatisticsWidget.cpp:128
 #, kde-format
 msgid "Sentences:"
 msgstr "משפטים:"
 
-#: part/dockers/KWStatisticsWidget.cpp:133
+#: part/dockers/KWStatisticsWidget.cpp:131
 #, kde-format
 msgid "Syllables:"
 msgstr "הברות:"
 
-#: part/dockers/KWStatisticsWidget.cpp:136
+#: part/dockers/KWStatisticsWidget.cpp:134
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "תווים (רווחים):"
 
-#: part/dockers/KWStatisticsWidget.cpp:139
+#: part/dockers/KWStatisticsWidget.cpp:137
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "תווים (ללא רווחים):"
 
-#: part/dockers/KWStatisticsWidget.cpp:142
+#: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
 msgid "Lines:"
 msgstr "שורות:"
 
-#: part/dockers/KWStatisticsWidget.cpp:145
+#: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
 msgid "Readability:"
 msgstr "קריאוּת:"
 
-#: part/dockers/KWStatisticsWidget.cpp:147
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Flesch reading ease"
 msgstr "מידת קריאות Flesch"
 
-#: part/dockers/KWStatisticsWidget.cpp:149
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "East asian characters:"
 msgstr "תווים מזרח אסייתיים:"
@@ -1081,285 +1081,296 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr "אפור למעלה ולמטה"
 
-#: part/KWAboutData.h:19
+#: part/KWAboutData.h:18
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "Calligra מילים"
 
-#: part/KWAboutData.h:21
+#: part/KWAboutData.h:20
 #, kde-format
 msgid "Word processor"
 msgstr "מעבד תמלילים"
 
-#: part/KWAboutData.h:23
+#: part/KWAboutData.h:22
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "כל הזכויות שמורות 1998‏-%1, צוות „מילים”"
 
-#: part/KWAboutData.h:31 part/KWAboutData.h:32
+#: part/KWAboutData.h:28
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/KWAboutData.h:29
+#, fuzzy, kde-format
+#| msgid "Co maintainer"
+msgid "Co Maintainer/Port to Qt6"
+msgstr "מתחזק משנה"
+
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
 msgid "Co maintainer"
 msgstr "מתחזק משנה"
 
-#: part/KWAboutData.h:31
+#: part/KWAboutData.h:33 part/KWAboutData.h:34
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "פייר דוקרוקט"
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "C. Boemann"
 msgstr "קמילה בוימן"
 
-#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Everything"
 msgstr "הכול"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "סבסטיאן סוייר"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "בודווין רמפט"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "פייר שטירנווייס"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Formatting stuff"
 msgstr "ענייני עיצוב"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Inge Wallin"
 msgstr "אינגה וולין"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "תורסתן זקמן"
 
-#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
-#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
-#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:41 part/KWAboutData.h:47 part/KWAboutData.h:48
+#: part/KWAboutData.h:49 part/KWAboutData.h:61 part/KWAboutData.h:62
 #: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
-#: part/KWAboutData.h:66 part/KWAboutData.h:67
+#: part/KWAboutData.h:66 part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:69 part/KWAboutData.h:70
 #, kde-format
 msgid "Filter"
 msgstr "מסנן"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Matus Uzak"
 msgstr "מתוס אוזק"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Layout and Painting"
 msgstr "פריסה וצביעה"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Pavol Korinek"
 msgstr "פבול קורינק"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Shreya Pandit"
 msgstr "שרייה פנדיט"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Statistics docker"
 msgstr "מעגן סטטיסטיקה"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Brijesh Patel"
 msgstr "בריג׳ש פאתל"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Foot and endnotes"
 msgstr "הערות שוליים ותחתונות"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Bibliography"
 msgstr "ביבליוגרפיה"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Smit Patel"
 msgstr "סמיט פאתל"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Mojtaba Shahi"
 msgstr "מויטאבה שאהי"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Style Manager"
 msgstr "מנהל סגנונות"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr "לאסי נימינן"
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Hanzes Matus"
 msgstr "היינצס מאטוס"
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "לוקאש טברדי"
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "Thomas Zander"
 msgstr "תומס זנדר"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "גיריש רמאקרשינן"
 
-#: part/KWAboutData.h:48 part/KWAboutData.h:49
+#: part/KWAboutData.h:51 part/KWAboutData.h:52
 #, kde-format
 msgid "ODF Support"
 msgstr "תמיכה ב־ODF"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr "רוברט מתיאס מרמורשטיין"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "David Faure"
 msgstr "דוד פור"
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Laurent Montel"
 msgstr "לורנט מונטל"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "סוון לופקן"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "פרנק דקרבל"
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "Krister Wicksell Eriksson"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Dag Andersen"
 msgstr "דאג אנדרסן"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "נאש הוגווטר"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "KFormula"
 msgstr "KFormula"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "Ulrich Kuettler"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "שהיד האק"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Werner Trobin"
 msgstr "ורנר טרובין"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "ניקולס גוט"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Clarence Dang"
 msgstr "קלרנס דנג"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "Robert Jacolin"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Ewald Snel"
 msgstr "Ewald Snel"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:69
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "תומש גרובלני"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:70
 #, kde-format
 msgid "Michael Johnson"
 msgstr "מייקל ג׳ונסון"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:71
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr "אירוח האתרים Fatcow"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:71
 #, kde-format
 msgid "Page break icon"
 msgstr "סמל מעבר עמוד"
 
-#: part/KWAboutData.h:70
+#: part/KWAboutData.h:73
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde-l10n-he@kde.org"
 
 #. i18n translator strings
-#: part/KWAboutData.h:70
+#: part/KWAboutData.h:73
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -1405,17 +1416,17 @@ msgstr "רשימת תבליטים"
 msgid "Tools"
 msgstr "כלים"
 
-#: part/KWOdfLoader.cpp:83
+#: part/KWOdfLoader.cpp:81
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr "מסמך OASIS OpenDocument שגוי. לא נמצאה תגית office:body."
 
-#: part/KWOdfLoader.cpp:94
+#: part/KWOdfLoader.cpp:92
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr "מסמך OASIS OpenDocument שגוי. לא נמצאה תגית office:body."
 
-#: part/KWOdfLoader.cpp:96
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1429,12 +1440,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "רגיל"
 
-#: part/KWPart.cpp:139
+#: part/KWPart.cpp:137
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, „מילים” ייצא כעת"
 
-#: part/KWPart.cpp:139
+#: part/KWPart.cpp:137
 #, kde-format
 msgid "Installation Error"
 msgstr "שגיאת התקנה"
@@ -1751,12 +1762,12 @@ msgstr "כמות מילים"
 msgid "Shows or hides word counting in status bar"
 msgstr "הצגת או הסתרת כמות המילים בשורת המצב"
 
-#: part/pagetool/KWPageTool.cpp:85
+#: part/pagetool/KWPageTool.cpp:83
 #, kde-format
 msgid "Page Setup"
 msgstr "הגדרת עמוד"
 
-#: part/pagetool/KWPageTool.cpp:89
+#: part/pagetool/KWPageTool.cpp:87
 #, kde-format
 msgid "Header & Footer"
 msgstr "כותרות עליונה ותחתונה"

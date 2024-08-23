@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
-"PO-Revision-Date: 2024-04-30 09:05+0200\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"PO-Revision-Date: 2024-08-22 05:19+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -117,7 +117,7 @@ msgstr "ეფექტები"
 #: data/karbon.rc:177
 #, kde-format
 msgid "Add Shape"
-msgstr ""
+msgstr "მოხაზულობის დამატება"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -137,7 +137,7 @@ msgstr "ბილიკის გაბრტყელება"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
-#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/roundcorners/RoundCornersPlugin.cpp:107
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, kde-format
 msgid "Properties"
@@ -153,7 +153,7 @@ msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "ბილიკის გაბრტყელება"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "ბილიკის გამკვეთრება"
@@ -174,7 +174,7 @@ msgid "Subdivisions:"
 msgstr "ქვენაწილები:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
-#: plugins/roundcorners/RoundCornersPlugin.cpp:81
+#: plugins/roundcorners/RoundCornersPlugin.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "მრგვალი კუთხეები"
@@ -184,12 +184,12 @@ msgstr "მრგვალი კუთხეები"
 msgid "&Round Corners..."
 msgstr "&მრგვალი კუთხეები..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:97
+#: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
 msgid "Round Corners"
 msgstr "მრგვალი კუთხეები"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
@@ -307,90 +307,100 @@ msgstr "ვექტორული გრაფიკის აპლიკა�
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr "(c) 2001-%1, Karbon-ის პროგრამისტები"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr "Anthony Fieroni"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Maintainer"
 msgstr "წამყვანი პროგრამისტი"
 
-#: ui/KarbonAboutData.h:32
+#: ui/KarbonAboutData.h:30
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:31
+#, kde-format
+msgid "Port to Qt6"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
 #, kde-format
 msgid "Rob Buis"
 msgstr "Rob Buis"
 
-#: ui/KarbonAboutData.h:33
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr "Tomislav Lukman"
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr "Benoît Vautrin"
 
-#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
-#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr "შეცდომების გასწორება, კოდის გასუფთავება"
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Jan Hambrecht"
 msgstr "Jan Hambrecht"
 
-#: ui/KarbonAboutData.h:36
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Tim Beaulen"
 msgstr "Tim Beaulen"
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Bug fixes"
 msgstr "შეცდომების გასწორება"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Alan Horkan"
 msgstr "Alan Horkan"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr "პაჩები და სასარგებლო რჩევები"
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "რუსუდან ცისკრელი"
 
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -617,35 +627,35 @@ msgstr "აირჩიეთ პალიტრა"
 msgid "Press to apply fill to selection"
 msgstr "დააწექით მონიშნულის შესავსებად"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:90
+#: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "არაფერი"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:112
+#: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr "დააწექით მონიშნულის გარშემო შემოსავლებად"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:161
+#: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr "ხელით"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:167
+#: ui/widgets/KarbonSmallStylePreview.cpp:165
 #, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "არაფერი"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:187
+#: ui/widgets/KarbonSmallStylePreview.cpp:185
 #, kde-format
 msgid "Stroke:"
 msgstr "გამოძრავება:"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:192
+#: ui/widgets/KarbonSmallStylePreview.cpp:190
 #, kde-format
 msgid "Fill:"
 msgstr "შევსება:"

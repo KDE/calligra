@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2008-03-12 11:46+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -543,7 +543,7 @@ msgstr "संगीत आकार"
 msgid "A shape which provides a music editor"
 msgstr "एक आकार जो संगीत संपादक उपलब्ध कराता है."
 
-#: MusicTool.cpp:83
+#: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
 msgstr "पार्ट्स"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/MusicShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2007-07-22 14:30-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -515,7 +515,7 @@ msgstr "Giuirléid Cheoil"
 msgid "A shape which provides a music editor"
 msgstr "Giuirléid a sholáthraíonn eagarthóir ceoil"
 
-#: MusicTool.cpp:83
+#: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
 msgstr "Comhpháirteanna"

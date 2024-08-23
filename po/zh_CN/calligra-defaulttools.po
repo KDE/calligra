@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -115,59 +115,59 @@ msgstr "向上逃离"
 msgid "Escape in down direction"
 msgstr "向下逃离"
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "创建链接"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "拖拽以编辑连接。"
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "双击连接或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "点击以编辑连接点。"
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr "拖拽以移动连接点。双击连接或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr "双击连接点或按下 delete 删除。"
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "双击以添加连接点。"
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "拖拽以创建新连接。"
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
 msgstr "连接"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "直线"
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
 msgstr "连接点"
@@ -417,22 +417,22 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "裁剪"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
 msgstr "双击以添加参考线。"
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr "点击并拖拽以移动参考线。双击以删除参考线。"
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr "参考线编辑器"
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr "参考线插入器"

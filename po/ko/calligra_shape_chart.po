@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2020-04-08 01:36+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -49,8 +49,8 @@ msgstr "가까운 축"
 msgid "Other-side"
 msgstr "다른 쪽"
 
-#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
-#: DataSetConfigWidget.cpp:347
+#: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
+#: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
 msgstr "축 제목"
@@ -170,18 +170,18 @@ msgstr "보조 X축"
 msgid "Secondary Y Axis"
 msgstr "보조 Y축"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
 msgstr "플러그인 없음"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr "차트에 텍스트 이름표를 표시하는 플러그인이 없습니다."
 
-#: ChartShape.cpp:305
+#: ChartShape.cpp:303
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
@@ -190,31 +190,31 @@ msgstr ""
 "현재 버전의 차트 Flake 도형과 텍스트 이름표 표시 플러그인이 호환되지 않습니"
 "다."
 
-#: ChartShape.cpp:306
+#: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "플러그인 호환되지 않음"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
 msgstr "제목"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
-#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
+#: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
 msgstr "부제목"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
-#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
+#: ChartShape.cpp:382 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
 msgstr "바닥글"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:752
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -223,17 +223,17 @@ msgstr ""
 "이 문서에는 다음 외부 문서로 향한 링크가 들어 있습니다\n"
 "%1"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
 msgstr "확인 필요"
 
-#: ChartShape.cpp:756
+#: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
 msgstr "다운로드"
 
-#: ChartShape.cpp:757
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
 msgstr "건너뛰기"
@@ -250,7 +250,7 @@ msgstr "비즈니스 차트"
 
 # 차트 형태는 사용 가능한 경우 Excel의 번역을 따름. https://support.office.com/ko-kr/article/office%ec%9d%98-%ec%82%ac%ec%9a%a9-%ea%b0%80%eb%8a%a5%ed%95%9c-%ec%b0%a8%ed%8a%b8-%ec%a2%85%eb%a5%98-a6187218-807e-4103-9e0a-27cdb19afb90
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
-#: PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:230
 #, kde-format
 msgid "Bar Chart"
 msgstr "막대형 차트"
@@ -281,7 +281,7 @@ msgid "Percent bar chart"
 msgstr "백분율 막대형 차트"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
-#: PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:236
 #, kde-format
 msgid "Line Chart"
 msgstr "꺾은선형 차트"
@@ -312,7 +312,7 @@ msgid "Percent line chart"
 msgstr "백분율 꺾은선형 차트"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
-#: PlotAreaConfigWidget.cpp:244
+#: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
 msgstr "영역 차트"
@@ -343,7 +343,7 @@ msgid "Percent area chart"
 msgstr "백분율 영역 차트"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
-#: PlotAreaConfigWidget.cpp:252
+#: PlotAreaConfigWidget.cpp:250
 #, kde-format
 msgid "Pie Chart"
 msgstr "원형 차트"
@@ -355,7 +355,7 @@ msgstr "원형 차트"
 
 # https://support.office.com/ko-kr/article/office%ec%9d%98-%ec%82%ac%ec%9a%a9-%ea%b0%80%eb%8a%a5%ed%95%9c-%ec%b0%a8%ed%8a%b8-%ec%a2%85%eb%a5%98-a6187218-807e-4103-9e0a-27cdb19afb90
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
-#: PlotAreaConfigWidget.cpp:253
+#: PlotAreaConfigWidget.cpp:251
 #, kde-format
 msgid "Ring Chart"
 msgstr "도넛 차트"
@@ -366,7 +366,7 @@ msgid "Ring chart"
 msgstr "도넛 차트"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
-#: PlotAreaConfigWidget.cpp:266
+#: PlotAreaConfigWidget.cpp:264
 #, kde-format
 msgid "Bubble Chart"
 msgstr "거품 차트"
@@ -377,7 +377,7 @@ msgid "Bubble chart"
 msgstr "거품 차트"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
-#: PlotAreaConfigWidget.cpp:265
+#: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
 msgstr "분산형 차트"
@@ -515,37 +515,37 @@ msgstr "닫기"
 msgid "Growth"
 msgstr "성장률"
 
-#: ChartTool.cpp:99
+#: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
 msgstr "무언가 하기"
 
-#: ChartTool.cpp:104
+#: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
 msgstr "다른 것 하기"
 
-#: ChartTool.cpp:271
+#: ChartTool.cpp:269
 #, kde-format
 msgid "Titles"
 msgstr "제목"
 
-#: ChartTool.cpp:286
+#: ChartTool.cpp:284
 #, kde-format
 msgid "Legend"
 msgstr "범례"
 
-#: ChartTool.cpp:299
+#: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
 msgstr "그리기 영역"
 
-#: ChartTool.cpp:1063
+#: ChartTool.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "범례 표시"
 
-#: ChartTool.cpp:1065
+#: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
 msgstr "범례 숨기기"
@@ -565,107 +565,107 @@ msgctxt "(qtundo-format)"
 msgid "Remove Axis"
 msgstr "축 삭제"
 
-#: commands/AxisCommand.cpp:113
+#: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
 msgstr "축 제목 표시"
 
-#: commands/AxisCommand.cpp:115
+#: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
 msgstr "축 제목 숨기기"
 
-#: commands/AxisCommand.cpp:140
+#: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
 msgstr "축 표시"
 
-#: commands/AxisCommand.cpp:142
+#: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
 msgstr "축 숨기기"
 
-#: commands/AxisCommand.cpp:151
+#: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
 msgstr "축 이름표 표시"
 
-#: commands/AxisCommand.cpp:153
+#: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
 msgstr "축 이름표 숨기기"
 
-#: commands/AxisCommand.cpp:162
+#: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
 msgstr "축 주 눈금선 표시"
 
-#: commands/AxisCommand.cpp:164
+#: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
 msgstr "축 주 눈금선 숨기기"
 
-#: commands/AxisCommand.cpp:173
+#: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
 msgstr "축 보조 눈금선 표시"
 
-#: commands/AxisCommand.cpp:175
+#: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
 msgstr "축 보조 눈금선 숨기기"
 
-#: commands/AxisCommand.cpp:184
+#: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
 msgstr "로그 크기"
 
-#: commands/AxisCommand.cpp:186
+#: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
 msgstr "선형 크기"
 
-#: commands/AxisCommand.cpp:194
+#: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
 msgstr "축 단계 간격 설정"
 
-#: commands/AxisCommand.cpp:201
+#: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
 msgstr "축 하위 단계 간격 설정"
 
-#: commands/AxisCommand.cpp:209
+#: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
 msgstr "자동 단계 간격 설정"
 
-#: commands/AxisCommand.cpp:211
+#: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
 msgstr "수동 단계 간격 설정"
 
-#: commands/AxisCommand.cpp:220
+#: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
 msgstr "자동 하위 단계 간격"
 
-#: commands/AxisCommand.cpp:222
+#: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
 msgstr "수동 하위 단계 간격"
 
-#: commands/AxisCommand.cpp:230
+#: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
 msgstr "축 이름표 글꼴 설정"
 
-#: commands/AxisCommand.cpp:236
+#: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
 msgstr "축 위치 설정"
 
-#: commands/AxisCommand.cpp:257
+#: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
 msgstr "축 이름표 위치 설정"
@@ -680,227 +680,227 @@ msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
 msgstr "텍스트 모양 숨기기"
 
-#: commands/ChartTypeCommand.cpp:77
+#: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
 msgstr "일반 막대형 차트"
 
-#: commands/ChartTypeCommand.cpp:80
+#: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
 msgstr "누적 막대형 차트"
 
-#: commands/ChartTypeCommand.cpp:83
+#: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
 msgstr "백분율 막대형 차트"
 
-#: commands/ChartTypeCommand.cpp:92
+#: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
 msgstr "일반 꺾은선형 차트"
 
-#: commands/ChartTypeCommand.cpp:95
+#: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
 msgstr "누적 꺾은선형 차트"
 
-#: commands/ChartTypeCommand.cpp:98
+#: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
 msgstr "백분율 꺾은선형 차트"
 
-#: commands/ChartTypeCommand.cpp:107
+#: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
 msgstr "일반 영역 차트"
 
-#: commands/ChartTypeCommand.cpp:110
+#: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
 msgstr "누적 영역 차트"
 
-#: commands/ChartTypeCommand.cpp:113
+#: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
 msgstr "백분율 영역 차트"
 
-#: commands/ChartTypeCommand.cpp:120
+#: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
 msgstr "원형 차트"
 
-#: commands/ChartTypeCommand.cpp:123
+#: commands/ChartTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
 msgstr "도넛 차트"
 
-#: commands/ChartTypeCommand.cpp:126
+#: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
 msgstr "분산형 차트"
 
-#: commands/ChartTypeCommand.cpp:129
+#: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
 msgstr "레이더 차트"
 
-#: commands/ChartTypeCommand.cpp:132
+#: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
 msgstr "채워진 레이더 차트"
 
-#: commands/ChartTypeCommand.cpp:135
+#: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
 msgstr "주식형 차트"
 
-#: commands/ChartTypeCommand.cpp:138
+#: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr "거품 차트"
 
-#: commands/ChartTypeCommand.cpp:141
+#: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
 msgstr "표면형 차트"
 
-#: commands/ChartTypeCommand.cpp:144
+#: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
 msgstr "간트 차트"
 
-#: commands/DatasetCommand.cpp:137
+#: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
 msgstr "데이터 모음 차트 형식 설정"
 
-#: commands/DatasetCommand.cpp:145
+#: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
 msgstr "데이터 모음 분류 표시"
 
-#: commands/DatasetCommand.cpp:147
+#: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
 msgstr "데이터 모음 분류 숨기기"
 
-#: commands/DatasetCommand.cpp:156
+#: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
 msgstr "데이터 모음 번호 표시"
 
-#: commands/DatasetCommand.cpp:158
+#: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
 msgstr "데이터 모음 번호 숨기기"
 
-#: commands/DatasetCommand.cpp:167
+#: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
 msgstr "데이터 모음 백분율 표시"
 
-#: commands/DatasetCommand.cpp:169
+#: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
 msgstr "데이터 모음 백분율 숨기기"
 
-#: commands/DatasetCommand.cpp:178
+#: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
 msgstr "데이터 모음 기호 표시"
 
-#: commands/DatasetCommand.cpp:180
+#: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
 msgstr "데이터 모음 심볼 숨기기"
 
-#: commands/DatasetCommand.cpp:188
+#: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
 msgstr "데이터 모음 브러시 색상 설정"
 
-#: commands/DatasetCommand.cpp:195
+#: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
 msgstr "데이터 모음 펜 색상 설정"
 
-#: commands/DatasetCommand.cpp:204
+#: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
 msgstr "데이터 모음 마커 숨기기"
 
-#: commands/DatasetCommand.cpp:206
+#: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
 msgstr "데이터 모음 마커 기호 표시"
 
-#: commands/DatasetCommand.cpp:214
+#: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
 msgstr "데이터 모음 축 설정"
 
-#: commands/GapCommand.cpp:60
+#: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
 msgstr "막대 사이 간격 설정"
 
-#: commands/GapCommand.cpp:67
+#: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
 msgstr "묶음 사이 간격 설정"
 
-#: commands/LegendCommand.cpp:75
+#: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
 msgstr "범례 제목 설정"
 
-#: commands/LegendCommand.cpp:83
+#: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
 msgstr "범례 글꼴 설정"
 
-#: commands/LegendCommand.cpp:90
+#: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
 msgstr "범례 글꼴 크기 설정"
 
-#: commands/LegendCommand.cpp:97
+#: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
 msgstr "범례 방향 설정"
 
-#: commands/PlotAreaCommand.cpp:58
+#: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
 msgstr "가로 막대 설정"
 
-#: commands/PlotAreaCommand.cpp:60
+#: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
 msgstr "세로 막대 설정"
 
-#: DataSet.cpp:274
+#: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
 msgstr "계열%1"
 
-#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, kde-format
 msgid "Chart Type"
 msgstr "차트 종류"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
-#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
-#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
+#: PlotAreaConfigWidget.cpp:231 PlotAreaConfigWidget.cpp:237
+#: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
 msgstr "일반"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
-#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
-#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
 msgstr "누적"
@@ -910,47 +910,47 @@ msgstr "누적"
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
 #: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
 #: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
-#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
-#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:233
+#: PlotAreaConfigWidget.cpp:239 PlotAreaConfigWidget.cpp:245
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
 msgstr "백분율"
 
-#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, kde-format
 msgid "Polar Chart"
 msgstr "극좌표 차트"
 
-#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Filled"
 msgstr "채워짐"
 
-#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
 msgstr "주식형 차트"
 
-#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
 msgstr "촛대"
 
-#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
 msgstr "시가고가저가종가"
 
-#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
 msgstr "고가저가종가"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
-#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
 #: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
-#: widgets/RadarDataSetConfigWidget.cpp:182
+#: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
 msgstr "없음"
@@ -974,17 +974,17 @@ msgstr "선택"
 #. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
-#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
+#: DataSetConfigWidget.cpp:388 TitlesConfigWidget.ui:52
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
-#: widgets/RadarDataSetConfigWidget.cpp:191
+#: widgets/RadarDataSetConfigWidget.cpp:189
 #, kde-format
 msgid "Auto"
 msgstr "자동"
 
-#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
-#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
-#: widgets/RadarDataSetConfigWidget.cpp:297
+#: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
+#: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
+#: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
 msgstr "데이터 모음 %1"
@@ -1543,7 +1543,7 @@ msgstr "파이 데이터 편집기"
 msgid "Del"
 msgstr "Del"
 
-#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
 msgstr "%1줄"
@@ -1695,7 +1695,7 @@ msgstr "방향"
 msgid "Fonts..."
 msgstr "글꼴..."
 
-#: PieConfigWidget.cpp:100
+#: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
 msgstr "데이터 지점 %1"
@@ -1706,12 +1706,12 @@ msgstr "데이터 지점 %1"
 msgid "E&xplode Factor"
 msgstr "나누기 인자(&X)"
 
-#: PlotAreaConfigWidget.cpp:277
+#: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
 msgstr "표면형 차트"
 
-#: PlotAreaConfigWidget.cpp:279
+#: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Gantt Chart"
 msgstr "간트 차트"

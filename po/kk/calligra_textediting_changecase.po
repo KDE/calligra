@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2008-11-14 06:52-0500\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh\n"
@@ -20,32 +20,32 @@ msgstr ""
 "\n"
 "\n"
 
-#: Changecase.cpp:51 Changecase.cpp:79
+#: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
 msgid "Change case"
 msgstr "Үлкен-кішілігін ауыстыру"
 
-#: Changecase.cpp:56
+#: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
 msgstr "Сөйлемдегідей"
 
-#: Changecase.cpp:57
+#: Changecase.cpp:55
 #, kde-format
 msgid "lowercase"
 msgstr "кіші әріптер"
 
-#: Changecase.cpp:58
+#: Changecase.cpp:56
 #, kde-format
 msgid "UPPER CASE"
 msgstr "ҮЛКЕН ӘРІПТЕР"
 
-#: Changecase.cpp:59
+#: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
 msgstr "Үлкеннен бастап"
 
-#: Changecase.cpp:60
+#: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
 msgstr "әІПТЕРДІ тЕРІСТЕУ"

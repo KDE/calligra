@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2012-04-28 11:28+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -334,22 +334,22 @@ msgstr "Void"
 msgid "Value:"
 msgstr "Wartość:"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "New Variable"
 msgstr "Nowa zmienna"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
 msgstr "Nazwa dla nowej zmiennej:"
 
-#: UserVariableOptionsWidget.cpp:168
+#: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr "Czy usunąć zmienną <b>%1</b>?"
 
-#: UserVariableOptionsWidget.cpp:169
+#: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
 msgstr "Usuń zmienną"

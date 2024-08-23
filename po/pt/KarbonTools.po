@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2022-03-25 17:31+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -130,33 +130,33 @@ msgstr "Rato"
 msgid "Graphics Pen"
 msgstr "Caneta Gráfica"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Preencher"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr "Caligrafia: aumentar a espessura"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr "Caligrafia: diminuir a espessura"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr "Caligrafia: aumentar o ângulo"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr "Caligrafia: diminuir o ângulo"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
@@ -393,12 +393,12 @@ msgstr "Fundo"
 msgid "Bottom Right"
 msgstr "Inferior-Direita"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, kde-format
 msgid "Pattern Options"
 msgstr "Opções do Padrão"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Padrões"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2016-10-29 07:57+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -105,7 +105,7 @@ msgstr "Kształt stanu"
 msgid "A state shape"
 msgstr "Kształt stanu"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Opcje narzędzia stanu"
@@ -256,12 +256,12 @@ msgstr "Przełącza pokazywanie paska tytułu"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Przełącza organizowanie opcji na kartach"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Kolumnowy"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Dowolny"
@@ -271,7 +271,7 @@ msgstr "Dowolny"
 msgid "Dockers"
 msgstr "Dokowania"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Bez tytułu %1"

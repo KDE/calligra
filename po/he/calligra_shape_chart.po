@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-07-14 14:46+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -50,8 +50,8 @@ msgstr "ליד הציר"
 msgid "Other-side"
 msgstr "בצד שני"
 
-#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
-#: DataSetConfigWidget.cpp:347
+#: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
+#: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
 msgstr "כותרת ציר"
@@ -171,18 +171,18 @@ msgstr "ציר X משני"
 msgid "Secondary Y Axis"
 msgstr "ציר Y משני"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
 msgstr "חסר תוסף"
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr "התוסף שמשמש להצגת תוויות טקסט בתרשים לא זמין."
 
-#: ChartShape.cpp:305
+#: ChartShape.cpp:303
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
@@ -190,31 +190,31 @@ msgid ""
 msgstr ""
 "התוסף הנחוץ להצגת תוויות טקסט לא תואם לגרסה הנוכחית של צורת תרשים פתיתים."
 
-#: ChartShape.cpp:306
+#: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr "חוסר תאימות תוסף"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
 msgstr "כותרת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
-#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
+#: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
 msgstr "תת־כותרת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
-#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
+#: ChartShape.cpp:382 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
 msgstr "כותרת תחתונה"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:752
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -223,17 +223,17 @@ msgstr ""
 "המסמך הזה מכי לקישור חיצוני למסמך מרוחק\n"
 "%1"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
 msgstr "נדרש אישור"
 
-#: ChartShape.cpp:756
+#: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
 msgstr "הורדה"
 
-#: ChartShape.cpp:757
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
 msgstr "דילוג"
@@ -249,7 +249,7 @@ msgid "Business charts"
 msgstr "תרשימים עסקיים"
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
-#: PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:230
 #, kde-format
 msgid "Bar Chart"
 msgstr "תרשים עמודות"
@@ -280,7 +280,7 @@ msgid "Percent bar chart"
 msgstr "תרשים עמודות אחוזי"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
-#: PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:236
 #, kde-format
 msgid "Line Chart"
 msgstr "תרשים קווים"
@@ -311,7 +311,7 @@ msgid "Percent line chart"
 msgstr "תרשים קווים אחוזי"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
-#: PlotAreaConfigWidget.cpp:244
+#: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
 msgstr "תרשים שטח"
@@ -342,7 +342,7 @@ msgid "Percent area chart"
 msgstr "תרשים שטח אחוזי"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
-#: PlotAreaConfigWidget.cpp:252
+#: PlotAreaConfigWidget.cpp:250
 #, kde-format
 msgid "Pie Chart"
 msgstr "תרשים עוגה"
@@ -353,7 +353,7 @@ msgid "Pie chart"
 msgstr "תרשים עוגה"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
-#: PlotAreaConfigWidget.cpp:253
+#: PlotAreaConfigWidget.cpp:251
 #, kde-format
 msgid "Ring Chart"
 msgstr "תרשים טבעות"
@@ -364,7 +364,7 @@ msgid "Ring chart"
 msgstr "תרשים טבעות"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
-#: PlotAreaConfigWidget.cpp:266
+#: PlotAreaConfigWidget.cpp:264
 #, kde-format
 msgid "Bubble Chart"
 msgstr "תרשים בועות"
@@ -375,7 +375,7 @@ msgid "Bubble chart"
 msgstr "תרשים בועות"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
-#: PlotAreaConfigWidget.cpp:265
+#: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
 msgstr "תרשים פיזור"
@@ -513,37 +513,37 @@ msgstr "סגירה"
 msgid "Growth"
 msgstr "גידול"
 
-#: ChartTool.cpp:99
+#: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
 msgstr "לעשות משהו"
 
-#: ChartTool.cpp:104
+#: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
 msgstr "לעשות משהו אחר"
 
-#: ChartTool.cpp:271
+#: ChartTool.cpp:269
 #, kde-format
 msgid "Titles"
 msgstr "כותרות"
 
-#: ChartTool.cpp:286
+#: ChartTool.cpp:284
 #, kde-format
 msgid "Legend"
 msgstr "מקרא"
 
-#: ChartTool.cpp:299
+#: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
 msgstr "אזור שרטוט"
 
-#: ChartTool.cpp:1063
+#: ChartTool.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "הצגת מקרא"
 
-#: ChartTool.cpp:1065
+#: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
 msgstr "הסתרת מקרא"
@@ -563,107 +563,107 @@ msgctxt "(qtundo-format)"
 msgid "Remove Axis"
 msgstr "הסרת ציר"
 
-#: commands/AxisCommand.cpp:113
+#: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
 msgstr "הצגת כותרת ציר"
 
-#: commands/AxisCommand.cpp:115
+#: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
 msgstr "הסתרת כותרת ציר"
 
-#: commands/AxisCommand.cpp:140
+#: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
 msgstr "הצגת ציר"
 
-#: commands/AxisCommand.cpp:142
+#: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
 msgstr "הסתרת ציר"
 
-#: commands/AxisCommand.cpp:151
+#: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
 msgstr "הצגת תוויות צירים"
 
-#: commands/AxisCommand.cpp:153
+#: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
 msgstr "הסתרת תוויות צירים"
 
-#: commands/AxisCommand.cpp:162
+#: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
 msgstr "הצגת קווי רשת עיקריים של הציר"
 
-#: commands/AxisCommand.cpp:164
+#: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
 msgstr "הסתרת קווי רשת עיקריים של הציר"
 
-#: commands/AxisCommand.cpp:173
+#: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
 msgstr "הצגת קווי רשת משניים של הציר"
 
-#: commands/AxisCommand.cpp:175
+#: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
 msgstr "הסתרת קווי רשת משניים של הציר"
 
-#: commands/AxisCommand.cpp:184
+#: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
 msgstr "התאמת קנה מידה לוגריתמי"
 
-#: commands/AxisCommand.cpp:186
+#: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
 msgstr "התאמת קנה מידה קווי"
 
-#: commands/AxisCommand.cpp:194
+#: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
 msgstr "הגדרת רוחב צעד ציר"
 
-#: commands/AxisCommand.cpp:201
+#: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
 msgstr "הגדרת רוחב תת־צעד ציר"
 
-#: commands/AxisCommand.cpp:209
+#: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
 msgstr "הגדרת רוחב צעד אוטומטי"
 
-#: commands/AxisCommand.cpp:211
+#: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
 msgstr "הגדרת צעד רוחב ידני"
 
-#: commands/AxisCommand.cpp:220
+#: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
 msgstr "רוחב תת־צעד אוטומטי"
 
-#: commands/AxisCommand.cpp:222
+#: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
 msgstr "רוחב תת־צעד ידני"
 
-#: commands/AxisCommand.cpp:230
+#: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
 msgstr "הגדרת גופן תוויות ציר"
 
-#: commands/AxisCommand.cpp:236
+#: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
 msgstr "הגדרת מקום ציר"
 
-#: commands/AxisCommand.cpp:257
+#: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
 msgstr "הגדרת מקום תוויות ציר"
@@ -678,227 +678,227 @@ msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
 msgstr "הסתרת צורת טקסט"
 
-#: commands/ChartTypeCommand.cpp:77
+#: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
 msgstr "תרשים עמודות רגיל"
 
-#: commands/ChartTypeCommand.cpp:80
+#: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
 msgstr "תרשים עמודות בערימה"
 
-#: commands/ChartTypeCommand.cpp:83
+#: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
 msgstr "תרשים עמודות אחוזי"
 
-#: commands/ChartTypeCommand.cpp:92
+#: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
 msgstr "תרשים קווים רגיל"
 
-#: commands/ChartTypeCommand.cpp:95
+#: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
 msgstr "תרשים קווים בערימה"
 
-#: commands/ChartTypeCommand.cpp:98
+#: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
 msgstr "תרשים קווים אחוזי"
 
-#: commands/ChartTypeCommand.cpp:107
+#: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
 msgstr "תרשים שטח רגיל"
 
-#: commands/ChartTypeCommand.cpp:110
+#: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
 msgstr "תרשים שטח בערימה"
 
-#: commands/ChartTypeCommand.cpp:113
+#: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
 msgstr "תרשים שטח אחוזי"
 
-#: commands/ChartTypeCommand.cpp:120
+#: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
 msgstr "תרשים עיגול"
 
-#: commands/ChartTypeCommand.cpp:123
+#: commands/ChartTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
 msgstr "תרשים טבעות"
 
-#: commands/ChartTypeCommand.cpp:126
+#: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
 msgstr "תרשים פיזור"
 
-#: commands/ChartTypeCommand.cpp:129
+#: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
 msgstr "תרשים מכ״ם"
 
-#: commands/ChartTypeCommand.cpp:132
+#: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
 msgstr "תרשים מכ״ם עם מילוי"
 
-#: commands/ChartTypeCommand.cpp:135
+#: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
 msgstr "תרשים מניות"
 
-#: commands/ChartTypeCommand.cpp:138
+#: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr "תרשים בועות"
 
-#: commands/ChartTypeCommand.cpp:141
+#: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
 msgstr "תרשים משטחים"
 
-#: commands/ChartTypeCommand.cpp:144
+#: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
 msgstr "תרשים גאנט"
 
-#: commands/DatasetCommand.cpp:137
+#: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
 msgstr "הגדרת סוג תרשים לסדרת נתונים"
 
-#: commands/DatasetCommand.cpp:145
+#: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
 msgstr "הצגת קטגוריית סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:147
+#: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
 msgstr "הסתרת קטגוריית סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:156
+#: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
 msgstr "הצגת מספר סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:158
+#: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
 msgstr "הסתרת מספר סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:167
+#: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
 msgstr "הצגת אחוז סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:169
+#: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
 msgstr "הסתרת אחוז סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:178
+#: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
 msgstr "הצגת סמל סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:180
+#: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
 msgstr "הסתרת סמל סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:188
+#: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
 msgstr "הגדרת צבע מברשת לסדרת נתונים"
 
-#: commands/DatasetCommand.cpp:195
+#: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
 msgstr "הגדרת צבע עט לסדרת נתונים"
 
-#: commands/DatasetCommand.cpp:204
+#: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
 msgstr "הסתרת סמן סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:206
+#: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
 msgstr "הצגת סמל סימון סדרת נתונים"
 
-#: commands/DatasetCommand.cpp:214
+#: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
 msgstr "הגדרת ציר סדרת נתונים"
 
-#: commands/GapCommand.cpp:60
+#: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
 msgstr "הגדרת רווח בין עמודות"
 
-#: commands/GapCommand.cpp:67
+#: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
 msgstr "הגדרת רווח בין סדרות"
 
-#: commands/LegendCommand.cpp:75
+#: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
 msgstr "הגדרת כותרת למקרא"
 
-#: commands/LegendCommand.cpp:83
+#: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
 msgstr "הגדרת גופן המקרא"
 
-#: commands/LegendCommand.cpp:90
+#: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
 msgstr "הגדרת גודל כתב המקרא"
 
-#: commands/LegendCommand.cpp:97
+#: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
 msgstr "הגדרת כיוון המקרא"
 
-#: commands/PlotAreaCommand.cpp:58
+#: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
 msgstr "הגדרת עמודות אופקיות"
 
-#: commands/PlotAreaCommand.cpp:60
+#: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
 msgstr "הגדרת עמודות אנכיות"
 
-#: DataSet.cpp:274
+#: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
 msgstr "סדרה %1"
 
-#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, kde-format
 msgid "Chart Type"
 msgstr "סוג תרשים"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
-#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
-#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
+#: PlotAreaConfigWidget.cpp:231 PlotAreaConfigWidget.cpp:237
+#: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
 msgstr "רגיל"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
-#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
-#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
 msgstr "מוערם"
@@ -908,47 +908,47 @@ msgstr "מוערם"
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
 #: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
 #: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
-#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
-#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:233
+#: PlotAreaConfigWidget.cpp:239 PlotAreaConfigWidget.cpp:245
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
 msgstr "אחוז"
 
-#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, kde-format
 msgid "Polar Chart"
 msgstr "תרשים קוטבי"
 
-#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Filled"
 msgstr "עם מילוי"
 
-#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
 msgstr "תרשים מניות"
 
-#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
 msgstr "נרות"
 
-#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
 msgstr "פתיחה_גבוה_נמוך_סגירה"
 
-#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
 msgstr "גבוה_נמוך_סגירה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
-#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
 #: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
-#: widgets/RadarDataSetConfigWidget.cpp:182
+#: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
 msgstr "ללא"
@@ -972,17 +972,17 @@ msgstr "בחירה"
 #. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
-#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
+#: DataSetConfigWidget.cpp:388 TitlesConfigWidget.ui:52
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
-#: widgets/RadarDataSetConfigWidget.cpp:191
+#: widgets/RadarDataSetConfigWidget.cpp:189
 #, kde-format
 msgid "Auto"
 msgstr "אוטו׳"
 
-#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
-#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
-#: widgets/RadarDataSetConfigWidget.cpp:297
+#: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
+#: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
+#: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
 msgstr "סדרת נתונים %1"
@@ -1541,7 +1541,7 @@ msgstr "עורך נתוני עוגה"
 msgid "Del"
 msgstr "מחיקה"
 
-#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
 msgstr "שורה %1"
@@ -1693,7 +1693,7 @@ msgstr "כיוון"
 msgid "Fonts..."
 msgstr "גופנים…"
 
-#: PieConfigWidget.cpp:100
+#: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
 msgstr "נקודת נתונים %1"
@@ -1704,12 +1704,12 @@ msgstr "נקודת נתונים %1"
 msgid "E&xplode Factor"
 msgstr "מקדם פי&צוץ"
 
-#: PlotAreaConfigWidget.cpp:277
+#: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
 msgstr "תרשים משטחים"
 
-#: PlotAreaConfigWidget.cpp:279
+#: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Gantt Chart"
 msgstr "תרשים גאנט"

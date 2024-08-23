@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2019-12-15 22:52+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -493,7 +493,7 @@ msgstr "Muusikakujund"
 msgid "A shape which provides a music editor"
 msgstr "Muusikaredaktorit pakkuv kujund"
 
-#: MusicTool.cpp:83
+#: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
 msgstr "Partiid"

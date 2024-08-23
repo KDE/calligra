@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2013-09-30 03:16+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -105,7 +105,7 @@ msgstr "Күй-жай қалыпы"
 msgid "A state shape"
 msgstr "Күй-жай қалыпы"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Күй-жай құрал параметрлері"
@@ -257,12 +257,12 @@ msgstr "Атау айдарын көрсету/жасыру"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Қойындылар тәртібін қосу/ажырату"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Баған"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Бос"
@@ -272,7 +272,7 @@ msgstr "Бос"
 msgid "Dockers"
 msgstr "Докерлер"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Аталмаған %1"

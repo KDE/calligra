@@ -4,21 +4,21 @@
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019, 2024.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 10:34+0200\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"PO-Revision-Date: 2024-08-22 10:28+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -122,7 +122,7 @@ msgstr "Efectes"
 #: data/karbon.rc:177
 #, kde-format
 msgid "Add Shape"
-msgstr ""
+msgstr "Afegeix una forma"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -142,7 +142,7 @@ msgstr "Camí aplanat"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
-#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/roundcorners/RoundCornersPlugin.cpp:107
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, kde-format
 msgid "Properties"
@@ -158,7 +158,7 @@ msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "Camí aplanat"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "Refina el camí"
@@ -179,7 +179,7 @@ msgid "Subdivisions:"
 msgstr "Subdivisions:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
-#: plugins/roundcorners/RoundCornersPlugin.cpp:81
+#: plugins/roundcorners/RoundCornersPlugin.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "Cantonades arrodonides"
@@ -189,12 +189,12 @@ msgstr "Cantonades arrodonides"
 msgid "&Round Corners..."
 msgstr "Cantonades a&rrodonides..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:97
+#: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
 msgid "Round Corners"
 msgstr "Cantonades arrodonides"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
@@ -312,90 +312,100 @@ msgstr "Una aplicació de dibuix de vectors gràfics."
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr "(c) 2001-%1, The Karbon Developers"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr "Anthony Fieroni"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Maintainer"
 msgstr "Mantenidor"
 
-#: ui/KarbonAboutData.h:32
+#: ui/KarbonAboutData.h:30
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:31
+#, kde-format
+msgid "Port to Qt6"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
 #, kde-format
 msgid "Rob Buis"
 msgstr "Rob Buis"
 
-#: ui/KarbonAboutData.h:33
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr "Tomislav Lukman"
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr "Benoît Vautrin"
 
-#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
-#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr "Correcció d'errors i millores generals"
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Jan Hambrecht"
 msgstr "Jan Hambrecht"
 
-#: ui/KarbonAboutData.h:36
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Tim Beaulen"
 msgstr "Tim Beaulen"
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Bug fixes"
 msgstr "Correcció d'errors"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Alan Horkan"
 msgstr "Alan Horkan"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr "Pedaços útils i consells"
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Albert Astals Cid, Rafael Carreras"
 
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -622,35 +632,35 @@ msgstr "Selecció de paleta"
 msgid "Press to apply fill to selection"
 msgstr "Premeu per a aplicar farciment a la selecció"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:90
+#: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "Cap"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:112
+#: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr "Premeu per a aplicar un traç a la selecció"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:161
+#: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr "Personalitzat"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:167
+#: ui/widgets/KarbonSmallStylePreview.cpp:165
 #, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "Cap"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:187
+#: ui/widgets/KarbonSmallStylePreview.cpp:185
 #, kde-format
 msgid "Stroke:"
 msgstr "Traç:"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:192
+#: ui/widgets/KarbonSmallStylePreview.cpp:190
 #, kde-format
 msgid "Fill:"
 msgstr "Omple:"

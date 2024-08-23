@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice-defaulttools.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -115,60 +115,60 @@ msgstr ""
 msgid "Escape in down direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, fuzzy, kde-format
 msgid "Drag to edit connection."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, fuzzy, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, fuzzy, kde-format
 msgid "Click to edit connection points."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, fuzzy, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, fuzzy, kde-format
 msgid "Double click to add connection point."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, fuzzy, kde-format
 msgid "Drag to create new connection."
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, fuzzy, kde-format
 msgid "Connection"
 msgstr "Giuirléid Cheangail"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, fuzzy, kde-format
 msgid "Connection Point"
 msgstr "Giuirléid Cheangail"
@@ -428,22 +428,22 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Fiar"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, fuzzy, kde-format
 msgid "Double click to add guide line."
 msgstr "Giuirléid Cheangail"
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr ""
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr ""

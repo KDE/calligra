@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2020-02-10 22:34+0100\n"
 "Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -115,27 +115,27 @@ msgstr "Escappata in direction in alto"
 msgid "Escape in down direction"
 msgstr "Escappata in direction a basso"
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Crea connexion"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "Trahe pro modificar connexion"
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "Duple pulsa sur le connexion o pressa le clave de dele pro remover lo."
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "Pulsa pro modificar punctos de connexion."
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
@@ -144,34 +144,34 @@ msgstr ""
 "Trahe pro mover punctop de connexion. Duple pulsa sur le connexion o pressa "
 "le clave de dele pro remover lo."
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
 "Duple pulsa sur le puncto de connexion o pressa le clave de dele pro remover "
 "lo."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "Duple pulsa pro adder puncto de connexion."
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "Trahe pro crear un nove connexion."
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
 msgstr "Connexion"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "Linea"
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
 msgstr "Puncto de connexion"
@@ -425,23 +425,23 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Tonde"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
 msgstr "Duple pulsa pro adder linea de guida"
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
 "Pulsa e trahe pro mover line de guida. Duple pulsa pro remover linea de guida"
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr "Editor de guidas"
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr "Insertor de guidas"

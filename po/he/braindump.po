@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-06-29 16:31+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -106,7 +106,7 @@ msgstr "צורת מצב"
 msgid "A state shape"
 msgstr "צורת מצב"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "אפשרויות כלי מצב"
@@ -257,12 +257,12 @@ msgstr "הצגת/הסתרת שורת כותרת"
 msgid "Toggles organising the options in tabs or not"
 msgstr "החלפה בין ארגון האפשרויות בלשוניות או שלא"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "עמודה"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "פנוי"
@@ -272,7 +272,7 @@ msgstr "פנוי"
 msgid "Dockers"
 msgstr "מעגנים"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "%1 ללא כותרת"

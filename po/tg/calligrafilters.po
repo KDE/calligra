@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2004-07-06 13:25-0400\n"
 "Last-Translator: Victor Ibragimov <youth_opportunities@tajik.net>\n"
 "Language-Team: Tajik\n"
@@ -97,116 +97,116 @@ msgid "Opacity"
 msgstr ""
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:164 libmsooxml/MsooXmlThemesReader.cpp:356
-#: sheets/xlsx/XlsxXmlCommentsReader.cpp:97
-#: sheets/xlsx/XlsxXmlDocumentReader.cpp:128
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:107
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:456
-#: sheets/xlsx/XlsxXmlTableReader.cpp:68
+#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:450
+#: sheets/xlsx/XlsxXmlTableReader.cpp:66
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:295
-#: stage/pptx/PptxXmlDocumentReader.cpp:150
-#: stage/pptx/PptxXmlSlideReader.cpp:330
-#: words/docx/import/DocxXmlCommentsReader.cpp:84
-#: words/docx/import/DocxXmlDocumentReader.cpp:187
-#: words/docx/import/DocxXmlEndnoteReader.cpp:85
-#: words/docx/import/DocxXmlFontTableReader.cpp:80
-#: words/docx/import/DocxXmlFooterReader.cpp:90
-#: words/docx/import/DocxXmlFootnoteReader.cpp:85
-#: words/docx/import/DocxXmlHeaderReader.cpp:90
-#: words/docx/import/DocxXmlNumberingReader.cpp:79
-#: words/docx/import/DocxXmlSettingsReader.cpp:79
+#: stage/pptx/PptxXmlDocumentReader.cpp:148
+#: stage/pptx/PptxXmlSlideReader.cpp:316
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:78
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:75
+#: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
 msgstr ""
 
-#: libmsooxml/MsooXmlImport.cpp:92
+#: libmsooxml/MsooXmlImport.cpp:90
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not open the requested file %1"
 msgstr "Аз файл хонда натавонист."
 
-#: libmsooxml/MsooXmlImport.cpp:115
+#: libmsooxml/MsooXmlImport.cpp:113
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr ""
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
 #, fuzzy, kde-format
 #| msgid "Passwords"
 msgid "Enter password"
 msgstr "Гузарвожаҳо"
 
-#: libmsooxml/MsooXmlImport.cpp:328 libmsooxml/MsooXmlImport.cpp:447
+#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
 
-#: libmsooxml/MsooXmlImport.cpp:622
+#: libmsooxml/MsooXmlImport.cpp:620
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not find path for type %1"
 msgstr "Аз файл хонда натавонист."
 
-#: libmsooxml/MsooXmlReader.cpp:131
+#: libmsooxml/MsooXmlReader.cpp:127
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:132
+#: libmsooxml/MsooXmlReader.cpp:128
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:154
+#: libmsooxml/MsooXmlReader.cpp:150
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:159
+#: libmsooxml/MsooXmlReader.cpp:155
 #, fuzzy, kde-format
 #| msgid "Footnote %1"
 msgid "Attribute \"%1\" not found"
 msgstr "Эзоҳи поварақ%1"
 
-#: libmsooxml/MsooXmlReader.cpp:169
+#: libmsooxml/MsooXmlReader.cpp:165
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:174
+#: libmsooxml/MsooXmlReader.cpp:170
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:191 libmsooxml/MsooXmlReader.cpp:242
+#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:233
+#: libmsooxml/MsooXmlReader.cpp:229
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr ""
 
-#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:85
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not find target for id \"%1\" in file \"%2\""
 msgstr "Аз файл хонда натавонист."
 
-#: libmsooxml/MsooXmlRelationships.cpp:93
-#: libmsooxml/MsooXmlRelationships.cpp:112
+#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:108
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not find relationships file \"%1\""
 msgstr "Аз файл хонда натавонист."
 
-#: libmsooxml/MsooXmlRelationships.cpp:108
+#: libmsooxml/MsooXmlRelationships.cpp:104
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
@@ -250,6 +250,20 @@ msgstr "Аз файл хонда натавонист."
 msgid "<SHEETNAME>"
 msgstr "<TABLENAME>"
 
+#: sheets/csv/csvexportdialog.cpp:37
+#, fuzzy, kde-format
+msgctxt "@title:dialog"
+msgid "Export to CVS"
+msgstr "Воридоти суратҳо"
+
+#: sheets/csv/csvexportdialog.cpp:46
+#: sheets/latex/export/latexexportdialog.cc:152
+#, fuzzy, kde-format
+#| msgid "EPS Export"
+msgctxt "@action:button"
+msgid "Export"
+msgstr "Содироти EPS"
+
 #: sheets/csv/csvimport.cc:74
 #, fuzzy, kde-format
 msgid "CSV filter cannot open input file - please report."
@@ -258,129 +272,135 @@ msgstr ""
 "бифиристед."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
-#: sheets/csv/exportdialogui.ui:27 sheets/csv/exportdialogui.ui:33
+#: sheets/csv/exportdialogui.ui:48
 #, kde-format
 msgid "End of Line"
 msgstr "Дар охири сатр"
 
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:56
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End of Line:"
+msgstr "Дар охири сатр"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
-#: sheets/csv/exportdialogui.ui:39
+#: sheets/csv/exportdialogui.ui:63
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
 msgstr "Услуби &UNIX"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
-#: sheets/csv/exportdialogui.ui:49
+#: sheets/csv/exportdialogui.ui:73
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
 msgstr "Услуби &Windows"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
-#: sheets/csv/exportdialogui.ui:59
+#: sheets/csv/exportdialogui.ui:83
 #, kde-format
 msgid "&MacOS style (carriage return only)"
 msgstr "Услуби &MacOS"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: sheets/csv/exportdialogui.ui:89
+#: sheets/csv/exportdialogui.ui:96
 #, kde-format
 msgid "Sheets"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
-#: sheets/csv/exportdialogui.ui:102
+#: sheets/csv/exportdialogui.ui:109
 #, kde-format
 msgid "Select sheets to export:"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
-#: sheets/csv/exportdialogui.ui:118
+#: sheets/csv/exportdialogui.ui:125
 #, kde-format
 msgid "Delimiter Line"
 msgstr "Ҷудокунандаи хат"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
-#: sheets/csv/exportdialogui.ui:124
+#: sheets/csv/exportdialogui.ui:131
 #, fuzzy, kde-format
 msgid "********<SHEETNAME>********"
 msgstr "********<TABLENAME>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
-#: sheets/csv/exportdialogui.ui:137
+#: sheets/csv/exportdialogui.ui:144
 #, fuzzy, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 msgstr "<TABLENAME> ба номи ҷадвали дигар иваз мекунад."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
-#: sheets/csv/exportdialogui.ui:156
+#: sheets/csv/exportdialogui.ui:163
 #, fuzzy, kde-format
 msgid "Print delimiter line above every sheet"
 msgstr "Ҷудокунандаи хат дар болои ҷадвалҳо чоп кунед"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
-#: sheets/csv/exportdialogui.ui:167 sheets/csv/exportdialogui.ui:251
+#: sheets/csv/exportdialogui.ui:174
 #, kde-format
 msgid "Cells"
 msgstr "Сӯрохҳо"
 
-#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: sheets/csv/exportdialogui.ui:179
-#, kde-format
-msgid "Delimiter"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:182
+#, fuzzy, kde-format
+#| msgid "Delimiter"
+msgid "Delimiter:"
 msgstr "Ҷудокунанда"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: sheets/csv/exportdialogui.ui:185
+#: sheets/csv/exportdialogui.ui:189
 #, kde-format
 msgid "Comma"
 msgstr "Нуқта"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: sheets/csv/exportdialogui.ui:195
+#: sheets/csv/exportdialogui.ui:199
 #, kde-format
 msgid "Semicolon"
 msgstr "Нуқтавергул"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: sheets/csv/exportdialogui.ui:202
+#: sheets/csv/exportdialogui.ui:206
 #, kde-format
 msgid "Tabulator"
 msgstr "Табулятор"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: sheets/csv/exportdialogui.ui:209
+#: sheets/csv/exportdialogui.ui:213
 #, kde-format
 msgid "Space"
 msgstr "Фосила"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: sheets/csv/exportdialogui.ui:216
+#: sheets/csv/exportdialogui.ui:222
 #, kde-format
 msgid "Other:"
 msgstr "Дигар:"
 
-#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
-#: sheets/csv/exportdialogui.ui:266
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:250
 #, kde-format
 msgid "Quotes:"
 msgstr "Ишораҳо:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:286
+#: sheets/csv/exportdialogui.ui:270
 #, kde-format
 msgid "\""
 msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:291
+#: sheets/csv/exportdialogui.ui:275
 #, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
-#: sheets/csv/exportdialogui.ui:322
+#: sheets/csv/exportdialogui.ui:301
 #, kde-format
 msgid "Export selection only"
 msgstr "Танҳо интихобот содирот кунед:"
@@ -513,55 +533,57 @@ msgstr ""
 msgid "Pi&xels between cells:"
 msgstr ""
 
-#: sheets/html/htmlexport.cc:198 sheets/html/htmlexport.cc:373
+#: sheets/html/htmlexport.cc:191 sheets/html/htmlexport.cc:366
 #, kde-format
 msgid "Top"
 msgstr ""
 
-#: sheets/latex/export/latexexportdialog.cc:139
+#: sheets/latex/export/latexexportdialog.cc:155
 #, kde-format
 msgid "Latex Export Filter Configuration"
 msgstr "Танзимоти Филтри Содироти Latex "
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
-#: sheets/latex/export/latexexportwidget.ui:24
+#: sheets/latex/export/latexexportwidget.ui:36
 #, kde-format
 msgid "Document"
 msgstr "Ҳуҷҷат"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: sheets/latex/export/latexexportwidget.ui:32
-#, kde-format
-msgid "Document Style"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:44
+#, fuzzy, kde-format
+#| msgid "Document Style"
+msgid "Document style:"
 msgstr "Услуби ҳуҷҷат"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:38
+#: sheets/latex/export/latexexportwidget.ui:51
 #, kde-format
 msgid "Latex style"
 msgstr "Услуби LaTex "
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:45
+#: sheets/latex/export/latexexportwidget.ui:58
 #, fuzzy, kde-format
 #| msgid "KWord style"
 msgid "Words style"
 msgstr "Услуби KWord "
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: sheets/latex/export/latexexportwidget.ui:58
-#, kde-format
-msgid "Document Type"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:68
+#, fuzzy, kde-format
+#| msgid "Document Type"
+msgid "Document type:"
 msgstr "Шакли ҳуҷҷат"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:64
+#: sheets/latex/export/latexexportwidget.ui:75
 #, fuzzy, kde-format
 msgid "The document will be able to be compiled alone"
 msgstr "Ин ҳуҷҷат метавонад ба танҳои ҷамъ шудан."
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:67
+#: sheets/latex/export/latexexportwidget.ui:78
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document will be generated as a full latex document since all the "
@@ -576,19 +598,19 @@ msgstr ""
 "пеш аз дастуроти \\аввали [ҳуҷҷат} ва \\охири {ҳуҷҷат} таҳия мешаванд."
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:70
+#: sheets/latex/export/latexexportwidget.ui:81
 #, kde-format
 msgid "Independent document"
 msgstr "Ҳуҷҷати мустақил"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:80
+#: sheets/latex/export/latexexportwidget.ui:91
 #, fuzzy, kde-format
 msgid "Do not generate either the latex header or the document environment"
 msgstr "Сарлавҳаи latex ё гирдуатрофи ҳуҷҷатро нагиронед."
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:83
+#: sheets/latex/export/latexexportwidget.ui:94
 #, kde-format
 msgid ""
 "The document will be generated as a latex document which will have to be "
@@ -600,126 +622,126 @@ msgstr ""
 "хурдро барои параграфҳои ҳуҷҷати худ истифода баред."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:86
+#: sheets/latex/export/latexexportwidget.ui:97
 #, kde-format
 msgid "Document to include"
 msgstr "Дохил кардани ҳуҷҷат"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
-#: sheets/latex/export/latexexportwidget.ui:98
+#: sheets/latex/export/latexexportwidget.ui:104
 #, kde-format
 msgid "Document class:"
 msgstr "Синфи ҳуҷҷат:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
-#: sheets/latex/export/latexexportwidget.ui:111
+#: sheets/latex/export/latexexportwidget.ui:124
 #, kde-format
 msgid "Quality:"
 msgstr "Сифат:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:122
+#: sheets/latex/export/latexexportwidget.ui:141
 #, fuzzy, kde-format
 msgid "Final"
 msgstr "охир"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:127
+#: sheets/latex/export/latexexportwidget.ui:146
 #, fuzzy, kde-format
 msgid "Draft"
 msgstr "нақша"
 
 #. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
-#: sheets/latex/export/latexexportwidget.ui:135
+#: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
 msgstr "Андозаи Ҳарфи Пешфарз:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
-#: sheets/latex/export/latexexportwidget.ui:176
+#: sheets/latex/export/latexexportwidget.ui:186
 #, kde-format
 msgid "Pictures"
 msgstr "Суратҳо"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: sheets/latex/export/latexexportwidget.ui:182
+#: sheets/latex/export/latexexportwidget.ui:192
 #, fuzzy, kde-format
 #| msgid "Convert the pictures"
 msgid "Convert the pictures:"
 msgstr "Табдил додани тасвир"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
-#: sheets/latex/export/latexexportwidget.ui:199
+#: sheets/latex/export/latexexportwidget.ui:209
 #, kde-format
 msgid "Pictures directory:"
 msgstr "Феҳристи суратҳо:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: sheets/latex/export/latexexportwidget.ui:213
-#: sheets/latex/export/latexexportwidget.ui:244
+#: sheets/latex/export/latexexportwidget.ui:223
+#: sheets/latex/export/latexexportwidget.ui:269
 #, kde-format
 msgid "Language"
 msgstr "Забон"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: sheets/latex/export/latexexportwidget.ui:219
-#, kde-format
-msgid "Encoding"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/latex/export/latexexportwidget.ui:244
+#, fuzzy, kde-format
+msgid "Encoding:"
 msgstr "Рамзгузорӣ"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:261
+#: sheets/latex/export/latexexportwidget.ui:289
 #, kde-format
 msgid "Add"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:268
+#: sheets/latex/export/latexexportwidget.ui:296
 #, kde-format
 msgid "Remove"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: sheets/latex/export/latexexportwidget.ui:293
+#: sheets/latex/export/latexexportwidget.ui:321
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Аломатҳо"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: sheets/latex/export/latexexportwidget.ui:301
+#: sheets/latex/export/latexexportwidget.ui:329
 #, fuzzy, kde-format
 #| msgid "Export informations about author"
 msgid "Export information about author:"
 msgstr "Ахбороти содирот дар бораи муаллиф"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: sheets/latex/export/latexexportwidget.ui:321
+#: sheets/latex/export/latexexportwidget.ui:349
 #, fuzzy, kde-format
 #| msgid "Add a table of content"
 msgid "Add a table of content:"
 msgstr "Иловаи ҷадвали мундариҷа"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: sheets/latex/export/latexexportwidget.ui:340
+#: sheets/latex/export/latexexportwidget.ui:368
 #, kde-format
 msgid "Notes"
 msgstr "Аломатҳо"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
-#: sheets/latex/export/latexexportwidget.ui:346
+#: sheets/latex/export/latexexportwidget.ui:374
 #, kde-format
 msgid "Don't export"
 msgstr "Содирот накунед"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
-#: sheets/latex/export/latexexportwidget.ui:353
+#: sheets/latex/export/latexexportwidget.ui:381
 #, kde-format
 msgid "Export notes in margin notes"
 msgstr "Содироти аломатҳо дар канораи аломатҳо"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
-#: sheets/latex/export/latexexportwidget.ui:360
+#: sheets/latex/export/latexexportwidget.ui:388
 #, kde-format
 msgid "Export notes in comments"
 msgstr "Содироти аломатҳо дар қайдҳо"
@@ -780,23 +802,23 @@ msgstr ""
 msgid "Unable to find part for type %1"
 msgstr "Аз файл хонда натавонист."
 
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:175
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
 msgstr ""
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:570
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
 msgstr ""
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:926
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
 msgstr ""
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1053
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1374
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
 msgstr ""
@@ -813,13 +835,13 @@ msgstr ""
 msgid "Expected integer or floating point number"
 msgstr ""
 
-#: stage/pptx/PptxXmlDocumentReader.cpp:291
+#: stage/pptx/PptxXmlDocumentReader.cpp:289
 #, fuzzy, kde-format
 #| msgid "Endnote %1"
 msgid "Slide layout \"%1\" not found"
 msgstr "Теҳнушт %1"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:603
+#: stage/pptx/PptxXmlSlideReader.cpp:589
 #, fuzzy, kde-format
 #| msgid "Slide Title"
 msgid "Slide %1"
@@ -861,7 +883,7 @@ msgstr "&Ҷумла: Агар, тамоми хат - тамоми ҷумла м�
 msgid "&Empty Line: If the line is empty"
 msgstr ""
 
-#: words/epub/OdtHtmlConverter.cpp:258 words/mobi/OdtMobiHtmlConverter.cpp:285
+#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, fuzzy, kde-format
 #| msgid "End of Line"
 msgid "End notes"
@@ -918,6 +940,9 @@ msgstr "Воридоти филтри ҳуҷҷати PDF"
 msgid "The file cannot be loaded."
 msgstr ""
 
+#~ msgid "Encoding"
+#~ msgstr "Рамзгузорӣ"
+
 #, fuzzy
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"
@@ -931,10 +956,6 @@ msgstr ""
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Other ( %1 )"
 #~ msgstr "Дигар ( %1 )"
-
-#, fuzzy
-#~ msgid "E&ncoding:"
-#~ msgstr "Рамзгузорӣ"
 
 #, fuzzy
 #~ msgid "Locale (%1)"
@@ -953,10 +974,6 @@ msgstr ""
 
 #~ msgid "Malformed XML data."
 #~ msgstr "Санаи XML нокифоя ташкилёфтани."
-
-#, fuzzy
-#~ msgid "Export to Image"
-#~ msgstr "Воридоти суратҳо"
 
 #, fuzzy
 #~ msgid "Height:"
@@ -1655,9 +1672,6 @@ msgstr ""
 
 #~ msgid "PNG Export Error"
 #~ msgstr "Хатои Содироти PNG"
-
-#~ msgid "EPS Export"
-#~ msgstr "Содироти EPS"
 
 #~ msgid "PostScript level 1"
 #~ msgstr "PostScript-и дараҷаи 1"

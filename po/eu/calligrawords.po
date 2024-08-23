@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-17 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2023-08-29 16:04+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -393,7 +393,7 @@ msgstr "Testuaren inguraketa"
 msgid "Connect Text Frames"
 msgstr "Konektatu testu-markoak"
 
-#: part/dialogs/KWFrameDialog.cpp:66
+#: part/dialogs/KWFrameDialog.cpp:64
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
 msgstr "Aldatu formaren propietateak"
@@ -531,37 +531,37 @@ msgid "Distance Between Shape and Text:"
 msgstr "Formaren eta testuaren arteko distantzia:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
-#: part/dialogs/KWPageSettingsDialog.cpp:36 part/dialogs/KWStartupWidget.ui:37
+#: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
 msgstr "Zutabeak"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:41
+#: part/dialogs/KWPageSettingsDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Estiloa"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:47
+#: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
 msgid "Clone"
 msgstr "Klonatu"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:50 part/KWView.cpp:304
+#: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
 #, kde-format
 msgid "Delete"
 msgstr "Ezabatu"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:136
+#: part/dialogs/KWPageSettingsDialog.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
 msgstr "Orri-estiloa aldatu"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:217
+#: part/dialogs/KWPageSettingsDialog.cpp:235
 #, kde-format
 msgid "Clone Page Style"
 msgstr "Klonatu orri-estiloa"
 
-#: part/dialogs/KWPageSettingsDialog.cpp:218
+#: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
 msgstr "Gehitu izen hau duen orri-estilo berri bat:"
@@ -679,12 +679,12 @@ msgstr "Araztu"
 msgid "Navigation"
 msgstr "Nabigatzea"
 
-#: part/dockers/KWNavigationWidget.cpp:94
+#: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Page #"
 msgstr "Orrialde zk."
 
-#: part/dockers/KWNavigationWidget.cpp:94
+#: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Section"
 msgstr "Atala"
@@ -699,47 +699,47 @@ msgstr "RDF"
 msgid "Statistics"
 msgstr "Estatistikak"
 
-#: part/dockers/KWStatisticsWidget.cpp:127
+#: part/dockers/KWStatisticsWidget.cpp:125
 #, kde-format
 msgid "Words:"
 msgstr "Hitzak:"
 
-#: part/dockers/KWStatisticsWidget.cpp:130
+#: part/dockers/KWStatisticsWidget.cpp:128
 #, kde-format
 msgid "Sentences:"
 msgstr "Esaldiak:"
 
-#: part/dockers/KWStatisticsWidget.cpp:133
+#: part/dockers/KWStatisticsWidget.cpp:131
 #, kde-format
 msgid "Syllables:"
 msgstr "Silabak:"
 
-#: part/dockers/KWStatisticsWidget.cpp:136
+#: part/dockers/KWStatisticsWidget.cpp:134
 #, kde-format
 msgid "Characters (spaces):"
 msgstr "Karaktereak (zuriuneekin):"
 
-#: part/dockers/KWStatisticsWidget.cpp:139
+#: part/dockers/KWStatisticsWidget.cpp:137
 #, kde-format
 msgid "Characters (no spaces):"
 msgstr "Karaktereak (zuriune gabe):"
 
-#: part/dockers/KWStatisticsWidget.cpp:142
+#: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
 msgid "Lines:"
 msgstr "Lerroak:"
 
-#: part/dockers/KWStatisticsWidget.cpp:145
+#: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
 msgid "Readability:"
 msgstr "Irakurgarritasuna:"
 
-#: part/dockers/KWStatisticsWidget.cpp:147
+#: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Flesch reading ease"
 msgstr "Flesch-en irakurgarritasuna"
 
-#: part/dockers/KWStatisticsWidget.cpp:149
+#: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "East asian characters:"
 msgstr "Asiako Ekialdeko karaktereak:"
@@ -1074,278 +1074,289 @@ msgctxt "Style name"
 msgid "Gray Top and Bottom"
 msgstr "Grisa goian eta behean"
 
-#: part/KWAboutData.h:19
+#: part/KWAboutData.h:18
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
 msgstr "Calligra Words"
 
-#: part/KWAboutData.h:21
+#: part/KWAboutData.h:20
 #, kde-format
 msgid "Word processor"
 msgstr "Testu-tratamenduko programa"
 
-#: part/KWAboutData.h:23
+#: part/KWAboutData.h:22
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
 msgstr "Copyright 1998-%1, «Words» taldea"
 
-#: part/KWAboutData.h:31 part/KWAboutData.h:32
+#: part/KWAboutData.h:28
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/KWAboutData.h:29
+#, fuzzy, kde-format
+#| msgid "Co maintainer"
+msgid "Co Maintainer/Port to Qt6"
+msgstr "Arduradunkidea"
+
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
 msgid "Co maintainer"
 msgstr "Arduradunkidea"
 
-#: part/KWAboutData.h:31
+#: part/KWAboutData.h:33 part/KWAboutData.h:34
 #, kde-format
 msgid "Pierre Ducroquet"
 msgstr "Pierre Ducroquet"
 
-#: part/KWAboutData.h:32
+#: part/KWAboutData.h:35
 #, kde-format
 msgid "C. Boemann"
 msgstr "C. Boemann"
 
-#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Everything"
 msgstr "Guztia"
 
-#: part/KWAboutData.h:33
+#: part/KWAboutData.h:36
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/KWAboutData.h:34
+#: part/KWAboutData.h:37
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: part/KWAboutData.h:35
+#: part/KWAboutData.h:38
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Formatting stuff"
 msgstr "Formatu-kontuak"
 
-#: part/KWAboutData.h:36
+#: part/KWAboutData.h:39
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: part/KWAboutData.h:37
+#: part/KWAboutData.h:40
 #, kde-format
 msgid "Thorsten Zachmann"
 msgstr "Thorsten Zachmann"
 
-#: part/KWAboutData.h:38 part/KWAboutData.h:44 part/KWAboutData.h:45
-#: part/KWAboutData.h:46 part/KWAboutData.h:58 part/KWAboutData.h:59
-#: part/KWAboutData.h:60 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:41 part/KWAboutData.h:47 part/KWAboutData.h:48
+#: part/KWAboutData.h:49 part/KWAboutData.h:61 part/KWAboutData.h:62
 #: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
-#: part/KWAboutData.h:66 part/KWAboutData.h:67
+#: part/KWAboutData.h:66 part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:69 part/KWAboutData.h:70
 #, kde-format
 msgid "Filter"
 msgstr "Iragazkia"
 
-#: part/KWAboutData.h:38
+#: part/KWAboutData.h:41
 #, kde-format
 msgid "Matus Uzak"
 msgstr "Matus Uzak"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Layout and Painting"
 msgstr "Diseinua eta irudiak"
 
-#: part/KWAboutData.h:39
+#: part/KWAboutData.h:42
 #, kde-format
 msgid "Pavol Korinek"
 msgstr "Pavol Korinek"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Shreya Pandit"
 msgstr "Shreya Pandit"
 
-#: part/KWAboutData.h:40
+#: part/KWAboutData.h:43
 #, kde-format
 msgid "Statistics docker"
 msgstr "Estatistiken panel atrakagarria"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Brijesh Patel"
 msgstr "Brijesh Patel"
 
-#: part/KWAboutData.h:41
+#: part/KWAboutData.h:44
 #, kde-format
 msgid "Foot and endnotes"
 msgstr "Oin-oharrak eta amaiera-oharrak"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Bibliography"
 msgstr "Bibliografia"
 
-#: part/KWAboutData.h:42
+#: part/KWAboutData.h:45
 #, kde-format
 msgid "Smit Patel"
 msgstr "Smit Patel"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Mojtaba Shahi"
 msgstr "Mojtaba Shahi"
 
-#: part/KWAboutData.h:43
+#: part/KWAboutData.h:46
 #, kde-format
 msgid "Style Manager"
 msgstr "Estilo-kudeatzailea"
 
-#: part/KWAboutData.h:44
+#: part/KWAboutData.h:47
 #, kde-format
 msgid "Lassi Nieminen"
 msgstr "Lassi Nieminen"
 
-#: part/KWAboutData.h:45
+#: part/KWAboutData.h:48
 #, kde-format
 msgid "Hanzes Matus"
 msgstr "Hanzes Matus"
 
-#: part/KWAboutData.h:46
+#: part/KWAboutData.h:49
 #, kde-format
 msgid "Lukáš Tvrdý"
 msgstr "Lukáš Tvrdý"
 
-#: part/KWAboutData.h:47
+#: part/KWAboutData.h:50
 #, kde-format
 msgid "Thomas Zander"
 msgstr "Thomas Zander"
 
-#: part/KWAboutData.h:48
+#: part/KWAboutData.h:51
 #, kde-format
 msgid "Girish Ramakrishnan"
 msgstr "Girish Ramakrishnan"
 
-#: part/KWAboutData.h:48 part/KWAboutData.h:49
+#: part/KWAboutData.h:51 part/KWAboutData.h:52
 #, kde-format
 msgid "ODF Support"
 msgstr "ODFri buruzko laguntza"
 
-#: part/KWAboutData.h:49
+#: part/KWAboutData.h:52
 #, kde-format
 msgid "Robert Mathias Marmorstein"
 msgstr "Robert Mathias Marmorstein"
 
-#: part/KWAboutData.h:50
+#: part/KWAboutData.h:53
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/KWAboutData.h:51
+#: part/KWAboutData.h:54
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/KWAboutData.h:52
+#: part/KWAboutData.h:55
 #, kde-format
 msgid "Sven Lüppken"
 msgstr "Sven Lüppken"
 
-#: part/KWAboutData.h:53
+#: part/KWAboutData.h:56
 #, kde-format
 msgid "Frank Dekervel"
 msgstr "Frank Dekervel"
 
-#: part/KWAboutData.h:54
+#: part/KWAboutData.h:57
 #, kde-format
 msgid "Krister Wicksell Eriksson"
 msgstr "Krister Wicksell Eriksson"
 
-#: part/KWAboutData.h:55
+#: part/KWAboutData.h:58
 #, kde-format
 msgid "Dag Andersen"
 msgstr "Dag Andersen"
 
-#: part/KWAboutData.h:56
+#: part/KWAboutData.h:59
 #, kde-format
 msgid "Nash Hoogwater"
 msgstr "Nash Hoogwater"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "KFormula"
 msgstr "KFormula"
 
-#: part/KWAboutData.h:57
+#: part/KWAboutData.h:60
 #, kde-format
 msgid "Ulrich Kuettler"
 msgstr "Ulrich Kuettler"
 
-#: part/KWAboutData.h:58
+#: part/KWAboutData.h:61
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "Shaheed Haque"
 
-#: part/KWAboutData.h:59
+#: part/KWAboutData.h:62
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/KWAboutData.h:60
+#: part/KWAboutData.h:63
 #, kde-format
 msgid "Nicolas Goutte"
 msgstr "Nicolas Goutte"
 
-#: part/KWAboutData.h:61
+#: part/KWAboutData.h:64
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/KWAboutData.h:62
+#: part/KWAboutData.h:65
 #, kde-format
 msgid "Clarence Dang"
 msgstr "Clarence Dang"
 
-#: part/KWAboutData.h:63
+#: part/KWAboutData.h:66
 #, kde-format
 msgid "Robert Jacolin"
 msgstr "Robert Jacolin"
 
-#: part/KWAboutData.h:64
+#: part/KWAboutData.h:67
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/KWAboutData.h:65
+#: part/KWAboutData.h:68
 #, kde-format
 msgid "Ewald Snel"
 msgstr "Ewald Snel"
 
-#: part/KWAboutData.h:66
+#: part/KWAboutData.h:69
 #, kde-format
 msgid "Tomasz Grobelny"
 msgstr "Tomasz Grobelny"
 
-#: part/KWAboutData.h:67
+#: part/KWAboutData.h:70
 #, kde-format
 msgid "Michael Johnson"
 msgstr "Michael Johnson"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:71
 #, kde-format
 msgid "Fatcow Web Hosting"
 msgstr "Fatcow Web Hosting"
 
-#: part/KWAboutData.h:68
+#: part/KWAboutData.h:71
 #, kde-format
 msgid "Page break icon"
 msgstr "Orri-jauziaren ikonoa"
 
-#: part/KWAboutData.h:70
+#: part/KWAboutData.h:73
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -1353,7 +1364,7 @@ msgstr ""
 "igaztanaga@gmail.com,marcos@euskalgnu.org,hizpol@ej-gv.es,xalba@euskalnet.net"
 
 #. i18n translator strings
-#: part/KWAboutData.h:70
+#: part/KWAboutData.h:73
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -1401,21 +1412,21 @@ msgstr "Buletdun zerrenda"
 msgid "Tools"
 msgstr "Tresnak"
 
-#: part/KWOdfLoader.cpp:83
+#: part/KWOdfLoader.cpp:81
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr ""
 "OASIS OpenDocument fitxategi baliogabea. Ez da office:body etiketarik "
 "aurkitu."
 
-#: part/KWOdfLoader.cpp:94
+#: part/KWOdfLoader.cpp:92
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr ""
 "OASIS OpenDocument fitxategi baliogabea. Ez da etiketarik aurkitu office:"
 "body-ren barruan."
 
-#: part/KWOdfLoader.cpp:96
+#: part/KWOdfLoader.cpp:94
 #, kde-format
 msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
@@ -1430,12 +1441,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Estandarra"
 
-#: part/KWPart.cpp:139
+#: part/KWPart.cpp:137
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "Ezin da aurkitu behar den testu-osagaia. Words itxi egingo da orain."
 
-#: part/KWPart.cpp:139
+#: part/KWPart.cpp:137
 #, kde-format
 msgid "Installation Error"
 msgstr "Instalazioko errorea"
@@ -1760,12 +1771,12 @@ msgstr "Hitz zenbaketa"
 msgid "Shows or hides word counting in status bar"
 msgstr "Erakutsi edo ezkutatu hitz zenbaketa egoera-barran"
 
-#: part/pagetool/KWPageTool.cpp:85
+#: part/pagetool/KWPageTool.cpp:83
 #, kde-format
 msgid "Page Setup"
 msgstr "Orri ezarpena"
 
-#: part/pagetool/KWPageTool.cpp:89
+#: part/pagetool/KWPageTool.cpp:87
 #, kde-format
 msgid "Header & Footer"
 msgstr "Goiburua eta orri-oina"

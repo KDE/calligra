@@ -7,21 +7,21 @@
 # Sander Koning <sanderkoning@kde.nl>, 2006.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
 # Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2010, 2011, 2012.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2015, 2016, 2018, 2019, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
-"PO-Revision-Date: 2021-09-27 14:34+0200\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"PO-Revision-Date: 2024-08-22 18:23+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
@@ -121,10 +121,9 @@ msgstr "Effecten"
 
 #. i18n: ectx: ToolBar (add_shape_toolbar)
 #: data/karbon.rc:177
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgid "Add Shape"
-msgstr "Vorm"
+msgstr "Vorm toevoegen"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -144,7 +143,7 @@ msgstr "Pad vlak maken"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
-#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/roundcorners/RoundCornersPlugin.cpp:107
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, kde-format
 msgid "Properties"
@@ -160,7 +159,7 @@ msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "Pad vlak maken"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "Pad verfijnen"
@@ -181,7 +180,7 @@ msgid "Subdivisions:"
 msgstr "Subsecties:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
-#: plugins/roundcorners/RoundCornersPlugin.cpp:81
+#: plugins/roundcorners/RoundCornersPlugin.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "Hoeken afronden"
@@ -191,12 +190,12 @@ msgstr "Hoeken afronden"
 msgid "&Round Corners..."
 msgstr "&Hoeken afronden..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:97
+#: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
 msgid "Round Corners"
 msgstr "Hoeken afronden"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
@@ -314,84 +313,94 @@ msgstr "Een grafisch vectortekenprogramma."
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr "(c) 2001-%1, De ontwikkelaars van Karbon"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr "Anthony Fieroni"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Maintainer"
 msgstr "Onderhouder"
 
-#: ui/KarbonAboutData.h:32
+#: ui/KarbonAboutData.h:30
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:31
+#, kde-format
+msgid "Port to Qt6"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
 #, kde-format
 msgid "Rob Buis"
 msgstr "Rob Buis"
 
-#: ui/KarbonAboutData.h:33
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr "Tomislav Lukman"
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr "Benoît Vautrin"
 
-#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
-#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr "Bugreparaties en verbeteringen"
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Jan Hambrecht"
 msgstr "Jan Hambrecht"
 
-#: ui/KarbonAboutData.h:36
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Tim Beaulen"
 msgstr "Tim Beaulen"
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Bug fixes"
 msgstr "Reparaties van bugs"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Alan Horkan"
 msgstr "Alan Horkan"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr "Nuttige verbeteringen en advies"
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -399,7 +408,7 @@ msgstr ""
 "Rinse de Vries - 2003 t/m 2005 2009,Maarten Rütten - 2005,Sander Koning - "
 "2006,Antoon Tolboom,Freek de Kruijf - 2008 t/m 2016"
 
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -626,35 +635,35 @@ msgstr "Palet selecteren"
 msgid "Press to apply fill to selection"
 msgstr "Druk om de selectie te vullen"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:90
+#: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "Geen"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:112
+#: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr "Druk om in de selectie strepen te zetten"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:161
+#: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr "Aangepast"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:167
+#: ui/widgets/KarbonSmallStylePreview.cpp:165
 #, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "Geen"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:187
+#: ui/widgets/KarbonSmallStylePreview.cpp:185
 #, kde-format
 msgid "Stroke:"
 msgstr "Reep:"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:192
+#: ui/widgets/KarbonSmallStylePreview.cpp:190
 #, kde-format
 msgid "Fill:"
 msgstr "Opvullen:"

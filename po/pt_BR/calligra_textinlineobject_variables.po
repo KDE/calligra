@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textinlineobject_variables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2015-06-28 09:41-0300\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -337,22 +337,22 @@ msgstr "Nenhum"
 msgid "Value:"
 msgstr "Valor:"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "New Variable"
 msgstr "Nova variável"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
 msgstr "Nome da nova variável:"
 
-#: UserVariableOptionsWidget.cpp:168
+#: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr "Deseja apagar a variável <b>%1</b>?"
 
-#: UserVariableOptionsWidget.cpp:169
+#: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
 msgstr "Apagar a variável"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2022-08-12 12:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -336,22 +336,22 @@ msgstr "Boş"
 msgid "Value:"
 msgstr "Değer:"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "New Variable"
 msgstr "Yeni Değişken"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
 msgstr "Yeni değişken adı:"
 
-#: UserVariableOptionsWidget.cpp:168
+#: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr "<b>%1</b> değişkeni silinsin mi?"
 
-#: UserVariableOptionsWidget.cpp:169
+#: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
 msgstr "Değişkeni Sil"

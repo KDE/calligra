@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2011-07-27 22:39+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -115,30 +115,30 @@ msgstr ""
 msgid "Escape in down direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Свързване"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "Изтеглете с мишката за редактиране на свързване."
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr ""
 "Натиснете два пъти върху свързване или натиснете \"изтриване\", за да го "
 "премахнете."
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "Натиснете за редактиране точките на свързване."
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
@@ -147,34 +147,34 @@ msgstr ""
 "Изтеглете с мишката за преместване точката на свързване. Натиснете два пъти "
 "върху свързването или натиснете \"изтриване\", за да го премахнете."
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
 "Натиснете два пъти върху точка свързване или натиснете \"изтриване\", за да "
 "я премахнете."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "Натиснете два пъти за добавяне на точка на свързване."
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "Изтеглете с мишката за ново свързване."
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
 msgstr "Свързване"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
 msgstr "Точка на свързване"
@@ -428,24 +428,24 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Изрязване"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
 msgstr "Натиснете два пъти за добавяне на водач."
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
 "Натиснете и изтеглете с мишката за преместване на водач. Натиснете два пъти "
 "за премахване на водач."
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr "Редактор на водачи"
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr "Вмъкване на водачи"

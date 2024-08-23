@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2019-04-19 15:45+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -136,33 +136,33 @@ msgstr "마우스"
 msgid "Graphics Pen"
 msgstr "그래픽 펜"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "채우기"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, kde-format
 msgid "Calligraphy: increase width"
 msgstr "붓글씨: 너비 증가"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, kde-format
 msgid "Calligraphy: decrease width"
 msgstr "붓글씨: 너비 감소"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, kde-format
 msgid "Calligraphy: increase angle"
 msgstr "붓글씨: 각도 증가"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, kde-format
 msgid "Calligraphy: decrease angle"
 msgstr "붓글씨: 각도 감소"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
@@ -398,12 +398,12 @@ msgstr "아래"
 msgid "Bottom Right"
 msgstr "오른쪽 아래"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, kde-format
 msgid "Pattern Options"
 msgstr "패턴 설정"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "패턴"

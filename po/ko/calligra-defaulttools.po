@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2022-04-16 21:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -115,27 +115,27 @@ msgstr "위쪽으로 이스케이프"
 msgid "Escape in down direction"
 msgstr "아래쪽으로 이스케이프"
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "연결 만들기"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "연결을 편집하려면 드래그하십시오."
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
 msgstr "연결을 두 번 클릭하거나 Delete 키를 누르면 삭제합니다."
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "연결 점을 클릭해서 편집할 수 있습니다."
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, kde-format
 msgid ""
 "Drag to move connection point. Double click connection or press delete to "
@@ -144,32 +144,32 @@ msgstr ""
 "드래그하면 연결 점을 이동합니다. 연결을 두 번 클릭하거나 Delete 키를 눌러 삭"
 "제하십시오."
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr "연결 점을 두 번 클릭하거나 Delete 키를 눌러 삭제할 수 있습니다."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "두 번 클릭하여 연결 점을 추가할 수 있습니다."
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "드래그해서 새 연결을 만들 수 있습니다."
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
 msgstr "연결"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr "줄"
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
 msgstr "연결 점"
@@ -423,24 +423,24 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "기울이기"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
 msgstr "안내선을 추가하려면 두 번 클릭하십시오."
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
 "안내선을 이동하려면 클릭한 후 드래그하십시오. 안내선을 삭제하려면 두 번 클릭"
 "하십시오."
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr "안내선 편집기"
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr "안내선 삽입 도구"

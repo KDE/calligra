@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2019-01-19 19:46+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -29,52 +29,52 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
+#: core/HeaderFooter.cpp:51 core/HeaderFooter.cpp:74
 #, kde-format
 msgid "page"
 msgstr "頁"
 
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:52 core/HeaderFooter.cpp:75
 #, kde-format
 msgid "pages"
 msgstr "頁"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "file"
 msgstr "檔案"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "name"
 msgstr "名稱"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "time"
 msgstr "時間"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "date"
 msgstr "日期"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "author"
 msgstr "作者"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "email"
 msgstr "電子郵件"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "org"
 msgstr "組織"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "sheet"
 msgstr "工作表"
@@ -144,8 +144,8 @@ msgstr "標頭"
 msgid "Header1"
 msgstr "標頭1"
 
-#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
-#: ui/dialogs/LayoutPage_General.cpp:143
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:122
+#: ui/dialogs/LayoutPage_General.cpp:141
 #, kde-format
 msgid "Default"
 msgstr "預設"
@@ -283,66 +283,66 @@ msgstr "真"
 msgid "false"
 msgstr "假"
 
-#: engine/SheetBase.cpp:359
+#: engine/SheetBase.cpp:357
 #, kde-format
 msgid "Dependency"
 msgstr "相依性"
 
-#: engine/Value.cpp:662
+#: engine/Value.cpp:655
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:670
+#: engine/Value.cpp:663
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:678
+#: engine/Value.cpp:671
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:686
+#: engine/Value.cpp:679
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:694
+#: engine/Value.cpp:687
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:702
+#: engine/Value.cpp:695
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:710
+#: engine/Value.cpp:703
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:718
+#: engine/Value.cpp:711
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:726
+#: engine/Value.cpp:719
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:734
+#: engine/Value.cpp:727
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5084,12 +5084,12 @@ msgstr "ZERO_COUPON(face value;rate;years)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) 等於 148.64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "手動"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -10986,7 +10986,7 @@ msgstr "FINDB(find_text;within_text;BytePosition Start)"
 msgid "Source string"
 msgstr "來源字串"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "位置"
@@ -12036,187 +12036,199 @@ msgstr "SECH(Float)"
 msgid "SECH(0) equals 1"
 msgstr "SECH(0) equals 1"
 
-#: part/AboutData.h:27
+#: part/AboutData.h:26
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "Calligra Sheets"
 
-#: part/AboutData.h:29
+#: part/AboutData.h:28
 #, fuzzy, kde-format
 #| msgid "Calligra Spreadsheet Application"
 msgid "Spreadsheet Application"
 msgstr "Calligra 試算表應用程式"
 
-#: part/AboutData.h:31
+#: part/AboutData.h:30
 #, fuzzy, kde-format
 #| msgid "(c) 1998-2011, The Calligra Sheets Team"
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "(c) 1998-2011, Calligra Sheets 開發團隊"
 
-#: part/AboutData.h:39
+#: part/AboutData.h:36
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/AboutData.h:37
+#, fuzzy, kde-format
+#| msgid "Maintainer"
+msgid "Maintainer/Port to Qt6"
+msgstr "維護者"
+
+#: part/AboutData.h:41
 #, kde-format
 msgid "Original Author"
 msgstr "原始作者"
 
-#: part/AboutData.h:39
+#: part/AboutData.h:41
 #, kde-format
 msgid "Torben Weis"
 msgstr "Torben Weis"
 
-#: part/AboutData.h:40
-#, kde-format
-msgid "Maintainer"
+#: part/AboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Maintainer"
+msgid "Former Maintainer"
 msgstr "維護者"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:42
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr "Marijn Kruisselbrink"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr "ODS 與 Excel，函式，文稿"
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "Sebastian Sauer"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:44
 #, kde-format
 msgid "Laurent Montel"
 msgstr "Laurent Montel"
 
-#: part/AboutData.h:43
+#: part/AboutData.h:45
 #, kde-format
 msgid "John Dailey"
 msgstr "John Dailey"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:46
 #, kde-format
 msgid "Philipp Müller"
 msgstr "Philipp Müller"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:47
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr "Ariya Hidayat"
 
-#: part/AboutData.h:46
+#: part/AboutData.h:48
 #, kde-format
 msgid "Norbert Andres"
 msgstr "Norbert Andres"
 
-#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
-#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
-#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
+#: part/AboutData.h:49 part/AboutData.h:50 part/AboutData.h:51
+#: part/AboutData.h:53 part/AboutData.h:54 part/AboutData.h:55
+#: part/AboutData.h:56 part/AboutData.h:57 part/AboutData.h:58
 #, kde-format
 msgid "Import/export filter developer"
 msgstr "匯入/匯出過濾器開發者"
 
-#: part/AboutData.h:47
+#: part/AboutData.h:49
 #, kde-format
 msgid "Shaheed Haque"
 msgstr "Shaheed Haque"
 
-#: part/AboutData.h:48
+#: part/AboutData.h:50
 #, kde-format
 msgid "Werner Trobin"
 msgstr "Werner Trobin"
 
-#: part/AboutData.h:49
+#: part/AboutData.h:51
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr "Nikolas Zimmermann"
 
-#: part/AboutData.h:50
+#: part/AboutData.h:52
 #, kde-format
 msgid "David Faure"
 msgstr "David Faure"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:53
 #, kde-format
 msgid "Helge Deller"
 msgstr "Helge Deller"
 
-#: part/AboutData.h:52
+#: part/AboutData.h:54
 #, kde-format
 msgid "Percy Leonhart"
 msgstr "Percy Leonhart"
 
-#: part/AboutData.h:53
+#: part/AboutData.h:55
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr "Eva Brucherseifer"
 
-#: part/AboutData.h:54
+#: part/AboutData.h:56
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr "Phillip Ezolt"
 
-#: part/AboutData.h:55
+#: part/AboutData.h:57
 #, kde-format
 msgid "Enno Bartels"
 msgstr "Enno Bartels"
 
-#: part/AboutData.h:56
+#: part/AboutData.h:58
 #, kde-format
 msgid "Graham Short"
 msgstr "Graham Short"
 
-#: part/AboutData.h:57
+#: part/AboutData.h:59
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr "Lukáš Tinkl"
 
-#: part/AboutData.h:58
+#: part/AboutData.h:60
 #, kde-format
 msgid "Tomas Mecir"
 msgstr "Tomas Mecir"
 
-#: part/AboutData.h:59
+#: part/AboutData.h:61
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr "Raphael Langerhorst"
 
-#: part/AboutData.h:60
+#: part/AboutData.h:62
 #, kde-format
 msgid "John Tapsell"
 msgstr "John Tapsell"
 
-#: part/AboutData.h:61
+#: part/AboutData.h:63
 #, kde-format
 msgid "Robert Knight"
 msgstr "Robert Knight"
 
-#: part/AboutData.h:62
+#: part/AboutData.h:64
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr "Stefan Nikolaus"
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, kde-format
 msgid "Developer (functions)"
 msgstr "開發者（函數）"
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, kde-format
 msgid "Sascha Pfau"
 msgstr "Sascha Pfau"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Brad Hards"
 msgstr "Brad Hards"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr "已實作、檢視與測試過的各種函數"
 
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -12225,7 +12237,7 @@ msgstr ""
 "idv.tw"
 
 #. i18n translator strings
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -12375,7 +12387,7 @@ msgstr "啟用"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:141
+#: ui/dialogs/LayoutDialog.cpp:139
 #, kde-format
 msgid "Font"
 msgstr "字型"
@@ -12447,7 +12459,7 @@ msgid "First column as label"
 msgstr "第一欄做為標籤"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:135
 #, kde-format
 msgid "Data Format"
 msgstr "資料格式"
@@ -12879,7 +12891,7 @@ msgstr "開啟/儲存"
 msgid "Function Modules"
 msgstr "函數模組"
 
-#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:730
 #, kde-format
 msgid "Tools"
 msgstr "工具"
@@ -13259,27 +13271,27 @@ msgstr "區分大小寫"
 msgid "Match cases when searching"
 msgstr "搜尋時要符合大小寫"
 
-#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
+#: part/HeaderItems.cpp:155 part/HeaderWidgets.cpp:150
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "高度：%1 %2"
 
-#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Hide Row"
 msgstr "隱藏列"
 
-#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
+#: part/HeaderItems.cpp:324 part/HeaderWidgets.cpp:316
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "寬度：%1 %2"
 
-#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
+#: part/HeaderItems.cpp:326 part/HeaderWidgets.cpp:318
 #, kde-format
 msgid "Hide Column"
 msgstr "隱藏欄"
 
-#: part/Headers.cpp:233 part/Headers.cpp:725
+#: part/Headers.cpp:231 part/Headers.cpp:721
 #, kde-format
 msgid "Area is too large."
 msgstr "區域太大。"
@@ -13304,7 +13316,7 @@ msgstr "工作表內容..."
 msgid "Modify current sheet's properties"
 msgstr "變更目前工作表的內容"
 
-#: part/View.cpp:233 part/View.cpp:2022
+#: part/View.cpp:233 part/View.cpp:2020
 #, kde-format
 msgid "Insert Sheet"
 msgstr "插入工作表"
@@ -13324,12 +13336,12 @@ msgstr "複製工作表"
 msgid "Duplicate the selected sheet"
 msgstr "複製選取的工作表"
 
-#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
+#: part/View.cpp:244 part/View.cpp:1828 part/View.cpp:1833 part/View.cpp:2025
 #, kde-format
 msgid "Remove Sheet"
 msgstr "移除工作表"
 
-#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
+#: part/View.cpp:245 part/View.cpp:2021 part/View.cpp:2026
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "移除作用中的工作表"
@@ -13451,12 +13463,12 @@ msgstr "從文件建立樣本(&C)..."
 msgid "Anchor"
 msgstr "定錨點"
 
-#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
+#: part/View.cpp:312 part/View.cpp:1052 part/View.cpp:1517
 #, kde-format
 msgid "Cell"
 msgstr "儲存格"
 
-#: part/View.cpp:313 part/View.cpp:1054
+#: part/View.cpp:313 part/View.cpp:1052
 #, kde-format
 msgid "Page"
 msgstr "頁面"
@@ -13627,62 +13639,62 @@ msgstr "使用計數計算"
 msgid "Calculate using the countA"
 msgstr "使用計數A計算"
 
-#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
+#: part/View.cpp:1404 part/View.cpp:1423 part/View.cpp:1850
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "您不能變更已保護的工作表。"
 
-#: part/View.cpp:1445
+#: part/View.cpp:1443
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "您不能隱藏最後一個可見的表格。"
 
-#: part/View.cpp:1527
+#: part/View.cpp:1525
 #, kde-format
 msgid "Enter a password."
 msgstr "請輸入密碼。"
 
-#: part/View.cpp:1539
+#: part/View.cpp:1537
 #, kde-format
 msgid "Enter the password."
 msgstr "請輸入密碼。"
 
-#: part/View.cpp:1547
+#: part/View.cpp:1545
 #, kde-format
 msgid "Password is incorrect."
 msgstr "密碼不正確。"
 
-#: part/View.cpp:1563
+#: part/View.cpp:1561
 #, kde-format
 msgid "Protect Document"
 msgstr "保護文件"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1563
 #, kde-format
 msgid "Unprotect Document"
 msgstr "取消保護文件"
 
-#: part/View.cpp:1584
+#: part/View.cpp:1582
 #, kde-format
 msgid "Protect Sheet"
 msgstr "保護工作表"
 
-#: part/View.cpp:1586
+#: part/View.cpp:1584
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "取消保護工作表"
 
-#: part/View.cpp:1821
+#: part/View.cpp:1819
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "重新設定列印範圍"
 
-#: part/View.cpp:1830
+#: part/View.cpp:1828
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "您不能刪除唯一的工作表。"
 
-#: part/View.cpp:1834
+#: part/View.cpp:1832
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13691,78 +13703,78 @@ msgstr ""
 "您即將移除作用中的工作表。\n"
 "您要繼續嗎？"
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, kde-format
 msgid "Enter name:"
 msgstr "輸入名稱："
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, kde-format
 msgid "Rename Sheet"
 msgstr "重新命名工作表"
 
-#: part/View.cpp:1864 part/View.cpp:1870
+#: part/View.cpp:1862 part/View.cpp:1868
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "改變工作表名稱"
 
-#: part/View.cpp:1864
+#: part/View.cpp:1862
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "工作表名稱不能是空的。"
 
-#: part/View.cpp:1870
+#: part/View.cpp:1868
 #, kde-format
 msgid "This name is already used."
 msgstr "這個名稱已經被使用。"
 
-#: part/View.cpp:1938
+#: part/View.cpp:1936
 #, kde-format
 msgid "Sum: "
 msgstr "加總："
 
-#: part/View.cpp:1942
+#: part/View.cpp:1940
 #, kde-format
 msgid "Average: "
 msgstr "平均："
 
-#: part/View.cpp:1946
+#: part/View.cpp:1944
 #, kde-format
 msgid "Min: "
 msgstr "最小值："
 
-#: part/View.cpp:1950
+#: part/View.cpp:1948
 #, kde-format
 msgid "Max: "
 msgstr "最大值："
 
-#: part/View.cpp:1954
+#: part/View.cpp:1952
 #, kde-format
 msgid "Count: "
 msgstr "計數："
 
-#: part/View.cpp:1958
+#: part/View.cpp:1956
 #, kde-format
 msgid "CountA: "
 msgstr "計數A："
 
-#: part/View.cpp:1965
+#: part/View.cpp:1963
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:127
+#: part/ViewAdaptor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "變更文字顏色"
 
-#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
+#: part/ViewAdaptor.cpp:137 part/ViewAdaptor.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "變更背景顏色"
 
-#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
-#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
+#: part/ViewAdaptor.cpp:161 part/ViewAdaptor.cpp:176 part/ViewAdaptor.cpp:188
+#: part/ViewAdaptor.cpp:203 part/ViewAdaptor.cpp:215 part/ViewAdaptor.cpp:232
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "變更框線"
@@ -13992,22 +14004,22 @@ msgstr "週六"
 msgid "Sun"
 msgstr "週日"
 
-#: ui/commands/AutoFillCommand.cpp:673
+#: ui/commands/AutoFillCommand.cpp:669
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "自動填入"
 
-#: ui/commands/DataManipulators.cpp:108
+#: ui/commands/DataManipulators.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "改變值"
 
-#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
+#: ui/commands/DataManipulators.cpp:172 ui/commands/DataManipulators.cpp:181
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "插入儲存格"
 
-#: ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:183
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "移除儲存格"
@@ -14017,37 +14029,37 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "刪除"
 
-#: ui/commands/MergeCommand.cpp:83
+#: ui/commands/MergeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "水平合併儲存格"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "垂直合併儲存格"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "合併儲存格"
 
-#: ui/commands/MergeCommand.cpp:90
+#: ui/commands/MergeCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "分離儲存格"
 
-#: ui/commands/MergeCommand.cpp:96
+#: ui/commands/MergeCommand.cpp:94
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "不支援合併欄或列。"
 
-#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "新增命名區域"
 
-#: ui/commands/NamedAreaCommand.cpp:44
+#: ui/commands/NamedAreaCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "移除命名區域"
@@ -14057,78 +14069,78 @@ msgctxt "(qtundo-format)"
 msgid "Resize Column"
 msgstr "重設欄的大小"
 
-#: ui/commands/RowColumnManipulators.cpp:93
+#: ui/commands/RowColumnManipulators.cpp:91
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "重設列的大小"
 
-#: ui/commands/RowColumnManipulators.cpp:283
+#: ui/commands/RowColumnManipulators.cpp:277
 #, fuzzy
 #| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "隱藏欄"
 
-#: ui/commands/RowColumnManipulators.cpp:285
+#: ui/commands/RowColumnManipulators.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "隱藏欄"
 
-#: ui/commands/RowColumnManipulators.cpp:287
+#: ui/commands/RowColumnManipulators.cpp:281
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "隱藏列"
 
-#: ui/commands/RowColumnManipulators.cpp:290
+#: ui/commands/RowColumnManipulators.cpp:284
 #, fuzzy
 #| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "顯示欄"
 
-#: ui/commands/RowColumnManipulators.cpp:292
+#: ui/commands/RowColumnManipulators.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "顯示欄"
 
-#: ui/commands/RowColumnManipulators.cpp:294
+#: ui/commands/RowColumnManipulators.cpp:288
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "顯示列"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:531
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "調整欄/列"
 
-#: ui/commands/RowColumnManipulators.cpp:541
+#: ui/commands/RowColumnManipulators.cpp:533
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "調整欄"
 
-#: ui/commands/RowColumnManipulators.cpp:543
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "調整列"
 
-#: ui/commands/RowColumnManipulators.cpp:556
-#: ui/commands/RowColumnManipulators.cpp:574
+#: ui/commands/RowColumnManipulators.cpp:548
+#: ui/commands/RowColumnManipulators.cpp:566
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "插入欄"
 
-#: ui/commands/RowColumnManipulators.cpp:576
+#: ui/commands/RowColumnManipulators.cpp:568
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "移除欄"
 
-#: ui/commands/RowColumnManipulators.cpp:631
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:623
+#: ui/commands/RowColumnManipulators.cpp:641
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "插入列"
 
-#: ui/commands/RowColumnManipulators.cpp:651
+#: ui/commands/RowColumnManipulators.cpp:643
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "移除列"
@@ -14180,12 +14192,12 @@ msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "改變工作表內容"
 
-#: ui/commands/StyleCommand.cpp:36
+#: ui/commands/StyleCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "重置樣式"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "變更樣式"
@@ -14355,35 +14367,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "您可以看到目前儲存格的設定預覽。"
 
-#: ui/dialogs/LayoutDialog.cpp:118
+#: ui/dialogs/LayoutDialog.cpp:116
 #, kde-format
 msgid "Cell Format"
 msgstr "儲存格格式"
 
-#: ui/dialogs/LayoutDialog.cpp:121
+#: ui/dialogs/LayoutDialog.cpp:119
 #, fuzzy, kde-format
 #| msgid "Cell Format"
 msgid "Set Cell Format"
 msgstr "儲存格格式"
 
-#: ui/dialogs/LayoutDialog.cpp:131
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "一般(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "框線"
 
-#: ui/dialogs/LayoutDialog.cpp:154
+#: ui/dialogs/LayoutDialog.cpp:152
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "背景(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:158
+#: ui/dialogs/LayoutDialog.cpp:156
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"
@@ -14725,22 +14737,22 @@ msgstr "名稱："
 msgid "Inherit style:"
 msgstr "繼承樣式："
 
-#: ui/dialogs/LayoutPage_General.cpp:88
+#: ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "此名稱的樣式已經存在。"
 
-#: ui/dialogs/LayoutPage_General.cpp:92
+#: ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "The style name can not be empty."
 msgstr "樣式名稱不能是空的"
 
-#: ui/dialogs/LayoutPage_General.cpp:104
+#: ui/dialogs/LayoutPage_General.cpp:102
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "樣式無法繼承它自己。"
 
-#: ui/dialogs/LayoutPage_General.cpp:108
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr "樣式無法繼承 %1 因為有遞迴參照。"

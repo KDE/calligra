@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2007-02-11 00:26+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -158,37 +158,37 @@ msgstr ""
 msgid "Graphics Pen"
 msgstr "Gradient"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Toʻldirish"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase width"
 msgstr "Ellips vositasi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease width"
 msgstr "Ellips vositasi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase angle"
 msgstr "Ellips vositasi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease angle"
 msgstr "Ellips vositasi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
@@ -454,13 +454,13 @@ msgstr "Pastga"
 msgid "Bottom Right"
 msgstr "Oʻng"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, fuzzy, kde-format
 #| msgid "Pattern Tool"
 msgid "Pattern Options"
 msgstr "Namuna moslamasi"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Namunalar"

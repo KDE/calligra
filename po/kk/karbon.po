@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2013-09-30 03:23+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -150,7 +150,7 @@ msgstr "Қисықты түзеу"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
-#: plugins/roundcorners/RoundCornersPlugin.cpp:109
+#: plugins/roundcorners/RoundCornersPlugin.cpp:107
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
 #, kde-format
 msgid "Properties"
@@ -166,7 +166,7 @@ msgctxt "(qtundo-format)"
 msgid "Flatten path"
 msgstr "Қисықты түзеу"
 
-#: plugins/refinepath/KarbonPathRefineCommand.cpp:35
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Refine path"
 msgstr "Сызығын айқындату"
@@ -187,7 +187,7 @@ msgid "Subdivisions:"
 msgstr "Бөлшектері:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
-#: plugins/roundcorners/RoundCornersPlugin.cpp:81
+#: plugins/roundcorners/RoundCornersPlugin.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "Дөңгеленген бұрыштар"
@@ -197,12 +197,12 @@ msgstr "Дөңгеленген бұрыштар"
 msgid "&Round Corners..."
 msgstr "Бұрыштарды &дөңгелету..."
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:97
+#: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
 msgid "Round Corners"
 msgstr "Дөңгеленген бұрыштар"
 
-#: plugins/roundcorners/RoundCornersPlugin.cpp:113
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
 #, kde-format
 msgid "Radius:"
@@ -321,90 +321,100 @@ msgstr "Векторлы графиканы салу бағдарламасы"
 msgid "(c) 2001-%1, The Karbon Developers"
 msgstr "(c) 2001-2013, Karbon құрастырушылар"
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Anthony Fieroni"
 msgstr ""
 
-#: ui/KarbonAboutData.h:31
+#: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: ui/KarbonAboutData.h:32
+#: ui/KarbonAboutData.h:30
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:31
+#, kde-format
+msgid "Port to Qt6"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
 #, kde-format
 msgid "Rob Buis"
 msgstr "Rob Buis"
 
-#: ui/KarbonAboutData.h:33
+#: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Tomislav Lukman"
 msgstr "Tomislav Lukman"
 
-#: ui/KarbonAboutData.h:34
+#: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Benoît Vautrin"
 msgstr "Benoît Vautrin"
 
-#: ui/KarbonAboutData.h:35 ui/KarbonAboutData.h:36 ui/KarbonAboutData.h:37
-#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Bug fixes and improvements"
 msgstr "Қателерді түзеу, жақсартуы"
 
-#: ui/KarbonAboutData.h:35
+#: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Jan Hambrecht"
 msgstr "Jan Hambrecht"
 
-#: ui/KarbonAboutData.h:36
+#: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Peter Simonsson"
 msgstr "Peter Simonsson"
 
-#: ui/KarbonAboutData.h:37
+#: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Tim Beaulen"
 msgstr "Tim Beaulen"
 
-#: ui/KarbonAboutData.h:38
+#: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Boudewijn Rempt"
 msgstr "Boudewijn Rempt"
 
-#: ui/KarbonAboutData.h:39
+#: ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Pierre Stirnweiss"
 msgstr "Pierre Stirnweiss"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Bug fixes"
 msgstr "Қателерді түзеу"
 
-#: ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Inge Wallin"
 msgstr "Inge Wallin"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Alan Horkan"
 msgstr "Alan Horkan"
 
-#: ui/KarbonAboutData.h:41
+#: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Helpful patches and advice"
 msgstr "Пайдалы жамаулар мен кеңестер"
 
 #. i18n translator strings
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Сайран Киккарин"
 
-#: ui/KarbonAboutData.h:44
+#: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -631,35 +641,35 @@ msgstr "Палитраны таңдау"
 msgid "Press to apply fill to selection"
 msgstr "Таңдалғанды толтыру үшін басыңыз"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:90
+#: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
 msgctxt "The style has no fill"
 msgid "None"
 msgstr "Жоқ"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:112
+#: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
 msgstr "Таңдалғанды штрихтау үшін басыңыз"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:161
+#: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
 msgstr "Өзгеше"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:167
+#: ui/widgets/KarbonSmallStylePreview.cpp:165
 #, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
 msgstr "Жоқ"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:187
+#: ui/widgets/KarbonSmallStylePreview.cpp:185
 #, kde-format
 msgid "Stroke:"
 msgstr "Штрихі:"
 
-#: ui/widgets/KarbonSmallStylePreview.cpp:192
+#: ui/widgets/KarbonSmallStylePreview.cpp:190
 #, kde-format
 msgid "Fill:"
 msgstr "Толтыруы:"

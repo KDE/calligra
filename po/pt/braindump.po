@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 12:33+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -102,7 +102,7 @@ msgstr "Forma de Estado"
 msgid "A state shape"
 msgstr "Uma forma de estado"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Opções da ferramenta de estado"
@@ -254,12 +254,12 @@ msgstr "Activa/desactiva a apresentação da barra de título"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Activa/desactiva a organização das opções por páginas"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Coluna"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Livre"
@@ -269,7 +269,7 @@ msgstr "Livre"
 msgid "Dockers"
 msgstr "Áreas Acopláveis"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Sem título %1"

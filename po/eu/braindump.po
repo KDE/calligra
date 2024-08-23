@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2020-11-28 18:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -108,7 +108,7 @@ msgstr "Egoera-forma"
 msgid "A state shape"
 msgstr "Egoera-forma bat"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Egoera-tresnaren aukerak"
@@ -260,12 +260,12 @@ msgstr "Titulu-barra bat erakustea txandakatzen du"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Aukerak fitxetan antolatzea edo ez txandakatzen du"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Zutabea"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Aske"
@@ -275,7 +275,7 @@ msgstr "Aske"
 msgid "Dockers"
 msgstr "Zamaketariak"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Izengabea %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-05-11 11:11+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -106,7 +106,7 @@ msgstr "Stāvokļa objekts"
 msgid "A state shape"
 msgstr "Stāvokļa objekts"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Stāvokļa rīka opcijas"
@@ -257,12 +257,12 @@ msgstr "Pārslēdz rīkjoslu parādīšanu"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Ieslēdz/izslēdz izkārtošanu cilnēs"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Kolonna"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Brīvs"
@@ -272,7 +272,7 @@ msgstr "Brīvs"
 msgid "Dockers"
 msgstr "Dokeri"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Nenosaukts %1"

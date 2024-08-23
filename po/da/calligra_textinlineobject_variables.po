@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2012-06-30 11:04+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -333,22 +333,22 @@ msgstr "Tomrum"
 msgid "Value:"
 msgstr "Værdi:"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "New Variable"
 msgstr "Ny variabel"
 
-#: UserVariableOptionsWidget.cpp:152
+#: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
 msgstr "Navn på ny variabel:"
 
-#: UserVariableOptionsWidget.cpp:168
+#: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
 msgstr "Slet variablen <b>%1</b>?"
 
-#: UserVariableOptionsWidget.cpp:169
+#: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
 msgstr "Slet variabel"

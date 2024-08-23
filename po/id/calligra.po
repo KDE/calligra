@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -38,63 +38,63 @@ msgstr "Gambari alur"
 msgid "Freehand path"
 msgstr "Alur bebas"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:444
+#: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr "Sudutpandang delta penjepretan:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:451
+#: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
 msgstr "Aktifkan jepretan sudutpandang:"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:459
+#: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
 msgid "Angle Constraints"
 msgstr "Kendala Sudutpandang"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
-#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
+#: basicflakes/tools/KoCreatePathTool.cpp:461
+#: basicflakes/tools/KoPencilTool.cpp:339 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
 msgstr "Garis"
 
-#: basicflakes/tools/KoPencilTool.cpp:278
+#: basicflakes/tools/KoPencilTool.cpp:276
 #, kde-format
 msgid "Precision:"
 msgstr "Presisi:"
 
-#: basicflakes/tools/KoPencilTool.cpp:280
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Raw"
 
-#: basicflakes/tools/KoPencilTool.cpp:281
+#: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Curve"
 msgstr "Kurva"
 
-#: basicflakes/tools/KoPencilTool.cpp:282
+#: basicflakes/tools/KoPencilTool.cpp:280
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, kde-format
 msgid "Straight"
 msgstr "Lurus"
 
-#: basicflakes/tools/KoPencilTool.cpp:291
-#: basicflakes/tools/KoPencilTool.cpp:297
+#: basicflakes/tools/KoPencilTool.cpp:289
+#: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
 msgstr "Optimal"
 
-#: basicflakes/tools/KoPencilTool.cpp:303
+#: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
 msgstr "Ketepatan:"
 
-#: basicflakes/tools/KoPencilTool.cpp:336
-#: basicflakes/tools/KoPencilTool.cpp:337
+#: basicflakes/tools/KoPencilTool.cpp:334
+#: basicflakes/tools/KoPencilTool.cpp:335
 #, kde-format
 msgid "Pencil"
 msgstr "Pensil"
@@ -162,7 +162,7 @@ msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Set tipe titik"
 
-#: flake/commands/KoPathReverseCommand.cpp:41
+#: flake/commands/KoPathReverseCommand.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
 msgstr "Alur kebalikan"
@@ -172,12 +172,12 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Patahkan sub-alur"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:120
+#: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Ubah segmen ke kurva"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:122
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Ubah segmen ke garis"
@@ -192,9 +192,9 @@ msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Sejajarkan bentuk"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:51
-#: flake/commands/KoShapeBackgroundCommand.cpp:62
-#: flake/commands/KoShapeBackgroundCommand.cpp:77
+#: flake/commands/KoShapeBackgroundCommand.cpp:49
+#: flake/commands/KoShapeBackgroundCommand.cpp:60
+#: flake/commands/KoShapeBackgroundCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "Set latarbelakang"
@@ -268,9 +268,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Ubah Sekeliling Bentuk"
 
-#: flake/commands/KoShapeShadowCommand.cpp:57
-#: flake/commands/KoShapeShadowCommand.cpp:74
-#: flake/commands/KoShapeShadowCommand.cpp:85
+#: flake/commands/KoShapeShadowCommand.cpp:55
+#: flake/commands/KoShapeShadowCommand.cpp:72
+#: flake/commands/KoShapeShadowCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "Atur Bayangan"
@@ -285,16 +285,16 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Ubah ukuran bentuk-bentuk"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:61
-#: flake/commands/KoShapeStrokeCommand.cpp:78
-#: flake/commands/KoShapeStrokeCommand.cpp:89
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:76
+#: flake/commands/KoShapeStrokeCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Atur rusuk"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:37
-#: flake/commands/KoShapeTransparencyCommand.cpp:48
-#: flake/commands/KoShapeTransparencyCommand.cpp:61
+#: flake/commands/KoShapeTransparencyCommand.cpp:33
+#: flake/commands/KoShapeTransparencyCommand.cpp:44
+#: flake/commands/KoShapeTransparencyCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "Atur opasitas"
@@ -463,7 +463,7 @@ msgstr "Ciptakan objek"
 msgid "Pan"
 msgstr "Pan"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Ubah Segmen"
@@ -669,13 +669,13 @@ msgstr "Ulang %1"
 msgid "<empty>"
 msgstr "<kosong>"
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Ulang"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1021,7 +1021,7 @@ msgstr ""
 "Sebuah file autosimpan sudah ada untuk dokumen ini.\n"
 "Apakah kamu ingin membukanya?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "File %1 tidak ada."
@@ -1190,12 +1190,12 @@ msgstr ""
 "membuka sebuah versi lawas."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
-#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
+#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Tak berjudul"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1266,12 +1266,12 @@ msgstr "Tutup Dokumen"
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "No"
 msgstr "Tidak"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "Yes"
 msgstr "Ya"
@@ -1286,7 +1286,7 @@ msgstr "Tidak bisa mengekspor file."
 msgid "Missing Export Filter"
 msgstr "Filter Ekspor Hilang"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:534
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1295,7 +1295,7 @@ msgstr ""
 "Tidak bisa mengimpor file dengan tipe\n"
 "%1"
 
-#: main/KoFilterManager.cpp:536
+#: main/KoFilterManager.cpp:537
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Filter Impor Hilang"
@@ -1335,98 +1335,98 @@ msgstr "Temukan dari Kursor"
 msgid "Start searching from the current cursor"
 msgstr "Mulai mencari dari kursor saat ini"
 
-#: main/KoMainWindow.cpp:158
+#: main/KoMainWindow.cpp:154
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 dokumen tak tersimpan (%2)"
 
-#: main/KoMainWindow.cpp:263
+#: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Ekspor sebagai PDF..."
 
-#: main/KoMainWindow.cpp:275
+#: main/KoMainWindow.cpp:271
 #, kde-format
 msgid "Reload"
 msgstr "Muat ulang"
 
-#: main/KoMainWindow.cpp:279
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
 msgstr "Versi..."
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Buka Dokumen yang &ada sebagai Dokumen Tak Berjudul..."
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "E&xport..."
 msgstr "E&kspor..."
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "En&crypt Document"
 msgstr "Enk&ripsikan Dokumen"
 
-#: main/KoMainWindow.cpp:296
+#: main/KoMainWindow.cpp:292
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "&Lepas-kompres ke Direktori"
 
-#: main/KoMainWindow.cpp:301
+#: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&New View"
 msgstr "&Tampilan Baru"
 
-#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Informasi Dokumen"
 
-#: main/KoMainWindow.cpp:331
+#: main/KoMainWindow.cpp:327
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Mode Layar Penuh"
 
-#: main/KoMainWindow.cpp:336
+#: main/KoMainWindow.cpp:332
 #, kde-format
 msgid "Show Dockers"
 msgstr "Tampilkan Docker"
 
-#: main/KoMainWindow.cpp:341
+#: main/KoMainWindow.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Tampilkan Bilah-Judul Docker"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Dockers"
 msgstr "Docker"
 
-#: main/KoMainWindow.cpp:632
+#: main/KoMainWindow.cpp:628
 #, kde-format
 msgid "(write protected)"
 msgstr "(tulisan diproteksi)"
 
-#: main/KoMainWindow.cpp:637
+#: main/KoMainWindow.cpp:633
 #, kde-format
 msgid "Save as %1"
 msgstr "Simpan sebagai %1"
 
-#: main/KoMainWindow.cpp:639
+#: main/KoMainWindow.cpp:635
 #, kde-format
 msgid "Save"
 msgstr "Simpan"
 
-#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tipe tak diketahui)"
 
-#: main/KoMainWindow.cpp:825
+#: main/KoMainWindow.cpp:821
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1435,12 +1435,12 @@ msgstr ""
 "<qt>Penyimpanan sebagai %1 bisa menyebabkan hilangnya beberapa pemformatan."
 "<p>Apakah kamu masih ingin menyimpan dalam format ini?</qt>"
 
-#: main/KoMainWindow.cpp:828
+#: main/KoMainWindow.cpp:824
 #, kde-format
 msgid "Confirm Save"
 msgstr "Konfirmasikan Simpan"
 
-#: main/KoMainWindow.cpp:834
+#: main/KoMainWindow.cpp:830
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1449,52 +1449,52 @@ msgstr ""
 "<qt>Pengeksporan sebagai %1 bisa menyebabkan hilangnya beberapa pemformatan. "
 "<p>Apakah kamu masih ingin mengekspor ke format ini?</qt>"
 
-#: main/KoMainWindow.cpp:837
+#: main/KoMainWindow.cpp:833
 #, kde-format
 msgid "Confirm Export"
 msgstr "Konfirmasikan Ekspor"
 
-#: main/KoMainWindow.cpp:838
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid "Export"
 msgstr "Ekspor"
 
-#: main/KoMainWindow.cpp:936
+#: main/KoMainWindow.cpp:934
 #, kde-format
 msgid "untitled"
 msgstr "tak berjudul"
 
-#: main/KoMainWindow.cpp:1200
+#: main/KoMainWindow.cpp:1198
 #, kde-format
 msgid "Open Document"
 msgstr "Buka Dokumen"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Document"
 msgstr "Impor Dokumen"
 
-#: main/KoMainWindow.cpp:1374
+#: main/KoMainWindow.cpp:1372
 #, kde-format
 msgid "Export as PDF"
 msgstr "Ekspor sebagai PDF"
 
-#: main/KoMainWindow.cpp:1416
+#: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Tidak bisa mengekspor ke file yang ditentukan"
 
-#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Dokumen"
 
-#: main/KoMainWindow.cpp:1622
+#: main/KoMainWindow.cpp:1620
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokumen - %1"
 
-#: main/KoMainWindow.cpp:1662
+#: main/KoMainWindow.cpp:1650
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1503,17 +1503,17 @@ msgstr ""
 "Kamu akan kehilangan semua perubahan yang dibuat sejak terakhir kamu simpan\n"
 "Apakah kamu ingin terus?"
 
-#: main/KoMainWindow.cpp:1664
+#: main/KoMainWindow.cpp:1652
 #, kde-format
 msgid "Warning"
 msgstr "Peringatan"
 
-#: main/KoMainWindow.cpp:2027
+#: main/KoMainWindow.cpp:2015
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Tampilkan Bilah Alat %1"
 
-#: main/KoMainWindow.cpp:2029
+#: main/KoMainWindow.cpp:2017
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Sembunyikan Bilah Alat %1"
@@ -1559,18 +1559,18 @@ msgstr "Tutup"
 msgid "Stopped"
 msgstr "Berhenti"
 
-#: main/KoRecentDocumentsPane.cpp:68
+#: main/KoRecentDocumentsPane.cpp:64
 #, kde-format
 msgid "Open This Document"
 msgstr "Buka Dokumen Ini"
 
-#: main/KoRecentDocumentsPane.cpp:167
+#: main/KoRecentDocumentsPane.cpp:163
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Dimodifikasi:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:170
+#: main/KoRecentDocumentsPane.cpp:166
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1729,7 +1729,7 @@ msgstr "Tanggal & Waktu"
 msgid "Saved By"
 msgstr "Didimpan Oleh"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
 #, kde-format
 msgid "Comment"
 msgstr "Komentar"
@@ -1749,35 +1749,35 @@ msgstr "&Modifikasi"
 msgid "&Open"
 msgstr "&Buka"
 
-#: main/KoVersionDialog.cpp:116
+#: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
 msgstr "Sebuah versi baru tidak bisa ditambahkan"
 
-#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
+#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, kde-format
 msgid "Date: %1"
 msgstr "Tanggal: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Bentuk"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:354
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profil Penulis Aktif"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:368 main/KoView.cpp:421
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Profil Penulis Baku"
@@ -2135,12 +2135,12 @@ msgid "Select a master page design:"
 msgstr "Pilih sebuah desain halaman master:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
 #, kde-format
 msgid "Master Page"
 msgstr "Halaman Master"
 
-#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:52
 #, kde-format
 msgid "Slide %1"
 msgstr "Salindia  %1"
@@ -2330,7 +2330,7 @@ msgstr "Salin"
 msgid "Paste"
 msgstr "Tempel"
 
-#: pageapp/KoPAPageThumbnailModel.cpp:56
+#: pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Page %1"
 msgstr "Halaman %1"
@@ -2349,108 +2349,108 @@ msgid_plural "Paste Pages"
 msgstr[0] "Tempelkan Halaman"
 msgstr[1] "Tempelkan Halaman-halaman"
 
-#: pageapp/KoPAView.cpp:299
+#: pageapp/KoPAView.cpp:297
 #, kde-format
 msgid "Tools"
 msgstr "Peralatan"
 
-#: pageapp/KoPAView.cpp:351
+#: pageapp/KoPAView.cpp:349
 #, kde-format
 msgid "D&elete"
 msgstr "&Hapus"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:359
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Jepretkan ke Kisi"
 
-#: pageapp/KoPAView.cpp:370
+#: pageapp/KoPAView.cpp:368
 #, kde-format
 msgid "Show Master Pages"
 msgstr "Tampilkan Halaman Master"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:372
 #, kde-format
 msgid "Show Rulers"
 msgstr "Tampilkan Penggaris"
 
-#: pageapp/KoPAView.cpp:376
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "Tampilkan/sembunyikan tampilan penggaris"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:378
 #, kde-format
 msgid "Show Page Margins"
 msgstr "Tampilkan Margin-margin Halaman"
 
-#: pageapp/KoPAView.cpp:382
+#: pageapp/KoPAView.cpp:380
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "Tampilkan/sembunyikan margin-margin halaman"
 
-#: pageapp/KoPAView.cpp:386
+#: pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert Page"
 msgstr "Sisipkan Halaman"
 
-#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
+#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "Sisipkan sebuah halaman baru sesudah yang saat ini"
 
-#: pageapp/KoPAView.cpp:392
+#: pageapp/KoPAView.cpp:390
 #, kde-format
 msgid "Copy Page"
 msgstr "Salin Halaman"
 
-#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
+#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
 #, kde-format
 msgid "Copy the current page"
 msgstr "Salinkan halaman saat ini"
 
-#: pageapp/KoPAView.cpp:398
+#: pageapp/KoPAView.cpp:396
 #, kde-format
 msgid "Delete Page"
 msgstr "Hapus Halaman"
 
-#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
+#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Delete the current page"
 msgstr "Hapuskan halaman saat ini"
 
-#: pageapp/KoPAView.cpp:405
+#: pageapp/KoPAView.cpp:403
 #, kde-format
 msgid "Master Page..."
 msgstr "Halaman Master..."
 
-#: pageapp/KoPAView.cpp:409
+#: pageapp/KoPAView.cpp:407
 #, kde-format
 msgid "Page Layout..."
 msgstr "Tataletak Halaman..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Variabel"
 
-#: pageapp/KoPAView.cpp:424
+#: pageapp/KoPAView.cpp:422
 #, kde-format
 msgid "Import Document..."
 msgstr "Impor Dokumen..."
 
-#: pageapp/KoPAView.cpp:428
+#: pageapp/KoPAView.cpp:426
 #, kde-format
 msgid "Configure..."
 msgstr "Konfigurasikan..."
 
-#: pageapp/KoPAView.cpp:518
+#: pageapp/KoPAView.cpp:516
 #, kde-format
 msgid "Import Slideshow"
 msgstr "Impor Salindia"
 
-#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
+#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2459,7 +2459,7 @@ msgstr ""
 "Tidak bisa mengimpor\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:660
+#: pageapp/KoPAView.cpp:658
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "Ubah tataletak halaman"
@@ -2470,23 +2470,23 @@ msgstr "Ubah tataletak halaman"
 msgid "Set image ..."
 msgstr "Atur citra ..."
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, kde-format
 msgid "Background"
 msgstr "Latarbelakang"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #, kde-format
 msgid "Page Background"
 msgstr "Latarbelakang Halaman"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, kde-format
 msgid "Page Design"
 msgstr "Desain Halaman"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, kde-format
 msgid "Slide Design"
 msgstr "Desain Salindia"
@@ -2511,12 +2511,12 @@ msgstr "Displaikan bentuk-bentuknya halaman master"
 msgid "Display shapes of master slide"
 msgstr "Displaikan bentuk-bentuknya salindia master"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "Ubah citra latarbelakang halaman"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
 msgstr "Ubah citra latarbelakang salindia"
@@ -2661,7 +2661,7 @@ msgstr "Operasi tak ditentukan di dalam ruang %1"
 msgid "Undefined operation in the %1 color space"
 msgstr "Operasi tak ditentukan di dalam ruang warna %1"
 
-#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr "Mesin Konversi Warna Sederhana"
@@ -3270,7 +3270,7 @@ msgstr "Peta-Berbenjol"
 msgid "Combine Normal Map"
 msgstr "Kombinasikan Peta Normal"
 
-#: pigment/resources/KoStopGradient.cpp:419
+#: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Gradien SVG"
@@ -4092,7 +4092,7 @@ msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Pemformatan"
 
-#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
+#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Format"
@@ -5052,12 +5052,12 @@ msgstr "Hapus dari tag lain"
 msgid "Tags"
 msgstr "Tag"
 
-#: widgets/KoResourceTaggingManager.cpp:133
+#: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr "Tidak bisa mengurungkan hapus tag"
 
-#: widgets/KoResourceTaggingManager.cpp:134
+#: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
@@ -5066,7 +5066,7 @@ msgstr ""
 "<qt>Tag yang kamu coba untuk urungkan hapusnya sudah ada di daftar tag."
 "<br>Silakan masukkan yang baru, nama unik untuknya.</qt>"
 
-#: widgets/KoResourceTaggingManager.cpp:142
+#: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr "Tag yang tidak diurungkan hapus."
@@ -5086,7 +5086,7 @@ msgstr "Lekukan kiri"
 msgid "Right indent"
 msgstr "Lekukan kanan"
 
-#: widgets/KoShadowConfigWidget.cpp:55
+#: widgets/KoShadowConfigWidget.cpp:53
 #, kde-format
 msgid "Change the color of the shadow"
 msgstr "Ubah warnanya bayangan"

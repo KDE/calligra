@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2020-04-22 21:45+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -32,7 +32,7 @@ msgctxt "(qtundo-format)"
 msgid "Add text to formula"
 msgstr "Føj tekst til formel"
 
-#: FormulaCommand.cpp:220
+#: FormulaCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Ændr rækker"
@@ -72,115 +72,84 @@ msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Fjern formelelementer"
 
-#: FormulaToolWidget.cpp:69
+#: FormulaToolEditWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Edit"
+msgctxt "@title:group"
+msgid "Edit"
+msgstr "Rediger"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolEditWidget.ui:17
+#, kde-format
+msgid "Font:"
+msgstr "Skrifttype:"
+
+#: FormulaToolWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgctxt "@title:group"
+msgid "Insert"
+msgstr "Indsæt"
+
+#: FormulaToolWidget.cpp:70
 #, kde-format
 msgid "Arrows"
 msgstr "Pile"
 
-#: FormulaToolWidget.cpp:71
+#: FormulaToolWidget.cpp:72
 #, kde-format
 msgid "Greek"
 msgstr "Græsk"
 
-#: FormulaToolWidget.cpp:73
+#: FormulaToolWidget.cpp:74
 #, kde-format
 msgid "Relations"
 msgstr "Relationer"
 
-#: FormulaToolWidget.cpp:77
+#: FormulaToolWidget.cpp:78
 #, kde-format
 msgid "Operators"
 msgstr "Operatorer"
 
-#: FormulaToolWidget.cpp:80
+#: FormulaToolWidget.cpp:81
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: FormulaToolWidget.ui:24
-#, kde-format
-msgid "Insert"
-msgstr "Indsæt"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
-#: FormulaToolWidget.ui:36
-#, kde-format
-msgid "Elements"
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "Elements"
+msgid "Elements:"
 msgstr "Elementer"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
-#: FormulaToolWidget.ui:132
-#, kde-format
-msgid "Symbols"
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:106
+#, fuzzy, kde-format
+#| msgid "Symbols"
+msgid "Symbols:"
 msgstr "Symboler"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
-#: FormulaToolWidget.ui:228
-#, kde-format
-msgid "Actions"
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:195
+#, fuzzy, kde-format
+#| msgid "Actions"
+msgid "Actions:"
 msgstr "Handlinger"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
-#: FormulaToolWidget.ui:279
+#: FormulaToolWidget.ui:245
 #, kde-format
 msgctxt "This button opens a file dialog to load a MathML file"
 msgid "Load..."
 msgstr "Indlæs..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSave)
-#: FormulaToolWidget.ui:286
+#: FormulaToolWidget.ui:252
 #, kde-format
 msgid "Save..."
 msgstr "Gem..."
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: FormulaToolWidget.ui:294
-#, kde-format
-msgid "Edit"
-msgstr "Rediger"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
-#: FormulaToolWidget.ui:300
-#, kde-format
-msgid "General options"
-msgstr "Generelle indstillinger"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: FormulaToolWidget.ui:325
-#, kde-format
-msgid "Font:"
-msgstr "Skrifttype:"
-
-#. i18n: ectx: property (text), widget (QLabel, labelColors)
-#: FormulaToolWidget.ui:341
-#, kde-format
-msgid "Colors:"
-msgstr "Farver:"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
-#: FormulaToolWidget.ui:349
-#, kde-format
-msgid "Specific options"
-msgstr "Specifikke indstillinger"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: FormulaToolWidget.ui:371
-#, kde-format
-msgid "Rows:"
-msgstr "Rækker:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: FormulaToolWidget.ui:378
-#, kde-format
-msgid "Columns:"
-msgstr "Kolonner:"
-
-#. i18n: ectx: property (text), widget (QPushButton, pushButton)
-#: FormulaToolWidget.ui:406
-#, kde-format
-msgid "View MathML"
-msgstr "Vis MathML"
 
 #: KoFormulaShape.cpp:200
 #, kde-format
@@ -216,92 +185,92 @@ msgstr "Formel"
 msgid "A formula"
 msgstr "En formel"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:403
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Indsæt indhegnet formel"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Indsæt omsluttet element"
 
-#: KoFormulaTool.cpp:412
+#: KoFormulaTool.cpp:406
 #, kde-format
 msgid "Insert root"
 msgstr "Indsæt rod"
 
-#: KoFormulaTool.cpp:413
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert square root"
 msgstr "Indsæt kvadratrod"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:409
 #, kde-format
 msgid "Insert fraction"
 msgstr "Indsæt brøk"
 
-#: KoFormulaTool.cpp:416
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Indsæt brøk med skråstreg"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:415
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Indsæt 3x3-tabel"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:421
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Indsæt todimensionel vektor"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:426
 #, kde-format
 msgid "Insert subscript"
 msgstr "Indsæt sænket skrift"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert superscript"
 msgstr "Indsæt hævet skrift"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Indsæt sænket og hævet skrift"
 
-#: KoFormulaTool.cpp:438
+#: KoFormulaTool.cpp:432
 #, kde-format
 msgid "Insert overscript"
 msgstr "Indsæt skrift over"
 
-#: KoFormulaTool.cpp:439
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert underscript"
 msgstr "Indsæt skrift under"
 
-#: KoFormulaTool.cpp:440
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Indsæt skrift under og over"
 
-#: KoFormulaTool.cpp:451
+#: KoFormulaTool.cpp:445
 #, kde-format
 msgid "Insert row"
 msgstr "Indsæt række"
 
-#: KoFormulaTool.cpp:458
+#: KoFormulaTool.cpp:452
 #, kde-format
 msgid "Insert column"
 msgstr "Indsæt kolonne"
 
-#: KoFormulaTool.cpp:465
+#: KoFormulaTool.cpp:459
 #, kde-format
 msgid "Remove row"
 msgstr "Fjern række"
 
-#: KoFormulaTool.cpp:472
+#: KoFormulaTool.cpp:466
 #, kde-format
 msgid "Remove column"
 msgstr "Fjern kolonne"
@@ -340,6 +309,24 @@ msgstr "Redigér formel med LaTeX-/Matlab-syntaks"
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Redigér formel med LaTeX-syntaks"
+
+#~ msgid "General options"
+#~ msgstr "Generelle indstillinger"
+
+#~ msgid "Colors:"
+#~ msgstr "Farver:"
+
+#~ msgid "Specific options"
+#~ msgstr "Specifikke indstillinger"
+
+#~ msgid "Rows:"
+#~ msgstr "Rækker:"
+
+#~ msgid "Columns:"
+#~ msgstr "Kolonner:"
+
+#~ msgid "View MathML"
+#~ msgstr "Vis MathML"
 
 #, fuzzy
 #~| msgid "Insert"

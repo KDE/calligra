@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2024-08-18 20:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -235,17 +235,17 @@ msgstr "Kaynakça"
 msgid "References"
 msgstr "Başvurular"
 
-#: dialogs/ChangeConfigureDialog.cpp:143
+#: dialogs/ChangeConfigureDialog.cpp:141
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Bu, eklenmiş bir metin satırıdır."
 
-#: dialogs/ChangeConfigureDialog.cpp:149
+#: dialogs/ChangeConfigureDialog.cpp:147
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Bu, bir silinmiş metin satırıdır."
 
-#: dialogs/ChangeConfigureDialog.cpp:155
+#: dialogs/ChangeConfigureDialog.cpp:153
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Bu, biçimleri değiştirilmiş bir metin satırıdır."
@@ -330,7 +330,6 @@ msgstr "Arka Plan Rengi"
 #. i18n: ectx: property (text), widget (QToolButton, splitCells)
 #. i18n: ectx: property (text), widget (QToolButton, mergeCells)
 #. i18n: ectx: property (text), widget (FormattingButton, border)
-#. i18n: ectx: property (text), widget (QToolButton, resetBackgroundColor)
 #. i18n: ectx: property (text), widget (QPushButton, insertionColorButton)
 #. i18n: ectx: property (text), widget (QPushButton, deletionColorButton)
 #. i18n: ectx: property (text), widget (QPushButton, formatColorButton)
@@ -343,14 +342,13 @@ msgstr "Arka Plan Rengi"
 #: dialogs/FontDecorations.ui:148 dialogs/FontDecorations.ui:161
 #: dialogs/FontDecorations.ui:174 dialogs/FontDecorations.ui:187
 #: dialogs/FontDecorations.ui:200 dialogs/ParagraphBulletsNumbers.ui:221
-#: dialogs/ParagraphDecorations.ui:55 dialogs/SimpleCharacterWidget.ui:128
-#: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
-#: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
-#: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
-#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
-#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:26
-#: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
-#: dialogs/SimpleTableWidget.ui:137
+#: dialogs/SimpleCharacterWidget.ui:128 dialogs/SimpleInsertWidget.ui:49
+#: dialogs/SimpleInsertWidget.ui:62 dialogs/SimpleInsertWidget.ui:75
+#: dialogs/SimpleInsertWidget.ui:88 dialogs/SimpleInsertWidget.ui:101
+#: dialogs/SimpleInsertWidget.ui:114 dialogs/SimpleInsertWidget.ui:124
+#: dialogs/SimpleParagraphWidget.ui:73 dialogs/SimpleParagraphWidget.ui:167
+#: dialogs/SimpleSpellCheckingWidget.ui:26 dialogs/SimpleTableWidget.ui:101
+#: dialogs/SimpleTableWidget.ui:111 dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -567,6 +565,7 @@ msgstr "Metin rengi:"
 
 #. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
 #: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
+#: dialogs/ParagraphDecorations.ui:15
 #, kde-format
 msgid "Background color:"
 msgstr "Arka plan rengi:"
@@ -1050,7 +1049,7 @@ msgstr "Yazıtipi"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:164
+#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:162
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Kaynakça Ekle"
@@ -1164,7 +1163,7 @@ msgstr "Özel Karakterler"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:116 TextTool.cpp:2260
+#: ReferencesTool.cpp:114 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Ekle"
@@ -1367,21 +1366,21 @@ msgstr "İlk satır etiketten şununla ayrılır:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:23
+#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:22
 #, kde-format
 msgid "Left"
 msgstr "Sol"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:30
+#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:29
 #, kde-format
 msgid "Center"
 msgstr "Ortala"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:37
+#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:36
 #, kde-format
 msgid "Right"
 msgstr "Sağ"
@@ -1471,7 +1470,7 @@ msgstr "Yer İmi Yerleştir"
 msgid "Please provide a name for the bookmark"
 msgstr "Lütfen yer imi için bir ad girin"
 
-#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:193
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Yer İmlerini Yönet"
@@ -1653,8 +1652,9 @@ msgstr "Bir liste resmi seç"
 msgid "Start at:"
 msgstr "Buradan başla:"
 
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: dialogs/ParagraphBulletsNumbers.ui:57
+#: dialogs/ParagraphBulletsNumbers.ui:57 dialogs/ParagraphLayout.ui:15
 #, kde-format
 msgid "Alignment:"
 msgstr "Yerleşim:"
@@ -1747,43 +1747,41 @@ msgstr "Yükseklik"
 msgid "Browse..."
 msgstr "Göz At..."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
-#, kde-format
-msgid "Background"
-msgstr "Arka Plan"
-
-#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
-#: dialogs/ParagraphDecorations.ui:65
-#, kde-format
-msgid "Background color"
+#: dialogs/ParagraphDecorations.cpp:18
+#, fuzzy, kde-format
+#| msgid "Background color"
+msgctxt "@action:button"
+msgid "Reset background color"
 msgstr "Arka plan rengi"
 
-#: dialogs/ParagraphDropCaps.cpp:20
+#. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
+#: dialogs/ParagraphDecorations.ui:36
+#, fuzzy, kde-format
+#| msgid "Background color"
+msgid "Reset background color"
+msgstr "Arka plan rengi"
+
+#: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
 msgid "Whole Word"
 msgstr "Tüm Sözcük"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/ParagraphDropCaps.ui:32
-#, kde-format
-msgid "Drop caps:"
+#. i18n: ectx: property (text), widget (QCheckBox, capsState)
+#: dialogs/ParagraphDropCaps.ui:15
+#, fuzzy, kde-format
+#| msgid "Drop caps:"
+msgid "Enable drop caps"
 msgstr "Büyük harfleri küçült:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: dialogs/ParagraphDropCaps.ui:84
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
+#. i18n: ectx: property (text), widget (QLabel, charactersLabel)
+#: dialogs/ParagraphDropCaps.ui:22 dialogs/ParagraphDropCaps.ui:42
 #, kde-format
 msgid "Distance to paragraph:"
 msgstr "Paragrafa uzaklık:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: dialogs/ParagraphDropCaps.ui:94
-#, kde-format
-msgid "Number of characters:"
-msgstr "Karakter sayısı:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: dialogs/ParagraphDropCaps.ui:104
+#. i18n: ectx: property (text), widget (QLabel, linesLabel)
+#: dialogs/ParagraphDropCaps.ui:71
 #, kde-format
 msgid "Number of lines it covers:"
 msgstr "Kaplayacağı satır sayısı:"
@@ -1909,44 +1907,39 @@ msgstr "Paragraf öncesi boşluk:"
 msgid "Paragraph Space After:"
 msgstr "Paragraf sonrası boşluk:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphLayout.ui:17
-#, kde-format
-msgid "Alignment"
-msgstr "Hizalama"
-
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
-#: dialogs/ParagraphLayout.ui:44
+#: dialogs/ParagraphLayout.ui:43
 #, kde-format
 msgid "Justify"
 msgstr "İki Yana Hizala"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: dialogs/ParagraphLayout.ui:54
-#, kde-format
-msgid "Behavior at End of Frame/Page"
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
+#: dialogs/ParagraphLayout.ui:50
+#, fuzzy, kde-format
+#| msgid "Behavior at End of Frame/Page"
+msgid "Behavior at end of frame and page:"
 msgstr "Sayfa/Çerçeve Sonu Davranışı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
-#: dialogs/ParagraphLayout.ui:60
+#: dialogs/ParagraphLayout.ui:57
 #, kde-format
 msgid "Keep lines together"
 msgstr "Çizgileri birarada tut"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
-#: dialogs/ParagraphLayout.ui:67
+#: dialogs/ParagraphLayout.ui:64
 #, kde-format
 msgid "Insert break before paragraph"
 msgstr "Paragraf öncesi kesme ekle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
-#: dialogs/ParagraphLayout.ui:74
+#: dialogs/ParagraphLayout.ui:71
 #, kde-format
 msgid "Insert break after paragraph"
 msgstr "Paragraf sonrası kesme ekle"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/ParagraphLayout.ui:83
+#: dialogs/ParagraphLayout.ui:78
 #, kde-format
 msgid "Leave at least this many lines (orphans):"
 msgstr "En azından bu kadar satır (yalnız) bırak:"
@@ -2036,7 +2029,7 @@ msgid "Insert citation at current position"
 msgstr "Geçerli konuma alıntı ekle"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:159
+#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:157
 #, kde-format
 msgid "Insert Citation"
 msgstr "Alıntı Ekle"
@@ -2083,7 +2076,7 @@ msgid "Hyperlinks"
 msgstr "Köprüler"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
 #, kde-format
 msgid "Bookmarks"
 msgstr "Yer İmleri"
@@ -2330,7 +2323,7 @@ msgstr "Dış hat kullan"
 msgid "Use styles"
 msgstr "Kullanılacak biçemler"
 
-#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:170
 #, kde-format
 msgid "Configure"
 msgstr "Yapılandır"
@@ -2422,107 +2415,107 @@ msgstr "Devre dışı"
 msgid "Table Of Contents"
 msgstr "İçindekiler Tablosu"
 
-#: ReferencesTool.cpp:118
+#: ReferencesTool.cpp:116
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr "Belgeye bir İçindekiler Tablosu ekler."
 
-#: ReferencesTool.cpp:120 TextTool.cpp:406
+#: ReferencesTool.cpp:118 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Özel Ekle..."
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr "Belgeye özel bir İçindekiler Tablosu ekler."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Configure..."
 msgstr "Yapılandır..."
 
-#: ReferencesTool.cpp:126
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr "İçindekiler Tablosunu Yapılandır"
 
-#: ReferencesTool.cpp:129
+#: ReferencesTool.cpp:127
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr "Otomatik numaralandırma ile bir dipnot ekle"
 
-#: ReferencesTool.cpp:134
+#: ReferencesTool.cpp:132
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr "Etiketli Dipnot Ekle"
 
-#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
+#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
 #, kde-format
 msgid "Insert with label:"
 msgstr "Etiket ile ekle:"
 
-#: ReferencesTool.cpp:140
+#: ReferencesTool.cpp:138
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr "Otomatik numaralandırma ile bir sonnot ekle"
 
-#: ReferencesTool.cpp:145
+#: ReferencesTool.cpp:143
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr "Etiketli Sonnot Ekle"
 
-#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
+#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
 msgstr "Ayarlar..."
 
-#: ReferencesTool.cpp:161
+#: ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr "Belgeye bir alıntı ekle."
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr "Belgeye bir kaynakça ekle."
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr "Özel Bir Kaynakça Ekle"
 
-#: ReferencesTool.cpp:170
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr "Belgeye özel bir Kaynakça ekle."
 
-#: ReferencesTool.cpp:174
+#: ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure the bibliography"
 msgstr "Kaynakçayı yapılandır"
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:175
 #, kde-format
 msgid "Insert Link"
 msgstr "Bağlantı Ekle"
 
-#: ReferencesTool.cpp:179
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr "Yer imi için bir bağlantı girin."
 
-#: ReferencesTool.cpp:183
+#: ReferencesTool.cpp:181
 #, kde-format
 msgid "Add Bookmark"
 msgstr "Yer İmi Koy"
 
-#: ReferencesTool.cpp:184
+#: ReferencesTool.cpp:182
 #, kde-format
 msgid "Add Bookmark :"
 msgstr "Yer imi koy:"
 
-#: ReferencesTool.cpp:189
+#: ReferencesTool.cpp:187
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
@@ -2531,7 +2524,7 @@ msgstr ""
 "Bir Yer İmi ekle. Bu belgedeki alanlara işaret etmek için bağlantılar "
 "oluşturmak için yararlıdır"
 
-#: ReferencesTool.cpp:193
+#: ReferencesTool.cpp:191
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
@@ -2540,7 +2533,7 @@ msgstr ""
 "Yeni bir yer imi eklemek veya mevcut yer imini düzenlemek için seçenekler "
 "barındıran bir pencere aç"
 
-#: ReferencesTool.cpp:197
+#: ReferencesTool.cpp:195
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
@@ -2548,53 +2541,53 @@ msgstr ""
 "Yer İmlerinizi yönetin. Nereye işaret ettiklerini kontrol edin, Silin veya "
 "Yeniden Adlandırın."
 
-#: ReferencesTool.cpp:232
+#: ReferencesTool.cpp:230
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr "Tablolar, Listeler ve Dizinler"
 
-#: ReferencesTool.cpp:235
+#: ReferencesTool.cpp:233
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr "Dip ve son notlar"
 
-#: ReferencesTool.cpp:238
+#: ReferencesTool.cpp:236
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr "Alıntılar ve Kaynakça"
 
-#: ReferencesTool.cpp:241
+#: ReferencesTool.cpp:239
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr "Bağlantılar ve yer imleri"
 
-#: ReferencesTool.cpp:366
+#: ReferencesTool.cpp:364
 #, kde-format
 msgid "Bookmark cannot be empty"
 msgstr "Yer imi boş olamaz"
 
-#: ReferencesTool.cpp:373
+#: ReferencesTool.cpp:371
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
 msgstr "Yinelenmiş ad. \"Yer İmlerini Yönet\"e tıklayın"
 
-#: ReferencesTool.cpp:374
+#: ReferencesTool.cpp:372
 #, kde-format
 msgid "to Rename or Delete Bookmarks"
 msgstr "Yer imlerini yeniden adlandırmak veya silmek için"
 
-#: ReviewTool.cpp:53 ReviewTool.cpp:54
+#: ReviewTool.cpp:51 ReviewTool.cpp:52
 #, kde-format
 msgid "Remove Comment"
 msgstr "Yorumu Kaldır"
 
-#: ReviewTool.cpp:98
+#: ReviewTool.cpp:96
 #, kde-format
 msgid "Spell check"
 msgstr "Yazım denetimi"
 
-#: ReviewTool.cpp:101
+#: ReviewTool.cpp:99
 #, kde-format
 msgid "Comments"
 msgstr "Yorumlar"
@@ -2804,6 +2797,11 @@ msgstr "Metin Rengi"
 #, kde-format
 msgid "Background Color..."
 msgstr "Arka Plan Rengi..."
+
+#: TextTool.cpp:381
+#, kde-format
+msgid "Background"
+msgstr "Arka Plan"
 
 #: TextTool.cpp:385
 #, kde-format
@@ -3053,6 +3051,12 @@ msgstr "Basılacak Düğme"
 #, kde-format
 msgid "Text editing"
 msgstr "Metin düzenleme"
+
+#~ msgid "Number of characters:"
+#~ msgstr "Karakter sayısı:"
+
+#~ msgid "Alignment"
+#~ msgstr "Hizalama"
 
 #~ msgid "Left:"
 #~ msgstr "Sol:"

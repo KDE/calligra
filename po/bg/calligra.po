@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-05-13 22:08+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -39,63 +39,63 @@ msgstr "Разбиване на части от път"
 msgid "Freehand path"
 msgstr "Разбиване на части от път"
 
-#: basicflakes/tools/KoCreatePathTool.cpp:444
+#: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
 msgid "Angle snapping delta:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:451
+#: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:459
+#: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
 msgid "Angle Constraints"
 msgstr ""
 
-#: basicflakes/tools/KoCreatePathTool.cpp:463
-#: basicflakes/tools/KoPencilTool.cpp:341 widgets/KoGradientEditWidget.cpp:150
+#: basicflakes/tools/KoCreatePathTool.cpp:461
+#: basicflakes/tools/KoPencilTool.cpp:339 widgets/KoGradientEditWidget.cpp:150
 #, kde-format
 msgid "Line"
 msgstr "Линия"
 
-#: basicflakes/tools/KoPencilTool.cpp:278
+#: basicflakes/tools/KoPencilTool.cpp:276
 #, kde-format
 msgid "Precision:"
 msgstr "Точност:"
 
-#: basicflakes/tools/KoPencilTool.cpp:280
+#: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Необработено"
 
-#: basicflakes/tools/KoPencilTool.cpp:281
+#: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Curve"
 msgstr "Крива"
 
-#: basicflakes/tools/KoPencilTool.cpp:282
+#: basicflakes/tools/KoPencilTool.cpp:280
 #: flake/KoConnectionShapeConfigWidget.cpp:19
 #, kde-format
 msgid "Straight"
 msgstr "Права"
 
-#: basicflakes/tools/KoPencilTool.cpp:291
-#: basicflakes/tools/KoPencilTool.cpp:297
+#: basicflakes/tools/KoPencilTool.cpp:289
+#: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
 msgstr "Оптимизиране"
 
-#: basicflakes/tools/KoPencilTool.cpp:303
+#: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
 msgstr "Точност:"
 
-#: basicflakes/tools/KoPencilTool.cpp:336
-#: basicflakes/tools/KoPencilTool.cpp:337
+#: basicflakes/tools/KoPencilTool.cpp:334
+#: basicflakes/tools/KoPencilTool.cpp:335
 #, kde-format
 msgid "Pencil"
 msgstr "Молив"
@@ -164,7 +164,7 @@ msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Задаване вида на точка"
 
-#: flake/commands/KoPathReverseCommand.cpp:41
+#: flake/commands/KoPathReverseCommand.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
 msgstr "Обръщане на пътища"
@@ -174,12 +174,12 @@ msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Разбиване на части от път"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:120
+#: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Промяна на участъци в криви"
 
-#: flake/commands/KoPathSegmentTypeCommand.cpp:122
+#: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Промяна на участъци в отсечки"
@@ -195,9 +195,9 @@ msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Подравняване на форми"
 
-#: flake/commands/KoShapeBackgroundCommand.cpp:51
-#: flake/commands/KoShapeBackgroundCommand.cpp:62
-#: flake/commands/KoShapeBackgroundCommand.cpp:77
+#: flake/commands/KoShapeBackgroundCommand.cpp:49
+#: flake/commands/KoShapeBackgroundCommand.cpp:60
+#: flake/commands/KoShapeBackgroundCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "Задаване на фон"
@@ -272,9 +272,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Промяна подредбата на страница"
 
-#: flake/commands/KoShapeShadowCommand.cpp:57
-#: flake/commands/KoShapeShadowCommand.cpp:74
-#: flake/commands/KoShapeShadowCommand.cpp:85
+#: flake/commands/KoShapeShadowCommand.cpp:55
+#: flake/commands/KoShapeShadowCommand.cpp:72
+#: flake/commands/KoShapeShadowCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "Хвърляне на сянка"
@@ -289,17 +289,17 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Преоразмеряване на форми"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:61
-#: flake/commands/KoShapeStrokeCommand.cpp:78
-#: flake/commands/KoShapeStrokeCommand.cpp:89
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:76
+#: flake/commands/KoShapeStrokeCommand.cpp:87
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Задаване на граница"
 
-#: flake/commands/KoShapeTransparencyCommand.cpp:37
-#: flake/commands/KoShapeTransparencyCommand.cpp:48
-#: flake/commands/KoShapeTransparencyCommand.cpp:61
+#: flake/commands/KoShapeTransparencyCommand.cpp:33
+#: flake/commands/KoShapeTransparencyCommand.cpp:44
+#: flake/commands/KoShapeTransparencyCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "Задаване на непрозрачност"
@@ -469,7 +469,7 @@ msgstr "Създаване на обект"
 msgid "Pan"
 msgstr "Пан"
 
-#: flake/tools/KoPathSegmentChangeStrategy.cpp:129
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Промяна на участък"
@@ -673,13 +673,13 @@ msgstr "Повторение на %1"
 msgid "<empty>"
 msgstr "<празно>"
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1436
+#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Повтаряне"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1435
+#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1016,7 +1016,7 @@ msgstr ""
 "Съществува автоматично запазен файл за този документ.\n"
 "Искате ли да го отворите?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:677
+#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файлът %1 не съществува."
@@ -1183,12 +1183,12 @@ msgid ""
 msgstr ""
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
-#: pigment/resources/KoColorSet.cpp:317 pigment/resources/KoColorSet.cpp:413
+#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Неозаглавено"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1138
+#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1259,12 +1259,12 @@ msgstr "Потребителски документ"
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "No"
 msgstr "Не"
 
-#: main/KoDocumentSectionToolTip.cpp:37
+#: main/KoDocumentSectionToolTip.cpp:33
 #, kde-format
 msgid "Yes"
 msgstr "Да"
@@ -1279,7 +1279,7 @@ msgstr "Грешка при изнасяне на файл."
 msgid "Missing Export Filter"
 msgstr "Лисващ филтър за изнасяне"
 
-#: main/KoFilterManager.cpp:533
+#: main/KoFilterManager.cpp:534
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1288,7 +1288,7 @@ msgstr ""
 "Грешка при внасяне на файл от вид\n"
 "%1"
 
-#: main/KoFilterManager.cpp:536
+#: main/KoFilterManager.cpp:537
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Липсващ филтър за внасяне"
@@ -1328,98 +1328,98 @@ msgstr ""
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:158
+#: main/KoMainWindow.cpp:154
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 незаписан документ (%2)"
 
-#: main/KoMainWindow.cpp:263
+#: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Изнасяне в PDF…"
 
-#: main/KoMainWindow.cpp:275
+#: main/KoMainWindow.cpp:271
 #, kde-format
 msgid "Reload"
 msgstr "Презареждане"
 
-#: main/KoMainWindow.cpp:279
+#: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
 msgstr "Версии…"
 
-#: main/KoMainWindow.cpp:283
+#: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Отваряне на съ&ществуващ документ като неозаглавен…"
 
-#: main/KoMainWindow.cpp:287
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "E&xport..."
 msgstr "&Изнасяне…"
 
-#: main/KoMainWindow.cpp:291
+#: main/KoMainWindow.cpp:287
 #, fuzzy, kde-format
 msgid "En&crypt Document"
 msgstr "Внасяне на документ"
 
-#: main/KoMainWindow.cpp:296
+#: main/KoMainWindow.cpp:292
 #, fuzzy, kde-format
 msgid "&Uncompress to Directory"
 msgstr "Внасяне на ресурс"
 
-#: main/KoMainWindow.cpp:301
+#: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&New View"
 msgstr "&Нов изглед"
 
-#: main/KoMainWindow.cpp:307 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
 #, kde-format
 msgid "Document Information"
 msgstr "Данни на документ"
 
-#: main/KoMainWindow.cpp:331
+#: main/KoMainWindow.cpp:327
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Режим на пълен екран"
 
-#: main/KoMainWindow.cpp:336
+#: main/KoMainWindow.cpp:332
 #, kde-format
 msgid "Show Dockers"
 msgstr "Показване на панели"
 
-#: main/KoMainWindow.cpp:341
+#: main/KoMainWindow.cpp:337
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Показване на лента с инструменти %1"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Dockers"
 msgstr "Контейнери"
 
-#: main/KoMainWindow.cpp:632
+#: main/KoMainWindow.cpp:628
 #, kde-format
 msgid "(write protected)"
 msgstr "(защитено от запис)"
 
-#: main/KoMainWindow.cpp:637
+#: main/KoMainWindow.cpp:633
 #, kde-format
 msgid "Save as %1"
 msgstr "Запис като %1"
 
-#: main/KoMainWindow.cpp:639
+#: main/KoMainWindow.cpp:635
 #, kde-format
 msgid "Save"
 msgstr "Запис"
 
-#: main/KoMainWindow.cpp:819 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1(непознат вид файл)"
 
-#: main/KoMainWindow.cpp:825
+#: main/KoMainWindow.cpp:821
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1428,12 +1428,12 @@ msgstr ""
 "<qt>Запазването като %1 може да доведе до частична загуба на форматирането "
 "на текста.<p>Искате ли да го запазите в този формат?</qt>"
 
-#: main/KoMainWindow.cpp:828
+#: main/KoMainWindow.cpp:824
 #, kde-format
 msgid "Confirm Save"
 msgstr "Потвърждение на записа"
 
-#: main/KoMainWindow.cpp:834
+#: main/KoMainWindow.cpp:830
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1442,52 +1442,52 @@ msgstr ""
 "<qt>Изнасянето като %1 може да доведе до частична загуба форматирането на "
 "текста.<p>Искате ли да го изнесете в този формат?</qt>"
 
-#: main/KoMainWindow.cpp:837
+#: main/KoMainWindow.cpp:833
 #, kde-format
 msgid "Confirm Export"
 msgstr "Потвърждение на изнасянето"
 
-#: main/KoMainWindow.cpp:838
+#: main/KoMainWindow.cpp:834
 #, kde-format
 msgid "Export"
 msgstr "Изнасяне"
 
-#: main/KoMainWindow.cpp:936
+#: main/KoMainWindow.cpp:934
 #, kde-format
 msgid "untitled"
 msgstr "неозаглавено"
 
-#: main/KoMainWindow.cpp:1200
+#: main/KoMainWindow.cpp:1198
 #, kde-format
 msgid "Open Document"
 msgstr "Отваряне на документ"
 
-#: main/KoMainWindow.cpp:1208 pageapp/KoPAView.cpp:520
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
 #, kde-format
 msgid "Import Document"
 msgstr "Внасяне на документ"
 
-#: main/KoMainWindow.cpp:1374
+#: main/KoMainWindow.cpp:1372
 #, kde-format
 msgid "Export as PDF"
 msgstr "Експортиране в PDF"
 
-#: main/KoMainWindow.cpp:1416
+#: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1614 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Документ"
 
-#: main/KoMainWindow.cpp:1622
+#: main/KoMainWindow.cpp:1620
 #, kde-format
 msgid "Document - %1"
 msgstr "Документ - %1"
 
-#: main/KoMainWindow.cpp:1662
+#: main/KoMainWindow.cpp:1650
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1496,17 +1496,17 @@ msgstr ""
 "Ще изгубите всички промени след последния запис.\n"
 "Искате ли да продължите?"
 
-#: main/KoMainWindow.cpp:1664
+#: main/KoMainWindow.cpp:1652
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: main/KoMainWindow.cpp:2027
+#: main/KoMainWindow.cpp:2015
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показване на лента с инструменти %1"
 
-#: main/KoMainWindow.cpp:2029
+#: main/KoMainWindow.cpp:2017
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скриване на лента с инструменти %1"
@@ -1552,18 +1552,18 @@ msgstr "Затваряне"
 msgid "Stopped"
 msgstr "Спряно"
 
-#: main/KoRecentDocumentsPane.cpp:68
+#: main/KoRecentDocumentsPane.cpp:64
 #, kde-format
 msgid "Open This Document"
 msgstr "Отваряне на този документ"
 
-#: main/KoRecentDocumentsPane.cpp:167
+#: main/KoRecentDocumentsPane.cpp:163
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Променен:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:170
+#: main/KoRecentDocumentsPane.cpp:166
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -1721,7 +1721,7 @@ msgstr "Дата и час"
 msgid "Saved By"
 msgstr "Записано от"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:210
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
 #, kde-format
 msgid "Comment"
 msgstr "Коментар"
@@ -1741,35 +1741,35 @@ msgstr "Про&мяна"
 msgid "&Open"
 msgstr "&Отваряне"
 
-#: main/KoVersionDialog.cpp:116
+#: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
 msgstr "Не може да бъде добавена нова версия"
 
-#: main/KoVersionDialog.cpp:222 main/KoVersionDialog.cpp:224
+#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, kde-format
 msgid "Date: %1"
 msgstr "Дата: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Форма"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:354
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активен профил на автора"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:368 main/KoView.cpp:421
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Анонимен"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Активен инструмент: %1"
@@ -2129,12 +2129,12 @@ msgid "Select a master page design:"
 msgstr ""
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:95
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
 #, kde-format
 msgid "Master Page"
 msgstr "Главна страница"
 
-#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:54
+#: pageapp/KoPADocumentModel.cpp:170 pageapp/KoPAPageThumbnailModel.cpp:52
 #, kde-format
 msgid "Slide %1"
 msgstr "Кадър %1"
@@ -2325,7 +2325,7 @@ msgstr "Копиране"
 msgid "Paste"
 msgstr "Поставяне"
 
-#: pageapp/KoPAPageThumbnailModel.cpp:56
+#: pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Page %1"
 msgstr "Страница %1"
@@ -2344,108 +2344,108 @@ msgid_plural "Paste Pages"
 msgstr[0] "Поставяне на страница"
 msgstr[1] "Поставяне на страници"
 
-#: pageapp/KoPAView.cpp:299
+#: pageapp/KoPAView.cpp:297
 #, kde-format
 msgid "Tools"
 msgstr "Инструменти"
 
-#: pageapp/KoPAView.cpp:351
+#: pageapp/KoPAView.cpp:349
 #, kde-format
 msgid "D&elete"
 msgstr "И&зтриване"
 
-#: pageapp/KoPAView.cpp:361
+#: pageapp/KoPAView.cpp:359
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Прилепяне към мрежата"
 
-#: pageapp/KoPAView.cpp:370
+#: pageapp/KoPAView.cpp:368
 #, kde-format
 msgid "Show Master Pages"
 msgstr "Показване на основните страници"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:372
 #, kde-format
 msgid "Show Rulers"
 msgstr "Показване на линийките"
 
-#: pageapp/KoPAView.cpp:376
+#: pageapp/KoPAView.cpp:374
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:378
 #, kde-format
 msgid "Show Page Margins"
 msgstr "Показване на краищата на страницата"
 
-#: pageapp/KoPAView.cpp:382
+#: pageapp/KoPAView.cpp:380
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:386
+#: pageapp/KoPAView.cpp:384
 #, kde-format
 msgid "Insert Page"
 msgstr "Вмъкване на страница"
 
-#: pageapp/KoPAView.cpp:388 pageapp/KoPAView.cpp:389
+#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "Вмъкване на нова страница след текущата"
 
-#: pageapp/KoPAView.cpp:392
+#: pageapp/KoPAView.cpp:390
 #, kde-format
 msgid "Copy Page"
 msgstr "Копиране на страница"
 
-#: pageapp/KoPAView.cpp:394 pageapp/KoPAView.cpp:395
+#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
 #, kde-format
 msgid "Copy the current page"
 msgstr "Копиране на текущата страница"
 
-#: pageapp/KoPAView.cpp:398
+#: pageapp/KoPAView.cpp:396
 #, kde-format
 msgid "Delete Page"
 msgstr "Изтриване на страница"
 
-#: pageapp/KoPAView.cpp:401 pageapp/KoPAView.cpp:402
+#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
 #, kde-format
 msgid "Delete the current page"
 msgstr "Изтриване на текущата страница"
 
-#: pageapp/KoPAView.cpp:405
+#: pageapp/KoPAView.cpp:403
 #, kde-format
 msgid "Master Page..."
 msgstr "Главна страница…"
 
-#: pageapp/KoPAView.cpp:409
+#: pageapp/KoPAView.cpp:407
 #, kde-format
 msgid "Page Layout..."
 msgstr "Подредба на страница…"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:419 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Променлива"
 
-#: pageapp/KoPAView.cpp:424
+#: pageapp/KoPAView.cpp:422
 #, kde-format
 msgid "Import Document..."
 msgstr "Внасяне на документ…"
 
-#: pageapp/KoPAView.cpp:428
+#: pageapp/KoPAView.cpp:426
 #, kde-format
 msgid "Configure..."
 msgstr "Настройки…"
 
-#: pageapp/KoPAView.cpp:518
+#: pageapp/KoPAView.cpp:516
 #, kde-format
 msgid "Import Slideshow"
 msgstr "Внасяне на прожекция"
 
-#: pageapp/KoPAView.cpp:545 pageapp/KoPAView.cpp:548
+#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2454,7 +2454,7 @@ msgstr ""
 "Грешка при внасяне\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:660
+#: pageapp/KoPAView.cpp:658
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "Промяна подредбата на страница"
@@ -2465,23 +2465,23 @@ msgstr "Промяна подредбата на страница"
 msgid "Set image ..."
 msgstr "Задаване на фоново изображение…"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
 #, kde-format
 msgid "Background"
 msgstr "Фон"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:88
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #, fuzzy, kde-format
 msgid "Page Background"
 msgstr "Задаване на фон"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 msgid "Page Design"
 msgstr "Горен колонтитул"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:38
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:36
 #, fuzzy, kde-format
 msgid "Slide Design"
 msgstr "Кадър %1"
@@ -2506,13 +2506,13 @@ msgstr "Промяна на главната страница"
 msgid "Display shapes of master slide"
 msgstr "Промяна на основния кадър"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr "Промяна на фоново изображение"
 
-#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:98
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
@@ -2658,7 +2658,7 @@ msgstr "Неопределено действие в пространствот�
 msgid "Undefined operation in the %1 color space"
 msgstr "Неопределено действие в цветовото пространство %1"
 
-#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr ""
@@ -3267,7 +3267,7 @@ msgstr ""
 msgid "Combine Normal Map"
 msgstr "Комбиниране на пътища"
 
-#: pigment/resources/KoStopGradient.cpp:419
+#: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Преливка SVG"
@@ -4104,7 +4104,7 @@ msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Форматиране"
 
-#: text/KoTextEditor_p.h:161 text/KoTextEditor_p.h:206
+#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Формат"
@@ -5041,19 +5041,19 @@ msgstr "Премахване на точка"
 msgid "Tags"
 msgstr "Етикети"
 
-#: widgets/KoResourceTaggingManager.cpp:133
+#: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:134
+#: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
 msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
 
-#: widgets/KoResourceTaggingManager.cpp:142
+#: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
 msgstr ""
@@ -5073,7 +5073,7 @@ msgstr "Отстъп отляво"
 msgid "Right indent"
 msgstr "Отстъп отдясно"
 
-#: widgets/KoShadowConfigWidget.cpp:55
+#: widgets/KoShadowConfigWidget.cpp:53
 #, kde-format
 msgid "Change the color of the shadow"
 msgstr "Промяна на цвета на сянката"

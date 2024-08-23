@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -24,57 +24,57 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
+#: core/HeaderFooter.cpp:51 core/HeaderFooter.cpp:74
 #, kde-format
 msgid "page"
 msgstr "पृष्ठ"
 
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:52 core/HeaderFooter.cpp:75
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "pages"
 msgstr "पृष्ठ"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, kde-format
 msgid "file"
 msgstr "फाइल"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, fuzzy, kde-format
 #| msgid "Suriname"
 msgid "name"
 msgstr "सुरीनाम"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "time"
 msgstr "एकाइः"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "date"
 msgstr "तिथि"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "author"
 msgstr ""
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, fuzzy, kde-format
 #| msgid "Email:"
 msgid "email"
 msgstr "इमेलः"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, fuzzy, kde-format
 #| msgid "Georgia"
 msgid "org"
 msgstr "जार्जिया"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "sheet"
 msgstr "शीट"
@@ -142,8 +142,8 @@ msgstr "शीर्ष टीका"
 msgid "Header1"
 msgstr "शीर्ष टीका"
 
-#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
-#: ui/dialogs/LayoutPage_General.cpp:143
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:122
+#: ui/dialogs/LayoutPage_General.cpp:141
 #, kde-format
 msgid "Default"
 msgstr "मूलभूत"
@@ -286,66 +286,66 @@ msgstr "सही"
 msgid "false"
 msgstr "गलत"
 
-#: engine/SheetBase.cpp:359
+#: engine/SheetBase.cpp:357
 #, kde-format
 msgid "Dependency"
 msgstr ""
 
-#: engine/Value.cpp:662
+#: engine/Value.cpp:655
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr ""
 
-#: engine/Value.cpp:670
+#: engine/Value.cpp:663
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr ""
 
-#: engine/Value.cpp:678
+#: engine/Value.cpp:671
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:686
+#: engine/Value.cpp:679
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:694
+#: engine/Value.cpp:687
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:702
+#: engine/Value.cpp:695
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:710
+#: engine/Value.cpp:703
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:718
+#: engine/Value.cpp:711
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr ""
 
-#: engine/Value.cpp:726
+#: engine/Value.cpp:719
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:734
+#: engine/Value.cpp:727
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5042,12 +5042,12 @@ msgstr ""
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr ""
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "दस्ती"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -10993,7 +10993,7 @@ msgstr "नमाइ"
 msgid "Source string"
 msgstr "छाँटनाइ"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "स्थिति"
@@ -12080,197 +12080,209 @@ msgstr "फ्लोट"
 msgid "SECH(0) equals 1"
 msgstr ""
 
-#: part/AboutData.h:27
+#: part/AboutData.h:26
 #, fuzzy, kde-format
 #| msgid "Sheets"
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "शीट"
 
-#: part/AboutData.h:29
+#: part/AboutData.h:28
 #, kde-format
 msgid "Spreadsheet Application"
 msgstr ""
 
-#: part/AboutData.h:31
+#: part/AboutData.h:30
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr ""
 
-#: part/AboutData.h:39
+#: part/AboutData.h:36
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/AboutData.h:37
+#, fuzzy, kde-format
+#| msgid "Maintainer"
+msgid "Maintainer/Port to Qt6"
+msgstr "अनुरक्षक"
+
+#: part/AboutData.h:41
 #, kde-format
 msgid "Original Author"
 msgstr "मूल लेखक"
 
-#: part/AboutData.h:39
+#: part/AboutData.h:41
 #, kde-format
 msgid "Torben Weis"
 msgstr "टारबेन वेइस"
 
-#: part/AboutData.h:40
-#, kde-format
-msgid "Maintainer"
+#: part/AboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Maintainer"
+msgid "Former Maintainer"
 msgstr "अनुरक्षक"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:42
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr ""
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr ""
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr "सेबेस्टियन साए"
 
-#: part/AboutData.h:42
+#: part/AboutData.h:44
 #, kde-format
 msgid "Laurent Montel"
 msgstr ""
 
-#: part/AboutData.h:43
+#: part/AboutData.h:45
 #, fuzzy, kde-format
 #| msgid "John Tapsell"
 msgid "John Dailey"
 msgstr "जान टापसेल"
 
-#: part/AboutData.h:44
+#: part/AboutData.h:46
 #, fuzzy, kde-format
 #| msgid "Philippines"
 msgid "Philipp Müller"
 msgstr "फिलीपीन"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:47
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr ""
 
-#: part/AboutData.h:46
+#: part/AboutData.h:48
 #, kde-format
 msgid "Norbert Andres"
 msgstr ""
 
-#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
-#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
-#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
+#: part/AboutData.h:49 part/AboutData.h:50 part/AboutData.h:51
+#: part/AboutData.h:53 part/AboutData.h:54 part/AboutData.h:55
+#: part/AboutData.h:56 part/AboutData.h:57 part/AboutData.h:58
 #, kde-format
 msgid "Import/export filter developer"
 msgstr ""
 
-#: part/AboutData.h:47
+#: part/AboutData.h:49
 #, kde-format
 msgid "Shaheed Haque"
 msgstr ""
 
-#: part/AboutData.h:48
+#: part/AboutData.h:50
 #, kde-format
 msgid "Werner Trobin"
 msgstr ""
 
-#: part/AboutData.h:49
+#: part/AboutData.h:51
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr ""
 
-#: part/AboutData.h:50
+#: part/AboutData.h:52
 #, kde-format
 msgid "David Faure"
 msgstr "डेविड फाउरे"
 
-#: part/AboutData.h:51
+#: part/AboutData.h:53
 #, kde-format
 msgid "Helge Deller"
 msgstr "हेल्ग डेलर"
 
-#: part/AboutData.h:52
+#: part/AboutData.h:54
 #, fuzzy, kde-format
 #| msgid "Percent"
 msgid "Percy Leonhart"
 msgstr "प्रतिशत"
 
-#: part/AboutData.h:53
+#: part/AboutData.h:55
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr ""
 
-#: part/AboutData.h:54
+#: part/AboutData.h:56
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr ""
 
-#: part/AboutData.h:55
+#: part/AboutData.h:57
 #, kde-format
 msgid "Enno Bartels"
 msgstr ""
 
-#: part/AboutData.h:56
+#: part/AboutData.h:58
 #, kde-format
 msgid "Graham Short"
 msgstr ""
 
-#: part/AboutData.h:57
+#: part/AboutData.h:59
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr ""
 
-#: part/AboutData.h:58
+#: part/AboutData.h:60
 #, kde-format
 msgid "Tomas Mecir"
 msgstr ""
 
-#: part/AboutData.h:59
+#: part/AboutData.h:61
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr ""
 
-#: part/AboutData.h:60
+#: part/AboutData.h:62
 #, kde-format
 msgid "John Tapsell"
 msgstr "जान टापसेल"
 
-#: part/AboutData.h:61
+#: part/AboutData.h:63
 #, kde-format
 msgid "Robert Knight"
 msgstr "राबर्ट नाइट"
 
-#: part/AboutData.h:62
+#: part/AboutData.h:64
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr ""
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Developer (functions)"
 msgstr "फंक्शन"
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, kde-format
 msgid "Sascha Pfau"
 msgstr ""
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Brad Hards"
 msgstr "ब्रेड हार्ड्स"
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr ""
 
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "sangeeta09@gmail.com"
 
 #. i18n translator strings
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -12428,7 +12440,7 @@ msgstr "नाम बदलू शीट"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:141
+#: ui/dialogs/LayoutDialog.cpp:139
 #, kde-format
 msgid "Font"
 msgstr "फोन्ट"
@@ -12507,7 +12519,7 @@ msgid "First column as label"
 msgstr "पहिल ब्याज"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:135
 #, fuzzy, kde-format
 #| msgid "Date Format"
 msgid "Data Format"
@@ -12945,7 +12957,7 @@ msgstr "खोलू/सहेजू"
 msgid "Function Modules"
 msgstr "फंक्शन"
 
-#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:730
 #, kde-format
 msgid "Tools"
 msgstr "अओजार"
@@ -13336,31 +13348,31 @@ msgstr ""
 msgid "Match cases when searching"
 msgstr ""
 
-#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
+#: part/HeaderItems.cpp:155 part/HeaderWidgets.cpp:150
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgid "Height: %1 %2"
 msgstr "उँचाइ:"
 
-#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, fuzzy, kde-format
 #| msgid "Resize"
 msgid "Hide Row"
 msgstr "आकार बदलू"
 
-#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
+#: part/HeaderItems.cpp:324 part/HeaderWidgets.cpp:316
 #, fuzzy, kde-format
 #| msgid "Width:"
 msgid "Width: %1 %2"
 msgstr "चओड़ाइ:"
 
-#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
+#: part/HeaderItems.cpp:326 part/HeaderWidgets.cpp:318
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Hide Column"
 msgstr "कालम"
 
-#: part/Headers.cpp:233 part/Headers.cpp:725
+#: part/Headers.cpp:231 part/Headers.cpp:721
 #, kde-format
 msgid "Area is too large."
 msgstr ""
@@ -13386,7 +13398,7 @@ msgstr "केस बदलू"
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:233 part/View.cpp:2022
+#: part/View.cpp:233 part/View.cpp:2020
 #, kde-format
 msgid "Insert Sheet"
 msgstr "शीट दिअ'"
@@ -13409,13 +13421,13 @@ msgstr "नाम बदलू शीट"
 msgid "Duplicate the selected sheet"
 msgstr "नाम बदलू शीट"
 
-#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
+#: part/View.cpp:244 part/View.cpp:1828 part/View.cpp:1833 part/View.cpp:2025
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove Sheet"
 msgstr "नाम बदलू शीट"
 
-#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
+#: part/View.cpp:245 part/View.cpp:2021 part/View.cpp:2026
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove the active sheet"
@@ -13551,12 +13563,12 @@ msgstr "मेटाबू (&D)..."
 msgid "Anchor"
 msgstr "एंकर"
 
-#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
+#: part/View.cpp:312 part/View.cpp:1052 part/View.cpp:1517
 #, kde-format
 msgid "Cell"
 msgstr "सेल"
 
-#: part/View.cpp:313 part/View.cpp:1054
+#: part/View.cpp:313 part/View.cpp:1052
 #, kde-format
 msgid "Page"
 msgstr "पृष्ठ"
@@ -13752,154 +13764,154 @@ msgstr "हिस्सा"
 msgid "Calculate using the countA"
 msgstr "हिस्सा"
 
-#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
+#: part/View.cpp:1404 part/View.cpp:1423 part/View.cpp:1850
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr ""
 
-#: part/View.cpp:1445
+#: part/View.cpp:1443
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr ""
 
-#: part/View.cpp:1527
+#: part/View.cpp:1525
 #, kde-format
 msgid "Enter a password."
 msgstr ""
 
-#: part/View.cpp:1539
+#: part/View.cpp:1537
 #, fuzzy, kde-format
 #| msgid "Reference"
 msgid "Enter the password."
 msgstr "संदर्भ"
 
-#: part/View.cpp:1547
+#: part/View.cpp:1545
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1563
+#: part/View.cpp:1561
 #, kde-format
 msgid "Protect Document"
 msgstr "दस्तावेजकेँ रक्षा करू"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1563
 #, fuzzy, kde-format
 #| msgid "Protect Document"
 msgid "Unprotect Document"
 msgstr "दस्तावेजकेँ रक्षा करू"
 
-#: part/View.cpp:1584
+#: part/View.cpp:1582
 #, kde-format
 msgid "Protect Sheet"
 msgstr "शीटकेँ रक्षा करू"
 
-#: part/View.cpp:1586
+#: part/View.cpp:1584
 #, fuzzy, kde-format
 #| msgid "Protect Sheet"
 msgid "Unprotect Sheet"
 msgstr "शीटकेँ रक्षा करू"
 
-#: part/View.cpp:1821
+#: part/View.cpp:1819
 #, fuzzy
 #| msgid "Define Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "छपाइ परिसरकेँ परिभाषा दिअ'"
 
-#: part/View.cpp:1830
+#: part/View.cpp:1828
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr ""
 
-#: part/View.cpp:1834
+#: part/View.cpp:1832
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, fuzzy, kde-format
 #| msgid "Area name:"
 msgid "Enter name:"
 msgstr "क्षेत्र नामः"
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, kde-format
 msgid "Rename Sheet"
 msgstr "नाम बदलू शीट"
 
-#: part/View.cpp:1864 part/View.cpp:1870
+#: part/View.cpp:1862 part/View.cpp:1868
 #, fuzzy, kde-format
 #| msgid "Change Case"
 msgid "Change Sheet Name"
 msgstr "केस बदलू"
 
-#: part/View.cpp:1864
+#: part/View.cpp:1862
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr ""
 
-#: part/View.cpp:1870
+#: part/View.cpp:1868
 #, kde-format
 msgid "This name is already used."
 msgstr ""
 
-#: part/View.cpp:1938
+#: part/View.cpp:1936
 #, kde-format
 msgid "Sum: "
 msgstr ""
 
-#: part/View.cpp:1942
+#: part/View.cpp:1940
 #, fuzzy, kde-format
 #| msgid "Average"
 msgid "Average: "
 msgstr "औसत"
 
-#: part/View.cpp:1946
+#: part/View.cpp:1944
 #, kde-format
 msgid "Min: "
 msgstr ""
 
-#: part/View.cpp:1950
+#: part/View.cpp:1948
 #, kde-format
 msgid "Max: "
 msgstr ""
 
-#: part/View.cpp:1954
+#: part/View.cpp:1952
 #, fuzzy, kde-format
 #| msgid "Count"
 msgid "Count: "
 msgstr "गिनती"
 
-#: part/View.cpp:1958
+#: part/View.cpp:1956
 #, fuzzy, kde-format
 #| msgid "CountA"
 msgid "CountA: "
 msgstr "CountA"
 
-#: part/View.cpp:1965
+#: part/View.cpp:1963
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:127
+#: part/ViewAdaptor.cpp:125
 #, fuzzy
 #| msgid "Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "पाठ रंग"
 
-#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
+#: part/ViewAdaptor.cpp:137 part/ViewAdaptor.cpp:149
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "पृष्ठभूमि रंग बदलू"
 
-#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
-#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
+#: part/ViewAdaptor.cpp:161 part/ViewAdaptor.cpp:176 part/ViewAdaptor.cpp:188
+#: part/ViewAdaptor.cpp:203 part/ViewAdaptor.cpp:215 part/ViewAdaptor.cpp:232
 #, fuzzy
 #| msgid "Page order"
 msgctxt "(qtundo-format)"
@@ -14137,28 +14149,28 @@ msgstr "शनि"
 msgid "Sun"
 msgstr "रवि"
 
-#: ui/commands/AutoFillCommand.cpp:673
+#: ui/commands/AutoFillCommand.cpp:669
 #, fuzzy
 #| msgid "Anguilla"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "एंग्विला"
 
-#: ui/commands/DataManipulators.cpp:108
+#: ui/commands/DataManipulators.cpp:104
 #, fuzzy
 #| msgid "Change Case"
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "केस बदलू"
 
-#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
+#: ui/commands/DataManipulators.cpp:172 ui/commands/DataManipulators.cpp:181
 #, fuzzy
 #| msgid "Insert Cells"
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "कोष्ठ जोडू"
 
-#: ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:183
 #, fuzzy
 #| msgid "Remove All"
 msgctxt "(qtundo-format)"
@@ -14172,45 +14184,45 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "मेटाबू"
 
-#: ui/commands/MergeCommand.cpp:83
+#: ui/commands/MergeCommand.cpp:81
 #, fuzzy
 #| msgid "Center vertically"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "केंद्र लबंवत रूप सँ"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 #, fuzzy
 #| msgid "Merge Cells"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "कोष्ठसभकेँ मिलाबू"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 #, fuzzy
 #| msgid "Merge Cells"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "कोष्ठसभकेँ मिलाबू"
 
-#: ui/commands/MergeCommand.cpp:90
+#: ui/commands/MergeCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr ""
 
-#: ui/commands/MergeCommand.cpp:96
+#: ui/commands/MergeCommand.cpp:94
 #, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr ""
 
-#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "प्रतिस्थापन"
 
-#: ui/commands/NamedAreaCommand.cpp:44
+#: ui/commands/NamedAreaCommand.cpp:42
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
@@ -14224,100 +14236,100 @@ msgctxt "(qtundo-format)"
 msgid "Resize Column"
 msgstr "कालम मेटाउ"
 
-#: ui/commands/RowColumnManipulators.cpp:93
+#: ui/commands/RowColumnManipulators.cpp:91
 #, fuzzy
 #| msgid "Resize"
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "आकार बदलू"
 
-#: ui/commands/RowColumnManipulators.cpp:283
+#: ui/commands/RowColumnManipulators.cpp:277
 #, fuzzy
 #| msgid "Text to Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "पाठसँ कालम"
 
-#: ui/commands/RowColumnManipulators.cpp:285
+#: ui/commands/RowColumnManipulators.cpp:279
 #, fuzzy
 #| msgid "Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "कालम"
 
-#: ui/commands/RowColumnManipulators.cpp:287
+#: ui/commands/RowColumnManipulators.cpp:281
 #, fuzzy
 #| msgid "Resize"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "आकार बदलू"
 
-#: ui/commands/RowColumnManipulators.cpp:290
+#: ui/commands/RowColumnManipulators.cpp:284
 #, fuzzy
 #| msgid "Text to Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "पाठसँ कालम"
 
-#: ui/commands/RowColumnManipulators.cpp:292
+#: ui/commands/RowColumnManipulators.cpp:286
 #, fuzzy
 #| msgid "Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "कालम"
 
-#: ui/commands/RowColumnManipulators.cpp:294
+#: ui/commands/RowColumnManipulators.cpp:288
 #, fuzzy
 #| msgid "Rows"
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "पंक्ति"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:531
 #, fuzzy
 #| msgid "Insert Cells"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "कोष्ठ जोडू"
 
-#: ui/commands/RowColumnManipulators.cpp:541
+#: ui/commands/RowColumnManipulators.cpp:533
 #, fuzzy
 #| msgid "Insert Cells"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "कोष्ठ जोडू"
 
-#: ui/commands/RowColumnManipulators.cpp:543
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 #| msgid "Insert Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "पंक्तिसभकेँ जोडू"
 
-#: ui/commands/RowColumnManipulators.cpp:556
-#: ui/commands/RowColumnManipulators.cpp:574
+#: ui/commands/RowColumnManipulators.cpp:548
+#: ui/commands/RowColumnManipulators.cpp:566
 #, fuzzy
 #| msgid "Insert Cells"
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "कोष्ठ जोडू"
 
-#: ui/commands/RowColumnManipulators.cpp:576
+#: ui/commands/RowColumnManipulators.cpp:568
 #, fuzzy
 #| msgid "Delete Columns"
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "कालम मेटाउ"
 
-#: ui/commands/RowColumnManipulators.cpp:631
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:623
+#: ui/commands/RowColumnManipulators.cpp:641
 #, fuzzy
 #| msgid "Insert Rows"
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "पंक्तिसभकेँ जोडू"
 
-#: ui/commands/RowColumnManipulators.cpp:651
+#: ui/commands/RowColumnManipulators.cpp:643
 #, fuzzy
 #| msgid "Remove"
 msgctxt "(qtundo-format)"
@@ -14387,14 +14399,14 @@ msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "केस बदलू"
 
-#: ui/commands/StyleCommand.cpp:36
+#: ui/commands/StyleCommand.cpp:34
 #, fuzzy
 #| msgid "Custom Styles"
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "शैलीसभकेँ पसँदीदा करू"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 #, fuzzy
 #| msgid "Change Case"
 msgctxt "(qtundo-format)"
@@ -14556,36 +14568,36 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:118
+#: ui/dialogs/LayoutDialog.cpp:116
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Cell Format"
 msgstr "सेल परिसर"
 
-#: ui/dialogs/LayoutDialog.cpp:121
+#: ui/dialogs/LayoutDialog.cpp:119
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set Cell Format"
 msgstr "सेल परिसर"
 
-#: ui/dialogs/LayoutDialog.cpp:131
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "सामान्य (&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
 msgid "Border"
 msgstr "किनार"
 
-#: ui/dialogs/LayoutDialog.cpp:154
+#: ui/dialogs/LayoutDialog.cpp:152
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Background"
 msgstr "पृष्ठभूमि रँग"
 
-#: ui/dialogs/LayoutDialog.cpp:158
+#: ui/dialogs/LayoutDialog.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Cell Protection"
@@ -14893,22 +14905,22 @@ msgstr "नाम:"
 msgid "Inherit style:"
 msgstr "शैलीसभकेँ पसँदीदा करू"
 
-#: ui/dialogs/LayoutPage_General.cpp:88
+#: ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
 msgid "A style with this name already exists."
 msgstr ""
 
-#: ui/dialogs/LayoutPage_General.cpp:92
+#: ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "The style name can not be empty."
 msgstr ""
 
-#: ui/dialogs/LayoutPage_General.cpp:104
+#: ui/dialogs/LayoutPage_General.cpp:102
 #, kde-format
 msgid "A style cannot inherit from itself."
 msgstr ""
 
-#: ui/dialogs/LayoutPage_General.cpp:108
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr ""

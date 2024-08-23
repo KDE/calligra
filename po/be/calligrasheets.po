@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-14 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -23,52 +23,52 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
+#: core/HeaderFooter.cpp:51 core/HeaderFooter.cpp:74
 #, fuzzy, kde-format
 msgid "page"
 msgstr "ліст"
 
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:52 core/HeaderFooter.cpp:75
 #, fuzzy, kde-format
 msgid "pages"
 msgstr "лісты"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
 #, fuzzy, kde-format
 msgid "file"
 msgstr "файл"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, fuzzy, kde-format
 msgid "name"
 msgstr "імя"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, fuzzy, kde-format
 msgid "time"
 msgstr "час"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, fuzzy, kde-format
 msgid "date"
 msgstr "дата"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, fuzzy, kde-format
 msgid "author"
 msgstr "аўтар"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, fuzzy, kde-format
 msgid "email"
 msgstr "эл. пошта"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, fuzzy, kde-format
 msgid "org"
 msgstr "арганізацыя"
 
-#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, fuzzy, kde-format
 msgid "sheet"
 msgstr "ліст"
@@ -139,8 +139,8 @@ msgstr "Загаловак"
 msgid "Header1"
 msgstr "Заголовок1"
 
-#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:124
-#: ui/dialogs/LayoutPage_General.cpp:143
+#: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:122
+#: ui/dialogs/LayoutPage_General.cpp:141
 #, fuzzy, kde-format
 msgid "Default"
 msgstr "Прадвызначаны"
@@ -278,66 +278,66 @@ msgstr "ісціна"
 msgid "false"
 msgstr "мана"
 
-#: engine/SheetBase.cpp:359
+#: engine/SheetBase.cpp:357
 #, fuzzy, kde-format
 msgid "Dependency"
 msgstr "Залежнасць"
 
-#: engine/Value.cpp:662
+#: engine/Value.cpp:655
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr ""
 
-#: engine/Value.cpp:670
+#: engine/Value.cpp:663
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr ""
 
-#: engine/Value.cpp:678
+#: engine/Value.cpp:671
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr ""
 
-#: engine/Value.cpp:686
+#: engine/Value.cpp:679
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr ""
 
-#: engine/Value.cpp:694
+#: engine/Value.cpp:687
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr ""
 
-#: engine/Value.cpp:702
+#: engine/Value.cpp:695
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr ""
 
-#: engine/Value.cpp:710
+#: engine/Value.cpp:703
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr ""
 
-#: engine/Value.cpp:718
+#: engine/Value.cpp:711
 #, fuzzy, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "ARS"
 
-#: engine/Value.cpp:726
+#: engine/Value.cpp:719
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr ""
 
-#: engine/Value.cpp:734
+#: engine/Value.cpp:727
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5161,12 +5161,12 @@ msgstr "ZERO_COUPON(намінал;стаўка;гадоў)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) ураўноўваецца 148.64"
 
-#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
 #, fuzzy, kde-format
 msgid "Manual"
 msgstr "Самастойнае"
 
-#: functions/information.cpp:197 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, fuzzy, kde-format
 msgid "Automatic"
@@ -11155,7 +11155,7 @@ msgstr "FIND(find_text;within_text;start_num)"
 msgid "Source string"
 msgstr "Радок"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:146
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, fuzzy, kde-format
 msgid "Position"
 msgstr "Пазіцыя"
@@ -12230,192 +12230,202 @@ msgstr "COSH(Float)"
 msgid "SECH(0) equals 1"
 msgstr "COSH(0) ураўноўваецца 1"
 
-#: part/AboutData.h:27
+#: part/AboutData.h:26
 #, fuzzy, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
 msgstr "Значэннях"
 
-#: part/AboutData.h:29
+#: part/AboutData.h:28
 #, fuzzy, kde-format
 msgid "Spreadsheet Application"
 msgstr "Электронная табліца KOffice"
 
-#: part/AboutData.h:31
+#: part/AboutData.h:30
 #, fuzzy, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
 msgstr "(c) 1998-2006, каманда распрацоўнікаў KSpread"
 
-#: part/AboutData.h:39
+#: part/AboutData.h:36
+#, kde-format
+msgid "Carl Schwan"
+msgstr ""
+
+#: part/AboutData.h:37
+#, fuzzy, kde-format
+msgid "Maintainer/Port to Qt6"
+msgstr "Мартыніка"
+
+#: part/AboutData.h:41
 #, kde-format
 msgid "Original Author"
 msgstr ""
 
-#: part/AboutData.h:39
+#: part/AboutData.h:41
 #, kde-format
 msgid "Torben Weis"
 msgstr ""
 
-#: part/AboutData.h:40
+#: part/AboutData.h:42
 #, fuzzy, kde-format
-msgid "Maintainer"
+msgid "Former Maintainer"
 msgstr "Мартыніка"
 
-#: part/AboutData.h:40
+#: part/AboutData.h:42
 #, kde-format
 msgid "Marijn Kruisselbrink"
 msgstr ""
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
 msgstr ""
 
-#: part/AboutData.h:41
+#: part/AboutData.h:43
 #, kde-format
 msgid "Sebastian Sauer"
 msgstr ""
 
-#: part/AboutData.h:42
+#: part/AboutData.h:44
 #, kde-format
 msgid "Laurent Montel"
 msgstr ""
 
-#: part/AboutData.h:43
+#: part/AboutData.h:45
 #, kde-format
 msgid "John Dailey"
 msgstr ""
 
-#: part/AboutData.h:44
+#: part/AboutData.h:46
 #, fuzzy, kde-format
 msgid "Philipp Müller"
 msgstr "Філіпіны"
 
-#: part/AboutData.h:45
+#: part/AboutData.h:47
 #, kde-format
 msgid "Ariya Hidayat"
 msgstr ""
 
-#: part/AboutData.h:46
+#: part/AboutData.h:48
 #, kde-format
 msgid "Norbert Andres"
 msgstr ""
 
-#: part/AboutData.h:47 part/AboutData.h:48 part/AboutData.h:49
-#: part/AboutData.h:51 part/AboutData.h:52 part/AboutData.h:53
-#: part/AboutData.h:54 part/AboutData.h:55 part/AboutData.h:56
+#: part/AboutData.h:49 part/AboutData.h:50 part/AboutData.h:51
+#: part/AboutData.h:53 part/AboutData.h:54 part/AboutData.h:55
+#: part/AboutData.h:56 part/AboutData.h:57 part/AboutData.h:58
 #, kde-format
 msgid "Import/export filter developer"
 msgstr ""
 
-#: part/AboutData.h:47
+#: part/AboutData.h:49
 #, fuzzy, kde-format
 msgid "Shaheed Haque"
 msgstr "Імя ліста"
 
-#: part/AboutData.h:48
+#: part/AboutData.h:50
 #, kde-format
 msgid "Werner Trobin"
 msgstr ""
 
-#: part/AboutData.h:49
+#: part/AboutData.h:51
 #, kde-format
 msgid "Nikolas Zimmermann"
 msgstr ""
 
-#: part/AboutData.h:50
+#: part/AboutData.h:52
 #, kde-format
 msgid "David Faure"
 msgstr ""
 
-#: part/AboutData.h:51
+#: part/AboutData.h:53
 #, fuzzy, kde-format
 msgid "Helge Deller"
 msgstr "Белізскі даляр"
 
-#: part/AboutData.h:52
+#: part/AboutData.h:54
 #, fuzzy, kde-format
 msgid "Percy Leonhart"
 msgstr "Адсоткавы"
 
-#: part/AboutData.h:53
+#: part/AboutData.h:55
 #, kde-format
 msgid "Eva Brucherseifer"
 msgstr ""
 
-#: part/AboutData.h:54
+#: part/AboutData.h:56
 #, kde-format
 msgid "Phillip Ezolt"
 msgstr ""
 
-#: part/AboutData.h:55
+#: part/AboutData.h:57
 #, kde-format
 msgid "Enno Bartels"
 msgstr ""
 
-#: part/AboutData.h:56
+#: part/AboutData.h:58
 #, kde-format
 msgid "Graham Short"
 msgstr ""
 
-#: part/AboutData.h:57
+#: part/AboutData.h:59
 #, kde-format
 msgid "Lukáš Tinkl"
 msgstr ""
 
-#: part/AboutData.h:58
+#: part/AboutData.h:60
 #, kde-format
 msgid "Tomas Mecir"
 msgstr ""
 
-#: part/AboutData.h:59
+#: part/AboutData.h:61
 #, kde-format
 msgid "Raphael Langerhorst"
 msgstr ""
 
-#: part/AboutData.h:60
+#: part/AboutData.h:62
 #, kde-format
 msgid "John Tapsell"
 msgstr ""
 
-#: part/AboutData.h:61
+#: part/AboutData.h:63
 #, fuzzy, kde-format
 msgid "Robert Knight"
 msgstr "Мяжа справа"
 
-#: part/AboutData.h:62
+#: part/AboutData.h:64
 #, kde-format
 msgid "Stefan Nikolaus"
 msgstr ""
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, fuzzy, kde-format
 msgid "Developer (functions)"
 msgstr "<h2>Гл. таксама</h2><ul>"
 
-#: part/AboutData.h:63
+#: part/AboutData.h:65
 #, kde-format
 msgid "Sascha Pfau"
 msgstr ""
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Brad Hards"
 msgstr ""
 
-#: part/AboutData.h:64
+#: part/AboutData.h:66
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
 msgstr ""
 
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, fuzzy, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "komzpa@licei2.com"
 
 #. i18n translator strings
-#: part/AboutData.h:66
+#: part/AboutData.h:68
 #, fuzzy, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -12564,7 +12574,7 @@ msgstr "Схаваць ліст"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:229 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:141
+#: ui/dialogs/LayoutDialog.cpp:139
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "&Шрыфт"
@@ -12636,7 +12646,7 @@ msgid "First column as label"
 msgstr "Першы слупок утрымоўвае загалоўкі"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:135
 #, fuzzy, kde-format
 msgid "Data Format"
 msgstr "Фармат дадзеных"
@@ -13069,7 +13079,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "Функцыя"
 
-#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:732
+#: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:730
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Н&ачынне"
@@ -13463,27 +13473,27 @@ msgstr "Сартаванне з улікам рэгістра"
 msgid "Match cases when searching"
 msgstr ""
 
-#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
+#: part/HeaderItems.cpp:155 part/HeaderWidgets.cpp:150
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Вышыня: %1 %2"
 
-#: part/HeaderItems.cpp:159 part/HeaderWidgets.cpp:154
+#: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
 msgid "Hide Row"
 msgstr "Схаваць радок"
 
-#: part/HeaderItems.cpp:328 part/HeaderWidgets.cpp:320
+#: part/HeaderItems.cpp:324 part/HeaderWidgets.cpp:316
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Шырыня: %1 %2"
 
-#: part/HeaderItems.cpp:330 part/HeaderWidgets.cpp:322
+#: part/HeaderItems.cpp:326 part/HeaderWidgets.cpp:318
 #, kde-format
 msgid "Hide Column"
 msgstr "Схаваць слупок"
 
-#: part/Headers.cpp:233 part/Headers.cpp:725
+#: part/Headers.cpp:231 part/Headers.cpp:721
 #, fuzzy, kde-format
 msgid "Area is too large."
 msgstr "Дыяпазон занадта вялікі."
@@ -13508,7 +13518,7 @@ msgstr "Уласцівасці ліста"
 msgid "Modify current sheet's properties"
 msgstr "Змена ўласцівасцяў ліста"
 
-#: part/View.cpp:233 part/View.cpp:2022
+#: part/View.cpp:233 part/View.cpp:2020
 #, fuzzy, kde-format
 msgid "Insert Sheet"
 msgstr "Уставіць ліст"
@@ -13528,12 +13538,12 @@ msgstr "Пералічыць ліст"
 msgid "Duplicate the selected sheet"
 msgstr "Схаваць бягучы ліст"
 
-#: part/View.cpp:244 part/View.cpp:1830 part/View.cpp:1835 part/View.cpp:2027
+#: part/View.cpp:244 part/View.cpp:1828 part/View.cpp:1833 part/View.cpp:2025
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Выдаліць ліст"
 
-#: part/View.cpp:245 part/View.cpp:2023 part/View.cpp:2028
+#: part/View.cpp:245 part/View.cpp:2021 part/View.cpp:2026
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Выдаліць бягучы ліст"
@@ -13653,12 +13663,12 @@ msgstr "Стварыць шаблон з дакумента..."
 msgid "Anchor"
 msgstr "Андора"
 
-#: part/View.cpp:312 part/View.cpp:1054 part/View.cpp:1519
+#: part/View.cpp:312 part/View.cpp:1052 part/View.cpp:1517
 #, fuzzy, kde-format
 msgid "Cell"
 msgstr "Вочка"
 
-#: part/View.cpp:313 part/View.cpp:1054
+#: part/View.cpp:313 part/View.cpp:1052
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "ліст"
@@ -13830,143 +13840,143 @@ msgstr "Паказаць колькасць лікаў у вылучаных в�
 msgid "Calculate using the countA"
 msgstr "Паказаць колькасць непустых вылучаных вочак"
 
-#: part/View.cpp:1406 part/View.cpp:1425 part/View.cpp:1852
+#: part/View.cpp:1404 part/View.cpp:1423 part/View.cpp:1850
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Вы не можаце рэдагаваць абаронены ліст"
 
-#: part/View.cpp:1445
+#: part/View.cpp:1443
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Вы не можаце схаваць апошні бачны ліст."
 
-#: part/View.cpp:1527
+#: part/View.cpp:1525
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1539
+#: part/View.cpp:1537
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1547
+#: part/View.cpp:1545
 #, fuzzy, kde-format
 msgid "Password is incorrect."
 msgstr "Пароль няслушны."
 
-#: part/View.cpp:1563
+#: part/View.cpp:1561
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Абараніць дакумент"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1563
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Зняць абарону з дакумента"
 
-#: part/View.cpp:1584
+#: part/View.cpp:1582
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Абараніць ліст"
 
-#: part/View.cpp:1586
+#: part/View.cpp:1584
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Зняць абарону з ліста"
 
-#: part/View.cpp:1821
+#: part/View.cpp:1819
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Прыбраць"
 
-#: part/View.cpp:1830
+#: part/View.cpp:1828
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Вы не можаце выдаліць апошні ліст."
 
-#: part/View.cpp:1834
+#: part/View.cpp:1832
 #, fuzzy, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Выдаліць бягучы ліст?"
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Увядзіце імя:"
 
-#: part/View.cpp:1858
+#: part/View.cpp:1856
 #, fuzzy, kde-format
 msgid "Rename Sheet"
 msgstr "Пераназваць ліст"
 
-#: part/View.cpp:1864 part/View.cpp:1870
+#: part/View.cpp:1862 part/View.cpp:1868
 #, fuzzy, kde-format
 msgid "Change Sheet Name"
 msgstr "Змяніць імя ліста"
 
-#: part/View.cpp:1864
+#: part/View.cpp:1862
 #, fuzzy, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Імя ліста не можа быць пустым."
 
-#: part/View.cpp:1870
+#: part/View.cpp:1868
 #, fuzzy, kde-format
 msgid "This name is already used."
 msgstr "Гэтае імя ўжо скарыстана."
 
-#: part/View.cpp:1938
+#: part/View.cpp:1936
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr "Сума: "
 
-#: part/View.cpp:1942
+#: part/View.cpp:1940
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Сярэдняе: "
 
-#: part/View.cpp:1946
+#: part/View.cpp:1944
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Мінімум: "
 
-#: part/View.cpp:1950
+#: part/View.cpp:1948
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Максімум: "
 
-#: part/View.cpp:1954
+#: part/View.cpp:1952
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Колькасць лікаў: "
 
-#: part/View.cpp:1958
+#: part/View.cpp:1956
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Колькасць: "
 
-#: part/View.cpp:1965
+#: part/View.cpp:1963
 #, kde-format
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:127
+#: part/ViewAdaptor.cpp:125
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Змяніць тэкст"
 
-#: part/ViewAdaptor.cpp:139 part/ViewAdaptor.cpp:151
+#: part/ViewAdaptor.cpp:137 part/ViewAdaptor.cpp:149
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Колер фону"
 
-#: part/ViewAdaptor.cpp:163 part/ViewAdaptor.cpp:178 part/ViewAdaptor.cpp:190
-#: part/ViewAdaptor.cpp:205 part/ViewAdaptor.cpp:217 part/ViewAdaptor.cpp:234
+#: part/ViewAdaptor.cpp:161 part/ViewAdaptor.cpp:176 part/ViewAdaptor.cpp:188
+#: part/ViewAdaptor.cpp:203 part/ViewAdaptor.cpp:215 part/ViewAdaptor.cpp:232
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
@@ -14199,25 +14209,25 @@ msgstr "Суб"
 msgid "Sun"
 msgstr "Няд"
 
-#: ui/commands/AutoFillCommand.cpp:673
+#: ui/commands/AutoFillCommand.cpp:669
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Аўтазапаўненне"
 
-#: ui/commands/DataManipulators.cpp:108
+#: ui/commands/DataManipulators.cpp:104
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Value"
 msgstr "Змяніць значэнне"
 
-#: ui/commands/DataManipulators.cpp:178 ui/commands/DataManipulators.cpp:189
+#: ui/commands/DataManipulators.cpp:172 ui/commands/DataManipulators.cpp:181
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
 msgstr "Уставіць вочкі"
 
-#: ui/commands/DataManipulators.cpp:191
+#: ui/commands/DataManipulators.cpp:183
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
@@ -14229,42 +14239,42 @@ msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: ui/commands/MergeCommand.cpp:83
+#: ui/commands/MergeCommand.cpp:81
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
 msgstr "Аб'яднаць вочкі гарызантальна"
 
-#: ui/commands/MergeCommand.cpp:85
+#: ui/commands/MergeCommand.cpp:83
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
 msgstr "Аб'яднаць вочкі вертыкальна"
 
-#: ui/commands/MergeCommand.cpp:87
+#: ui/commands/MergeCommand.cpp:85
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Аб'яднаць вочкі"
 
-#: ui/commands/MergeCommand.cpp:90
+#: ui/commands/MergeCommand.cpp:88
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "Разбіць вочкі"
 
-#: ui/commands/MergeCommand.cpp:96
+#: ui/commands/MergeCommand.cpp:94
 #, fuzzy, kde-format
 msgid "Merging of columns or rows is not supported."
 msgstr "Аб'яднанне слупкоў або радкоў не падтрымліваецца"
 
-#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "Змяніць дыяпазон"
 
-#: ui/commands/NamedAreaCommand.cpp:44
+#: ui/commands/NamedAreaCommand.cpp:42
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
@@ -14276,87 +14286,87 @@ msgctxt "(qtundo-format)"
 msgid "Resize Column"
 msgstr "Змяніць памер слупка"
 
-#: ui/commands/RowColumnManipulators.cpp:93
+#: ui/commands/RowColumnManipulators.cpp:91
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
 msgstr "Змяніць памер радка"
 
-#: ui/commands/RowColumnManipulators.cpp:283
+#: ui/commands/RowColumnManipulators.cpp:277
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
 msgstr "Схаваць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:285
+#: ui/commands/RowColumnManipulators.cpp:279
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
 msgstr "Схаваць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:287
+#: ui/commands/RowColumnManipulators.cpp:281
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
 msgstr "Схаваць радкі"
 
-#: ui/commands/RowColumnManipulators.cpp:290
+#: ui/commands/RowColumnManipulators.cpp:284
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
 msgstr "Паказаць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:292
+#: ui/commands/RowColumnManipulators.cpp:286
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
 msgstr "Паказаць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:294
+#: ui/commands/RowColumnManipulators.cpp:288
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Паказаць радкі"
 
-#: ui/commands/RowColumnManipulators.cpp:539
+#: ui/commands/RowColumnManipulators.cpp:531
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Выраўнаваць слупкі або радкі"
 
-#: ui/commands/RowColumnManipulators.cpp:541
+#: ui/commands/RowColumnManipulators.cpp:533
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Выраўнаваць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:543
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Выраўнаваць радкі"
 
-#: ui/commands/RowColumnManipulators.cpp:556
-#: ui/commands/RowColumnManipulators.cpp:574
+#: ui/commands/RowColumnManipulators.cpp:548
+#: ui/commands/RowColumnManipulators.cpp:566
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Уставіць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:576
+#: ui/commands/RowColumnManipulators.cpp:568
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Выдаліць слупкі"
 
-#: ui/commands/RowColumnManipulators.cpp:631
-#: ui/commands/RowColumnManipulators.cpp:649
+#: ui/commands/RowColumnManipulators.cpp:623
+#: ui/commands/RowColumnManipulators.cpp:641
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Уставіць радкі"
 
-#: ui/commands/RowColumnManipulators.cpp:651
+#: ui/commands/RowColumnManipulators.cpp:643
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
@@ -14416,13 +14426,13 @@ msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "Уласцівасці ліста"
 
-#: ui/commands/StyleCommand.cpp:36
+#: ui/commands/StyleCommand.cpp:34
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "Стыль ліста"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Style"
@@ -14598,32 +14608,32 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Тут паказваецца прыклад фарматавання тэксту."
 
-#: ui/dialogs/LayoutDialog.cpp:118
+#: ui/dialogs/LayoutDialog.cpp:116
 #, fuzzy, kde-format
 msgid "Cell Format"
 msgstr "Фармат вочак"
 
-#: ui/dialogs/LayoutDialog.cpp:121
+#: ui/dialogs/LayoutDialog.cpp:119
 #, fuzzy, kde-format
 msgid "Set Cell Format"
 msgstr "Фармат вочак"
 
-#: ui/dialogs/LayoutDialog.cpp:131
+#: ui/dialogs/LayoutDialog.cpp:129
 #, fuzzy, kde-format
 msgid "General"
 msgstr "&Агульныя"
 
-#: ui/dialogs/LayoutDialog.cpp:150 ui/dialogs/LayoutPage_Border.cpp:234
+#: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, fuzzy, kde-format
 msgid "Border"
 msgstr "Поле"
 
-#: ui/dialogs/LayoutDialog.cpp:154
+#: ui/dialogs/LayoutDialog.cpp:152
 #, fuzzy, kde-format
 msgid "Background"
 msgstr "Фон"
 
-#: ui/dialogs/LayoutDialog.cpp:158
+#: ui/dialogs/LayoutDialog.cpp:156
 #, fuzzy, kde-format
 msgid "Cell Protection"
 msgstr "Абарона"
@@ -14970,22 +14980,22 @@ msgstr "Назва:"
 msgid "Inherit style:"
 msgstr "Атрымліваць у спадчыну стыль:"
 
-#: ui/dialogs/LayoutPage_General.cpp:88
+#: ui/dialogs/LayoutPage_General.cpp:86
 #, fuzzy, kde-format
 msgid "A style with this name already exists."
 msgstr "Стыль з такім імем ужо існуе."
 
-#: ui/dialogs/LayoutPage_General.cpp:92
+#: ui/dialogs/LayoutPage_General.cpp:90
 #, fuzzy, kde-format
 msgid "The style name can not be empty."
 msgstr "Імя стылю не можа быць пустым."
 
-#: ui/dialogs/LayoutPage_General.cpp:104
+#: ui/dialogs/LayoutPage_General.cpp:102
 #, fuzzy, kde-format
 msgid "A style cannot inherit from itself."
 msgstr "Немагчыма атрымліваць у спадчыну стыль з самога сябе."
 
-#: ui/dialogs/LayoutPage_General.cpp:108
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, fuzzy, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2024-05-01 10:02+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "2);\n"
 "X-Generator: Lokalize 24.02.2\n"
 
-#: PluginShape.cpp:35
+#: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
 msgstr "Nezināma"
 
-#: PluginShape.cpp:39
+#: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "Spraudnis MIME tipam: %1"

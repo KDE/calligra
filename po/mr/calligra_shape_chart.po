@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2013-02-22 18:20+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -49,8 +49,8 @@ msgstr ""
 msgid "Other-side"
 msgstr ""
 
-#: AxesConfigWidget.cpp:247 AxesConfigWidget.cpp:255 ChartTool.cpp:916
-#: DataSetConfigWidget.cpp:347
+#: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
+#: DataSetConfigWidget.cpp:345
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Axistitle"
@@ -188,67 +188,67 @@ msgstr ""
 msgid "Secondary Y Axis"
 msgstr ""
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
 msgstr ""
 
-#: ChartShape.cpp:301
+#: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr ""
 
-#: ChartShape.cpp:305
+#: ChartShape.cpp:303
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
 
-#: ChartShape.cpp:306
+#: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: ChartShape.cpp:324 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
 msgstr "शिर्षक"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
-#: ChartShape.cpp:354 TitlesConfigWidget.ui:85
+#: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, fuzzy, kde-format
 #| msgid "Title"
 msgid "Subtitle"
 msgstr "शिर्षक"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
-#: ChartShape.cpp:384 TitlesConfigWidget.ui:126
+#: ChartShape.cpp:382 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
 msgstr "अधोशिर्षक"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:752
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
 msgstr "खात्री आवश्यक आहे"
 
-#: ChartShape.cpp:756
+#: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
 msgstr "डाउनलोड"
 
-#: ChartShape.cpp:757
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
 msgstr "वगळा"
@@ -265,7 +265,7 @@ msgid "Business charts"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
-#: PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:230
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Bar Chart"
@@ -302,7 +302,7 @@ msgid "Percent bar chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
-#: PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:236
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Line Chart"
@@ -339,7 +339,7 @@ msgid "Percent line chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
-#: PlotAreaConfigWidget.cpp:244
+#: PlotAreaConfigWidget.cpp:242
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Area Chart"
@@ -376,7 +376,7 @@ msgid "Percent area chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
-#: PlotAreaConfigWidget.cpp:252
+#: PlotAreaConfigWidget.cpp:250
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Pie Chart"
@@ -389,7 +389,7 @@ msgid "Pie chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
-#: PlotAreaConfigWidget.cpp:253
+#: PlotAreaConfigWidget.cpp:251
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Ring Chart"
@@ -402,7 +402,7 @@ msgid "Ring chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
-#: PlotAreaConfigWidget.cpp:266
+#: PlotAreaConfigWidget.cpp:264
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Bubble Chart"
@@ -415,7 +415,7 @@ msgid "Bubble chart"
 msgstr "चार्ट"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
-#: PlotAreaConfigWidget.cpp:265
+#: PlotAreaConfigWidget.cpp:263
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Scatter Chart"
@@ -562,41 +562,41 @@ msgstr ""
 msgid "Growth"
 msgstr ""
 
-#: ChartTool.cpp:99
+#: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
 msgstr ""
 
-#: ChartTool.cpp:104
+#: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
 msgstr ""
 
-#: ChartTool.cpp:271
+#: ChartTool.cpp:269
 #, fuzzy, kde-format
 #| msgid "Title"
 msgid "Titles"
 msgstr "शिर्षक"
 
-#: ChartTool.cpp:286
+#: ChartTool.cpp:284
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Legend"
 msgstr "फॉन्ट निवडा"
 
-#: ChartTool.cpp:299
+#: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
 msgstr ""
 
-#: ChartTool.cpp:1063
+#: ChartTool.cpp:1061
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
 msgstr "फॉन्ट निवडा"
 
-#: ChartTool.cpp:1065
+#: ChartTool.cpp:1063
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
@@ -623,127 +623,127 @@ msgctxt "(qtundo-format)"
 msgid "Remove Axis"
 msgstr "नवीन अक्ष"
 
-#: commands/AxisCommand.cpp:113
+#: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
 msgstr ""
 
-#: commands/AxisCommand.cpp:115
+#: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
 msgstr ""
 
-#: commands/AxisCommand.cpp:140
+#: commands/AxisCommand.cpp:138
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:142
+#: commands/AxisCommand.cpp:140
 #, fuzzy
 #| msgid "New Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
 msgstr "नवीन अक्ष"
 
-#: commands/AxisCommand.cpp:151
+#: commands/AxisCommand.cpp:149
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:153
+#: commands/AxisCommand.cpp:151
 #, fuzzy
 #| msgid "New Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
 msgstr "नवीन अक्ष"
 
-#: commands/AxisCommand.cpp:162
+#: commands/AxisCommand.cpp:160
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:164
+#: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
 msgstr ""
 
-#: commands/AxisCommand.cpp:173
+#: commands/AxisCommand.cpp:171
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:175
+#: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
 msgstr ""
 
-#: commands/AxisCommand.cpp:184
+#: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
 msgstr ""
 
-#: commands/AxisCommand.cpp:186
+#: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
 msgstr ""
 
-#: commands/AxisCommand.cpp:194
+#: commands/AxisCommand.cpp:192
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:201
+#: commands/AxisCommand.cpp:199
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:209
+#: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
 msgstr ""
 
-#: commands/AxisCommand.cpp:211
+#: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
 msgstr ""
 
-#: commands/AxisCommand.cpp:220
+#: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
 msgstr ""
 
-#: commands/AxisCommand.cpp:222
+#: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
 msgstr ""
 
-#: commands/AxisCommand.cpp:230
+#: commands/AxisCommand.cpp:228
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:236
+#: commands/AxisCommand.cpp:234
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
 msgstr "फॉन्ट निवडा"
 
-#: commands/AxisCommand.cpp:257
+#: commands/AxisCommand.cpp:255
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
@@ -760,256 +760,256 @@ msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
 msgstr ""
 
-#: commands/ChartTypeCommand.cpp:77
+#: commands/ChartTypeCommand.cpp:75
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:80
+#: commands/ChartTypeCommand.cpp:78
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:83
+#: commands/ChartTypeCommand.cpp:81
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:92
+#: commands/ChartTypeCommand.cpp:90
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:95
+#: commands/ChartTypeCommand.cpp:93
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:98
+#: commands/ChartTypeCommand.cpp:96
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:107
+#: commands/ChartTypeCommand.cpp:105
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:110
+#: commands/ChartTypeCommand.cpp:108
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:113
+#: commands/ChartTypeCommand.cpp:111
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:120
+#: commands/ChartTypeCommand.cpp:118
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:123
+#: commands/ChartTypeCommand.cpp:121
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:126
+#: commands/ChartTypeCommand.cpp:124
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:129
+#: commands/ChartTypeCommand.cpp:127
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:132
+#: commands/ChartTypeCommand.cpp:130
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:135
+#: commands/ChartTypeCommand.cpp:133
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:138
+#: commands/ChartTypeCommand.cpp:136
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:141
+#: commands/ChartTypeCommand.cpp:139
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
 msgstr "चार्ट"
 
-#: commands/ChartTypeCommand.cpp:144
+#: commands/ChartTypeCommand.cpp:142
 #, fuzzy
 #| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
 msgstr "चार्ट"
 
-#: commands/DatasetCommand.cpp:137
+#: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:145
+#: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:147
+#: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:156
+#: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:158
+#: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:167
+#: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:169
+#: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:178
+#: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:180
+#: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:188
+#: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:195
+#: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:204
+#: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:206
+#: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
 msgstr ""
 
-#: commands/DatasetCommand.cpp:214
+#: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
 msgstr ""
 
-#: commands/GapCommand.cpp:60
+#: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
 msgstr ""
 
-#: commands/GapCommand.cpp:67
+#: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
 msgstr ""
 
-#: commands/LegendCommand.cpp:75
+#: commands/LegendCommand.cpp:73
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
 msgstr "फॉन्ट निवडा"
 
-#: commands/LegendCommand.cpp:83
+#: commands/LegendCommand.cpp:81
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
 msgstr "फॉन्ट निवडा"
 
-#: commands/LegendCommand.cpp:90
+#: commands/LegendCommand.cpp:88
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
 msgstr "फॉन्ट निवडा"
 
-#: commands/LegendCommand.cpp:97
+#: commands/LegendCommand.cpp:95
 #, fuzzy
 #| msgid "Orientation"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
 msgstr "कल"
 
-#: commands/PlotAreaCommand.cpp:58
+#: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
 msgstr ""
 
-#: commands/PlotAreaCommand.cpp:60
+#: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
 msgstr ""
 
-#: DataSet.cpp:274
+#: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
 msgstr ""
 
-#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:228
+#: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Chart Type"
@@ -1017,15 +1017,15 @@ msgstr "चार्ट"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
-#: PlotAreaConfigWidget.cpp:233 PlotAreaConfigWidget.cpp:239
-#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:259
+#: PlotAreaConfigWidget.cpp:231 PlotAreaConfigWidget.cpp:237
+#: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
-#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:234
-#: PlotAreaConfigWidget.cpp:240 PlotAreaConfigWidget.cpp:246
+#: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
+#: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
 msgstr ""
@@ -1035,50 +1035,50 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
 #: DataSetConfigWidget.cpp:202 DataSetConfigWidget.cpp:207
 #: DataSetConfigWidget.cpp:212 DataSetConfigWidget.ui:245
-#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:235
-#: PlotAreaConfigWidget.cpp:241 PlotAreaConfigWidget.cpp:247
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:233
+#: PlotAreaConfigWidget.cpp:239 PlotAreaConfigWidget.cpp:245
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
 msgstr "टक्के"
 
-#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:258
+#: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Polar Chart"
 msgstr "चार्ट"
 
-#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:260
+#: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, fuzzy, kde-format
 #| msgid "Fill"
 msgid "Filled"
 msgstr "भरण"
 
-#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:271
+#: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Stock Chart"
 msgstr "चार्ट"
 
-#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:272
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
 msgstr ""
 
-#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:273
+#: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
 msgstr ""
 
-#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:274
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
-#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:381
+#: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
 #: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:82
-#: widgets/RadarDataSetConfigWidget.cpp:182
+#: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
 msgstr "काही नाही"
@@ -1102,18 +1102,18 @@ msgstr "निवडा"
 #. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
-#: DataSetConfigWidget.cpp:390 TitlesConfigWidget.ui:52
+#: DataSetConfigWidget.cpp:388 TitlesConfigWidget.ui:52
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
-#: widgets/RadarDataSetConfigWidget.cpp:191
+#: widgets/RadarDataSetConfigWidget.cpp:189
 #, fuzzy, kde-format
 #| msgid "Automatic"
 msgid "Auto"
 msgstr "स्वयंचलित"
 
-#: DataSetConfigWidget.cpp:653 PlotAreaConfigWidget.cpp:627
-#: PlotAreaConfigWidget.cpp:677 PlotAreaConfigWidget.cpp:853
-#: widgets/RadarDataSetConfigWidget.cpp:297
+#: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
+#: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
+#: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
 msgstr ""
@@ -1714,7 +1714,7 @@ msgstr ""
 msgid "Del"
 msgstr "अंतर्भूत करा"
 
-#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:100
+#: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
 msgstr ""
@@ -1878,7 +1878,7 @@ msgstr "कल"
 msgid "Fonts..."
 msgstr ""
 
-#: PieConfigWidget.cpp:100
+#: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
 msgstr ""
@@ -1889,13 +1889,13 @@ msgstr ""
 msgid "E&xplode Factor"
 msgstr ""
 
-#: PlotAreaConfigWidget.cpp:277
+#: PlotAreaConfigWidget.cpp:275
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Surface Chart"
 msgstr "चार्ट"
 
-#: PlotAreaConfigWidget.cpp:279
+#: PlotAreaConfigWidget.cpp:277
 #, fuzzy, kde-format
 #| msgid "Chart"
 msgid "Gantt Chart"

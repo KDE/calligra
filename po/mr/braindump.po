@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2013-03-25 17:16+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -105,7 +105,7 @@ msgstr "आकार स्थिती"
 msgid "A state shape"
 msgstr "एक आकार स्थिती"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "स्थिती साधन पर्याय"
@@ -258,12 +258,12 @@ msgstr "शिर्षक पट्टी दृश्य चालू/बं�
 msgid "Toggles organising the options in tabs or not"
 msgstr "टॅब मध्ये पर्यायांचे आयोजन चालू/बंद करतो"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "स्तंभ"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "मोकळे"
@@ -273,7 +273,7 @@ msgstr "मोकळे"
 msgid "Dockers"
 msgstr "डॉकर्स"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "शिर्षकहीन %1"

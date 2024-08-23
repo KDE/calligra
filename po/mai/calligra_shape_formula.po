@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:14+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -37,7 +37,7 @@ msgctxt "(qtundo-format)"
 msgid "Add text to formula"
 msgstr "सूत्र"
 
-#: FormulaCommand.cpp:220
+#: FormulaCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr ""
@@ -89,115 +89,83 @@ msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "जोडू"
 
-#: FormulaToolWidget.cpp:69
+#: FormulaToolEditWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Edit"
+msgctxt "@title:group"
+msgid "Edit"
+msgstr "संपादन"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolEditWidget.ui:17
+#, kde-format
+msgid "Font:"
+msgstr "फान्टः"
+
+#: FormulaToolWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgctxt "@title:group"
+msgid "Insert"
+msgstr "जोडू"
+
+#: FormulaToolWidget.cpp:70
 #, kde-format
 msgid "Arrows"
 msgstr ""
 
-#: FormulaToolWidget.cpp:71
+#: FormulaToolWidget.cpp:72
 #, kde-format
 msgid "Greek"
 msgstr ""
 
-#: FormulaToolWidget.cpp:73
+#: FormulaToolWidget.cpp:74
 #, kde-format
 msgid "Relations"
 msgstr ""
 
-#: FormulaToolWidget.cpp:77
+#: FormulaToolWidget.cpp:78
 #, kde-format
 msgid "Operators"
 msgstr ""
 
-#: FormulaToolWidget.cpp:80
+#: FormulaToolWidget.cpp:81
 #, kde-format
 msgid "Miscellaneous"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: FormulaToolWidget.ui:24
-#, kde-format
-msgid "Insert"
-msgstr "जोडू"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
-#: FormulaToolWidget.ui:36
-#, kde-format
-msgid "Elements"
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "Elements"
+msgid "Elements:"
 msgstr "तत्व"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
-#: FormulaToolWidget.ui:132
-#, kde-format
-msgid "Symbols"
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:106
+#, fuzzy, kde-format
+#| msgid "Symbols"
+msgid "Symbols:"
 msgstr "संकेत"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
-#: FormulaToolWidget.ui:228
+#. i18n: ectx: property (text), widget (QLabel)
+#: FormulaToolWidget.ui:195
 #, kde-format
-msgid "Actions"
+msgid "Actions:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
-#: FormulaToolWidget.ui:279
+#: FormulaToolWidget.ui:245
 #, kde-format
 msgctxt "This button opens a file dialog to load a MathML file"
 msgid "Load..."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSave)
-#: FormulaToolWidget.ui:286
+#: FormulaToolWidget.ui:252
 #, kde-format
 msgid "Save..."
 msgstr "सहेजू..."
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: FormulaToolWidget.ui:294
-#, kde-format
-msgid "Edit"
-msgstr "संपादन"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
-#: FormulaToolWidget.ui:300
-#, kde-format
-msgid "General options"
-msgstr "सामान्य विकल्प"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: FormulaToolWidget.ui:325
-#, kde-format
-msgid "Font:"
-msgstr "फान्टः"
-
-#. i18n: ectx: property (text), widget (QLabel, labelColors)
-#: FormulaToolWidget.ui:341
-#, kde-format
-msgid "Colors:"
-msgstr "रंगः"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
-#: FormulaToolWidget.ui:349
-#, kde-format
-msgid "Specific options"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: FormulaToolWidget.ui:371
-#, kde-format
-msgid "Rows:"
-msgstr "पंक्तिसभ:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: FormulaToolWidget.ui:378
-#, kde-format
-msgid "Columns:"
-msgstr "कालम: "
-
-#. i18n: ectx: property (text), widget (QPushButton, pushButton)
-#: FormulaToolWidget.ui:406
-#, kde-format
-msgid "View MathML"
-msgstr ""
 
 #: KoFormulaShape.cpp:200
 #, kde-format
@@ -232,107 +200,107 @@ msgstr "सूत्र"
 msgid "A formula"
 msgstr "सूत्र"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:403
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fenced element"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:404
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert enclosed element"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:412
+#: KoFormulaTool.cpp:406
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert root"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:413
+#: KoFormulaTool.cpp:407
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert square root"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:409
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fraction"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:416
+#: KoFormulaTool.cpp:410
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert bevelled fraction"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:415
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr ""
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:421
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr ""
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:426
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert subscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:427
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert superscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:428
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert sub- and superscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:438
+#: KoFormulaTool.cpp:432
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert overscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:439
+#: KoFormulaTool.cpp:433
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert underscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:440
+#: KoFormulaTool.cpp:434
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert under- and overscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:451
+#: KoFormulaTool.cpp:445
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert row"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:458
+#: KoFormulaTool.cpp:452
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert column"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:465
+#: KoFormulaTool.cpp:459
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Remove row"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:472
+#: KoFormulaTool.cpp:466
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Remove column"
@@ -373,6 +341,18 @@ msgstr ""
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr ""
+
+#~ msgid "General options"
+#~ msgstr "सामान्य विकल्प"
+
+#~ msgid "Colors:"
+#~ msgstr "रंगः"
+
+#~ msgid "Rows:"
+#~ msgstr "पंक्तिसभ:"
+
+#~ msgid "Columns:"
+#~ msgstr "कालम: "
 
 #, fuzzy
 #~| msgid "Insert"

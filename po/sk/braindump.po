@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:45+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -104,7 +104,7 @@ msgstr "Tvar stavu"
 msgid "A state shape"
 msgstr "Tvar stavu"
 
-#: plugins/stateshape/StateTool.cpp:109
+#: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
 msgstr "Možnosti nástroja stavu"
@@ -255,12 +255,12 @@ msgstr "Prepnúť zobrazenie titulkového pruhu"
 msgid "Toggles organising the options in tabs or not"
 msgstr "Prepne organizovanie volieb do kariet"
 
-#: src/layouts/ColumnLayout.cpp:128
+#: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
 msgstr "Stĺpec"
 
-#: src/layouts/FreeLayout.cpp:62
+#: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
 msgstr "Voľné"
@@ -270,7 +270,7 @@ msgstr "Voľné"
 msgid "Dockers"
 msgstr "Dockery"
 
-#: src/SectionGroup.cpp:88
+#: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
 msgstr "Bez názvu %1"

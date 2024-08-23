@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2024-08-20 08:39+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -233,17 +233,17 @@ msgstr "Seznam použité literatury "
 msgid "References"
 msgstr "Odkazy"
 
-#: dialogs/ChangeConfigureDialog.cpp:143
+#: dialogs/ChangeConfigureDialog.cpp:141
 #, kde-format
 msgid "This is a line of inserted text."
 msgstr "Řádek vloženého textu."
 
-#: dialogs/ChangeConfigureDialog.cpp:149
+#: dialogs/ChangeConfigureDialog.cpp:147
 #, kde-format
 msgid "This is a line of deleted text."
 msgstr "Řádek smazaného textu."
 
-#: dialogs/ChangeConfigureDialog.cpp:155
+#: dialogs/ChangeConfigureDialog.cpp:153
 #, kde-format
 msgid "This is a line of text whose format has been changed."
 msgstr "Řádek změněného textu."
@@ -328,7 +328,6 @@ msgstr "Barva pozadí"
 #. i18n: ectx: property (text), widget (QToolButton, splitCells)
 #. i18n: ectx: property (text), widget (QToolButton, mergeCells)
 #. i18n: ectx: property (text), widget (FormattingButton, border)
-#. i18n: ectx: property (text), widget (QToolButton, resetBackgroundColor)
 #. i18n: ectx: property (text), widget (QPushButton, insertionColorButton)
 #. i18n: ectx: property (text), widget (QPushButton, deletionColorButton)
 #. i18n: ectx: property (text), widget (QPushButton, formatColorButton)
@@ -341,14 +340,13 @@ msgstr "Barva pozadí"
 #: dialogs/FontDecorations.ui:148 dialogs/FontDecorations.ui:161
 #: dialogs/FontDecorations.ui:174 dialogs/FontDecorations.ui:187
 #: dialogs/FontDecorations.ui:200 dialogs/ParagraphBulletsNumbers.ui:221
-#: dialogs/ParagraphDecorations.ui:55 dialogs/SimpleCharacterWidget.ui:128
-#: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
-#: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
-#: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
-#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:73
-#: dialogs/SimpleParagraphWidget.ui:167 dialogs/SimpleSpellCheckingWidget.ui:26
-#: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
-#: dialogs/SimpleTableWidget.ui:137
+#: dialogs/SimpleCharacterWidget.ui:128 dialogs/SimpleInsertWidget.ui:49
+#: dialogs/SimpleInsertWidget.ui:62 dialogs/SimpleInsertWidget.ui:75
+#: dialogs/SimpleInsertWidget.ui:88 dialogs/SimpleInsertWidget.ui:101
+#: dialogs/SimpleInsertWidget.ui:114 dialogs/SimpleInsertWidget.ui:124
+#: dialogs/SimpleParagraphWidget.ui:73 dialogs/SimpleParagraphWidget.ui:167
+#: dialogs/SimpleSpellCheckingWidget.ui:26 dialogs/SimpleTableWidget.ui:101
+#: dialogs/SimpleTableWidget.ui:111 dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -562,6 +560,7 @@ msgstr "Barva textu:"
 
 #. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
 #: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
+#: dialogs/ParagraphDecorations.ui:15
 #, kde-format
 msgid "Background color:"
 msgstr "Barva pozadí:"
@@ -1043,7 +1042,7 @@ msgstr "Písmo"
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
-#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:164
+#: dialogs/SimpleCitationBibliographyWidget.ui:39 ReferencesTool.cpp:162
 #, kde-format
 msgid "Insert Bibliography"
 msgstr "Vložit seznam použité literatury"
@@ -1157,7 +1156,7 @@ msgstr "Zvláštní znaky"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:116 TextTool.cpp:2260
+#: ReferencesTool.cpp:114 TextTool.cpp:2260
 #, kde-format
 msgid "Insert"
 msgstr "Vložit"
@@ -1345,21 +1344,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:23
+#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:22
 #, kde-format
 msgid "Left"
 msgstr "Vlevo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:30
+#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:29
 #, kde-format
 msgid "Center"
 msgstr "Na střed"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
-#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:37
+#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:36
 #, kde-format
 msgid "Right"
 msgstr "Vpravo"
@@ -1449,7 +1448,7 @@ msgstr "Vložit záložku"
 msgid "Please provide a name for the bookmark"
 msgstr "Prosím, poskytněte název pro záložku"
 
-#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:195
+#: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:193
 #, kde-format
 msgid "Manage Bookmarks"
 msgstr "Spravovat záložky"
@@ -1631,8 +1630,9 @@ msgstr ""
 msgid "Start at:"
 msgstr "Začít na:"
 
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: dialogs/ParagraphBulletsNumbers.ui:57
+#: dialogs/ParagraphBulletsNumbers.ui:57 dialogs/ParagraphLayout.ui:15
 #, kde-format
 msgid "Alignment:"
 msgstr "Zarovnání:"
@@ -1725,43 +1725,40 @@ msgstr "Výška"
 msgid "Browse..."
 msgstr "Procházet..."
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:381
-#, kde-format
-msgid "Background"
-msgstr "Pozadí"
-
-#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
-#: dialogs/ParagraphDecorations.ui:65
-#, kde-format
-msgid "Background color"
+#: dialogs/ParagraphDecorations.cpp:18
+#, fuzzy, kde-format
+#| msgid "Background color"
+msgctxt "@action:button"
+msgid "Reset background color"
 msgstr "Barva pozadí"
 
-#: dialogs/ParagraphDropCaps.cpp:20
+#. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
+#: dialogs/ParagraphDecorations.ui:36
+#, fuzzy, kde-format
+#| msgid "Background color"
+msgid "Reset background color"
+msgstr "Barva pozadí"
+
+#: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
 msgid "Whole Word"
 msgstr "Celé slovo"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/ParagraphDropCaps.ui:32
+#. i18n: ectx: property (text), widget (QCheckBox, capsState)
+#: dialogs/ParagraphDropCaps.ui:15
 #, kde-format
-msgid "Drop caps:"
+msgid "Enable drop caps"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: dialogs/ParagraphDropCaps.ui:84
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
+#. i18n: ectx: property (text), widget (QLabel, charactersLabel)
+#: dialogs/ParagraphDropCaps.ui:22 dialogs/ParagraphDropCaps.ui:42
 #, kde-format
 msgid "Distance to paragraph:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: dialogs/ParagraphDropCaps.ui:94
-#, kde-format
-msgid "Number of characters:"
-msgstr "Počet znaků:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: dialogs/ParagraphDropCaps.ui:104
+#. i18n: ectx: property (text), widget (QLabel, linesLabel)
+#: dialogs/ParagraphDropCaps.ui:71
 #, kde-format
 msgid "Number of lines it covers:"
 msgstr ""
@@ -1887,44 +1884,39 @@ msgstr "Odsazení odstavce před:"
 msgid "Paragraph Space After:"
 msgstr "Odsazení odstavce po:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: dialogs/ParagraphLayout.ui:17
-#, kde-format
-msgid "Alignment"
-msgstr "Zarovnání"
-
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
-#: dialogs/ParagraphLayout.ui:44
+#: dialogs/ParagraphLayout.ui:43
 #, kde-format
 msgid "Justify"
 msgstr "Do bloku"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: dialogs/ParagraphLayout.ui:54
-#, kde-format
-msgid "Behavior at End of Frame/Page"
+#. i18n: ectx: property (text), widget (QLabel, distanceLabel)
+#: dialogs/ParagraphLayout.ui:50
+#, fuzzy, kde-format
+#| msgid "Behavior at End of Frame/Page"
+msgid "Behavior at end of frame and page:"
 msgstr "Chování na konci snímku/stránky"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
-#: dialogs/ParagraphLayout.ui:60
+#: dialogs/ParagraphLayout.ui:57
 #, kde-format
 msgid "Keep lines together"
 msgstr "Udržovat řádky u sebe"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
-#: dialogs/ParagraphLayout.ui:67
+#: dialogs/ParagraphLayout.ui:64
 #, kde-format
 msgid "Insert break before paragraph"
 msgstr "Vložit zalomení před odstavec"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
-#: dialogs/ParagraphLayout.ui:74
+#: dialogs/ParagraphLayout.ui:71
 #, kde-format
 msgid "Insert break after paragraph"
 msgstr "Vložit zalomení za odstavec"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: dialogs/ParagraphLayout.ui:83
+#: dialogs/ParagraphLayout.ui:78
 #, kde-format
 msgid "Leave at least this many lines (orphans):"
 msgstr ""
@@ -2014,7 +2006,7 @@ msgid "Insert citation at current position"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
-#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:159
+#: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:157
 #, kde-format
 msgid "Insert Citation"
 msgstr "Vložit citaci"
@@ -2060,7 +2052,7 @@ msgid "Hyperlinks"
 msgstr "Hypertextové odkazy"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
-#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:191
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
 #, kde-format
 msgid "Bookmarks"
 msgstr "Záložky"
@@ -2304,7 +2296,7 @@ msgstr ""
 msgid "Use styles"
 msgstr ""
 
-#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:172
+#: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:170
 #, kde-format
 msgid "Configure"
 msgstr "Nastavit"
@@ -2396,173 +2388,173 @@ msgstr "Zakázáno"
 msgid "Table Of Contents"
 msgstr "Obsah"
 
-#: ReferencesTool.cpp:118
+#: ReferencesTool.cpp:116
 #, kde-format
 msgid "Insert a Table of Contents into the document."
 msgstr "Vložit obsah do dokumentu."
 
-#: ReferencesTool.cpp:120 TextTool.cpp:406
+#: ReferencesTool.cpp:118 TextTool.cpp:406
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Vložit vlastní..."
 
-#: ReferencesTool.cpp:122
+#: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
 msgstr "Vložit vlastní obsah do dokumentu."
 
-#: ReferencesTool.cpp:124
+#: ReferencesTool.cpp:122
 #, kde-format
 msgid "Configure..."
 msgstr "Nastavit..."
 
-#: ReferencesTool.cpp:126
+#: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure the Table of Contents"
 msgstr "Nastavit obsah"
 
-#: ReferencesTool.cpp:129
+#: ReferencesTool.cpp:127
 #, kde-format
 msgid "Insert footnote with auto number"
 msgstr "Vložit poznámku pod čarou s automatickým číslem"
 
-#: ReferencesTool.cpp:134
+#: ReferencesTool.cpp:132
 #, kde-format
 msgid "Insert Labeled Footnote"
 msgstr ""
 
-#: ReferencesTool.cpp:135 ReferencesTool.cpp:146
+#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
 #, kde-format
 msgid "Insert with label:"
 msgstr "Vložit s popiskou:"
 
-#: ReferencesTool.cpp:140
+#: ReferencesTool.cpp:138
 #, kde-format
 msgid "Insert endnote with auto number"
 msgstr ""
 
-#: ReferencesTool.cpp:145
+#: ReferencesTool.cpp:143
 #, kde-format
 msgid "Insert Labeled Endnote"
 msgstr ""
 
-#: ReferencesTool.cpp:151 ReferencesTool.cpp:155
+#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
 msgstr "Nastavení..."
 
-#: ReferencesTool.cpp:161
+#: ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert a citation into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:166
+#: ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert a bibliography into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:168
+#: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert Custom Bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:170
+#: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
 msgstr ""
 
-#: ReferencesTool.cpp:174
+#: ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure the bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:177
+#: ReferencesTool.cpp:175
 #, kde-format
 msgid "Insert Link"
 msgstr "Vložit odkaz"
 
-#: ReferencesTool.cpp:179
+#: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
 msgstr ""
 
-#: ReferencesTool.cpp:183
+#: ReferencesTool.cpp:181
 #, kde-format
 msgid "Add Bookmark"
 msgstr "Přidat záložku"
 
-#: ReferencesTool.cpp:184
+#: ReferencesTool.cpp:182
 #, kde-format
 msgid "Add Bookmark :"
 msgstr "Přidat záložku :"
 
-#: ReferencesTool.cpp:189
+#: ReferencesTool.cpp:187
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
 "the document"
 msgstr ""
 
-#: ReferencesTool.cpp:193
+#: ReferencesTool.cpp:191
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
 
-#: ReferencesTool.cpp:197
+#: ReferencesTool.cpp:195
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
 msgstr ""
 
-#: ReferencesTool.cpp:232
+#: ReferencesTool.cpp:230
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
 msgstr ""
 
-#: ReferencesTool.cpp:235
+#: ReferencesTool.cpp:233
 #, kde-format
 msgid "Footnotes and Endnotes"
 msgstr "Poznámky pod čarou a na konci"
 
-#: ReferencesTool.cpp:238
+#: ReferencesTool.cpp:236
 #, kde-format
 msgid "Citations and Bibliography"
 msgstr ""
 
-#: ReferencesTool.cpp:241
+#: ReferencesTool.cpp:239
 #, kde-format
 msgid "Links and Bookmarks"
 msgstr "Odkazy a záložky"
 
-#: ReferencesTool.cpp:366
+#: ReferencesTool.cpp:364
 #, kde-format
 msgid "Bookmark cannot be empty"
 msgstr ""
 
-#: ReferencesTool.cpp:373
+#: ReferencesTool.cpp:371
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
 msgstr ""
 
-#: ReferencesTool.cpp:374
+#: ReferencesTool.cpp:372
 #, kde-format
 msgid "to Rename or Delete Bookmarks"
 msgstr ""
 
-#: ReviewTool.cpp:53 ReviewTool.cpp:54
+#: ReviewTool.cpp:51 ReviewTool.cpp:52
 #, kde-format
 msgid "Remove Comment"
 msgstr "Odstranit komentář"
 
-#: ReviewTool.cpp:98
+#: ReviewTool.cpp:96
 #, kde-format
 msgid "Spell check"
 msgstr "Kontrola pravopisu"
 
-#: ReviewTool.cpp:101
+#: ReviewTool.cpp:99
 #, kde-format
 msgid "Comments"
 msgstr "Poznámky"
@@ -2772,6 +2764,11 @@ msgstr "Barva textu"
 #, kde-format
 msgid "Background Color..."
 msgstr "Barva pozadí..."
+
+#: TextTool.cpp:381
+#, kde-format
+msgid "Background"
+msgstr "Pozadí"
 
 #: TextTool.cpp:385
 #, kde-format
@@ -3016,3 +3013,9 @@ msgstr "Stisk klávesy"
 #, kde-format
 msgid "Text editing"
 msgstr "Úprava textu"
+
+#~ msgid "Number of characters:"
+#~ msgstr "Počet znaků:"
+
+#~ msgid "Alignment"
+#~ msgstr "Zarovnání"

@@ -21,6 +21,3 @@ msgstr ""
 #, kde-format
 msgid "Snap Settings"
 msgstr "吸附设置"
-
-#~ msgid "Shape Properties"
-#~ msgstr "形状属性"

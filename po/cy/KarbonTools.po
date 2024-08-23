@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2004-07-06 15:43+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -150,37 +150,37 @@ msgstr ""
 msgid "Graphics Pen"
 msgstr "Graddiant"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Llenwi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase width"
 msgstr "Erfyn Hirgylch"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease width"
 msgstr "Erfyn Hirgylch"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase angle"
 msgstr "Erfyn Hirgylch"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease angle"
 msgstr "Erfyn Hirgylch"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
@@ -446,13 +446,13 @@ msgstr "Alinio i'r Gwaelod"
 msgid "Bottom Right"
 msgstr "De"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, fuzzy, kde-format
 #| msgid "Pattern Tool"
 msgid "Pattern Options"
 msgstr "Erfyn Patrwm"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Patrymau"

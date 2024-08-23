@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2004-09-29 01:29+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -143,37 +143,37 @@ msgstr ""
 msgid "Graphics Pen"
 msgstr "Kemmesk"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Leuniañ"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase width"
 msgstr "Ostilh elipsenn"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease width"
 msgstr "Ostilh elipsenn"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase angle"
 msgstr "Ostilh elipsenn"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease angle"
 msgstr "Ostilh elipsenn"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
@@ -436,13 +436,13 @@ msgstr "Ostilh Zoom"
 msgid "Bottom Right"
 msgstr "Steudañ d'a-zehou"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, fuzzy, kde-format
 #| msgid "Pattern Tool"
 msgid "Pattern Options"
 msgstr "Ostilh sil"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Siloù :"

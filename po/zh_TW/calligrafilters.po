@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2024-05-26 23:19+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -104,110 +104,110 @@ msgid "Opacity"
 msgstr "不透明度"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:164 libmsooxml/MsooXmlThemesReader.cpp:356
-#: sheets/xlsx/XlsxXmlCommentsReader.cpp:97
-#: sheets/xlsx/XlsxXmlDocumentReader.cpp:128
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:107
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:456
-#: sheets/xlsx/XlsxXmlTableReader.cpp:68
+#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:450
+#: sheets/xlsx/XlsxXmlTableReader.cpp:66
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:295
-#: stage/pptx/PptxXmlDocumentReader.cpp:150
-#: stage/pptx/PptxXmlSlideReader.cpp:330
-#: words/docx/import/DocxXmlCommentsReader.cpp:84
-#: words/docx/import/DocxXmlDocumentReader.cpp:187
-#: words/docx/import/DocxXmlEndnoteReader.cpp:85
-#: words/docx/import/DocxXmlFontTableReader.cpp:80
-#: words/docx/import/DocxXmlFooterReader.cpp:90
-#: words/docx/import/DocxXmlFootnoteReader.cpp:85
-#: words/docx/import/DocxXmlHeaderReader.cpp:90
-#: words/docx/import/DocxXmlNumberingReader.cpp:79
-#: words/docx/import/DocxXmlSettingsReader.cpp:79
+#: stage/pptx/PptxXmlDocumentReader.cpp:148
+#: stage/pptx/PptxXmlSlideReader.cpp:316
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:78
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:75
+#: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
 msgstr "找不到命名空間 %1"
 
-#: libmsooxml/MsooXmlImport.cpp:92
+#: libmsooxml/MsooXmlImport.cpp:90
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "無法開啟要求的檔案 %1"
 
-#: libmsooxml/MsooXmlImport.cpp:115
+#: libmsooxml/MsooXmlImport.cpp:113
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "無法讀取要求的檔案 %1 中的 ZIP 目錄"
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
 #, kde-format
 msgid "Enter password"
 msgstr "輸入密碼"
 
-#: libmsooxml/MsooXmlImport.cpp:328 libmsooxml/MsooXmlImport.cpp:447
+#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "文件已加密。請輸入密碼來解密："
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "不正確的密碼。請輸入密碼來解密此文件："
 
-#: libmsooxml/MsooXmlImport.cpp:622
+#: libmsooxml/MsooXmlImport.cpp:620
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "找不到型態 %1 的路徑"
 
-#: libmsooxml/MsooXmlReader.cpp:131
+#: libmsooxml/MsooXmlReader.cpp:127
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1（第 %2 行，第 %3 欄）"
 
-#: libmsooxml/MsooXmlReader.cpp:132
+#: libmsooxml/MsooXmlReader.cpp:128
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1（%2，第 %3 行，第 %4 欄）"
 
-#: libmsooxml/MsooXmlReader.cpp:154
+#: libmsooxml/MsooXmlReader.cpp:150
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "元素 %1 找不到"
 
-#: libmsooxml/MsooXmlReader.cpp:159
+#: libmsooxml/MsooXmlReader.cpp:155
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "屬性 %1 找不到"
 
-#: libmsooxml/MsooXmlReader.cpp:169
+#: libmsooxml/MsooXmlReader.cpp:165
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "屬性 %2 中未預期的值 %1"
 
-#: libmsooxml/MsooXmlReader.cpp:174
+#: libmsooxml/MsooXmlReader.cpp:170
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "未預期的第二次遇到 %1 元素"
 
-#: libmsooxml/MsooXmlReader.cpp:191 libmsooxml/MsooXmlReader.cpp:242
+#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "預期應該關閉元素 %1"
 
-#: libmsooxml/MsooXmlReader.cpp:233
+#: libmsooxml/MsooXmlReader.cpp:229
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "找不到預期的元素：%1"
 
-#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:85
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
 msgstr "檔案 %2 內找不到代碼 %1 的目標"
 
-#: libmsooxml/MsooXmlRelationships.cpp:93
-#: libmsooxml/MsooXmlRelationships.cpp:112
+#: libmsooxml/MsooXmlRelationships.cpp:89
+#: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find relationships file \"%1\""
 msgstr "找不到關聯檔 %1"
 
-#: libmsooxml/MsooXmlRelationships.cpp:108
+#: libmsooxml/MsooXmlRelationships.cpp:104
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "檔案 %2 內找不到關係 %1 的目標"
@@ -248,135 +248,156 @@ msgstr "無法寫入區塊"
 msgid "<SHEETNAME>"
 msgstr "<工作表名稱>"
 
+#: sheets/csv/csvexportdialog.cpp:37
+#, fuzzy, kde-format
+#| msgid "Export to Image"
+msgctxt "@title:dialog"
+msgid "Export to CVS"
+msgstr "匯入影像"
+
+#: sheets/csv/csvexportdialog.cpp:46
+#: sheets/latex/export/latexexportdialog.cc:152
+#, fuzzy, kde-format
+#| msgid "Export Error"
+msgctxt "@action:button"
+msgid "Export"
+msgstr "匯出錯誤"
+
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
 msgstr "CSV 過濾器無法開啟輸入檔案─請回報錯誤。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
-#: sheets/csv/exportdialogui.ui:27 sheets/csv/exportdialogui.ui:33
+#: sheets/csv/exportdialogui.ui:48
 #, kde-format
 msgid "End of Line"
 msgstr "行尾"
 
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:56
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End of Line:"
+msgstr "行尾"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
-#: sheets/csv/exportdialogui.ui:39
+#: sheets/csv/exportdialogui.ui:63
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
 msgstr "UNIX 樣式（建議使用，只有 LF）(&U)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
-#: sheets/csv/exportdialogui.ui:49
+#: sheets/csv/exportdialogui.ui:73
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
 msgstr "Windows 樣式（包含 CR 與 LF）(&W)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
-#: sheets/csv/exportdialogui.ui:59
+#: sheets/csv/exportdialogui.ui:83
 #, kde-format
 msgid "&MacOS style (carriage return only)"
 msgstr "MacOS 樣式（只有 CR）(&M)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: sheets/csv/exportdialogui.ui:89
+#: sheets/csv/exportdialogui.ui:96
 #, kde-format
 msgid "Sheets"
 msgstr "工作表"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
-#: sheets/csv/exportdialogui.ui:102
+#: sheets/csv/exportdialogui.ui:109
 #, kde-format
 msgid "Select sheets to export:"
 msgstr "選擇要匯出的工作表："
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
-#: sheets/csv/exportdialogui.ui:118
+#: sheets/csv/exportdialogui.ui:125
 #, kde-format
 msgid "Delimiter Line"
 msgstr "分隔線"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
-#: sheets/csv/exportdialogui.ui:124
+#: sheets/csv/exportdialogui.ui:131
 #, kde-format
 msgid "********<SHEETNAME>********"
 msgstr "********<SHEETNAME>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
-#: sheets/csv/exportdialogui.ui:137
+#: sheets/csv/exportdialogui.ui:144
 #, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 msgstr "<SHEETNAME> 會取代為下個工作表的名稱。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
-#: sheets/csv/exportdialogui.ui:156
+#: sheets/csv/exportdialogui.ui:163
 #, kde-format
 msgid "Print delimiter line above every sheet"
 msgstr "在每個工作表上方列印分隔線"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
-#: sheets/csv/exportdialogui.ui:167 sheets/csv/exportdialogui.ui:251
+#: sheets/csv/exportdialogui.ui:174
 #, kde-format
 msgid "Cells"
 msgstr "儲存格"
 
-#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
-#: sheets/csv/exportdialogui.ui:179
-#, kde-format
-msgid "Delimiter"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:182
+#, fuzzy, kde-format
+#| msgid "Delimiter"
+msgid "Delimiter:"
 msgstr "定義符號"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
-#: sheets/csv/exportdialogui.ui:185
+#: sheets/csv/exportdialogui.ui:189
 #, kde-format
 msgid "Comma"
 msgstr "逗點"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
-#: sheets/csv/exportdialogui.ui:195
+#: sheets/csv/exportdialogui.ui:199
 #, kde-format
 msgid "Semicolon"
 msgstr "分號"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
-#: sheets/csv/exportdialogui.ui:202
+#: sheets/csv/exportdialogui.ui:206
 #, kde-format
 msgid "Tabulator"
 msgstr "定位"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
-#: sheets/csv/exportdialogui.ui:209
+#: sheets/csv/exportdialogui.ui:213
 #, kde-format
 msgid "Space"
 msgstr "空白"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
-#: sheets/csv/exportdialogui.ui:216
+#: sheets/csv/exportdialogui.ui:222
 #, kde-format
 msgid "Other:"
 msgstr "其他："
 
-#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
-#: sheets/csv/exportdialogui.ui:266
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/csv/exportdialogui.ui:250
 #, kde-format
 msgid "Quotes:"
 msgstr "引號："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:286
+#: sheets/csv/exportdialogui.ui:270
 #, kde-format
 msgid "\""
 msgstr "\""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: sheets/csv/exportdialogui.ui:291
+#: sheets/csv/exportdialogui.ui:275
 #, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
-#: sheets/csv/exportdialogui.ui:322
+#: sheets/csv/exportdialogui.ui:301
 #, kde-format
 msgid "Export selection only"
 msgstr "只匯出所選擇的"
@@ -516,54 +537,56 @@ msgstr ""
 msgid "Pi&xels between cells:"
 msgstr "儲存格之間的像素(&X)："
 
-#: sheets/html/htmlexport.cc:198 sheets/html/htmlexport.cc:373
+#: sheets/html/htmlexport.cc:191 sheets/html/htmlexport.cc:366
 #, kde-format
 msgid "Top"
 msgstr "頂端"
 
-#: sheets/latex/export/latexexportdialog.cc:139
+#: sheets/latex/export/latexexportdialog.cc:155
 #, kde-format
 msgid "Latex Export Filter Configuration"
 msgstr "Latex 匯出過濾器設定"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
-#: sheets/latex/export/latexexportwidget.ui:24
+#: sheets/latex/export/latexexportwidget.ui:36
 #, kde-format
 msgid "Document"
 msgstr "文件"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: sheets/latex/export/latexexportwidget.ui:32
-#, kde-format
-msgid "Document Style"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:44
+#, fuzzy, kde-format
+#| msgid "Document Style"
+msgid "Document style:"
 msgstr "文件樣式"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:38
+#: sheets/latex/export/latexexportwidget.ui:51
 #, kde-format
 msgid "Latex style"
 msgstr "LaTeX 樣式"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
-#: sheets/latex/export/latexexportwidget.ui:45
+#: sheets/latex/export/latexexportwidget.ui:58
 #, kde-format
 msgid "Words style"
 msgstr "Words 樣式"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: sheets/latex/export/latexexportwidget.ui:58
-#, kde-format
-msgid "Document Type"
+#. i18n: ectx: property (text), widget (QLabel, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:68
+#, fuzzy, kde-format
+#| msgid "Document Type"
+msgid "Document type:"
 msgstr "文件類型"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:64
+#: sheets/latex/export/latexexportwidget.ui:75
 #, kde-format
 msgid "The document will be able to be compiled alone"
 msgstr "這份文件將可以單獨編譯。"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:67
+#: sheets/latex/export/latexexportwidget.ui:78
 #, kde-format
 msgid ""
 "The document will be generated as a full latex document since all the "
@@ -574,19 +597,19 @@ msgstr ""
 "\\end{document} 指令間的引入文件將一起產生。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
-#: sheets/latex/export/latexexportwidget.ui:70
+#: sheets/latex/export/latexexportwidget.ui:81
 #, kde-format
 msgid "Independent document"
 msgstr "獨立文件"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:80
+#: sheets/latex/export/latexexportwidget.ui:91
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
 msgstr "不要產生 latex 標頭與文件環境。"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:83
+#: sheets/latex/export/latexexportwidget.ui:94
 #, kde-format
 msgid ""
 "The document will be generated as a latex document which will have to be "
@@ -597,123 +620,124 @@ msgstr ""
 "在一份主要的 latex 文件中。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
-#: sheets/latex/export/latexexportwidget.ui:86
+#: sheets/latex/export/latexexportwidget.ui:97
 #, kde-format
 msgid "Document to include"
 msgstr "要引入的文件"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
-#: sheets/latex/export/latexexportwidget.ui:98
+#: sheets/latex/export/latexexportwidget.ui:104
 #, kde-format
 msgid "Document class:"
 msgstr "文件類別："
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
-#: sheets/latex/export/latexexportwidget.ui:111
+#: sheets/latex/export/latexexportwidget.ui:124
 #, kde-format
 msgid "Quality:"
 msgstr "品質："
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:122
+#: sheets/latex/export/latexexportwidget.ui:141
 #, kde-format
 msgid "Final"
 msgstr "完成"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
-#: sheets/latex/export/latexexportwidget.ui:127
+#: sheets/latex/export/latexexportwidget.ui:146
 #, kde-format
 msgid "Draft"
 msgstr "草稿"
 
 #. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
-#: sheets/latex/export/latexexportwidget.ui:135
+#: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
 msgstr "預設字型大小："
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
-#: sheets/latex/export/latexexportwidget.ui:176
+#: sheets/latex/export/latexexportwidget.ui:186
 #, kde-format
 msgid "Pictures"
 msgstr "圖片"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: sheets/latex/export/latexexportwidget.ui:182
+#: sheets/latex/export/latexexportwidget.ui:192
 #, kde-format
 msgid "Convert the pictures:"
 msgstr "轉換圖片："
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
-#: sheets/latex/export/latexexportwidget.ui:199
+#: sheets/latex/export/latexexportwidget.ui:209
 #, kde-format
 msgid "Pictures directory:"
 msgstr "圖片目錄："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: sheets/latex/export/latexexportwidget.ui:213
-#: sheets/latex/export/latexexportwidget.ui:244
+#: sheets/latex/export/latexexportwidget.ui:223
+#: sheets/latex/export/latexexportwidget.ui:269
 #, kde-format
 msgid "Language"
 msgstr "語言"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: sheets/latex/export/latexexportwidget.ui:219
-#, kde-format
-msgid "Encoding"
-msgstr "編碼"
+#. i18n: ectx: property (text), widget (QLabel)
+#: sheets/latex/export/latexexportwidget.ui:244
+#, fuzzy, kde-format
+#| msgid "E&ncoding:"
+msgid "Encoding:"
+msgstr "編碼(&N)："
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:261
+#: sheets/latex/export/latexexportwidget.ui:289
 #, kde-format
 msgid "Add"
 msgstr "新增"
 
 #. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
-#: sheets/latex/export/latexexportwidget.ui:268
+#: sheets/latex/export/latexexportwidget.ui:296
 #, kde-format
 msgid "Remove"
 msgstr "移除"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: sheets/latex/export/latexexportwidget.ui:293
+#: sheets/latex/export/latexexportwidget.ui:321
 #, kde-format
 msgid "Contents"
 msgstr "內容"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: sheets/latex/export/latexexportwidget.ui:301
+#: sheets/latex/export/latexexportwidget.ui:329
 #, kde-format
 msgid "Export information about author:"
 msgstr "匯出作者資訊："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: sheets/latex/export/latexexportwidget.ui:321
+#: sheets/latex/export/latexexportwidget.ui:349
 #, kde-format
 msgid "Add a table of content:"
 msgstr "增加表格內容："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: sheets/latex/export/latexexportwidget.ui:340
+#: sheets/latex/export/latexexportwidget.ui:368
 #, kde-format
 msgid "Notes"
 msgstr "筆記"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
-#: sheets/latex/export/latexexportwidget.ui:346
+#: sheets/latex/export/latexexportwidget.ui:374
 #, kde-format
 msgid "Don't export"
 msgstr "不匯出"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
-#: sheets/latex/export/latexexportwidget.ui:353
+#: sheets/latex/export/latexexportwidget.ui:381
 #, kde-format
 msgid "Export notes in margin notes"
 msgstr "匯出筆記於邊界筆記"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
-#: sheets/latex/export/latexexportwidget.ui:360
+#: sheets/latex/export/latexexportwidget.ui:388
 #, kde-format
 msgid "Export notes in comments"
 msgstr "匯出筆記於註解"
@@ -770,23 +794,23 @@ msgstr ""
 msgid "Unable to find part for type %1"
 msgstr "找不到型態 %1 的部件"
 
-#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:175
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
 msgstr "分享字串的宣告數字太小（%1）"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:570
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
 msgstr "字型樣式宣告的數字太小（%1）"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:926
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
 msgstr "儲存格格式宣告的數字太小（%1）"
 
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1053
-#: sheets/xlsx/XlsxXmlStylesReader.cpp:1374
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
 msgstr "充填樣式宣告的數字太小（%1）"
@@ -803,12 +827,12 @@ msgstr "資料無法完整被載入，因為超過了工作表的最大大小。
 msgid "Expected integer or floating point number"
 msgstr "預期應為整數或浮點數"
 
-#: stage/pptx/PptxXmlDocumentReader.cpp:291
+#: stage/pptx/PptxXmlDocumentReader.cpp:289
 #, kde-format
 msgid "Slide layout \"%1\" not found"
 msgstr "投影片佈局 %1 找不到"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:603
+#: stage/pptx/PptxXmlSlideReader.cpp:589
 #, kde-format
 msgid "Slide %1"
 msgstr "投影片 %1"
@@ -848,7 +872,7 @@ msgstr "句子：如果行尾是句子的結尾(&S)"
 msgid "&Empty Line: If the line is empty"
 msgstr "空白行：此行是否為空白(&E)"
 
-#: words/epub/OdtHtmlConverter.cpp:258 words/mobi/OdtMobiHtmlConverter.cpp:285
+#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
 msgstr "尾註"
@@ -904,6 +928,9 @@ msgstr "Words RTF 匯出過濾器"
 msgid "The file cannot be loaded."
 msgstr "無法載入檔案。"
 
+#~ msgid "Encoding"
+#~ msgstr "編碼"
+
 #~ msgctxt "Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"
 #~ msgstr "建議（%1）"
@@ -918,9 +945,6 @@ msgstr "無法載入檔案。"
 
 #~ msgid "Cannot find encoding: %1"
 #~ msgstr "找不到編碼：%1"
-
-#~ msgid "E&ncoding:"
-#~ msgstr "編碼(&N)："
 
 #~ msgid "Recommended: UTF-8"
 #~ msgstr "建議使用：UTF-8"
@@ -939,14 +963,8 @@ msgstr "無法載入檔案。"
 #~ msgid "Failed to read data."
 #~ msgstr "讀取資料失敗。"
 
-#~ msgid "Export Error"
-#~ msgstr "匯出錯誤"
-
 #~ msgid "Malformed XML data."
 #~ msgstr "不正確的 XML 資料。"
-
-#~ msgid "Export to Image"
-#~ msgstr "匯入影像"
 
 #~ msgid "Complete Page"
 #~ msgstr "完成頁面"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2005-09-29 17:00-0800\n"
 "Last-Translator: MIMOS Open Source <opensource@mimos.my>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -143,37 +143,37 @@ msgstr ""
 msgid "Graphics Pen"
 msgstr "Kecerunan"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:332
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
 msgid "Fill"
 msgstr "Isi"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:360
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase width"
 msgstr "Alat Elips"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:365
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease width"
 msgstr "Alat Elips"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:370
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: increase angle"
 msgstr "Alat Elips"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:375
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Calligraphy: decrease angle"
 msgstr "Alat Elips"
 
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
-#: CalligraphyTool/KarbonCalligraphyTool.cpp:383
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
@@ -430,13 +430,13 @@ msgstr "Jajarkan Bawah"
 msgid "Bottom Right"
 msgstr "Jajarkan Kanan"
 
-#: KarbonPatternTool.cpp:272
+#: KarbonPatternTool.cpp:270
 #, fuzzy, kde-format
 #| msgid "Pattern Tool"
 msgid "Pattern Options"
 msgstr "Alat Corak"
 
-#: KarbonPatternTool.cpp:274
+#: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
 msgstr "Corak"

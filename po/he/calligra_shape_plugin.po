@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2024-05-12 00:01+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -19,12 +19,12 @@ msgstr ""
 "n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: PluginShape.cpp:35
+#: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: PluginShape.cpp:39
+#: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "תוסף לסוג תוכן: %1"

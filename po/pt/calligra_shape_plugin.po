@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PluginShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2016-11-20 12:37+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -12,12 +12,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: PluginShape.cpp:35
+#: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: PluginShape.cpp:39
+#: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
 msgstr "'Plugin' com tipo MIME: %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
 "PO-Revision-Date: 2011-10-11 18:46+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -116,30 +116,30 @@ msgstr ""
 msgid "Escape in down direction"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:429
+#: connectionTool/ConnectionTool.cpp:427
 #, fuzzy
 #| msgid "Connection"
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
 msgstr "Verbinnen"
 
-#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
+#: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
 msgstr "Treck, wenn Du en Verbinnen bewerken wullt."
 
-#: connectionTool/ConnectionTool.cpp:772 connectionTool/ConnectionTool.cpp:784
+#: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, fuzzy, kde-format
 #| msgid "Double click to add connection point."
 msgid "Double click connection or press delete to remove it."
 msgstr "Dubbelklick, wenn Du en Verbinnenpunkt tofögen wullt."
 
-#: connectionTool/ConnectionTool.cpp:774
+#: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
 msgstr "Klick, wenn Du en Verbinnenpünkt bewerken wullt."
 
-#: connectionTool/ConnectionTool.cpp:788
+#: connectionTool/ConnectionTool.cpp:786
 #, fuzzy, kde-format
 #| msgid "Double click to add connection point."
 msgid ""
@@ -147,33 +147,33 @@ msgid ""
 "remove it."
 msgstr "Dubbelklick, wenn Du en Verbinnenpunkt tofögen wullt."
 
-#: connectionTool/ConnectionTool.cpp:790
+#: connectionTool/ConnectionTool.cpp:788
 #, fuzzy, kde-format
 #| msgid "Double click to add connection point."
 msgid "Double click connection point or press delete to remove it."
 msgstr "Dubbelklick, wenn Du en Verbinnenpunkt tofögen wullt."
 
-#: connectionTool/ConnectionTool.cpp:792
+#: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
 msgstr "Dubbelklick, wenn Du en Verbinnenpunkt tofögen wullt."
 
-#: connectionTool/ConnectionTool.cpp:795
+#: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
 msgstr "Treck, wenn Du en nieg Verbinnen opstellen wullt."
 
-#: connectionTool/ConnectionTool.cpp:823
+#: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
 msgstr "Verbinnen"
 
-#: connectionTool/ConnectionTool.cpp:828 defaulttool/DefaultTool.cpp:1175
+#: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
 msgstr ""
 
-#: connectionTool/ConnectionTool.cpp:833
+#: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
 msgstr "Verbinnenpunkt"
@@ -425,24 +425,24 @@ msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Scheren"
 
-#: guidestool/GuidesTool.cpp:133
+#: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
 msgstr "Dubbelklick, wenn Du en Hülplien tofögen wullt."
 
-#: guidestool/GuidesTool.cpp:136
+#: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
 "Klick un treck, wenn Du de Hülplien verschuven wullt. Dubbelklick, wenn Du "
 "ehr wegmaken wullt."
 
-#: guidestool/GuidesTool.cpp:373
+#: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
 msgstr "Hülplienen bewerken"
 
-#: guidestool/GuidesTool.cpp:379
+#: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
 msgstr "Hülplienen infögen"
