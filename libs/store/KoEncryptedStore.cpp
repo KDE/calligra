@@ -7,40 +7,36 @@
 #include "KoEncryptedStore.h"
 #include "KoStore_p.h"
 #include "KoXmlReader.h"
-#include <KoNetAccess.h>
 #include <KoXmlNS.h>
-#include <StoreDebug.h>
 
 #include <KCompressionDevice>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KNewPasswordDialog>
 #include <KPasswordDialog>
-#include <KZip>
-
+#include <KoNetAccess.h>
 #include <QBuffer>
 #include <QByteArray>
-#include <QCryptographicHash>
 #include <QIODevice>
 #include <QString>
 #include <QTemporaryFile>
 #include <QWidget>
-
+#include <StoreDebug.h>
+#include <knewpassworddialog.h>
+#include <kzip.h>
 #include <qt6keychain/keychain.h>
 
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
-static QByteArray randomArray(int size)
+QByteArray randomArray(int size)
 {
     QByteArray buf(size, ' ');
     int r;
     // FIXME: loop while we don't have enough random bytes.
     while (true) {
         r = RAND_bytes((unsigned char *)(buf.data()), size);
-        if (r == 1) {
+        if (r == 1)
             break; // success
-        }
     }
     return buf;
 }
@@ -73,56 +69,6 @@ namespace
 const char MANIFEST_FILE[] = "META-INF/manifest.xml";
 const char META_FILE[] = "meta.xml";
 const char THUMBNAIL_FILE[] = "Thumbnails/thumbnail.png";
-}
-
-static QByteArray decryptFile(QByteArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QByteArray &password)
-{
-    QByteArray keyhash = QCryptographicHash::hash(password, QCryptographicHash::Sha1);
-
-    constexpr auto keyLength = 16;
-
-    // create symmetric key
-    QByteArray symmetricKey(keyLength, ' ');
-    PKCS5_PBKDF2_HMAC_SHA1((char *)keyhash.data(),
-                           keyhash.size(),
-                           (unsigned char *)encData.salt.data(),
-                           encData.salt.size(),
-                           keyLength,
-                           encData.iterationCount,
-                           (unsigned char *)symmetricKey.data());
-
-    // setup decrypt context with blowfish cfb cipher
-    auto context = EVP_CIPHER_CTX_new();
-    int resultLength;
-    auto cryptoAlgorithm = EVP_bf_cfb();
-    EVP_CIPHER_CTX_init(context);
-
-    EVP_DecryptInit_ex(context, cryptoAlgorithm, nullptr, nullptr, nullptr);
-    EVP_CIPHER_CTX_set_key_length(context, symmetricKey.size());
-    EVP_DecryptInit_ex(context, nullptr, nullptr, (const unsigned char *)(symmetricKey.data()), (const unsigned char *)(encData.initVector.data()));
-
-    EVP_CIPHER_CTX_set_padding(context, 0);
-
-    // actually decrypt with blowfish cfb cipher
-    QByteArray result(encryptedFile.size() + EVP_CIPHER_CTX_block_size(context), ' ');
-    int ok = EVP_DecryptUpdate(context, (unsigned char *)result.data(), &resultLength, (unsigned char *)encryptedFile.data(), encryptedFile.size());
-    if (!ok) {
-        return {};
-    }
-    result.resize(resultLength);
-
-    // Finalized
-    QByteArray final;
-    int finalLength;
-    final.resize(EVP_CIPHER_CTX_block_size(context));
-    EVP_DecryptFinal_ex(context, (unsigned char *) final.data(), &finalLength);
-
-    result += final;
-
-    EVP_CIPHER_CTX_cleanup(context);
-    EVP_CIPHER_CTX_free(context);
-
-    return result;
 }
 
 KoEncryptedStore::KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
@@ -505,10 +451,10 @@ bool KoEncryptedStore::doFinalize()
             }
         }
     }
-    if (m_pZip) {
+    if (m_pZip)
         return m_pZip->close();
-    }
-    return true;
+    else
+        return true;
 }
 
 KoEncryptedStore::~KoEncryptedStore()
@@ -553,8 +499,7 @@ QStringList KoEncryptedStore::directoryList() const
     return retval;
 }
 
-/** returns true if the file should be encrypted, false otherwise **/
-static bool isToBeEncrypted(const QString &name)
+bool KoEncryptedStore::isToBeEncrypted(const QString &name)
 {
     return !(name == META_FILE || name == MANIFEST_FILE || name == THUMBNAIL_FILE);
 }
@@ -562,9 +507,8 @@ static bool isToBeEncrypted(const QString &name)
 bool KoEncryptedStore::openRead(const QString &name)
 {
     Q_D(KoStore);
-    if (bad()) {
+    if (bad())
         return false;
-    }
 
     const KArchiveEntry *fileArchiveEntry = m_pZip->directory()->entry(name);
     if (!fileArchiveEntry) {
@@ -574,7 +518,7 @@ bool KoEncryptedStore::openRead(const QString &name)
         warnStore << name << " is a directory!";
         return false;
     }
-    const auto fileZipEntry = static_cast<const KZipFileEntry *>(fileArchiveEntry);
+    const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(fileArchiveEntry);
 
     delete d->stream;
     d->stream = fileZipEntry->createDevice();
@@ -619,9 +563,8 @@ bool KoEncryptedStore::openRead(const QString &name)
                 password = m_password;
                 m_password = {};
             } else {
-                if (!m_filename.isNull()) {
+                if (!m_filename.isNull())
                     keepPass = false;
-                }
                 KPasswordDialog dlg(d->window, keepPass ? KPasswordDialog::ShowKeepPassword : KPasswordDialog::KPasswordDialogFlags());
                 dlg.setPrompt(i18n("Please enter the password to open this file."));
                 if (!dlg.exec()) {
@@ -632,9 +575,8 @@ bool KoEncryptedStore::openRead(const QString &name)
                     return true;
                 }
                 password = dlg.password().toUtf8();
-                if (keepPass) {
+                if (keepPass)
                     keepPass = dlg.keepPassword();
-                }
                 if (password.isEmpty()) {
                     continue;
                 }
@@ -669,9 +611,9 @@ bool KoEncryptedStore::openRead(const QString &name)
             break;
         }
 
-        auto resultArray = new QByteArray(decrypted);
+        QByteArray *resultArray = new QByteArray(decrypted);
         KCompressionDevice::CompressionType type = KCompressionDevice::compressionTypeForMimeType("application/x-gzip");
-        auto resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
+        KCompressionDevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
 
         if (!resultDevice) {
             delete resultArray;
@@ -697,6 +639,8 @@ bool KoEncryptedStore::closeRead()
 
 void KoEncryptedStore::findPasswordInKWallet()
 {
+    Q_D(KoStore);
+
     if (!m_filename.isNull()) {
         auto readJob = new ReadPasswordJob(QLatin1String("Calligra"));
         readJob->setKey(m_filename);
@@ -720,6 +664,56 @@ void KoEncryptedStore::savePasswordInKWallet()
     writeJob->start();
 }
 
+QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QByteArray &password)
+{
+    QByteArray keyhash = QCryptographicHash::hash(password, QCryptographicHash::Sha1);
+
+    constexpr auto keyLength = 16;
+
+    // create symmetric key
+    QByteArray symmetricKey(keyLength, ' ');
+    PKCS5_PBKDF2_HMAC_SHA1((char *)keyhash.data(),
+                           keyhash.size(),
+                           (unsigned char *)encData.salt.data(),
+                           encData.salt.size(),
+                           keyLength,
+                           encData.iterationCount,
+                           (unsigned char *)symmetricKey.data());
+
+    // setup decrypt context with blowfish cfb cipher
+    auto context = EVP_CIPHER_CTX_new();
+    int resultLength;
+    auto cryptoAlgorithm = EVP_bf_cfb();
+    EVP_CIPHER_CTX_init(context);
+
+    EVP_DecryptInit_ex(context, cryptoAlgorithm, nullptr, nullptr, nullptr);
+    EVP_CIPHER_CTX_set_key_length(context, symmetricKey.size());
+    EVP_DecryptInit_ex(context, nullptr, nullptr, (const unsigned char *)(symmetricKey.data()), (const unsigned char *)(encData.initVector.data()));
+
+    EVP_CIPHER_CTX_set_padding(context, 0);
+
+    // actually decrypt with blowfish cfb cipher
+    QByteArray result(encryptedFile.size() + EVP_CIPHER_CTX_block_size(context), ' ');
+    int ok = EVP_DecryptUpdate(context, (unsigned char *)result.data(), &resultLength, (unsigned char *)encryptedFile.data(), encryptedFile.size());
+    if (!ok) {
+        return {};
+    }
+    result.resize(resultLength);
+
+    // Finalized
+    QByteArray final;
+    int finalLength;
+    final.resize(EVP_CIPHER_CTX_block_size(context));
+    EVP_DecryptFinal_ex(context, (unsigned char *) final.data(), &finalLength);
+
+    result += final;
+
+    EVP_CIPHER_CTX_cleanup(context);
+    EVP_CIPHER_CTX_free(context);
+
+    return result;
+}
+
 bool KoEncryptedStore::setPassword(const QString &password)
 {
     if (m_bPasswordUsed || password.isEmpty()) {
@@ -740,9 +734,8 @@ QString KoEncryptedStore::password()
 bool KoEncryptedStore::openWrite(const QString &name)
 {
     Q_D(KoStore);
-    if (bad()) {
+    if (bad())
         return false;
-    }
     if (isToBeEncrypted(name)) {
         // Encrypted files will be compressed by this class and should be stored in the zip as not compressed
         m_pZip->setCompression(KZip::NoCompression);
@@ -751,9 +744,8 @@ bool KoEncryptedStore::openWrite(const QString &name)
     }
     d->stream = new QBuffer();
     (static_cast<QBuffer *>(d->stream))->open(QIODevice::WriteOnly);
-    if (name == MANIFEST_FILE) {
+    if (name == MANIFEST_FILE)
         return true;
-    }
     return m_pZip->prepareWriting(name, "", "", 0);
 }
 
@@ -854,14 +846,12 @@ bool KoEncryptedStore::closeWrite()
             return false;
 
         ok = EVP_EncryptInit_ex(context, nullptr, nullptr, (const unsigned char *)(symmetricKey.data()), (const unsigned char *)(encData.initVector.data()));
-        if (!ok) {
+        if (!ok)
             return false;
-        }
 
         ok = EVP_CIPHER_CTX_set_padding(context, 0);
-        if (!ok) {
+        if (!ok)
             return false;
-        }
 
         // Encrypt the data
         int resultLength;
@@ -871,18 +861,16 @@ bool KoEncryptedStore::closeWrite()
                                &resultLength,
                                (unsigned char *)compressedData.buffer().data(),
                                compressedData.buffer().size());
-        if (!ok) {
+        if (!ok)
             return false;
-        }
 
         // Finalize
         QByteArray final;
         int finalLength;
         final.resize(EVP_CIPHER_CTX_block_size(context));
         ok = EVP_EncryptFinal_ex(context, (unsigned char *) final.data(), &finalLength);
-        if (!ok) {
+        if (!ok)
             return false;
-        }
         final.resize(finalLength);
 
         result += final;
@@ -915,8 +903,9 @@ bool KoEncryptedStore::enterRelativeDirectory(const QString &dirName)
             return m_currentDir != nullptr;
         }
         return false;
+    } else { // Write, no checking here
+        return true;
     }
-    return true;
 }
 
 bool KoEncryptedStore::enterAbsoluteDirectory(const QString &path)

@@ -14,6 +14,7 @@
 
 #include <QDomDocument>
 #include <QPair>
+#include <QtXml>
 
 class QIODevice;
 
@@ -425,8 +426,8 @@ setDocument(KoXmlDocument &doc, QIODevice *device, bool namespaceProcessing, QSt
  * \endcode
  */
 #define forEachElement(elem, parent)                                                                                                                           \
-    for (KoXmlNode _node = (parent).firstChild(); !_node.isNull(); _node = _node.nextSibling())                                                                \
-        if (((elem) = _node.toElement()).isNull()) {                                                                                                           \
+    for (KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling())                                                                  \
+        if ((elem = _node.toElement()).isNull()) {                                                                                                             \
         } else
 
 #endif // KO_XMLREADER_H
