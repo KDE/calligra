@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>org.kde.karbon.desktop</id>
+  <id>org.kde.calligra.karbon</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0+</project_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <launchable type="desktop-id">org.kde.calligra.karbon.desktop</launchable>
+  <developer id="kde.org">
+    <name>The KDE Community</name>
+    <url>https://kde.org</url>
+  </developer>
   <name>Karbon</name>
   <name xml:lang="bs">Karbon</name>
   <name xml:lang="ca">Karbon</name>
@@ -520,11 +525,20 @@
       <li xml:lang="zh-CN">可通过自行编写插件制作新工具、形状和面板</li>
     </ul>
   </description>
-  <url type="homepage">https://www.calligra.org/karbon/</url>
+  <url type="homepage">https://calligra.org/karbon/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=karbon</url>
+  <content_rating type="oars-1.1" />
+  <branding>
+    <color type="primary" scheme_preference="light">#25c5ad</color>
+    <color type="primary" scheme_preference="dark">#1d5d54</color>
+  </branding>
+  <custom>
+    <value key="KDE::matrix">#calligra:kde.org</value>
+  </custom>
   <screenshots>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/karbon/karbon.png</image>
+      <caption>Main window of Karbon</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>

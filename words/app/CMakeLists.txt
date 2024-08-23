@@ -28,5 +28,5 @@ install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS org.kde.calligrawords.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES org.kde.calligrawords.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install( PROGRAMS org.kde.calligra.words.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install( FILES org.kde.calligra.words.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

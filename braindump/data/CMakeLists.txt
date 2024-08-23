@@ -9,5 +9,5 @@ add_subdirectory(icons)
 install( FILES braindumpui.rc braindumpview.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/braindump)
 
 ### desktop files ###
-install( PROGRAMS org.kde.braindump.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES org.kde.braindump.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install( PROGRAMS org.kde.calligra.braindump.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install( FILES org.kde.calligra.braindump.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>org.kde.braindump.desktop</id>
+  <id>org.kde.calligra.braindump</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0+</project_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <launchable type="desktop-id">org.kde.calligra.braindump.desktop</launchable>
+  <developer id="kde.org">
+    <name>The KDE Community</name>
+    <url>https://kde.org</url>
+  </developer>
   <name>Braindump</name>
   <name xml:lang="bs">Braindump</name>
   <name xml:lang="ca">Braindump</name>
@@ -108,13 +113,22 @@
     <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
     <p xml:lang="zh-CN">Braindump 是一款用于快速记录和组织思路和信息的工具。您可以创建和编辑白板，在无限大小的画布中随意添加文字、图像、图表、绘图等。</p>
   </description>
-  <url type="homepage">http://www.calligra.org/braindump/</url>
+  <url type="homepage">https://calligra.org/braindump/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=braindump</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://www.calligra.org/wp-content/uploads/2011/03/projection-900x548.png</image>
+      <image>https://cdn.kde.org/screenshots/calligra/braindump.png</image>
+      <caption>Main window of Braindump showing a music partition and many other shapes</caption>
     </screenshot>
   </screenshots>
+  <content_rating type="oars-1.1" />
+  <branding>
+    <color type="primary" scheme_preference="light">#ffd28f</color>
+    <color type="primary" scheme_preference="dark">#643a00</color>
+  </branding>
+  <custom>
+    <value key="KDE::matrix">#calligra:kde.org</value>
+  </custom>
   <project_group>KDE</project_group>
   <provides>
     <binary>braindump</binary>

@@ -25,5 +25,5 @@ target_link_libraries(calligrastage komain)
 
 install(TARGETS calligrastage ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS org.kde.calligrastage.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES org.kde.calligrastage.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install( PROGRAMS org.kde.calligra.stage.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install( FILES org.kde.calligra.stage.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

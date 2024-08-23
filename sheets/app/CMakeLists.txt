@@ -26,7 +26,7 @@ target_include_directories(calligrasheets
 
 install(TARGETS calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install( PROGRAMS  org.kde.calligra.sheets.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install( FILES org.kde.calligra.sheets.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 

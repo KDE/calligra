@@ -86,8 +86,8 @@ target_link_libraries(calligragemini
 )
 
 install(TARGETS   calligragemini calligrageminithumbnailhelper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  org.kde.calligragemini.desktop               DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES org.kde.calligragemini.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(PROGRAMS  org.kde.calligra.gemini.desktop               DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.calligra.gemini.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 #install(FILES     calligrageminirc calligrageminipanelsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
 install(FILES     calligragemini.qml                   DESTINATION ${KDE_INSTALL_DATADIR}/calligragemini)
 #install(FILES     calligragemini.rc                    DESTINATION ${KDE_INSTALL_DATADIR}/calligragemini)
