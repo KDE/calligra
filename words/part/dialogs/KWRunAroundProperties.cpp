@@ -21,6 +21,10 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     : m_state(state)
 {
     widget.setupUi(this);
+    widget.mainLayout->insertStretch(0);
+    widget.mainLayout->insertStretch(2);
+    widget.spacer->changeSize(0, 16, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    widget.spacer1->changeSize(0, 16, QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_runAroundSide = new QButtonGroup();
     m_runAroundSide->addButton(widget.left);
