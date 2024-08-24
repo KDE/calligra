@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -62,7 +62,7 @@ msgstr "高斯模糊"
 msgid "Radius"
 msgstr "半径"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "色彩矩阵"
@@ -102,7 +102,7 @@ msgstr "角度"
 msgid "Color matrix"
 msgstr "颜色矩阵"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "组件变换"

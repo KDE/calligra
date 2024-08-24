@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 21:45+0200\n"
 "Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -75,8 +75,7 @@ msgid "Remove formula elements"
 msgstr "Forigi formulelementojn"
 
 #: FormulaToolEditWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:group"
 msgid "Edit"
 msgstr "Redakti"
@@ -88,8 +87,7 @@ msgid "Font:"
 msgstr "Tiparo:"
 
 #: FormulaToolWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgctxt "@title:group"
 msgid "Insert"
 msgstr "Enmeti"
@@ -121,24 +119,21 @@ msgstr "Diversaj"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Elements"
+#, kde-format
 msgid "Elements:"
-msgstr "Elementoj"
+msgstr "Elementoj:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
-#, fuzzy, kde-format
-#| msgid "Symbols"
+#, kde-format
 msgid "Symbols:"
-msgstr "Simboloj"
+msgstr "Simboloj:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Actions:"
-msgstr "Agoj"
+msgstr "Agoj:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -187,92 +182,92 @@ msgstr "Formulo"
 msgid "A formula"
 msgstr "Formulo"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Enmeti baritan elementon"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Enmeti enfermitan elementon"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
 msgstr "Enmeti radikon"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
 msgstr "Enmeti kvadratan radikon"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
 msgstr "Enmeti frakcion"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Enmeti bevelitan frakcion"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Enmeti 3x3 tabelon"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Enmeti 2-dimensian vektoron"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
 msgstr "Enigi malaltan skibon"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr "Enigi altan skribon"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Enigi malalt- kaj alt-skribon"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr "Enigi supran skribon"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr "Enigi suban skribon"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Enmeti suban kaj supran skribon"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
 msgstr "Enmeti vicon"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
 msgstr "Enmeti kolumnon"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr "Forigi vicon"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
 msgstr "Forigi kolumnon"
@@ -311,21 +306,3 @@ msgstr "Redakti formulon kun LaTeX/Matlab sintakso"
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Redakti formulon kun LaTeX-sintakso"
-
-#~ msgid "General options"
-#~ msgstr "Ĝeneralaj opcioj"
-
-#~ msgid "Colors:"
-#~ msgstr "Koloroj:"
-
-#~ msgid "Specific options"
-#~ msgstr "Specifaj opcioj"
-
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#~ msgid "Columns:"
-#~ msgstr "Kolumnoj:"
-
-#~ msgid "View MathML"
-#~ msgstr "Rigardi MathML"

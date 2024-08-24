@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2022-04-16 21:34+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -306,17 +306,17 @@ msgstr "프레젠테이션이 끝났습니다. 종료하려면 클릭하십시�
 msgid "Layout"
 msgstr "레이아웃"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr "필요한 텍스트 구성 요소를 찾을 수 없어서 Calligra Stage를 종료합니다."
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr "필요한 그림 구성 요소를 찾을 수 없어서 Calligra Stage를 종료합니다."
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "설치 오류"
@@ -846,37 +846,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "모든 슬라이드에 슬라이드 효과 적용"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr "들어오기"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "나가기"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "강조"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr "모션 경로"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr "올레 액션"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr "미디어 콜"

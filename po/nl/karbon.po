@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 18:23+0200\n"
+"PO-Revision-Date: 2024-08-23 12:08+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
-msgstr "Boleaanse operatie"
+msgstr "Booleaanse operatie"
 
 #. i18n: ectx: Menu (object_order)
 #: data/karbon.rc:16 data/karbon.rc:77
@@ -326,12 +326,12 @@ msgstr "Onderhouder"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Overzetten naar Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

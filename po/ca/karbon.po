@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 10:28+0200\n"
+"PO-Revision-Date: 2024-08-23 11:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -325,12 +325,12 @@ msgstr "Mantenidor"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Adaptació a les Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

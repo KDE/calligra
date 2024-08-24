@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-02-09 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -68,7 +68,7 @@ msgstr "Gauss bulanıklaştırması"
 msgid "Radius"
 msgstr "Yarıçap"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Renk Matrisi"
@@ -108,7 +108,7 @@ msgstr "Açı"
 msgid "Color matrix"
 msgstr "Renk matrisi"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Bileşen aktarımı"

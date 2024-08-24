@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2004-11-29 01:52-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team:  <ta@li.org>\n"
@@ -351,17 +351,17 @@ msgstr "முன்வைப்பின் முடிவு,வெளிய�
 msgid "Layout"
 msgstr "பக்க அமைப்பு"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr ""
@@ -959,38 +959,38 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "பாணிகளை சட்டங்களில் பயன்படுத்து"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, fuzzy, kde-format
 msgid "Custom"
 msgstr "தனிப்பயன் படவில்லை"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, fuzzy, kde-format
 #| msgid "Elevation:"
 msgid "Ole Action"
 msgstr "முன்புறத்தோற்றம்"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr ""

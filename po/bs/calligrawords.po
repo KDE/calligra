@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2014-10-20 19:38+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -1435,12 +1435,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standardno"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "Ne mogu naći tekstualnu komponentu, Words će sada izaći"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Greška u instalaciji"

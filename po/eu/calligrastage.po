@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2023-08-29 15:50+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -314,19 +314,19 @@ msgstr "Aurkezpenaren amaiera. Egin klik irteteko."
 msgid "Layout"
 msgstr "Antolamendua"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
 "Ezin da aurkitu behar den testu-osagaia. Calligra Stage itxi egingo da orain."
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
 "Ezin da aurkitu behar den irudi-osagaia. Calligra Stage itxi egingo da orain."
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "Instalazioko errorea"
@@ -856,37 +856,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Aplikatu trantsizio efektua diapositiba guztiei"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr "Sarrera"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "Irteera"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "Enfasia"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "Pertsonalizatua"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr "Ibilbidea"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr "OLE ekintza"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr "Multimedia-deia"

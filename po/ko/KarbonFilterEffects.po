@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2022-04-16 21:36+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -63,7 +63,7 @@ msgstr "가우시안 블러"
 msgid "Radius"
 msgstr "반지름"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "색상 배열"
@@ -103,7 +103,7 @@ msgstr "각도"
 msgid "Color matrix"
 msgstr "색상 배열"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "구성 요소 전송"

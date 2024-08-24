@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2014-04-04 09:00+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -186,92 +186,92 @@ msgstr "Formel"
 msgid "A formula"
 msgstr "Eine Formel"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Eingeklammertes Element einfügen"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Eingeschlossenes Element einfügen"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
 msgstr "Wurzel einfügen"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
 msgstr "Quadratwurzel einfügen"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
 msgstr "Bruch einfügen"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Schrägen Bruch einfügen"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "3×3-Tabelle einfügen"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "2-dimensionalen Vektor einfügen"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
 msgstr "Index einfügen"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr "Exponent einfügen"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Index und Exponent einfügen"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr "Hochgestelltes Element einfügen"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr "Tiefgestelltes Element einfügen"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Hoch- und tiefgestellte Elemente einfügen"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
 msgstr "Zeile einfügen"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
 msgstr "Spalte einfügen"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr "Zeile entfernen"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
 msgstr "Spalte entfernen"

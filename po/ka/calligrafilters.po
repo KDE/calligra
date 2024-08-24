@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-01 09:19+0200\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 06:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -104,7 +104,7 @@ msgstr "გაუმჭირვალობა"
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -202,7 +202,7 @@ msgstr "ვერ ვიპოვე ურთიერთობების ფ
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "ვერ ვიპოვე სამიზნე ურთიერთობისთვის \"%1\" ფაილში \"%2\""
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
@@ -211,24 +211,24 @@ msgstr ""
 "დამუშავების შეცდომა მთავარ დოკუმენტში ხაზზე %1, სვეტი %2.\n"
 "შეცდომის შეტყობინება: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr "ჩანაწერი ვერ ვიპოვე: %1."
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr "ჩანაწერი \"%1\" ფაილი არაა."
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr "ვერ გავხსენი ელემენტი \"%1\" ჩასაწერად."
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
 msgstr "ბლოკის ჩაწერის შეცდომა"
@@ -239,18 +239,17 @@ msgid "<SHEETNAME>"
 msgstr "<ფურცლისსახელი>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export Sheet to HTML"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "ფურცლის გატანა HTML-ში"
+msgstr "გატანა CVS-ში"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr ""
+msgstr "გატანა"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -265,10 +264,9 @@ msgstr "ხაზის დასასრული"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "ხაზის დასასრული"
+msgstr "ხაზის დასასრული:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -332,10 +330,9 @@ msgstr "უჯრედები"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "გამყოფი"
+msgstr "გამყოფი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -549,10 +546,9 @@ msgstr "დოკუმენტი"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Document-ის სტილი"
+msgstr "Document-ის სტილი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -568,10 +564,9 @@ msgstr "Words-ის სტილი"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "დოკუმენტს ტიპი"
+msgstr "დოკუმენტს ტიპი:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -679,10 +674,9 @@ msgstr "ენა"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "&კოდირება:"
+msgstr "კოდირება:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -871,7 +865,7 @@ msgstr "&წინადადება: თუ ხაზის ბოლო წ
 msgid "&Empty Line: If the line is empty"
 msgstr "&ცარიელი ხაზი: თუ ხაზი ცარიელია"
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
 msgstr "ბოლო შენიშვნები"

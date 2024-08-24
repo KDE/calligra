@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2023-11-26 01:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -189,92 +189,92 @@ msgstr "Formül"
 msgid "A formula"
 msgstr "Bir formül"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Etrafı korumalı öge ekle"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Kapatılmış öge ekle"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
 msgstr "Kök ekle"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
 msgstr "Kare kök ekle"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
 msgstr "Kesir ekle"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Eğimli kesir ekle"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "3 × 3 tablo ekle"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "2 boyutlu vektörel çizim ekle"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
 msgstr "Alt simge ekle"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr "Üst simge ekle"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Alt ve üst simge ekle"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr "Üst yazı ekle"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr "Alt yazı ekle"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Alt ve üst yazı ekle"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
 msgstr "Satır ekle"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
 msgstr "Sütun ekle"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr "Satırı sil"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
 msgstr "Sütunu sil"

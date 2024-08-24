@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-14 11:08+0200\n"
+"PO-Revision-Date: 2024-08-23 12:06+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -12896,14 +12896,13 @@ msgstr "Copyright 1998-%1, het team van Calligra Sheets"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 # msgid "Martinique"
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Onderhouder"
+msgstr "Onderhouder/overzetten naar Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12917,10 +12916,9 @@ msgstr "Torben Weis"
 
 # msgid "Martinique"
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Onderhouder"
+msgstr "Voormalige onderhouder"
 
 #: part/AboutData.h:42
 #, kde-format

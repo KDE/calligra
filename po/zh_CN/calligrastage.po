@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -306,17 +306,17 @@ msgstr "放映结束。点击退出。"
 msgid "Layout"
 msgstr "布局"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "安装错误"
@@ -846,37 +846,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "退出"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "强调"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "定制"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr ""
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr ""

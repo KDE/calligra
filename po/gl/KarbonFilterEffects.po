@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-02-25 11:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -70,7 +70,7 @@ msgstr "Desenfoque de Gauss"
 msgid "Radius"
 msgstr "Radio"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Matriz de cores"
@@ -110,7 +110,7 @@ msgstr "Ángulo"
 msgid "Color matrix"
 msgstr "Matriz de cores"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Transferencia de compoñentes"

@@ -7,7 +7,7 @@
 # Maarten Rütten <mrutten@dds.nl>, 2005.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2005, 2006.
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
-# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2006, 2008, 2009.
+# SPDX-FileCopyrightText: 2006, 2008, 2009, 2024 Freek de Kruijf <f.de.kruijf@hetnet.nl>
 # Sander Koning <sanderkoning@kde.nl>, 2006.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2013, 2016, 2017, 2019.
@@ -15,15 +15,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2019-11-13 12:24+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 12:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.08.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: karbon/image/ImageExport.cpp:88
@@ -111,7 +111,7 @@ msgstr "Dekking"
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -211,7 +211,7 @@ msgstr "Kon bestand met relaties \"%1\" niet vinden"
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "Kon doel voor relatie \"%1\" niet vinden in bestand \"%2\""
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
@@ -220,24 +220,24 @@ msgstr ""
 "Fout tijdens het ontleden van het hoofddocument bij regel %1, kolom %2.\n"
 "Foutmelding: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr "Item '%1' niet gevonden."
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr "Item '%1' is geen bestand."
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr "Kon item \"%1\" niet openen voor schrijven."
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
 msgstr "Kon blok niet schrijven"
@@ -248,19 +248,17 @@ msgid "<SHEETNAME>"
 msgstr "<BLADNAAM>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Naar afbeelding exporteren"
+msgstr "Naar CVS exporteren"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "EPS Export"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "EPS-export"
+msgstr "Exporteren"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -275,10 +273,9 @@ msgstr "Einde van regel"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Einde van regel"
+msgstr "Einde van regel:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -342,10 +339,9 @@ msgstr "Cellen"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Begrenzer"
+msgstr "Scheidingsteken:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -560,10 +556,9 @@ msgstr "Document"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Documentstijl"
+msgstr "Documentstijl:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -579,10 +574,9 @@ msgstr "Words-stijl"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "Documenttype"
+msgstr "Documenttype:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -691,10 +685,9 @@ msgstr "Taal"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "Coderi&ng:"
+msgstr "Codering:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -885,7 +878,7 @@ msgstr "&Zin: als het einde van de regel het einde van een zin is"
 msgid "&Empty Line: If the line is empty"
 msgstr "L&ege regel: als de regel leeg is"
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
 msgstr "Eindnotities"

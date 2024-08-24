@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-04-29 10:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -189,92 +189,92 @@ msgstr "Fórmula"
 msgid "A formula"
 msgstr "Una fórmula"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Inserix un element delimitat"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Inserix un element inclòs"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
 msgstr "Inserix una arrel"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
 msgstr "Inserix una arrel quadrada"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
 msgstr "Inserix una fracció"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Inserix una fracció inclinada"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Inserix una taula 3x3"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Inserix un vector bidimensional"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
 msgstr "Inserix un subíndex"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr "Inserix un superíndex"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Inserix subíndex i superíndex"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr "Inserix un sobreíndex"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr "Inserix un sotaíndex"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Inserix sotaíndex i sobreíndex"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
 msgstr "Inserix una fila"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
 msgstr "Inserix una columna"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr "Elimina la fila"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
 msgstr "Elimina la columna"

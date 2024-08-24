@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2020-02-06 15:10+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -315,17 +315,17 @@ msgstr "Esitluse lõpp. Klõpsa väljumiseks."
 msgid "Layout"
 msgstr "Paigutus"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr "Vajalikku tekstikomponenti ei leitud. Calligra Stage lõpetab nüüd töö."
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr "Vajalikku pildikomponenti ei leitud. Calligra Stage lõpetab nüüd töö."
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "Paigaldusviga"
@@ -855,37 +855,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Rakenda slaidiefekte kõigile slaididele"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr "Sisenemine"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "Väljumine"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "Rõhutus"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "Kohandatud"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr "Liikumise teekond"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr "Ole toiming"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr "Meedia väljakutse"

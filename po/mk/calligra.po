@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -438,7 +438,7 @@ msgstr "Создади шаблон"
 msgid "Active tool: %1"
 msgstr "Одбери..."
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
@@ -1498,7 +1498,7 @@ msgstr "Наслов :"
 msgid "Open Document"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, fuzzy, kde-format
 msgid "Import Document"
 msgstr "&Отвори документ"
@@ -1791,24 +1791,24 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Избери..."
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "&Додади група..."
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Одбери..."
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Одбери..."
@@ -2442,108 +2442,108 @@ msgstr[0] "Колони"
 msgstr[1] "Колони"
 msgstr[2] "Колони"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Одбери..."
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, fuzzy, kde-format
 msgid "Snap to Grid"
 msgstr "Насловна линија:"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, fuzzy, kde-format
 msgid "Show Rulers"
 msgstr "Покажи %1 алатник"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "Колони"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, fuzzy, kde-format
 msgid "Copy Page"
 msgstr "Фирма :"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, fuzzy, kde-format
 msgid "Master Page..."
 msgstr "Колони"
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "Распоред на страна..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, fuzzy, kde-format
 msgid "Variable"
 msgstr "&Додади група..."
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, fuzzy, kde-format
 msgid "Import Document..."
 msgstr "&Отвори документ"
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr ""
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "Наслов :"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2555,7 +2555,7 @@ msgstr ""
 "Не може да се отвори\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -3980,102 +3980,102 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr ""
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "Создади шаблон"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Автор"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "&Додади група..."
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Отстрани група"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "Вертикално"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "По Избор"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Формат на страна"
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "Колони"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "&Додади група..."
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
@@ -5185,13 +5185,13 @@ msgstr ""
 msgid "Distance:"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
 #| msgid "No picture available."
 msgctxt "@info"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonFilterEffects\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 12:34+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -59,7 +59,7 @@ msgstr "Borrão gaussiano"
 msgid "Radius"
 msgstr "Raio"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Matriz de Cores"
@@ -99,7 +99,7 @@ msgstr "Ângulo"
 msgid "Color matrix"
 msgstr "Matriz de cores"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Transferência de componentes"

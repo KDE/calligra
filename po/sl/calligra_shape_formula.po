@@ -7,18 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-02 05:52+0200\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 06:23+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
+"Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -76,8 +76,7 @@ msgid "Remove formula elements"
 msgstr "Odstrani elemente formule"
 
 #: FormulaToolEditWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:group"
 msgid "Edit"
 msgstr "Uredi"
@@ -89,8 +88,7 @@ msgid "Font:"
 msgstr "Pisava:"
 
 #: FormulaToolWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgctxt "@title:group"
 msgid "Insert"
 msgstr "Vstavi"
@@ -122,24 +120,21 @@ msgstr "Razno"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Elements"
+#, kde-format
 msgid "Elements:"
-msgstr "Predmeti"
+msgstr "Predmeti:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
-#, fuzzy, kde-format
-#| msgid "Symbols"
+#, kde-format
 msgid "Symbols:"
-msgstr "Simboli"
+msgstr "Simboli:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Actions:"
-msgstr "Dejanja"
+msgstr "Dejanja:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -188,92 +183,92 @@ msgstr "Formula"
 msgid "A formula"
 msgstr "Formula"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
 msgstr "Vstavi omejen element"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
 msgstr "Vstavi obkrožen element"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
 msgstr "Vstavi koren"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
 msgstr "Vstavi kvadratni koren"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
 msgstr "Vstavi ulomek"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Vstavi del ulomka"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr "Vstavi tabelo 3x3"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Vstavi dvo-dimenzionalni vektor"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
 msgstr "Vstavi podpisano"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr "Vstavi nadpisano"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Vstavi pod- in nadpisano"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr "Vstavi pisano zgoraj"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr "Vstavi pisano spodaj"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr "Vstavi pod- in nadpisano"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
 msgstr "Vstavi vrstico"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
 msgstr "Vstavi stolpec"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr "Odstrani vrstico"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
 msgstr "Odstrani stolpec"

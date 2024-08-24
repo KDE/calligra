@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2015-09-09 09:40+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1434,12 +1434,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "A szükséges szöveges komponens nem található. A Words kilép"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Telepítési hiba"

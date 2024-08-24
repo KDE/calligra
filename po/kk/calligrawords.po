@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2013-09-30 04:14+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1437,12 +1437,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Стандартты"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "Керек мәтін компоненті табылмады, Words енді жұмысын аяқтайды"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Орнату қатесі"

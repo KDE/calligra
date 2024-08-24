@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2002-08-07 14:16+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga_n@yahoo.com>\n"
 "Language-Team: Thai <th@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Radius"
 msgstr "รัศมี:"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr ""
@@ -105,7 +105,7 @@ msgstr "มุม:"
 msgid "Color matrix"
 msgstr ""
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr ""

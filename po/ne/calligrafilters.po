@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2007-07-29 13:39+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -107,7 +107,7 @@ msgstr ""
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -212,7 +212,7 @@ msgstr "फाइलबाट पढ्न सकिएन ।"
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "फाइलबाट पढ्न सकिएन ।"
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, fuzzy, kde-format
 #| msgid ""
 #| "An error has occurred while parsing the KWord file.\n"
@@ -226,24 +226,24 @@ msgstr ""
 "रेखामा: %1, स्तम्भ %2\n"
 "त्रुटि सन्देश: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, fuzzy, kde-format
 #| msgid "Could not read from file."
 msgid "Could not write block"
@@ -893,7 +893,7 @@ msgstr "वाक्य: यदि रेखाको समाप्ति व�
 msgid "&Empty Line: If the line is empty"
 msgstr ""
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, fuzzy, kde-format
 #| msgid "End of Line"
 msgid "End notes"

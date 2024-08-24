@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -403,7 +403,7 @@ msgstr "シェイプを貼り付け"
 msgid "Active tool: %1"
 msgstr "アクティブなツール: %1"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
 msgstr "画像を貼り付け"
@@ -1475,7 +1475,7 @@ msgstr "タイトルなし"
 msgid "Open Document"
 msgstr "文書を開く"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, kde-format
 msgid "Import Document"
 msgstr "文書をインポート"
@@ -1767,25 +1767,25 @@ msgstr "新しいバージョンを追加できませんでした"
 msgid "Date: %1"
 msgstr "日付: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "シェイプ"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "アクティブな作者プロファイル"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "デフォルトの作者プロファイル"
@@ -2361,110 +2361,110 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "ページを貼り付け"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, kde-format
 msgid "Tools"
 msgstr "ツール"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, kde-format
 msgid "D&elete"
 msgstr "削除(&E)"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, kde-format
 msgid "Snap to Grid"
 msgstr "グリッドに合わせる"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Master Pages"
 msgstr "マスターページを表示"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, kde-format
 msgid "Show Rulers"
 msgstr "定規を表示"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "ビューの定規の表示/非表示を切り替え"
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Show Page Margins"
 msgstr "マスターページを表示"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, fuzzy, kde-format
 #| msgid "Show/hide the view's rulers"
 msgid "Show/hide the page margins"
 msgstr "ビューの定規の表示/非表示を切り替え"
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, kde-format
 msgid "Insert Page"
 msgstr "ページを挿入"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "現在のページの後に新しいページを挿入"
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, kde-format
 msgid "Copy Page"
 msgstr "ページをコピー"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, kde-format
 msgid "Copy the current page"
 msgstr "現在のページをコピー"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete Page"
 msgstr "ページを削除"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, kde-format
 msgid "Delete the current page"
 msgstr "現在のページを削除"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Master Page..."
 msgstr "マスターページ..."
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "ページレイアウト..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "変数"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Import Document..."
 msgstr "文書をインポート..."
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr "設定..."
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, kde-format
 msgid "Import Slideshow"
 msgstr "スライドショーをインポート"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2473,7 +2473,7 @@ msgstr ""
 "%1 \n"
 "をインポートできませんでした"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "ページレイアウトを変更"
@@ -3885,87 +3885,87 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "二重"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "新しい段落"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "ブックマークに追加"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "注釈を追加"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "インデックスを挿入"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "変数を挿入"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "改行を挿入"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "表を挿入"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "セルを結合"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "セルを分割"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "表の幅を調整"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "境界線のフォーマットを変更"
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "目次を挿入"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "目次を編集"
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "参考文献項目を挿入"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "引用を追加"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr "タイピング"
@@ -5071,13 +5071,13 @@ msgstr "ぼかし:"
 msgid "Distance:"
 msgstr "距離:"
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
 #| msgid "No picture available."
 msgctxt "@info"

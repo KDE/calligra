@@ -21,6 +21,3 @@ msgstr ""
 #, kde-format
 msgid "Snap Settings"
 msgstr "Nastavení uchycení"
-
-#~ msgid "Shape Properties"
-#~ msgstr "Vlastnosti tvaru"

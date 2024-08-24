@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2008-07-08 22:08+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -448,7 +448,7 @@ msgstr "Cipta Templat"
 msgid "Active tool: %1"
 msgstr "Hapuskan Teks"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -1543,7 +1543,7 @@ msgstr "Tajuk"
 msgid "Open Document"
 msgstr "Buka Dokumen"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, kde-format
 msgid "Import Document"
 msgstr "Import Dokumen"
@@ -1844,24 +1844,24 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Tarikh"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Gelombang"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Hapuskan Teks"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Hapuskan Teks"
@@ -2549,115 +2549,115 @@ msgid_plural "Paste Pages"
 msgstr[0] "Tampalkan Teks"
 msgstr[1] "Tampalkan Teks"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Warna Piawai"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, fuzzy, kde-format
 msgid "D&elete"
 msgstr "Hapuskan Teks"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Snap to Grid"
 msgstr "Sahkan Simpan"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, fuzzy, kde-format
 msgid "Show Master Pages"
 msgstr "Cipta Templat"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, fuzzy, kde-format
 #| msgid "Change Shadow"
 msgid "Show Rulers"
 msgstr "Ubah Bayang"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, fuzzy, kde-format
 msgid "Show Page Margins"
 msgstr "Cipta Templat"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, fuzzy, kde-format
 msgid "Insert Page"
 msgstr "Selitkan Teks"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, fuzzy, kde-format
 #| msgid "Company Name"
 msgid "Copy Page"
 msgstr "Nama Syarikat"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, fuzzy, kde-format
 msgid "Copy the current page"
 msgstr "Hapuskan Teks"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, fuzzy, kde-format
 msgid "Delete Page"
 msgstr "Hapuskan Teks"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, fuzzy, kde-format
 msgid "Delete the current page"
 msgstr "Hapuskan Teks"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Master Page..."
 msgstr "Tampalkan Teks"
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgid "Page Layout..."
 msgstr "Paparan Laman"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Variabel"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import Document..."
 msgstr "Import Dokumen"
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Configure..."
 msgstr "Sahkan Simpan"
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, fuzzy, kde-format
 msgid "Import Slideshow"
 msgstr "Import Gaya"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2669,7 +2669,7 @@ msgstr ""
 "Tidak dapat buka\n"
 " %1"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -4143,107 +4143,107 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Kembar"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "Teks perenggan normal"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 #, fuzzy
 #| msgid "Bookmark"
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Tanda Buku"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 #, fuzzy
 #| msgid "Position"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "Posisi"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 #, fuzzy
 #| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "Selitkan Teks"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "Selitkan Teks"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "Selitkan Pemisah Baris"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "Selitkan Teks"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Margin"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "&Menegak"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "Halaman Berikutnya"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "Selitkan Teks"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "Selitkan Teks"
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "Selitkan Pemisah Baris"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 #, fuzzy
 #| msgid "Position"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "Posisi"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
@@ -5380,13 +5380,13 @@ msgstr ""
 msgid "Distance:"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
 #| msgid "No picture available."
 msgctxt "@info"

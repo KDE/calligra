@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2019-08-27 06:56+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1437,14 +1437,14 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
 "Die benötigte Textkomponente kann nicht gefunden werden. Words wird jetzt "
 "beendet."
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Installationsfehler"

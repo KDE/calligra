@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xsltimportfilter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2002-10-14 10:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -104,7 +104,7 @@ msgstr ""
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -218,31 +218,31 @@ msgstr ""
 "#-#-#-#-#  kformulapngfilter.po (kformulapngfilter)  #-#-#-#-#\n"
 "Yahlulekile ekubhaleni ifayile."
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
 "Error message: %3"
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
 msgstr ""
@@ -881,7 +881,7 @@ msgstr "&Isivakalisi: Ukuba isiphelo somgca sisiphelo sesivakalisi"
 msgid "&Empty Line: If the line is empty"
 msgstr ""
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, fuzzy, kde-format
 #| msgid "End of Line"
 msgid "End notes"

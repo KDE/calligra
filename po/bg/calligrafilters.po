@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2011-07-27 22:23+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -103,7 +103,7 @@ msgstr "Непрозрачност"
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -201,7 +201,7 @@ msgstr ""
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
@@ -210,24 +210,24 @@ msgstr ""
 "Грешка при обработка на основния документ на ред %1, знак %2.\n"
 "Съобщение за грешка: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr ""
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
 msgstr "Грешка при запис на блок"
@@ -868,7 +868,7 @@ msgstr "&Изречение (ако краят на реда е край на и
 msgid "&Empty Line: If the line is empty"
 msgstr "&Празен ред (ако редът е празен)"
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, fuzzy, kde-format
 msgid "End notes"
 msgstr "Край на ред"

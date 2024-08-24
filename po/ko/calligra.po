@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -395,7 +395,7 @@ msgstr "모양 붙여넣기"
 msgid "Active tool: %1"
 msgstr "활성 도구: %1"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
 msgstr "이미지 붙여넣기"
@@ -1470,7 +1470,7 @@ msgstr "제목 없음"
 msgid "Open Document"
 msgstr "문서 열기"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, kde-format
 msgid "Import Document"
 msgstr "문서 가져오기"
@@ -1760,25 +1760,25 @@ msgstr "새 버전을 추가할 수 없음"
 msgid "Date: %1"
 msgstr "날짜: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "모양"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "활성 작성자 프로필"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "익명"
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "기본 작성자 프로필"
@@ -2343,108 +2343,108 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "쪽 붙여넣기"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, kde-format
 msgid "Tools"
 msgstr "도구"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, kde-format
 msgid "D&elete"
 msgstr "삭제(&E)"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, kde-format
 msgid "Snap to Grid"
 msgstr "격자에 맞추기"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Master Pages"
 msgstr "마스터 쪽 표시"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, kde-format
 msgid "Show Rulers"
 msgstr "눈금자 표시"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr "보기의 눈금자 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, kde-format
 msgid "Show Page Margins"
 msgstr "쪽 여백 표시"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "쪽 여백 표시/숨기기"
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, kde-format
 msgid "Insert Page"
 msgstr "쪽 삽입"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr "현재 쪽 다음에 새 쪽 삽입"
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, kde-format
 msgid "Copy Page"
 msgstr "쪽 복사"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, kde-format
 msgid "Copy the current page"
 msgstr "현재 쪽 복사"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete Page"
 msgstr "쪽 삭제"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, kde-format
 msgid "Delete the current page"
 msgstr "현재 쪽 삭제"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Master Page..."
 msgstr "마스터 쪽..."
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "쪽 레이아웃..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "변수"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Import Document..."
 msgstr "문서 가져오기..."
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr "설정..."
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, kde-format
 msgid "Import Slideshow"
 msgstr "슬라이드 쇼 가져오기"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2453,7 +2453,7 @@ msgstr ""
 "가져올 수 없음\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "쪽 레이아웃 변경"
@@ -3907,87 +3907,87 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "두 줄"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "새 문단"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "책갈피 추가"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "주석 추가"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "색인 삽입"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "변수 삽입"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "나누기 삽입"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "표 삽입"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "셀 병합"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "셀 분할"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "표 너비 조정"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "테두리 서식 변경"
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "목차 삽입"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "목차 수정"
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "참고 문헌 삽입"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "인용문 추가"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr "입력"
@@ -5079,13 +5079,13 @@ msgstr "흐림:"
 msgid "Distance:"
 msgstr "간격:"
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
 #| msgid "No picture available."
 msgctxt "@info"

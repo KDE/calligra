@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:14+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -200,107 +200,107 @@ msgstr "सूत्र"
 msgid "A formula"
 msgstr "सूत्र"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fenced element"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert enclosed element"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert root"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert square root"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fraction"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert bevelled fraction"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr ""
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr ""
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert subscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert superscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert sub- and superscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert overscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert underscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert under- and overscript"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert row"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert column"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Remove row"
 msgstr "जोडू"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Remove column"

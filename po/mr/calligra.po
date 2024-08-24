@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -461,7 +461,7 @@ msgstr "आकार चिकटवा"
 msgid "Active tool: %1"
 msgstr "सक्रिय साधन : %1"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste Page"
@@ -1597,7 +1597,7 @@ msgstr "शिर्षकहीन"
 msgid "Open Document"
 msgstr "दस्तऐवज उघडा"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgid "Import Document"
@@ -1904,25 +1904,25 @@ msgstr "नविन आवृत्ती जोडू शकत नाही"
 msgid "Date: %1"
 msgstr "दिनांक : %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "आकार"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "सक्रिय लेखक रूपरेषा :"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "निनावी"
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 #| msgid "Active Author Profile"
 msgid "Default Author Profile"
@@ -2526,112 +2526,112 @@ msgid_plural "Paste Pages"
 msgstr[0] "पान चिटकवा"
 msgstr[1] "पाने चिटकवा"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, kde-format
 msgid "Tools"
 msgstr "साधने"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, kde-format
 msgid "D&elete"
 msgstr "काढून टाका (&E)"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, kde-format
 msgid "Snap to Grid"
 msgstr "जाळ्याकडे खेचा"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Master Pages"
 msgstr "मुख्य पान"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, kde-format
 msgid "Show Rulers"
 msgstr "पट्ट्या दर्शवा"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Page Margins"
 msgstr "मुख्य पान"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, kde-format
 msgid "Insert Page"
 msgstr "पान अंतर्भूत करा"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, kde-format
 msgid "Copy Page"
 msgstr "पानाची प्रत करा"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgid "Copy the current page"
 msgstr "पान काढून टाका"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete Page"
 msgstr "पान काढून टाका"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgid "Delete the current page"
 msgstr "पान काढून टाका"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Master Page..."
 msgstr "मुख्य पान..."
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "पानाची रचना..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "परिवर्तनीय"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Import Document..."
 msgstr "दस्तऐवज आयात करा..."
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr "संयोजीत करा..."
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, kde-format
 msgid "Import Slideshow"
 msgstr "स्लाइड शो आयात करा"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2645,7 +2645,7 @@ msgstr ""
 "%2.\n"
 "कारण : %1"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 #, fuzzy
 #| msgid "Page Layout"
 msgctxt "(qtundo-format)"
@@ -4136,25 +4136,25 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "दुप्पट"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "नवीन परिच्छेद"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "ओळखचिन्ह जोडा"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 #, fuzzy
 #| msgid "Addition"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "बेरीज"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert slide"
@@ -4162,48 +4162,48 @@ msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "स्लाइड अंतर्भूत करा"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "परिवर्तनीय अंतर्भूत करा"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 #, fuzzy
 #| msgid "Insert Page"
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "पान अंतर्भूत करा"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 #, fuzzy
 #| msgid "Fit Page Width"
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "पानाच्या रूंदी प्रमाणे समर्पक बसवा"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Table"
@@ -4211,26 +4211,26 @@ msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "कोष्टक अंतर्भूत करा"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 #, fuzzy
 #| msgid "Addition"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "बेरीज"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr "टायपिंग"
@@ -5370,13 +5370,13 @@ msgstr "पुसट :"
 msgid "Distance:"
 msgstr "अंतर :"
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
 #| msgid "Variables Available"
 msgctxt "@info"

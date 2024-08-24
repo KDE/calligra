@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2014-03-30 20:39+0400\n"
 "Last-Translator: Georgiy Syptchenko <superzhook@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -73,7 +73,7 @@ msgstr "Гауссово размывание"
 msgid "Radius"
 msgstr "Радиус"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Матрица цветов"
@@ -113,7 +113,7 @@ msgstr "Угол"
 msgid "Color matrix"
 msgstr "Матрица цветов"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Перемещение компонента"

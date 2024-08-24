@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2020-04-22 21:45+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -102,7 +102,7 @@ msgstr "Ugennemsigtighed"
 #: stage/pptx/PptxXmlDocumentReader.cpp:148
 #: stage/pptx/PptxXmlSlideReader.cpp:316
 #: words/docx/import/DocxXmlCommentsReader.cpp:82
-#: words/docx/import/DocxXmlDocumentReader.cpp:183
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
 #: words/docx/import/DocxXmlEndnoteReader.cpp:83
 #: words/docx/import/DocxXmlFontTableReader.cpp:78
 #: words/docx/import/DocxXmlFooterReader.cpp:88
@@ -201,7 +201,7 @@ msgstr "Kunne ikke finde forholdsfilen \"%1\""
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
 msgstr "Kunne ikke finde mål for forholdet \"%1\" i filen \"%2\""
 
-#: libmsooxml/MsooXmlUtils.cpp:165
+#: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
@@ -210,24 +210,24 @@ msgstr ""
 "Fortolkningsfejl i hoveddokumentet ved linje %1, kolonne %2.\n"
 "Fejlmeddelelse: %3"
 
-#: libmsooxml/MsooXmlUtils.cpp:212
+#: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
 msgstr "Indgangen \"%1\" blev ikke fundet."
 
-#: libmsooxml/MsooXmlUtils.cpp:218
+#: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
 msgstr "Indgangen \"%1\" er ikke en fil."
 
-#: libmsooxml/MsooXmlUtils.cpp:294 libmsooxml/MsooXmlUtils.cpp:336
-#: libmsooxml/MsooXmlUtils.cpp:378
+#: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
+#: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr "Kunne ikke åbne indgangen \"%1\" til skrivning."
 
-#: libmsooxml/MsooXmlUtils.cpp:308 libmsooxml/MsooXmlUtils.cpp:346
-#: libmsooxml/MsooXmlUtils.cpp:389
+#: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
+#: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
 msgstr "Kunne ikke skrive blok"
@@ -868,7 +868,7 @@ msgstr "&Sætning: hvis slutningen af linjen er slutningen på en sætning"
 msgid "&Empty Line: If the line is empty"
 msgstr "&Tom linje: Hvis linjen er tom"
 
-#: words/epub/OdtHtmlConverter.cpp:257 words/mobi/OdtMobiHtmlConverter.cpp:284
+#: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
 msgstr "Slutnoter"

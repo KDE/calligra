@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2023-06-15 21:48+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 21:45+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1091,13 +1091,12 @@ msgstr "Kopirajto 1998-%1, The Words Team"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Kuna prizorganto"
+msgstr "Kunprizorganto/Portado al Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
@@ -1435,12 +1434,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Normala"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "Ne povas trovi bezonatan tekstkomponenton, Vortoj ĉesos nun"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Instala eraro"

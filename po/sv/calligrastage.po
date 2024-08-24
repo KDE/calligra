@@ -4,22 +4,22 @@
 # Copyright (C) 2000,2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Per Lindström <per.lindstrom@osd.privataccess.nu>, 2000.
 # Mattias Newzella <newzella@linux.nu>, 2000, 2001, 2002,2003.
-# Stefan Asserhäll <stefan.asserhall@gmail.com>, 2002.
+# SPDX-FileCopyrightText: 2002, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
 # Stefan Asserhäll <stefan.asserhall@gmail.com>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
 # Stefan Asserhall <stefan.asserhall@gmail.com>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2021-03-01 07:18+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 07:34+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: Menu (edit)
@@ -160,13 +160,12 @@ msgstr "Copyright 1998-%1, Stage-gruppen"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Utvecklare"
+msgstr "Underhåll och konvertering till Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format
@@ -313,17 +312,17 @@ msgstr "Presentationen är slut. Klicka för att avsluta."
 msgid "Layout"
 msgstr "Layout"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr "Kan inte hitta nödvändig textkomponent. Calligra Stage avslutas nu."
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr "Kan inte hitta nödvändig bildkomponent. Calligra Stage avslutas nu."
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "Installationsproblem"
@@ -853,37 +852,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Verkställ bildeffekter för alla sidor"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr "Ingång"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "Utgång"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "Betoning"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "Egen"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr "Rörelseväg"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr "OLE-åtgärd"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr "Mediaanrop"

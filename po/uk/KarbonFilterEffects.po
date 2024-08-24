@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KarbonFilterEffects\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2015-10-13 19:46+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr "Гаусове розмивання"
 msgid "Radius"
 msgstr "Радіус"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Матриця кольорів"
@@ -105,7 +105,7 @@ msgstr "Кут"
 msgid "Color matrix"
 msgstr "Матриця кольорів"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Перенесення компонента"

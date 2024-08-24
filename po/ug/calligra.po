@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -469,7 +469,7 @@ msgstr "بەتلەرنى چاپلا"
 msgid "Active tool: %1"
 msgstr "ئاكتىپ قورال: %1"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste Page"
@@ -1602,7 +1602,7 @@ msgstr "ماۋزۇسىز"
 msgid "Open Document"
 msgstr "پۈتۈك ئېچىش"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, fuzzy, kde-format
 #| msgid "Save Document As"
 msgid "Import Document"
@@ -1902,26 +1902,26 @@ msgstr "يېڭى نەشرىنى قوشۇشقا بولمىدى"
 msgid "Date: %1"
 msgstr "چېسلا: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "شەكىل"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "ئاكتىپ قورال: %1"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "ئاتسىز"
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Default Author Profile"
@@ -2528,113 +2528,113 @@ msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "بەتلەرنى چاپلا"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, kde-format
 msgid "Tools"
 msgstr "قوراللار"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, kde-format
 msgid "D&elete"
 msgstr "ئۆچۈر(&E)"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, kde-format
 msgid "Snap to Grid"
 msgstr "سېتكىغا توغرىلا"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Master Pages"
 msgstr "ئانا بەت"
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, kde-format
 msgid "Show Rulers"
 msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Show Page Margins"
 msgstr "ئانا بەت"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, kde-format
 msgid "Insert Page"
 msgstr "بەت قىستۇر"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, kde-format
 msgid "Copy Page"
 msgstr "بەت كۆچۈر"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, kde-format
 msgid "Copy the current page"
 msgstr "نۆۋەتتىكى  بەتنى كۆچۈرىدۇ"
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete Page"
 msgstr "بەت ئۆچۈر"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, kde-format
 msgid "Delete the current page"
 msgstr "نۆۋەتتىكى  بەتنى ئۆچۈرىدۇ"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Master Page..."
 msgstr "ئانا بەت"
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "بەت ئۇسلۇبى …"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "ئۆزگىرىشچان"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, fuzzy, kde-format
 #| msgid "Save Document As"
 msgid "Import Document..."
 msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr "سەپلە…"
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, fuzzy, kde-format
 #| msgid "Import lines:"
 msgid "Import Slideshow"
 msgstr "قۇرلارنى ئىمپورت قىلىش:"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid ""
@@ -2642,7 +2642,7 @@ msgid ""
 "%1"
 msgstr "%1 نى تاپقىلى بولمىدى"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
@@ -4129,69 +4129,69 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "قوش"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "يېڭى ئابزاس"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "خەتكۈش قوش"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 #, fuzzy
 #| msgid "Addition"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "قوشۇش"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "مۇندەرىجە قىستۇر"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "ئۆزگەرگۈچى قىستۇرۇش"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "قۇر ئالماشتۇرۇش بەلگىسى قىستۇر"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "جەدۋەل قىستۇر"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "كاتەكچە بىرلەشتۈر"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "كاتەكچە پارچىلا"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 #, fuzzy
 #| msgid "Fit Page Width"
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "بەت كەڭلىككە ماسلاش"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Table"
@@ -4199,13 +4199,13 @@ msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "جەدۋەل قىستۇر"
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Break"
@@ -4213,15 +4213,15 @@ msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "قۇر ئالماشتۇرۇش بەلگىسى قىستۇر"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 #, fuzzy
 #| msgid "Addition"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "قوشۇش"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr "كىرگۈزۈۋاتىدۇ"
@@ -5359,13 +5359,13 @@ msgstr ""
 msgid "Distance:"
 msgstr "ئارىلىق:"
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
 msgstr ""
 
-#: widgets/KoShapePropertyWidget.cpp:56
+#: widgets/KoShapePropertyWidget.cpp:57
 #, kde-format
 msgctxt "@info"
 msgid "No properties available"

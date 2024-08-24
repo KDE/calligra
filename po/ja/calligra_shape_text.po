@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2014-07-10 00:21-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -552,12 +552,12 @@ msgstr "小文字"
 msgid "Capitalize"
 msgstr "先頭を大文字に"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "上付き文字"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "下付き文字"
@@ -1173,7 +1173,7 @@ msgstr "特殊文字"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2260
+#: ReferencesTool.cpp:114 TextTool.cpp:2261
 #, kde-format
 msgid "Insert"
 msgstr "挿入"
@@ -1190,28 +1190,28 @@ msgstr "閉じる"
 msgid "Quick search:"
 msgstr "クイック検索:"
 
-#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
-#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:278
 #, kde-format
 msgid "The URL is invalid"
 msgstr "この URL は不正です"
 
-#: dialogs/LinkInsertionDialog.cpp:87
+#: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "ブックマークは存在しません"
 
-#: dialogs/LinkInsertionDialog.cpp:189
+#: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "タイトルを取得中: 0%完了"
 
-#: dialogs/LinkInsertionDialog.cpp:212
+#: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
 msgstr "取得時間切れ"
 
-#: dialogs/LinkInsertionDialog.cpp:266
+#: dialogs/LinkInsertionDialog.cpp:267
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "タイトルを取得中: %1%完了"
@@ -2124,7 +2124,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2640
 #, kde-format
 msgid "Delete"
 msgstr "削除"
@@ -2194,13 +2194,13 @@ msgstr ""
 "「%1」という名前のスタイルは既に存在しています。別の名前を選んでください"
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2253
 #, kde-format
 msgid "Paragraph"
 msgstr "段落"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2251
 #, kde-format
 msgid "Character"
 msgstr "文字"
@@ -2445,7 +2445,7 @@ msgstr "目次"
 msgid "Insert a Table of Contents into the document."
 msgstr "文書に目次を挿入。"
 
-#: ReferencesTool.cpp:118 TextTool.cpp:406
+#: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
 msgid "Insert Custom..."
 msgstr "カスタムを挿入..."
@@ -2635,311 +2635,311 @@ msgstr "テキストを表示するシェイプ"
 msgid "Text Shape"
 msgstr "テキストシェイプ"
 
-#: TextTool.cpp:202
+#: TextTool.cpp:203
 #, fuzzy, kde-format
 #| msgid "Configure Settings"
 msgid "Configure current section"
 msgstr "設定の変更"
 
-#: TextTool.cpp:206
+#: TextTool.cpp:207
 #, fuzzy, kde-format
 #| msgid "Insert Citation"
 msgid "Insert new section"
 msgstr "引用を挿入"
 
-#: TextTool.cpp:210
+#: TextTool.cpp:211
 #, fuzzy, kde-format
 #| msgid "Insert Citation"
 msgid "Insert paragraph between sections"
 msgstr "引用を挿入"
 
-#: TextTool.cpp:214
+#: TextTool.cpp:215
 #, kde-format
 msgid "Paste As Text"
 msgstr "テキストとして貼り付け"
 
-#: TextTool.cpp:219
+#: TextTool.cpp:220
 #, kde-format
 msgid "Bold"
 msgstr "ボールド"
 
-#: TextTool.cpp:225
+#: TextTool.cpp:226
 #, kde-format
 msgid "Italic"
 msgstr "イタリック"
 
-#: TextTool.cpp:231
+#: TextTool.cpp:232
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "下線"
 
-#: TextTool.cpp:237
+#: TextTool.cpp:238
 #, kde-format
 msgid "Strikethrough"
 msgstr "取り消し線"
 
-#: TextTool.cpp:243
+#: TextTool.cpp:244
 #, kde-format
 msgid "Align Left"
 msgstr "左揃え"
 
-#: TextTool.cpp:250
+#: TextTool.cpp:251
 #, kde-format
 msgid "Align Right"
 msgstr "右揃え"
 
-#: TextTool.cpp:257
+#: TextTool.cpp:258
 #, kde-format
 msgid "Align Center"
 msgstr "中央揃え"
 
-#: TextTool.cpp:265
+#: TextTool.cpp:266
 #, kde-format
 msgid "Align Block"
 msgstr "両端揃え"
 
-#: TextTool.cpp:272
+#: TextTool.cpp:273
 #, kde-format
 msgid "Change text direction"
 msgstr "テキスト方向を変更"
 
-#: TextTool.cpp:274
+#: TextTool.cpp:275
 #, kde-format
 msgid "Change writing direction"
 msgstr "書く方向の変更"
 
-#: TextTool.cpp:293
+#: TextTool.cpp:294
 #, kde-format
 msgid "Increase Indent"
 msgstr "字下げを増やす"
 
-#: TextTool.cpp:299
+#: TextTool.cpp:300
 #, kde-format
 msgid "Decrease Indent"
 msgstr "字下げを減らす"
 
-#: TextTool.cpp:303
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:304
+#: TextTool.cpp:305
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:308
 #, kde-format
 msgid "Increase Font Size"
 msgstr "フォントサイズを大きく"
 
-#: TextTool.cpp:312
+#: TextTool.cpp:313
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "フォントサイズを小さく"
 
-#: TextTool.cpp:318
+#: TextTool.cpp:319
 #, kde-format
 msgid "Font Family"
 msgstr "フォントファミリー"
 
-#: TextTool.cpp:322
+#: TextTool.cpp:323
 #, kde-format
 msgid "Variable"
 msgstr "可変"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:327
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "非改行スペースを挿入"
 
-#: TextTool.cpp:331
+#: TextTool.cpp:332
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "非改行ハイフンを挿入"
 
-#: TextTool.cpp:336
+#: TextTool.cpp:337
 #, kde-format
 msgid "Insert Index"
 msgstr "見出しを挿入"
 
-#: TextTool.cpp:341
+#: TextTool.cpp:342
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "ソフトハイフンを挿入"
 
-#: TextTool.cpp:347
+#: TextTool.cpp:348
 #, kde-format
 msgid "Line Break"
 msgstr "改行"
 
-#: TextTool.cpp:352
+#: TextTool.cpp:353
 #, kde-format
 msgid "Page Break"
 msgstr "改ページ"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:357
 #, kde-format
 msgid "Insert a page break"
 msgstr "ページの区切りを挿入"
 
-#: TextTool.cpp:357
+#: TextTool.cpp:358
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr "ここ以降の全テキストは次のページに移動されます。"
 
-#: TextTool.cpp:360
+#: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
 msgstr "フォント..."
 
-#: TextTool.cpp:363
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "文字の大きさ、フォント、ボールド、イタリックなどを変更します。"
 
-#: TextTool.cpp:364
+#: TextTool.cpp:365
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "現在選択されている文字の属性を変更します。"
 
-#: TextTool.cpp:367
+#: TextTool.cpp:368
 #, kde-format
 msgid "Font Size"
 msgstr "フォントサイズ"
 
-#: TextTool.cpp:373
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color..."
 msgstr "テキスト色..."
 
-#: TextTool.cpp:374
+#: TextTool.cpp:375
 #, kde-format
 msgid "Text Color"
 msgstr "テキスト色"
 
-#: TextTool.cpp:380
+#: TextTool.cpp:381
 #, kde-format
 msgid "Background Color..."
 msgstr "背景色..."
 
-#: TextTool.cpp:381
+#: TextTool.cpp:382
 #, kde-format
 msgid "Background"
 msgstr "背景"
 
-#: TextTool.cpp:385
+#: TextTool.cpp:386
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr ""
 
-#: TextTool.cpp:390
+#: TextTool.cpp:391
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr "拡大して幅を合わせる"
 
-#: TextTool.cpp:395
+#: TextTool.cpp:396
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr "拡大して高さを合わせる"
 
-#: TextTool.cpp:400
+#: TextTool.cpp:401
 #, kde-format
 msgid "Shrink To Fit"
 msgstr "縮小して合わせる"
 
-#: TextTool.cpp:408
+#: TextTool.cpp:409
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "文書に表を挿入。"
 
-#: TextTool.cpp:411
+#: TextTool.cpp:412
 #, kde-format
 msgid "Row Above"
 msgstr "上の行"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:413
 #, kde-format
 msgid "Insert Row Above"
 msgstr "行を上に挿入"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:417
 #, kde-format
 msgid "Row Below"
 msgstr "下の行"
 
-#: TextTool.cpp:417
+#: TextTool.cpp:418
 #, kde-format
 msgid "Insert Row Below"
 msgstr "行を下に挿入"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:422
 #, kde-format
 msgid "Column Left"
 msgstr "左の列"
 
-#: TextTool.cpp:422
+#: TextTool.cpp:423
 #, kde-format
 msgid "Insert Column Left"
 msgstr "列を左に挿入"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:427
 #, kde-format
 msgid "Column Right"
 msgstr "右の列"
 
-#: TextTool.cpp:427
+#: TextTool.cpp:428
 #, kde-format
 msgid "Insert Column Right"
 msgstr "列を右に挿入"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:432
 #, kde-format
 msgid "Column"
 msgstr "列"
 
-#: TextTool.cpp:432
+#: TextTool.cpp:433
 #, kde-format
 msgid "Delete Column"
 msgstr "列を削除"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:437
 #, kde-format
 msgid "Row"
 msgstr "行"
 
-#: TextTool.cpp:437
+#: TextTool.cpp:438
 #, kde-format
 msgid "Delete Row"
 msgstr "行を削除"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:442
 #, kde-format
 msgid "Merge Cells"
 msgstr "セルを結合"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:446
 #, kde-format
 msgid "Split Cells"
 msgstr "セルを分割"
 
-#: TextTool.cpp:450
+#: TextTool.cpp:451
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr ""
 
-#: TextTool.cpp:454
+#: TextTool.cpp:455
 #, kde-format
 msgid "Paragraph..."
 msgstr "段落..."
 
-#: TextTool.cpp:457
+#: TextTool.cpp:458
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr "段落のマージン、テキストの流れ、境界、箇条書きの設定などを変更"
 
-#: TextTool.cpp:459
+#: TextTool.cpp:460
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change paragraph margins, text flow, borders, bullets, numbering etc."
@@ -2957,17 +2957,17 @@ msgstr ""
 "のフォーマットが変更されます。</p><p>テキストが選択されていなければ、カーソル"
 "のある段落のフォーマットが変更されます。</p>"
 
-#: TextTool.cpp:463
+#: TextTool.cpp:464
 #, kde-format
 msgid "Style Manager..."
 msgstr "スタイルマネージャ..."
 
-#: TextTool.cpp:465
+#: TextTool.cpp:466
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "スタイルの属性を変更"
 
-#: TextTool.cpp:466
+#: TextTool.cpp:467
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change font and paragraph attributes of styles.<p>Multiple styles can be "
@@ -2979,102 +2979,102 @@ msgstr ""
 "<p>スタイルのフォントと段落の属性を変更します。</p><p>ダイアログボックスを"
 "使って複数のスタイルを変更できます。</p>"
 
-#: TextTool.cpp:473
+#: TextTool.cpp:474
 #, kde-format
 msgid "Special Character..."
 msgstr "特殊文字..."
 
-#: TextTool.cpp:477
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr "キーボードにない記号や文字を挿入"
 
-#: TextTool.cpp:478
+#: TextTool.cpp:479
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr "キーボードにない記号や文字を挿入します。"
 
-#: TextTool.cpp:481
+#: TextTool.cpp:482
 #, kde-format
 msgid "Repaint"
 msgstr "塗り替え"
 
-#: TextTool.cpp:486
+#: TextTool.cpp:487
 #, kde-format
 msgid "Insert Comment"
 msgstr "コメントを挿入"
 
-#: TextTool.cpp:570
+#: TextTool.cpp:571
 #, kde-format
 msgid "Insertion"
 msgstr "挿入"
 
-#: TextTool.cpp:572
+#: TextTool.cpp:573
 #, kde-format
 msgid "Deletion"
 msgstr "削除"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:575
 #, kde-format
 msgid "Formatting"
 msgstr "フォーマット"
 
-#: TextTool.cpp:589
+#: TextTool.cpp:590
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Ctrl+クリックでリンクへ移動"
 
-#: TextTool.cpp:596
+#: TextTool.cpp:597
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Ctrl+クリックで注釈へと移動"
 
-#: TextTool.cpp:602
+#: TextTool.cpp:603
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr "Ctrl+クリックで注釈参照へと移動"
 
-#: TextTool.cpp:698
+#: TextTool.cpp:699
 #, kde-format
 msgid "follows along"
 msgstr "追従する"
 
-#: TextTool.cpp:728
+#: TextTool.cpp:729
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "これの大きさを変更しないように Shift キーを押す"
 
-#: TextTool.cpp:929
+#: TextTool.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "境界線の書式を変更する"
 
-#: TextTool.cpp:1153
+#: TextTool.cpp:1154
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "切り取り"
 
-#: TextTool.cpp:1413
+#: TextTool.cpp:1414
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "列幅を調整"
 
-#: TextTool.cpp:1457
+#: TextTool.cpp:1458
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "行高さを調整"
 
-#: TextTool.cpp:2258
+#: TextTool.cpp:2259
 #, kde-format
 msgid "Table"
 msgstr "表"
 
-#: TextTool.cpp:2634 TextTool.cpp:2639
+#: TextTool.cpp:2635 TextTool.cpp:2640
 #, kde-format
 msgid "Autocorrection"
 msgstr "自動修正"
 
-#: TextTool.cpp:2634
+#: TextTool.cpp:2635
 #, kde-format
 msgid "Key Press"
 msgstr "キー押下げ"

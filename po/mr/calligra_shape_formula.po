@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2013-03-11 15:42+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -189,100 +189,100 @@ msgstr "फोर्म्युला"
 msgid "A formula"
 msgstr "फोर्म्युला"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fenced element"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert enclosed element"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert root"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert square root"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert fraction"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
 msgstr ""
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
 msgstr ""
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr ""
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert subscript"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
 msgstr ""
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
 msgstr ""
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
 msgstr ""
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
 msgstr ""
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
 msgstr ""
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert row"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert column"
 msgstr "अंतर्भूत करा"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
 msgstr ""
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Remove column"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2015-06-11 15:34+0200\n"
 "Last-Translator: Vincent Pinon <vpinon@kde.org>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr "Flou gaussien"
 msgid "Radius"
 msgstr "Rayon"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Matrice de couleur"
@@ -105,7 +105,7 @@ msgstr "Angle"
 msgid "Color matrix"
 msgstr "Matrice de couleur"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Transfert de composant"

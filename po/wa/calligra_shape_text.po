@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2010-06-06 15:05+0200\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -538,12 +538,12 @@ msgstr "Pititès letes"
 msgid "Capitalize"
 msgstr "Li prumire lete e madjuscule"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Dizeu l' roye"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Dizo l' roye"
@@ -1195,7 +1195,7 @@ msgstr "Caracteres sipeciå"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2260
+#: ReferencesTool.cpp:114 TextTool.cpp:2261
 #, kde-format
 msgid "Insert"
 msgstr "Sititchî"
@@ -1212,28 +1212,28 @@ msgstr "Clôre"
 msgid "Quick search:"
 msgstr "Trover rade:"
 
-#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
-#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:278
 #, kde-format
 msgid "The URL is invalid"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:87
+#: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:189
+#: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:212
+#: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
 msgstr ""
 
-#: dialogs/LinkInsertionDialog.cpp:266
+#: dialogs/LinkInsertionDialog.cpp:267
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr ""
@@ -2176,7 +2176,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2640
 #, kde-format
 msgid "Delete"
 msgstr "Disfacer"
@@ -2250,14 +2250,14 @@ msgid "Another style named '%1' already exist. Please choose another name."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2253
 #, fuzzy, kde-format
 #| msgid "Paragraph..."
 msgid "Paragraph"
 msgstr "Hagnon..."
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2251
 #, fuzzy, kde-format
 #| msgid "Character style"
 msgid "Character"
@@ -2521,7 +2521,7 @@ msgstr "Meet dins l' tåve di l' ådvins"
 msgid "Insert a Table of Contents into the document."
 msgstr "Sititchî on tåvlea e documint."
 
-#: ReferencesTool.cpp:118 TextTool.cpp:406
+#: ReferencesTool.cpp:118 TextTool.cpp:407
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Custom..."
@@ -2732,335 +2732,335 @@ msgstr "Ene fôme ki moster do tecse"
 msgid "Text Shape"
 msgstr "Fôme tecse"
 
-#: TextTool.cpp:202
+#: TextTool.cpp:203
 #, fuzzy, kde-format
 #| msgid "Configure Change Tracking"
 msgid "Configure current section"
 msgstr "Apontyî l' shuvaedje des candjmints"
 
-#: TextTool.cpp:206
+#: TextTool.cpp:207
 #, fuzzy, kde-format
 #| msgid "Insertion"
 msgid "Insert new section"
 msgstr "Stitchaedje"
 
-#: TextTool.cpp:210
+#: TextTool.cpp:211
 #, fuzzy, kde-format
 #| msgid "Insertion"
 msgid "Insert paragraph between sections"
 msgstr "Stitchaedje"
 
-#: TextTool.cpp:214
+#: TextTool.cpp:215
 #, kde-format
 msgid "Paste As Text"
 msgstr ""
 
-#: TextTool.cpp:219
+#: TextTool.cpp:220
 #, kde-format
 msgid "Bold"
 msgstr "Cråsses"
 
-#: TextTool.cpp:225
+#: TextTool.cpp:226
 #, kde-format
 msgid "Italic"
 msgstr "Clintcheyes"
 
-#: TextTool.cpp:231
+#: TextTool.cpp:232
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Sorlignî"
 
-#: TextTool.cpp:237
+#: TextTool.cpp:238
 #, fuzzy, kde-format
 #| msgid "Strikethrough:"
 msgid "Strikethrough"
 msgstr "Båré:"
 
-#: TextTool.cpp:243
+#: TextTool.cpp:244
 #, kde-format
 msgid "Align Left"
 msgstr "Aroymint a hintche"
 
-#: TextTool.cpp:250
+#: TextTool.cpp:251
 #, kde-format
 msgid "Align Right"
 msgstr "Aroymint a droete"
 
-#: TextTool.cpp:257
+#: TextTool.cpp:258
 #, kde-format
 msgid "Align Center"
 msgstr "Aroymint å mitan"
 
-#: TextTool.cpp:265
+#: TextTool.cpp:266
 #, kde-format
 msgid "Align Block"
 msgstr "Aroymint bloc"
 
-#: TextTool.cpp:272
+#: TextTool.cpp:273
 #, fuzzy, kde-format
 #| msgid "Change Tracking tool"
 msgid "Change text direction"
 msgstr "Usteye di shuvaedje des candjmints"
 
-#: TextTool.cpp:274
+#: TextTool.cpp:275
 #, fuzzy, kde-format
 #| msgid "Change Tracking tool"
 msgid "Change writing direction"
 msgstr "Usteye di shuvaedje des candjmints"
 
-#: TextTool.cpp:293
+#: TextTool.cpp:294
 #, kde-format
 msgid "Increase Indent"
 msgstr "Ritrait pus grand"
 
-#: TextTool.cpp:299
+#: TextTool.cpp:300
 #, kde-format
 msgid "Decrease Indent"
 msgstr "Ritrait pus ptit"
 
-#: TextTool.cpp:303
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:304
+#: TextTool.cpp:305
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:308
 #, kde-format
 msgid "Increase Font Size"
 msgstr "Ragrandi l' fonte"
 
-#: TextTool.cpp:312
+#: TextTool.cpp:313
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "Raptiti l' fonte"
 
-#: TextTool.cpp:318
+#: TextTool.cpp:319
 #, fuzzy, kde-format
 #| msgid "Layout"
 msgid "Font Family"
 msgstr "Adjinçmint"
 
-#: TextTool.cpp:322
+#: TextTool.cpp:323
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgid "Variable"
 msgstr "Distance:"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:327
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "Sititchî espåce nén côpåve"
 
-#: TextTool.cpp:331
+#: TextTool.cpp:332
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "Sititchî loyeure nén côpåve"
 
-#: TextTool.cpp:336
+#: TextTool.cpp:337
 #, kde-format
 msgid "Insert Index"
 msgstr "Sititchî indecse"
 
-#: TextTool.cpp:341
+#: TextTool.cpp:342
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "Sititchî loyeure condicionele"
 
-#: TextTool.cpp:347
+#: TextTool.cpp:348
 #, kde-format
 msgid "Line Break"
 msgstr "Djocaedje di roye"
 
-#: TextTool.cpp:352
+#: TextTool.cpp:353
 #, fuzzy, kde-format
 #| msgid "Line Break"
 msgid "Page Break"
 msgstr "Djocaedje di roye"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:357
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert a page break"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:357
+#: TextTool.cpp:358
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr ""
 
-#: TextTool.cpp:360
+#: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
 msgstr "Fonte..."
 
-#: TextTool.cpp:363
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr ""
 "Candjî l' grandeu des caracteres, fonte, cråssès letes, clintcheyès letes et "
 "tchik et tchak."
 
-#: TextTool.cpp:364
+#: TextTool.cpp:365
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "Candjî les atributs des caracteres tchoezis pol moumint."
 
-#: TextTool.cpp:367
+#: TextTool.cpp:368
 #, kde-format
 msgid "Font Size"
 msgstr "Grandeu del fonte"
 
-#: TextTool.cpp:373
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color..."
 msgstr "Coleur do Tecse..."
 
-#: TextTool.cpp:374
+#: TextTool.cpp:375
 #, fuzzy, kde-format
 #| msgid "Text Color..."
 msgid "Text Color"
 msgstr "Coleur do Tecse..."
 
-#: TextTool.cpp:380
+#: TextTool.cpp:381
 #, kde-format
 msgid "Background Color..."
 msgstr "Coleur do fond..."
 
-#: TextTool.cpp:381
+#: TextTool.cpp:382
 #, kde-format
 msgid "Background"
 msgstr "Fond"
 
-#: TextTool.cpp:385
+#: TextTool.cpp:386
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr ""
 
-#: TextTool.cpp:390
+#: TextTool.cpp:391
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr ""
 
-#: TextTool.cpp:395
+#: TextTool.cpp:396
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr ""
 
-#: TextTool.cpp:400
+#: TextTool.cpp:401
 #, kde-format
 msgid "Shrink To Fit"
 msgstr ""
 
-#: TextTool.cpp:408
+#: TextTool.cpp:409
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "Sititchî on tåvlea e documint."
 
-#: TextTool.cpp:411
+#: TextTool.cpp:412
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Row Above"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:413
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Row Above"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:417
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Row Below"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:417
+#: TextTool.cpp:418
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Row Below"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:422
 #, fuzzy, kde-format
 #| msgid "Align Left"
 msgid "Column Left"
 msgstr "Aroymint a hintche"
 
-#: TextTool.cpp:422
+#: TextTool.cpp:423
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Column Left"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:427
 #, fuzzy, kde-format
 #| msgid "Align Right"
 msgid "Column Right"
 msgstr "Aroymint a droete"
 
-#: TextTool.cpp:427
+#: TextTool.cpp:428
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Column Right"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:432
 #, fuzzy, kde-format
 #| msgid "Align Left"
 msgid "Column"
 msgstr "Aroymint a hintche"
 
-#: TextTool.cpp:432
+#: TextTool.cpp:433
 #, fuzzy, kde-format
 #| msgid "Deletion"
 msgid "Delete Column"
 msgstr "Disfaçaedje"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:437
 #, kde-format
 msgid "Row"
 msgstr ""
 
-#: TextTool.cpp:437
+#: TextTool.cpp:438
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Delete Row"
 msgstr "Disfacer"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:442
 #, kde-format
 msgid "Merge Cells"
 msgstr ""
 
-#: TextTool.cpp:445
+#: TextTool.cpp:446
 #, fuzzy, kde-format
 #| msgid "Configure Change Tracking"
 msgid "Split Cells"
 msgstr "Apontyî l' shuvaedje des candjmints"
 
-#: TextTool.cpp:450
+#: TextTool.cpp:451
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr ""
 
-#: TextTool.cpp:454
+#: TextTool.cpp:455
 #, kde-format
 msgid "Paragraph..."
 msgstr "Hagnon..."
 
-#: TextTool.cpp:457
+#: TextTool.cpp:458
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
 "Candjî les mådjes des hagnons, li floû d' sicrijhaedje, les boirdeures, "
 "tchikes, limerotaedje et tchik et tchak."
 
-#: TextTool.cpp:459
+#: TextTool.cpp:460
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change paragraph margins, text flow, borders, bullets, numbering etc."
@@ -3078,18 +3078,18 @@ msgstr ""
 "candjî l' epådjnaedje di tos les hagnons d' tchoezis.<p>Si gn a nou tecse di "
 "tchoezi, li hagnon ewou çkel cursoe est srè candjî.</p>"
 
-#: TextTool.cpp:463
+#: TextTool.cpp:464
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "Manaedjeu des stîles"
 
-#: TextTool.cpp:465
+#: TextTool.cpp:466
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "Candjî les atributs des stîles"
 
-#: TextTool.cpp:466
+#: TextTool.cpp:467
 #, fuzzy, kde-format
 #| msgid ""
 #| "Change font and paragraph attributes of styles.<p>Multiple styles can be "
@@ -3101,116 +3101,116 @@ msgstr ""
 "Candjî les atributs ou stîles del fonte et del hagnon.<p>Sacwants stîles "
 "savèt esse candjîs e siervant del boesse di dvize."
 
-#: TextTool.cpp:473
+#: TextTool.cpp:474
 #, kde-format
 msgid "Special Character..."
 msgstr "Caractere especiå..."
 
-#: TextTool.cpp:477
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 "Sititchî onk ou sacwants simbôles ou caracteres k' on n' trove nén sol "
 "taprece"
 
-#: TextTool.cpp:478
+#: TextTool.cpp:479
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 "Sititchî onk ou sacwants simbôles ou caracteres k' on n' trove nén sol "
 "taprece."
 
-#: TextTool.cpp:481
+#: TextTool.cpp:482
 #, kde-format
 msgid "Repaint"
 msgstr ""
 
-#: TextTool.cpp:486
+#: TextTool.cpp:487
 #, fuzzy, kde-format
 #| msgid "Insert Table"
 msgid "Insert Comment"
 msgstr "Sititchî tåvlea"
 
-#: TextTool.cpp:570
+#: TextTool.cpp:571
 #, kde-format
 msgid "Insertion"
 msgstr "Stitchaedje"
 
-#: TextTool.cpp:572
+#: TextTool.cpp:573
 #, kde-format
 msgid "Deletion"
 msgstr "Disfaçaedje"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:575
 #, kde-format
 msgid "Formatting"
 msgstr "Epådjnaedje"
 
-#: TextTool.cpp:589
+#: TextTool.cpp:590
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr ""
 
-#: TextTool.cpp:596
+#: TextTool.cpp:597
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr ""
 
-#: TextTool.cpp:602
+#: TextTool.cpp:603
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr ""
 
-#: TextTool.cpp:698
+#: TextTool.cpp:699
 #, kde-format
 msgid "follows along"
 msgstr ""
 
-#: TextTool.cpp:728
+#: TextTool.cpp:729
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr ""
 
-#: TextTool.cpp:929
+#: TextTool.cpp:930
 #, fuzzy
 #| msgid "Paragraph Format"
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Cogne do hagnon"
 
-#: TextTool.cpp:1153
+#: TextTool.cpp:1154
 #, fuzzy
 #| msgid "Cut"
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Côper"
 
-#: TextTool.cpp:1413
+#: TextTool.cpp:1414
 #, fuzzy
 #| msgid "Fixed column width:"
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Lårdjeur del colone ewale :"
 
-#: TextTool.cpp:1457
+#: TextTool.cpp:1458
 #, fuzzy
 #| msgid "Fixed column width:"
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Lårdjeur del colone ewale :"
 
-#: TextTool.cpp:2258
+#: TextTool.cpp:2259
 #, fuzzy, kde-format
 #| msgid "Table..."
 msgid "Table"
 msgstr "Tåvlea..."
 
-#: TextTool.cpp:2634 TextTool.cpp:2639
+#: TextTool.cpp:2635 TextTool.cpp:2640
 #, kde-format
 msgid "Autocorrection"
 msgstr "Coridjaedje tot seu"
 
-#: TextTool.cpp:2634
+#: TextTool.cpp:2635
 #, kde-format
 msgid "Key Press"
 msgstr "Tchôcaedje di tape"

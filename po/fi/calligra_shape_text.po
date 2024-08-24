@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2022-07-29 11:40+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -561,12 +561,12 @@ msgstr "Pienaakkoset"
 msgid "Capitalize"
 msgstr "Suuraakkosiksi"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:279
+#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Yläindeksi"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:285
+#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Alaindeksi"
@@ -1180,7 +1180,7 @@ msgstr "Erikoismerkit"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
-#: ReferencesTool.cpp:114 TextTool.cpp:2260
+#: ReferencesTool.cpp:114 TextTool.cpp:2261
 #, kde-format
 msgid "Insert"
 msgstr "Lisää"
@@ -1197,28 +1197,28 @@ msgstr "Sulje"
 msgid "Quick search:"
 msgstr "Pikahaku:"
 
-#: dialogs/LinkInsertionDialog.cpp:70 dialogs/LinkInsertionDialog.cpp:151
-#: dialogs/LinkInsertionDialog.cpp:185 dialogs/LinkInsertionDialog.cpp:277
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:278
 #, kde-format
 msgid "The URL is invalid"
 msgstr "Osoite on virheellinen"
 
-#: dialogs/LinkInsertionDialog.cpp:87
+#: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
 msgstr "Kirjanmerkkiä ei ole olemassa"
 
-#: dialogs/LinkInsertionDialog.cpp:189
+#: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
 msgstr "Haetaan otsikkoa: 0 % valmis"
 
-#: dialogs/LinkInsertionDialog.cpp:212
+#: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
 msgstr "Hakeminen aikakatkaistiin"
 
-#: dialogs/LinkInsertionDialog.cpp:266
+#: dialogs/LinkInsertionDialog.cpp:267
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
 msgstr "Haetaan otsikkoa: %1 % valmis"
@@ -2125,7 +2125,7 @@ msgstr "Tasomuotoilukirjasto"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
-#: dialogs/StyleManager.ui:104 TextTool.cpp:2639
+#: dialogs/StyleManager.ui:104 TextTool.cpp:2640
 #, kde-format
 msgid "Delete"
 msgstr "Poista"
@@ -2195,13 +2195,13 @@ msgid "Another style named '%1' already exist. Please choose another name."
 msgstr "Nimellä ”%1” on jo tyyli. Valitse toinen nimi."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
-#: dialogs/StyleManager.ui:52 TextTool.cpp:2252
+#: dialogs/StyleManager.ui:52 TextTool.cpp:2253
 #, kde-format
 msgid "Paragraph"
 msgstr "Kappale"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
-#: dialogs/StyleManager.ui:66 TextTool.cpp:2250
+#: dialogs/StyleManager.ui:66 TextTool.cpp:2251
 #, kde-format
 msgid "Character"
 msgstr "Merkki"
@@ -2448,7 +2448,7 @@ msgstr "Sisällysluettelo"
 msgid "Insert a Table of Contents into the document."
 msgstr "Lisää tiedostoon sisällysluettelo."
 
-#: ReferencesTool.cpp:118 TextTool.cpp:406
+#: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
 msgid "Insert Custom..."
 msgstr "Lisää mukautettu…"
@@ -2643,312 +2643,312 @@ msgstr "Muoto, joka sisältää tekstiä"
 msgid "Text Shape"
 msgstr "Tekstimuoto"
 
-#: TextTool.cpp:202
+#: TextTool.cpp:203
 #, kde-format
 msgid "Configure current section"
 msgstr "Muokkaa nykyistä osaa"
 
-#: TextTool.cpp:206
+#: TextTool.cpp:207
 #, kde-format
 msgid "Insert new section"
 msgstr "Lisää uusi osa"
 
-#: TextTool.cpp:210
+#: TextTool.cpp:211
 #, kde-format
 msgid "Insert paragraph between sections"
 msgstr "Lisää kappale osien väliin"
 
-#: TextTool.cpp:214
+#: TextTool.cpp:215
 #, kde-format
 msgid "Paste As Text"
 msgstr "Liitä tekstinä"
 
-#: TextTool.cpp:219
+#: TextTool.cpp:220
 #, kde-format
 msgid "Bold"
 msgstr "Lihavointi"
 
-#: TextTool.cpp:225
+#: TextTool.cpp:226
 #, kde-format
 msgid "Italic"
 msgstr "Kursiivi"
 
-#: TextTool.cpp:231
+#: TextTool.cpp:232
 #, kde-format
 msgctxt "Text formatting"
 msgid "Underline"
 msgstr "Alleviivaus"
 
-#: TextTool.cpp:237
+#: TextTool.cpp:238
 #, kde-format
 msgid "Strikethrough"
 msgstr "Yliviivaus"
 
-#: TextTool.cpp:243
+#: TextTool.cpp:244
 #, kde-format
 msgid "Align Left"
 msgstr "Tasaa vasemmalle"
 
-#: TextTool.cpp:250
+#: TextTool.cpp:251
 #, kde-format
 msgid "Align Right"
 msgstr "Tasaa oikealle"
 
-#: TextTool.cpp:257
+#: TextTool.cpp:258
 #, kde-format
 msgid "Align Center"
 msgstr "Keskitä"
 
-#: TextTool.cpp:265
+#: TextTool.cpp:266
 #, kde-format
 msgid "Align Block"
 msgstr "Tasaa lohko"
 
-#: TextTool.cpp:272
+#: TextTool.cpp:273
 #, kde-format
 msgid "Change text direction"
 msgstr "Muuta tekstin suuntaa"
 
-#: TextTool.cpp:274
+#: TextTool.cpp:275
 #, kde-format
 msgid "Change writing direction"
 msgstr "Muuta kirjoitussuuntaa"
 
-#: TextTool.cpp:293
+#: TextTool.cpp:294
 #, kde-format
 msgid "Increase Indent"
 msgstr "Kasvata sisennystä"
 
-#: TextTool.cpp:299
+#: TextTool.cpp:300
 #, kde-format
 msgid "Decrease Indent"
 msgstr "Pienennä sisennystä"
 
-#: TextTool.cpp:303
+#: TextTool.cpp:304
 #, kde-format
 msgid "Toggle List or List Level Formatting"
 msgstr ""
 
-#: TextTool.cpp:304
+#: TextTool.cpp:305
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
 
-#: TextTool.cpp:307
+#: TextTool.cpp:308
 #, kde-format
 msgid "Increase Font Size"
 msgstr "Kasvata fonttikokoa"
 
-#: TextTool.cpp:312
+#: TextTool.cpp:313
 #, kde-format
 msgid "Decrease Font Size"
 msgstr "Pienennä fonttikokoa"
 
-#: TextTool.cpp:318
+#: TextTool.cpp:319
 #, kde-format
 msgid "Font Family"
 msgstr "Fonttiperhe"
 
 # Nimi valikolle, josta voi lisätä muuttujan.
 # KEHITTÄJILLE: lisää kontekstia
-#: TextTool.cpp:322
+#: TextTool.cpp:323
 #, kde-format
 msgid "Variable"
 msgstr "Muuttuja"
 
-#: TextTool.cpp:326
+#: TextTool.cpp:327
 #, kde-format
 msgid "Insert Non-Breaking Space"
 msgstr "Lisää sitova välilyönti"
 
-#: TextTool.cpp:331
+#: TextTool.cpp:332
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
 msgstr "Lisää sitova yhdysmerkki"
 
-#: TextTool.cpp:336
+#: TextTool.cpp:337
 #, kde-format
 msgid "Insert Index"
 msgstr "Lisää viittaus"
 
-#: TextTool.cpp:341
+#: TextTool.cpp:342
 #, kde-format
 msgid "Insert Soft Hyphen"
 msgstr "Lisää tavutusvihje"
 
-#: TextTool.cpp:347
+#: TextTool.cpp:348
 #, kde-format
 msgid "Line Break"
 msgstr "Rivinvaihto"
 
-#: TextTool.cpp:352
+#: TextTool.cpp:353
 #, kde-format
 msgid "Page Break"
 msgstr "Sivunvaihto"
 
-#: TextTool.cpp:356
+#: TextTool.cpp:357
 #, kde-format
 msgid "Insert a page break"
 msgstr "Lisää sivunvaihto"
 
-#: TextTool.cpp:357
+#: TextTool.cpp:358
 #, kde-format
 msgid "All text after this point will be moved into the next page."
 msgstr "Tätä kohtaa seuraava teksti siirretään seuraavalla sivulle."
 
-#: TextTool.cpp:360
+#: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
 msgstr "Fontti…"
 
-#: TextTool.cpp:363
+#: TextTool.cpp:364
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
 msgstr "Muuta fonttia, fonttikokoa, lihavointia, kursivointia jne."
 
-#: TextTool.cpp:364
+#: TextTool.cpp:365
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
 msgstr "Muuta valittujen merkkien muotoilua."
 
-#: TextTool.cpp:367
+#: TextTool.cpp:368
 #, kde-format
 msgid "Font Size"
 msgstr "Fonttikoko"
 
-#: TextTool.cpp:373
+#: TextTool.cpp:374
 #, kde-format
 msgid "Text Color..."
 msgstr "Tekstiväri…"
 
-#: TextTool.cpp:374
+#: TextTool.cpp:375
 #, kde-format
 msgid "Text Color"
 msgstr "Tekstiväri"
 
-#: TextTool.cpp:380
+#: TextTool.cpp:381
 #, kde-format
 msgid "Background Color..."
 msgstr "Taustaväri…"
 
-#: TextTool.cpp:381
+#: TextTool.cpp:382
 #, kde-format
 msgid "Background"
 msgstr "Tausta"
 
-#: TextTool.cpp:385
+#: TextTool.cpp:386
 #, kde-format
 msgid "Auto Resize To Content"
 msgstr "Sovita koko sisältöön"
 
-#: TextTool.cpp:390
+#: TextTool.cpp:391
 #, kde-format
 msgid "Grow To Fit Width"
 msgstr "Kasvata leveyteen"
 
-#: TextTool.cpp:395
+#: TextTool.cpp:396
 #, kde-format
 msgid "Grow To Fit Height"
 msgstr "Kasvata korkeuteen"
 
-#: TextTool.cpp:400
+#: TextTool.cpp:401
 #, kde-format
 msgid "Shrink To Fit"
 msgstr "Pienennä sopimaan"
 
-#: TextTool.cpp:408
+#: TextTool.cpp:409
 #, kde-format
 msgid "Insert a table into the document."
 msgstr "Lisää tiedostoon taulukko."
 
-#: TextTool.cpp:411
+#: TextTool.cpp:412
 #, kde-format
 msgid "Row Above"
 msgstr "Rivi ylle"
 
-#: TextTool.cpp:412
+#: TextTool.cpp:413
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Lisää rivi ylle"
 
-#: TextTool.cpp:416
+#: TextTool.cpp:417
 #, kde-format
 msgid "Row Below"
 msgstr "Rivi alle"
 
-#: TextTool.cpp:417
+#: TextTool.cpp:418
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Lisää rivi alle"
 
-#: TextTool.cpp:421
+#: TextTool.cpp:422
 #, kde-format
 msgid "Column Left"
 msgstr "Sarake vasemmalle"
 
-#: TextTool.cpp:422
+#: TextTool.cpp:423
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Lisää sarake vasemmalle"
 
-#: TextTool.cpp:426
+#: TextTool.cpp:427
 #, kde-format
 msgid "Column Right"
 msgstr "Sarake oikealle"
 
-#: TextTool.cpp:427
+#: TextTool.cpp:428
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Lisää sarake oikealle"
 
-#: TextTool.cpp:431
+#: TextTool.cpp:432
 #, kde-format
 msgid "Column"
 msgstr "Sarake"
 
-#: TextTool.cpp:432
+#: TextTool.cpp:433
 #, kde-format
 msgid "Delete Column"
 msgstr "Poista sarake"
 
-#: TextTool.cpp:436
+#: TextTool.cpp:437
 #, kde-format
 msgid "Row"
 msgstr "Rivi"
 
-#: TextTool.cpp:437
+#: TextTool.cpp:438
 #, kde-format
 msgid "Delete Row"
 msgstr "Poista rivi"
 
-#: TextTool.cpp:441
+#: TextTool.cpp:442
 #, kde-format
 msgid "Merge Cells"
 msgstr "Yhdistä solut"
 
-#: TextTool.cpp:445
+#: TextTool.cpp:446
 #, kde-format
 msgid "Split Cells"
 msgstr "Jaa solut"
 
-#: TextTool.cpp:450
+#: TextTool.cpp:451
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
 msgstr "Valitse reunatyyli ja maalaa se tyyli taulukkoon"
 
-#: TextTool.cpp:454
+#: TextTool.cpp:455
 #, kde-format
 msgid "Paragraph..."
 msgstr "Kappale…"
 
-#: TextTool.cpp:457
+#: TextTool.cpp:458
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr ""
 "Muuta kappaleen reunuksia, tekstin kulkua, reunoja, luetelmia, numerointia "
 "jne."
 
-#: TextTool.cpp:459
+#: TextTool.cpp:460
 #, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -2961,17 +2961,17 @@ msgstr ""
 "ne samanaikaisesti.</p><p>Ellei valintaa ole, muutetaan kappaletta, jossa "
 "kohdistin tällä hetkellä on.</p>"
 
-#: TextTool.cpp:463
+#: TextTool.cpp:464
 #, kde-format
 msgid "Style Manager..."
 msgstr "Tyylien hallinta…"
 
-#: TextTool.cpp:465
+#: TextTool.cpp:466
 #, kde-format
 msgid "Change attributes of styles"
 msgstr "Muuta tyylin ominaisuuksia"
 
-#: TextTool.cpp:466
+#: TextTool.cpp:467
 #, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
@@ -2980,113 +2980,113 @@ msgstr ""
 "<p>Muuta tyylien fontti- ja kappaleasetuksia.</p><p>Voit muuttaa useita eri "
 "tyylejä asetusikkunan kautta.</p>"
 
-#: TextTool.cpp:473
+#: TextTool.cpp:474
 #, kde-format
 msgid "Special Character..."
 msgstr "Erikoismerkki…"
 
-#: TextTool.cpp:477
+#: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 "Lisää yksi tai useampi kirjain tai merkki, jota ei löydy näppäimistöltä"
 
-#: TextTool.cpp:478
+#: TextTool.cpp:479
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
 "Lisää yksi tai useampi kirjain tai merkki, jota ei löydy näppäimistöltä"
 
-#: TextTool.cpp:481
+#: TextTool.cpp:482
 #, kde-format
 msgid "Repaint"
 msgstr "Piirrä uudelleen"
 
-#: TextTool.cpp:486
+#: TextTool.cpp:487
 #, kde-format
 msgid "Insert Comment"
 msgstr "Lisää kommentti"
 
-#: TextTool.cpp:570
+#: TextTool.cpp:571
 #, kde-format
 msgid "Insertion"
 msgstr "Lisäys"
 
-#: TextTool.cpp:572
+#: TextTool.cpp:573
 #, kde-format
 msgid "Deletion"
 msgstr "Poisto"
 
-#: TextTool.cpp:574
+#: TextTool.cpp:575
 #, kde-format
 msgid "Formatting"
 msgstr "Muotoilu"
 
-#: TextTool.cpp:589
+#: TextTool.cpp:590
 #, kde-format
 msgid "Ctrl+click to go to link "
 msgstr "Avaa linkki Ctrl+napsauttamalla"
 
-#: TextTool.cpp:596
+#: TextTool.cpp:597
 #, kde-format
 msgid "Ctrl+click to go to the note "
 msgstr "Siirry viitteeseen Ctrl+napsauttamalla"
 
 # ”note reference” tarkoittaa tässä kohtaa, johon ”note” eli ”footnote” tai ”endnote” viittaa.
-#: TextTool.cpp:602
+#: TextTool.cpp:603
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
 msgstr "Siirry viitattuun kohtaan Ctr+napsauttamalla"
 
-#: TextTool.cpp:698
+#: TextTool.cpp:699
 #, kde-format
 msgid "follows along"
 msgstr "seuraa mukana"
 
-#: TextTool.cpp:728
+#: TextTool.cpp:729
 #, kde-format
 msgid "Press shift to not resize this"
 msgstr "Säilytä tämän koko painamalla Vaihtoa"
 
-#: TextTool.cpp:929
+#: TextTool.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 "Muuta reunan muotoilua\n"
 "reunan muotoilun muuttaminen"
 
-#: TextTool.cpp:1153
+#: TextTool.cpp:1154
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr ""
 "Leikkaa\n"
 "leikkaaminen"
 
-#: TextTool.cpp:1413
+#: TextTool.cpp:1414
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr ""
 "Muuta sarakkeen leveyttä\n"
 "sarakkeen leveyden muuttaminen"
 
-#: TextTool.cpp:1457
+#: TextTool.cpp:1458
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr ""
 "Muuta rivin korkeutta\n"
 "rivin korkeuden muuttaminen"
 
-#: TextTool.cpp:2258
+#: TextTool.cpp:2259
 #, kde-format
 msgid "Table"
 msgstr "Taulukko"
 
-#: TextTool.cpp:2634 TextTool.cpp:2639
+#: TextTool.cpp:2635 TextTool.cpp:2640
 #, kde-format
 msgid "Autocorrection"
 msgstr "Automaattikorjaus"
 
-#: TextTool.cpp:2634
+#: TextTool.cpp:2635
 #, kde-format
 msgid "Key Press"
 msgstr "Näppäinpainallus"

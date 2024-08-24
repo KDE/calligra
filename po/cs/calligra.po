@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-15 13:46+0200\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 15:30+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -397,7 +397,7 @@ msgstr "Vložit tvary"
 msgid "Active tool: %1"
 msgstr "Aktivní nástroj: %1"
 
-#: flake/KoToolProxy.cpp:589
+#: flake/KoToolProxy.cpp:590
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
 msgstr "Vložit obrázek"
@@ -1449,7 +1449,7 @@ msgstr "nepojmenovaný"
 msgid "Open Document"
 msgstr "Otevřít dokument"
 
-#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:518
+#: main/KoMainWindow.cpp:1206 pageapp/KoPAView.cpp:519
 #, kde-format
 msgid "Import Document"
 msgstr "Importovat dokument"
@@ -1736,24 +1736,24 @@ msgstr "Nová verze nemohla být přidána"
 msgid "Date: %1"
 msgstr "Datum: %1"
 
-#: main/KoView.cpp:343
+#: main/KoView.cpp:345
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Přidat tvar"
 
-#: main/KoView.cpp:354
+#: main/KoView.cpp:356
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktivní profil autora"
 
-#: main/KoView.cpp:368 main/KoView.cpp:421
+#: main/KoView.cpp:370 main/KoView.cpp:423
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonymní"
 
-#: main/KoView.cpp:420 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Výchozí profil autora"
@@ -2330,108 +2330,108 @@ msgstr[0] "Vložit stránku"
 msgstr[1] "Vložit stránky"
 msgstr[2] "Vložit stránky"
 
-#: pageapp/KoPAView.cpp:297
+#: pageapp/KoPAView.cpp:298
 #, kde-format
 msgid "Tools"
 msgstr "Nástroje"
 
-#: pageapp/KoPAView.cpp:349
+#: pageapp/KoPAView.cpp:350
 #, kde-format
 msgid "D&elete"
 msgstr "S&mazat"
 
-#: pageapp/KoPAView.cpp:359
+#: pageapp/KoPAView.cpp:360
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Přichytávat k mřížce"
 
-#: pageapp/KoPAView.cpp:368
+#: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Master Pages"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:372
+#: pageapp/KoPAView.cpp:373
 #, kde-format
 msgid "Show Rulers"
 msgstr "Zobrazit pravítka"
 
-#: pageapp/KoPAView.cpp:374
+#: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:378
+#: pageapp/KoPAView.cpp:379
 #, kde-format
 msgid "Show Page Margins"
 msgstr "Zobrazit okraje stránky"
 
-#: pageapp/KoPAView.cpp:380
+#: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show/hide the page margins"
 msgstr "Ukázat/Skrýt okraje stránky"
 
-#: pageapp/KoPAView.cpp:384
+#: pageapp/KoPAView.cpp:385
 #, kde-format
 msgid "Insert Page"
 msgstr "Vložit stránku"
 
-#: pageapp/KoPAView.cpp:386 pageapp/KoPAView.cpp:387
+#: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:390
+#: pageapp/KoPAView.cpp:391
 #, kde-format
 msgid "Copy Page"
 msgstr "Kopírovat stránku"
 
-#: pageapp/KoPAView.cpp:392 pageapp/KoPAView.cpp:393
+#: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, kde-format
 msgid "Copy the current page"
 msgstr ""
 
-#: pageapp/KoPAView.cpp:396
+#: pageapp/KoPAView.cpp:397
 #, kde-format
 msgid "Delete Page"
 msgstr "Smazat stránku"
 
-#: pageapp/KoPAView.cpp:399 pageapp/KoPAView.cpp:400
+#: pageapp/KoPAView.cpp:400 pageapp/KoPAView.cpp:401
 #, kde-format
 msgid "Delete the current page"
 msgstr "Smazat současnou stranu"
 
-#: pageapp/KoPAView.cpp:403
+#: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Master Page..."
 msgstr "Hlavní strana..."
 
-#: pageapp/KoPAView.cpp:407
+#: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
 msgstr "Rozvržení stránky..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
-#: pageapp/KoPAView.cpp:417 rdf/KoSemanticStylesheetsEditor.ui:57
+#: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
 #, kde-format
 msgid "Variable"
 msgstr "Proměnná"
 
-#: pageapp/KoPAView.cpp:422
+#: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Import Document..."
 msgstr "Importovat dokument..."
 
-#: pageapp/KoPAView.cpp:426
+#: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
 msgstr "Nastavit..."
 
-#: pageapp/KoPAView.cpp:516
+#: pageapp/KoPAView.cpp:517
 #, kde-format
 msgid "Import Slideshow"
 msgstr "Importovat prezentaci"
 
-#: pageapp/KoPAView.cpp:543 pageapp/KoPAView.cpp:546
+#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2440,7 +2440,7 @@ msgstr ""
 "Nelze importovat\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:658
+#: pageapp/KoPAView.cpp:659
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr ""
@@ -3827,87 +3827,87 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Dvojité"
 
-#: text/KoTextEditor.cpp:179 text/KoTextEditor.cpp:1481
-#: text/KoTextEditor.cpp:1483
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "Nový odstavec"
 
-#: text/KoTextEditor.cpp:473
+#: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Přidat záložku"
 
-#: text/KoTextEditor.cpp:488
+#: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "Přidat poznámku"
 
-#: text/KoTextEditor.cpp:512
+#: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "Vložit index"
 
-#: text/KoTextEditor.cpp:538
+#: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "Vložit proměnnou"
 
-#: text/KoTextEditor.cpp:603
+#: text/KoTextEditor.cpp:604
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "Vložit zalomení"
 
-#: text/KoTextEditor.cpp:911 text/KoTextEditor.cpp:913
-#: text/KoTextEditor.cpp:928
+#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
+#: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "Vložit tabulku"
 
-#: text/KoTextEditor.cpp:1068
+#: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Sloučit buňky"
 
-#: text/KoTextEditor.cpp:1085
+#: text/KoTextEditor.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "Rozdělit buňky"
 
-#: text/KoTextEditor.cpp:1113
+#: text/KoTextEditor.cpp:1114
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "Upravit šířku tabulky"
 
-#: text/KoTextEditor.cpp:1129
+#: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "Změnit formátování okraje"
 
-#: text/KoTextEditor.cpp:1176 text/KoTextEditor.cpp:1178
-#: text/KoTextEditor.cpp:1196
+#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
+#: text/KoTextEditor.cpp:1197
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1235
+#: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1252 text/KoTextEditor.cpp:1254
-#: text/KoTextEditor.cpp:1273
+#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
+#: text/KoTextEditor.cpp:1274
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "Vložit seznam použité literatury"
 
-#: text/KoTextEditor.cpp:1310 text/KoTextEditor.cpp:1312
+#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "Přidat citaci"
 
-#: text/KoTextEditor.cpp:1339 text/KoTextEditor.cpp:1341
-#: text/KoTextEditor.cpp:1379
+#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
+#: text/KoTextEditor.cpp:1380
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr "Psaní"
@@ -4987,18 +4987,17 @@ msgstr "Rozostření:"
 msgid "Distance:"
 msgstr "Vzdálenost:"
 
-#: widgets/KoShapePropertyWidget.cpp:45
+#: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Vlastnosti tvaru"
 
-#: widgets/KoShapePropertyWidget.cpp:56
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#: widgets/KoShapePropertyWidget.cpp:57
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Žádný obrázek není dostupný."
+msgstr "Nejsou dostupné žádné vlastnosti"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5158,32 +5157,28 @@ msgid "Icon Size"
 msgstr "Velikost ikon"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "Rozvržení stránky"
+msgstr "Rozvržení"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automaticky"
+msgstr "&Automaticky"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Zleva doprava"
+msgstr "Z&leva doprava"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Zprava doleva"
+msgstr "Z&prava doleva"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format
@@ -5252,6 +5247,3 @@ msgstr "Všechny podporované formáty"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Toggles organizing the options in tabs or not"
-#~ msgstr "Přepne organizování voleb do karet"

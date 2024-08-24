@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-14 19:37+0300\n"
+"PO-Revision-Date: 2024-08-23 09:14+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12671,13 +12671,12 @@ msgstr "© Команда Calligra Sheets, 1998–%1"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Відповідальний за програму"
+msgstr "Супровідник, портування на Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12690,10 +12689,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Відповідальний за програму"
+msgstr "Колишній супровідник"
 
 #: part/AboutData.h:42
 #, kde-format

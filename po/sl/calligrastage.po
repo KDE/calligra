@@ -1,7 +1,7 @@
 # translation of kpresenter.po to Slovenian
 # Translation of kpresenter.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrastage.po 1688383 2024-08-23 01:14:24Z scripty $
+# $Id: calligrastage.po 1688482 2024-08-24 01:14:28Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 1999.
@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-02 05:59+0200\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 06:25+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -166,13 +166,12 @@ msgstr "(c) 1998-%1, Ekipa Stage"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Vzdrževalec"
+msgstr "Vzdrževalec/Prenos na Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format
@@ -321,19 +320,19 @@ msgstr "Konec predstavitve. Kliknite za izhod."
 msgid "Layout"
 msgstr "Razpored"
 
-#: part/KPrPart.cpp:67
+#: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
 "Ne najdem potrebne besedilne komponente. Calligra Stage se bo zdaj ustavila."
 
-#: part/KPrPart.cpp:72
+#: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
 "Ne morem najti ustrezne slikovne komponente. Calligra Stage so zdaj ustavila."
 
-#: part/KPrPart.cpp:85
+#: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
 msgstr "Napaka pri namestitvi"
@@ -863,37 +862,37 @@ msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
 msgstr "Uporabi učinke prosojnic za vse prosojnice"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:157
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
 msgstr "Vhod"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:163
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
 msgid "Exit"
 msgstr "Izhod"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:168
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:169
 #, kde-format
 msgid "Emphasis"
 msgstr "Poudarek"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:173
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
 msgstr "Po meri"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:178
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
 msgstr "Pot gibanja"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:183
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
 msgstr "Dejavnost ole"
 
-#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:188
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
 msgstr "Klic medija"

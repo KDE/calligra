@@ -1,6 +1,6 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2023.
 #
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2023-02-24 11:06+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 15:41+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1089,13 +1089,12 @@ msgstr "Autorská práva 1998-%1, Tým Words"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Spolusprávce"
+msgstr "Spolusprávce/port do Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
@@ -1430,12 +1429,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standardní"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Chyba instalace"

@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1688383 2024-08-23 01:14:24Z scripty $
+# $Id: calligrawords.po 1688482 2024-08-24 01:14:28Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2022-11-15 13:48+0100\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"PO-Revision-Date: 2024-08-23 06:24+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1096,13 +1096,12 @@ msgstr "© 1998-%1, Ekipa Words"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Sovzdrževalec"
+msgstr "Sovzdrževalec/Prenos na Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
@@ -1440,13 +1439,13 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
 "Ni bilo moč najti potrebne besedilne komponente, Words bo sedaj zaključil"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "Napaka pri namestitvi"

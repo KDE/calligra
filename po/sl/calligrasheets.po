@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1688383 2024-08-23 01:14:24Z scripty $
+# $Id: calligrasheets.po 1688482 2024-08-24 01:14:28Z scripty $
 # $Source$
 #
 #
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-14 06:23+0200\n"
+"PO-Revision-Date: 2024-08-23 06:26+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12461,13 +12461,12 @@ msgstr "(c) 1998-%1, ekipa Calligra Sheets"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Vzdrževalec"
+msgstr "Vzdrževalec/Prenos na Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12480,10 +12479,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Vzdrževalec"
+msgstr "Prejšnji vzdrževalec"
 
 #: part/AboutData.h:42
 #, kde-format

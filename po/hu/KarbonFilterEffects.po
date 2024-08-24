@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2013-10-06 10:41+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -62,7 +62,7 @@ msgstr "Gauss-féle elmosás"
 msgid "Radius"
 msgstr "Sugár"
 
-#: ColorMatrixEffect.cpp:22
+#: ColorMatrixEffect.cpp:25
 #, kde-format
 msgid "Color Matrix"
 msgstr "Színmátrix"
@@ -102,7 +102,7 @@ msgstr "Szög"
 msgid "Color matrix"
 msgstr "Színmátrix"
 
-#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#: ComponentTransferEffect.cpp:19 ComponentTransferEffectFactory.cpp:14
 #, kde-format
 msgid "Component transfer"
 msgstr "Komponens átvitel"

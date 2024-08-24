@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2008-03-26 18:26+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -1526,13 +1526,13 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "मानक"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, fuzzy, kde-format
 #| msgid "Can not find needed text component, KWord will quit now"
 msgid "Can not find needed text component, Words will quit now"
 msgstr "आवश्यक पाठ अवयव नहीं मिला, केवर्ड अब बाहर होता है"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "संस्थापन त्रुटि"

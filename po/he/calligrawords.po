@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2024-06-29 16:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1440,12 +1440,12 @@ msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "רגיל"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr "לא ניתן למצוא את רכיב הטקסט הנדרש, „מילים” ייצא כעת"
 
-#: part/KWPart.cpp:137
+#: part/KWPart.cpp:139
 #, kde-format
 msgid "Installation Error"
 msgstr "שגיאת התקנה"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2011-07-12 00:15+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -185,92 +185,92 @@ msgstr "Formula"
 msgid "A formula"
 msgstr "A"
 
-#: KoFormulaTool.cpp:403
+#: KoFormulaTool.cpp:404
 #, fuzzy, kde-format
 msgid "Insert fenced element"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:404
+#: KoFormulaTool.cpp:405
 #, fuzzy, kde-format
 msgid "Insert enclosed element"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:406
+#: KoFormulaTool.cpp:407
 #, fuzzy, kde-format
 msgid "Insert root"
 msgstr "Selit root"
 
-#: KoFormulaTool.cpp:407
+#: KoFormulaTool.cpp:408
 #, fuzzy, kde-format
 msgid "Insert square root"
 msgstr "Selit root"
 
-#: KoFormulaTool.cpp:409
+#: KoFormulaTool.cpp:410
 #, fuzzy, kde-format
 msgid "Insert fraction"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:410
+#: KoFormulaTool.cpp:411
 #, fuzzy, kde-format
 msgid "Insert bevelled fraction"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:415
+#: KoFormulaTool.cpp:416
 #, fuzzy, kde-format
 msgid "Insert 3x3 table"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:421
+#: KoFormulaTool.cpp:422
 #, fuzzy, kde-format
 msgid "Insert 2 dimensional vector"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:426
+#: KoFormulaTool.cpp:427
 #, fuzzy, kde-format
 msgid "Insert subscript"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:427
+#: KoFormulaTool.cpp:428
 #, fuzzy, kde-format
 msgid "Insert superscript"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:428
+#: KoFormulaTool.cpp:429
 #, fuzzy, kde-format
 msgid "Insert sub- and superscript"
 msgstr "Selit dan"
 
-#: KoFormulaTool.cpp:432
+#: KoFormulaTool.cpp:433
 #, fuzzy, kde-format
 msgid "Insert overscript"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:433
+#: KoFormulaTool.cpp:434
 #, fuzzy, kde-format
 msgid "Insert underscript"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:434
+#: KoFormulaTool.cpp:435
 #, fuzzy, kde-format
 msgid "Insert under- and overscript"
 msgstr "Selit dan"
 
-#: KoFormulaTool.cpp:445
+#: KoFormulaTool.cpp:446
 #, fuzzy, kde-format
 msgid "Insert row"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:452
+#: KoFormulaTool.cpp:453
 #, fuzzy, kde-format
 msgid "Insert column"
 msgstr "Selit"
 
-#: KoFormulaTool.cpp:459
+#: KoFormulaTool.cpp:460
 #, fuzzy, kde-format
 msgid "Remove row"
 msgstr "Buang"
 
-#: KoFormulaTool.cpp:466
+#: KoFormulaTool.cpp:467
 #, fuzzy, kde-format
 msgid "Remove column"
 msgstr "Buang"
