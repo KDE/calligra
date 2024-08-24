@@ -85,7 +85,7 @@ private:
     void saveEncryption();
 
     class KoDocumentInfoDlgPrivate;
-    KoDocumentInfoDlgPrivate *const d;
+    std::unique_ptr<KoDocumentInfoDlgPrivate> const d;
 };
 
 #endif

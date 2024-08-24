@@ -65,38 +65,32 @@ private:
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
-    KoDocumentInfoDlgPrivate()
-        : toggleEncryption(false)
-        , applyToggleEncryption(false)
-        , documentSaved(false)
-    {
-    }
+    KoDocumentInfoDlgPrivate() = default;
     ~KoDocumentInfoDlgPrivate() = default;
 
     KoDocumentInfo *info;
     QList<KPageWidgetItem *> pages;
-    Ui::KoDocumentInfoAboutWidget *aboutUi;
-    Ui::KoDocumentInfoAuthorWidget *authorUi;
+    std::unique_ptr<Ui::KoDocumentInfoAboutWidget> aboutUi;
+    std::unique_ptr<Ui::KoDocumentInfoAuthorWidget> authorUi;
 
-    bool toggleEncryption;
-    bool applyToggleEncryption;
-    bool documentSaved;
+    bool toggleEncryption = false;
+    bool applyToggleEncryption = false;
+    bool documentSaved = false;
 };
 
 KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     : KPageDialog(parent)
-    , d(new KoDocumentInfoDlgPrivate)
+    , d(std::make_unique<KoDocumentInfoDlgPrivate>())
 {
     d->info = docInfo;
 
     setWindowTitle(i18n("Document Information"));
-    //    setInitialSize(QSize(500, 500));
-    setFaceType(KPageDialog::List);
+    setFaceType(KPageDialog::FlatList);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
-    QWidget *infodlg = new QWidget();
+    d->aboutUi = std::make_unique<Ui::KoDocumentInfoAboutWidget>();
+    auto infodlg = new QWidget();
     d->aboutUi->setupUi(infodlg);
     d->aboutUi->lblEncryptedDesc->setVisible(false);
     d->aboutUi->lblEncrypted->setVisible(false);
@@ -105,11 +99,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
     d->aboutUi->cbLanguage->setCurrentIndex(-1);
 
-    KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
+    auto page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
+    auto doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
     if (doc) {
         QMimeDatabase db;
         QMimeType mime = db.mimeTypeForName(doc->mimeType());
@@ -129,9 +123,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
 
     initAboutTab();
 
-    d->authorUi = new Ui::KoDocumentInfoAuthorWidget();
-    QWidget *authordlg = new QWidget();
+    d->authorUi = std::make_unique<Ui::KoDocumentInfoAuthorWidget>();
+    auto authordlg = new QWidget();
     d->authorUi->setupUi(authordlg);
+    d->authorUi->mainLayout->insertStretch(0);
+    d->authorUi->mainLayout->insertStretch(2);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
     page->setHeader(i18n("Last saved by"));
     page->setIcon(koIcon("user-identity"));
@@ -139,31 +135,26 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->pages.append(page);
 
     initAuthorTab();
+
+    resize(QSize(1100, size().height()));
 }
 
-KoDocumentInfoDlg::~KoDocumentInfoDlg()
-{
-    delete d->authorUi;
-    delete d->aboutUi;
-    delete d;
-}
+KoDocumentInfoDlg::~KoDocumentInfoDlg() = default;
 
 void KoDocumentInfoDlg::accept()
 {
     // check if any pages veto the close
-    foreach (KPageWidgetItem *item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
-        if (page) {
-            if (page->shouldDialogCloseBeVetoed()) {
-                return;
-            }
+    for (KPageWidgetItem *item : std::as_const(d->pages)) {
+        auto page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
+        if (page && page->shouldDialogCloseBeVetoed()) {
+            return;
         }
     }
 
     // all fine, go and apply
     saveAboutData();
-    foreach (KPageWidgetItem *item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
+    for (KPageWidgetItem *item : std::as_const(d->pages)) {
+        auto page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
         if (page) {
             page->apply();
         }
@@ -179,7 +170,7 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
+    auto doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
 
     if (doc) {
         d->aboutUi->filePathLabel->setText(doc->localFilePath());
@@ -191,15 +182,17 @@ void KoDocumentInfoDlg::initAboutTab()
     d->aboutUi->cbLanguage->setCurrentIndex(d->aboutUi->cbLanguage->findText(language));
 
     d->aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
-    if (!d->info->aboutInfo("keyword").isEmpty())
+    if (!d->info->aboutInfo("keyword").isEmpty()) {
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
+    }
 
     d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
     if (doc && !doc->mimeType().isEmpty()) {
         QMimeDatabase db;
         QMimeType docmime = db.mimeTypeForName(doc->mimeType());
-        if (docmime.isValid())
+        if (docmime.isValid()) {
             d->aboutUi->lblType->setText(docmime.comment());
+        }
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"), Qt::ISODate);
@@ -247,19 +240,22 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    d->authorUi->fullName->setText(d->info->authorInfo("creator"));
-    d->authorUi->initials->setText(d->info->authorInfo("initial"));
-    d->authorUi->title->setText(d->info->authorInfo("author-title"));
-    d->authorUi->company->setText(d->info->authorInfo("company"));
-    d->authorUi->email->setText(d->info->authorInfo("email"));
-    d->authorUi->phoneWork->setText(d->info->authorInfo("telephone-work"));
-    d->authorUi->phoneHome->setText(d->info->authorInfo("telephone"));
-    d->authorUi->fax->setText(d->info->authorInfo("fax"));
-    d->authorUi->country->setText(d->info->authorInfo("country"));
-    d->authorUi->postal->setText(d->info->authorInfo("postal-code"));
-    d->authorUi->city->setText(d->info->authorInfo("city"));
-    d->authorUi->street->setText(d->info->authorInfo("street"));
-    d->authorUi->position->setText(d->info->authorInfo("position"));
+    auto setText = [](QLabel *label, const QString &value) {
+        label->setText(!value.isEmpty() ? value : i18nc("@info:placeholder", "Not set"));
+    };
+    setText(d->authorUi->fullName, d->info->authorInfo("creator"));
+    setText(d->authorUi->initials, d->info->authorInfo("initial"));
+    setText(d->authorUi->title, d->info->authorInfo("author-title"));
+    setText(d->authorUi->company, d->info->authorInfo("company"));
+    setText(d->authorUi->email, d->info->authorInfo("email"));
+    setText(d->authorUi->phoneWork, d->info->authorInfo("telephone-work"));
+    setText(d->authorUi->phoneHome, d->info->authorInfo("telephone"));
+    setText(d->authorUi->fax, d->info->authorInfo("fax"));
+    setText(d->authorUi->country, d->info->authorInfo("country"));
+    setText(d->authorUi->postal, d->info->authorInfo("postal-code"));
+    setText(d->authorUi->city, d->info->authorInfo("city"));
+    setText(d->authorUi->street, d->info->authorInfo("street"));
+    setText(d->authorUi->position, d->info->authorInfo("position"));
 }
 
 void KoDocumentInfoDlg::saveAboutData()
@@ -288,13 +284,13 @@ void KoDocumentInfoDlg::slotResetMetaData()
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"), Qt::ISODate);
         QString s = QLocale().toString(t);
-        d->aboutUi->lblCreated->setText(s + ", " + d->info->aboutInfo("initial-creator"));
+        d->aboutUi->lblCreated->setText(s + i18nc("list separator", ", ") + d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
         QString s = QLocale().toString(t);
-        d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
+        d->aboutUi->lblModified->setText(s + i18nc("list separator", ", ") + d->info->authorInfo("creator"));
     }
 
     d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
@@ -302,9 +298,10 @@ void KoDocumentInfoDlg::slotResetMetaData()
 
 void KoDocumentInfoDlg::slotToggleEncryption()
 {
-    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
-    if (!doc)
+    auto doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
+    if (!doc) {
         return;
+    }
 
     d->toggleEncryption = !d->toggleEncryption;
 
@@ -318,29 +315,29 @@ void KoDocumentInfoDlg::slotToggleEncryption()
             d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
             d->aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
         }
+    } else if (d->toggleEncryption) {
+        d->aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
+        d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
+        d->aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
     } else {
-        if (d->toggleEncryption) {
-            d->aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
-            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
-            d->aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
-        } else {
-            d->aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
-            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
-            d->aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
-        }
+        d->aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
+        d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
+        d->aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
     }
 }
 
 void KoDocumentInfoDlg::saveEncryption()
 {
-    if (!d->applyToggleEncryption)
+    if (!d->applyToggleEncryption) {
         return;
+    }
 
-    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
-    if (!doc)
+    auto doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
+    if (!doc) {
         return;
+    }
 
-    KMainWindow *mainWindow = dynamic_cast<KMainWindow *>(parent());
+    auto mainWindow = dynamic_cast<KMainWindow *>(parent());
 
     bool saveas = doc->url().isEmpty();
     if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
@@ -378,8 +375,7 @@ void KoDocumentInfoDlg::saveEncryption()
         saveas = true;
     } else {
         // Encrypt
-        bool modified = doc->isModified();
-        if (!doc->url().isEmpty() && !(doc->mimeType().startsWith("application/vnd.oasis.opendocument.") && doc->specialOutputFlag() == 0)) {
+        if (!doc->url().isEmpty() && (!doc->mimeType().startsWith("application/vnd.oasis.opendocument.") || doc->specialOutputFlag() != 0)) {
             QMimeDatabase db;
             QMimeType mime = db.mimeTypeForName(doc->mimeType());
             QString comment = mime.isValid() ? mime.comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
@@ -437,12 +433,14 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
     d->aboutUi->meComments->setReadOnly(ro);
 
-    Q_FOREACH (KPageWidgetItem *page, d->pages) {
-        Q_FOREACH (QLineEdit *le, page->widget()->findChildren<QLineEdit *>()) {
-            le->setReadOnly(ro);
+    for (KPageWidgetItem *page : std::as_const(d->pages)) {
+        const auto lineEdits = page->widget()->findChildren<QLineEdit *>();
+        for (auto lineEdit : lineEdits) {
+            lineEdit->setReadOnly(ro);
         }
-        Q_FOREACH (QPushButton *le, page->widget()->findChildren<QPushButton *>()) {
-            le->setDisabled(ro);
+        const auto pushButtons = page->widget()->findChildren<QPushButton *>();
+        for (auto pushButton : pushButtons) {
+            pushButton->setDisabled(ro);
         }
     }
 }
@@ -454,4 +452,5 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
     addPage(page);
     d->pages.append(page);
 }
+
 #include "KoDocumentInfoDlg.moc"
