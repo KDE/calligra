@@ -100,7 +100,8 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *d
 
     d->pasteAtCursor = new QCheckBox(this);
     d->pasteAtCursor->setChecked(d->oldPasteAtCursor);
-    miscLayout->addRow(i18n("Paste at Cursor:"), d->pasteAtCursor);
+    d->pasteAtCursor->setText(i18nc("@option:check", "Paste at Cursor"));
+    miscLayout->addRow({}, d->pasteAtCursor);
 
     connect(d->unit, QOverload<int>::of(&QComboBox::activated), this, &KoConfigMiscPage::slotUnitChanged);
     connect(d->pasteAtCursor, &QAbstractButton::clicked, d->pasteOffset, &QWidget::setDisabled);
