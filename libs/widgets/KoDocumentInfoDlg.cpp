@@ -85,7 +85,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->info = docInfo;
 
     setWindowTitle(i18n("Document Information"));
-    setFaceType(KPageDialog::FlatList);
+    setFaceType(KPageDialog::Tabbed);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -135,8 +135,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->pages.append(page);
 
     initAuthorTab();
-
-    resize(QSize(1100, size().height()));
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg() = default;

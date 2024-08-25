@@ -9,9 +9,11 @@
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionToolTip.h"
 #include "KoDocumentSectionView.h"
+#include "KoItemToolTip.h"
 
 #include <QApplication>
 #include <QKeyEvent>
+#include <QLibraryInfo>
 #include <QLineEdit>
 #include <QModelIndex>
 #include <QMouseEvent>
@@ -19,37 +21,32 @@
 #include <QPointer>
 #include <QStyle>
 #include <QStyleOptionViewItem>
+#include <QToolTip>
+#include <QVersionNumber>
 
 #include <KLocalizedString>
 
 class KoDocumentSectionDelegate::Private
 {
 public:
-    Private()
-        : view(nullptr)
-        , edit(nullptr)
-    {
-    }
+    Private() = default;
 
-    KoDocumentSectionView *view;
-    QPointer<QWidget> edit;
+    KoDocumentSectionView *view = nullptr;
+    QPointer<QWidget> edit = nullptr;
     KoDocumentSectionToolTip tip;
     static const int margin = 1;
 };
 
 KoDocumentSectionDelegate::KoDocumentSectionDelegate(KoDocumentSectionView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
-    , d(new Private)
+    , d(std::make_unique<Private>())
 {
     d->view = view;
     view->setItemDelegate(this);
     QApplication::instance()->installEventFilter(this);
 }
 
-KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
-{
-    delete d;
-}
+KoDocumentSectionDelegate::~KoDocumentSectionDelegate() = default;
 
 QSize KoDocumentSectionDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -89,7 +86,7 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
 bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) && (index.flags() & Qt::ItemIsEnabled)) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        auto mouseEvent = static_cast<QMouseEvent *>(event);
 
         const QRect iconsRect_ = iconsRect(option, index).translated(option.rect.topLeft());
 
@@ -162,14 +159,23 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             return false;
         }
     } else if (event->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-        d->tip.showTip(d->view, helpEvent->pos(), option, index);
+        auto helpEvent = dynamic_cast<QHelpEvent *>(event);
+        static bool canRepositionPopups = !qApp->platformName().startsWith(QLatin1String("wayland")) || QLibraryInfo::version() >= QVersionNumber(6, 8, 0);
+        if (canRepositionPopups) {
+            d->tip.showTip(d->view, helpEvent->globalPos(), d->view->visualRect(index), option, index);
+        }
+        event->setAccepted(true);
         return true;
     } else if (event->type() == QEvent::Leave) {
         d->tip.hide();
     }
 
     return false;
+}
+
+bool KoDocumentSectionDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    return QAbstractItemDelegate::helpEvent(event, view, option, index);
 }
 
 QWidget *KoDocumentSectionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const

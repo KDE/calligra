@@ -186,12 +186,12 @@ QVariant KoPADocumentModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         return shape->name();
     case Qt::SizeHintRole: {
-        KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape);
+        auto page = dynamic_cast<KoPAPageBase *>(shape);
         if (page) { // return actual page size for page
             KoPageLayout layout = page->pageLayout();
-            return QSize(layout.width, layout.height);
-        } else
-            return shape->size();
+            return QSize((int)layout.width, (int)layout.height);
+        }
+        return shape->size();
     }
     case ActiveRole: {
         KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
@@ -211,10 +211,11 @@ QVariant KoPADocumentModel::data(const QModelIndex &index, int role) const
     case AspectRatioRole: {
         QTransform matrix = shape->absoluteTransformation(nullptr);
         QRectF bbox = matrix.mapRect(shape->outline().boundingRect());
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+        auto container = dynamic_cast<KoShapeContainer *>(shape);
         if (container) {
             bbox = QRectF();
-            foreach (KoShape *shape, container->shapes()) {
+            const auto shapes = container->shapes();
+            for (KoShape *shape : shapes) {
                 bbox = bbox.united(shape->outline().boundingRect());
             }
         }
@@ -257,7 +258,7 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    KoShape *shape = static_cast<KoShape *>(index.internalPointer());
+    auto shape = static_cast<KoShape *>(index.internalPointer());
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole: {
@@ -300,7 +301,7 @@ KoDocumentSectionModel::PropertyList KoPADocumentModel::properties(KoShape *shap
 {
     PropertyList l;
 
-    if (KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape)) {
+    if (auto page = dynamic_cast<KoPAPageBase *>(shape)) {
         // The idea is to display the page-number so users know what page-number/slide-number
         // the shape has also in the case the slide has a name (in which case it's not named
         // "Slide [slide-number]" any longer.

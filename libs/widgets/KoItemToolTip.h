@@ -8,11 +8,13 @@
 #define KO_ITEM_TOOLTIP_H
 
 #include "kowidgets_export.h"
-#include <QFrame>
+
+#include <QTextDocument>
 
 class QStyleOptionViewItem;
 class QModelIndex;
-class QTextDocument;
+class QHelpEvent;
+class QAbstractItemView;
 
 /**
  * Base class for tooltips that can show extensive information about
@@ -22,23 +24,21 @@ class QTextDocument;
  *
  * (KoItemToolTip is currently used in kopainter/KoResourceChooser)
  */
-class KOWIDGETS_EXPORT KoItemToolTip : public QFrame
+class KOWIDGETS_EXPORT KoItemToolTip
 {
-    Q_OBJECT
 public:
     KoItemToolTip();
-    ~KoItemToolTip() override;
-    void showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index);
+    virtual ~KoItemToolTip();
+
+    void showTip(QWidget *widget, const QPoint &pos, const QRect &rect, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void hide() const;
 
 protected:
     /**
      * Re-implement this to provide the actual tooltip contents.
      * For instance:
      * @code
-     *    QTextDocument *doc = new QTextDocument(this);
-     *
-     *     QImage thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
-     *     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
+     *     QTextDocument doc;
      *
      *     QString name = index.data(Qt::DisplayRole).toString();
      *
@@ -46,27 +46,17 @@ protected:
      *     const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name) + image;
      *     const QString html = QString("<html><body>%1</body></html>").arg(body);
      *
-     *     doc->setHtml(html);
-     *     doc->setTextWidth(qMin(doc->size().width(), 500.0));
+     *     doc.setHtml(html);
+     *     doc.setTextWidth(qMin(doc->size().width(), 500.0));
      *
-     *     return doc;
+     *     return doc.toHtml();
      * @endcode
      */
-    virtual QTextDocument *createDocument(const QModelIndex &index) = 0;
+    [[nodiscard]] virtual QString createDocument(const QModelIndex &index) const = 0;
 
 private:
     class Private;
-    Private *const d;
-
-    void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
-
-public:
-    QSize sizeHint() const override;
-
-protected:
-    void paintEvent(QPaintEvent *e) override;
-    void timerEvent(QTimerEvent *e) override;
-    bool eventFilter(QObject *object, QEvent *event) override;
+    std::unique_ptr<Private> const d;
 };
 
 #endif

@@ -36,12 +36,14 @@ public:
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
+    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
 private:
-    typedef KoDocumentSectionModel Model;
-    typedef KoDocumentSectionView View;
+    using Model = KoDocumentSectionModel;
+    using View = KoDocumentSectionView;
+
     class Private;
-    Private *const d;
+    std::unique_ptr<Private> const d;
 
     static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;

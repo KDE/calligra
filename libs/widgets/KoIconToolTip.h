@@ -5,23 +5,19 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KOICONTOOLTIP_H
-#define KOICONTOOLTIP_H
+#pragma once
 
 #include "KoItemToolTip.h"
 
-class KoIconToolTip : public KoItemToolTip
+class KoIconToolTip final : public KoItemToolTip
 {
-    Q_OBJECT
 public:
     KoIconToolTip() = default;
     ~KoIconToolTip() override = default;
 
 protected:
-    QTextDocument *createDocument(const QModelIndex &index) override;
+    [[nodiscard]] QString createDocument(const QModelIndex &index) const override;
 
 private:
-    typedef KoItemToolTip super;
+    using super = KoItemToolTip;
 };
-
-#endif // KOICONTOOLTIP_H

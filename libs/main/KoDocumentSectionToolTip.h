@@ -4,8 +4,7 @@
   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KO_DOCUMENT_SECTION_TOOLTIP_H
-#define KO_DOCUMENT_SECTION_TOOLTIP_H
+#pragma once
 
 #include "KoItemToolTip.h"
 
@@ -17,17 +16,13 @@ class KoDocumentSectionModel;
  */
 class KoDocumentSectionToolTip : public KoItemToolTip
 {
-    Q_OBJECT
-
 public:
     KoDocumentSectionToolTip();
     ~KoDocumentSectionToolTip() override;
 
 protected:
-    QTextDocument *createDocument(const QModelIndex &index) override;
+    [[nodiscard]] QString createDocument(const QModelIndex &index) const override;
 
 private:
-    typedef KoDocumentSectionModel Model;
+    using Model = KoDocumentSectionModel;
 };
-
-#endif

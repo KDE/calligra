@@ -8,28 +8,32 @@
 
 #include "KoIconToolTip.h"
 
+#include <QBuffer>
+#include <QImage>
 #include <QTextDocument>
 #include <QUrl>
 
 #include <KoResourceModel.h>
 
-// #include <WidgetsDebug.h>
-
-QTextDocument *KoIconToolTip::createDocument(const QModelIndex &index)
+QString KoIconToolTip::createDocument(const QModelIndex &index) const
 {
-    QTextDocument *doc = new QTextDocument(this);
+    QTextDocument doc;
 
-    QImage thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
-    doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
+    const QString name = index.data(Qt::DisplayRole).toString();
+    const auto thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
 
-    QString name = index.data(Qt::DisplayRole).toString();
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    thumb.save(&buffer, "png");
+    QString base64 = QString::fromUtf8(byteArray.toBase64());
 
-    const QString image = QString("<image src=\"data:thumbnail\">");
-    const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name) + image;
-    const QString html = QString("<html><body>%1</body></html>").arg(body);
+    const QString image = QStringLiteral("<image src=\"data:image/png;base64,%1\">").arg(base64);
+    const QString body = QStringLiteral("<h3 align=\"center\">%1</h3>").arg(name) + image;
+    const QString html = QStringLiteral("<html><body>%1</body></html>").arg(body);
 
-    doc->setHtml(html);
-    doc->setTextWidth(qMin(doc->size().width(), qreal(500.0)));
+    doc.setHtml(html);
+    doc.setTextWidth(qMin(doc.size().width(), qreal(500.0)));
 
-    return doc;
+    return doc.toHtml();
 }

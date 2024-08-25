@@ -25,7 +25,7 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
             option.rect = visualRect(index);
-            m_tip.showTip(this, he->pos(), option, index);
+            m_tip.showTip(this, he->pos(), visualRect(index), option, index);
             return true;
         }
     }
