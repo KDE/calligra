@@ -187,10 +187,12 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     connect(d->document.data(), &KoDocument::clearStatusBarMessage, this, &KoView::slotClearStatusText);
 
     // add all plugins.
-    foreach (const QString &docker, KoDockRegistry::instance()->keys()) {
+    const auto dockers = KoDockRegistry::instance()->keys();
+    for (const QString &docker : dockers) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        if (mainWindow())
+        if (mainWindow()) {
             mainWindow()->createDockWidget(factory);
+        }
     }
 
     actionCollection()->addAssociatedWidget(this);
@@ -200,7 +202,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
      *          only. All actions added later will have the default
      *          context, which is Qt::WindowShortcut!
      */
-    foreach (QAction *action, actionCollection()->actions()) {
+    const auto actions = actionCollection()->actions();
+    for (QAction *action : actions) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
 }
@@ -237,21 +240,20 @@ void KoView::dropEvent(QDropEvent *event)
             images << image;
         }
     } else if (event->mimeData()->hasUrls()) {
-        QList<QUrl> urls = event->mimeData()->urls();
-        foreach (const QUrl &url, urls) {
+        const QList<QUrl> urls = event->mimeData()->urls();
+        for (const QUrl &url : urls) {
             QImage image;
-            QUrl kurl(url);
             // make sure we download the files before inserting them
-            if (!kurl.isLocalFile()) {
+            if (!url.isLocalFile()) {
                 QString tmpFile;
-                if (KIO::NetAccess::download(kurl, tmpFile, this)) {
+                if (KIO::NetAccess::download(url, tmpFile, this)) {
                     image.load(tmpFile);
                     KIO::NetAccess::removeTempFile(tmpFile);
                 } else {
                     KMessageBox::error(this, KIO::NetAccess::lastErrorString());
                 }
             } else {
-                image.load(kurl.toLocalFile());
+                image.load(url.toLocalFile());
             }
             if (!image.isNull()) {
                 images << image;
@@ -260,7 +262,7 @@ void KoView::dropEvent(QDropEvent *event)
     }
 
     if (!images.isEmpty()) {
-        addImages(images, event->pos());
+        addImages(images, event->position().toPoint());
     }
 }
 
@@ -293,8 +295,8 @@ void KoView::removeStatusBarItem(QWidget *widget)
 {
     QStatusBar *sb = statusBar();
 
-    int itemCount = d->statusBarItems.count();
-    for (int i = itemCount - 1; i >= 0; --i) {
+    qsizetype itemCount = d->statusBarItems.count();
+    for (qsizetype i = itemCount - 1; i >= 0; --i) {
         KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
         if (sbItem.widget() == widget) {
             if (sb) {
@@ -324,7 +326,7 @@ KoPageLayout KoView::pageLayout() const
 
 QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 {
-    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), parent);
+    auto printDialog = new QPrintDialog(&printJob->printer(), parent);
     printDialog->setOptionTabs(printJob->createOptionWidgets());
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
     printDialog->setOptions(printJob->printDialogOptions());
@@ -381,7 +383,7 @@ KoMainWindow *KoView::mainWindow() const
     // It is possible (when embedded inside a Gemini window) that you have a KoMainWindow which
     // is not the top level window. The code below ensures you can still get access to it, even
     // in that case.
-    KoMainWindow *mw = dynamic_cast<KoMainWindow *>(window());
+    auto mw = dynamic_cast<KoMainWindow *>(window());
     QWidget *parent = parentWidget();
     while (!mw && parent) {
         mw = dynamic_cast<KoMainWindow *>(parent);
@@ -398,18 +400,20 @@ QStatusBar *KoView::statusBar() const
     return d->statusBar;
 }
 
-void KoView::slotActionStatusText(const QString &text)
+void KoView::slotActionStatusText(const QString &text) const
 {
-    QStatusBar *sb = statusBar();
-    if (sb)
+    auto sb = statusBar();
+    if (sb) {
         sb->showMessage(text);
+    }
 }
 
-void KoView::slotClearStatusText()
+void KoView::slotClearStatusText() const
 {
-    QStatusBar *sb = statusBar();
-    if (sb)
+    auto sb = statusBar();
+    if (sb) {
         sb->clearMessage();
+    }
 }
 
 void KoView::slotUpdateAuthorProfileActions()
@@ -423,8 +427,8 @@ void KoView::slotUpdateAuthorProfileActions()
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
     KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    foreach (const QString &profile, profiles) {
+    const QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    for (const QString &profile : profiles) {
         d->actionAuthor->addAction(profile);
     }
 
@@ -441,7 +445,7 @@ void KoView::slotUpdateAuthorProfileActions()
 
 QList<QAction *> KoView::createChangeUnitActions(bool addPixelUnit)
 {
-    UnitActionGroup *unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
+    auto unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
     return unitActions->actions();
 }
 

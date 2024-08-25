@@ -167,13 +167,13 @@ public Q_SLOTS:
      * Display a message in the status bar (calls QStatusBar::message())
      * @todo rename to something more generic
      */
-    void slotActionStatusText(const QString &text);
+    void slotActionStatusText(const QString &text) const;
 
     /**
      * End of the message in the status bar (calls QStatusBar::clear())
      * @todo rename to something more generic
      */
-    void slotClearStatusText();
+    void slotClearStatusText() const;
 
     /**
      * Updates the author profile actions from configuration.
