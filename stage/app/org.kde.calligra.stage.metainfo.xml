@@ -290,6 +290,10 @@
       <caption>Calligra Stage main window</caption>
     </screenshot>
   </screenshots>
+  <branding>
+    <color type="primary" scheme_preference="light">#99c1f1</color>
+    <color type="primary" scheme_preference="dark">#17529b</color>
+  </branding>
   <project_group>KDE</project_group>
   <provides>
     <binary>calligrastage</binary>

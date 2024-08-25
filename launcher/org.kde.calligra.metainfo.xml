@@ -181,6 +181,10 @@
       <caption>Main window of Karbon</caption>
     </screenshot>
   </screenshots>
+  <branding>
+    <color type="primary" scheme_preference="light">#f5aa33</color>
+    <color type="primary" scheme_preference="dark">#694917</color>
+  </branding>
   <content_rating type="oars-1.1" />
   <project_group>KDE</project_group>
   <launchable type="desktop-id">org.kde.calligra.desktop</launchable>

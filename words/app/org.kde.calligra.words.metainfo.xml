@@ -341,6 +341,10 @@
       <caption>Calligra Words main window</caption>
     </screenshot>
   </screenshots>
+  <branding>
+    <color type="primary" scheme_preference="light">#f5aa33</color>
+    <color type="primary" scheme_preference="dark">#694917</color>
+  </branding>
   <project_group>KDE</project_group>
   <provides>
     <binary>calligrawords</binary>
