@@ -79,6 +79,9 @@ Controls.ApplicationWindow {
 
                 onClicked: helper.execute(modelData.desktopId)
 
+                Kirigami.Theme.colorSet: Kirigami.Theme.View
+                Kirigami.Theme.inherit: false
+
                 contentItem: ColumnLayout {
                     Kirigami.Icon {
                         source: modelData.icon

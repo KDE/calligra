@@ -16,6 +16,10 @@
 #include <KLocalizedContext>
 #include <KLocalizedString>
 
+#ifdef Q_OS_WINDOWS
+#include <QFont>
+#endif
+
 using namespace Qt::StringLiterals;
 
 int main(int argc, char *argv[])
