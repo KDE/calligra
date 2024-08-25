@@ -1,4 +1,5 @@
 # translation of kword.po to
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Daniel Koć <kocio@bigfoot.com>, 1999.
 # Piotr Szymanski <djurban@linuxpl.org>, 2002, 2004.
 # Michal Milos <krasnall@post.pl>, 2004.
@@ -10,7 +11,6 @@
 # Robert Gomulka <carramba@epf.pl>, 2008.
 # Michał Lachowski <michal@lachowski.info>, 2010.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010, 2013.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
@@ -25,6 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4

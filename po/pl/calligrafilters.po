@@ -1,6 +1,7 @@
 # translation of kofficefilters.po to Polish
 # translation of kofficefilters.po to
 #
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2017, 2020, 2021, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Tomasz Sitek <tsitek@zie.pg.gda.pl>, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2006.
@@ -8,13 +9,12 @@
 # Igor Klimer <kigro@vp.pl>, 2006, 2007.
 # Michał Lachowski <michal@lachowski.info>, 2010.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2017, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2021-04-04 08:08+0200\n"
+"PO-Revision-Date: 2024-08-24 12:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -23,6 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
@@ -597,7 +598,7 @@ msgstr "Dokument"
 #: sheets/latex/export/latexexportwidget.ui:32
 #, kde-format
 msgid "Document Style"
-msgstr "Styl dokumentu"
+msgstr "Wygląd dokumentu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:38
