@@ -18,6 +18,7 @@
 
 #ifdef Q_OS_WINDOWS
 #include <QFont>
+#include <Windows.h>
 #endif
 
 using namespace Qt::StringLiterals;
