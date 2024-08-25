@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Calligra Launcher
+Exec=calligralauncher
+Comment=Office Suite Launcher
+Icon=calligrawords
+X-KDE-StartupNotify=true
+Categories=Qt;KDE;Office;WordProcessor;

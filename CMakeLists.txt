@@ -171,15 +171,18 @@ find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED
     Test
     Widgets
     Xml
+    Quick
+    QuickControls2
 )
 find_package(Qt6 ${REQUIRED_QT_VERSION} QUIET
     COMPONENTS
     OpenGL
-    Quick
     QuickWidgets
     Sql
     WebEngineWidgets
 )
+
+qt_policy(SET QTP0001 NEW)
 
 
 find_package(OpenSSL)
@@ -188,10 +191,6 @@ set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Encrypted communications"
 )
 
-set_package_properties(Qt6Quick PROPERTIES
-    PURPOSE "Required for QtQuick2 components"
-    TYPE RECOMMENDED
-    )
 set_package_properties(Qt6QuickWidgets PROPERTIES
     PURPOSE "Required for Calligra Gemini"
     TYPE RECOMMENDED
@@ -996,6 +995,7 @@ add_subdirectory(devtools)
 add_subdirectory(extras)
 add_subdirectory(filters)
 add_subdirectory(data)
+add_subdirectory(launcher)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

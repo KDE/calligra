@@ -332,15 +332,22 @@
       <li xml:lang="zh-CN">ODT (OpenDocument 文字) 格式支持</li>
     </ul>
   </description>
-  <url type="homepage">https://www.calligra.org/words/</url>
+  <url type="homepage">https://calligra.org/words/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrawords</url>
+  <content_rating type="oars-1.1" />
   <screenshots>
     <screenshot type="default">
-      <image>https://cdn.kde.org/screenshots/words/words.png</image>
+      <image>https://cdn.kde.org/screenshots/calligra/words-desktop-mode.png</image>
+      <caption>Calligra Words main window</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
   <provides>
     <binary>calligrawords</binary>
   </provides>
+  <launchable type="desktop-id">org.kde.calligra.words.desktop</launchable>
+  <developer id="kde.org">
+    <name>The KDE Community</name>
+    <url>https://kde.org</url>
+  </developer>
 </component>

@@ -71,38 +71,7 @@
   <summary xml:lang="zh-CN">办公套件</summary>
   <summary xml:lang="zh-TW">辦公軟體</summary>
   <description>
-    <p>The KDE Office suite for 2-in-1 devices.</p>
-    <p xml:lang="ca">La suite d'oficina del KDE per a dispositius 2 en 1.</p>
-    <p xml:lang="ca-valencia">La suite d'oficina de KDE per a dispositius 2 en 1.</p>
-    <p xml:lang="el">Η σουίτα γραφείου του KDE για 2-σε-1 συσκευές.</p>
-    <p xml:lang="en-GB">The KDE Office suite for 2-in-1 devices.</p>
-    <p xml:lang="eo">La KDE Office-serio por 2-en-1 aparatoj.</p>
-    <p xml:lang="es">La suite ofimática de KDE para dispositivos 2 en 1.</p>
-    <p xml:lang="et">KDE kontoritöö komplekt kaks-ühes seadmetele.</p>
-    <p xml:lang="eu">KDEren Bulegorako suitea, 2-1ean diren gailuetarako.</p>
-    <p xml:lang="fi">KDE:n toimisto-ohjelmisto hybridilaitteille.</p>
-    <p xml:lang="fr">La suite bureautique de KDE pour des périphériques 2-en-1.</p>
-    <p xml:lang="gl">A suite de oficina de KDE para dispositivos 2 en 1.</p>
-    <p xml:lang="ia">Le suite de office de KDE per dispositivos 2-in-1.</p>
-    <p xml:lang="id">Suite Perkantoran KDE untuk peranti 2-in-1.</p>
-    <p xml:lang="it">La suite Office di KDE per i dispositivi 2-in-1.</p>
-    <p xml:lang="ka">KDE-ის საოფისე ნაკრები 2-1-ში მოწყობილობებისთვის.</p>
-    <p xml:lang="ko">2-in-1 장치용 KDE 오피스 도구입니다.</p>
-    <p xml:lang="lv">KDE biroja programmatūra divi vienā ierīcēm.</p>
-    <p xml:lang="nl">De KDE kantoor-suite voor 2-in-1 apparaten.</p>
-    <p xml:lang="pl">Pakiet biurowy KDE dla urządzeń 2 w 1.</p>
-    <p xml:lang="pt">O pacote de Escritório do KDE para os dispositivos 2-em-1.</p>
-    <p xml:lang="pt-BR">A suíte de escritório do KDE para dispositivos 2-em-1.</p>
-    <p xml:lang="ru">Офисный пакет KDE для устройств 2-в-1.</p>
-    <p xml:lang="sk">KDE kancelásky balík pre zariadenia 2 v 1.</p>
-    <p xml:lang="sl">Pisarniški paket KDE za naprave dve v enem.</p>
-    <p xml:lang="sv">KDE:s kontorssvit för surfplattor med tangentbord.</p>
-    <p xml:lang="tr">2'si 1 arada aygıtlar için KDE ofis takımı.</p>
-    <p xml:lang="uk">Офісний комплект KDE для пристроїв «два в одному».</p>
-    <p xml:lang="x-test">xxThe KDE Office suite for 2-in-1 devices.xx</p>
-    <p xml:lang="zh-CN">针对变形本设计的 KDE 办公套件。</p>
-    <p xml:lang="zh-TW">KDE 供二合一裝置用的辦公軟體。</p>
-    <p>2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.</p>
+    <p>The KDE Office suite for 2-in-1 devices. 2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.</p>
     <p xml:lang="ca">Els dispositius 2 en 1, que poden actuar tant com a tauleta tàctil i com a portàtil clàssic, estan esdevenint molt populars, i després de l'èxit del Krita Gemini, l'equip que hi ha darrere s'ha adonat que hi ha moltes raons per a aplicar el mateix concepte a altres aplicacions, i en especial, les altres del paquet Calligra. En concret, el component Words de processament de textos i l'eina de presentacions Stage s'han considerat madures per a aquest tractament.</p>
     <p xml:lang="ca-valencia">Els dispositius 2 en 1, que poden actuar tant com a tauleta tàctil i com a portàtil clàssic, estan esdevenint molt populars, i després de l'èxit de Krita Gemini, l'equip que hi ha darrere s'ha adonat que hi ha moltes raons per a aplicar el mateix concepte a altres aplicacions, i en especial, les altres del paquet Calligra. En concret, el component Words de processament de textos i l'eina de presentacions Stage s'han considerat madures per a este tractament.</p>
     <p xml:lang="el">Οι 2-σε-1 συσκευές που λειτουργούν και μόνο ως πινάκιο αφής και ως ένα κλασικό ανοιγόμενο φορητό υπολογιστή γίνονται δημοφιλή πολύ γρήγορα και μετά την επιτυχία του Krita Gemini, η ομάδα υποστήριξης αντιλήφθηκε ότι υπάρχουν πολλοί λόγοι να εφαρμόσουν την ίδια ιδέα σε άλλες εφαρμογές και ειδικά στη σουίτα Calligra. Πιο συγκεκριμένα το συστατικό επεξεργασίας κειμένου Words και το εργαλείο παρουσιάσεων Stage θεωρήθηκαν ώριμα για τέτοια αντιμετώπιση.</p>
@@ -512,8 +481,14 @@
       <image>https://cdn.kde.org/screenshots/calligra/words-touch-mode-with-notes-panel.png</image>
     </screenshot>
   </screenshots>
+  <content_rating type="oars-1.1" />
   <project_group>KDE</project_group>
   <provides>
     <binary>calligragemini</binary>
   </provides>
+  <launchable type="desktop-id">org.kde.calligra.gemini.desktop</launchable>
+  <developer id="kde.org">
+    <name>The KDE Community</name>
+    <url>https://kde.org</url>
+  </developer>
 </component>

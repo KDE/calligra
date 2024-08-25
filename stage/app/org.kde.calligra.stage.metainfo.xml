@@ -280,13 +280,23 @@
   <url type="homepage">https://www.calligra.org/stage/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrastage</url>
   <url type="help">https://docs.kde.org/?application=stage</url>
+  <content_rating type="oars-1.1" />
+  <custom>
+    <value key="KDE::matrix">#calligra:kde.org</value>
+  </custom>
   <screenshots>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/calligrastage.png</image>
+      <caption>Calligra Stage main window</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
   <provides>
     <binary>calligrastage</binary>
   </provides>
+  <launchable type="desktop-id">org.kde.calligra.karbon.desktop</launchable>
+  <developer id="kde.org">
+    <name>The KDE Community</name>
+    <url>https://kde.org</url>
+  </developer>
 </component>
