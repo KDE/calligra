@@ -1,6 +1,7 @@
 # translation of kofficefilters.po to Polish
 # translation of kofficefilters.po to
 #
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2017, 2020, 2021, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Tomasz Sitek <tsitek@zie.pg.gda.pl>, 2005.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2005.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2006.
@@ -8,13 +9,12 @@
 # Igor Klimer <kigro@vp.pl>, 2006, 2007.
 # Michał Lachowski <michal@lachowski.info>, 2010.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2017, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2021-04-04 07:52+0200\n"
+"PO-Revision-Date: 2024-08-24 12:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -23,6 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
@@ -245,19 +246,17 @@ msgid "<SHEETNAME>"
 msgstr "<SHEETNAME>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Eksport do obrazka"
+msgstr "Wyeksportuj do CVS"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "EPS Export"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "Eksport EPS"
+msgstr "Wyeksportuj"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -272,10 +271,9 @@ msgstr "Koniec wiersza"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Koniec wiersza"
+msgstr "Koniec wiersza:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -339,10 +337,9 @@ msgstr "Komórki"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Oddzielacz"
+msgstr "Znak rozdzielający:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -555,10 +552,9 @@ msgstr "Dokument"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Styl dokumentu"
+msgstr "Styl dokumentu:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -574,10 +570,9 @@ msgstr "Styl Words"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "Typ dokumentu"
+msgstr "Rodzaj dokumentu:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -684,10 +679,9 @@ msgstr "Język"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "Kodowa&nie:"
+msgstr "Kodowanie:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289

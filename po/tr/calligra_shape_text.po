@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-18 20:17+0300\n"
+"PO-Revision-Date: 2024-08-24 14:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1748,18 +1748,16 @@ msgid "Browse..."
 msgstr "Göz At..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Arka plan rengi"
+msgstr "Arka Plan Rengini Sıfırla"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Arka plan rengi"
+msgstr "Arka plan rengini sıfırla"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1768,10 +1766,9 @@ msgstr "Tüm Sözcük"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Büyük harfleri küçült:"
+msgstr "İlk harfi büyüt"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1915,10 +1912,9 @@ msgstr "İki Yana Hizala"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Sayfa/Çerçeve Sonu Davranışı"
+msgstr "Çerçeve/sayfa sonundaki davranış:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57

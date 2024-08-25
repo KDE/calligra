@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2023-08-07 22:58+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -562,59 +562,54 @@ msgstr "쪽 스타일 복제"
 msgid "Add a new page style with the name:"
 msgstr "다음 이름으로 새 쪽 스타일을 추가합니다:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: part/dialogs/KWRunAroundProperties.ui:17
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
 msgstr "다른 곳의 텍스트는 다음과 같습니다:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/KWRunAroundProperties.ui:105
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
 msgstr "다음 도형은 텍스트에 영향을 미칩니다:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
-#: part/dialogs/KWRunAroundProperties.ui:114
+#: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
 msgstr "경계 상자"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
-#: part/dialogs/KWRunAroundProperties.ui:121
+#: part/dialogs/KWRunAroundProperties.ui:106
 #, kde-format
 msgid "Contour"
 msgstr "윤곽"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: part/dialogs/KWRunAroundProperties.ui:131
-#, kde-format
-msgid "Shape and text is separated:"
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:116
+#, fuzzy, kde-format
+#| msgid "Shape and text is separated:"
+msgid "Shape and text are separated left by:"
 msgstr "도형과 텍스트가 구분됩니다:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/KWRunAroundProperties.ui:140
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
-msgid "Left by:"
-msgstr "왼쪽 기준:"
+msgid "Right by:"
+msgstr "오른쪽 기준:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/KWRunAroundProperties.ui:169
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
 msgstr "위쪽 기준:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: part/dialogs/KWRunAroundProperties.ui:198
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
 msgstr "아래쪽 기준:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: part/dialogs/KWRunAroundProperties.ui:227
-#, kde-format
-msgid "Right by:"
-msgstr "오른쪽 기준:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -1875,6 +1870,9 @@ msgstr "주 텍스트"
 #, kde-format
 msgid "Other text"
 msgstr "기타 텍스트"
+
+#~ msgid "Left by:"
+#~ msgstr "왼쪽 기준:"
 
 #, fuzzy
 #~| msgid "Page %1"

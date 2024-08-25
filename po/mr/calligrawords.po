@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2013-04-12 16:20+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -561,59 +561,54 @@ msgstr "पान शैली प्रतिकृत करा"
 msgid "Add a new page style with the name:"
 msgstr "या नावाने नवीन पान शैली जोडा :"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: part/dialogs/KWRunAroundProperties.ui:17
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
 msgstr "इतर ठिकाणचा मजकूर :"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/KWRunAroundProperties.ui:105
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
 msgstr "आकार मजकूरावर याने परिणाम करतो :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
-#: part/dialogs/KWRunAroundProperties.ui:114
+#: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
 msgstr "बाऊंडिंग बॉक्स"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
-#: part/dialogs/KWRunAroundProperties.ui:121
+#: part/dialogs/KWRunAroundProperties.ui:106
 #, kde-format
 msgid "Contour"
 msgstr "कॉनटुर"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: part/dialogs/KWRunAroundProperties.ui:131
-#, kde-format
-msgid "Shape and text is separated:"
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:116
+#, fuzzy, kde-format
+#| msgid "Shape and text is separated:"
+msgid "Shape and text are separated left by:"
 msgstr "आकार व मजकूरातील याने विभाजीत :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/KWRunAroundProperties.ui:140
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
-msgid "Left by:"
-msgstr "याने डावे :"
+msgid "Right by:"
+msgstr "याने उजवे :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/KWRunAroundProperties.ui:169
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
 msgstr "याने वर :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: part/dialogs/KWRunAroundProperties.ui:198
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
 msgstr "याने खाली :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: part/dialogs/KWRunAroundProperties.ui:227
-#, kde-format
-msgid "Right by:"
-msgstr "याने उजवे :"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -1886,6 +1881,9 @@ msgstr "मुख्य मजकूर"
 #, kde-format
 msgid "Other text"
 msgstr "इतर मजकूर"
+
+#~ msgid "Left by:"
+#~ msgstr "याने डावे :"
 
 #, fuzzy
 #~| msgid "Anchor to..."

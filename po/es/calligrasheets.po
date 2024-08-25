@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-14 12:51+0100\n"
+"PO-Revision-Date: 2024-08-24 12:29+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12708,13 +12708,12 @@ msgstr "Copyright 1998-%1, el equipo de Calligra Sheets"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Encargado"
+msgstr "Encargado/migración a Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12727,10 +12726,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Encargado"
+msgstr "Encargado anterior"
 
 #: part/AboutData.h:42
 #, kde-format

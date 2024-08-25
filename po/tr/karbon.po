@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 13:54+0300\n"
+"PO-Revision-Date: 2024-08-24 14:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -325,12 +325,12 @@ msgstr "Bakımcı"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Qt6 geçişi"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

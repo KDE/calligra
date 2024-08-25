@@ -1,6 +1,6 @@
 # translation of kpresenter.po to
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2019, 2020, 2021, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Translated by Arkadiusz Danilecki <szopen@aurora.put.poznan.pl>
-# with corrections, suggestions and updates by:
 # Waldemar Kochaniec <walkoch@polbox.pl>
 # Jacek Stolarczyk <jacek@mer.chemia.polsl.gliwice.pl>
 # Krzysztof Jasiutowicz <kpjas@box43.gnet.pl>
@@ -11,13 +11,13 @@
 # Robert Gomulka <rgom@o2.pl>, 2006.
 # Michał Lachowski <michal@lachowski.info>, 2010.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2019, 2020, 2021.
+# with corrections, suggestions and updates by:
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2021-04-05 07:49+0200\n"
+"PO-Revision-Date: 2024-08-24 12:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -26,6 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -166,13 +167,12 @@ msgstr "Copyright 1998-%1, Zespół Sceny"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Opiekun"
+msgstr "Opiekun/Przeniesienie na Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format

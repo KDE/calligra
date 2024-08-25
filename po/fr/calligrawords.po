@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2022-11-10 21:56+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -574,59 +574,54 @@ msgstr "Copier le style de page"
 msgid "Add a new page style with the name:"
 msgstr "Ajouter une nouvelle page de style avec le nom : "
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: part/dialogs/KWRunAroundProperties.ui:17
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
 msgstr "Le texte partout sera : "
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/KWRunAroundProperties.ui:105
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
 msgstr "Le cadre affecte le texte par son : "
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
-#: part/dialogs/KWRunAroundProperties.ui:114
+#: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
 msgstr "Boîte de délimitation"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
-#: part/dialogs/KWRunAroundProperties.ui:121
+#: part/dialogs/KWRunAroundProperties.ui:106
 #, kde-format
 msgid "Contour"
 msgstr "Contour"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: part/dialogs/KWRunAroundProperties.ui:131
-#, kde-format
-msgid "Shape and text is separated:"
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:116
+#, fuzzy, kde-format
+#| msgid "Shape and text is separated:"
+msgid "Shape and text are separated left by:"
 msgstr "Le cadre et le texte sont séparés : "
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/KWRunAroundProperties.ui:140
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
-msgid "Left by:"
-msgstr "À gauche : "
+msgid "Right by:"
+msgstr "À droite : "
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/KWRunAroundProperties.ui:169
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
 msgstr "Au-dessus par : "
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: part/dialogs/KWRunAroundProperties.ui:198
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
 msgstr "Au-dessous par : "
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: part/dialogs/KWRunAroundProperties.ui:227
-#, kde-format
-msgid "Right by:"
-msgstr "À droite : "
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -1899,6 +1894,9 @@ msgstr "Texte simple"
 #, kde-format
 msgid "Other text"
 msgstr "Autre texte"
+
+#~ msgid "Left by:"
+#~ msgstr "À gauche : "
 
 #~ msgid "Distraction Free Mode"
 #~ msgstr "Mode sans distraction"

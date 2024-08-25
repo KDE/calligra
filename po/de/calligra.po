@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -785,8 +785,10 @@ msgid "Paste offset:"
 msgstr "Versatz beim Einfügen:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, kde-format
-msgid "Paste at Cursor:"
+#, fuzzy, kde-format
+#| msgid "Paste at Cursor:"
+msgctxt "@option:check"
+msgid "Paste at Cursor"
 msgstr "Am Cursor einfügen:"
 
 #: main/KoApplication.cpp:191
@@ -1403,7 +1405,7 @@ msgstr "&In Ordner entpacken"
 msgid "&New View"
 msgstr "Neue &Ansicht"
 
-#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:87
 #, kde-format
 msgid "Document Information"
 msgstr "Dokument-Informationen"
@@ -1444,7 +1446,7 @@ msgstr "Speichern als %1"
 msgid "Save"
 msgstr "Speichern"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "Unbekannter Dateityp %1"
@@ -2139,7 +2141,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
 #, kde-format
 msgid "Author"
 msgstr "Autor"
@@ -4164,79 +4166,79 @@ msgid "Name of Profile"
 msgstr "Name des Profils"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
-#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:14
 #, kde-format
 msgid "Name:"
 msgstr "Name:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
-#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:24
 #, kde-format
 msgid "Initials:"
 msgstr "Initialen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
-#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:34
 #, kde-format
 msgid "Title:"
 msgstr "Titel:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
-#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:44
 #, kde-format
 msgid "Position:"
 msgstr "Position:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
-#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:54
 #, kde-format
 msgid "Company:"
 msgstr "Firma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
-#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:61
 #, kde-format
 msgid "Email:"
 msgstr "E-Mail:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
-#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:68
 #, kde-format
 msgid "Telephone (home):"
 msgstr "Telefon (privat):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
-#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:75
 #, kde-format
 msgid "Telephone (work):"
 msgstr "Telefon (geschäftlich):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
-#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:82
 #, kde-format
 msgid "Fax:"
 msgstr "Fax:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
-#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:89
 #, kde-format
 msgid "Street:"
 msgstr "Straße:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
-#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:96
 #, kde-format
 msgid "Postal code:"
 msgstr "Postleitzahl:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
-#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:103
 #, kde-format
 msgid "City:"
 msgstr "Stadt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
-#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:110
 #, kde-format
 msgid "Country:"
 msgstr "Land:"
@@ -4468,8 +4470,8 @@ msgid "Lock Docker"
 msgstr "Andockbare Dialoge sperren"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
-#: widgets/KoDocumentInfoDlg.cpp:329
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
+#: widgets/KoDocumentInfoDlg.cpp:325
 #, kde-format
 msgid "&Encrypt"
 msgstr "&Verschlüsseln"
@@ -4553,62 +4555,74 @@ msgstr "&Zurücksetzen"
 msgid "Language:"
 msgstr "Sprache:"
 
-#: widgets/KoDocumentInfoDlg.cpp:108 widgets/KoDocumentInfoDlg.cpp:109
+#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
 #, kde-format
 msgid "General"
 msgstr "Allgemein"
 
-#: widgets/KoDocumentInfoDlg.cpp:136
+#: widgets/KoDocumentInfoDlg.cpp:132
 #, kde-format
 msgid "Last saved by"
 msgstr "Zuletzt gespeichert durch"
 
-#: widgets/KoDocumentInfoDlg.cpp:193
+#: widgets/KoDocumentInfoDlg.cpp:184
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Verwenden Sie „;“ (Beispiel: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:313
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Dieses Dokument wird entschlüsselt"
 
-#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:315
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Nicht entschlüsseln"
 
-#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Dieses Dokument ist verschlüsselt"
 
-#: widgets/KoDocumentInfoDlg.cpp:227 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Entschlüsseln"
 
-#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Dieses Dokument wird verschlüsselt"
 
-#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Nicht verschlüsseln"
 
-#: widgets/KoDocumentInfoDlg.cpp:235 widgets/KoDocumentInfoDlg.cpp:327
+#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Dieses Dokument ist nicht verschlüsselt"
 
-#: widgets/KoDocumentInfoDlg.cpp:241
+#: widgets/KoDocumentInfoDlg.cpp:234
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Dieses Dokument unterstützt keine Verschlüsselung"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:244
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Not set"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#, kde-format
+msgctxt "list separator"
+msgid ", "
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4617,17 +4631,17 @@ msgstr ""
 "<qt>Das Entschlüsseln des Dokuments wird den Passwortschutz daraus entfernen."
 "<p>Möchten Sie die Datei immer noch entschlüsseln?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:348
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Entschlüsseln bestätigen"
 
-#: widgets/KoDocumentInfoDlg.cpp:352
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid "Decrypt"
 msgstr "Entschlüsseln"
 
-#: widgets/KoDocumentInfoDlg.cpp:361
+#: widgets/KoDocumentInfoDlg.cpp:358
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4636,13 +4650,13 @@ msgstr ""
 "<qt>Ihr Dokument kann nicht automatisch gespeichert werden.<p>Bitte "
 "speichern Sie das Dokument, um die Entschlüsselung abzuschließen.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
-#: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
+#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
+#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
 #, kde-format
 msgid "Save Document"
 msgstr "Dokument speichern"
 
-#: widgets/KoDocumentInfoDlg.cpp:368
+#: widgets/KoDocumentInfoDlg.cpp:365
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4656,7 +4670,7 @@ msgstr ""
 "Entschlüsselung abzuschießen, muss es gespeichert werden.<p>Möchten Sie das "
 "Dokument jetzt speichern?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:384
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4668,17 +4682,17 @@ msgstr ""
 "<p>Möchten Sie die Datei jetzt in das Format OASIS OpenDocument konvertieren?"
 "</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid "Change Filetype"
 msgstr "Dateityp ändern"
 
-#: widgets/KoDocumentInfoDlg.cpp:392
+#: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
 msgid "Change"
 msgstr "Ändern"
 
-#: widgets/KoDocumentInfoDlg.cpp:404
+#: widgets/KoDocumentInfoDlg.cpp:400
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4687,7 +4701,7 @@ msgstr ""
 "<qt>Ihr Dokument kann nicht automatisch gespeichert werden.<p>Bitte "
 "speichern Sie das Dokument, um die Verschlüsselung abzuschließen.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:412
+#: widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

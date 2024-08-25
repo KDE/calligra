@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2013-09-30 04:14+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -567,59 +567,54 @@ msgstr "Бет стилінің егізін құру"
 msgid "Add a new page style with the name:"
 msgstr "Жаңа құрылатын бет стилінің атауы:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: part/dialogs/KWRunAroundProperties.ui:17
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
 msgstr "Басқа жерлердегі мәтін:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: part/dialogs/KWRunAroundProperties.ui:105
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
 msgstr "Қалып мәтінге мынамен әсер етпек:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
-#: part/dialogs/KWRunAroundProperties.ui:114
+#: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
 msgstr "Шектейтін қоршау"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
-#: part/dialogs/KWRunAroundProperties.ui:121
+#: part/dialogs/KWRunAroundProperties.ui:106
 #, kde-format
 msgid "Contour"
 msgstr "Контур"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: part/dialogs/KWRunAroundProperties.ui:131
-#, kde-format
-msgid "Shape and text is separated:"
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:116
+#, fuzzy, kde-format
+#| msgid "Shape and text is separated:"
+msgid "Shape and text are separated left by:"
 msgstr "Қалыппен мәтіннің аралығы:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: part/dialogs/KWRunAroundProperties.ui:140
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
-msgid "Left by:"
-msgstr "Сол жақта:"
+msgid "Right by:"
+msgstr "Оң жақта:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: part/dialogs/KWRunAroundProperties.ui:169
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
 msgstr "Жоғары жақта:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: part/dialogs/KWRunAroundProperties.ui:198
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
 msgstr "Төмен жақта:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: part/dialogs/KWRunAroundProperties.ui:227
-#, kde-format
-msgid "Right by:"
-msgstr "Оң жақта:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -1898,6 +1893,9 @@ msgstr "Негізгі мәтін"
 #, kde-format
 msgid "Other text"
 msgstr "Басқа мәтін"
+
+#~ msgid "Left by:"
+#~ msgstr "Сол жақта:"
 
 #~ msgid "Distraction Free Mode"
 #~ msgstr "Зейін қою режімі"

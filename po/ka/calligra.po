@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
 "PO-Revision-Date: 2024-08-22 05:19+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -776,8 +776,10 @@ msgid "Paste offset:"
 msgstr "ჩასმის წანაცვლება:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, kde-format
-msgid "Paste at Cursor:"
+#, fuzzy, kde-format
+#| msgid "Paste at Cursor:"
+msgctxt "@option:check"
+msgid "Paste at Cursor"
 msgstr "კურსორთან ჩასმა:"
 
 #: main/KoApplication.cpp:191
@@ -1377,7 +1379,7 @@ msgstr "საქაღალდეში &გაშლა"
 msgid "&New View"
 msgstr "&ახალი ხედი"
 
-#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:92
+#: main/KoMainWindow.cpp:303 widgets/KoDocumentInfoDlg.cpp:87
 #, kde-format
 msgid "Document Information"
 msgstr "ინფორმაცია დოკუმეტზე"
@@ -1418,7 +1420,7 @@ msgstr "შენახვა, როგორც %1"
 msgid "Save"
 msgstr "შენახვა"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:385
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (უცნობი ფაილის ტიპი)"
@@ -2109,7 +2111,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ავტორი"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:135
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
@@ -4122,79 +4124,79 @@ msgid "Name of Profile"
 msgstr "პროფილის სახელი"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
-#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:14
 #, kde-format
 msgid "Name:"
 msgstr "სახელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
-#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:24
 #, kde-format
 msgid "Initials:"
 msgstr "ინიციალები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
-#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:34
 #, kde-format
 msgid "Title:"
 msgstr "სათაური:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
-#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:44
 #, kde-format
 msgid "Position:"
 msgstr "მდებარეობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
-#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:54
 #, kde-format
 msgid "Company:"
 msgstr "კომპანია:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
-#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:61
 #, kde-format
 msgid "Email:"
 msgstr "ელფოტა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
-#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:68
 #, kde-format
 msgid "Telephone (home):"
 msgstr "ტელეფონი (სახლი):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
-#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:75
 #, kde-format
 msgid "Telephone (work):"
 msgstr "ტელეფონი (სამუშაო):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
-#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:82
 #, kde-format
 msgid "Fax:"
 msgstr "ფაქსი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
-#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:89
 #, kde-format
 msgid "Street:"
 msgstr "ქუჩა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
-#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:96
 #, kde-format
 msgid "Postal code:"
 msgstr "საფოსტო კოდი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
-#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:103
 #, kde-format
 msgid "City:"
 msgstr "ქალაქი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
-#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:110
 #, kde-format
 msgid "Country:"
 msgstr "ქვეყანა:"
@@ -4425,8 +4427,8 @@ msgid "Lock Docker"
 msgstr "პანელის დაბლოკვა"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:237
-#: widgets/KoDocumentInfoDlg.cpp:329
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
+#: widgets/KoDocumentInfoDlg.cpp:325
 #, kde-format
 msgid "&Encrypt"
 msgstr "&დაშიფვრა"
@@ -4510,62 +4512,74 @@ msgstr "ჩ&ამოყრა"
 msgid "Language:"
 msgstr "ენა:"
 
-#: widgets/KoDocumentInfoDlg.cpp:108 widgets/KoDocumentInfoDlg.cpp:109
+#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
 #, kde-format
 msgid "General"
 msgstr "ზოგადი"
 
-#: widgets/KoDocumentInfoDlg.cpp:136
+#: widgets/KoDocumentInfoDlg.cpp:132
 #, kde-format
 msgid "Last saved by"
 msgstr "ბოლოს შენახვის ავტორი"
 
-#: widgets/KoDocumentInfoDlg.cpp:193
+#: widgets/KoDocumentInfoDlg.cpp:184
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';'-ის გამოყენება (მაგ: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:313
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "ეს დოკუმენტი გაიშიფრება"
 
-#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:315
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not decrypt"
 msgstr "არ გაშიფრო"
 
-#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is encrypted"
 msgstr "ეს დოკუმენტი დაშიფრულია"
 
-#: widgets/KoDocumentInfoDlg.cpp:227 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&გაშიფვრა"
 
-#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "ეს დოკუმენტი დაიშიფრება."
 
-#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "Do not encrypt"
 msgstr "არ დაშიფრო"
 
-#: widgets/KoDocumentInfoDlg.cpp:235 widgets/KoDocumentInfoDlg.cpp:327
+#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "ეს დოკუმენტი დაშიფრული არაა"
 
-#: widgets/KoDocumentInfoDlg.cpp:241
+#: widgets/KoDocumentInfoDlg.cpp:234
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "ამ დოკუმენტს დაშიფვრის მხარდაჭერა არ გააჩნია"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:244
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Not set"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#, kde-format
+msgctxt "list separator"
+msgid ", "
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4574,17 +4588,17 @@ msgstr ""
 "<qt>დოკუმენტის გაშიფვრა მის პაროლით დაცვას მოაცილებს. <p>მართლა გნებავთ "
 "ფაილის გაშიფვრა?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:348
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "გაშიფვრის დადასტურება"
 
-#: widgets/KoDocumentInfoDlg.cpp:352
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid "Decrypt"
 msgstr "გაშიფვრა"
 
-#: widgets/KoDocumentInfoDlg.cpp:361
+#: widgets/KoDocumentInfoDlg.cpp:358
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4593,13 +4607,13 @@ msgstr ""
 "<qt>დოკუმენტის ავტომატური შენახვა შეუძლებელია. <p>გაშიფვრის დასასრულებლად "
 "საჭიროა, შეინახოთ დოკუმენტი.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:363 widgets/KoDocumentInfoDlg.cpp:370
-#: widgets/KoDocumentInfoDlg.cpp:406 widgets/KoDocumentInfoDlg.cpp:414
+#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
+#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
 #, kde-format
 msgid "Save Document"
 msgstr "დოკუმენტის შენახვა"
 
-#: widgets/KoDocumentInfoDlg.cpp:368
+#: widgets/KoDocumentInfoDlg.cpp:365
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4608,7 +4622,7 @@ msgstr ""
 "<qt>დოკუმენტის გაშიფვრის დასასრულებლად საჭიროა, შეინახოთ ის.<p>გნებავთ, "
 "შეინახოთ დოკუმენტი ახლავე?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:384
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4619,17 +4633,17 @@ msgstr ""
 "დოკუმენტი <b>OASIS OpenDocument</b>-ში გადაიყვანოთ. <p>გნებავთ ფაილის OASIS "
 "OpenDocument-ში გადაყვანა?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid "Change Filetype"
 msgstr "ფაილის ტიპის შეცვლა"
 
-#: widgets/KoDocumentInfoDlg.cpp:392
+#: widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
 msgid "Change"
 msgstr "შეცვლა"
 
-#: widgets/KoDocumentInfoDlg.cpp:404
+#: widgets/KoDocumentInfoDlg.cpp:400
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4638,7 +4652,7 @@ msgstr ""
 "<qt>დოკუმენტის ავტომატური შენახვა შეუძლებელია. <p>დაშიფვრის დასასრულებლად "
 "საჭიროა, შეინახოთ დოკუმენტი.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:412
+#: widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

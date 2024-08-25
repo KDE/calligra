@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-17 10:13+0200\n"
+"PO-Revision-Date: 2024-08-24 12:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12571,13 +12571,12 @@ msgstr "Copyright 1998-%1, Zespół Arkuszy Calligra"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Opiekun"
+msgstr "Opiekun/Przeniesienie na Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12590,10 +12589,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Opiekun"
+msgstr "Poprzedni opiekun"
 
 #: part/AboutData.h:42
 #, kde-format
