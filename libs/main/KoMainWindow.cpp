@@ -1538,6 +1538,7 @@ void KoMainWindow::slotProgress(int value)
             statusBar()->removeWidget(d->progress);
             delete d->progress;
             d->progress = nullptr;
+            statusBar()->hide();
         }
         d->firstTime = true;
         return;
