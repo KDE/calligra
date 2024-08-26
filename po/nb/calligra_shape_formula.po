@@ -76,7 +76,6 @@ msgstr "Fjern formelelementer"
 
 #: FormulaToolEditWidget.cpp:28
 #, fuzzy, kde-format
-#| msgid "Edit"
 msgctxt "@title:group"
 msgid "Edit"
 msgstr "Rediger"
@@ -89,7 +88,6 @@ msgstr "Skrift:"
 
 #: FormulaToolWidget.cpp:28
 #, fuzzy, kde-format
-#| msgid "Insert"
 msgctxt "@title:group"
 msgid "Insert"
 msgstr "Sett inn"
@@ -122,21 +120,18 @@ msgstr "Diverse"
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
 #, fuzzy, kde-format
-#| msgid "Elements"
 msgid "Elements:"
 msgstr "Elementer"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
 #, fuzzy, kde-format
-#| msgid "Symbols"
 msgid "Symbols:"
 msgstr "Symboler"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
 #, fuzzy, kde-format
-#| msgid "Actions"
 msgid "Actions:"
 msgstr "Handlinger"
 

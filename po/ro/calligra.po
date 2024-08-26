@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
 "PO-Revision-Date: 2022-03-14 12:28+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -1301,17 +1301,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "Deschide document"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "No"
 msgstr "Nu"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr "Da"
@@ -1463,7 +1463,7 @@ msgstr "Salvează ca %1"
 msgid "Save"
 msgstr "Salvează"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tip de fișier necunoscut)"
@@ -1807,26 +1807,26 @@ msgstr "Nu s-a putut adăuga o nouă versiune"
 msgid "Date: %1"
 msgstr "Dată: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Formă"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Active Author Profile"
 msgstr "Instrument activ: %1"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Textul &selectat"
@@ -2227,58 +2227,58 @@ msgstr "Grup"
 msgid "Shape"
 msgstr "Formă"
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 #, fuzzy
 #| msgid "Rename Slide"
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Redenumeşte slide"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 #, fuzzy
 #| msgid "Rename Page"
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Redenumeşte pagină"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 #, fuzzy
 #| msgid "Rename Layer"
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Redenumeşte layer"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, fuzzy, kde-format
 msgid "Slide"
 msgstr "Slide"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr "Vizibil"
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, kde-format
 msgid "Locked"
 msgstr "Blocat"
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr "Realege părinte forme "
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
 msgid "&Move Here"
 msgstr "&Mută aici"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, kde-format
 msgid "&Copy Here"
 msgstr "&Copiază aici"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, kde-format
 msgid "C&ancel"
 msgstr "&Anulează"
@@ -4689,8 +4689,8 @@ msgid "Lock Docker"
 msgstr "Afișează ataşamentele"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "&Encrypt"
 msgstr "Cript&ează"
@@ -4787,64 +4787,64 @@ msgstr "General"
 msgid "Last saved by"
 msgstr "Ultima pagină"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Folosiţi ';' (exemplu: birou;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Acest document va fi decriptat"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Nu decriptaţi"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Acest document este criptat"
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "D&ecrypt"
 msgstr "D&ecriptează"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Acest document va fi criptat."
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Nu criptaţi"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Acest document nu este criptat"
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Acest document nu suportă criptare"
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4853,17 +4853,17 @@ msgstr ""
 "<qt>Decriptarea documentului va şterge parola care îl protejează.<p>Doriţi "
 "să decriptaţi fişierul?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Confirmă decriptarea"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, kde-format
 msgid "Decrypt"
 msgstr "Decriptează"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4872,13 +4872,13 @@ msgstr ""
 "<qt>Documentul dumneavoastră nu s-a putut salva automat.<p>Pentru a finaliza "
 "decriptarea, salvaţi documentul.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid "Save Document"
 msgstr "Salvează documentul"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4892,7 +4892,7 @@ msgstr ""
 "decriptarea documentul trebuie salvat.<p>Doriţi să salvaţi acum documentul?</"
 "qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4903,17 +4903,17 @@ msgstr ""
 "modificat în <b>OASIS DeschidereDocument</b> pentru a fi criptat.<p>Doriţi "
 "să modificaţi fişierul în OASIS DeschidereDocument</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "Change Filetype"
 msgstr "Schimbă tipul fișierului"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, kde-format
 msgid "Change"
 msgstr "Schimbă"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4922,7 +4922,7 @@ msgstr ""
 "<qt>Documentul dumneavoastră nu s-a putut salva automat.<p>Pentru a finaliza "
 "criptarea, salvaţi documentul.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

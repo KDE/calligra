@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1688549 2024-08-25 01:13:47Z scripty $
+# $Id: calligrawords.po 1688742 2024-08-26 01:13:41Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-23 06:24+0200\n"
+"PO-Revision-Date: 2024-08-25 08:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -595,10 +595,9 @@ msgstr "Obris"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "Oblika in besedilo sta ločena:"
+msgstr "Oblika in besedilo sta levo ločena z:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129

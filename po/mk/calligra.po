@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -1285,17 +1285,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "&Отвори документ"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr ""
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, fuzzy, kde-format
 msgid "No"
 msgstr "Избери..."
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr ""
@@ -1451,7 +1451,7 @@ msgstr "Преглед на страна"
 msgid "Save"
 msgstr "&Додади група..."
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr ""
@@ -1792,24 +1792,24 @@ msgstr ""
 msgid "Date: %1"
 msgstr "Избери..."
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "&Додади група..."
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Одбери..."
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
 msgid "Default Author Profile"
 msgstr "Одбери..."
@@ -2249,56 +2249,56 @@ msgstr "Група:"
 msgid "Shape"
 msgstr "&Додади група..."
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Колони"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, fuzzy, kde-format
 msgid "Slide"
 msgstr "Наслов :"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr ""
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, fuzzy, kde-format
 msgid "Locked"
 msgstr "&Додади група..."
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, fuzzy, kde-format
 msgid "&Move Here"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, fuzzy, kde-format
 msgid "&Copy Here"
 msgstr "Екран"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, fuzzy, kde-format
 msgid "C&ancel"
 msgstr "Рабови на страна"
@@ -4529,8 +4529,8 @@ msgid "Lock Docker"
 msgstr "Насловна линија:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, fuzzy, kde-format
 msgid "&Encrypt"
 msgstr ""
@@ -4628,111 +4628,111 @@ msgstr "Распоред на страна"
 msgid "Last saved by"
 msgstr "Колони"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, fuzzy, kde-format
 msgid "Do not decrypt"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, fuzzy, kde-format
 msgid "D&ecrypt"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, fuzzy, kde-format
 msgid "Do not encrypt"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, fuzzy, kde-format
 msgid "Confirm Decrypt"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, fuzzy, kde-format
 msgid "Decrypt"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, fuzzy, kde-format
 msgid "Save Document"
 msgstr "Зачувај документ како"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4740,24 +4740,24 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, fuzzy, kde-format
 msgid "Change Filetype"
 msgstr "Рабови на страна"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, fuzzy, kde-format
 msgid "Change"
 msgstr "Рабови на страна"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

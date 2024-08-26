@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-23 07:34+0200\n"
+"PO-Revision-Date: 2024-08-25 07:19+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -590,10 +590,9 @@ msgstr "Kontur"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "Form och text är separerade:"
+msgstr "Form och text är separerade till vänster med:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129

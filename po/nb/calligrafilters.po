@@ -243,7 +243,6 @@ msgstr "<ARKNAVN>"
 
 #: sheets/csv/csvexportdialog.cpp:37
 #, fuzzy, kde-format
-#| msgid "Export Sheet to HTML"
 msgctxt "@title:dialog"
 msgid "Export to CVS"
 msgstr "Eksporter arket til HTML"
@@ -269,7 +268,6 @@ msgstr "Linjeslutt"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
 #, fuzzy, kde-format
-#| msgid "End of Line"
 msgid "End of Line:"
 msgstr "Linjeslutt"
 
@@ -336,7 +334,6 @@ msgstr "Celler"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
 #, fuzzy, kde-format
-#| msgid "Delimiter"
 msgid "Delimiter:"
 msgstr "Skilletegn"
 
@@ -549,7 +546,6 @@ msgstr "Dokument"
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
 #, fuzzy, kde-format
-#| msgid "Document Style"
 msgid "Document style:"
 msgstr "Dokumentstil"
 
@@ -568,7 +564,6 @@ msgstr "Words-stil"
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
 #, fuzzy, kde-format
-#| msgid "Document Type"
 msgid "Document type:"
 msgstr "Dokumenttype"
 
@@ -676,7 +671,6 @@ msgstr "Språk"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
 #, fuzzy, kde-format
-#| msgid "Encoding"
 msgid "Encoding:"
 msgstr "Koding"
 

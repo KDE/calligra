@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
 "PO-Revision-Date: 2024-08-23 15:30+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1243,17 +1243,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "Zavřít dokument"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "No"
 msgstr "Ne"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr "Ano"
@@ -1403,7 +1403,7 @@ msgstr "Uložit jako %1"
 msgid "Save"
 msgstr "Uložit"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (neznámý typ souboru)"
@@ -1738,24 +1738,24 @@ msgstr "Nová verze nemohla být přidána"
 msgid "Date: %1"
 msgstr "Datum: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Přidat tvar"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktivní profil autora"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonymní"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Výchozí profil autora"
@@ -2147,52 +2147,52 @@ msgstr "Skupina"
 msgid "Shape"
 msgstr "Tvar"
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Přejmenovat snímek"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Přejmenovat stránku"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Přejmenovat vrstvu"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Slide"
 msgstr "Snímek"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr "Viditelný"
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, kde-format
 msgid "Locked"
 msgstr "Uzamčeno"
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr ""
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
 msgid "&Move Here"
 msgstr "Přesu&nout na toto místo"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, kde-format
 msgid "&Copy Here"
 msgstr "&Kopírovat na toto místo"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, kde-format
 msgid "C&ancel"
 msgstr "Z&rušit"
@@ -4344,8 +4344,8 @@ msgid "Lock Docker"
 msgstr "Uzamknout dok"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "&Encrypt"
 msgstr "Zaši&frovat"
@@ -4439,81 +4439,81 @@ msgstr "Obecné"
 msgid "Last saved by"
 msgstr "Naposled uložil"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Použijte ';' (Např.: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Tento dokument bude dešifrován"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Nedešifrovat"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Tento dokument je zašifrován"
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "D&ecrypt"
 msgstr "D&ešifrovat"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Tento dokument bude zašifrován"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Nešifrovat"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Tento dokument není zašifrován"
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Tento dokument nepodporuje šifrování"
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Potvrdit dešifrování"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, kde-format
 msgid "Decrypt"
 msgstr "Dešifrovat"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4522,13 +4522,13 @@ msgstr ""
 "<qt>Váš dokument nemohl být automaticky uložen.<p>Pro dokončení dešifrování "
 "jej prosím uložte.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid "Save Document"
 msgstr "Uložit dokument"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4537,7 +4537,7 @@ msgstr ""
 "<qt>Pro dokončení dešifrování je potřeba dokument uložit.<p>Chcete tento "
 "dokument uložit nyní?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4545,17 +4545,17 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "Change Filetype"
 msgstr "Změnit typ souboru"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, kde-format
 msgid "Change"
 msgstr "Změnit"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4564,7 +4564,7 @@ msgstr ""
 "<qt>Váš dokument nemohl být automaticky uložen.<p>Pro dokončení šifrování "
 "jej prosím uložte.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

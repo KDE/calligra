@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-23 09:13+0300\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-08-25 09:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -881,11 +881,10 @@ msgid "Paste offset:"
 msgstr "Відступ вставлення:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Вставляти під вказівником:"
+msgstr "Вставити під вказівником"
 
 #: main/KoApplication.cpp:191
 #, kde-format
@@ -1366,17 +1365,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "Закриття документа"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "No"
 msgstr "Ні"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr "Так"
@@ -1526,7 +1525,7 @@ msgstr "Зберегти як %1"
 msgid "Save"
 msgstr "Зберегти"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (невідомий тип файла)"
@@ -1863,24 +1862,24 @@ msgstr "Не вдалося додати нову версію"
 msgid "Date: %1"
 msgstr "Дата: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Додати форму"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активний профіль автора"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Анонімний"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Типовий профіль автора"
@@ -2332,60 +2331,60 @@ msgstr "Група"
 msgid "Shape"
 msgstr "Форма"
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr ""
 "Перейменувати слайд\n"
 "перейменування слайда"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr ""
 "Перейменувати сторінку\n"
 "перейменування сторінки"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr ""
 "Перейменувати шар\n"
 "перейменування шару"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Slide"
 msgstr "Слайд"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr "Видиме"
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, kde-format
 msgid "Locked"
 msgstr "Зафіксовано"
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr ""
 "Перепідпорядкувати форми\n"
 "перепідпорядковування форм"
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
 msgid "&Move Here"
 msgstr "П&ересунути сюди"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, kde-format
 msgid "&Copy Here"
 msgstr "С&копіювати сюди"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, kde-format
 msgid "C&ancel"
 msgstr "&Скасувати"
@@ -4751,8 +4750,8 @@ msgid "Lock Docker"
 msgstr "Зафіксувати бічну панель"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "&Encrypt"
 msgstr "За&шифрувати"
@@ -4846,64 +4845,64 @@ msgstr "Загальні"
 msgid "Last saved by"
 msgstr "Востаннє збережено"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Використовувати «;» (наприклад, Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Цей документ буде розшифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Не розшифровувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Цей документ зашифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Розшифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Цей документ буде зашифровано."
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Не шифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Цей документ не зашифровано"
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Цей документ не підтримує шифрування"
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Не встан."
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4912,17 +4911,17 @@ msgstr ""
 "<qt>Розшифрування документа вилучить з нього парольний захист.<p>Все ще "
 "бажаєте розшифрувати файл?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Підтвердження розшифрування"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, kde-format
 msgid "Decrypt"
 msgstr "Розшифрувати"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4931,13 +4930,13 @@ msgstr ""
 "<qt>Ваш документ не можна зберегти автоматично.<p>Щоб завершити "
 "розшифрування, будь ласка, збережіть цей документ.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid "Save Document"
 msgstr "Зберегти документ"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4946,7 +4945,7 @@ msgstr ""
 "<qt>Щоб завершити розшифрування, документ слід зберегти.<p>Бажаєте зберегти "
 "його зараз?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4957,17 +4956,17 @@ msgstr ""
 "<b>OASIS OpenDocument</b>, щоб його можна було зашифрувати.<p>Бажаєте "
 "змінити файл на OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "Change Filetype"
 msgstr "Змінити тип файла"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, kde-format
 msgid "Change"
 msgstr "Змінити"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4976,7 +4975,7 @@ msgstr ""
 "<qt>Ваш документ не вдалося зберегти автоматично.<p>Щоб завершити "
 "шифрування, будь ласка, збережіть документ.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

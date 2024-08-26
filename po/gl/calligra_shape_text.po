@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-19 15:45+0200\n"
+"PO-Revision-Date: 2024-08-25 15:49+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1751,18 +1751,16 @@ msgid "Browse..."
 msgstr "Examinar…"
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Cor do fondo"
+msgstr "Restabelecer a cor de fondo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Cor do fondo"
+msgstr "Restabelecer a cor de fondo"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1771,10 +1769,9 @@ msgstr "O mundo enteiro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Maiúsculas capitulares:"
+msgstr "Activar as maiúsculas capitulares."
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1918,10 +1915,9 @@ msgstr "Xustificado"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Comportamento ao Remate do Marco/Páxina"
+msgstr "Comportamento ao remate do marco e da páxina:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57

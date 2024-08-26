@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 13:54+0300\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-08-25 20:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -782,11 +782,10 @@ msgid "Paste offset:"
 msgstr "Yapıştırma ofseti:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "İmleç konumuna yapıştır:"
+msgstr "İmleç konumuna yapıştır"
 
 #: main/KoApplication.cpp:191
 #, kde-format
@@ -1265,17 +1264,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "Belgeyi Kapat"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr "%​%1"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "No"
 msgstr "Hayır"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr "Evet"
@@ -1425,7 +1424,7 @@ msgstr "%1 olarak farklı kaydet"
 msgid "Save"
 msgstr "Kaydet"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "Bilinmeyen dosya türü %1"
@@ -1762,24 +1761,24 @@ msgstr "Yeni bir sürüm eklenemedi"
 msgid "Date: %1"
 msgstr "Tarih: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Şekil Ekle"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Etkin Yazar Profili"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Öntanımlı Yazar Profili"
@@ -2167,52 +2166,52 @@ msgstr "Grup"
 msgid "Shape"
 msgstr "Şekil"
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Slaytı Yeniden Adlandır"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Sayfayı Yeniden Adlandır"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Katmanı Yeniden Adlandır"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Slide"
 msgstr "Slayt"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr "Görünür"
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, kde-format
 msgid "Locked"
 msgstr "Kilitli"
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr "Şekilleri yeniden bağlantılandır"
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
 msgid "&Move Here"
 msgstr "Buraya &Taşı"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, kde-format
 msgid "&Copy Here"
 msgstr "Buraya Ko&pyala"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, kde-format
 msgid "C&ancel"
 msgstr "İ&ptal"
@@ -4429,8 +4428,8 @@ msgid "Lock Docker"
 msgstr "Araç Kutusunu Kilitle"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "&Encrypt"
 msgstr "Şif&rele"
@@ -4524,64 +4523,64 @@ msgstr "Genel"
 msgid "Last saved by"
 msgstr "Son kaydeden kişi"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';' kullanın (Örnek: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Bu belgenin şifresi çözülecek"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Şifreyi çözme"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Bu belge şifrelenmiş"
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Şifre Çöz"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Bu belge şifelenecek."
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Şifrelemeyi Aç&ma"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Bu belge şifrelenmiş değil"
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Bu belge şifrelemeyi desteklemiyor"
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Ayarlı değil"
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4590,17 +4589,17 @@ msgstr ""
 "<qt>Belgenin şifresinin çözülmesi parola korumasını kaldıracaktır.<p>Dosya "
 "şifresini çözmeyi hâlâ istiyor musunuz?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Şifre Çözmeyi Onayla"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, kde-format
 msgid "Decrypt"
 msgstr "Şifreyi Çöz"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4609,13 +4608,13 @@ msgstr ""
 "<qt>Belgeniz otomatik olarak kaydedilemedi.<p>Şifre çözmeyi tamamlamak için "
 "lütfen belgeyi kaydedin.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid "Save Document"
 msgstr "Belgeyi Kaydet"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4624,7 +4623,7 @@ msgstr ""
 "<qt>Şifre çözmenin tamamlanması için belgenin kaydedilmesi gerekli."
 "<p>Belgeyi şimdi kaydetmek istiyor musunuz?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4635,17 +4634,17 @@ msgstr ""
 "b> olarak değiştirilmesi gereklidir.<p>Dosyayı OASIS OpenDocument olarak "
 "değiştirmek ister misiniz?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "Change Filetype"
 msgstr "Dosya Türünü Değiştir"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, kde-format
 msgid "Change"
 msgstr "Değiştir"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4654,7 +4653,7 @@ msgstr ""
 "<qt>Belgeniz otomatik olarak kaydedilemedi.<p>Şifrelemeyi tamamlamak için "
 "lütfen belgeyi kaydedin.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

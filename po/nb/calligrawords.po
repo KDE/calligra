@@ -599,7 +599,6 @@ msgstr "Kontur"
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
 msgid "Shape and text are separated left by:"
 msgstr "Form og tekst er atskilt:"
 
@@ -1098,7 +1097,6 @@ msgstr ""
 
 #: part/KWAboutData.h:29
 #, fuzzy, kde-format
-#| msgid "Co maintainer"
 msgid "Co Maintainer/Port to Qt6"
 msgstr "Med-vedlikeholder"
 
@@ -1887,6 +1885,3 @@ msgstr "Hovedtekst"
 #, kde-format
 msgid "Other text"
 msgstr "Annen tekst"
-
-#~ msgid "Left by:"
-#~ msgstr "Venstre med:"

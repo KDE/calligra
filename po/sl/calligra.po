@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1688549 2024-08-25 01:13:47Z scripty $
+# $Id: calligra.po 1688742 2024-08-26 01:13:41Z scripty $
 # $Source$
 #
 #
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 09:31+0200\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-08-25 08:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -791,11 +791,10 @@ msgid "Paste offset:"
 msgstr "Prilepi odmik:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Prilepi pri kazalki:"
+msgstr "Prilepi pri kazalki"
 
 #: main/KoApplication.cpp:191
 #, kde-format
@@ -1273,17 +1272,17 @@ msgstr ""
 msgid "Close Document"
 msgstr "Zapri dokument"
 
-#: main/KoDocumentSectionDelegate.cpp:506
+#: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "No"
 msgstr "Ne"
 
-#: main/KoDocumentSectionToolTip.cpp:33
+#: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
 msgid "Yes"
 msgstr "Da"
@@ -1433,7 +1432,7 @@ msgstr "Shrani kot %1"
 msgid "Save"
 msgstr "Shrani"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:381
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (neznana vrsta datoteke)"
@@ -1770,24 +1769,24 @@ msgstr "Nove različice ni bilo moč dodati"
 msgid "Date: %1"
 msgstr "Datum: %1"
 
-#: main/KoView.cpp:345
+#: main/KoView.cpp:347
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Dodaj obliko"
 
-#: main/KoView.cpp:356
+#: main/KoView.cpp:358
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profil aktivnega avtorja"
 
-#: main/KoView.cpp:370 main/KoView.cpp:423
+#: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonimno"
 
-#: main/KoView.cpp:422 widgets/KoConfigAuthorPage.cpp:68
+#: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
 msgstr "Privzet profil avtorja"
@@ -2183,52 +2182,52 @@ msgstr "Skupina"
 msgid "Shape"
 msgstr "Oblika"
 
-#: pageapp/KoPADocumentModel.cpp:267
+#: pageapp/KoPADocumentModel.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "Preimenuj prosojnico"
 
-#: pageapp/KoPADocumentModel.cpp:269
+#: pageapp/KoPADocumentModel.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
 msgstr "Preimenuj stran"
 
-#: pageapp/KoPADocumentModel.cpp:272
+#: pageapp/KoPADocumentModel.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Preimenuj plast"
 
-#: pageapp/KoPADocumentModel.cpp:308 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Slide"
 msgstr "Prosojnica"
 
-#: pageapp/KoPADocumentModel.cpp:311
+#: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
 msgid "Visible"
 msgstr "Vidna"
 
-#: pageapp/KoPADocumentModel.cpp:312
+#: pageapp/KoPADocumentModel.cpp:313
 #, kde-format
 msgid "Locked"
 msgstr "Zaklenjena"
 
-#: pageapp/KoPADocumentModel.cpp:524 pageapp/KoPADocumentModel.cpp:543
+#: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
 msgstr "HIerarhično uredi oblike"
 
-#: pageapp/KoPADocumentModel.cpp:675
+#: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
 msgid "&Move Here"
 msgstr "Pre&makni sem"
 
-#: pageapp/KoPADocumentModel.cpp:679
+#: pageapp/KoPADocumentModel.cpp:680
 #, kde-format
 msgid "&Copy Here"
 msgstr "Kopiraj sem"
 
-#: pageapp/KoPADocumentModel.cpp:683
+#: pageapp/KoPADocumentModel.cpp:684
 #, kde-format
 msgid "C&ancel"
 msgstr "Prekliči"
@@ -4460,8 +4459,8 @@ msgid "Lock Docker"
 msgstr "Zakleni sidrišče"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:230
-#: widgets/KoDocumentInfoDlg.cpp:325
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
+#: widgets/KoDocumentInfoDlg.cpp:323
 #, kde-format
 msgid "&Encrypt"
 msgstr "Šifriraj"
@@ -4555,64 +4554,64 @@ msgstr "Splošno"
 msgid "Last saved by"
 msgstr "Nazadnje je shranil"
 
-#: widgets/KoDocumentInfoDlg.cpp:184
+#: widgets/KoDocumentInfoDlg.cpp:182
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Uporabi »;« (Zgled: Pisarna;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Ta dokument bo dešifriran"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Ne dešifriraj"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Ta dokument je šifriran"
 
-#: widgets/KoDocumentInfoDlg.cpp:220 widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Dešifriraj"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Ta dokument bo šifriran."
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
 msgid "Do not encrypt"
 msgstr "&Ne šifriraj"
 
-#: widgets/KoDocumentInfoDlg.cpp:228 widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Ta dokument ni šifriran"
 
-#: widgets/KoDocumentInfoDlg.cpp:234
+#: widgets/KoDocumentInfoDlg.cpp:232
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Ta dokument ne podpira šifriranja"
 
-#: widgets/KoDocumentInfoDlg.cpp:244
+#: widgets/KoDocumentInfoDlg.cpp:242
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Ni nastavljeno"
 
-#: widgets/KoDocumentInfoDlg.cpp:287 widgets/KoDocumentInfoDlg.cpp:293
+#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:344
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4621,17 +4620,17 @@ msgstr ""
 "<qt>Dešifriranje dokumenta bo odstranilo njegovo zaščito z geslom.<p>Želite "
 "še vedno dešifrirati datoteko?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:348
+#: widgets/KoDocumentInfoDlg.cpp:346
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Potrdi dešifriranje"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:347
 #, kde-format
 msgid "Decrypt"
 msgstr "Dešifriraj"
 
-#: widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4640,13 +4639,13 @@ msgstr ""
 "<qt>Vašega dokumenta ni mogoče samodejno shraniti.<p> Za dokončanje "
 "dešifriranja, prosimo shranite dokument.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:360 widgets/KoDocumentInfoDlg.cpp:367
-#: widgets/KoDocumentInfoDlg.cpp:402 widgets/KoDocumentInfoDlg.cpp:410
+#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
 #, kde-format
 msgid "Save Document"
 msgstr "Shrani dokument"
 
-#: widgets/KoDocumentInfoDlg.cpp:365
+#: widgets/KoDocumentInfoDlg.cpp:363
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4655,7 +4654,7 @@ msgstr ""
 "<qt>Za dokončanje dešifriranja je dokument treba shraniti.<p>Ali želite "
 "shraniti dokument zdaj?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:384
+#: widgets/KoDocumentInfoDlg.cpp:382
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4666,17 +4665,17 @@ msgstr ""
 "<b>OASIS OpenDocument</b> za šifriranje.<p>Ali želite spremeniti datoteko v "
 "OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:387
+#: widgets/KoDocumentInfoDlg.cpp:385
 #, kde-format
 msgid "Change Filetype"
 msgstr "Spremeni vrsto datoteke"
 
-#: widgets/KoDocumentInfoDlg.cpp:388
+#: widgets/KoDocumentInfoDlg.cpp:386
 #, kde-format
 msgid "Change"
 msgstr "Spremeni"
 
-#: widgets/KoDocumentInfoDlg.cpp:400
+#: widgets/KoDocumentInfoDlg.cpp:398
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4685,7 +4684,7 @@ msgstr ""
 "<qt>Vašega dokumenta ni mogoče samodejno shraniti.<p>Za dokončanje "
 "šifriranja shranite dokument.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:406
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5135,7 +5134,7 @@ msgstr "Lastnosti oblike"
 #, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Lastnosti ni na voljo."
+msgstr "Nobene lastnosti ni na voljo"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format

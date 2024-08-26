@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-02-27 06:40+0100\n"
+"PO-Revision-Date: 2024-08-25 15:43+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -162,13 +162,12 @@ msgstr "© 1998-%1 Equipo de Stage"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Mantedor"
+msgstr "Mantemento e adaptación a Qt 6."
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format

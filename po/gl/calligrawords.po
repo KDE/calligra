@@ -10,22 +10,22 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2012, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
+# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2023-06-24 11:17+0200\n"
+"PO-Revision-Date: 2024-08-25 15:48+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -596,10 +596,9 @@ msgstr "Contorno"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "A forma e o texto sepáranse:"
+msgstr "A forma e o texto sepáranse da dereita:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1092,13 +1091,12 @@ msgstr "© 1998-%1 Equipo de Words"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Co-mantedor"
+msgstr "Co-mantemento e adaptación a Qt 6."
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format

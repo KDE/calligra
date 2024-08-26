@@ -12413,7 +12413,6 @@ msgstr ""
 
 #: part/AboutData.h:37
 #, fuzzy, kde-format
-#| msgid "Maintainer"
 msgid "Maintainer/Port to Qt6"
 msgstr "Vedlikeholder"
 
@@ -12429,7 +12428,6 @@ msgstr "Torben Weis"
 
 #: part/AboutData.h:42
 #, fuzzy, kde-format
-#| msgid "Maintainer"
 msgid "Former Maintainer"
 msgstr "Vedlikeholder"
 
@@ -12967,7 +12965,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Color:"
 msgid "&Grid Color:"
 msgstr "Farge:"
 
@@ -12983,7 +12980,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
 #, fuzzy, kde-format
-#| msgid "Page Outline"
 msgid "Page Out&line Color:"
 msgstr "Sideomriss"
 

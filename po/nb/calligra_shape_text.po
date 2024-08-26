@@ -1740,7 +1740,6 @@ msgstr "Bla …"
 
 #: dialogs/ParagraphDecorations.cpp:18
 #, fuzzy, kde-format
-#| msgid "Background color"
 msgctxt "@action:button"
 msgid "Reset background color"
 msgstr "Bakgrunnsfarge"
@@ -1748,7 +1747,6 @@ msgstr "Bakgrunnsfarge"
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
 #, fuzzy, kde-format
-#| msgid "Background color"
 msgid "Reset background color"
 msgstr "Bakgrunnsfarge"
 
@@ -1760,7 +1758,6 @@ msgstr "Hele ord"
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
 #, fuzzy, kde-format
-#| msgid "Drop caps:"
 msgid "Enable drop caps"
 msgstr "Senkede versaler:"
 
@@ -1847,21 +1844,18 @@ msgstr "Minst"
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
 #, fuzzy, kde-format
-#| msgid "Indent"
 msgid "Left Indent:"
 msgstr "Innrykk"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
 #, fuzzy, kde-format
-#| msgid "Indent"
 msgid "Right Indent:"
 msgstr "Innrykk"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
 #, fuzzy, kde-format
-#| msgid "First Line:"
 msgid "First Line Indent:"
 msgstr "Første linje:"
 
@@ -1874,7 +1868,6 @@ msgstr "Avled automatisk fra tekststørrelse"
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
 #, fuzzy, kde-format
-#| msgid "Line Spacing"
 msgid "Line Spacing:"
 msgstr "Linjeavstand"
 
@@ -1887,21 +1880,18 @@ msgstr " %"
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
 #, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
 msgid "Use Font Metrics"
 msgstr "Bruk skriftmetrikk:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
 #, fuzzy, kde-format
-#| msgid "Paragraph Space"
 msgid "Paragraph Space Before:"
 msgstr "Avsnittsmellomrom"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
 #, fuzzy, kde-format
-#| msgid "Paragraph Space"
 msgid "Paragraph Space After:"
 msgstr "Avsnittsmellomrom"
 
@@ -1914,7 +1904,6 @@ msgstr "Tilpass"
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
 #, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
 msgid "Behavior at end of frame and page:"
 msgstr "Oppførsel ved slutt på ramme/side"
 

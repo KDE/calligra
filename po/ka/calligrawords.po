@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-23 06:42+0200\n"
+"PO-Revision-Date: 2024-08-25 05:09+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -587,10 +587,9 @@ msgstr "კონტური"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "ობიექტი და ტექსტი გაიყოფა:"
+msgstr "ობიექტი და ტექსტი გაიყოფა მარცხნივ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129

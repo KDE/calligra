@@ -263,7 +263,6 @@ msgstr "Linnjámolsun"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
 #, fuzzy, kde-format
-#| msgid "End of Line"
 msgid "End of Line:"
 msgstr "Linnjámolsun"
 
@@ -330,7 +329,6 @@ msgstr "Seallat"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
 #, fuzzy, kde-format
-#| msgid "Delimiter"
 msgid "Delimiter:"
 msgstr "Earromearka"
 
@@ -535,7 +533,6 @@ msgstr "Dokumeanta"
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
 #, fuzzy, kde-format
-#| msgid "Document Style"
 msgid "Document style:"
 msgstr "Dokumeantastiila"
 
@@ -554,7 +551,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
 #, fuzzy, kde-format
-#| msgid "Document Type"
 msgid "Document type:"
 msgstr "Dokumeantašládja"
 
@@ -659,7 +655,6 @@ msgstr "Giella"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
 #, fuzzy, kde-format
-#| msgid "Encoding"
 msgid "Encoding:"
 msgstr "Koden"
 

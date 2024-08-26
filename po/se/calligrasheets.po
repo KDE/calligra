@@ -12353,7 +12353,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
 #, fuzzy, kde-format
-#| msgid "Color:"
 msgid "&Grid Color:"
 msgstr "Ivdni:"
 
