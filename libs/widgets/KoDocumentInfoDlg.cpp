@@ -104,13 +104,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
 
     // Ugly hack, the mimetype should be a parameter, instead
     auto doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
-    if (doc) {
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(doc->mimeType());
-        if (mime.isValid()) {
-            page->setIcon(QIcon::fromTheme(mime.iconName()));
-        }
-    } else {
+    if (!doc) {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
         d->aboutUi->filePathLabel->setVisible(false);
@@ -130,7 +124,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->authorUi->mainLayout->insertStretch(2);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
     page->setHeader(i18n("Last saved by"));
-    page->setIcon(koIcon("user-identity"));
     addPage(page);
     d->pages.append(page);
 
