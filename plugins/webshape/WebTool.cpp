@@ -188,6 +188,5 @@ QList<QPointer<QWidget>> WebTool::createOptionWidgets()
 {
     auto widget = new WebToolWidget(this);
     widget->open(m_currentShape);
-    widgets.append(widget);
     return {widget};
 }
