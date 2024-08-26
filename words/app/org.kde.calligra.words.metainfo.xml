@@ -354,4 +354,13 @@
     <name>The KDE Community</name>
     <url>https://kde.org</url>
   </developer>
+  <releases>
+    <release version="4.0.0" date="2024-08-27">
+      <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
+      <description>
+        <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.<p>
+        <p>Word now features the new sidebar design, and the main view uses a shadow to define the document borders. The Style Manager and Page Layout dialog were also updated with a new design.</p>
+      </description>
+    </release>
+  </releases>
 </component>

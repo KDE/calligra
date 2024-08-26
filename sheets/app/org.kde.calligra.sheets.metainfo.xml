@@ -307,4 +307,13 @@
     <name>The KDE Community</name>
     <url>https://kde.org</url>
   </developer>
+  <releases>
+    <release version="4.0.0" date="2024-08-27">
+      <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
+      <description>
+        <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.<p>
+        <p>As part of the Qt6 port, Sheets lost its scripting system based on the unmaintained Kross framework. Visually a noticable change is that the cell editor moved from a docker positioned on the left of the spreadsheet view by default to a normal widget on the top. This takes a lot less space which can be used by the spreadsheet.</p>
+      </description>
+    </release>
+  </releases>
 </component>
