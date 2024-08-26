@@ -218,6 +218,7 @@ void KPrView::initGUI()
 
     // unhide tab bar and populate with view modes
     setTabBarPosition(Qt::Horizontal);
+    tabBar()->setDocumentMode(true);
     tabBar()->show();
     tabBar()->addTab(m_normalMode->name());
     tabBar()->addTab(m_notesMode->name());
