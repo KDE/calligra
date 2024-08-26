@@ -28,7 +28,7 @@ public:
     explicit WebToolFactory();
     ~WebToolFactory();
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) final;
 };
 
 #endif

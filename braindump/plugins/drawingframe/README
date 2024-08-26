@@ -1,3 +1,0 @@
-The main goal of the drawing frame is to allow to easily draw objects, and have some sort of a freehand space inside a non-freehand layout, which would be more convenient to use than a group.
-
-On the implementation details, I would see a shape inheriting the layer shape.

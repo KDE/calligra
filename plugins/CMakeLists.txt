@@ -13,6 +13,10 @@ if (SHOULD_BUILD_PLUGIN_MUSICSHAPE)
     add_subdirectory( musicshape )
 endif ()
 
+if (TARGET Qt6::WebEngineWidgets)
+  add_subdirectory(webshape)
+endif ()
+
 if (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
     macro_optional_find_package(Spnav)
     set_package_properties(Spnav PROPERTIES

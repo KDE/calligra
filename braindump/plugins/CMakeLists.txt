@@ -1,6 +1,2 @@
-if(Qt6WebEngineWidgets_FOUND)
-  add_subdirectory(webshape)
-endif()
 add_subdirectory(stateshape)
-add_subdirectory(drawingframe)
 # add_subdirectory(quickstates)

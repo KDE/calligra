@@ -1,4 +1,8 @@
+project(webshape)
+
 include_directories (${FLAKE_INCLUDES} )
+
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_webshape\")
 
 ########### Flake Plugin library ###############
 

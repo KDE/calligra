@@ -41,12 +41,14 @@ public:
         , m_oldScroll(oldScroll)
     {
     }
-    virtual void undo()
+
+    void undo() override
     {
         m_shape->setScroll(m_oldScroll);
         m_shape->update();
     }
-    virtual void redo()
+
+    void redo() override
     {
         m_shape->setScroll(m_newScroll);
         m_shape->update();
@@ -67,12 +69,12 @@ public:
         , m_oldZoom(oldZoom)
     {
     }
-    virtual void undo()
+    void undo() override
     {
         m_shape->setZoom(m_oldZoom);
         m_shape->update();
     }
-    virtual void redo()
+    void redo() override
     {
         m_shape->setZoom(m_newZoom);
         m_shape->update();
@@ -100,10 +102,11 @@ void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> 
     const auto selectionShapes = selection->selectedShapes();
     for (KoShape *shape : selectionShapes) {
         m_currentShape = dynamic_cast<WebShape *>(shape);
-        if (m_currentShape)
+        if (m_currentShape) {
             break;
+        }
     }
-    emit(shapeChanged(m_currentShape));
+    Q_EMIT shapeChanged(m_currentShape);
     if (m_currentShape == nullptr) {
         // none found
         Q_EMIT done();
@@ -140,7 +143,7 @@ void WebTool::mousePressEvent(KoPointerEvent *event)
                 selection->deselectAll();
                 m_currentShape = hit;
                 selection->select(m_currentShape);
-                emit(shapeChanged(m_currentShape));
+                Q_EMIT shapeChanged(m_currentShape);
             }
         }
     }
@@ -183,9 +186,8 @@ void WebTool::mouseReleaseEvent(KoPointerEvent *event)
 
 QList<QPointer<QWidget>> WebTool::createOptionWidgets()
 {
-    QList<QPointer<QWidget>> widgets;
-    WebToolWidget *widget = new WebToolWidget(this);
+    auto widget = new WebToolWidget(this);
     widget->open(m_currentShape);
     widgets.append(widget);
-    return widgets;
+    return {widget};
 }

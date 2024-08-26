@@ -34,23 +34,17 @@ public:
     explicit WebTool(KoCanvasBase *canvas);
     ~WebTool();
 
-    /// reimplemented
-    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-
-    /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
 Q_SIGNALS:
     void shapeChanged(WebShape *);
 
 protected:
-    virtual QList<QPointer<QWidget>> createOptionWidgets();
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private:
     WebShape *m_currentShape;

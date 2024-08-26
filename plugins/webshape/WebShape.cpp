@@ -34,7 +34,14 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
-#include <../../src/Xml.h>
+namespace Xml
+{
+inline void writeBraindumpNS(KoXmlWriter &bodyWriter)
+{
+    bodyWriter.addAttribute("xmlns:braindump", "http://kde.org/braindump");
+}
+
+}
 
 WebShape::WebShape()
     : m_hiddenScene(std::make_unique<QGraphicsScene>())
@@ -191,8 +198,9 @@ void WebShape::scrollOf(const QPointF &_scroll)
 void WebShape::zoomOf(qreal z)
 {
     m_zoom *= z;
-    if (m_zoom <= 0.01)
+    if (m_zoom <= 0.01) {
         m_zoom = 0.01;
+    }
 }
 
 QPointF WebShape::scroll() const
