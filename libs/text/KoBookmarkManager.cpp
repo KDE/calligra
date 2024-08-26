@@ -40,7 +40,7 @@ void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark)
 void KoBookmarkManager::remove(const QString &name)
 {
     d->bookmarkHash.remove(name);
-    d->bookmarkNameList.removeAt(d->bookmarkNameList.indexOf(name));
+    d->bookmarkNameList.removeAll(name);
 }
 
 void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
