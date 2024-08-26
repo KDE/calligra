@@ -527,7 +527,7 @@
   </description>
   <url type="homepage">https://calligra.org/karbon/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=karbon</url>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <branding>
     <color type="primary" scheme_preference="light">#25c5ad</color>
     <color type="primary" scheme_preference="dark">#1d5d54</color>

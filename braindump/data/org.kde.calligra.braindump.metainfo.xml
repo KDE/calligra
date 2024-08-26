@@ -121,7 +121,7 @@
       <caption>Main window of Braindump showing a music partition and many other shapes</caption>
     </screenshot>
   </screenshots>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <branding>
     <color type="primary" scheme_preference="light">#ffd28f</color>
     <color type="primary" scheme_preference="dark">#643a00</color>
