@@ -196,7 +196,7 @@
     <release version="4.0.0" date="2024-08-27">
       <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
       <description>
-        <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.<p>
+        <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.</p>
         <p>Words, Sheets, and Stage now feature a new sidebar design. The “Custom Shape” docker has been removed, and custom shapes are now accessible through a popup menu in the toolbar across all Calligra applications. We simplified the toolbar and removed the basic copy, paste and cut actions.</p>
       </description>
     </release>
