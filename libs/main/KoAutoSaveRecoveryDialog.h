@@ -11,6 +11,7 @@
 #include <QStringList>
 
 class QListView;
+struct FileItem;
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -19,10 +20,8 @@ class KoAutoSaveRecoveryDialog : public KoDialog
     Q_OBJECT
 public:
     explicit KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = nullptr);
-    QStringList recoverableFiles();
 
-public Q_SLOTS:
-    void toggleFileItem(bool toggle);
+    QStringList recoverableFiles();
     void slotDeleteAll();
 
 private:

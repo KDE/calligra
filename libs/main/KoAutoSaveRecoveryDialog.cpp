@@ -27,15 +27,10 @@
 #include <QVBoxLayout>
 
 struct FileItem {
-    FileItem()
-        : checked(true)
-    {
-    }
-
     QImage thumbnail;
     QString name;
     QString date;
-    bool checked;
+    bool checked = true;
 };
 
 class FileItemDelegate : public KWidgetItemDelegate
@@ -49,16 +44,19 @@ public:
 
     QList<QWidget *> createItemWidgets(const QModelIndex &index) const override
     {
-        QWidget *page = new QWidget;
-        QHBoxLayout *layout = new QHBoxLayout(page);
+        auto page = new QWidget;
+        auto layout = new QHBoxLayout(page);
 
-        QCheckBox *checkBox = new QCheckBox;
-        checkBox->setProperty("fileitem", index.data());
+        auto checkBox = new QCheckBox;
+        checkBox->setProperty("fileitem", index.data(Qt::UserRole));
+        const auto fileItem = index.data(Qt::UserRole).value<FileItem *>();
 
-        connect(checkBox, &QAbstractButton::toggled, m_parent, &KoAutoSaveRecoveryDialog::toggleFileItem);
-        QLabel *thumbnail = new QLabel;
-        QLabel *filename = new QLabel;
-        QLabel *dateModified = new QLabel;
+        connect(checkBox, &QAbstractButton::toggled, this, [fileItem, this](bool toggle) {
+            fileItem->checked = toggle;
+        });
+        auto thumbnail = new QLabel;
+        auto filename = new QLabel;
+        auto dateModified = new QLabel;
 
         layout->addWidget(checkBox);
         layout->addWidget(thumbnail);
@@ -67,19 +65,19 @@ public:
 
         page->setFixedSize(600, 200);
 
-        return QList<QWidget *>() << page;
+        return {page};
     }
 
     void updateItemWidgets(const QList<QWidget *> &widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const override
     {
-        FileItem *fileItem = (FileItem *)index.data().value<void *>();
+        auto fileItem = index.data(Qt::UserRole).value<FileItem *>();
 
         QWidget *page = widgets[0];
-        QHBoxLayout *layout = qobject_cast<QHBoxLayout *>(page->layout());
-        QCheckBox *checkBox = qobject_cast<QCheckBox *>(layout->itemAt(0)->widget());
-        QLabel *thumbnail = qobject_cast<QLabel *>(layout->itemAt(1)->widget());
-        QLabel *filename = qobject_cast<QLabel *>(layout->itemAt(2)->widget());
-        QLabel *modified = qobject_cast<QLabel *>(layout->itemAt(3)->widget());
+        auto layout = qobject_cast<QHBoxLayout *>(page->layout());
+        auto checkBox = qobject_cast<QCheckBox *>(layout->itemAt(0)->widget());
+        auto thumbnail = qobject_cast<QLabel *>(layout->itemAt(1)->widget());
+        auto filename = qobject_cast<QLabel *>(layout->itemAt(2)->widget());
+        auto modified = qobject_cast<QLabel *>(layout->itemAt(3)->widget());
 
         checkBox->setChecked(fileItem->checked);
         thumbnail->setPixmap(QPixmap::fromImage(fileItem->thumbnail));
@@ -108,56 +106,50 @@ public:
 class KoAutoSaveRecoveryDialog::FileItemModel : public QAbstractListModel
 {
 public:
-    FileItemModel(QList<FileItem *> fileItems, QObject *parent)
+    FileItemModel(std::vector<std::unique_ptr<FileItem>> &&fileItems, QObject *parent)
         : QAbstractListModel(parent)
-        , m_fileItems(fileItems)
+        , m_fileItems(std::move(fileItems))
     {
-    }
-
-    ~FileItemModel() override
-    {
-        qDeleteAll(m_fileItems);
-        m_fileItems.clear();
     }
 
     int rowCount(const QModelIndex & /*parent*/) const override
     {
-        return m_fileItems.size();
+        return (int)m_fileItems.size();
     }
 
     Qt::ItemFlags flags(const QModelIndex & /*index*/) const override
     {
-        Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
-        return flags;
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     }
 
     QVariant data(const QModelIndex &index, int role) const override
     {
-        if (index.isValid() && index.row() < m_fileItems.size()) {
-            FileItem *item = m_fileItems.at(index.row());
+        Q_ASSERT(checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid));
 
-            switch (role) {
-            case Qt::DisplayRole: {
-                return QVariant::fromValue<void *>((void *)item);
-            }
-            case Qt::SizeHintRole:
-                return QSize(600, 200);
-            }
+        auto &item = m_fileItems.at(index.row());
+
+        switch (role) {
+        case Qt::UserRole:
+            return QVariant::fromValue<FileItem *>(item.get());
+        case Qt::SizeHintRole:
+            return QSize(600, 200);
+        default:
+            return {};
         }
-        return QVariant();
     }
 
     bool setData(const QModelIndex &index, const QVariant & /*value*/, int role) override
     {
-        if (index.isValid() && index.row() < m_fileItems.size()) {
-            if (role == Qt::CheckStateRole) {
-                m_fileItems.at(index.row())->checked = !m_fileItems.at(index.row())->checked;
-                return true;
-            }
+        Q_ASSERT(checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid));
+
+        if (role == Qt::CheckStateRole) {
+            m_fileItems.at(index.row())->checked = !m_fileItems.at(index.row())->checked;
+            return true;
         }
         return false;
     }
-    QList<FileItem *> m_fileItems;
+
+    std::vector<std::unique_ptr<FileItem>> m_fileItems;
 };
 
 KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent)
@@ -167,8 +159,8 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     setButtons(KoDialog::Ok | KoDialog::Cancel | KoDialog::User1);
     setButtonText(KoDialog::User1, i18n("Discard All"));
     setMinimumSize(650, 500);
-    QWidget *page = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(page);
+    auto page = new QWidget(this);
+    auto layout = new QVBoxLayout(page);
     if (filenames.size() == 1) {
         layout->addWidget(new QLabel(i18n("The following autosave file can be recovered:")));
     } else {
@@ -180,9 +172,9 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     KWidgetItemDelegate *delegate = new FileItemDelegate(m_listView, this);
     m_listView->setItemDelegate(delegate);
 
-    QList<FileItem *> fileItems;
+    std::vector<std::unique_ptr<FileItem>> fileItems;
     for (const QString &filename : filenames) {
-        FileItem *file = new FileItem();
+        auto file = std::make_unique<FileItem>();
         file->name = filename;
 
         QString path = QDir::homePath() + "/" + filename;
@@ -202,10 +194,10 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
         QDateTime date = QFileInfo(path).lastModified();
         file->date = "(" + QLocale().toString(date) + ")";
 
-        fileItems.append(file);
+        fileItems.push_back(std::move(file));
     }
 
-    m_model = new FileItemModel(fileItems, m_listView);
+    m_model = new FileItemModel(std::move(fileItems), m_listView);
     m_listView->setModel(m_model);
 
     layout->addWidget(m_listView);
@@ -218,7 +210,7 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
 
 void KoAutoSaveRecoveryDialog::slotDeleteAll()
 {
-    for (FileItem *fileItem : std::as_const(m_model->m_fileItems)) {
+    for (auto &fileItem : std::as_const(m_model->m_fileItems)) {
         fileItem->checked = false;
     }
     accept();
@@ -227,20 +219,10 @@ void KoAutoSaveRecoveryDialog::slotDeleteAll()
 QStringList KoAutoSaveRecoveryDialog::recoverableFiles()
 {
     QStringList files;
-    foreach (FileItem *fileItem, m_model->m_fileItems) {
+    for (auto &fileItem : std::as_const(m_model->m_fileItems)) {
         if (fileItem->checked) {
             files << fileItem->name;
         }
     }
     return files;
-}
-
-void KoAutoSaveRecoveryDialog::toggleFileItem(bool toggle)
-{
-    // I've made better man from a piece of putty and matchstick!
-    QVariant v = sender()->property("fileitem");
-    if (v.isValid()) {
-        FileItem *fileItem = (FileItem *)v.value<void *>();
-        fileItem->checked = toggle;
-    }
 }
