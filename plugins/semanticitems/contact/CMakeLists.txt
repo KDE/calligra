@@ -16,11 +16,11 @@ ki18n_wrap_ui( calligra_semanticitem_contact_LIB_SRCS
 
 add_library(calligra_semanticitem_contact MODULE ${calligra_semanticitem_contact_LIB_SRCS})
 
-if (KF6Contacts_FOUND AND KF6Akonadi_FOUND)
+if (KF6Contacts_FOUND AND KPim6Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_contact
       KF6::Contacts
-      KF6::AkonadiCore
+      KPim6::AkonadiCore
    )
 endif ()
 

@@ -313,39 +313,40 @@ set_package_properties(Phonon4Qt6 PROPERTIES
     TYPE OPTIONAL
     )
 
+## PIM libraries detection disabled until semanticitems plugin is ported to Qt6
 ##
 ## Test for KF6CalendarCore
 ##
-find_package(KF6CalendarCore CONFIG QUIET)
-set_package_properties(KF6CalendarCore PROPERTIES
-    DESCRIPTION "KDE Calendar Library"
-    URL "https://www.kde.org/"
-    PURPOSE "Optionally used by semantic item Event"
-    TYPE OPTIONAL
-    )
-
+# find_package(KF6CalendarCore CONFIG QUIET)
+# set_package_properties(KF6CalendarCore PROPERTIES
+#     DESCRIPTION "KDE Calendar Library"
+#     URL "https://www.kde.org/"
+#     PURPOSE "Optionally used by semantic item Event"
+#     TYPE OPTIONAL
+#     )
+# 
 ##
 ## Test for KF6Contacts
 ##
-find_package(KF6Contacts CONFIG QUIET)
-set_package_properties(KF6Contacts PROPERTIES
-    DESCRIPTION "KDE Address book Library"
-    URL "https://www.kde.org/"
-    PURPOSE "Optionally used by semantic item Contact"
-    TYPE OPTIONAL
-    )
-
+# find_package(KF6Contacts CONFIG QUIET)
+# set_package_properties(KF6Contacts PROPERTIES
+#     DESCRIPTION "KDE Address book Library"
+#     URL "https://www.kde.org/"
+#     PURPOSE "Optionally used by semantic item Contact"
+#     TYPE OPTIONAL
+#     )
+# 
 ##
-## Test for KF6AkonadiCore
+## Test for KPim6AkonadiCore
 ##
-find_package(KF6Akonadi CONFIG QUIET)
-set_package_properties(KF6Akonadi PROPERTIES
-    DESCRIPTION "Library for general Access to Akonadi"
-    URL "https://www.kde.org/"
-    PURPOSE "Optionally used by semantic items Event and Contact"
-    TYPE OPTIONAL
-    )
-
+# find_package(KPim6Akonadi CONFIG QUIET)
+# set_package_properties(KFPimAkonadi PROPERTIES
+#     DESCRIPTION "Library for general Access to Akonadi"
+#     URL "https://www.kde.org/"
+#     PURPOSE "Optionally used by semantic items Event and Contact"
+#     TYPE OPTIONAL
+#     )
+# 
 ##
 ## Test for KChart
 ##
