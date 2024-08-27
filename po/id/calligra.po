@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -891,28 +891,28 @@ msgstr "Templat %1 gagal dimuat."
 msgid "No template found at: %1"
 msgstr "Tidak ada templat yang ditemukan di: %1"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:166
+#: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Pemulihan File-file"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:168
+#: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "File autosimpan berikut bisa dipulihkan:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:175
+#: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "File-file autosimpan berikut bisa dipulihkan:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:213
+#: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -1423,7 +1423,7 @@ msgstr "Simpan sebagai %1"
 msgid "Save"
 msgstr "Simpan"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tipe tak diketahui)"
@@ -1486,17 +1486,17 @@ msgstr "Ekspor sebagai PDF"
 msgid "Cannot export to the specified file"
 msgstr "Tidak bisa mengekspor ke file yang ditentukan"
 
-#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Dokumen"
 
-#: main/KoMainWindow.cpp:1620
+#: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokumen - %1"
 
-#: main/KoMainWindow.cpp:1650
+#: main/KoMainWindow.cpp:1651
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1505,17 +1505,17 @@ msgstr ""
 "Kamu akan kehilangan semua perubahan yang dibuat sejak terakhir kamu simpan\n"
 "Apakah kamu ingin terus?"
 
-#: main/KoMainWindow.cpp:1652
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Warning"
 msgstr "Peringatan"
 
-#: main/KoMainWindow.cpp:2015
+#: main/KoMainWindow.cpp:2016
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Tampilkan Bilah Alat %1"
 
-#: main/KoMainWindow.cpp:2017
+#: main/KoMainWindow.cpp:2018
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Sembunyikan Bilah Alat %1"
@@ -2116,7 +2116,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Penulis"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
 #, kde-format
 msgid "Author"
 msgstr "Penulis"
@@ -4439,8 +4439,8 @@ msgid "Lock Docker"
 msgstr "Kuncikan Docker"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
-#: widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
+#: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
 msgstr "&Enkripsi"
@@ -4529,69 +4529,69 @@ msgstr "Bahasa:"
 msgid "General"
 msgstr "Umum"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:126
 #, kde-format
 msgid "Last saved by"
 msgstr "Terakhir disimpan oleh"
 
-#: widgets/KoDocumentInfoDlg.cpp:182
+#: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Gunakan ';' (Contoh: OfficedKDEdCalligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Dokumen ini akan didenkripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Jangan dekripsikan"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Dokumen ini telah dienkripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
 msgstr "D&ekripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Dokumen ini akan dienkripsi."
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Jangan enkripsikan"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Dokumen ini tidaklah dienkripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:232
+#: widgets/KoDocumentInfoDlg.cpp:225
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Dokumen ini belum mendukung pengenkripsian"
 
-#: widgets/KoDocumentInfoDlg.cpp:242
+#: widgets/KoDocumentInfoDlg.cpp:235
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
+#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:344
+#: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4600,17 +4600,17 @@ msgstr ""
 "<qt>Pendekripsian dokumen akan menghapus proteksi kata sandi darinya."
 "<p>Apakah kamu masih ingin mendekripsikan si file?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Konfirmasi Dekripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:347
+#: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
 msgstr "Dekripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4619,13 +4619,13 @@ msgstr ""
 "<qt>Dokumenmu tidak bisa disimpan secara otomatis.<p>Untuk melengkapi "
 "pendekripsian, silakan simpan si dokumen.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
-#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
 #, kde-format
 msgid "Save Document"
 msgstr "Simpan Dokumen"
 
-#: widgets/KoDocumentInfoDlg.cpp:363
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4639,7 +4639,7 @@ msgstr ""
 "dokumen perlu disimpan.<p>Apakah kamu ingin menyimpan si dokumen sekarang?</"
 "qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:382
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4650,17 +4650,17 @@ msgstr ""
 "OpenDocument</b> supaya terenkripsi.<p>Apakah kamu ingin mengubah si file ke "
 "OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:385
+#: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
 msgid "Change Filetype"
 msgstr "Ubah TipeFile"
 
-#: widgets/KoDocumentInfoDlg.cpp:386
+#: widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "Change"
 msgstr "Ubah"
 
-#: widgets/KoDocumentInfoDlg.cpp:398
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4669,7 +4669,7 @@ msgstr ""
 "<qt>Dokumenmu tidak bisa disimpan secara otomatis.<p>Untuk melengkapi "
 "pengenkripsian, silakan simpan si dokumen.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:406
+#: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2024-08-24 14:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -572,82 +572,82 @@ msgstr "Son slayta git"
 msgid "Configure Stage..."
 msgstr "Sahne'yi Yapılandır..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "HTML Olarak Dışa Aktar..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Resimleri Slayt Olarak Ekle..."
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Ortaya Çıkma Canlandırması Oluştur"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Özel Slayt Gösterilerini Yapılandır..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Sunumu Başlat"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "Geçerli Slayttan"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "İlk Slayttan"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, kde-format
 msgid "Stop presentation"
 msgstr "Sunumu durdur"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Durum Çubuğunu Göster"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Durum Çubuğunu Gizle"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Durum çubuğunu gösterir ya da gizler"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Slayt Gösterisini Yapılandır..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Sunum Görünümünü Yapılandır..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Sunum üzerinde çiz..."
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Sunumu vurgula..."
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Sunum üzerinde siyah ekran..."

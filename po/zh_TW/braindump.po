@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2016-12-08 08:22+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
@@ -115,33 +115,6 @@ msgstr "狀態工具選項"
 #, kde-format
 msgid "State editing"
 msgstr "編輯狀態"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "網址："
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "使用快取複本"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "網頁元件"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "網頁元件"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "編輯網頁元件"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -351,3 +324,18 @@ msgstr "群組元件"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "取消元件群組"
+
+#~ msgid "URL:"
+#~ msgstr "網址："
+
+#~ msgid "Use a cache copy"
+#~ msgstr "使用快取複本"
+
+#~ msgid "Web Shape"
+#~ msgstr "網頁元件"
+
+#~ msgid "A web shape"
+#~ msgstr "網頁元件"
+
+#~ msgid "Web shape editing"
+#~ msgstr "編輯網頁元件"

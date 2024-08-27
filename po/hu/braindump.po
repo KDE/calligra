@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2017-02-14 23:26+0100\n"
 "Last-Translator: Kiszel Kristóf <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -116,33 +116,6 @@ msgstr "Az állapot eszköz beállításai"
 #, kde-format
 msgid "State editing"
 msgstr "Állapot szerkesztés"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL-cím:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Gyorsítótár-másolat használata"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Webes alakzat"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Egy webes alakzat"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Webes alakzat szerkesztés"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -353,6 +326,21 @@ msgstr "Alakzatok csoportosítása"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Alakzatcsoport felbontása"
+
+#~ msgid "URL:"
+#~ msgstr "URL-cím:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Gyorsítótár-másolat használata"
+
+#~ msgid "Web Shape"
+#~ msgstr "Webes alakzat"
+
+#~ msgid "A web shape"
+#~ msgstr "Egy webes alakzat"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Webes alakzat szerkesztés"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

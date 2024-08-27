@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2017-04-28 13:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -117,33 +117,6 @@ msgstr "Επιλογές εργαλείου κατάστασης"
 #, kde-format
 msgid "State editing"
 msgstr "Επεξεργασία κατάστασης"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Χρήση αντιγράφου λανθάνουσας μνήμης"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Σχήμα ιστού"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Ένα σχήμα ιστού"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Επεξεργασία σχήματος ιστού"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -354,6 +327,21 @@ msgstr "Ομαδοποίηση σχημάτων"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Διαχωρισμός σχημάτων"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Χρήση αντιγράφου λανθάνουσας μνήμης"
+
+#~ msgid "Web Shape"
+#~ msgstr "Σχήμα ιστού"
+
+#~ msgid "A web shape"
+#~ msgstr "Ένα σχήμα ιστού"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Επεξεργασία σχήματος ιστού"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

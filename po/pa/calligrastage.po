@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2007-06-27 17:37+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -625,91 +625,91 @@ msgstr "ਸਲਾਇਡ ਤੇ ਜਾਓ:"
 msgid "Configure Stage..."
 msgstr "ਸਲਾਇਡ ਸ਼ੋ ਸੰਰਚਨਾ..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Picture"
 msgid "Insert Pictures as Slides..."
 msgstr "ਤਸਵੀਰ ਸ਼ਾਮਿਲ"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Save Configuration..."
 msgid "Create Appear Animation"
 msgstr "ਸੰਰਚਨਾ ਸੰਭਾਲੋ..."
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show"
 msgid "From Current Slide"
 msgstr "ਪ੍ਰਚਲਿਤ ਸਲਾਇਡ ਸ਼ੋ"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 msgid "From First Slide"
 msgstr "ਸ਼ੁਰੂ"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 msgid "Stop presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Show Status Bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Hide Status Bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Shows or hides the status bar"
 msgstr "ਸਥਿਤੀ ਪੱਟੀ ਵੇਖਾਓ"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Slide Show..."
 msgstr "ਸਲਾਇਡ ਸ਼ੋ ਸੰਰਚਨਾ..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Configure KPresenter"
 msgid "Configure Presenter View..."
 msgstr "ਕੇ-ਪੇਸ਼ਕਾਰ ਸੰਰਚਨਾ"
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 msgid "Draw on the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 msgid "Highlight the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "ਉੱਪਰ ਲਿਖੋ"

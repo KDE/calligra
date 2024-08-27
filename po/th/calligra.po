@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -983,30 +983,30 @@ msgstr "ล้มเหลวในการโหลดเอกสารต้
 msgid "No template found at: %1"
 msgstr "ไม่พบเอกสารต้นแบบสำหรับ %1"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:166
+#: main/KoAutoSaveRecoveryDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "Save palette"
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "บันทึกจานสี"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:168
+#: main/KoAutoSaveRecoveryDialog.cpp:160
 #, fuzzy, kde-format
 #| msgid "Disc Bullet"
 msgid "Discard All"
 msgstr "สัญลักษณ์แบบจานกลวง"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:175
+#: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:213
+#: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -1532,7 +1532,7 @@ msgstr "บันทึกเป็น %1"
 msgid "Save"
 msgstr "บันทึก"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
 #, fuzzy, kde-format
 msgid "%1 (unknown file type)"
 msgstr "ไม่รู้จักแฟ้มประเภท %1"
@@ -1592,17 +1592,17 @@ msgstr "ส่งออกเป็นเอกสาร PDF..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "เอกสาร"
 
-#: main/KoMainWindow.cpp:1620
+#: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
 msgstr "เอกสาร - %1"
 
-#: main/KoMainWindow.cpp:1650
+#: main/KoMainWindow.cpp:1651
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1611,17 +1611,17 @@ msgstr ""
 "คุณจะสูญเสียการเปลี่ยนแปลงทั้งหมดที่ทำไว้ตั้งแต่หลังการบันทึกล่าสุด\n"
 "คุณต้องการจะทำต่อไปหรือไม่ ?"
 
-#: main/KoMainWindow.cpp:1652
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: main/KoMainWindow.cpp:2015
+#: main/KoMainWindow.cpp:2016
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "แสดงแถบเครื่องมือ %1"
 
-#: main/KoMainWindow.cpp:2017
+#: main/KoMainWindow.cpp:2018
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ซ่อนแถบเครื่องมือ %1"
@@ -2307,7 +2307,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ผู้เขียน"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
 #, kde-format
 msgid "Author"
 msgstr "ผู้เขียน"
@@ -4781,8 +4781,8 @@ msgid "Lock Docker"
 msgstr "ถาดแนบ"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
-#: widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
+#: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
 msgstr "เข้ารหัส"
@@ -4873,109 +4873,109 @@ msgstr "พอดีกับหน้า"
 msgid "General"
 msgstr "ทั่วไป"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:126
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Last saved by"
 msgstr "พอดีกับหน้า"
 
-#: widgets/KoDocumentInfoDlg.cpp:182
+#: widgets/KoDocumentInfoDlg.cpp:175
 #, fuzzy, kde-format
 #| msgid "Use ';' (Example: Office;KDE;KOffice)"
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "ใช้เครื่องหมาย ';' (ตัวอย่าง: Office;KDE;KOffice)"
 
-#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "เอกสารนี้จะถูกถอดรหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
 msgstr "ไม่ต้องถอดรหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
 msgstr "เอกสารถูกเข้ารหัสไว้"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
 msgstr "ถอดรหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "เอกสารนี้จะถูกเข้ารหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
 msgstr "ไม่ต้องเข้ารหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "เอกสารนี้ไม่ได้ถูกเข้ารหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:232
+#: widgets/KoDocumentInfoDlg.cpp:225
 #, fuzzy, kde-format
 #| msgid "This document is not encrypted"
 msgid "This document does not support encryption"
 msgstr "เอกสารนี้ไม่ได้ถูกเข้ารหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:242
+#: widgets/KoDocumentInfoDlg.cpp:235
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
+#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:344
+#: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "ยืนยันการถอดรหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:347
+#: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
 msgstr "ถอดรหัส"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
-#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
 #, kde-format
 msgid "Save Document"
 msgstr "บันทึกเอกสาร"
 
-#: widgets/KoDocumentInfoDlg.cpp:363
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:382
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4983,24 +4983,24 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:385
+#: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
 msgid "Change Filetype"
 msgstr "เปลี่ยนประเภทแฟ้ม"
 
-#: widgets/KoDocumentInfoDlg.cpp:386
+#: widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "Change"
 msgstr "เปลี่ยน"
 
-#: widgets/KoDocumentInfoDlg.cpp:398
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:406
+#: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

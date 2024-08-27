@@ -238,7 +238,6 @@ msgstr "<工作表名称>"
 
 #: sheets/csv/csvexportdialog.cpp:37
 #, fuzzy, kde-format
-#| msgid "Export Sheet to HTML"
 msgctxt "@title:dialog"
 msgid "Export to CVS"
 msgstr "将工作表导出为 HTML"
@@ -264,7 +263,6 @@ msgstr "行尾"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
 #, fuzzy, kde-format
-#| msgid "End of Line"
 msgid "End of Line:"
 msgstr "行尾"
 
@@ -331,7 +329,6 @@ msgstr "单元格"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
 #, fuzzy, kde-format
-#| msgid "Delimiter"
 msgid "Delimiter:"
 msgstr "分隔符"
 
@@ -542,7 +539,6 @@ msgstr "文档"
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
 #, fuzzy, kde-format
-#| msgid "Document Style"
 msgid "Document style:"
 msgstr "文档风格"
 
@@ -561,7 +557,6 @@ msgstr "Words 风格"
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
 #, fuzzy, kde-format
-#| msgid "Document Type"
 msgid "Document type:"
 msgstr "文档类型"
 
@@ -670,7 +665,6 @@ msgstr "语言"
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
 #, fuzzy, kde-format
-#| msgid "Encoding"
 msgid "Encoding:"
 msgstr "编码"
 

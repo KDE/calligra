@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2024-01-05 21:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -568,82 +568,82 @@ msgstr "Iru al la lasta diapozitivo"
 msgid "Configure Stage..."
 msgstr "Agordu Etapo..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Eksportu kiel HTML..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Enigu bildojn kiel diapozitivojn..."
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Kreu Aperan Animacion"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Redaktu Proprajn Diagramojn..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Starti prezentaĵon"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "El Nuna Slide"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "El Unua Slide"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, kde-format
 msgid "Stop presentation"
 msgstr "Ĉesu prezenton"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Montri Statusan Breton"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Kaŝi Statusbreton"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Montras aŭ kaŝas la statusbreton"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Agordi bildoprezenton..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Agordi Prezentilan Vidon..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Tiru sur la prezento..."
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Emfazu la prezenton..."
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Nigra Ekrano en la prezento..."

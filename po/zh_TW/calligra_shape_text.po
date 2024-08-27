@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-01-05 20:05+0900\n"
+"PO-Revision-Date: 2024-08-25 02:39+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
@@ -2670,12 +2670,12 @@ msgstr "變更寫字方向"
 #: TextTool.cpp:294
 #, kde-format
 msgid "Increase Indent"
-msgstr "遞增縮排"
+msgstr "提高縮排"
 
 #: TextTool.cpp:300
 #, kde-format
 msgid "Decrease Indent"
-msgstr "遞減縮排"
+msgstr "降低縮排"
 
 #: TextTool.cpp:304
 #, kde-format
@@ -2690,12 +2690,12 @@ msgstr "切換列表開關，或是變更目前等級的格式"
 #: TextTool.cpp:308
 #, kde-format
 msgid "Increase Font Size"
-msgstr "遞增字型大小"
+msgstr "提高字型大小"
 
 #: TextTool.cpp:313
 #, kde-format
 msgid "Decrease Font Size"
-msgstr "遞減字型大小"
+msgstr "降低字型大小"
 
 #: TextTool.cpp:319
 #, kde-format

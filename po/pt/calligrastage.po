@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2021-03-02 13:01+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -578,82 +578,82 @@ msgstr "Ir para o último 'slide'"
 msgid "Configure Stage..."
 msgstr "Configurar o Stage..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Exportar como HTML..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Inserir Imagens como 'Slides'..."
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Criar uma Animação de Aparição"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Editar as Apresentações Personalizadas..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Iniciar a Apresentação"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "Do 'Slide' Actual"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "Do Primeiro 'Slide'"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, kde-format
 msgid "Stop presentation"
 msgstr "Parar a apresentação"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Mostrar a Barra de Estado"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Esconder a Barra de Estado"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Mostra ou esconde a barra de estado"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Configurar a Apresentação..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Configurar a Área de Apresentação..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Desenhar sobre a apresentação..."
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Realçar a apresentação..."
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Fundo preto na apresentação..."

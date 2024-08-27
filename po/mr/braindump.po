@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2013-03-25 17:16+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -114,34 +114,6 @@ msgstr "स्थिती साधन पर्याय"
 #, fuzzy, kde-format
 #| msgid "Web Shape"
 msgid "State editing"
-msgstr "वेब आकार"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "कॅशे प्रत वापरा"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "वेब आकार"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "एक वेब आकार"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
-#| msgid "Web Shape"
-msgid "Web shape editing"
 msgstr "वेब आकार"
 
 #: src/AboutData.h:33
@@ -353,6 +325,23 @@ msgstr "आकारांचा समूह करा"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "आकारांचा समूह काढून टाका"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "कॅशे प्रत वापरा"
+
+#~ msgid "Web Shape"
+#~ msgstr "वेब आकार"
+
+#~ msgid "A web shape"
+#~ msgstr "एक वेब आकार"
+
+#, fuzzy
+#~| msgid "Web Shape"
+#~ msgid "Web shape editing"
+#~ msgstr "वेब आकार"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

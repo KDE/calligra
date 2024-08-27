@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2021-11-15 17:29+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -571,82 +571,82 @@ msgstr "Prejsť na poslednú snímku"
 msgid "Configure Stage..."
 msgstr "&Nastaviť Stage..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Exportovať ako HTML..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Vložiť obrázky ako snímky..."
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Vytvoriť animáciu objavenia"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Upraviť vlastné prezentácie..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Spustiť prezentáciu"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "Od aktuálnej snímky"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "Od prvej snímky"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, kde-format
 msgid "Stop presentation"
 msgstr "Zastaviť prezentáciu"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Zobraziť stavový riadok"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Skryť stavový riadok"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Zobrazí alebo skryje stavový riadok"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Nastavenie prezentácie..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Povoliť zobrazenie presentera..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Kresliť na prezentáciu..."
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Vysvietiť prezentáciu..."
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Prázdna obrazovka na prezentáciu..."

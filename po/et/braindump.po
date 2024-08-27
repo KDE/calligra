@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2019-12-15 22:51+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -114,33 +114,6 @@ msgstr "Olekutööriista valikud"
 #, kde-format
 msgid "State editing"
 msgstr "Oleku muutmine"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Puhvri koopia kasutamine"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Veebikujund"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Veebikujund"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Veebikujundi muutmine"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -351,6 +324,21 @@ msgstr "Rühmita kujundid"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lõhu kujundite rühmad"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Puhvri koopia kasutamine"
+
+#~ msgid "Web Shape"
+#~ msgstr "Veebikujund"
+
+#~ msgid "A web shape"
+#~ msgstr "Veebikujund"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Veebikujundi muutmine"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

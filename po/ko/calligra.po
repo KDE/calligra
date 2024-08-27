@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -892,28 +892,28 @@ msgstr "서식 %1을(를) 불러올 수 없습니다."
 msgid "No template found at: %1"
 msgstr "서식 파일을 찾을 수 없음: %1"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:166
+#: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "파일 복구"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:168
+#: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "다음 자동 저장된 파일을 복구할 수 있습니다:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:175
+#: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "다음 자동 저장된 파일을 복구할 수 있습니다:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:213
+#: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -1424,7 +1424,7 @@ msgstr "%1(으)로 저장"
 msgid "Save"
 msgstr "저장"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1(알 수 없는 파일 형식)"
@@ -1487,17 +1487,17 @@ msgstr "PDF로 내보내기"
 msgid "Cannot export to the specified file"
 msgstr "지정한 파일로 내보낼 수 없음"
 
-#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "문서"
 
-#: main/KoMainWindow.cpp:1620
+#: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
 msgstr "문서 - %1"
 
-#: main/KoMainWindow.cpp:1650
+#: main/KoMainWindow.cpp:1651
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1506,17 +1506,17 @@ msgstr ""
 "마지막 저장 이후 변경 사항이 손실됩니다.\n"
 "계속하시겠습니까?"
 
-#: main/KoMainWindow.cpp:1652
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Warning"
 msgstr "경고"
 
-#: main/KoMainWindow.cpp:2015
+#: main/KoMainWindow.cpp:2016
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 도구 모음 표시"
 
-#: main/KoMainWindow.cpp:2017
+#: main/KoMainWindow.cpp:2018
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 도구 모음 숨기기"
@@ -2113,7 +2113,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
 #, kde-format
 msgid "Author"
 msgstr "작성자"
@@ -4422,8 +4422,8 @@ msgid "Lock Docker"
 msgstr "도커 잠금"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
-#: widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
+#: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
 msgstr "암호화(&E)"
@@ -4512,69 +4512,69 @@ msgstr "언어:"
 msgid "General"
 msgstr "일반"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:126
 #, kde-format
 msgid "Last saved by"
 msgstr "마지막 저장"
 
-#: widgets/KoDocumentInfoDlg.cpp:182
+#: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';' 사용(예: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "이 문서가 복호화됩니다"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
 msgstr "복호화하지 않음"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
 msgstr "이 문서는 암호화되어 있습니다"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
 msgstr "복호화(&E)"
 
-#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "이 문서는 암호화됩니다."
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
 msgstr "암호화하지 않음"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "이 문서는 암호화되지 않았습니다"
 
-#: widgets/KoDocumentInfoDlg.cpp:232
+#: widgets/KoDocumentInfoDlg.cpp:225
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "이 문서는 암호화를 지원하지 않습니다"
 
-#: widgets/KoDocumentInfoDlg.cpp:242
+#: widgets/KoDocumentInfoDlg.cpp:235
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
+#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:344
+#: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4583,17 +4583,17 @@ msgstr ""
 "<qt>문서를 복호화하면 문서에서 암호 보호가 삭제됩니다.<p>파일을 복호화하시겠"
 "습니까?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "복호화 확인"
 
-#: widgets/KoDocumentInfoDlg.cpp:347
+#: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
 msgstr "복호화"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4602,13 +4602,13 @@ msgstr ""
 "<qt>문서를 자동으로 저장할 수 없습니다.<p>복호화를 완료하려면 문서를 저장하십"
 "시오.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
-#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
 #, kde-format
 msgid "Save Document"
 msgstr "문서 저장"
 
-#: widgets/KoDocumentInfoDlg.cpp:363
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4617,7 +4617,7 @@ msgstr ""
 "<qt>복호화를 완료하려면 문서를 저장해야 합니다.<p>지금 문서를 저장하시겠습니"
 "까?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:382
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4628,17 +4628,17 @@ msgstr ""
 "OpenDocument</b>로 변경해야 합니다.<p>파일 형식을 OASIS OpenDocument로 변경하"
 "시겠습니까?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:385
+#: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
 msgid "Change Filetype"
 msgstr "파일 형식 변경"
 
-#: widgets/KoDocumentInfoDlg.cpp:386
+#: widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "Change"
 msgstr "변경"
 
-#: widgets/KoDocumentInfoDlg.cpp:398
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4647,7 +4647,7 @@ msgstr ""
 "<qt>문서를 자동으로 저장할 수 없습니다.<p>암호화를 완료하려면 문서를 저장해 "
 "주십시오.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:406
+#: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

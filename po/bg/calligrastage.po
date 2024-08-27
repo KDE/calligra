@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2024-05-13 23:14+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -577,82 +577,82 @@ msgstr "Отиване на кадър:"
 msgid "Configure Stage..."
 msgstr "Настройки на прожекцията…"
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Изнасяне като HTML…"
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Вмъкване на изображения…"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
 msgstr "Анимация при появяване"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Редактиране на потребителски прожекции…"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Начало на презентация"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "От текущия кадър"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "От първия кадър"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 msgid "Stop presentation"
 msgstr "Повторение на презентацията"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "Показване на лента за състояние"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "Скриване на лента за състояние"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Показване и скриване лентата за състоянието"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Настройки на прожекцията…"
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Настройки на изгледа за презентация…"
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
 msgstr "Рисуване върху презентацията…"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
 msgstr "Открояване на презентацията…"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Рисуване върху презентацията…"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2017-02-05 22:57+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-it@kde.org>\n"
@@ -114,33 +114,6 @@ msgstr "Optiones de instrumento de stato"
 #, kde-format
 msgid "State editing"
 msgstr "Constata modificar"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Usa un copia de cache"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Forma Web"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Un forma de web"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Modifica de Forma Web"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -349,6 +322,21 @@ msgstr "Gruppa formas"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Leva formas de gruppo"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Usa un copia de cache"
+
+#~ msgid "Web Shape"
+#~ msgstr "Forma Web"
+
+#~ msgid "A web shape"
+#~ msgstr "Un forma de web"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Modifica de Forma Web"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

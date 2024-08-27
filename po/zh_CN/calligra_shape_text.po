@@ -1735,7 +1735,6 @@ msgstr "浏览..."
 
 #: dialogs/ParagraphDecorations.cpp:18
 #, fuzzy, kde-format
-#| msgid "Background color"
 msgctxt "@action:button"
 msgid "Reset background color"
 msgstr "背景颜色"
@@ -1743,7 +1742,6 @@ msgstr "背景颜色"
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
 #, fuzzy, kde-format
-#| msgid "Background color"
 msgid "Reset background color"
 msgstr "背景颜色"
 
@@ -1755,7 +1753,6 @@ msgstr "整个单词"
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
 #, fuzzy, kde-format
-#| msgid "Drop caps:"
 msgid "Enable drop caps"
 msgstr "首字下沉："
 
@@ -1902,7 +1899,6 @@ msgstr "两端对齐"
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
 #, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
 msgid "Behavior at end of frame and page:"
 msgstr "边框/页面末段行为"
 

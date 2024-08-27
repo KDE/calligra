@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2007-02-11 00:26+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -628,93 +628,93 @@ msgstr "Слайдни қўйиш"
 msgid "Configure Stage..."
 msgstr "Намойиш &мосламалари..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Picture"
 msgid "Insert Pictures as Slides..."
 msgstr "Расмни қўйиш"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "Create Appear Animation"
 msgstr "HTML намойишни яратиш"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show..."
 msgid "Edit Custom Slide Shows..."
 msgstr "Бошқа намойиш..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "Намойиш"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "After Current Slide"
 msgid "From Current Slide"
 msgstr "Жорий слайддан кейин"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 #| msgid "Start From &First Slide"
 msgid "From First Slide"
 msgstr "&Биринчи слайддан бошлаш"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Stop presentation"
 msgstr "Намойиш"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr ""
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Slide Show..."
 msgstr "Намойиш &мосламалари..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Configure KPresenter..."
 msgid "Configure Presenter View..."
 msgstr "KPresenter мосламаси..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Draw on the presentation..."
 msgstr "Намойиш файлини алмаштириш"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Highlight the presentation..."
 msgstr "Намойиш файлини алмаштириш"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Blackscreen on the presentation..."

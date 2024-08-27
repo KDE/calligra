@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kpresenter.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -585,86 +585,86 @@ msgstr "Téigh go sleamhnán::"
 msgid "Configure Stage..."
 msgstr "Cumraigh Taispeántas Sleamhnán..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr "Easpórtáil mar HTML..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Pictures..."
 msgid "Insert Pictures as Slides..."
 msgstr "Ionsáigh Pictiúir..."
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 msgid "Create Appear Animation"
 msgstr "Cruthaigh beochan ghiuirléide"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Cuir Taispeántais Saincheaptha Sleamhnán in Eagar..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "Tosaigh an Láithreoireacht"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, kde-format
 msgid "From Current Slide"
 msgstr "Ón Sleamhnán Reatha"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, kde-format
 msgid "From First Slide"
 msgstr "Ón Chéad Sleamhnán"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Stop presentation"
 msgstr "Tosaigh an Láithreoireacht"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 msgid "Show Status Bar"
 msgstr "Taispeáin an barra stádais"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 msgid "Hide Status Bar"
 msgstr "Taispeáin an barra stádais"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, fuzzy, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Taispeáin an barra stádais"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
 msgstr "Cumraigh Taispeántas Sleamhnán..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
 msgstr "Cumraigh Amharc KPresenter..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Draw on the presentation..."
 msgstr "Tosaigh an Láithreoireacht"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Highlight the presentation..."
 msgstr "Tosaigh an Láithreoireacht"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Blackscreen on the presentation..."

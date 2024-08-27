@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2020-11-28 18:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -117,33 +117,6 @@ msgstr "Egoera-tresnaren aukerak"
 #, kde-format
 msgid "State editing"
 msgstr "Egoera editatzea"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Erabili cacheko kopia bat"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Web-forma"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Web-forma bat"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Web-forma editatzea"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -355,3 +328,18 @@ msgstr "Taldekatu formak"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Bereizi formak"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Erabili cacheko kopia bat"
+
+#~ msgid "Web Shape"
+#~ msgstr "Web-forma"
+
+#~ msgid "A web shape"
+#~ msgstr "Web-forma bat"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Web-forma editatzea"

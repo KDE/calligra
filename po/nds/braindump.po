@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2011-10-04 13:50+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -118,36 +118,6 @@ msgstr "Warktüüchoptschonen"
 #, kde-format
 msgid "State editing"
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "En Twischenspiekerkopie bruken"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "Web Shape"
-msgstr "Formen"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "A web shape"
-msgstr "Formen"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "Web shape editing"
-msgstr "Formen"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -359,6 +329,27 @@ msgstr "Formen tosamenkoppeln"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Formenkoppel opheven"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "En Twischenspiekerkopie bruken"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "Web Shape"
+#~ msgstr "Formen"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "A web shape"
+#~ msgstr "Formen"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "Web shape editing"
+#~ msgstr "Formen"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

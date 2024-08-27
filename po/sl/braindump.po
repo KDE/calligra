@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2020-11-02 10:35+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -117,33 +117,6 @@ msgstr "Možnosti orodja za stanja"
 #, kde-format
 msgid "State editing"
 msgstr "Urejanje oblike"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Uporabi kopijo iz predpomnilnika"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Spletna oblika"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Spletna oblika"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Urejanje spletne oblike"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -354,6 +327,21 @@ msgstr "Združi oblike"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Razdruži oblike"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Uporabi kopijo iz predpomnilnika"
+
+#~ msgid "Web Shape"
+#~ msgstr "Spletna oblika"
+
+#~ msgid "A web shape"
+#~ msgstr "Spletna oblika"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Urejanje spletne oblike"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

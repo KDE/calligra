@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2020-01-17 19:00+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -896,28 +896,28 @@ msgstr "Malli %1 avamine nurjus"
 msgid "No template found at: %1"
 msgstr "Ühtegi malli ei leitud: %1"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:166
+#: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Failide taastamine"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:168
+#: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "Taastada saab järgmise automaatsalvestatud faili:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:175
+#: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "Taastada saab järgmised automaatsalvestatud failid:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:213
+#: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -1427,7 +1427,7 @@ msgstr "Salvesta kui %1"
 msgid "Save"
 msgstr "Salvesta"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tundmatu failitüüp)"
@@ -1490,17 +1490,17 @@ msgstr "Eksport PDF-ina"
 msgid "Cannot export to the specified file"
 msgstr "Eksport määratud failina nurjus"
 
-#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "Dokument"
 
-#: main/KoMainWindow.cpp:1620
+#: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokument - %1"
 
-#: main/KoMainWindow.cpp:1650
+#: main/KoMainWindow.cpp:1651
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1509,17 +1509,17 @@ msgstr ""
 "Nii kaotad kõik tehtud muudatused.\n"
 "Kas tõesti jätkata?"
 
-#: main/KoMainWindow.cpp:1652
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Warning"
 msgstr "Hoiatus"
 
-#: main/KoMainWindow.cpp:2015
+#: main/KoMainWindow.cpp:2016
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 tööriistariba näitamine"
 
-#: main/KoMainWindow.cpp:2017
+#: main/KoMainWindow.cpp:2018
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 tööriistariba peitmine"
@@ -2130,7 +2130,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
 #, kde-format
 msgid "Author"
 msgstr "Autor"
@@ -4447,8 +4447,8 @@ msgid "Lock Docker"
 msgstr "Doki lukustamine"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
-#: widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
+#: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
 msgstr "Krüpt&i"
@@ -4537,69 +4537,69 @@ msgstr "Keel:"
 msgid "General"
 msgstr "Üldine"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:126
 #, kde-format
 msgid "Last saved by"
 msgstr "Viimati salvestanud"
 
-#: widgets/KoDocumentInfoDlg.cpp:182
+#: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Kasuta  ';' (näide: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "See dokument krüptitakse lahti"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Ära krüpti lahti"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
 msgstr "See dokument on krüptitud"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
 msgstr "Krüpt&i lahti:"
 
-#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "See dokument krüptitakse."
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Ära krüpti"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "See dokument ei ole krüptitud"
 
-#: widgets/KoDocumentInfoDlg.cpp:232
+#: widgets/KoDocumentInfoDlg.cpp:225
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "See dokument ei toeta krüptimist"
 
-#: widgets/KoDocumentInfoDlg.cpp:242
+#: widgets/KoDocumentInfoDlg.cpp:235
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
+#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:344
+#: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4608,17 +4608,17 @@ msgstr ""
 "<qt>Dokumendi lahtikrüptimisel eemaldatakse sellelt parooliga kaitse.<p>Kas "
 "soovid dokumendi ikkagi lahti krüptida?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Lahtikrüptimise kinnitamine"
 
-#: widgets/KoDocumentInfoDlg.cpp:347
+#: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
 msgstr "Lahtikrüptimine"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4627,13 +4627,13 @@ msgstr ""
 "<qt>Dokumenti ei salvestata automaatselt.<p>Lahtikrüptimise lõpetamise palun "
 "salvesta dokument.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
-#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
 #, kde-format
 msgid "Save Document"
 msgstr "Dokumendi salvestamine"
 
-#: widgets/KoDocumentInfoDlg.cpp:363
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4646,7 +4646,7 @@ msgstr ""
 "<qt>Dokumenti on pärast avamist muudetud. Dokumendi lahtikrüptimise "
 "lõpetamiseks tuleb see salvestada.<p>Kas salvestada dokument nüüd?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:382
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4657,17 +4657,17 @@ msgstr ""
 "salvestatud kui <b>OASIS OpenDocument</b>.<p>Kas muuta dokumenti ja "
 "salvestada see kui OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:385
+#: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
 msgid "Change Filetype"
 msgstr "Failitüübi muutmine"
 
-#: widgets/KoDocumentInfoDlg.cpp:386
+#: widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "Change"
 msgstr "Muuda"
 
-#: widgets/KoDocumentInfoDlg.cpp:398
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4676,7 +4676,7 @@ msgstr ""
 "<qt>Dokumenti ei saa automaatselt salvestada.<p>Krüptimise lõpetamiseks "
 "salvesta palun dokument.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:406
+#: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

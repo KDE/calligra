@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2016-11-20 19:45+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -113,33 +113,6 @@ msgstr "Možnosti nástroja stavu"
 #, kde-format
 msgid "State editing"
 msgstr "Úprava stavov"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Použiť načítanú kópiu"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Webový tvar"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Webový tvar"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Úprava webových tvarov"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -350,6 +323,21 @@ msgstr "Zoskupiť tvary"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Odskupiť tvary"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Použiť načítanú kópiu"
+
+#~ msgid "Web Shape"
+#~ msgstr "Webový tvar"
+
+#~ msgid "A web shape"
+#~ msgstr "Webový tvar"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Úprava webových tvarov"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Create a new whiteboard"

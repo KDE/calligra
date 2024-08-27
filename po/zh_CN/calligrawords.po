@@ -587,7 +587,6 @@ msgstr "轮廓"
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
 msgid "Shape and text are separated left by:"
 msgstr "形状与文本的分隔方式："
 
@@ -1086,7 +1085,6 @@ msgstr ""
 
 #: part/KWAboutData.h:29
 #, fuzzy, kde-format
-#| msgid "Co maintainer"
 msgid "Co Maintainer/Port to Qt6"
 msgstr "协助维护者"
 

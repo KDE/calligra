@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -903,28 +903,28 @@ msgstr "テンプレート “%1” の読み込みに失敗しました。"
 msgid "No template found at: %1"
 msgstr "次のためのテンプレートが見つかりまん: %1"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:166
+#: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "ファイルを復元する"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:168
+#: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
 msgstr ""
 
-#: main/KoAutoSaveRecoveryDialog.cpp:173
+#: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "自動保存した次のファイルは復元することができます:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:175
+#: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "自動保存した次のファイルは復元することができます:"
 
-#: main/KoAutoSaveRecoveryDialog.cpp:213
+#: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -1429,7 +1429,7 @@ msgstr "%1 として保存"
 msgid "Save"
 msgstr "保存"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:379
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (未知のファイルタイプ)"
@@ -1492,17 +1492,17 @@ msgstr "PDF としてエクスポート"
 msgid "Cannot export to the specified file"
 msgstr "指定したファイルにエクスポートできません"
 
-#: main/KoMainWindow.cpp:1612 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
 #, kde-format
 msgid "Document"
 msgstr "文書"
 
-#: main/KoMainWindow.cpp:1620
+#: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
 msgstr "文書 -%1"
 
-#: main/KoMainWindow.cpp:1650
+#: main/KoMainWindow.cpp:1651
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1511,17 +1511,17 @@ msgstr ""
 "前回の保存以降のすべての変更が失われます。\n"
 "続けますか？"
 
-#: main/KoMainWindow.cpp:1652
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: main/KoMainWindow.cpp:2015
+#: main/KoMainWindow.cpp:2016
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1ツールバーを表示"
 
-#: main/KoMainWindow.cpp:2017
+#: main/KoMainWindow.cpp:2018
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1ツールバーを隠す"
@@ -2129,7 +2129,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
 #, kde-format
 msgid "Author"
 msgstr "作者"
@@ -4403,8 +4403,8 @@ msgid "Lock Docker"
 msgstr "ドッキングパネルのロック"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:228
-#: widgets/KoDocumentInfoDlg.cpp:323
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
+#: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
 msgstr "暗号化(&E)"
@@ -4493,69 +4493,69 @@ msgstr "言語:"
 msgid "General"
 msgstr "全般"
 
-#: widgets/KoDocumentInfoDlg.cpp:132
+#: widgets/KoDocumentInfoDlg.cpp:126
 #, kde-format
 msgid "Last saved by"
 msgstr "最後の保存者"
 
-#: widgets/KoDocumentInfoDlg.cpp:182
+#: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';' を使用 (例: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:212 widgets/KoDocumentInfoDlg.cpp:308
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "この文書を復号します"
 
-#: widgets/KoDocumentInfoDlg.cpp:214 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
 msgstr "復号しない"
 
-#: widgets/KoDocumentInfoDlg.cpp:216 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
 msgstr "この文書は暗号化されています"
 
-#: widgets/KoDocumentInfoDlg.cpp:218 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
 msgstr "復号(&E)"
 
-#: widgets/KoDocumentInfoDlg.cpp:222 widgets/KoDocumentInfoDlg.cpp:317
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "この文書を暗号化します。"
 
-#: widgets/KoDocumentInfoDlg.cpp:224 widgets/KoDocumentInfoDlg.cpp:319
+#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
 msgstr "暗号化しない"
 
-#: widgets/KoDocumentInfoDlg.cpp:226 widgets/KoDocumentInfoDlg.cpp:321
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "この文書は暗号化されていません"
 
-#: widgets/KoDocumentInfoDlg.cpp:232
+#: widgets/KoDocumentInfoDlg.cpp:225
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "この文書は暗号化をサポートしていません"
 
-#: widgets/KoDocumentInfoDlg.cpp:242
+#: widgets/KoDocumentInfoDlg.cpp:235
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:285 widgets/KoDocumentInfoDlg.cpp:291
+#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:344
+#: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4564,17 +4564,17 @@ msgstr ""
 "<qt>文書を復号すると、パスワード保護が失われます。<p>それでもファイルを復号し"
 "ますか？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:346
+#: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "復号の確認"
 
-#: widgets/KoDocumentInfoDlg.cpp:347
+#: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
 msgstr "復号"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4583,13 +4583,13 @@ msgstr ""
 "<qt>この文書を自動的に保存できませんでした。<p>復号するには、文書を保存してく"
 "ださい。</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:358 widgets/KoDocumentInfoDlg.cpp:365
-#: widgets/KoDocumentInfoDlg.cpp:400 widgets/KoDocumentInfoDlg.cpp:408
+#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
+#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
 #, kde-format
 msgid "Save Document"
 msgstr "文書を保存"
 
-#: widgets/KoDocumentInfoDlg.cpp:363
+#: widgets/KoDocumentInfoDlg.cpp:356
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4602,7 +4602,7 @@ msgstr ""
 "<qt>この文書は、開かれてから変更されています。復号するには、文書を保存する必"
 "要があります。<p>文書を保存しますか？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:382
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4613,17 +4613,17 @@ msgstr ""
 "<b>OASIS OpenDocument</b> に変更する必要があります。<p>ファイルを OASIS "
 "OpenDocument に変更しますか？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:385
+#: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
 msgid "Change Filetype"
 msgstr "ファイルタイプを変更"
 
-#: widgets/KoDocumentInfoDlg.cpp:386
+#: widgets/KoDocumentInfoDlg.cpp:379
 #, kde-format
 msgid "Change"
 msgstr "変更"
 
-#: widgets/KoDocumentInfoDlg.cpp:398
+#: widgets/KoDocumentInfoDlg.cpp:391
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4632,7 +4632,7 @@ msgstr ""
 "<qt>この文書を自動的に保存できませんでした。<p>暗号化するには、文書を保存して"
 "ください。</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:406
+#: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

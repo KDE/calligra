@@ -74,7 +74,6 @@ msgstr "删除公式元素"
 
 #: FormulaToolEditWidget.cpp:28
 #, fuzzy, kde-format
-#| msgid "Edit"
 msgctxt "@title:group"
 msgid "Edit"
 msgstr "编辑"
@@ -87,7 +86,6 @@ msgstr "字体："
 
 #: FormulaToolWidget.cpp:28
 #, fuzzy, kde-format
-#| msgid "Insert"
 msgctxt "@title:group"
 msgid "Insert"
 msgstr "插入"
@@ -120,21 +118,18 @@ msgstr "杂类"
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
 #, fuzzy, kde-format
-#| msgid "Elements"
 msgid "Elements:"
 msgstr "元素"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
 #, fuzzy, kde-format
-#| msgid "Symbols"
 msgid "Symbols:"
 msgstr "符号"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
 #, fuzzy, kde-format
-#| msgid "Actions"
 msgid "Actions:"
 msgstr "操作"
 

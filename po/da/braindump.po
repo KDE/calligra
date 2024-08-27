@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2020-04-22 21:51+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -114,33 +114,6 @@ msgstr "Indstilling for tilstandsværktøj"
 #, kde-format
 msgid "State editing"
 msgstr "Redigering af tilstand"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Brug en cache-kopi"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Web-form"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "En web-form"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Redigering af web-form"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -349,6 +322,21 @@ msgstr "Guppér former"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Afgruppér former"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Brug en cache-kopi"
+
+#~ msgid "Web Shape"
+#~ msgstr "Web-form"
+
+#~ msgid "A web shape"
+#~ msgstr "En web-form"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Redigering af web-form"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

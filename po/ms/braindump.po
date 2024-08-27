@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2011-01-13 21:07+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -115,33 +115,6 @@ msgstr ""
 #, kde-format
 msgid "State editing"
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, fuzzy, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr ""
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, fuzzy, kde-format
-msgid "Web Shape"
-msgstr "Bentuk"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, fuzzy, kde-format
-msgid "A web shape"
-msgstr "Bentuk"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
-msgid "Web shape editing"
-msgstr "Bentuk"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -352,6 +325,22 @@ msgstr "Bentuk"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Bentuk"
+
+#, fuzzy
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "Web Shape"
+#~ msgstr "Bentuk"
+
+#, fuzzy
+#~ msgid "A web shape"
+#~ msgstr "Bentuk"
+
+#, fuzzy
+#~ msgid "Web shape editing"
+#~ msgstr "Bentuk"
 
 #, fuzzy
 #~| msgid "State:"

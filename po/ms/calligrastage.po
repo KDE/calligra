@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -626,96 +626,96 @@ msgstr "Beralih ke slid:"
 msgid "Configure Stage..."
 msgstr "&Konfigur Paparan Slaid..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Picture"
 msgid "Insert Pictures as Slides..."
 msgstr "Selitkan Gambar"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "Create Appear Animation"
 msgstr "Cipta Persembahan HTML"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show..."
 msgid "Edit Custom Slide Shows..."
 msgstr "Paparan Slaid Biasa..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "Persembahan"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "After Current Slide"
 msgid "From Current Slide"
 msgstr "Selepas Slid Semasa"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 #| msgid "Start From &First Slide"
 msgid "From First Slide"
 msgstr "Mula Dari Slaid &Pertama"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 #| msgid "Loop presentation"
 msgid "Stop presentation"
 msgstr "Persembahan gelung"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Show Status Bar"
 msgstr "Papar bar status"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Hide Status Bar"
 msgstr "Papar bar status"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Shows or hides the status bar"
 msgstr "Papar bar status"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Slide Show..."
 msgstr "&Konfigur Paparan Slaid..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Configure KPresenter..."
 msgid "Configure Presenter View..."
 msgstr "Konfigur KPresenter..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Draw on the presentation..."
 msgstr "Tulis Ganti Persembahan"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Highlight the presentation..."
 msgstr "Tulis Ganti Persembahan"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 #| msgid "Overwrite Presentation"
 msgid "Blackscreen on the presentation..."

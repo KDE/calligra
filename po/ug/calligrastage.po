@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -620,24 +620,24 @@ msgstr "ئاخىرقى تام تەسۋىر"
 msgid "Configure Stage..."
 msgstr "تام تەسۋىر كۆرسەت"
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Slide"
 msgid "Insert Pictures as Slides..."
 msgstr "تام تەسۋىر قىستۇر"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Animation"
 msgid "Create Appear Animation"
 msgstr "جانلاندۇرۇم"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Delete slide"
@@ -645,69 +645,69 @@ msgstr "جانلاندۇرۇم"
 msgid "Edit Custom Slide Shows..."
 msgstr "تام تەسۋىر ئۆچۈر"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, kde-format
 msgid "Start Presentation"
 msgstr "كۆرسەتمە قوي"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From Current Slide"
 msgstr "بىرىنچى تام تەسۋىر"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From First Slide"
 msgstr "بىرىنچى تام تەسۋىر"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Stop presentation"
 msgstr "كۆرسەتمە قوي"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr "ھالەت بالداق كۆرسەت"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr "ھالەت بالداقنى يوشۇر"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr "ھالەت بالداقنى كۆرسەتسۇن ياكى يوشۇرسۇن"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Configure Slide Show..."
 msgstr "تام تەسۋىر كۆرسەت"
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Slide Show"
 msgid "Configure Presenter View..."
 msgstr "تام تەسۋىر كۆرسەت"
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Draw on the presentation..."
 msgstr "كۆرسەتمە قوي"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Highlight the presentation..."
 msgstr "كۆرسەتمە قوي"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 #| msgid "Start Presentation"
 msgid "Blackscreen on the presentation..."

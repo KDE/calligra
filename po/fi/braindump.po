@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2015-10-03 13:24+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -117,33 +117,6 @@ msgstr "Tilatyökalun asetukset"
 #, kde-format
 msgid "State editing"
 msgstr "Tilojen muokkaus"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "Verkko-osoite:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Käytä välimuistikopiota"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Webmuoto"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Webmuoto"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Webmuodon muokkaus"
 
 # pmap: =:gen=Braindumpin:
 # pmap: =:elat=Braindumpista:
@@ -368,6 +341,21 @@ msgid "Ungroup shapes"
 msgstr ""
 "Pura muotojen ryhmitys\n"
 "muotojen ryhmityksen purku"
+
+#~ msgid "URL:"
+#~ msgstr "Verkko-osoite:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Käytä välimuistikopiota"
+
+#~ msgid "Web Shape"
+#~ msgstr "Webmuoto"
+
+#~ msgid "A web shape"
+#~ msgstr "Webmuoto"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Webmuodon muokkaus"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

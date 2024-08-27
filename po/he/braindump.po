@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2024-06-29 16:31+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -115,33 +115,6 @@ msgstr "אפשרויות כלי מצב"
 #, kde-format
 msgid "State editing"
 msgstr "עריכת מצב"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "כתובת:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "להשתמש בעותק מהמטמון"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "צורה מהאינטרנט"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "צורה מהאינטרנט"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "עריכת צורה מהאינטרנט"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -352,3 +325,18 @@ msgstr "קיבוץ צורות"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "פירוק קבוצת צורות"
+
+#~ msgid "URL:"
+#~ msgstr "כתובת:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "להשתמש בעותק מהמטמון"
+
+#~ msgid "Web Shape"
+#~ msgstr "צורה מהאינטרנט"
+
+#~ msgid "A web shape"
+#~ msgstr "צורה מהאינטרנט"
+
+#~ msgid "Web shape editing"
+#~ msgstr "עריכת צורה מהאינטרנט"

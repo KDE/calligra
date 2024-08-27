@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2013-04-18 07:38+0300\n"
 "Last-Translator: Liudas Alisauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -119,34 +119,6 @@ msgstr "Būsenos įrankio nuostatos"
 #, fuzzy, kde-format
 #| msgid "Web Shape"
 msgid "State editing"
-msgstr "Žiniatinklio forma"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Naudoti podėlio kopiją"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Žiniatinklio forma"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Žiniatinklio forma"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
-#| msgid "Web Shape"
-msgid "Web shape editing"
 msgstr "Žiniatinklio forma"
 
 #: src/AboutData.h:33
@@ -358,6 +330,23 @@ msgstr "Sugrupuoti formas"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Išgrupuoti formas"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Naudoti podėlio kopiją"
+
+#~ msgid "Web Shape"
+#~ msgstr "Žiniatinklio forma"
+
+#~ msgid "A web shape"
+#~ msgstr "Žiniatinklio forma"
+
+#, fuzzy
+#~| msgid "Web Shape"
+#~ msgid "Web shape editing"
+#~ msgstr "Žiniatinklio forma"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

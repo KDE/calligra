@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -621,93 +621,93 @@ msgstr "अंतिम स्लाइड"
 msgid "Configure Stage..."
 msgstr "आयात..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Slide"
 msgid "Insert Pictures as Slides..."
 msgstr "स्लाइड जोडू"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Navigation"
 msgid "Create Appear Animation"
 msgstr "नेविगेशन"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 #| msgid "Next Slide"
 msgid "Edit Custom Slide Shows..."
 msgstr "अगिला स्लाइड"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "प्रस्तुति"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From Current Slide"
 msgstr "पहिल स्लाइड"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 #| msgid "First Slide"
 msgid "From First Slide"
 msgstr "पहिल स्लाइड"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Stop presentation"
 msgstr "प्रस्तुति"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
 msgstr ""
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
 msgstr ""
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "Import..."
 msgid "Configure Slide Show..."
 msgstr "आयात..."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Import..."
 msgid "Configure Presenter View..."
 msgstr "आयात..."
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Draw on the presentation..."
 msgstr "प्रस्तुति"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Highlight the presentation..."
 msgstr "प्रस्तुति"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Blackscreen on the presentation..."

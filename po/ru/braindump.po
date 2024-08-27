@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2015-03-10 08:43+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -120,33 +120,6 @@ msgstr "Параметры состояния"
 #, kde-format
 msgid "State editing"
 msgstr "Редактирование состояния"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "Адрес:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Использовать копию кэша"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Веб-объект"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Веб-объект"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Редактирование веб-объекта"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -360,6 +333,21 @@ msgid "Ungroup shapes"
 msgstr ""
 "Разгруппировка объектов\n"
 "разгруппировку объектов"
+
+#~ msgid "URL:"
+#~ msgstr "Адрес:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Использовать копию кэша"
+
+#~ msgid "Web Shape"
+#~ msgstr "Веб-объект"
+
+#~ msgid "A web shape"
+#~ msgstr "Веб-объект"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Редактирование веб-объекта"
 
 #, fuzzy
 #~| msgid "Create a new whiteboard"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2024-05-11 11:11+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -115,33 +115,6 @@ msgstr "Stāvokļa rīka opcijas"
 #, kde-format
 msgid "State editing"
 msgstr "Stāvokļa rediģēšana"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Izmantot kešatmiņas kopiju"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Tīmekļa objekts"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Tīmekļa objekts"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Tīmekļa objekta rediģēšana"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -352,3 +325,18 @@ msgstr "Grupēt objektus"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Atgrupēt objektus"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Izmantot kešatmiņas kopiju"
+
+#~ msgid "Web Shape"
+#~ msgstr "Tīmekļa objekts"
+
+#~ msgid "A web shape"
+#~ msgstr "Tīmekļa objekts"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Tīmekļa objekta rediģēšana"

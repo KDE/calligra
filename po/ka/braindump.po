@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2022-12-04 06:26+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -115,33 +115,6 @@ msgstr "მდგომარეობის მორგება"
 #, kde-format
 msgid "State editing"
 msgstr "მდგომარეობის ჩასწორება"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "მისამართი:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "ქეშირებული ასლის გამოყენება"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Web ფორმა"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Web ფორმა"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Web ფორმის ჩასწორება"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -352,3 +325,18 @@ msgstr "ფორმების დაჯგუფება"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "ფორმების განჯგუფება"
+
+#~ msgid "URL:"
+#~ msgstr "მისამართი:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "ქეშირებული ასლის გამოყენება"
+
+#~ msgid "Web Shape"
+#~ msgstr "Web ფორმა"
+
+#~ msgid "A web shape"
+#~ msgstr "Web ფორმა"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Web ფორმის ჩასწორება"

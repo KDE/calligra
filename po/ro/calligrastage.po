@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2013-01-12 05:09+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -601,82 +601,82 @@ msgstr "Du-te la pagina..."
 msgid "Configure Stage..."
 msgstr "Configurează pagini..."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, fuzzy, kde-format
 msgid "Export as HTML..."
 msgstr "Exportă ca HTML..."
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 msgid "Insert Pictures as Slides..."
 msgstr "Inserează imagini"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 msgid "Create Appear Animation"
 msgstr "Creează animație de apariție"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 msgid "Edit Custom Slide Shows..."
 msgstr "Editează Diapozitiv Specific"
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 msgid "Start Presentation"
 msgstr "Începe prezentarea"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 msgid "From Current Slide"
 msgstr "De la diapozitivul curent"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 msgid "From First Slide"
 msgstr "De la primul diapozitiv"
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 msgid "Stop presentation"
 msgstr "Prezentare"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 msgid "Show Status Bar"
 msgstr "Afișează bara de stare"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 msgid "Hide Status Bar"
 msgstr "Ascunde subsol"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, fuzzy, kde-format
 msgid "Shows or hides the status bar"
 msgstr "Afișează sau ascunde bara de stare"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 msgid "Configure Slide Show..."
 msgstr "Configurează Diapozitiv"
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 msgid "Configure Presenter View..."
 msgstr "Configurează Vizualizarea Prezentatorului"
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 msgid "Draw on the presentation..."
 msgstr "Desenează pe prezentare..."
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 msgid "Highlight the presentation..."
 msgstr "Evidențiază prezentarea"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "Ecran negru pe prezentare"

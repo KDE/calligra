@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2004-11-29 01:52-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team:  <ta@li.org>\n"
@@ -632,93 +632,93 @@ msgstr "படவில்லைக்கு செல் :"
 msgid "Configure Stage..."
 msgstr "படவில்லையை உள்ளமை."
 
-#: part/KPrView.cpp:237
+#: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
 msgstr ""
 
-#: part/KPrView.cpp:263
+#: part/KPrView.cpp:264
 #, fuzzy, kde-format
 #| msgid "Insert Picture"
 msgid "Insert Pictures as Slides..."
 msgstr "படத்தை செருகு"
 
-#: part/KPrView.cpp:272
+#: part/KPrView.cpp:273
 #, fuzzy, kde-format
 #| msgid "Create HTML Presentation"
 msgid "Create Appear Animation"
 msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
 
-#: part/KPrView.cpp:276
+#: part/KPrView.cpp:277
 #, fuzzy, kde-format
 #| msgid "Custom Slide Show..."
 msgid "Edit Custom Slide Shows..."
 msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
 
-#: part/KPrView.cpp:280
+#: part/KPrView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Start Presentation"
 msgstr "முன்வைப்பு"
 
-#: part/KPrView.cpp:283
+#: part/KPrView.cpp:284
 #, fuzzy, kde-format
 #| msgid "After Current Slide"
 msgid "From Current Slide"
 msgstr "தற்போதைய படவில்லைக்கு பின்"
 
-#: part/KPrView.cpp:287
+#: part/KPrView.cpp:288
 #, fuzzy, kde-format
 #| msgid "Start From &First Slide"
 msgid "From First Slide"
 msgstr "முதல் படவில்லையை ஆரம்பி "
 
-#: part/KPrView.cpp:292
+#: part/KPrView.cpp:293
 #, fuzzy, kde-format
 msgid "Stop presentation"
 msgstr "முன்வைப்பு"
 
-#: part/KPrView.cpp:298
+#: part/KPrView.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Show Status Bar"
 msgstr "நிலைப்பட்டையை காட்டவும்"
 
-#: part/KPrView.cpp:299
+#: part/KPrView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Hide Status Bar"
 msgstr "நிலைப்பட்டையை காட்டவும்"
 
-#: part/KPrView.cpp:300
+#: part/KPrView.cpp:301
 #, fuzzy, kde-format
 #| msgid "Show status bar"
 msgid "Shows or hides the status bar"
 msgstr "நிலைப்பட்டையை காட்டவும்"
 
-#: part/KPrView.cpp:309
+#: part/KPrView.cpp:310
 #, fuzzy, kde-format
 #| msgid "&Configure Slide Show..."
 msgid "Configure Slide Show..."
 msgstr "படவில்லையை உள்ளமை."
 
-#: part/KPrView.cpp:313
+#: part/KPrView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Configure KPresenter..."
 msgid "Configure Presenter View..."
 msgstr "KPresenter கட்டமை "
 
-#: part/KPrView.cpp:317
+#: part/KPrView.cpp:318
 #, fuzzy, kde-format
 msgid "Draw on the presentation..."
 msgstr "முன்வைப்பை மேல் எழுது"
 
-#: part/KPrView.cpp:324
+#: part/KPrView.cpp:325
 #, fuzzy, kde-format
 msgid "Highlight the presentation..."
 msgstr "முன்வைப்பை மேல் எழுது"
 
-#: part/KPrView.cpp:331
+#: part/KPrView.cpp:332
 #, fuzzy, kde-format
 msgid "Blackscreen on the presentation..."
 msgstr "முன்வைப்பை மேல் எழுது"

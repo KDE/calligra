@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2011-12-28 12:28-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -118,36 +118,6 @@ msgstr ""
 #, kde-format
 msgid "State editing"
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr ""
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "Web Shape"
-msgstr "Cruthanna"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "A web shape"
-msgstr "Cruthanna"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
-#| msgid "Shapes"
-msgid "Web shape editing"
-msgstr "Cruthanna"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -363,6 +333,24 @@ msgstr "Díghrúpáil Giuirléidí"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Díghrúpáil Giuirléidí"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "Web Shape"
+#~ msgstr "Cruthanna"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "A web shape"
+#~ msgstr "Cruthanna"
+
+#, fuzzy
+#~| msgid "Shapes"
+#~ msgid "Web shape editing"
+#~ msgstr "Cruthanna"
 
 #, fuzzy
 #~| msgid "Layout:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
 "PO-Revision-Date: 2019-08-27 10:19+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -113,33 +113,6 @@ msgstr "Opsi alat keadaan"
 #, kde-format
 msgid "State editing"
 msgstr "Pengeditan keadaan"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/webshape/WebShapeConfigWidget.ui:17
-#, kde-format
-msgid "URL:"
-msgstr "URL:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, useCache)
-#: plugins/webshape/WebShapeConfigWidget.ui:40
-#, kde-format
-msgid "Use a cache copy"
-msgstr "Gunakan sebuah salinan cache"
-
-#: plugins/webshape/WebShapeFactory.cpp:30
-#, kde-format
-msgid "Web Shape"
-msgstr "Bentuk Web"
-
-#: plugins/webshape/WebShapeFactory.cpp:32
-#, kde-format
-msgid "A web shape"
-msgstr "Sebuah bentuk web"
-
-#: plugins/webshape/WebToolFactory.cpp:31
-#, kde-format
-msgid "Web shape editing"
-msgstr "Pengeditan bentuk web"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -350,3 +323,18 @@ msgstr "Kelompokkan bentuk-bentuk"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lepas-kelompok bentuk-bentuk"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "Use a cache copy"
+#~ msgstr "Gunakan sebuah salinan cache"
+
+#~ msgid "Web Shape"
+#~ msgstr "Bentuk Web"
+
+#~ msgid "A web shape"
+#~ msgstr "Sebuah bentuk web"
+
+#~ msgid "Web shape editing"
+#~ msgstr "Pengeditan bentuk web"
