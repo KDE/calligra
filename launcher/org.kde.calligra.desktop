@@ -1,8 +1,26 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Launcher
+Name[ca]=Llançador del Calligra
+Name[gl]=Iniciador de Calligra
+Name[ka]=Calligra-ის გამშვები
+Name[nl]=Starter van Calligra
+Name[sl]=Calligra Launcher
+Name[sv]=Calligra Startprogram
+Name[tr]=Calligra Başlatıcısı
+Name[uk]=Засіб запуску Calligra
+Name[x-test]=xxCalligra Launcherxx
 Exec=calligralauncher
 Comment=Office Suite Launcher
+Comment[ca]=Llançador de la suite d'oficina
+Comment[gl]=Iniciador de suite de oficina.
+Comment[ka]=საოფისე პაკეტის გამშვები
+Comment[nl]=Starter van Kantoor-suite
+Comment[sl]=Office Suite Launcher
+Comment[sv]=Startprogram för kontorssviten
+Comment[tr]=Ofis Takımı Başlatıcısı
+Comment[uk]=Засіб запуску офісного комплекту
+Comment[x-test]=xxOffice Suite Launcherxx
 Icon=calligrawords
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;WordProcessor;
