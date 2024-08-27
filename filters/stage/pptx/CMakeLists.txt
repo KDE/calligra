@@ -36,7 +36,7 @@ install(TARGETS calligra_filter_pptx2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/ca
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
     kcoreaddons_add_plugin(okularGenerator_pptx_calligra
-        INSTALL_NAMESPACE "okular/generators"
+        INSTALL_NAMESPACE "okular_generators"
         SOURCES OkularPptxGeneratorPlugin.cpp
     )
 

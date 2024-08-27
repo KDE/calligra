@@ -30,7 +30,7 @@ install(TARGETS calligra_filter_doc2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/ca
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     kcoreaddons_add_plugin(okularGenerator_doc_calligra
-        INSTALL_NAMESPACE "okular/generators"
+        INSTALL_NAMESPACE "okular_generators"
         SOURCES OkularDocGeneratorPlugin.cpp
     )
 

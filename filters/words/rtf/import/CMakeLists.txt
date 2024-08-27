@@ -12,7 +12,7 @@ install(TARGETS calligra_filter_rtf2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/ca
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_RTF)
     kcoreaddons_add_plugin(okularGenerator_rtf_calligra
-        INSTALL_NAMESPACE "okular/generators"
+        INSTALL_NAMESPACE "okular_generators"
         SOURCES OkularRtfGeneratorPlugin.cpp
     )
 

@@ -25,7 +25,7 @@ install(TARGETS calligra_filter_wpd2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/cal
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
     kcoreaddons_add_plugin(okularGenerator_wpd_calligra
-        INSTALL_NAMESPACE "okular/generators"
+        INSTALL_NAMESPACE "okular_generators"
         SOURCES OkularWpdGeneratorPlugin.cpp
     )
 
