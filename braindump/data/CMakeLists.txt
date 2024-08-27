@@ -11,3 +11,4 @@ install( FILES braindumpui.rc braindumpview.rc DESTINATION ${KDE_INSTALL_KXMLGUI
 ### desktop files ###
 install( PROGRAMS org.kde.calligra.braindump.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install( FILES org.kde.calligra.braindump.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES org.kde.calligra.braindump.svg DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/hicolor/scalable/apps)

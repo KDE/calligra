@@ -28,5 +28,6 @@ install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS org.kde.calligra.words.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES org.kde.calligra.words.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(PROGRAMS org.kde.calligra.words.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.calligra.words.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES org.kde.calligra.words.svg DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/hicolor/scalable/apps)

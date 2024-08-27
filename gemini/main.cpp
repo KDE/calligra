@@ -47,6 +47,8 @@ int main(int argc, char **argv)
     app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     KAboutData::setApplicationData(aboutData);
 
+    QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("calligragemini")));
+
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
 

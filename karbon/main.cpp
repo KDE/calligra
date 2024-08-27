@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         "calligra.*.debug=false\n"
         "calligra.*.warning=true");
 
-    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), newKarbonAboutData, argc, argv);
+    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("org.kde.calligra.karbon"), newKarbonAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("karbon");
 
     if (!app.start()) { // parses command line args, create initial docs and mainwindows

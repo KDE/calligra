@@ -26,12 +26,12 @@ int main(int argc, char **argv)
         "calligra.*.debug=false\n"
         "calligra.*.warning=true");
 
-    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), newWordsAboutData, argc, argv);
+    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("org.kde.calligra.words"), newWordsAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrawords");
 
     if (!app.start()) {
         return 1;
     }
 
-    return app.exec();
+    return KoApplication::exec();
 }

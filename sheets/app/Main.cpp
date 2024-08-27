@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     // QT5TODO: support custom options
     //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
-    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), newAboutData, argc, argv);
+    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("org.kde.calligra.sheets"), newAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrasheets");
 
     if (!app.start()) {

@@ -26,7 +26,7 @@ int main(int argc, char **argv)
         "calligra.*.debug=false\n"
         "calligra.*.warning=true");
 
-    KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), newKPresenterAboutData, argc, argv);
+    KoApplication app(STAGE_MIME_TYPE, QStringLiteral("org.kde.calligra.stage"), newKPresenterAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrastage");
 
     if (!app.start()) {
