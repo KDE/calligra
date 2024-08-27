@@ -1014,8 +1014,7 @@ endif(BUILD_TESTING)
 
 ki18n_install(po)
 if(KF6DocTools_FOUND)
-    #kdoctools_install(po)
-    # Disable for now, since it is failing
+    kdoctools_install(po)
 endif()
 
 file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
