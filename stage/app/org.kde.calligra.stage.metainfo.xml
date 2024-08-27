@@ -280,7 +280,7 @@
   <url type="homepage">https://www.calligra.org/stage/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrastage</url>
   <url type="help">https://docs.kde.org/?application=stage</url>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <custom>
     <value key="KDE::matrix">#calligra:kde.org</value>
   </custom>
@@ -288,6 +288,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/calligrastage.png</image>
       <caption>Calligra Stage main window</caption>
+      <caption xml:lang="x-test">xxCalligra Stage main windowxx</caption>
     </screenshot>
   </screenshots>
   <branding>

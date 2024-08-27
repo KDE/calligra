@@ -289,7 +289,7 @@
   <url type="homepage">https://www.calligra.org/sheets/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrasheets</url>
   <url type="help">https://docs.kde.org/?application=sheets</url>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <custom>
     <value key="KDE::matrix">#calligra:kde.org</value>
   </custom>

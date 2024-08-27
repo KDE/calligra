@@ -539,6 +539,15 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/karbon/karbon.png</image>
       <caption>Main window of Karbon</caption>
+      <caption xml:lang="ca">Finestra principal del Karbon</caption>
+      <caption xml:lang="gl">Xanela principal de Karbon.</caption>
+      <caption xml:lang="ka">Karbon-ის მთავარი ფანჯარა</caption>
+      <caption xml:lang="nl">Hoofdvenster van Karbon</caption>
+      <caption xml:lang="sl">Glavno okno Carbona</caption>
+      <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
+      <caption xml:lang="tr">Karbon’un ana penceresi</caption>
+      <caption xml:lang="uk">Головне вікно Karbon</caption>
+      <caption xml:lang="x-test">xxMain window of Karbonxx</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
