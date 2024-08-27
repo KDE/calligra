@@ -649,7 +649,6 @@ set_package_properties(PopplerXPDFHeaders PROPERTIES
     TYPE OPTIONAL
 )
 
-
 ##
 ## Test for libgit2
 ##
