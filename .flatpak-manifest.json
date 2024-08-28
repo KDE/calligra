@@ -325,7 +325,7 @@
             "name": "calligra",
             "buildsystem": "cmake-ninja",
             "builddir": true,
-            "config-opts": ["-DENABLE_TESTING=OFF" ],
+            "config-opts": ["-DBUILD_TESTING=OFF" ],
             "sources": [
                 {
                     "type": "dir",
