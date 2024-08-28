@@ -339,6 +339,17 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/words-desktop-mode.png</image>
       <caption>Calligra Words main window</caption>
+      <caption xml:lang="ca">Finestra principal del Words del Calligra</caption>
+      <caption xml:lang="ca-valencia">Finestra principal de Words de Calligra</caption>
+      <caption xml:lang="cs">Hlavní okno aplikace Calligra Words</caption>
+      <caption xml:lang="es">Ventana principal de Calligra Words</caption>
+      <caption xml:lang="it">La finestra principale di Calligra Words</caption>
+      <caption xml:lang="ka">Calligra Words-ის მთავარი ფანჯარა</caption>
+      <caption xml:lang="nl">Hoofdvenster van Calligra Words</caption>
+      <caption xml:lang="sl">Glavno okno Calligra Words</caption>
+      <caption xml:lang="sv">Calligra Words huvudfönster</caption>
+      <caption xml:lang="tr">Calligra Sözcükler ana penceresi</caption>
+      <caption xml:lang="uk">Головне вікно Calligra Words</caption>
       <caption xml:lang="x-test">xxCalligra Words main windowxx</caption>
     </screenshot>
   </screenshots>

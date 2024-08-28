@@ -108,7 +108,7 @@
     <p xml:lang="sk">Karbon je vektorová kresliaca aplikácia s používateľským rozhraním jednoduchým na používanie, veľmi prispôsobiteľná a rozšíriteľná. Toto robí z Karbonu výbornú aplikáciu pre používateľov, ktorí začínajú objavovať sveet vektorovej grafiky, ako aj pre umelcov, ktorí chcú vytvárať dych vyrážajúce vektorové umenie.</p>
     <p xml:lang="sl">Karbon je program za vektorsko risanje z enostavnim uporabniškim vmesnikom in je enostavno prilagodljiv in razširljiv. Zaradi tega je Karbon odličen program za uporabnike, ki začenjajo raziskovati svet vektorske grafike kot kot tudi za umetnike, ki želijo ustvariti osupljivo vektorsko umetnost.</p>
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
-    <p xml:lang="tr">Karbon, kullanımı kolay, son derece özelleştirilebilir ve genişletilebilir bir kullanıcı arayüzüne sahip bir vektör çizim uygulamasıdır. Bu, Karbon'u vektör grafikleri dünyasını keşfetmeye başlayan kullanıcılar ve nefes kesici vektör sanatı yaratmak isteyen sanatçılar için harika bir uygulama haline getiriyor.</p>
+    <p xml:lang="tr">Karbon, kullanımı kolay, son derece özelleştirilebilir ve genişletilebilir bir kullanıcı arayüzüne sahip bir vektör çizim uygulamasıdır. Bu, Karbon’u vektör grafikleri dünyasını keşfetmeye başlayan kullanıcılar ve nefes kesici vektör sanatı yaratmak isteyen sanatçılar için harika bir uygulama haline getiriyor.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
     <p xml:lang="zh-CN">Karbon 是一款矢量绘图程序，具有易用、高度可定制和可扩展的用户界面。它既适合初次接触矢量图形的新手小试牛刀，也适合经验丰富的画师绘制精美的作品。</p>
@@ -540,7 +540,11 @@
       <image>https://cdn.kde.org/screenshots/karbon/karbon.png</image>
       <caption>Main window of Karbon</caption>
       <caption xml:lang="ca">Finestra principal del Karbon</caption>
+      <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
+      <caption xml:lang="cs">Hlavní okno aplikace Karbon</caption>
+      <caption xml:lang="es">Ventana principal de Karbon</caption>
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
+      <caption xml:lang="it">Finestra principale di Karbon</caption>
       <caption xml:lang="ka">Karbon-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="nl">Hoofdvenster van Karbon</caption>
       <caption xml:lang="sl">Glavno okno Carbona</caption>
