@@ -2,14 +2,14 @@
 # Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Daniele Medri <madrid@linuxmeeting.net>, 2003.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
-# Vincenzo Reale <smart2128vr@gmail.com>, 2018, 2019.
+# SPDX-FileCopyrightText: 2018, 2019, 2024 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2019-11-06 20:19+0100\n"
+"PO-Revision-Date: 2024-08-24 10:46+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.08.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
@@ -116,10 +116,9 @@ msgstr "Effetti"
 
 #. i18n: ectx: ToolBar (add_shape_toolbar)
 #: data/karbon.rc:177
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgid "Add Shape"
-msgstr "Forma"
+msgstr "Aggiungi forma"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -322,13 +321,12 @@ msgstr "Responsabile"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
-#, fuzzy, kde-format
-#| msgid "Convert to Path"
+#, kde-format
 msgid "Port to Qt6"
-msgstr "Converti a percorso"
+msgstr "Conversione a Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

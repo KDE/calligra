@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-26 00:38+0000\n"
-"PO-Revision-Date: 2024-08-27 03:17+0300\n"
+"PO-Revision-Date: 2024-08-27 14:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,12 +21,12 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Calligra Launcher"
-msgstr "Calligra Başlatıcısı"
+msgstr "Calligra Başlatıcı"
 
 #: main.cpp:53
 #, kde-format
 msgid "Calligra Launcher"
-msgstr "Calligra Başlatıcısı"
+msgstr "Calligra Başlatıcı"
 
 #: main.cpp:55
 #, kde-format

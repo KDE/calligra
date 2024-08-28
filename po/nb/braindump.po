@@ -325,18 +325,3 @@ msgstr "Grupper former"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Løs opp formgruppe"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "Use a cache copy"
-#~ msgstr "Bruk en mellomlagerkopi"
-
-#~ msgid "Web Shape"
-#~ msgstr "Vevform"
-
-#~ msgid "A web shape"
-#~ msgstr "En vevform"
-
-#~ msgid "Web shape editing"
-#~ msgstr "Redigeringsverktøy for vevform"

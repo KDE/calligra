@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-14 09:37+0200\n"
+"PO-Revision-Date: 2024-08-23 11:12+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12648,14 +12648,13 @@ msgstr "Copyright 1998-%1, L'equip Sheets de Calligra"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 # msgid "Martinique"
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Mantenidor"
+msgstr "Mantenidor/adaptació a les Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12669,10 +12668,9 @@ msgstr "Torben Weis"
 
 # msgid "Martinique"
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Mantenidor"
+msgstr "Mantenidor anterior"
 
 #: part/AboutData.h:42
 #, kde-format

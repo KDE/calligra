@@ -5,13 +5,13 @@
 # Ongun Kanat <ongun.kanat@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2015.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2022-08-12 13:01+0300\n"
+"PO-Revision-Date: 2024-08-27 14:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -35,13 +35,13 @@ msgstr "ongun.kanat@gmail.com"
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
-msgstr "<filename>%1</filename> için dosya türü bulunamadı!"
+msgstr "<filename>%1</filename> için MIME türü bulunamadı!"
 
 #: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
-msgstr "<application>%1</application> ile aç"
+msgstr "<application>%1</application> ile Aç"
 
 #: main.cpp:122
 #, kde-format
@@ -74,7 +74,7 @@ msgstr "Calligra Belge Açıcı"
 #: main.cpp:160
 #, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
-msgstr "Telif hakkı 2010-%1 Calligra geliştiricileri"
+msgstr "Telif hakkı 2010–%1 Calligra geliştiricileri"
 
 #: main.cpp:161
 #, kde-format

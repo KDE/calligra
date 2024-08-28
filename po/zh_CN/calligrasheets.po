@@ -11809,9 +11809,9 @@ msgid "Carl Schwan"
 msgstr ""
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "维护者"
+msgstr ""
 
 #: part/AboutData.h:41
 #, kde-format
@@ -11824,9 +11824,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Former Maintainer"
-msgstr "维护者"
+msgstr ""
 
 #: part/AboutData.h:42
 #, kde-format

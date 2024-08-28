@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-07-20 07:20+0300\n"
+"PO-Revision-Date: 2024-08-25 22:08+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -169,12 +169,12 @@ msgstr "כל הזכויות שמורות 1998-%1, צוות במה"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "קארל שוואן"
 
 #: part/KPrAboutData.h:30
 #, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr ""
+msgstr "מתחזק משנה/הסבה ל־Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format

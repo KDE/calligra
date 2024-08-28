@@ -1,0 +1,33 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"PO-Revision-Date: 2024-08-27 19:30\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra_shape_webshape.pot\n"
+"X-Crowdin-File-ID: 55750\n"
+
+#: WebShapeFactory.cpp:30
+#, kde-format
+msgid "Web Shape"
+msgstr ""
+
+#: WebShapeFactory.cpp:32
+#, kde-format
+msgid "A web shape"
+msgstr ""
+
+#: WebToolFactory.cpp:31
+#, kde-format
+msgid "Web shape editing"
+msgstr ""

@@ -1,19 +1,19 @@
 # translation of karbon.po to Slovenian
 # Translation of karbon.po to Slovenian
 # Copyright (C) 2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: karbon.po 1688383 2024-08-23 01:14:24Z scripty $
+# $Id: karbon.po 1688933 2024-08-28 01:13:41Z scripty $
 # $Source$
 #
 # Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004.
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2005, 2006, 2007, 2008, 2012.
 # Jure Repinc <jlp@holodeck1.com>, 2006.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+# SPDX-FileCopyrightText: 2019, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 07:48+0200\n"
+"PO-Revision-Date: 2024-08-27 09:56+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
@@ -326,12 +326,12 @@ msgstr "Vzdrževalec"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Prenos na Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

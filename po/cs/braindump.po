@@ -323,18 +323,3 @@ msgstr "Seskupit tvary"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Zrušit seskupení tvarů"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "Use a cache copy"
-#~ msgstr "Používat kopii mezipaměti"
-
-#~ msgid "Web Shape"
-#~ msgstr "Tvar webu"
-
-#~ msgid "A web shape"
-#~ msgstr "Tvar webu"
-
-#~ msgid "Web shape editing"
-#~ msgstr "Úprava tvaru pro web"

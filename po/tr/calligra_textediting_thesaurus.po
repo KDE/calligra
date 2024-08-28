@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-04-30 00:20+0300\n"
+"PO-Revision-Date: 2024-08-27 14:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #: Thesaurus.cpp:81
 #, kde-format
@@ -50,7 +50,7 @@ msgstr "İleri"
 #: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
-msgstr "Dili Değiştir..."
+msgstr "Dili Değiştir…"
 
 #: Thesaurus.cpp:124
 #, kde-format
@@ -95,7 +95,7 @@ msgstr "Sözcüğü Değiştir"
 #: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
-msgstr "İlgili Sözcükler - %1"
+msgstr "İlgili Sözcükler — %1"
 
 #: Thesaurus.cpp:406
 #, kde-format
@@ -114,12 +114,12 @@ msgstr "<b>Hata:</b> grep yürütülemedi."
 #: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
-msgstr "Eşanlamlılar/- Sıklığa Göre Sıralanmış"
+msgstr "Eşanlamlılar/Kapsayıcılar — Sıklığa Göre Sıralanmış"
 
 #: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-msgstr "Eşanlamlılar - Anlam Yakınlığına Göre Dizilmiş (yalnızca fiiller)"
+msgstr "Eşanlamlılar — Anlam Yakınlığına Göre Dizilmiş (Yalnızca Eylemler)"
 
 #: Thesaurus.cpp:580
 #, kde-format
@@ -129,17 +129,17 @@ msgstr "Karşıt Anlamlı Sözcükler"
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "Eşsesliler - ... %1 gibi"
+msgstr "Eşsesliler — … %1 gibi"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "Tamlayan - %1 şuna sahip..."
+msgstr "Tamlayan — %1 şuna sahip…"
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "Tamlanan - %1 ' sahip"
+msgstr "Tamlanan — %1 ögesine sahip"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -185,8 +185,8 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
-"<b>Hata:</b> WordNet programı ’wn’ başlatılamadı. Eğer WordNet’i kullanmak "
-"istiyorsanız bilgisayarınıza kurulu ve ’wn’ komutu PATH içerisinde "
+"<b>Hata:</b> WordNet programı “wn” başlatılamadı. Eğer WordNet’i kullanmak "
+"istiyorsanız bilgisayarınıza kurulu ve “wn” komutu PATH içerisinde "
 "olmalıdır. WordNet’i <a href=\"http://www.cogsci.princeton.edu/~wn/\">http://"
 "www.cogsci.princeton.edu/~wn/</a> adresinden edinebilirsiniz. Unutmayın; "
 "WordNet yalnızca İngilizce dilini desteklemektedir."
@@ -194,4 +194,4 @@ msgstr ""
 #: Thesaurus.cpp:633
 #, kde-format
 msgid "No match for '%1'."
-msgstr "'%1' için eşleşme bulunamadı."
+msgstr "“%1” için eşleşme bulunamadı."

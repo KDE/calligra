@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the FormulaShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2013, 2014, 2015, 2016, 2024.
+# SPDX-FileCopyrightText: 2010, 2013, 2014, 2015, 2016, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 10:29+0200\n"
+"PO-Revision-Date: 2024-08-23 11:11+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -76,12 +76,12 @@ msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Elimina els elements de fórmula"
 
+# skip-rule: t-sc-edit
 #: FormulaToolEditWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:group"
 msgid "Edit"
-msgstr "Edita"
+msgstr "Edició"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FormulaToolEditWidget.ui:17
@@ -90,11 +90,10 @@ msgid "Font:"
 msgstr "Lletra:"
 
 #: FormulaToolWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgctxt "@title:group"
 msgid "Insert"
-msgstr "Inserix"
+msgstr "Inserció"
 
 #: FormulaToolWidget.cpp:70
 #, kde-format
@@ -123,24 +122,21 @@ msgstr "Miscel·lània"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Elements"
+#, kde-format
 msgid "Elements:"
-msgstr "Elements"
+msgstr "Elements:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
-#, fuzzy, kde-format
-#| msgid "Symbols"
+#, kde-format
 msgid "Symbols:"
-msgstr "Símbols"
+msgstr "Símbols:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Actions:"
-msgstr "Accions"
+msgstr "Accions:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -313,21 +309,3 @@ msgstr "Edita fórmula amb la sintaxi LaTeX/Matlab"
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Edita fórmula amb la sintaxi LaTeX"
-
-#~ msgid "General options"
-#~ msgstr "Opcions generals"
-
-#~ msgid "Colors:"
-#~ msgstr "Colors:"
-
-#~ msgid "Specific options"
-#~ msgstr "Opcions específiques"
-
-#~ msgid "Rows:"
-#~ msgstr "Files:"
-
-#~ msgid "Columns:"
-#~ msgstr "Columnes:"
-
-#~ msgid "View MathML"
-#~ msgstr "Visualització MathML"

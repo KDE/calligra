@@ -771,10 +771,10 @@ msgid "Paste offset:"
 msgstr "粘贴偏移："
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "于光标处粘贴:"
+msgstr ""
 
 #: main/KoApplication.cpp:191
 #, kde-format

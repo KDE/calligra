@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-17 11:25+0200\n"
+"PO-Revision-Date: 2024-08-23 11:15+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1749,18 +1749,16 @@ msgid "Browse..."
 msgstr "Navega…"
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Color de fons"
+msgstr "Restablix el color de fons"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Color de fons"
+msgstr "Restablix el color de fons"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1769,10 +1767,9 @@ msgstr "Paraula sencera"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Majúscules inicials:"
+msgstr "Activa les majúscules inicials"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1916,10 +1913,9 @@ msgstr "Justifica"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Comportament al final del marc/pàgina"
+msgstr "Comportament al final del marc i la pàgina:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
@@ -3050,9 +3046,3 @@ msgstr "Tecla premuda"
 #, kde-format
 msgid "Text editing"
 msgstr "Edició de text"
-
-#~ msgid "Number of characters:"
-#~ msgstr "Nombre de caràcters:"
-
-#~ msgid "Alignment"
-#~ msgstr "Alineació"

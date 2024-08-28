@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 14:09+0300\n"
+"PO-Revision-Date: 2024-08-27 14:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -116,7 +116,7 @@ msgstr "Matlık"
 #: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
-msgstr "Ad alanı \"%1\" bulunamadı"
+msgstr "Ad alanı “%1” bulunamadı"
 
 #: libmsooxml/MsooXmlImport.cpp:90
 #, kde-format
@@ -161,7 +161,7 @@ msgstr "%1 (%2, %3. satır, %4. sütun)"
 #: libmsooxml/MsooXmlReader.cpp:150
 #, kde-format
 msgid "Element \"%1\" not found"
-msgstr "\"%1\" ögesi bulunamadı"
+msgstr "“%1” ögesi bulunamadı"
 
 #: libmsooxml/MsooXmlReader.cpp:155
 #, kde-format
@@ -171,17 +171,17 @@ msgstr "%1 özniteliği bulunamadı"
 #: libmsooxml/MsooXmlReader.cpp:165
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
-msgstr "\"%2\" özniteliği için beklenmeyen değer \"%1\""
+msgstr "“%2” özniteliği için beklenmeyen değer “%1”"
 
 #: libmsooxml/MsooXmlReader.cpp:170
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
-msgstr "\"%1\" ögesinin beklenmeyen ikinci oluşu"
+msgstr "“%1” ögesinin beklenmeyen ikinci oluşu"
 
 #: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
 #, kde-format
 msgid "Expected closing of element \"%1\""
-msgstr "\"%1\" ögesinin kapatılması bekleniyor"
+msgstr "“%1” ögesinin kapatılması bekleniyor"
 
 #: libmsooxml/MsooXmlReader.cpp:229
 #, kde-format
@@ -191,18 +191,18 @@ msgstr "Beklenen ögelerin hiçbiri bulunamadı: %1"
 #: libmsooxml/MsooXmlRelationships.cpp:85
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr "\"%2\" dosyasında \"%1\" kimliği için hedef bulunamadı"
+msgstr "“%2” dosyasında “%1” kimliği için hedef bulunamadı"
 
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr "\"%1\" ilişkiler dosyası bulunamadı"
+msgstr "“%1” ilişkiler dosyası bulunamadı"
 
 #: libmsooxml/MsooXmlRelationships.cpp:104
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr "\"%2\" dosyasında \"%1\" ilişkisi için hedef bulunamadı"
+msgstr "“%2” dosyasında “%1” ilişkisi için hedef bulunamadı"
 
 #: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
@@ -216,18 +216,18 @@ msgstr ""
 #: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
-msgstr "'%1' girdisi bulunamadı."
+msgstr "“%1” girdisi bulunamadı."
 
 #: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
-msgstr "'%1' girdisi bir dosya değil."
+msgstr "“%1” girdisi bir dosya değil."
 
 #: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
 #: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr "\"%1\" girdisi, yazma için açılamadı."
+msgstr "“%1” girdisi, yazmak için açılamadı."
 
 #: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
 #: libmsooxml/MsooXmlUtils.cpp:390
@@ -256,7 +256,7 @@ msgstr "Dışa Aktar"
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
-msgstr "CSV süzgeci giriş dosyasını açamıyor - lütfen raporlayın."
+msgstr "CSV süzgeci girdi dosyasını açamıyor — lütfen raporlayın."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #: sheets/csv/exportdialogui.ui:48
@@ -771,7 +771,7 @@ msgstr "Desteklenmeyen belge sürümü"
 #: sheets/qpro/qproimport.cc:114
 #, kde-format
 msgid "QPRO filter cannot open input file - please report."
-msgstr "QPRO süzgeci, giriş dosyasını açamıyor - lütfen raporlayın."
+msgstr "QPRO süzgeci, girdi dosyasını açamıyor — lütfen raporlayın."
 
 #: sheets/qpro/qproimport.cc:219
 #, kde-format
@@ -826,7 +826,7 @@ msgstr "Tamsayı ve kayan noktalı sayı bekleniyor"
 #: stage/pptx/PptxXmlDocumentReader.cpp:289
 #, kde-format
 msgid "Slide layout \"%1\" not found"
-msgstr "Slayt yerleşimi \"%1\" bulunamadı"
+msgstr "Slayt yerleşimi “%1” bulunamadı"
 
 #: stage/pptx/PptxXmlSlideReader.cpp:589
 #, kde-format
@@ -866,7 +866,7 @@ msgstr "&Tümce: Eğer satırın sonu bir tümcenin sonuysa"
 #: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
-msgstr "&Boş Satır: Eğer satır boşsa"
+msgstr "&Boş satır: Eğer satır boşsa"
 
 #: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format

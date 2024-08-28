@@ -1734,16 +1734,16 @@ msgid "Browse..."
 msgstr "浏览..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "背景颜色"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset background color"
-msgstr "背景颜色"
+msgstr ""
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1752,9 +1752,9 @@ msgstr "整个单词"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable drop caps"
-msgstr "首字下沉："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1898,9 +1898,9 @@ msgstr "两端对齐"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "边框/页面末段行为"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
@@ -3016,9 +3016,3 @@ msgstr "按键"
 #, kde-format
 msgid "Text editing"
 msgstr "文本编辑"
-
-#~ msgid "Number of characters:"
-#~ msgstr "字符数："
-
-#~ msgid "Alignment"
-#~ msgstr "对齐"

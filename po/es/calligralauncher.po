@@ -1,33 +1,31 @@
-# Copyright (C) YEAR This file is copyright:
-# This file is distributed under the same license as the calligra package.
+# Translation of calligralauncher to Spanish
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2024.
+# SPDX-FileCopyrightText: 2024 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: calligra\n"
+"Project-Id-Version: calligralauncher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-26 00:38+0000\n"
-"PO-Revision-Date: 2024-08-26 22:46+0300\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
-"Language: uk\n"
+"PO-Revision-Date: 2024-08-27 23:56+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: main.cpp:51
 #, kde-format
 msgctxt "@title"
 msgid "Calligra Launcher"
-msgstr "Засіб запуску Calligra"
+msgstr "Lanzador de Calligra"
 
 #: main.cpp:53
 #, kde-format
 msgid "Calligra Launcher"
-msgstr "Засіб запуску Calligra"
+msgstr "Lanzador de Calligra"
 
 #: main.cpp:55
 #, kde-format
@@ -44,19 +42,19 @@ msgstr "Carl Schwan"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Maintainer"
-msgstr "Супровідник"
+msgstr "Responsable"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Юрій Чорноіван"
+msgstr "Eloy Cuadra"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "yurchor@ukr.net"
+msgstr "ecuadra@eloihr.net"
 
 #: Main.qml:48
 #, kde-format
@@ -81,4 +79,4 @@ msgstr "Karbon"
 #: Main.qml:68
 #, kde-format
 msgid "Quit"
-msgstr "Вийти"
+msgstr "Salir"

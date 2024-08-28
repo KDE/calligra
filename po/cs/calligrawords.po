@@ -1865,6 +1865,3 @@ msgstr "Hlavní text"
 #, kde-format
 msgid "Other text"
 msgstr "Jiný text"
-
-#~ msgid "Left by:"
-#~ msgstr "Vlevo od:"

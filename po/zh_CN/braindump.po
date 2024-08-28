@@ -322,18 +322,3 @@ msgstr "组合形状"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "拆散形状"
-
-#~ msgid "URL:"
-#~ msgstr "URL："
-
-#~ msgid "Use a cache copy"
-#~ msgstr "使用缓存副本"
-
-#~ msgid "Web Shape"
-#~ msgstr "网络形状"
-
-#~ msgid "A web shape"
-#~ msgstr "一个网络形状"
-
-#~ msgid "Web shape editing"
-#~ msgstr "网络形状编辑"

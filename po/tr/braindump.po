@@ -5,13 +5,13 @@
 # Ongun Kanat <ongun.kanat@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2012-2013.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2015.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2022-08-11 11:53+0300\n"
+"PO-Revision-Date: 2024-08-27 14:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
@@ -44,13 +44,13 @@ msgstr "Yapılacaklar"
 #: data/states/states/states.xml:4
 #, kde-format
 msgid "Unchecked"
-msgstr "Seçili değil"
+msgstr "İşaretsiz"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:5
 #, kde-format
 msgid "Checked"
-msgstr "Seçili"
+msgstr "İşaretli"
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:7
@@ -141,7 +141,7 @@ msgstr ""
 #: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
-msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+msgstr "© 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 
 #: src/AboutData.h:42
 #, kde-format
@@ -276,7 +276,7 @@ msgstr "Ayrıntılı Görünüm"
 #: src/SectionsBoxDock.cpp:59
 #, kde-format
 msgid "Thumbnail View"
-msgstr "Küçük Resim Görünümü"
+msgstr "Küçük Görsel Görünümü"
 
 #: src/SectionsBoxDock.cpp:70
 #, kde-format
@@ -286,17 +286,17 @@ msgstr "Görünüm Kipi"
 #: src/SectionsBoxDock.cpp:82
 #, kde-format
 msgid "Add new whiteboard below current."
-msgstr "Şimdikinin altına yeni bir beyaz tahta ekle."
+msgstr "Şimdikinin altına yeni bir beyaz tahta ekleyin."
 
 #: src/SectionsBoxDock.cpp:83
 #, kde-format
 msgid "Add new whiteboard above current."
-msgstr "Şimdikinin üstüne yeni bir beyaz tahta ekle."
+msgstr "Şimdikinin üstüne yeni bir beyaz tahta ekleyin."
 
 #: src/SectionsBoxDock.cpp:84
 #, kde-format
 msgid "Add new whiteboard as child of current."
-msgstr "Şimdikine yeni bir alt beyaz tahta ekle."
+msgstr "Şimdikine yeni bir alt beyaz tahta ekleyin."
 
 #: src/View.cpp:182
 #, kde-format

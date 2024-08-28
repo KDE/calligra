@@ -73,7 +73,7 @@ msgid "Remove formula elements"
 msgstr "删除公式元素"
 
 #: FormulaToolEditWidget.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Edit"
 msgstr "编辑"
@@ -85,7 +85,7 @@ msgid "Font:"
 msgstr "字体："
 
 #: FormulaToolWidget.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Insert"
 msgstr "插入"
@@ -117,21 +117,21 @@ msgstr "杂类"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Elements:"
-msgstr "元素"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Symbols:"
-msgstr "符号"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Actions:"
-msgstr "操作"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -304,21 +304,3 @@ msgstr "使用 LaTeX/Matlab 语法编辑公式"
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "使用 LaTeX 语法编辑公式"
-
-#~ msgid "General options"
-#~ msgstr "常规选项"
-
-#~ msgid "Colors:"
-#~ msgstr "颜色："
-
-#~ msgid "Specific options"
-#~ msgstr "特定选项"
-
-#~ msgid "Rows:"
-#~ msgstr "行："
-
-#~ msgid "Columns:"
-#~ msgstr "列："
-
-#~ msgid "View MathML"
-#~ msgstr "查看 MathML"
