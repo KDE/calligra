@@ -153,7 +153,6 @@ find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     KIO
     Notifications
     NotifyConfig
-    Parts
     Sonnet
     TextWidgets
     WidgetsAddons

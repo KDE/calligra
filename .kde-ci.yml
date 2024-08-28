@@ -21,7 +21,6 @@ Dependencies:
     'frameworks/kio': '@latest-kf6'
     'frameworks/knotifications': '@latest-kf6'
     'frameworks/knotifyconfig': '@latest-kf6'
-    'frameworks/kparts': '@latest-kf6'
     'frameworks/sonnet': '@latest-kf6'
     'frameworks/ktextwidgets': '@latest-kf6'
     'frameworks/kwidgetsaddons': '@latest-kf6'
