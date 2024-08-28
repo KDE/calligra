@@ -21,12 +21,6 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
 
-# ensure out-of-source build
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" isBuildInSource)
-if(isBuildInSource)
-    message(FATAL_ERROR "Compiling Calligra inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommitted changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
-endif()
-
 set(REQUIRED_KF6_VERSION "6.0.0")
 set(REQUIRED_QT_VERSION "6.5.0")
 
