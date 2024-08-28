@@ -25,7 +25,7 @@ KAboutData *newKPresenterAboutData()
                                            QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrastage"));
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligra.stage"));
     aboutData->addAuthor(i18n("Carl Schwan"),
                          i18n("Maintainer/Port to Qt6"),
                          QStringLiteral("carl@carlschwan.eu"),

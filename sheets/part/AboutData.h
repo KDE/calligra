@@ -32,7 +32,7 @@ static KAboutData *newAboutData()
                                     QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrasheets"));
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligra.sheets"));
     aboutData->addAuthor(i18n("Carl Schwan"),
                          i18n("Maintainer/Port to Qt6"),
                          QStringLiteral("carl@carlschwan.eu"),

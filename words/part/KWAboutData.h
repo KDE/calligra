@@ -24,7 +24,7 @@ KAboutData *newWordsAboutData()
                                     QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrawords"));
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligra.words"));
     aboutData->addAuthor(i18n("Carl Schwan"),
                          i18n("Co Maintainer/Port to Qt6"),
                          QStringLiteral("carl@carlschwan.eu"),

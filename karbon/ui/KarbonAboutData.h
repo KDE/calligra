@@ -25,7 +25,7 @@ KAboutData *newKarbonAboutData()
                                            QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
-    aboutData->setDesktopFileName(QStringLiteral("org.kde.karbon"));
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligra.karbon"));
     aboutData->addAuthor(i18n("Anthony Fieroni"), i18n("Maintainer"), QString());
     aboutData->addAuthor(i18n("Carl Schwan"),
                          i18n("Port to Qt6"),
