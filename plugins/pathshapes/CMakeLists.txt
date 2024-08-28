@@ -15,7 +15,7 @@ ki18n_wrap_ui(pathshapes_PART_SRCS
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
-add_library(calligra_shape_paths SHARED
+add_library(calligra_shape_paths MODULE
     ${pathshapes_PART_SRCS}
     ellipse/EllipseShape.cpp
     ellipse/EllipseShapeFactory.cpp
