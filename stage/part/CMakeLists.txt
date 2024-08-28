@@ -134,7 +134,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(TARGET Qt6::DBus)
+if(UNIX AND NOT APPLE AND NOT ANDROID AND NOT CALLIGRA_FLATPAK)
     set(calligrastageprivate_LIB_SRCS
         ${calligrastageprivate_LIB_SRCS}
         KPrViewAdaptor.cpp

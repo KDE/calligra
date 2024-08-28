@@ -67,7 +67,7 @@ set(komain_LIB_SRCS
     MainDebug.cpp
 )
 
-if(TARGET Qt6::DBus)
+if(UNIX AND NOT APPLE AND NOT ANDROID AND NOT CALLIGRA_FLATPAK)
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
@@ -163,7 +163,7 @@ install( FILES
     komain_export.h
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
-if(TARGET Qt6::DBus)
+if(UNIX AND NOT APPLE AND NOT ANDROID AND NOT CALLIGRA_FLATPAK)
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
