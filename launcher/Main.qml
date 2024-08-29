@@ -47,22 +47,22 @@ Controls.ApplicationWindow {
                 {
                     name: i18n("Calligra Words"),
                     icon: "calligrawords",
-                    desktopId: "org.kde.calligra.words"
+                    desktopId: "calligrawords"
                 },
                 {
                     name: i18n("Calligra Stage"),
                     icon: "calligrasheets",
-                    desktopId: "org.kde.calligra.stage"
+                    desktopId: "calligrastage"
                 },
                 {
                     name: i18n("Calligra Sheets"),
                     icon: "calligrastage",
-                    desktopId: "org.kde.calligra.sheets"
+                    desktopId: "calligrasheets"
                 },
                 {
                     name: i18n("Karbon"),
                     icon: "karbon",
-                    desktopId: "org.kde.calligra.karbon"
+                    desktopId: "karbon"
                 },
                 {
                     name: i18n("Quit"),

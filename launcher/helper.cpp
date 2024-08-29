@@ -3,7 +3,7 @@
 
 #include "helper.h"
 
-#include <KIO/ApplicationLauncherJob>
+#include <KIO/CommandLauncherJob>
 #include <KIO/JobUiDelegateFactory>
 #include <KJobUiDelegate>
 #include <KService>
@@ -22,9 +22,11 @@ void Helper::execute(const QString &appId)
         qApp->quit();
     }
 
-    KService::Ptr service = KService::serviceByDesktopName(appId);
-    auto job = new KIO::ApplicationLauncherJob(service);
+    auto job = new KIO::CommandLauncherJob(appId, QStringList{});
     connect(job, &KJob::result, this, [job](KJob *) {
+        if (job->error() != KJob::NoError) {
+            qWarning() << job->errorString();
+        }
         qApp->quit();
     });
     job->start();
