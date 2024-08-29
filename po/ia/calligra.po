@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2022, 2024.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2022, 2024 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-04-29 14:48+0200\n"
+"PO-Revision-Date: 2024-08-28 15:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -720,22 +720,19 @@ msgid "Create backup file:"
 msgstr "Crea file de retrocopia:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Monstra grillia:"
+msgstr "Monstra grillia"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Instantaneo a grilia:"
+msgstr "Instantaneo a grilia"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
 msgstr "Grillia"
 
@@ -745,20 +742,16 @@ msgid "Grid color:"
 msgstr "Color de Grillia:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontal"
+msgstr "Spatiar horizontalmente:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Vertical"
+msgstr "Spatiar Verticalmente:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -891,7 +884,7 @@ msgstr "Recupera files"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Abandona toto"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -1567,17 +1560,17 @@ msgstr "Predefinite"
 #: main/KoShapeCollectionMenu.cpp:358
 #, kde-format
 msgid "Geometrics"
-msgstr ""
+msgstr "Geometria"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Flechas"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Divertente"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1741,11 +1734,10 @@ msgid "Date: %1"
 msgstr "Data: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Forma"
+msgstr "Adde forma"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -4481,7 +4473,7 @@ msgstr "Iste servitor non supporta cryptation"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Non Fixa"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
@@ -4730,10 +4722,9 @@ msgid "Icon only"
 msgstr "Solmente icone"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Sur un singule latere"
+msgstr "Latere de barra lateral"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -4756,30 +4747,26 @@ msgid "Apply to document"
 msgstr "Applica a documento"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Margine sinistre"
+msgstr "Margine de bordo sinistre:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Margine dextere"
+msgstr "Margine de bordo dextere:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Bordo de ligatura:"
+msgstr "Margine de Bordo de ligatura:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Limite de Pagina:"
+msgstr "Margine de Limite de Pagina:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4888,17 +4875,15 @@ msgstr "Dextera a Sinistra"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
 msgstr "Margine in alto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Margine in basso"
+msgstr "Margine in basso:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -4997,7 +4982,7 @@ msgstr "Distantia:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Proprietates de forma"
 
 #: widgets/KoShapePropertyWidget.cpp:57
 #, kde-format
@@ -5150,7 +5135,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
@@ -5163,32 +5148,28 @@ msgid "Icon Size"
 msgstr "Dimension de Icone"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "Disposition de pagina"
+msgstr "Disposition"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatic"
+msgstr "&Automatic"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Sinistra a dextera"
+msgstr "&Sinistra a Dextera"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Dextera a Sinistra"
+msgstr "&Dextera a Sinistra"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

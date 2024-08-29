@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2016, 2020, 2022.
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2020, 2022, 2024 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2022-12-14 12:25+0100\n"
+"PO-Revision-Date: 2024-08-28 15:50+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1682,18 +1682,16 @@ msgid "Browse..."
 msgstr "Naviga..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Color de fundo"
+msgstr "Reinitialisa Color de fundo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Color de fundo"
+msgstr "Reinitialisa Color de fundo"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1788,24 +1786,21 @@ msgstr "Al minus "
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Indenta"
+msgstr "Indentation sinistre:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Indenta"
+msgstr "Indentation dextere:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Prime linea:"
+msgstr "Indentation de prime linea:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1815,10 +1810,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Interlinea"
+msgstr "Spatiar de linea:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1834,17 +1828,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Spatio de Paragrapho"
+msgstr "Spatio de Paragrapho Ante:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Spatio de Paragrapho"
+msgstr "Spatio de Paragrapho Post:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-05-13 21:56+0300\n"
+"PO-Revision-Date: 2024-08-27 12:17+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "#-#-#-#-#  csvfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 "#-#-#-#-#  kformulalatexfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "X-Generator: KBabel 1.11.4\n"
 "#-#-#-#-#  kformulamathmlfilter.po (PACKAGE VERSION)  #-#-#-#-#\n"
@@ -274,18 +274,17 @@ msgid "<SHEETNAME>"
 msgstr "<LOKSNES NOSAUKUMS>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Eksportēt kā attēlu"
+msgstr "Eksportēt uz CVS"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "PNG Eksporta Kļūda"
+msgstr "Eksportēt"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -300,10 +299,9 @@ msgstr "Rindas beigas"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Rindas beigas"
+msgstr "Rindas beigas:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -367,10 +365,9 @@ msgstr "Šūnas"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Atdalītājs"
+msgstr "Atdalītājs:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -582,10 +579,9 @@ msgstr "Dokuments"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Dokumenta stils"
+msgstr "Dokumenta stils:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -601,10 +597,9 @@ msgstr "„Words“ stils"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "Dokumenta tips"
+msgstr "Dokumenta tips:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -711,10 +706,9 @@ msgstr "Valoda"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "&Kodējums:"
+msgstr "Kodējums:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289

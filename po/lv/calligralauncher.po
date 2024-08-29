@@ -1,0 +1,84 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-08-27 12:18+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Generator: Lokalize 24.08.0\n"
+
+#: main.cpp:51
+#, kde-format
+msgctxt "@title"
+msgid "Calligra Launcher"
+msgstr "„Calligra“ palaidējs"
+
+#: main.cpp:53
+#, kde-format
+msgid "Calligra Launcher"
+msgstr "„Calligra“ palaidējs"
+
+#: main.cpp:55
+#, kde-format
+msgid "(c) 2024"
+msgstr "(c) 2024"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Carl Schwan"
+msgstr "Carl Schwan"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Maintainer"
+msgstr "Uzturētājs"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Toms Trasūns"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "toms.trasuns@posteo.net"
+
+#: Main.qml:48
+#, kde-format
+msgid "Calligra Words"
+msgstr "Calligra Words"
+
+#: Main.qml:53
+#, kde-format
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: Main.qml:58
+#, kde-format
+msgid "Calligra Sheets"
+msgstr "Calligra Sheets"
+
+#: Main.qml:63
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: Main.qml:68
+#, kde-format
+msgid "Quit"
+msgstr "Iziet"
