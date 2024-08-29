@@ -101,6 +101,7 @@ target_link_libraries(komain
         KF6::Completion
         KF6::IconThemes
         KF6::IconWidgets
+        KF6::Crash
 )
 if (TARGET KF6::DBusAddons)
     target_link_libraries(komain

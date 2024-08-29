@@ -35,6 +35,7 @@
 #ifdef WITH_QTDBUS
 #include <KDBusService>
 #endif
+#include <KCrash>
 #include <KIconLoader>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -129,6 +130,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType, const QString &wi
     KAboutData::setApplicationData(*aboutData);
 
     setWindowIcon(QIcon::fromTheme(windowIconName, windowIcon()));
+
+    KCrash::initialize();
 
     KoApplication::KoApp = this;
 
