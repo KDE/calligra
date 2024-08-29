@@ -974,9 +974,9 @@ if(SHOULD_BUILD_PART_COMPONENTS)
     add_subdirectory(components)
 endif()
 
-if(SHOULD_BUILD_GEMINI)
-    add_subdirectory(gemini)
-endif()
+#if(SHOULD_BUILD_GEMINI)
+#    add_subdirectory(gemini)
+#endif()
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
