@@ -209,15 +209,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     QTemporaryFile tmpChangeFile;
     tmpChangeFile.open();
-    KoXmlWriter *changeWriter = new KoXmlWriter(&tmpChangeFile, 1);
-    if (!changeWriter)
-        return false;
+    auto changeWriter = new KoXmlWriter(&tmpChangeFile);
 
     QTemporaryFile tmpTextBodyFile;
     tmpTextBodyFile.open();
-    KoXmlWriter *tmpBodyWriter = new KoXmlWriter(&tmpTextBodyFile, 1);
-    if (!tmpBodyWriter)
-        return false;
+    auto tmpBodyWriter = new KoXmlWriter(&tmpTextBodyFile);
 
     KoGenStyles mainStyles;
 

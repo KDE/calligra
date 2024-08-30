@@ -140,7 +140,7 @@ public:
     void addProcessingInstruction(const char *cstr)
     {
         endChild();
-        xml->addProcessingInstruction(cstr);
+        xml->writeProcessingInstruction(cstr);
     }
     template<class T>
     void addCompleteElement(T cstr)

@@ -141,7 +141,7 @@ KoXmlWriter *KoOdfWriteStore::bodyWriter()
             d->contentTmpFile = nullptr;
             return nullptr;
         }
-        d->bodyWriter = new KoXmlWriter(d->contentTmpFile, 1);
+        d->bodyWriter = new KoXmlWriter(d->contentTmpFile);
     }
     return d->bodyWriter;
 }

@@ -352,7 +352,7 @@ bool KoOdfChartWriter::saveContent(KoStore *store, KoXmlWriter *manifestWriter)
     bodyWriter->startElement("chart:chart");
 
     if (!chart()->m_impl->name().isEmpty()) {
-        bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
+        bodyWriter->addAttribute("chart:class", QString("chart:" + chart()->m_impl->name()));
     }
 
     if (m_width > 0) {
@@ -793,7 +793,7 @@ bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, 
             bodyWriter->addAttribute("chart:values-cell-range-address", series->m_domainValuesCellRangeAddress.last());
         }
 
-        bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
+        bodyWriter->addAttribute("chart:class", QString("chart:" + chart()->m_impl->name()));
 
         //         if (chart()->m_impl->name() == QLatin1StringView("scatter")) {
         //             bodyWriter->startElement("chart:domain");
