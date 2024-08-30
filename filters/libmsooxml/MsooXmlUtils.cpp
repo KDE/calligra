@@ -889,7 +889,7 @@ KoXmlWriter *Utils::XmlWriteBuffer::setWriter(KoXmlWriter *writer)
         return nullptr;
     }
     m_origWriter = writer; // remember
-    m_newWriter = new KoXmlWriter(&m_buffer, m_origWriter->indentLevel() + 1);
+    m_newWriter = new KoXmlWriter(&m_buffer);
     return m_newWriter;
 }
 

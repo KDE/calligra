@@ -156,7 +156,7 @@ void KoGenStyle::writeStyleProperties(KoXmlWriter *writer, PropertyType type, co
         const auto end = map.constEnd();
         for (; it != end; ++it) {
             if (!parentStyle || parentStyle->property(it.key(), type) != it.value())
-                writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+                writer->addAttribute(it.key(), it.value());
         }
         auto itChild = mapChild.constBegin();
         const auto endChild = mapChild.constEnd();

@@ -10,134 +10,22 @@
 #include <QByteArray>
 #include <QStack>
 #include <StoreDebug.h>
-#include <float.h>
+#include <cfloat>
 
-static const int s_indentBufferLength = 100;
-static const int s_escapeBufferLen = 10000;
-
-class Q_DECL_HIDDEN KoXmlWriter::Private
+KoXmlWriter::KoXmlWriter(QIODevice *dev)
+    : QXmlStreamWriter(dev)
 {
-public:
-    Private(QIODevice *dev_, int indentLevel = 0)
-        : dev(dev_)
-        , baseIndentLevel(indentLevel)
-    {
-    }
-    ~Private()
-    {
-        delete[] indentBuffer;
-        delete[] escapeBuffer;
-        // TODO: look at if we must delete "dev". For me we must delete it otherwise we will leak it
-    }
-
-    QIODevice *dev;
-    QStack<Tag> tags;
-    int baseIndentLevel;
-
-    char *indentBuffer; // maybe make it static, but then it needs a K_GLOBAL_STATIC
-    // and would eat 1K all the time... Maybe refcount it :)
-    char *escapeBuffer; // can't really be static if we want to be thread-safe
-};
-
-KoXmlWriter::KoXmlWriter(QIODevice *dev, int indentLevel)
-    : d(new Private(dev, indentLevel))
-{
-    init();
 }
 
-void KoXmlWriter::init()
+void KoXmlWriter::addCompleteElement(QAnyStringView cstr)
 {
-    d->indentBuffer = new char[s_indentBufferLength];
-    memset(d->indentBuffer, ' ', s_indentBufferLength);
-    *d->indentBuffer = '\n'; // write newline before indentation, in one go
-
-    d->escapeBuffer = new char[s_escapeBufferLen];
-    if (!d->dev->isOpen())
-        d->dev->open(QIODevice::WriteOnly);
-}
-
-KoXmlWriter::~KoXmlWriter()
-{
-    delete d;
-}
-
-void KoXmlWriter::startDocument(const char *rootElemName, const char *publicId, const char *systemId)
-{
-    Q_ASSERT(d->tags.isEmpty());
-    writeCString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    // There isn't much point in a doctype if there's no DTD to refer to
-    // (I'm told that files that are validated by a RelaxNG schema cannot refer to the schema)
-    if (publicId) {
-        writeCString("<!DOCTYPE ");
-        writeCString(rootElemName);
-        writeCString(" PUBLIC \"");
-        writeCString(publicId);
-        writeCString("\" \"");
-        writeCString(systemId);
-        writeCString("\"");
-        writeCString(">\n");
-    }
-}
-
-void KoXmlWriter::endDocument()
-{
-    // just to do exactly like QDom does (newline at end of file).
-    writeChar('\n');
-    Q_ASSERT(d->tags.isEmpty());
-}
-
-// returns the value of indentInside of the parent
-bool KoXmlWriter::prepareForChild()
-{
-    if (!d->tags.isEmpty()) {
-        Tag &parent = d->tags.top();
-        if (!parent.hasChildren) {
-            closeStartElement(parent);
-            parent.hasChildren = true;
-            parent.lastChildIsText = false;
-        }
-        if (parent.indentInside) {
-            writeIndent();
-        }
-        return parent.indentInside;
-    }
-    return true;
-}
-
-void KoXmlWriter::prepareForTextNode()
-{
-    if (d->tags.isEmpty())
-        return;
-    Tag &parent = d->tags.top();
-    if (!parent.hasChildren) {
-        closeStartElement(parent);
-        parent.hasChildren = true;
-        parent.lastChildIsText = true;
-    }
-}
-
-void KoXmlWriter::startElement(const char *tagName, bool indentInside)
-{
-    Q_ASSERT(tagName != nullptr);
-
-    // Tell parent that it has children
-    bool parentIndent = prepareForChild();
-
-    d->tags.push(Tag(tagName, parentIndent && indentInside));
-    writeChar('<');
-    writeCString(tagName);
-    // kDebug(s_area) << tagName;
-}
-
-void KoXmlWriter::addCompleteElement(const char *cstr)
-{
-    prepareForChild();
-    writeCString(cstr);
+    device()->write(">");
+    device()->write(cstr.toString().toUtf8());
+    writeEndElement();
 }
 
 void KoXmlWriter::addCompleteElement(QIODevice *indev)
 {
-    prepareForChild();
     const bool wasOpen = indev->isOpen();
     // Always (re)open the device in readonly mode, it might be
     // already open but for writing, and we need to rewind.
@@ -148,6 +36,8 @@ void KoXmlWriter::addCompleteElement(QIODevice *indev)
         return;
     }
 
+    device()->write(">");
+
     static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
     QByteArray buffer;
     buffer.resize(MAX_CHUNK_SIZE);
@@ -155,274 +45,115 @@ void KoXmlWriter::addCompleteElement(QIODevice *indev)
         qint64 len = indev->read(buffer.data(), buffer.size());
         if (len <= 0) // e.g. on error
             break;
-        d->dev->write(buffer.data(), len);
+        device()->write(buffer.data(), len);
     }
     if (!wasOpen) {
         // Restore initial state
         indev->close();
     }
+
+    writeEndElement();
 }
 
-void KoXmlWriter::endElement()
-{
-    if (d->tags.isEmpty())
-        warnStore << "EndElement() was called more times than startElement(). "
-                     "The generated XML will be invalid! "
-                     "Please report this bug (by saving the document to another format...)"
-                  << Qt::endl;
-
-    Tag tag = d->tags.pop();
-
-    if (!tag.hasChildren) {
-        writeCString("/>");
-    } else {
-        if (tag.indentInside && !tag.lastChildIsText) {
-            writeIndent();
-        }
-        writeCString("</");
-        Q_ASSERT(tag.tagName != nullptr);
-        writeCString(tag.tagName);
-        writeChar('>');
-    }
-}
-
-void KoXmlWriter::addTextNode(const QByteArray &cstr)
-{
-    // Same as the const char* version below, but here we know the size
-    prepareForTextNode();
-    char *escaped = escapeForXML(cstr.constData(), cstr.size());
-    writeCString(escaped);
-    if (escaped != d->escapeBuffer)
-        delete[] escaped;
-}
-
-void KoXmlWriter::addTextNode(const char *cstr)
-{
-    prepareForTextNode();
-    char *escaped = escapeForXML(cstr, -1);
-    writeCString(escaped);
-    if (escaped != d->escapeBuffer)
-        delete[] escaped;
-}
-
-void KoXmlWriter::addProcessingInstruction(const char *cstr)
-{
-    prepareForTextNode();
-    writeCString("<?");
-    addTextNode(cstr);
-    writeCString("?>");
-}
-
-void KoXmlWriter::addAttribute(const char *attrName, const QByteArray &value)
-{
-    // Same as the const char* one, but here we know the size
-    writeChar(' ');
-    writeCString(attrName);
-    writeCString("=\"");
-    char *escaped = escapeForXML(value.constData(), value.size());
-    writeCString(escaped);
-    if (escaped != d->escapeBuffer)
-        delete[] escaped;
-    writeChar('"');
-}
-
-void KoXmlWriter::addAttribute(const char *attrName, const char *value)
-{
-    writeChar(' ');
-    writeCString(attrName);
-    writeCString("=\"");
-    char *escaped = escapeForXML(value, -1);
-    writeCString(escaped);
-    if (escaped != d->escapeBuffer)
-        delete[] escaped;
-    writeChar('"');
-}
-
-void KoXmlWriter::addAttribute(const char *attrName, double value)
+void KoXmlWriter::writeAttribute(QAnyStringView attrName, double value)
 {
     QByteArray str;
     str.setNum(value, 'f', 11);
-    addAttribute(attrName, str.data());
+    QXmlStreamWriter::writeAttribute(attrName, str.data());
 }
 
-void KoXmlWriter::addAttribute(const char *attrName, float value)
+void KoXmlWriter::writeAttribute(QAnyStringView attrName, float value)
 {
     QByteArray str;
     str.setNum(value, 'f', FLT_DIG);
-    addAttribute(attrName, str.data());
+    QXmlStreamWriter::writeAttribute(attrName, str);
 }
 
-void KoXmlWriter::addAttributePt(const char *attrName, double value)
+void KoXmlWriter::writeAttributePt(QAnyStringView attrName, double value)
 {
     QByteArray str;
     str.setNum(value, 'f', 11);
     str += "pt";
-    addAttribute(attrName, str.data());
+    QXmlStreamWriter::writeAttribute(attrName, str);
 }
 
-void KoXmlWriter::addAttributePt(const char *attrName, float value)
+void KoXmlWriter::writeAttributePt(QAnyStringView attrName, float value)
 {
     QByteArray str;
     str.setNum(value, 'f', FLT_DIG);
     str += "pt";
-    addAttribute(attrName, str.data());
+    QXmlStreamWriter::writeAttribute(attrName, str);
 }
 
-void KoXmlWriter::writeIndent()
+void KoXmlWriter::addManifestEntry(QAnyStringView fullPath, QAnyStringView mediaType)
 {
-    // +1 because of the leading '\n'
-    d->dev->write(d->indentBuffer, qMin(indentLevel() + 1, s_indentBufferLength));
+    writeStartElement("manifest:file-entry"_L1);
+    QXmlStreamWriter::writeAttribute("manifest:media-type"_L1, mediaType);
+    QXmlStreamWriter::writeAttribute("manifest:full-path"_L1, fullPath);
+    writeEndElement();
 }
 
-void KoXmlWriter::writeString(const QString &str)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, QAnyStringView value)
 {
-    // cachegrind says .utf8() is where most of the time is spent
-    const QByteArray cstr = str.toUtf8();
-    d->dev->write(cstr);
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "string");
+    writeCharacters(value);
+    writeEndElement();
 }
 
-// In case of a reallocation (ret value != d->buffer), the caller owns the return value,
-// it must delete it (with [])
-char *KoXmlWriter::escapeForXML(const char *source, int length = -1) const
+void KoXmlWriter::addConfigItem(QAnyStringView configName, bool value)
 {
-    // we're going to be pessimistic on char length; so lets make the outputLength less
-    // the amount one char can take: 6
-    char *destBoundary = d->escapeBuffer + s_escapeBufferLen - 6;
-    char *destination = d->escapeBuffer;
-    char *output = d->escapeBuffer;
-    const char *src = source; // src moves, source remains
-    for (;;) {
-        if (destination >= destBoundary) {
-            // When we come to realize that our escaped string is going to
-            // be bigger than the escape buffer (this shouldn't happen very often...),
-            // we drop the idea of using it, and we allocate a bigger buffer.
-            // Note that this if() can only be hit once per call to the method.
-            if (length == -1)
-                length = qstrlen(source); // expensive...
-            uint newLength = length * 6 + 1; // worst case. 6 is due to &quot; and &apos;
-            char *buffer = new char[newLength];
-            destBoundary = buffer + newLength;
-            uint amountOfCharsAlreadyCopied = destination - d->escapeBuffer;
-            memcpy(buffer, d->escapeBuffer, amountOfCharsAlreadyCopied);
-            output = buffer;
-            destination = buffer + amountOfCharsAlreadyCopied;
-        }
-        switch (*src) {
-        case 60: // <
-            memcpy(destination, "&lt;", 4);
-            destination += 4;
-            break;
-        case 62: // >
-            memcpy(destination, "&gt;", 4);
-            destination += 4;
-            break;
-        case 34: // "
-            memcpy(destination, "&quot;", 6);
-            destination += 6;
-            break;
-#if 0 // needed?
-        case 39: // '
-            memcpy(destination, "&apos;", 6);
-            destination += 6;
-            break;
-#endif
-        case 38: // &
-            memcpy(destination, "&amp;", 5);
-            destination += 5;
-            break;
-        case 0:
-            *destination = '\0';
-            return output;
-        // Control codes accepted in XML 1.0 documents.
-        case 9:
-        case 10:
-        case 13:
-            *destination++ = *src++;
-            continue;
-        default:
-            // Don't add control codes not accepted in XML 1.0 documents.
-            if (*src > 0 && *src < 32) {
-                ++src;
-            } else {
-                *destination++ = *src++;
-            }
-            continue;
-        }
-        ++src;
-    }
-    // NOTREACHED (see case 0)
-    return output;
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "boolean"_L1);
+    writeCharacters(value ? "true"_L1 : "false"_L1);
+    writeEndElement();
 }
 
-void KoXmlWriter::addManifestEntry(const QString &fullPath, const QString &mediaType)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, int value)
 {
-    startElement("manifest:file-entry");
-    addAttribute("manifest:media-type", mediaType);
-    addAttribute("manifest:full-path", fullPath);
-    endElement();
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "int"_L1);
+    writeCharacters(QString::number(value));
+    writeEndElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString &configName, const QString &value)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, double value)
 {
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "string");
-    addTextNode(value);
-    endElement();
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "double"_L1);
+    writeCharacters(QString::number(value));
+    writeEndElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString &configName, bool value)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, float value)
 {
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "boolean");
-    addTextNode(value ? "true" : "false");
-    endElement();
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "double"_L1);
+    writeCharacters(QString::number(value));
+    writeEndElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString &configName, int value)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, long value)
 {
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "int");
-    addTextNode(QString::number(value));
-    endElement();
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "long"_L1);
+    writeCharacters(QByteArray::number(value));
+    writeEndElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString &configName, double value)
+void KoXmlWriter::addConfigItem(QAnyStringView configName, short value)
 {
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "double");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString &configName, float value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "double");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString &configName, long value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "long");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString &configName, short value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "short");
-    addTextNode(QString::number(value));
-    endElement();
+    writeStartElement("config:config-item"_L1);
+    QXmlStreamWriter::writeAttribute("config:name"_L1, configName);
+    QXmlStreamWriter::writeAttribute("config:type"_L1, "short"_L1);
+    writeCharacters(QByteArray::number(value));
+    writeEndElement();
 }
 
 void KoXmlWriter::addTextSpan(const QString &text)
@@ -433,7 +164,7 @@ void KoXmlWriter::addTextSpan(const QString &text)
 
 void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCache)
 {
-    int len = text.length();
+    qsizetype len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
     bool leadingSpace = false;
     QString str;
@@ -462,13 +193,16 @@ void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCach
                     --nrSpaces;
                 }
                 if (nrSpaces > 0) { // there are more spaces
-                    if (!str.isEmpty())
-                        addTextNode(str);
+                    if (!str.isEmpty()) {
+                        writeCharacters(str);
+                    }
                     str.clear();
-                    startElement("text:s");
-                    if (nrSpaces > 1) // it's 1 by default
-                        addAttribute("text:c", nrSpaces);
-                    endElement();
+                    writeStartElement("text:s"_L1);
+                    if (nrSpaces > 1) {
+                        // it's 1 by default
+                        writeAttribute("text:c"_L1, nrSpaces);
+                    }
+                    writeEndElement();
                 }
             }
             nrSpaces = 0;
@@ -476,13 +210,15 @@ void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCach
 
             switch (unicode) {
             case '\t':
-                if (!str.isEmpty())
-                    addTextNode(str);
+                if (!str.isEmpty()) {
+                    writeCharacters(str);
+                }
                 str.clear();
-                startElement("text:tab");
-                if (tabCache.contains(i))
-                    addAttribute("text:tab-ref", tabCache[i] + 1);
-                endElement();
+                writeStartElement("text:tab"_L1);
+                if (tabCache.contains(i)) {
+                    writeAttribute("text:tab-ref"_L1, tabCache[i] + 1);
+                }
+                writeEndElement();
                 break;
             // gracefully handle \f form feed in text input.
             // otherwise the xml will not be valid.
@@ -490,11 +226,12 @@ void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCach
             case '\f':
             case '\n':
             case QChar::LineSeparator:
-                if (!str.isEmpty())
-                    addTextNode(str);
+                if (!str.isEmpty()) {
+                    writeCharacters(str);
+                }
                 str.clear();
-                startElement("text:line-break");
-                endElement();
+                writeStartElement("text:line-break"_L1);
+                writeEndElement();
                 break;
             default:
                 // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
@@ -507,56 +244,12 @@ void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCach
     }
     // either we still have text in str or we have spaces in nrSpaces
     if (!str.isEmpty()) {
-        addTextNode(str);
+        writeCharacters(str);
     }
     if (nrSpaces > 0) { // there are more spaces
-        startElement("text:s");
+        writeStartElement("text:s"_L1);
         if (nrSpaces > 1) // it's 1 by default
-            addAttribute("text:c", nrSpaces);
-        endElement();
+            writeAttribute("text:c"_L1, nrSpaces);
+        writeEndElement();
     }
-}
-
-QIODevice *KoXmlWriter::device() const
-{
-    return d->dev;
-}
-
-int KoXmlWriter::indentLevel() const
-{
-    return d->tags.size() + d->baseIndentLevel;
-}
-
-QList<const char *> KoXmlWriter::tagHierarchy() const
-{
-    QList<const char *> answer;
-    foreach (const Tag &tag, d->tags)
-        answer.append(tag.tagName);
-
-    return answer;
-}
-
-QString KoXmlWriter::toString() const
-{
-    Q_ASSERT(!d->dev->isSequential());
-    if (d->dev->isSequential())
-        return QString();
-    bool wasOpen = d->dev->isOpen();
-    qint64 oldPos = -1;
-    if (wasOpen) {
-        oldPos = d->dev->pos();
-        if (oldPos > 0)
-            d->dev->seek(0);
-    } else {
-        const bool openOk = d->dev->open(QIODevice::ReadOnly);
-        Q_ASSERT(openOk);
-        if (!openOk)
-            return QString();
-    }
-    QString s = QString::fromUtf8(d->dev->readAll());
-    if (wasOpen)
-        d->dev->seek(oldPos);
-    else
-        d->dev->close();
-    return s;
 }

@@ -12,6 +12,12 @@
 #include "kostore_export.h"
 #include <QIODevice>
 #include <QMap>
+#include <QXmlStreamWriter>
+#include <qanystringview.h>
+#include <qstringview.h>
+#include <qxmlstream.h>
+
+using namespace Qt::StringLiterals;
 
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.
@@ -19,19 +25,14 @@
  * document in memory (like QDom does), and avoids using QTextStream at all
  * (which in Qt3 has major performance issues when converting to utf8).
  */
-class KOSTORE_EXPORT KoXmlWriter
+class KOSTORE_EXPORT KoXmlWriter : public QXmlStreamWriter
 {
 public:
     /**
      * Create a KoXmlWriter instance to write out an XML document into
      * the given QIODevice.
      */
-    explicit KoXmlWriter(QIODevice *dev, int indentLevel = 0);
-
-    /// Destructor
-    ~KoXmlWriter();
-
-    QIODevice *device() const;
+    explicit KoXmlWriter(QIODevice *dev);
 
     /**
      * Start the XML document.
@@ -40,10 +41,20 @@ public:
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
      */
-    void startDocument(const char *rootElemName, const char *publicId = nullptr, const char *systemId = nullptr);
+    [[deprecated]]
+    inline void startDocument(QAnyStringView rootElemName, QAnyStringView publicId = {}, QAnyStringView systemId = {})
+    {
+        writeStartDocument("1.0"_L1);
+        if (!publicId.isEmpty()) {
+            writeDTD(QStringLiteral("%1 PUBLIC \"%2\" \"%3\"").arg(rootElemName.toString(), publicId.toString(), systemId.toString()));
+        }
+    }
 
     /// Call this to terminate an XML document.
-    void endDocument();
+    [[deprecated]] inline void endDocument()
+    {
+        writeEndDocument();
+    }
 
     /**
      * Start a new element, as a child of the current element.
@@ -53,87 +64,137 @@ public:
      * @param indentInside if set to false, there will be no indentation inside
      * this tag. This is useful for elements where whitespace matters.
      */
-    void startElement(const char *tagName, bool indentInside = true);
-
-    /**
-     * Overloaded version of addAttribute( const char*, const char* ),
-     * which is a bit slower because it needs to convert @p value to utf8 first.
-     */
-    inline void addAttribute(const char *attrName, const QString &value)
+    [[deprecated]]
+    inline void startElement(QAnyStringView tagName, bool indentInside = true)
     {
-        addAttribute(attrName, value.toUtf8());
+        Q_UNUSED(indentInside); // we never ident
+        writeStartElement(tagName);
     }
+
     /**
      * Add an attribute whose value is an integer
      */
-    inline void addAttribute(const char *attrName, int value)
+    [[deprecated]]
+    inline void addAttribute(QAnyStringView attrName, int value)
     {
-        addAttribute(attrName, QByteArray::number(value));
+        QXmlStreamWriter::writeAttribute(attrName, QString::number(value));
     }
+
+    /**
+     * Add an attribute whose value is an integer
+     */
+    inline void writeAttribute(QAnyStringView attributeName, int value)
+    {
+        QXmlStreamWriter::writeAttribute(attributeName, QByteArray::number(value));
+    }
+
     /**
      * Add an attribute whose value is an unsigned integer
      */
-    inline void addAttribute(const char *attrName, uint value)
+    inline void writeAttribute(QAnyStringView attrName, uint value)
     {
-        addAttribute(attrName, QByteArray::number(value));
+        QXmlStreamWriter::writeAttribute(attrName, QByteArray::number(value));
     }
+
+    [[deprecated]]
+    inline void addAttribute(QAnyStringView attrName, uint value)
+    {
+        writeAttribute(attrName, value);
+    }
+
     /**
      * Add an attribute whose value is an bool
      * It is written as "true" or "false" based on value
      */
-    inline void addAttribute(const char *attrName, bool value)
+    inline void writeAttribute(QAnyStringView attrName, bool value)
     {
-        addAttribute(attrName, value ? "true" : "false");
+        QXmlStreamWriter::writeAttribute(attrName, value ? "true"_L1 : "false"_L1);
+    }
+
+    [[deprecated]]
+    inline void addAttribute(const QByteArray &attrName, const QByteArray &value)
+    {
+        QXmlStreamWriter::writeAttribute(attrName, value);
+    }
+
+    [[deprecated]]
+    inline void addAttribute(QAnyStringView attrName, bool value)
+    {
+        writeAttribute(attrName, value);
     }
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
      */
-    void addAttribute(const char *attrName, double value);
+    void writeAttribute(QAnyStringView attrName, double value);
+
+    [[deprecated]]
+    void addAttribute(QAnyStringView attrName, double value)
+    {
+        writeAttribute(attrName, value);
+    }
+
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
      */
-    void addAttribute(const char *attrName, float value);
-    /**
-     * Add an attribute which represents a distance, measured in pt
-     * The number is written out with the highest possible precision
-     * (unlike QString::number and setNum, which default to 6 digits),
-     * and the unit name ("pt") is appended to it.
-     */
-    void addAttributePt(const char *attrName, double value);
-    /**
-     * Add an attribute which represents a distance, measured in pt
-     * The number is written out with the highest possible precision
-     * (unlike QString::number and setNum, which default to 6 digits),
-     * and the unit name ("pt") is appended to it.
-     */
-    void addAttributePt(const char *attrName, float value);
+    void writeAttribute(QAnyStringView attrName, float value);
 
-    /// Overloaded version of the one taking a const char* argument, for convenience
-    void addAttribute(const char *attrName, const QByteArray &value);
+    [[deprecated]]
+    inline void addAttribute(QAnyStringView attrName, float value)
+    {
+        writeAttribute(attrName, value);
+    }
+
+    /**
+     * Add an attribute which represents a distance, measured in pt
+     * The number is written out with the highest possible precision
+     * (unlike QString::number and setNum, which default to 6 digits),
+     * and the unit name ("pt") is appended to it.
+     */
+    void writeAttributePt(QAnyStringView attrName, double value);
+
+    [[deprecated]]
+    inline void addAttributePt(QAnyStringView attrName, double value)
+    {
+        writeAttributePt(attrName, value);
+    }
+
+    /**
+     * Add an attribute which represents a distance, measured in pt
+     * The number is written out with the highest possible precision
+     * (unlike QString::number and setNum, which default to 6 digits),
+     * and the unit name ("pt") is appended to it.
+     */
+    void writeAttributePt(QAnyStringView attrName, float value);
+
+    [[deprecated]]
+    inline void addAttributePt(QAnyStringView attrName, float value)
+    {
+        writeAttributePt(attrName, value);
+    }
 
     /**
      * Add an attribute to the current element.
      */
-    void addAttribute(const char *attrName, const char *value);
+    [[deprecated]]
+    void addAttribute(QAnyStringView attrName, QAnyStringView value)
+    {
+        QXmlStreamWriter::writeAttribute(attrName, value);
+    }
+
     /**
      * Terminate the current element. After this you should start a new one (sibling),
      * add a sibling text node, or close another one (end of siblings).
      */
-    void endElement();
-    /**
-     * Overloaded version of addTextNode( const char* ),
-     * which is a bit slower because it needs to convert @p str to utf8 first.
-     */
-    inline void addTextNode(const QString &str)
+    [[deprecated]]
+    inline void endElement()
     {
-        addTextNode(str.toUtf8());
+        writeEndDocument();
     }
-    /// Overloaded version of the one taking a const char* argument
-    void addTextNode(const QByteArray &cstr);
+
     /**
      * @brief Adds a text node as a child of the current element.
      *
@@ -141,18 +202,11 @@ public:
      * E.g. addTextNode( "foo" ) inside a \<p\> element gives \<p\>foo\</p\>,
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */
-    void addTextNode(const char *cstr);
-
-    /**
-     * @brief Adds a processing instruction
-     *
-     * This writes a processing instruction, like <?foo bar blah?>, where foo
-     * is the target, and the rest is the data.
-     *
-     * Processing instructions are used in XML to keep processor-specific
-     * information in the text of the document.
-     */
-    void addProcessingInstruction(const char *cstr);
+    [[deprecated("use writeCharacters")]]
+    inline void addTextNode(QAnyStringView text)
+    {
+        writeCharacters(text);
+    }
 
     /**
      * This is quite a special-purpose method, not for everyday use.
@@ -160,7 +214,7 @@ public:
      * as a child of the current element. The string is supposed to be escaped
      * for XML already, so it will usually come from another KoXmlWriter.
      */
-    void addCompleteElement(const char *cstr);
+    void addCompleteElement(QAnyStringView cstr);
 
     /**
      * This is quite a special-purpose method, not for everyday use.
@@ -179,25 +233,25 @@ public:
      * when we add support for encrypting/signing.
      * @note OASIS-specific
      */
-    void addManifestEntry(const QString &fullPath, const QString &mediaType);
+    void addManifestEntry(QAnyStringView fullPath, QAnyStringView mediaType);
 
     /**
      * Special helper for writing config item into settings.xml
      * @note OASIS-specific
      */
-    void addConfigItem(const QString &configName, const QString &value);
+    void addConfigItem(QAnyStringView configName, QAnyStringView value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, bool value);
+    void addConfigItem(QAnyStringView configName, bool value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, int value);
+    void addConfigItem(QAnyStringView configName, int value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, double value);
+    void addConfigItem(QAnyStringView configName, double value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, float value);
+    void addConfigItem(QAnyStringView configName, float value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, long value);
+    void addConfigItem(QAnyStringView configName, long value);
     /// @note OASIS-specific
-    void addConfigItem(const QString &configName, short value);
+    void addConfigItem(QAnyStringView configName, short value);
 
     // TODO addConfigItem for datetime and base64Binary
 
@@ -219,74 +273,6 @@ public:
      * @note OASIS-specific
      */
     void addTextSpan(const QString &text, const QMap<int, int> &tabCache);
-
-    /**
-     * @return the current indentation level.
-     * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
-     */
-    int indentLevel() const;
-
-    /**
-     * Return all the open tags at this time, root element first.
-     */
-    QList<const char *> tagHierarchy() const;
-
-    /**
-     * Return the so far written XML as string for debugging purposes.
-     */
-    QString toString() const;
-
-private:
-    struct Tag {
-        Tag(const char *t = nullptr, bool ind = true)
-            : tagName(t)
-            , hasChildren(false)
-            , lastChildIsText(false)
-            , openingTagClosed(false)
-            , indentInside(ind)
-        {
-        }
-
-        const char *tagName;
-        bool hasChildren : 1; ///< element or text children
-        bool lastChildIsText : 1; ///< last child is a text node
-        bool openingTagClosed : 1; ///< true once the '\>' in \<tag a="b"\> is written out
-        bool indentInside : 1; ///< whether to indent the contents of this tag
-    };
-
-    /// Write out \n followed by the number of spaces required.
-    void writeIndent();
-
-    // writeCString is much faster than writeString.
-    // Try to use it as much as possible, especially with constants.
-    void writeString(const QString &str);
-
-    // TODO check return value!!!
-    inline void writeCString(const char *cstr)
-    {
-        device()->write(cstr, qstrlen(cstr));
-    }
-    inline void writeChar(char c)
-    {
-        device()->putChar(c);
-    }
-    inline void closeStartElement(Tag &tag)
-    {
-        if (!tag.openingTagClosed) {
-            tag.openingTagClosed = true;
-            writeChar('>');
-        }
-    }
-    char *escapeForXML(const char *source, int length) const;
-    bool prepareForChild();
-    void prepareForTextNode();
-    void init();
-
-    class Private;
-    Private *const d;
-
-    KoXmlWriter(const KoXmlWriter &) = delete; // forbidden
-    KoXmlWriter &operator=(const KoXmlWriter &) = delete; // forbidden
 };
 
 #endif /* XMLWRITER_H */

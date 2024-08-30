@@ -33,9 +33,9 @@ public:
         , shapeWriter(nullptr)
         , saveInlineImages(true)
     {
-        styleWriter = new KoXmlWriter(&styleBuffer, 1);
+        styleWriter = new KoXmlWriter(&styleBuffer);
         styleWriter->startElement("defs");
-        shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
+        shapeWriter = new KoXmlWriter(&shapeBuffer);
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
         userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);

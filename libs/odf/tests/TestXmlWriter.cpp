@@ -156,7 +156,7 @@ void TestXmlWriter::testProcessingInstruction()
 {
     setup();
     writer->startElement("p", false /*no indent*/);
-    writer->addProcessingInstruction("opendocument foobar");
+    writer->writeProcessingInstruction("opendocument foobar");
     writer->addTextSpan(QString::fromLatin1("foo"));
     writer->endElement();
     QCOMPARE(content(), QString("<p><?opendocument foobar?>foo</p>"));
