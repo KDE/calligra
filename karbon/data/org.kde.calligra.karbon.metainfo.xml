@@ -260,6 +260,7 @@
       <li xml:lang="eo">Tavola fiksilo por facila uzado de kompleksaj dokumentoj inkluzive de antaŭrigardaj bildetoj, subteno por grupigo de formoj per trenado kaj faligo, kontrolado de videbleco de formoj aŭ ŝlosado.</li>
       <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas y agrupación de figuras mediante la operación de arrastrar y soltar, controlando la visibilidad de las figuras o su bloqueo.</li>
       <li xml:lang="et">Kihtide dokk keerukamate dokumentide hõlpsaks töötlemiseks, kaasa arvatud pisipiltide eelvaatlus, kujundite rühmitamise toetamine ainult lohistamisega, kujundite nähtavuse ja lukustamise määramine</li>
+      <li xml:lang="eu">Geruza zamaketaria dokumentu konplexuak erraz maneiatzeko, koadro txikien aurreikuspegia, arrastatu eta jareginez formak taldekatzeko euskarria, eta formen ikusgaitasuna kontrolatzea edo giltzatzea barne</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
       <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
@@ -290,6 +291,7 @@
       <li xml:lang="eo">Altnivela vojoredaktilo kun bonegaj surkanvasaj redaktaj kapabloj</li>
       <li xml:lang="es">Herramienta de edición avanzada de rutas con grandes capacidades de edición en el lienzo</li>
       <li xml:lang="et">Täiustatud kompleksjoone muutmise tööriist suurepäraste otse lõuendil redigeerimise võimalustega</li>
+      <li xml:lang="eu">ibilbideak editatzeko tresna aurreratua, mihisean editatzeko gaitasun itzelekin</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
       <li xml:lang="fr">Outil avancé d'édition d'emplacement avec des capacités d'édition dans les canevas performantes</li>
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
@@ -320,6 +322,7 @@
       <li xml:lang="eo">Diversaj desegnaj iloj por krei vojformojn inkluzive de desegna vojo, krajonilo kaj kaligrafia desegna ilo</li>
       <li xml:lang="es">Diversas herramientas de dibujo para crear figuras con rutas, entre las que se incluyen una herramienta de dibujo de rutas, una herramienta de pincel y una herramienta de dibujo caligráfico.</li>
       <li xml:lang="et">Mitmesugused kompleksjoontest kujundite loomise vahendid, sealhulgas kompleksjoone joonistamise tööriist, pliiatsitööriist ning kalligraafia loomise tööriist</li>
+      <li xml:lang="eu">Ibilbide-formak sortzeko marrazteko tresna batzuk, ibilbidea marrazteko tresna bat, arkatz tresna bat barne baita kaligrafia marrazteko tresna bat ere barne</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
       <li xml:lang="fr">Outils de dessin variés incluant un outil de création d'emplacement, un crayon ainsi qu'un outil pour la calligraphie</li>
       <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de rutas, incluíndo unha ferramenta de debuxo de rutas, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
@@ -350,6 +353,7 @@
       <li xml:lang="eo">Gradient- kaj ŝablono-iloj por facila surkanvasa redaktado de gradientaj kaj ŝablono-stiloj</li>
       <li xml:lang="es">Herramientas de degradados y patrones para una sencilla edición de estilos de degradados y patrones en el lienzo</li>
       <li xml:lang="et">Ülemineku- ja mustritööriistad üleminekute ja mustrite stiilide hõlpsaks redigeerimiseks otse lõuendil</li>
+      <li xml:lang="eu">Gradiente eta eredu tresnak, mihisean gradienteen eta ereduen estiloak editatzeko</li>
       <li xml:lang="fi">Työkalut liukuvärien ja täyttökuvioiden helppoon muokkaukseen</li>
       <li xml:lang="fr">Outils de gradient et de tramage pour l'édition facile de styles de gradients et de trames</li>
       <li xml:lang="gl">Ferramentas de gradacións e padróns para editar degradados e estilos de padróns facilmente sobre o lenzo.</li>
@@ -381,6 +385,7 @@
       <li xml:lang="eo">Altnivelaj klakinstalaĵoj por gvidita desegnado kaj redaktado (ekz. klakado al krado, gvidlinioj, padnodoj, limkestoj, ortogonalaj pozicioj, intersekciĝoj de vojformoj aŭ etendaĵoj de linioj kaj padoj)</li>
       <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo, ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
       <li xml:lang="et">Äärmiselt tulusad haardetööriistad juhtjoonte järgi joonistamiseks ja redigeerimiseks (nt tõmme alusvõrgule, juhtjooned, kompleksjoone sõlmed, piirdekastid, kompleksjoontest kujundite lõikekohad jms)</li>
+      <li xml:lang="eu">Marrazketa gidaturako eta editatzeko, maila goreneko atxikitze erraztasunak (adib. sareta, gida-lerro, ibilbideko nodo, kaxa edukitzaile, posizio ortogonal, ibilbide-formen edo lerroen luzapen ebakidura edo ibilbideetara atxikitzea)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
       <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, lignes de guidage, nœuds d'emplacement, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
       <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de rutas, caixas de límites, posicións ortogonais, cruzamento de formas de rutas ou extensións de liñas e rutas).</li>
@@ -443,6 +448,7 @@
       <li xml:lang="eo">Arta tekstformo kun subteno por sekvado de vojostrekoj (t.e. teksto sur vojo)</li>
       <li xml:lang="es">Forma de texto artístico con soporte para contornos de seguimiento de rutas (es decir, texto sobre una ruta)</li>
       <li xml:lang="et">Kunstiline tekstikujund, mis toetab kompleksjooni, st võimaldab asetada teksti kompleksjoonele</li>
+      <li xml:lang="eu">Testu forma artistikoa, ibilbide ingeradak jarraitzeko (adib. testua ibilbidean)</li>
       <li xml:lang="fi">Taiteelliset tekstimuodot polunseurantatuella</li>
       <li xml:lang="fr">Formes de texte artistiques prenant par exemple en charge la création de texte le long d'une courbe</li>
       <li xml:lang="gl">Forma de texto artístico que permite seguir o contorno de rutas (é dicir, texto sobre rutas).</li>
@@ -473,6 +479,7 @@
       <li xml:lang="eo">Kompleksaj vojoperacioj kaj efikoj kiel buleaj ar-operacioj, pado-platigo, rondigo kaj rafinado same kiel kirl/pinĉaj efikoj</li>
       <li xml:lang="es">Operaciones de ruta complejas y efectos como operaciones booleanas con conjuntos, aplanamiento de rutas, redondeo y refinación así como también efectos de arremolinar/apretar</li>
       <li xml:lang="et">Ka keerukamad kompleksjoone operatsioonid ja efektid, näiteks tõeväärtustega operatsioonid, kompleksjoonte lamendamine, ümardamine ja täpsustamine, keerise efekt jms</li>
+      <li xml:lang="eu">Ibilbide-eragiketa konplexuak eta efektuak, hala nola multzo boolearren eragiketak, ibilbidea lautzea, biribiltzea eta birfintzea baita zurrunbilo/atximur efektuak ere</li>
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
       <li xml:lang="fr">Opérations d'emplacements complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement.</li>
       <li xml:lang="gl">Operacións de rutas complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de rutas; así como efectos de xiro e picada.</li>
@@ -504,6 +511,7 @@
       <li xml:lang="eo">Etendebla skribante kromaĵojn por novaj iloj, formoj kaj dockers</li>
       <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y paneles</li>
       <li xml:lang="et">Laiendamisvõimalus pluginate kirjutamise abil uute tööriistade, kujundite ja dokkide tarbeks</li>
+      <li xml:lang="eu">Hedagarria, tresna berri, forma eta zamaketarietarako pluginak idatziz</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
@@ -543,6 +551,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
       <caption xml:lang="cs">Hlavní okno aplikace Karbon</caption>
       <caption xml:lang="es">Ventana principal de Karbon</caption>
+      <caption xml:lang="eu">Karbon-en leiho nagusia</caption>
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
       <caption xml:lang="it">Finestra principale di Karbon</caption>
       <caption xml:lang="ka">Karbon-ის მთავარი ფანჯარა</caption>
