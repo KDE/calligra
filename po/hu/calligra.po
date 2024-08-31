@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
 "PO-Revision-Date: 2015-09-08 10:39+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -791,65 +791,65 @@ msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "Beillesztés a kurzornál:"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "Csak nyomtatás, majd kilépés"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Új dokumentum létrehozása sablonnal"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template file"
 msgstr "Új dokumentum létrehozása sablonnal"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "A képernyő DPI értékének felülbírálása"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Exportálás PDF-be és kilépés"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Az exportált PDF fájlneve"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "a fájl betöltése és kilépés"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 "a fájl betöltése, az ablak és a folyamatjelző megjelenítése, majd kilépés"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "A profilkészítési adatokat tároló fájl neve"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "Fájl betöltése és mentése ODF-ként (hibakeresés céljából)."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -860,12 +860,12 @@ msgstr ""
 "Ez nem javasolt.\n"
 "Kérjük töltse le és telepítse helyette az x64-es verziót."
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritikus hiba"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, fuzzy, kde-format
 #| msgid ""
 #| "Essential application components could not be found.\n"
@@ -881,22 +881,22 @@ msgstr ""
 "Próbálja meg az újraindítást, a kbuildsycoca4.exe futtatását vagy az "
 "újratelepítést."
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Nem található sablon ehhez: %1 "
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Túl sok sablon található ehhez: %1"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "A(z) %1 nevű sablon betöltése nem sikerült."
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, fuzzy, kde-format
 #| msgid "No template found for: %1"
 msgid "No template found at: %1"

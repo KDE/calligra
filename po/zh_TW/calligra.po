@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
 "PO-Revision-Date: 2024-05-21 01:57+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -798,64 +798,64 @@ msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "在游標處貼上"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "只做列印然後離開"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "用樣本開啟新文件"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template file"
 msgstr "用樣本開啟新文件"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "覆蓋顯示的 DPI"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "只匯出到 PDF 然後離開"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "要匯出成 pdf 的檔名"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "只載入檔案就離開"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "載入檔案，顯示視窗與進度列，然後離開"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "要寫入設定資訊的檔名。"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "載入檔案，並將它存成 ODF 檔。主要為除錯用。"
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "要開啟的檔案或 URL"
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -866,12 +866,12 @@ msgstr ""
 "我們不建議此做法。\n"
 "請下載並安裝 x64 版本的應用程式。"
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, fuzzy, kde-format
 msgid "%1: Critical Error"
 msgstr "建立錯誤"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -879,22 +879,22 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到樣本給：%1 "
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "找到太多樣本給：%1"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "樣本 %1 載入失敗。"
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, fuzzy, kde-format
 #| msgid "No template found for: %1"
 msgid "No template found at: %1"

@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 14:02+0300\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
+"PO-Revision-Date: 2024-08-30 10:59+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -786,68 +786,67 @@ msgid "Paste offset:"
 msgstr "היסט הדבקה:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "הדבקה בסמן:"
+msgstr "הדבקה במקום של הסמן"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "רק הדפס וצא"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "פתיחת מסמך חדש שמבוסס על קובץ התבנית שסופק (שם desktopfile)"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "פתיחת מסמך חדש שמבוסס על קובץ התבנית שסופק"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "עקוף את הגדרת הנקודות לאינץ' של התצוגה"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "רק לייצא ל־PDF ולצאת"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "שם קובץ ל־PD מיוצא"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "פשוט לטעון את הקובץ ולצאת"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "לטעון את הקובץ, להציג את החלון וסרגל ההתקדמות ולצאת"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "שם קובץ שאליו ייכתבו פרטי השוואת הביצועים."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "לטעון קובץ ולשמור אותו כקובץ ODF. מיועד לניפוי שגיאות."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "קבצים או כתובות לפתיחה"
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -858,12 +857,12 @@ msgstr ""
 "זה לא מצב מומלץ.\n"
 "נא להוריד ולהתקין את מהדורת x64 במקום."
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: שגיאה משמעותית"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -874,22 +873,22 @@ msgstr ""
 "יכול להיות שזאת תקלה בהתקנה.\n"
 "נא לנסות להפעיל או להתקין מחדש."
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "לא נמצאה תבנית עבור: %1"
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "נמצאו יותר מדי תבניות עבור: %1"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "טעינת התבנית %1 לא הצליחה."
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, kde-format
 msgid "No template found at: %1"
 msgstr "לא נמצאה תבנית תחת: %1"
@@ -4535,7 +4534,7 @@ msgstr ""
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -5049,14 +5048,13 @@ msgstr "מרחק:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "מאפייני צורה"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "אין תמונה זמינה."
+msgstr "אין מאפיינים זמינים"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5216,32 +5214,28 @@ msgid "Icon Size"
 msgstr "גודל סמלים"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "הגדרות עמוד"
+msgstr "פריסה"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "אוטומטי"
+msgstr "&אוטומטית"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "משמאל לימין"
+msgstr "מ&שמאל לימין"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "מימין לשמאל"
+msgstr "מ&ימין לשמאל"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

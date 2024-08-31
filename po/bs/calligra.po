@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
 "PO-Revision-Date: 2015-02-26 18:25+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -794,66 +794,66 @@ msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "Zalijepi na kursor:"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "Samo odštampaj i izađi"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Napravi novi dokument prema šablonu"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template file"
 msgstr "Napravi novi dokument prema šablonu"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "Prevaziđi DPI ekrana"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Samo izvezi u PDF i izađi"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Ime datoteke za izvoz-pdf"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "samo učitaj datoteku i izađi"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "učitaj datoteku, pokaži prozor i traku napretka a zatim izađi"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Ime datoteke u koju se pišu informacija profilisanja."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Učitaj datoteku i sačuvaj je kao datoteku ODF. Namijenjeno za otklanjanje "
 "grešaka."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -864,12 +864,12 @@ msgstr ""
 "To nije preporučljivo.\n"
 "Molim preuzmite i instalirajte x64 gradnju umjesto toga."
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritična greška"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -880,22 +880,22 @@ msgstr ""
 "To bi moglao biti problem  instalacije.\n"
 "Pokušajte ponovno pokrenuti ili reinstalirati."
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Uzorak nije pronađen za:%1"
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Pronađeno je previše šablona za: %1"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Šablon %1 nije mogao da se učita."
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, fuzzy, kde-format
 #| msgid "No template found for: %1"
 msgid "No template found at: %1"

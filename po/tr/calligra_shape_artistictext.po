@@ -5,13 +5,13 @@
 # Anıl Özbek <ozbekanil@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2015.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-06-04 01:40+0300\n"
+"PO-Revision-Date: 2024-08-30 12:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -74,17 +74,17 @@ msgstr "Alt Simge"
 #: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
-msgstr "Başlangıca Çapala"
+msgstr "Başlangıca Sabitle"
 
 #: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
-msgstr "Ortaya Çapala"
+msgstr "Ortaya Sabitle"
 
 #: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
-msgstr "Sona Çapala"
+msgstr "Sona Sabitle"
 
 #: ArtisticTextTool.cpp:303
 #, kde-format
@@ -144,7 +144,7 @@ msgstr "Yol İliştir"
 #: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr "Metin çapasını değiştir"
+msgstr "Metin Sabitlemesini Değiştir"
 
 #: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"

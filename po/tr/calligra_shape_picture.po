@@ -5,13 +5,13 @@
 # Anıl Özbek <ozbekanil@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2015.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2023-05-29 12:32+0300\n"
+"PO-Revision-Date: 2024-08-30 12:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,27 +19,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr "Görseli değiştir"
+msgstr "Görseli Değiştir"
 
 #: ChangeImageCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Crop image"
-msgstr "Görseli kırp"
+msgstr "Görseli Kırp"
 
 #: ChangeImageCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Change image color mode"
-msgstr "Görselin renk kipini değiştir"
+msgstr "Görsel Renk Kipini Değiştir"
 
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Contour image (by image analysis)"
-msgstr "Görselin dış hatlarını belirle (görsel çözümleme ile)"
+msgstr "Görseli Konturla (Çözümlemeyle)"
 
 #: ClipCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -92,7 +92,7 @@ msgstr "Sıfırla"
 #: forms/wdgPictureTool.ui:148
 #, kde-format
 msgid "Contour (by image analysis)"
-msgstr "Dış Hatlar (görsel çözümleme ile)"
+msgstr "Kontur (çözümlemeyle)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
@@ -114,7 +114,7 @@ msgstr "Görsel"
 #: PictureShapeFactory.cpp:33
 #, kde-format
 msgid "Image shape that can display jpg, png etc."
-msgstr "Jpg, png gibi biçimleri içeren görsel şekli."
+msgstr "JPG, PNG gibi biçimleri içeren görsel şekli."
 
 #: PictureTool.cpp:94
 #, kde-format

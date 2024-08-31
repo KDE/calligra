@@ -1,6 +1,7 @@
-# POT_PART_NORMAL only
-# Copyright (C) 2024 This file is copyright:
-# This file is distributed under the same license as the calligra package.
+# Translation of calligra_shape_webshape.po to Catalan (Valencian)
+# Copyright (C) 2024 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""

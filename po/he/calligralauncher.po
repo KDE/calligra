@@ -1,0 +1,83 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-08-30 10:40+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.05.2\n"
+
+#: main.cpp:51
+#, kde-format
+msgctxt "@title"
+msgid "Calligra Launcher"
+msgstr "משגר Calligra"
+
+#: main.cpp:53
+#, kde-format
+msgid "Calligra Launcher"
+msgstr "משגר Calligra"
+
+#: main.cpp:55
+#, kde-format
+msgid "(c) 2024"
+msgstr "(c) 2024"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Carl Schwan"
+msgstr "קארל שוואן"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Maintainer"
+msgstr "מתחזק"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "צוות התרגום של KDE ישראל"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde-l10n-he@kde.org"
+
+#: Main.qml:48
+#, kde-format
+msgid "Calligra Words"
+msgstr "Calligra מילים"
+
+#: Main.qml:53
+#, kde-format
+msgid "Calligra Stage"
+msgstr "Calligra במה"
+
+#: Main.qml:58
+#, kde-format
+msgid "Calligra Sheets"
+msgstr "Calligra גיליונות"
+
+#: Main.qml:63
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: Main.qml:68
+#, kde-format
+msgid "Quit"
+msgstr "יציאה"

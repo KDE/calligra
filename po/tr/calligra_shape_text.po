@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 14:07+0300\n"
+"PO-Revision-Date: 2024-08-30 12:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -351,7 +351,7 @@ msgstr "Arka Plan Rengi"
 #: dialogs/SimpleTableWidget.ui:111 dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
 #: dialogs/ChangeConfigureDialog.ui:158
@@ -535,7 +535,7 @@ msgstr "Küçük büyük harfler"
 #: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
 msgid "Uppercase"
-msgstr "Büyük harf"
+msgstr "BÜYÜK harf"
 
 #: dialogs/CharacterHighlighting.cpp:301
 #, kde-format
@@ -1226,10 +1226,9 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
-"Web belgelerine bağlantılar ekleyin. Hem URL hem de bağlantı için etiket "
-"girebilirsiniz\n"
-" veya yalnızca URL’yi girip \"URL’den Başlığı Getir\" düğmesine "
-"tıklayabilirsiniz"
+"Web belgelerine bağlantılar ekleyin. Hem URL hem de bağlantı için\n"
+"etiket girebilirsiniz veya yalnızca URL’yi girip “URL’den Başlığı\n"
+"Getir” düğmesine tıklayabilirsiniz."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
@@ -1287,7 +1286,8 @@ msgid ""
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
 "Bağlantılara yer imi koyun. Yer imi oluşturmak için\n"
-"Bağlantılar ve Yer İmleri alanından \"Yer İmleri\"ne tıklayın"
+"Bağlantılar ve Yer İmleri alanından “Yer İmleri”ne\n"
+"tıklayın."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:132
@@ -1431,7 +1431,7 @@ msgstr "Resim"
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr "Görsel Yükle..."
+msgstr "Görsel Yükle…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
@@ -1458,7 +1458,7 @@ msgstr "Yer İmini Yeniden Adlandır"
 #: dialogs/ManageBookmarkDialog.cpp:72 dialogs/ManageBookmarkDialog.cpp:113
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "\"%1\" adlı bir yer imi zaten var."
+msgstr "“%1” adlı bir yer imi zaten var."
 
 #: dialogs/ManageBookmarkDialog.cpp:105
 #, kde-format
@@ -1543,43 +1543,43 @@ msgstr "Belge"
 #: dialogs/NotesConfigurationDialog.ui:233
 #, kde-format
 msgid "1, 2, 3, ..."
-msgstr "1, 2, 3, ..."
+msgstr "1, 2, 3, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+msgstr "a, b, c, …, aa, ab, …, ba, bb, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+msgstr "A, B, C, …, AA, AB, …, BA, BB, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+msgstr "a, b, c, …, aa, bb, …, aaa, bbb, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+msgstr "A, B, C, …, AA, BB, …, AAA, BBB, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr "i, ii, iii, ..."
+msgstr "i, ii, iii, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr "I,II,III, ..."
+msgstr "I, II, III, …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1644,7 +1644,7 @@ msgstr "Hiçbir şey"
 #: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
-msgstr "Bir liste resmi seç"
+msgstr "Bir liste görseli seç"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
@@ -1733,7 +1733,7 @@ msgstr "Genişlik"
 #: dialogs/ParagraphBulletsNumbers.ui:264
 #, kde-format
 msgid "Insert Image"
-msgstr "Resim Ekle"
+msgstr "Görsel Ekle"
 
 #. i18n: ectx: property (text), widget (QLabel, heightLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:274
@@ -1745,7 +1745,7 @@ msgstr "Yükseklik"
 #: dialogs/ParagraphBulletsNumbers.ui:284
 #, kde-format
 msgid "Browse..."
-msgstr "Göz At..."
+msgstr "Göz At…"
 
 #: dialogs/ParagraphDecorations.cpp:18
 #, kde-format
@@ -1806,7 +1806,7 @@ msgstr "Dekorasyonlar"
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
 msgid "Drop Caps"
-msgstr "Büyük Harfleri Küçült"
+msgstr "İlk Harfi Büyüt"
 
 #: dialogs/ParagraphIndentSpacing.cpp:28
 #, kde-format
@@ -1981,7 +1981,7 @@ msgstr "Seçimleri böl"
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr "Paragraf ekle..."
+msgstr "Paragraf ekle…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
@@ -2062,8 +2062,7 @@ msgstr "Dipnot"
 #: dialogs/SimpleInsertWidget.ui:20
 #, kde-format
 msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
-msgstr ""
-"Aşağıdaki \"Başvurular\" ve \"Şekil Ekle\" tutturucusundan diğer eklemeler"
+msgstr "Aşağıdaki “Başvurular” ve “Şekil Ekle” tutturucusundan diğer eklemeler"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertLink)
 #: dialogs/SimpleLinksWidget.ui:34
@@ -2102,12 +2101,12 @@ msgstr "Sil"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr "Düzenle..."
+msgstr "Düzenle…"
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
 msgid "Define New Level Format..."
-msgstr "Yeni Düzey Biçimi Tanımla..."
+msgstr "Yeni Düzey Biçimi Tanımla…"
 
 #: dialogs/SimpleParagraphWidget.cpp:313
 #, kde-format
@@ -2134,7 +2133,7 @@ msgstr "İçindekiler"
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr "Kenarlık Rengini Ayarla..."
+msgstr "Kenarlık Rengini Ayarla…"
 
 #: dialogs/SimpleTableWidget.cpp:173
 #, kde-format
@@ -2160,7 +2159,7 @@ msgstr "Yeni Biçem"
 #: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
-msgstr "'%1' adında farklı bir biçem zaten mevcut. Lütfen başka bir ad seçin."
+msgstr "“%1” adlı bir biçem halihazırda var. Lütfen başka bir ad seçin."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:52 TextTool.cpp:2253
@@ -2302,7 +2301,7 @@ msgstr "Kullanılabilir çevre boşluklarına sığdır"
 #: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr "İçindekiler Tablosu - Yapılandır"
+msgstr "İçindekiler Tablosu — Yapılandır"
 
 #: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
@@ -2387,7 +2386,7 @@ msgstr "Biçem"
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr "İçindekiler Tablosu - Biçemleri Yapılandır"
+msgstr "İçindekiler Tablosu — Biçemleri Yapılandır"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
@@ -2419,7 +2418,7 @@ msgstr "Belgeye bir İçindekiler Tablosu ekler."
 #: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
 msgid "Insert Custom..."
-msgstr "Özel Ekle..."
+msgstr "Özel Ekle…"
 
 #: ReferencesTool.cpp:120
 #, kde-format
@@ -2429,7 +2428,7 @@ msgstr "Belgeye özel bir İçindekiler Tablosu ekler."
 #: ReferencesTool.cpp:122
 #, kde-format
 msgid "Configure..."
-msgstr "Yapılandır..."
+msgstr "Yapılandır…"
 
 #: ReferencesTool.cpp:124
 #, kde-format
@@ -2464,7 +2463,7 @@ msgstr "Etiketli Sonnot Ekle"
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
-msgstr "Ayarlar..."
+msgstr "Ayarlar…"
 
 #: ReferencesTool.cpp:159
 #, kde-format
@@ -2566,7 +2565,7 @@ msgstr "Yer imi boş olamaz"
 #: ReferencesTool.cpp:371
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr "Yinelenmiş ad. \"Yer İmlerini Yönet\"e tıklayın"
+msgstr "Yinelenmiş ad. “Yer İmlerini Yönet”e tıklayın"
 
 #: ReferencesTool.cpp:372
 #, kde-format
@@ -2762,7 +2761,7 @@ msgstr "Bu noktadan sonraki bütün metin sonraki sayfaya taşınacaktır."
 #: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
-msgstr "Yazıtipi..."
+msgstr "Yazıtipi…"
 
 #: TextTool.cpp:364
 #, kde-format
@@ -2782,7 +2781,7 @@ msgstr "Yazıtipi Boyutu"
 #: TextTool.cpp:374
 #, kde-format
 msgid "Text Color..."
-msgstr "Metin Rengi..."
+msgstr "Metin Rengi…"
 
 #: TextTool.cpp:375
 #, kde-format
@@ -2792,7 +2791,7 @@ msgstr "Metin Rengi"
 #: TextTool.cpp:381
 #, kde-format
 msgid "Background Color..."
-msgstr "Arka Plan Rengi..."
+msgstr "Arka Plan Rengi…"
 
 #: TextTool.cpp:382
 #, kde-format
@@ -2902,7 +2901,7 @@ msgstr "Bir kenarlık biçemi seç ve bir tabloyu bu biçemle boya"
 #: TextTool.cpp:455
 #, kde-format
 msgid "Paragraph..."
-msgstr "Paragraf..."
+msgstr "Paragraf…"
 
 #: TextTool.cpp:458
 #, kde-format
@@ -2927,7 +2926,7 @@ msgstr ""
 #: TextTool.cpp:464
 #, kde-format
 msgid "Style Manager..."
-msgstr "Biçem Yöneticisi..."
+msgstr "Biçem Yöneticisi…"
 
 #: TextTool.cpp:466
 #, kde-format
@@ -2946,7 +2945,7 @@ msgstr ""
 #: TextTool.cpp:474
 #, kde-format
 msgid "Special Character..."
-msgstr "Özel Karakter..."
+msgstr "Özel Karakter…"
 
 #: TextTool.cpp:478
 #, kde-format

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
 "PO-Revision-Date: 2023-05-18 11:50+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -839,64 +839,64 @@ msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "Liitä kohdistimen kohdalle:"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "Tulosta ja lopeta heti"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Avaa uusi tiedosto käyttäen mallipohjaa (työpöytätiedostonimi)"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Avaa uusi tiedosto käyttäen mallipohjaa"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "Ohita näytön DPI"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Vie PDF:ksi ja lopeta heti"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Viedyn PDF:n tiedostonimi"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "avaa tiedosto ja lopeta heti"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "avaa tiedosto, näytä ikkuna ja edistymispalkki ja lopeta heti"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Tiedostonimi, johon profilointitieto kirjoitetaan."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Avaa tiedosto ja tallenna se ODF-tiedostoksi. Tarkoitettu "
 "virheenpaikannukseen."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Avattavat tiedostot tai verkko-osoitteet"
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -907,12 +907,12 @@ msgstr ""
 "Tätä ei suositella.\n"
 "Lataa ja asenna mieluummin x64-ohjelma."
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Vakava virhe"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -923,22 +923,22 @@ msgstr ""
 "Tämä voi merkitä asennusvirhettä.\n"
 "Yritä käynnistää tai asentaa uudelleen."
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Mallipohjaa ei löytynyt kohteelle: %1"
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Löytyi liian monta mallipohjaa kohteelle: %1"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallipohjaa %1 ei voitu ladata."
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Mallipohjaa ei löytynyt: %1"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-08-31 00:39+0000\n"
 "PO-Revision-Date: 2024-08-27 12:17+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -784,63 +784,63 @@ msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "Ielīmēt pie kursora"
 
-#: main/KoApplication.cpp:191
+#: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
 msgstr "Tikai izdrukāt un iziet"
 
-#: main/KoApplication.cpp:193
+#: main/KoApplication.cpp:196
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
 "Atvērt jaunu dokumentu pēc norādītās veidnes (darbvirsmas datnes nosaukuma)"
 
-#: main/KoApplication.cpp:194
+#: main/KoApplication.cpp:197
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Atvērt jaunu dokumentu pēc dotās veidnes datnes"
 
-#: main/KoApplication.cpp:195
+#: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
 msgstr "Aizstāt ekrāna DPI"
 
-#: main/KoApplication.cpp:196
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Tikai eksportēt uz PDF un iziet"
 
-#: main/KoApplication.cpp:197
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Datnes nosaukums PDF eksportam"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "tikai ielādēt datni un pēc tam iziet"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "ielādēt datni, parādīt logu un progresa joslu un pēc tam iziet"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Datnes nosaukums informācijas profilēšanai."
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "Ielādēt datni un to saglabāt kā ODF datni. Paredzēts atkļūdošanai."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Atveramā(-ās) datne(-es) vai adrese(-es)"
 
-#: main/KoApplication.cpp:217
+#: main/KoApplication.cpp:220
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -852,12 +852,12 @@ msgstr ""
 "To neiesakām.\n"
 "Lūdzu, lejupielādējiet un šīs instalācijas vietā instalējiet x64 būvējumu."
 
-#: main/KoApplication.cpp:257
+#: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: kritiska kļūda"
 
-#: main/KoApplication.cpp:258
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -868,22 +868,22 @@ msgstr ""
 "Iespējams, ir problēma ar instalāciju.\n"
 "Mēģiniet pārstartēt ierīci vai pārinstalēt programmu."
 
-#: main/KoApplication.cpp:495
+#: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Nav atrasta %1 veidne"
 
-#: main/KoApplication.cpp:498
+#: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 atrastas pārāk daudzas veidnes"
 
-#: main/KoApplication.cpp:520 main/KoApplication.cpp:537
+#: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Problēma ar veidnes „%1“ ielādēšanu."
 
-#: main/KoApplication.cpp:527
+#: main/KoApplication.cpp:530
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Nav atrasta veidne: %1"
