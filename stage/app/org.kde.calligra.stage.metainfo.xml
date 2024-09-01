@@ -130,7 +130,7 @@
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lv">Iespējas:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
-    <p xml:lang="pl">Cechy:</p>
+    <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ru">Возможности:</p>
@@ -299,6 +299,7 @@
       <caption xml:lang="it">La finestra principale di Calligra Stage</caption>
       <caption xml:lang="ka">Calligra Stage-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="nl">Hoofdvenster van Calligra Stage</caption>
+      <caption xml:lang="pl">Główne okno Sceny Calligry</caption>
       <caption xml:lang="sl">Glavno okno Calligra Stage</caption>
       <caption xml:lang="sv">Calligra Stage huvudfönster</caption>
       <caption xml:lang="tr">Calligra Sahne ana penceresi</caption>
