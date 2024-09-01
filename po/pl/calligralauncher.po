@@ -1,33 +1,33 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
+# SPDX-FileCopyrightText: 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 #
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-26 00:38+0000\n"
-"PO-Revision-Date: 2024-08-30 10:40+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: צוות התרגום של KDE ישראל\n"
-"Language: he\n"
+"PO-Revision-Date: 2024-08-31 07:08+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
-"n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: main.cpp:51
 #, kde-format
 msgctxt "@title"
 msgid "Calligra Launcher"
-msgstr "משגר Calligra"
+msgstr "Uruchamiacz Calligry"
 
 #: main.cpp:53
 #, kde-format
 msgid "Calligra Launcher"
-msgstr "משגר Calligra"
+msgstr "Uruchamiacz Calligry"
 
 #: main.cpp:55
 #, kde-format
@@ -38,40 +38,40 @@ msgstr "(c) 2024"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Carl Schwan"
-msgstr "קארל שוואן"
+msgstr "Carl Schwan"
 
 #: main.cpp:56
 #, kde-format
 msgctxt "@info:credit"
 msgid "Maintainer"
-msgstr "מתחזק"
+msgstr "Opiekun"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "צוות התרגום של KDE ישראל"
+msgstr "Łukasz Wojniłowicz"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "kde-l10n-he@kde.org"
+msgstr "lukasz.wojnilowicz@gmail.com"
 
 #: Main.qml:48
 #, kde-format
 msgid "Calligra Words"
-msgstr "Calligra מילים"
+msgstr "Słowa Calligra"
 
 #: Main.qml:53
 #, kde-format
 msgid "Calligra Stage"
-msgstr "Calligra במה"
+msgstr "Scena Calligra"
 
 #: Main.qml:58
 #, kde-format
 msgid "Calligra Sheets"
-msgstr "Calligra גיליונות"
+msgstr "Arkusze Calligra"
 
 #: Main.qml:63
 #, kde-format
@@ -81,4 +81,4 @@ msgstr "Karbon"
 #: Main.qml:68
 #, kde-format
 msgid "Quit"
-msgstr "יציאה"
+msgstr "Zakończ"

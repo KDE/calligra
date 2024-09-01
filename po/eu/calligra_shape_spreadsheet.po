@@ -1,0 +1,156 @@
+# Translation for calligra_shape_spreadsheet.po to Euskara/Basque (eu).
+# POT_PART_NORMAL only
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.#
+# SPDX-FileCopyrightText: 2024 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
+#
+# Translators:
+# SPDX-FileCopyrightText: 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-08-31 18:57+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.08.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Iñigo Salvador Azurmendi"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "xalba@ni.eus"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
+#, kde-format
+msgid "Rename"
+msgstr "Berrizendatu"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Gehitu"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Kendu"
+
+#: SheetsEditor.cpp:124
+#, kde-format
+msgid "Enter Name:"
+msgstr "Sartu izena:"
+
+#: TableShape.cpp:300
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Dokumentu honek urrutiko dokumentu baterako kanpoko esteka bat du\n"
+"%1"
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Baieztatzea beharrezkoa da"
+
+#: TableShape.cpp:302
+#, kde-format
+msgid "Download"
+msgstr "Zama-jaitsi"
+
+#: TableShape.cpp:303
+#, kde-format
+msgid "Skip"
+msgstr "Saltatu"
+
+#: TableShapeFactory.cpp:35
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Kalkulu-orria"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Kalkulu-orri forma"
+
+#: TableTool.cpp:211
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Inportatu OpenDocument kalkulu-orri fitxategia"
+
+#: TableTool.cpp:212
+#, kde-format
+msgid "Import"
+msgstr "Inportatu"
+
+#: TableTool.cpp:216
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Esportatu OpenDocument kalkulu-orri fitxategia"
+
+#: TableTool.cpp:217
+#, kde-format
+msgid "Export"
+msgstr "Esportatu"
+
+#: TableTool.cpp:696
+#, kde-format
+msgid "Sheets"
+msgstr "Orriak"
+
+#: TableTool.cpp:738
+#, kde-format
+msgid "Sheet:"
+msgstr "Orria:"
+
+#: TableTool.cpp:740
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Hautatutako orria"
+
+#: TableTool.cpp:754
+#, kde-format
+msgid "View Options"
+msgstr "Ikuspegi aukerak"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Taula editatzea"
+
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
+#, kde-format
+msgid "Area is too large."
+msgstr "Azalera handiegia da."
+
+#: ToolHeaders.cpp:418
+#, kde-format
+msgid "Hide Row"
+msgstr "Ezkutatu errenkada"
+
+#: ToolHeaders.cpp:420
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Altuera: %1 %2"
+
+#: ToolHeaders.cpp:1031
+#, kde-format
+msgid "Hide Column"
+msgstr "Ezkutatu zutabea"
+
+#: ToolHeaders.cpp:1033
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Zabalera: %1 %2"

@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-31 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 12:17+0200\n"
+"PO-Revision-Date: 2024-08-31 07:07+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -788,11 +788,10 @@ msgid "Paste offset:"
 msgstr "Przesunięcie wklejania:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Wklej przy kursorze:"
+msgstr "Wklej w miejscu wskaźnika"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -4595,13 +4594,13 @@ msgstr "Ten dokument nie wspiera szyfrowania"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Nieustawione"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format

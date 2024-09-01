@@ -1,35 +1,37 @@
+# Translation for calligra_shape_webshape.po to Euskara/Basque (eu).
 # POT_PART_NORMAL only
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>.
 #
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# Translators:
+# SPDX-FileCopyrightText: 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-08-30 10:36+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: צוות התרגום של KDE ישראל\n"
-"Language: he\n"
+"PO-Revision-Date: 2024-08-30 20:12+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
-"n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #: WebShapeFactory.cpp:30
 #, kde-format
 msgid "Web Shape"
-msgstr "צורה מהאינטרנט"
+msgstr "Web-forma"
 
 #: WebShapeFactory.cpp:32
 #, kde-format
 msgid "A web shape"
-msgstr "צורה מהאינטרנט"
+msgstr "Web-forma bat"
 
 #: WebToolFactory.cpp:31
 #, kde-format
 msgid "Web shape editing"
-msgstr "עריכת צורה מהאינטרנט"
+msgstr "Web-forma editatzea"
