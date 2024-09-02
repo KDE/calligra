@@ -50,9 +50,11 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
 {
     QGridLayout *containerLayout = new QGridLayout;
 
+    // Todo enable checkbox again when preview doesn't close popup
     m_previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
     m_previewCheckBox->setChecked(loadPreviewConfig());
-    m_showAutomaticPreview = m_previewCheckBox->isChecked();
+    m_previewCheckBox->hide();
+    m_showAutomaticPreview = false; // m_previewCheckBox->isChecked();
 
     QFont viewWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
