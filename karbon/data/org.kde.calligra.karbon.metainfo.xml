@@ -571,6 +571,12 @@
     <binary>karbon</binary>
   </provides>
   <releases>
+    <release version="4.0.1" date="2024-09-03">
+      <url>https://carlschwan.eu/2024/09/02/calligra-office-4.0.1/</url>
+      <description>
+        <p>This release add flatpak support to the Calligra Office suite.</p>
+      </description>
+    </release>
     <release version="4.0.0" date="2024-08-27">
       <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
       <description>
