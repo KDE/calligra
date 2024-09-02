@@ -40,12 +40,13 @@
 #include <QApplication>
 #include <QButtonGroup>
 #include <QClipboard>
-#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QInputDialog>
 #include <QItemSelection>
 #include <QMenu>
 #include <QMimeData>
 #include <QToolButton>
+#include <QVBoxLayout>
 
 #include <algorithm>
 
@@ -75,20 +76,29 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 {
     setWindowTitle(i18n("Document"));
 
-    QWidget *mainWidget = new QWidget(this);
-    QGridLayout *layout = new QGridLayout(mainWidget);
-    layout->addWidget(m_sectionView = new KoDocumentSectionView(mainWidget), 0, 0, 1, -1);
+    auto mainWidget = new QWidget(this);
+    auto vbox = new QVBoxLayout(mainWidget);
+    vbox->setContentsMargins({});
+    vbox->setSpacing(0);
 
-    QToolButton *button = new QToolButton(mainWidget);
+    vbox->addWidget(m_sectionView = new KoDocumentSectionView(mainWidget));
+    m_sectionView->setProperty("_breeze_borders_sides", QVariant::fromValue(QFlags{Qt::BottomEdge}));
+
+    auto buttonLayout = new QHBoxLayout(this);
+    buttonLayout->setContentsMargins(4, 4, 4, 3);
+    buttonLayout->setSpacing(4);
+    vbox->addLayout(buttonLayout);
+
+    auto button = new QToolButton(mainWidget);
     button->setIcon(koIcon("list-add"));
     if (pageType == KoPageApp::Slide) {
         button->setToolTip(i18n("Add a new slide or layer"));
     } else {
         button->setToolTip(i18n("Add a new page or layer"));
     }
-    layout->addWidget(button, 1, 0);
+    buttonLayout->addWidget(button);
 
-    QMenu *menu = new QMenu(button);
+    auto menu = new QMenu(button);
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
     menu->addAction(koIcon("document-new"), (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page"), this, &KoPADocumentStructureDocker::addPage);
@@ -101,23 +111,25 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     button->setIcon(koIcon("list-remove"));
     button->setToolTip(i18n("Delete selected objects"));
     m_buttonGroup->addButton(button, Button_Delete);
-    layout->addWidget(button, 1, 1);
+    buttonLayout->addWidget(button);
+
+    buttonLayout->addStretch();
 
     button = new QToolButton(mainWidget);
     button->setIcon(koIcon("arrow-up"));
     button->setToolTip(i18n("Raise selected objects"));
     m_buttonGroup->addButton(button, Button_Raise);
-    layout->addWidget(button, 1, 3);
+    buttonLayout->addWidget(button);
 
     button = new QToolButton(mainWidget);
     button->setIcon(koIcon("arrow-down"));
     button->setToolTip(i18n("Lower selected objects"));
     m_buttonGroup->addButton(button, Button_Lower);
-    layout->addWidget(button, 1, 4);
+    buttonLayout->addWidget(button);
 
     button = new QToolButton(mainWidget);
     menu = new QMenu(this);
-    QActionGroup *group = new QActionGroup(this);
+    auto group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
                              menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, &KoPADocumentStructureDocker::minimalView));
@@ -135,11 +147,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     button->setPopupMode(QToolButton::InstantPopup);
     button->setIcon(koIcon("view-choose"));
     button->setText(i18n("View mode"));
-    layout->addWidget(button, 1, 5);
-
-    layout->setSpacing(0);
-    layout->setContentsMargins(3, 3, 3, 3);
-    layout->setColumnStretch(2, 10);
+    buttonLayout->addWidget(button);
 
     setWidget(mainWidget);
 
@@ -160,10 +168,11 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     KConfigGroup configGroup = KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     QString viewModeString = configGroup.readEntry("ViewMode", "");
 
-    if (viewModeString.isEmpty())
+    if (viewModeString.isEmpty()) {
         setViewMode(mode);
-    else
+    } else {
         setViewMode(viewModeFromString(viewModeString));
+    }
 
     m_itemsContextBar = new KoViewItemContextBar(m_sectionView);
 }
