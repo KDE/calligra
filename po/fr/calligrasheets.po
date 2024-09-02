@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-15 11:24+0200\n"
+"PO-Revision-Date: 2024-08-31 19:33+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -32,9 +32,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n:
@@ -2500,7 +2500,7 @@ msgid ""
 msgstr ""
 "Unités de masse gérées : g (gramme), sg (piece), lbm (livre), u (masse "
 "atomique), ozm (once), stone, ton, grain, pweight (pennyweight), hweight "
-"(hundredweight), bron (gross t ton)."
+"(hundredweight)."
 
 #: functions/engineering.xml:131
 #, kde-format
@@ -12864,13 +12864,12 @@ msgstr "Copyright ©1998-%1, l'équipe de Calligra Sheets"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Mainteneur"
+msgstr "Mainteneur et portage vers Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12883,10 +12882,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Mainteneur"
+msgstr "Précédent mainteneur"
 
 #: part/AboutData.h:42
 #, kde-format

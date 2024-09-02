@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-04-25 13:24+0200\n"
+"PO-Revision-Date: 2024-08-26 11:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -27,9 +27,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: ectx: Menu (edit)
@@ -170,13 +170,12 @@ msgstr "Copyright ©1998-%1, l'équipe de Stage"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Mainteneur"
+msgstr "Mainteneur et portage vers Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format

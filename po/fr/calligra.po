@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-31 00:39+0000\n"
-"PO-Revision-Date: 2024-08-16 10:46+0200\n"
+"PO-Revision-Date: 2024-08-26 11:08+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -790,11 +790,10 @@ msgid "Paste offset:"
 msgstr "coller en décalant : "
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Coller au curseur : "
+msgstr "Coller à la position du curseur"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -4592,13 +4591,13 @@ msgstr "Ce document n'accepte pas le chiffrement"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Non défini"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -5120,14 +5119,13 @@ msgstr "Distance : "
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Propriétés de forme"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Aucune image disponible"
+msgstr "Aucune propriété disponible"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5314,32 +5312,28 @@ msgid "Icon Size"
 msgstr "Taille d'icône"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Mise en page"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatique"
+msgstr "&Automatique"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Gauche à droite"
+msgstr "&Gauche à droite"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Droite à gauche"
+msgstr "&Droite à gauche"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

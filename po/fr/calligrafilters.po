@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-04-26 16:28+0200\n"
+"PO-Revision-Date: 2024-08-26 11:07+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -254,19 +254,17 @@ msgid "<SHEETNAME>"
 msgstr "<NOM DE FEUILLE>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Exporter vers une image"
+msgstr "Exporter vers un fichier « csv »"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "EPS Export"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "Exportation EPS"
+msgstr "Exporter"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -282,10 +280,9 @@ msgstr "Fin de ligne"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Fin de ligne"
+msgstr "Fin de ligne :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -349,10 +346,9 @@ msgstr "Cellules"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Délimiteur"
+msgstr "Délimiteur :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -570,10 +566,9 @@ msgstr "Document"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Style du document"
+msgstr "Style de document :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -589,10 +584,9 @@ msgstr "Style « Words »"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "Type de document"
+msgstr "Type de document :"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -700,10 +694,9 @@ msgstr "Langue"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "&Jeu de caractères : "
+msgstr "Encodage :"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289

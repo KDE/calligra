@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-08-18 09:37+0200\n"
+"PO-Revision-Date: 2024-08-26 15:01+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -1760,18 +1760,16 @@ msgid "Browse..."
 msgstr "Parcourir..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Couleur d'arrière plan"
+msgstr "Ré-initialiser la couleur d'arrière plan"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Couleur d'arrière plan"
+msgstr "Ré-initialiser la couleur d'arrière plan"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1780,10 +1778,9 @@ msgstr "Mot entier"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Enlever les majuscules :"
+msgstr "Activer les majuscules"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1927,10 +1924,9 @@ msgstr "Justifié"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Comportement à la fin du cadre/page"
+msgstr "Comportement à la fin du cadre et de la page :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
