@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -1486,7 +1486,7 @@ msgstr "Ekspor sebagai PDF"
 msgid "Cannot export to the specified file"
 msgstr "Tidak bisa mengekspor ke file yang ditentukan"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
 #, kde-format
 msgid "Document"
 msgstr "Dokumen"
@@ -2152,7 +2152,8 @@ msgstr "Salindia  %1"
 msgid "Page  %1"
 msgstr "Halaman %1"
 
-#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentModel.cpp:175
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Layer"
 msgstr "Lapisan"
@@ -2182,7 +2183,8 @@ msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Ubah nama Lapisan"
 
-#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309
+#: pageapp/KoPADocumentStructureDocker.cpp:104
 #, kde-format
 msgid "Slide"
 msgstr "Salindia"
@@ -2217,109 +2219,110 @@ msgstr "&Salin Sini"
 msgid "C&ancel"
 msgstr "&Batal"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:85
+#: pageapp/KoPADocumentStructureDocker.cpp:95
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Tambahkan sebuah salindia atau lapisan baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:87
+#: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Tambahkan sebuah halaman atau lapisan baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
+#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Halaman"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:102
-#: pageapp/KoPADocumentStructureDocker.cpp:590
+#: pageapp/KoPADocumentStructureDocker.cpp:112
+#: pageapp/KoPADocumentStructureDocker.cpp:599
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Hapus objek yang dipilih"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:108
+#: pageapp/KoPADocumentStructureDocker.cpp:120
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Angkatkan objek yang dipilih"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:114
+#: pageapp/KoPADocumentStructureDocker.cpp:126
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Turunkan objek yang dipilih"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:123
+#: pageapp/KoPADocumentStructureDocker.cpp:135
 #, kde-format
 msgid "Minimal View"
 msgstr "Tampilan Minimal"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:125
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "Detailed View"
 msgstr "Tampilan Terperinci"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:139
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Tampilan GambarMini"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:149
 #, kde-format
 msgid "View mode"
 msgstr "Mode tampilan"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Masukkan nama si lapisan baru:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New Layer"
 msgstr "Lapisan Baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New layer"
 msgstr "Lapisan baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Ciptakan Lapisan"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:327
+#: pageapp/KoPADocumentStructureDocker.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Hapus Lapisan"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 "Tidak bisa menghapus semua lapisan. Setidaknya satu lapisan telah diperlukan."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Error penghapusan lapisan"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:586
+#: pageapp/KoPADocumentStructureDocker.cpp:595
 #, kde-format
 msgid "Add a new slide"
 msgstr "Tambahkan sebuah salindia baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:588
+#: pageapp/KoPADocumentStructureDocker.cpp:597
 #, kde-format
 msgid "Add a new page"
 msgstr "Tambahkan sebuah halaman baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:592
+#: pageapp/KoPADocumentStructureDocker.cpp:601
 #, kde-format
 msgid "Cut"
 msgstr "Potong"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pageapp/KoPADocumentStructureDocker.cpp:602
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2327,7 +2330,7 @@ msgstr "Potong"
 msgid "Copy"
 msgstr "Salin"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:594
+#: pageapp/KoPADocumentStructureDocker.cpp:603
 #, kde-format
 msgid "Paste"
 msgstr "Tempel"

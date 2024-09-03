@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2007-02-11 00:26+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -841,13 +841,13 @@ msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "&Master slayd"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, fuzzy, kde-format
 msgid "Automatic animation preview"
 msgstr "Avtomatik boʻgʻin koʻchirish"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview animation"

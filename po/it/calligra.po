@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2024-08-26 00:14+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1486,7 +1486,7 @@ msgstr "Esporta come PDF"
 msgid "Cannot export to the specified file"
 msgstr "Impossibile esportare nel file specificato"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
 #, kde-format
 msgid "Document"
 msgstr "Documento"
@@ -2150,7 +2150,8 @@ msgstr "Diapositiva %1"
 msgid "Page  %1"
 msgstr "Pagina %1"
 
-#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentModel.cpp:175
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Layer"
 msgstr "Livello"
@@ -2180,7 +2181,8 @@ msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Rinomina livello"
 
-#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309
+#: pageapp/KoPADocumentStructureDocker.cpp:104
 #, kde-format
 msgid "Slide"
 msgstr "Diapositiva"
@@ -2215,108 +2217,109 @@ msgstr "&Copia qui"
 msgid "C&ancel"
 msgstr "&Annulla"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:85
+#: pageapp/KoPADocumentStructureDocker.cpp:95
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Aggiungi una nuova diapositiva o livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:87
+#: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Aggiungi una nuova pagina o livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
+#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Pagina"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:102
-#: pageapp/KoPADocumentStructureDocker.cpp:590
+#: pageapp/KoPADocumentStructureDocker.cpp:112
+#: pageapp/KoPADocumentStructureDocker.cpp:599
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Elimina oggetti selezionati"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:108
+#: pageapp/KoPADocumentStructureDocker.cpp:120
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Alza gli oggetti selezionati"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:114
+#: pageapp/KoPADocumentStructureDocker.cpp:126
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Abbassa gli oggetti selezionati"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:123
+#: pageapp/KoPADocumentStructureDocker.cpp:135
 #, kde-format
 msgid "Minimal View"
 msgstr "Vista minimale"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:125
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "Detailed View"
 msgstr "Vista dettagliata"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:139
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Vista a miniature"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:149
 #, kde-format
 msgid "View mode"
 msgstr "Modalità di vista"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Inserisci il nome del nuovo livello:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New Layer"
 msgstr "Nuovo livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New layer"
 msgstr "Nuovo livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Crea livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:327
+#: pageapp/KoPADocumentStructureDocker.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Elimina livello"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "Impossibile eliminare tutti i livelli. Se ne richiede almeno uno."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Errore nell'eliminazione dei livelli"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:586
+#: pageapp/KoPADocumentStructureDocker.cpp:595
 #, kde-format
 msgid "Add a new slide"
 msgstr "Aggiungi una nuova diapositiva"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:588
+#: pageapp/KoPADocumentStructureDocker.cpp:597
 #, kde-format
 msgid "Add a new page"
 msgstr "Aggiungi una nuova pagina"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:592
+#: pageapp/KoPADocumentStructureDocker.cpp:601
 #, kde-format
 msgid "Cut"
 msgstr "Taglia"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pageapp/KoPADocumentStructureDocker.cpp:602
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2324,7 +2327,7 @@ msgstr "Taglia"
 msgid "Copy"
 msgstr "Copia"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:594
+#: pageapp/KoPADocumentStructureDocker.cpp:603
 #, kde-format
 msgid "Paste"
 msgstr "Incolla"

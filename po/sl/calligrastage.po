@@ -1,7 +1,7 @@
 # translation of kpresenter.po to Slovenian
 # Translation of kpresenter.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrastage.po 1688836 2024-08-27 01:13:45Z scripty $
+# $Id: calligrastage.po 1689413 2024-09-03 01:13:06Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 1999.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2024-08-23 06:25+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -760,13 +760,13 @@ msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Nastavi razpored"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
 msgstr "Samodejni predogled animacije"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, kde-format
 msgid "Preview animation"
 msgstr "Predogled animacije"

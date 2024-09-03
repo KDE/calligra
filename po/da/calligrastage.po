@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2020-04-22 21:40+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -757,13 +757,13 @@ msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Angiv layout"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
 msgstr "Forhåndsvis animation automatisk"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, kde-format
 msgid "Preview animation"
 msgstr "Forhåndsvis animation"

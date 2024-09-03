@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1689165 2024-08-31 01:13:43Z scripty $
+# $Id: calligra.po 1689413 2024-09-03 01:13:06Z scripty $
 # $Source$
 #
 #
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2024-08-25 08:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1495,7 +1495,7 @@ msgstr "Izvoz kot PDF"
 msgid "Cannot export to the specified file"
 msgstr "Ni moč izvoziti v podano datoteko"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
 #, kde-format
 msgid "Document"
 msgstr "Dokument"
@@ -2167,7 +2167,8 @@ msgstr "Prosojnica %1"
 msgid "Page  %1"
 msgstr "Stran %1"
 
-#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentModel.cpp:175
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Layer"
 msgstr "Plast"
@@ -2197,7 +2198,8 @@ msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Preimenuj plast"
 
-#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309
+#: pageapp/KoPADocumentStructureDocker.cpp:104
 #, kde-format
 msgid "Slide"
 msgstr "Prosojnica"
@@ -2232,108 +2234,109 @@ msgstr "Kopiraj sem"
 msgid "C&ancel"
 msgstr "Prekliči"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:85
+#: pageapp/KoPADocumentStructureDocker.cpp:95
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Dodaj novo prosojnico ali plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:87
+#: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Dodaj novo stran ali plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
+#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Stran"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:102
-#: pageapp/KoPADocumentStructureDocker.cpp:590
+#: pageapp/KoPADocumentStructureDocker.cpp:112
+#: pageapp/KoPADocumentStructureDocker.cpp:599
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Izbriši izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:108
+#: pageapp/KoPADocumentStructureDocker.cpp:120
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Dvigni izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:114
+#: pageapp/KoPADocumentStructureDocker.cpp:126
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Spusti izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:123
+#: pageapp/KoPADocumentStructureDocker.cpp:135
 #, kde-format
 msgid "Minimal View"
 msgstr "Minimalni pogled"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:125
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "Detailed View"
 msgstr "Podrobni pogled"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:139
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Pogled sličic"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:149
 #, kde-format
 msgid "View mode"
 msgstr "Način prikaza"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Vnesite ime nove plasti:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New Layer"
 msgstr "Nova plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "New layer"
 msgstr "Nova plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Ustvari plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:327
+#: pageapp/KoPADocumentStructureDocker.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Zbriši plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "Ne morem zbrisati vseh plasti. Vsaj ene plast mora ostati."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Napaka pri brisanju plasti"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:586
+#: pageapp/KoPADocumentStructureDocker.cpp:595
 #, kde-format
 msgid "Add a new slide"
 msgstr "Dodaj novo prosojnico"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:588
+#: pageapp/KoPADocumentStructureDocker.cpp:597
 #, kde-format
 msgid "Add a new page"
 msgstr "Dodaj novo stran"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:592
+#: pageapp/KoPADocumentStructureDocker.cpp:601
 #, kde-format
 msgid "Cut"
 msgstr "Izreži"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pageapp/KoPADocumentStructureDocker.cpp:602
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2341,7 +2344,7 @@ msgstr "Izreži"
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:594
+#: pageapp/KoPADocumentStructureDocker.cpp:603
 #, kde-format
 msgid "Paste"
 msgstr "Prilepi"

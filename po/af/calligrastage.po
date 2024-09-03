@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -793,13 +793,13 @@ msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Bladsy Uitleg..."
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, fuzzy, kde-format
 msgid "Automatic animation preview"
 msgstr "Vertoon voorskou"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, fuzzy, kde-format
 #| msgid "Presentation"
 msgid "Preview animation"

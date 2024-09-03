@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2021-06-03 12:23+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -756,13 +756,13 @@ msgctxt "(qtundo-format)"
 msgid "Set Layout"
 msgstr "Ορισμός διάταξης"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:53
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
 msgstr "Αυτόματη προεπισκόπηση εφέ κίνησης"
 
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:299
-#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:307
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, kde-format
 msgid "Preview animation"
 msgstr "Προεπισκόπηση εφέ κίνησης"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 00:39+0000\n"
+"POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2008-07-08 22:08+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -1560,7 +1560,7 @@ msgstr "&Eksport..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:76
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
 #, kde-format
 msgid "Document"
 msgstr "Dokumen"
@@ -2322,7 +2322,8 @@ msgstr "Saiz:"
 msgid "Page  %1"
 msgstr "Halaman Berikutnya"
 
-#: pageapp/KoPADocumentModel.cpp:175 pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentModel.cpp:175
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
@@ -2359,7 +2360,8 @@ msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "Cipta Templat"
 
-#: pageapp/KoPADocumentModel.cpp:309 pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentModel.cpp:309
+#: pageapp/KoPADocumentStructureDocker.cpp:104
 #, fuzzy, kde-format
 #| msgid "Size:"
 msgid "Slide"
@@ -2397,122 +2399,123 @@ msgstr "Skrin"
 msgid "C&ancel"
 msgstr "Ubah Huruf"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:85
+#: pageapp/KoPADocumentStructureDocker.cpp:95
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide or layer"
 msgstr "Tambahkan Garis Baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:87
+#: pageapp/KoPADocumentStructureDocker.cpp:97
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new page or layer"
 msgstr "Tambahkan Garis Baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94 widgets/KoPageLayoutDialog.cpp:40
+#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: widgets/KoPageLayoutDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Halaman Berikutnya"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:102
-#: pageapp/KoPADocumentStructureDocker.cpp:590
+#: pageapp/KoPADocumentStructureDocker.cpp:112
+#: pageapp/KoPADocumentStructureDocker.cpp:599
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Delete selected objects"
 msgstr "Buang Teks Dipilih"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:108
+#: pageapp/KoPADocumentStructureDocker.cpp:120
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Raise selected objects"
 msgstr "Buang Teks Dipilih"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:114
+#: pageapp/KoPADocumentStructureDocker.cpp:126
 #, fuzzy, kde-format
 msgid "Lower selected objects"
 msgstr "Cipta Dokumen"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:123
+#: pageapp/KoPADocumentStructureDocker.cpp:135
 #, kde-format
 msgid "Minimal View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:125
+#: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "Detailed View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:139
 #, kde-format
 msgid "Thumbnail View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:149
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "View mode"
 msgstr "Ubah Sempadan"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New Layer"
 msgstr "Lavender"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:288
+#: pageapp/KoPADocumentStructureDocker.cpp:297
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New layer"
 msgstr "Lavender"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:301
+#: pageapp/KoPADocumentStructureDocker.cpp:310
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Cipta Templat"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:327
+#: pageapp/KoPADocumentStructureDocker.cpp:336
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Hapuskan Teks"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:329
+#: pageapp/KoPADocumentStructureDocker.cpp:338
 #, fuzzy, kde-format
 msgid "Error deleting layers"
 msgstr "Cipta Templat"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:586
+#: pageapp/KoPADocumentStructureDocker.cpp:595
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide"
 msgstr "Tambahkan Garis Baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:588
+#: pageapp/KoPADocumentStructureDocker.cpp:597
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new page"
 msgstr "Tambahkan Garis Baru"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:592
+#: pageapp/KoPADocumentStructureDocker.cpp:601
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "Biasa"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:593
+#: pageapp/KoPADocumentStructureDocker.cpp:602
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2521,7 +2524,7 @@ msgstr "Biasa"
 msgid "Copy"
 msgstr "Syarikat:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:594
+#: pageapp/KoPADocumentStructureDocker.cpp:603
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"

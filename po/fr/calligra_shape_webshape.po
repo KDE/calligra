@@ -1,0 +1,31 @@
+#
+# SPDX-FileCopyrightText: 2024 Xavier Besnard <xavier.besnard@kde.org>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"PO-Revision-Date: 2024-08-28 10:07+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: WebShapeFactory.cpp:30
+#, kde-format
+msgid "Web Shape"
+msgstr "Forme pour Internet"
+
+#: WebShapeFactory.cpp:32
+#, kde-format
+msgid "A web shape"
+msgstr "Une forme pour Internet"
+
+#: WebToolFactory.cpp:31
+#, kde-format
+msgid "Web shape editing"
+msgstr "Édition d'une forme pour Internet"
