@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"), i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     KCrash::initialize();
     KAboutData::setApplicationData(aboutData);
-    QGuiApplication::setWindowIcon(QIcon::fromTheme(u"org.kde.calligralauncher"_s));
+    QGuiApplication::setWindowIcon(QIcon::fromTheme(u"org.kde.calligra.words"_s));
 
     QQmlApplicationEngine engine;
 
