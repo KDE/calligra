@@ -12,6 +12,7 @@
 #include "KoPADocument.h"
 #include "KoPADocumentModel.h"
 #include "KoPAPageBase.h"
+#include "KoPAPageMoveCommand.h"
 #include "KoPAViewBase.h"
 
 #include <KoCanvasBase.h>
@@ -74,8 +75,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     , m_doc(nullptr)
     , m_model(nullptr)
 {
-    setWindowTitle(i18n("Document"));
-
     auto mainWidget = new QWidget(this);
     auto vbox = new QVBoxLayout(mainWidget);
     vbox->setContentsMargins({});
@@ -93,8 +92,10 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     button->setIcon(koIcon("list-add"));
     if (pageType == KoPageApp::Slide) {
         button->setToolTip(i18n("Add a new slide or layer"));
+        setWindowTitle(i18n("Slides"));
     } else {
         button->setToolTip(i18n("Add a new page or layer"));
+        setWindowTitle(i18n("Document"));
     }
     buttonLayout->addWidget(button);
 
@@ -360,7 +361,15 @@ void KoPADocumentStructureDocker::raiseItem()
 
     KUndo2Command *cmd = nullptr;
 
-    if (selectedLayers.count()) {
+    if (!selectedPages.isEmpty() && m_doc->pageType() == KoPageApp::Slide && m_sectionView->displayMode() != KoDocumentSectionView::DetailedMode) {
+        const auto firstPage = selectedPages[0];
+        const auto index = m_doc->pageIndex(firstPage);
+        if (index == 0) {
+            return; // already at first page
+        }
+        const auto afterPage = index == 1 ? nullptr : m_doc->pageByIndex(index - 2, false);
+        cmd = new KoPAPageMoveCommand(m_doc, selectedPages, afterPage);
+    } else if (selectedLayers.count()) {
         //         // check if all layers could be raised
         //         foreach(KoShapeLayer* layer, selectedLayers)
         //             if (! m_document->canRaiseLayer(layer))
@@ -390,7 +399,15 @@ void KoPADocumentStructureDocker::lowerItem()
 
     KUndo2Command *cmd = nullptr;
 
-    if (selectedLayers.count()) {
+    if (!selectedPages.isEmpty() && m_doc->pageType() == KoPageApp::Slide && m_sectionView->displayMode() != KoDocumentSectionView::DetailedMode) {
+        const auto lastPage = selectedPages[selectedPages.count() - 1];
+        const auto index = m_doc->pageIndex(lastPage);
+        if (index == m_doc->pageCount() - 1) {
+            return; // already at last page
+        }
+        const auto afterPage = m_doc->pageByIndex(index + 1, false);
+        cmd = new KoPAPageMoveCommand(m_doc, selectedPages, afterPage);
+    } else if (selectedLayers.count()) {
         //         // check if all layers could be raised
         //         foreach(KoShapeLayer* layer, selectedLayers)
         //             if (! m_document->canLowerLayer(layer))
@@ -415,25 +432,27 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes(QList<KoPAPageB
     layers.clear();
     shapes.clear();
 
-    QModelIndexList selectedItems = m_sectionView->selectionModel()->selectedIndexes();
-    if (selectedItems.count() == 0)
+    const QModelIndexList selectedItems = m_sectionView->selectionModel()->selectedIndexes();
+    if (selectedItems.count() == 0) {
         return;
+    }
 
     // TODO tz: I don't know what is best:
     // 1. only make it possible to select one type of object page, layer, shape
     // 2. don't add shapes when we already have the page/layer/group in the selection
     // separate selected layers and selected shapes
-    foreach (const QModelIndex &index, selectedItems) {
-        KoShape *shape = static_cast<KoShape *>(index.internalPointer());
-        KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape);
+    for (const QModelIndex &index : selectedItems) {
+        auto shape = static_cast<KoShape *>(index.internalPointer());
+        auto page = dynamic_cast<KoPAPageBase *>(shape);
         if (page) {
             pages.append(page);
         } else {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
-            if (layer)
+            auto layer = dynamic_cast<KoShapeLayer *>(shape);
+            if (layer) {
                 layers.append(layer);
-            else if (!selectedItems.contains(index.parent()))
+            } else if (!selectedItems.contains(index.parent())) {
                 shapes.append(shape);
+            }
         }
     }
 }

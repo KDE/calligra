@@ -57,6 +57,7 @@ public:
         /// no thumbnails, with titles and property icons in a single row
         MinimalMode
     };
+    Q_ENUM(DisplayMode);
 
     void paintEvent(QPaintEvent *event) override;
 

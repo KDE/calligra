@@ -13,12 +13,8 @@
 #include "KoPAPageBase.h"
 
 KoPAPageMoveCommand::KoPAPageMoveCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , m_document(document)
-    , m_after(after)
+    : KoPAPageMoveCommand(document, QList<KoPAPageBase *>{page}, after, parent)
 {
-    Q_ASSERT(document);
-    init(QList<KoPAPageBase *>() << page);
 }
 
 KoPAPageMoveCommand::KoPAPageMoveCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent)
@@ -27,16 +23,9 @@ KoPAPageMoveCommand::KoPAPageMoveCommand(KoPADocument *document, const QList<KoP
     , m_after(after)
 {
     Q_ASSERT(document);
-
-    init(pages);
-}
-
-// Since C++ constructor can't call another constructor ...
-void KoPAPageMoveCommand::init(const QList<KoPAPageBase *> &pages)
-{
     Q_ASSERT(pages.size() > 0);
 
-    foreach (KoPAPageBase *page, pages) {
+    for (KoPAPageBase *page : pages) {
         int index = m_document->pageIndex(page);
         m_pageIndices.insert(index, page);
     }
@@ -53,9 +42,9 @@ KoPAPageMoveCommand::~KoPAPageMoveCommand() = default;
 void KoPAPageMoveCommand::redo()
 {
     KoPAPageBase *after = m_after;
-    QList<KoPAPageBase *> pages = m_pageIndices.values();
+    const auto pages = m_pageIndices.values();
 
-    foreach (KoPAPageBase *page, pages) {
+    for (KoPAPageBase *page : pages) {
         m_document->takePage(page);
         m_document->insertPage(page, after);
         after = page;
@@ -64,13 +53,12 @@ void KoPAPageMoveCommand::redo()
 
 void KoPAPageMoveCommand::undo()
 {
-    QList<KoPAPageBase *> pages = m_pageIndices.values();
-    foreach (KoPAPageBase *page, pages) {
+    const auto pages = m_pageIndices.values();
+    for (KoPAPageBase *page : pages) {
         m_document->takePage(page);
     }
 
-    QMap<int, KoPAPageBase *>::const_iterator it;
-    for (it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); ++it) {
+    for (auto it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); ++it) {
         m_document->insertPage(it.value(), it.key());
     }
 }
