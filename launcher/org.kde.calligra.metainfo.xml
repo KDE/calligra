@@ -9,6 +9,7 @@
   <name xml:lang="cs">Calligra</name>
   <name xml:lang="es">Calligra</name>
   <name xml:lang="eu">Calligra</name>
+  <name xml:lang="fr">Calligra</name>
   <name xml:lang="gl">Calligra</name>
   <name xml:lang="he">Calligra</name>
   <name xml:lang="it">Calligra</name>
@@ -26,6 +27,7 @@
   <summary xml:lang="ca-valencia">Solució d'oficina tot en un</summary>
   <summary xml:lang="es">Solución ofimática todo en uno</summary>
   <summary xml:lang="eu">Bulego soluzioa, dena batean</summary>
+  <summary xml:lang="fr">Solution de suite bureautique complète</summary>
   <summary xml:lang="gl">Solución de oficina todo en un.</summary>
   <summary xml:lang="he">פתרון משרדי אחוד</summary>
   <summary xml:lang="it">Soluzione per ufficio completa</summary>
@@ -46,6 +48,7 @@
     <p xml:lang="ca-valencia">Calligra és una suite d'oficina i gràfics. Conté aplicacions per a processament de textos, fulls de càlcul, presentacions i gràfics vectorials.</p>
     <p xml:lang="es">Calligra es un paquete ofimático y gráfico. Contiene aplicaciones para procesamiento de textos, hojas de cálculo, presentaciones y gráficos vectoriales.</p>
     <p xml:lang="eu">Calligra bulegotika eta grafikoen suite bat da. Testua prozesatzeko, kalkulu-orriak, aurkezpen eta bektore-grafikoak ditu.</p>
+    <p xml:lang="fr">Calligra est une suite bureautique et graphique. Elle contient des applications pour le traitement de texte, les feuilles de calcul, la présentation et les graphiques vectoriels.</p>
     <p xml:lang="gl">Calligra e unha suite de oficina e de gráficos. Contén aplicacións para procesamento de texto, follas de cálculo, presentacións e gráficos vectoriais.</p>
     <p xml:lang="he">Calligra היא חבילה של כלים משרדיים וגרפיים. היא מכילה יישומים לעיבוד תמלילים, גיליונות נתונים, מצגות וגרפיקת וקטורים.</p>
     <p xml:lang="it">Calligra è una suite per ufficio e grafica. Contiene applicazioni per elaborazione testi, fogli di calcolo, presentazioni e grafica vettoriale.</p>
@@ -67,6 +70,7 @@
     <p xml:lang="ca-valencia">Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="es">Words es un procesador de textos intuitivo y una aplicación de edición para el escritorio. Con ella se pueden crear documentos informativos y atractivos de forma placentera y con facilidad.</p>
     <p xml:lang="eu">Words, testu-prozesatzaile eta argitaratzeko mahaigaineko aplikazio intuitibo bat da. Hori erabiliz, dokumentu informatibo eta erakargarriak sor ditzakezu, erraz eta aise.</p>
+    <p xml:lang="fr">Words est une application intuitive de traitement de texte et d'édition de bureau. Avec elle, vous pouvez créer des documents informatifs et attrayants avec plaisir et facilité.</p>
     <p xml:lang="gl">Words é unha aplicación intuitiva de procesamento de texto e publicación de escritorio. Con ela pode crear documentos informativos e atractivos plácida e facilmente.</p>
     <p xml:lang="he">„מילים” הוא יישום נהיר למחשב לעיבוד תמלילים והפקת תוכן. באמצעותו, אפשר ליצור מסמכים רבי משמעות ומושכי עין בצורה מהנה ופשוטה.</p>
     <p xml:lang="it">Words è un'applicazione intuitiva per l'elaborazione di testi e l'editoria desktop. Con essa, puoi creare documenti informativi e accattivanti con piacere e facilità.</p>
@@ -88,6 +92,7 @@
     <p xml:lang="ca-valencia">Sheets de Calligra és una eina de full de càlcul plenament funcional. S'utilitza per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de cálculo y de hojas de cálculo rica en funciones. Puede usarla para calcular y crear rápidamente diversas hojas de cálculo empresariales, como las de gastos e ingresos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="eu">Calligra Sheets, kalkulatzeko tresna eta kalkulu-orri tresna guztiz funtzional bat da. Erabil ezazu negozioarekin lotutako hainbat kalkulu-orri azkar sortzeko eta kalkulatzeko, hala nola, diru-sarrerak eta gastuak, enplegatuen lanorduak, etab.</p>
+    <p xml:lang="fr">Calligra Sheets est un outil de calcul et de feuille de calcul complet. Utilisez-le pour créer et calculer rapidement diverses feuilles de calcul liées à l'entreprise, telles que les revenus et les dépenses, les heures de travail des employés, etc.</p>
     <p xml:lang="gl">Calligra Sheets é unha ferramenta completa de follas de cálculo. Úsea para crear rapidamente follas de cálculo de negocios, como por exemplo follas de gastos e ingresos, de horas de traballo, etc.</p>
     <p xml:lang="he">גיליונות של Calligra הוא כלי חישוב וגיליון נתונים עתיר יכולות. אפשר להשתמש בו כדי ליצור ולחשב גיליונות נתונים עסקיים במהירות, כגון הכנסות והוצאות, שעות עבודה של עובדים ועוד.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e foglio di calcolo completo. Utilizzalo per creare e calcolare rapidamente vari fogli di calcolo aziendali, come entrate e uscite, ore di lavoro dei dipendenti, ecc.</p>
@@ -111,6 +116,7 @@
     <p xml:lang="ca-valencia">Stage de Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear amb facilitat presentacions que continguen una gran varietat d'elements, des de gràfics fins a text, des de diagrames fins a imatges. Stage de Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb Calligra, tota la potència i la flexibilitat dels elements de contingut de Calligra estan disponibles per a Stage.</p>
     <p xml:lang="es">Calligra Stage es una aplicación de presentaciones fácil de usar, aunque flexible. Permite crear con facilidad presentaciones que contienen una rica variedad de elementos, desde gráficos hasta texto, y desde gráficas a imágenes. Calligra Stage se puede extender mediante un sistema de complementos, por lo que resulta fácil añadir nuevos efectos, nuevos elementos de contenido e incluso nuevas formas de gestionar la presentación. Debido a su integración con Calligra, toda la potencia y la flexibilidad de los elementos de Calligra están disponibles para Stage.</p>
     <p xml:lang="eu">«Calligra Stage» erabiltzeko erraza eta aldi berean malgua den aurkezpen aplikazio bat da. Erraz sor ditzakezu era askotako elementuak dituzten aurkezpenak, grafikoak nahiz testua, diagramak nahiz irudiak. «Calligra Stage» plugin sistema baten bidez heda daiteke, horregatik erraza da efektu berriak, eduki-elementu berriak edo baita zure aurkezpenak kudeatzeko era berriak gehitzea. «Calligra»rekiko integrazioaren ondorioz, «Calligra»ko eduki elementuen gaitasun eta malgutasun guztia «Stage»n erabilgarri daude.</p>
+    <p xml:lang="fr">Calligra Stage est une application de présentation facile à utiliser mais toujours flexible. Vous pouvez facilement créer des présentations contenant une grande variété d'éléments, des graphiques au texte, des graphiques aux images. Calligra Stage est extensible grâce à un système de modules externes. Ainsi, il est donc facile d'ajouter de nouveaux effets, de nouveaux éléments de contenu ou même de nouvelles façons de gérer votre présentation. En raison de l'intégration avec Calligra, toute la puissance et la flexibilité des éléments de contenu de Calligra sont disponibles pour Stage.</p>
     <p xml:lang="gl">Calligra Stage é unha aplicación de presentacións fácil de usar pero flexíbel. Permítelle crear presentacións cunha ampla variedade de elementos, incluíndo texto, gráficos e imaxes. As funcionalidades de Calligra Stage poden ampliarse mediante un sistema de complementos, así que resulta doado engadir efectos e elementos novos, así como novos xeitos de xestionar as presentacións. Grazas á súa integración con Calligra, Stage pode facer uso da potencia e flexibilidade dos elementos de contido dispoñíbeis en Calligra.</p>
     <p xml:lang="he">Calligra במה הוא יישום מצגות קל לשימוש ועדיין מאוד גמיש. אפשר בקלות ליצור מצגות שמכילות מגוון רחב של רכיבים, החל מגרפיקה דרך טקסט וכלה בתמונות. את Calligra במה אפשר להרחיב בעזרת מערכת תוספים, כך שקל להוסיף אפקטים חדשים, רכיבי תוכן חדשים או איפלו דרכים חדשות לנהל את הצגת המצגת שלך. בזכות השילוב מול Calligra, כל העוצמה והגמישות של רכיבי התוכן של Calligra זמינים בבמה.</p>
     <p xml:lang="it">Calligra Stage è un'applicazione di presentazione facile da utilizzare, ma comunque flessibile. Puoi creare facilmente presentazioni contenenti un'ampia varietà di elementi, dalla grafica al testo, dai grafici alle immagini. Calligra Stage è ampliabile tramite un sistema di estensioni, quindi è facile aggiungere nuovi effetti, nuovi elementi di contenuto o persino nuovi modi di gestire la tua presentazione. Grazie all'integrazione con Calligra, tutta la potenza e la flessibilità degli elementi di contenuto di Calligra sono disponibili per Stage.</p>
@@ -133,6 +139,7 @@
     <p xml:lang="ca-valencia">Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, la qual es pot personalitzar i ampliar molt. Açò convertix Karbon en una gran aplicació per a usuaris que comencen a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixe bocabadat.</p>
     <p xml:lang="es">Karbon es una aplicación de dibujo vectorial con una interfaz de usuario fácil de usar, altamente personalizable y extensible. Esto hace que Karbon sea una gran aplicación para los usuarios que empiezan a explorar el mundo de los gráficos vectoriales así como para los artistas que quieren crear composiciones vectoriales sorprendentes.</p>
     <p xml:lang="eu">Karbon, marrazketa bektorialeko aplikazio bat da, erabiltzen erraza den erabiltzaile-interfaze bat, norbere gustura oso egokigarria, duena. Hori dela eta, Karbon bikaina da grafiko bektorialen mundua esploratzen hasitako erabiltzaileentzat, baita arte bektorial txundigarriak sortu nahi dituzten artistentzat ere.</p>
+    <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface utilisateur facile à utiliser, hautement personnalisable et extensible. Cela fait de Karbon une excellente application pour les utilisateurs commençant à explorer le monde des graphiques vectoriels ainsi que pour les artistes souhaitant créer une œuvre vectorielle à couper le souffle.</p>
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha gran aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
     <p xml:lang="he">Karbon הוא יישום לציור וקטורי עם ממשק משתמש קל לשימוש, גמיש וניתן להרחבה. כל אלו הופכים את Karbon ליישום מעולה למשתמשים שמתחילים לחקור את עולם הגרפיקה הווקטורית לרבות אומנים שרוצים ליצור אומנות וקטורית עוצרת נשימה.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estensibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale e per gli artisti che desiderano creare arte vettoriale mozzafiato.</p>
@@ -156,6 +163,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Words de Calligra que mostra text aleatori a l'editor principal</caption>
       <caption xml:lang="es">Ventana principal de Calligra Words que muestra un texto aleatorio en el editor principal</caption>
       <caption xml:lang="eu">Calligra Words-en leiho nagusia editore nagusian hausazko testua erakutsiz</caption>
+      <caption xml:lang="fr">Fenêtre principale de Calligra Words affichant du texte aléatoire dans l'éditeur principal</caption>
       <caption xml:lang="gl">Xanela principal de Calligra Words amosando texto aleatorio no editor principal.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra מילים שמציג טקסט אקראי בעורך הראשי</caption>
       <caption xml:lang="it">La finestra principale di Calligra Words che mostra testo casuale nell'editor principale</caption>
@@ -176,6 +184,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Sheets de Calligra</caption>
       <caption xml:lang="es">Ventana principal de Calligra Sheets</caption>
       <caption xml:lang="eu">Calligra Sheets leiho nagusia</caption>
+      <caption xml:lang="fr">Fenêtre principale de Calligra Sheets</caption>
       <caption xml:lang="gl">Xanela principal de Calligra Sheets.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra גיליונות</caption>
       <caption xml:lang="it">La finestra principale di Calligra Sheets</caption>
@@ -196,6 +205,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Stage de Calligra</caption>
       <caption xml:lang="es">Ventana principal de Calligra Stage</caption>
       <caption xml:lang="eu">Calligra Stage leiho nagusia</caption>
+      <caption xml:lang="fr">Fenêtre principale de Calligra Stage</caption>
       <caption xml:lang="gl">Xanela principal de Calligra Stage.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra במה</caption>
       <caption xml:lang="it">La finestra principale di Calligra Stage</caption>
@@ -216,6 +226,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
       <caption xml:lang="es">Ventana principal de Karbon</caption>
       <caption xml:lang="eu">Karbon-en leiho nagusia</caption>
+      <caption xml:lang="fr">Fenêtre principale de Karbon</caption>
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
       <caption xml:lang="he">החלון הראשי של Karbon</caption>
       <caption xml:lang="it">La finestra principale di Karbon</caption>
