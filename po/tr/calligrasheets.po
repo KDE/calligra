@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-08-24 14:11+0300\n"
+"PO-Revision-Date: 2024-09-03 17:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -114,7 +114,7 @@ msgstr "Geçersiz belge. Eşlem etiketi yok."
 #: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
 msgid "This document has no sheets (tables)."
-msgstr "Bu belgede hiç tablo yok."
+msgstr "Bu belgede hiç sayfa (tablo) yok."
 
 #: core/ksp/SheetsKspSheet.cpp:51
 #, kde-format
@@ -139,7 +139,7 @@ msgstr "Başlık"
 #: core/StyleManager.cpp:47
 #, kde-format
 msgid "Header1"
-msgstr "Başık1"
+msgstr "Başlık1"
 
 #: core/StyleManager.cpp:179 ui/dialogs/LayoutPage_General.cpp:122
 #: ui/dialogs/LayoutPage_General.cpp:141
@@ -207,38 +207,38 @@ msgstr "Tarihi gösteren bir dizi (\"2/2/2012\" gibi)"
 #: engine/FunctionDescription.cpp:52
 #, kde-format
 msgid "A range of strings"
-msgstr "Diziler aralığı"
+msgstr "Diziler erimi"
 
 #: engine/FunctionDescription.cpp:54
 #, kde-format
 msgid "A range of whole numbers (like 1, 132, 2344)"
-msgstr "Tamsayı aralığı (1, 132, 2344 gibi)"
+msgstr "Tamsayı erimi (1, 132, 2344 gibi)"
 
 #: engine/FunctionDescription.cpp:56
 #, kde-format
 msgid "A range of truth values (TRUE or FALSE)"
-msgstr "Doğruluk değeri aralığı (TRUE veya FALSE)"
+msgstr "Doğruluk değeri erimi (TRUE veya FALSE)"
 
 #: engine/FunctionDescription.cpp:58
 #, kde-format
 msgid "A range of floating point values (like 1.3, 0.343, 253 )"
-msgstr "Kayan noktalı değer aralığı (1,3, 0,343, 253 gibi)"
+msgstr "Kayan noktalı değer erimi (1,3, 0,343, 253 gibi)"
 
 #: engine/FunctionDescription.cpp:60
 #, kde-format
 msgid "A range of any kind of values"
-msgstr "Herhangi bir türde değerler aralığı"
+msgstr "Herhangi bir türde değerler erimi"
 
 #: engine/FunctionDescription.cpp:62
 #, kde-format
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
-msgstr "Tarih aralığını gösteren bir dizi (\"2/2/2012\"-\"5/2/2012\" gibi)"
+msgstr "Tarih erimini gösteren bir dizi (\"2/2/2012\"–\"5/2/2012\" gibi)"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
 msgid "<p><b>Return type:</b> %1</p>"
-msgstr "<p><b>Döndürme türü:</b> %1</p>"
+msgstr "<p><b>Dönüş türü:</b> %1</p>"
 
 #: engine/FunctionDescription.cpp:168
 #, kde-format
@@ -383,7 +383,7 @@ msgid ""
 "BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"anded\" with 1010 is 1000, which is integer 8)."
 msgstr ""
-"BITAND(12;10), 8 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"BITAND(12; 10), 8 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
 "değeri 1010’dur. 1100 ile 1010’un bit bit ve işlemine tabi tutulması sonucu "
 "1000 eder ve bu da 8’e karşılık gelir)."
 
@@ -451,7 +451,7 @@ msgid ""
 "BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"ored\" with 1010 is 1110, which is integer 14)."
 msgstr ""
-"BITAND(12;10), 14 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"BITAND(12; 10), 14 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
 "değeri 1010’dur. 1100 ile 1010’un bit bit veya işlemine tabi tutulması "
 "sonucu 1110 eder ve bu da 14’e karşılık gelir)."
 
@@ -462,7 +462,7 @@ msgid ""
 "integer parameters. "
 msgstr ""
 "BITXOR() işlevi, iki tamsayı parametresi arasında bit bit özel OR işlemi "
-"gerçekleştirir. "
+"gerçekleştirir."
 
 #: functions/bitops.xml:96
 #, kde-format
@@ -475,7 +475,7 @@ msgid ""
 "BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"xored\" with 1010 is 0110, which is integer 6)."
 msgstr ""
-"BITXOR(12;10) 6 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"BITXOR(12; 10) 6 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
 "değeri 1010’dur. 1100 ile 1010’un bit bit özel veya işlemine tabi tutulması "
 "sonucu 0110 eder ve bu da 6’ya karşılık gelir)."
 
@@ -497,7 +497,7 @@ msgid ""
 msgstr ""
 "BOOL2STRING() işlevi, verilen bir Boole değeri için bir karakter dizisi "
 "döndürür. Bu yöntem, karakter dizisi gerektiren yöntemlerde Boole "
-"kullanılması amaçlıdır"
+"kullanılması amaçlıdır."
 
 #: functions/conversion.xml:16
 #, kde-format
@@ -507,17 +507,17 @@ msgstr "BOOL2STRING(değer)"
 #: functions/conversion.xml:17
 #, kde-format
 msgid "BOOL2STRING(true) returns \"True\""
-msgstr "BOOL2STRING(true), \"True\" döndürür"
+msgstr "BOOL2STRING(doğru), \"doğru\" döndürür"
 
 #: functions/conversion.xml:18
 #, kde-format
 msgid "BOOL2STRING(false) returns \"False\""
-msgstr "BOOL2STRING(false), \"False\" döndürür"
+msgstr "BOOL2STRING(yanlış), \"yanlış\" döndürür"
 
 #: functions/conversion.xml:19
 #, kde-format
 msgid "upper(BOOL2STRING(find(\"nan\";\"banana\"))) returns TRUE"
-msgstr "üst(BOOL2STRING(bul(\"nan\";\"ananas\"))), TRUE döndürür"
+msgstr "UPPER(BOOL2STRING(find(\"nan\";\"ananas\"))), 3 döndürür"
 
 #: functions/conversion.xml:27
 #, kde-format
@@ -575,12 +575,12 @@ msgstr "BOOL2INT(değer)"
 #: functions/conversion.xml:50
 #, kde-format
 msgid "BOOL2INT(True) returns 1"
-msgstr "BOOL2INT(true), 1 döndürür"
+msgstr "BOOL2INT(doğru), 1 döndürür"
 
 #: functions/conversion.xml:51
 #, kde-format
 msgid "BOOL2INT(False) returns 0"
-msgstr "BOOL2INT(false), 0 döndürür"
+msgstr "BOOL2INT(yanlış), 0 döndürür"
 
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
@@ -595,9 +595,8 @@ msgid ""
 "function should rarely be needed."
 msgstr ""
 "NUM2STRING() işlevi, verilen bir sayı için bir karakter dizisi döndürür. "
-"Unutmayın ki Calligra Tablolar, gerektiğinde sayıları otomatik olarak "
-"karakter dizisine çevirebilir. Dolayısıyla bu işlev nadiren gerekli "
-"olacaktır."
+"Unutmayın ki Calligra Tablolar, gerektiğinde sayıları kendiliğinden karakter "
+"dizisine çevirebilir. Dolayısıyla bu işlev nadiren gerekli olacaktır."
 
 #: functions/conversion.xml:65
 #, kde-format
@@ -617,7 +616,7 @@ msgstr "NUM2STRING(2,05), \"2,05\" döndürür"
 #: functions/conversion.xml:68
 #, kde-format
 msgid "=find(\"101\";NUM2STRING(A1)) (A1 = 2.010102) returns True"
-msgstr "=bul(\"101\";NUM2STRING(A1)) (A1 = 2,010102), True döndürür"
+msgstr "FIND(\"101\"; NUM2STRING(A1)) (A1 = 2,010102), doğru döndürür"
 
 #: functions/conversion.xml:81
 #, kde-format
@@ -652,7 +651,7 @@ msgstr "CHARTOASCII(\"v\"), 118 döndürür"
 #: functions/conversion.xml:97
 #, kde-format
 msgid "CHARTOASCII(r) is an error. The character must be in quotes."
-msgstr "CHARTOASCII(r) hatalıdır. Karakter, tırnaklar içinde olmalıdır."
+msgstr "CHARTOASCII(r) hatalıdır. Karakter, tırnak içinde olmalıdır."
 
 #: functions/conversion.xml:105
 #, kde-format
@@ -675,7 +674,7 @@ msgstr "ASCIITOCHAR(değer)"
 #: functions/conversion.xml:111
 #, kde-format
 msgid "ASCIITOCHAR(118) returns \"v\""
-msgstr "ASCIITOCHAR(118) \"v\" döndürür"
+msgstr "ASCIITOCHAR(118), \"v\" döndürür"
 
 #: functions/conversion.xml:112
 #, kde-format
@@ -704,17 +703,17 @@ msgstr ""
 #: functions/conversion.xml:129
 #, kde-format
 msgid "POLR(X;Y)"
-msgstr "POLR(X;Y)"
+msgstr "POLR(X; Y)"
 
 #: functions/conversion.xml:130
 #, kde-format
 msgid "POLR(12;12) returns 16.9705"
-msgstr "POLR(12;12), 16,9705 döndürür"
+msgstr "POLR(12; 12), 16,9705 döndürür"
 
 #: functions/conversion.xml:131
 #, kde-format
 msgid "POLR(12;0) returns 12"
-msgstr "POLR(12;0), 12 döndürür"
+msgstr "POLR(12; 0), 12 döndürür"
 
 #: functions/conversion.xml:150
 #, kde-format
@@ -722,28 +721,28 @@ msgid ""
 "The POLA() function returns the angle (in radians) corresponding to the "
 "position of a point in a cartesian landmark."
 msgstr ""
-"POLA() işlevi, bir noktanın kartezyen düzlemdeki konumunun açısını (radyan "
+"POLA() işlevi, bir noktanın kartezyen düzlemdeki konumunun açısını (yarıçap "
 "türünden) döndürür."
 
 #: functions/conversion.xml:151
 #, kde-format
 msgid "POLA(X;Y)"
-msgstr "POLA(X;Y)"
+msgstr "POLA(X; Y)"
 
 #: functions/conversion.xml:152
 #, kde-format
 msgid "POLA(12;12) returns 0.78539816"
-msgstr "POLA(12;12), 0,78539816 döndürür"
+msgstr "POLA(12; 12), 0,78539816 döndürür"
 
 #: functions/conversion.xml:153
 #, kde-format
 msgid "POLA(12;0) returns 0"
-msgstr "POLA(12;0), 0 döndürür"
+msgstr "POLA(12; 0), 0 döndürür"
 
 #: functions/conversion.xml:154
 #, kde-format
 msgid "POLA(0;12) returns 1.5707"
-msgstr "POLA(0;12), 1,5707 döndürür"
+msgstr "POLA(0; 12), 1,5707 döndürür"
 
 #: functions/conversion.xml:165 functions/conversion.xml:225
 #, kde-format
@@ -4191,9 +4190,9 @@ msgid ""
 "rate (annual rate or APR). For example: 8% interest compounded monthly "
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
-"EFFECT() işlevi, bir basit faizin belli zamanlarda tekrarlanarak alacağı "
-"değeri hesaplar. Örneğin, yüzde 8 değerinde aylik tekrar hesaplanan bir "
-"faiz, yıllık EFFECT(.08;12) veya yüzde 8,3 olacaktır."
+"EFFECT() işlevi, bir basit faizin belli zamanlarda yinelenerek alacağı "
+"değeri hesaplar. Örneğin, %​8 değerinde aylik tekrar hesaplanan bir faiz, "
+"yıllık EFFECT(.08; 12) veya ​%​8,3 olacaktır."
 
 #: functions/financial.xml:488
 #, kde-format
@@ -4428,7 +4427,7 @@ msgstr ""
 #: functions/financial.xml:1049
 #, kde-format
 msgid "PV is the present value in the sequence of payments."
-msgstr "PV, bir sizi ödemenin şu anki değeridir."
+msgstr "PV, bir dizi ödemenin şu anki değeridir."
 
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
@@ -4633,7 +4632,7 @@ msgid ""
 msgstr ""
 "NOMINAL() işlevi, yıllık olarak hesaplanmış verimli bir faiz oranı için "
 "nominal (belirli) faiz oranını hesaplar. Örneğin; aylık birleşik bir hesapta "
-"%​8 kazanmak için, Nominal(.08;12) veya %​7,72 getiriye gereksiniminiz var."
+"%​8 kazanmak için, NOMINAL(.08; 12) veya %​​7,72 getiriye gereksiniminiz vardır."
 
 #: functions/financial.xml:828
 #, kde-format
@@ -4925,10 +4924,10 @@ msgid ""
 "are made at the end of each period."
 msgstr ""
 "PV_ANNUITY() işlevi, yıllık ödemelerin veya ödeme dizisinin şimdiki "
-"döndürür. Örneğin; 20 yıl boyunca, % 5 faiz oranı ile yılda 50.000$ ödeyecek "
-"\"milyon dolarlık\" bir piyango kuponunun gerçek ederi "
-"PV_ANNUITY(50000;0.05;20) veya 623,111$'dır. Bu işlev ödemelerin dönem "
-"sonunda yapıldığını varsayar."
+"döndürür. Örneğin; 20 yıl boyunca, %​5 faiz oranı ile yılda $50.000 ödeyecek "
+"“milyon dolarlık” bir piyango biletinin gerçek ederi PV_ANNUITY(50000; 0,05; "
+"20) veya $623.111’dır. Bu işlev ödemelerin dönem sonunda yapıldığını "
+"varsayar."
 
 #: functions/financial.xml:1141
 #, kde-format
@@ -5278,7 +5277,7 @@ msgstr "Elle"
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: functions/information.xml:5
 #, kde-format
@@ -8729,7 +8728,7 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Üçüncü ve dördüncü değerler isteğe bağlıdır. Alt ve üst sınırları "
-"belirlerler. Öntanımlı olarak sırasıyla 0.0 ve 1.0 değerlerine eşittirler."
+"belirlerler. Öntanımlı olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
 
 #: functions/statistical.xml:117
 #, kde-format
@@ -8762,7 +8761,7 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Başlangıç ve bitiş parametreleri isteğe bağlıdır. Alt ve üst sınırları "
-"belirlerler. Öntanımlı olarak sırasıyla 0.0 ve 1.0 değerlerine eşittirler."
+"belirlerler. Öntanımlı olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
 
 #: functions/statistical.xml:149
 #, kde-format
@@ -8815,7 +8814,7 @@ msgstr "CHIDIST(sayı;bağımsızlık_derecesi)"
 #: functions/statistical.xml:171
 #, kde-format
 msgid "CHIDIST(13.27;5) returns 0.021"
-msgstr "CHIDIST(13.27;5), 0.021 döndürür"
+msgstr "CHIDIST(13,27; 5), 0,021 döndürür"
 
 #: functions/statistical.xml:179 functions/statistical.xml:198
 #: functions/statistical.xml:932 functions/statistical.xml:951
@@ -8838,7 +8837,7 @@ msgid ""
 "first parameter should not be less than the second. Otherwise the function "
 "returns an error."
 msgstr ""
-"COMBIN() işlev, olası birleşimlerin(kombinasyon) sayısını hesaplar. İlk "
+"COMBIN() işlevi, olası birleşimlerin(kombinasyon) sayısını hesaplar. İlk "
 "değer toplam eleman sayısıdır. İkinci değer ise seçilebilecek eleman "
 "sayısıdır. Her iki değer de artı olmalı ve ilk değer, ikincisinden küçük "
 "olmalalıdır. Aksi durumlarda hata iletisi gönderilecektir."
@@ -8875,17 +8874,17 @@ msgstr ""
 #: functions/statistical.xml:207
 #, kde-format
 msgid "COMBINA(total;chosen)"
-msgstr "COMBIN(toplam;seçilen)"
+msgstr "COMBINA(toplam;seçilen)"
 
 #: functions/statistical.xml:208
 #, kde-format
 msgid "COMBINA(12;5) returns 4368"
-msgstr "COMBIN(12;5), 4368 döndürür"
+msgstr "COMBINA(12;5), 4368 döndürür"
 
 #: functions/statistical.xml:209
 #, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr "COMBIN(5;5), 126 döndürür"
+msgstr "COMBINA(5;5), 126 döndürür"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -8928,7 +8927,7 @@ msgstr "CONFIDENCE(alfa;ölçsap;boy)"
 #: functions/statistical.xml:232
 #, kde-format
 msgid "CONFIDENCE(0.05;1.5;100) equals 0.294059"
-msgstr "CONFIDENCE(0.05;1.5;100), 0.294059 döndürür"
+msgstr "CONFIDENCE(0,05; 1,5; 100), 0,294059 döndürür"
 
 #: functions/statistical.xml:240 functions/statistical.xml:259
 #: functions/statistical.xml:668 functions/statistical.xml:913
@@ -9237,7 +9236,7 @@ msgstr "GAMMADIST(0.758;0.1;0.35;1), 0.995450 döndürür"
 #: functions/statistical.xml:451
 #, kde-format
 msgid "GAMMADIST(0.758;0.1;0.35;0) equals 0.017179"
-msgstr "GAMMADIST(0.758;0.1;0.35;0), 0.017179 döndürür"
+msgstr "GAMMADIST(0,758; 0,1; 0,35; 0), 0,017179 döndürür"
 
 #: functions/statistical.xml:471
 #, kde-format
@@ -9287,7 +9286,7 @@ msgstr "GAUSS(değer)"
 #: functions/statistical.xml:489
 #, kde-format
 msgid "GAUSS(0.25) equals 0.098706"
-msgstr "GAUSS(0.25), 0.098706 döndürür"
+msgstr "GAUSS(0,25), 0,098706 döndürür"
 
 #: functions/statistical.xml:517
 #, kde-format
@@ -9447,7 +9446,7 @@ msgstr "KURTP(A1:A5)"
 #: functions/statistical.xml:659
 #, kde-format
 msgid "KURTP(21; 33; 54; 23) returns -1.021"
-msgstr "KURTP(21; 33; 54; 23), -1.021 döndürür"
+msgstr "KURTP(21; 33; 54; 23), -1,021 döndürür"
 
 #: functions/statistical.xml:672
 #, kde-format
@@ -12340,8 +12339,8 @@ msgid ""
 "greater than 1.0, ATANH() returns not-a-number (NaN)."
 msgstr ""
 "ATANH() işlevi, X’in ters hiperbolik tanjant değerini hesaplar; öyle ki bu "
-"sonucun hiperbolik tamjantı X edecektir. Eğer X’in mutlak değeri 1.0’dan "
-"büyük ise, ATANH() işlevi, sayı olmayan değeri (NaN) döndürür."
+"sonucun hiperbolik tamjantı X edecektir. Eğer X’in mutlak değeri 1,0’dan "
+"büyükse ATANH() işlevi, sayı olmayan değeri (NaN) döndürür."
 
 #: functions/trig.xml:209
 #, kde-format
@@ -12982,7 +12981,7 @@ msgstr ""
 #: part/dialogs/FileOptionsWidget.ui:41
 #, kde-format
 msgid "Autosave interval:"
-msgstr "Otomatik kaydetme sıklığı:"
+msgstr "Kendiliğinden kaydetme sıklığı:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:48
@@ -12991,15 +12990,15 @@ msgid ""
 "Here you can select the time between autosaves, or disable this feature "
 "altogether by choosing \"No autosave\" (by selecting the minimum value)."
 msgstr ""
-"Buradan otomatik kaydetmeler arasındaki zamanı seçebilir veya \"Otomatik "
-"Kaydet Devre dışı\"' seçeneğini seçerek bu özelliği devre dışı "
+"Buradan kendiliğinden kaydetmeler arasındaki zamanı seçebilir veya "
+"“Kendiliğinden kaydetme kapalı” seçeneğini seçerek bu özelliği devre dışı "
 "bırakabilirsiniz (en düşük değeri seçerek)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
-msgstr "Otomatik Kaydet Devre Dışı"
+msgstr "Kendiliğinden kaydetme kapalı"
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
@@ -13407,8 +13406,8 @@ msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr ""
-"Aşağı açılan seçim kutusundaki seçenek aralığından (otomatik) metin "
-"tamamlama modunu seçmenizi sağlar."
+"Aşağı açılan seçim kutusundaki seçenek aralığından (kendiliğinden) metin "
+"tamamlama kipini seçmenizi sağlar."
 
 #: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
@@ -13418,7 +13417,7 @@ msgstr "Açılır Pencere"
 #: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
-msgstr "Yarı Otomatik"
+msgstr "Yarı Kendiliğinden"
 
 #: part/dialogs/SheetPropertiesDialog.cpp:17
 #, kde-format
@@ -13521,8 +13520,8 @@ msgid ""
 "Check this box and the first letter of any text you type in will "
 "automatically be converted to uppercase."
 msgstr ""
-"Bu kutuyu işaretleyin ve yazdığınız herhangi bir metnin ilk harfi otomatik "
-"olarak büyük harfe dönüştürülecektir."
+"Bu kutuyu işaretleyin ve yazdığınız herhangi bir metnin ilk harfi "
+"kendiliğinden BÜYÜK harfe dönüştürülecektir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:143
@@ -13618,13 +13617,13 @@ msgid ""
 "the value of any cell they refer to changes."
 msgstr ""
 "Bu ayar, başvurdukları herhangi bir hücrenin değeri değiştiğinde formüllerin "
-"otomatik olarak yeniden hesaplanıp hesaplanmayacağını denetler."
+"kendiliğinden yeniden hesaplanıp hesaplanmayacağını denetler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:203
 #, kde-format
 msgid "&Automatic recalculation"
-msgstr "&Otomatik yeniden hesaplama"
+msgstr "&Kendiliğinden yeniden hesaplama"
 
 #: part/dialogs/SheetSelectPage.cpp:19
 #, kde-format
@@ -14501,7 +14500,7 @@ msgstr "Paz"
 #: ui/commands/AutoFillCommand.cpp:669
 msgctxt "(qtundo-format)"
 msgid "Autofill"
-msgstr "Otomatik Doldurma"
+msgstr "Kendiliğinden Doldur"
 
 #: ui/commands/DataManipulators.cpp:104
 msgctxt "(qtundo-format)"
@@ -14925,9 +14924,9 @@ msgid ""
 "else."
 msgstr ""
 "Bu öntanımlı biçimdir ve Calligra Çizelgeleri geçerli hücre verisine dayalı "
-"olarak gerçek veri türünü otomatik olarak algılar. öntanımlı olarak Calligra "
-"Çizelgeleri sayıları, tarihleri ve zamanı hücrelerde sağa, geri kalan her "
-"şeyi sola hizalar."
+"olarak gerçek veri türünü kendiliğinden algılar. Öntanımlı olarak Calligra "
+"Tablolar sayıları, tarihleri ve zamanı hücrelerde sağa, geri kalan her şeyi "
+"sola hizalar."
 
 #: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
@@ -15018,10 +15017,10 @@ msgstr ""
 "2/16 veya 1/10 getirilebilir. Kesir türünü sağdaki alandan seçerek siz "
 "belirlersiniz. Seçtiğiniz kesir kipinde tam kesir olanaklı değilse en yakın "
 "eşleşme seçilir.\n"
-" Örneğin: Sayı olarak 1,5 varsa ve Kesir ve Onaltılık 1/16 seçilmişse "
-"hücrede gösterilecek metin tam kesir olan \"1 8/16\" olacaktır. Sayının 1,4 "
-"ve Kesir ve Onaltılık 1/16 seçilmesi durumunda en yakın Onaltılık kesir olan "
-"\"1 6/16\" görüntülenir."
+"Örneğin: Sayı olarak 1,5 varsa ve Kesir ve Onaltılık 1/16 seçilmişse hücrede "
+"gösterilecek metin tam kesir olan “1 8/16” olacaktır. Sayının 1,4 ve Kesir "
+"ve Onaltılık 1/16 seçilmesi durumunda en yakın Onaltılık kesir olan “1 6/16” "
+"görüntülenir."
 
 #: ui/dialogs/LayoutPage_Float.cpp:100
 #, kde-format

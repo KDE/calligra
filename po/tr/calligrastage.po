@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 14:12+0300\n"
+"PO-Revision-Date: 2024-09-03 17:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -156,7 +156,7 @@ msgstr "Sunum Aracı"
 #: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "Telif hakkı 1998-%1, Sahne Takımı"
+msgstr "Telif hakkı 1998–%1, Sahne Takımı"
 
 #: part/KPrAboutData.h:29
 #, kde-format
@@ -495,7 +495,7 @@ msgstr "Ana Slaytları Göster"
 #: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
-msgstr "Slayt Gösterisi İçe Aktar..."
+msgstr "Slayt Gösterisi İçe Aktar…"
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -530,7 +530,7 @@ msgstr "Geçerli slaytı sil"
 #: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
-msgstr "Kılavuz Slayt..."
+msgstr "Kılavuz Slayt…"
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -570,17 +570,17 @@ msgstr "Son slayta git"
 #: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
-msgstr "Sahne'yi Yapılandır..."
+msgstr "Sahne’yi Yapılandır…"
 
 #: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
-msgstr "HTML Olarak Dışa Aktar..."
+msgstr "HTML Olarak Dışa Aktar…"
 
 #: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "Resimleri Slayt Olarak Ekle..."
+msgstr "Resimleri Slayt Olarak Ekle…"
 
 #: part/KPrView.cpp:273
 #, kde-format
@@ -590,7 +590,7 @@ msgstr "Ortaya Çıkma Canlandırması Oluştur"
 #: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "Özel Slayt Gösterilerini Yapılandır..."
+msgstr "Özel Slayt Gösterilerini Yapılandır…"
 
 #: part/KPrView.cpp:281
 #, kde-format
@@ -625,32 +625,32 @@ msgstr "Durum Çubuğunu Gizle"
 #: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Durum çubuğunu gösterir ya da gizler"
+msgstr "Durum çubuğunu gösterir veya gizler"
 
 #: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr "Slayt Gösterisini Yapılandır..."
+msgstr "Slayt Gösterisini Yapılandır…"
 
 #: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr "Sunum Görünümünü Yapılandır..."
+msgstr "Sunum Görünümünü Yapılandır…"
 
 #: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr "Sunum üzerinde çiz..."
+msgstr "Sunum üzerinde çiz…"
 
 #: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr "Sunumu vurgula..."
+msgstr "Sunumu vurgula…"
 
 #: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "Sunum üzerinde siyah ekran..."
+msgstr "Sunum üzerinde siyah ekran…"
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -660,12 +660,12 @@ msgstr "Notlar"
 #: part/KPrViewModeSlidesSorter.cpp:64
 #, kde-format
 msgid "Slides Sorter"
-msgstr "Slayt Sıralayıcı"
+msgstr "Slayt Sıralayıcısı"
 
 #: part/KPrViewModeSlidesSorter.cpp:74
 #, kde-format
 msgid "Slide Show: "
-msgstr "Slayt Gösterisi: "
+msgstr "Slayt gösterisi: "
 
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
@@ -845,7 +845,7 @@ msgstr "Otomatik"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
-msgstr "Slayt Geçişi:"
+msgstr "Slayt geçişi:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
@@ -1066,13 +1066,13 @@ msgstr "Slaytlar"
 #: part/ui/KPrConfigureSlideShow.ui:27
 #, kde-format
 msgid "Presentation Slides:"
-msgstr "Sunum Slaytları:"
+msgstr "Sunum slaytları:"
 
 #. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "Özel Slayt Gösterilerini Yapılandır ..."
+msgstr "Özel Slayt Gösterilerini Yapılandır …"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
@@ -1121,7 +1121,7 @@ msgstr "Çıktı önizlemesi"
 #: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
 #: part/ui/KPrHtmlExport.ui:227
@@ -1150,7 +1150,7 @@ msgstr "Tarayıcıda aç"
 #: part/ui/KPrHtmlExportDialog.cpp:34
 #, kde-format
 msgid "Html Export"
-msgstr "HTML Dışa Aktar"
+msgstr "HTML Olarak Dışa Aktar"
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
@@ -1195,7 +1195,7 @@ msgstr "Silmeyi Onayla"
 #: part/ui/KPrHtmlExportDialog.cpp:326
 #, kde-format
 msgid "Are you sure you want to remove \"%1\"?"
-msgstr "\"%1\" ögesini kaldırmak istediğinizden emin misiniz?"
+msgstr "“%1” ögesini kaldırmak istediğinizden emin misiniz?"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:78
 msgctxt "(qtundo-format)"
@@ -1210,7 +1210,7 @@ msgstr "Ses yok"
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "Import..."
-msgstr "İçe Aktar..."
+msgstr "İçe Aktar…"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
@@ -1300,7 +1300,7 @@ msgstr "Üstten"
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:30
 #, kde-format
 msgid "Unknown subtype"
-msgstr "Bilinmeyen alt tip"
+msgstr "Bilinmeyen alt tür"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format

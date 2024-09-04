@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 20:40+0300\n"
+"PO-Revision-Date: 2024-09-03 17:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -186,7 +186,7 @@ msgstr "Sol paragraf kenarlığı"
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr "Metin şekil ilişkisi:"
+msgstr "Metin–şekil ilişkisi:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
@@ -402,7 +402,7 @@ msgstr "Şekil Özelliklerini Değiştir"
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr "Tuttur..."
+msgstr "Şuraya Sabitle…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -639,7 +639,7 @@ msgstr "Yer İmini Yeniden Adlandır"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "\"%1\" adlı bir yer imi zaten var."
+msgstr "“%1” adlı bir yer imi halihazırda var."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
@@ -1458,7 +1458,7 @@ msgstr "Sayfa %1/%2"
 #: part/KWStatusBar.cpp:38
 #, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "Sayfa %1-%2/%3"
+msgstr "Sayfa %1–%2/%3"
 
 #: part/KWStatusBar.cpp:39
 #, kde-format
@@ -1513,7 +1513,7 @@ msgstr "Tam Ekran Kipinden Çık"
 #: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
-msgstr "Şekil Özellikleri..."
+msgstr "Şekil Özellikleri…"
 
 #: part/KWView.cpp:280
 #, kde-format
@@ -1523,7 +1523,7 @@ msgstr "Şeklin nasıl davranacağını değiştir"
 #: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
-msgstr "Belgeden Şablon Oluştur..."
+msgstr "Belgeden Şablon Oluştur…"
 
 #: part/KWView.cpp:290
 #, kde-format
@@ -1690,7 +1690,7 @@ msgstr "Görünümü, tam ekran kipine ayarlar"
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr "Anlamsal Biçem Sayfaları..."
+msgstr "Anlamsal Biçem Sayfaları…"
 
 #: part/KWView.cpp:402
 #, kde-format
@@ -1709,12 +1709,12 @@ msgstr ""
 #: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
-msgstr "Yapılandır..."
+msgstr "Yapılandır…"
 
 #: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
-msgstr "Sayfa Düzeni..."
+msgstr "Sayfa Yerleşimi…"
 
 #: part/KWView.cpp:429
 #, kde-format
@@ -1780,7 +1780,7 @@ msgstr "Sayfa düzeni"
 #: part/pagetool/SimpleSetupWidget.ui:32
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: part/widgets/KoFindToolbar.cpp:64
 #, kde-format
