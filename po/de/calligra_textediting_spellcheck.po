@@ -2,7 +2,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: SpellCheckPlugin\n"
+"Project-Id-Version: calligra_textediting_spellcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2011-10-31 21:59+0100\n"

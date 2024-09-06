@@ -3,20 +3,22 @@
 # Usama Ahmed Ali <usama01@maktoob.com>, 2002.
 # Nuriddin Aminagha <nuriddin@haydarlinux.org>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2007-10-14 16:03+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: <en@li.org>\n"
+"PO-Revision-Date: 2024-09-05 11:14+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
@@ -97,15 +99,15 @@ msgstr "تحرير"
 
 #. i18n: ectx: ToolBar (object_toolbar)
 #: data/karbon.rc:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Object"
 msgstr "كائن"
 
 #. i18n: ectx: ToolBar (align_toolbar)
 #: data/karbon.rc:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align"
-msgstr "حاذي"
+msgstr "حاذِ"
 
 #. i18n: ectx: ToolBar (Effects)
 #: data/karbon.rc:174
@@ -177,7 +179,6 @@ msgstr "تجزئة الجزء:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
 #: plugins/roundcorners/RoundCornersPlugin.cpp:79
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
 msgstr "تدوير الحواف"
@@ -215,7 +216,7 @@ msgid "Whirl Pinch"
 msgstr "دوامة"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Info"
 msgstr "معلومات"
 
@@ -327,9 +328,9 @@ msgid "Carl Schwan"
 msgstr ""
 
 #: ui/KarbonAboutData.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Port to Qt6"
-msgstr "حوّل إلى أشكال"
+msgstr "النّقل إلى كيوت 6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

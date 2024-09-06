@@ -1,6 +1,7 @@
 # translation of kspreadinsertcalendar.po to
 # Language AR translations for PACKAGE package.
 # Automatically generated, 2007.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2008.
 msgid ""
@@ -8,15 +9,16 @@ msgstr ""
 "Project-Id-Version: kspreadinsertcalendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2008-01-20 20:11+0200\n"
-"Last-Translator: Abdelrahman <abd_elrahman_em@yahoo.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-05 11:12+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: CalendarTool.cpp:62
 #, kde-format
@@ -91,9 +93,9 @@ msgid "week"
 msgstr "أسبوع"
 
 #: CalendarToolFactory.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calendar"
-msgstr "التقويم من %1 إلى %2"
+msgstr "التقويم"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
 #: CalendarToolWidget.ui:14
@@ -103,21 +105,21 @@ msgstr "التقويم من %1 إلى %2"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
 #: CalendarToolWidget.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
-msgstr "أ&درج"
+msgstr "أدرج"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: CalendarToolWidget.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "End date:"
-msgstr "تاريخ النهاية"
+msgstr "تاريخ النهاية:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: CalendarToolWidget.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start date:"
-msgstr "تاريخ البدء"
+msgstr "تاريخ البدء:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

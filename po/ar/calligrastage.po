@@ -3,20 +3,22 @@
 # Sayed Jaffer Al-Mosawi <mosawi@arabeyes.org>, 2002.
 # IBRAHIM ALIBRAHIM <iki2@eudoramail.com>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2008-01-09 20:13+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: Arabic <doc@arabeyes.org>\n"
+"PO-Revision-Date: 2024-09-05 11:14+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -324,9 +326,9 @@ msgid "End of presentation. Click to exit."
 msgstr ""
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout"
-msgstr "عرض"
+msgstr "التّخطيط"
 
 #: part/KPrPart.cpp:69
 #, kde-format
@@ -341,7 +343,7 @@ msgstr ""
 #: part/KPrPart.cpp:87
 #, kde-format
 msgid "Installation Error"
-msgstr ""
+msgstr "خطأ تثبيت"
 
 #: part/KPrPicturesImport.cpp:59
 #, fuzzy
@@ -395,37 +397,37 @@ msgstr ""
 #: part/KPrPresentationDrawWidget.cpp:89
 #, kde-format
 msgid "Black"
-msgstr ""
+msgstr "أسود"
 
 #: part/KPrPresentationDrawWidget.cpp:90
 #, kde-format
 msgid "White"
-msgstr ""
+msgstr "أبيض"
 
 #: part/KPrPresentationDrawWidget.cpp:91
 #, kde-format
 msgid "Green"
-msgstr ""
+msgstr "أخضر"
 
 #: part/KPrPresentationDrawWidget.cpp:92
 #, kde-format
 msgid "Red"
-msgstr ""
+msgstr "أحمر"
 
 #: part/KPrPresentationDrawWidget.cpp:93
 #, kde-format
 msgid "Blue"
-msgstr ""
+msgstr "أزرق"
 
 #: part/KPrPresentationDrawWidget.cpp:94
 #, kde-format
 msgid "Yellow"
-msgstr ""
+msgstr "أصفر"
 
 #: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Next Slide"
-msgstr "أدرج"
+msgstr "الشريحة التالية"
 
 #: part/KPrPresenterViewInterface.cpp:59
 #, kde-format
@@ -470,9 +472,9 @@ msgstr ""
 
 #: part/KPrShapeAnimations.cpp:225
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation"
-msgstr "أنشئ شكلا متحركا"
+msgstr "التحريك"
 
 #: part/KPrShapeAnimations.cpp:229
 #, kde-format
@@ -480,19 +482,19 @@ msgid "Shape"
 msgstr "شكل"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move Here"
-msgstr "عرض"
+msgstr "ان&قل هنا"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Copy Here"
-msgstr "عرض"
+msgstr "ان&سخ هنا"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "أل&غِ"
+msgstr "أ&لغِ"
 
 #: part/KPrView.cpp:74
 #, fuzzy, kde-format
@@ -706,9 +708,9 @@ msgid "Duplicate Slide"
 msgstr "احذف تأثير الصفحة"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Slideshow"
-msgstr "عرض"
+msgstr "ابدأ عرض الشرائح"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, fuzzy, kde-format
@@ -733,7 +735,7 @@ msgstr ""
 #: part/KPrViewModeSlidesSorter.cpp:542
 #, kde-format
 msgid "Copy"
-msgstr ""
+msgstr "انسخ"
 
 #: part/KPrViewModeSlidesSorter.cpp:543
 #, kde-format
@@ -803,7 +805,7 @@ msgstr "أنشئ شكلا متحركا"
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
 #, kde-format
 msgid "Start: "
-msgstr ""
+msgstr "البداية: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
@@ -828,7 +830,7 @@ msgstr ""
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
 #, kde-format
 msgid "Duration: "
-msgstr ""
+msgstr "المدّة: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
@@ -963,13 +965,13 @@ msgstr ""
 #: part/tools/animationtool/wdg_tool_crop.ui:36
 #, kde-format
 msgid "X:"
-msgstr ""
+msgstr "س:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:60
 #, kde-format
 msgid "W&idth:"
-msgstr ""
+msgstr "ال&عرض:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
 #: part/tools/animationtool/wdg_tool_crop.ui:63
@@ -1057,7 +1059,7 @@ msgstr ""
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:29
 #, kde-format
 msgid "Monitor %1"
-msgstr ""
+msgstr "الشّاشة %1"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, fuzzy, kde-format
@@ -1105,7 +1107,7 @@ msgstr ""
 #: part/ui/KPrHtmlExport.ui:55
 #, kde-format
 msgid "Select all"
-msgstr ""
+msgstr "حدّد الكلّ"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel_css)
 #: part/ui/KPrHtmlExport.ui:65
@@ -1142,7 +1144,7 @@ msgstr ""
 #: part/ui/KPrHtmlExport.ui:227
 #, kde-format
 msgid "Browse"
-msgstr ""
+msgstr "تصفح"
 
 #. i18n: ectx: property (text), widget (QLabel, label_author)
 #: part/ui/KPrHtmlExport.ui:243
@@ -1223,9 +1225,9 @@ msgid "No sound"
 msgstr ""
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import..."
-msgstr "عرض"
+msgstr "استورد..."
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format
@@ -1324,7 +1326,7 @@ msgstr ""
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Clock"
-msgstr ""
+msgstr "الساعة"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:31
 #, fuzzy
@@ -1469,13 +1471,12 @@ msgstr "تأثير المسح"
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
-msgstr ""
+msgstr "المروحة"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#, fuzzy
 msgid "Center Right"
-msgstr "Werner Trobin"
+msgstr "يمين الوسط"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
@@ -1485,9 +1486,8 @@ msgstr "Werner Trobin"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, fuzzy
 msgid "Center Left"
-msgstr "Werner Trobin"
+msgstr "يسار الوسط"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
@@ -1772,9 +1772,8 @@ msgid "Diagonal Bottom Left Reverse"
 msgstr "تأثير المسح"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#, fuzzy
 msgid "Diagonal Top Left"
-msgstr "تأثير المسح"
+msgstr "قطري اعلى اليسار"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 #, fuzzy
@@ -1804,7 +1803,7 @@ msgstr "المحاذاة العمودية"
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
-msgstr ""
+msgstr "الصندوق"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:30
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
@@ -1938,9 +1937,8 @@ msgid "Ellipse"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
-#, fuzzy
 msgid "Circle"
-msgstr "ملف"
+msgstr "دائرة"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
 #, fuzzy
@@ -1963,9 +1961,8 @@ msgid "Iris"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
-#, fuzzy
 msgid "Diamond"
-msgstr "المحاذاة العمودية"
+msgstr "معين الزوايا"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 #, fuzzy
@@ -2019,7 +2016,7 @@ msgstr "تأثير المسح"
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
 #, kde-format
 msgid "Star"
-msgstr ""
+msgstr "النجم"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:83
 #, fuzzy
@@ -2054,7 +2051,7 @@ msgstr "المحاذاة العمودية"
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Triangle"
-msgstr ""
+msgstr "مثلّث"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
 #, fuzzy, kde-format
@@ -2234,7 +2231,7 @@ msgstr "شكل"
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Spiral"
-msgstr ""
+msgstr "لولبيّ"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:38
 #, fuzzy
@@ -2362,9 +2359,9 @@ msgid "Bottom Right Horizontal"
 msgstr "المحاذاة العمودية"
 
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide"
-msgstr "عرض"
+msgstr "أزْلِق"
 
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
 #, fuzzy, kde-format
@@ -2382,9 +2379,9 @@ msgid "Header"
 msgstr ""
 
 #: plugins/variable/PresentationVariableFactory.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Footer"
-msgstr "نسّق"
+msgstr "تذييل"
 
 #, fuzzy
 #~| msgid "&Edit"

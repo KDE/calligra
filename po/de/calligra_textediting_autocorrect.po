@@ -6,7 +6,7 @@
 # Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: AutocorrectPlugin\n"
+"Project-Id-Version: calligra_textediting_autocorrect\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2008-11-12 17:59+0100\n"

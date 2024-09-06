@@ -3,7 +3,7 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: VideoShape\n"
+"Project-Id-Version: calligra_shape_video\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2014-05-19 10:02+0200\n"

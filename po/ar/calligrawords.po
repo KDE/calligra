@@ -6,20 +6,22 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2008-01-16 14:38+0200\n"
-"Last-Translator: Abdelrahman <abd_elrahman_em@yahoo.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2024-09-05 11:11+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -132,9 +134,9 @@ msgstr "اجعله متداخلا"
 
 #: part/dialogs/KWAnchoringProperties.cpp:413
 #: part/dialogs/KWAnchoringProperties.cpp:424
-#, fuzzy, kde-format
+#, kde-format
 msgid "Character"
-msgstr "أنشئ"
+msgstr "المحارف"
 
 #: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
@@ -247,7 +249,7 @@ msgstr "يمين"
 #: part/dialogs/KWAnchoringProperties.ui:206
 #, kde-format
 msgid "Offset"
-msgstr ""
+msgstr "الإزاحة"
 
 #. i18n: ectx: property (text), widget (QLabel, lVOffset)
 #. i18n: ectx: property (text), widget (QLabel, lHOffset)
@@ -432,15 +434,15 @@ msgstr "أنشئ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Alignment"
-msgstr "الموضع"
+msgstr "محاذاة أفقية"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
 #: part/dialogs/KWInsertImage.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Left"
-msgstr "يسار"
+msgstr "ي&سار"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
 #: part/dialogs/KWInsertImage.ui:75
@@ -450,21 +452,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Right"
-msgstr "يمين"
+msgstr "ي&مين"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
 #: part/dialogs/KWInsertImage.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Alignment"
-msgstr "الموضع"
+msgstr "محاذاة العموديّة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
 #: part/dialogs/KWInsertImage.ui:98
 #, kde-format
 msgid "&Top"
-msgstr ""
+msgstr "أ&على"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
 #: part/dialogs/KWInsertImage.ui:105
@@ -544,9 +546,9 @@ msgid "Style"
 msgstr "حافة الصفحة:"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clone"
-msgstr "إغلاق"
+msgstr "استنسخ"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
 #, fuzzy, kde-format
@@ -635,9 +637,9 @@ msgid "Please provide a new name for the bookmark"
 msgstr ""
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename Bookmark"
-msgstr "أنشئ صفحة جديدة"
+msgstr "غير اسم العلامة"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
@@ -669,7 +671,7 @@ msgstr "أنشئ"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "تنقيح"
 
 #: part/dockers/KWNavigationDocker.cpp:20
 #, fuzzy, kde-format
@@ -745,7 +747,7 @@ msgstr "محارف التنسيق"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Words"
 msgstr "كلمات"
 
@@ -1107,7 +1109,7 @@ msgstr ""
 #: part/KWAboutData.h:33 part/KWAboutData.h:34
 #, kde-format
 msgid "Pierre Ducroquet"
-msgstr ""
+msgstr "Pierre Ducroquet"
 
 #: part/KWAboutData.h:35
 #, kde-format
@@ -1118,12 +1120,12 @@ msgstr ""
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Everything"
-msgstr ""
+msgstr "كلّ شيء"
 
 #: part/KWAboutData.h:36
 #, kde-format
 msgid "Sebastian Sauer"
-msgstr ""
+msgstr "Sebastian Sauer"
 
 #: part/KWAboutData.h:37
 #, kde-format
@@ -1381,27 +1383,27 @@ msgid "Standard"
 msgstr "قياسي"
 
 #: part/KWDocument.cpp:544
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Title"
 msgstr "عنوان المستند"
 
 #: part/KWDocument.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 1"
 msgstr "الرأس 1"
 
 #: part/KWDocument.cpp:557
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 2"
 msgstr "الرأس 2"
 
 #: part/KWDocument.cpp:563
-#, fuzzy, kde-format
+#, kde-format
 msgid "Head 3"
 msgstr "الرأس 3"
 
 #: part/KWDocument.cpp:569
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bullet List"
 msgstr "قائمة نقطية"
 
@@ -1456,9 +1458,9 @@ msgid "Saved"
 msgstr "محفوظ"
 
 #: part/KWStatusBar.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1 of %2"
-msgstr "الصفحة: %1/%2"
+msgstr "الصفحة %1 من %2"
 
 #: part/KWStatusBar.cpp:38
 #, fuzzy, kde-format
@@ -1491,9 +1493,9 @@ msgid "Page Style"
 msgstr "حافة الصفحة:"
 
 #: part/KWStatusBar.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Size"
-msgstr "فاصل صفحات"
+msgstr "حجم الصفحة"
 
 #: part/KWStatusBar.cpp:194
 #, fuzzy, kde-format
@@ -1702,9 +1704,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:418
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure..."
-msgstr "أدرج صفحة"
+msgstr "اضبط..."
 
 #: part/KWView.cpp:427
 #, kde-format
@@ -1749,7 +1751,7 @@ msgstr "لا مجموعات أطر في المستند"
 #: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
-msgstr ""
+msgstr "عدد الكلمات"
 
 #: part/KWView.cpp:455
 #, fuzzy, kde-format
@@ -1807,7 +1809,7 @@ msgstr "خيارات"
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "استبدل:"
 
 #: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
@@ -1819,7 +1821,7 @@ msgstr ""
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "استبدل الكلّ"
 
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
@@ -1841,7 +1843,7 @@ msgstr[5] ""
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "لم يعثر على تطابقات"
 
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format

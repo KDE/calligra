@@ -5,7 +5,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: FormulaShape\n"
+"Project-Id-Version: calligra_shape_formula\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
 "PO-Revision-Date: 2014-04-04 09:00+0200\n"

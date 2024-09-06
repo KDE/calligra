@@ -2,7 +2,7 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: TemplateShape\n"
+"Project-Id-Version: calligra_shape_template\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
 "PO-Revision-Date: 2014-04-04 09:29+0200\n"

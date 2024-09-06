@@ -3,7 +3,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: VariablesPlugin\n"
+"Project-Id-Version: calligra_textinlineobject_variables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2021-05-10 06:49+0200\n"

@@ -1,7 +1,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: PluginShape\n"
+"Project-Id-Version: calligra_shape_plugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
 "PO-Revision-Date: 2011-06-05 00:41+0200\n"

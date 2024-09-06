@@ -1,21 +1,23 @@
 # translation of kofficefilters.po to
 # Language AR translations for PACKAGE package.
 # Automatically generated, 2007.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2007-10-14 16:05+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: <en@li.org>\n"
+"PO-Revision-Date: 2024-09-05 12:13+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, fuzzy, kde-format
@@ -23,9 +25,9 @@ msgid "%1 Export Options"
 msgstr "PNG صدِّر خيارات"
 
 #: karbon/image/ImageExportOptionsWidget.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1"
-msgstr "صفحة %1"
+msgstr "الصفحة %1"
 
 #. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
 #: karbon/image/ImageExportOptionsWidget.ui:19
@@ -71,13 +73,13 @@ msgstr "الإ_ستبانة:"
 #: karbon/image/ImageExportOptionsWidget.ui:108
 #, kde-format
 msgid "Unit:"
-msgstr ""
+msgstr "الوحدة:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: karbon/image/ImageExportOptionsWidget.ui:124
 #, kde-format
 msgid "Background Color"
-msgstr ""
+msgstr "لون الخلفيّة"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColor)
 #: karbon/image/ImageExportOptionsWidget.ui:133
@@ -125,9 +127,9 @@ msgid "Could not read ZIP directory of the requested file %1"
 msgstr ""
 
 #: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter password"
-msgstr "كلمات السر"
+msgstr "أدخل كلمة المرور"
 
 #: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
 #, kde-format
@@ -254,7 +256,7 @@ msgstr "CVS المرشّح فتح دَخْل ملفّ تقرير."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #: sheets/csv/exportdialogui.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "End of Line"
 msgstr "نهاية السطر"
 
@@ -332,19 +334,19 @@ msgstr "حد"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comma"
 msgstr "فاصلة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
 #: sheets/csv/exportdialogui.ui:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "Semicolon"
 msgstr "فاصلة منقوطة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
 #: sheets/csv/exportdialogui.ui:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tabulator"
 msgstr "علامة الجدولة"
 
@@ -356,9 +358,9 @@ msgstr "فضائي"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
 #: sheets/csv/exportdialogui.ui:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other:"
-msgstr "الآخر"
+msgstr "أخرى:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:250
@@ -486,9 +488,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout"
-msgstr "التصميم"
+msgstr "التّخطيط"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:131
@@ -610,7 +612,7 @@ msgstr "مستند الفئة:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: sheets/latex/export/latexexportwidget.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Quality:"
 msgstr "الجودة:"
 
@@ -622,9 +624,9 @@ msgstr "نهائي"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
 #: sheets/latex/export/latexexportwidget.ui:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Draft"
-msgstr "مسوّدة"
+msgstr "مسودة"
 
 #. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
 #: sheets/latex/export/latexexportwidget.ui:154
@@ -678,7 +680,7 @@ msgstr "احذف"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: sheets/latex/export/latexexportwidget.ui:321
-#, fuzzy, kde-format
+#, kde-format
 msgid "Contents"
 msgstr "المحتويات"
 
@@ -719,9 +721,9 @@ msgid "Export notes in comments"
 msgstr "صدِّر بوصة تعليقات"
 
 #: sheets/opencalc/opencalcexport.cc:889
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page "
-msgstr "صفحة "
+msgstr "الصفحة "
 
 #: sheets/opencalc/opencalcimport.cc:1198
 #, fuzzy, kde-format
@@ -851,22 +853,22 @@ msgid "End notes"
 msgstr "نهاية السطر"
 
 #: words/msword-odf/conversion.cpp:783
-#, fuzzy, kde-format
+#, kde-format
 msgid "Even Pages Header"
 msgstr "ترويسة الصفحات الزوجية"
 
 #: words/msword-odf/conversion.cpp:785
-#, fuzzy, kde-format
+#, kde-format
 msgid "Odd Pages Header"
 msgstr "ترويسة الصفحات الفردية"
 
 #: words/msword-odf/conversion.cpp:787
-#, fuzzy, kde-format
+#, kde-format
 msgid "Even Pages Footer"
 msgstr "تذييل الصفحات الزوجية"
 
 #: words/msword-odf/conversion.cpp:789
-#, fuzzy, kde-format
+#, kde-format
 msgid "Odd Pages Footer"
 msgstr "تذييل الصفحات الفردية"
 

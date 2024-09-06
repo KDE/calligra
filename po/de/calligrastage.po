@@ -9,7 +9,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011, 2012, 2013, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: stage\n"
+"Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"

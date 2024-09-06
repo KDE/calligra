@@ -5,20 +5,22 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2008-01-12 07:26+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: Arabic <doc@arabeyes.org>\n"
+"PO-Revision-Date: 2024-09-05 11:12+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, fuzzy, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -62,15 +64,15 @@ msgid "Line"
 msgstr "الخطوط"
 
 #: basicflakes/tools/KoPencilTool.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Precision:"
-msgstr "الموقع:"
+msgstr "الدقة:"
 
 #: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr ""
+msgstr "خام"
 
 #: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
@@ -88,7 +90,7 @@ msgstr "مستقيم"
 #: basicflakes/tools/KoPencilTool.cpp:295
 #, kde-format
 msgid "Optimize"
-msgstr ""
+msgstr "حسِّن"
 
 #: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
@@ -151,7 +153,6 @@ msgid "Insert points"
 msgstr "أدرج نقطة"
 
 #: flake/commands/KoPathPointMergeCommand.cpp:134
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "ادمج النقاط"
@@ -408,9 +409,9 @@ msgid "A connection between two other shapes"
 msgstr "الشكل الذي يظهر اتصالا بين شكلين آخرين"
 
 #: flake/KoGridData.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Grid"
-msgstr "اعرض ال&شبيكة"
+msgstr "أظهر الشبكة"
 
 #: flake/KoGridData.cpp:207
 #, fuzzy, kde-format
@@ -639,15 +640,15 @@ msgstr "تكبير"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: flake/tools/KoZoomToolWidget.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom In"
-msgstr "تكبير"
+msgstr "قرّب"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: flake/tools/KoZoomToolWidget.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom Out"
-msgstr "تكبير"
+msgstr "بعّد"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -753,18 +754,18 @@ msgstr "ملف"
 #: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
 msgid "No autosave"
-msgstr ""
+msgstr "لا تحفظ آليًّا"
 
 #: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr ""
+msgstr "دقائق"
 
 #: main/config/KoConfigDocumentPage.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autosave interval:"
-msgstr "يجري الحفظ التلقائي..."
+msgstr "فترة الحفظ الآليّ:"
 
 #: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
@@ -772,10 +773,10 @@ msgid "Create backup file:"
 msgstr "انشئ شكلاً"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "اعرض ال&شبيكة"
+msgstr "اعرض الشّبكة"
 
 #: main/config/KoConfigGridPage.cpp:59
 #, fuzzy, kde-format
@@ -806,9 +807,9 @@ msgid "Vertical spacing:"
 msgstr "&رأسي"
 
 #: main/config/KoConfigMiscPage.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "Units:"
-msgstr "الوحدة:"
+msgstr "الوحدات:"
 
 #: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
@@ -940,7 +941,7 @@ msgstr "احفظ لوحة ألوان"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "أهمل الكلّ"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -1506,10 +1507,9 @@ msgid "Export"
 msgstr "صدِّر"
 
 #: main/KoMainWindow.cpp:934
-#, fuzzy, kde-format
-#| msgid "Untitled"
+#, kde-format
 msgid "untitled"
-msgstr "بدون عنوان"
+msgstr "بلا عنوان"
 
 #: main/KoMainWindow.cpp:1198
 #, kde-format
@@ -1640,12 +1640,12 @@ msgstr "الهندسة"
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "أسهم"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "مضحك"
 
 #: main/KoStandardAction.cpp:19
 #, fuzzy, kde-format
@@ -1663,7 +1663,7 @@ msgid "Create Template"
 msgstr "انشئ قالب"
 
 #: main/KoTemplateCreateDia.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "الاسم:"
@@ -1694,9 +1694,9 @@ msgid "&Preview"
 msgstr "المعاينة:"
 
 #: main/KoTemplateCreateDia.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom:"
-msgstr "مخصص"
+msgstr "مخصص:"
 
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
@@ -1824,7 +1824,7 @@ msgstr "الأداة النشطة: %1"
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
-msgstr ""
+msgstr "مجهّل"
 
 #: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, fuzzy, kde-format
@@ -2067,7 +2067,7 @@ msgstr "بكسلات (px)"
 #: odf/KoUnit.cpp:43
 #, kde-format
 msgid "Unsupported unit"
-msgstr ""
+msgstr "وحدة غير مدعومة"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
 #, fuzzy
@@ -2296,9 +2296,9 @@ msgstr "انشئ طبقة"
 
 #: pageapp/KoPADocumentModel.cpp:309
 #: pageapp/KoPADocumentStructureDocker.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide"
-msgstr "ال&حجم:"
+msgstr "أزْلِق"
 
 #: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
@@ -2317,19 +2317,19 @@ msgid "Reparent shapes"
 msgstr "غيّر أصول الأشكال"
 
 #: pageapp/KoPADocumentModel.cpp:676
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move Here"
-msgstr "انقل الصفحة"
+msgstr "ان&قل هنا"
 
 #: pageapp/KoPADocumentModel.cpp:680
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Copy Here"
-msgstr "أخضر"
+msgstr "ان&سخ هنا"
 
 #: pageapp/KoPADocumentModel.cpp:684
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "غيّر"
+msgstr "أ&لغِ"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
 #, fuzzy, kde-format
@@ -2371,7 +2371,7 @@ msgstr ""
 #: pageapp/KoPADocumentStructureDocker.cpp:137
 #, kde-format
 msgid "Detailed View"
-msgstr ""
+msgstr "منظور مفصّل"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:139
 #, kde-format
@@ -2439,9 +2439,9 @@ msgstr "مخصص"
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy"
-msgstr "الشركة:"
+msgstr "انسخ"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:603
 #, fuzzy, kde-format
@@ -2449,9 +2449,9 @@ msgid "Paste"
 msgstr "للصفحة"
 
 #: pageapp/KoPAPageThumbnailModel.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1"
-msgstr "للصفحة"
+msgstr "الصفحة %1"
 
 #: pageapp/KoPAPastePage.cpp:112
 #, fuzzy
@@ -2483,9 +2483,9 @@ msgid "Tools"
 msgstr "Pan Tool"
 
 #: pageapp/KoPAView.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "D&elete"
-msgstr "احذف"
+msgstr "ا&حذف"
 
 #: pageapp/KoPAView.cpp:360
 #, kde-format
@@ -2555,9 +2555,9 @@ msgid "Master Page..."
 msgstr "الصق الصفحة"
 
 #: pageapp/KoPAView.cpp:408
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Layout..."
-msgstr "تخطيط الصفحة"
+msgstr "تخطيط الصفحة..."
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
@@ -2571,9 +2571,9 @@ msgid "Import Document..."
 msgstr "استورد مستندا"
 
 #: pageapp/KoPAView.cpp:427
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure..."
-msgstr "طابق إلى الشبكة"
+msgstr "اضبط..."
 
 #: pageapp/KoPAView.cpp:517
 #, fuzzy, kde-format
@@ -2691,7 +2691,7 @@ msgstr "اطرح"
 #: pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
 msgid "Multiply"
-msgstr ""
+msgstr "ضرب"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:227
 #: pigment/colorspaces/KoAlphaColorSpace.h:205
@@ -2816,7 +2816,7 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgid "Dissolve"
-msgstr ""
+msgstr "إذابة"
 
 #: pigment/compositeops/KoCompositeOpErase.h:26
 #: pigment/KoCompositeOpRegistry.cpp:63
@@ -2841,10 +2841,9 @@ msgstr "عادي"
 
 #: pigment/compositeops/KoCompositeOps.h:109
 #: pigment/KoCompositeOpRegistry.cpp:62
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Overlay"
-msgstr "الإعتام:"
+msgstr "تراكب"
 
 #: pigment/compositeops/KoCompositeOps.h:110
 #: pigment/KoCompositeOpRegistry.cpp:66
@@ -2986,7 +2985,7 @@ msgstr "اطرح"
 #: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
-msgstr ""
+msgstr "قسمة"
 
 #: pigment/compositeops/KoCompositeOps.h:140
 #: pigment/KoCompositeOpRegistry.cpp:57
@@ -2996,9 +2995,9 @@ msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:141
 #: pigment/KoCompositeOpRegistry.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Difference"
-msgstr "مرجع النص"
+msgstr "الفرق"
 
 #: pigment/compositeops/KoCompositeOps.h:142
 #: pigment/KoCompositeOpRegistry.cpp:56
@@ -3078,9 +3077,9 @@ msgstr "الإشباع"
 
 #: pigment/compositeops/KoCompositeOps.h:186
 #: pigment/KoCompositeOpRegistry.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Luminosity"
-msgstr "زد حجم الخط"
+msgstr "الضياء"
 
 #: pigment/compositeops/KoCompositeOps.h:187
 #: pigment/KoCompositeOpRegistry.cpp:88
@@ -3283,7 +3282,7 @@ msgstr "مدرج RGB الشامل"
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
-msgstr ""
+msgstr "ح‌خ‌ز"
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
@@ -3298,7 +3297,7 @@ msgstr ""
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
-msgstr ""
+msgstr "س‌م‌ص‌د"
 
 #: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
@@ -3366,9 +3365,9 @@ msgid "HSL"
 msgstr "التدرج"
 
 #: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "HSV"
-msgstr "التدرج"
+msgstr "HSV"
 
 #: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
@@ -3416,9 +3415,9 @@ msgid "Select the object you want to reference"
 msgstr "انتق الفهرس الذي ترغب بمرجعيته"
 
 #: rdf/KoDocumentRdf.cpp:594
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reference"
-msgstr "مرجع النص"
+msgstr "المرجع"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:234
 #, kde-format
@@ -3489,7 +3488,7 @@ msgstr "استبدل"
 #: rdf/KoDocumentRdfEditWidget.ui:123
 #, kde-format
 msgid "Prefix"
-msgstr ""
+msgstr "البادئة"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
 #: rdf/KoDocumentRdfEditWidget.ui:128
@@ -3571,9 +3570,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:191
-#, fuzzy, kde-format
+#, kde-format
 msgid "Execute"
-msgstr "US Executive"
+msgstr "نفّذ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: rdf/KoDocumentRdfEditWidget.ui:221
@@ -3604,9 +3603,9 @@ msgstr ""
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
 #: rdf/KoSemanticStylesheetsEditor.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "User"
-msgstr "أدرج"
+msgstr "المستخدم"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:121
 #, kde-format
@@ -3619,10 +3618,9 @@ msgid "Disassociate"
 msgstr ""
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:143
-#, fuzzy, kde-format
-#| msgid "Add..."
+#, kde-format
 msgid "Edit %1"
-msgstr "أضف..."
+msgstr "حرّر %1"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: rdf/KoSemanticStylesheetsEditor.ui:17
@@ -3638,9 +3636,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: rdf/KoSemanticStylesheetsEditor.ui:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Description"
-msgstr "الوصف:"
+msgstr "الوصف"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
 #: rdf/KoSemanticStylesheetsEditor.ui:107
@@ -4029,10 +4027,9 @@ msgid "New Paragraph"
 msgstr "اضبط أسلوب الفقرة"
 
 #: text/KoTextEditor.cpp:474
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
-msgstr "أضف علامة موقع"
+msgstr "أضف علامة"
 
 #: text/KoTextEditor.cpp:489
 #, fuzzy
@@ -4060,16 +4057,14 @@ msgstr "ادرج فاصلا"
 
 #: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
 #: text/KoTextEditor.cpp:929
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
-msgstr "أدرج صفحة"
+msgstr "أدرِج جدول"
 
 #: text/KoTextEditor.cpp:1069
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
-msgstr "ادمج النقاط"
+msgstr "ادمج الخلايا"
 
 #: text/KoTextEditor.cpp:1086
 #, fuzzy
@@ -4127,7 +4122,6 @@ msgid "Bold"
 msgstr "عريض"
 
 #: text/KoTextEditor_format.cpp:70
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Italic"
 msgstr "مائل"
@@ -4157,10 +4151,9 @@ msgid "Set Vertical Alignment"
 msgstr "اضبط المحاذاة الرأسية"
 
 #: text/KoTextEditor_format.cpp:192 text/KoTextEditor_format.cpp:193
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
-msgstr "انقص الإزاحة"
+msgstr "أنقص الإزاحة"
 
 #: text/KoTextEditor_format.cpp:229 text/KoTextEditor_format.cpp:230
 #, fuzzy
@@ -4523,10 +4516,9 @@ msgid "&Try"
 msgstr ""
 
 #: widgets/KoDialog.cpp:459
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgid "modified"
-msgstr "آخر تعديل:"
+msgstr "المعدّل"
 
 #: widgets/KoDialog.cpp:468
 #, kde-format
@@ -4535,9 +4527,9 @@ msgid " – "
 msgstr ""
 
 #: widgets/KoDialog.cpp:823
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Details"
-msgstr "ا&فتراضي"
+msgstr "التّ&فاصيل"
 
 #: widgets/KoDialog.cpp:971
 #, kde-format
@@ -4640,9 +4632,9 @@ msgstr "تم إنشاؤه:"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
 #: widgets/koDocumentInfoAboutWidget.ui:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "Path:"
-msgstr "إلى المسار"
+msgstr "المسار:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbReset)
 #: widgets/koDocumentInfoAboutWidget.ui:280
@@ -4652,9 +4644,9 @@ msgstr "اسـ&تعادة"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language:"
-msgstr "الصق الصفحة"
+msgstr "اللغة:"
 
 #: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
 #, kde-format
@@ -4715,7 +4707,7 @@ msgstr "هذا المستند ليس مشفراً"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "غير محدد"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
@@ -4872,12 +4864,12 @@ msgstr "لا يوجد"
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
-msgstr ""
+msgstr "صلب"
 
 #: widgets/KoFillConfigWidget.cpp:163
 #, kde-format
 msgid "Gradient"
-msgstr ""
+msgstr "التّدرّج"
 
 #: widgets/KoFillConfigWidget.cpp:171
 #, kde-format
@@ -4902,7 +4894,7 @@ msgstr "غير المعامل"
 #: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Target:"
-msgstr ""
+msgstr "الهدف:"
 
 #: widgets/KoGradientEditWidget.cpp:151
 #, kde-format
@@ -4910,16 +4902,16 @@ msgid "Fill"
 msgstr ""
 
 #: widgets/KoGradientEditWidget.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
-msgstr "الخطوط"
+msgstr "خطّي"
 
 #: widgets/KoGradientEditWidget.cpp:158
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
-msgstr ""
+msgstr "دائريّ"
 
 #: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
@@ -5063,9 +5055,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoPageLayoutWidget.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size:"
-msgstr "ال&حجم:"
+msgstr "الحجم:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/KoPageLayoutWidget.ui:77
@@ -5165,9 +5157,9 @@ msgstr "اختر مرشح"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:105
 #: widgets/KoTagToolButton.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "New tag"
-msgstr "طبقة جديدة"
+msgstr "وسم جديد"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:140
 #, kde-format
@@ -5230,13 +5222,13 @@ msgstr ""
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "الغشاوة:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84
 #, kde-format
 msgid "Distance:"
-msgstr ""
+msgstr "المسافة:"
 
 #: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
@@ -5385,7 +5377,7 @@ msgstr "ا&فتراضي"
 #: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1×%2"
 
 #: widgets/KoToolBoxButton.cpp:53
 #, fuzzy, kde-format
@@ -5410,11 +5402,10 @@ msgid "Icon Size"
 msgstr "اضبط نوع النقطة"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "تخطيط الصفحة"
+msgstr "التّخطيط"
 
 #: widgets/KoToolBoxDocker.cpp:140
 #, kde-format
@@ -5468,9 +5459,8 @@ msgid "Actual Pixels"
 msgstr "البكسلات الفعلية"
 
 #: widgets/KoZoomMode.cpp:19
-#, fuzzy
 msgid "Fit Text Width"
-msgstr "اضبط لعرض الصفحة"
+msgstr "لائم إلى عرض النّصّ"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format
