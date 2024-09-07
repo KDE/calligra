@@ -44,6 +44,7 @@ Name[zh_CN]=Calligra Stage
 Name[zh_TW]=Calligra Stage
 Exec=calligrastage %U
 GenericName=Presentation
+GenericName[ar]=عرض تقديمي
 GenericName[bg]=Екранни презентации
 GenericName[bs]=Prezentacija
 GenericName[ca]=Presentació

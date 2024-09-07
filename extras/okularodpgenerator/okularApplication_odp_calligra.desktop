@@ -2,6 +2,7 @@
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;
 Terminal=false
 Name=okular
+Name[ar]=أوكلار
 Name[bg]=okular
 Name[bs]=okular
 Name[ca]=Okular

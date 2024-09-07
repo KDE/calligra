@@ -2,6 +2,7 @@
 Icon=business
 Name=Business
 Name[af]=Besigheid
+Name[ar]=العمل
 Name[bg]=Бизнес
 Name[br]=Labour
 Name[bs]=Poslovni
@@ -63,6 +64,7 @@ Name[x-test]=xxBusinessxx
 Name[zh_CN]=商务
 Name[zh_TW]=商業
 Comment=Business
+Comment[ar]=العمل
 Comment[bg]=Бизнес
 Comment[bs]=Posao
 Comment[ca]=Negoci

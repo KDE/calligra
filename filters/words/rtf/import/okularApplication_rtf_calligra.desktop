@@ -2,6 +2,7 @@
 MimeType=text/rtf;application/rtf;
 Terminal=false
 Name=okular
+Name[ar]=أوكلار
 Name[bg]=okular
 Name[bs]=okular
 Name[ca]=Okular
