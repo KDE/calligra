@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-09-05 11:11+0400\n"
+"PO-Revision-Date: 2024-09-06 22:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -278,25 +278,25 @@ msgid "Right align with:"
 msgstr "يمين"
 
 #: part/dialogs/KWConfigureDialog.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure"
-msgstr "أدرج صفحة"
+msgstr "اضبط"
 
 #: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
 msgid "Misc"
-msgstr ""
+msgstr "متنوّع"
 
 #: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
-msgstr "شبكة 1"
+msgstr "الشّبكة"
 
 #: part/dialogs/KWConfigureDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
-msgstr "مستند HTML"
+msgstr "مستند"
 
 #: part/dialogs/KWConfigureDialog.cpp:46
 #, fuzzy, kde-format
@@ -307,12 +307,12 @@ msgstr "تخزين التعيينات"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr ""
+msgstr "المؤلف"
 
 #: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "المؤلف"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
 #: part/dialogs/KWCreateBookmark.ui:13
@@ -1255,17 +1255,17 @@ msgstr ""
 #: part/KWAboutData.h:53
 #, kde-format
 msgid "David Faure"
-msgstr "David Faure"
+msgstr "ديفيد فور"
 
 #: part/KWAboutData.h:54
 #, kde-format
 msgid "Laurent Montel"
-msgstr "Laurent Montel"
+msgstr "لوران مونتال"
 
 #: part/KWAboutData.h:55
 #, kde-format
 msgid "Sven Lüppken"
-msgstr "Sven Lüppken"
+msgstr "سفين لوكن"
 
 #: part/KWAboutData.h:56
 #, kde-format
@@ -1320,7 +1320,7 @@ msgstr "Ariya Hidayat"
 #: part/KWAboutData.h:65
 #, kde-format
 msgid "Clarence Dang"
-msgstr "Clarence Dang"
+msgstr "كلارنس دانغ"
 
 #: part/KWAboutData.h:66
 #, kde-format
@@ -1783,24 +1783,22 @@ msgstr "..."
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "اعثر:"
 
 #: part/widgets/KoFindToolbar.cpp:81
-#, fuzzy, kde-format
-#| msgid "Index Page"
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "صفحة الفهرس"
+msgstr "التالي"
 
 #: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr ""
+msgstr "السابق"
 
 #: part/widgets/KoFindToolbar.cpp:104
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr "خيارات"
@@ -1815,7 +1813,7 @@ msgstr "استبدل:"
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "استبدل"
 
 #: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
@@ -1826,7 +1824,7 @@ msgstr "استبدل الكلّ"
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "استبدل"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-05 11:14+0400\n"
+"PO-Revision-Date: 2024-09-06 23:02+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -254,9 +254,9 @@ msgid "Set filter stack"
 msgstr "ا&ضف للتدرجات المحددة مسبقاً"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effects"
-msgstr "ال&تأثيرات"
+msgstr "التّأثيرات"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
@@ -362,7 +362,7 @@ msgstr "أعلى اليسار"
 #: KarbonPatternOptionsWidget.cpp:27
 #, kde-format
 msgid "Top"
-msgstr ""
+msgstr "الأعلى"
 
 #: KarbonPatternOptionsWidget.cpp:28
 #, kde-format
@@ -370,34 +370,34 @@ msgid "Top Right"
 msgstr "أعلى اليمين"
 
 #: KarbonPatternOptionsWidget.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left"
-msgstr "يسار"
+msgstr "اليسار"
 
 #: KarbonPatternOptionsWidget.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center"
-msgstr "وسط"
+msgstr "الوسط"
 
 #: KarbonPatternOptionsWidget.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right"
-msgstr "الارتفاع:"
+msgstr "اليمين"
 
 #: KarbonPatternOptionsWidget.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom Left"
-msgstr "محاذاة للأسفل"
+msgstr "أسفل اليسار"
 
 #: KarbonPatternOptionsWidget.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom"
-msgstr "محاذاة للأسفل"
+msgstr "الأسفل"
 
 #: KarbonPatternOptionsWidget.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom Right"
-msgstr "محاذاة إلى اليمين"
+msgstr "أسفل اليمين"
 
 #: KarbonPatternTool.cpp:270
 #, fuzzy, kde-format

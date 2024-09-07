@@ -3,25 +3,27 @@
 # Usama Ahmed Ali <usama01@maktoob.com>, 2002.
 # Nuriddin Aminagha <nuriddin@haydarlinux.org>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2007-10-14 16:03+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: <en@li.org>\n"
+"PO-Revision-Date: 2024-09-06 23:02+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blend"
-msgstr "غليظ"
+msgstr "مزج"
 
 #: BlendEffectConfigWidget.cpp:23
 #, fuzzy, kde-format
@@ -29,39 +31,39 @@ msgid "Blend mode"
 msgstr "عرض"
 
 #: BlendEffectConfigWidget.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Normal"
-msgstr "الهيئة:"
+msgstr "عادي"
 
 #: BlendEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Multiply"
-msgstr ""
+msgstr "ضرب"
 
 #: BlendEffectConfigWidget.cpp:27
 #, kde-format
 msgid "Screen"
-msgstr ""
+msgstr "الشّاشة"
 
 #: BlendEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Darken"
-msgstr ""
+msgstr "تقتيم"
 
 #: BlendEffectConfigWidget.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lighten"
-msgstr "الارتفاع:"
+msgstr "تفتيح"
 
 #: BlurEffect.cpp:257 BlurEffectFactory.cpp:14
 #, kde-format
 msgid "Gaussian blur"
-msgstr ""
+msgstr "غشاوة غوسيّة"
 
 #: BlurEffectConfigWidget.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Radius"
-msgstr "نصف القطر:"
+msgstr "نصف القطر"
 
 #: ColorMatrixEffect.cpp:25
 #, kde-format
@@ -94,9 +96,9 @@ msgid "Saturate value"
 msgstr "شطب اللون"
 
 #: ColorMatrixEffectConfigWidget.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Angle"
-msgstr "زاوية:"
+msgstr "الزاوية"
 
 #: ColorMatrixEffectFactory.cpp:14
 #, kde-format
@@ -111,27 +113,27 @@ msgstr ""
 #: ComponentTransferEffectConfigWidget.cpp:46
 #, kde-format
 msgid "Function"
-msgstr ""
+msgstr "الدالة"
 
 #: ComponentTransferEffectConfigWidget.cpp:48
 #, kde-format
 msgid "Identity"
-msgstr ""
+msgstr "الهويّة"
 
 #: ComponentTransferEffectConfigWidget.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table"
-msgstr "&ملف"
+msgstr "الجدول"
 
 #: ComponentTransferEffectConfigWidget.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Discrete"
-msgstr "توزي&ع"
+msgstr "منفصلة"
 
 #: ComponentTransferEffectConfigWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear"
-msgstr "طولي"
+msgstr "خطّي"
 
 #: ComponentTransferEffectConfigWidget.cpp:52
 #, kde-format
@@ -142,7 +144,7 @@ msgstr ""
 #: ComponentTransferEffectConfigWidget.cpp:75
 #, kde-format
 msgid "Values"
-msgstr ""
+msgstr "القيم"
 
 #: ComponentTransferEffectConfigWidget.cpp:85
 #, fuzzy, kde-format
@@ -157,28 +159,28 @@ msgstr "الواجهة"
 #: ComponentTransferEffectConfigWidget.cpp:102
 #, kde-format
 msgid "Amplitude"
-msgstr ""
+msgstr "السعه"
 
 #: ComponentTransferEffectConfigWidget.cpp:107
 #, kde-format
 msgid "Exponent"
-msgstr ""
+msgstr "القوَة"
 
 #: ComponentTransferEffectConfigWidget.cpp:112 OffsetEffect.cpp:17
 #: OffsetEffectFactory.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Offset"
-msgstr "اوفسيت"
+msgstr "الإزاحة"
 
 #: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Composite"
-msgstr "المكونات"
+msgstr "تراكب"
 
 #: CompositeEffectConfigWidget.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Operation"
-msgstr "تكرار:"
+msgstr "العملية"
 
 #: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
 #, kde-format
@@ -186,9 +188,9 @@ msgid "Convolve Matrix"
 msgstr ""
 
 #: ConvolveMatrixEffectConfigWidget.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate"
-msgstr "م&ضاعفة"
+msgstr "كرّر"
 
 #: ConvolveMatrixEffectConfigWidget.cpp:34
 #, kde-format
@@ -228,7 +230,7 @@ msgstr "غطاء"
 #: ConvolveMatrixEffectConfigWidget.cpp:64
 #, kde-format
 msgid "Preserve alpha"
-msgstr ""
+msgstr "أبقِ ألفا"
 
 #: ConvolveMatrixEffectConfigWidget.cpp:67
 #, fuzzy, kde-format
@@ -246,7 +248,7 @@ msgid "Flood color"
 msgstr "شطب اللون"
 
 #: ImageEffect.cpp:24 ImageEffectFactory.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image"
 msgstr "صورة"
 
@@ -263,7 +265,7 @@ msgstr ""
 #: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
 #, kde-format
 msgid "Merge"
-msgstr ""
+msgstr "ادمج"
 
 #: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
 #, kde-format

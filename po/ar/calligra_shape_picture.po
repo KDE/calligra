@@ -2,25 +2,27 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: PictureShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2008-01-14 19:13+0000\n"
-"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
-"Language-Team: Arabic <doc@arabeyes.org>\n"
+"PO-Revision-Date: 2024-09-06 22:41+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr ""
+msgstr "غيّر الصورة"
 
 #: ChangeImageCommand.cpp:43
 msgctxt "(qtundo-format)"
@@ -58,31 +60,31 @@ msgstr ""
 #: forms/wdgPictureTool.ui:58
 #, kde-format
 msgid "Left:"
-msgstr ""
+msgstr "اليسار:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: forms/wdgPictureTool.ui:68
 #, kde-format
 msgid "Right:"
-msgstr ""
+msgstr "اليمين:"
 
 #. i18n: ectx: property (text), widget (QLabel, bottomLabel)
 #: forms/wdgPictureTool.ui:91
 #, kde-format
 msgid "Bottom:"
-msgstr ""
+msgstr "الأسفل:"
 
 #. i18n: ectx: property (text), widget (QLabel, topLabel)
 #: forms/wdgPictureTool.ui:111
 #, kde-format
 msgid "Top:"
-msgstr ""
+msgstr "الأعلى:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnFill)
 #: forms/wdgPictureTool.ui:131
 #, kde-format
 msgid "Reset"
-msgstr ""
+msgstr "صفّر"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbContour)
 #: forms/wdgPictureTool.ui:148
@@ -94,18 +96,18 @@ msgstr ""
 #: forms/wdgPictureTool.ui:178
 #, kde-format
 msgid "Color mode:"
-msgstr ""
+msgstr "نمط الألوان:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: forms/wdgPictureTool.ui:193
 #, kde-format
 msgid "Crop"
-msgstr ""
+msgstr "اقتصّ"
 
 #: PictureShapeFactory.cpp:31
 #, kde-format
 msgid "Image"
-msgstr ""
+msgstr "صورة"
 
 #: PictureShapeFactory.cpp:33
 #, kde-format
@@ -115,28 +117,27 @@ msgstr ""
 #: PictureTool.cpp:94
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "قياسي"
 
 #: PictureTool.cpp:95
 #, kde-format
 msgid "Greyscale"
-msgstr ""
+msgstr "التدرج الرمادي"
 
 #: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
-msgstr ""
+msgstr "أُحاديِّ اللون"
 
 #: PictureTool.cpp:97
 #, kde-format
 msgid "Watermark"
-msgstr ""
+msgstr "علامة مائيّة"
 
 #: PictureToolFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Picture editing tool"
+#, kde-format
 msgid "Picture editing"
-msgstr "أداة تحرير الصورة"
+msgstr "تحرير الصورة"
 
 #, fuzzy
 #~| msgid "Picture editing tool"

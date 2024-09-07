@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-09-05 12:13+0400\n"
+"PO-Revision-Date: 2024-09-06 22:57+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -286,9 +286,9 @@ msgstr "أسلوب عودة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: sheets/csv/exportdialogui.ui:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheets"
-msgstr "أوراق"
+msgstr "الأوراق"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: sheets/csv/exportdialogui.ui:109
@@ -630,15 +630,15 @@ msgstr "مسودة"
 
 #. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
 #: sheets/latex/export/latexexportwidget.ui:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default font size:"
-msgstr "افتراضي الخط حجم:"
+msgstr "حجم الخط المبدئي:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pictures"
-msgstr "صور"
+msgstr "الصور"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: sheets/latex/export/latexexportwidget.ui:192
@@ -656,27 +656,27 @@ msgstr "صور دليل:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: sheets/latex/export/latexexportwidget.ui:223
 #: sheets/latex/export/latexexportwidget.ui:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language"
 msgstr "اللغة"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
+#, kde-format
 msgid "Encoding:"
-msgstr "ال&ترميز:"
+msgstr "التّرميز:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
-msgstr "إضافة"
+msgstr "أضف"
 
 #. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove"
-msgstr "احذف"
+msgstr "أزل"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: sheets/latex/export/latexexportwidget.ui:321
@@ -698,7 +698,7 @@ msgstr "إضافة a جدول من المحتوى"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "Notes"
 msgstr "ملاحظات"
 
@@ -883,9 +883,9 @@ msgid "First Page Footer"
 msgstr "تذييل الصفحة الأولى"
 
 #: words/msword-odf/texthandler.cpp:623
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table %1"
-msgstr "جدول %1"
+msgstr "الجدول %1"
 
 #: words/rtf/import/rtfimport.cpp:54
 #, fuzzy, kde-format

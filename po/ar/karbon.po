@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-05 11:14+0400\n"
+"PO-Revision-Date: 2024-09-06 23:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -33,39 +33,39 @@ msgstr "ت&رتيب"
 
 #. i18n: ectx: Menu (object_align)
 #: data/karbon.rc:23 data/karbon.rc:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Align"
-msgstr "&محاذاة"
+msgstr "&حاذِ"
 
 #. i18n: ectx: Menu (file)
 #: data/karbon.rc:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "&File"
 msgstr "&ملف"
 
 #. i18n: ectx: Menu (edit)
 #: data/karbon.rc:38 data/karbon_readonly.rc:11
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edit"
 msgstr "&حرّر"
 
 #. i18n: ectx: Menu (view)
 #: data/karbon.rc:52 data/karbon_readonly.rc:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "&View"
-msgstr "ا&عرض"
+msgstr "&عرض"
 
 #. i18n: ectx: Menu (object)
 #: data/karbon.rc:74
 #, kde-format
 msgid "&Object"
-msgstr "&عنصر"
+msgstr "&كائن"
 
 #. i18n: ectx: Menu (object_distribute)
 #: data/karbon.rc:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Distribute"
-msgstr "توزي&ع"
+msgstr "&توزيع"
 
 #. i18n: ectx: Menu (path)
 #: data/karbon.rc:113
@@ -75,13 +75,13 @@ msgstr "الم&سار"
 
 #. i18n: ectx: Menu (effects)
 #: data/karbon.rc:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Effe&cts"
-msgstr "ال&تأثيرات"
+msgstr "تأ&ثيرات"
 
 #. i18n: ectx: Menu (settings)
 #: data/karbon.rc:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Settings"
 msgstr "إ&عدادات"
 
@@ -89,13 +89,13 @@ msgstr "إ&عدادات"
 #: data/karbon.rc:137
 #, kde-format
 msgid "&Page"
-msgstr ""
+msgstr "ال&صفحة"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: data/karbon.rc:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit"
-msgstr "تحرير"
+msgstr "حرّر"
 
 #. i18n: ectx: ToolBar (object_toolbar)
 #: data/karbon.rc:156
@@ -117,9 +117,9 @@ msgstr "تأثيرات"
 
 #. i18n: ectx: ToolBar (add_shape_toolbar)
 #: data/karbon.rc:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Shape"
-msgstr "تكلّم"
+msgstr "أضف شكل"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -655,10 +655,10 @@ msgid "Custom"
 msgstr ""
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The style has no stroking"
 msgid "None"
-msgstr "لا شيئ"
+msgstr "لا شيء"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:185
 #, fuzzy, kde-format
