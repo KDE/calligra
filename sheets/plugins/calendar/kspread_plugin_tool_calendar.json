@@ -4,6 +4,7 @@
             {
                 "Email": "raphael.langerhorst@kdemail.net",
                 "Name": "Raphael Langerhorst",
+                "Name[ar]": "Raphael Langerhorst",
                 "Name[ca@valencia]": "Raphael Langerhorst",
                 "Name[ca]": "Raphael Langerhorst",
                 "Name[cs]": "Raphael Langerhorst",
@@ -52,6 +53,7 @@
         "Icon": "x-office-calendar",
         "License": "GPL",
         "Name": "Calendar Tool",
+        "Name[ar]": "أداة التقويم",
         "Name[ca@valencia]": "Eina de calendari",
         "Name[ca]": "Eina de calendari",
         "Name[cs]": "Nástroj kalendáře",

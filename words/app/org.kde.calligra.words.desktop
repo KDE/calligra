@@ -45,6 +45,7 @@ Name[zh_CN]=Calligra Words
 Name[zh_TW]=Calligra Words
 Exec=calligrawords %U
 GenericName=Word Processor
+GenericName[ar]=معالج المستندات
 GenericName[bg]=Текстообработваща програма
 GenericName[bs]=Obrađivač teksta
 GenericName[ca]=Processador de textos

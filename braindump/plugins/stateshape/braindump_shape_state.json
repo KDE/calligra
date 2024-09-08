@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "State Shape",
+        "Name[ar]": "حالة الشكل",
         "Name[ca@valencia]": "Forma d'estat",
         "Name[ca]": "Forma d'estat",
         "Name[cs]": "Stavový tvar",

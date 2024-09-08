@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Text Shape",
+        "Name[ar]": "شكل النص",
         "Name[ca@valencia]": "Forma de text",
         "Name[ca]": "Forma de text",
         "Name[cs]": "Tvar textu",
