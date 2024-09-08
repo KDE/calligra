@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:53+0400\n"
+"PO-Revision-Date: 2024-09-07 20:43+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: connectionTool/ConnectionPointWidget.ui:48
 #, kde-format
 msgid "Edit Mode"
-msgstr ""
+msgstr "وضع التّحرير"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEscape)
 #: connectionTool/ConnectionPointWidget.ui:55
@@ -44,7 +44,7 @@ msgstr "المحاذاة"
 #: defaulttool/DefaultToolTransformWidget.ui:138
 #, no-c-format, kde-format
 msgid "%"
-msgstr ""
+msgstr "٪"
 
 #: connectionTool/ConnectionTool.cpp:65
 #, kde-format
@@ -166,7 +166,7 @@ msgstr "الاتّصال"
 #: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
-msgstr ""
+msgstr "السّطر"
 
 #: connectionTool/ConnectionTool.cpp:831
 #, kde-format
@@ -181,22 +181,22 @@ msgstr ""
 #: defaulttool/DefaultTool.cpp:220
 #, kde-format
 msgid "Bring to &Front"
-msgstr ""
+msgstr "إحضار إلى الواجهة"
 
 #: defaulttool/DefaultTool.cpp:225
 #, kde-format
 msgid "&Raise"
-msgstr ""
+msgstr "ا&رفع"
 
 #: defaulttool/DefaultTool.cpp:230
 #, kde-format
 msgid "&Lower"
-msgstr ""
+msgstr "ا&خفض"
 
 #: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
-msgstr ""
+msgstr "إرسال إلى الخلف"
 
 #: defaulttool/DefaultTool.cpp:240
 #, kde-format
@@ -206,7 +206,7 @@ msgstr "حاذِ يسارًا"
 #: defaulttool/DefaultTool.cpp:244
 #, kde-format
 msgid "Horizontally Center"
-msgstr ""
+msgstr "أفقيًا وسطًا"
 
 #: defaulttool/DefaultTool.cpp:248
 #, kde-format
@@ -216,17 +216,17 @@ msgstr "حاذِ يمينًا"
 #: defaulttool/DefaultTool.cpp:252
 #, kde-format
 msgid "Align Top"
-msgstr ""
+msgstr "حاذِ إلى الأعلى"
 
 #: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
-msgstr ""
+msgstr "رأسيًا وسطًا"
 
 #: defaulttool/DefaultTool.cpp:260
 #, kde-format
 msgid "Align Bottom"
-msgstr ""
+msgstr "حاذِ إلى الأسفل"
 
 #: defaulttool/DefaultTool.cpp:264
 #, kde-format
@@ -283,22 +283,22 @@ msgstr ""
 #: defaulttool/DefaultTool.cpp:1169
 #, kde-format
 msgid "Arrange"
-msgstr ""
+msgstr "نظّم"
 
 #: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Geometry"
-msgstr ""
+msgstr "الأبعاد"
 
 #: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "املأ"
 
 #: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
-msgstr ""
+msgstr "ظل"
 
 #: defaulttool/DefaultToolFactory.cpp:17
 #, kde-format
@@ -309,7 +309,7 @@ msgstr ""
 #: defaulttool/ShapeRotateStrategy.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Rotate"
-msgstr ""
+msgstr "دوّر"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:135
 msgctxt "(qtundo-format)"
@@ -325,7 +325,7 @@ msgstr "قطع ص"
 #: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
-msgstr ""
+msgstr "حجّم"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
@@ -336,7 +336,7 @@ msgstr ""
 #: defaulttool/DefaultToolTransformWidget.ui:25
 #, kde-format
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #. i18n: ectx: property (text), widget (QPushButton, rotateButton)
 #: defaulttool/DefaultToolTransformWidget.ui:38
@@ -384,7 +384,7 @@ msgstr ""
 #: defaulttool/ShapeResizeStrategy.cpp:332
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr ""
+msgstr "أعد التحجيم"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: defaulttool/DefaultToolWidget.ui:35

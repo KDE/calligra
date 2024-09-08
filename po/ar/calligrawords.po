@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:59+0400\n"
+"PO-Revision-Date: 2024-09-07 19:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -50,15 +50,15 @@ msgstr "&نمط العرض"
 
 #. i18n: ectx: Menu (semantic)
 #: part/calligrawords.rc:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Semantics"
-msgstr "إحصاءات"
+msgstr "علم دلالة الألفاظ"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "S&tyles"
-msgstr "حافة الصفحة:"
+msgstr "ال&طُرُز"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrawords.rc:78
@@ -128,9 +128,9 @@ msgid "Create shape"
 msgstr "انشئ إطاراً"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
-#, fuzzy, kde-format
+#, kde-format
 msgid "Baseline"
-msgstr "اجعله متداخلا"
+msgstr "خط القاعدة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:413
 #: part/dialogs/KWAnchoringProperties.cpp:424
@@ -151,9 +151,9 @@ msgstr "وفّر منطقة نص رئيسية"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page text area"
-msgstr "وفّر منطقة نص رئيسية"
+msgstr "مساحة نص الصفحة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
@@ -163,9 +163,9 @@ msgstr "فقرة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph text area"
-msgstr "وفّر منطقة نص رئيسية"
+msgstr "مساحة نص الفقرة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
 #, fuzzy, kde-format
@@ -255,7 +255,7 @@ msgstr "الإزاحة"
 #. i18n: ectx: property (text), widget (QLabel, lHOffset)
 #: part/dialogs/KWAnchoringProperties.ui:119
 #: part/dialogs/KWAnchoringProperties.ui:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "from:"
 msgstr "من:"
 
@@ -299,9 +299,9 @@ msgid "Document"
 msgstr "مستند"
 
 #: part/dialogs/KWConfigureDialog.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Settings"
-msgstr "تخزين التعيينات"
+msgstr "خصائص المستند"
 
 #: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
@@ -410,15 +410,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Page"
-msgstr "الصفحات"
+msgstr "ال&صفحة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWInsertImage.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Para&graph"
-msgstr "فقرة"
+msgstr "ال&فقرة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
@@ -472,7 +472,7 @@ msgstr "أ&على"
 #: part/dialogs/KWInsertImage.ui:105
 #, kde-format
 msgid "&Middle"
-msgstr ""
+msgstr "الأو&سط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
 #: part/dialogs/KWInsertImage.ui:115
@@ -541,9 +541,9 @@ msgid "Columns"
 msgstr "الأعمدة"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style"
-msgstr "حافة الصفحة:"
+msgstr "الطراز"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
@@ -551,9 +551,9 @@ msgid "Clone"
 msgstr "استنسخ"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete"
-msgstr "احذف الصفحة"
+msgstr "احذف"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:154
 #, fuzzy
@@ -621,15 +621,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Rename"
-msgstr "اسم ال&مستخدم:"
+msgstr "&غيّر الاسم"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: part/dialogs/KWSelectBookmark.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete"
-msgstr "احذف الصفحة"
+msgstr "ا&حذف"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
@@ -680,15 +680,14 @@ msgid "Navigation"
 msgstr "تحية"
 
 #: part/dockers/KWNavigationWidget.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page #"
-msgstr "الصفحات"
+msgstr "الصفحة #"
 
 #: part/dockers/KWNavigationWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Section"
-msgstr "الدوال"
+msgstr "القسم"
 
 #: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
@@ -733,7 +732,7 @@ msgstr "الأسطر:"
 #: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
 msgid "Readability:"
-msgstr ""
+msgstr "المقروئية:"
 
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, fuzzy, kde-format
@@ -1082,9 +1081,9 @@ msgid "Calligra Words"
 msgstr "معالج كلمات KOffice"
 
 #: part/KWAboutData.h:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Word processor"
-msgstr "معالج كلمات KOffice"
+msgstr "معالج كلمات"
 
 #: part/KWAboutData.h:22
 #, fuzzy, kde-format
@@ -1145,21 +1144,21 @@ msgstr "محارف التنسيق"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Inge Wallin"
-msgstr ""
+msgstr "ينغ والين"
 
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Thorsten Zachmann"
-msgstr ""
+msgstr "Thorsten Zachmann"
 
 #: part/KWAboutData.h:41 part/KWAboutData.h:47 part/KWAboutData.h:48
 #: part/KWAboutData.h:49 part/KWAboutData.h:61 part/KWAboutData.h:62
 #: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
 #: part/KWAboutData.h:66 part/KWAboutData.h:67 part/KWAboutData.h:68
 #: part/KWAboutData.h:69 part/KWAboutData.h:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter"
-msgstr "&ملف"
+msgstr "المرشّح"
 
 #: part/KWAboutData.h:41
 #, kde-format
@@ -1199,12 +1198,12 @@ msgstr "تذييل"
 #: part/KWAboutData.h:45
 #, kde-format
 msgid "Bibliography"
-msgstr ""
+msgstr "ثبَت مراجع"
 
 #: part/KWAboutData.h:45
 #, kde-format
 msgid "Smit Patel"
-msgstr ""
+msgstr "سميت باتل"
 
 #: part/KWAboutData.h:46
 #, kde-format
@@ -1378,7 +1377,7 @@ msgid "Copy"
 msgstr "انسخ"
 
 #: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Standard"
 msgstr "قياسي"
 
@@ -1408,9 +1407,9 @@ msgid "Bullet List"
 msgstr "قائمة نقطية"
 
 #: part/KWGui.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tools"
-msgstr "&أدوات"
+msgstr "أدوات"
 
 #: part/KWOdfLoader.cpp:81
 #, kde-format
@@ -1432,7 +1431,7 @@ msgstr ""
 "هذا ليس مستند معالجة كلمات، لكن %1. يرجى محاولة فتحه مع التطبيق المناسب."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "قياسي"
@@ -1463,24 +1462,24 @@ msgid "Page %1 of %2"
 msgstr "الصفحة %1 من %2"
 
 #: part/KWStatusBar.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "الصفحة: %1/%2"
+msgstr "الصفحة %1-%2 من %3"
 
 #: part/KWStatusBar.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line %1"
-msgstr "أسطر"
+msgstr "السطر %1"
 
 #: part/KWStatusBar.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Number"
-msgstr "رقم الصفحة:"
+msgstr "رقم الصفحة"
 
 #: part/KWStatusBar.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Number"
-msgstr "رقم الصفحة:"
+msgstr "رقم السطر"
 
 #: part/KWStatusBar.cpp:157
 #, fuzzy, kde-format
@@ -1488,9 +1487,9 @@ msgid "Change the page style"
 msgstr "حافة الصفحة:"
 
 #: part/KWStatusBar.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Style"
-msgstr "حافة الصفحة:"
+msgstr "طراز الصفحة"
 
 #: part/KWStatusBar.cpp:179
 #, kde-format
@@ -1740,7 +1739,7 @@ msgstr "انشئ إطاراً"
 #: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
-msgstr ""
+msgstr "أظهر التعليقات"
 
 #: part/KWView.cpp:448
 #, fuzzy, kde-format
@@ -1759,19 +1758,19 @@ msgid "Shows or hides word counting in status bar"
 msgstr "اعرض شريط الحالة"
 
 #: part/pagetool/KWPageTool.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Setup"
-msgstr "فاصل صفحات"
+msgstr "إعداد الصفحة"
 
 #: part/pagetool/KWPageTool.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Header & Footer"
-msgstr "تذييل الصفحات الزوجية"
+msgstr "التّرويسة و التّذييل"
 
 #: part/pagetool/KWPageToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page layout"
-msgstr "تخطيط الصفحة:"
+msgstr "تنسيق الصفحة"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
 #: part/pagetool/SimpleSetupWidget.ui:32
@@ -1831,12 +1830,12 @@ msgstr "استبدل"
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لم توجد مطابقات"
+msgstr[1] "وُجدت مطابقة واحدة"
+msgstr[2] "وُجدت مطابقتان"
+msgstr[3] "وُجدت %1 مطابقات"
+msgstr[4] "وُجدت %1 مطابقة"
+msgstr[5] "وُجدت %1 مطابقة"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format

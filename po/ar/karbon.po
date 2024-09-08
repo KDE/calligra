@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 23:01+0400\n"
+"PO-Revision-Date: 2024-09-07 21:33+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -123,7 +123,7 @@ msgstr "أضف شكل"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "View"
 msgstr "عرض"
 
@@ -173,9 +173,9 @@ msgid "Refine Path"
 msgstr "حَسِّن المسار"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subdivisions:"
-msgstr "تجزئة الجزء:"
+msgstr "أقسام:"
 
 #: plugins/roundcorners/RoundCornersCommand.cpp:30
 #: plugins/roundcorners/RoundCornersPlugin.cpp:79
@@ -184,9 +184,9 @@ msgid "Round Corners"
 msgstr "تدوير الحواف"
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Round Corners..."
-msgstr "دائري الزوايا."
+msgstr "&تدوير الحواف..."
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
@@ -239,20 +239,18 @@ msgstr "القرص:"
 
 #: ui/commands/KarbonLayerReorderCommand.cpp:26
 #: ui/commands/KarbonLayerReorderCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Layer"
-msgstr "طبقات:"
+msgstr "ارفع الطبقة"
 
 #: ui/commands/KarbonLayerReorderCommand.cpp:28
 #: ui/commands/KarbonLayerReorderCommand.cpp:40
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Layer"
-msgstr "طبقات:"
+msgstr "اخفض الطبقة "
 
 #: ui/dialogs/KarbonConfigureDialog.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure"
 msgstr "اضبط"
 
@@ -271,15 +269,15 @@ msgstr "متنوع"
 
 #: ui/dialogs/KarbonConfigureDialog.cpp:50
 #: ui/dialogs/KarbonConfigureDialog.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
 msgstr "الشبكة"
 
 #: ui/dialogs/KarbonConfigureDialog.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
-msgstr "مستند"
+msgstr "المستند"
 
 #: ui/dialogs/KarbonConfigureDialog.cpp:58
 #, kde-format
@@ -290,17 +288,17 @@ msgstr "خصائص المستند"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr ""
+msgstr "المؤلف"
 
 #: ui/dialogs/KarbonConfigureDialog.cpp:63
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "المؤلف"
 
 #: ui/KarbonAboutData.h:20
 #, kde-format
 msgid "Karbon"
-msgstr ""
+msgstr "كربون"
 
 #: ui/KarbonAboutData.h:22
 #, kde-format
@@ -320,12 +318,12 @@ msgstr ""
 #: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Maintainer"
-msgstr ""
+msgstr "المصين"
 
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "كارل شوان"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
@@ -381,12 +379,12 @@ msgstr ""
 #: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Bug fixes"
-msgstr ""
+msgstr "إصلاح العلل"
 
 #: ui/KarbonAboutData.h:43
 #, kde-format
 msgid "Inge Wallin"
-msgstr ""
+msgstr "ينغ والين"
 
 #: ui/KarbonAboutData.h:44
 #, kde-format
@@ -412,10 +410,9 @@ msgid "Your emails"
 msgstr "aser@arabeyes.org"
 
 #: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
-msgstr "ادخل منحنى جيبي"
+msgstr "إدراج رسومات"
 
 #: ui/KarbonView.cpp:369
 #, fuzzy, kde-format
@@ -428,9 +425,9 @@ msgid "Could not load image."
 msgstr ""
 
 #: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import graphic"
-msgstr "استيراد رسم."
+msgstr "استورد رسمًا"
 
 #: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
@@ -438,10 +435,9 @@ msgid "Could not create image shape."
 msgstr ""
 
 #: ui/KarbonView.cpp:636
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
-msgstr "أفقي:"
+msgstr "اعكس أفقيًّا"
 
 #: ui/KarbonView.cpp:638
 #, fuzzy
@@ -472,15 +468,15 @@ msgid "&Import Graphic..."
 msgstr "استيراد رسم."
 
 #: ui/KarbonView.cpp:888
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Guides"
-msgstr "إخفاء الشبكة"
+msgstr "أدلة التحرير"
 
 #: ui/KarbonView.cpp:894
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
-msgstr "م&ضاعفة"
+msgstr "&كرّر"
 
 #: ui/KarbonView.cpp:899
 #, fuzzy, kde-format
@@ -548,14 +544,14 @@ msgid "Mirror Vertically"
 msgstr "أفقي:"
 
 #: ui/KarbonView.cpp:949
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror Horizontally"
-msgstr "أفقي:"
+msgstr "اعكس أفقيًّا"
 
 #: ui/KarbonView.cpp:956
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Close Path"
-msgstr "إغلاق المسار"
+msgstr "أ&غلق المسار"
 
 #: ui/KarbonView.cpp:962
 #, fuzzy, kde-format
@@ -600,7 +596,7 @@ msgstr "انطباق على الشبكة"
 #: ui/KarbonView.cpp:1012
 #, kde-format
 msgid "Zoom to Selection"
-msgstr ""
+msgstr "كبر للتحديد"
 
 #: ui/KarbonView.cpp:1016
 #, kde-format
@@ -608,14 +604,14 @@ msgid "Zoom to Drawing"
 msgstr ""
 
 #: ui/KarbonZoomController.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom"
-msgstr "محاذاة للأسفل"
+msgstr "تكبير"
 
 #: ui/widgets/KarbonConfigInterfacePage.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show status bar:"
-msgstr "اظهار شريط الحالة"
+msgstr "اعرض شريط الحالة:"
 
 #: ui/widgets/KarbonConfigInterfacePage.cpp:64
 #, fuzzy, kde-format
@@ -638,10 +634,10 @@ msgid "Press to apply fill to selection"
 msgstr ""
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The style has no fill"
 msgid "None"
-msgstr "لا شيئ"
+msgstr "لا شيء"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
@@ -652,7 +648,7 @@ msgstr ""
 #, kde-format
 msgctxt "The style has a custom stroking"
 msgid "Custom"
-msgstr ""
+msgstr "مخصّص"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:165
 #, kde-format
@@ -666,9 +662,9 @@ msgid "Stroke:"
 msgstr "شطب"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill:"
-msgstr "تعبئة"
+msgstr "التعبئة:"
 
 #~ msgid "D&elete"
 #~ msgstr "م&سح"

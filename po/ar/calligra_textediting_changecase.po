@@ -2,20 +2,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
+# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2008-01-12 01:13+0300\n"
-"Last-Translator: Muhannad al Hariri <muh.acit@gmail.com>\n"
-"Language-Team: <en@li.org>\n"
+"PO-Revision-Date: 2024-09-07 21:23+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
@@ -23,7 +25,7 @@ msgid "Change case"
 msgstr "غيّر الحالة"
 
 #: Changecase.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sentence case"
 msgstr "حالة الجملة"
 
@@ -45,12 +47,12 @@ msgstr "الحروف العلوية الأولى"
 #: Changecase.cpp:58
 #, kde-format
 msgid "tOGGLE cASE"
-msgstr "ثبّت الحالة"
+msgstr "اعكس حالة الأحرف"
 
 #: ChangecaseFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Case..."
-msgstr "غيّر الحالة"
+msgstr "غيّر الحالة..."
 
 #, fuzzy
 #~| msgid "Change case"

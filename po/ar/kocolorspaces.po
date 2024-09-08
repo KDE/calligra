@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 23:02+0400\n"
+"PO-Revision-Date: 2024-09-07 20:36+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:21
 #, kde-format
 msgid "Cyan"
-msgstr ""
+msgstr "سماوي"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:26
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:21
@@ -38,14 +38,14 @@ msgstr "أرجواني"
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:23
 #, kde-format
 msgid "Yellow"
-msgstr ""
+msgstr "أصفر"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:28
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:23
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:24
 #, kde-format
 msgid "Black"
-msgstr ""
+msgstr "أسود"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:29
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:24
@@ -93,7 +93,7 @@ msgstr ""
 #: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.cpp:22
 #, kde-format
 msgid "Gray"
-msgstr ""
+msgstr "رصاصيّ"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
 #, kde-format
@@ -157,7 +157,7 @@ msgstr ""
 #: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:55
 #, kde-format
 msgid "Red"
-msgstr ""
+msgstr "أحمر"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:24
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:27
@@ -165,7 +165,7 @@ msgstr ""
 #: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:54
 #, kde-format
 msgid "Green"
-msgstr ""
+msgstr "أخضر"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:25
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:28
@@ -173,7 +173,7 @@ msgstr ""
 #: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:53
 #, kde-format
 msgid "Blue"
-msgstr ""
+msgstr "أزرق"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
 #, kde-format
@@ -212,7 +212,7 @@ msgstr "س"
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:21
 #, kde-format
 msgid "Y"
-msgstr ""
+msgstr "ص"
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:30
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:41
@@ -270,7 +270,7 @@ msgstr ""
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
 msgid "Bumpmap"
-msgstr ""
+msgstr "خريطة نتوءات"
 
 #: lcms2/compositeops/RgbCompositeOpClear.h:20
 #, kde-format
@@ -280,7 +280,7 @@ msgstr "امسح"
 #: lcms2/compositeops/RgbCompositeOpColor.h:25
 #, kde-format
 msgid "Color"
-msgstr ""
+msgstr "اللون"
 
 #: lcms2/compositeops/RgbCompositeOpDarken.h:20
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:49+0400\n"
+"PO-Revision-Date: 2024-09-07 21:19+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -183,7 +183,7 @@ msgstr "البادئة:"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/BibliographyConfigureDialog.ui:48 dialogs/ListLevelWidget.ui:373
 #: dialogs/ParagraphBulletsNumbers.ui:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Suffix:"
 msgstr "اللاحقة:"
 
@@ -230,7 +230,7 @@ msgstr "الاسم:"
 #: dialogs/BibliographyConfigureDialog.ui:139
 #, kde-format
 msgid "Alphanumeric"
-msgstr ""
+msgstr "هجائي عددي"
 
 #: dialogs/BibliographyTemplate.cpp:30
 #, kde-format
@@ -265,9 +265,9 @@ msgstr "فقرة إعدادات n"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ChangeConfigureDialog.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "General Settings"
-msgstr "فقرة إعدادات n"
+msgstr "إعدادات عامة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/ChangeConfigureDialog.ui:37
@@ -279,7 +279,7 @@ msgstr "أسلوب الفقرة"
 #: dialogs/ChangeConfigureDialog.ui:44
 #, kde-format
 msgid "ODF 1.2"
-msgstr ""
+msgstr "ODF 1.2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
 #: dialogs/ChangeConfigureDialog.ui:51
@@ -289,9 +289,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ChangeConfigureDialog.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author Name"
-msgstr "الاسم:"
+msgstr "اسم المؤلف"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ChangeConfigureDialog.ui:75
@@ -491,7 +491,7 @@ msgstr "عادي"
 #: dialogs/CharacterHighlighting.cpp:299
 #, kde-format
 msgid "Small Caps"
-msgstr ""
+msgstr "حروف كبيرة مصغرة"
 
 #: dialogs/CharacterHighlighting.cpp:300
 #, kde-format
@@ -520,22 +520,22 @@ msgstr "منخفض"
 
 #. i18n: ectx: property (text), widget (QLabel, textColorLabel)
 #: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text color:"
-msgstr "لون النص:"
+msgstr "لون النّصّ:"
 
 #. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
 #: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
 #: dialogs/ParagraphDecorations.ui:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background color:"
 msgstr "لون الخلفية:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Underlining:"
-msgstr "تسطير:"
+msgstr "خط سفلي:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:141
@@ -593,9 +593,9 @@ msgstr "إدراج فهرس"
 
 #. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
 #: dialogs/CitationInsertionDialog.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Short Name:"
-msgstr "الاسم:"
+msgstr "الاسم القصير:"
 
 #. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
 #: dialogs/CitationInsertionDialog.ui:52
@@ -613,9 +613,9 @@ msgstr "المقالة"
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/CitationInsertionDialog.ui:65 dialogs/InsertBibliographyDialog.ui:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Book"
-msgstr "علامات المواقع"
+msgstr "الكتاب"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -636,7 +636,7 @@ msgstr "فقرة إعدادات n"
 #: dialogs/CitationInsertionDialog.ui:80 dialogs/InsertBibliographyDialog.ui:81
 #, kde-format
 msgid "Email"
-msgstr ""
+msgstr "البريد الإلكترونيّ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:85
@@ -819,27 +819,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
 #: dialogs/CitationInsertionDialog.ui:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Book title:"
-msgstr "علامات المواقع"
+msgstr "عنوان الكتاب:"
 
 #. i18n: ectx: property (text), widget (QLabel, editionLabel)
 #: dialogs/CitationInsertionDialog.ui:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edition:"
-msgstr "إضافي"
+msgstr "الإصدارة:"
 
 #. i18n: ectx: property (text), widget (QLabel, publicationLabel)
 #: dialogs/CitationInsertionDialog.ui:293
-#, fuzzy, kde-format
+#, kde-format
 msgid "Publication:"
-msgstr "الموضع"
+msgstr "النشر:"
 
 #. i18n: ectx: property (text), widget (QLabel, volumeLabel)
 #: dialogs/CitationInsertionDialog.ui:303
-#, fuzzy, kde-format
+#, kde-format
 msgid "Volume:"
-msgstr "محاذاة إلى اليسار"
+msgstr "الجزء:"
 
 #. i18n: ectx: property (text), widget (QLabel, institutionLabel)
 #: dialogs/CitationInsertionDialog.ui:313
@@ -863,25 +863,25 @@ msgstr ""
 #: dialogs/CitationInsertionDialog.ui:343
 #, kde-format
 msgid "University:"
-msgstr ""
+msgstr "الجامعة:"
 
 #. i18n: ectx: property (text), widget (QLabel, journalLabel)
 #: dialogs/CitationInsertionDialog.ui:353
 #, kde-format
 msgid "Journal:"
-msgstr ""
+msgstr "اليوميّة:"
 
 #. i18n: ectx: property (text), widget (QLabel, monthLabel)
 #: dialogs/CitationInsertionDialog.ui:363
 #, kde-format
 msgid "Month:"
-msgstr ""
+msgstr "الشهر:"
 
 #. i18n: ectx: property (text), widget (QLabel, seriesLabel)
 #: dialogs/CitationInsertionDialog.ui:373
 #, kde-format
 msgid "Series:"
-msgstr ""
+msgstr "السلسلة:"
 
 #. i18n: ectx: property (text), widget (QLabel, numberLabel)
 #: dialogs/CitationInsertionDialog.ui:383
@@ -897,9 +897,9 @@ msgstr "الملاحظة:"
 
 #. i18n: ectx: property (text), widget (QLabel, annotationLabel)
 #: dialogs/CitationInsertionDialog.ui:403
-#, fuzzy, kde-format
+#, kde-format
 msgid "Annotation:"
-msgstr "إضافي"
+msgstr "الشرح:"
 
 #. i18n: ectx: property (text), widget (QLabel, urlLabel)
 #: dialogs/CitationInsertionDialog.ui:413
@@ -991,9 +991,9 @@ msgstr "الموضع"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hyphenate)
 #: dialogs/FontDecorations.ui:295
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic hyphenation"
-msgstr "تلقائي"
+msgstr "الوصلة الآلية"
 
 #: dialogs/FontDia.cpp:34
 #, kde-format
@@ -1089,7 +1089,7 @@ msgstr "مخصّص5"
 #: dialogs/InsertBibliographyDialog.ui:178
 #, kde-format
 msgid "Available fields "
-msgstr ""
+msgstr "الحقول المتاحة"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: dialogs/InsertBibliographyDialog.ui:192
@@ -1116,28 +1116,28 @@ msgid "Fields added"
 msgstr ""
 
 #: dialogs/InsertCharacter.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Special Characters"
 msgstr "أحرف خاصة"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
 #: ReferencesTool.cpp:114 TextTool.cpp:2261
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
-msgstr "إدراج"
+msgstr "أدرج"
 
 #: dialogs/InsertCharacter.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Close dialog"
 msgid "Close"
-msgstr "إغلاق"
+msgstr "أغلق"
 
 #. i18n: ectx: property (text), widget (QLabel, filterLabel)
 #: dialogs/LanguageTab.ui:19
 #, kde-format
 msgid "Quick search:"
-msgstr ""
+msgstr "بحث سريع:"
 
 #: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:278
@@ -1196,7 +1196,7 @@ msgstr ""
 #: dialogs/LinkInsertionDialog.ui:45
 #, kde-format
 msgid " URL:"
-msgstr ""
+msgstr " المسار:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:58
@@ -1222,9 +1222,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid " Text:"
-msgstr "نص"
+msgstr "النص:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:113
@@ -1248,7 +1248,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid " Name:"
 msgstr "الاسم:"
 
@@ -1281,7 +1281,7 @@ msgstr "أحرف خاصة"
 #: dialogs/ListLevelWidget.ui:81
 #, kde-format
 msgid "Nothing"
-msgstr ""
+msgstr "لا شيء"
 
 #. i18n: ectx: property (text), widget (QLabel, loremIpsum)
 #: dialogs/ListLevelWidget.ui:95
@@ -1300,7 +1300,7 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:117
 #, kde-format
 msgid "LABEL"
-msgstr ""
+msgstr "اللصيقة"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
@@ -1311,21 +1311,21 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
 #: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left"
 msgstr "يسار"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
 #: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center"
 msgstr "وسط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
 #: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right"
 msgstr "يمين"
 
@@ -1339,13 +1339,13 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:334
 #, kde-format
 msgid "Number"
-msgstr ""
+msgstr "عدد"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ListLevelWidget.ui:366
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format:"
-msgstr "عادي"
+msgstr "النّسق:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ListLevelWidget.ui:429
@@ -1361,31 +1361,31 @@ msgstr "خطاب مزامنة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bullet"
-msgstr "صندوق"
+msgstr "نقطية"
 
 #. i18n: ectx: attribute (title), widget (QWidget, imageTab)
 #: dialogs/ListLevelWidget.ui:459
 #, kde-format
 msgid "Picture"
-msgstr ""
+msgstr "صورة"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr ""
+msgstr "حمّل الصّورة..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Rename"
-msgstr "ا&عادة تسمية"
+msgstr "&غيّر الاسم"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: dialogs/ManageBookmark.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete"
 msgstr "ا&حذف"
 
@@ -1437,27 +1437,27 @@ msgstr "تلقائي"
 
 #. i18n: ectx: property (text), widget (QLabel, prefix)
 #: dialogs/NotesConfigurationDialog.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid " Prefix:"
-msgstr "البادئة:"
+msgstr " البادئة:"
 
 #. i18n: ectx: property (text), widget (QLabel, startAt)
 #: dialogs/NotesConfigurationDialog.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid " Start at:"
-msgstr "ابدأ عند:"
+msgstr " ابدأ من:"
 
 #. i18n: ectx: property (text), widget (QLabel, numStyle)
 #: dialogs/NotesConfigurationDialog.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgid " Format:"
-msgstr "عادي"
+msgstr " النّسق:"
 
 #. i18n: ectx: property (text), widget (QLabel, suffix)
 #: dialogs/NotesConfigurationDialog.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgid " Suffix:"
-msgstr "اللاحقة:"
+msgstr "اللاحقة"
 
 #. i18n: ectx: property (text), widget (QLabel, beginAt)
 #: dialogs/NotesConfigurationDialog.ui:127
@@ -1479,9 +1479,9 @@ msgstr "الفصل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document"
-msgstr "تضمين بوصة جدول من"
+msgstr "مستند"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:233
@@ -1517,13 +1517,13 @@ msgstr ""
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr ""
+msgstr "‏i، ‏ii، ‏iii، ‏..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr ""
+msgstr "I,II,III, ..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1550,13 +1550,13 @@ msgid "Auto"
 msgstr "آليّ"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Text alignment"
 msgid "Left"
 msgstr "يسار"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Text alignment"
 msgid "Right"
 msgstr "يمين"
@@ -1571,19 +1571,19 @@ msgstr "موسّطة"
 #, kde-format
 msgctxt "Tab follows the bullet or number"
 msgid "Tab Stop"
-msgstr ""
+msgstr "توقُّف مفتاح التبويب"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:40
 #, kde-format
 msgctxt "Space"
 msgid "Space"
-msgstr ""
+msgstr "مسافة"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:41
 #, kde-format
 msgctxt "None"
 msgid "Nothing"
-msgstr ""
+msgstr "لا شيء"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
@@ -1592,9 +1592,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start at:"
-msgstr "ابدأ عند:"
+msgstr "ابدأ من:"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -1629,19 +1629,19 @@ msgstr "نقاط أرقام"
 #: dialogs/ParagraphBulletsNumbers.ui:192
 #, kde-format
 msgid " cm"
-msgstr ""
+msgstr "سم"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: dialogs/ParagraphBulletsNumbers.ui:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "at"
-msgstr "احذف"
+msgstr "في"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: dialogs/ParagraphBulletsNumbers.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Aligned at"
-msgstr "المحاذاة"
+msgstr "محاذاة عند"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: dialogs/ParagraphBulletsNumbers.ui:199
@@ -1684,9 +1684,9 @@ msgstr "أدرج صورة"
 
 #. i18n: ectx: property (text), widget (QLabel, heightLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height"
-msgstr "يمين"
+msgstr "الارتفاع"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertImage)
 #: dialogs/ParagraphBulletsNumbers.ui:284
@@ -1709,7 +1709,7 @@ msgstr "لون الخلفية:"
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
 msgid "Whole Word"
-msgstr ""
+msgstr "كل الكلمات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
@@ -1756,7 +1756,7 @@ msgstr "الزينة"
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
 msgid "Drop Caps"
-msgstr ""
+msgstr "أحرف استهلالية"
 
 #: dialogs/ParagraphIndentSpacing.cpp:28
 #, kde-format
@@ -1765,10 +1765,10 @@ msgid "Single"
 msgstr "مفرد"
 
 #: dialogs/ParagraphIndentSpacing.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing value"
 msgid "1.5 Lines"
-msgstr "سطر ونصف"
+msgstr "1.5 سطر"
 
 #: dialogs/ParagraphIndentSpacing.cpp:30
 #, kde-format
@@ -1789,7 +1789,7 @@ msgid "Additional"
 msgstr "إضافي"
 
 #: dialogs/ParagraphIndentSpacing.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing type"
 msgid "Fixed"
 msgstr "ثابت"
@@ -1802,21 +1802,21 @@ msgstr "على الأقل"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left Indent:"
-msgstr "إزاحة"
+msgstr "المسافة البادئة اليسرى:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right Indent:"
-msgstr "إزاحة"
+msgstr "المسافة البادئة اليمنى:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Line Indent:"
-msgstr "الأول خط:"
+msgstr "إزاحة السطر الأول:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1826,15 +1826,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Spacing:"
-msgstr "تباعد الأسطر"
+msgstr "تباعد الأسطر:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid " %"
-msgstr " %"
+msgstr " ٪"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
@@ -1856,7 +1856,7 @@ msgstr "فقرة فضائي"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Justify"
 msgstr "ساوِ"
 
@@ -1929,9 +1929,9 @@ msgstr "فقرة إعدادات n"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionsSplitDialog.ui:12
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert paragraph..."
-msgstr "فقرة."
+msgstr "أدرج فقرة..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
@@ -1998,15 +1998,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Endnote"
-msgstr "فقرة إعدادات n"
+msgstr "حاشية ختامية"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Footnote"
-msgstr "فقرة إعدادات n"
+msgstr "حاشية"
 
 #. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
 #: dialogs/SimpleInsertWidget.ui:20
@@ -2018,13 +2018,13 @@ msgstr ""
 #: dialogs/SimpleLinksWidget.ui:34
 #, kde-format
 msgid "Hyperlinks"
-msgstr ""
+msgstr "روابط"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
 #: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bookmarks"
-msgstr "علامة موقع."
+msgstr "العلامات"
 
 #: dialogs/SimpleParagraphWidget.cpp:84
 #, fuzzy, kde-format
@@ -2044,14 +2044,14 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
 #: dialogs/StyleManager.ui:104 TextTool.cpp:2640
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete"
 msgstr "احذف"
 
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "حرّر..."
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
@@ -2086,15 +2086,15 @@ msgid "Set Border Color..."
 msgstr "لون النص:"
 
 #: dialogs/SimpleTableWidget.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
-msgstr "لا شيء"
+msgstr "بلا شيء"
 
 #: dialogs/SimpleTableWidget.cpp:174
 #, kde-format
 msgid "No Border"
-msgstr ""
+msgstr "بلا حدود"
 
 #: dialogs/StyleManager.cpp:38
 #, kde-format
@@ -2102,9 +2102,9 @@ msgid "Create a new style inheriting the current style"
 msgstr ""
 
 #: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Style"
-msgstr "الطراز التالي:"
+msgstr "نمط جديد"
 
 #: dialogs/StyleManager.cpp:442
 #, kde-format
@@ -2113,9 +2113,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:52 TextTool.cpp:2253
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph"
-msgstr "فقرة."
+msgstr "الفقرة"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
 #: dialogs/StyleManager.ui:66 TextTool.cpp:2251
@@ -2173,15 +2173,15 @@ msgid "Create a new style with the current properties"
 msgstr ""
 
 #: dialogs/StylesComboPreview.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "New style"
-msgstr "الطراز التالي:"
+msgstr "نمط جديد"
 
 #: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
 #: dialogs/StylesModel.cpp:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "None"
-msgstr "لا شيء"
+msgstr "بلا شيء"
 
 #: dialogs/TableDialog.cpp:14
 #, kde-format
@@ -2196,21 +2196,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelColumns)
 #: dialogs/TableDialog.ui:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of columns:"
-msgstr ""
-"مخصص رمز\n"
-"حرف\n"
-"مِحرف:"
+msgstr "عدد الأعمدة:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRows)
 #: dialogs/TableDialog.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of rows:"
-msgstr ""
-"مخصص رمز\n"
-"حرف\n"
-"مِحرف:"
+msgstr "عدد الصفوف:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPhysical)
 #: dialogs/TableDialog.ui:97
@@ -2257,9 +2251,9 @@ msgid "Use styles"
 msgstr "أسلوب جديد"
 
 #: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure"
-msgstr "فقرة إعدادات n"
+msgstr "اضبط"
 
 #: dialogs/TableOfContentsConfigure.cpp:67
 #, kde-format
@@ -2268,22 +2262,22 @@ msgstr "الدليل"
 
 #: dialogs/TableOfContentsConfigure.cpp:68
 #: dialogs/TableOfContentsStyleModel.cpp:229
-#, fuzzy, kde-format
+#, kde-format
 msgid "Styles"
-msgstr "الأسلوب"
+msgstr "الطُرُز"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: dialogs/TableOfContentsConfigure.ui:49
 #, kde-format
 msgid "Tab 1"
-msgstr ""
+msgstr "اللسان 1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitle)
 #: dialogs/TableOfContentsConfigure.ui:57
 #: dialogs/TableOfContentsEntryModel.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Title"
-msgstr "تاميلي"
+msgstr "العنوان"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, useStyles)
@@ -2303,7 +2297,7 @@ msgstr ""
 #: dialogs/TableOfContentsConfigure.ui:108
 #, kde-format
 msgid "Tab 2"
-msgstr ""
+msgstr "اللسان 2"
 
 #: dialogs/TableOfContentsEntryModel.cpp:30
 #, kde-format
@@ -2317,9 +2311,9 @@ msgid "Level"
 msgstr "المستوى"
 
 #: dialogs/TableOfContentsEntryModel.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style"
-msgstr "الأسلوب"
+msgstr "الطراز"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, fuzzy, kde-format
@@ -2327,9 +2321,9 @@ msgid "Table of Contents - Configure Styles"
 msgstr "تضمين بوصة جدول من"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Styles available"
-msgstr "الأسلوب المدير"
+msgstr "الطرز المتوفّرة"
 
 #. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
 #: dialogs/TableOfContentsStyleConfigure.ui:20
@@ -2339,14 +2333,14 @@ msgstr "لصيقة نصّيّة"
 
 #: dialogs/TableOfContentsStyleDelegate.cpp:40
 #: dialogs/TableOfContentsStyleModel.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disabled"
-msgstr "المسافة:"
+msgstr "معطّل"
 
 #: dialogs/TableOfContentsTemplate.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table Of Contents"
-msgstr "تضمين بوصة جدول من"
+msgstr "جدول المحتويات"
 
 #: ReferencesTool.cpp:116
 #, fuzzy, kde-format
@@ -2399,9 +2393,9 @@ msgid "Insert Labeled Endnote"
 msgstr "إدراج فهرس"
 
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgid "Settings..."
-msgstr "فقرة إعدادات n"
+msgstr "إعدادات..."
 
 #: ReferencesTool.cpp:159
 #, fuzzy, kde-format
@@ -2429,9 +2423,9 @@ msgid "Configure the bibliography"
 msgstr "إدراج فهرس"
 
 #: ReferencesTool.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Link"
-msgstr "إدراج"
+msgstr "أدرج رابط"
 
 #: ReferencesTool.cpp:177
 #, fuzzy, kde-format
@@ -2444,9 +2438,9 @@ msgid "Add Bookmark"
 msgstr "أضف علامة"
 
 #: ReferencesTool.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Bookmark :"
-msgstr "علامة موقع."
+msgstr "أضف علامة :"
 
 #: ReferencesTool.cpp:187
 #, kde-format
@@ -2512,7 +2506,7 @@ msgstr "إدراج فهرس"
 #: ReviewTool.cpp:96
 #, kde-format
 msgid "Spell check"
-msgstr ""
+msgstr "تدقيق الإملاء"
 
 #: ReviewTool.cpp:99
 #, kde-format
@@ -2520,14 +2514,14 @@ msgid "Comments"
 msgstr "تعليقات"
 
 #: ReviewToolFactory.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Review"
-msgstr "معاينة"
+msgstr "المراجعة"
 
 #: TextShapeFactory.cpp:31 TextShapeFactory.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text"
-msgstr "نص"
+msgstr "النص"
 
 #: TextShapeFactory.cpp:33
 #, fuzzy, kde-format
@@ -2535,9 +2529,9 @@ msgid "A shape that shows text"
 msgstr "A شكل ذلك المعارض نص"
 
 #: TextShapeFactory.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Shape"
-msgstr "نص شكل"
+msgstr "شكل النص"
 
 #: TextTool.cpp:203
 #, fuzzy, kde-format
@@ -2651,9 +2645,9 @@ msgid "Variable"
 msgstr "متغير"
 
 #: TextTool.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Non-Breaking Space"
-msgstr "إدراج غير الانكسار فضائي"
+msgstr "أدرِج مسافة واصلة"
 
 #: TextTool.cpp:332
 #, fuzzy, kde-format
@@ -2671,19 +2665,19 @@ msgid "Insert Soft Hyphen"
 msgstr "إدراج شارطة"
 
 #: TextTool.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Break"
-msgstr "قطع الخط"
+msgstr "كاسر أسطر"
 
 #: TextTool.cpp:353
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Break"
-msgstr "قطع الخط"
+msgstr "فاصل صفحات"
 
 #: TextTool.cpp:357
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a page break"
-msgstr "إدراج فهرس"
+msgstr "أدرج فاصل صفحات"
 
 #: TextTool.cpp:358
 #, kde-format
@@ -2691,7 +2685,7 @@ msgid "All text after this point will be moved into the next page."
 msgstr ""
 
 #: TextTool.cpp:361
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font..."
 msgstr "الخط..."
 
@@ -2724,14 +2718,14 @@ msgid "Text Color"
 msgstr "لون النّصّ"
 
 #: TextTool.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background Color..."
-msgstr "لون الخلفية:"
+msgstr "لون الخلفية..."
 
 #: TextTool.cpp:382
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
-msgstr "لون الخلفية:"
+msgstr "الخلفية"
 
 #: TextTool.cpp:386
 #, kde-format
@@ -2764,9 +2758,9 @@ msgid "Row Above"
 msgstr "صفًّا قبله"
 
 #: TextTool.cpp:413
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Row Above"
-msgstr "إدراج فهرس"
+msgstr "أدرج صفّا لأعلى"
 
 #: TextTool.cpp:417
 #, kde-format
@@ -2774,9 +2768,9 @@ msgid "Row Below"
 msgstr "صفًّا بعده"
 
 #: TextTool.cpp:418
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Row Below"
-msgstr "إدراج فهرس"
+msgstr "أدرج صفّا لأسفل"
 
 #: TextTool.cpp:422
 #, fuzzy, kde-format
@@ -2794,19 +2788,19 @@ msgid "Column Right"
 msgstr "محاذاة إلى اليمين"
 
 #: TextTool.cpp:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Column Right"
-msgstr "إدراج فهرس"
+msgstr "أدرج عمودًا يمينً  ا"
 
 #: TextTool.cpp:432
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column"
-msgstr "محاذاة إلى اليسار"
+msgstr "عمود"
 
 #: TextTool.cpp:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Column"
-msgstr "احذف"
+msgstr "حذف العمود"
 
 #: TextTool.cpp:437
 #, kde-format
@@ -2824,9 +2818,9 @@ msgid "Merge Cells"
 msgstr "ادمج الخلايا"
 
 #: TextTool.cpp:446
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split Cells"
-msgstr "فقرة إعدادات n"
+msgstr "اقسم الخلايا"
 
 #: TextTool.cpp:451
 #, kde-format
@@ -2834,9 +2828,9 @@ msgid "Select a border style and paint that style onto a table"
 msgstr ""
 
 #: TextTool.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph..."
-msgstr "فقرة."
+msgstr "فقرة..."
 
 #: TextTool.cpp:458
 #, fuzzy, kde-format
@@ -2874,9 +2868,9 @@ msgstr ""
 "الحوار."
 
 #: TextTool.cpp:474
-#, fuzzy, kde-format
+#, kde-format
 msgid "Special Character..."
-msgstr "خاص حرف."
+msgstr "رمز خاص..."
 
 #: TextTool.cpp:478
 #, fuzzy, kde-format
@@ -2894,9 +2888,9 @@ msgid "Repaint"
 msgstr ""
 
 #: TextTool.cpp:487
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Comment"
-msgstr "إدراج فهرس"
+msgstr "أدرج تعليقًا"
 
 #: TextTool.cpp:571
 #, kde-format
@@ -2909,9 +2903,9 @@ msgid "Deletion"
 msgstr "الحذف"
 
 #: TextTool.cpp:575
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formatting"
-msgstr "الزينة"
+msgstr "التنسيق"
 
 #: TextTool.cpp:590
 #, kde-format
@@ -2945,16 +2939,14 @@ msgid "Change Border Formatting"
 msgstr "أسلوب الفقرة"
 
 #: TextTool.cpp:1154
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut"
-msgstr "مخصص"
+msgstr "قصّ"
 
 #: TextTool.cpp:1414
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr "إدراج فهرس"
+msgstr "ضبط عرض العمود"
 
 #: TextTool.cpp:1458
 msgctxt "(qtundo-format)"
@@ -2977,9 +2969,9 @@ msgid "Key Press"
 msgstr "ضغطة مفتاح"
 
 #: TextToolFactory.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text editing"
-msgstr "نص أداة"
+msgstr "تحرير النّصّ"
 
 #, fuzzy
 #~ msgid "Number of characters:"

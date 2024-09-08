@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-09-06 22:51+0400\n"
+"PO-Revision-Date: 2024-09-07 21:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -111,9 +111,9 @@ msgid "Minute"
 msgstr "أقل من دقيقة"
 
 #: FixedDateFormat.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "Second"
-msgstr "الثّانية"
+msgstr "ثانية"
 
 #: FixedDateFormat.cpp:129
 #, fuzzy, kde-format
@@ -161,9 +161,9 @@ msgid "2 Digits (01-99)"
 msgstr "خانات رقمية"
 
 #: FixedDateFormat.cpp:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "4 Digits"
-msgstr "خانات رقمية"
+msgstr "4 خانات"
 
 #: FixedDateFormat.cpp:141
 #, fuzzy, kde-format
@@ -191,7 +191,7 @@ msgid "am/pm"
 msgstr "ص/م"
 
 #: FixedDateFormat.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "AM/PM"
 msgstr "صباحا/مساءا"
 
@@ -203,9 +203,9 @@ msgstr "التاريخ التصحيح:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, correction)
 #: FixedDateFormat.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgid " days"
-msgstr " أيام"
+msgstr " أيّام"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FixedDateFormat.ui:53

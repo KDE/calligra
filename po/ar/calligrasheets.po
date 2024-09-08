@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-09-05 11:11+0400\n"
+"PO-Revision-Date: 2024-09-07 19:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -12229,10 +12229,10 @@ msgid "SECH(0) equals 1"
 msgstr "الدالة COSH(0) تعادل 1"
 
 #: part/AboutData.h:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Sheets"
-msgstr "قيم الخلية"
+msgstr "كي سبريد"
 
 #: part/AboutData.h:28
 #, fuzzy, kde-format
@@ -12635,15 +12635,15 @@ msgstr "المنطقة: %1"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstRowAsLabel)
 #: part/chart/ChartDatabaseSelector.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "First row as label"
-msgstr "الـ&صف الأول يحتوي على ترويسات"
+msgstr "أوّل صفّ كلصيقة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColumnAsLabel)
 #: part/chart/ChartDatabaseSelector.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "First column as label"
-msgstr "الـ&عمود الأول يحتوي على ترويسات"
+msgstr "أوّل عمود كلصيقة"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
 #: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:135
@@ -12773,9 +12773,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/InterfaceOptionsWidget.ui:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Unit:"
-msgstr "وقت Unix"
+msgstr "الو&حدة:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
 #: part/dialogs/InterfaceOptionsWidget.ui:63
@@ -12801,10 +12801,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "&Grid color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "لون الـ&شبكة:"
+msgstr "&لون الشبكة:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -12848,15 +12847,15 @@ msgstr "ورقة"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/PageLayoutSheetPage.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print settings"
-msgstr "إجراء الطباعة"
+msgstr "إعدادات الطباعة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gridCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
-msgstr "جورد"
+msgstr "الشبكة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commentCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:48
@@ -12866,15 +12865,15 @@ msgstr "اعرض &مميز التعليقات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chartsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Charts"
-msgstr "رسم بياني"
+msgstr "رسوم بيانية"
 
 #. i18n: ectx: property (text), widget (QCheckBox, objectsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Objects"
-msgstr "&كائن"
+msgstr "الكائنات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, zeroValuesCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:84
@@ -12958,15 +12957,15 @@ msgstr "صفوف"
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: part/dialogs/PageLayoutSheetPage.ui:199
 #: part/dialogs/PageLayoutSheetPage.ui:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "to"
-msgstr "أوقف"
+msgstr "إلى"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: part/dialogs/PageLayoutSheetPage.ui:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scaling"
-msgstr "Schilling"
+msgstr "تحجيم"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomButton)
 #: part/dialogs/PageLayoutSheetPage.ui:275
@@ -12995,10 +12994,10 @@ msgid "Vertical"
 msgstr "رأسي"
 
 #: part/dialogs/PreferenceDialog.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr "إعداد KSpread"
+msgstr "اضبط"
 
 #: part/dialogs/PreferenceDialog.cpp:289
 #, kde-format
@@ -13079,14 +13078,14 @@ msgid "Function Modules"
 msgstr "الدالة"
 
 #: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:730
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tools"
-msgstr "أ&دوات"
+msgstr "أدوات"
 
 #: part/dialogs/PreferenceDialog.cpp:337
 #, kde-format
 msgid "Plugins"
-msgstr ""
+msgstr "الملحقات"
 
 #: part/dialogs/PreferenceDialog.cpp:345 part/dialogs/PreferenceDialog.cpp:352
 #, kde-format
@@ -13099,13 +13098,13 @@ msgid "Spell Checker Behavior"
 msgstr "سلوك المدقق الإملائي"
 
 #: part/dialogs/PreferenceDialog.cpp:353
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "المؤلف"
 
 #: part/dialogs/PreferenceDialog.cpp:354
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author"
 msgstr "المؤلف"
 
@@ -13335,15 +13334,15 @@ msgid "&Automatic recalculation"
 msgstr "&إعادة الحساب التلقائية"
 
 #: part/dialogs/SheetSelectPage.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheets"
-msgstr "ورقة"
+msgstr "أوراق"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Sheets"
-msgstr "الأوراق المتاحة"
+msgstr "كل الأوراق"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeSheetButton)
 #: part/dialogs/SheetSelectWidget.ui:47
@@ -13353,9 +13352,9 @@ msgstr "اخف الورقة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected Sheets:"
-msgstr "الأوراق المنتقاة"
+msgstr "الأوراق المحددة:"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:67
@@ -13463,9 +13462,9 @@ msgid "Move selected sheet to the bottom"
 msgstr "انقل الورقة المنتقاة إلى الأسفل"
 
 #: part/Find.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Case Sensitive"
-msgstr "فرز حساس لحالة الأحرف"
+msgstr "حساس للحالة"
 
 #: part/Find.cpp:40
 #, kde-format
@@ -13658,9 +13657,9 @@ msgid "&Create Template From Document..."
 msgstr "أنـ&شئ قالبا من مستند..."
 
 #: part/View.cpp:311
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor"
-msgstr "أندورا"
+msgstr "المربط"
 
 #: part/View.cpp:312 part/View.cpp:1052 part/View.cpp:1517
 #, kde-format
@@ -13728,7 +13727,7 @@ msgid "Last Sheet"
 msgstr "الورقة الأخيرة"
 
 #: part/View.cpp:342
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "الأخير"
@@ -13739,9 +13738,9 @@ msgid "Move to the last sheet"
 msgstr "انقل للورقة الأخيرة"
 
 #: part/View.cpp:349
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Header"
-msgstr "رقم العمود"
+msgstr "رأس العمود"
 
 #: part/View.cpp:350
 #, fuzzy, kde-format
@@ -13749,9 +13748,9 @@ msgid "Show the column header"
 msgstr "اعرض ترويسة العمو&د"
 
 #: part/View.cpp:354
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row Header"
-msgstr "ترويسة"
+msgstr "رأس الصف"
 
 #: part/View.cpp:355
 #, fuzzy, kde-format
@@ -14000,7 +13999,7 @@ msgstr "الحدود"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number format"
 msgstr "تنسيق الأرقام"
 
@@ -14011,10 +14010,9 @@ msgid "Merge"
 msgstr "ادمج"
 
 #: ui/commands/ApplyFilterCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
-msgstr "طَبِّق المرشح"
+msgstr "طبق المرشّح"
 
 #: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
@@ -14208,10 +14206,9 @@ msgid "Sun"
 msgstr "الأحد"
 
 #: ui/commands/AutoFillCommand.cpp:669
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
-msgstr "ملء تلقائي"
+msgstr "الملئ التلقائي"
 
 #: ui/commands/DataManipulators.cpp:104
 msgctxt "(qtundo-format)"
@@ -14219,10 +14216,9 @@ msgid "Change Value"
 msgstr "غيّر القيمة"
 
 #: ui/commands/DataManipulators.cpp:172 ui/commands/DataManipulators.cpp:181
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
-msgstr "أدرج خلايا"
+msgstr "إدراج خلايا"
 
 #: ui/commands/DataManipulators.cpp:183
 #, fuzzy
@@ -14231,7 +14227,6 @@ msgid "Remove Cells"
 msgstr "أزل الخلايا"
 
 #: ui/commands/DeleteCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "احذف"
@@ -14299,18 +14294,14 @@ msgid "Hide Rows/Columns"
 msgstr "اخف الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:279
-#, fuzzy
-#| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
-msgstr "اخف الأعمدة"
+msgstr "أخف الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:281
-#, fuzzy
-#| msgid "Hide Rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
-msgstr "اخف الصفوف"
+msgstr "أخف الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:284
 #, fuzzy
@@ -14320,18 +14311,14 @@ msgid "Show Rows/Columns"
 msgstr "اعرض الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:286
-#, fuzzy
-#| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
-msgstr "اعرض الأعمدة"
+msgstr "أظهر الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:288
-#, fuzzy
-#| msgid "Show Rows"
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
-msgstr "اعرض الصفوف"
+msgstr "أظهر الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:531
 #, fuzzy
@@ -14356,7 +14343,6 @@ msgstr "عدل الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:548
 #: ui/commands/RowColumnManipulators.cpp:566
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "أدرج أعمدة"
@@ -14369,10 +14355,9 @@ msgstr "أزل الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:623
 #: ui/commands/RowColumnManipulators.cpp:641
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
-msgstr "أدرج صفوفا"
+msgstr "أدرج صفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:643
 #, fuzzy
@@ -14386,8 +14371,7 @@ msgid "Rename Sheet"
 msgstr "أعد تسمية الورقة"
 
 #: ui/commands/SheetCommands.cpp:46
-#, fuzzy, kde-format
-#| msgid "Hide Sheet %1"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Hide Sheet %1"
 msgstr "اخف الورقة %1"
@@ -14398,8 +14382,7 @@ msgid "Hide Sheet"
 msgstr "اخف الورقة"
 
 #: ui/commands/SheetCommands.cpp:77
-#, fuzzy, kde-format
-#| msgid "Show Sheet %1"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
 msgstr "اعرض الورقة %1"
@@ -14624,10 +14607,9 @@ msgid "Set Cell Format"
 msgstr "تنسيق الخلية"
 
 #: ui/dialogs/LayoutDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&عام"
+msgstr "عامّ"
 
 #: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
@@ -14635,16 +14617,14 @@ msgid "Border"
 msgstr "حد"
 
 #: ui/dialogs/LayoutDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "&خلفية"
+msgstr "الخلفية"
 
 #: ui/dialogs/LayoutDialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "حما&ية الخلية"
+msgstr "حماية الخلية"
 
 #: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
@@ -14805,10 +14785,9 @@ msgstr ""
 "لديك في مركز التحكم."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "التاريخ و الوقت"
+msgstr "التاريخ والوقت"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
 #, fuzzy, kde-format

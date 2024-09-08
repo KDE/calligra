@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:42+0400\n"
+"PO-Revision-Date: 2024-09-07 21:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -23,13 +23,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu"
 msgid "Shapes"
-msgstr ""
+msgstr "أشكال"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpview.rc:23
 #, kde-format
 msgid "Shapes"
-msgstr ""
+msgstr "أشكال"
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:3
@@ -59,31 +59,31 @@ msgstr "التّقدّم"
 #: data/states/states/states.xml:8
 #, kde-format
 msgid "0 %"
-msgstr ""
+msgstr "0 ٪"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:9
 #, kde-format
 msgid "25 %"
-msgstr ""
+msgstr "25 ٪"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:10
 #, kde-format
 msgid "50 %"
-msgstr ""
+msgstr "50 ٪"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:11
 #, kde-format
 msgid "75 %"
-msgstr ""
+msgstr "75 ٪"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:12
 #, kde-format
 msgid "100 %"
-msgstr ""
+msgstr "100 ٪"
 
 #: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
 #, kde-format
@@ -99,22 +99,22 @@ msgstr "الحالة:"
 #: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
-msgstr ""
+msgstr "حالة الشكل"
 
 #: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
-msgstr ""
+msgstr "حالة الشكل"
 
 #: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
-msgstr ""
+msgstr "خيارات أداة الحالة"
 
 #: plugins/stateshape/StateToolFactory.cpp:32
 #, kde-format
 msgid "State editing"
-msgstr ""
+msgstr "حالة التّحرير"
 
 #: src/AboutData.h:33
 #, kde-format
@@ -146,7 +146,7 @@ msgstr ""
 #: src/AboutData.h:43 src/AboutData.h:46
 #, kde-format
 msgid "Former maintainer"
-msgstr ""
+msgstr "المشرف السابق"
 
 #: src/AboutData.h:46
 #, kde-format
@@ -158,13 +158,13 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "زايد السعيدي"
 
 #: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "zayed.alsaidi@gmail.com"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/forms/wdgsectionproperties.ui:17
@@ -211,7 +211,7 @@ msgstr ""
 #: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
-msgstr ""
+msgstr "أشرطة الأدوات"
 
 #: src/import/ToolDocker.cpp:31
 #, kde-format
@@ -231,7 +231,7 @@ msgstr ""
 #: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
-msgstr ""
+msgstr "عمود"
 
 #: src/layouts/FreeLayout.cpp:60
 #, kde-format
@@ -246,7 +246,7 @@ msgstr "مراسي"
 #: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
-msgstr ""
+msgstr "غير معنون %1"
 
 #: src/SectionPropertiesDock.cpp:33
 #, kde-format
@@ -271,12 +271,12 @@ msgstr "منظور مفصّل"
 #: src/SectionsBoxDock.cpp:59
 #, kde-format
 msgid "Thumbnail View"
-msgstr ""
+msgstr "عَرض مصغّرات"
 
 #: src/SectionsBoxDock.cpp:70
 #, kde-format
 msgid "View mode"
-msgstr ""
+msgstr "طريقة العرض"
 
 #: src/SectionsBoxDock.cpp:82
 #, kde-format
@@ -302,24 +302,24 @@ msgstr "ا&حذف"
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
-msgstr ""
+msgstr "&كرّر"
 
 #: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
-msgstr ""
+msgstr "تجميع الأشكال"
 
 #: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
-msgstr ""
+msgstr "فك تجميع الأشكال"
 
 #: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr ""
+msgstr "تجميع الأشكال"
 
 #: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr ""
+msgstr "فك تجميع الأشكال"
