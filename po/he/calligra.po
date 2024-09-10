@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2024-08-30 10:59+0300\n"
+"PO-Revision-Date: 2024-09-09 19:05+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4816,12 +4816,12 @@ msgstr "החלה על המסמך"
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Left Edge Margin:"
-msgstr "השול הצד השמאלי:"
+msgstr "שול הצד השמאלי:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, kde-format
 msgid "Right Edge Margin:"
-msgstr "השול הצד הימני:"
+msgstr "שול הצד הימני:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
