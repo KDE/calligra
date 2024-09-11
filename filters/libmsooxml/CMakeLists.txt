@@ -45,6 +45,11 @@ target_link_libraries(komsooxml
         KF6::Archive
     )
 
+if (TARGET qca-qt6)
+    target_link_libraries(komsooxml PRIVATE qca-qt6)
+    add_definitions(-DHAVE_QCA2=1)
+endif()
+
 set_target_properties(komsooxml PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION} )
 install(TARGETS komsooxml ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

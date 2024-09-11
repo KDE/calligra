@@ -21,6 +21,7 @@
 #include "ooxml_pole.h"
 
 #include <QColor>
+#include <QCryptographicHash>
 #include <QFile>
 #include <QFileInfo>
 #include <QFont>
@@ -28,10 +29,9 @@
 #include <QImageReader>
 #include <QInputDialog>
 #include <QPen>
+#include <QTemporaryFile>
 
 #include "MsooXmlDebug.h"
-#include <QCryptographicHash>
-#include <QTemporaryFile>
 #include <kzip.h>
 
 #include <KoDocument.h>
@@ -42,6 +42,10 @@
 #include <KoXmlWriter.h>
 
 #include <memory>
+
+#ifdef HAVE_QCA2
+#include <QtCrypto>
+#endif
 
 using namespace MSOOXML;
 
@@ -213,13 +217,13 @@ bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
 #ifdef HAVE_QCA2
 QCA::Cipher createCipher(const QByteArray &blockKey, const QByteArray &hn, const QByteArray &salt)
 {
-    QByteArray hfinal = sha1sum(hn + blockKey);
+    QByteArray hfinal = QCryptographicHash::hash(QByteArray(hn + blockKey), QCryptographicHash::Sha1);
     if (hfinal.size() * 8 < 128)
         hfinal.append(QByteArray(128 / 8 - hfinal.size(), 0x36));
     if (hfinal.size() * 8 > 128)
         hfinal = hfinal.left(128 / 8);
     // not clear which is correct
-    // QByteArray iv = sha1sum(salt + blockKey);
+    // QByteArray iv = QCryptographicHash::hash(salt + blockKey, QCryptographicHash::Sha1);
     QByteArray iv = salt;
     QCA::Cipher aes("aes128", // TODO: size from xml
                     QCA::Cipher::CBC, // TODO: from xml
@@ -235,10 +239,10 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
 {
 #ifdef HAVE_QCA2
     QCA::Initializer qcainit;
-    debugMsooXml << QCA::isSupported("sha1") << QCA::isSupported("aes128-ecb") << QCA::supportedFeatures();
-    if (!QCA::isSupported("sha1") || !QCA::isSupported("aes128-ecb")) {
+    debugMsooXml << QCA::isSupported("aes128-ecb") << QCA::supportedFeatures();
+    if (!QCA::isSupported("aes128-ecb")) {
 #endif
-        debugMsooXml << "sha1 or aes128_ecb are not supported";
+        debugMsooXml << "aes128_ecb are not supported";
         return nullptr;
 #ifdef HAVE_QCA2
     }
@@ -333,15 +337,15 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
                 return 0;
             }
             QByteArray unicodePassword(reinterpret_cast<const char *>(password.utf16()), password.length() * 2);
-            QByteArray h0 = sha1sum(salt + unicodePassword);
+            QByteArray h0 = QCryptographicHash::hash(QByteArray(salt + unicodePassword), QCryptographicHash::Sha1);
             QByteArray hn = h0;
             for (int i = 0; i < spinCount; i++) {
                 QByteArray it;
                 it.append(i & 0xff).append((i >> 8) & 0xff).append((i >> 16) & 0xff).append((i >> 24) & 0xff);
-                hn = sha1sum(it + hn);
+                hn = QCryptographicHash::hash(QByteArray(it + hn), QCryptographicHash::Sha1);
             }
             QByteArray block(4, '\0');
-            QByteArray hfinal = sha1sum(hn + block);
+            QByteArray hfinal = QCryptographicHash::hash(QByteArray(hn + block), QCryptographicHash::Sha1);
             // debugMsooXml << hfinal;
             QByteArray x1(64, 0x36);
             QByteArray x2(64, 0x5C);
@@ -358,7 +362,7 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
             QByteArray verifier = aes.update(encryptedVerifier).toByteArray();
             verifier += aes.final().toByteArray();
             debugMsooXml << verifier.size() << QCA::arrayToHex(verifier);
-            QByteArray hashedVerifier = sha1sum(verifier);
+            QByteArray hashedVerifier = QCryptographicHash::hash(verifier, QCryptographicHash::Sha1);
             aes.clear();
             QByteArray verifierHash = aes.update(encryptedVerifierHash).toByteArray();
             debugMsooXml << verifierHash.size() << QCA::arrayToHex(verifierHash);
@@ -453,12 +457,12 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
             }
 
             QByteArray unicodePassword(reinterpret_cast<const char *>(password.utf16()), password.length() * 2);
-            QByteArray h0 = sha1sum(salt + unicodePassword);
+            QByteArray h0 = QCryptographicHash::hash(QByteArray(salt + unicodePassword), QCryptographicHash::Sha1);
             QByteArray hn = h0;
             for (int i = 0; i < spinCount; i++) {
                 QByteArray it;
                 it.append(i & 0xff).append((i >> 8) & 0xff).append((i >> 16) & 0xff).append((i >> 24) & 0xff);
-                hn = sha1sum(it + hn);
+                hn = QCryptographicHash::hash(QByteArray(it + hn), QCryptographicHash::Sha1);
             }
             const char blockKeyData1[] = "\xfe\xa7\xd2\x76\x3b\x4b\x9e\x79";
             QByteArray blockKey1(blockKeyData1, sizeof(blockKeyData1) - 1);
@@ -469,7 +473,7 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
             verifierHashInput = verifierHashInput.left(16);
 
             debugMsooXml << "verifier hash input:" << QCA::arrayToHex(verifierHashInput);
-            QByteArray hashedVerifierHashInput = sha1sum(verifierHashInput);
+            QByteArray hashedVerifierHashInput = QCryptographicHash::hash(verifierHashInput, QCryptographicHash::Sha1);
             debugMsooXml << "hashed verifier hash input:" << QCA::arrayToHex(hashedVerifierHashInput);
 
             const char blockKeyData2[] = "\xd7\xaa\x0f\x6d\x30\x61\x34\x4e";
@@ -506,7 +510,7 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
                 QByteArray blockKey;
                 blockKey.append(segment & 0xff).append((segment >> 8) & 0xff).append((segment >> 16) & 0xff).append((segment >> 24) & 0xff);
                 // blockKey.append((segment >> 24) & 0xff).append((segment >> 16) & 0xff).append((segment >> 8) & 0xff).append(segment & 0xff);
-                QByteArray iv = sha1sum(keyDataSalt + blockKey);
+                QByteArray iv = QCryptographicHash::hash(QByteArray(keyDataSalt + blockKey), QCryptographicHash::Sha1);
                 if (iv.size() * 8 < 128)
                     iv.append(QByteArray(128 / 8 - iv.size(), 0x36));
                 if (iv.size() * 8 > 128)
