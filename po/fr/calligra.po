@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-08-26 11:08+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -1502,7 +1502,7 @@ msgstr "Exporter comme PDF"
 msgid "Cannot export to the specified file"
 msgstr "Impossible d'exporter vers le fichier précisé"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Document"
 msgstr "Document"
@@ -2082,14 +2082,14 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "Insérer une page"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
 msgstr[0] "Déplacer la diapositive"
 msgstr[1] "Déplacer les tâches"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
@@ -2168,7 +2168,7 @@ msgid "Page  %1"
 msgstr "Page  %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, kde-format
 msgid "Layer"
 msgstr "calque"
@@ -2199,7 +2199,7 @@ msgid "Rename Layer"
 msgstr "Renommer une mise en page"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Slide"
 msgstr "Diapositive"
@@ -2234,110 +2234,116 @@ msgstr "&Copier ici"
 msgid "C&ancel"
 msgstr "&Annuler"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Ajouter une nouvelle diapositive ou une nouvelle calque"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slide"
+msgid "Slides"
+msgstr "Diapositive"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Ajouter une nouvelle page ou une nouvelle calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Page"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Supprimer les objets sélectionnés"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Avancer les objets sélectionnés"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Reculer les objets sélectionnés"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr "Vue minimale"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr "Vue détaillée"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Vue en vignettes"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, kde-format
 msgid "View mode"
 msgstr "Mode vue"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Saisir le nom de la nouvelle calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New Layer"
 msgstr "Nouvelle calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New layer"
 msgstr "Nouvelle calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Créer une calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Supprimer une calque"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 "Impossible de supprimer toutes les calques. Une calque est exigée au minimum."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Erreur en supprimant les calques"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, kde-format
 msgid "Add a new slide"
 msgstr "Ajouter une nouvelle diapositive"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, kde-format
 msgid "Add a new page"
 msgstr "Ajouter une nouvelle page"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Cut"
 msgstr "Couper"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2345,7 +2351,7 @@ msgstr "Couper"
 msgid "Copy"
 msgstr "Copier"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Paste"
 msgstr "Coller"

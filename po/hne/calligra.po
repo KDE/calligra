@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2009-03-03 09:35+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -1604,7 +1604,7 @@ msgstr "पीडीएफ मं निर्यात करव..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Document"
 msgstr "कागद"
@@ -2271,7 +2271,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "पेज भरव"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 #, fuzzy
 #| msgid "Move slide"
 msgctxt "(qtundo-format)"
@@ -2280,7 +2280,7 @@ msgid_plural "Move slides"
 msgstr[0] "स्लाइड खिसकाव"
 msgstr[1] "स्लाइड खिसकाव"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 #, fuzzy
 #| msgid "Move page"
 msgctxt "(qtundo-format)"
@@ -2365,7 +2365,7 @@ msgid "Page  %1"
 msgstr "पेज %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, kde-format
 msgid "Layer"
 msgstr "लेयर"
@@ -2403,7 +2403,7 @@ msgid "Rename Layer"
 msgstr "परत बनाव"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Slide"
 msgstr "स्लाइड"
@@ -2443,116 +2443,122 @@ msgstr "हरा"
 msgid "C&ancel"
 msgstr "बदलव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "एक नवा स्लाइड या परत जोड़व"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slide"
+msgid "Slides"
+msgstr "स्लाइड"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "एक नवा पेज या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "पेज"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Delete selected objects"
 msgstr "चुने गे चीज मन ल मेटाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, kde-format
 msgid "Raise selected objects"
 msgstr "चुने गे चीज मन ल ऊंचा करव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Lower selected objects"
 msgstr "चुने गे चीज मन ल नीचे करव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr "सबसे कम दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr "विस्तृत दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr "छोटे फोटू दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, kde-format
 msgid "View mode"
 msgstr "मोड देखाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "नवा परत के नाम भरव:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New Layer"
 msgstr "नवा परत"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New layer"
 msgstr "नवा परत"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "परत बनाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 #, fuzzy
 #| msgid "Delete Layer"
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "परत मेटाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "सब्बो परतों ल मिटा नइ सकिस. कम से कम एक परत चाही."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Error deleting layers"
 msgstr "परतों ल मेटाय मं गलती"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Add a new slide"
 msgstr "एक नवा स्लाइड या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Add a new page"
 msgstr "एक नवा स्लाइड या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "मनमाफिक"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2561,7 +2567,7 @@ msgstr "मनमाफिक"
 msgid "Copy"
 msgstr "कम्पनी:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"

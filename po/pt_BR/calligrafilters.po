@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2019-11-12 10:26-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -122,36 +122,36 @@ msgstr "Opacidade"
 msgid "Namespace \"%1\" not found"
 msgstr "O espaço de nomes \"%1\" não foi encontrado"
 
-#: libmsooxml/MsooXmlImport.cpp:90
+#: libmsooxml/MsooXmlImport.cpp:94
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "Não foi possível abrir o arquivo %1 solicitado"
 
-#: libmsooxml/MsooXmlImport.cpp:113
+#: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Não foi possível ler a pasta ZIP do arquivo %1 solicitado"
 
-#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
 msgstr "Insira a senha"
 
-#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
 "Este documento está criptografado, por favor, insira a senha para "
 "descriptografá-lo:"
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
 "Senha incorreta, por favor, insira a senha para descriptografar este "
 "documento:"
 
-#: libmsooxml/MsooXmlImport.cpp:620
+#: libmsooxml/MsooXmlImport.cpp:624
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Não foi possível encontrar o caminho para o tipo %1"

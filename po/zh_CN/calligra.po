@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1460,7 +1460,7 @@ msgstr "导出为 PDF"
 msgid "Cannot export to the specified file"
 msgstr "无法导出到指定文件"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Document"
 msgstr "文档"
@@ -2037,13 +2037,13 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "插入页面"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
 msgstr[0] "移动幻灯片"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
@@ -2121,7 +2121,7 @@ msgid "Page  %1"
 msgstr "页面 %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, kde-format
 msgid "Layer"
 msgstr "图层"
@@ -2152,7 +2152,7 @@ msgid "Rename Layer"
 msgstr "重命名图层"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Slide"
 msgstr "幻灯片"
@@ -2187,109 +2187,115 @@ msgstr "复制到此处(&C)"
 msgid "C&ancel"
 msgstr "取消(&A)"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "添加新幻灯片或图层"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slide"
+msgid "Slides"
+msgstr "幻灯片"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "添加新页面或图层"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "页面"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Delete selected objects"
 msgstr "删除所选对象"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, kde-format
 msgid "Raise selected objects"
 msgstr "提升所选对象"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Lower selected objects"
 msgstr "降低所选对象"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr "最小视图"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr "详情视图"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr "缩略图视图"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, kde-format
 msgid "View mode"
 msgstr "查看模式"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "输入新图层的名称："
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New Layer"
 msgstr "新图层"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New layer"
 msgstr "新图层"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "创建图层"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "删除图层"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "无法删除全部图层。至少需要一个图层。"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Error deleting layers"
 msgstr "删除图层出错"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, kde-format
 msgid "Add a new slide"
 msgstr "添加新幻灯片"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, kde-format
 msgid "Add a new page"
 msgstr "添加新幻灯片"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Cut"
 msgstr "剪切"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2297,7 +2303,7 @@ msgstr "剪切"
 msgid "Copy"
 msgstr "复制"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Paste"
 msgstr "粘贴"

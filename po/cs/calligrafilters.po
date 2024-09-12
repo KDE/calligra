@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-08-23 15:31+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -116,34 +116,34 @@ msgstr "Krytí"
 msgid "Namespace \"%1\" not found"
 msgstr "Jmenný prostor \"%1\" nenalezen"
 
-#: libmsooxml/MsooXmlImport.cpp:90
+#: libmsooxml/MsooXmlImport.cpp:94
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "Nelze otevřít požadovaný soubor %1"
 
-#: libmsooxml/MsooXmlImport.cpp:113
+#: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Nelze přečíst adresář ZIP požadovaného souboru \"%1\""
 
-#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
 msgstr "Zadejte heslo"
 
-#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
 "Tento dokument je zašifrovaný. Prosím, zadejte heslo pro jeho dešifrování."
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
 "Neplatné heslo. Prosím, zadejte heslo pro dešifrování tohoto dokumentu."
 
-#: libmsooxml/MsooXmlImport.cpp:620
+#: libmsooxml/MsooXmlImport.cpp:624
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Nelze najít vestu pro typ \"%1\""

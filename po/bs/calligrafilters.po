@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2015-02-04 15:58+0000\n"
 "Last-Translator: Samir Ribic <Unknown>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -114,32 +114,32 @@ msgstr "Neprozirnost"
 msgid "Namespace \"%1\" not found"
 msgstr "Prostor \"%1\" nije pronađen"
 
-#: libmsooxml/MsooXmlImport.cpp:90
+#: libmsooxml/MsooXmlImport.cpp:94
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "Nisam mogao otvoriti zahtjevani dokument %1"
 
-#: libmsooxml/MsooXmlImport.cpp:113
+#: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Nisam mogao pročitati ZIP imenik zahtijevane datoteke %1"
 
-#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
 msgstr "Unesite lozinku"
 
-#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "Ovaj dokument je šifrovan, molim unesite lozinku da ga dešifrujete:"
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "Neispravna lozinka, unesite lozinku da dešifrujete ovaj dokument:"
 
-#: libmsooxml/MsooXmlImport.cpp:620
+#: libmsooxml/MsooXmlImport.cpp:624
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Nisam mogao naći put za tip %1"

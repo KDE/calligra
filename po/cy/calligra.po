@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2004-09-07 14:22+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -1576,7 +1576,7 @@ msgstr "&Allforio..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Document"
 msgstr "Dogfen"
@@ -2244,7 +2244,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "Mewnosod Testun"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -2253,7 +2253,7 @@ msgid_plural "Move slides"
 msgstr[0] "Gludo Testun"
 msgstr[1] "Gludo Testun"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move page"
@@ -2340,7 +2340,7 @@ msgid "Page  %1"
 msgstr "Dyddiad:"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
@@ -2378,7 +2378,7 @@ msgid "Rename Layer"
 msgstr "Creu Patrymlun"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, fuzzy, kde-format
 #| msgid "Size:"
 msgid "Slide"
@@ -2418,11 +2418,17 @@ msgstr "Gwyrdd"
 msgid "C&ancel"
 msgstr "Newid Prid/Islythrennau"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide or layer"
 msgstr "Ychwanegu Llinell Newydd"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Size:"
+msgid "Slides"
+msgstr "Maint:"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, fuzzy, kde-format
@@ -2430,111 +2436,111 @@ msgstr "Ychwanegu Llinell Newydd"
 msgid "Add a new page or layer"
 msgstr "Ychwanegu Llinell Newydd"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Ffitio i Dudalen"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Delete selected objects"
 msgstr "Gwaredu'r Testun Dewisiedig"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Raise selected objects"
 msgstr "Gwaredu'r Testun Dewisiedig"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, fuzzy, kde-format
 msgid "Lower selected objects"
 msgstr "Creu Dogfen"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "View mode"
 msgstr "Newid Ffiniau"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New Layer"
 msgstr "Lafant"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New layer"
 msgstr "Lafant"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Creu Patrymlun"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Dileu Testun"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, fuzzy, kde-format
 msgid "Error deleting layers"
 msgstr "Creu Patrymlun"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide"
 msgstr "Ychwanegu Llinell Newydd"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new page"
 msgstr "Ychwanegu Llinell Newydd"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "Addasiedig"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2542,7 +2548,7 @@ msgstr "Addasiedig"
 msgid "Copy"
 msgstr "Cwmni"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"

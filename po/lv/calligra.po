@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-08-27 12:17+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -1488,7 +1488,7 @@ msgstr "Eksportēt kā PDF"
 msgid "Cannot export to the specified file"
 msgstr "Neizdevās eksportēt uz attiecīgo datni"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Document"
 msgstr "Dokuments"
@@ -2069,7 +2069,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "Ievietot lapu"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
@@ -2077,7 +2077,7 @@ msgstr[0] "Pārvietot slaidu"
 msgstr[1] "Pārvietot slaidus"
 msgstr[2] "Pārvietot slaidus"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
@@ -2157,7 +2157,7 @@ msgid "Page  %1"
 msgstr "%1. lapa"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, kde-format
 msgid "Layer"
 msgstr "Slānis"
@@ -2188,7 +2188,7 @@ msgid "Rename Layer"
 msgstr "Pārdēvēt slāni"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Slide"
 msgstr "Slaids"
@@ -2223,109 +2223,115 @@ msgstr "&Kopēt te"
 msgid "C&ancel"
 msgstr "&Atcelt"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Pievienot jaunu slaidu vai slāni"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slide"
+msgid "Slides"
+msgstr "Slaids"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Pievienot jaunu lapu vai slāni"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Lapa"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Dzēst atlasītos objektus"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Pacelt atlasītos objektus"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Nolaist atlasītos objektus"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr "Minimālais skats"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr "Informatīvais skats"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Sīktēlu skats"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, kde-format
 msgid "View mode"
 msgstr "Skata režīms"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Ierakstiet jaunā slāņa nosaukumu:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New Layer"
 msgstr "Jauns slānis"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "New layer"
 msgstr "Jauns slānis"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Izveidot slāni"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Dzēst slāni"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "Nevar izdzēst visus slāņus. Ir jāatstāj vismaz viens slānis."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Kļūda, dzēšot slāņus"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, kde-format
 msgid "Add a new slide"
 msgstr "Pievienot jaunu slaidu"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, kde-format
 msgid "Add a new page"
 msgstr "Pievienot jaunu lapu"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Cut"
 msgstr "Izgriezt"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2333,7 +2339,7 @@ msgstr "Izgriezt"
 msgid "Copy"
 msgstr "Kopēt"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Paste"
 msgstr "Ielīmēt"

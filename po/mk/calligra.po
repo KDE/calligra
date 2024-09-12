@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-03 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -1514,7 +1514,7 @@ msgstr "Отстрани приказ"
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:77
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "&Отвори документ"
@@ -2143,7 +2143,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert page"
 msgstr "Колони"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#: pageapp/commands/KoPAPageMoveCommand.cpp:34
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move slide"
@@ -2152,7 +2152,7 @@ msgstr[0] "Колони"
 msgstr[1] "Колони"
 msgstr[2] "Колони"
 
-#: pageapp/commands/KoPAPageMoveCommand.cpp:47
+#: pageapp/commands/KoPAPageMoveCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move page"
@@ -2234,7 +2234,7 @@ msgid "Page  %1"
 msgstr "Избери..."
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:106
 #, fuzzy, kde-format
 msgid "Layer"
 msgstr "Создади шаблон"
@@ -2269,7 +2269,7 @@ msgid "Rename Layer"
 msgstr "Создади шаблон"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #, fuzzy, kde-format
 msgid "Slide"
 msgstr "Наслов :"
@@ -2305,112 +2305,117 @@ msgstr "Екран"
 msgid "C&ancel"
 msgstr "Рабови на страна"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:94
 #, fuzzy, kde-format
 msgid "Add a new slide or layer"
 msgstr "Насловна линија:"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:95
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "Наслов :"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, fuzzy, kde-format
 msgid "Add a new page or layer"
 msgstr "Насловна линија:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:104
+#: pageapp/KoPADocumentStructureDocker.cpp:105
 #: widgets/KoPageLayoutDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Преглед на страна"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:112
-#: pageapp/KoPADocumentStructureDocker.cpp:599
+#: pageapp/KoPADocumentStructureDocker.cpp:113
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, fuzzy, kde-format
 msgid "Delete selected objects"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:120
+#: pageapp/KoPADocumentStructureDocker.cpp:121
 #, fuzzy, kde-format
 msgid "Raise selected objects"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:126
+#: pageapp/KoPADocumentStructureDocker.cpp:127
 #, fuzzy, kde-format
 msgid "Lower selected objects"
 msgstr "&Отвори документ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:135
+#: pageapp/KoPADocumentStructureDocker.cpp:136
 #, kde-format
 msgid "Minimal View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:137
+#: pageapp/KoPADocumentStructureDocker.cpp:138
 #, kde-format
 msgid "Detailed View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:139
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Thumbnail View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:149
+#: pageapp/KoPADocumentStructureDocker.cpp:150
 #, fuzzy, kde-format
 msgid "View mode"
 msgstr "Рабови на страна"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, fuzzy, kde-format
 msgid "New Layer"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:297
+#: pageapp/KoPADocumentStructureDocker.cpp:298
 #, fuzzy, kde-format
 msgid "New layer"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:310
+#: pageapp/KoPADocumentStructureDocker.cpp:311
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:336
+#: pageapp/KoPADocumentStructureDocker.cpp:337
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Отстрани шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:338
+#: pageapp/KoPADocumentStructureDocker.cpp:339
 #, fuzzy, kde-format
 msgid "Error deleting layers"
 msgstr "Создади шаблон"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:595
+#: pageapp/KoPADocumentStructureDocker.cpp:614
 #, fuzzy, kde-format
 msgid "Add a new slide"
 msgstr "Насловна линија:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:597
+#: pageapp/KoPADocumentStructureDocker.cpp:616
 #, fuzzy, kde-format
 msgid "Add a new page"
 msgstr "Насловна линија:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:601
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "По Избор"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:602
+#: pageapp/KoPADocumentStructureDocker.cpp:621
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2418,7 +2423,7 @@ msgstr "По Избор"
 msgid "Copy"
 msgstr "Фирма :"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:603
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, fuzzy, kde-format
 msgid "Paste"
 msgstr "Преглед на страна"

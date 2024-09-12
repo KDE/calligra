@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-05-26 23:19+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -126,32 +126,32 @@ msgstr "不透明度"
 msgid "Namespace \"%1\" not found"
 msgstr "找不到命名空間 %1"
 
-#: libmsooxml/MsooXmlImport.cpp:90
+#: libmsooxml/MsooXmlImport.cpp:94
 #, kde-format
 msgid "Could not open the requested file %1"
 msgstr "無法開啟要求的檔案 %1"
 
-#: libmsooxml/MsooXmlImport.cpp:113
+#: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "無法讀取要求的檔案 %1 中的 ZIP 目錄"
 
-#: libmsooxml/MsooXmlImport.cpp:325 libmsooxml/MsooXmlImport.cpp:444
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
 msgstr "輸入密碼"
 
-#: libmsooxml/MsooXmlImport.cpp:326 libmsooxml/MsooXmlImport.cpp:445
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "文件已加密。請輸入密碼來解密："
 
-#: libmsooxml/MsooXmlImport.cpp:327 libmsooxml/MsooXmlImport.cpp:446
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "不正確的密碼。請輸入密碼來解密此文件："
 
-#: libmsooxml/MsooXmlImport.cpp:620
+#: libmsooxml/MsooXmlImport.cpp:624
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "找不到型態 %1 的路徑"
