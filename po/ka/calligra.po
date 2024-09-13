@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 05:08+0200\n"
+"PO-Revision-Date: 2024-09-12 03:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2219,10 +2219,9 @@ msgid "Add a new slide or layer"
 msgstr "ახალი სლაიდის ან ფენის დამატება"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "სლაიდი"
+msgstr "სლაიდები"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format

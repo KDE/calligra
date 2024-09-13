@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 09:17+0300\n"
+"PO-Revision-Date: 2024-09-12 14:31+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2397,10 +2397,9 @@ msgid "Add a new slide or layer"
 msgstr "Додати новий слайд або шар"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Слайд"
+msgstr "Слайди"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
