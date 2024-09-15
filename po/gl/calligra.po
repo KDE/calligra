@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 15:42+0200\n"
+"PO-Revision-Date: 2024-09-14 16:51+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2226,10 +2226,9 @@ msgid "Add a new slide or layer"
 msgstr "Engadir unha nova diapositiva ou capa"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Diapositiva"
+msgstr "Diapositivas"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format

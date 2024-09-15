@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-08-22 22:54+0200\n"
+"PO-Revision-Date: 2024-09-14 11:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -31,8 +31,8 @@ msgstr "Steffen Pietsch,Axel Rousseau,Oliver Kellogg"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"Steffen.Pietsch@BerlinOnline.de,axel@esperanto-jeunes.org,okellogg@users."
-"sourceforge.net"
+"Steffen.Pietsch@BerlinOnline.de,axel@esperanto-jeunes.org,"
+"olivermkellogg@gmail.com"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
 #, kde-format
@@ -780,11 +780,10 @@ msgid "Paste offset:"
 msgstr "Alglui deŝovon:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Alglui ĉe Kursoro:"
+msgstr "Alglui ĉe Kursoro"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -2188,7 +2187,7 @@ msgstr "Alinomi Tavolon"
 #: pageapp/KoPADocumentStructureDocker.cpp:105
 #, kde-format
 msgid "Slide"
-msgstr "Gliti"
+msgstr "Lumbildo"
 
 #: pageapp/KoPADocumentModel.cpp:312
 #, kde-format
@@ -2226,10 +2225,9 @@ msgid "Add a new slide or layer"
 msgstr "Aldoni novan lumbildon aŭ tavolon"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Gliti"
+msgstr "Lumbildoj"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
@@ -2510,7 +2508,7 @@ msgstr "Uzi fonon de ĉefpaĝo"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master slide"
-msgstr "Uzu fonon de majstra glitado"
+msgstr "Uzi fonon de majstra lumbildo"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format

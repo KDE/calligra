@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-08-23 21:45+0200\n"
+"PO-Revision-Date: 2024-09-14 11:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -590,10 +590,9 @@ msgstr "Konturo"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "Formo kaj teksto estas apartigitaj:"
+msgstr "Formo kaj teksto estas apartigitaj maldekstre je:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1353,8 +1352,7 @@ msgstr "Paĝrompikono"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"wolfram@steloj.de,Steffen.Pietsch@BerlinOnline.de,okellogg@users.sourceforge."
-"net"
+"wolfram@steloj.de,Steffen.Pietsch@BerlinOnline.de,olivermkellogg@gmail.com"
 
 #. i18n translator strings
 #: part/KWAboutData.h:73
@@ -1879,6 +1877,3 @@ msgstr "Ĉefa teksto"
 #, kde-format
 msgid "Other text"
 msgstr "Alia teksto"
-
-#~ msgid "Left by:"
-#~ msgstr "Maldekstre je:"
