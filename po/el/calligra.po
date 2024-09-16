@@ -733,24 +733,21 @@ msgid "Create backup file:"
 msgstr "Δημιουργία αρχείου υποστηρικτικής αποθήκευσης:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Εμφάνιση καννάβου:"
+msgstr "Εμφάνιση καννάβου"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Προσαρμογή στον κάνναβο:"
+msgstr "Προσαρμογή στον κάνναβο"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Κάνναβος"
+msgstr "Κάνναβος:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -794,11 +791,10 @@ msgid "Paste offset:"
 msgstr "Απόσταση επικόλλησης:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Επικόλληση στο δρομέα:"
+msgstr "Επικόλληση στο δρομέα"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -5028,17 +5024,15 @@ msgstr "Δεξιά προς αριστερά"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Περιθώριο κορυφής"
+msgstr "Περιθώριο κορυφής:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Περιθώριο βάσης"
+msgstr "Περιθώριο βάσης:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5340,11 +5334,10 @@ msgid "Layout"
 msgstr "Σελιδοποίηση"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Αυτόματη"
+msgstr "Α&υτόματη"
 
 #: widgets/KoToolBoxDocker.cpp:147
 #, fuzzy, kde-format

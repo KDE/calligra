@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 12:06+0100\n"
+"PO-Revision-Date: 2024-09-15 10:43+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -2217,10 +2217,9 @@ msgid "Add a new slide or layer"
 msgstr "Add a new slide or layer"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Slide"
+msgstr "Slides"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
