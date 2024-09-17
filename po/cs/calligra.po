@@ -2204,10 +2204,9 @@ msgid "Add a new slide or layer"
 msgstr "Přidat nový snímek nebo vrstvu"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Snímek"
+msgstr "Snímky"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
