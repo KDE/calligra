@@ -1602,11 +1602,9 @@ msgid "Geometrics"
 msgstr "Γεωμετρικός μέσος"
 
 #: main/KoShapeCollectionMenu.cpp:369
-#, fuzzy, kde-format
-#| msgctxt "Mouse Cursor Shape"
-#| msgid "Arrow"
+#, kde-format
 msgid "Arrows"
-msgstr "Βέλος"
+msgstr "Βέλη"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
@@ -1775,11 +1773,10 @@ msgid "Date: %1"
 msgstr "Ημερομηνία: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Σχήμα"
+msgstr "Προσθήκη σχήματος"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2238,10 +2235,9 @@ msgid "Add a new slide or layer"
 msgstr "Προσθήκη νέας διαφάνειας ή στρώματος"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Διαφάνεια"
+msgstr "Διαφάνειες"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
@@ -5340,18 +5336,16 @@ msgid "&Automatic"
 msgstr "Α&υτόματη"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Αριστερά προς δεξιά"
+msgstr "Αρισ&τερά προς δεξιά"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Δεξιά προς αριστερά"
+msgstr "Δε&ξιά προς αριστερά"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

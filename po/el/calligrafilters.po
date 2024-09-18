@@ -254,8 +254,7 @@ msgstr "Εξαγωγή σε εικόνα"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "EPS Export"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
 msgstr "Εξαγωγή EPS"
