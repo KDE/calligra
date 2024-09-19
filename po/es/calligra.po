@@ -1,28 +1,25 @@
-# Translation of koffice to Spanish
+# Translation of calligra to Spanish
 #
-# Sofía Priego <spriego@darksylvania.net>, %Y.
-# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2001, 2002, 2003, 2004, 2005, 2006.
-# Juan Manuel García Molina <juanma@superiodico.net>, 2006.
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2009, 2010.
-# Jaime Robles <jaime@kde.org>, 2007, 2008.
-# SPDX-FileCopyrightText: 2008, 2015, 2016, 2017, 2019, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
-# Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2013, 2014, 2015.
-# Sofia Priego <spriego@darksylvania.net>, 2015, 2016, 2017, %Y.
-# Eloy Cuadra <ecuadra@eloihr.net>, %Y.
+# SPDX-FileCopyrightText: 2001, 2002, 2003, 2004, 2005, 2006 Juan Manuel García Molina <juanma@superiodico.net>
+# SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2007, 2008 Jaime Robles <jaime@kde.org>
+# SPDX-FileCopyrightText: 2008, 2015, 2016, 2017 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: koffice\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 12:31+0100\n"
+"PO-Revision-Date: 2024-09-18 11:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -2230,10 +2227,9 @@ msgid "Add a new slide or layer"
 msgstr "Añadir una nueva diapositiva o capa"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Diapositiva"
+msgstr "Diapositivas"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
