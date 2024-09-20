@@ -380,7 +380,7 @@
       <li xml:lang="bs">Vrhunska snapping objekti za vođene crtanje i uređivanje ( npr snapping na mrežu , vodič linije , staze čvorova , granični kutije , okomita pozicija , preplitanja put oblikuje ili proširenja linija i staze )</li>
       <li xml:lang="ca">Capacitats d'alt nivell d'ajust per a dibuix guiat i edició (p. ex. ajust a quadrícula, línies de guia, nodes de camins, caixes contenidores, posicions ortogonals, interseccions de formes de camí o extensions de línies i camins)</li>
       <li xml:lang="ca-valencia">Capacitats d'alt nivell d'ajust per a dibuix guiat i edició (p. ex., ajust a quadrícula, línies de guia, nodes de camins, caixes contenidores, posicions ortogonals, interseccions de formes de camí o extensions de línies i camins)</li>
-      <li xml:lang="el">Κορυφαίες υπηρεσίες σύλληωης για οδηγούμενη σχεδίαση και επεξεργασία (π.χ. σύλληψη στο πλέγμα, γραμές οδήγησης, κόμβοι διαδρομών, περιοριστικά πλαίσια, ορθογώνιες θέσεις, τομές σχημάτων διαδρομών ή επεκτάσεις γραμμών και διαδρομών)</li>
+      <li xml:lang="el">Κορυφαίες υπηρεσίες σύλληψης για οδηγούμενη σχεδίαση και επεξεργασία (π.χ. σύλληψη στο πλέγμα, γραμμές οδήγησης, κόμβοι διαδρομών, περιοριστικά πλαίσια, ορθογώνιες θέσεις, τομές σχημάτων διαδρομών ή επεκτάσεις γραμμών και διαδρομών)</li>
       <li xml:lang="en-GB">Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)</li>
       <li xml:lang="eo">Altnivelaj klakinstalaĵoj por gvidita desegnado kaj redaktado (ekz. klakado al krado, gvidlinioj, padnodoj, limkestoj, ortogonalaj pozicioj, intersekciĝoj de vojformoj aŭ etendaĵoj de linioj kaj padoj)</li>
       <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo, ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
@@ -551,6 +551,7 @@
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
       <caption xml:lang="cs">Hlavní okno aplikace Karbon</caption>
       <caption xml:lang="en-GB">Main window of Karbon</caption>
+      <caption xml:lang="eo">Ĉeffenestro de Karbon</caption>
       <caption xml:lang="es">Ventana principal de Karbon</caption>
       <caption xml:lang="eu">Karbon-en leiho nagusia</caption>
       <caption xml:lang="fr">Fenêtre principale de Karbon</caption>
