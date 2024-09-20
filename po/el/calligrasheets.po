@@ -10,20 +10,21 @@
 # Stelios <sstavra@gmail.com>, 2011, 2012, 2020, 2023.
 # Dimitris Kardarakos <dimkard@gmail.com>, 2014.
 # George Stefanakis <george.stefanakis@gmail.com>, 2023.
+# SPDX-FileCopyrightText: 2024 Antonis Geralis <capoiosct@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2023-07-25 00:33+0300\n"
-"Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
-"Language-Team: Greek <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2024-09-19 14:25+0300\n"
+"Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -526,7 +527,7 @@ msgstr "Η BOOL2STRING(false) επιστρέφει \"False\""
 #: functions/conversion.xml:19
 #, kde-format
 msgid "upper(BOOL2STRING(find(\"nan\";\"banana\"))) returns TRUE"
-msgstr "Η upper(BOOL2STRING(find(\"νάν\";\"μπανάνα\"))) επιστρέφει TRUE"
+msgstr "Η upper(BOOL2STRING(find(\"nan\";\"μπανάνα\"))) επιστρέφει TRUE"
 
 #: functions/conversion.xml:27
 #, kde-format
@@ -5335,7 +5336,7 @@ msgid ""
 "YIELDDISC calculates the yield of a discounted security per 100 currency "
 "units of face value."
 msgstr ""
-"H YIELDDISC υπολογίζει την απόδοση ενός προεξοφλητικού τίτλου ανά 100 "
+"Η YIELDDISC υπολογίζει την απόδοση ενός προεξοφλητικού τίτλου ανά 100 "
 "νομισματικές μονάδες της αξίας όψεως."
 
 #: functions/financial.xml:1462
@@ -5853,7 +5854,7 @@ msgid ""
 "A. Otherwise, it returns False. Use ISERROR() if you want to include the N/A "
 "error as well."
 msgstr ""
-"Η συνάρτηση ISERR() επιστρέφει True αν η παράμετρός της είναι ένα σφάλμα "
+"Η συνάρτηση ISERR() επιστρέφει True αν η παράμετρος της είναι ένα σφάλμα "
 "διαφορετικό από το Μ/Δ. Σε άλλη περίπτωση επιστρέφει False. Χρησιμοποιήστε "
 "την ISERROR() αν επιθυμείτε να συμπεριλαμβάνεται επίσης η περίπτωση του Μ/Δ."
 
@@ -5868,7 +5869,7 @@ msgid ""
 "The ISERROR() function returns True if its parameter is an error of any "
 "type. Otherwise, it returns False."
 msgstr ""
-"Η συνάρτηση ISERROR() επιστρέφει True αν η παράμετρός της είναι σφάλμα "
+"Η συνάρτηση ISERROR() επιστρέφει True αν η παράμετρος της είναι σφάλμα "
 "οποιουδήποτε τύπου. Σε άλλη περίπτωση, επιστρέφει False."
 
 #: functions/information.xml:285
@@ -5882,7 +5883,7 @@ msgid ""
 "The ISNA() function returns True if its parameter is a N/A error. In all "
 "other cases, it returns False."
 msgstr ""
-"Η συνάρτηση ISNA() επιστρέφει True αν η παράμετρός της είναι ένα σφάλμα Μ/Δ. "
+"Η συνάρτηση ISNA() επιστρέφει True αν η παράμετρος της είναι ένα σφάλμα Μ/Δ. "
 "Σε όλες τις άλλες περιπτώσεις, επιστρέφει False."
 
 #: functions/information.xml:300
@@ -5911,7 +5912,7 @@ msgstr ""
 "Η συνάρτηση TYPE() επιστρέφει 1 αν η τιμή είναι ένας αριθμός, 2 αν είναι "
 "κείμενο, 4 αν η τιμή είναι μια λογική τιμή, 16 αν είναι μια τιμή σφάλματος ή "
 "64 αν η τιμή είναι ένας πίνακας. Αν το κελί το οποίο αντιπροσωπεύει η τιμή "
-"περιέχει εναν μαθηματικό τύπο επιστρέφεται ο τύπος επιστροφής της."
+"περιέχει έναν μαθηματικό τύπο επιστρέφεται ο τύπος επιστροφής της."
 
 #: functions/information.xml:327
 #, kde-format
@@ -7460,10 +7461,10 @@ msgid ""
 msgstr ""
 "Η συνάρτηση CEILING() στρογγυλοποιεί τον αριθμό x προς τα πάνω (μακρυά από "
 "το μηδέν) στο εγγύτερο πολλαπλάσιο της σημαντικότητας το οποίο είναι "
-"μεγσλύτερο του αριθμού. Η προκαθορισμένη τιμή της σημαντικότητας είναι 1 (ή "
+"μεγαλύτερο του αριθμού. Η προκαθορισμένη τιμή της σημαντικότητας είναι 1 (ή "
 "-1 αν η τιμή είναι αρνητική), το οποίο σημαίνει την εκτέλεση "
 "στρογγυλοποίησης στον εγγύτερο ακέραιο. Αν η παράμετρος Mode δεν είναι "
-"μηδεν, η συνάρτηση κάνει στρογγυλοποίηση μακριά από το μηδέν, αντί να "
+"μηδέν, η συνάρτηση κάνει στρογγυλοποίηση μακριά από το μηδέν, αντί να "
 "κινηθεί προς το θετικό άπειρο."
 
 #: functions/math.xml:864
@@ -10568,7 +10569,7 @@ msgid ""
 "must firstly select a cell-range containing the Y-values, followed by the "
 "cell-range of the corresponding X-values. "
 msgstr ""
-"Η συνάρτηση TREND() υπολογίζει την ακολουθία των Y-τιμών με βάση τη γρσμμική "
+"Η συνάρτηση TREND() υπολογίζει την ακολουθία των Y-τιμών με βάση τη γραμμική "
 "παλινδρόμηση γνωστών Χ, Υ ζευγών. Για τα δεδομένα εισόδου, ο χρήστης πρέπει "
 "πρώτα να επιλέξει ένα εύρος κελιών που περιέχουν Υ-τιμές, ακολουθούμενο από "
 "το εύρος κελιών των αντίστοιχων X-τιμών. "
@@ -10595,7 +10596,7 @@ msgstr ""
 "Ο εξαναγκασμός της καμπύλης παλινδρόμησης να τέμνει την αρχή των αξόνων "
 "(X=0, Y=0) ρυθμίζεται με την 4η παράμετρο, allowOffset, σε FALSE ή 0. Η "
 "ρύθμιση αυτής της παραμέτρου σε TRUE ή 1 (η προκαθορισμένη τιμή) επιτρέπει "
-"στη βέλτιστη καμπύλη να τέμνει τον κατακόρυφο άξονα σε μια μη-μηδεινική τιμή "
+"στη βέλτιστη καμπύλη να τέμνει τον κατακόρυφο άξονα σε μια μη-μηδενική τιμή "
 "της Y. "
 
 #: functions/statistical.xml:1434
@@ -10605,9 +10606,9 @@ msgid ""
 "plotting the data will be facilitated if the X- and Y- values are also in "
 "rows, rather than columns."
 msgstr ""
-"Σημειώστε ότι επειδή το αποτέλεσμα αυτής της συνάρτησης είναι η γραμμή "
-"τωνυπολογισθέντων Y-τιμών, η σχεδίαση των δεδομένων θα διευκολυνθεί αν οι "
-"τιμές X και Y είναι επίσης σε γραμμές και όχι σε στήλες."
+"Σημειώστε ότι επειδή το αποτέλεσμα αυτής της συνάρτησης είναι η γραμμή των "
+"υπολογισθέντων Y-τιμών, η σχεδίαση των δεδομένων θα διευκολυνθεί αν οι τιμές "
+"X και Y είναι επίσης σε γραμμές και όχι σε στήλες."
 
 #: functions/statistical.xml:1435
 #, kde-format
@@ -10652,7 +10653,7 @@ msgid ""
 msgstr ""
 "Η συνάρτηση TRIMMEAN() υπολογίζει τον μέσο ενός συνόλου δεδομένων με "
 "παράλειψη της μικρότερης και της μεγαλύτερης τιμής για την εξάλειψη πιθανών "
-"αποκλίσεων. Το συνολικό τμήμα των μετρήσεω`ν που θα αποκλεισθούν ρυθμίζεται "
+"αποκλίσεων. Το συνολικό τμήμα των μετρήσεων που θα αποκλεισθούν ρυθμίζεται "
 "με τη δεύτερη παράμετρο (cutOffFraction)."
 
 #: functions/statistical.xml:1457
@@ -10677,7 +10678,7 @@ msgid ""
 "probability for t."
 msgstr ""
 "mode Αν θα γίνει κατευθυνόμενος (1-tailed, mode = 1) ή η μη-κατευθυνόμενος "
-"(2-tailed, mode = 2) ελεγχος υποθέσεων πιθανότητας του t."
+"(2-tailed, mode = 2) έλεγχος υποθέσεων πιθανότητας του t."
 
 #: functions/statistical.xml:1480
 #, kde-format
@@ -10745,7 +10746,7 @@ msgid ""
 "sized; for paired t-tests the two ranges are required to contain the same "
 "number of cells."
 msgstr ""
-"Οι έλεγχοι με ζεύγη υποκειμένων (type = 1, δείτε τη σύνταξη παρκάτω) είναι "
+"Οι έλεγχοι με ζεύγη υποκειμένων (type = 1, δείτε τη σύνταξη παρακάτω) είναι "
 "κατάλληλοι μόνο όταν και τα δύο σύνολα προέρχονται από την ίδια πηγή (δηλ. "
 "κάθε πηγή δεδομένων παρέχει ένα στοιχείο στην πρώτη περιοχή και ένα στη "
 "δεύτερη). Στο παράδειγμα του αγώνα ταχύτητας, αυτό είναι αδύνατον αφού ένα "
@@ -10754,7 +10755,7 @@ msgstr ""
 "τιμές σε κάθε σύνολο προέρχονται από διαφορετικές πηγές, κατάλληλος είναι ο "
 "έλεγχος χωρίς ζεύγη υποκειμένων (type = 2 ή type = 3). Για τον έλεγχο χωρίς "
 "ζεύγη υποκειμένων, οι δύο περιοχές δεδομένων δεν χρειάζεται να είναι "
-"ισομεγέθεις. Για τον έλεγχο με ζεύγη υποκειμένωνοι δύο περιοχές απαιτείται "
+"ισομεγέθεις. Για τον έλεγχο με ζεύγη υποκειμένων οι δύο περιοχές απαιτείται "
 "να περιέχουν το ίδιο πλήθος κελιών."
 
 #: functions/statistical.xml:1488
@@ -11327,8 +11328,8 @@ msgid ""
 "lowercase letters."
 msgstr ""
 "Η παράμετρος BytePosition καθορίζει το χαρακτήρα στον οποίο θα ξεκινήσει η "
-"αναζήτηση. Ο πρώτος χαρακτήρας είναι ο χαρακτήρας με αριθμό 2. Αν "
-"ηBytePosition παραλειφθεί, θεωρείται ότι έχει τιμή 2. Η SEARCHB δεν κάνει "
+"αναζήτηση. Ο πρώτος χαρακτήρας είναι ο χαρακτήρας με αριθμό 2. Αν η "
+"BytePosition παραλειφθεί, θεωρείται ότι έχει τιμή 2. Η SEARCHB δεν κάνει "
 "διαχωρισμό πεζών και κεφαλαίων γραμμάτων."
 
 #: functions/text.xml:129
@@ -11744,7 +11745,7 @@ msgstr "LEN(\"KSpread\") επιστρέφει 7"
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
 msgstr ""
-"Η συνάρτηση LENB() επιστρέφει το μήκος της συμβολοσειράς χρησιμοπoιώντας "
+"Η συνάρτηση LENB() επιστρέφει το μήκος της συμβολοσειράς χρησιμοποιώντας "
 "θέσεις byte."
 
 #: functions/text.xml:425
@@ -12426,7 +12427,7 @@ msgid ""
 "The ASIN() function returns the arc sine in radians and the value is "
 "mathematically defined to be -PI/2 to PI/2 (inclusive)."
 msgstr ""
-"Η συνάρτηση ASIN() επιστρέφει το τόξο ημιτόνου σε ακτίνια, και η τιμή "
+"Η συνάρτηση ASIN() επιστρέφει το τόξο ημίτονου σε ακτίνια, και η τιμή "
 "ορίζεται μαθηματικά να ανήκει στο διάστημα [-π/2,π/2]."
 
 #: functions/trig.xml:96
