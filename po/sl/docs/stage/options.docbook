@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Matjaž</firstname
+><surname
+>Jeran</surname
+><affiliation
+><address
+><email
+>matjaz.jeran@amis.net</email
+></address
+></affiliation
+><contrib
+>Prevod</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Konfiguriranje &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>Konfiguracija Stage - pogovorno okno </title>
+
+<sect2 id="configure-misc">
+<title
+>Razno</title>
+
+<screenshot>
+<screeninfo
+>Razno</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Razno</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Enote</guilabel
+></term>
+<listitem
+><para
+>Izberite privzeto enoto, ki bo uporabljena v prosojnicah.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Polmer ročaja</guilabel
+></term>
+<listitem
+><para
+>Če izberete obliko s privzetim orodjem (puščica), vidite rumene in rdeče pravokotnike. Imenujejo se ročaji (uporabljajo se za spreminjanje velikosti, vrtenje, ...). Polmer ročaja spremeni velikost ročajev. Če jih povečate, jih boste lažje udarili.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Občutljivost grabljenja</guilabel
+></term>
+<listitem
+><para
+>Ta možnost določa, kako natančno morate zadeti ročaj, da ga izberete.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Zamik lepljenja</guilabel
+></term>
+<listitem
+><para
+>To je aktivno le, če je onemogočeno <guilabel
+>Prilepi ob kazalec</guilabel
+>. Če kopirate obliko z bližnjico <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> in jo prilepite z <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> in to naredite na mestu, kjer je že oblika, ta odmik se uporabi za lepljenje nove oblike spodaj/desno.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Prilepi na kazalec</guilabel
+></term>
+<listitem
+><para
+>Onemogoči odmik lepljenja in vstavi prilepljeno obliko na položaj miškinega kazalca.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Mreža</title>
+
+<screenshot>
+<screeninfo
+>Mreža</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Mreža</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Mreža</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Pokaži mrežo</guilabel
+></term>
+<listitem
+><para
+>Če je omogočeno, bo &stage; prikazal mrežo pik, ki predstavljajo presečišča namišljenih vodoravnih in navpičnih črt. S temi pikami lahko natančno postavite predmete na prosojnico.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Pripni na mrežo</guilabel
+></term>
+<listitem
+><para
+>Če je to omogočeno, se pri spuščanju ali premikanju predmetov na prosojnici zgornji levi kot predmeta <quote
+>zaskoči</quote
+> ali premakne na najbližjo točko mreže.</para>
+<para
+>To sicer zmanjšuje vašo svobodo pri prostem postavljanju predmetov na prosojnico, vendar pomaga tudi pri natančnem razvrščanju predmetov. S to možnostjo ga je enostavno onemogočiti ali omogočiti, kar vam omogoča najboljše iz obeh svetov.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Barva mreže:</guilabel
+></term>
+<listitem
+><para
+>Tukaj lahko spremenite barvo mreže, ki je privzeto črna.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Razmik</guilabel
+></title>
+<para
+>Izberete lahko, da ohranite enako razmerje za spodnji dve nastavitvi, tako da imate ikono <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> ali ločite dve nastavitvi z uporabo ikone <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Vodoravno:</guilabel
+></term>
+<listitem
+><para
+>Nastavite razmik v centimetrih med dvema točkama na vodoravni črti na mreži. Privzeta vrednost je 0,5 centimetra.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Navpično:</guilabel
+></term>
+<listitem
+><para
+>Nastavite razmik v centimetrih med dvema točkama na navpični črti na mreži. Privzeta vrednost je 0,5 centimetra.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Dokument</title>
+
+<screenshot>
+<screeninfo
+>Dokument</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Nastavitve dokumenta</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Interval samodejnega shranjevanja:</guilabel
+></term>
+<listitem
+><para
+>S tem lahko prilagodite, kako pogosto &stage; shrani začasno datoteko. Če to vrednost nastavite na <guilabel
+>Brez samodejnega shranjevanja</guilabel
+>, &stage; ne bo samodejno shranil. Samodejno shranjevanje lahko nastavite od 1 minute do 60 minut.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ustvari varnostno kopijo datoteke:</guilabel
+></term>
+<listitem
+><para
+>Če je označeno, bo to ustvarilo <filename
+>.&lt;name&gt;.odp.autosave.odp</filename
+> v mapi, kjer je vaša datoteka. To varnostno kopijo lahko nato uporabite v primeru težave. Datoteka z varnostno kopijo se posodobi vsakič, ko shranite dokument ali vsakič, ko pride do samodejnega shranjevanja.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Avtor</title>
+
+<screenshot>
+<screeninfo
+>Avtor</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Izberite profil avtorja za svoj dokument. </para>
+<para
+>Z gumbi na desni strani spustnega seznama profilov lahko dodate nov profil ali izbrišete trenutni profil. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

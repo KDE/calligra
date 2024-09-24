@@ -1,0 +1,254 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>Matjaž</firstname
+><surname
+>Jeran</surname
+><affiliation
+><address
+><email
+>matjaz.jeran@amis.net</email
+></address
+></affiliation
+><contrib
+>Prevod</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Podrobni vodiči</title>
+
+<para
+>V tem poglavju je opisano, kako izvajati nekatera običajna opravila v &stage;.</para>
+
+<sect1 id="html-wizard">
+<title
+>Ustvari &HTML; Predstavitev</title>
+
+<para
+>Spremenite obstoječo predstavitev v standardni &HTML; strani s spremljajočimi navigacijskimi pripomočki.</para>
+
+<para
+>Najprej naredite novo predstavitev ali odprite obstoječo. Nato kliknite <menuchoice
+><guimenu
+>Datoteka</guimenu
+><guimenuitem
+>Izvozi kot HTML...</guimenuitem
+></menuchoice
+></para>
+<para
+>Nato boste dobili pogovorno okno, ki vas bo vprašalo za nekaj podrobnosti:</para>
+
+<screenshot>
+<screeninfo
+>Izpolnite podrobnosti za svojo &HTML; predstavitev</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Izpolnite podrobnosti za svojo &HTML; predstavitev</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Izpolnite polji <guilabel
+>Naslov</guilabel
+> in <guilabel
+>Avtor</guilabel
+>. Izberite prosojnice, ki jih želite izvoziti. Če želite spremeniti ime, uporabljeno v datoteki &HTML; stran za vsako prosojnico dvakrat kliknite na ime in jo uredite v vrstici.</para>
+
+<para
+>V območju <guilabel
+>Predogled izhoda</guilabel
+> so prikazani pomanjšane prosojnice in lahko preverite pravilni vrstni red prosojnic ter brskate po predstavitvi z <guiicon
+>&lt;</guiicon
+> in <guiicon
+>&gt;</guiicon
+> gumbi. </para>
+
+<para
+>Zdaj lahko izberete slogovno datoteko s konfiguracijo datoteke možnosti &HTML;.</para>
+
+<para
+>Za dejansko izdelavo vaše &HTML; predstavitev pritisnite gumb <guibutton
+>Izvozi</guibutton
+> in izberite mapo.</para>
+
+<para
+>Kar imamo zdaj, sta na novo proizvedeni mapi <filename
+>html/</filename
+> in <filename
+>pics/</filename
+>, ustvarjeni tam, kjer smo prej nastavili pot:</para>
+
+<screenshot>
+<screeninfo
+>Novo ustvarjene &HTML; mape predstavitev</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Novo ustvarjene &HTML; mape predstavitve</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Obstaja tudi datoteka <filename
+>index.html</filename
+> za zagon vaše spletne predstavitve.</para>
+
+<para
+>Kako deluje, si lahko ogledate tako, da z upraviteljem datotek ali spletnim brskalnikom odprete datoteko <filename
+>index.html</filename
+>. Kliknite, kjer ste pozvani, in prikazala se bo prva prosojnica vaše predstavitve. Zdaj se bo obnašala kot &stage; predstavitev.</para>
+
+<para
+>Vsak klik na puščične ikone vas popelje na naslednjo ali prejšnjo prosojnico. Za vrnitev na začetek predstavitve kliknite ikono prosojnice.</para>
+
+<tip
+><para
+>Če želite deliti svojo predstavitev s svetom, prenesite novo izdelane datoteke na omrežno dostopno lokacijo (&ie; spletno mesto), pri čemer ne pozabite ohraniti strukture map nedotaknjene.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Ustvarjanje &stage; Predloge</title>
+
+<para
+>Ustvariti novo predlogo za &stage; je zelo enostavno.</para>
+
+<para
+>Če ste naredili predstavitev v slogu, ki bi ga radi ponovno uporabili, jo lahko shranite kot predlogo.</para>
+
+<para
+>Ta vadnica bo pokazala, kako lahko naredimo novo predlogo in jo shranimo.</para>
+
+<para
+>Odpri &stage; in ustvari nov dokument.</para>
+
+<para
+>Če želite dodati malo iskrice prazni prosojnici, lahko spremenite ozadje prosojnice - to storite tako, da izberete orodje <guilabel
+>Ozadje dokumenta</guilabel
+> v oknu Orodja.</para>
+
+<para
+>Želimo, da je ozadje videti privlačno, zato se lahko odločite za uporabo slike kot ozadja s klikom na gumb <guibutton
+>Nastavi sliko</guibutton
+>: lahko eksperimentirate, vendar naj bo lepo!</para>
+
+<screenshot>
+<screeninfo
+>Izbira ozadja prosojnice</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Izbira ozadja prosojnice</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Stran mora zdaj imeti želeno ozadje. Ustvarite besedilno polje in vnesite naslov za prosojnico:</para>
+
+<screenshot>
+<screeninfo
+>Dodajanje naslova v novo predlogo</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dodajanje naslova novi predlogi</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Ko ste zadovoljni s svojo predlogo, pojdite na <menuchoice
+><guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Shrani kot</guimenuitem
+></menuchoice
+> in v datoteki izberite vrsto datoteke <guilabel
+>Opendocument Presentation Template</guilabel
+> dialog.</para>
+
+</sect1>
+
+</chapter>

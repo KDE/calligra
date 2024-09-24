@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-08-24 14:13+0300\n"
+"PO-Revision-Date: 2024-09-23 15:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -310,7 +310,7 @@ msgstr "Bir Vektörel Grafik Çizim Aracı."
 #: ui/KarbonAboutData.h:24
 #, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
-msgstr "(c) 2001-%1, Karbon Geliştiricileri"
+msgstr "© 2001–%1, Karbon Geliştiricileri"
 
 #: ui/KarbonAboutData.h:29
 #, kde-format

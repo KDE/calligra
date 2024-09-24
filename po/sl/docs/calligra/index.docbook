@@ -1,0 +1,347 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Slovenian "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Splošni uvod</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Matej</firstname
+><surname
+>Badalič</surname
+><affiliation
+><address
+><email
+>matej_badalic@slo.net</email
+></address
+></affiliation
+><contrib
+>Prevod</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>03.01.2012</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; je grafični in pisarniški paket &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Uvod</title>
+<sect1>
+<title
+>&calligra; komponente</title>
+
+<important
+> <para
+>Preverite <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+> za posodobljene različice tega dokumenta.</para
+></important>
+
+<para
+>&calligra; je grafični in pisarniški paket &kde;. &calligra; sestoji iz naslednjih komponent: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (obdelovalnik besedil, ki temelji na okvirjih)</para
+></listitem>
+<listitem
+><para
+>&sheets; (aplikacija za preglednice)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (predstavitve na zaslonu in projektorjih)</para
+></listitem>
+<listitem
+><para
+>&flow; (aplikacija za diagram poteka)</para
+></listitem>
+<listitem
+><para
+>&karbon; (aplikacija za vektorsko risanje)</para
+></listitem>
+<listitem
+><para
+>&plan; (aplikacija za vodenje projektov)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Ker te komponente uporabljajo tehnologijo Flake, so &calligra; komponente zasnovane tako, da med seboj zelo dobro delujejo. Veliko &calligra; komponent je mogoče vdelati v drug &calligra; dokument. Na primer, lahko vstavite preglednico, ki ste jo ustvarili v &sheets; neposredno v dokument &words; dokument. Na ta način lahko s pomočjo &calligra; ustvarite kompleksne sestavljene dokumente. </para>
+
+<para
+>Mehanizem vtičnikov olajša razširitev funkcionalnosti &calligra;. V nekaterih komponentah boste našli veliko vtičnikov in se lahko naučite, kako sami napišete vtičnike. </para>
+
+<para
+>Ta priročnik pokriva le splošne zmožnosti &calligra;, tiste, ki so skupne večini ali vsem komponentam v paketu. Za podrobne informacije o različnih komponentah si oglejte ustrezni priročnik. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Pregled zmožnosti &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Integracija</title>
+<para
+>&calligra; zagotavlja okvir, na katerem gradijo vse komponente. S tem okvirjem je dosežena visoka integracija. Možno je razviti lastno komponento, ki se prav tako integrira. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Lahka</title>
+<para
+>Kljub temu, da ponuja toliko komponent, je &calligra; lahek, hiter in ima precej malo pomnilniškega odtisa. To je doseženo tudi zato, ker &calligra; temelji na &kde;, močnem ogrodju za razvoj aplikacij. </para>
+<para
+>Cilj &calligra; je tudi, da ne preobremenimo uporabniškega vmesnika s funkcijami, ki so komaj potrebne. Posledica tega je tanek in skopuški uporabniški vmesnik, ki vam omogoča učinkovito opravljanje dela. </para>
+<para
+>Ker je lahek, lahko včasih pomeni tudi, da te posebne posebne funkcije, ki jo potrebujete, ni. V tem primeru lahko vedno sami dodate funkcionalnost z razširitvijo &calligra;. Dodatne funkcije lahko vedno omogočite prek dodatnih vtičnikov ali skriptov, s čimer ohranite &calligra; sama po sebi lahko. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Popolnost</title>
+<para
+>&calligra; ponuja široko paleto komponent, ki pokrivajo večino potreb doma in poslovne pisarne. Dodatne funkcije je vedno mogoče implementirati prek skriptov, vtičnikov ali celo celih komponent, ki temeljijo na &calligra; ogrodju. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>Format OASIS OpenDocument</title>
+<para
+>Za vsak pisarniški paket je zelo pomembno, da se drži uveljavljenih standardov. Zlasti na ravni formata datoteke, ki omogoča brezhibno izmenjavo dokumentov z drugimi pisarniškimi paketi. S tem se izognemo tudi vezanosti na prodajalca, kar je še posebej pomembno za podjetja in tudi posameznike. </para>
+<para
+>Iz tega razloga &calligra; je prilagodil format OASIS OpenDocument kot izvorni format datoteke. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>&kde; zmožnosti</title>
+<para
+>Ker &calligra; gradi vse zmožnosti na &kde;, ki bi jih pričakovali od &kde; aplikacija je na voljo tudi v &calligra;. To vključuje &DBus;, KParts, Flake, integracijo namizja, konfiguracijo in tako naprej. Zaradi vsega tega sta videz in občutek &calligra; zelo poznan in resnično vključuje &calligra; v namizno okolje, kar omogoča brezhiben potek dela. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Konfiguriranje &calligra; in vaš sistem</title>
+
+<para
+>Medtem ko bi &calligra; morala delovati precej dobro takoj po namestitvi, je morda treba nekatere stvari optimizirati, da boste kar najbolje izkoristili &calligra;. To poglavje vam pokaže, kaj bi morda želeli narediti, da bi dosegli najboljše rezultate s svojim novim pisarniškim paketom in ga prilagodili vašim potrebam. &calligra; je zelo nastavljiv, vse do podrobne orodne vrstice in postavitve menija. </para>
+
+<sect1 id="custom-gui">
+<title
+>Prilagajanje &calligra; &GUI;</title>
+
+<para
+>Medtem ko &calligra; prihaja iz škatle z &GUI; (grafični uporabniški vmesnik), ki bi moral ustrezati potrebam večine ljudi, obstajajo dobri razlogi, zakaj bi morda želeli spremeniti videz programov. </para>
+
+<para
+>Moja mama se na primer kar malo boji gumbov in menijskih vnosov, ki jih ne razume. Za prilagajanje &calligra; za njene potrebe sem zmanjšal &GUI; na minimum funkcionalnosti. Ker mora samo pisati pisma in uporabljati določene predloge, ni potrebe po veliko več zmožnostih kot so shranjevanje, nalaganje, tiskanje, &etc; </para>
+
+<para
+>Zahvaljujoč konceptu <quote
+>dejavnosti</quote
+> &Qt; in &kde;, lahko poljubno prilagodite &calligra; menijske in orodne vrstice. Na žalost trenutno ni preprostih pogovornih oken za to. &calligra; shrani svoj &GUI; konfiguracijo v &XML; datoteke in jih boste morali urediti. Upajmo, da se bo to stanje v prihodnosti spremenilo; za zdaj boste potrebovali nekaj osnovnega znanja o tem, kako &XML; dokument deluje (ali &HTML;, ki je podnabor &XML;). </para>
+
+<para
+>Običajno ima vsaka &calligra; aplikacija vsaj dve od teh &XML; datotek: ena opisuje &GUI; lupine (v bistvu je to tisto, kar vidite, če ni odprtega dokumenta) in ena, ki opisuje &GUI; ustreznega dela (to je tisto, kar običajno vidite). Na primer, za &words;, ti dve &XML; datoteki se imenujeta <filename
+>calligra_shell.rc</filename
+> in <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Tukaj je preprost primer takšne rc-datoteke. </para>
+
+<example>
+<title
+>Primer preproste datoteke rc</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Kako do več informacij</title>
+
+<sect1 id="other-manuals">
+<title
+>Drugi &calligra; priročniki</title>
+
+<para
+>Za podrobne informacije o različnih &calligra; aplikacijah, si oglejte ustrezne priročnike. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Povezave</title>
+
+<para
+>Naslednje povezave bi morale biti uporabne, če iščete več informacij o &kde; ali &calligra;. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>&calligra; domača stran</ulink
+>. Tukaj lahko najdete informacije o tem, kako pridobiti in namestiti &calligra;, novice o &calligra; razvoj, posnetki zaslona &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>&kde; Domača stran</ulink
+>. &kde; je najnaprednejše in popolnoma prosto namizno okolje za operacijske sisteme, podobne unixu. &calligra; uporablja &kde; knjižnice. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>&Qt; stran</ulink
+>. Ustvarjalci kompleta orodij C++ &Qt;. &kde; in &calligra; uporabljajo &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Programiranje &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Uvod</title>
+<para
+>Če želite sodelovati pri razvoju &calligra;, so lahko zanimivi naslednji viri: </para>
+
+<itemizedlist>
+<listitem
+><para
+>Na <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> boste našli veliko dokumentov o programiranju z &Qt; in &kde;. Najdete spletno različico celotnega &kde; knjižnična dokumentacija na <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+> </para
+></listitem
+> 
+<listitem
+><para
+>Prvi korak za prispevanje kode je, da sledite <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>tem navodilom</ulink
+>, da dobite izvorno kodo in jo zgradite. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Avtorske pravice in licenciranje</title>
+
+<para
+>&calligra; je rezultat skupnega truda številnih razvijalcev. Vsaka izvorna datoteka &calligra; je avtorsko zaščitena s strani ljudi, ki so napisali to določeno datoteko, njihova imena pa so na začetku vsake izvorne datoteke z licenco, ki velja za to izvorno datoteko. </para>
+
+<para
+>Avtorske pravice tega priročnika ima &Jost.Schenck;. Lahko se prosto distribuira, če je vključeno to obvestilo o avtorskih pravicah. Spremenite ga lahko, če mi pošljete spremembe ali jih objavite v &kde; <acronym
+>Git</acronym
+>. Ne bom odgovoren za karkoli, kar bo posledica uporabe tega priročnika. </para>
+
+<para
+>Drugi &calligra; priročniki so avtorsko zaščiteni s strani njihovih avtorjev. </para>
+
+<para
+>Prevod: Matej Badalič <email
+>matej_badalic@slo.net</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+
