@@ -212,16 +212,16 @@ protected:
     class LeafNode;
 
     // factory methods
-    LeafNode *createLeafNode(int capacity, int level, typename KoRTree<T>::Node *parent) override
+    LeafNode *createLeafNode(int capacity, int level, KoRTree<T>::Node *parent) override
     {
         return new LeafNode(capacity, level, dynamic_cast<Node *>(parent));
     }
-    NonLeafNode *createNonLeafNode(int capacity, int level, typename KoRTree<T>::Node *parent) override
+    NonLeafNode *createNonLeafNode(int capacity, int level, KoRTree<T>::Node *parent) override
     {
         return new NonLeafNode(capacity, level, dynamic_cast<Node *>(parent));
     }
 
-    void adjustTree(typename KoRTree<T>::Node *node1, typename KoRTree<T>::Node *node2) override
+    void adjustTree(KoRTree<T>::Node *node1, KoRTree<T>::Node *node2) override
     {
         KoRTree<T>::adjustTree(node1, node2);
         m_castRoot = dynamic_cast<Node *>(this->m_root);
