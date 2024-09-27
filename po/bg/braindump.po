@@ -323,15 +323,3 @@ msgstr "Групиране на форми"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Разгрупиране на форми"
-
-#~ msgid "URL:"
-#~ msgstr "URL-адрес:"
-
-#~ msgid "Web Shape"
-#~ msgstr "Форма за уеб"
-
-#~ msgid "A web shape"
-#~ msgstr "Форма за уеб"
-
-#~ msgid "Web shape editing"
-#~ msgstr "Редактиране на уеб форма"

@@ -15339,13 +15339,3 @@ msgstr "Трябва да маркирате няколко клетки."
 #, kde-format
 msgid "Link %1 activated"
 msgstr ""
-
-#~ msgid "Colors"
-#~ msgstr "Цветове"
-
-#, fuzzy
-#~ msgid "&Grid:"
-#~ msgstr "Мрежа"
-
-#~ msgid "Custom..."
-#~ msgstr "Потребителски…"

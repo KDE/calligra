@@ -1872,7 +1872,3 @@ msgstr "Основен текст"
 #, kde-format
 msgid "Other text"
 msgstr "Друг текст"
-
-#, fuzzy
-#~ msgid "Left by:"
-#~ msgstr "Ляво:"
