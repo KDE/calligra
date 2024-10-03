@@ -33,6 +33,7 @@
         "Name[tr]": "Görseller (OpenDocument, MS Visio, WordPerfect, …)",
         "Name[uk]": "Зображення (OpenDocument, MS Visio, WordPerfect, ...)",
         "Name[x-test]": "xxImages (OpenDocument, MS Visio, WordPerfect, ...)xx",
+        "Name[zh_TW]": "影像 (OpenDocument、MS Visio、WordPerfect…)",
         "ServiceTypes": [
             "ThumbCreator"
         ]

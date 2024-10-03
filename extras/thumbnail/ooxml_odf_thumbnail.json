@@ -57,6 +57,7 @@
         "Name[tr]": "OpenDocument, Microsoft Office Belgeleri",
         "Name[uk]": "OpenDocument, документи Microsoft Office",
         "Name[x-test]": "xxOpenDocument, Microsoft Office Documentsxx",
+        "Name[zh_TW]": "OpenDocument、Microsoft Office 文件",
         "ServiceTypes": [
             "ThumbCreator"
         ]
