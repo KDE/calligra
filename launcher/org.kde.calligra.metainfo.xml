@@ -23,6 +23,7 @@
   <name xml:lang="tr">Calligra</name>
   <name xml:lang="uk">Calligra</name>
   <name xml:lang="x-test">xxCalligraxx</name>
+  <name xml:lang="zh-TW">Calligra</name>
   <summary>All-in-one office solution</summary>
   <summary xml:lang="ca">Solució d'oficina tot en un</summary>
   <summary xml:lang="ca-valencia">Solució d'oficina tot en un</summary>
@@ -42,6 +43,7 @@
   <summary xml:lang="tr">Hepsi bir arada ofis çözümü</summary>
   <summary xml:lang="uk">Універсальне офісне рішення</summary>
   <summary xml:lang="x-test">xxAll-in-one office solutionxx</summary>
+  <summary xml:lang="zh-TW">多合一辦公軟體方案</summary>
   <description>
     <p>
       Calligra is an office and graphics suite. It contains applications for word processing, spreadsheets, presentation and vector graphics.
@@ -64,6 +66,7 @@
     <p xml:lang="tr">Calligra bir ofis ve grafik paketidir. Sözcük işleme, tablolar, sunum ve vektör grafikler için araçlar içerir.</p>
     <p xml:lang="uk">Calligra — комплект офісних і графічних програм. У ньому містяться програми для роботи з текстом, електронними таблицями, презентаціями та векторною графікою.</p>
     <p xml:lang="x-test">xxCalligra is an office and graphics suite. It contains applications for word processing, spreadsheets, presentation and vector graphics.xx</p>
+    <p xml:lang="zh-TW">Calligra 是一套辦公軟體與圖形軟體的組合。它含有文字處理、試算表、簡報與向量圖形用的應用程式。</p>
     <!-- Word -->
     <p>
       Words is an intuitive word processor and desktop publisher application.
@@ -110,6 +113,7 @@
     <p xml:lang="tr">Calligra Tablolar, tam özellikli bir hesaplama ve elektronik tablo aracıdır. Gelir ve gider, çalışan çalışma saatleri vb. gibi çeşitli iş ile ilgili elektronik tabloları hızla oluşturmak ve hesaplamak için kullanın.</p>
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
     <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
+    <p xml:lang="zh-TW">Calligra Sheets 是一個功能完善的計算與工作表工具。您可以使用它來快速建立並計算各種商業用工作表，像是收入與支出、員工工作時間等等。</p>
     <!-- Stage -->
     <p>
       Calligra Stage is an easy to use yet still flexible presentation application.
@@ -206,6 +210,7 @@
       <caption xml:lang="tr">Calligra Tablolar ana penceresi</caption>
       <caption xml:lang="uk">Головне вікно Calligra</caption>
       <caption xml:lang="x-test">xxCalligra Sheets main windowxx</caption>
+      <caption xml:lang="zh-TW">Calligra Sheets 主視窗</caption>
     </screenshot>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/calligrastage.png</image>
@@ -228,6 +233,7 @@
       <caption xml:lang="tr">Calligra Sahne ana penceresi</caption>
       <caption xml:lang="uk">Головне вікно Calligra Stage</caption>
       <caption xml:lang="x-test">xxCalligra Stage main windowxx</caption>
+      <caption xml:lang="zh-TW">Calligra Stage 主視窗</caption>
     </screenshot>
     <screenshot type="default">
       <image>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/karbon.png</image>
@@ -250,6 +256,7 @@
       <caption xml:lang="tr">Karbon ana penceresi</caption>
       <caption xml:lang="uk">Головне вікно Karbon</caption>
       <caption xml:lang="x-test">xxMain window of Karbonxx</caption>
+      <caption xml:lang="zh-TW">Karbon 的主視窗</caption>
     </screenshot>
   </screenshots>
   <branding>
