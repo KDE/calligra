@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-21 01:23+0900\n"
+"PO-Revision-Date: 2024-10-02 17:40+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -121,10 +121,9 @@ msgstr "效果"
 
 #. i18n: ectx: ToolBar (add_shape_toolbar)
 #: data/karbon.rc:177
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgid "Add Shape"
-msgstr "物件"
+msgstr "加入元件"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -325,12 +324,12 @@ msgstr "維護者"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "移植到 Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format
