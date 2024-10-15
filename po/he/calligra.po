@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-12 00:39+0000\n"
-"PO-Revision-Date: 2024-09-09 19:05+0300\n"
+"PO-Revision-Date: 2024-10-12 14:08+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2232,10 +2232,9 @@ msgid "Add a new slide or layer"
 msgstr "הוספת שקופית או שכבה חדשות"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:95
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "שקופית"
+msgstr "שקופיות"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:97
 #, kde-format
@@ -3317,10 +3316,10 @@ msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "<qt>העריכות יאבדו.<p>נשארה הכרזה שגויה.</qt>"
+msgstr[1] "<qt>העריכות יאבדו.<p>נשארו שתי הכרזות שגויות.</qt>"
+msgstr[2] "<qt>העריכות יאבדו.<p>נשארו %1 הכרזות שגויות.</qt>"
+msgstr[3] "<qt>העריכות יאבדו.<p>נשארו %1 הכרזות שגויות.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:299
 #, kde-format
@@ -3385,7 +3384,7 @@ msgstr "מרחב שם"
 #: rdf/KoDocumentRdfEditWidget.ui:137
 #, kde-format
 msgid "Semantic"
-msgstr ""
+msgstr "סמנטיקה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: rdf/KoDocumentRdfEditWidget.ui:156
@@ -4537,7 +4536,7 @@ msgstr "המסמך הזה לא תומך בהצפנה"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "לא מוגדר"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
