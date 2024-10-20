@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-10-06 17:25+0300\n"
+"PO-Revision-Date: 2024-10-18 19:56+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -1345,7 +1345,7 @@ msgstr "„Fatcow“ tīmekļa mitināšana"
 #: part/KWAboutData.h:71
 #, kde-format
 msgid "Page break icon"
-msgstr "Lappuses atdalītāja ikona"
+msgstr "Lapas atdalītāja ikona"
 
 #: part/KWAboutData.h:73
 #, kde-format
@@ -1451,12 +1451,12 @@ msgstr "Saglabāts"
 #: part/KWStatusBar.cpp:37
 #, kde-format
 msgid "Page %1 of %2"
-msgstr "%1. lappuse no %2"
+msgstr "%1. lapa no %2"
 
 #: part/KWStatusBar.cpp:38
 #, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "%1.—%2. lappuse no %3"
+msgstr "%1.—%2. lapa no %3"
 
 #: part/KWStatusBar.cpp:39
 #, kde-format
@@ -1466,7 +1466,7 @@ msgstr "%1. rinda"
 #: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
-msgstr "Lappuses numurs"
+msgstr "Lapas numurs"
 
 #: part/KWStatusBar.cpp:145
 #, kde-format
