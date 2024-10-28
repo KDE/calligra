@@ -4,11 +4,19 @@
     "runtime": "org.kde.Platform",
     "runtime-version": "6.7",
     "sdk": "org.kde.Sdk",
-    "command": "calligra",
-    "tags": ["nightly"],
+    "command": "calligralauncher",
+    "tags": [
+        "nightly"
+    ],
     "desktop-file-name-suffix": " (Nightly)",
-    "finish-args": ["--share=network", "--share=ipc", "--socket=x11", "--socket=wayland" ],
-
+    "finish-args": [
+        "--device=dri",
+        "--own-name=org.kde.calligrasheets.*",
+        "--share=ipc",
+        "--share=network",
+        "--socket=fallback-x11",
+        "--socket=wayland"
+    ],
     "modules": [
         {
             "name": "boost",
@@ -20,7 +28,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2",
+                    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2",
                     "sha256": "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b",
                     "x-checker-data": {
                         "type": "anitya",
@@ -56,14 +64,13 @@
                 "-Dmanpage=false",
                 "-Dvapi=false",
                 "-Dgtk_doc=false",
-                "-Dintrospection=false",
-                "-Dgcrypt=false"
+                "-Dintrospection=false"
             ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/libsecret/0.20/libsecret-0.20.5.tar.xz",
-                    "sha256": "3fb3ce340fcd7db54d87c893e69bfc2b1f6e4d4b279065ffe66dac9f0fd12b4d",
+                    "url": "https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.4.tar.xz",
+                    "sha256": "163d08d783be6d4ab9a979ceb5a4fecbc1d9660d3c34168c581301cd53912b20",
                     "x-checker-data": {
                         "type": "gnome",
                         "name": "libsecret",
@@ -78,13 +85,13 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/frankosterfeld/qtkeychain/archive/0.14.2.tar.gz",
-                    "sha256": "cf2e972b783ba66334a79a30f6b3a1ea794a1dc574d6c3bebae5ffd2f0399571",
+                    "url": "https://github.com/frankosterfeld/qtkeychain/archive/0.14.3.tar.gz",
+                    "sha256": "a22c708f351431d8736a0ac5c562414f2b7bb919a6292cbca1ff7ac0849cb0a7",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 4138,
                         "stable-only": true,
-                        "url-template": "https://github.com/frankosterfeld/qtkeychain/archive/v$version.tar.gz"
+                        "url-template": "https://github.com/frankosterfeld/qtkeychain/archive/$version.tar.gz"
                     }
                 }
             ],
@@ -96,7 +103,6 @@
             ]
         },
         {
-            "config-opts": [ "-DENABLE_TESTING=OFF" ],
             "name": "kdiagram",
             "buildsystem": "cmake-ninja",
             "sources": [
@@ -116,7 +122,6 @@
         {
             "name": "qca",
             "config-opts": [
-                "-DBUILD_TESTING=OFF",
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DBUILD_WITH_QT6=ON"
             ],
@@ -145,8 +150,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/kirigami-addons/kirigami-addons-1.4.0.tar.xz",
-                    "sha256": "56e3ceb52055b5603320ea08b27d3673d32a391a8d58646d998227d8b51f0a93",
+                    "url": "https://download.kde.org/stable/kirigami-addons/kirigami-addons-1.5.0.tar.xz",
+                    "sha256": "f9dfd191022b633ea3348f84730d7158a159dfe49668dba0a9e9bd678ac44e54",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 242933,
@@ -159,29 +164,24 @@
         {
             "name": "lcms2",
             "config-opts": [
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                "-DBUILD_TESTS=FALSE",
-                "-DBUILD_UTILS=FALSE",
-                "-DBUILD_STATIC=FALSE",
-                "-DBUILD_PLUGINS=TRUE"
+                "-Dutils=FALSE"
             ],
-            "cleanup": [ "/bin", "/share" ],
-            "buildsystem": "cmake-ninja",
+            "cleanup": [
+                "/bin",
+                "/share"
+            ],
+            "buildsystem": "meson",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.14/lcms2-2.14.tar.gz",
-                    "sha256": "28474ea6f6591c4d4cee972123587001a4e6e353412a41b3e9e82219818d5740",
+                    "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.16/lcms2-2.16.tar.gz",
+                    "sha256": "d873d34ad8b9b4cea010631f1a6228d2087475e4dc5e763eb81acc23d9d45a51",
                     "x-checker-data": {
                         "type": "anitya",
-                        "project-id": 242933,
+                        "project-id": 9815,
                         "stable-only": true,
-                        "url-template": ""
+                        "url-template": "https://github.com/mm2/Little-CMS/releases/download/lcms$version/lcms2-$version.tar.gz"
                     }
-                },
-                {
-                    "type": "patch",
-                    "paths": [ "patches/lcms2/0002-Add-modern-CMake-toolchain.patch", "patches/lcms2/0003-Revert-Fix-LUT-based-optimization-on-8-bits.patch" ]
                 }
             ]
         },
@@ -252,18 +252,14 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://dev-www.libreoffice.org/src/libvisio/libvisio-0.1.7.tar.xz",
-                    "sha256": "8faf8df870cb27b09a787a1959d6c646faa44d0d8ab151883df408b7166bea4c",
+                    "url": "https://dev-www.libreoffice.org/src/libvisio/libvisio-0.1.8.tar.xz",
+                    "sha256": "b4098ffbf4dcb9e71213fa0acddbd928f27bed30db2d80234813b15d53d0405b",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1757,
                         "stable-only": true,
                         "url-template": "https://dev-www.libreoffice.org/src/libvisio/libvisio-$version.tar.xz"
                     }
-                },
-                {
-                    "type": "patch",
-                    "path": "patches/libvisio/a24c7ff.diff"
                 }
             ]
         },
@@ -325,7 +321,9 @@
             "name": "calligra",
             "buildsystem": "cmake-ninja",
             "builddir": true,
-            "config-opts": ["-DBUILD_TESTING=OFF" ],
+            "config-opts": [
+                "-DBUILD_TESTING=OFF"
+            ],
             "sources": [
                 {
                     "type": "dir",
