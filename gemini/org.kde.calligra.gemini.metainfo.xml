@@ -476,7 +476,7 @@
     <binary>calligragemini</binary>
   </provides>
   <launchable type="desktop-id">org.kde.calligra.gemini.desktop</launchable>
-  <developer id="kde.org">
+  <developer id="org.kde">
     <name>The KDE Community</name>
     <url>https://kde.org</url>
   </developer>

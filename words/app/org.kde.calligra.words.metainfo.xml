@@ -371,7 +371,7 @@
     <binary>calligrawords</binary>
   </provides>
   <launchable type="desktop-id">org.kde.calligra.words.desktop</launchable>
-  <developer id="kde.org">
+  <developer id="org.kde">
     <name>The KDE Community</name>
     <url>https://kde.org</url>
   </developer>
