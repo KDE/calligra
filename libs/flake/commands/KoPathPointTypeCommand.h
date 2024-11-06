@@ -21,7 +21,13 @@ class FLAKE_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point
-    enum PointType { Corner, Smooth, Symmetric, Line, Curve };
+    enum PointType {
+        Corner,
+        Smooth,
+        Symmetric,
+        Line,
+        Curve
+    };
     /**
      * Command to change the type of the given points
      * @param pointDataList List of point for changing the points

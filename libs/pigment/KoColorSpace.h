@@ -27,9 +27,18 @@ class KoColorProfile;
 class KoColorTransformation;
 class QBitArray;
 
-enum Deletability { OwnedByRegistryDoNotDelete, OwnedByRegistryRegistryDeletes, NotOwnedByRegistry };
+enum Deletability {
+    OwnedByRegistryDoNotDelete,
+    OwnedByRegistryRegistryDeletes,
+    NotOwnedByRegistry
+};
 
-enum ColorSpaceIndependence { FULLY_INDEPENDENT, TO_LAB16, TO_RGBA8, TO_RGBA16 };
+enum ColorSpaceIndependence {
+    FULLY_INDEPENDENT,
+    TO_LAB16,
+    TO_RGBA8,
+    TO_RGBA16
+};
 
 class KoMixColorsOp;
 class KoConvolutionOp;

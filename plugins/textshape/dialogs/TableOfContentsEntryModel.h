@@ -18,7 +18,10 @@ class TableOfContentsEntryModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    enum ModelColumns { Levels = 0, Styles = 1 };
+    enum ModelColumns {
+        Levels = 0,
+        Styles = 1
+    };
     TableOfContentsEntryModel(KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info);
 
     int rowCount(const QModelIndex &parent) const override;

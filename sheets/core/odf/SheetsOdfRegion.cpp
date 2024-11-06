@@ -40,7 +40,10 @@ static void append(const QChar *from, const QChar *to, QChar **dest)
 
 void Odf::loadRegion(const QChar *&data, const QChar *&end, QChar *&out)
 {
-    enum { Start, InQuotes } state = Start;
+    enum {
+        Start,
+        InQuotes
+    } state = Start;
 
     if (*data == QChar('$', 0)) {
         ++data;
@@ -112,7 +115,10 @@ QString Odf::loadRegion(const QString &expression)
     QString result;
     QString temp;
     bool isRange = false;
-    enum { Start, InQuotes } state = Start;
+    enum {
+        Start,
+        InQuotes
+    } state = Start;
     int i = 0;
     // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
     if (expression[i] == '$')
@@ -169,7 +175,10 @@ QString Odf::saveRegion(const QString &expression)
     QString result;
     QString sheetName;
     QString temp;
-    enum { Start, InQuotes } state = Start;
+    enum {
+        Start,
+        InQuotes
+    } state = Start;
     int i = 0;
     while (i < expression.count()) {
         switch (state) {

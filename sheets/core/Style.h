@@ -63,13 +63,37 @@ CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style &style, size_t seed = 0);
 class CALLIGRA_SHEETS_CORE_EXPORT Style
 {
 public:
-    enum HAlign { Left = 1, Center = 2, Right = 3, Justified = 4, HAlignUndefined = 0 };
+    enum HAlign {
+        Left = 1,
+        Center = 2,
+        Right = 3,
+        Justified = 4,
+        HAlignUndefined = 0
+    };
 
-    enum VAlign { Top = 1, Middle = 2, Bottom = 3, VDistributed = 4, VJustified = 5, VAlignUndefined = 0 };
+    enum VAlign {
+        Top = 1,
+        Middle = 2,
+        Bottom = 3,
+        VDistributed = 4,
+        VJustified = 5,
+        VAlignUndefined = 0
+    };
 
-    enum FloatFormat { DefaultFloatFormat = 0, AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = DefaultFloatFormat };
+    enum FloatFormat {
+        DefaultFloatFormat = 0,
+        AlwaysSigned = 1,
+        AlwaysUnsigned = 2,
+        OnlyNegSigned = DefaultFloatFormat
+    };
 
-    enum FloatColor { DefaultFloatColor = 0, NegRed = 1, AllBlack = DefaultFloatColor, NegBrackets = 3, NegRedBrackets = 4 };
+    enum FloatColor {
+        DefaultFloatColor = 0,
+        NegRed = 1,
+        AllBlack = DefaultFloatColor,
+        NegBrackets = 3,
+        NegRedBrackets = 4
+    };
 
     /// The style type
     enum StyleType {

@@ -40,7 +40,11 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(PptxImportFactory, "calligra_filter_pptx2odp.json", registerPlugin<PptxImport>();)
 
-enum PptxDocumentType { PptxDocumentPresentation, PptxDocumentTemplate, PptxDocumentSlideShow };
+enum PptxDocumentType {
+    PptxDocumentPresentation,
+    PptxDocumentTemplate,
+    PptxDocumentSlideShow
+};
 
 class PptxImport::Private
 {

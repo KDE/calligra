@@ -6,7 +6,13 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-enum TextAlignment { LeftAligned, CentreAligned, RightAligned, Justified, Distributed };
+enum TextAlignment {
+    LeftAligned,
+    CentreAligned,
+    RightAligned,
+    Justified,
+    Distributed
+};
 
 class RTFREADER_EXPORT StyleSheetTableEntry
 {

@@ -54,7 +54,10 @@ public:
 
     bool operator==(const KoFontFace &other) const;
 
-    enum Pitch { FixedPitch, VariablePitch };
+    enum Pitch {
+        FixedPitch,
+        VariablePitch
+    };
     //! @todo add enum FamilyGeneric?
 
     QString name() const;

@@ -13,11 +13,11 @@
 #include <KoStore.h>
 
 // Qt
+#include <KPluginFactory>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QPainter>
 #include <QTimer>
-#include <KPluginFactory>
 
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec

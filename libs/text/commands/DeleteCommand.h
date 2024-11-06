@@ -26,7 +26,10 @@ class DeleteVisitor;
 class DeleteCommand : public KoTextCommandBase
 {
 public:
-    enum DeleteMode { PreviousChar, NextChar };
+    enum DeleteMode {
+        PreviousChar,
+        NextChar
+    };
 
     DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent = nullptr);
     ~DeleteCommand() override;

@@ -31,7 +31,14 @@ class TableTool : public CellToolBase
     Q_OBJECT
 
 public:
-    enum ToolType { None, Shape, ColumnHeader, RowHeader, HScrollBar, VScrollBar };
+    enum ToolType {
+        None,
+        Shape,
+        ColumnHeader,
+        RowHeader,
+        HScrollBar,
+        VScrollBar
+    };
 
     explicit TableTool(KoCanvasBase *canvas);
     ~TableTool();

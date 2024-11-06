@@ -67,7 +67,10 @@ enum TextOutOptions {
 
    See [MS-EMF] Section 2.1.16
 */
-enum GraphicsMode { GM_COMPATIBLE = 0x01, GM_ADVANCED = 0x02 };
+enum GraphicsMode {
+    GM_COMPATIBLE = 0x01,
+    GM_ADVANCED = 0x02
+};
 
 /**
    MapModes
@@ -90,7 +93,12 @@ typedef enum {
 
    See [MS-EMF] Section 2.1.24
 */
-enum ModifyWorldTransformMode { MWT_IDENTITY = 0x01, MWT_LEFTMULTIPLY = 0x02, MWT_RIGHTMULTIPLY = 0x03, MWT_SET = 0x04 };
+enum ModifyWorldTransformMode {
+    MWT_IDENTITY = 0x01,
+    MWT_LEFTMULTIPLY = 0x02,
+    MWT_RIGHTMULTIPLY = 0x03,
+    MWT_SET = 0x04
+};
 
 /**
    Pen Styles

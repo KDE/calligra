@@ -16,7 +16,12 @@
 class ColorMatrixEffect : public KoFilterEffect
 {
 public:
-    enum Type { Matrix, Saturate, HueRotate, LuminanceAlpha };
+    enum Type {
+        Matrix,
+        Saturate,
+        HueRotate,
+        LuminanceAlpha
+    };
 
     ColorMatrixEffect();
 

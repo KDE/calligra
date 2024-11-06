@@ -174,7 +174,10 @@ protected:
     virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
-    enum StyleType { ContentDotXml = 1, StylesDotXml = 2 };
+    enum StyleType {
+        ContentDotXml = 1,
+        StylesDotXml = 2
+    };
     // helper functions for loading of paragraph styles
     void addParagraphStyles(KoShapeLoadingContext &context, const QList<KoXmlElement *> &styleElements, int styleTypes, KoStyleManager *styleManager = nullptr);
     QList<QPair<QString, KoParagraphStyle *>>

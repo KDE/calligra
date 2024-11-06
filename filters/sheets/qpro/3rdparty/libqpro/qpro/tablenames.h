@@ -12,7 +12,9 @@
 class QpTableNames
 {
 public:
-    enum { cNameCnt = 256 };
+    enum {
+        cNameCnt = 256
+    };
 
     QpTableNames();
     ~QpTableNames();

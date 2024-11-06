@@ -210,7 +210,11 @@ private:
      * Referenced by: Declaration Type
      * A declaration type ex:- Header,Footer,DateTime
      */
-    enum DeclarationType { Footer, Header, DateTime };
+    enum DeclarationType {
+        Footer,
+        Header,
+        DateTime
+    };
 
     /**
      * Function that does the actual conversion.

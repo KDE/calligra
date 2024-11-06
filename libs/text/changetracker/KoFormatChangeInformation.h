@@ -13,7 +13,11 @@
 class KoFormatChangeInformation
 {
 public:
-    typedef enum { eTextStyleChange = 0, eParagraphStyleChange, eListItemNumberingChange } FormatChangeType;
+    typedef enum {
+        eTextStyleChange = 0,
+        eParagraphStyleChange,
+        eListItemNumberingChange
+    } FormatChangeType;
 
     KoFormatChangeInformation::FormatChangeType formatType();
 
@@ -49,7 +53,10 @@ private:
 class KoListItemNumChangeInformation : public KoFormatChangeInformation
 {
 public:
-    typedef enum { eNumberingRestarted = 0, eRestartRemoved } ListItemNumChangeType;
+    typedef enum {
+        eNumberingRestarted = 0,
+        eRestartRemoved
+    } ListItemNumChangeType;
     explicit KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType eSubType);
     void setPreviousStartNumber(int oldRestartNumber);
     KoListItemNumChangeInformation::ListItemNumChangeType listItemNumChangeType();

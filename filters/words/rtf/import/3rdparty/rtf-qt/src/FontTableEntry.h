@@ -8,9 +8,22 @@
 
 namespace RtfReader
 {
-enum FontFamily { Nil, Roman, Swiss, Modern, Script, Decor, Tech, Bidi };
+enum FontFamily {
+    Nil,
+    Roman,
+    Swiss,
+    Modern,
+    Script,
+    Decor,
+    Tech,
+    Bidi
+};
 
-enum FontPitch { Default = 0, Fixed = 1, Variable = 2 };
+enum FontPitch {
+    Default = 0,
+    Fixed = 1,
+    Variable = 2
+};
 
 class RTFREADER_EXPORT FontTableEntry
 {

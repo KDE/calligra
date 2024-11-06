@@ -181,7 +181,14 @@ public:
     QList<HotSpotData> hotspots;
 
     bool rightToLeft;
-    enum Selection { None, Tab, FirstLineIndent, ParagraphIndent, EndIndent, HotSpot };
+    enum Selection {
+        None,
+        Tab,
+        FirstLineIndent,
+        ParagraphIndent,
+        EndIndent,
+        HotSpot
+    };
     Selection selected;
     int selectOffset;
 

@@ -23,7 +23,13 @@ class PartGroup : public QObject
     Q_OBJECT
 public:
     /// Used to identify the symbol shown for the group
-    enum GroupSymbol { None, Brace, Line, Bracket, DefaultSymbol = None };
+    enum GroupSymbol {
+        None,
+        Brace,
+        Line,
+        Bracket,
+        DefaultSymbol = None
+    };
 
     /**
      * Create a new partgroup in the given sheet. The part group contains all parts from firstPart up to and

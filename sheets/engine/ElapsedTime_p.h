@@ -29,7 +29,10 @@ namespace Sheets
 class ElapsedTime
 {
 public:
-    enum OutputMode { Default, PrintOnlyTime };
+    enum OutputMode {
+        Default,
+        PrintOnlyTime
+    };
 
 #ifdef NDEBUG
 

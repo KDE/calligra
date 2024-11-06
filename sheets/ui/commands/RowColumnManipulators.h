@@ -174,7 +174,10 @@ protected:
     bool undoNonCommandActions() override;
 
 private:
-    enum Mode { Insert, Delete };
+    enum Mode {
+        Insert,
+        Delete
+    };
     Mode m_mode;
     ColFormat *m_template;
 };
@@ -199,7 +202,10 @@ protected:
     bool undoNonCommandActions() override;
 
 private:
-    enum Mode { Insert, Delete };
+    enum Mode {
+        Insert,
+        Delete
+    };
     Mode m_mode;
     RowFormat *m_template;
 };

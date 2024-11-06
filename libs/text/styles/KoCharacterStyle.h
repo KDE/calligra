@@ -42,7 +42,10 @@ class KOTEXT_EXPORT KoCharacterStyle : public QObject
     Q_OBJECT
 public:
     /// types of style
-    enum Type { CharacterStyle, ParagraphStyle };
+    enum Type {
+        CharacterStyle,
+        ParagraphStyle
+    };
 
     /// list of character style properties we can store in a QTextCharFormat
     enum Property {
@@ -94,17 +97,38 @@ public:
     };
 
     /// List of possible combine mode
-    enum TextCombineType { NoTextCombine, TextCombineLetters, TextCombineLines };
+    enum TextCombineType {
+        NoTextCombine,
+        TextCombineLetters,
+        TextCombineLines
+    };
 
     /// list of possible line type : no line, single line, double line
-    enum LineType { NoLineType, SingleLine, DoubleLine };
+    enum LineType {
+        NoLineType,
+        SingleLine,
+        DoubleLine
+    };
 
     /// List of possible font relief : none, embossed, engraved
-    enum ReliefType { NoRelief, Embossed, Engraved };
+    enum ReliefType {
+        NoRelief,
+        Embossed,
+        Engraved
+    };
 
-    enum EmphasisStyle { NoEmphasis, AccentEmphasis, CircleEmphasis, DiscEmphasis, DotEmphasis };
+    enum EmphasisStyle {
+        NoEmphasis,
+        AccentEmphasis,
+        CircleEmphasis,
+        DiscEmphasis,
+        DotEmphasis
+    };
 
-    enum EmphasisPosition { EmphasisAbove, EmphasisBelow };
+    enum EmphasisPosition {
+        EmphasisAbove,
+        EmphasisBelow
+    };
 
     /// list of possible line style.
     enum LineStyle {
@@ -131,9 +155,16 @@ public:
     };
 
     /// list of possible line modes.
-    enum LineMode { NoLineMode, ContinuousLineMode, SkipWhiteSpaceLineMode };
+    enum LineMode {
+        NoLineMode,
+        ContinuousLineMode,
+        SkipWhiteSpaceLineMode
+    };
 
-    enum RotationScale { Fixed, LineHeight };
+    enum RotationScale {
+        Fixed,
+        LineHeight
+    };
 
     enum AnchorTypes {
         Bookmark,

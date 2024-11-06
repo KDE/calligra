@@ -197,7 +197,11 @@ private:
 
     // We have to keep track of the current parsing mode (e.g. are we skimming tables
     // or are we parsing them?)
-    enum ParsingMode { Default, Table, NestedTable };
+    enum ParsingMode {
+        Default,
+        Table,
+        NestedTable
+    };
 
     // "Callbacks" for the 95/97 parsers
     // ##### TODO

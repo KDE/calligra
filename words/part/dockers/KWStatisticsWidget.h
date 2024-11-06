@@ -36,7 +36,10 @@ public:
     explicit KWStatisticsWidget(QWidget *parent = nullptr, bool shortVersion = false);
     ~KWStatisticsWidget() override;
 
-    enum LayoutDirection { LayoutVertical, LayoutHorizontal };
+    enum LayoutDirection {
+        LayoutVertical,
+        LayoutHorizontal
+    };
 
     void setLayoutDirection(LayoutDirection direction);
 

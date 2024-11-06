@@ -31,7 +31,10 @@ class KOWIDGETS_EXPORT KoGradientEditWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum GradientTarget { StrokeGradient, FillGradient };
+    enum GradientTarget {
+        StrokeGradient,
+        FillGradient
+    };
 
     /**
      * Creates a new gradient tab widget with the given parent.

@@ -691,9 +691,22 @@ public:
      */
     void setValueFormat(const QString &valueFormat);
 
-    enum { Standard = -1, Left, Center, Right, Justify, Distributed };
+    enum {
+        Standard = -1,
+        Left,
+        Center,
+        Right,
+        Justify,
+        Distributed
+    };
 
-    enum { Top, Middle, Bottom, VJustify, VDistributed };
+    enum {
+        Top,
+        Middle,
+        Bottom,
+        VJustify,
+        VDistributed
+    };
 
     /**
      * Applies another format to this format. Basically this will merge

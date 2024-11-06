@@ -16,7 +16,12 @@ public:
     ~DiagonalWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { FromTopLeft, FromBottomRight, FromTopRight, FromBottomLeft };
+    enum SubType {
+        FromTopLeft,
+        FromBottomRight,
+        FromTopRight,
+        FromBottomLeft
+    };
 };
 
 #endif // DIAGONALWIPEEFFECTFACTORY_H

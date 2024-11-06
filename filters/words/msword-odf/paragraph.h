@@ -128,7 +128,11 @@ public:
     };
 
     // DropCaps related
-    typedef enum { NoDropCap, IsDropCapPara, HasDropCapIntegrated } DropCapStatus;
+    typedef enum {
+        NoDropCap,
+        IsDropCapPara,
+        HasDropCapIntegrated
+    } DropCapStatus;
 
     DropCapStatus dropCapStatus() const;
     void getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const;

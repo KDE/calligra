@@ -16,7 +16,12 @@ public:
     ~KPrEyeWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { Vertical, VerticalReverse, Horizontal, HorizontalReverse };
+    enum SubType {
+        Vertical,
+        VerticalReverse,
+        Horizontal,
+        HorizontalReverse
+    };
 };
 
 #endif /* KPREYEWIPEEFFECTFACTORY_H */

@@ -16,10 +16,21 @@ class ComponentTransferEffect : public KoFilterEffect
 {
 public:
     /// the different transfer functions
-    enum Function { Identity, Table, Discrete, Linear, Gamma };
+    enum Function {
+        Identity,
+        Table,
+        Discrete,
+        Linear,
+        Gamma
+    };
 
     /// the different color channels
-    enum Channel { ChannelR, ChannelG, ChannelB, ChannelA };
+    enum Channel {
+        ChannelR,
+        ChannelG,
+        ChannelB,
+        ChannelA
+    };
 
     ComponentTransferEffect();
 

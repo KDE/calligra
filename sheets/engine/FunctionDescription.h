@@ -18,7 +18,14 @@ namespace Calligra
 namespace Sheets
 {
 
-enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any, KSpread_Date };
+enum ParameterType {
+    KSpread_Int,
+    KSpread_Float,
+    KSpread_String,
+    KSpread_Boolean,
+    KSpread_Any,
+    KSpread_Date
+};
 
 /**
  * \ingroup Value

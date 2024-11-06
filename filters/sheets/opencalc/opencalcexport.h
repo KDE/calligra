@@ -39,7 +39,12 @@ public:
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 private:
-    enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
+    enum files {
+        metaXML = 0x01,
+        contentXML = 0x02,
+        stylesXML = 0x04,
+        settingsXML = 0x08
+    };
     OpenCalcStyles m_styles;
 
     bool writeFile(const Calligra::Sheets::DocBase *ksdoc);

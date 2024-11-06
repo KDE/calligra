@@ -30,7 +30,9 @@ class DocumentModel : public KoDocumentSectionModel
 {
     Q_OBJECT
 public:
-    enum Role { SectionPtr = 0x1252BAD };
+    enum Role {
+        SectionPtr = 0x1252BAD
+    };
 
 public:
     DocumentModel(QObject *parent, RootSection *document);

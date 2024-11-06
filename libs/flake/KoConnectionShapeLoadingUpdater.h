@@ -15,7 +15,10 @@ class KoShape;
 class KoConnectionShapeLoadingUpdater : public KoLoadingShapeUpdater
 {
 public:
-    enum ConnectionPosition { First, Second };
+    enum ConnectionPosition {
+        First,
+        Second
+    };
 
     KoConnectionShapeLoadingUpdater(KoConnectionShape *connectionShape, ConnectionPosition position);
     ~KoConnectionShapeLoadingUpdater() override;

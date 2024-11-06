@@ -28,7 +28,12 @@ struct KOMSOOXML_EXPORT TableStyleProperties {
     {
     }
 
-    enum TargetLevel { Table, TableRow, TableColumn, TableCell };
+    enum TargetLevel {
+        Table,
+        TableRow,
+        TableColumn,
+        TableCell
+    };
 
     enum Property {
         BottomBorder = 1,

@@ -402,10 +402,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
 
  @todo
 */
-KoFilter::ConversionStatus MsooXmlThemesReader::read_objectDefaults()
-{
-    SKIP_EVERYTHING_AND_RETURN
-}
+KoFilter::ConversionStatus MsooXmlThemesReader::read_objectDefaults(){SKIP_EVERYTHING_AND_RETURN}
 
 #undef CURRENT_EL
 #define CURRENT_EL custClrLst

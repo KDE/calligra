@@ -321,8 +321,16 @@ void KarbonImport::loadColorStops(const KoXmlElement &element)
 
 QString KarbonImport::loadGradient(const KoXmlElement &element)
 {
-    enum GradientType { linear = 0, radial = 1, conic = 2 };
-    enum GradientSpread { none = 0, reflect = 1, repeat = 2 };
+    enum GradientType {
+        linear = 0,
+        radial = 1,
+        conic = 2
+    };
+    enum GradientSpread {
+        none = 0,
+        reflect = 1,
+        repeat = 2
+    };
 
     QPointF origin;
     origin.setX(element.attribute("originX", "0.0").toDouble());
@@ -863,7 +871,10 @@ void KarbonImport::loadSinus(const KoXmlElement &element)
 
 void KarbonImport::loadSpiral(const KoXmlElement &element)
 {
-    enum SpiralType { round, rectangular };
+    enum SpiralType {
+        round,
+        rectangular
+    };
 
     qreal radius = qAbs(KoUnit::parseValue(element.attribute("radius")));
     // TODO: proper way to use "angle" value in transformation code below
@@ -942,8 +953,19 @@ void KarbonImport::loadSpiral(const KoXmlElement &element)
 
 void KarbonImport::loadStar(const KoXmlElement &element)
 {
-    enum StarType { star_outline, spoke, wheel, polygon, framed_star, star, gear };
-    enum CornerType { tip = 0, base = 1 };
+    enum StarType {
+        star_outline,
+        spoke,
+        wheel,
+        polygon,
+        framed_star,
+        star,
+        gear
+    };
+    enum CornerType {
+        tip = 0,
+        base = 1
+    };
 
     const qreal cx = KoUnit::parseValue(element.attribute("cx"));
     const qreal cy = KoUnit::parseValue(element.attribute("cy"));
@@ -1162,7 +1184,11 @@ void KarbonImport::loadImage(const KoXmlElement &element)
 
 void KarbonImport::loadText(const KoXmlElement &element)
 {
-    enum Position { Above, On, Under };
+    enum Position {
+        Above,
+        On,
+        Under
+    };
 
     // int position = element.attribute( "position", "0" ).toInt();
     //  TODO: apply alignment value

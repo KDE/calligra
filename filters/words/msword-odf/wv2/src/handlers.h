@@ -346,7 +346,13 @@ public:
     /**
      * special characters that were defined in parser9x.h  (fSpec = 1) but that weren't used.
      */
-    enum UnusedSpecialCharacter { FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7, AbbrevDate = 10, MergeHelper = 41 };
+    enum UnusedSpecialCharacter {
+        FootnoteSeparator = 3,
+        FootnodeContinuation = 4,
+        HandAnnotationPic = 7,
+        AbbrevDate = 10,
+        MergeHelper = 41
+    };
 
     /**
      * This method passes the simple cases of special characters we find. More complex ones

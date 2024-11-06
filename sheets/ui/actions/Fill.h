@@ -27,7 +27,12 @@ public:
     FillManipulator();
     ~FillManipulator() override;
 
-    enum Direction { Up = 0, Down, Left, Right };
+    enum Direction {
+        Up = 0,
+        Down,
+        Left,
+        Right
+    };
 
     void setDirection(Direction d)
     {

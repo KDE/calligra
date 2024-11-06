@@ -74,7 +74,10 @@ public:
         KoPageAppStart = 8000 ///< Base number for KoPageApp specific values.
     };
 
-    enum ApplicationSpecial { NoSpecial = 0, NoAdvancedText = 1 };
+    enum ApplicationSpecial {
+        NoSpecial = 0,
+        NoAdvancedText = 1
+    };
 
     /**
      * Constructor.

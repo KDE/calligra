@@ -17,8 +17,23 @@ namespace Calligra
 namespace Sheets
 {
 
-enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
-enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
+enum MoveTo {
+    Bottom,
+    Left,
+    Top,
+    Right,
+    BottomFirst,
+    NoMovement
+};
+enum MethodOfCalc {
+    SumOfNumber,
+    Min,
+    Max,
+    Average,
+    Count,
+    NoneCalc,
+    CountA
+};
 
 /**
  * Visual settings.

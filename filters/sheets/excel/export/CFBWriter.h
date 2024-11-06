@@ -57,7 +57,12 @@ private:
     QList<unsigned> m_miniFat;
 
     struct DirectoryEntry {
-        enum Type { Unknown = 0x00, Storage = 0x01, Stream = 0x02, RootStorage = 0x05 };
+        enum Type {
+            Unknown = 0x00,
+            Storage = 0x01,
+            Stream = 0x02,
+            RootStorage = 0x05
+        };
 
         int id;
         QString name;

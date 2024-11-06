@@ -85,7 +85,10 @@ class GitOpsThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    enum GitOperation { PullOperation, PushOperation };
+    enum GitOperation {
+        PullOperation,
+        PushOperation
+    };
     GitOpsThread(QString privateKey,
                  QString publicKey,
                  QString userForRemote,

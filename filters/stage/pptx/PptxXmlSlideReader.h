@@ -148,7 +148,13 @@ class PptxXmlSlideReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     //! Mode of operation.
-    enum Type { Slide, SlideLayout, SlideMaster, NotesMaster, Notes };
+    enum Type {
+        Slide,
+        SlideLayout,
+        SlideMaster,
+        NotesMaster,
+        Notes
+    };
 
     explicit PptxXmlSlideReader(KoOdfWriters *writers);
 

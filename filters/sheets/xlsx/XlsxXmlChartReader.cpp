@@ -955,7 +955,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_chartText_Tx()
 {
     READ_PROLOGUE2(chartText_Tx)
-    enum { Start, InStrRef, InRichText } state;
+    enum {
+        Start,
+        InStrRef,
+        InRichText
+    } state;
     state = Start;
     while (!atEnd()) {
         readNext();
@@ -981,7 +985,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_chartText_Tx()
         case InRichText: // richtext means the title text
             // we extract the text from the richtext cause we cannot handle the richtext formattings anyway
             QString result;
-            enum { Rich, Paragraph, TextRun } s;
+            enum {
+                Rich,
+                Paragraph,
+                TextRun
+            } s;
             s = Rich;
             while (!atEnd()) {
                 readNext();
@@ -1289,7 +1297,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
  */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
 {
-    enum State { Start, NoFill, InFill };
+    enum State {
+        Start,
+        NoFill,
+        InFill
+    };
     State state = Start;
     READ_PROLOGUE
     int level = 0;

@@ -25,11 +25,13 @@ public:
     Private()
         : mode(NormalMode)
         , currentKeys(&normalKeys)
-        , useBuiltIn(true){
+        , useBuiltIn(true)
+    {
 #ifdef Q_OS_WIN
-    // useBuiltIn = false;
+        // useBuiltIn = false;
 #endif
-          } KeyboardMode mode;
+    }
+    KeyboardMode mode;
     QList<Key> *currentKeys;
     QList<Key> normalKeys;
     QList<Key> capitalKeys;

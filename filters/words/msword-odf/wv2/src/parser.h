@@ -86,7 +86,18 @@ public:
      * handle footnote references differently while parsing footnotes. It's a bit
      * hacky, but needed.
      */
-    enum SubDocument { None, Main, Footnote, Header, Macro, Annotation, Endnote, TextBox, HeaderTextBox, Bookmark };
+    enum SubDocument {
+        None,
+        Main,
+        Footnote,
+        Header,
+        Macro,
+        Annotation,
+        Endnote,
+        TextBox,
+        HeaderTextBox,
+        Bookmark
+    };
 
     /**
      * Construct a parser. The reason that we get the "open" storage

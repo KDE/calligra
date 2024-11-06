@@ -337,7 +337,7 @@ private:
             , presSlide(nullptr)
             , notesMasterSlide(nullptr)
             , notesSlide(nullptr)
-            , slideTexts(nullptr) {};
+            , slideTexts(nullptr) { };
     };
 
     DrawClientData dc_data[1];

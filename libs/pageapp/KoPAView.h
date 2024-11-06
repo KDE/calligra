@@ -48,7 +48,10 @@ public:
         AllActions = 0xFF
     };
 
-    enum KoPAFlags { NormalMode = 1, ModeBox = 2 };
+    enum KoPAFlags {
+        NormalMode = 1,
+        ModeBox = 2
+    };
 
     /**
      * Constructor

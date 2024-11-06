@@ -386,7 +386,11 @@ private:
 class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Element
 {
 public:
-    enum Type { Undefined, Point, Range };
+    enum Type {
+        Undefined,
+        Point,
+        Range
+    };
 
     Element();
     virtual ~Element();

@@ -518,7 +518,11 @@ protected:
     QDomElement insertAnchor(const QString &fsname);
 
 private:
-    enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
+    enum {
+        NoShadow,
+        Shadow,
+        Imprint
+    } m_shadowTextFound;
 
     QDomElement m_framesetElement;
     QDomElement m_oldLayout;

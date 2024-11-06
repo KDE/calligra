@@ -99,7 +99,17 @@ public:
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
 
 private:
-    enum ElementType { Span, ParagraphOrHeader, ListItem, List, NumberedParagraph, Table, TableRow, TableColumn, TableCell };
+    enum ElementType {
+        Span,
+        ParagraphOrHeader,
+        ListItem,
+        List,
+        NumberedParagraph,
+        Table,
+        TableRow,
+        TableColumn,
+        TableCell
+    };
 
     void openTagRegion(KoTextWriter::Private::ElementType elementType, TagInformation &tagInformation);
     void closeTagRegion();

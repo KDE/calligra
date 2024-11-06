@@ -19,7 +19,10 @@ class MorphologyEffect : public KoFilterEffect
 {
 public:
     /// Morphology operator type
-    enum Operator { Erode, Dilate };
+    enum Operator {
+        Erode,
+        Dilate
+    };
 
     MorphologyEffect();
 

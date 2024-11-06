@@ -72,7 +72,15 @@ public:
 private:
     QPainterPath decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const;
 
-    enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
+    enum Side {
+        None,
+        Left,
+        Right,
+        Empty,
+        Both,
+        Bigger,
+        Enough
+    };
     Side m_side;
     QRectF m_bounds;
     QPolygonF m_polygon;

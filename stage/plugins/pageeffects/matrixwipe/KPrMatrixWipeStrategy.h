@@ -20,7 +20,13 @@ public:
     void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 
     void next(const KPrPageEffect::Data &data) override;
-    enum Direction { NotSmooth, TopToBottom, BottomToTop, LeftToRight, RightToLeft };
+    enum Direction {
+        NotSmooth,
+        TopToBottom,
+        BottomToTop,
+        LeftToRight,
+        RightToLeft
+    };
 
 protected:
     virtual int squareIndex(int x, int y, int columns, int rows) = 0;

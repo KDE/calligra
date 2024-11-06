@@ -8,9 +8,7 @@
 #include "KoXmlNS.h"
 #include <OdfDebug.h>
 
-class Q_DECL_HIDDEN KoOasisSettings::Private
-{
-};
+class Q_DECL_HIDDEN KoOasisSettings::Private{};
 
 KoOasisSettings::KoOasisSettings(const KoXmlDocument &doc)
     : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), KoXmlNS::office, "settings"))

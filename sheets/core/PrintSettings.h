@@ -30,7 +30,10 @@ class Sheet;
 class CALLIGRA_SHEETS_CORE_EXPORT PrintSettings
 {
 public:
-    enum PageOrder { TopToBottom, LeftToRight };
+    enum PageOrder {
+        TopToBottom,
+        LeftToRight
+    };
 
     /**
      * Constructor.

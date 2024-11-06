@@ -16,7 +16,10 @@ class QRectF;
 class SvgFilterHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
+    enum Units {
+        UserSpaceOnUse,
+        ObjectBoundingBox
+    };
 
     SvgFilterHelper();
     ~SvgFilterHelper();

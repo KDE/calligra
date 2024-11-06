@@ -32,7 +32,12 @@ public:
     void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
-    enum BreakType { NoBreak, AutoBreak, ColumnBreak, PageBreak };
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
     void setBreakBefore(BreakType breakBefore);
     BreakType breakBefore() const;
 
@@ -58,27 +63,50 @@ public:
     void setBottomMargin(qreal bottom);
     qreal bottomMargin() const;
 
-    enum WidthUnit { PercentageUnit, PointsUnit };
+    enum WidthUnit {
+        PercentageUnit,
+        PointsUnit
+    };
     void setWidth(qreal width, WidthUnit unit = PointsUnit);
     qreal width() const;
     WidthUnit widthUnit() const;
 
-    enum HorizontalAlign { CenterAlign, LeftAlign, MarginsAlign, RightAlign };
+    enum HorizontalAlign {
+        CenterAlign,
+        LeftAlign,
+        MarginsAlign,
+        RightAlign
+    };
     void setHorizontalAlign(HorizontalAlign align);
     HorizontalAlign horizontalAlign() const;
 
-    enum BorderModel { CollapsingModel, SeparatingModel };
+    enum BorderModel {
+        CollapsingModel,
+        SeparatingModel
+    };
     void setBorderModel(BorderModel bordelModel);
     BorderModel borderModel() const;
 
     void setDisplay(bool display);
     bool display() const;
 
-    enum KeepWithNext { AutoKeepWithNext, AlwaysKeepWithNext };
+    enum KeepWithNext {
+        AutoKeepWithNext,
+        AlwaysKeepWithNext
+    };
     void setKeepWithNext(KeepWithNext keepWithNext);
     KeepWithNext keepWithNext() const;
 
-    enum WritingMode { LrTbWritingMode, RlTbWritingMode, TbRlWritingMode, TbLrWritingMode, LrWritingMode, RlWritingMode, TbWritingMode, PageWritingMode };
+    enum WritingMode {
+        LrTbWritingMode,
+        RlTbWritingMode,
+        TbRlWritingMode,
+        TbLrWritingMode,
+        LrWritingMode,
+        RlWritingMode,
+        TbWritingMode,
+        PageWritingMode
+    };
     void setWritingMode(WritingMode writingMode);
     WritingMode writingMode() const;
 

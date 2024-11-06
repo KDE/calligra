@@ -14,10 +14,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN PasteStrategy::Private
-{
-public:
-};
+class Q_DECL_HIDDEN PasteStrategy::Private{public : };
 
 PasteStrategy::PasteStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
     : SelectionStrategy(cellTool, documentPos, modifiers)

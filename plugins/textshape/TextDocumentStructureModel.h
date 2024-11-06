@@ -19,7 +19,11 @@ class QTextBlock;
 class QTextLine;
 
 struct NodeData {
-    enum Type { Frame, Block, Line };
+    enum Type {
+        Frame,
+        Block,
+        Line
+    };
 
     Type type;
     union {
@@ -49,7 +53,10 @@ class TextDocumentStructureModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    enum Columns { nameColumn = 0, endColumn };
+    enum Columns {
+        nameColumn = 0,
+        endColumn
+    };
 
 public:
     explicit TextDocumentStructureModel(QObject *parent = nullptr);

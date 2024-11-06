@@ -158,7 +158,12 @@ private:
 
     // "A whole is that which has beginning, middle, and end" - Aristotle
     // ...but we also need to signal "Done" state, Mr. Aristotle
-    enum Whole { Beginning = 1, Middle = 2, End = 4, Done = 8 };
+    enum Whole {
+        Beginning = 1,
+        Middle = 2,
+        End = 4,
+        Done = 8
+    };
 
     // Don't copy or assign filter chains
     KoFilterChain(const KoFilterChain &rhs) = delete;
@@ -187,7 +192,12 @@ private:
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for
-    enum IOState { Nil, File, Storage, Document };
+    enum IOState {
+        Nil,
+        File,
+        Storage,
+        Document
+    };
     IOState m_inputQueried, m_outputQueried;
 
     class Private;

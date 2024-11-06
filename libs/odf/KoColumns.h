@@ -22,9 +22,19 @@ class KoXmlElement;
 
 /** structure for columns */
 struct KoColumns {
-    enum SeparatorVerticalAlignment { AlignTop = Qt::AlignTop, AlignVCenter = Qt::AlignVCenter, AlignBottom = Qt::AlignBottom };
+    enum SeparatorVerticalAlignment {
+        AlignTop = Qt::AlignTop,
+        AlignVCenter = Qt::AlignVCenter,
+        AlignBottom = Qt::AlignBottom
+    };
 
-    enum SeparatorStyle { None = Qt::NoPen, Solid = Qt::SolidLine, Dashed = Qt::DashLine, Dotted = Qt::DotLine, DotDashed = Qt::DashDotLine };
+    enum SeparatorStyle {
+        None = Qt::NoPen,
+        Solid = Qt::SolidLine,
+        Dashed = Qt::DashLine,
+        Dotted = Qt::DotLine,
+        DotDashed = Qt::DashDotLine
+    };
 
     struct ColumnDatum {
         /** Left indent in points */

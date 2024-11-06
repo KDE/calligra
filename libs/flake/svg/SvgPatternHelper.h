@@ -16,7 +16,10 @@ class KoShape;
 class SvgPatternHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
+    enum Units {
+        UserSpaceOnUse,
+        ObjectBoundingBox
+    };
 
     SvgPatternHelper();
     ~SvgPatternHelper();

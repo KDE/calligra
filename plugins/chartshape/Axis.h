@@ -25,7 +25,10 @@ struct NumericStyleFormat;
 namespace KoChart
 {
 
-enum OdfGridClass { OdfMajorGrid, OdfMinorGrid };
+enum OdfGridClass {
+    OdfMajorGrid,
+    OdfMinorGrid
+};
 
 /**
  * @brief The Axis class handles axis as well as grid settings.

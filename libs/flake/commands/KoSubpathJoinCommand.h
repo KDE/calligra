@@ -43,7 +43,10 @@ private:
     QPointF m_oldControlPoint2;
     KoPathPoint::PointProperties m_oldProperties1;
     KoPathPoint::PointProperties m_oldProperties2;
-    enum Reverse { ReverseFirst = 1, ReverseSecond = 2 };
+    enum Reverse {
+        ReverseFirst = 1,
+        ReverseSecond = 2
+    };
     int m_reverse;
 };
 

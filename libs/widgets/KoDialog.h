@@ -138,7 +138,10 @@ public:
     // TODO KDE5: remove NoDefault and use the value None instead
     Q_DECLARE_FLAGS(ButtonCodes, ButtonCode)
 
-    enum ButtonPopupMode { InstantPopup = 0, DelayedPopup = 1 };
+    enum ButtonPopupMode {
+        InstantPopup = 0,
+        DelayedPopup = 1
+    };
     Q_DECLARE_FLAGS(ButtonPopupModes, ButtonPopupMode)
 
 public:
@@ -389,7 +392,12 @@ public:
      * @var HIGCompliantCaption The base minimum flags required to align a
      * caption with the KDE Human Interface Guidelines
      */
-    enum CaptionFlag { NoCaptionFlags = 0, AppNameCaption = 1, ModifiedCaption = 2, HIGCompliantCaption = AppNameCaption };
+    enum CaptionFlag {
+        NoCaptionFlags = 0,
+        AppNameCaption = 1,
+        ModifiedCaption = 2,
+        HIGCompliantCaption = AppNameCaption
+    };
     Q_DECLARE_FLAGS(CaptionFlags, CaptionFlag)
 
     /**

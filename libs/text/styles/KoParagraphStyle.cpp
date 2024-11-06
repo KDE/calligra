@@ -1255,7 +1255,11 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
 }
 
 struct ParagraphBorderData {
-    enum Values { Style = 1, Color = 2, Width = 4 };
+    enum Values {
+        Style = 1,
+        Color = 2,
+        Width = 4
+    };
 
     ParagraphBorderData()
         : values(0)

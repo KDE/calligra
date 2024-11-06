@@ -53,7 +53,12 @@ typedef enum {
 
 // Make use of the grfbrc enumeration in decision to which cell sides the cell
 // margin or cell spacing applies to.
-typedef enum { fbrcTop = 0x01, fbrcLeft = 0x02, fbrcBottom = 0x04, fbrcRight = 0x08 } GRFBRC;
+typedef enum {
+    fbrcTop = 0x01,
+    fbrcLeft = 0x02,
+    fbrcBottom = 0x04,
+    fbrcRight = 0x08
+} GRFBRC;
 
 namespace SPRM
 {

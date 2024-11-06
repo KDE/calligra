@@ -150,7 +150,10 @@ class Section : public QWidget
 {
     Q_OBJECT
 public:
-    enum SeparatorFlag { SeparatorTop = 0x0001, /* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008 };
+    enum SeparatorFlag {
+        SeparatorTop = 0x0001, /* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/
+        SeparatorLeft = 0x0008
+    };
     Q_DECLARE_FLAGS(Separators, SeparatorFlag)
     explicit Section(QWidget *parent = nullptr)
         : QWidget(parent)

@@ -17,7 +17,11 @@ class KWTextFrameSet;
 /// The words-global namespace for all Words related things.
 namespace Words
 {
-enum FrameSetType { BackgroundFrameSet, TextFrameSet, OtherFrameSet };
+enum FrameSetType {
+    BackgroundFrameSet,
+    TextFrameSet,
+    OtherFrameSet
+};
 
 /// Each text frame set can be categorized in one of these items
 enum TextFrameSetType {

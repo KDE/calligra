@@ -50,7 +50,10 @@ public:
     explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox() override;
 
-    enum HorizontalTabsSide { LeftSide, RightSide };
+    enum HorizontalTabsSide {
+        LeftSide,
+        RightSide
+    };
 
 public Q_SLOTS:
     /**
@@ -108,7 +111,10 @@ public:
     static QString applicationName;
 
 private:
-    enum IconMode { IconAndText, IconOnly };
+    enum IconMode {
+        IconAndText,
+        IconOnly
+    };
 
     QIcon createTextIcon(KoToolAction *toolAction) const;
     QIcon createSimpleIcon(KoToolAction *toolAction) const;

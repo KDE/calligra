@@ -33,7 +33,9 @@ protected:
     ~MsooXmlCommonReader() override;
 
     // -- for read_p()
-    enum read_p_arg { read_p_Skip };
+    enum read_p_arg {
+        read_p_Skip
+    };
     Q_DECLARE_FLAGS(read_p_args, read_p_arg)
     read_p_args m_read_p_args;
 

@@ -14,7 +14,12 @@
 
 namespace KoResourcePaths
 {
-enum SearchOption { NoSearchOptions = 0, Recursive = 1, NoDuplicates = 2, IgnoreExecBit = 4 };
+enum SearchOption {
+    NoSearchOptions = 0,
+    Recursive = 1,
+    NoDuplicates = 2,
+    IgnoreExecBit = 4
+};
 Q_DECLARE_FLAGS(SearchOptions, SearchOption)
 
 /**

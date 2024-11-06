@@ -30,19 +30,32 @@ public:
     void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
-    enum HeightType { MinimumHeight, ExactHeight, OptimalHeight };
+    enum HeightType {
+        MinimumHeight,
+        ExactHeight,
+        OptimalHeight
+    };
     void setHeight(qreal height);
     void setHeightType(HeightType type);
     qreal height() const;
 
-    enum BreakType { NoBreak, AutoBreak, ColumnBreak, PageBreak };
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
     void setBreakBefore(BreakType breakBefore);
     BreakType breakBefore() const;
 
     void setBreakAfter(BreakType breakAfter);
     BreakType breakAfter() const;
 
-    enum KeepTogetherType { DontKeepTogether, AutoKeepTogether, AlwaysKeeptogether };
+    enum KeepTogetherType {
+        DontKeepTogether,
+        AutoKeepTogether,
+        AlwaysKeeptogether
+    };
     void setKeepTogether(KeepTogetherType keepTogether);
     KeepTogetherType keepTogether() const;
 

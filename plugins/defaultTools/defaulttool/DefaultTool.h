@@ -43,7 +43,9 @@ public:
     explicit DefaultTool(KoCanvasBase *canvas);
     ~DefaultTool() override;
 
-    enum CanvasResource { HotPosition = 1410100299 };
+    enum CanvasResource {
+        HotPosition = 1410100299
+    };
 
 public:
     bool wantsAutoScroll() const override;

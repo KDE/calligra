@@ -21,11 +21,20 @@
 class DateVariable : public KoVariable
 {
 public:
-    enum DateType { Fixed, AutoUpdate };
+    enum DateType {
+        Fixed,
+        AutoUpdate
+    };
 
-    enum DisplayType { Date, Time };
+    enum DisplayType {
+        Date,
+        Time
+    };
 
-    enum ValueType { DateOrTime, DateTime };
+    enum ValueType {
+        DateOrTime,
+        DateTime
+    };
 
     /**
      * Constructor.

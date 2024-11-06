@@ -41,12 +41,17 @@ public:
         None /**< For when no unit has been specified */
     };
 
-    enum UnitType { NoType, Relative, Absolute, Pixel };
+    enum UnitType {
+        NoType,
+        Relative,
+        Absolute,
+        Pixel
+    };
 
     Length()
         : value(0)
         , unit(None)
-        , type(NoType){};
+        , type(NoType) { };
     qreal value;
     Unit unit;
     UnitType type;

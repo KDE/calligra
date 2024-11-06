@@ -235,7 +235,10 @@ void KoTextEditor::increaseIndent()
 class FontResizer : public CharFormatVisitor
 {
 public:
-    enum Type { Grow, Shrink };
+    enum Type {
+        Grow,
+        Shrink
+    };
     FontResizer(Type type_)
         : type(type_)
     {

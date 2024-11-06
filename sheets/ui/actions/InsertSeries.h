@@ -39,7 +39,12 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT SeriesManipulator : public AbstractDataManipulator
 {
 public:
-    enum Series { Column, Row, Linear, Geometric };
+    enum Series {
+        Column,
+        Row,
+        Linear,
+        Geometric
+    };
 
     SeriesManipulator();
     ~SeriesManipulator() override;

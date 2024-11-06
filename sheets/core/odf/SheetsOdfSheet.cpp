@@ -775,7 +775,11 @@ bool Odf::loadColumnFormat(Sheet *sheet,
         }
     }
 
-    enum { Visible, Collapsed, Filtered } visibility = Visible;
+    enum {
+        Visible,
+        Collapsed,
+        Filtered
+    } visibility = Visible;
     if (column.hasAttributeNS(KoXmlNS::table, "visibility")) {
         const QString string = column.attributeNS(KoXmlNS::table, "visibility", "visible");
         if (string == "collapse")
@@ -901,7 +905,11 @@ int Odf::loadRowFormat(Sheet *sheet,
         isNonDefaultRow = true;
     }
 
-    enum { Visible, Collapsed, Filtered } visibility = Visible;
+    enum {
+        Visible,
+        Collapsed,
+        Filtered
+    } visibility = Visible;
     if (row.hasAttributeNS(KoXmlNS::table, sVisibility)) {
         const QString string = row.attributeNS(KoXmlNS::table, sVisibility, sVisible);
         if (string == sCollapse)

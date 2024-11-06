@@ -28,7 +28,11 @@
 #include "config.h"
 #include "map.h"
 
-enum EGenerate { E_LATEX, E_WORDS, E_CONFIG };
+enum EGenerate {
+    E_LATEX,
+    E_WORDS,
+    E_CONFIG
+};
 
 /***********************************************************************/
 /* Class: Spreadsheet                                                  */

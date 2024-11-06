@@ -20,7 +20,9 @@
 
 static const int MAX_RECENTFILES_ENTRIES = 10;
 
-enum KoRecentDocumentRoles { PreviewRole = Qt::UserRole };
+enum KoRecentDocumentRoles {
+    PreviewRole = Qt::UserRole
+};
 
 class KoFileListItem : public QStandardItem
 {

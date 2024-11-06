@@ -31,9 +31,17 @@ public:
      * If there is a still missing add it here so that it is possible to use the same
      * saving code in all applications.
      */
-    enum Type { InsertChange, FormatChange, DeleteChange, UNKNOWN = 9999 };
+    enum Type {
+        InsertChange,
+        FormatChange,
+        DeleteChange,
+        UNKNOWN = 9999
+    };
 
-    enum ChangeFormat { ODF_1_2, DELTAXML };
+    enum ChangeFormat {
+        ODF_1_2,
+        DELTAXML
+    };
 
     /**
      * Start the definition of a new change. Its name will be set later by KoGenChanges::insert(),

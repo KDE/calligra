@@ -83,7 +83,15 @@ public:
         virtual int position() const = 0;
     };
 
-    enum HorizontalPos { HCenter, HFromInside, HFromLeft, HInside, HLeft, HOutside, HRight };
+    enum HorizontalPos {
+        HCenter,
+        HFromInside,
+        HFromLeft,
+        HInside,
+        HLeft,
+        HOutside,
+        HRight
+    };
 
     enum HorizontalRel { // NOTE: update KWAnchoringProperties if you change this
         HChar,
@@ -101,7 +109,13 @@ public:
         HParagraphStartMargin
     };
 
-    enum VerticalPos { VBelow, VBottom, VFromTop, VMiddle, VTop };
+    enum VerticalPos {
+        VBelow,
+        VBottom,
+        VFromTop,
+        VMiddle,
+        VTop
+    };
 
     enum VerticalRel { // NOTE: update KWAnchoringProperties if you change this
         VBaseline,
@@ -116,7 +130,12 @@ public:
         VText
     };
 
-    enum AnchorType { AnchorAsCharacter, AnchorToCharacter, AnchorParagraph, AnchorPage };
+    enum AnchorType {
+        AnchorAsCharacter,
+        AnchorToCharacter,
+        AnchorParagraph,
+        AnchorPage
+    };
 
     /**
      * Constructor for an in-place anchor.

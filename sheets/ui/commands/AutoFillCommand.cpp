@@ -50,7 +50,15 @@ namespace Sheets
 class AutoFillSequenceItem
 {
 public:
-    enum Type { VALUE, FORMULA, DAY, SHORTDAY, MONTH, SHORTMONTH, OTHER };
+    enum Type {
+        VALUE,
+        FORMULA,
+        DAY,
+        SHORTDAY,
+        MONTH,
+        SHORTMONTH,
+        OTHER
+    };
 
     explicit AutoFillSequenceItem(const Cell &cell, ApplicationSettings *sett);
 

@@ -163,7 +163,13 @@ public:
         IdeographAlpha ///< space should be added between portions of Asian, Western and complex texts
     };
 
-    enum VerticalAlign { VAlignAuto, VAlignBaseline, VAlignBottom, VAlignMiddle, VAlignTop };
+    enum VerticalAlign {
+        VAlignAuto,
+        VAlignBaseline,
+        VAlignBottom,
+        VAlignMiddle,
+        VAlignTop
+    };
 
     /// Constructor
     KoParagraphStyle(QObject *parent = nullptr);

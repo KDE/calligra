@@ -116,7 +116,10 @@ private:
     double defaultAngleRadian() const;
 
     /// the handle types
-    enum Handles { tip = 0, base = 1 };
+    enum Handles {
+        tip = 0,
+        base = 1
+    };
 
     uint m_cornerCount; ///< number of corners
     qreal m_radius[2]; ///< the different radii

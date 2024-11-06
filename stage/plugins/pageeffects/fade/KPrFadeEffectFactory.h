@@ -17,7 +17,10 @@ public:
     ~KPrFadeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { CrossFade, FadeOverColor };
+    enum SubType {
+        CrossFade,
+        FadeOverColor
+    };
 };
 
 #endif /* KPRFADEEFFECTFACTORY_H */

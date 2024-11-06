@@ -118,7 +118,11 @@ public:
 class QpRecRecalcMode : public QpRec
 {
 public:
-    enum MODE { Manual = 0, Background = 1, Automatic = 255 };
+    enum MODE {
+        Manual = 0,
+        Background = 1,
+        Automatic = 255
+    };
 
     QpRecRecalcMode(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecRecalcMode();
@@ -135,7 +139,11 @@ protected:
 class QpRecRecalcOrder : public QpRec
 {
 public:
-    enum ORDER { Natural = 0, Column = 1, Row = 255 };
+    enum ORDER {
+        Natural = 0,
+        Column = 1,
+        Row = 255
+    };
 
     QpRecRecalcOrder(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecRecalcOrder();

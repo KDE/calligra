@@ -18,7 +18,10 @@ class KoPageNavigator : public QStackedWidget
 {
     Q_OBJECT
 
-    enum State { Display = 0, Edit = 1 };
+    enum State {
+        Display = 0,
+        Edit = 1
+    };
 
 public:
     explicit KoPageNavigator(KoPAView *view);

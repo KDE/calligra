@@ -149,7 +149,12 @@ static inline void decodeRK(unsigned rkvalue, bool &isInteger, int &i, double &f
 /**
  * Supported Excel document version.
  */
-enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
+enum {
+    UnknownExcel = 0,
+    Excel95,
+    Excel97,
+    Excel2000
+};
 
 QString readByteString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = nullptr, unsigned *size = nullptr);
 QString readTerminatedUnicodeChars(const void *data, unsigned *size = nullptr, unsigned maxSize = -1, bool *error = nullptr);

@@ -21,7 +21,11 @@ class KoList;
 class ChangeListLevelCommand : public KoTextCommandBase
 {
 public:
-    enum CommandType { IncreaseLevel, DecreaseLevel, SetLevel };
+    enum CommandType {
+        IncreaseLevel,
+        DecreaseLevel,
+        SetLevel
+    };
 
     /**
      * Change the list property of 'block'.

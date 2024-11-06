@@ -283,7 +283,16 @@ private:
             return;
         }
 
-        enum { Start, Finish, Bad, InType, InId, InAttribute, InClassAttribute, InPseudoClass } state;
+        enum {
+            Start,
+            Finish,
+            Bad,
+            InType,
+            InId,
+            InAttribute,
+            InClassAttribute,
+            InPseudoClass
+        } state;
 
         // add terminator to string
         QString expr = m_token + QChar();
@@ -508,7 +517,12 @@ public:
     {
         // add terminator to string
         QString expr = selector + QChar();
-        enum { Finish, Bad, InCombinator, InSelector } state;
+        enum {
+            Finish,
+            Bad,
+            InCombinator,
+            InSelector
+        } state;
 
         QChar combinator;
         int selectorStart = 0;

@@ -238,7 +238,10 @@ public:
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
     KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = nullptr) override;
 
-    enum DiagonalDirection { DiagonalUp = 1, DiagonalDown = 2 };
+    enum DiagonalDirection {
+        DiagonalUp = 1,
+        DiagonalDown = 2
+    };
     Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
     DiagonalDirections diagonalDirections;
 

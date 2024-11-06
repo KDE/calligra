@@ -29,7 +29,11 @@ class QDomElement;
 class Style
 {
 public:
-    enum breakBefore { none, automatic, page };
+    enum breakBefore {
+        none,
+        automatic,
+        page
+    };
 
     Style()
         : breakB(none)
@@ -65,7 +69,13 @@ class NumberStyle
 public:
     NumberStyle() = default;
 
-    enum NumberType { Boolean, Date, Number, Percentage, Time };
+    enum NumberType {
+        Boolean,
+        Date,
+        Number,
+        Percentage,
+        Time
+    };
 
     void copyData(NumberStyle const &ts)
     {

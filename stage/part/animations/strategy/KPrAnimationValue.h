@@ -37,7 +37,12 @@ public:
     virtual qreal endValue() const = 0;
     virtual void setCache(KPrAnimationCache *cache);
     virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
-    enum SmilCalcMode { discrete, linear, paced, spline };
+    enum SmilCalcMode {
+        discrete,
+        linear,
+        paced,
+        spline
+    };
 
 protected:
     SmilCalcMode m_calcMode;

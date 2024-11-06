@@ -34,7 +34,7 @@ public:
         , endColor()
         , angle(0)
         , border(0)
-        , opacity(1.0){};
+        , opacity(1.0) { };
     ~KoOdfGradientBackgroundPrivate() override = default;
     // data
     QString style;

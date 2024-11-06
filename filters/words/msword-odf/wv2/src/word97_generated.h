@@ -60,7 +60,10 @@ U32 icoToCOLORREF(U16 ico);
  * Font Family Name (FFN), this code is located in the template-Word97.h
  */
 struct FFN {
-    enum Version { Word95, Word97 };
+    enum Version {
+        Word95,
+        Word97
+    };
     /**
      * Creates an empty FFN structure and sets the defaults
      */

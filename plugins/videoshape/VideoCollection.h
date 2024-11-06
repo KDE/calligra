@@ -21,7 +21,9 @@ class VideoCollection : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 public:
-    enum ResouceManager { ResourceId = 75208282 };
+    enum ResouceManager {
+        ResourceId = 75208282
+    };
     /// constructor
     explicit VideoCollection(QObject *parent = nullptr);
     virtual ~VideoCollection();

@@ -11,7 +11,13 @@
 #include <QDebug>
 #include <QTest>
 
-enum TestEnum { FirstType = 0, SecondType = 1, ThirdType = 2, FourthType = 3, FifthType = 4 };
+enum TestEnum {
+    FirstType = 0,
+    SecondType = 1,
+    ThirdType = 2,
+    FourthType = 3,
+    FifthType = 4
+};
 
 class TestStruct
 {

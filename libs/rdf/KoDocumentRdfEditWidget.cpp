@@ -40,7 +40,11 @@ class KoRdfPrefixMappingTreeWidgetItem : public QTreeWidgetItem
     QString m_key;
 
 public:
-    enum { ColKey = 0, ColValue = 1, ColSize };
+    enum {
+        ColKey = 0,
+        ColValue = 1,
+        ColSize
+    };
     KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, const QString &key, int type = Type)
         : QTreeWidgetItem(type)
         , m_mapping(mapping)

@@ -22,7 +22,14 @@
 */
 
 protected:
-    enum FrameStartElement { FrameStart, EllipseStart, RectStart, LineStart, CustomStart, GroupStart };
+    enum FrameStartElement {
+        FrameStart,
+        EllipseStart,
+        RectStart,
+        LineStart,
+        CustomStart,
+        GroupStart
+    };
 
     // v namespace:
     KoFilter::ConversionStatus genericReader(FrameStartElement startType);

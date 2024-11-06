@@ -51,7 +51,11 @@
 
 #include <algorithm>
 
-enum ButtonIds { Button_Raise, Button_Lower, Button_Delete };
+enum ButtonIds {
+    Button_Raise,
+    Button_Lower,
+    Button_Delete
+};
 
 KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType)
     : m_mode(mode)

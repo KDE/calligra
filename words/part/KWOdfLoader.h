@@ -54,7 +54,10 @@ Q_SIGNALS:
     void progressUpdate(int percent);
 
 private:
-    enum HFLoadType { LoadHeader, LoadFooter };
+    enum HFLoadType {
+        LoadHeader,
+        LoadFooter
+    };
 
     void loadSettings(const KoXmlDocument &settings, QTextDocument *textDoc);
     void loadMasterPageStyles(KoShapeLoadingContext &context);

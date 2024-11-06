@@ -17,9 +17,17 @@
 
 typedef qint32 XFigCoord;
 
-enum XFigCapType { XFigCapButt, XFigCapRound, XFigCapProjecting };
+enum XFigCapType {
+    XFigCapButt,
+    XFigCapRound,
+    XFigCapProjecting
+};
 
-enum XFigJoinType { XFigJoinMiter, XFigJoinRound, XFigJoinBevel };
+enum XFigJoinType {
+    XFigJoinMiter,
+    XFigJoinRound,
+    XFigJoinBevel
+};
 
 struct XFigPoint {
 public:
@@ -133,7 +141,17 @@ private:
 class XFigAbstractObject
 {
 public:
-    enum TypeId { EllipseId, PolylineId, PolygonId, BoxId, PictureBoxId, SplineId, ArcId, TextId, CompoundId };
+    enum TypeId {
+        EllipseId,
+        PolylineId,
+        PolygonId,
+        BoxId,
+        PictureBoxId,
+        SplineId,
+        ArcId,
+        TextId,
+        CompoundId
+    };
 
 protected:
     explicit XFigAbstractObject(TypeId typeId)
@@ -167,7 +185,11 @@ private:
     QString m_Comment;
 };
 
-enum XFigFillType { XFigFillNone, XFigFillSolid, XFigFillPattern };
+enum XFigFillType {
+    XFigFillNone,
+    XFigFillSolid,
+    XFigFillPattern
+};
 
 enum XFigFillPatternType {
     XFigFillLeftDiagonal30Degree,
@@ -373,7 +395,12 @@ private:
 class XFigEllipseObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable
 {
 public:
-    enum Subtype { EllipseByRadii, EllipseByDiameter, CircleByRadius, CircleByDiameter };
+    enum Subtype {
+        EllipseByRadii,
+        EllipseByDiameter,
+        CircleByRadius,
+        CircleByDiameter
+    };
 
     XFigEllipseObject()
         : XFigAbstractGraphObject(EllipseId)
@@ -598,7 +625,14 @@ private:
 class XFigSplineObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable
 {
 public:
-    enum Subtype { OpenApproximated, ClosedApproximated, OpenInterpolated, ClosedInterpolated, OpenX, ClosedX };
+    enum Subtype {
+        OpenApproximated,
+        ClosedApproximated,
+        OpenInterpolated,
+        ClosedInterpolated,
+        OpenX,
+        ClosedX
+    };
 
     XFigSplineObject()
         : XFigAbstractGraphObject(SplineId)
@@ -625,8 +659,14 @@ private:
 class XFigArcObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable, public XFigLineEndable
 {
 public:
-    enum Subtype { OpenEnded, PieWedgeClosed };
-    enum Direction { Clockwise, CounterClockwise };
+    enum Subtype {
+        OpenEnded,
+        PieWedgeClosed
+    };
+    enum Direction {
+        Clockwise,
+        CounterClockwise
+    };
 
     XFigArcObject()
         : XFigAbstractGraphObject(ArcId)
@@ -688,7 +728,11 @@ private:
     XFigPoint m_Point3;
 };
 
-enum XFigTextAlignment { XFigTextLeftAligned, XFigTextCenterAligned, XFigTextRightAligned };
+enum XFigTextAlignment {
+    XFigTextLeftAligned,
+    XFigTextCenterAligned,
+    XFigTextRightAligned
+};
 
 struct XFigFontData {
     QString mFamily;
@@ -882,11 +926,23 @@ private:
     QVector<XFigAbstractObject *> m_Objects;
 };
 
-enum XFigUnitType { XFigUnitTypeUnknown, XFigUnitMetric, XFigUnitInches };
+enum XFigUnitType {
+    XFigUnitTypeUnknown,
+    XFigUnitMetric,
+    XFigUnitInches
+};
 
-enum XFigCoordSystemOriginType { XFigCoordSystemOriginTypeUnknown, XFigCoordSystemOriginUpperLeft, XFigCoordSystemOriginLowerLeft };
+enum XFigCoordSystemOriginType {
+    XFigCoordSystemOriginTypeUnknown,
+    XFigCoordSystemOriginUpperLeft,
+    XFigCoordSystemOriginLowerLeft
+};
 
-enum XFigPageOrientation { XFigPageOrientationUnknown, XFigPagePortrait, XFigPageLandscape };
+enum XFigPageOrientation {
+    XFigPageOrientationUnknown,
+    XFigPagePortrait,
+    XFigPageLandscape
+};
 
 enum XFigPageSizeType {
     XFigPageSizeUnknown,

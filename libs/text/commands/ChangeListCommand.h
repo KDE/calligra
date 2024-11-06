@@ -62,7 +62,13 @@ public:
     bool mergeWith(const KUndo2Command *other) override;
 
 private:
-    enum CommandAction { CreateNew, ModifyExisting, ReparentList, MergeList, RemoveList };
+    enum CommandAction {
+        CreateNew,
+        ModifyExisting,
+        ReparentList,
+        MergeList,
+        RemoveList
+    };
     bool extractTextBlocks(const QTextCursor &cursor, int level, KoListStyle::LabelType newLabelType = KoListStyle::None);
     int detectLevel(const QTextBlock &block, int givenLevel);
     void initList(KoListStyle *style);

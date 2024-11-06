@@ -70,7 +70,10 @@ public:
      */
     ~KoTextLoader() override;
 
-    enum LoadBodyMode { LoadMode, PasteMode };
+    enum LoadBodyMode {
+        LoadMode,
+        PasteMode
+    };
     /**
      * Load the body from the \p element into the \p cursor .
      *

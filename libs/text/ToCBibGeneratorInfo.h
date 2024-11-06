@@ -16,7 +16,17 @@ class KoXmlWriter;
 class KOTEXT_EXPORT IndexEntry
 {
 public:
-    enum IndexEntryName { UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END, BIBLIOGRAPHY };
+    enum IndexEntryName {
+        UNKNOWN,
+        LINK_START,
+        CHAPTER,
+        SPAN,
+        TEXT,
+        TAB_STOP,
+        PAGE_NUMBER,
+        LINK_END,
+        BIBLIOGRAPHY
+    };
 
     explicit IndexEntry(const QString &_styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
     virtual IndexEntry *clone();

@@ -78,7 +78,12 @@ public:
         LightGrayPattern = 0x0008
     };
 
-    enum Thickness { Hairline = 0xFFFF, NarrowSingle = 0x0000, MediumDouble = 0x0001, WideTriple = 0x0002 };
+    enum Thickness {
+        Hairline = 0xFFFF,
+        NarrowSingle = 0x0000,
+        MediumDouble = 0x0001,
+        WideTriple = 0x0002
+    };
 
     Style m_style;
     Thickness m_thickness;
@@ -155,7 +160,14 @@ public:
 class Fill
 {
 public:
-    enum FillType { Blip, Gradient, Group, None, Pattern, Solid };
+    enum FillType {
+        Blip,
+        Gradient,
+        Group,
+        None,
+        Pattern,
+        Solid
+    };
 
     Fill()
         : type(None)
@@ -304,7 +316,14 @@ public:
 class ScatterImpl : public ChartImpl
 {
 public:
-    enum ScatterStyle { None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+    enum ScatterStyle {
+        None,
+        Line,
+        LineMarker,
+        Marker,
+        Smooth,
+        SmoothMarker
+    };
     ScatterStyle style;
 
     ScatterImpl()
@@ -415,7 +434,11 @@ public:
 class Axis : public Obj
 {
 public:
-    enum Type { HorizontalValueAxis = 0x0000, VerticalValueAxis = 0x0001, SeriesAxis = 0x0002 };
+    enum Type {
+        HorizontalValueAxis = 0x0000,
+        VerticalValueAxis = 0x0001,
+        SeriesAxis = 0x0002
+    };
     Type m_type;
 
     class Gridline

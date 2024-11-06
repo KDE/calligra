@@ -44,7 +44,10 @@ struct STD {
     // structure.  This value MUST be 0x000A when the Stdf structure does not
     // contain an StdfPost2000 structure and MUST be 0x0012 when the Stdf
     // structure does contain an StdfPost2000 structure.  [MS-DOC] — v20101219
-    enum StdfPost2000OrNone { StdfPost2000 = 0x0012, StdfPost2000None = 0x000A };
+    enum StdfPost2000OrNone {
+        StdfPost2000 = 0x0012,
+        StdfPost2000None = 0x000A
+    };
 
     /**
      * Creates an empty STD structure and sets the defaults

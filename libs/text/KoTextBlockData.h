@@ -56,7 +56,10 @@ public:
     /**
      * The different types of markups.
      */
-    enum MarkupType { Misspell, Grammar };
+    enum MarkupType {
+        Misspell,
+        Grammar
+    };
 
     explicit KoTextBlockData(QTextBlock &block);
     explicit KoTextBlockData(QTextBlockUserData *userData);

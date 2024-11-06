@@ -28,7 +28,15 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Damage
 public:
     virtual ~Damage() = default;
 
-    typedef enum { Nothing = 0, Document, Workbook, Sheet, Range, Cell, Selection } Type;
+    typedef enum {
+        Nothing = 0,
+        Document,
+        Workbook,
+        Sheet,
+        Range,
+        Cell,
+        Selection
+    } Type;
 
     virtual Type type() const
     {
@@ -132,7 +140,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
 class CALLIGRA_SHEETS_ENGINE_EXPORT WorkbookDamage : public Damage
 {
 public:
-    enum Change { None = 0x00, Formula = 0x01, Value = 0x02 };
+    enum Change {
+        None = 0x00,
+        Formula = 0x01,
+        Value = 0x02
+    };
     Q_DECLARE_FLAGS(Changes, Change)
 
     WorkbookDamage(Calligra::Sheets::MapBase *map, Changes changes);

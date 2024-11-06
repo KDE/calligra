@@ -42,7 +42,12 @@ class KOMAIN_EXPORT KoFindText : public KoFindBase
 {
     Q_OBJECT
 public:
-    enum FormatType { HighlightFormat, CurrentMatchFormat, SelectionFormat, ReplacedFormat };
+    enum FormatType {
+        HighlightFormat,
+        CurrentMatchFormat,
+        SelectionFormat,
+        ReplacedFormat
+    };
 
     /**
      * Constructor.

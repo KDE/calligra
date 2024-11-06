@@ -365,12 +365,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     - transition (Slide Transition for a Slide Layout) §19.3.1.50
 */
 //! @todo support all child elements
-KoFilter::ConversionStatus PptxXmlSlideReader::read_notes()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_sldInternal())
-    READ_EPILOGUE
-}
+KoFilter::ConversionStatus PptxXmlSlideReader::read_notes(){READ_PROLOGUE RETURN_IF_ERROR(read_sldInternal()) READ_EPILOGUE}
 
 #undef CURRENT_EL
 #define CURRENT_EL sld
@@ -388,12 +383,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notes()
 */
 //! @todo support all child elements
 //! CASE #P300
-KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_sldInternal())
-    READ_EPILOGUE
-}
+KoFilter::ConversionStatus PptxXmlSlideReader::read_sld(){READ_PROLOGUE RETURN_IF_ERROR(read_sldInternal()) READ_EPILOGUE}
 
 #undef CURRENT_EL
 #define CURRENT_EL notesMaster
@@ -408,12 +398,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
     - hf (Header/Footer information for a master) §19.3.1.25
 */
 //! @todo support all child elements
-KoFilter::ConversionStatus PptxXmlSlideReader::read_notesMaster()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_sldInternal())
-    READ_EPILOGUE
-}
+KoFilter::ConversionStatus PptxXmlSlideReader::read_notesMaster(){READ_PROLOGUE RETURN_IF_ERROR(read_sldInternal()) READ_EPILOGUE}
 
 #undef CURRENT_EL
 #define CURRENT_EL sldMaster
@@ -432,12 +417,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesMaster()
     - [done] txStyles (Slide Master Text Styles) §19.3.1.52
 */
 //! @todo support all child elements
-KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_sldInternal())
-    READ_EPILOGUE
-}
+KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster(){READ_PROLOGUE RETURN_IF_ERROR(read_sldInternal()) READ_EPILOGUE}
 
 #undef CURRENT_EL
 #define CURRENT_EL sldLayout

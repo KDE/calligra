@@ -13,7 +13,11 @@
 /**
  *@author Dirk Schönberger
  */
-typedef enum { State_Comment = 0, State_CommentEncodedChar, State_Start } State;
+typedef enum {
+    State_Comment = 0,
+    State_CommentEncodedChar,
+    State_Start
+} State;
 
 typedef enum {
     Action_Copy = 1,

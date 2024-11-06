@@ -19,7 +19,12 @@
 #include <QTextCharFormat>
 #include <QVBoxLayout>
 
-enum Position { Normal, Superscript, Subscript, Custom };
+enum Position {
+    Normal,
+    Superscript,
+    Subscript,
+    Custom
+};
 
 CharacterHighlighting::CharacterHighlighting(QWidget *parent)
     : QWidget(parent)

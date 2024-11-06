@@ -55,7 +55,10 @@ class KOWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
 {
     Q_OBJECT
 public:
-    enum Mode { Threaded, Unthreaded };
+    enum Mode {
+        Threaded,
+        Unthreaded
+    };
 
     /**
      * Constructor.

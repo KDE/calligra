@@ -29,7 +29,11 @@ public:
     /// Destructor.
     virtual ~KoTextPage();
 
-    enum PageSelection { PreviousPage = -1, CurrentPage = 0, NextPage = 1 };
+    enum PageSelection {
+        PreviousPage = -1,
+        CurrentPage = 0,
+        NextPage = 1
+    };
 
     /**
      * Returns the unique number of this page for internal purposes. All pages

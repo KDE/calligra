@@ -30,11 +30,31 @@ enum NoteLength {
 /**
  * This enum represents the various supported durations for chords/rests.
  */
-enum Duration { HundredTwentyEighthNote, SixtyFourthNote, ThirtySecondNote, SixteenthNote, EighthNote, QuarterNote, HalfNote, WholeNote, BreveNote };
+enum Duration {
+    HundredTwentyEighthNote,
+    SixtyFourthNote,
+    ThirtySecondNote,
+    SixteenthNote,
+    EighthNote,
+    QuarterNote,
+    HalfNote,
+    WholeNote,
+    BreveNote
+};
 
-enum StemDirection { StemUp, StemDown };
+enum StemDirection {
+    StemUp,
+    StemDown
+};
 
-enum BeamType { BeamStart, BeamContinue, BeamEnd, BeamFlag, BeamForwardHook, BeamBackwardHook };
+enum BeamType {
+    BeamStart,
+    BeamContinue,
+    BeamEnd,
+    BeamFlag,
+    BeamForwardHook,
+    BeamBackwardHook
+};
 
 /**
  * Convert a duration to a number of ticks.

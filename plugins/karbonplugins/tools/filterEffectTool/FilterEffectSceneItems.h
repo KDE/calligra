@@ -17,7 +17,10 @@ class KoFilterEffect;
 class ConnectorItem : public QGraphicsEllipseItem
 {
 public:
-    enum ConnectorType { Input, Output };
+    enum ConnectorType {
+        Input,
+        Output
+    };
 
     ConnectorItem(ConnectorType type, int index, QGraphicsItem *parent);
     void setCenter(const QPointF &position);

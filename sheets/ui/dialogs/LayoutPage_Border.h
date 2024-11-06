@@ -181,7 +181,12 @@ enum BorderType {
     BorderType_END
 };
 
-enum BorderShortcutType { BorderShortcutType_Remove = 0, BorderShortcutType_All, BorderShortcutType_Outline, BorderShortcutType_END };
+enum BorderShortcutType {
+    BorderShortcutType_Remove = 0,
+    BorderShortcutType_All,
+    BorderShortcutType_Outline,
+    BorderShortcutType_END
+};
 
 /**
  * \ingroup UI

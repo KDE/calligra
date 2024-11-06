@@ -93,7 +93,12 @@ public:
      * The text:position attribute determines whether the line numbers are printed on the left, right,
      * inner, or outer margins.
      */
-    enum Position { Left, Right, Inner, Outer };
+    enum Position {
+        Left,
+        Right,
+        Inner,
+        Outer
+    };
 
     Position position() const;
     void setPosition(Position position);

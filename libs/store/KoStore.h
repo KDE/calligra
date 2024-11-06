@@ -25,8 +25,17 @@ class KoStorePrivate;
 class KOSTORE_EXPORT KoStore
 {
 public:
-    enum Mode { Read, Write };
-    enum Backend { Auto, Tar, Zip, Directory, Encrypted };
+    enum Mode {
+        Read,
+        Write
+    };
+    enum Backend {
+        Auto,
+        Tar,
+        Zip,
+        Directory,
+        Encrypted
+    };
 
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).

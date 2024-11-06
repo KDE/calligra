@@ -216,7 +216,13 @@ enum BrcType {
  * Specifies the type of the section break that is being described.
  * [MS-DOC] — v20101219
  */
-enum SBkcOperand { bkcContinuous = 0x00, bkcNewColumn, bkcNewPage, bkcEvenPage, bkcOddPage };
+enum SBkcOperand {
+    bkcContinuous = 0x00,
+    bkcNewColumn,
+    bkcNewPage,
+    bkcEvenPage,
+    bkcOddPage
+};
 
 /**
  * The Ipat enumeration is an index to a shading pattern.  [MS-DOC] — v20101219
@@ -427,11 +433,19 @@ enum TabLC {
 /**
  * The HALIGN enumeration specifies horizontal alignment.
  */
-enum HALIGN { hAlignLeft = 0x0, hAlignCenter = 0x1, hAlignRight = 0x2 };
+enum HALIGN {
+    hAlignLeft = 0x0,
+    hAlignCenter = 0x1,
+    hAlignRight = 0x2
+};
 
 /**
  * The VALIGN enumeration specifies vertical alignment.
  */
-enum VALIGN { vAlignTop = 0x0, vAlignMiddle = 0x1, vAlignBottom = 0x2 };
+enum VALIGN {
+    vAlignTop = 0x0,
+    vAlignMiddle = 0x1,
+    vAlignBottom = 0x2
+};
 
 #endif

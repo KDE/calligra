@@ -2132,7 +2132,11 @@ void View::saveCurrentSheetSelection()
 void View::handleDamages(const QList<Damage *> &damages)
 {
     QRegion paintRegion;
-    enum { Nothing, Everything, Clipped } paintMode = Nothing;
+    enum {
+        Nothing,
+        Everything,
+        Clipped
+    } paintMode = Nothing;
 
     QList<Damage *>::ConstIterator end(damages.end());
     for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {

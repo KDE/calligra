@@ -49,7 +49,11 @@ protected:
 private:
     WebShape *m_currentShape;
     KoShape *m_tmpShape;
-    enum DragMode { NO_DRAG, SCROLL_DRAG, ZOOM_DRAG };
+    enum DragMode {
+        NO_DRAG,
+        SCROLL_DRAG,
+        ZOOM_DRAG
+    };
     DragMode m_dragMode;
     QPointF m_scrollPoint;
     qreal m_oldZoom;

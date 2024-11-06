@@ -1788,7 +1788,11 @@ void CellView::obscureHorizontalCells(SheetView *sheetView, const Cell &masterCe
         int col = effectiveCol;
 
         // Find free cells to the right of this one.
-        enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
+        enum {
+            Undefined,
+            EnoughSpace,
+            NotEnoughSpace
+        } status = Undefined;
         while (status == Undefined) {
             Cell nextCell = Cell(masterCell.fullSheet(), col + 1, masterCell.row()).masterCell();
 
@@ -1852,7 +1856,11 @@ void CellView::obscureVerticalCells(SheetView *sheetView, const Cell &masterCell
         int row = effectiveRow;
 
         // Find free cells bottom to this one
-        enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
+        enum {
+            Undefined,
+            EnoughSpace,
+            NotEnoughSpace
+        } status = Undefined;
         Sheet *sheet = masterCell.fullSheet();
         while (status == Undefined) {
             Cell nextCell = Cell(sheet, masterCell.column(), row + 1).masterCell();

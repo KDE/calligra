@@ -18,7 +18,11 @@ class CQTextToCModel : public QAbstractListModel
     Q_PROPERTY(QObject *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged);
 
 public:
-    enum TextToCModelRoleNames { Title = Qt::UserRole + 1, Level, PageNumber };
+    enum TextToCModelRoleNames {
+        Title = Qt::UserRole + 1,
+        Level,
+        PageNumber
+    };
     explicit CQTextToCModel(QObject *parent = nullptr);
     virtual ~CQTextToCModel();
     QVariant data(const QModelIndex &index, int role) const override;

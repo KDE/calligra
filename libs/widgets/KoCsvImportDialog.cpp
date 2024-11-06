@@ -263,7 +263,14 @@ void KoCsvImportDialog::Private::fillTable()
 {
     int row, column;
     bool lastCharDelimiter = false;
-    enum { Start, InQuotedField, MaybeQuotedFieldEnd, QuotedFieldEnd, MaybeInNormalField, InNormalField } state = Start;
+    enum {
+        Start,
+        InQuotedField,
+        MaybeQuotedFieldEnd,
+        QuotedFieldEnd,
+        MaybeInNormalField,
+        InNormalField
+    } state = Start;
 
     QChar x;
     QString field;

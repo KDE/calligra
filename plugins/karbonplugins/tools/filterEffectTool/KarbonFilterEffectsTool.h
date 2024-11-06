@@ -16,7 +16,14 @@ class KarbonFilterEffectsTool : public KoInteractionTool
 {
     Q_OBJECT
 public:
-    enum EditMode { None, MoveAll, MoveLeft, MoveRight, MoveTop, MoveBottom };
+    enum EditMode {
+        None,
+        MoveAll,
+        MoveLeft,
+        MoveRight,
+        MoveTop,
+        MoveBottom
+    };
 
     explicit KarbonFilterEffectsTool(KoCanvasBase *canvas);
     ~KarbonFilterEffectsTool() override;

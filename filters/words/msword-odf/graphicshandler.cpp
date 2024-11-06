@@ -50,7 +50,10 @@ using namespace MSO;
 using Conversion::twipsToPt;
 
 // Specifies the format of the picture data for the PICF structure.
-enum { MM_SHAPE = 0x0064, MM_SHAPEFILE = 0x0066 };
+enum {
+    MM_SHAPE = 0x0064,
+    MM_SHAPEFILE = 0x0066
+};
 
 namespace
 {

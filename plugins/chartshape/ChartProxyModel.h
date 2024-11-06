@@ -47,7 +47,13 @@ public:
      * This enum may be extended at a later point to store and retrieve
      * attributes.
      */
-    enum DataRole { XDataRole = Qt::UserRole, YDataRole, CustomDataRole, LabelDataRole, CategoryDataRole };
+    enum DataRole {
+        XDataRole = Qt::UserRole,
+        YDataRole,
+        CustomDataRole,
+        LabelDataRole,
+        CategoryDataRole
+    };
 
     /**
      * Re-initializes the model with data from an arbitrary region.

@@ -46,7 +46,10 @@ public:
     bool write(XFigDocument *document);
 
 private:
-    enum LineEndType { LineStart, LineEnd };
+    enum LineEndType {
+        LineStart,
+        LineEnd
+    };
 
     void storePixelImageFiles();
     void storeMetaXml();

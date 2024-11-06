@@ -141,10 +141,10 @@ public:
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-           SaveAsDirectoryStore = 2,
-           SaveAsFlatXML = 4,
-           SaveEncrypted = 8
-           // bitfield! next value is 16
+        SaveAsDirectoryStore = 2,
+        SaveAsFlatXML = 4,
+        SaveEncrypted = 8
+        // bitfield! next value is 16
     };
     virtual int specialOutputFlag() const = 0;
 

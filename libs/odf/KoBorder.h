@@ -126,7 +126,10 @@ public:
     bool hasBorder() const;
     bool hasBorder(BorderSide side) const;
 
-    enum BorderPaintArea { PaintOnLine, PaintInsideLine };
+    enum BorderPaintArea {
+        PaintOnLine,
+        PaintInsideLine
+    };
     void paint(QPainter &painter, const QRectF &borderRect, BorderPaintArea whereToPaint = PaintInsideLine) const;
 
     /**

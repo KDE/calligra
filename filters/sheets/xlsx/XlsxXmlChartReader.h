@@ -119,8 +119,14 @@ protected:
 private:
     void read_showDataLabel();
 
-    enum ReadTxContext { Title, None };
-    enum ReadAreaContext { PlotArea, ChartArea };
+    enum ReadTxContext {
+        Title,
+        None
+    };
+    enum ReadAreaContext {
+        PlotArea,
+        ChartArea
+    };
     XlsxXmlChartReaderContext *m_context;
     KoChart::Series *m_currentSeries;
     KoChart::ShapeProperties *m_currentShapeProperties;

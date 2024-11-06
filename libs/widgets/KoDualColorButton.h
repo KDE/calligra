@@ -43,7 +43,10 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
     Q_PROPERTY(bool popDialog READ popDialog WRITE setPopDialog)
 
 public:
-    enum Selection { Foreground, Background };
+    enum Selection {
+        Foreground,
+        Background
+    };
     Q_ENUM(Selection);
 
     /**

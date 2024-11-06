@@ -29,7 +29,11 @@ typedef QPair<int, int> CharIndex;
 class ArtisticTextShape : public KoShape, public SvgShape
 {
 public:
-    enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
+    enum TextAnchor {
+        AnchorStart,
+        AnchorMiddle,
+        AnchorEnd
+    };
 
     enum LayoutMode {
         Straight, ///< baseline is a straight line

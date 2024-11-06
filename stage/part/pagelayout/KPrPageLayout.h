@@ -32,7 +32,10 @@ class KoPASavingContext;
 class KPrPageLayout
 {
 public:
-    enum Type { Page, Handout };
+    enum Type {
+        Page,
+        Handout
+    };
 
     KPrPageLayout();
     ~KPrPageLayout();

@@ -45,7 +45,11 @@ K_PLUGIN_FACTORY_WITH_JSON(XlsxImportFactory, "calligra_filter_xlsx2ods.json", r
 
 Q_LOGGING_CATEGORY(lcXlsxImport, "calligra.filter.xlsx2ods")
 
-enum XlsxDocumentType { XlsxDocument, XlsxTemplate, XlsxMacroDocument };
+enum XlsxDocumentType {
+    XlsxDocument,
+    XlsxTemplate,
+    XlsxMacroDocument
+};
 
 class XlsxImport::Private
 {

@@ -61,7 +61,10 @@ MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships *_relat
 
 MsooXmlReaderContext::~MsooXmlReaderContext() = default;
 
-enum State { Start, InsideDocument };
+enum State {
+    Start,
+    InsideDocument
+};
 
 MsooXmlReader::MsooXmlReader(KoOdfWriters *writers)
     : QXmlStreamReader()

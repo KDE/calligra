@@ -26,7 +26,10 @@ namespace Sheets
 class CALLIGRA_SHEETS_ENGINE_EXPORT ProtectableObject
 {
 public:
-    enum Mode { Lock, Unlock };
+    enum Mode {
+        Lock,
+        Unlock
+    };
 
     ProtectableObject();
 

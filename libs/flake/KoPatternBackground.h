@@ -25,9 +25,23 @@ class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
     /// Pattern rendering style
-    enum PatternRepeat { Original, Tiled, Stretched };
+    enum PatternRepeat {
+        Original,
+        Tiled,
+        Stretched
+    };
     /// Pattern reference point
-    enum ReferencePoint { TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
+    enum ReferencePoint {
+        TopLeft,
+        Top,
+        TopRight,
+        Left,
+        Center,
+        Right,
+        BottomLeft,
+        Bottom,
+        BottomRight
+    };
 
     /// Constructs a new pattern background utilizing the given image collection
     explicit KoPatternBackground(KoImageCollection *collection);

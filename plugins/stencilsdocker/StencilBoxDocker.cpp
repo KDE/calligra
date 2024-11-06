@@ -136,8 +136,7 @@ void StencilBoxDocker::manageStencilsFolder()
     QDir().mkpath(destination);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        debugStencilBox << "could not open" << destination + "/readme.txt"
-                        << "for writing";
+        debugStencilBox << "could not open" << destination + "/readme.txt" << "for writing";
     } else {
         QTextStream out(&file);
         out << i18n(

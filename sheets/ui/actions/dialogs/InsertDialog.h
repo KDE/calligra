@@ -31,7 +31,10 @@ class InsertDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    enum Mode { Insert, Remove };
+    enum Mode {
+        Insert,
+        Remove
+    };
 
     InsertDialog(QWidget *parent, Mode _mode);
 

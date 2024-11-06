@@ -24,7 +24,11 @@ public:
     /**
      * Presentation declaration type
      */
-    enum Type { Footer, Header, DateTime };
+    enum Type {
+        Footer,
+        Header,
+        DateTime
+    };
 
     /**
      * Constructor

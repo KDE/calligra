@@ -196,8 +196,8 @@ QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(cons
     if (!d->m_textRanges.contains(doc))
         return ranges;
 
-        // TODO: this constant is kind of magic. It's the trade-of between comparing each item, and the cost of going through several lists, with varying
-        // ordering rules
+    // TODO: this constant is kind of magic. It's the trade-of between comparing each item, and the cost of going through several lists, with varying
+    // ordering rules
 #define INDEX_USAGE_THRESHOLD 10
     if (d->m_textRanges[doc].size() < INDEX_USAGE_THRESHOLD) {
         const QSet<KoTextRange *> &docRanges = d->m_textRanges.value(doc);

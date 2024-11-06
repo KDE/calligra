@@ -58,7 +58,10 @@ class KOSTORE_EXPORT NetAccess : public QObject
     Q_OBJECT
 
 public:
-    enum StatSide { SourceSide, DestinationSide };
+    enum StatSide {
+        SourceSide,
+        DestinationSide
+    };
 
     /**
      * Downloads a file from an arbitrary URL (@p src) to a

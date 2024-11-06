@@ -128,7 +128,11 @@ int main()
 
     QXmlStreamReader xml(&inputFile);
 
-    enum ReadingState { Beginning, ShapeNameNext, InShapeName };
+    enum ReadingState {
+        Beginning,
+        ShapeNameNext,
+        InShapeName
+    };
     ReadingState state = Beginning;
 
     QXmlStreamAttributes attrs;

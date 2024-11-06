@@ -16,7 +16,16 @@ public:
     ~KPrTriangleWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { Up, UpReverse, Right, RightReverse, Down, DownReverse, Left, LeftReverse };
+    enum SubType {
+        Up,
+        UpReverse,
+        Right,
+        RightReverse,
+        Down,
+        DownReverse,
+        Left,
+        LeftReverse
+    };
 };
 
 #endif /* KPRTRIANGLEWIPEEFFECTFACTORY_H */

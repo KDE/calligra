@@ -35,7 +35,10 @@ class KoXmlElement;
 class KOODF_EXPORT Ko3dScene
 {
 public:
-    enum Projection { Parallel, Perspective };
+    enum Projection {
+        Parallel,
+        Perspective
+    };
 
     enum Shademode {
         Flat,

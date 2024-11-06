@@ -14,7 +14,13 @@ class TemplateVariantsModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum TemplateVariantRoles { NameRole = Qt::UserRole + 1, ColorRole, ThumbnailRole, SwatchRole, UrlRole };
+    enum TemplateVariantRoles {
+        NameRole = Qt::UserRole + 1,
+        ColorRole,
+        ThumbnailRole,
+        SwatchRole,
+        UrlRole
+    };
     explicit TemplateVariantsModel(QObject *parent = nullptr);
     ~TemplateVariantsModel() override;
 

@@ -279,13 +279,21 @@ enum MSOLINEEND {
  * The MSOLINECAP enumeration specifies ways to cap the ends of lines
  * in the document.
  */
-enum MSOLINECAP { msolineEndCapRound, msolineEndCapSquare, msolineEndCapFlat };
+enum MSOLINECAP {
+    msolineEndCapRound,
+    msolineEndCapSquare,
+    msolineEndCapFlat
+};
 
 /**
  * The MSOLINEJOIN enumeration specifies the types of join styles that
  * can be applied to lines in the document.
  */
-enum MSOLINEJOIN { msolineJoinBevel, msolineJoinMiter, msolineJoinRound };
+enum MSOLINEJOIN {
+    msolineJoinBevel,
+    msolineJoinMiter,
+    msolineJoinRound
+};
 
 /**
  * The MSOLINEDASHING enumeration, as shown in the following table, specifies
@@ -328,13 +336,25 @@ enum MSOFILLTYPE {
  * The MSOPATHTYPE enumeration specifies how the individual pieces of a path
  * SHOULD be interpreted.  [MS-ODRAW] — v20101219
  */
-enum MSOPATHTYPE { msopathLineTo = 0, msopathCurveTo, msopathMoveTo, msopathClose, msopathEnd, msopathEscape, msopathClientEscape };
+enum MSOPATHTYPE {
+    msopathLineTo = 0,
+    msopathCurveTo,
+    msopathMoveTo,
+    msopathClose,
+    msopathEnd,
+    msopathEscape,
+    msopathClientEscape
+};
 
 /**
  * The MSOWRAPMODE enumeration specifies how text wraps
  * SHOULD be interpreted.  [MS-ODRAW] — v20101219
  */
-enum MSOWRAPMODE { msowrapSquare = 0, msowrapByPoints, msowrapNone };
+enum MSOWRAPMODE {
+    msowrapSquare = 0,
+    msowrapByPoints,
+    msowrapNone
+};
 
 /**
  * The MSOANCHOR enumeration specifies the suggested placement rule for a body
@@ -361,7 +381,14 @@ enum MSOANCHOR {
  * The POSH enumeration specifies the type of horizontal positioning to use for
  * a shape.  [MS-ODRAW] — v20101219
  */
-enum POSH { msophAbs = 0x0, msophLeft = 0x1, msophCenter = 0x2, msophRight = 0x3, msophInside = 0x4, msophOutside = 0x5 };
+enum POSH {
+    msophAbs = 0x0,
+    msophLeft = 0x1,
+    msophCenter = 0x2,
+    msophRight = 0x3,
+    msophInside = 0x4,
+    msophOutside = 0x5
+};
 
 /**
  * The POSRELH enumeration specifies a page element relative to which a shape
@@ -379,7 +406,14 @@ enum POSRELH {
  * The POSV enumeration specifies the type of vertical positioning to use for a
  * shape.  [MS-ODRAW] — v20101219
  */
-enum POSV { msopvAbs = 0x0, msopvTop = 0x1, msopvCenter = 0x2, msopvBottom = 0x3, msopvInside = 0x4, msopvOutside = 0x5 };
+enum POSV {
+    msopvAbs = 0x0,
+    msopvTop = 0x1,
+    msopvCenter = 0x2,
+    msopvBottom = 0x3,
+    msopvInside = 0x4,
+    msopvOutside = 0x5
+};
 
 /**
  * The POSRELV enumeration specifies a page element relative to which a shape

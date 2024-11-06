@@ -68,7 +68,11 @@ public:
     };
 
     /// Used to control the scope of the unit types listed in the UI
-    enum ListOption { ListAll = 0, HidePixel = 1, HideMask = HidePixel };
+    enum ListOption {
+        ListAll = 0,
+        HidePixel = 1,
+        HideMask = HidePixel
+    };
     Q_DECLARE_FLAGS(ListOptions, ListOption)
 
     /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p listOptions. */

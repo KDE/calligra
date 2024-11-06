@@ -25,7 +25,7 @@ public:
     /// Returns the text content
     virtual QString text() const = 0;
 
-    virtual ~SimpleTextShapeInterface(){};
+    virtual ~SimpleTextShapeInterface() { };
 
     /**
      * Sets the font used for drawing

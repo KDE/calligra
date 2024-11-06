@@ -69,7 +69,11 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     uint currentRange = 0; // range index denoting the current range
     int regionStart = 0; // range index denoting the sub-region start
     uint regionEnd = 0; // range index denoting the sub-region end
-    enum { Anywhere, InRegion, BeyondCursor } state = Anywhere;
+    enum {
+        Anywhere,
+        InRegion,
+        BeyondCursor
+    } state = Anywhere;
 
     Token token;
     Token::Type type;

@@ -17,7 +17,10 @@ class QGradient;
 class SvgGradientHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
+    enum Units {
+        UserSpaceOnUse,
+        ObjectBoundingBox
+    };
 
     SvgGradientHelper();
     ~SvgGradientHelper();

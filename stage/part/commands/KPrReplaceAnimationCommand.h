@@ -41,7 +41,10 @@ public:
     void undo() override;
 
 private:
-    enum AnimationDelete { DeleteOld, DeleteNew };
+    enum AnimationDelete {
+        DeleteOld,
+        DeleteNew
+    };
     KPrShapeAnimation *m_oldAnimation;
     KPrShapeAnimation *m_newAnimation;
     KPrDocument *m_document;

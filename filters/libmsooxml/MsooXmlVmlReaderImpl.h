@@ -1746,7 +1746,10 @@ static QString getArgument(QString &source, bool commaMeansZero, bool &wasComman
 
 static QString convertToEnhancedPath(const QString &source, QString &extraShapeFormulas)
 {
-    enum ConversionState { CommandExpected, ArgumentExpected };
+    enum ConversionState {
+        CommandExpected,
+        ArgumentExpected
+    };
     int extraFormulaIndex = 1;
     QString parsedString = source;
     QString returnedString;

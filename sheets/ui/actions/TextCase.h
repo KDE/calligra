@@ -27,7 +27,11 @@ public:
     CaseManipulator();
     ~CaseManipulator() override;
 
-    enum CaseMode { Upper = 0, Lower, FirstUpper };
+    enum CaseMode {
+        Upper = 0,
+        Lower,
+        FirstUpper
+    };
     void changeMode(CaseMode mode)
     {
         m_mode = mode;

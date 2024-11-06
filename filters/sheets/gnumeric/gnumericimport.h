@@ -33,7 +33,14 @@ public:
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
-    enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal };
+    enum borderStyle {
+        Left,
+        Right,
+        Top,
+        Bottom,
+        Diagonal,
+        Revdiagonal
+    };
 
 private:
     class GnumericDate : public QDate

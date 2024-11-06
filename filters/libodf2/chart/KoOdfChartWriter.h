@@ -62,7 +62,10 @@ protected:
 
     QString normalizeCellRange(QString range);
     QString toPtString(int number);
-    enum Orientation { vertical, horizontal };
+    enum Orientation {
+        vertical,
+        horizontal
+    };
     float sprcToPt(int sprc, Orientation orientation);
     QColor tintColor(const QColor &color, qreal tintfactor);
     QString replaceSheet(const QString &originalString, const QString &replacementSheet);

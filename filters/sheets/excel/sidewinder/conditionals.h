@@ -18,7 +18,18 @@ namespace Swinder
 class Conditional : private Format
 {
 public:
-    enum Type { None, Formula, Between, Outside, Equal, NotEqual, Greater, Less, GreaterOrEqual, LessOrEqual };
+    enum Type {
+        None,
+        Formula,
+        Between,
+        Outside,
+        Equal,
+        NotEqual,
+        Greater,
+        Less,
+        GreaterOrEqual,
+        LessOrEqual
+    };
 
     Type cond;
     Value value1;

@@ -180,7 +180,12 @@ void Ksp::saveStyle(const Style &style, QDomDocument &doc, QDomElement &format, 
             format.setAttribute("font-size", QString::number(style.fontSize()));
         if (keysToStore.contains(Style::FontBold) || keysToStore.contains(Style::FontItalic) || keysToStore.contains(Style::FontUnderline)
             || keysToStore.contains(Style::FontStrike)) {
-            enum FontFlags { FBold = 0x01, FUnderline = 0x02, FItalic = 0x04, FStrike = 0x08 };
+            enum FontFlags {
+                FBold = 0x01,
+                FUnderline = 0x02,
+                FItalic = 0x04,
+                FStrike = 0x08
+            };
             int fontFlags = 0;
             fontFlags |= style.bold() ? FBold : 0;
             fontFlags |= style.italic() ? FItalic : 0;
@@ -380,7 +385,12 @@ bool Ksp::loadStyle(Style *style, KoXmlElement &format)
             if (!ok)
                 return false;
 
-            enum FontFlags { FBold = 0x01, FUnderline = 0x02, FItalic = 0x04, FStrike = 0x08 };
+            enum FontFlags {
+                FBold = 0x01,
+                FUnderline = 0x02,
+                FItalic = 0x04,
+                FStrike = 0x08
+            };
             style->setFontBold(fontFlags & FBold);
             style->setFontItalic(fontFlags & FItalic);
             style->setFontUnderline(fontFlags & FUnderline);

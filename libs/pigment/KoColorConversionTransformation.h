@@ -27,7 +27,12 @@ public:
      * Possible value for the intent of a color conversion (useful only for ICC
      * transformations)
      */
-    enum Intent { IntentPerceptual = 0, IntentRelativeColorimetric = 1, IntentSaturation = 2, IntentAbsoluteColorimetric = 3 };
+    enum Intent {
+        IntentPerceptual = 0,
+        IntentRelativeColorimetric = 1,
+        IntentSaturation = 2,
+        IntentAbsoluteColorimetric = 3
+    };
 
     /**
      * Flags for the color conversion, see lcms2 documentation for more information

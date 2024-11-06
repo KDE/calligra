@@ -15,7 +15,14 @@
 class KoTableTemplate : public KoStyle
 {
 public:
-    enum Type { BandingColumns, BandingRows, FirstColumn, FirstRow, LastColumn, LastRow };
+    enum Type {
+        BandingColumns,
+        BandingRows,
+        FirstColumn,
+        FirstRow,
+        LastColumn,
+        LastRow
+    };
     Q_DECLARE_FLAGS(Types, Type);
 
 private:

@@ -34,7 +34,12 @@ public:
     }
 };
 
-enum { ColName = 0, ColSemobj = 1, ColVar = 0, ColDesc = 1 };
+enum {
+    ColName = 0,
+    ColSemobj = 1,
+    ColVar = 0,
+    ColDesc = 1
+};
 
 class KoSemanticStylesheetWidgetItem : public QTreeWidgetItem
 {

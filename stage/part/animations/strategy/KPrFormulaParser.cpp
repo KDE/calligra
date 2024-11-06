@@ -226,7 +226,12 @@ Tokens KPrFormulaParser::scan(const QString &formula) const
 {
     Tokens tokens;
     // parsing state
-    enum { Start, Finish, InNumber, InIdentifierName } state;
+    enum {
+        Start,
+        Finish,
+        InNumber,
+        InIdentifierName
+    } state;
     int i = 0;
     state = Start;
     bool parseError = false;

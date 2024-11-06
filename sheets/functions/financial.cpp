@@ -894,7 +894,14 @@ Value func_continuous(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(principal, calc->exp(calc->mul(interest, years)));
 }
 
-enum CoupBasis { BASIS_MSRB_30_360 = 0, BASIS_ACT_ACT = 1, BASIS_ACT_360 = 2, BASIS_ACT_365 = 3, BASIS_30E_360 = 4, BASIS_30Ep_360 = 5 };
+enum CoupBasis {
+    BASIS_MSRB_30_360 = 0,
+    BASIS_ACT_ACT = 1,
+    BASIS_ACT_360 = 2,
+    BASIS_ACT_365 = 3,
+    BASIS_30E_360 = 4,
+    BASIS_30Ep_360 = 5
+};
 
 struct CoupSettings {
     int frequency; // times-per-year

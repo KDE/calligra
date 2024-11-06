@@ -9,7 +9,14 @@
 #include <QString>
 namespace RtfReader
 {
-enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary, Invalid };
+enum TokenType {
+    OpenGroup,
+    CloseGroup,
+    Control,
+    Plain,
+    Binary,
+    Invalid
+};
 
 /**
   RTF token

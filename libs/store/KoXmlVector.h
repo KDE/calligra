@@ -108,7 +108,7 @@ protected:
 public:
     inline KoXmlVector()
         : m_totalItems(0)
-        , m_bufferStartIndex(0){};
+        , m_bufferStartIndex(0) { };
 
     void clear()
     {

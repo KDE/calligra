@@ -33,8 +33,14 @@ class CALLIGRA_SHEETS_UI_EXPORT RegionSelector : public QWidget
     Q_OBJECT
 
 public:
-    enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
-    enum DisplayMode { Widget, Dialog };
+    enum SelectionMode {
+        SingleCell = 0,
+        MultipleCells = 1
+    }; // TODO Stefan: merge with Selection::Mode
+    enum DisplayMode {
+        Widget,
+        Dialog
+    };
 
     explicit RegionSelector(QWidget *parent = nullptr);
     ~RegionSelector() override;

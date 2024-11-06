@@ -16,7 +16,12 @@ public:
     ~KPrIrisWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { Rectangle, RectangleReverse, Diamond, DiamondReverse };
+    enum SubType {
+        Rectangle,
+        RectangleReverse,
+        Diamond,
+        DiamondReverse
+    };
 };
 
 #endif /* KPRIRISWIPEEFFECTFACTORY_H */

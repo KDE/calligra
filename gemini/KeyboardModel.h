@@ -18,12 +18,30 @@ class KeyboardModel : public QAbstractListModel, public QQmlParserStatus
     Q_PROPERTY(bool useBuiltIn READ useBuiltIn NOTIFY useBuiltInChanged)
 
 public:
-    enum Roles { TextRole = Qt::UserRole + 1, TypeRole, WidthRole };
+    enum Roles {
+        TextRole = Qt::UserRole + 1,
+        TypeRole,
+        WidthRole
+    };
 
-    enum KeyboardMode { NormalMode, CapitalMode, NumericMode };
+    enum KeyboardMode {
+        NormalMode,
+        CapitalMode,
+        NumericMode
+    };
     Q_ENUM(KeyboardMode)
 
-    enum KeyType { NormalKey, SpacerKey, ShiftKey, EnterKey, BackspaceKey, NumericModeKey, CloseKey, LeftArrowKey, RightArrowKey };
+    enum KeyType {
+        NormalKey,
+        SpacerKey,
+        ShiftKey,
+        EnterKey,
+        BackspaceKey,
+        NumericModeKey,
+        CloseKey,
+        LeftArrowKey,
+        RightArrowKey
+    };
     Q_ENUM(KeyType)
 
     explicit KeyboardModel(QObject *parent = nullptr);

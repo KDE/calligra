@@ -34,9 +34,21 @@ namespace wvWare
  * the Type enum ORed together.
  */
 struct WV2_EXPORT HeaderData {
-    enum Type { HeaderEven = 0x01, HeaderOdd = 0x02, FooterEven = 0x04, FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 };
+    enum Type {
+        HeaderEven = 0x01,
+        HeaderOdd = 0x02,
+        FooterEven = 0x04,
+        FooterOdd = 0x08,
+        HeaderFirst = 0x10,
+        FooterFirst = 0x20
+    };
 
-    enum Empty { NoHeaderEven = 0xfe, NoFooterEven = 0xfb, NoHeaderFirst = 0x2f, NoFooterFirst = 0x1f };
+    enum Empty {
+        NoHeaderEven = 0xfe,
+        NoFooterEven = 0xfb,
+        NoHeaderFirst = 0x2f,
+        NoFooterFirst = 0x1f
+    };
 
     HeaderData(int sectionNum)
         : sectionNumber(sectionNum)
@@ -53,7 +65,10 @@ struct WV2_EXPORT HeaderData {
  * Holds all necessary information for delayed footnote/endnote parsing.
  */
 struct WV2_EXPORT FootnoteData {
-    enum Type { Footnote, Endnote };
+    enum Type {
+        Footnote,
+        Endnote
+    };
 
     FootnoteData(Type t, bool autoNum, unsigned int start, unsigned int lim)
         : type(t)

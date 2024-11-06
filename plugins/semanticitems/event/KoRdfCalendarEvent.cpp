@@ -140,7 +140,12 @@ QWidget *KoRdfCalendarEvent::createEditor(QWidget *parent)
     editWidget.setupUi(ret);
     editWidget.summary->setText(m_summary);
     editWidget.location->setText(m_location);
-    enum { ColArea = 0, ColRegion, ColComment, ColCount };
+    enum {
+        ColArea = 0,
+        ColRegion,
+        ColComment,
+        ColCount
+    };
     editWidget.tz->sortItems(ColRegion, Qt::AscendingOrder);
     editWidget.tz->setColumnHidden(ColComment, true);
     editWidget.tz->header()->resizeSections(QHeaderView::ResizeToContents);

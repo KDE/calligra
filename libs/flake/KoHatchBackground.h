@@ -18,7 +18,11 @@ class KoHatchBackgroundPrivate;
 class FLAKE_EXPORT KoHatchBackground : public KoColorBackground
 {
 public:
-    enum HatchStyle { Single, Double, Triple };
+    enum HatchStyle {
+        Single,
+        Double,
+        Triple
+    };
 
     KoHatchBackground();
 

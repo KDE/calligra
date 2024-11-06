@@ -37,7 +37,10 @@ protected:
     QAction *createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:
-    enum { ColName = 0, ColSize };
+    enum {
+        ColName = 0,
+        ColSize
+    };
 
     explicit KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent);
     virtual ~KoRdfSemanticTreeWidgetItem();

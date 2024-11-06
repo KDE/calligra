@@ -20,7 +20,11 @@ class KoShapeSavingContext;
 class PageVariable : public KoVariable
 {
 public:
-    enum PageType { PageCount, PageNumber, PageContinuation };
+    enum PageType {
+        PageCount,
+        PageNumber,
+        PageContinuation
+    };
 
     /**
      * Constructor.

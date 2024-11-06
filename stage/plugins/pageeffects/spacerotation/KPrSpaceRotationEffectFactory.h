@@ -16,7 +16,12 @@ public:
     ~KPrSpaceRotationEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { FromBottom, FromTop, FromLeft, FromRight };
+    enum SubType {
+        FromBottom,
+        FromTop,
+        FromLeft,
+        FromRight
+    };
 };
 
 #endif /* KPRSPACEROTATIONEFFECTFACTORY_H */

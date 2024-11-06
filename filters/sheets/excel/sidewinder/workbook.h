@@ -136,7 +136,16 @@ public:
     QDateTime baseDate() const;
     void setBaseDate(const QDateTime &baseDate);
 
-    enum Version { Excel95, Excel97, Excel2000, Excel2002, Excel2003, Excel2007, Excel2010, Unknown = -1 };
+    enum Version {
+        Excel95,
+        Excel97,
+        Excel2000,
+        Excel2002,
+        Excel2003,
+        Excel2007,
+        Excel2010,
+        Unknown = -1
+    };
     Version version() const;
     void setVersion(Version ver);
 

@@ -342,7 +342,10 @@ private:
      * - show the template dialog with 'templates only' if InitDocFileNew
      * - create an empty document with default settings if InitDocEmpty
      */
-    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+    enum InitDocFlags { /*InitDocAppStarting, */
+        InitDocFileNew,
+        InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/
+    };
 
     /// Helper method for slotFileNew and slotFileClose
     void chooseNewDocument(InitDocFlags initDocFlags);

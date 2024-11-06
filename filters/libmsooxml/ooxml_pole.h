@@ -50,7 +50,13 @@ class KOMSOOXML_EXPORT Storage
 
 public:
     // for Storage::result()
-    enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
+    enum {
+        Ok,
+        OpenFailed,
+        NotOLE,
+        BadOLE,
+        UnknownError
+    };
 
     /**
      * Constructs a storage with name filename.

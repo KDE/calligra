@@ -15,7 +15,13 @@
 class BlendEffect : public KoFilterEffect
 {
 public:
-    enum BlendMode { Normal, Multiply, Screen, Darken, Lighten };
+    enum BlendMode {
+        Normal,
+        Multiply,
+        Screen,
+        Darken,
+        Lighten
+    };
 
     BlendEffect();
 

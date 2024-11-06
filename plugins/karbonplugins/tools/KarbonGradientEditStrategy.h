@@ -26,9 +26,17 @@ class GradientStrategy
 {
 public:
     /// The different targets of the gradients
-    enum Target { Fill, Stroke };
+    enum Target {
+        Fill,
+        Stroke
+    };
     /// The selection types
-    enum SelectionType { None, Handle, Line, Stop };
+    enum SelectionType {
+        None,
+        Handle,
+        Line,
+        Stop
+    };
 
     /// constructs new strategy on the specified shape and target
     explicit GradientStrategy(KoShape *shape, const QGradient *gradient, Target target);
@@ -186,7 +194,10 @@ public:
 
 private:
     QBrush brush() override;
-    enum Handles { start, stop };
+    enum Handles {
+        start,
+        stop
+    };
 };
 
 /// Strategy for editing a radial gradient
@@ -197,7 +208,11 @@ public:
 
 private:
     QBrush brush() override;
-    enum Handles { center, focal, radius };
+    enum Handles {
+        center,
+        focal,
+        radius
+    };
 };
 
 /// Strategy for editing a conical gradient
@@ -208,7 +223,10 @@ public:
 
 private:
     QBrush brush() override;
-    enum Handles { center, direction };
+    enum Handles {
+        center,
+        direction
+    };
 };
 
 #endif // _KARBONGRADIENTEDITSTRATEGY_H_

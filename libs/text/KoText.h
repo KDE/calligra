@@ -68,12 +68,16 @@ enum DocumentResource {
     /** The KoDocumentRdf for the document,
         this will be a KoDocumentRdfBase when Soprano support is not compiled in. */
     DocumentRdf
-
 };
 
-enum KoTextFrameProperty { SubFrameType = QTextFormat::UserProperty + 1 };
+enum KoTextFrameProperty {
+    SubFrameType = QTextFormat::UserProperty + 1
+};
 
-enum KoSubFrameType { AuxillaryFrameType = 1, NoteFrameType };
+enum KoSubFrameType {
+    AuxillaryFrameType = 1,
+    NoteFrameType
+};
 
 /// Text in the objects will be positioned according to the direction.
 enum Direction {

@@ -42,10 +42,23 @@ class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimat
     Q_OBJECT
 public:
     /// Node Type (Trigger Event of the animation)
-    enum NodeType { OnClick, AfterPrevious, WithPrevious };
+    enum NodeType {
+        OnClick,
+        AfterPrevious,
+        WithPrevious
+    };
 
     /// Animation class
-    enum PresetClass { None, Entrance, Exit, Emphasis, Custom, MotionPath, OleAction, MediaCall };
+    enum PresetClass {
+        None,
+        Entrance,
+        Exit,
+        Emphasis,
+        Custom,
+        MotionPath,
+        OleAction,
+        MediaCall
+    };
 
     KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockData);
     ~KPrShapeAnimation() override;

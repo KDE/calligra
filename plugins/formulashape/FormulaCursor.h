@@ -20,7 +20,13 @@ class QString;
 class QPainter;
 class QPointF;
 
-enum CursorDirection { MoveRight, MoveLeft, MoveUp, MoveDown, NoDirection };
+enum CursorDirection {
+    MoveRight,
+    MoveLeft,
+    MoveUp,
+    MoveDown,
+    NoDirection
+};
 
 /**
  * @short The cursor being moved through a formula

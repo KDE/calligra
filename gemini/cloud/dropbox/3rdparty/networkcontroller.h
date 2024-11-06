@@ -39,10 +39,26 @@ public:
         return folder;
     }
 
-    enum State { REQUEST_TOKEN, ACCESS_TOKEN, FILES_FOLDERS, DELETE, CREATE, RENAME, MOVE, COPY, SHARES, ACCOUNT_INFO };
+    enum State {
+        REQUEST_TOKEN,
+        ACCESS_TOKEN,
+        FILES_FOLDERS,
+        DELETE,
+        CREATE,
+        RENAME,
+        MOVE,
+        COPY,
+        SHARES,
+        ACCOUNT_INFO
+    };
     Q_ENUM(State);
 
-    enum TransferState { DOWNLOADING, UPLOADING, FREE, ABORT };
+    enum TransferState {
+        DOWNLOADING,
+        UPLOADING,
+        FREE,
+        ABORT
+    };
 
     QString m_user_email;
     QString m_user_password;

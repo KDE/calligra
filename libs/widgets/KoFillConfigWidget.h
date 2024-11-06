@@ -21,7 +21,12 @@ class KoShape;
 class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
 {
     Q_OBJECT
-    enum StyleButton { None, Solid, Gradient, Pattern };
+    enum StyleButton {
+        None,
+        Solid,
+        Gradient,
+        Pattern
+    };
 
 public:
     explicit KoFillConfigWidget(QWidget *parent);

@@ -38,7 +38,10 @@ public:
         UUIDRole,
     };
 
-    enum GroupBy { GroupByName, GroupByDocType };
+    enum GroupBy {
+        GroupByName,
+        GroupByDocType
+    };
     Q_ENUM(GroupBy);
 
     enum DocumentType {

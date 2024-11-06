@@ -56,7 +56,13 @@ protected:
 private:
     MsooXmlDiagramReaderContext *m_context;
 
-    enum Type { InvalidType, DataModelType, LayoutDefType, StyleDefType, ColorsDefType } m_type;
+    enum Type {
+        InvalidType,
+        DataModelType,
+        LayoutDefType,
+        StyleDefType,
+        ColorsDefType
+    } m_type;
 };
 
 }

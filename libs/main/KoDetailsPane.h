@@ -47,7 +47,10 @@ protected Q_SLOTS:
     void changePalette();
 
 protected:
-    enum Extents { IconExtent = 64, PreviewExtent = 128 };
+    enum Extents {
+        IconExtent = 64,
+        PreviewExtent = 128
+    };
 
 private:
     KoDetailsPanePrivate *const d;

@@ -65,7 +65,11 @@ private:
     /// Connects given path with the ones we hit when starting/finishing
     bool connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd);
 
-    enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
+    enum PencilMode {
+        ModeRaw,
+        ModeCurve,
+        ModeStraight
+    };
 
     PencilMode m_mode;
     bool m_optimizeRaw;

@@ -20,7 +20,10 @@ class TimeSignature : public StaffElement
 {
     Q_OBJECT
 public:
-    enum TimeSignatureType { Classical, Number };
+    enum TimeSignatureType {
+        Classical,
+        Number
+    };
 
     /**
      * Create a new time signature instance and place it on a specified staff.

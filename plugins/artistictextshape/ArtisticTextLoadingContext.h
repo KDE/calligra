@@ -20,7 +20,11 @@ class SvgGraphicsContext;
 class ArtisticTextLoadingContext
 {
 public:
-    enum OffsetType { None, Absolute, Relative };
+    enum OffsetType {
+        None,
+        Absolute,
+        Relative
+    };
 
     ArtisticTextLoadingContext();
 
@@ -85,7 +89,11 @@ private:
 
     typedef QList<CharTransformState> CharTransformStack;
 
-    enum ValueType { Number, XLength, YLength };
+    enum ValueType {
+        Number,
+        XLength,
+        YLength
+    };
 
     /// Parses offset values from the given string
     CharTransforms parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type);

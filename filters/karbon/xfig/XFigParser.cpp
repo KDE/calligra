@@ -19,7 +19,12 @@
 
 #include <QDebug>
 
-enum XFig3_2TextFlag { XFig3_2TextNotScaled = 1 << 0, XFig3_2TextForLaTeX = 1 << 1, XFig3_2TextPostScriptFont = 1 << 2, XFig3_2TextHidden = 1 << 3 };
+enum XFig3_2TextFlag {
+    XFig3_2TextNotScaled = 1 << 0,
+    XFig3_2TextForLaTeX = 1 << 1,
+    XFig3_2TextPostScriptFont = 1 << 2,
+    XFig3_2TextHidden = 1 << 3
+};
 
 enum XFig3_2ObjectCode {
     XFig3_2CompoundObjectEndId = -6,
@@ -32,7 +37,10 @@ enum XFig3_2ObjectCode {
     XFig3_2CompoundObjectId = 6
 };
 
-enum XFig3_2ArcSubTypeCode { XFig3_2ArcOpenEndedId = 1, XFig3_2ArcPieWedgeId = 2 };
+enum XFig3_2ArcSubTypeCode {
+    XFig3_2ArcOpenEndedId = 1,
+    XFig3_2ArcPieWedgeId = 2
+};
 
 enum XFig3_2PolylineSubTypeCode {
     XFig3_2PolylinePolylineId = 1,
@@ -51,7 +59,11 @@ enum XFig3_2SplineSubtypeCode {
     XFig3_2SplineClosedXId = 5
 };
 
-enum XFig3_2TextAlignment { XFig3_2TextLeftAligned = 0, XFig3_2TextCenterAligned = 1, XFig3_2TextRightAligned = 2 };
+enum XFig3_2TextAlignment {
+    XFig3_2TextLeftAligned = 0,
+    XFig3_2TextCenterAligned = 1,
+    XFig3_2TextRightAligned = 2
+};
 
 static const int arrowHeadTypeMapSize = 15;
 static const struct {

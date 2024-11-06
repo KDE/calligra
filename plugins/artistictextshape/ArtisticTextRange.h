@@ -17,7 +17,10 @@
 class ArtisticTextRange
 {
 public:
-    enum OffsetType { AbsoluteOffset, RelativeOffset };
+    enum OffsetType {
+        AbsoluteOffset,
+        RelativeOffset
+    };
 
     enum BaselineShift {
         None, ///< no baseline shift

@@ -77,7 +77,11 @@ public:
 
     KoPathPoint *removedPoint;
 
-    enum Reverse { ReverseNone = 0, ReverseFirst = 1, ReverseSecond = 2 };
+    enum Reverse {
+        ReverseNone = 0,
+        ReverseFirst = 1,
+        ReverseSecond = 2
+    };
     int reverse;
 };
 

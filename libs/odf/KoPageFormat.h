@@ -59,7 +59,10 @@ enum Format : int {
 /**
  *  Represents the orientation of a printed document.
  */
-enum Orientation { Portrait, Landscape };
+enum Orientation {
+    Portrait,
+    Landscape
+};
 
 /**
  * @brief Convert a Format into a KPrinter::PageSize.

@@ -44,7 +44,13 @@ class DatabaseDialog : public ActionDialog
     Q_OBJECT
 
 public:
-    enum PageId { eDatabase = 0, eTables = 1, eColumns = 2, eOptions = 3, eResult = 4 };
+    enum PageId {
+        eDatabase = 0,
+        eTables = 1,
+        eColumns = 2,
+        eOptions = 3,
+        eResult = 4
+    };
 
     DatabaseDialog(QWidget *parent, Selection *selection);
     ~DatabaseDialog() override;

@@ -386,7 +386,11 @@ void PointNode::readAll(Context *context, MsooXmlDiagramReader *reader)
 void PointNode::readTextBody(Context *, MsooXmlDiagramReader *reader)
 {
     // m_text.clear();
-    enum { Start, Paragraph, TextRun } s;
+    enum {
+        Start,
+        Paragraph,
+        TextRun
+    } s;
     s = Start;
     while (!reader->atEnd()) {
         reader->readNext();
@@ -2196,7 +2200,11 @@ void ShapeAtom::writeAtom(Context *context, KoXmlWriter *xmlWriter, KoGenStyles 
         // xmlWriter->addAttribute("svg:viewBox", "0 0 1524000 914400");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("conn")) { // Connection shape type
-        enum EndStyle { Arrow, Auto, NoArrow };
+        enum EndStyle {
+            Arrow,
+            Auto,
+            NoArrow
+        };
         EndStyle endstyle = Arrow;
         if (params.contains("endSty")) {
             const QString endStyle = params["endSty"];

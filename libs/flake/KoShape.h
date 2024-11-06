@@ -141,7 +141,10 @@ public:
     /**
      * TODO
      */
-    enum RunThroughLevel { Background, Foreground };
+    enum RunThroughLevel {
+        Background,
+        Foreground
+    };
 
     /// Fine grained control of allowed user interactions
     enum AllowedInteraction {

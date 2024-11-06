@@ -40,7 +40,11 @@ public:
     };
 
     virtual ~AbstractCondition() = default;
-    enum Type { And, Or, Condition };
+    enum Type {
+        And,
+        Or,
+        Condition
+    };
     virtual Type type() const = 0;
     virtual bool evaluate(const Database &database, int index) const = 0;
     virtual bool isEmpty() const = 0;
@@ -65,9 +69,15 @@ public:
 class CALLIGRA_SHEETS_CORE_EXPORT Filter
 {
 public:
-    enum Composition { AndComposition, OrComposition };
+    enum Composition {
+        AndComposition,
+        OrComposition
+    };
 
-    enum Mode { Text, Number };
+    enum Mode {
+        Text,
+        Number
+    };
 
     /**
      * Constructor.

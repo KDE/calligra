@@ -26,7 +26,10 @@ public:
     QSize minimumSizeHint() const override; ///< reimplemented from QWidget
     QSize sizeHint() const override; ///< reimplemented from QWidget
 
-    enum TextVisibilityMode { TextCanBeInvisible, FullTextAlwaysVisible };
+    enum TextVisibilityMode {
+        TextCanBeInvisible,
+        FullTextAlwaysVisible
+    };
     /// Define whether the minimal width should ensure that the full text is visible.
     /// textVisibilityMode is FullTextAlwaysVisible by default
     void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);

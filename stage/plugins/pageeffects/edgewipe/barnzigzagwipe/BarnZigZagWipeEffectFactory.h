@@ -16,7 +16,12 @@ public:
     ~BarnZigZagWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { Vertical, Horizontal, VerticalReversed, HorizontalReversed };
+    enum SubType {
+        Vertical,
+        Horizontal,
+        VerticalReversed,
+        HorizontalReversed
+    };
 };
 
 #endif // BARNZIGZAGWIPEEFFECTFACTORY_H

@@ -70,7 +70,10 @@ private:
     void setCaption();
     void updateNavButtons();
 
-    enum Mode { grep, other };
+    enum Mode {
+        grep,
+        other
+    };
 
     bool m_standAlone;
     int m_historyPos;

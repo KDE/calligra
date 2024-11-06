@@ -796,7 +796,14 @@ static const char *const markerStyles[6] =
     {"", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5", "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"};
 
 // trying to maintain compatibility with libmso
-enum MSOLINEEND_CUSTOM { msolineNoEnd, msolineArrowEnd, msolineArrowStealthEnd, msolineArrowDiamondEnd, msolineArrowOvalEnd, msolineArrowOpenEnd };
+enum MSOLINEEND_CUSTOM {
+    msolineNoEnd,
+    msolineArrowEnd,
+    msolineArrowStealthEnd,
+    msolineArrowDiamondEnd,
+    msolineArrowOvalEnd,
+    msolineArrowOpenEnd
+};
 }
 
 QString Utils::defineMarkerStyle(KoGenStyles &mainStyles, const QString &type)

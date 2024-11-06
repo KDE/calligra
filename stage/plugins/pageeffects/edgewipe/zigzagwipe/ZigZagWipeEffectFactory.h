@@ -16,7 +16,12 @@ public:
     ~ZigZagWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { FromLeft, FromTop, FromRight, FromBottom };
+    enum SubType {
+        FromLeft,
+        FromTop,
+        FromRight,
+        FromBottom
+    };
 };
 
 #endif // ZIGZAGWIPEEFFECTFACTORY_H

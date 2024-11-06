@@ -20,7 +20,16 @@ class ParagraphStylesModel : public QAbstractListModel
     Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
 
 public:
-    enum ParagraphStyleRoles { Name = Qt::UserRole + 1, Current, Font, FontFamily, FontPointSize, FontWeight, FontItalic, FontUnderline };
+    enum ParagraphStyleRoles {
+        Name = Qt::UserRole + 1,
+        Current,
+        Font,
+        FontFamily,
+        FontPointSize,
+        FontWeight,
+        FontItalic,
+        FontUnderline
+    };
     ParagraphStylesModel();
     ~ParagraphStylesModel() override;
     QHash<int, QByteArray> roleNames() const override;

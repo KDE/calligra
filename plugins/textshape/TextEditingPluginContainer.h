@@ -20,7 +20,9 @@ class TextEditingPluginContainer : public QObject
 {
     Q_OBJECT
 public:
-    enum ResourceManagerId { ResourceId = 345681743 };
+    enum ResourceManagerId {
+        ResourceId = 345681743
+    };
 
     explicit TextEditingPluginContainer(QObject *parent = nullptr);
     ~TextEditingPluginContainer() override;

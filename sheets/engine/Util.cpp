@@ -141,7 +141,12 @@ QString Calligra::Sheets::Util::adjustFormulaReference(const QString &formula, i
     QString result = formula;
     if (result.isEmpty())
         return QString();
-    enum { InStart, InCellReference, InString, InSheetOrAreaName } state;
+    enum {
+        InStart,
+        InCellReference,
+        InString,
+        InSheetOrAreaName
+    } state;
     state = InStart;
     int cellReferenceStart = 0;
     for (int i = 1; i < result.length(); ++i) {

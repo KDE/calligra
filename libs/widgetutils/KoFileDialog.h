@@ -24,7 +24,15 @@ class KOWIDGETUTILS_EXPORT KoFileDialog : public QObject
     Q_OBJECT
 
 public:
-    enum DialogType { OpenFile, OpenFiles, OpenDirectory, ImportFile, ImportFiles, ImportDirectory, SaveFile };
+    enum DialogType {
+        OpenFile,
+        OpenFiles,
+        OpenDirectory,
+        ImportFile,
+        ImportFiles,
+        ImportDirectory,
+        SaveFile
+    };
 
     /**
      * @brief constructor

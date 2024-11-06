@@ -920,7 +920,10 @@ bool operator==(const CHPFKP_BX &lhs, const CHPFKP_BX &rhs);
 bool operator!=(const CHPFKP_BX &lhs, const CHPFKP_BX &rhs);
 
 // This enum is a "convenience enum" for reading the piece table
-typedef enum { clxtGrpprl = 1, clxtPlcfpcd = 2 } clxtENUM;
+typedef enum {
+    clxtGrpprl = 1,
+    clxtPlcfpcd = 2
+} clxtENUM;
 
 } // namespace wvWare
 

@@ -104,7 +104,12 @@ uint qHash(const Datatype &d)
 class RNGItem
 {
 public:
-    enum ItemType { Define, Start, Element, Attribute };
+    enum ItemType {
+        Define,
+        Start,
+        Element,
+        Attribute
+    };
 
 private:
     RNGItem(const RNGItem &) = delete;

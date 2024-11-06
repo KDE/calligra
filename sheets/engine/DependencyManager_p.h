@@ -107,7 +107,10 @@ public:
      */
     void computeDependencies(const CellBase &cell, const Formula &formula);
 
-    enum Direction { Forward, Backward };
+    enum Direction {
+        Forward,
+        Backward
+    };
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
      */

@@ -97,7 +97,12 @@ public:
         MirrorMask = 0x0f // Only used as a mask, never as a value.
     };
 
-    enum ColorMode { Standard, Greyscale, Mono, Watermark };
+    enum ColorMode {
+        Standard,
+        Greyscale,
+        Mono,
+        Watermark
+    };
 
     PictureShape();
 

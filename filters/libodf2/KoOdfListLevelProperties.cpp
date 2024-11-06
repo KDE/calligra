@@ -25,7 +25,7 @@ class Q_DECL_HIDDEN KoOdfListLevelProperties::Private
 {
 public:
     Private()
-        : hasLabelAlignment(false){};
+        : hasLabelAlignment(false) { };
     ~Private() = default;
 
     bool hasLabelAlignment;

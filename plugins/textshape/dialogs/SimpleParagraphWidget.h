@@ -62,7 +62,11 @@ private Q_SLOTS:
     void styleSelected(const QModelIndex &index);
 
 private:
-    enum DirectionButtonState { LTR, RTL, Auto };
+    enum DirectionButtonState {
+        LTR,
+        RTL,
+        Auto
+    };
 
     void updateDirection(DirectionButtonState state);
 

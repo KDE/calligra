@@ -15,7 +15,11 @@
 #include <QPixmap>
 #include <QTimer>
 
-enum CurrentHandle { NoHandle, HueHandle, ValueSaturationHandle };
+enum CurrentHandle {
+    NoHandle,
+    HueHandle,
+    ValueSaturationHandle
+};
 
 struct Q_DECL_HIDDEN KoTriangleColorSelector::Private {
     Private(KoTriangleColorSelector *_q, const KoColorDisplayRendererInterface *_displayRenderer)

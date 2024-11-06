@@ -246,7 +246,11 @@ public:
     {
     }
 
-    enum Color { White, Gray, Black };
+    enum Color {
+        White,
+        Gray,
+        Black
+    };
     Color color() const
     {
         return m_color;

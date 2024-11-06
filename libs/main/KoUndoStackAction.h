@@ -16,7 +16,10 @@ class KoUndoStackAction : public QAction
 {
     Q_OBJECT
 public:
-    enum Type { UNDO, RED0 };
+    enum Type {
+        UNDO,
+        RED0
+    };
 
     KoUndoStackAction(KUndo2Stack *stack, Type type);
 

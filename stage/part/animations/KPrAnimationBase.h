@@ -33,7 +33,14 @@ class KPrShapeAnimation;
 class KPrAnimationBase : public QAbstractAnimation, KPrAnimationData
 {
 public:
-    enum FillType { FillRemove, FillFreeze, FillHold, FillTransition, FillAuto, FillDefault };
+    enum FillType {
+        FillRemove,
+        FillFreeze,
+        FillHold,
+        FillTransition,
+        FillAuto,
+        FillDefault
+    };
     explicit KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     ~KPrAnimationBase() override;
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

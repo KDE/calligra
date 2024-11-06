@@ -3,7 +3,13 @@
 
 #include "controlword.h"
 
-enum control_word_types { Symbol, Flag, Value, Toggle, Destination };
+enum control_word_types {
+    Symbol,
+    Flag,
+    Value,
+    Toggle,
+    Destination
+};
 
 struct control_word_known {
     const char *controlword;

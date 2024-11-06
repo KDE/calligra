@@ -59,7 +59,15 @@ private:
         bool isRange;
     };
 
-    enum bPos { Left, Top, Right, Bottom, Fall, GoUp, Border };
+    enum bPos {
+        Left,
+        Top,
+        Right,
+        Bottom,
+        Fall,
+        GoUp,
+        Border
+    };
 
     Calligra::Sheets::DocBase *m_doc;
     Calligra::Sheets::Style *m_defaultStyle;

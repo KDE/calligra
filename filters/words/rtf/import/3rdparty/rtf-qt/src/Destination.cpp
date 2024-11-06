@@ -39,5 +39,5 @@ void Destination::handlePlainText(const QByteArray &plainText)
     qCDebug(lcRtf) << "plain text:" << plainText << "in" << m_name;
 };
 
-void Destination::aboutToEndDestination(){};
+void Destination::aboutToEndDestination() { };
 }

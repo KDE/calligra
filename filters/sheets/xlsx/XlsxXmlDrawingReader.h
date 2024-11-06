@@ -38,7 +38,13 @@ class XlsxDrawingObject
 {
 public:
     Sheet *m_sheet;
-    enum Type { Unknown, Chart, Diagram, Picture, Shape };
+    enum Type {
+        Unknown,
+        Chart,
+        Diagram,
+        Picture,
+        Shape
+    };
     Type m_type;
     union {
         XlsxXmlChartReaderContext *m_chart;
@@ -46,7 +52,11 @@ public:
         XlsxXmlEmbeddedPicture *m_picture;
         XlsxShape *m_shape;
     };
-    enum AnchorType { NoAnchor, FromAnchor, ToAnchor };
+    enum AnchorType {
+        NoAnchor,
+        FromAnchor,
+        ToAnchor
+    };
     struct Position {
         int m_row, m_col, m_rowOff, m_colOff;
         Position()

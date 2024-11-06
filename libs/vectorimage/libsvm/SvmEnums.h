@@ -91,14 +91,22 @@ enum ActionType {
     FIXME: Define this in the spec
 */
 
-enum TextAlign { ALIGN_TOP, ALIGN_BASELINE, ALIGN_BOTTOM };
+enum TextAlign {
+    ALIGN_TOP,
+    ALIGN_BASELINE,
+    ALIGN_BOTTOM
+};
 
 /**
    Mtf (FIXME)
 
    See the SPEC Section 2.1.1.2
 */
-enum MtfType { MTF_CONVERSION_NONE = 0, MTF_CONVERSION_1BIT_THRESHOLD = 1, MTF_CONVERSION_8BIT_GREYS = 2 };
+enum MtfType {
+    MTF_CONVERSION_NONE = 0,
+    MTF_CONVERSION_1BIT_THRESHOLD = 1,
+    MTF_CONVERSION_8BIT_GREYS = 2
+};
 
 /**
    Layout Mode
@@ -126,8 +134,11 @@ enum LayoutMode {
 
    See the SPEC Section 2.1.2.1
 */
-enum MtfMirrorType { MTF_MIRROR_NONE = 0x00000000, MTF_MIRROR_HORZ = 0x00000001, MTF_MIRROR_VERT = 0x00000002 };
-
+enum MtfMirrorType {
+    MTF_MIRROR_NONE = 0x00000000,
+    MTF_MIRROR_HORZ = 0x00000001,
+    MTF_MIRROR_VERT = 0x00000002
+};
 }
 
 #endif

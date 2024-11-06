@@ -35,7 +35,12 @@ class PreferenceDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    enum { InterfacePage = 2, OpenSavePage = 4, SpellCheckerPage = 8, PluginPage = 16 };
+    enum {
+        InterfacePage = 2,
+        OpenSavePage = 4,
+        SpellCheckerPage = 8,
+        PluginPage = 16
+    };
 
     explicit PreferenceDialog(View *view);
     ~PreferenceDialog() override;

@@ -51,7 +51,10 @@ public:
      * The mode of the storage. libgsf doesn't support storages opened
      * for reading and writing like libole2 did.
      */
-    enum Mode { ReadOnly, WriteOnly };
+    enum Mode {
+        ReadOnly,
+        WriteOnly
+    };
 
     /**
      * Create an "empty" storage

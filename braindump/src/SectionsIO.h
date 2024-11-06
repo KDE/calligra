@@ -38,7 +38,10 @@ public:
     ~SectionsIO();
 
 public:
-    enum PushMode { SinglePush, RecursivePush };
+    enum PushMode {
+        SinglePush,
+        RecursivePush
+    };
     /**
      * push a section to save
      */

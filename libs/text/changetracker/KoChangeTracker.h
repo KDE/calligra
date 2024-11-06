@@ -32,7 +32,11 @@ class KOTEXT_EXPORT KoChangeTracker : public QObject
 {
     Q_OBJECT
 public:
-    enum ChangeSaveFormat { ODF_1_2 = 0, DELTAXML, UNKNOWN = 9999 };
+    enum ChangeSaveFormat {
+        ODF_1_2 = 0,
+        DELTAXML,
+        UNKNOWN = 9999
+    };
 
     explicit KoChangeTracker(QObject *parent = nullptr);
     ~KoChangeTracker() override;

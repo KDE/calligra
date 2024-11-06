@@ -64,7 +64,28 @@ namespace Sheets
 class Opcode
 {
 public:
-    enum { Nop = 0, Load, Ref, Cell, Range, Function, Add, Sub, Neg, Mul, Div, Pow, Concat, Intersect, Not, Equal, Less, Greater, Array, Union };
+    enum {
+        Nop = 0,
+        Load,
+        Ref,
+        Cell,
+        Range,
+        Function,
+        Add,
+        Sub,
+        Neg,
+        Mul,
+        Div,
+        Pow,
+        Concat,
+        Intersect,
+        Not,
+        Equal,
+        Less,
+        Greater,
+        Array,
+        Union
+    };
 
     unsigned type;
     unsigned index;
@@ -551,7 +572,20 @@ Tokens Formula::tokens() const
 Tokens Formula::scan(const QString &expr, const Localization *locale) const
 {
     // parsing state
-    enum { Start, Finish, InNumber, InDecimal, InExpIndicator, InExponent, InString, InIdentifier, InCell, InRange, InSheetOrAreaName, InError } state;
+    enum {
+        Start,
+        Finish,
+        InNumber,
+        InDecimal,
+        InExpIndicator,
+        InExponent,
+        InString,
+        InIdentifier,
+        InCell,
+        InRange,
+        InSheetOrAreaName,
+        InError
+    } state;
 
     // use locale settings if specified
     QString thousand = locale ? locale->thousandsSeparator() : "";

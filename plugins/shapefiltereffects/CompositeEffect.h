@@ -15,7 +15,14 @@
 class CompositeEffect : public KoFilterEffect
 {
 public:
-    enum Operation { CompositeOver, CompositeIn, CompositeOut, CompositeAtop, CompositeXor, Arithmetic };
+    enum Operation {
+        CompositeOver,
+        CompositeIn,
+        CompositeOut,
+        CompositeAtop,
+        CompositeXor,
+        Arithmetic
+    };
 
     CompositeEffect();
 

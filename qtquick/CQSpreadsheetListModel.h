@@ -17,7 +17,10 @@ class CQSpreadsheetListModel : public QAbstractListModel
     Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 
 public:
-    enum RoleNames { SheetNameRole = Qt::UserRole, ThumbnailRole };
+    enum RoleNames {
+        SheetNameRole = Qt::UserRole,
+        ThumbnailRole
+    };
 
     explicit CQSpreadsheetListModel(QObject *parent = nullptr);
     virtual ~CQSpreadsheetListModel();

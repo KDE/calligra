@@ -100,7 +100,10 @@ class LabeledWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum LabelPosition { INLINE, ABOVE };
+    enum LabelPosition {
+        INLINE,
+        ABOVE
+    };
     LabeledWidget(QAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
     virtual ~LabeledWidget();
     void setWarningText(int pos, const QString &warning);

@@ -20,7 +20,10 @@ class FLAKE_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
 {
 public:
     /// Segment Types
-    enum SegmentType { Curve = 1, Line = 2 };
+    enum SegmentType {
+        Curve = 1,
+        Line = 2
+    };
 
     /**
      * Command for changing the segment type ( curve/line )

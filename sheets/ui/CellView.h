@@ -55,7 +55,13 @@ public:
     virtual ~CellView();
     CellView &operator=(const CellView &other);
 
-    enum Border { NoBorder = 0x0, LeftBorder = 0x1, RightBorder = 0x2, TopBorder = 0x4, BottomBorder = 0x8 };
+    enum Border {
+        NoBorder = 0x0,
+        LeftBorder = 0x1,
+        RightBorder = 0x2,
+        TopBorder = 0x4,
+        BottomBorder = 0x8
+    };
     Q_DECLARE_FLAGS(Borders, Border)
 
     /**

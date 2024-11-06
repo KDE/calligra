@@ -36,7 +36,12 @@ enum Type {
     BlankNode = Soprano::Node::BlankNode
 };
 #else
-enum Type { EmptyNode, ResourceNode, LiteralNode, BlankNode };
+enum Type {
+    EmptyNode,
+    ResourceNode,
+    LiteralNode,
+    BlankNode
+};
 #endif
 
 class Q_DECL_HIDDEN KoTextInlineRdf::Private

@@ -29,7 +29,12 @@ class ChangeConfigureDialog : public QDialog
 {
     Q_OBJECT
 
-    typedef enum { eInsert, eDelete, eFormatChange, eChangeTypeNone } ChangeType;
+    typedef enum {
+        eInsert,
+        eDelete,
+        eFormatChange,
+        eChangeTypeNone
+    } ChangeType;
 
 public:
     ChangeConfigureDialog(const QColor &insertionColor,

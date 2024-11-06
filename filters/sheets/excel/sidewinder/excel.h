@@ -773,8 +773,20 @@ public:
 class TxORecord : public Record
 {
 public:
-    enum HorizontalAlignment { Left = 1, Centered = 2, Right = 3, Justified = 4, Distributed = 7 };
-    enum VerticalAlignment { Top = 1, VCentered = 2, Bottom = 3, VJustified = 4, VDistributed = 7 };
+    enum HorizontalAlignment {
+        Left = 1,
+        Centered = 2,
+        Right = 3,
+        Justified = 4,
+        Distributed = 7
+    };
+    enum VerticalAlignment {
+        Top = 1,
+        VCentered = 2,
+        Bottom = 3,
+        VJustified = 4,
+        VDistributed = 7
+    };
 
     static const unsigned id;
     explicit TxORecord(Workbook *book = nullptr);
@@ -898,7 +910,10 @@ public:
     BkHimRecord(const BkHimRecord &record);
     BkHimRecord &operator=(const BkHimRecord &record);
 
-    enum Format { WindowsBitMap = 0x0009, NativeFormat = 0x000e };
+    enum Format {
+        WindowsBitMap = 0x0009,
+        NativeFormat = 0x000e
+    };
 
     static QString formatToString(Format format);
 

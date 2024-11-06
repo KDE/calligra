@@ -735,8 +735,8 @@ void DirTree::load(unsigned char *buffer, unsigned size)
         if (name_len < 1)
             e.valid = false;
 
-            // CLSID, contains a object class GUI if this entry is a storage or root
-            // storage or all zero if not.
+        // CLSID, contains a object class GUI if this entry is a storage or root
+        // storage or all zero if not.
 #ifdef POLE_DEBUG
         printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
                name.c_str(),

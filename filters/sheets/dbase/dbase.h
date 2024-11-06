@@ -19,7 +19,14 @@ class DBaseField
 {
 public:
     QString name;
-    enum { Unknown, Character, Date, Numeric, Logical, Memo } type;
+    enum {
+        Unknown,
+        Character,
+        Date,
+        Numeric,
+        Logical,
+        Memo
+    } type;
     unsigned length;
     unsigned decimals;
 };

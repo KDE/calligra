@@ -30,7 +30,13 @@ class KUndo2Command;
 class Q_DECL_HIDDEN KoTextEditor::Private
 {
 public:
-    enum State { NoOp, KeyPress, Delete, Format, Custom };
+    enum State {
+        NoOp,
+        KeyPress,
+        Delete,
+        Format,
+        Custom
+    };
 
     explicit Private(KoTextEditor *qq, QTextDocument *document);
 

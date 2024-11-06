@@ -57,7 +57,11 @@ QLatin1String chartTypeIconName(ChartType type, ChartSubtype subtype);
 #define ICON1(charttype) QIcon::fromTheme(chartTypeIconName(charttype, NoChartSubtype))
 #define ICON2(charttype, chartsubtype) QIcon::fromTheme(chartTypeIconName(charttype, chartsubtype))
 
-enum AxisDimension { XAxisDimension, YAxisDimension, ZAxisDimension };
+enum AxisDimension {
+    XAxisDimension,
+    YAxisDimension,
+    ZAxisDimension
+};
 
 struct ChartTypeOptions {
     ChartSubtype subtype;
@@ -77,7 +81,12 @@ enum Position {
     FloatingPosition
 };
 
-enum LegendExpansion { HighLegendExpansion, WideLegendExpansion, BalancedLegendExpansion, CustomLegendExpansion };
+enum LegendExpansion {
+    HighLegendExpansion,
+    WideLegendExpansion,
+    BalancedLegendExpansion,
+    CustomLegendExpansion
+};
 
 enum ErrorCategory {
     NoErrorCategory,
@@ -102,7 +111,12 @@ enum ItemType {
     SecondaryYAxisTitleType = 23
 };
 
-enum OdfSymbolType { NoSymbol, AutomaticSymbol, NamedSymbol, ImageSymbol };
+enum OdfSymbolType {
+    NoSymbol,
+    AutomaticSymbol,
+    NamedSymbol,
+    ImageSymbol
+};
 
 // From odf spec:
 // The values of the chart:symbol-name attribute are:

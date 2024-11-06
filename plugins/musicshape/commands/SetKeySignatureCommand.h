@@ -21,7 +21,10 @@ class KeySignature;
 class SetKeySignatureCommand : public KUndo2Command
 {
 public:
-    enum RegionType { EndOfPiece, NextChange };
+    enum RegionType {
+        EndOfPiece,
+        NextChange
+    };
     SetKeySignatureCommand(MusicShape *shape, int bar, RegionType type, MusicCore::Staff *staff, int accidentals);
     SetKeySignatureCommand(MusicShape *shape, int startBar, int endBar, MusicCore::Staff *staff, int accidentals);
     void redo() override;

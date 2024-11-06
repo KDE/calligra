@@ -56,7 +56,14 @@ public:
 
 private:
     struct Token {
-        enum TokenType { Dot = 0, DoubleDot = 1, Space = 2, Spacer = 3, Identifier = 4, End };
+        enum TokenType {
+            Dot = 0,
+            DoubleDot = 1,
+            Space = 2,
+            Spacer = 3,
+            Identifier = 4,
+            End
+        };
         Token(TokenType type, const QString &identifier)
             : m_type(type)
             , m_identifier(identifier)

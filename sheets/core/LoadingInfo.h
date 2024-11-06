@@ -23,7 +23,12 @@ class SheetBase;
 class LoadingInfo
 {
 public:
-    enum FileFormat { OpenDocument, NativeFormat, Gnumeric, Unknown };
+    enum FileFormat {
+        OpenDocument,
+        NativeFormat,
+        Gnumeric,
+        Unknown
+    };
 
     LoadingInfo()
         : m_fileFormat(Unknown)

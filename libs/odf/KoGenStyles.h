@@ -72,7 +72,11 @@ public:
      * already exists. In other words, the collection will now contain two equal KoGenStyle
      * and generate them with different style names.
      */
-    enum InsertionFlag { NoFlag = 0, DontAddNumberToName = 1, AllowDuplicates = 2 };
+    enum InsertionFlag {
+        NoFlag = 0,
+        DontAddNumberToName = 1,
+        AllowDuplicates = 2
+    };
     Q_DECLARE_FLAGS(InsertionFlags, InsertionFlag)
 
     /**

@@ -15,7 +15,14 @@ class GitLogModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QString repoDir READ repoDir WRITE setRepoDir NOTIFY repoDirChanged)
 public:
-    enum CustomRoles { AuthorNameRole = Qt::UserRole + 1, AuthorEmailRole, TimeRole, OIDRole, ShortMessageRole, MessageRole };
+    enum CustomRoles {
+        AuthorNameRole = Qt::UserRole + 1,
+        AuthorEmailRole,
+        TimeRole,
+        OIDRole,
+        ShortMessageRole,
+        MessageRole
+    };
 
     explicit GitLogModel(QObject *parent = nullptr);
     virtual ~GitLogModel();

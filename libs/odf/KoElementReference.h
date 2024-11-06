@@ -49,9 +49,16 @@ public:
 class KOODF_EXPORT KoElementReference
 {
 public:
-    enum GenerationOption { UUID = 0, Counter = 1 };
+    enum GenerationOption {
+        UUID = 0,
+        Counter = 1
+    };
 
-    enum SaveOption { XmlId = 0x0, DrawId = 0x1, TextId = 0x2 };
+    enum SaveOption {
+        XmlId = 0x0,
+        DrawId = 0x1,
+        TextId = 0x2
+    };
     Q_DECLARE_FLAGS(SaveOptions, SaveOption)
 
     KoElementReference();

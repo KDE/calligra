@@ -18,7 +18,10 @@ class DockerStylesComboModel : public StylesFilteredModelBase
 {
     Q_OBJECT
 public:
-    enum CategoriesInternalIds { UsedStyleId = -32000, UnusedStyleId = -32001 };
+    enum CategoriesInternalIds {
+        UsedStyleId = -32000,
+        UnusedStyleId = -32001
+    };
 
     explicit DockerStylesComboModel(QObject *parent = nullptr);
 

@@ -30,7 +30,13 @@ public:
     };
 
     // IDs of the connecting handles
-    enum HandleId { StartHandle, EndHandle, ControlHandle_1, ControlHandle_2, ControlHandle_3 };
+    enum HandleId {
+        StartHandle,
+        EndHandle,
+        ControlHandle_1,
+        ControlHandle_2,
+        ControlHandle_3
+    };
 
     KoConnectionShape();
     ~KoConnectionShape() override;

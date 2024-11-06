@@ -99,7 +99,12 @@ private:
     void updateTextCursorArea() const;
     void setCurrentShape(ArtisticTextShape *currentShape);
 
-    enum FontProperty { BoldProperty, ItalicProperty, FamilyProperty, SizeProperty };
+    enum FontProperty {
+        BoldProperty,
+        ItalicProperty,
+        FamilyProperty,
+        SizeProperty
+    };
 
     /// Changes the specified font property for the current text selection
     void changeFontProperty(FontProperty property, const QVariant &value);

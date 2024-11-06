@@ -24,7 +24,17 @@ class KoGenStyle;
  */
 namespace KoOdfNumberStyles
 {
-enum Format { Number, Scientific, Fraction, Currency, Percentage, Date, Time, Boolean, Text };
+enum Format {
+    Number,
+    Scientific,
+    Fraction,
+    Currency,
+    Percentage,
+    Date,
+    Time,
+    Boolean,
+    Text
+};
 /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
 /// allows to extract them from formatStr, to display them in separate widgets.
 struct NumericStyleFormat {

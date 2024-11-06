@@ -26,14 +26,23 @@ public:
 
     ~KoColumnStyle() override;
 
-    enum BreakType { NoBreak, AutoBreak, ColumnBreak, PageBreak };
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
     void setBreakBefore(BreakType breakBefore);
     BreakType breakBefore() const;
 
     void setBreakAfter(BreakType breakAfter);
     BreakType breakAfter() const;
 
-    enum WidthType { MinimumWidth, ExactWidth, OptimalWidth };
+    enum WidthType {
+        MinimumWidth,
+        ExactWidth,
+        OptimalWidth
+    };
     void setWidth(qreal width);
     qreal width() const;
     void setWidthType(WidthType type);

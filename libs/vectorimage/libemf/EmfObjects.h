@@ -41,7 +41,10 @@ public:
     /**
       The type of text to read
       */
-    enum TextType { EightBitChars, SixteenBitChars };
+    enum TextType {
+        EightBitChars,
+        SixteenBitChars
+    };
 
     /**
        Constructor for EmrText object

@@ -36,9 +36,18 @@ class AbstractStylesModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    enum Type { CharacterStyle, ParagraphStyle };
+    enum Type {
+        CharacterStyle,
+        ParagraphStyle
+    };
 
-    enum AdditionalRoles { CharacterStylePointer = Qt::UserRole + 1, ParagraphStylePointer, isModifiedStyle, isTitleRole, TitleString };
+    enum AdditionalRoles {
+        CharacterStylePointer = Qt::UserRole + 1,
+        ParagraphStylePointer,
+        isModifiedStyle,
+        isTitleRole,
+        TitleString
+    };
 
     explicit AbstractStylesModel(QObject *parent = nullptr);
 

@@ -20,7 +20,12 @@ protected:
 //! When dealing with colors there's no way to know what type of
 //! attribute we are setting. While MSOOXML doesn't need to know the
 //! context in which a color is used, ODF does need to know this.
-enum ColorType { BackgroundColor, OutlineColor, TextColor, GradientColor };
+    enum ColorType {
+        BackgroundColor,
+        OutlineColor,
+        TextColor,
+        GradientColor
+    };
 
 enum blipFillCaller {
     blipFill_lockedCanvas = 'a',
@@ -31,11 +36,23 @@ enum blipFillCaller {
     blipFill_grpSpPr = 'a'
 };
 
-enum cNvPrCaller { cNvPr_nvSpPr, cNvPr_nvPicPr, cNvPr_nvCxnSpPr };
+enum cNvPrCaller {
+    cNvPr_nvSpPr,
+    cNvPr_nvPicPr,
+    cNvPr_nvCxnSpPr
+};
 
-enum txBodyCaller { DrawingML_txBody_tc, DrawingML_txBody_txSp, DrawingML_txBody_sp };
+enum txBodyCaller {
+    DrawingML_txBody_tc,
+    DrawingML_txBody_txSp,
+    DrawingML_txBody_sp
+};
 
-enum spacingType { spacingMarginTop, spacingLines, spacingMarginBottom };
+enum spacingType {
+    spacingMarginTop,
+    spacingLines,
+    spacingMarginBottom
+};
 
 struct GroupProp {
     qint64 svgXOld;

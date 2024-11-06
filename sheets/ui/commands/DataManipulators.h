@@ -122,7 +122,10 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT ShiftManipulator : public AbstractRegionCommand
 {
 public:
-    enum Direction { ShiftRight, ShiftBottom };
+    enum Direction {
+        ShiftRight,
+        ShiftBottom
+    };
     explicit ShiftManipulator(KUndo2Command *parent = nullptr);
     ~ShiftManipulator() override;
     void setDirection(Direction direction)
@@ -138,7 +141,10 @@ protected:
 private:
     Direction m_direction;
 
-    enum Mode { Insert, Delete };
+    enum Mode {
+        Insert,
+        Delete
+    };
     Mode m_mode;
 };
 

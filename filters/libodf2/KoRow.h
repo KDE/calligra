@@ -36,7 +36,11 @@ public:
     KoCellStyle::Ptr defualtCellStyle() const;
     void setDefaultCellStyle(KoCellStyle::Ptr defaultStyle);
 
-    enum Visibility { Collapse, Filter, Visible };
+    enum Visibility {
+        Collapse,
+        Filter,
+        Visible
+    };
     Visibility visibility();
     void setVisibility(Visibility visibility);
 

@@ -24,7 +24,10 @@ public:
     explicit PageBreakCommand(KUndo2Command *parent = nullptr);
     ~PageBreakCommand() override;
 
-    enum Mode { BreakBeforeColumn, BreakBeforeRow };
+    enum Mode {
+        BreakBeforeColumn,
+        BreakBeforeRow
+    };
     void setMode(Mode mode);
 
     void setBreak(bool breaking)

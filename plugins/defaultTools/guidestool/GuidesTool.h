@@ -72,7 +72,11 @@ private:
     /// Calculates update rectangle for specified guide line
     QRectF updateRectFromGuideLine(qreal position, Qt::Orientation orientation);
 
-    enum EditMode { AddGuide, MoveGuide, EditGuide };
+    enum EditMode {
+        AddGuide,
+        MoveGuide,
+        EditGuide
+    };
     Qt::Orientation m_orientation;
     int m_index;
     qreal m_position;

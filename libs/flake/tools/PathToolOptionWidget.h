@@ -17,7 +17,10 @@ class PathToolOptionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum Type { PlainPath = 1, ParametricShape = 2 };
+    enum Type {
+        PlainPath = 1,
+        ParametricShape = 2
+    };
     Q_DECLARE_FLAGS(Types, Type)
 
     explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = nullptr);

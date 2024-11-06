@@ -67,7 +67,15 @@ enum KoXmlNamedItemType {
 class KOSTORE_EXPORT KoXmlNode
 {
 public:
-    enum NodeType { NullNode = 0, ElementNode, TextNode, CDATASectionNode, ProcessingInstructionNode, DocumentNode, DocumentTypeNode };
+    enum NodeType {
+        NullNode = 0,
+        ElementNode,
+        TextNode,
+        CDATASectionNode,
+        ProcessingInstructionNode,
+        DocumentNode,
+        DocumentTypeNode
+    };
 
     KoXmlNode();
     KoXmlNode(const KoXmlNode &node);

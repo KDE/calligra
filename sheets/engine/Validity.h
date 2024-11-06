@@ -62,7 +62,18 @@ public:
         List ///< Restrict to lists
     };
 
-    enum Type { None, Equal, Superior, Inferior, SuperiorEqual, InferiorEqual, Between, Different, DifferentTo, IsTrueFormula };
+    enum Type {
+        None,
+        Equal,
+        Superior,
+        Inferior,
+        SuperiorEqual,
+        InferiorEqual,
+        Between,
+        Different,
+        DifferentTo,
+        IsTrueFormula
+    };
 
     /**
      * Constructor.

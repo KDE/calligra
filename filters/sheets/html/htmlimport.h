@@ -48,7 +48,14 @@ private:
     bool createMeta();
 
 private:
-    enum State { InNone, InFrameset, InBody, InTable, InRow, InCell };
+    enum State {
+        InNone,
+        InFrameset,
+        InBody,
+        InTable,
+        InRow,
+        InCell
+    };
     QStack<State> m_states;
 
     QDir m_inputDir;

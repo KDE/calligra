@@ -16,7 +16,14 @@ public:
     ~KPrStarWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { FourPoint, FourPointReverse, FivePoint, FivePointReverse, SixPoint, SixPointReverse };
+    enum SubType {
+        FourPoint,
+        FourPointReverse,
+        FivePoint,
+        FivePointReverse,
+        SixPoint,
+        SixPointReverse
+    };
 };
 
 #endif /* KPRSTARWIPEEFFECTFACTORY_H */

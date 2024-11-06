@@ -17,7 +17,11 @@ class QTextTable;
 class KoDeletedRowColumnDataStore
 {
 public:
-    typedef enum { eDeletedRow, eDeletedColumn, eUnknownDeleteType } DeleteType;
+    typedef enum {
+        eDeletedRow,
+        eDeletedColumn,
+        eUnknownDeleteType
+    } DeleteType;
 
     KoDeletedRowColumnDataStore();
 

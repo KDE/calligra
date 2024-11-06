@@ -39,10 +39,25 @@ class STAGE_EXPORT KPrShapeAnimations : public QAbstractTableModel
     Q_OBJECT
 public:
     /// Time to be updated
-    enum TimeUpdated { BeginTime, DurationTime, BothTimes };
+    enum TimeUpdated {
+        BeginTime,
+        DurationTime,
+        BothTimes
+    };
 
     /// column names
-    enum ColumnNames { Group, StepCount, TriggerEvent, Name, ShapeThumbnail, AnimationIcon, StartTime, Duration, AnimationClass, NodeType };
+    enum ColumnNames {
+        Group,
+        StepCount,
+        TriggerEvent,
+        Name,
+        ShapeThumbnail,
+        AnimationIcon,
+        StartTime,
+        Duration,
+        AnimationClass,
+        NodeType
+    };
 
     explicit KPrShapeAnimations(KPrDocument *document, QObject *parent = nullptr);
     ~KPrShapeAnimations() override;

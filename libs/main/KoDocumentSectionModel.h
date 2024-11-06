@@ -92,7 +92,6 @@ public:
          * request thumbnails of arbitrary size.
          */
         BeginThumbnailRole
-
     };
 
     /**

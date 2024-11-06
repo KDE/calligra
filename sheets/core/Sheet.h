@@ -61,7 +61,12 @@ class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBa
 {
     Q_OBJECT
 public:
-    enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
+    enum TestType {
+        Text,
+        Validity,
+        Comment,
+        ConditionalCellAttribute
+    };
 
     /**
      * Creates a sheet in \p map with the name \p sheetName.
@@ -217,15 +222,27 @@ public:
         {
         }
 
-        enum Repetition { NoRepeat, Repeat, Stretch };
+        enum Repetition {
+            NoRepeat,
+            Repeat,
+            Stretch
+        };
         Repetition repeat;
 
         float opacity;
 
-        enum HorizontalPosition { Left, HorizontalCenter, Right };
+        enum HorizontalPosition {
+            Left,
+            HorizontalCenter,
+            Right
+        };
         HorizontalPosition horizontalPosition;
 
-        enum VerticalPosition { Top, VerticalCenter, Bottom };
+        enum VerticalPosition {
+            Top,
+            VerticalCenter,
+            Bottom
+        };
         VerticalPosition verticalPosition;
 
         // TODO filterName

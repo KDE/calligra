@@ -108,13 +108,20 @@ protected:
     KoFilter::ConversionStatus read_b();
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_sz();
-    enum jcCaller { jc_tblPr, jc_pPr };
+    enum jcCaller {
+        jc_tblPr,
+        jc_pPr
+    };
     KoFilter::ConversionStatus read_jc(jcCaller caller);
     KoFilter::ConversionStatus read_spacing();
     KoFilter::ConversionStatus read_trPr();
     KoFilter::ConversionStatus read_cnfStyle();
     KoFilter::ConversionStatus read_trHeight();
-    enum shdCaller { shd_rPr, shd_pPr, shd_tcPr };
+    enum shdCaller {
+        shd_rPr,
+        shd_pPr,
+        shd_tcPr
+    };
     KoFilter::ConversionStatus read_shd(shdCaller caller);
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
@@ -166,9 +173,15 @@ protected:
     KoFilter::ConversionStatus read_r_m();
     KoFilter::ConversionStatus read_t_m();
 
-    enum posOffsetCaller { posOffset_positionH, posOffset_positionV };
+    enum posOffsetCaller {
+        posOffset_positionH,
+        posOffset_positionV
+    };
 
-    enum alignCaller { align_positionH, align_positionV };
+    enum alignCaller {
+        align_positionH,
+        align_positionV
+    };
     KoFilter::ConversionStatus read_align(alignCaller caller);
     KoFilter::ConversionStatus read_pict();
     KoFilter::ConversionStatus read_sdt();
@@ -199,13 +212,25 @@ protected:
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
-    enum PageMargin { MarginTop, MarginBottom, MarginLeft, MarginRight };
+    enum PageMargin {
+        MarginTop,
+        MarginBottom,
+        MarginLeft,
+        MarginRight
+    };
 
     //! Used for setting up properties for page margins.
     QMap<PageMargin, qreal> m_pageMargins;
     QString m_pageBorderOffsetFrom;
 
-    enum BorderSide { TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV };
+    enum BorderSide {
+        TopBorder,
+        BottomBorder,
+        LeftBorder,
+        RightBorder,
+        InsideH,
+        InsideV
+    };
 
     //! Whether the picture when run-through wrap is active should be in fore or background
     bool m_behindDoc;
@@ -302,13 +327,22 @@ private:
     //! Value of the complex field char if applicable
     QString m_complexCharValue;
 
-    enum ComplexCharStatus { NoneAllowed, InstrAllowed, InstrExecute, ExecuteInstrNow };
+    enum ComplexCharStatus {
+        NoneAllowed,
+        InstrAllowed,
+        InstrExecute,
+        ExecuteInstrNow
+    };
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
 
     int m_z_index;
 
-    enum DropCapStatus { NoDropCap, DropCapRead, DropCapDone };
+    enum DropCapStatus {
+        NoDropCap,
+        DropCapRead,
+        DropCapDone
+    };
     //! State of dropCap
     DropCapStatus m_dropCapStatus;
 
@@ -352,7 +386,10 @@ private:
     QMap<QString, QString> m_footers;
 
     // processing the ins/del element (Inserted/Deleted Run Content)
-    enum ChangeTrackingState { InsertedRunContent, DeletedRunContent };
+    enum ChangeTrackingState {
+        InsertedRunContent,
+        DeletedRunContent
+    };
     QStack<ChangeTrackingState> m_changeTrackingState;
 
     // ************************************************

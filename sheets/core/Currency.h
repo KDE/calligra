@@ -27,7 +27,14 @@ namespace Sheets
 class CALLIGRA_SHEETS_CORE_EXPORT Currency
 {
 public:
-    enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };
+    enum Format {
+        Native,
+        Gnumeric,
+        OpenCalc,
+        ApplixSpread,
+        GobeProductiveSpread,
+        HancomSheet
+    };
 
     /**
      * Constructor.

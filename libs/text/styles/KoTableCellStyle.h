@@ -44,11 +44,26 @@ class KOTEXT_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:
-    enum CellProtectionFlag { NoProtection, HiddenAndProtected, Protected, FormulaHidden, ProtectedAndFormulaHidden };
+    enum CellProtectionFlag {
+        NoProtection,
+        HiddenAndProtected,
+        Protected,
+        FormulaHidden,
+        ProtectedAndFormulaHidden
+    };
 
-    enum CellTextDirection { Default = 0, LeftToRight, TopToBottom };
+    enum CellTextDirection {
+        Default = 0,
+        LeftToRight,
+        TopToBottom
+    };
 
-    enum RotationAlignment { RAlignNone, RAlignBottom, RAlignTop, RAlignCenter };
+    enum RotationAlignment {
+        RAlignNone,
+        RAlignBottom,
+        RAlignTop,
+        RAlignCenter
+    };
 
     enum Property {
         StyleId = QTextTableCellFormat::UserProperty + 7001,
@@ -72,7 +87,7 @@ public:
         Shadow, ///< KoShadowStyle, the shadow of this cell
         CellIsProtected ///< boolean, if true, the cell is protected against edits
                         /// It's not really a property of KoTableCellStyle but defined here for convenience
-        ,
+            ,
         LastCellStyleProperty
     };
 

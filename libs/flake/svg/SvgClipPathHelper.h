@@ -12,7 +12,10 @@
 class SvgClipPathHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
+    enum Units {
+        UserSpaceOnUse,
+        ObjectBoundingBox
+    };
 
     SvgClipPathHelper();
     ~SvgClipPathHelper();

@@ -14,7 +14,13 @@ class CloudAccountsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum CloudAccountRoles { TextRole = Qt::UserRole + 1, SelectedRole, AccountTypeRole, StackComponentRole, AccountDetailsRole };
+    enum CloudAccountRoles {
+        TextRole = Qt::UserRole + 1,
+        SelectedRole,
+        AccountTypeRole,
+        StackComponentRole,
+        AccountDetailsRole
+    };
     explicit CloudAccountsModel(QObject *parent = nullptr);
     ~CloudAccountsModel() override;
 

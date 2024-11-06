@@ -47,9 +47,20 @@ class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
 public:
-    enum Navigation { FirstPage, PreviousPage, PreviousStep, NextStep, NextPage, LastPage };
+    enum Navigation {
+        FirstPage,
+        PreviousPage,
+        PreviousStep,
+        NextStep,
+        NextPage,
+        LastPage
+    };
 
-    enum State { PresentationState, EntryEffectState, EntryAnimationState };
+    enum State {
+        PresentationState,
+        EntryEffectState,
+        EntryAnimationState
+    };
 
     KPrAnimationDirector(KoPAView *view, KoPACanvas *canvas, const QList<KoPAPageBase *> &pages, KoPAPageBase *currentPage);
     ~KPrAnimationDirector() override;

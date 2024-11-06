@@ -85,7 +85,17 @@ private:
 class Opcode
 {
 public:
-    enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div };
+    enum {
+        Nop = 0,
+        Load,
+        Ref,
+        Function,
+        Add,
+        Sub,
+        Neg,
+        Mul,
+        Div
+    };
 
     unsigned type;
     unsigned index;
@@ -298,7 +308,17 @@ qreal EnhancedPathFormula::evaluateFunction(Function function, const QList<qreal
 TokenList EnhancedPathFormula::scan(const QString &formula) const
 {
     // parsing state
-    enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent, InString, InIdentifier } state;
+    enum {
+        Start,
+        Finish,
+        Bad,
+        InNumber,
+        InDecimal,
+        InExpIndicator,
+        InExponent,
+        InString,
+        InIdentifier
+    } state;
 
     TokenList tokens;
 

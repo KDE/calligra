@@ -31,7 +31,10 @@ class KOTEXT_EXPORT KoTextRange : public QObject
 {
     Q_OBJECT
 public:
-    enum TagType { StartTag = 0, EndTag = 1 };
+    enum TagType {
+        StartTag = 0,
+        EndTag = 1
+    };
 
     /**
      * constructor

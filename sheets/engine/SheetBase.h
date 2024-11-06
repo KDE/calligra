@@ -28,7 +28,12 @@ class MapBase;
 class CALLIGRA_SHEETS_ENGINE_EXPORT SheetBase
 {
 public:
-    enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
+    enum ChangeRef {
+        ColumnInsert,
+        ColumnRemove,
+        RowInsert,
+        RowRemove
+    };
     /**
      * Creates a sheet in \p map with the name \p sheetName.
      */

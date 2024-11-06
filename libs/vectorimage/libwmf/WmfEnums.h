@@ -199,7 +199,11 @@ enum WmfCharacterSet {
    in a device -independent bitmap (DIB) and how to interpret its values.
 */
 
-enum WmfColorUsage { DIB_RGB_COLORS = 0x0000, DIB_PAL_COLORS = 0x0001, DIB_PAL_INDICES = 0x0002 };
+enum WmfColorUsage {
+    DIB_RGB_COLORS = 0x0000,
+    DIB_PAL_COLORS = 0x0001,
+    DIB_PAL_INDICES = 0x0002
+};
 
 /**
    MS-WMF 2.1.1.7 Compression Enumeration
@@ -228,7 +232,14 @@ enum WmfCompression {
    specifying fonts when the exact typeface desired is not available.
 */
 
-typedef enum { FF_DONTCARE = 0x00, FF_ROMAN = 0x01, FF_SWISS = 0x02, FF_MODERN = 0x03, FF_SCRIPT = 0x04, FF_DECORATIVE = 0x05 } WmfFamilyFont;
+typedef enum {
+    FF_DONTCARE = 0x00,
+    FF_ROMAN = 0x01,
+    FF_SWISS = 0x02,
+    FF_MODERN = 0x03,
+    FF_SCRIPT = 0x04,
+    FF_DECORATIVE = 0x05
+} WmfFamilyFont;
 
 /**
    MS-WMF 2.1.1.9 FloodFill Enumeration
@@ -237,7 +248,10 @@ typedef enum { FF_DONTCARE = 0x00, FF_ROMAN = 0x01, FF_SWISS = 0x02, FF_MODERN =
    be performed.
 */
 
-enum WmfFloodFill { FLOODFILLBORDER = 0x0000, FLOODFILLSURFACE = 0x0001 };
+enum WmfFloodFill {
+    FLOODFILLBORDER = 0x0000,
+    FLOODFILLSURFACE = 0x0001
+};
 
 /**
    MS-WMF 2.1.1.10 FontQuality Enumeration
@@ -263,7 +277,12 @@ enum WmfFontQuality {
   between logical and physical colors.
 */
 
-enum WmfGamutMappingIntent { LCS_GM_ABS_COLORIMETRIC = 0x00000008, LCS_GM_BUSINESS = 0x00000001, LCS_GM_GRAPHICS = 0x00000002, LCS_GM_IMAGES = 0x00000004 };
+enum WmfGamutMappingIntent {
+    LCS_GM_ABS_COLORIMETRIC = 0x00000008,
+    LCS_GM_BUSINESS = 0x00000001,
+    LCS_GM_GRAPHICS = 0x00000002,
+    LCS_GM_IMAGES = 0x00000004
+};
 
 /**
    MS-WMF 2.1.1.12 HatchStyle Enumeration
@@ -271,7 +290,14 @@ enum WmfGamutMappingIntent { LCS_GM_ABS_COLORIMETRIC = 0x00000008, LCS_GM_BUSINE
    The HatchStyle Enumeration specifies the hatch pattern.
 */
 
-enum WmfHatchStyle { HS_HORIZONTAL = 0x0000, HS_VERTICAL = 0x0001, HS_FDIAGONAL = 0x0002, HS_BDIAGONAL = 0x0003, HS_CROSS = 0x0004, HS_DIAGCROSS = 0x0005 };
+enum WmfHatchStyle {
+    HS_HORIZONTAL = 0x0000,
+    HS_VERTICAL = 0x0001,
+    HS_FDIAGONAL = 0x0002,
+    HS_BDIAGONAL = 0x0003,
+    HS_CROSS = 0x0004,
+    HS_DIAGCROSS = 0x0005
+};
 
 /**
    MS-WMF 2.1.1.13 Layout Enumeration
@@ -280,7 +306,13 @@ enum WmfHatchStyle { HS_HORIZONTAL = 0x0000, HS_VERTICAL = 0x0001, HS_FDIAGONAL 
    direction in which text and graphics are drawn.
 */
 
-enum WmfLayout { LAYOUT_LTR = 0x0000, LAYOUT_RTL = 0x0001, LAYOUT_BTT = 0x0002, LAYOUT_VBH = 0x0004, LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008 };
+enum WmfLayout {
+    LAYOUT_LTR = 0x0000,
+    LAYOUT_RTL = 0x0001,
+    LAYOUT_BTT = 0x0002,
+    LAYOUT_VBH = 0x0004,
+    LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
+};
 
 /**
    MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
@@ -288,7 +320,11 @@ enum WmfLayout { LAYOUT_LTR = 0x0000, LAYOUT_RTL = 0x0001, LAYOUT_BTT = 0x0002, 
    The LogicalColorSpace Enumeration specifies the type of color space.
 */
 
-enum WmfLogicalColorSpace { LCS_CALIBRATED_RGB = 0x00000000, LCS_sRGB = 0x73524742, LCS_WINDOWS_COLOR_SPACE = 0x57696E20 };
+enum WmfLogicalColorSpace {
+    LCS_CALIBRATED_RGB = 0x00000000,
+    LCS_sRGB = 0x73524742,
+    LCS_WINDOWS_COLOR_SPACE = 0x57696E20
+};
 
 /**
    MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
@@ -299,7 +335,10 @@ enum WmfLogicalColorSpace { LCS_CALIBRATED_RGB = 0x00000000, LCS_sRGB = 0x735247
    Object (section 2.2.2.5).
 */
 
-enum WmfLogicalColorSpaceV5 { LCS_PROFILE_LINKED = 0x4C494E4B, LCS_PROFILE_EMBEDDED = 0x4D424544 };
+enum WmfLogicalColorSpaceV5 {
+    LCS_PROFILE_LINKED = 0x4C494E4B,
+    LCS_PROFILE_EMBEDDED = 0x4D424544
+};
 
 /**
    MS-WMF 2.1.1.16 MapMode Enumeration
@@ -328,7 +367,10 @@ enum WmfMapMode {
    The MetafileType Enumeration specifies where the metafile is stored.
 */
 
-enum WmfMetafileType { MEMORYMETAFILE = 0x0001, DISKMETAFILE = 0x0002 };
+enum WmfMetafileType {
+    MEMORYMETAFILE = 0x0001,
+    DISKMETAFILE = 0x0002
+};
 
 /**
    MS-WMF 2.1.1.19 MetafileVersion Enumeration
@@ -337,7 +379,10 @@ enum WmfMetafileType { MEMORYMETAFILE = 0x0001, DISKMETAFILE = 0x0002 };
    for device-independent bitmaps (DIBs) in metafiles.
 */
 
-enum WmfMetafileVersion { METAVERSION100 = 0x0100, METAVERSION300 = 0x0300 };
+enum WmfMetafileVersion {
+    METAVERSION100 = 0x0100,
+    METAVERSION300 = 0x0300
+};
 
 /**
    MS-WMF 2.1.1.20 MixMode Enumeration
@@ -346,7 +391,10 @@ enum WmfMetafileVersion { METAVERSION100 = 0x0100, METAVERSION300 = 0x0300 };
    hatched brushes, and other nonsolid pen styles.
 */
 
-enum WmfMixMode { TRANSPARENT = 0x0001, OPAQUE = 0x0002 };
+enum WmfMixMode {
+    TRANSPARENT = 0x0001,
+    OPAQUE = 0x0002
+};
 
 /**
    MS-WMF 2.1.1.21 OutPrecision Enumeration
@@ -376,7 +424,11 @@ enum WmfOutPrecision {
    The PaletteEntryFlag Enumeration specifies how the palette entry should be used.
 */
 
-enum WmfPaletteEntryFlag { PC_RESERVED = 0x01, PC_EXPLICIT = 0x02, PC_NOCOLLAPSE = 0x04 };
+enum WmfPaletteEntryFlag {
+    PC_RESERVED = 0x01,
+    PC_EXPLICIT = 0x02,
+    PC_NOCOLLAPSE = 0x04
+};
 
 /**
    MS-WMF 2.1.1.23 Pe nStyle Enumeration
@@ -416,7 +468,11 @@ enum WmfPenStyle {
    width, or pitch.
 */
 
-enum WmfPitchFont { DEFAULT_PITCH = 0, FIXED_PITCH = 1, VARIABLE_PITCH = 2 };
+enum WmfPitchFont {
+    DEFAULT_PITCH = 0,
+    FIXED_PITCH = 1,
+    VARIABLE_PITCH = 2
+};
 
 /*
    MS-WMF 2.1.1.25 PolyFillMode Enumeration
@@ -425,7 +481,10 @@ enum WmfPitchFont { DEFAULT_PITCH = 0, FIXED_PITCH = 1, VARIABLE_PITCH = 2 };
    a polygon.
 */
 
-enum WmfPolyFillMode { ALTERNATE = 0x0001, WINDING = 0x0002 };
+enum WmfPolyFillMode {
+    ALTERNATE = 0x0001,
+    WINDING = 0x0002
+};
 
 /**
    MS-WMF 2.1.1.29 StretchMode Enumeration
@@ -435,7 +494,12 @@ enum WmfPolyFillMode { ALTERNATE = 0x0001, WINDING = 0x0002 };
    with existing pixels.
 */
 
-enum WmfStretchMode { BLACKONWHITE = 0x0001, WHITEONBLACK = 0x0002, COLORONCOLOR = 0x0003, HALFTONE = 0x0004 };
+enum WmfStretchMode {
+    BLACKONWHITE = 0x0001,
+    WHITEONBLACK = 0x0002,
+    COLORONCOLOR = 0x0003,
+    HALFTONE = 0x0004
+};
 
 /**
    MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration

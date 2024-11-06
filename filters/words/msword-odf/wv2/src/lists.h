@@ -66,7 +66,12 @@ struct ListText {
 class ListInfo
 {
 public:
-    enum ListType { BulletType, NumberType, PictureType, DefaultType };
+    enum ListType {
+        BulletType,
+        NumberType,
+        PictureType,
+        DefaultType
+    };
 
     /**
      * @param current paragraph's PAP

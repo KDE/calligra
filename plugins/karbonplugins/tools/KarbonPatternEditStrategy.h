@@ -133,7 +133,10 @@ public:
     QSharedPointer<KoPatternBackground> updatedBackground() override;
 
 private:
-    enum Handles { center, direction };
+    enum Handles {
+        center,
+        direction
+    };
 
     qreal m_normalizedLength; ///< the normalized direction vector length
     QPointF m_origin; ///< the pattern handle origin
@@ -153,7 +156,10 @@ public:
     void updateHandles() override;
 
 private:
-    enum Handles { origin, size };
+    enum Handles {
+        origin,
+        size
+    };
 
     void updateHandles(QSharedPointer<KoPatternBackground> fill);
 };

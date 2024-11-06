@@ -40,7 +40,10 @@ public:
     /**
      * This enum is used to distinguish the import/export cases
      */
-    enum Direction { Import = 1, Export = 2 };
+    enum Direction {
+        Import = 1,
+        Export = 2
+    };
 
     /**
      * Create a filter manager for a document

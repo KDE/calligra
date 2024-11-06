@@ -44,7 +44,10 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(DocxImportFactory, "calligra_filter_docx2odt.json", registerPlugin<DocxImport>();)
 
-enum DocxDocumentType { DocxDocument, DocxTemplate };
+enum DocxDocumentType {
+    DocxDocument,
+    DocxTemplate
+};
 
 class DocxImport::Private
 {

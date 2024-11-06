@@ -16,7 +16,12 @@ public:
     ~KPrMiscShapeWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType { Heart, HeartReverse, Keyhole, KeyholeReverse };
+    enum SubType {
+        Heart,
+        HeartReverse,
+        Keyhole,
+        KeyholeReverse
+    };
 };
 
 #endif /* KPRMISCSHAPEWIPEEFFECTFACTORY_H */

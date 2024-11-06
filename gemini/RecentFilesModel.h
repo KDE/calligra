@@ -13,7 +13,13 @@ class RecentFilesModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QObject *recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFileManagerChanged)
 public:
-    enum PresetRoles { ImageRole = Qt::UserRole + 1, TextRole, UrlRole, NameRole, DateRole };
+    enum PresetRoles {
+        ImageRole = Qt::UserRole + 1,
+        TextRole,
+        UrlRole,
+        NameRole,
+        DateRole
+    };
 
     explicit RecentFilesModel(QObject *parent = nullptr);
     ~RecentFilesModel() override;

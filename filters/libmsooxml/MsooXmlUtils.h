@@ -48,9 +48,17 @@ class MsooXmlReaderContext;
 namespace Utils
 {
 
-enum autoFitStatus { autoFitUnUsed, autoFitOn, autoFitOff };
+enum autoFitStatus {
+    autoFitUnUsed,
+    autoFitOn,
+    autoFitOff
+};
 
-enum MSOOXMLFilter { DocxFilter, PptxFilter, XlsxFilter };
+enum MSOOXMLFilter {
+    DocxFilter,
+    PptxFilter,
+    XlsxFilter
+};
 
 class KOMSOOXML_EXPORT ParagraphBulletProperties
 {
@@ -121,7 +129,12 @@ public:
 
     int m_level;
 
-    enum ParagraphBulletType { BulletType, NumberType, PictureType, DefaultType };
+    enum ParagraphBulletType {
+        BulletType,
+        NumberType,
+        PictureType,
+        DefaultType
+    };
     ParagraphBulletType m_type;
 
 private:

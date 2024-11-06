@@ -75,7 +75,9 @@ void SectionsIO::push(Section *_section, PushMode _pushMode)
 }
 
 struct SectionsIO::SaveContext {
-    enum Version { VERSION_1 };
+    enum Version {
+        VERSION_1
+    };
     Section *section;
     QString filename;
     bool saveSection(SectionsIO *sectionsIO);

@@ -47,7 +47,10 @@ public:
      * Note class
      * The note class attribute determines which note elements this notes configuration applies to.
      */
-    enum NoteClass { Footnote, Endnote };
+    enum NoteClass {
+        Footnote,
+        Endnote
+    };
 
     explicit KoOdfNotesConfiguration(NoteClass noteClass);
     ~KoOdfNotesConfiguration() override;
@@ -120,7 +123,11 @@ public:
      * The text:start-numbering-at attribute specifies if footnote numbers start with a new
      * number at the beginning of the document or at the beginning of each chapter or page.
      */
-    enum NumberingScheme { BeginAtDocument, BeginAtChapter, BeginAtPage };
+    enum NumberingScheme {
+        BeginAtDocument,
+        BeginAtChapter,
+        BeginAtPage
+    };
 
     NumberingScheme numberingScheme() const;
     void setNumberingScheme(NumberingScheme numberingScheme);
@@ -133,7 +140,12 @@ public:
      * • section: The end of the section
      * • document: The end of the document.
      */
-    enum FootnotesPosition { Text, Page, Section, Document };
+    enum FootnotesPosition {
+        Text,
+        Page,
+        Section,
+        Document
+    };
 
     FootnotesPosition footnotesPosition() const;
     void setFootnotesPosition(FootnotesPosition footnotesPosition);

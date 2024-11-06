@@ -15,7 +15,7 @@ struct Entry {
     Entry()
         : colorCount(1)
         , shape(0)
-        , expanded(false){};
+        , expanded(false) { };
     QString text;
     QString image;
     QString color;

@@ -16,7 +16,11 @@ class AcceptRejectChangeDialog : public QDialog
     Q_OBJECT
 
 public:
-    typedef enum { eDialogCancelled = 0, eChangeAccepted, eChangeRejected } AcceptRejectResult;
+    typedef enum {
+        eDialogCancelled = 0,
+        eChangeAccepted,
+        eChangeRejected
+    } AcceptRejectResult;
 
     AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId);
     ~AcceptRejectChangeDialog();

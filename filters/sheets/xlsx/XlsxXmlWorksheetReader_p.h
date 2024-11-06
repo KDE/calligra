@@ -137,10 +137,22 @@ public:
     int rowsMerged;
     int columnsMerged;
 
-    enum ValueType { ConstNone, ConstString, ConstBoolean, ConstDate, ConstFloat };
+    enum ValueType {
+        ConstNone,
+        ConstString,
+        ConstBoolean,
+        ConstDate,
+        ConstFloat
+    };
     ValueType valueType;
 
-    enum ValueAttr { OfficeNone, OfficeValue, OfficeStringValue, OfficeBooleanValue, OfficeDateValue };
+    enum ValueAttr {
+        OfficeNone,
+        OfficeValue,
+        OfficeStringValue,
+        OfficeBooleanValue,
+        OfficeDateValue
+    };
     ValueAttr valueAttr;
 
     bool isPlainText : 1;

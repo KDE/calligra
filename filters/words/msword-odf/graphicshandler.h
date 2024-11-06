@@ -42,7 +42,10 @@
 
 class DrawStyle;
 
-enum ObjectType { Inline, Floating };
+enum ObjectType {
+    Inline,
+    Floating
+};
 
 /*
  * ************************************************

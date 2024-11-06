@@ -50,7 +50,17 @@ public:
         Error
     };
 
-    enum Format { fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String };
+    enum Format {
+        fmt_None,
+        fmt_Boolean,
+        fmt_Number,
+        fmt_Percent,
+        fmt_Money,
+        fmt_DateTime,
+        fmt_Date,
+        fmt_Time,
+        fmt_String
+    };
     /**
      * Creates an empty value, i.e holds nothing.
      */

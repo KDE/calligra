@@ -40,8 +40,8 @@ class OdtOutputFileHelper : public OutputFileHelper
 {
 public:
     OdtOutputFileHelper(const char *outFileName, const char *password)
-        : OutputFileHelper(outFileName, password){};
-    ~OdtOutputFileHelper() override{};
+        : OutputFileHelper(outFileName, password) { };
+    ~OdtOutputFileHelper() override { };
     bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {
         OdtGenerator collector;

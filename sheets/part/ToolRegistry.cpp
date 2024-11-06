@@ -21,10 +21,7 @@ Q_GLOBAL_STATIC(Calligra::Sheets::ToolRegistry, s_instance)
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN ToolRegistry::Private
-{
-public:
-};
+class Q_DECL_HIDDEN ToolRegistry::Private{public : };
 
 ToolRegistry::ToolRegistry()
     : d(new Private)

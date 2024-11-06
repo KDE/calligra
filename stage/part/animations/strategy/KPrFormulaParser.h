@@ -187,7 +187,18 @@ private:
 class Opcode
 {
 public:
-    enum { Nop = 0, Load, Identifier, Add, Sub, Neg, Mul, Div, Pow, Function };
+    enum {
+        Nop = 0,
+        Load,
+        Identifier,
+        Add,
+        Sub,
+        Neg,
+        Mul,
+        Div,
+        Pow,
+        Function
+    };
 
     unsigned type;
     unsigned index;
@@ -212,7 +223,10 @@ public:
 class KPrFormulaParser
 {
 public:
-    enum ParseType { Values, Formula };
+    enum ParseType {
+        Values,
+        Formula
+    };
 
     KPrFormulaParser(const QString &formula, KoShape *shape, QTextBlockUserData *textBlockUserData, ParseType type);
     QString formula() const;

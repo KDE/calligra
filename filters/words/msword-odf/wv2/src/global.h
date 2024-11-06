@@ -66,7 +66,10 @@ typedef U32 FC;
  * This enum tells the apply* methods in the PAP/CHP/... structs what grpprls to
  * expect. Unfortunately the size of the SPRMs changed for Word 8.
  */
-enum WordVersion { Word67, Word8 };
+enum WordVersion {
+    Word67,
+    Word8
+};
 const int Word8nFib = 193;
 
 inline U8 readU8(const U8 *in)

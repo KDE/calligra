@@ -34,7 +34,10 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
     Q_OBJECT
 public:
-    enum Buttons { Button_Import, Button_Remove };
+    enum Buttons {
+        Button_Import,
+        Button_Remove
+    };
 
     /// \p usePreview shows the aside preview with the resource's image
     explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = nullptr, bool usePreview = false);

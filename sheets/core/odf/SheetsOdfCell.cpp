@@ -1029,7 +1029,14 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
 QString Odf::decodeFormula(const QString &expression_, const Localization *locale, const QString &namespacePrefix)
 {
     // parsing state
-    enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
+    enum {
+        Start,
+        InNumber,
+        InString,
+        InIdentifier,
+        InReference,
+        InSheetName
+    } state = Start;
 
     QString expression = expression_;
     if (namespacePrefix == "msoxl:") {
@@ -1300,7 +1307,14 @@ QString Odf::convertMSOOXMLFormula(const QString &formula)
 {
     if (formula.isEmpty())
         return QString();
-    enum { InStart, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName, InCellReference } state;
+    enum {
+        InStart,
+        InArguments,
+        InParenthesizedArgument,
+        InString,
+        InSheetOrAreaName,
+        InCellReference
+    } state;
     state = InStart;
     int cellReferenceStart = 0;
     int sheetOrAreaNameDelimiterCount = 0;

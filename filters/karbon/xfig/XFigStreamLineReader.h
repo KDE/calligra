@@ -18,7 +18,11 @@ class QIODevice;
 class XFigStreamLineReader
 {
 public:
-    enum CommentReadModus { DropComments, TakeComment, CollectComments };
+    enum CommentReadModus {
+        DropComments,
+        TakeComment,
+        CollectComments
+    };
 
     explicit XFigStreamLineReader(QIODevice *device);
     ~XFigStreamLineReader();

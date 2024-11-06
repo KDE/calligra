@@ -11,7 +11,16 @@
 
 namespace KoOdf
 {
-enum DocumentType { Text, Graphics, Presentation, Spreadsheet, Chart, Image, Formula, OpenOfficeClipboard };
+enum DocumentType {
+    Text,
+    Graphics,
+    Presentation,
+    Spreadsheet,
+    Chart,
+    Image,
+    Formula,
+    OpenOfficeClipboard
+};
 
 /**
  * Get the mime type
