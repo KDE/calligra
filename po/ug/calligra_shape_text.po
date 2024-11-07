@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -496,37 +496,37 @@ msgstr "ھەرپ ئۇسلۇبى"
 msgid "Include in table of contents"
 msgstr "ئاساسىي مەزمۇنلىرى"
 
-#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
+#: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
 msgid "Normal"
 msgstr "نورمال"
 
-#: dialogs/CharacterHighlighting.cpp:299
+#: dialogs/CharacterHighlighting.cpp:304
 #, kde-format
 msgid "Small Caps"
 msgstr "كىچىك يېزىلغان چوڭ ھەرپ"
 
-#: dialogs/CharacterHighlighting.cpp:300
+#: dialogs/CharacterHighlighting.cpp:305
 #, kde-format
 msgid "Uppercase"
 msgstr "چوڭ يېزىلىش"
 
-#: dialogs/CharacterHighlighting.cpp:301
+#: dialogs/CharacterHighlighting.cpp:306
 #, kde-format
 msgid "Lowercase"
 msgstr "كىچىك يېزىلىش"
 
-#: dialogs/CharacterHighlighting.cpp:302
+#: dialogs/CharacterHighlighting.cpp:307
 #, kde-format
 msgid "Capitalize"
 msgstr "باش ھەرپنى چوڭايت"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
+#: dialogs/CharacterHighlighting.cpp:315 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "يۇقىرى ئىندېكس"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
+#: dialogs/CharacterHighlighting.cpp:316 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "تۆۋەنكى ئىندېكس"

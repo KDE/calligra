@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2009-03-03 09:35+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -164,7 +164,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "बिंदु भरव नइ करव"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 #, fuzzy
 #| msgid "Merge points"
 msgctxt "(qtundo-format)"
@@ -1399,7 +1399,7 @@ msgstr "फाइल निर्यात नइ कर सकिस."
 msgid "Missing Export Filter"
 msgstr "गुमा निर्यात फिल्टर"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1408,7 +1408,7 @@ msgstr ""
 "फाइल किसिम\n"
 "%1 आयात नइ कर सकिस"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "गुमा आयात फिल्टर"
@@ -1604,7 +1604,7 @@ msgstr "पीडीएफ मं निर्यात करव..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "कागद"
@@ -1679,18 +1679,18 @@ msgstr "बंद करव"
 msgid "Stopped"
 msgstr "रुक गिस"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
 msgid "Open This Document"
 msgstr "ये कागद ल खोलव"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>परिवर्धित:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2365,7 +2365,7 @@ msgid "Page  %1"
 msgstr "पेज %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, kde-format
 msgid "Layer"
 msgstr "लेयर"
@@ -2403,7 +2403,7 @@ msgid "Rename Layer"
 msgstr "परत बनाव"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, kde-format
 msgid "Slide"
 msgstr "स्लाइड"
@@ -2443,122 +2443,122 @@ msgstr "हरा"
 msgid "C&ancel"
 msgstr "बदलव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "एक नवा स्लाइड या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
 #| msgid "Slide"
 msgid "Slides"
 msgstr "स्लाइड"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "एक नवा पेज या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "पेज"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Delete selected objects"
 msgstr "चुने गे चीज मन ल मेटाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Raise selected objects"
 msgstr "चुने गे चीज मन ल ऊंचा करव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, kde-format
 msgid "Lower selected objects"
 msgstr "चुने गे चीज मन ल नीचे करव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr "सबसे कम दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr "विस्तृत दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr "छोटे फोटू दृस्य"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
 msgid "View mode"
 msgstr "मोड देखाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "नवा परत के नाम भरव:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New Layer"
 msgstr "नवा परत"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New layer"
 msgstr "नवा परत"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "परत बनाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 #, fuzzy
 #| msgid "Delete Layer"
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "परत मेटाव"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "सब्बो परतों ल मिटा नइ सकिस. कम से कम एक परत चाही."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Error deleting layers"
 msgstr "परतों ल मेटाय मं गलती"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Add a new slide"
 msgstr "एक नवा स्लाइड या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Add a new page"
 msgstr "एक नवा स्लाइड या परत जोड़व"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "मनमाफिक"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2567,7 +2567,7 @@ msgstr "मनमाफिक"
 msgid "Copy"
 msgstr "कम्पनी:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"
@@ -3632,12 +3632,12 @@ msgstr "वह निर्देसिका चुनव जेखर सं�
 msgid "Reference"
 msgstr "पाठ संदर्भ"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3646,13 +3646,13 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, fuzzy, kde-format
 #| msgid "Red"
 msgid "Rdf"
@@ -3814,13 +3814,13 @@ msgid "Apply Stylesheet"
 msgstr "सैली"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr ""
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "User"
@@ -4429,70 +4429,70 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "हासिया बढ़ाव"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 #, fuzzy
 #| msgid "Decrease font size"
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "फोंट आकार घटाव"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 #, fuzzy
 #| msgid "Increase font size"
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "फोंट आकार बढ़ाव"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 #, fuzzy
 #| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "बिन्दु किसिम सेट करव"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 #, fuzzy
 #| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "बिन्दु किसिम सेट करव"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 #, fuzzy
 #| msgid "Set background"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "पिछोत अंगना सेट करव"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 #, fuzzy
 #| msgid "Text Color..."
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "पाठ रंग..."
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 #, fuzzy
 #| msgid "Set Character Style"
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "अक्छर सैली सेट करव"
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 #, fuzzy
 #| msgid "Set Paragraph Style"
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "पैराग्राफ सैली सेट करव"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "फार्मेट"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
@@ -4619,36 +4619,36 @@ msgstr "देस:"
 msgid "Import Data"
 msgstr "डाटा आयात करव"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, kde-format
 msgid "Generic"
 msgstr "जेनेरिक"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "तारीक"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "मुद्रा"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "कुछ नइ"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "

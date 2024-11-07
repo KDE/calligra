@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-08-25 22:07+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -101,7 +101,7 @@ msgid "Opacity"
 msgstr "אטימות"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: libmsooxml/MsooXmlReader.cpp:163 libmsooxml/MsooXmlThemesReader.cpp:334
 #: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
 #: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
@@ -153,42 +153,42 @@ msgstr "סיסמה שגויה, נא למלא את הסיסמה כדי לפענח
 msgid "Could not find path for type %1"
 msgstr "לא ניתן למצוא נתיב לסוג %1"
 
-#: libmsooxml/MsooXmlReader.cpp:127
+#: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1 (שורה %2, עמודה %3)"
 
-#: libmsooxml/MsooXmlReader.cpp:128
+#: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1 (%2, שורה %3, עמודה %4)"
 
-#: libmsooxml/MsooXmlReader.cpp:150
+#: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "הרכיב „%1” לא נמצא"
 
-#: libmsooxml/MsooXmlReader.cpp:155
+#: libmsooxml/MsooXmlReader.cpp:158
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "התכונה „%1” לא נמצאה"
 
-#: libmsooxml/MsooXmlReader.cpp:165
+#: libmsooxml/MsooXmlReader.cpp:168
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "הערך „%1” של המאפיין „%2” מפתיע"
 
-#: libmsooxml/MsooXmlReader.cpp:170
+#: libmsooxml/MsooXmlReader.cpp:173
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "מופע שני מפתיע של רכיב „%1”"
 
-#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
+#: libmsooxml/MsooXmlReader.cpp:190 libmsooxml/MsooXmlReader.cpp:241
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "אמור להיות סוגר לרכיב „%1”"
 
-#: libmsooxml/MsooXmlReader.cpp:229
+#: libmsooxml/MsooXmlReader.cpp:232
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "אף אחד מהרכיבים הצפויים לא נמצא: %1"
@@ -780,8 +780,8 @@ msgstr ""
 "אי אפשר לפתוח קבצים מוגנים בסיסמה.\n"
 "אלגוריתם הסיסמה לא פורסם."
 
-#: sheets/xlsx/XlsxImport.cpp:573 stage/pptx/PptxImport.cpp:1310
-#: words/docx/import/DocxImport.cpp:143
+#: sheets/xlsx/XlsxImport.cpp:577 stage/pptx/PptxImport.cpp:1314
+#: words/docx/import/DocxImport.cpp:146
 #, kde-format
 msgid "Unable to find part for type %1"
 msgstr "לא ניתן למצוא חלק לסוג %1"
@@ -824,7 +824,7 @@ msgstr "אמור להיות מספר שלם או שבר עשרוני"
 msgid "Slide layout \"%1\" not found"
 msgstr "פריסת השקופית „%1” לא נמצאה"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:589
+#: stage/pptx/PptxXmlSlideReader.cpp:569
 #, kde-format
 msgid "Slide %1"
 msgstr "שקופית %1"

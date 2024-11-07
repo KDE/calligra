@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2022-05-11 21:25+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -547,37 +547,37 @@ msgstr "Наследуемый стиль:"
 msgid "Include in table of contents"
 msgstr "Включить в Содержание"
 
-#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
+#: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
 msgid "Normal"
 msgstr "Обычный"
 
-#: dialogs/CharacterHighlighting.cpp:299
+#: dialogs/CharacterHighlighting.cpp:304
 #, kde-format
 msgid "Small Caps"
 msgstr "Малые прописные"
 
-#: dialogs/CharacterHighlighting.cpp:300
+#: dialogs/CharacterHighlighting.cpp:305
 #, kde-format
 msgid "Uppercase"
 msgstr "ВЕРХНИЙ РЕГИСТР"
 
-#: dialogs/CharacterHighlighting.cpp:301
+#: dialogs/CharacterHighlighting.cpp:306
 #, kde-format
 msgid "Lowercase"
 msgstr "нижний регистр"
 
-#: dialogs/CharacterHighlighting.cpp:302
+#: dialogs/CharacterHighlighting.cpp:307
 #, kde-format
 msgid "Capitalize"
 msgstr "Начинать с прописной буквы"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
+#: dialogs/CharacterHighlighting.cpp:315 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Верхний индекс"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
+#: dialogs/CharacterHighlighting.cpp:316 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Нижний индекс"

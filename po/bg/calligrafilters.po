@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2011-07-27 22:23+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -93,7 +93,7 @@ msgid "Opacity"
 msgstr "Непрозрачност"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: libmsooxml/MsooXmlReader.cpp:163 libmsooxml/MsooXmlThemesReader.cpp:334
 #: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
 #: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
@@ -145,42 +145,42 @@ msgstr "Неправилна парола. Въведете парола за д
 msgid "Could not find path for type %1"
 msgstr ""
 
-#: libmsooxml/MsooXmlReader.cpp:127
+#: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1 (ред %2, знак %3)"
 
-#: libmsooxml/MsooXmlReader.cpp:128
+#: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1 (%2, ред %3, знак %4)"
 
-#: libmsooxml/MsooXmlReader.cpp:150
+#: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "Елементът \"%1\" не е открит"
 
-#: libmsooxml/MsooXmlReader.cpp:155
+#: libmsooxml/MsooXmlReader.cpp:158
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "Параметърът \"%1\" не е открит"
 
-#: libmsooxml/MsooXmlReader.cpp:165
+#: libmsooxml/MsooXmlReader.cpp:168
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "Неочаквана стойност \"%1\" на атрибут \"%2\""
 
-#: libmsooxml/MsooXmlReader.cpp:170
+#: libmsooxml/MsooXmlReader.cpp:173
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "Неочаквано второ срещане на елемента \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
+#: libmsooxml/MsooXmlReader.cpp:190 libmsooxml/MsooXmlReader.cpp:241
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "Очаква се затваряне на елемента \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:229
+#: libmsooxml/MsooXmlReader.cpp:232
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "Не е открит никой от очакваните елементи: %1"
@@ -784,8 +784,8 @@ msgstr ""
 "Защитените с пароли файлове не могат да се отварят. \n"
 "Алгоритъмът на паролата не е публикуван"
 
-#: sheets/xlsx/XlsxImport.cpp:573 stage/pptx/PptxImport.cpp:1310
-#: words/docx/import/DocxImport.cpp:143
+#: sheets/xlsx/XlsxImport.cpp:577 stage/pptx/PptxImport.cpp:1314
+#: words/docx/import/DocxImport.cpp:146
 #, kde-format
 msgid "Unable to find part for type %1"
 msgstr "Не може да се открие приставка за вида %1"
@@ -828,7 +828,7 @@ msgstr "Очаква се цяло число или число с плаващ�
 msgid "Slide layout \"%1\" not found"
 msgstr "Подредбата на кадри \"%1\" не е открита"
 
-#: stage/pptx/PptxXmlSlideReader.cpp:589
+#: stage/pptx/PptxXmlSlideReader.cpp:569
 #, kde-format
 msgid "Slide %1"
 msgstr "Кадър %1"

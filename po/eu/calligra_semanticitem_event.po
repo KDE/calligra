@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-07-10 00:27+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -27,22 +27,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Ekitaldia"
 
-#: KoRdfCalendarEvent.cpp:147
+#: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
 msgstr "Aldea"
 
-#: KoRdfCalendarEvent.cpp:148
+#: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
 msgstr "Eskualdea"
 
-#: KoRdfCalendarEvent.cpp:359
+#: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Hautatu gordetzeko egutegi bat:"
 
-#: KoRdfCalendarEvent.cpp:379
+#: KoRdfCalendarEvent.cpp:384
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Ezin izan du sarrera gehitu\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:402
+#: KoRdfCalendarEvent.cpp:407
 #, kde-format
 msgid ""
 "Could not save iCal file\n"

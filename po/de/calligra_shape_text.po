@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_text\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -518,37 +518,37 @@ msgstr "Übergeordneter Stil:"
 msgid "Include in table of contents"
 msgstr "Ins Inhaltsverzeichnis aufnehmen"
 
-#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
+#: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
-#: dialogs/CharacterHighlighting.cpp:299
+#: dialogs/CharacterHighlighting.cpp:304
 #, kde-format
 msgid "Small Caps"
 msgstr "Pseudo-Kapitälchen"
 
-#: dialogs/CharacterHighlighting.cpp:300
+#: dialogs/CharacterHighlighting.cpp:305
 #, kde-format
 msgid "Uppercase"
 msgstr "Großschreibung"
 
-#: dialogs/CharacterHighlighting.cpp:301
+#: dialogs/CharacterHighlighting.cpp:306
 #, kde-format
 msgid "Lowercase"
 msgstr "Kleinschreibung"
 
-#: dialogs/CharacterHighlighting.cpp:302
+#: dialogs/CharacterHighlighting.cpp:307
 #, kde-format
 msgid "Capitalize"
 msgstr "Großschreibung am Wortanfang"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
+#: dialogs/CharacterHighlighting.cpp:315 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Hochgestellt"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
+#: dialogs/CharacterHighlighting.cpp:316 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Tiefgestellt"

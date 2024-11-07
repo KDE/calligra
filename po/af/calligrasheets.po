@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -14505,199 +14505,199 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Styl:"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "January"
 msgstr "Januarie"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "February"
 msgstr "Februarie"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "March"
 msgstr "Maart"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "April"
 msgstr "April"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "May"
 msgstr "Dalk mag"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "June"
 msgstr "Junie"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "July"
 msgstr "Julie"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "August"
 msgstr "Augustus"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "September"
 msgstr "September"
 
-#: ui/commands/AutoFillCommand.cpp:122
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "October"
 msgstr "Oktober"
 
-#: ui/commands/AutoFillCommand.cpp:123
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "November"
 msgstr "November"
 
-#: ui/commands/AutoFillCommand.cpp:124
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "December"
 msgstr "Desember"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:137
 #, fuzzy, kde-format
 msgid "Jan"
 msgstr "Japan"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Feb"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:139
 #, fuzzy, kde-format
 msgid "Mar"
 msgstr "Maart"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:140
 #, fuzzy, kde-format
 msgid "Apr"
 msgstr "April"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:141
 #, fuzzy, kde-format
 #| msgid "May"
 msgctxt "May short"
 msgid "May"
 msgstr "Dalk mag"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:142
 #, fuzzy, kde-format
 msgid "Jun"
 msgstr "Junie"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:143
 #, fuzzy, kde-format
 msgid "Jul"
 msgstr "Julie"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:144
 #, fuzzy, kde-format
 msgid "Aug"
 msgstr "Augustus"
 
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Sep"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:138
+#: ui/commands/AutoFillCommand.cpp:146
 #, fuzzy, kde-format
 msgid "Oct"
 msgstr "Voorwerp..."
 
-#: ui/commands/AutoFillCommand.cpp:139
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Nov"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:140
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Dec"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:153
 #, fuzzy, kde-format
 msgid "Monday"
 msgstr "Geld"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:154
 #, fuzzy, kde-format
 msgid "Tuesday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:155
 #, fuzzy, kde-format
 msgid "Wednesday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:156
 #, fuzzy, kde-format
 msgid "Thursday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:149
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Friday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:150
+#: ui/commands/AutoFillCommand.cpp:158
 #, fuzzy, kde-format
 msgid "Saturday"
 msgstr "Mauritius"
 
-#: ui/commands/AutoFillCommand.cpp:151
+#: ui/commands/AutoFillCommand.cpp:159
 #, fuzzy, kde-format
 msgid "Sunday"
 msgstr "Sudan"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:164
 #, fuzzy, kde-format
 msgid "Mon"
 msgstr "Geld"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:165
 #, fuzzy, kde-format
 msgid "Tue"
 msgstr "Waar"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:166
 #, fuzzy, kde-format
 msgid "Wed"
 msgstr "Afgaande"
 
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:167
 #, fuzzy, kde-format
 msgid "Thu"
 msgstr "Waar"
 
-#: ui/commands/AutoFillCommand.cpp:160
+#: ui/commands/AutoFillCommand.cpp:168
 #, kde-format
 msgid "Fri"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:161
+#: ui/commands/AutoFillCommand.cpp:169
 #, fuzzy, kde-format
 msgid "Sat"
 msgstr "Begin"
 
-#: ui/commands/AutoFillCommand.cpp:162
+#: ui/commands/AutoFillCommand.cpp:170
 #, fuzzy, kde-format
 msgid "Sun"
 msgstr "Sudan"
 
-#: ui/commands/AutoFillCommand.cpp:669
+#: ui/commands/AutoFillCommand.cpp:677
 #, fuzzy
 #| msgid "Autofill"
 msgctxt "(qtundo-format)"

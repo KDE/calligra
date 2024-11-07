@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2020-10-11 11:32+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -24,22 +24,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Γεγονός"
 
-#: KoRdfCalendarEvent.cpp:147
+#: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
 msgstr "Περιοχή"
 
-#: KoRdfCalendarEvent.cpp:148
+#: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
 msgstr "Περιφέρεια"
 
-#: KoRdfCalendarEvent.cpp:359
+#: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Επιλέξτε ένα ημερολόγιο για αποθήκευση:"
 
-#: KoRdfCalendarEvent.cpp:379
+#: KoRdfCalendarEvent.cpp:384
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Αδυναμία προσθήκης εγγραφής\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:402
+#: KoRdfCalendarEvent.cpp:407
 #, kde-format
 msgid ""
 "Could not save iCal file\n"

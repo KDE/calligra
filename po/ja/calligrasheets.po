@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2014-11-09 15:21-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -13995,198 +13995,198 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "フィルタを適用"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "January"
 msgstr "1月"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:122
 #, kde-format
 msgid "February"
 msgstr "2月"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:123
 #, kde-format
 msgid "March"
 msgstr "3月"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:124
 #, kde-format
 msgid "April"
 msgstr "4月"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "May"
 msgstr "5月"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "June"
 msgstr "6月"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "July"
 msgstr "7月"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "August"
 msgstr "8月"
 
-#: ui/commands/AutoFillCommand.cpp:121
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "September"
 msgstr "9月"
 
-#: ui/commands/AutoFillCommand.cpp:122
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "October"
 msgstr "10月"
 
-#: ui/commands/AutoFillCommand.cpp:123
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "November"
 msgstr "11月"
 
-#: ui/commands/AutoFillCommand.cpp:124
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "December"
 msgstr "12月"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Jan"
 msgstr "1月"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Feb"
 msgstr "2月"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
 msgid "Mar"
 msgstr "3月"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Apr"
 msgstr "4月"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "5月"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Jun"
 msgstr "6月"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Jul"
 msgstr "7月"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Aug"
 msgstr "8月"
 
-#: ui/commands/AutoFillCommand.cpp:137
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Sep"
 msgstr "9月"
 
-#: ui/commands/AutoFillCommand.cpp:138
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Oct"
 msgstr "10月"
 
-#: ui/commands/AutoFillCommand.cpp:139
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Nov"
 msgstr "11月"
 
-#: ui/commands/AutoFillCommand.cpp:140
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Dec"
 msgstr "12月"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Monday"
 msgstr "月曜日"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Tuesday"
 msgstr "火曜日"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Wednesday"
 msgstr "水曜日"
 
-#: ui/commands/AutoFillCommand.cpp:148
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Thursday"
 msgstr "木曜日"
 
-#: ui/commands/AutoFillCommand.cpp:149
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Friday"
 msgstr "金曜日"
 
-#: ui/commands/AutoFillCommand.cpp:150
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Saturday"
 msgstr "土曜日"
 
-#: ui/commands/AutoFillCommand.cpp:151
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Sunday"
 msgstr "日曜日"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:164
 #, kde-format
 msgid "Mon"
 msgstr "月"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:165
 #, kde-format
 msgid "Tue"
 msgstr "火"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:166
 #, kde-format
 msgid "Wed"
 msgstr "水"
 
-#: ui/commands/AutoFillCommand.cpp:159
+#: ui/commands/AutoFillCommand.cpp:167
 #, kde-format
 msgid "Thu"
 msgstr "木"
 
-#: ui/commands/AutoFillCommand.cpp:160
+#: ui/commands/AutoFillCommand.cpp:168
 #, kde-format
 msgid "Fri"
 msgstr "金"
 
-#: ui/commands/AutoFillCommand.cpp:161
+#: ui/commands/AutoFillCommand.cpp:169
 #, kde-format
 msgid "Sat"
 msgstr "土"
 
-#: ui/commands/AutoFillCommand.cpp:162
+#: ui/commands/AutoFillCommand.cpp:170
 #, kde-format
 msgid "Sun"
 msgstr "日"
 
-#: ui/commands/AutoFillCommand.cpp:669
+#: ui/commands/AutoFillCommand.cpp:677
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "自動補完"

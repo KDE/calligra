@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-08-27 12:14+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -520,37 +520,37 @@ msgstr "Vecāka stils:"
 msgid "Include in table of contents"
 msgstr "Iekļaut satura rādītājā"
 
-#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
+#: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
 msgid "Normal"
 msgstr "Normāli"
 
-#: dialogs/CharacterHighlighting.cpp:299
+#: dialogs/CharacterHighlighting.cpp:304
 #, kde-format
 msgid "Small Caps"
 msgstr "Samazināti lielie burti"
 
-#: dialogs/CharacterHighlighting.cpp:300
+#: dialogs/CharacterHighlighting.cpp:305
 #, kde-format
 msgid "Uppercase"
 msgstr "Lielie burti"
 
-#: dialogs/CharacterHighlighting.cpp:301
+#: dialogs/CharacterHighlighting.cpp:306
 #, kde-format
 msgid "Lowercase"
 msgstr "Mazie burti"
 
-#: dialogs/CharacterHighlighting.cpp:302
+#: dialogs/CharacterHighlighting.cpp:307
 #, kde-format
 msgid "Capitalize"
 msgstr "Lielie/mazie burti"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
+#: dialogs/CharacterHighlighting.cpp:315 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Augšraksts"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
+#: dialogs/CharacterHighlighting.cpp:316 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Apakšraksts"

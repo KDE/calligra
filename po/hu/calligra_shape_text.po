@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2017-03-01 17:46+0100\n"
 "Last-Translator: Kiszel Kristóf <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -518,37 +518,37 @@ msgstr "Szülő stílus:"
 msgid "Include in table of contents"
 msgstr "Feltüntetés a tartalomjegyzékben"
 
-#: dialogs/CharacterHighlighting.cpp:298 dialogs/CharacterHighlighting.cpp:309
+#: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
 msgid "Normal"
 msgstr "Normál"
 
-#: dialogs/CharacterHighlighting.cpp:299
+#: dialogs/CharacterHighlighting.cpp:304
 #, kde-format
 msgid "Small Caps"
 msgstr "Kiskapitális"
 
-#: dialogs/CharacterHighlighting.cpp:300
+#: dialogs/CharacterHighlighting.cpp:305
 #, kde-format
 msgid "Uppercase"
 msgstr "Nagybetű"
 
-#: dialogs/CharacterHighlighting.cpp:301
+#: dialogs/CharacterHighlighting.cpp:306
 #, kde-format
 msgid "Lowercase"
 msgstr "Kisbetű"
 
-#: dialogs/CharacterHighlighting.cpp:302
+#: dialogs/CharacterHighlighting.cpp:307
 #, kde-format
 msgid "Capitalize"
 msgstr "Nagy kezdőbetűk"
 
-#: dialogs/CharacterHighlighting.cpp:310 TextTool.cpp:280
+#: dialogs/CharacterHighlighting.cpp:315 TextTool.cpp:280
 #, kde-format
 msgid "Superscript"
 msgstr "Felső index"
 
-#: dialogs/CharacterHighlighting.cpp:311 TextTool.cpp:286
+#: dialogs/CharacterHighlighting.cpp:316 TextTool.cpp:286
 #, kde-format
 msgid "Subscript"
 msgstr "Alsó index"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-05-21 01:57+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -147,7 +147,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "插入點"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "合併點"
@@ -1286,14 +1286,14 @@ msgstr "無法匯出檔案。"
 msgid "Missing Export Filter"
 msgstr "缺乏匯出過濾程式"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, kde-format
 msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr "無法匯入此類型的檔案：%1"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "遺失匯入過濾器"
@@ -1478,7 +1478,7 @@ msgstr "匯出為 PDF 檔..."
 msgid "Cannot export to the specified file"
 msgstr "無法匯出到指定檔案"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "文件"
@@ -1553,18 +1553,18 @@ msgstr "關閉"
 msgid "Stopped"
 msgstr "已停止"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
 msgid "Open This Document"
 msgstr "開啟此文件"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>修改時間：</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2149,7 +2149,7 @@ msgid "Page  %1"
 msgstr "第 %1 頁"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, kde-format
 msgid "Layer"
 msgstr "層次"
@@ -2183,7 +2183,7 @@ msgid "Rename Layer"
 msgstr "重新命名層次"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, kde-format
 msgid "Slide"
 msgstr "投影片"
@@ -2221,115 +2221,115 @@ msgstr "複製到這裡(&C)"
 msgid "C&ancel"
 msgstr "取消(&A)"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "新增投影片或層次"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
 #| msgid "Slide"
 msgid "Slides"
 msgstr "投影片"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "新增頁面或層次"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "頁面"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Delete selected objects"
 msgstr "刪除選取的物件"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Raise selected objects"
 msgstr "提升選取的物件"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, kde-format
 msgid "Lower selected objects"
 msgstr "降低選取的物件"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr "最小檢視"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr "詳細檢視"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr "縮圖檢視"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
 msgid "View mode"
 msgstr "檢視模式"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "輸入新層次的名稱："
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New Layer"
 msgstr "新階層"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New layer"
 msgstr "新層次"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "建立層次"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "刪除層次"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "無法刪除所有的層次，至少要留一個。"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Error deleting layers"
 msgstr "刪除層次發生錯誤"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Add a new slide"
 msgstr "新增投影片"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Add a new page"
 msgstr "新增頁面"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, kde-format
 msgid "Cut"
 msgstr "剪下"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2337,7 +2337,7 @@ msgstr "剪下"
 msgid "Copy"
 msgstr "複製"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, kde-format
 msgid "Paste"
 msgstr "貼上"
@@ -3300,12 +3300,12 @@ msgstr "選擇您要參考的物件"
 msgid "Reference"
 msgstr "參考"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr "設定所有現有的"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3313,13 +3313,13 @@ msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] "<qt>您編輯的資料會遺失。<p>還有 %1 個不合法的敘述。</qt>"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr "要丟棄不合法的敘述嗎？"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, kde-format
 msgid "Rdf"
 msgstr "Rdf"
@@ -3528,13 +3528,13 @@ msgid "Apply Stylesheet"
 msgstr "套用樣式表"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr "系統"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, kde-format
 msgid "User"
 msgstr "使用者"
@@ -4054,52 +4054,52 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "提高縮排"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "字型變小"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "字型變大"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "設定字型"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "設定字型大小"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "設定背景顏色"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "設定文字顏色"
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "設定字元樣式"
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "設定段落樣式"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "格式"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "格式化"
@@ -4222,36 +4222,36 @@ msgstr "國家："
 msgid "Import Data"
 msgstr "匯入資料"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, kde-format
 msgid "Generic"
 msgstr "一般"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "文字"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "日期"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "貨幣"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "無"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -152,7 +152,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "بەت قىستۇر"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "نۇقتىلارنى بىرىكتۈر"
@@ -1413,7 +1413,7 @@ msgstr "%1 نى تاپقىلى بولمىدى"
 msgid "Missing Export Filter"
 msgstr "قۇرلارنى ئىمپورت قىلىش:"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid ""
@@ -1421,7 +1421,7 @@ msgid ""
 "%1"
 msgstr "%1 نى تاپقىلى بولمىدى"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, fuzzy, kde-format
 #| msgid "Import lines:"
 msgid "Missing Import Filter"
@@ -1620,7 +1620,7 @@ msgstr "PDF چىقار…"
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "پۈتۈك"
@@ -1698,19 +1698,19 @@ msgstr "ياپ"
 msgid "Stopped"
 msgstr "توختىدى"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Open This Document"
 msgstr "پۈتۈك ئېچىش"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>ئۆزگەرتىلگەن ۋاقىت:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2318,7 +2318,7 @@ msgid "Page  %1"
 msgstr "بەت %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, kde-format
 msgid "Layer"
 msgstr "قەۋەت"
@@ -2360,7 +2360,7 @@ msgid "Rename Layer"
 msgstr "قاتلام قۇرۇش"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, kde-format
 msgid "Slide"
 msgstr "تام تەسۋىر"
@@ -2395,118 +2395,118 @@ msgstr "بۇ جايغا كۆچۈر(&C)"
 msgid "C&ancel"
 msgstr "ۋاز كەچ(&A)"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "Add a new page or layer"
 msgid "Add a new slide or layer"
 msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
 #| msgid "Slide"
 msgid "Slides"
 msgstr "تام تەسۋىر"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "بەت"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Delete selected objects"
 msgstr "تاللانغان نەڭنى ئۆچۈر"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Raise selected objects"
 msgstr "تاللانغان نەڭنى ئالدىغا يۆتكە"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, kde-format
 msgid "Lower selected objects"
 msgstr "تاللانغان نەڭنى ئارقىغا يۆتكە"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr "ئەڭ كىچىك كۆرۈنۈش"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr "تەپسىلات كۆرۈنۈش"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr "كىچىكلىتىلگەن سۈرەت كۆرۈنۈشى"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
 msgid "View mode"
 msgstr "كۆرۈنۈش ھالىتى"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "يېڭى قاتلامنىڭ ئاتىنى كىرگۈزۈڭ:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New Layer"
 msgstr "يېڭى سۈرەت قەۋىتى"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New layer"
 msgstr "يېڭى سۈرەت قەۋىتى"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "قاتلام قۇرۇش"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "سۈرەت قەۋىتى ئۆچۈر"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "ھەممە قاتلاملارنى ئۆچۈرگىلى بولمىدى. ئاز دېگەندە قاتلامدىن بىرى زۆرۈر."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Error deleting layers"
 msgstr "قاتلاملارنى ئۆچۈرۈۋاتقاندا خاتالىق كۆرۈلدى"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, fuzzy, kde-format
 #| msgid "Add a new page or layer"
 msgid "Add a new slide"
 msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Add a new page or layer"
 msgid "Add a new page"
 msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, kde-format
 msgid "Cut"
 msgstr "كەس"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2514,7 +2514,7 @@ msgstr "كەس"
 msgid "Copy"
 msgstr "كۆچۈر"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, kde-format
 msgid "Paste"
 msgstr "چاپلا"
@@ -3543,12 +3543,12 @@ msgstr ""
 msgid "Reference"
 msgstr "نەقىل"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3556,13 +3556,13 @@ msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, fuzzy, kde-format
 #| msgid "Red"
 msgid "Rdf"
@@ -3717,13 +3717,13 @@ msgid "Apply Stylesheet"
 msgstr "ئۇسلۇب جەدۋىلى"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr "سىستېما"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, kde-format
 msgid "User"
 msgstr "ئىشلەتكۈچى"
@@ -4280,48 +4280,48 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "كېڭەيت"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "خەت چوڭلۇقىنى كىچىكلىتىش"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "خەت چوڭلۇقىنى چوڭايتىش"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 #, fuzzy
 #| msgid "Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "خەت نۇسخا"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 #, fuzzy
 #| msgid "Size"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "چوڭلۇقى"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 #, fuzzy
 #| msgid "Background Color"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "تەگلىك رەڭگى"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "New Paragraph"
@@ -4329,12 +4329,12 @@ msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "يېڭى ئابزاس"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "فورمات"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
@@ -4461,36 +4461,36 @@ msgstr "دۆلەت:"
 msgid "Import Data"
 msgstr "سانلىق-مەلۇمات ئەكىر"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, kde-format
 msgid "Generic"
 msgstr "ئادەتتىكى"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "تېكىست"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "چېسلا"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "پۇل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "يوق"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "

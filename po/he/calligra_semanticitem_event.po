@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-07-02 14:45+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -25,22 +25,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "אירוע"
 
-#: KoRdfCalendarEvent.cpp:147
+#: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
 msgstr "שטח"
 
-#: KoRdfCalendarEvent.cpp:148
+#: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
 msgstr "אזור"
 
-#: KoRdfCalendarEvent.cpp:359
+#: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "נא לבחור לוח שנה לשמירה:"
 
-#: KoRdfCalendarEvent.cpp:379
+#: KoRdfCalendarEvent.cpp:384
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -49,7 +49,7 @@ msgstr ""
 "לא ניתן להוסיף רשומה\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:402
+#: KoRdfCalendarEvent.cpp:407
 #, kde-format
 msgid ""
 "Could not save iCal file\n"

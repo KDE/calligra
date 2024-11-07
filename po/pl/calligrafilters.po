@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-08-24 12:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -100,7 +100,7 @@ msgid "Opacity"
 msgstr "Nieprzezroczystość"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
-#: libmsooxml/MsooXmlReader.cpp:160 libmsooxml/MsooXmlThemesReader.cpp:334
+#: libmsooxml/MsooXmlReader.cpp:163 libmsooxml/MsooXmlThemesReader.cpp:334
 #: sheets/xlsx/XlsxXmlCommentsReader.cpp:91
 #: sheets/xlsx/XlsxXmlDocumentReader.cpp:126
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:103
@@ -153,42 +153,42 @@ msgstr "Niepoprawne hasło, proszę podać hasło, aby odszyfrować dokument:"
 msgid "Could not find path for type %1"
 msgstr "Nie można znaleźć ścieżki dla typu %1"
 
-#: libmsooxml/MsooXmlReader.cpp:127
+#: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
 msgid "%1 (line %2, column %3)"
 msgstr "%1 (wiersz %2, kolumna %3)"
 
-#: libmsooxml/MsooXmlReader.cpp:128
+#: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
 msgstr "%1 (%2, wiersz %3, kolumna %4)"
 
-#: libmsooxml/MsooXmlReader.cpp:150
+#: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
 msgid "Element \"%1\" not found"
 msgstr "Element \"%1\" nie został znaleziony"
 
-#: libmsooxml/MsooXmlReader.cpp:155
+#: libmsooxml/MsooXmlReader.cpp:158
 #, kde-format
 msgid "Attribute \"%1\" not found"
 msgstr "Atrybut \"%1\" nie został znaleziony"
 
-#: libmsooxml/MsooXmlReader.cpp:165
+#: libmsooxml/MsooXmlReader.cpp:168
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
 msgstr "Nieoczekiwana wartość \"%1\" atrybutu \"%2\""
 
-#: libmsooxml/MsooXmlReader.cpp:170
+#: libmsooxml/MsooXmlReader.cpp:173
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
 msgstr "Nieoczekiwane drugie wystąpienie elementu \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:187 libmsooxml/MsooXmlReader.cpp:238
+#: libmsooxml/MsooXmlReader.cpp:190 libmsooxml/MsooXmlReader.cpp:241
 #, kde-format
 msgid "Expected closing of element \"%1\""
 msgstr "Oczekiwano zamknięcia elementu \"%1\""
 
-#: libmsooxml/MsooXmlReader.cpp:229
+#: libmsooxml/MsooXmlReader.cpp:232
 #, kde-format
 msgid "None of expected elements found: %1"
 msgstr "Żaden z oczekiwanych elementów nie został znaleziony: %1"
@@ -784,8 +784,8 @@ msgstr ""
 "Nie można otworzyć plików zabezpieczonych hasłem.\n"
 "Algorytm hasła nie został opublikowany"
 
-#: sheets/xlsx/XlsxImport.cpp:573 stage/pptx/PptxImport.cpp:1310
-#: words/docx/import/DocxImport.cpp:143
+#: sheets/xlsx/XlsxImport.cpp:577 stage/pptx/PptxImport.cpp:1314
+#: words/docx/import/DocxImport.cpp:146
 #, kde-format
 msgid "Unable to find part for type %1"
 msgstr "Nie można znaleźć modułu dla typu %1"
@@ -830,7 +830,7 @@ msgstr "Oczekiwano liczby całkowitej lub zmiennoprzecinkowej"
 msgid "Slide layout \"%1\" not found"
 msgstr "Nie znaleziono układu slajdu \"%1\""
 
-#: stage/pptx/PptxXmlSlideReader.cpp:589
+#: stage/pptx/PptxXmlSlideReader.cpp:569
 #, kde-format
 msgid "Slide %1"
 msgstr "Slajd %1"

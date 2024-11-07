@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: $2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2015-02-04 16:02+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: none\n"
@@ -27,22 +27,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Događaj"
 
-#: KoRdfCalendarEvent.cpp:147
+#: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
 msgstr "Područje"
 
-#: KoRdfCalendarEvent.cpp:148
+#: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
 msgstr "Region"
 
-#: KoRdfCalendarEvent.cpp:359
+#: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Odaberi kalendar za snimanje:"
 
-#: KoRdfCalendarEvent.cpp:379
+#: KoRdfCalendarEvent.cpp:384
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Unos nije mogao biti dodat\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:402
+#: KoRdfCalendarEvent.cpp:407
 #, kde-format
 msgid ""
 "Could not save iCal file\n"

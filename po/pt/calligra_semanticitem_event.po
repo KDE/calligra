@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_semanticitem_event\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2016-11-20 12:51+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -19,22 +19,22 @@ msgctxt "displayname of the semantic item type Event"
 msgid "Event"
 msgstr "Evento"
 
-#: KoRdfCalendarEvent.cpp:147
+#: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
 msgstr "Área"
 
-#: KoRdfCalendarEvent.cpp:148
+#: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
 msgstr "Região"
 
-#: KoRdfCalendarEvent.cpp:359
+#: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
 msgstr "Seleccione um calendário para gravar:"
 
-#: KoRdfCalendarEvent.cpp:379
+#: KoRdfCalendarEvent.cpp:384
 #, kde-format
 msgid ""
 "Could not add entry\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Não foi possível adicionar o item\n"
 "%1"
 
-#: KoRdfCalendarEvent.cpp:402
+#: KoRdfCalendarEvent.cpp:407
 #, kde-format
 msgid ""
 "Could not save iCal file\n"

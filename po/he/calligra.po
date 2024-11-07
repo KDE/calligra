@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-10-12 14:08+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -149,7 +149,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "הוספת נקודות"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "מיזוג נקודות"
@@ -1289,7 +1289,7 @@ msgstr "אי אפשר לייצא את הקובץ."
 msgid "Missing Export Filter"
 msgstr "מסנן ייצוא חסר"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1298,7 +1298,7 @@ msgstr ""
 "לא ניתן לייבא קובץ מסוג\n"
 "%1"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "מסנן ייבוא חסר"
@@ -1487,7 +1487,7 @@ msgstr "ייצוא ל־PDF"
 msgid "Cannot export to the specified file"
 msgstr "לא ניתן לייצא לקובץ שצוין"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "מסמך"
@@ -1562,18 +1562,18 @@ msgstr "סגירה"
 msgid "Stopped"
 msgstr "נעצר"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
 msgid "Open This Document"
 msgstr "פתיחת המסמך הזה"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>מועד שינוי:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2160,7 +2160,7 @@ msgid "Page  %1"
 msgstr "עמוד %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, kde-format
 msgid "Layer"
 msgstr "שכבה"
@@ -2191,7 +2191,7 @@ msgid "Rename Layer"
 msgstr "שינוי שם שכבה"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, kde-format
 msgid "Slide"
 msgstr "שקופית"
@@ -2226,114 +2226,114 @@ msgstr "העתקה ל&כאן"
 msgid "C&ancel"
 msgstr "&ביטול"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "הוספת שקופית או שכבה חדשות"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, kde-format
 msgid "Slides"
 msgstr "שקופיות"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "הוספת עמוד או שכבה חדשים"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "עמוד"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Delete selected objects"
 msgstr "מחיקת העצמים הנבחרים"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Raise selected objects"
 msgstr "הגבהת העצמים הנבחרים"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, kde-format
 msgid "Lower selected objects"
 msgstr "הנמכת העצמים הנבחרים"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr "תצוגה מצומצמת"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr "תצוגה מפורטת"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr "תצוגת תמוניות"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
 msgid "View mode"
 msgstr "מצב תצוגה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "נא למלא שם לשכבה החדשה:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New Layer"
 msgstr "שכבה חדשה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New layer"
 msgstr "שכבה חדשה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "יצירת שכבה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "מחיקת שכבה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "אי אפשר למחוק את כל השכבות. חייבת להישאר לפחות שכבה אחת."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Error deleting layers"
 msgstr "שגיאה במחיקת שכבות"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Add a new slide"
 msgstr "הוספת שקופית חדשה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Add a new page"
 msgstr "הוספת עמוד חדש"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, kde-format
 msgid "Cut"
 msgstr "גזירה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2341,7 +2341,7 @@ msgstr "גזירה"
 msgid "Copy"
 msgstr "העתקה"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, kde-format
 msgid "Paste"
 msgstr "הדבקה"
@@ -3305,12 +3305,12 @@ msgstr "נא לבחור את העצם להפנות אליו"
 msgid "Reference"
 msgstr "הפנייה"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr "הגדרה לכל הקיימים"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3321,13 +3321,13 @@ msgstr[1] "<qt>העריכות יאבדו.<p>נשארו שתי הכרזות שג�
 msgstr[2] "<qt>העריכות יאבדו.<p>נשארו %1 הכרזות שגויות.</qt>"
 msgstr[3] "<qt>העריכות יאבדו.<p>נשארו %1 הכרזות שגויות.</qt>"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr "להתעלם מהצהרות שגויות?"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, kde-format
 msgid "Rdf"
 msgstr "Rdf"
@@ -3480,13 +3480,13 @@ msgid "Apply Stylesheet"
 msgstr "החלת גיליון סגנון"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr "מערכת"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, kde-format
 msgid "User"
 msgstr "משתמש"
@@ -4004,52 +4004,52 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "הגדלת הזחה"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "הקטנת הכתב"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "הגדלת הכתב"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "הגדרת גופן"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "הגדרת גודל גופן"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "הגדרת צבע הרקע"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "הגדרת צבע טקסט"
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "הגדרת סגנון תווים"
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "הגדרת סגנון פסקה"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "עיצוב"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "עיצוב"
@@ -4172,36 +4172,36 @@ msgstr "מדינה:"
 msgid "Import Data"
 msgstr "ייבוא נתונים"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, kde-format
 msgid "Generic"
 msgstr "כללי"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "טקסט"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "תאריך"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "מטבע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "ללא"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "

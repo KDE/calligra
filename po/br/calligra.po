@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2004-07-08 16:49+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -151,7 +151,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Enlakaat ul liamm"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge points"
@@ -1374,7 +1374,7 @@ msgstr "Ne m'eus ket ezporzh ar restr."
 msgid "Missing Export Filter"
 msgstr "Mankout a ra ar sil ezporzh"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1386,7 +1386,7 @@ msgstr ""
 "N'hellan ket digeriñ\n"
 "%1"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Mankout a ra ar sil enporzh"
@@ -1581,7 +1581,7 @@ msgstr "E&zporzh ..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "Teul"
@@ -1660,18 +1660,18 @@ msgstr "Livioù"
 msgid "Stopped"
 msgstr "da"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
 msgid "Open This Document"
 msgstr "Digeriñ an teul-se"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr ""
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2348,7 +2348,7 @@ msgid "Page  %1"
 msgstr "Deiziad : %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
@@ -2387,7 +2387,7 @@ msgid "Rename Layer"
 msgstr "Krouiñ ur patrom"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, fuzzy, kde-format
 #| msgid "Size:"
 msgid "Slide"
@@ -2429,132 +2429,132 @@ msgstr "Gwer"
 msgid "C&ancel"
 msgstr "Kemmañ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide or layer"
 msgstr "Ouzhpennañ un dibenn-linenn"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
 #| msgid "Size:"
 msgid "Slides"
 msgstr "Ment :"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new page or layer"
 msgstr "Ouzhpennañ un dibenn-linenn"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, fuzzy, kde-format
 #| msgid "Fit Page"
 msgid "Page"
 msgstr "Lakaat ar bajenn a-zoare"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Delete selected objects"
 msgstr "Lemel ar skrid diuzet"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, fuzzy, kde-format
 #| msgid "Remove Selected Text"
 msgid "Raise selected objects"
 msgstr "Lemel ar skrid diuzet"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, fuzzy, kde-format
 #| msgid "Create object"
 msgid "Lower selected objects"
 msgstr "Krouiñ un dra"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, fuzzy, kde-format
 #| msgid "Change Borders"
 msgid "View mode"
 msgstr "Kemmañ ar bevennoù"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New Layer"
 msgstr "Lavand"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Lavender"
 msgid "New layer"
 msgstr "Lavand"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Krouiñ ur patrom"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 #, fuzzy
 #| msgid "Delete page"
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Lemel ur bajenn"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, fuzzy, kde-format
 msgid "Error deleting layers"
 msgstr "Krouiñ ur patrom"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new slide"
 msgstr "Ouzhpennañ un dibenn-linenn"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, fuzzy, kde-format
 #| msgid "Add Newline"
 msgid "Add a new page"
 msgstr "Ouzhpennañ un dibenn-linenn"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Cut"
 msgstr "Diouzhoc'h"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2562,7 +2562,7 @@ msgstr "Diouzhoc'h"
 msgid "Copy"
 msgstr "Eilañ"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Paste"
@@ -3611,12 +3611,12 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3625,13 +3625,13 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr ""
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, fuzzy, kde-format
 #| msgid "Red"
 msgid "Rdf"
@@ -3794,13 +3794,13 @@ msgid "Apply Stylesheet"
 msgstr "Arloañ ar c'hiz %1"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr ""
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, fuzzy, kde-format
 #| msgid "&Insert"
 msgid "User"
@@ -4399,68 +4399,68 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "Kemmañ ment an nodrezh ?"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 #, fuzzy
 #| msgid "Change font size?"
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "Kemmañ ment an nodrezh ?"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 #, fuzzy
 #| msgid "Change font size?"
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "Kemmañ ment an nodrezh ?"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Diuzit un nodrezh"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Diuzit un nodrezh"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 #, fuzzy
 #| msgid "Set background"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Lakaat an drekleur"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 #, fuzzy
 #| msgid "Text Color"
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Liv ar skrid"
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Krouiñ ur c'hiz nevez"
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Skrid rannbennad reoliek"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Furmadiñ"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
@@ -4590,37 +4590,37 @@ msgstr "Bro :"
 msgid "Import Data"
 msgstr "Enporzh ar roadoù"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, fuzzy, kde-format
 #| msgid "General"
 msgid "Generic"
 msgstr "Pennañ"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Skrid"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "Deiziad"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "Moneiz"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "Ebet"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "

@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1690178 2024-09-13 01:14:49Z scripty $
+# $Id: calligra.po 1694453 2024-11-07 01:16:38Z scripty $
 # $Source$
 #
 #
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 00:39+0000\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
 "PO-Revision-Date: 2024-09-12 07:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -154,7 +154,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Vstavi točke"
 
-#: flake/commands/KoPathPointMergeCommand.cpp:134
+#: flake/commands/KoPathPointMergeCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "Združi točke"
@@ -1297,7 +1297,7 @@ msgstr "Ni moč izvoziti datoteke."
 msgid "Missing Export Filter"
 msgstr "Manjkajoč izvozni filter"
 
-#: main/KoFilterManager.cpp:534
+#: main/KoFilterManager.cpp:538
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1306,7 +1306,7 @@ msgstr ""
 "Ni moč uvoziti datoteke vrste\n"
 "%1"
 
-#: main/KoFilterManager.cpp:537
+#: main/KoFilterManager.cpp:541
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Manjkajoč uvozni filter"
@@ -1495,7 +1495,7 @@ msgstr "Izvoz kot PDF"
 msgid "Cannot export to the specified file"
 msgstr "Ni moč izvoziti v podano datoteko"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:98
+#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "Dokument"
@@ -1570,18 +1570,18 @@ msgstr "Zapri"
 msgid "Stopped"
 msgstr "Zaustavljen"
 
-#: main/KoRecentDocumentsPane.cpp:64
+#: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
 msgid "Open This Document"
 msgstr "Odpri ta dokument"
 
-#: main/KoRecentDocumentsPane.cpp:163
+#: main/KoRecentDocumentsPane.cpp:165
 #, kde-format
 msgctxt "File modification date and time. %1 is date time"
 msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Spremenjeno:</b></td><td>%1</td></tr>"
 
-#: main/KoRecentDocumentsPane.cpp:166
+#: main/KoRecentDocumentsPane.cpp:168
 #, kde-format
 msgctxt "File access date and time. %1 is date time"
 msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
@@ -2168,7 +2168,7 @@ msgid "Page  %1"
 msgstr "Stran %1"
 
 #: pageapp/KoPADocumentModel.cpp:175
-#: pageapp/KoPADocumentStructureDocker.cpp:106
+#: pageapp/KoPADocumentStructureDocker.cpp:110
 #, kde-format
 msgid "Layer"
 msgstr "Plast"
@@ -2199,7 +2199,7 @@ msgid "Rename Layer"
 msgstr "Preimenuj plast"
 
 #: pageapp/KoPADocumentModel.cpp:309
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #, kde-format
 msgid "Slide"
 msgstr "Prosojnica"
@@ -2234,114 +2234,114 @@ msgstr "Kopiraj sem"
 msgid "C&ancel"
 msgstr "Prekliči"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:94
+#: pageapp/KoPADocumentStructureDocker.cpp:98
 #, kde-format
 msgid "Add a new slide or layer"
 msgstr "Dodaj novo prosojnico ali plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:95
+#: pageapp/KoPADocumentStructureDocker.cpp:99
 #, kde-format
 msgid "Slides"
 msgstr "Prosojnice"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:97
+#: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
 msgid "Add a new page or layer"
 msgstr "Dodaj novo stran ali plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:105
+#: pageapp/KoPADocumentStructureDocker.cpp:109
 #: widgets/KoPageLayoutDialog.cpp:40
 #, kde-format
 msgid "Page"
 msgstr "Stran"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:113
-#: pageapp/KoPADocumentStructureDocker.cpp:618
+#: pageapp/KoPADocumentStructureDocker.cpp:117
+#: pageapp/KoPADocumentStructureDocker.cpp:622
 #, kde-format
 msgid "Delete selected objects"
 msgstr "Izbriši izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:121
+#: pageapp/KoPADocumentStructureDocker.cpp:125
 #, kde-format
 msgid "Raise selected objects"
 msgstr "Dvigni izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:127
+#: pageapp/KoPADocumentStructureDocker.cpp:131
 #, kde-format
 msgid "Lower selected objects"
 msgstr "Spusti izbrane predmete"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:136
+#: pageapp/KoPADocumentStructureDocker.cpp:140
 #, kde-format
 msgid "Minimal View"
 msgstr "Minimalni pogled"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:138
+#: pageapp/KoPADocumentStructureDocker.cpp:142
 #, kde-format
 msgid "Detailed View"
 msgstr "Podrobni pogled"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:140
+#: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Pogled sličic"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:150
+#: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
 msgid "View mode"
 msgstr "Način prikaza"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "Enter the name of the new layer:"
 msgstr "Vnesite ime nove plasti:"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New Layer"
 msgstr "Nova plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:298
+#: pageapp/KoPADocumentStructureDocker.cpp:302
 #, kde-format
 msgid "New layer"
 msgstr "Nova plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:311
+#: pageapp/KoPADocumentStructureDocker.cpp:315
 msgctxt "(qtundo-format)"
 msgid "Create Layer"
 msgstr "Ustvari plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:337
+#: pageapp/KoPADocumentStructureDocker.cpp:341
 msgctxt "(qtundo-format)"
 msgid "Delete Layer"
 msgstr "Zbriši plast"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr "Ne morem zbrisati vseh plasti. Vsaj ene plast mora ostati."
 
-#: pageapp/KoPADocumentStructureDocker.cpp:339
+#: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Error deleting layers"
 msgstr "Napaka pri brisanju plasti"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:614
+#: pageapp/KoPADocumentStructureDocker.cpp:618
 #, kde-format
 msgid "Add a new slide"
 msgstr "Dodaj novo prosojnico"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:616
+#: pageapp/KoPADocumentStructureDocker.cpp:620
 #, kde-format
 msgid "Add a new page"
 msgstr "Dodaj novo stran"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:620
+#: pageapp/KoPADocumentStructureDocker.cpp:624
 #, kde-format
 msgid "Cut"
 msgstr "Izreži"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:621
+#: pageapp/KoPADocumentStructureDocker.cpp:625
 #: pigment/compositeops/KoCompositeOpCopy.h:22
 #: pigment/compositeops/KoCompositeOpCopy2.h:32
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2349,7 +2349,7 @@ msgstr "Izreži"
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: pageapp/KoPADocumentStructureDocker.cpp:622
+#: pageapp/KoPADocumentStructureDocker.cpp:626
 #, kde-format
 msgid "Paste"
 msgstr "Prilepi"
@@ -3313,12 +3313,12 @@ msgstr "Izberite predmet na katerega se sklicujete"
 msgid "Reference"
 msgstr "Referenca"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:234
+#: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
 msgstr "Nastavi za vse obstoječe"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:296
+#: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
@@ -3333,13 +3333,13 @@ msgstr[2] ""
 msgstr[3] ""
 "<qt>Urejanja bodo izgubljena.<p>Na voljo je še %1 neveljavnih stavkov.</qt>"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:299
+#: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
 msgstr "Naj zavržem neveljavne izjave?"
 
-#: rdf/KoDocumentRdfEditWidget.cpp:338
+#: rdf/KoDocumentRdfEditWidget.cpp:342
 #, kde-format
 msgid "Rdf"
 msgstr "Rdf"
@@ -3550,13 +3550,13 @@ msgid "Apply Stylesheet"
 msgstr "Uveljavi slog"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
-#: rdf/KoSemanticStylesheetsEditor.cpp:96
+#: rdf/KoSemanticStylesheetsEditor.cpp:101
 #, kde-format
 msgid "System"
 msgstr "Sistem"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:110
-#: rdf/KoSemanticStylesheetsEditor.cpp:111
+#: rdf/KoSemanticStylesheetsEditor.cpp:116
 #, kde-format
 msgid "User"
 msgstr "Uporabnik"
@@ -4078,52 +4078,52 @@ msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "Povečaj zamik"
 
-#: text/KoTextEditor_format.cpp:268 text/KoTextEditor_format.cpp:270
+#: text/KoTextEditor_format.cpp:271 text/KoTextEditor_format.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Decrease font size"
 msgstr "Zmanjšaj velikost pisave"
 
-#: text/KoTextEditor_format.cpp:281 text/KoTextEditor_format.cpp:283
+#: text/KoTextEditor_format.cpp:284 text/KoTextEditor_format.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
 msgstr "Povečaj velikost pisave"
 
-#: text/KoTextEditor_format.cpp:294
+#: text/KoTextEditor_format.cpp:297
 msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Nastavi pisavo"
 
-#: text/KoTextEditor_format.cpp:307
+#: text/KoTextEditor_format.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Nastavi velikost pisave"
 
-#: text/KoTextEditor_format.cpp:320
+#: text/KoTextEditor_format.cpp:323
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Nastavi barvo ozadja"
 
-#: text/KoTextEditor_format.cpp:333
+#: text/KoTextEditor_format.cpp:336
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Nastavi barvo besedila"
 
-#: text/KoTextEditor_format.cpp:361 text/KoTextEditor_format.cpp:400
+#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Nastavi slog znakov"
 
-#: text/KoTextEditor_format.cpp:466
+#: text/KoTextEditor_format.cpp:469
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Nastavi slog odstavka"
 
-#: text/KoTextEditor_format.cpp:528
+#: text/KoTextEditor_format.cpp:531
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Oblikovanje"
 
-#: text/KoTextEditor_p.h:153 text/KoTextEditor_p.h:194
+#: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Oblika"
@@ -4246,36 +4246,36 @@ msgstr "Država:"
 msgid "Import Data"
 msgstr "Uvozi podatke"
 
-#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:460
-#: widgets/KoCsvImportDialog.cpp:483
+#: widgets/KoCsvImportDialog.cpp:179 widgets/KoCsvImportDialog.cpp:467
+#: widgets/KoCsvImportDialog.cpp:490
 #, kde-format
 msgid "Generic"
 msgstr "Splošno"
 
-#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:485
+#: widgets/KoCsvImportDialog.cpp:181 widgets/KoCsvImportDialog.cpp:492
 #: widgets/KoModeBox.cpp:498
 #, kde-format
 msgid "Text"
 msgstr "Besedilo"
 
-#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:487
+#: widgets/KoCsvImportDialog.cpp:183 widgets/KoCsvImportDialog.cpp:494
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:489
+#: widgets/KoCsvImportDialog.cpp:185 widgets/KoCsvImportDialog.cpp:496
 #, kde-format
 msgid "Currency"
 msgstr "Valuta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
-#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:491
-#: widgets/KoCsvImportDialog.cpp:593 widgets/KoCsvImportDialog.ui:222
+#: widgets/KoCsvImportDialog.cpp:187 widgets/KoCsvImportDialog.cpp:498
+#: widgets/KoCsvImportDialog.cpp:600 widgets/KoCsvImportDialog.ui:222
 #, kde-format
 msgid "None"
 msgstr "Brez"
 
-#: widgets/KoCsvImportDialog.cpp:618
+#: widgets/KoCsvImportDialog.cpp:625
 #, kde-format
 msgid ""
 "Please check the ranges you specified. The start value must be lower than "
