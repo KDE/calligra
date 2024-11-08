@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-10-18 19:49+0300\n"
+"PO-Revision-Date: 2024-11-06 21:05+0200\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
@@ -449,7 +449,7 @@ msgstr "Līniju krustpunkts"
 #: flake/SnapGuideConfigWidget.ui:111
 #, kde-format
 msgid "Guide lines"
-msgstr "Vadlīnijas"
+msgstr "Palīglīnijas"
 
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
