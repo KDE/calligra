@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-05-13 22:08+0200\n"
+"PO-Revision-Date: 2024-11-09 20:04+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -987,7 +987,7 @@ msgstr "Грешка при създаване на файла за запис"
 #: main/KoDocument.cpp:942
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "Грешка при запис на \"%1\". Да не би дялът да е пълен?"
+msgstr "Грешка при запис на „%1“. Да не би дялът да е пълен?"
 
 #: main/KoDocument.cpp:863
 #, kde-format
@@ -997,7 +997,7 @@ msgstr "Грешка при запис на метаданните RDF. Да н�
 #: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
-msgstr "Грешка при запис на \"%1\". Да не би дялът да е пълен?"
+msgstr "Грешка при запис на „%1“. Да не би дялът да е пълен?"
 
 #: main/KoDocument.cpp:1217
 #, kde-format
@@ -1195,7 +1195,7 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p>Документът <b>\"%1\"</b> е променен.</p><p>Искате ли промените да бъдат "
+"<p>Документът <b>„%1“</b> е променен.</p><p>Искате ли промените да бъдат "
 "записани?</p>"
 
 #: main/KoDocument.cpp:2147
@@ -1247,7 +1247,7 @@ msgid ""
 "The document \"%1\" has been modified.\n"
 "Do you want to save your changes or discard them?"
 msgstr ""
-"<p>Документът <b>\"%1\"</b> е променен.</p><p>Искате ли промените да бъдат "
+"<p>Документът <b>„%1“</b> е променен.</p><p>Искате ли промените да бъдат "
 "записани?</p>"
 
 #: main/KoDocument.cpp:2550
@@ -1655,7 +1655,7 @@ msgstr "Използване на новия шаблон по подразби�
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Наистина ли искате съществуващият шаблон \"%1\" да бъде презаписан?"
+msgstr "Наистина ли искате съществуващият шаблон „%1“ да бъде презаписан?"
 
 #: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -3699,12 +3699,12 @@ msgstr "Да се запомни ли паролата?"
 #: store/KoNetAccess.cpp:89
 #, kde-format
 msgid "File '%1' is not readable"
-msgstr "Файлът \"%1\" не може да бъде прочетен"
+msgstr "Файлът „%1“ не може да бъде прочетен"
 
 #: store/KoNetAccess.cpp:370
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
-msgstr "ГРЕШКА: Неизвестен протокол \"%1\""
+msgstr "ГРЕШКА: Неизвестен протокол „%1“"
 
 #: store/KoStore.cpp:152
 #, kde-format
