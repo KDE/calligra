@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/karbon.pot\n"
-"X-Crowdin-File-ID: 53606\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/karbon.pot\n"
+"X-Crowdin-File-ID: 56460\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"

@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/calligrasheets.pot\n"
-"X-Crowdin-File-ID: 53658\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/calligrasheets.pot\n"
+"X-Crowdin-File-ID: 56606\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
