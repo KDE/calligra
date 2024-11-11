@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-13 22:08+0200\n"
+"PO-Revision-Date: 2024-11-10 12:24+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.11.70\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
@@ -304,25 +304,25 @@ msgstr "Инструмент за редактиране на ефекти"
 #: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
-msgstr "Завлачете за преместване мястото на преливката."
+msgstr "Завлечете за преместване мястото на преливката."
 
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
-"Завлачете за преместване на крайния цвят. Натиснете два пъти за премахване "
+"Завлечете за преместване на крайния цвят. Натиснете два пъти за премахване "
 "на крайния цвят."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
-msgstr "Завлачете за преместване на крайния цвят."
+msgstr "Завлечете за преместване на крайния цвят."
 
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
-"Завлачете за преместване мястото на преливката. Натиснете два пъти за "
+"Завлечете за преместване мястото на преливката. Натиснете два пъти за "
 "вмъкване на краен цвят."
 
 #: KarbonGradientTool.cpp:493

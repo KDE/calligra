@@ -1,0 +1,31 @@
+# translation of calligra_shape_webshape.po to Slovak
+# SPDX-FileCopyrightText: 2024 Roman Paholik <wizzardsk@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_webshape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-27 00:39+0000\n"
+"PO-Revision-Date: 2024-11-10 16:08+0100\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 24.08.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: WebShapeFactory.cpp:30
+#, kde-format
+msgid "Web Shape"
+msgstr "Webový tvar"
+
+#: WebShapeFactory.cpp:32
+#, kde-format
+msgid "A web shape"
+msgstr "Webový tvar"
+
+#: WebToolFactory.cpp:31
+#, kde-format
+msgid "Web shape editing"
+msgstr "Editovanie webového tvaru"
