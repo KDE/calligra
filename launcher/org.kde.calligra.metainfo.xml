@@ -18,6 +18,7 @@
   <name xml:lang="lv">Calligra</name>
   <name xml:lang="nl">Calligra</name>
   <name xml:lang="pl">Calligra</name>
+  <name xml:lang="sk">Calligra</name>
   <name xml:lang="sl">Calligra</name>
   <name xml:lang="sv">Calligra</name>
   <name xml:lang="tr">Calligra</name>
@@ -251,6 +252,7 @@
       <caption xml:lang="lv">„Karbon“ pamata logs</caption>
       <caption xml:lang="nl">Hoofdvenster van Karbon</caption>
       <caption xml:lang="pl">Główne okno Karbona</caption>
+      <caption xml:lang="sk">Hlavné okno Karbon</caption>
       <caption xml:lang="sl">Glavno okno Karbon</caption>
       <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
       <caption xml:lang="tr">Karbon ana penceresi</caption>
