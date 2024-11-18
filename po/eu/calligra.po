@@ -1,22 +1,26 @@
-# translation of calligra.po to Euskara/Basque (eu).
+# Translation of calligra.po to Euskara/Basque (eu).
+# Copyright (C) 2005-2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# SPDX-FileCopyrightText: 2024 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
 #
+# Translators:
 # Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
 # Marcos  <marcos@euskalgnu.org>, 2005.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
-# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013, 2020.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2020, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2020-12-06 07:56+0100\n"
+"PO-Revision-Date: 2024-11-16 15:28+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
-"Language-Team: Basque\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.3\n"
+"X-Generator: Lokalize 24.08.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -30,17 +34,14 @@ msgid "Your emails"
 msgstr "igaztanaga@gmail.com,marcos@euskalgnu.org,hizpol@ej-gv.es"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Default path"
+#, kde-format
 msgid "Draw path"
-msgstr "Bide-izen lehenetsia"
+msgstr "Marraztu bidea"
 
 #: basicflakes/plugin/KoPencilToolFactory.cpp:16
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath"
+#, kde-format
 msgid "Freehand path"
-msgstr "Eten azpibidea"
+msgstr "Esku-hutseko bidea"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
@@ -50,7 +51,7 @@ msgstr "Angelu-atxikitzearen delta:"
 #: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
-msgstr ""
+msgstr "Aktibatu angelu atxikitzea:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
@@ -72,7 +73,7 @@ msgstr "Doitasuna:"
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr ""
+msgstr "Gordina"
 
 #: basicflakes/tools/KoPencilTool.cpp:279
 #: flake/KoConnectionShapeConfigWidget.cpp:20
@@ -215,10 +216,6 @@ msgid "Create shape"
 msgstr "Sortu forma bat"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete shape"
-#| msgid_plural "Delete shapes"
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "Ezabatu forma"
@@ -262,11 +259,9 @@ msgid "Move shapes"
 msgstr "Lekuz aldatu formak"
 
 #: flake/commands/KoShapeRenameCommand.cpp:29
-#, fuzzy
-#| msgid "Rename Shape"
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr "Aldatu izena formari"
+msgstr "Formaren izena aldatu"
 
 #: flake/commands/KoShapeReorderCommand.cpp:40
 msgctxt "(qtundo-format)"
@@ -588,10 +583,9 @@ msgid "Press B to break path at selected segments."
 msgstr "Sakatu B bidea hautatutako segmentuan eteteko."
 
 #: flake/tools/KoPathToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Path editing tool"
+#, kde-format
 msgid "Path editing"
-msgstr "Bidea editatzeko tresna"
+msgstr "Bidea editatzea"
 
 #: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:34
 #: widgets/KoZoomWidget.cpp:52
@@ -678,10 +672,9 @@ msgid "Redo %1"
 msgstr "Berregin %1"
 
 #: kundo2/kundo2model.cpp:54
-#, fuzzy, kde-format
-#| msgid "Empty"
+#, kde-format
 msgid "<empty>"
-msgstr "Hutsa"
+msgstr "<hutsik>"
 
 #: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
@@ -735,24 +728,21 @@ msgid "Create backup file:"
 msgstr "Sortu fitxategiaren babeskopia:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Erakutsi sareta:"
+msgstr "Erakutsi sareta"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Atxiki saretari:"
+msgstr "Atxiki saretara"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Sareta"
+msgstr "Sareta:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -760,16 +750,16 @@ msgid "Grid color:"
 msgstr "Sareta-kolorea:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Horizontala"
+msgstr "Tarte horizontala:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Bertikala"
+msgstr "Tarte bertikala:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -792,11 +782,10 @@ msgid "Paste offset:"
 msgstr "Itsaste-desplazamendua:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Itsatsi kurtsorea dagoen lekuan:"
+msgstr "Itsatsi kurtsorea dagoen lekuan"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -804,16 +793,16 @@ msgid "Only print and exit"
 msgstr "Soilik inprimatu eta irten"
 
 #: main/KoApplication.cpp:196
-#, fuzzy, kde-format
-#| msgid "Open a new document with a template"
+#, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
-msgstr "Ireki dokumentu berria txantiloi bat erabiliz"
+msgstr ""
+"Ireki dokumentu berri bat emandako txantiloian oinarrituz (mahaigaineko "
+"fitxategi-izena)"
 
 #: main/KoApplication.cpp:197
-#, fuzzy, kde-format
-#| msgid "Open a new document with a template"
+#, kde-format
 msgid "Open a new document based on the given template file"
-msgstr "Ireki dokumentu berria txantiloi bat erabiliz"
+msgstr "Ireki dokumentu berri bat emandako txantiloi-fitxategian oinarrituz"
 
 #: main/KoApplication.cpp:198
 #, kde-format
@@ -855,7 +844,7 @@ msgstr "Kargatu fitxategi bat eta gorde ODF fitxategi gisa. Arazteko balio du."
 #: main/KoApplication.cpp:210
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "Ireki beharreko fitxategia(k) edo URL(ak)"
 
 #: main/KoApplication.cpp:220
 #, kde-format
@@ -864,11 +853,14 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"64 biteko Windows batean 32 biteko eraikin bat exekutatzen ari zara.\n"
+"Ez da gomendatutakoa.\n"
+"Mesedez, horren ordez, x64 eraikina zama-jaitsi eta instalatu."
 
 #: main/KoApplication.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: Critical Error"
-msgstr "Hitzen amaiera"
+msgstr "%1: Errore larria"
 
 #: main/KoApplication.cpp:261
 #, kde-format
@@ -877,6 +869,9 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
+"Ezin izan ditu aplikazioaren funtsezko osagaiak aurkitu.\n"
+"Instalazio arazo baten ondorio izan daiteke.\n"
+"Saia zaitez berrabiatzen edo berrinstalatzen."
 
 #: main/KoApplication.cpp:498
 #, kde-format
@@ -894,10 +889,9 @@ msgid "Template %1 failed to load."
 msgstr "Huts egin du %1 txantiloia kargatzean."
 
 #: main/KoApplication.cpp:530
-#, fuzzy, kde-format
-#| msgid "No template found for: %1"
+#, kde-format
 msgid "No template found at: %1"
-msgstr "Ez da txantiloirik aurkitu honentzat: %1"
+msgstr "Kokalekuan ez da txantiloirik aurkitu: %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
@@ -906,10 +900,9 @@ msgid "Recover Files"
 msgstr "Berreskuratu fitxategiak"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Disc Bullet"
+#, kde-format
 msgid "Discard All"
-msgstr "Disko-buletak"
+msgstr "Denak baztertu"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -928,6 +921,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Utzi hautatzen baduzu, fitxategi berreskuragarri guztiak mantenduko dira.\n"
+"Ados sakatzen baduzu, hautatutako fitxategiak berreskuratuko dira, hautatu "
+"gabeko fitxategiak baztertuko dira."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1111,7 +1107,7 @@ msgstr "Memoriarik ez"
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
-msgstr ""
+msgstr "Iragazki plugina hutsik"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
@@ -1129,19 +1125,15 @@ msgid "Unknown error"
 msgstr "Errore ezezaguna"
 
 #: main/KoDocument.cpp:1527
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%2.\n"
-#| "Reason: %1"
+#, kde-format
 msgid ""
 "Could not open %2.\n"
 "Reason: %1.\n"
 "%3"
 msgstr ""
-"Ezin izan da ireki\n"
-"%2.\n"
-"Arrazoia: %1"
+"Ezin izan du %2 ireki.\n"
+"Arrazoia: %1.\n"
+"%3"
 
 #: main/KoDocument.cpp:1585
 #, kde-format
@@ -1409,11 +1401,10 @@ msgid "Show Dockers"
 msgstr "Erakutsi panelak"
 
 #: main/KoMainWindow.cpp:337
-#, fuzzy, kde-format
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
-msgstr "Erakutsi panelak"
+msgstr "Erakutsi zamaketarien titulu-barrak"
 
 #: main/KoMainWindow.cpp:344
 #, kde-format
@@ -1597,20 +1588,19 @@ msgid "Default"
 msgstr "Lehenetsia"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Batez besteko geometrikoa"
+msgstr "Geometriak"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Geziak"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Dibertigarria"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1774,11 +1764,10 @@ msgid "Date: %1"
 msgstr "Data: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Add Space"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Gehitu zurigunea"
+msgstr "Gehitu forma"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2046,22 +2035,14 @@ msgid "Hide master shapes"
 msgstr "Ezkutatu forma maisuak"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr "Ezabatu diapositiba"
+msgstr "Kendu diapositiba"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:28
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete page"
-#| msgid_plural "Delete pages"
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
-msgstr "Ezabatu orria"
+msgstr "Ezabatu orrialdea"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:49
 msgctxt "(qtundo-format)"
@@ -2189,25 +2170,19 @@ msgid "Shape"
 msgstr "Forma"
 
 #: pageapp/KoPADocumentModel.cpp:268
-#, fuzzy
-#| msgid "Rename Slide"
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Aldatu izena diapositibari"
+msgstr "Berrizendatu diapositiba"
 
 #: pageapp/KoPADocumentModel.cpp:270
-#, fuzzy
-#| msgid "Rename Page"
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
-msgstr "Aldatu izena orriari"
+msgstr "Berrizendatu orrialdea"
 
 #: pageapp/KoPADocumentModel.cpp:273
-#, fuzzy
-#| msgid "Rename Layer"
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
-msgstr "Aldatu izena geruzari"
+msgstr "Berrizendatu geruza"
 
 #: pageapp/KoPADocumentModel.cpp:309
 #: pageapp/KoPADocumentStructureDocker.cpp:109
@@ -2251,10 +2226,9 @@ msgid "Add a new slide or layer"
 msgstr "Gehitu diapositiba edo geruza berria"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Diapositiba"
+msgstr "Diapositibak"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -2416,16 +2390,14 @@ msgid "Show/hide the view's rulers"
 msgstr "Erakutsi/Ezkutatu ikuspegiaren erregelak"
 
 #: pageapp/KoPAView.cpp:379
-#, fuzzy, kde-format
-#| msgid "Show Master Pages"
+#, kde-format
 msgid "Show Page Margins"
-msgstr "Erakutsi orri maisuak"
+msgstr "Erakutsi orrialdearen marjinak"
 
 #: pageapp/KoPAView.cpp:381
-#, fuzzy, kde-format
-#| msgid "Show/hide the view's rulers"
+#, kde-format
 msgid "Show/hide the page margins"
-msgstr "Erakutsi/Ezkutatu ikuspegiaren erregelak"
+msgstr "Erakutsi/Ezkutatu orrialdearen marjinak"
 
 #: pageapp/KoPAView.cpp:385
 #, kde-format
@@ -2729,10 +2701,9 @@ msgstr "Ezabatu"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
 #: pigment/KoCompositeOpRegistry.cpp:61
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Greater"
-msgstr "Sortze-data:"
+msgstr "Handiagoa"
 
 #: pigment/compositeops/KoCompositeOpOver.h:48
 #: pigment/compositeops/KoOptimizedCompositeOpOver128.h:244
@@ -2939,18 +2910,14 @@ msgstr "Kopiatu urdina"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "Tangent Normalmap"
-msgstr "Konbinatu bideak"
+msgstr "mapa-normal elkarzuta"
 
 #: pigment/compositeops/KoCompositeOps.h:179
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "Combine Normal Maps"
-msgstr "Konbinatu bideak"
+msgstr "Konbinatu mapa normalak"
 
 #: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:81
@@ -3002,17 +2969,15 @@ msgstr "Txikiagotu argitasuna"
 
 #: pigment/compositeops/KoCompositeOps.h:189
 #: pigment/KoCompositeOpRegistry.cpp:38
-#, fuzzy, kde-format
-#| msgid "Background Color"
+#, kde-format
 msgid "Darker Color"
-msgstr "Atzeko planoaren kolorea"
+msgstr "Kolore ilunagoa"
 
 #: pigment/compositeops/KoCompositeOps.h:190
 #: pigment/KoCompositeOpRegistry.cpp:51
-#, fuzzy, kde-format
-#| msgid "Line Color"
+#, kde-format
 msgid "Lighter Color"
-msgstr "Marra-kolorea"
+msgstr "Kolore argiagoa"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:90
@@ -3191,7 +3156,7 @@ msgstr "L*a*b* histograma generikoa"
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
@@ -3201,12 +3166,12 @@ msgstr "XYZ"
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
-msgstr ""
+msgstr "L*a*b*"
 
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
-msgstr ""
+msgstr "CMYK"
 
 #: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
@@ -3309,11 +3274,9 @@ msgid "Bumpmap"
 msgstr "Erliebe-mapa"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "Combine Normal Map"
-msgstr "Konbinatu bideak"
+msgstr "Konbinatu mapa normalak"
 
 #: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
@@ -3419,62 +3382,7 @@ msgstr "SPARQL"
 
 #. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
 #: rdf/KoDocumentRdfEditWidget.ui:182
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
-#| "size:9pt; font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /"
-#| "># Results are shown below.</span></p>\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#| "font-family:'Verdana'; font-size:13pt;\"></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
-#| "org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
-#| "foaf/0.1/&gt; </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-"
-#| "open.org/opendocument/meta/package/common#&gt; </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
-#| "org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#| "font-family:'Verdana'; font-size:13pt;\"></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "family:'Verdana'; font-size:13pt;\">}</span></p>\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#| "font-family:'Verdana'; font-size:13pt;\"></p>\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#| "font-family:'Verdana'; font-size:13pt;\"></p>\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#| "font-family:'Verdana'; font-size:13pt;\"></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -3556,7 +3464,7 @@ msgstr ""
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
-"org/opendocument/meta/package/common#&gt; </span></p>\n"
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
@@ -3733,8 +3641,7 @@ msgstr ""
 "ez egiaztatzea."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Abisua"
@@ -3750,8 +3657,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Abisua"
@@ -3801,15 +3707,14 @@ msgid "Do you want to save the password?"
 msgstr "Pasahitza gorde nahi duzu?"
 
 #: store/KoNetAccess.cpp:89
-#, fuzzy, kde-format
-#| msgid "Database file \"%1\" is not readable."
+#, kde-format
 msgid "File '%1' is not readable"
-msgstr "\"%1\" datu-base fitxategia ezin da irakurri."
+msgstr "\"%1\" fitxategia ez da irakurgarria"
 
 #: store/KoNetAccess.cpp:370
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
-msgstr ""
+msgstr "ERROREA: Protokolo ezezaguna '%1'"
 
 #: store/KoStore.cpp:152
 #, kde-format
@@ -3897,31 +3802,24 @@ msgid "Change List Numbering"
 msgstr "Aldatu zerrenda-zenbakitzea"
 
 #: text/commands/NewSectionCommand.cpp:22
-#, fuzzy
-#| msgid "Group Sections"
 msgctxt "(qtundo-format)"
 msgid "New Section"
-msgstr "Talde-sekzioak"
+msgstr "Hautapen berria"
 
 #: text/commands/ParagraphFormattingCommand.cpp:82
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Paragraph Style"
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr "Ezarri paragrafo-estiloa"
+msgstr "Paragrafoaren zuzeneko formatua"
 
 #: text/commands/RenameSectionCommand.cpp:20
-#, fuzzy
-#| msgid "Rename Shape"
 msgctxt "(qtundo-format)"
 msgid "Rename Section"
-msgstr "Aldatu izena formari"
+msgstr "Berrizendatu atala"
 
 #: text/commands/ResizeTableCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr "Doitu zutabe-zabalera"
+msgstr "Doitu zutabearen zabalera"
 
 #: text/commands/ResizeTableCommand.cpp:32
 msgctxt "(qtundo-format)"
@@ -3931,12 +3829,12 @@ msgstr "Doitu errenkada-altuera"
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "Zatitu atalen hasierak"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "Zatitu atalen bukaerak"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -4004,11 +3902,10 @@ msgid "Replace %1 with %2?"
 msgstr "Ordeztu %1 %2(a)(r)ekin?"
 
 #: text/KoSectionModel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Group Sections"
+#, kde-format
 msgctxt "new numbered section name"
 msgid "New section %1"
-msgstr "Talde-sekzioak"
+msgstr "Atal berria %1"
 
 #: text/KoText.cpp:19
 #, kde-format
@@ -4040,12 +3937,9 @@ msgid "Add Bookmark"
 msgstr "Gehitu laster-markak"
 
 #: text/KoTextEditor.cpp:489
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Citation"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr "Gehitu aipua"
+msgstr "Gehitu idatzoharra"
 
 #: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
@@ -4202,8 +4096,6 @@ msgid "Formatting"
 msgstr "Formatua"
 
 #: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Formatua"
@@ -4500,58 +4392,52 @@ msgstr "-"
 #: widgets/KoDialog.cpp:256
 #, kde-format
 msgid "&Try"
-msgstr ""
+msgstr "Saia&tu"
 
 #: widgets/KoDialog.cpp:459
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgid "modified"
-msgstr "Aldatze-data:"
+msgstr "aldatuta"
 
 #: widgets/KoDialog.cpp:468
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
-msgstr ""
+msgstr " – "
 
 #: widgets/KoDialog.cpp:823
-#, fuzzy, kde-format
-#| msgid "Detail"
+#, kde-format
 msgid "&Details"
-msgstr "Xehetasuna"
+msgstr "&Xehetasunak"
 
 #: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
-msgstr ""
+msgstr "Laguntza lortu..."
 
 #: widgets/KoDockWidgetTitleBar.cpp:54
-#, fuzzy, kde-format
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Erakutsi panelak"
+msgstr "Zamaketari higikorra"
 
 #: widgets/KoDockWidgetTitleBar.cpp:61
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Itxi dokumentua"
+msgstr "Itxi zamaketaria"
 
 #: widgets/KoDockWidgetTitleBar.cpp:71
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
-msgstr "Itxi dokumentua"
+msgstr "Tolestu zamaketaria"
 
 #: widgets/KoDockWidgetTitleBar.cpp:80
-#, fuzzy, kde-format
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Erakutsi panelak"
+msgstr "Giltzatu zamaketaria"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
 #: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
@@ -4635,7 +4521,7 @@ msgstr "&Berrezarri"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language:"
 msgstr "Hizkuntza:"
 
@@ -4698,13 +4584,13 @@ msgstr "Dokumentu honek ez du zifratzea onartzen"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Ezarri gabe"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4712,7 +4598,7 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
-"<qt>Dokumentua deszifratzeak pasahitz-babesa kenduko dio.<p>Hala ere, "
+"<qt>Dokumentua deszifratzea pasahitz-babesa kenduko dio.<p>Hala ere, "
 "fitxategia deszifratu nahi duzu?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:339
@@ -4741,17 +4627,13 @@ msgid "Save Document"
 msgstr "Gorde dokumentua"
 
 #: widgets/KoDocumentInfoDlg.cpp:356
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Dokumentua ireki zenetik aldatu egin da. Deszifratzea osatzeko, "
-"dokumentua gorde behar da.<p>Dokumentua orain gorde nahi duzu?</qt>"
+"<qt>Deszifratzea osatzeko, dokumentua gorde beharra dago.<p>Dokumentua orain "
+"gorde nahi duzu?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
@@ -4828,10 +4710,9 @@ msgid "Color name:"
 msgstr "Kolore-izena:"
 
 #: widgets/KoEditColorSetDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "Add Color To Palette"
+#, kde-format
 msgid "Gimp Color Palette (*.gpl)"
-msgstr "Gehitu kolorea paletari"
+msgstr "GIMP kolore paleta (*.gpl)"
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -4877,16 +4758,14 @@ msgid "Change the filling color"
 msgstr "Aldatu kolore betegarria"
 
 #: widgets/KoFillConfigWidget.cpp:196
-#, fuzzy, kde-format
-#| msgid "Change the filling color"
+#, kde-format
 msgid "Change the filling gradient"
-msgstr "Aldatu kolore betegarria"
+msgstr "Aldatu betegarriaren gradientea"
 
 #: widgets/KoFillConfigWidget.cpp:203
-#, fuzzy, kde-format
-#| msgid "Change the filling color"
+#, kde-format
 msgid "Change the filling pattern"
-msgstr "Aldatu kolore betegarria"
+msgstr "Aldatu betegarriaren eredua"
 
 #: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
@@ -4894,38 +4773,35 @@ msgid "Target:"
 msgstr "Helburua:"
 
 #: widgets/KoGradientEditWidget.cpp:151
-#, fuzzy, kde-format
-#| msgid "&Filling:"
+#, kde-format
 msgid "Fill"
-msgstr "&Betegarria:"
+msgstr "Betegarria"
 
 #: widgets/KoGradientEditWidget.cpp:157
-#, fuzzy, kde-format
-#| msgid "Line"
+#, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
-msgstr "Marra"
+msgstr "Lineala"
 
 #: widgets/KoGradientEditWidget.cpp:158
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
-msgstr ""
+msgstr "Erradiala"
 
 #: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "Konikoa"
 
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Repeat:"
-msgstr ""
+msgstr "Errepikatu:"
 
 #: widgets/KoGradientEditWidget.cpp:164
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "No gradient spread"
 msgid "None"
 msgstr "Bat ere ez"
@@ -4933,34 +4809,32 @@ msgstr "Bat ere ez"
 #: widgets/KoGradientEditWidget.cpp:165
 #, kde-format
 msgid "Reflect"
-msgstr ""
+msgstr "Islatu"
 
 #: widgets/KoGradientEditWidget.cpp:166
 #, kde-format
 msgid "Repeat"
-msgstr ""
+msgstr "Errepikatu"
 
 #: widgets/KoGradientEditWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Overall opacity:"
-msgstr "Opakutasuna:"
+msgstr "Opakutasun globala:"
 
 #: widgets/KoGradientEditWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color stop:"
-msgstr "Kolorea:"
+msgstr "Kolore-geldialdia:"
 
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
-msgstr ""
+msgstr "Gelditzeko kolorea."
 
 #: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr ""
+msgstr "&Gehitu aurredefinitutako gradienteetara"
 
 #: widgets/KoModeBox.cpp:501
 #, kde-format
@@ -4973,10 +4847,9 @@ msgid "Icon only"
 msgstr "Ikonoa soilik"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Orrialde bakarra"
+msgstr "Alboko barraren alboa"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -4999,30 +4872,26 @@ msgid "Apply to document"
 msgstr "Aplikatu dokumentuari"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Ezkerreko marjina"
+msgstr "Ezker ertzeko marjina:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Eskuineko marjina"
+msgstr "Eskuin ertzeko marjina:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Azalaren ertza:"
+msgstr "Azala jartzeko ertzaren marjina:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Orriaren ertza:"
+msgstr "Orrialde ertzaren marjina:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5131,17 +5000,15 @@ msgstr "Eskuinetik ezkerrera"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Goiko marjina"
+msgstr "Goiko marjina:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Beheko marjina"
+msgstr "Beheko marjina:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5236,20 +5103,19 @@ msgstr "Lausotu:"
 #: widgets/KoShadowConfigWidget.ui:84
 #, kde-format
 msgid "Distance:"
-msgstr ""
+msgstr "Distantzia:"
 
 #: widgets/KoShapePropertyWidget.cpp:46
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Formaren propietateak"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Ez dago irudirik erabilgarri."
+msgstr "Ez dago propietate erabilgarririk"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5282,10 +5148,9 @@ msgid "Bevel join"
 msgstr "Juntura alakatua"
 
 #: widgets/KoStrokeConfigWidget.cpp:132
-#, fuzzy, kde-format
-#| msgid "Delimited list"
+#, kde-format
 msgid "Miter limit"
-msgstr "Bereizitako zerrenda"
+msgstr "Inglete-muga"
 
 #: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
@@ -5303,10 +5168,9 @@ msgid "Change the color of the line/border"
 msgstr "Aldatu lerro/ertzaren kolorea"
 
 #: widgets/KoTagChooserWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgid "Tag"
-msgstr "Etiketak"
+msgstr "Etiketa"
 
 #: widgets/KoTagFilterWidget.cpp:39
 #, kde-format
@@ -5323,6 +5187,15 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>Bilaketa terminoak hemen sartzeak, uneko etiketa ikuspegiari baliabideak "
+"gehitu edo kenduko dizkio.<para>Baliabidearen izen partzialean oinarrituta, "
+"maiuskulak bereizi gabe, iragazteko:<br><icode>izen-partziala</icode> edo "
+"<icode>!izen-partziala</icode>. </para>Iragazte-emaitzak ezin dira gorde "
+"<interface>Aurrezarpen guztiak</interface> ikuspegirako.<br>Ikuspegi "
+"honetan, <interface>Sartu</interface> sakatzea edo iragazki-laukia husteak "
+"elementu guztiak lehengoratuko ditu.<br>Sortu eta/edo aldatu beste etiketa "
+"batera iragazitako baliabideak izendatutako multzoetan gorde nahi badituzu.</"
+"qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5337,6 +5210,16 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>Bilaketa terminoak hemen sartzeak, uneko etiketa ikuspegiari baliabideak "
+"gehitu edo kenduko dizkio.<para>Baliabidearen izen partzialean oinarrituta, "
+"maiuskulak bereizi gabe, iragazteko:<br><icode>izen-partziala</icode> edo "
+"<icode>!izen-partziala</icode>.</para><para>Beste etiketa-multzo batzuk "
+"sartzea/baztertzea:<br><icode>[Etiketa-izena]</icode> edo <icode>![Etiketa-"
+"izena]</icode>.</para><para>Maiuskulak bereiziz eta izen osoa bat etorriz "
+"sartzea/baztertzea:<br><icode>\"Bat-etortzeZehatza\"</icode> edo <icode>!"
+"\"Bat-etortzeZehatza\"</icode>.</para><interface>Sartu</interface> sakatzea "
+"edo <interface>Gorde</interface> botoian klik egitea aldaketak gordeko ditu."
+"</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
@@ -5368,19 +5251,17 @@ msgid "Delete this tag"
 msgstr "Ezabatu etiketa hau"
 
 #: widgets/KoTagToolButton.cpp:86
-#, fuzzy, kde-format
-#| msgid "Unable to undelete tag"
+#, kde-format
 msgid "Clear undelete list"
-msgstr "Ezin da etiketa ezabatzea desegin"
+msgstr "Ezabatzea desegindakoen zerrenda garbitu"
 
 #: widgets/KoTagToolButton.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undelete"
-msgstr "Ezabatu testua"
+msgstr "Ezabatu desegin"
 
 #: widgets/KoToolBox.cpp:310
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Lehenetsia"
@@ -5388,60 +5269,53 @@ msgstr "Lehenetsia"
 #: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: widgets/KoToolBoxButton.cpp:53
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
-msgstr "% %1"
+msgstr "%1"
 
 #: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:25
-#, fuzzy, kde-format
-#| msgid "Tools"
+#, kde-format
 msgid "Toolbox"
-msgstr "Tresnak"
+msgstr "Tresna-kutxa"
 
 #: widgets/KoToolBoxDocker.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Font Size"
+#, kde-format
 msgid "Icon Size"
-msgstr "Ezarri letra-tamaina"
+msgstr "Ikono-neurria"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "Orriaren diseinua"
+msgstr "Antolaera"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatikoa"
+msgstr "&Automatikoa"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Ezkerretik eskuinera"
+msgstr "E&zkerretik eskuinera"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Eskuinetik ezkerrera"
+msgstr "E&skuinetik ezkerrera"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format
@@ -5477,9 +5351,8 @@ msgid "Actual Pixels"
 msgstr "Benetako pixelak"
 
 #: widgets/KoZoomMode.cpp:19
-#, fuzzy
 msgid "Fit Text Width"
-msgstr "Hurrengo orria"
+msgstr "Doitu testuaren zabalera"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format
@@ -5499,7 +5372,7 @@ msgstr "Egin zoom denera"
 #: widgetutils/KoFileDialog.cpp:394
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Fitxategi guztiak"
 
 #: widgetutils/KoFileDialog.cpp:397
 #, kde-format
@@ -5507,11 +5380,10 @@ msgid "All supported formats"
 msgstr "Onartutako formatu guztiak"
 
 #: widgetutils/KoGroupButton.cpp:134
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "% %1"
+msgstr "%1"
 
 #, fuzzy
 #~| msgid "Toggles organising the options in tabs or not"
