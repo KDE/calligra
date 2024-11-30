@@ -98,7 +98,7 @@ def main():
         #print >> sys.stderr, "usage: %s directory" % sys.argv[0]
         #sys.exit(1)
 
-    oxygenIcons = readIcons('devtools/iconcheck/breeze-icons-5.4.1.list')
+    oxygenIcons = readIcons('devtools/iconcheck/breeze-icons.list')
 
     r = createCalligraIconFile('calligra-icons.list')
     if r:
