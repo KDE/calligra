@@ -2,7 +2,7 @@
 # Copyright © 2007, 2008, 2010, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the calligra package.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
-# Tommi Nieminen <translator@legisign.org>, 2010, 2012, 2021, 2022.
+# SPDX-FileCopyrightText: 2010, 2012, 2021, 2022, 2024 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015.
 #
 # KDE Finnish translation sprint participants:
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2022-07-29 11:40+0300\n"
+"PO-Revision-Date: 2024-11-18 09:56+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -21,8 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2013-01-13 22:09:29+0000\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1406,7 +1405,7 @@ msgstr "Oikealle"
 #: dialogs/ListLevelWidget.ui:300
 #, kde-format
 msgid "Per level increase:"
-msgstr ""
+msgstr "Tasokohtainen lisäys:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
@@ -1767,18 +1766,16 @@ msgid "Browse..."
 msgstr "Selaa…"
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Taustaväri"
+msgstr "Palauta taustaväri"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Taustaväri"
+msgstr "Palauta taustaväri"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1787,10 +1784,9 @@ msgstr "Koko sana"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Anfangit:"
+msgstr "Käytä anfangeja"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1875,24 +1871,21 @@ msgstr "Vähintään"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent:"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Sisennys:"
+msgstr "Vasen sisennys:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent:"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Sisennys:"
+msgstr "Oikea sisennys:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Ensimmäinen rivi:"
+msgstr "Ensirivin sisennys:"
 
 # Calligran viesti.
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
@@ -1903,10 +1896,9 @@ msgstr "Päättele tekstikoosta"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Riviväli"
+msgstr "Riviväli:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1916,24 +1908,21 @@ msgstr " %"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
-#, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
+#, kde-format
 msgid "Use Font Metrics"
-msgstr "Käytä fontin mittoja"
+msgstr "Käytä fontin metriikkaa"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Kappaleväli:"
+msgstr "Kappaletta edeltävä väli:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Kappaleväli:"
+msgstr "Kappaletta seuraava väli:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
@@ -1943,10 +1932,9 @@ msgstr "Tasaa"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Toiminta kehyksen/sivun lopussa"
+msgstr "Toiminta kehyksen tai sivun lopussa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
@@ -2600,7 +2588,7 @@ msgstr "Kirjanmerkki ei voi olla tyhjä"
 #: ReferencesTool.cpp:371
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr "Nimi on jo käytössä. Muuta kirjanmerkkien nimiä"
+msgstr "Toistuva nimi. Napsauta ”Kirjanmerkkien hallinta”"
 
 # Kaksiosaisen viestin toinen osa.
 #: ReferencesTool.cpp:372
@@ -2733,6 +2721,8 @@ msgstr ""
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
 msgstr ""
+"Ota luetelma käyttöön tai poista se käytöstä tai muuta nykyisen tason "
+"muotoilua"
 
 #: TextTool.cpp:308
 #, kde-format

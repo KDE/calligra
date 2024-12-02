@@ -1,22 +1,21 @@
 # KDE Finnish translation sprint participants:
 # Author: Luksi
+# SPDX-FileCopyrightText: 2021, 2024 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014, 2015.
-# Tommi Nieminen <translator@legisign.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2021-03-25 11:31+0200\n"
+"PO-Revision-Date: 2024-11-18 09:57+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-POT-Import-Date: 2013-01-13 22:09:28+0000\n"
-"X-Generator: Lokalize 20.04.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1763,10 +1762,9 @@ msgid "Fonts..."
 msgstr "Fontit…"
 
 #: PieConfigWidget.cpp:98
-#, fuzzy, kde-format
-#| msgid "Data Set %1"
+#, kde-format
 msgid "Data Point %1"
-msgstr "Tietojoukko %1"
+msgstr "Tietopiste %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
@@ -1826,10 +1824,9 @@ msgstr "Tietojoukot"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Data Sets"
+#, kde-format
 msgid "Data Points"
-msgstr "Tietojoukot"
+msgstr "Tietopisteet"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
