@@ -6,7 +6,7 @@
 # Tapio Kautto <eleknader@phnet.fi>, 2004.
 # Ilpo Kantonen <ilpo@iki.fi>, 2005, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
-# Tommi Nieminen <translator@legisign.org>, 2010, 2012, 2018.
+# SPDX-FileCopyrightText: 2010, 2012, 2018, 2024 Tommi Nieminen <translator@legisign.org>
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015, 2016.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2018-08-19 18:37+0200\n"
+"PO-Revision-Date: 2024-11-18 09:45+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -27,8 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
-"X-POT-Import-Date: 2013-01-13 22:09:54+0000\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -81,10 +80,9 @@ msgstr "Oikoluku"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "AutoCorrection"
-msgstr "Automaattinen korjaus"
+msgstr "Automaattikorjaus"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -617,10 +615,9 @@ msgstr "Ääriviivat"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "Muodon ja tekstin välisn reunuksen paksuus:"
+msgstr "Kuvion ja tekstin väli vasemmalta:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1115,13 +1112,12 @@ msgstr "Copyright 1998–%1 Words-työryhmä"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Osaylläpitäjä"
+msgstr "Osaylläpitäjä, siirros Qt6:een"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
@@ -1461,11 +1457,10 @@ msgstr ""
 "ohjelmalla."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
-msgstr "Vakio"
+msgstr "Standard"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1513,13 +1508,9 @@ msgid "Line Number"
 msgstr "Rivinumero"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Page Style"
+#, kde-format
 msgid "Change the page style"
-msgstr ""
-"Muuta sivutyyliä\n"
-"sivutyylin muuttaminen"
+msgstr "Muuta sivutyyliä"
 
 #: part/KWStatusBar.cpp:165
 #, kde-format
@@ -1547,10 +1538,9 @@ msgid "Zoom Controller"
 msgstr "Suurennuksen muokkain"
 
 #: part/KWView.cpp:186
-#, fuzzy, kde-format
-#| msgid "Exit Distraction-Free Mode"
+#, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr "Poistu häiriötekijättömästä tilasta"
+msgstr "Poistu koko näytön tilasta"
 
 #: part/KWView.cpp:278
 #, kde-format
@@ -1720,13 +1710,12 @@ msgstr "Näytä tai piilota tilarivi"
 #: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Koko näytön tila"
 
 #: part/KWView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Set view in distraction free mode"
+#, kde-format
 msgid "Set view in fullscreen mode"
-msgstr "Aseta näkymä häiriötekijättömään tilaan"
+msgstr "Aseta näkymä koko näytön tilaan"
 
 #: part/KWView.cpp:400
 #, kde-format
