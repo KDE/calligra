@@ -32,17 +32,17 @@
 </chapterinfo
 > 
 <title
->Configuración de los accesos rápidos y las barras de herramientas de &sheets;</title>
+>Configuración de los atajos de teclado y las barras de herramientas de &sheets;</title>
 
 <sect1 id="configshort">
 <title
->Accesos rápidos</title>
+>Atajos de teclado</title>
 <para
->Para modificar las combinaciones de accesos rápidos que utiliza &sheets;, seleccione <menuchoice
+>Para modificar las combinaciones de atajos de teclado que usa &sheets;, seleccione <menuchoice
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar los accesos rápidos...</guimenuitem
+>Configurar los atajos de teclado...</guimenuitem
 ></menuchoice
 >. Esto lanzará un cuadro de diálogo como el que se muestra a continuación. </para>
 <mediaobject>
@@ -55,9 +55,9 @@
 </textobject>
 </mediaobject>
 <para
->Busque a través de la lista de selección múltiple hasta encontrar la acción que quiera añadir o para la que quiera cambiar el acceso rápido de teclado y selecciónela haciendo clic <mousebutton
+>Busque a través de la lista de selección múltiple hasta encontrar la acción que quiera añadir o para la que quiera cambiar el atajo de teclado y selecciónela haciendo clic <mousebutton
 >izquierdo</mousebutton
-> sobre el nombre. Si introduce el nombre de la acción en la barra de búsqueda de arriba, puede encontrar rápidamente la acción deseada. Entonces podrá cambiar el acceso rápido seleccionando el botón de radio <guilabel
+> sobre el nombre. Si introduce el nombre de la acción en la barra de búsqueda de arriba, puede encontrar rápidamente la acción deseada. Entonces podrá cambiar el atajo de teclado seleccionando el botón de radio <guilabel
 >Ninguno</guilabel
 >, <guilabel
 >Predeterminado</guilabel
@@ -65,7 +65,7 @@
 >Personalizado</guilabel
 >.</para>
 <para
->Ahora puede simplemente presionar la combinación de teclas que quiera como acceso rápido, por ejemplo <keycombo action="simul"
+>Ahora puede simplemente presionar la combinación de teclas que quiera como atajo de teclado, por ejemplo <keycombo action="simul"
 > &Ctrl;&Shift;<keycap
 >S</keycap
 ></keycombo

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-08-25 15:43+0200\n"
+"PO-Revision-Date: 2024-12-08 10:07+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2497,7 +2497,7 @@ msgid ""
 msgstr ""
 "Unidades de enerxía admitidas: J (Joule), e (erg), c (caloría "
 "termodinámica), cal (caloría IT), eV(electrón-watt), HPh (Cabalo-vapor/ "
-"hora), Wh (Watt/hora), flb (\"foot-pound\"), BTU."
+"hora), Wh (Watthora), flb (\"foot-pound\"), BTU."
 
 #: functions/engineering.xml:135
 #, kde-format
@@ -3798,9 +3798,9 @@ msgid ""
 "COMPOUND(5000;0.12;4;5) or $9030.56."
 msgstr ""
 "A función COMPOUND() devolve o valor dun investimento, dado o valor, a taxa "
-"de xuro nominal, a frecuencia de composición e o tempo. Por exemplo: 5000€ a "
-"unha taxa composta do 12% trimestral en 5 anos tornaranse en "
-"COMPOUND(5000;0,12;4;5) ou 9030.56€."
+"de xuro nominal, a frecuencia de composición e o tempo. Por exemplo: 5000 € "
+"a unha taxa composta do 12% trimestral en 5 anos tornaranse en "
+"COMPOUND(5000;0,12;4;5) ou 9030.56 €."
 
 #: functions/financial.xml:150
 #, kde-format
@@ -3820,8 +3820,8 @@ msgid ""
 "$1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17."
 msgstr ""
 "A función CONTINUOUS() calcula o retorno cun xuro composta continuo, dado o "
-"valor principal, a taxa nominal e o tempo en anos. Por exemplo: 1000€ a "
-"render 10% en 1 ano tornarase CONTINUOUS(1000;0,1;1) ou 1105.17€."
+"valor principal, a taxa nominal e o tempo en anos. Por exemplo: 1000 € a "
+"render 10% en 1 ano tornarase CONTINUOUS(1000;0,1;1) ou 1105.17 €."
 
 #: functions/financial.xml:172
 #, kde-format
@@ -4010,7 +4010,7 @@ msgstr "DDB(75000;1;60;12;2) devolve 1721.81"
 #: functions/financial.xml:357 functions/financial.xml:1349
 #, kde-format
 msgid "Price per $100 face value"
-msgstr "Prezo polo valor nominal de 100€"
+msgstr "Prezo polo valor nominal de 100 €"
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
@@ -4309,8 +4309,8 @@ msgid ""
 "interest, after two years you will have FV(1000;0.08;2) or $1166.40."
 msgstr ""
 "A función FV() devolve o valor futuro dun investimento, dada a taxa de xuro "
-"e o tempo transcorrido. Se ten 1000€ nunha conta a render un xuro do 8%, "
-"pasador dous anos terá FV(1000;0,08;2) ou 1166.40€."
+"e o tempo transcorrido. Se ten 1000 € nunha conta a render un xuro do 8%, "
+"pasador dous anos terá FV(1000;0,08;2) ou 1166.40 €."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4339,8 +4339,8 @@ msgid ""
 msgstr ""
 "A función FV_ANNUITY() devolve o valor futuro dunha secuencia de pagamentos "
 "dado o valor do pagamento, a taxa de xuro e o número de períodos. Por "
-"exemplo, de recibires 500€ por ano durante 20 anos e o investires ao 8%, o "
-"total ao fin de 20 anos será FV_ANNUITY (500;0,08;20) ou 22 880,98€. Esta "
+"exemplo, de recibires 500 € por ano durante 20 anos e o investires ao 8%, o "
+"total ao fin de 20 anos será FV_ANNUITY (500;0,08;20) ou 22 880,98 €. Esta "
 "función asume que os pagamentos son feitos ao fin de cada período."
 
 #: functions/financial.xml:594
@@ -4568,9 +4568,9 @@ msgid ""
 "LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95."
 msgstr ""
 "A función LEVEL_COUPON() calcula o valor dun bono \"level-coupon\". Por "
-"exemplo: se a taxa de xuro é do 10%, un bono de 1000€ con cupóns semi-anuais "
-"a unha taxa do 13% que dure 4 anos vale LEVEL_COUPON (1000;0,13;2;4;0,1) ou "
-"1096.95€."
+"exemplo: se a taxa de xuro é do 10%, un bono de 1000 € con cupóns semi-"
+"anuais a unha taxa do 13% que dure 4 anos vale LEVEL_COUPON "
+"(1000;0,13;2;4;0,1) ou 1096.95 €."
 
 #: functions/financial.xml:752
 #, kde-format
@@ -4919,9 +4919,9 @@ msgid ""
 msgstr ""
 "A función PV() devolve o valor actual ou presente dun investimento -- o "
 "valor actual dunha suma de diñeiro no futuro, dada a taxa de xuro ou "
-"inflación. Por exemplo se precisa de 1166.40€ para o seu novo computador e "
+"inflación. Por exemplo se precisa de 1166.40 € para o seu novo computador e "
 "quere compralo en dous anos mentres gaña 8% de xuros, precisa de comezar con "
-"PV(1166,4;0,08;2) ou 1000€."
+"PV(1166,4;0,08;2) ou 1000 €."
 
 #: functions/financial.xml:1119
 #, kde-format
@@ -4944,8 +4944,8 @@ msgid ""
 msgstr ""
 "A función PV_ANNUITY() devolve o valor actual dunha anualidade ou secuencia "
 "de pagamentos. Por exemplo, un billete de lotaría de \"un millón de euros\" "
-"que paga 50 000€ por 20 anos, cunha taxa de xuro do 5%, vale en realidade "
-"PV_ANNUITY(50000;0,05;20) ou 623 111€. Esta función asume que os pagamentos "
+"que paga 50 000 € por 20 anos, cunha taxa de xuro do 5%, vale en realidade "
+"PV_ANNUITY(50000;0,05;20) ou 623 111 €. Esta función asume que os pagamentos "
 "son feitos no fin de cada período."
 
 #: functions/financial.xml:1141
@@ -5117,7 +5117,7 @@ msgid ""
 "bill. The maturity date must be after the settlement date but within 365 "
 "days. The discount rate must be positive."
 msgstr ""
-"A función TBILLPRICE devolve o prezo por cada valor de 100€ para un título "
+"A función TBILLPRICE devolve o prezo por cada valor de 100 € para un título "
 "do tesouro. A data de vencemento debe ser posterior á data de depósito, "
 "dentro dun intervalo de 365 días. A taxa de desconto deberá ser positiva."
 
@@ -5282,8 +5282,8 @@ msgid ""
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
 "A función ZERO_COUPON() calcula o valor dun bono \"cero- cupón\" (desconto "
-"puro). Por exemplo: se a taxa de xuro é do 10%, un bono de 1000€ que dure 20 "
-"anos vale ZERO_COUPON(1000;0,1;20) ou 148.64€."
+"puro). Por exemplo: se a taxa de xuro é do 10%, un bono de 1000 € que dure "
+"20 anos vale ZERO_COUPON(1000;0,1;20) ou 148.64 €."
 
 #: functions/financial.xml:1521
 #, kde-format
@@ -6482,8 +6482,8 @@ msgid ""
 "The MOD() function returns the remainder after division. If the second "
 "parameter is null the function returns #DIV/0."
 msgstr ""
-"A función MOD() devolve o resto da división; se o segundo parámetro é nulo a "
-"función devolve #DIV/0."
+"A función MOD() devolve o resto da división; se o segundo parámetro é nulo, "
+"a función devolve #DIV/0."
 
 #: functions/math.xml:249
 #, kde-format
@@ -7394,7 +7394,7 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
-"A función FLOOR() redondea de maneira predeterminada (cara o cero) ao "
+"A función FLOOR() redondea de maneira predeterminada (cara ao cero) ao "
 "múltiplo máis próximo á cifra significativa que sexa menor que a fornecida.\n"
 "                O valor por defecto da cifra significativa a é 1, se x é "
 "positivo. É -1 se o valor é negativo,\n"
@@ -8037,8 +8037,8 @@ msgid ""
 "The ADDRESS creates a cell address. Parameter Row is the row number and "
 "Column is the column number."
 msgstr ""
-"ADDRESS crea un enderezo dunha cela. O parámetro Fila é o número da fila e o "
-"columna é a identificación da columna."
+"ADDRESS crea un enderezo dunha cela. O parámetro «Fila» é o número da fila e "
+"o parámetro «Columna» é o número da columna."
 
 #: functions/reference.xml:32
 #, kde-format
@@ -9899,8 +9899,8 @@ msgid ""
 msgstr ""
 "A función PERMUTATIONA() devolve o número de permutacións ordenadas cando se "
 "permite a repetición. O primeiro parámetro é o número de elementos e o "
-"segundo parámetro é o número de elementos a escoller. Ambos parámetros teñen "
-"que ser positivos."
+"segundo parámetro é o número de elementos a escoller. Ambos os parámetros "
+"teñen que ser positivos."
 
 #: functions/statistical.xml:960
 #, kde-format
@@ -13765,7 +13765,7 @@ msgstr ""
 "<b>Lista de todas as follas dispoñíbeis.</b><br>\n"
 "Para imprimir unha folla terás que escoller unha ou máis follas nesta lista "
 "e usar os botóns para inserir as escollidas na lista da dereita, que indica "
-"as follas que se van a imprimir.<br>\n"
+"as follas que se van imprimir.<br>\n"
 "Podes inserir unha folla tantas veces como queiras xa que isto o que fará "
 "será imprimilas múltiples veces. Isto é útil para divisións ou para páxinas "
 "de título, por exemplo."
@@ -15056,7 +15056,7 @@ msgstr ""
 "Cando teñas un número na cela actual e cambies o formato da cela de xenérico "
 "a porcentaxe, o número da cela actual multiplícase por 100. Por exemplo, se "
 "escribes 12 e defines o formato da cela como porcentaxe o número pasará a "
-"ser 1200 %. Se volves para o formato de cela xenérico volverase indicar como "
+"ser 1200%. Se volves para o formato de cela xenérico volverase indicar como "
 "12.\n"
 "Tamén podes usar a icona de porcentaxe na barra de formato."
 
