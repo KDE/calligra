@@ -136,7 +136,7 @@
 ><para
 >Esta opción solo está activa si la opción <guilabel
 >Pegar en el cursor</guilabel
-> está desactivada. Si copia una forma con el acceso rápido de teclado <keycombo action="simul"
+> está desactivada. Si copia una forma con el atajo de teclado <keycombo action="simul"
 >&Ctrl;<keycap
 >C</keycap
 ></keycombo

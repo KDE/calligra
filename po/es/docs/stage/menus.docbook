@@ -93,7 +93,7 @@ Be sure to comment it out again when you are done -->
 >Manipular las barras de herramientas</title>
 
 <para
->Además de los menú, &stage; también tiene una barra de herramientas. La barra de herramientas consta de una colección de iconos. Un icono de una barra de herramientas suele ofrecer un cómodo acceso rápido a una orden que se encuentra en uno de los menús.</para>
+>Además de los menú, &stage; también tiene una barra de herramientas. La barra de herramientas consta de una colección de iconos. Un icono de una barra de herramientas suele ofrecer un cómodo atajo a una orden que se encuentra en uno de los menús.</para>
 
 <para
 >Puede mover la barra de herramientas desbloqueada arrastrando el mango de la izquierda. La barra de herramientas desbloqueada se puede <quote
@@ -2615,26 +2615,26 @@ transition <emphasis
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar accesos rápidos...</guimenuitem
+>Configurar atajos de teclado...</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
 
 <para
 ><guimenuitem
->Configurar los accesos rápidos</guimenuitem
-> le permite asignar accesos rápidos de teclado a las acciones que tienen los menús o iconos de &stage;.</para>
+>Configurar los atajos de teclado</guimenuitem
+> le permite asignar atajos de teclado a las acciones que tienen los menús o iconos de &stage;.</para>
 
 <screenshot>
 <screeninfo
->Personalizar accesos rápidos</screeninfo>
+>Personalizar atajos de teclado</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="settings03.png" format="PNG"/>
 </imageobject>
 <textobject>
 <phrase
->Personalizar los accesos rápidos</phrase>
+>Personalizar los atajos de teclado</phrase>
 </textobject>
 </mediaobject>
 </screenshot>

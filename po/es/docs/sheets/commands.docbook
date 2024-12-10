@@ -1901,15 +1901,15 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar los accesos rápidos...</guimenuitem
+>Configurar los atajos de teclado...</guimenuitem
 > </menuchoice
 ></term>
 <listitem
 ><para
 ><action
->Configura los accesos rápidos de teclado utilizados por &sheets;. </action
+>Configura los atajos de teclado utilizados por &sheets;. </action
 > Consulte la sección sobre <link linkend="configshort"
->configuración de accesos rápidos </link
+>configuración de atajos de teclado</link
 > para más detalles. </para
 ></listitem>
 </varlistentry>
@@ -2482,7 +2482,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <title
 >Otros atajos</title>
 <para
->Esta sección describe aquellos accesos rápidos de teclado de &sheets; utilizados para operaciones que no aparecen en ninguno de los menús.</para>
+>Esta sección describe aquellos atajos de teclado de &sheets; utilizados para operaciones que no aparecen en ninguno de los menús.</para>
 
 <variablelist>
 

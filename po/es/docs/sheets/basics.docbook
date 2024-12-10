@@ -318,7 +318,7 @@
 >Editar</guimenu
 > o del menú desplegable que aparecerá si manteniendo pulsado el botón <mousebutton
 >derecho</mousebutton
-> del ratón sobre una celda seleccionada. También puede usar los accesos rápidos <keycombo action="simul"
+> del ratón sobre una celda seleccionada. También puede usar los atajos de teclado <keycombo action="simul"
 >&Ctrl;<keycap
 >C</keycap
 > </keycombo
@@ -328,7 +328,7 @@
 > </keycombo
 >, luego puede cambiar la selección a la celda de destino y seleccionar <guimenuitem
 >Pegar</guimenuitem
-> o utilizar el acceso rápido <keycombo action="simul"
+> o usar el atajo de teclado <keycombo action="simul"
 > &Ctrl;<keycap
 >V</keycap
 ></keycombo
@@ -570,7 +570,7 @@
 >Recalcular documento</guimenuitem
 > en el menú <guimenu
 >Herramientas</guimenu
-> o sus accesos rápidos <keycombo action="simul"
+> o sus atajos de teclado <keycombo action="simul"
 >&Shift;<keysym
 >F9</keysym
 ></keycombo
