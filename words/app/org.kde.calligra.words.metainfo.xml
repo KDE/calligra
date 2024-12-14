@@ -29,6 +29,7 @@
   <name xml:lang="pt">Calligra Words</name>
   <name xml:lang="pt-BR">Calligra Words</name>
   <name xml:lang="ru">Calligra Words</name>
+  <name xml:lang="sa">कलिग्रा शब्द</name>
   <name xml:lang="sk">Calligra Words</name>
   <name xml:lang="sl">Calligra Words</name>
   <name xml:lang="sv">Calligra Words</name>
@@ -66,6 +67,7 @@
   <summary xml:lang="pt">Processador de Texto</summary>
   <summary xml:lang="pt-BR">Processador de Texto</summary>
   <summary xml:lang="ru">Текстовый процессор</summary>
+  <summary xml:lang="sa">शब्दसंसाधक</summary>
   <summary xml:lang="sk">Textový procesor</summary>
   <summary xml:lang="sl">Urejevalnik besedil</summary>
   <summary xml:lang="sv">Ordbehandlare</summary>
@@ -105,6 +107,7 @@
     <p xml:lang="pt">O Words é um processador de texto intuitivo e uma aplicação de publicações no ecrã. Com ele, pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="pt-BR">Words é um processador de texto intuitivo e um aplicativo de publicação no desktop. Com ele, você pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="ru">Words — это интуитивно понятный текстовый редактор и приложение для публикаций текстов. Он позволяет легко и с удовольствием создавать информативные и привлекательные документы.</p>
+    <p xml:lang="sa">शब्दाः एकः सहजः शब्दसंसाधकः डेस्कटॉप् प्रकाशक-अनुप्रयोगः च अस्ति । तेन सह भवान् सुखेन सहजतया च सूचनाप्रदं आकर्षकं च दस्तावेजं निर्मातुम् अर्हति ।</p>
     <p xml:lang="sk">Words je intuitívny textový procesor a aplikácia na desktopové publikovanie. Môžete pomocou neho vytvoriť informatívne a atraktívne dokumenty s radosťou a jednoduchosťou.</p>
     <p xml:lang="sl">Words je intuitiven program za urejanje besedil in za namizno založništvo. Z njim lahko z veseljem in lahkoto ustvarite informativne in privlačne dokumente.</p>
     <p xml:lang="sv">Words är en intuitiv ordbehandlare och skrivbordspubliceringsprogram. Det gör att du kan skapa informativa och attraktiva dokument med nöje och enkelhet.</p>
@@ -142,6 +145,7 @@
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ru">Возможности:</p>
+    <p xml:lang="sa">गुणाः:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
@@ -179,6 +183,7 @@
       <li xml:lang="pt">Edição baseada em molduras</li>
       <li xml:lang="pt-BR">Edição baseada em molduras</li>
       <li xml:lang="ru">Фреймовое редактирование</li>
+      <li xml:lang="sa">फ्रेम-आधारित सम्पादन</li>
       <li xml:lang="sk">Rámcovo založené editovanie</li>
       <li xml:lang="sl">Urejanje na podlagi okvirjev</li>
       <li xml:lang="sv">Rambaserad redigering</li>
@@ -215,6 +220,7 @@
       <li xml:lang="pt">Permite a incorporação de documentos</li>
       <li xml:lang="pt-BR">Permite a incorporação de documentos</li>
       <li xml:lang="ru">Функция встраивания документов</li>
+      <li xml:lang="sa">Documents इत्यस्य एम्बेडिंग् इत्यस्य अनुमतिं ददाति</li>
       <li xml:lang="sk">Umožňuje vkladanie dokumentov</li>
       <li xml:lang="sl">Dovoljuje gnezdenje dokumentov</li>
       <li xml:lang="sv">Tillåter att dokument inbäddas</li>
@@ -251,6 +257,7 @@
       <li xml:lang="pt">Personalização da interface do utilizador</li>
       <li xml:lang="pt-BR">Personalização da interface do usuário</li>
       <li xml:lang="ru">Настройка пользовательского интерфейса</li>
+      <li xml:lang="sa">उपयोक्तृ-अन्तरफलकस्य अनुकूलनम्</li>
       <li xml:lang="sk">Úprava používateľského rozhrania</li>
       <li xml:lang="sl">Prilagoditev uporabniškega vmesnika</li>
       <li xml:lang="sv">Anpassning av användargränssnitt</li>
@@ -287,6 +294,7 @@
       <li xml:lang="pt">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
       <li xml:lang="pt-BR">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
       <li xml:lang="ru">Все функции, ожидаемые от текстового процессора</li>
+      <li xml:lang="sa">आधुनिकशब्दसंसाधकात् अपेक्षितानि सर्वाणि विशेषतानि समाविष्टानि सन्ति</li>
       <li xml:lang="sk">Obsahuje všetky funkcie očakávané od moderného textového procesora</li>
       <li xml:lang="sl">Vsebuje vse možnosti, ki jih pričakujete od modernega urejevalnika besedil</li>
       <li xml:lang="sv">Innehåller alla funktioner som förväntas av en modern ordbehandlare</li>
@@ -323,6 +331,7 @@
       <li xml:lang="pt">Suporte para o ODT (Texto do Open Document)</li>
       <li xml:lang="pt-BR">Suporte para ODT (Texto Open Document)</li>
       <li xml:lang="ru">Поддержка формата ODT (Open Document Text)</li>
+      <li xml:lang="sa">ODT (Open Document Text) समर्थनम्</li>
       <li xml:lang="sk">Podpora ODT (Open Document Text)</li>
       <li xml:lang="sl">Podpora ODT (Open Document Text)</li>
       <li xml:lang="sv">Stöd för ODT (Open Document Text)</li>
@@ -356,6 +365,7 @@
       <caption xml:lang="lv">„Calligra Words“ pamata logs</caption>
       <caption xml:lang="nl">Hoofdvenster van Calligra Words</caption>
       <caption xml:lang="pl">Główne okno Słów Calligry</caption>
+      <caption xml:lang="sa">Calligra Words मुख्यविण्डो</caption>
       <caption xml:lang="sl">Glavno okno Calligra Words</caption>
       <caption xml:lang="sv">Calligra Words huvudfönster</caption>
       <caption xml:lang="tr">Calligra Sözcükler ana penceresi</caption>

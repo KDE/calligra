@@ -28,6 +28,7 @@
   <name xml:lang="pt">Calligra Sheets</name>
   <name xml:lang="pt-BR">Calligra Sheets</name>
   <name xml:lang="ru">Calligra Sheets</name>
+  <name xml:lang="sa">कैलिग्रा शीट्स</name>
   <name xml:lang="sk">Calligra Sheets</name>
   <name xml:lang="sl">Calligra Sheets</name>
   <name xml:lang="sv">Calligra Sheets</name>
@@ -64,6 +65,7 @@
   <summary xml:lang="pt">Folha de Cálculo</summary>
   <summary xml:lang="pt-BR">Planilha</summary>
   <summary xml:lang="ru">Электронная таблица</summary>
+  <summary xml:lang="sa">स्प्रेडशीट</summary>
   <summary xml:lang="sk">Zošit</summary>
   <summary xml:lang="sl">Preglednica</summary>
   <summary xml:lang="sv">Kalkylark</summary>
@@ -102,6 +104,7 @@
     <p xml:lang="pt">O Calligra Sheets é uma folha de cálculo poderosa. Use-o para criar e calcular rapidamente várias folhas de cálculo relacionadas com o negócio, como receitas e despesas, horas de trabalho de empregados, etc.</p>
     <p xml:lang="pt-BR">Calligra Sheets é uma planilha de cálculo poderosa. Use-o para criar e calcular rapidamente várias planilhas relacionadas com negócios, como receitas e despesas, horas de trabalho de empregados, etc.</p>
     <p xml:lang="ru">Calligra Sheets — это полнофункциональный инструмент для расчётов и работы с электронными таблицами. Используйте его для быстрого создания и расчёта различных электронных таблиц, связанных с бизнесом, таких как доходы и расходы, часы работы сотрудников и так далее.</p>
+    <p xml:lang="sa">Calligra Sheets इति पूर्णविशेषतायुक्तं गणना-स्प्रेड्शीट्-उपकरणम् अस्ति । तस्य उपयोगं शीघ्रं विविधव्यापारसम्बद्धानि स्प्रेडशीट्-निर्माणार्थं गणनायाश्च कुर्वन्तु, यथा आयव्ययः, कर्मचारीकार्यसमयः इत्यादयः ।</p>
     <p xml:lang="sk">Calligra Sheets je plnohodnotný tabuľkový a výpočtový nástroj. Použite ho na rýchle vytvorenie a výpočet rôznych obchodných tabuliek, ako príjmy a výdavky, pracovné hodiny zamestnancov, atď.</p>
     <p xml:lang="sl">Calligra Sheets je orodje z mnogo možnostmi izračuna in urejanja preglednic. Uporabno je za hitro ustvarjanje in izračun različnih poslovnih preglednic, kot so kot prihodki in odhodki, delovni čas zaposlenih itd.</p>
     <p xml:lang="sv">Calligra Sheets är ett fullfjädrat beräknings- och kalkylarksverktyg. Använd det för att snabbt skapa och beräkna diverse affärsrelaterade kalkylark, såsom inkomster och utgifter, anställdas arbetstimmar, etc.</p>
@@ -138,6 +141,7 @@
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ru">Возможности:</p>
+    <p xml:lang="sa">गुणाः:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
@@ -174,6 +178,7 @@
       <li xml:lang="pt">Usar formas para tirar notas ou mapas mentais</li>
       <li xml:lang="pt-BR">Usa formas para fazer anotações ou mapas mentais</li>
       <li xml:lang="ru">Использование форм для создания заметок или диаграмм связей</li>
+      <li xml:lang="sa">टिप्पणीं कर्तुं वा मनःचित्रं ग्रहीतुं आकृतीनां उपयोगं कुर्वन्तु</li>
       <li xml:lang="sk">Použite tvary na vytváranie poznámok alebo myšlienkových máp</li>
       <li xml:lang="sl">Uporablja oblike za zbiranje opomb ali miselnih vzorcev</li>
       <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
@@ -208,6 +213,7 @@
       <li xml:lang="pt">Gama alargada de modelos predefinidos</li>
       <li xml:lang="pt-BR">Grande variedade de modelos predefinidos</li>
       <li xml:lang="ru">Большой диапазон предустановленных шаблонов</li>
+      <li xml:lang="sa">पूर्वनिर्धारितसारूप्यानां विशालपरिधिः</li>
       <li xml:lang="sk">Veľký rozsah preddefinovaných šablón</li>
       <li xml:lang="sl">Velik nabor vnaprej določenih predlog</li>
       <li xml:lang="sv">Stort antal fördefinierade mallar</li>
@@ -242,6 +248,7 @@
       <li xml:lang="pt">Lista de fórmulas poderosa e compreensiva</li>
       <li xml:lang="pt-BR">Lista de fórmulas poderosa e compreensiva</li>
       <li xml:lang="ru">Мощный и полный список формул</li>
+      <li xml:lang="sa">शक्तिशाली एवं व्यापक सूत्र सूची</li>
       <li xml:lang="sk">Silný a úplný zoznam vzorcov</li>
       <li xml:lang="sl">Zmogljiv in široko obsegajoč seznam formul</li>
       <li xml:lang="sv">Kraftfull och omfattande formellista</li>
@@ -276,6 +283,7 @@
       <li xml:lang="pt">Funciona num ambiente familiar</li>
       <li xml:lang="pt-BR">Funciona em um ambiente familiar</li>
       <li xml:lang="ru">Работа в знакомом окружении</li>
+      <li xml:lang="sa">परिचिते वातावरणे कार्यं कुर्वन्तु</li>
       <li xml:lang="sk">Práca v známom prostredí</li>
       <li xml:lang="sl">Delo v že znanem okolju</li>
       <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
