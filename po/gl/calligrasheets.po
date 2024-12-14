@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-12 19:55+0100\n"
+"PO-Revision-Date: 2024-12-13 23:15+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -6200,7 +6200,7 @@ msgstr "N é a potencia inicial a cal se eleva X"
 msgid "M the increment by which to increase N for each term in the series"
 msgstr "M é o incremento que se aplica a N para cada valor da serie"
 
-# skip-rule: trasno-11.0-gl-son
+# skip-rule: trasno-sound_reverse
 #: functions/math.xml:56
 #, kde-format
 msgid ""
@@ -11848,7 +11848,7 @@ msgstr "A función CLEAN() retira todos os caracteres non imprimíbeis do texto"
 msgid "CLEAN(text)"
 msgstr "CLEAN(texto)"
 
-# skip-rule: trasno-11.0-en-clean
+# skip-rule: trasno-clean
 #: functions/text.xml:626
 #, kde-format
 msgid "CLEAN(AsciiToChar(7) + \"HELLO\") returns \"HELLO\""

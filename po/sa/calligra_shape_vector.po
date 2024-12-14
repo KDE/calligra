@@ -1,0 +1,42 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ChangeVectorDataCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "सदिशदत्तांशं परिवर्तयन्तु"
+
+#: VectorShapeFactory.cpp:26
+#, kde-format
+msgid "Vector image"
+msgstr "सदिश छवि"
+
+#: VectorShapeFactory.cpp:28
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "एकः आकारः यः सदिशप्रतिबिम्बं (EMF/WMF/SVM) दर्शयति ।"
+
+#: VectorTool.cpp:63
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "खुला सदिश चित्र (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:19
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "सदिश चित्र (EMF / WMF / SVM / SVG) उपकरण"

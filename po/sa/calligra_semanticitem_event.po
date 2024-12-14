@@ -1,0 +1,113 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-11-07 00:40+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "घटना"
+
+#: KoRdfCalendarEvent.cpp:152
+#, kde-format
+msgid "Area"
+msgstr "क्षेत्र"
+
+#: KoRdfCalendarEvent.cpp:153
+#, kde-format
+msgid "Region"
+msgstr "क्षेत्र"
+
+#: KoRdfCalendarEvent.cpp:364
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "रक्षणार्थं पञ्चाङ्गं चिनोतु:"
+
+#: KoRdfCalendarEvent.cpp:384
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"प्रविष्टिं योजयितुं न शक्तवान्\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:407
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"iCal सञ्चिकां रक्षितुं न शक्तवान्\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&संक्षेपः:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&स्थानीय:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&प्रारंभः:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&अंत:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "समयः तिथिः च"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "समयक्षेत्रम्"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:29
+#, kde-format
+msgid "Calendar Event"
+msgstr "पञ्चाङ्ग घटना"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:36
+#, kde-format
+msgid "Edit..."
+msgstr "सम्पादन..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:39
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Calendar मध्ये इवेण्ट् आयातयन्तु"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "iCal सञ्चिकायां घटनां निर्यातयन्तु..."

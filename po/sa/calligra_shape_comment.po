@@ -1,0 +1,45 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "टिप्पणीप्रदर्शनाय आवश्यकं प्लगिन् नास्ति ।"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "प्लगिन् अनुपलब्धम्"
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr "टिप्पणीं प्रदर्शयितुं आवश्यकं प्लगिन् टिप्पणीकारस्य वर्तमानसंस्करणेन सह सङ्गतं नास्ति ।"
+
+#: CommentShape.cpp:53
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "प्लगिन् असङ्गतम्"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "टिप्पणी"

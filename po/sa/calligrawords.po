@@ -1,0 +1,1868 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-25 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:55+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Poedit 3.5\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&संचिका"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&सम्पादन"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&दृश्यं"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "&प्रदर्शनविधिः"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, kde-format
+msgid "Semantics"
+msgstr "शब्दार्थः"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, kde-format
+msgid "S&tyles"
+msgstr "S&tyles"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&सेटिंग्स"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "वर्तनीपरीक्षा"
+
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, kde-format
+msgid "AutoCorrection"
+msgstr "स्वतः सुधारः"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:94
+#, kde-format
+msgid "Edit"
+msgstr "सम्पादन"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:147
+#, kde-format
+msgid "Spell Check Result"
+msgstr "वर्तनी जाँच परिणाम"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:174
+#, kde-format
+msgid "Change Variable To"
+msgstr "परिवर्तनं चर To"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&उपकरणाः"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "पृष्ठशैली सेट् कुर्वन्तु"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "पृष्ठशैली सम्मिलितं कुर्वन्तु"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "पृष्ठ गुण"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "आकारं रचयतु"
+
+#: part/dialogs/KWAnchoringProperties.cpp:412
+#, kde-format
+msgid "Baseline"
+msgstr "आधाररेखा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:413
+#: part/dialogs/KWAnchoringProperties.cpp:424
+#, kde-format
+msgid "Character"
+msgstr "स्वभावः"
+
+#: part/dialogs/KWAnchoringProperties.cpp:416
+#, kde-format
+msgid "Row"
+msgstr "पंक्ति"
+
+#: part/dialogs/KWAnchoringProperties.cpp:417
+#: part/dialogs/KWAnchoringProperties.cpp:425
+#, kde-format
+msgid "Page (entire) area"
+msgstr "पृष्ठ (सम्पूर्ण) क्षेत्र"
+
+#: part/dialogs/KWAnchoringProperties.cpp:418
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Page text area"
+msgstr "पृष्ठ पाठ क्षेत्र"
+
+#: part/dialogs/KWAnchoringProperties.cpp:419
+#: part/dialogs/KWAnchoringProperties.cpp:433
+#, kde-format
+msgid "Paragraph area"
+msgstr "अनुच्छेदक्षेत्रम्"
+
+#: part/dialogs/KWAnchoringProperties.cpp:420
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Paragraph text area"
+msgstr "अनुच्छेद पाठ क्षेत्र"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#, kde-format
+msgid "Left page border"
+msgstr "वामपृष्ठसीमा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#, kde-format
+msgid "Right page border"
+msgstr "दक्षिण पृष्ठ सीमा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, kde-format
+msgid "Right paragraph border"
+msgstr "दक्षिणपरिच्छेदसीमा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, kde-format
+msgid "Left paragraph border"
+msgstr "वामपरिच्छेदसीमा"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr "पाठेन सह आकारसम्बन्धः अस्ति : १."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr "पाठेन सह अन्तर्रेखा (वर्णवत् वर्तते) २."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr "प्लवमानः, परन्तु पात्रस्थाने लंगरितः"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr "प्लवमानः, परन्तु एकस्मिन् अनुच्छेदे लंगरितः"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr "प्लवमानः मुक्तः (पाठे लंगरितः न) २."
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, kde-format
+msgid "Vertical Positioning"
+msgstr "ऊर्ध्वाधर स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr "उपरि संरेखणं कुर्वन्तु:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr "केन्द्रं संरेखणं करोति:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr "अधः संरेखणं भवति :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "ऑफसेट्"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr "इत्यस्मात्‌:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, kde-format
+msgid "Horizontal Positioning"
+msgstr "क्षैतिज स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr "वामभागे संरेखणं कुर्वन्तु:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr "दक्षिणतः संरेखणं कुर्वन्तु:"
+
+#: part/dialogs/KWConfigureDialog.cpp:29
+#, kde-format
+msgid "Configure"
+msgstr "विन्यस्तं कुर्वन्तु"
+
+#: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
+#, kde-format
+msgid "Misc"
+msgstr "विविधाः"
+
+#: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "गृध्र"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "प्रलेख"
+
+#: part/dialogs/KWConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "दस्तावेज सेटिंग्स्"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "लेखकः"
+
+#: part/dialogs/KWConfigureDialog.cpp:51
+#, kde-format
+msgid "Author"
+msgstr "लेखकः"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "नवीनं बुकमार्कं रचयन्तु"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"पुस्तकचिह्नानि भवन्तं स्वस्य दस्तावेजस्य भागानां मध्ये कूर्दितुं शक्नुवन्ति ।\n"
+"कृपया स्वस्य पुस्तकचिह्नस्य नाम प्रदातव्यम्।"
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "नामः:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:21
+#, kde-format
+msgid "Columns:"
+msgstr "स्तम्भाः : १."
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:41
+#, kde-format
+msgid "Column spacing:"
+msgstr "स्तम्भान्तरम् : १."
+
+#: part/dialogs/KWFrameConnectSelector.cpp:98
+#, kde-format
+msgid "frameset"
+msgstr "frameset इति"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:123
+#, kde-format
+msgid "No framesets in document"
+msgstr "दस्तावेजे फ्रेमसेट् नास्ति"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "फ्रेमसेट् इत्यस्य नाम : १."
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "नूतनं फ्रेमसेट् रचयन्तु : १."
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "सम्बद्धं कर्तुं विद्यमानं फ्रेमसेट् चिनोतु:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "फ्रेमसेट् नाम"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, kde-format
+msgid "Smart Positioning"
+msgstr "स्मार्ट पोजिशनिंग"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
+#, kde-format
+msgid "Text Run Around"
+msgstr "पाठः Run Around इति"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "पाठ फ्रेम्स संयोजयन्तु"
+
+#: part/dialogs/KWFrameDialog.cpp:64
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "आकृतिगुणान् परिवर्तयन्तु"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr "लंगर तो..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&पृष्ठम्"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, kde-format
+msgid "Para&graph"
+msgstr "अनुच्छेद&ग्राफ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, kde-format
+msgid "&To Character"
+msgstr "&चरित्रं प्रति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, kde-format
+msgid "&As Character"
+msgstr "&चरित्रत्वेन"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, kde-format
+msgid "Horizontal Alignment"
+msgstr "क्षैतिज संरेखण"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr "&वामः"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr "&केंद्र"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr "&दक्षिणः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, kde-format
+msgid "Vertical Alignment"
+msgstr "ऊर्ध्वाधर संरेखण"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&उपरितन"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr "&मध्यं"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, kde-format
+msgid "&Bottom"
+msgstr "&अधः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr "पाठः वेष्टनम्"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "अस्य आकारस्य माध्यमेन धावन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "अस्य आकारस्य अधः त्यजन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "अस्य आकारस्य वामभागे धावन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "अस्य आकारस्य दक्षिणभागे धावन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "अस्य आकारस्य दीर्घतमपक्षे धावन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "अस्य आकारस्य उभयतः धावन्तु"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "येषु पार्श्वेषु धावन्तु येषु तः विस्तृताः सन्ति : १."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "आकारस्य पाठस्य च मध्ये अन्तरम् : १."
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
+#, kde-format
+msgid "Columns"
+msgstr "स्तम्भाः"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:44
+#, kde-format
+msgid "Style"
+msgstr "शैली"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:60
+#, kde-format
+msgid "Clone"
+msgstr "क्लोन"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
+#, kde-format
+msgid "Delete"
+msgstr "लुप्"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:154
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "पृष्ठशैलीं परिवर्तयन्तु"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:235
+#, kde-format
+msgid "Clone Page Style"
+msgstr "क्लोन पृष्ठ शैली"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:236
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "नामेन सह नूतनं पृष्ठशैलीं योजयन्तु:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:19
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "अन्यत्र पाठः भविष्यति : १."
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:92
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr "आकारः पाठं तस्य प्रभावं करोति यत् :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:99
+#, kde-format
+msgid "Bounding box"
+msgstr "बाउंडिंग बॉक्स"
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:106
+#, kde-format
+msgid "Contour"
+msgstr "समोच्च"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:116
+#, kde-format
+msgid "Shape and text are separated left by:"
+msgstr "आकारः पाठश्च पृथक् भवति वाम:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:129
+#, kde-format
+msgid "Right by:"
+msgstr "सम्यक् द्वारा : १."
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:142
+#, kde-format
+msgid "Above by:"
+msgstr "उपरि द्वारा : १."
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: part/dialogs/KWRunAroundProperties.ui:155
+#, kde-format
+msgid "Below by:"
+msgstr "अधः द्वारा:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&नाम पुनर्नाम"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&लुप्"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "कृपया पुस्तकचिह्नस्य नूतनं नाम प्रदातव्यम्"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:66
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Bookmark इति नाम परिवर्तयतु"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:72
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "\"%1\" इति नामयुक्तं पुस्तकचिह्नं पूर्वमेव अस्ति ।"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:104
+#, kde-format
+msgid "Select Bookmark"
+msgstr "बुकमार्कं चिनोतु"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:43
+#, kde-format
+msgid "Geometry"
+msgstr "ज्यामिति"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:32
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "पृष्ठ आकार && मार्जिन"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:91 part/KWView.cpp:409
+#, kde-format
+msgid "Create"
+msgstr "निर्मियताम्"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr "त्रुटिनिवारणम्"
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr "नौकायानम्"
+
+#: part/dockers/KWNavigationWidget.cpp:92
+#, kde-format
+msgid "Page #"
+msgstr "पृष्ठहरू # 2019 ."
+
+#: part/dockers/KWNavigationWidget.cpp:92
+#, kde-format
+msgid "Section"
+msgstr "खंड"
+
+#: part/dockers/KWRdfDocker.cpp:38
+#, kde-format
+msgid "RDF"
+msgstr "आर डी एफ"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "सांख्यिकी"
+
+#: part/dockers/KWStatisticsWidget.cpp:125
+#, kde-format
+msgid "Words:"
+msgstr "शब्दाः:"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Sentences:"
+msgstr "वाक्यानि:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Syllables:"
+msgstr "अक्षराः : १."
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Characters (spaces):"
+msgstr "वर्णाः (अवकाशाः) : १."
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, kde-format
+msgid "Characters (no spaces):"
+msgstr "वर्णाः (न रिक्तस्थानानि) : १."
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, kde-format
+msgid "Lines:"
+msgstr "पङ्क्तयः : १."
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Readability:"
+msgstr "पठनीयता : १."
+
+#: part/dockers/KWStatisticsWidget.cpp:145
+#, kde-format
+msgid "Flesch reading ease"
+msgstr "Flesch पठनसुलभता"
+
+#: part/dockers/KWStatisticsWidget.cpp:147
+#, kde-format
+msgid "East asian characters:"
+msgstr "पूर्व एशियाई पात्राणि : १."
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, kde-format
+msgid "Words"
+msgstr "शब्दाः"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "वाक्यानि"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "अक्षरम्"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "रेखाः"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, kde-format
+msgid "Characters With Spaces"
+msgstr "रिक्तस्थानसहिताः पात्राः"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "रिक्तस्थानरहिताः वर्णाः"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "पूर्व एशियाई वर्ण"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Flesch पठन सहजता"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "स्तरीय"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "शिरः १"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "शिरः २"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "शिरः ३"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "गणनाकृतसूची"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "वर्णमाला सूची"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "बुलेट सूची"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "सामग्री शीर्षक"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "विषयवस्तु शीर्षक 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "विषयवस्तु शीर्षक 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "विषयवस्तु शीर्षक 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "दस्तावेज शीर्षक"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "शीर्षकम्"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "पादलेखः"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "सम"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "सीमाः १"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "सीमाः २"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "सीमाः ३"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "पंक्ति"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "स्तम्भ"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "हल्के ग्रे"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "गहरे धूसरवर्णः"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "कृष्णः"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "हल्के नीले"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "गहरे नीले"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "रक्त"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "पीतं"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "रङ्गिणी"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "नीलवर्णीयः"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "सरलम् १"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "सरलम् २"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "सरलम् ३"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "शीर्षकम् १"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "शीर्षकम् २"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "शीर्षकम् ३"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "शीर्षकम् ४"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "स्तम्भाः १"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "स्तम्भाः २"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "जालम् १"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "जालम् २"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "जालम् ३"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "ग्रे शीर्षकम्"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "नीलशीर्षकम्"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "नील पारम्परिक"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "ग्रे पारम्परिक"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "नीलः उपरि अधः च"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "ग्रे उपरि अधः च"
+
+#: part/KWAboutData.h:18
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "कलिग्रा शब्द"
+
+#: part/KWAboutData.h:20
+#, kde-format
+msgid "Word processor"
+msgstr "शब्दसंसाधकः"
+
+#: part/KWAboutData.h:22
+#, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "प्रतिलिपिधर्मः १९९८-%1, शब्ददलम्"
+
+#: part/KWAboutData.h:28
+#, kde-format
+msgid "Carl Schwan"
+msgstr "कार्ल स्वान्"
+
+#: part/KWAboutData.h:29
+#, kde-format
+msgid "Co Maintainer/Port to Qt6"
+msgstr "सह रखरखावकर्ता/बन्दरगाह to Qt6"
+
+#: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
+#, kde-format
+msgid "Co maintainer"
+msgstr "सह परिपालक"
+
+#: part/KWAboutData.h:33 part/KWAboutData.h:34
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "पियरे डुक्रोकेट्"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "C. Boemann"
+msgstr "जे बोएमन्"
+
+#: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Everything"
+msgstr "सर्वम्‌"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "सेबास्टियन सौर"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "बौदेविजन रेम्पट"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "पियरे स्टिरन्वेस्"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Formatting stuff"
+msgstr "द्रव्यं स्वरूपयति"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Inge Wallin"
+msgstr "इङ्गे वालिन्"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "थोर्स्टेन ज़ैचमैन"
+
+#: part/KWAboutData.h:41 part/KWAboutData.h:47 part/KWAboutData.h:48
+#: part/KWAboutData.h:49 part/KWAboutData.h:61 part/KWAboutData.h:62
+#: part/KWAboutData.h:63 part/KWAboutData.h:64 part/KWAboutData.h:65
+#: part/KWAboutData.h:66 part/KWAboutData.h:67 part/KWAboutData.h:68
+#: part/KWAboutData.h:69 part/KWAboutData.h:70
+#, kde-format
+msgid "Filter"
+msgstr "फ़िल्टर"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Matus Uzak"
+msgstr "मातुस फर"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Layout and Painting"
+msgstr "विन्यासः चित्रकला च"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Pavol Korinek"
+msgstr "पावलो कोरिनेक"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Shreya Pandit"
+msgstr "श्रेया पंडित"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Statistics docker"
+msgstr "सांख्यिकी डॉकर"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Brijesh Patel"
+msgstr "बृजेश पटेल"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Foot and endnotes"
+msgstr "पादः अन्त्यटिप्पणयः च"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Bibliography"
+msgstr "ग्रन्थसूची"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Smit Patel"
+msgstr "स्मित पटेल"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr "मोजताबा शाही"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Style Manager"
+msgstr "शैली प्रबन्धक"
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr "लस्सी निएमिनेन"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Hanzes Matus"
+msgstr "हन्जेस् मतुस्"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "लुकाश Tvrdý"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Thomas Zander"
+msgstr "थोमस ज़ैण्डर्"
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "गिरीश रामकृष्णन"
+
+#: part/KWAboutData.h:51 part/KWAboutData.h:52
+#, kde-format
+msgid "ODF Support"
+msgstr "ओडीएफ समर्थन"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr "रोबर्ट मथियस मार्मोर्स्टीन"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "David Faure"
+msgstr "डेविड फौरे"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Laurent Montel"
+msgstr "लॉरेण्ट् मोंटेल्"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "स्वेन लुप्पकेन्"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "फ्रैंक डेकरवेल्"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "क्रिस्टर विक्सेल् एरिकसन"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Dag Andersen"
+msgstr "दिवस एण्डर्सन्"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "नैश हाईवाटर"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "KFormula"
+msgstr "केसूत्रम्"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "उलरिच कुएटलर"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "शहीद हक"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Werner Trobin"
+msgstr "वर्नर् ट्रोबिन्"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "निकोलस गौट्"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "अरिया हिदायत"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Clarence Dang"
+msgstr "क्लेरेन्स डाङ्ग"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "राबर्ट् जैकोलिन्"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Enno Bartels"
+msgstr "एनो बार्टेल्स्"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Ewald Snel"
+msgstr "इवाल्ड स्नेल्"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "तोमास्ज ग्रोबेल्नी"
+
+#: part/KWAboutData.h:70
+#, kde-format
+msgid "Michael Johnson"
+msgstr "माइकल जॉन्सन्"
+
+#: part/KWAboutData.h:71
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr "Fatcow Web Hosting इति"
+
+#: part/KWAboutData.h:71
+#, kde-format
+msgid "Page break icon"
+msgstr "पृष्ठ विच्छेद चिह्न"
+
+#: part/KWAboutData.h:73
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#. i18n translator strings
+#: part/KWAboutData.h:73
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#: part/KWDocument.cpp:492
+#, kde-format
+msgid "Copy"
+msgstr "प्रतिलिपि"
+
+#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#, kde-format
+msgid "Standard"
+msgstr "स्तरीय"
+
+#: part/KWDocument.cpp:544
+#, kde-format
+msgid "Document Title"
+msgstr "दस्तावेज शीर्षक"
+
+#: part/KWDocument.cpp:551
+#, kde-format
+msgid "Head 1"
+msgstr "शिरः १"
+
+#: part/KWDocument.cpp:557
+#, kde-format
+msgid "Head 2"
+msgstr "शिरः २"
+
+#: part/KWDocument.cpp:563
+#, kde-format
+msgid "Head 3"
+msgstr "शिरः ३"
+
+#: part/KWDocument.cpp:569
+#, kde-format
+msgid "Bullet List"
+msgstr "बुलेट सूची"
+
+#: part/KWGui.cpp:68
+#, kde-format
+msgid "Tools"
+msgstr "उपकरणाः"
+
+#: part/KWOdfLoader.cpp:81
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "अमान्य OASIS OpenDocument सञ्चिका । कार्यालय:शरीरस्य टैगः न प्राप्तः।"
+
+#: part/KWOdfLoader.cpp:92
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"अमान्य OASIS OpenDocument सञ्चिका । office:body इत्यस्य अन्तः कोऽपि टैगः न प्राप्तः।"
+
+#: part/KWOdfLoader.cpp:94
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"एतत् शब्दसंसाधनदस्तावेजं नास्ति, अपितु %1 अस्ति । कृपया समुचितेन अनुप्रयोगेन उद्घाटयितुं "
+"प्रयतध्वम्।"
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "स्तरीय"
+
+#: part/KWPart.cpp:139
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr "आवश्यकं पाठघटकं न प्राप्नुयात्, Words इदानीं त्यक्ष्यति"
+
+#: part/KWPart.cpp:139
+#, kde-format
+msgid "Installation Error"
+msgstr "संस्थापनदोषः"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "परिवर्तित"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "रक्षितम्"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "पृष्ठ %1 के %2"
+
+#: part/KWStatusBar.cpp:38
+#, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "पृष्ठ %1-%2 के %3"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr "रेखा %1"
+
+#: part/KWStatusBar.cpp:132
+#, kde-format
+msgid "Page Number"
+msgstr "पृष्ठ संख्या"
+
+#: part/KWStatusBar.cpp:145
+#, kde-format
+msgid "Line Number"
+msgstr "रेखासङ्ख्या"
+
+#: part/KWStatusBar.cpp:157
+#, kde-format
+msgid "Change the page style"
+msgstr "पृष्ठशैलीं परिवर्तयन्तु"
+
+#: part/KWStatusBar.cpp:165
+#, kde-format
+msgid "Page Style"
+msgstr "पृष्ठ शैली"
+
+#: part/KWStatusBar.cpp:179
+#, kde-format
+msgid "Page Size"
+msgstr "पृष्ठ आकार"
+
+#: part/KWStatusBar.cpp:194
+#, kde-format
+msgid "Saved/Modified"
+msgstr "रक्षित/संशोधित"
+
+#: part/KWStatusBar.cpp:207
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "माउस कर्सर X:Y"
+
+#: part/KWStatusBar.cpp:220
+#, kde-format
+msgid "Zoom Controller"
+msgstr "जूम नियंत्रक"
+
+#: part/KWView.cpp:186
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr "Fullscreen Mode इत्यस्मात् निर्गच्छन्तु"
+
+#: part/KWView.cpp:278
+#, kde-format
+msgid "Shape Properties..."
+msgstr "आकार गुण..."
+
+#: part/KWView.cpp:280
+#, kde-format
+msgid "Change how the shape behave"
+msgstr "आकारः कथं वर्तते इति परिवर्तयतु"
+
+#: part/KWView.cpp:289
+#, kde-format
+msgid "Create Template From Document..."
+msgstr "दस्तावेजात् टेम्पलेट् रचयन्तु..."
+
+#: part/KWView.cpp:290
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "एतत् दस्तावेजं रक्षन्तु, पश्चात् टेम्पलेट् रूपेण तस्य उपयोगं कुर्वन्तु"
+
+#: part/KWView.cpp:292
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"भवान् एतत् दस्तावेजं टेम्पलेट् रूपेण रक्षितुं शक्नोति ।<br><br> अन्यस्य दस्तावेजस्य आरम्भबिन्दुरूपेण "
+"एतत् नूतनं टेम्पलेट् उपयोक्तुं शक्नुवन्ति ।"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Show Formatting Characters"
+msgstr "स्वरूपणवर्णान् दर्शयतु"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "अमुद्रणवर्णानां प्रदर्शनं टॉग्ल् कुर्वन्तु"
+
+#: part/KWView.cpp:319
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"अमुद्रणवर्णानां प्रदर्शनं टॉग्ल् कुर्वन्तु ।<br/><br/> यदा एतत् सक्षमं भवति तदा Words भवन्तं "
+"ट्याब्, स्पेस, कैरिज रिटर्न् इत्यादीन् अमुद्रणवर्णान् दर्शयति ।"
+
+#: part/KWView.cpp:322
+#, kde-format
+msgid "Show Field Shadings"
+msgstr "Field Shadings दर्शयतु"
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr "क्षेत्राणां छायाकृतपृष्ठभूमिं टॉग्ल् कुर्वन्तु"
+
+#: part/KWView.cpp:329
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr "क्षेत्राणां (चर इत्यादीनां) पृष्ठभूमिं विपरीतवर्णेन आकर्षयित्वा दृश्यीकरणं टॉगल कुर्वन्तु ।"
+
+#: part/KWView.cpp:331
+#, kde-format
+msgid "Show Text Shape Borders"
+msgstr "पाठ आकार सीमां दर्शयतु"
+
+#: part/KWView.cpp:332
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "सीमाप्रदर्शनं चालू-निष्क्रान्तं च करोति"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"सीमाप्रदर्शनं चालू-निष्क्रान्तं च करोति ।<br/><br/> सीमाः कदापि मुद्रिताः न भवन्ति। "
+"मुद्रितपृष्ठे दस्तावेजं कथं दृश्यते इति द्रष्टुं एषः विकल्पः उपयोगी भवति ।"
+
+#: part/KWView.cpp:342
+#, kde-format
+msgid "Show Table Borders"
+msgstr "सारणीसीमाः दर्शयतु"
+
+#: part/KWView.cpp:348
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr "सारणीसीमानां प्रदर्शनं टॉग्ल् कुर्वन्तु"
+
+#: part/KWView.cpp:350
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"सारणीसीमानां प्रदर्शनं टॉग्ल् कुर्वन्तु ।<br/><br/> यदा एतत् सक्षमं भवति तदा Words भवन्तं "
+"कृशधूसररेखायाः सह किमपि अदृश्यं सारणीसीमा दर्शयति ।"
+
+#: part/KWView.cpp:352
+#, kde-format
+msgid "Show Section Bounds"
+msgstr "खण्ड सीमां दर्शयतु"
+
+#: part/KWView.cpp:358
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "खण्डसीमानां प्रदर्शनं टॉग्ल् कुर्वन्तु"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"खण्डसीमानां प्रदर्शनं टॉग्ल् कुर्वन्तु ।<br/><br/> यदा एतत् सक्षमं भवति तदा कस्यापि "
+"खण्डसीमाः कृशधूसरेण क्षैतिजकोष्ठकैः सूचिताः भविष्यन्ति ।"
+
+#: part/KWView.cpp:362
+#, kde-format
+msgid "Show Rulers"
+msgstr "शासकाः दर्शयतु"
+
+#: part/KWView.cpp:364
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "शासकान् दर्शयति वा गोपयति वा"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"शासकाः दस्तावेजस्य उपरि वामे च श्वेतमापनस्थानानि सन्ति । शासकाः पृष्ठानां, फ्रेमस्य च स्थानं "
+"विस्तारं च दर्शयन्ति, अन्येषां मध्ये सारणीकर्तृणां स्थापनार्थं च उपयोक्तुं शक्यन्ते ।<p> शासकानाम् "
+"प्रदर्शनं निष्क्रियं कर्तुं एतत् अनचेक् कुर्वन्तु ।</p>"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid "Snap to Grid"
+msgstr "ग्रिड् मध्ये स्नैप कुर्वन्तु"
+
+#: part/KWView.cpp:385
+#, kde-format
+msgid "Show Status Bar"
+msgstr "स्थितिपट्टिकां दर्शयतु"
+
+#: part/KWView.cpp:386
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "स्थितिपट्टिकां दर्शयति वा गोपयति वा"
+
+#: part/KWView.cpp:392
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr "पूर्णपर्दे मोड"
+
+#: part/KWView.cpp:393
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr "पूर्णपर्दे दृश्यं सेट् कुर्वन्तु"
+
+#: part/KWView.cpp:400
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "शब्दार्थ शैलीपत्रिकाएँ..."
+
+#: part/KWView.cpp:402
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "शब्दार्थशैलीपत्राणि परिवर्त्य योजयन्तु"
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"सूचनायाः प्रदर्शनस्य स्वरूपणार्थं शैलीपत्राणां उपयोगः भवति यत् RDF मध्ये संगृहीतं भवति ।"
+
+#: part/KWView.cpp:418
+#, kde-format
+msgid "Configure..."
+msgstr "विन्यस्तं कुर्वन्तु..."
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Page Layout..."
+msgstr "पृष्ठ विन्यास..."
+
+#: part/KWView.cpp:429
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "सम्पूर्णपृष्ठस्य गुणाः परिवर्तयन्तु"
+
+#: part/KWView.cpp:431
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"सम्पूर्णस्य पृष्ठस्य गुणाः परिवर्तयन्तु ।<p> सम्प्रति भवान् कागदस्य आकारं, कागदस्य अभिमुखीकरणं, "
+"शीर्षकस्य पादलेखस्य च आकारं, स्तम्भसेटिंग्स् च परिवर्तयितुं शक्नोति ।</p>"
+
+#: part/KWView.cpp:434
+#, kde-format
+msgid "Create Header"
+msgstr "शीर्षकं रचयन्तु"
+
+#: part/KWView.cpp:440
+#, kde-format
+msgid "Create Footer"
+msgstr "पादलेखं रचयन्तु"
+
+#: part/KWView.cpp:447
+#, kde-format
+msgid "Show Comments"
+msgstr "टिप्पणीं दर्शयतु"
+
+#: part/KWView.cpp:448
+#, kde-format
+msgid "Shows comments in the document"
+msgstr "दस्तावेजे टिप्पण्यानि दर्शयति"
+
+#: part/KWView.cpp:454
+#, kde-format
+msgid "Word Count"
+msgstr "शब्दगणना"
+
+#: part/KWView.cpp:455
+#, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "स्थितिपट्टिकायां शब्दगणनां दर्शयति वा गोपयति वा"
+
+#: part/pagetool/KWPageTool.cpp:83
+#, kde-format
+msgid "Page Setup"
+msgstr "पृष्ठ सेटअप"
+
+#: part/pagetool/KWPageTool.cpp:87
+#, kde-format
+msgid "Header & Footer"
+msgstr "शीर्षक एवं पादलेख"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, kde-format
+msgid "Page layout"
+msgstr "पृष्ठविन्यास"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#: part/pagetool/SimpleSetupWidget.ui:32
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:64
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr "अन्वेषय:"
+
+#: part/widgets/KoFindToolbar.cpp:81
+#, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "अग्रिम"
+
+#: part/widgets/KoFindToolbar.cpp:93
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "पूर्वतनम्‌"
+
+#: part/widgets/KoFindToolbar.cpp:104
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr "विकल्पाः"
+
+#: part/widgets/KoFindToolbar.cpp:134
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "प्रत्याहृ:"
+
+#: part/widgets/KoFindToolbar.cpp:146
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "प्रत्याहृ"
+
+#: part/widgets/KoFindToolbar.cpp:154
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "सर्वेषां प्रतिस्थापनम्"
+
+#: part/widgets/KoFindToolbar.cpp:164
+#, kde-format
+msgid "Replace"
+msgstr "प्रत्याहृ"
+
+#: part/widgets/KoFindToolbar.cpp:225
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] "१ मेलः प्राप्तः"
+msgstr[1] "%1 मेलनं प्राप्तम्"
+
+#: part/widgets/KoFindToolbar.cpp:235
+#, kde-format
+msgid "No matches found"
+msgstr "न मेलनं लब्धम्"
+
+#: part/widgets/KoFindToolbar.cpp:241
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr "अन्वेषणं अधः मारितम्, उपरितः निरन्तरं।"
+
+#: part/widgets/KoFindToolbar.cpp:243
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr "अन्वेषणं उपरि मारितम्, अधः यावत् निरन्तरं।"
+
+#: part/Words.cpp:41
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "विषम पृष्ठ शीर्षक"
+
+#: part/Words.cpp:43
+#, kde-format
+msgid "Even Pages Header"
+msgstr "पृष्ठानि शीर्षकम् अपि"
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "विषम पृष्ठ पादलेख"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "पृष्ठानि अपि पादलेखम्"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Main text"
+msgstr "मुख्य पाठ"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Other text"
+msgstr "अन्यः पाठः"

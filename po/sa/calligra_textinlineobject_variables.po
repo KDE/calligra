@@ -1,0 +1,354 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-23 00:40+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#, kde-format
+msgid "Format:"
+msgstr "प्रारूपः : १."
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number"
+msgstr "संख्या"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Name"
+msgstr "नामः"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number and name"
+msgstr "संख्या च नाम च"
+
+#: ChapterVariable.cpp:206
+#, kde-format
+msgid "Number without separator"
+msgstr "विभाजकं विना संख्या"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name without separator"
+msgstr "विभाजकं विना संख्या च नाम च"
+
+#: ChapterVariable.cpp:211
+#, kde-format
+msgid "Level:"
+msgstr "स्तर:"
+
+#: ChapterVariableFactory.cpp:21
+#, kde-format
+msgid "Chapter"
+msgstr "अध्यायः"
+
+#: DateVariableFactory.cpp:22
+#, kde-format
+msgctxt "date that can not be changed later"
+msgid "Date (Fixed)"
+msgstr "तिथि (नियत) ९."
+
+#: FixedDateFormat.cpp:34
+#, kde-format
+msgid "Locale date format"
+msgstr "स्थानीय तिथि प्रारूप"
+
+#: FixedDateFormat.cpp:35
+#, kde-format
+msgid "Short locale date format"
+msgstr "लघु स्थानीय तिथि प्रारूप"
+
+#: FixedDateFormat.cpp:36
+#, kde-format
+msgid "Locale date & time format"
+msgstr "स्थानीय तिथि & समय प्रारूप"
+
+#: FixedDateFormat.cpp:37
+#, kde-format
+msgid "Short locale date & time format"
+msgstr "लघु स्थानीय तिथि & समय प्रारूप"
+
+#: FixedDateFormat.cpp:116
+#, kde-format
+msgid "Day"
+msgstr "दिनं"
+
+#: FixedDateFormat.cpp:117
+#, kde-format
+msgid "Month"
+msgstr "माह"
+
+#: FixedDateFormat.cpp:118
+#, kde-format
+msgid "Year"
+msgstr "वर्ष"
+
+#: FixedDateFormat.cpp:119
+#, kde-format
+msgid "Hour"
+msgstr "घटकः"
+
+#: FixedDateFormat.cpp:120
+#, kde-format
+msgid "Minute"
+msgstr "क्षणं"
+
+#: FixedDateFormat.cpp:121
+#, kde-format
+msgid "Second"
+msgstr "क्षण"
+
+#: FixedDateFormat.cpp:129
+#, kde-format
+msgid "Flexible Digits (1-31)"
+msgstr "लचीला अङ्काः (१-३१) २."
+
+#: FixedDateFormat.cpp:130
+#, kde-format
+msgid "2 Digits (01-31)"
+msgstr "२ अङ्काः (०१-३१) २."
+
+#: FixedDateFormat.cpp:131 FixedDateFormat.cpp:135
+#, kde-format
+msgid "Abbreviated Name"
+msgstr "संक्षिप्त नाम"
+
+#: FixedDateFormat.cpp:132 FixedDateFormat.cpp:136
+#, kde-format
+msgid "Long Name"
+msgstr "दीर्घ नाम"
+
+#: FixedDateFormat.cpp:133
+#, kde-format
+msgid "Flexible Digits (1-12)"
+msgstr "लचीला अङ्काः (१-१२) २."
+
+#: FixedDateFormat.cpp:134
+#, kde-format
+msgid "2 Digits (01-12)"
+msgstr "२ अङ्काः (०१-१२) २."
+
+#: FixedDateFormat.cpp:137
+#, kde-format
+msgid "Possessive Abbreviated Name"
+msgstr "स्वामित्व संक्षिप्त नाम"
+
+#: FixedDateFormat.cpp:138
+#, kde-format
+msgid "Possessive Long Name"
+msgstr "स्वामित्व दीर्घ नाम"
+
+#: FixedDateFormat.cpp:139
+#, kde-format
+msgid "2 Digits (01-99)"
+msgstr "२ अङ्काः (०१-९९) २."
+
+#: FixedDateFormat.cpp:140
+#, kde-format
+msgid "4 Digits"
+msgstr "४ अङ्काः"
+
+#: FixedDateFormat.cpp:141
+#, kde-format
+msgid "Flexible Digits (1-23)"
+msgstr "लचीला अङ्काः (१-२३) २."
+
+#: FixedDateFormat.cpp:142
+#, kde-format
+msgid "2 Digits (01-23)"
+msgstr "२ अङ्काः (०१-२३) २."
+
+#: FixedDateFormat.cpp:143 FixedDateFormat.cpp:145
+#, kde-format
+msgid "Flexible Digits (1-59)"
+msgstr "लचीला अङ्काः (१-५९) २."
+
+#: FixedDateFormat.cpp:144 FixedDateFormat.cpp:146
+#, kde-format
+msgid "2 Digits (01-59)"
+msgstr "२ अङ्काः (०१-५९) २."
+
+#: FixedDateFormat.cpp:147
+#, kde-format
+msgid "am/pm"
+msgstr "am/pm"
+
+#: FixedDateFormat.cpp:148
+#, kde-format
+msgid "AM/PM"
+msgstr "प्र./प"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: FixedDateFormat.ui:21
+#, kde-format
+msgid "Date Correction:"
+msgstr "तिथि सुधारः : १."
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, correction)
+#: FixedDateFormat.ui:28
+#, kde-format
+msgid " days"
+msgstr " दिवसाः"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FixedDateFormat.ui:53
+#, kde-format
+msgid "Select the way the date should be displayed:"
+msgstr "तिथिः यथा प्रदर्शितव्या तत् चिनोतु:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, custom)
+#: FixedDateFormat.ui:60
+#, kde-format
+msgid "Custom format"
+msgstr "कस्टम प्रारूप"
+
+#. i18n: ectx: property (text), widget (QToolButton, formatButton)
+#: FixedDateFormat.ui:101
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: InfoVariableFactory.cpp:24
+#, kde-format
+msgid "Author Name"
+msgstr "लेखक का नाम"
+
+#: InfoVariableFactory.cpp:32
+#, kde-format
+msgid "Title"
+msgstr "शीर्षक"
+
+#: InfoVariableFactory.cpp:40
+#, kde-format
+msgid "Subject"
+msgstr "विषयः"
+
+#: InfoVariableFactory.cpp:48
+#, kde-format
+msgid "File Name"
+msgstr "सञ्चिकानाम"
+
+#: InfoVariableFactory.cpp:56
+#, kde-format
+msgid "Keywords"
+msgstr "कीवर्ड"
+
+#: InfoVariableFactory.cpp:64
+#, kde-format
+msgid "Comments"
+msgstr "टिप्पणियाँ"
+
+#: PageVariableFactory.cpp:23
+#, kde-format
+msgid "Page Count"
+msgstr "पृष्ठगणना"
+
+#: PageVariableFactory.cpp:31
+#, kde-format
+msgid "Page Number"
+msgstr "पृष्ठ संख्या"
+
+#: UserVariableFactory.cpp:22
+#, kde-format
+msgid "Custom"
+msgstr "आचारः"
+
+#: UserVariableOptionsWidget.cpp:34
+#, kde-format
+msgid "Name:"
+msgstr "नामः:"
+
+#: UserVariableOptionsWidget.cpp:45
+#, kde-format
+msgid "New"
+msgstr "नूतनम्‌"
+
+#: UserVariableOptionsWidget.cpp:49
+#, kde-format
+msgid "Delete"
+msgstr "लुप्"
+
+#: UserVariableOptionsWidget.cpp:62
+#, kde-format
+msgid "String"
+msgstr "सूत्र"
+
+#: UserVariableOptionsWidget.cpp:63
+#, kde-format
+msgid "Boolean"
+msgstr "बूलियन इति"
+
+#: UserVariableOptionsWidget.cpp:64
+#, kde-format
+msgid "Float"
+msgstr "तारण"
+
+#: UserVariableOptionsWidget.cpp:65
+#, kde-format
+msgid "Percentage"
+msgstr "प्रतिशतम्"
+
+#: UserVariableOptionsWidget.cpp:66
+#, kde-format
+msgid "Currency"
+msgstr "मुद्रा"
+
+#: UserVariableOptionsWidget.cpp:67
+#, kde-format
+msgid "Date"
+msgstr "दिनाङ्कः"
+
+#: UserVariableOptionsWidget.cpp:68
+#, kde-format
+msgid "Time"
+msgstr "कालः"
+
+#: UserVariableOptionsWidget.cpp:69
+#, kde-format
+msgid "Formula"
+msgstr "सूत्रम्"
+
+#: UserVariableOptionsWidget.cpp:70
+#, kde-format
+msgid "Void"
+msgstr "रिक्त"
+
+#: UserVariableOptionsWidget.cpp:75
+#, kde-format
+msgid "Value:"
+msgstr "मूल्यम्‌:"
+
+#: UserVariableOptionsWidget.cpp:150
+#, kde-format
+msgid "New Variable"
+msgstr "नवीन चर"
+
+#: UserVariableOptionsWidget.cpp:150
+#, kde-format
+msgid "Name for new variable:"
+msgstr "नूतनचरस्य नाम : १."
+
+#: UserVariableOptionsWidget.cpp:166
+#, kde-format
+msgid "Delete variable <b>%1</b>?"
+msgstr "<b>%1</b> चरं विलोपयतु ?"
+
+#: UserVariableOptionsWidget.cpp:167
+#, kde-format
+msgid "Delete Variable"
+msgstr "चर विलोपयतु"

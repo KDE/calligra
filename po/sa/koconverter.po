@@ -1,0 +1,129 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:56+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#: calligraconverter.cpp:179
+#, kde-format
+msgid "CalligraConverter"
+msgstr "कैलिग्रापरिवर्तक"
+
+#: calligraconverter.cpp:181
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Calligra दस्तावेज परिवर्तक"
+
+#: calligraconverter.cpp:183
+#, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "प्रतिलिपिधर्मः २००१-%1 Calligra विकासकाः"
+
+#: calligraconverter.cpp:184
+#, kde-format
+msgid "David Faure"
+msgstr "डेविड फौरे"
+
+#: calligraconverter.cpp:185
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "निकोलस गौट्"
+
+#: calligraconverter.cpp:186
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "तथा लेनिर् तुर्थ्रा जेन्सेन्"
+
+#: calligraconverter.cpp:193
+#, kde-format
+msgid "Input file"
+msgstr "सञ्चिकां निवेशयन्तु"
+
+#: calligraconverter.cpp:194
+#, kde-format
+msgid "Output file"
+msgstr "आउटपुट् सञ्चिका"
+
+#: calligraconverter.cpp:195
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "गन्तव्यसञ्चिकायाः बैकअपं कुर्वन्तु"
+
+#: calligraconverter.cpp:196
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "बैच मोड्: संवादं न दर्शयन्तु"
+
+#: calligraconverter.cpp:197
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "अन्तरक्रियाशीलविधिः: संवादं दर्शयतु (पूर्वनिर्धारितम्)"
+
+#: calligraconverter.cpp:198
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "आउटपुट् सञ्चिकायाः Mimetype"
+
+#: calligraconverter.cpp:202
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "मुद्रण-अभिमुखीकरणं । एतत् चित्रं वा परिदृश्यं वा भवितुम् अर्हति ।"
+
+#: calligraconverter.cpp:205
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "कागदस्य आकारः । उ4, कानूनी, पत्र, ..."
+
+#: calligraconverter.cpp:207
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "कागदस्य मार्जिनस्य आकारः । पूर्वनिर्धारितरूपेण एतत् 0.2 अस्ति ।"
+
+#: calligraconverter.cpp:215
+#, kde-format
+msgid "Two arguments required"
+msgstr "तर्कद्वयम् आवश्यकम्"
+
+#: calligraconverter.cpp:243
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "%1 निवेशसञ्चिकायाः कृते Mimetype न प्राप्तम्!"
+
+#: calligraconverter.cpp:252
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "अनुकरणप्रकारः न लब्धः %1"
+
+#: calligraconverter.cpp:258
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "Mimetype न प्राप्तम्, -mimetype विकल्पस्य उपयोगेन प्रयतस्व"
+
+#: calligraconverter.cpp:282
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** परिवर्तनं विफलम् अभवत् ! *** ९."

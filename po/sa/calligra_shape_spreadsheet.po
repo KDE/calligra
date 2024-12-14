@@ -1,0 +1,152 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:124
+#, kde-format
+msgid "Rename"
+msgstr "पुनर्नाम"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "संयोजयति"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "अपाकरोति"
+
+#: SheetsEditor.cpp:124
+#, kde-format
+msgid "Enter Name:"
+msgstr "नाम प्रविष्टं कुर्वन्तु:"
+
+#: TableShape.cpp:300
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"अस्मिन् दस्तावेजे दूरस्थदस्तावेजस्य बाह्यलिङ्कः अस्ति\n"
+"%1"
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Confirmation Required"
+msgstr "पुष्टिकरणम् आवश्यकम्"
+
+#: TableShape.cpp:302
+#, kde-format
+msgid "Download"
+msgstr "अवाहरन"
+
+#: TableShape.cpp:303
+#, kde-format
+msgid "Skip"
+msgstr "क्षिपते"
+
+#: TableShapeFactory.cpp:35
+#, kde-format
+msgid "Spreadsheet"
+msgstr "स्प्रेडशीट"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "स्प्रेडशीट आकार"
+
+#: TableTool.cpp:211
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "OpenDocument स्प्रेडशीट् सञ्चिकां आयातयन्तु"
+
+#: TableTool.cpp:212
+#, kde-format
+msgid "Import"
+msgstr "आयात"
+
+#: TableTool.cpp:216
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "OpenDocument स्प्रेडशीट् सञ्चिका निर्यातयन्तु"
+
+#: TableTool.cpp:217
+#, kde-format
+msgid "Export"
+msgstr "निर्यात"
+
+#: TableTool.cpp:696
+#, kde-format
+msgid "Sheets"
+msgstr "पत्रिकाः"
+
+#: TableTool.cpp:738
+#, kde-format
+msgid "Sheet:"
+msgstr "आस्तरण:"
+
+#: TableTool.cpp:740
+#, kde-format
+msgid "Selected Sheet"
+msgstr "चयनितं पत्रम्"
+
+#: TableTool.cpp:754
+#, kde-format
+msgid "View Options"
+msgstr "विकल्पान् पश्यन्तु"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "सारणी सम्पादनम्"
+
+#: ToolHeaders.cpp:279 ToolHeaders.cpp:863
+#, kde-format
+msgid "Area is too large."
+msgstr "क्षेत्रफलम् अतिविशालम् अस्ति ।"
+
+#: ToolHeaders.cpp:418
+#, kde-format
+msgid "Hide Row"
+msgstr "पङ्क्तिः गोपयतु"
+
+#: ToolHeaders.cpp:420
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "ऊर्ध्वता: %1 %2"
+
+#: ToolHeaders.cpp:1031
+#, kde-format
+msgid "Hide Column"
+msgstr "स्तम्भं गोपयतु"
+
+#: ToolHeaders.cpp:1033
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "विस्तारः %1 %2"

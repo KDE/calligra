@@ -1,0 +1,82 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-26 00:38+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: main.cpp:51
+#, kde-format
+msgctxt "@title"
+msgid "Calligra Launcher"
+msgstr "कलिग्रा प्रक्षेपक"
+
+#: main.cpp:53
+#, kde-format
+msgid "Calligra Launcher"
+msgstr "कलिग्रा प्रक्षेपक"
+
+#: main.cpp:55
+#, kde-format
+msgid "(c) 2024"
+msgstr "(ग) 2024"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Carl Schwan"
+msgstr "कार्ल स्वान्"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Maintainer"
+msgstr "परिपालकः"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#: Main.qml:48
+#, kde-format
+msgid "Calligra Words"
+msgstr "कलिग्रा शब्द"
+
+#: Main.qml:53
+#, kde-format
+msgid "Calligra Stage"
+msgstr "कलिग्रा स्टेज"
+
+#: Main.qml:58
+#, kde-format
+msgid "Calligra Sheets"
+msgstr "कैलिग्रा शीट्स"
+
+#: Main.qml:63
+#, kde-format
+msgid "Karbon"
+msgstr "कार्बनम्"
+
+#: Main.qml:68
+#, kde-format
+msgid "Quit"
+msgstr "परिजहातु"

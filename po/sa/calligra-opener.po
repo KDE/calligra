@@ -1,0 +1,89 @@
+# POT_PART_NORMAL only
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:54+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#: main.cpp:62
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "<filename>%1</filename> इत्यस्य कृते Mimetype न प्राप्तम्!"
+
+#: main.cpp:118
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "<application>%1</application> इत्यनेन उद्घाटयन्तु"
+
+#: main.cpp:122
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"<filename>%1</filename> उद्घाटयितुं उपयुक्तं Calligra अनुप्रयोगं न लब्धम्।<nl/>किं भवान् "
+"पूर्वनिर्धारित-अनुप्रयोगेन <application>%2</application> इत्यस्य उपयोगेन सञ्चिकां "
+"उद्घाटयितुम् इच्छति?"
+
+#: main.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Calligra अनुप्रयोगः न प्राप्तः"
+
+#: main.cpp:156
+#, kde-format
+msgid "Calligra Opener"
+msgstr "कलिग्रा ओपनर"
+
+#: main.cpp:158
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "कैलिग्रा दस्तावेज उद्घाटक"
+
+#: main.cpp:160
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "प्रतिलिपिधर्मः २०१०-%1 Calligra विकासकाः"
+
+#: main.cpp:161
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:168
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "सर्वेषां उपलब्धानां कैलिग्रा-अनुप्रयोगानाम् नामानि सूचीबद्धं करोति"
+
+#: main.cpp:169
+#, kde-format
+msgid "Files to open"
+msgstr "सञ्चिकाः उद्घाटयितुं"

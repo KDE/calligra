@@ -1,0 +1,344 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-22 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "दीर्घवृत्तं परिवर्तयतु"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "चाप"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "इत्युपरि"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "तार"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "दीर्घवृत्ताकारः"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "प्रकारः:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "प्रारम्भकोणः १."
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "अन्त्यकोणः १."
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "दीर्घवृत्तं निमील्यताम्"
+
+#: ellipse/EllipseShapeFactory.cpp:20
+#, kde-format
+msgid "Ellipse"
+msgstr "दीर्घवृत्तम्"
+
+#: ellipse/EllipseShapeFactory.cpp:22
+#, kde-format
+msgid "An ellipse"
+msgstr "एकः दीर्घवृत्तः"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, kde-format
+msgid "A callout shape"
+msgstr "एकः आह्वानात्मकः आकारः"
+
+#: enhancedpath/CalloutShapeFactory.cpp:148
+#, kde-format
+msgid "Rectangular Callout"
+msgstr "आयताकार आह्वान"
+
+#: enhancedpath/CalloutShapeFactory.cpp:150
+#, kde-format
+msgid "A rectangular callout"
+msgstr "आयताकारः आह्वानः"
+
+#: enhancedpath/CalloutShapeFactory.cpp:229
+#, kde-format
+msgid "Rounded Callout"
+msgstr "गोल आह्वान"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, kde-format
+msgid "A rounded rectangular callout"
+msgstr "एकः गोलः आयताकारः आह्वानः"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, kde-format
+msgid "Callout editing"
+msgstr "आह्वान सम्पादन"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "एकः वर्धितः मार्गाकारः"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "एकः वर्धितः मार्गः"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:142
+#, kde-format
+msgid "Cross"
+msgstr "अनुप्रस्थ"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:144
+#, kde-format
+msgid "A cross"
+msgstr "तिरश्चीनम्‌"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:177
+#: enhancedpath/EnhancedPathShapeFactory.cpp:210
+#: enhancedpath/EnhancedPathShapeFactory.cpp:243
+#: enhancedpath/EnhancedPathShapeFactory.cpp:276
+#, kde-format
+msgid "Arrow"
+msgstr "बाण"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:179
+#: enhancedpath/EnhancedPathShapeFactory.cpp:212
+#: enhancedpath/EnhancedPathShapeFactory.cpp:245
+#: enhancedpath/EnhancedPathShapeFactory.cpp:278
+#, kde-format
+msgid "An arrow"
+msgstr "एकः बाणः"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:321
+#: enhancedpath/EnhancedPathShapeFactory.cpp:323
+#, kde-format
+msgid "Smiley"
+msgstr "स्माइली"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:401
+#, kde-format
+msgid "Circular Arrow"
+msgstr "वृत्तबाणः"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:403
+#, kde-format
+msgid "A circular-arrow"
+msgstr "एकः वृत्त-बाणः"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:446
+#, kde-format
+msgid "Gearhead"
+msgstr "गियरहेड"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:448
+#, kde-format
+msgid "A gearhead"
+msgstr "एकः गियरशिरः"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "आयतं परिवर्तयन्तु"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:5
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "आयत आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:21
+#, kde-format
+msgid "Corner radius x:"
+msgstr "कोणत्रिज्या x: ."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:34
+#, kde-format
+msgid "Corner radius y:"
+msgstr "कोणत्रिज्या य : १."
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "आयत"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "आयतम्"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "सर्पिलं परिवर्तयतु"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "वक्रम्"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "पंक्ति"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr "घड़ीयाः दिशि"
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr "घड़ीयाः विपरीतदिशा"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "सर्पिल आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "म्लै:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "निर्देश:"
+
+#: spiral/SpiralShapeFactory.cpp:17
+#, kde-format
+msgid "Spiral"
+msgstr "सर्पिल"
+
+#: spiral/SpiralShapeFactory.cpp:19
+#, kde-format
+msgid "A spiral shape"
+msgstr "एकः सर्पिलः आकारः"
+
+#: star/StarShapeConfigCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "तारकं परिवर्तयतु"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "ताराकारः"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "बहुभुजः : १."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "कोणाः : १."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "आन्तरिकत्रिज्या : १."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "बाह्यत्रिज्या : १."
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "एकः ताराकारः"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
+#, kde-format
+msgid "A star"
+msgstr "एकः तारकः"
+
+#: star/StarShapeFactory.cpp:37
+#, kde-format
+msgid "Star"
+msgstr "नक्षत्र"
+
+#: star/StarShapeFactory.cpp:51
+#, kde-format
+msgid "Flower"
+msgstr "पुष्पं"
+
+#: star/StarShapeFactory.cpp:53
+#, kde-format
+msgid "A flower"
+msgstr "एकं पुष्पम्"
+
+#: star/StarShapeFactory.cpp:68
+#, kde-format
+msgid "Pentagon"
+msgstr "पञ्चकोण"
+
+#: star/StarShapeFactory.cpp:70
+#, kde-format
+msgid "A pentagon"
+msgstr "एकः पञ्चकोणः"
+
+#: star/StarShapeFactory.cpp:84
+#, kde-format
+msgid "Hexagon"
+msgstr "षट्कोणः"
+
+#: star/StarShapeFactory.cpp:86
+#, kde-format
+msgid "A hexagon"
+msgstr "षट्कोणः"

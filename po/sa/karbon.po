@@ -1,0 +1,658 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:55+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "बूलियन ऑपरेशन"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&आदेशः"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&संरेखित करें"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&संचिका"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&सम्पादन"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&दृश्यं"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&वस्तु"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&वितरित करें"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&पथं"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "प्रभाव&cts"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "&सेटिंग्स"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "&पृष्ठम्"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "सम्पादन"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:156
+#, kde-format
+msgid "Object"
+msgstr "वस्तु"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:165
+#, kde-format
+msgid "Align"
+msgstr "संरेखणं कुर्वन्तु"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:174
+#, kde-format
+msgid "Effects"
+msgstr "प्रभावाः"
+
+#. i18n: ectx: ToolBar (add_shape_toolbar)
+#: data/karbon.rc:177
+#, kde-format
+msgid "Add Shape"
+msgstr "आकारं योजयतु"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "दृश्यं"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:49
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&समतल पथ..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:86
+#, kde-format
+msgid "Flatten Path"
+msgstr "समतल पथ"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:98
+#: plugins/refinepath/RefinePathPlugin.cpp:93
+#: plugins/roundcorners/RoundCornersPlugin.cpp:107
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
+#, kde-format
+msgid "Properties"
+msgstr "गुणाः"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#, kde-format
+msgid "Flatness:"
+msgstr "समतलता : १."
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:152
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "मार्गं समतलं कुरुत"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "मार्ग परिष्कृत करें"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:49
+#, kde-format
+msgid "&Refine Path..."
+msgstr "&पथ परिष्कृत्य..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:85
+#, kde-format
+msgid "Refine Path"
+msgstr "पथ परिष्कृत करें"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:97
+#, kde-format
+msgid "Subdivisions:"
+msgstr "उपविभागाः : १."
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:30
+#: plugins/roundcorners/RoundCornersPlugin.cpp:79
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "गोलकोण"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:52
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&गोलकोण..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:95
+#, kde-format
+msgid "Round Corners"
+msgstr "गोलकोण"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:129
+#, kde-format
+msgid "Radius:"
+msgstr "त्रिज्या : १."
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "भंवर & चुटकी"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&भंवर/चुटकी..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "भंवर चुटकी"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
+#, kde-format
+msgid "Info"
+msgstr "Info"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:104
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr "पूर्वं मार्गस्य आकारं परिष्कृत्य Whirlpinch प्रभावस्य परिणामः सुदृढः कर्तुं शक्यते ।"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
+#, kde-format
+msgid "Angle:"
+msgstr "कोण:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:122
+#, kde-format
+msgid "Pinch:"
+msgstr "चुटकी : १."
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "स्तरं उत्थापयन्तु"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:28
+#: ui/commands/KarbonLayerReorderCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "निम्नस्तर"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "विन्यस्तं कुर्वन्तु"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:40
+#: ui/dialogs/KarbonConfigureDialog.cpp:41
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "अन्तरफलकम्"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:45
+#: ui/dialogs/KarbonConfigureDialog.cpp:46
+#, kde-format
+msgid "Misc"
+msgstr "विविधाः"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:50
+#: ui/dialogs/KarbonConfigureDialog.cpp:51
+#, kde-format
+msgid "Grid"
+msgstr "गृध्र"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:57
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "प्रलेख"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:58
+#, kde-format
+msgid "Document Settings"
+msgstr "दस्तावेज सेटिंग्स्"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:62
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "लेखकः"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:63
+#, kde-format
+msgid "Author"
+msgstr "लेखकः"
+
+#: ui/KarbonAboutData.h:20
+#, kde-format
+msgid "Karbon"
+msgstr "कार्बनम्"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "एकः सदिशचित्रकलाचित्रणअनुप्रयोगः।"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(ग) २००१-%1, द कार्बन डेवलपर्स"
+
+#: ui/KarbonAboutData.h:29
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "एन्थोनी फिएरोनी"
+
+#: ui/KarbonAboutData.h:29
+#, kde-format
+msgid "Maintainer"
+msgstr "परिपालकः"
+
+#: ui/KarbonAboutData.h:30
+#, kde-format
+msgid "Carl Schwan"
+msgstr "कार्ल स्वान्"
+
+#: ui/KarbonAboutData.h:31
+#, kde-format
+msgid "Port to Qt6"
+msgstr "Qt6 यावत् पोर्ट् कुर्वन्तु"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Rob Buis"
+msgstr "रोब बुइस"
+
+#: ui/KarbonAboutData.h:36
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "तोमिस्लाव लुकमान"
+
+#: ui/KarbonAboutData.h:37
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "बेनोइत् वौट्रिन्"
+
+#: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
+#: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "दोषनिवारणं सुधारणं च"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "जन हाम्ब्रेक्ट्"
+
+#: ui/KarbonAboutData.h:39
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "पीटर सिमोनसनः"
+
+#: ui/KarbonAboutData.h:40
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "टिम ब्यूलेन्"
+
+#: ui/KarbonAboutData.h:41
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "बौदेविजन रेम्पट"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "पियरे स्टिरन्वेस्"
+
+#: ui/KarbonAboutData.h:43
+#, kde-format
+msgid "Bug fixes"
+msgstr "दोषनिवारणं भवति"
+
+#: ui/KarbonAboutData.h:43
+#, kde-format
+msgid "Inge Wallin"
+msgstr "इङ्गे वालिन्"
+
+#: ui/KarbonAboutData.h:44
+#, kde-format
+msgid "Alan Horkan"
+msgstr "एलन होर्कन"
+
+#: ui/KarbonAboutData.h:44
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "सहायकपैचः सल्लाहः च"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:47
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "भवतः नामानि"
+
+#: ui/KarbonAboutData.h:47
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "भवतः ईमेलपत्राणि"
+
+#: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "चित्राणि सम्मिलितं कुर्वन्तु"
+
+#: ui/KarbonView.cpp:369
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Add कर्तुं Graphic इति चिनोतु"
+
+#: ui/KarbonView.cpp:405
+#, kde-format
+msgid "Could not load image."
+msgstr "चित्रं लोड् कर्तुं न शक्तवान्।"
+
+#: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
+#, kde-format
+msgid "Import graphic"
+msgstr "ग्राफिक आयात करें"
+
+#: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
+#, kde-format
+msgid "Could not create image shape."
+msgstr "प्रतिबिम्बस्य आकारं निर्मातुं न शक्तवान् ।"
+
+#: ui/KarbonView.cpp:636
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "दर्पणं क्षैतिजरूपेण"
+
+#: ui/KarbonView.cpp:638
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "दर्पणं लम्बवत्"
+
+#: ui/KarbonView.cpp:640
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "क्षैतिजरूपेण लम्बरूपेण च दर्पणम्"
+
+#: ui/KarbonView.cpp:695
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "पृथक् पथाः"
+
+#: ui/KarbonView.cpp:876
+#, kde-format
+msgid "Outline &Mode"
+msgstr "रूपरेखा &मोड"
+
+#: ui/KarbonView.cpp:884
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&आयात ग्राफिक..."
+
+#: ui/KarbonView.cpp:888
+#, kde-format
+msgid "Edit Guides"
+msgstr "मार्गदर्शिका सम्पादयतु"
+
+#: ui/KarbonView.cpp:894
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&डुप्लिकेट"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "वितरित केन्द्र (क्षैतिज) ९."
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "अन्तराल वितरित (क्षैतिज) २."
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "वामसीमा वितरित करें"
+
+#: ui/KarbonView.cpp:911
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "दक्षिण सीमा वितरित करें"
+
+#: ui/KarbonView.cpp:915
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "वितरित केन्द्र (ऊर्ध्वाधर) ९."
+
+#: ui/KarbonView.cpp:919
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "अन्तराल वितरित (ऊर्ध्वाधर) २."
+
+#: ui/KarbonView.cpp:923
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "तलसीमा वितरित करें"
+
+#: ui/KarbonView.cpp:927
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "शीर्ष सीमा वितरित करें"
+
+#: ui/KarbonView.cpp:931
+#, kde-format
+msgid "Show Color Palette"
+msgstr "वर्णपैलेट् दर्शयतु"
+
+#: ui/KarbonView.cpp:933
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "वर्णपैलेट् दर्शयतु वा गोपयतु वा"
+
+#: ui/KarbonView.cpp:937
+#, kde-format
+msgid "&Clip Object"
+msgstr "&क्लिप् ऑब्जेक्ट"
+
+#: ui/KarbonView.cpp:941
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "&अनक्लिप् ऑब्जेक्ट्स्"
+
+#: ui/KarbonView.cpp:945
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "दर्पणं लम्बवत्"
+
+#: ui/KarbonView.cpp:949
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "दर्पणं क्षैतिजरूपेण"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "&Close Path"
+msgstr "&Close पथ"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Com&bine मार्गः"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Se&parate Path"
+msgstr "पृथक् पथः"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Re&verse पथ"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Intersect Paths"
+msgstr "पथान् प्रतिच्छेद्यताम्"
+
+#: ui/KarbonView.cpp:986
+#, kde-format
+msgid "Subtract Paths"
+msgstr "पथाः घटा"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Unite Paths"
+msgstr "पथान् एकीकृत्यताम्"
+
+#: ui/KarbonView.cpp:998
+#, kde-format
+msgid "Exclude Paths"
+msgstr "मार्गान् बहिष्कृत्य"
+
+#: ui/KarbonView.cpp:1004
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "ग्रिड् प्रति स्नैप पथः"
+
+#: ui/KarbonView.cpp:1012
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "चयनं प्रति जूम कुर्वन्तु"
+
+#: ui/KarbonView.cpp:1016
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Drawing इत्यत्र जूम कुर्वन्तु"
+
+#: ui/KarbonZoomController.cpp:55
+#, kde-format
+msgid "Zoom"
+msgstr "जूम"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "स्थितिपट्टिकां दर्शयतु : १."
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "अद्यतनसञ्चिकानां संख्या : १."
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "पॅलेट् फ़ॉन्ट आकारः : १."
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:51
+#, kde-format
+msgid "Select palette"
+msgstr "पॅलेट् चयनं कुर्वन्तु"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:46
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "चयनं प्रति fill प्रयोक्तुं नुदन्तु"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:88
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "न कश्चित्"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:110
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "चयनं प्रति स्ट्रोक् प्रयोक्तुं नुदन्तु"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:159
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "आचारः"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:165
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "न कश्चित्"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:185
+#, kde-format
+msgid "Stroke:"
+msgstr "प्रहार:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:190
+#, kde-format
+msgid "Fill:"
+msgstr "पूरण:"

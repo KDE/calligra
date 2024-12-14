@@ -1,0 +1,120 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CalendarTool.cpp:62
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"समाप्तितिथिः आरम्भतिथितः पूर्वं भवति! कृपया सुनिश्चितं कुर्वन्तु यत् अन्त्यतिथिः आरम्भतिथितः "
+"परं आगच्छति।"
+
+#: CalendarTool.cpp:62 CalendarTool.cpp:69
+#, kde-format
+msgid "Error"
+msgstr "त्रुटि"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"पञ्चाङ्गानि १० वर्षाणाम् अधिकं न भवेयुः। यदि भवतः वास्तविकरूपेण एतादृशानां दीर्घकालानाम् "
+"आवश्यकता अस्ति तर्हि भवतः तान् विभक्तुं आवश्यकम्।"
+
+#: CalendarTool.cpp:76
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"आरम्भस्य समाप्तेः च तिथयः समानाः सन्ति! केवलं एकः दिवसः निवेशितः भविष्यति, किं भवन्तः "
+"अग्रे गन्तुं इच्छन्ति?"
+
+#: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
+#, kde-format
+msgid "Warning"
+msgstr "चेतवानी"
+
+#: CalendarTool.cpp:86
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"वर्षापेक्षया अधिककालं यावत् पञ्चाङ्गस्य निर्माणेन बहु स्थानं ग्रहीतुं शक्यते, किं भवन्तः निरन्तरं "
+"कर्तुम् इच्छन्ति?"
+
+#: CalendarTool.cpp:109
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"यत्र पञ्चाङ्गं सम्मिलितं भवति तत् क्षेत्रं रिक्तं नास्ति, किं भवान् निश्चयेन निरन्तरं कर्तुम् "
+"इच्छति, विद्यमानदत्तांशं अधिलेखयन्? यदि भवान् No इति चिनोति तर्हि इष्टस्य पञ्चाङ्गस्य कृते "
+"यत् क्षेत्रं आवश्यकं भविष्यति तत् चयनं भविष्यति येन भवान् द्रष्टुं शक्नोति यत् किं दत्तांशं "
+"अधिलिखितं भविष्यति ।"
+
+#: CalendarTool.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "पञ्चाङ्गं सम्मिलितं कुर्वन्तु"
+
+#: CalendarTool.cpp:126
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "%1 तः %2 पर्यन्तं पञ्चाङ्गम्"
+
+#: CalendarTool.cpp:166
+#, kde-format
+msgid "week"
+msgstr "सप्ताहः"
+
+#: CalendarToolFactory.cpp:22
+#, kde-format
+msgid "Calendar"
+msgstr "पञ्चाङ्गम्"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "पञ्चाङ्गसाधनम्"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "युज्"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "समाप्तितिथिः : १."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "आरम्भतिथिः : १."

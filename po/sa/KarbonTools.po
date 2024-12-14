@@ -1,0 +1,409 @@
+# Sanskrit translations for calligra package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-08-23 00:39+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "एकः सुलेखात्मकः आकारः"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "सुलेख आकार"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "प्रोफाइलं रक्षन्तु यथा..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "प्रोफाइलं निष्कासयन्तु"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "&चयनितमार्गस्य अनुसरणं कुर्वन्तु"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "गोली & दबाव का प्रयोग करें"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "विस्तार:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "पतलाकरणम् : १."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "टैब्लेट् &angle इत्यस्य उपयोगं कुर्वन्तु"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "कोण:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "निश्चयः : १."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "टोप्याः : १."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "घन:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "आकर्षति:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgid "Current"
+msgstr "वर्त्तमानः"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "प्रोफाइल नाम"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "कृपया येन नामेन भवान् एतत् प्रोफाइलं रक्षितुं इच्छति तत् नाम सम्मिलितं कुर्वन्तु:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "असिद्धं नाम ।"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "क्षम्यतां, भवता प्रविष्टं नाम अमान्यम् अस्ति।"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"तत्नाम्ना प्रोफाइल पूर्वमेव विद्यते ।\n"
+"किं भवन्तः तस्य अधिलेखनं कर्तुम् इच्छन्ति ?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
+#, kde-format
+msgid "Mouse"
+msgstr "मूषकः"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
+#, kde-format
+msgid "Graphics Pen"
+msgstr "ग्राफिक्स पेन"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:330
+#, kde-format
+msgid "Fill"
+msgstr "पूरण"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:358
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "सुलेखः विस्तारं वर्धयति"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:363
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "सुलेखः विस्तारः न्यूनीकरोतु"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:368
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "सुलेखः कोणं वर्धयति"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:373
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "सुलेखः कोणं न्यूनीकरोतु"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:380
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:381
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "सुलेख"
+
+#: filterEffectTool/FilterAddCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "फ़िल्टर इफेक्ट् योजयन्तु"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:60
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "वर्तमान फ़िल्टर स्टैक् मध्ये प्रभावं योजयन्तु"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:70
+#, kde-format
+msgid "Add to filter presets"
+msgstr "फ़िल्टर प्रीसेट्स् मध्ये योजयन्तु"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:74
+#, kde-format
+msgid "Remove filter preset"
+msgstr "फ़िल्टर पूर्वनिर्धारितं निष्कासयन्तु"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "प्रभाव नाम"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "कृपया फ़िल्टर इफेक्ट् इत्यस्य नाम प्रविशतु"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:320
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "फ़िल्टर प्रभाव सम्पादक"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "प्रभावाः सम्बन्धाः च"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "फ़िल्टर पूर्वनिर्धारित"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:474
+#, kde-format
+msgid "Effect Properties"
+msgstr "प्रभाव गुण"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "फ़िल्टर प्रभावं निष्कासयन्तु"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "फ़िल्टर ढेरं सेट् कुर्वन्तु"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:439
+#, kde-format
+msgid "Effects"
+msgstr "प्रभावाः"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:447
+#, kde-format
+msgid "View and edit filter"
+msgstr "फ़िल्टरं पश्यन्तु सम्पादयन्तु च"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Remove filter from object"
+msgstr "वस्तुतः फ़िल्टरं निष्कासयन्तु"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:457
+#, kde-format
+msgid "Add Filter"
+msgstr "Filter योजयन्तु"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:486
+#, kde-format
+msgid "X:"
+msgstr "X: 1 ."
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:492
+#, kde-format
+msgid "Y:"
+msgstr "तथा:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:498
+#, kde-format
+msgid "W:"
+msgstr "इत्यस्मिन्‌:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:504
+#, kde-format
+msgid "H:"
+msgstr "जः : १."
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:509
+#, kde-format
+msgid "Effect Region"
+msgstr "प्रभाव क्षेत्र"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "फ़िल्टर प्रभाव सम्पादनम्"
+
+#: KarbonGradientTool.cpp:199
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "ढालस्थानं चालयितुं कर्षन्तु ।"
+
+#: KarbonGradientTool.cpp:208
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr "वर्णविरामं चालयितुं कर्षन्तु। वर्णविरामं दूरीकर्तुं द्विवारं क्लिक् कुर्वन्तु ।"
+
+#: KarbonGradientTool.cpp:210
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "वर्णविरामं चालयितुं कर्षन्तु।"
+
+#: KarbonGradientTool.cpp:217
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr "ढालस्थानं चालयितुं कर्षन्तु । वर्णविरामं सम्मिलितुं द्विवारं क्लिक् कुर्वन्तु ।"
+
+#: KarbonGradientTool.cpp:493
+#, kde-format
+msgid "Edit Gradient"
+msgstr "ढाल सम्पादयतु"
+
+#: KarbonGradientTool.cpp:495
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "पूर्वनिर्धारित ढाल"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "ढाल सम्पादन"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Original"
+msgstr "मूल"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Tiled"
+msgstr "टाइल्युक्तम्"
+
+#: KarbonPatternOptionsWidget.cpp:24
+#, kde-format
+msgid "Stretched"
+msgstr "तानितम्"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top Left"
+msgstr "उपरि वामभागे"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top"
+msgstr "उपरितन"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Top Right"
+msgstr "उपरि दक्षिणतः"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Left"
+msgstr "वामः"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Center"
+msgstr "केंद्र"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Right"
+msgstr "दक्षिणः"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom Left"
+msgstr "अधः वामभागे"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom"
+msgstr "अधः"
+
+#: KarbonPatternOptionsWidget.cpp:34
+#, kde-format
+msgid "Bottom Right"
+msgstr "अधः दक्षिणतः"
+
+#: KarbonPatternTool.cpp:270
+#, kde-format
+msgid "Pattern Options"
+msgstr "प्रतिरूपविकल्पाः"
+
+#: KarbonPatternTool.cpp:272
+#, kde-format
+msgid "Patterns"
+msgstr "प्रतिमानाः"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "पैटर्न सम्पादन"
