@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 23:15+0100\n"
+"PO-Revision-Date: 2024-12-16 00:07+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2488,6 +2488,7 @@ msgstr ""
 msgid "Supported force units: N (Newton), dyn, pound."
 msgstr "Unidades de forza admitidas: N (Newton), dyn, pound."
 
+# well-spelled: Watthora
 #: functions/engineering.xml:134
 #, kde-format
 msgid ""
@@ -11009,6 +11010,7 @@ msgstr ""
 "opcional sen_espazos fose verdadeiro, os separadores de millares non "
 "aparecerán."
 
+# skip-rule: trasno-encrypt_reverse
 #: functions/text.xml:43
 #, kde-format
 msgid "FIXED(number;decimals;no_commas)"

@@ -1,5 +1,5 @@
 # POT_PART_NORMAL only
-# Sanskrit translations for calligra package.
+# Hindi translations for calligra package.
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
@@ -9,31 +9,30 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"PO-Revision-Date: 2024-12-15 15:57+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
-"Language: sa\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>2);\n"
 
 #: PluginShape.cpp:33
 #, kde-format
 msgid "Unknown"
-msgstr "अज्ञात"
+msgstr ""
 
 #: PluginShape.cpp:37
 #, kde-format
 msgid "Plugin of mimetype: %1"
-msgstr "mimetype इत्यस्य प्लगिन्: %1"
+msgstr ""
 
 #: PluginShapeFactory.cpp:22
 #, kde-format
 msgid "Plugin Placeholder"
-msgstr "प्लगिन् प्लेसहोल्डर"
+msgstr ""
 
 #: PluginShapeFactory.cpp:24
 #, kde-format
 msgid "Plugin Placeholder, embedded or fullscreen"
-msgstr "प्लगिन् प्लेसहोल्डर्, एम्बेडेड् अथवा पूर्णस्क्रीन्"
+msgstr ""

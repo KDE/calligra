@@ -1,4 +1,4 @@
-# Sanskrit translations for calligra package.
+# Hindi translations for calligra package.
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
@@ -8,88 +8,87 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"PO-Revision-Date: 2024-12-15 15:57+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
-"Language: sa\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>2);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "भवतः नामानि"
+msgstr ""
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "भवतः ईमेलपत्राणि"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
-msgstr "प्रारंभः"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
-msgstr "अंत"
+msgstr ""
 
 #: AxesConfigWidget.cpp:80
 #, kde-format
 msgid "Near-axis"
-msgstr "निकट-अक्षः"
+msgstr ""
 
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr "परपक्षः"
+msgstr ""
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
-msgstr "अक्षिष्टिल्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
 #, kde-format
 msgid "Show Axis"
-msgstr "अक्षं दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
 #, kde-format
 msgid "Scale"
-msgstr "मापन"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
 #, kde-format
 msgid "Show Labels"
-msgstr "लेबल्स् दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr "फॉन्ट्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
 #, kde-format
 msgid "Show Major Grid"
-msgstr "प्रमुखजालं दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
 #, kde-format
 msgid "Show Minor Grid"
-msgstr "लघुजालं दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -106,15 +105,6 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /"
-"><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-"
-"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-"indent:0px;\"> <span style=\" font-size:8pt; font-weight:600;\">बार गुण</"
-"span></p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
 #. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
@@ -123,62 +113,62 @@ msgstr ""
 #: widgets/RingConfigWidget.ui:147
 #, no-c-format, kde-format
 msgid "%"
-msgstr "% ."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
 #: AxesConfigWidget.ui:154
 #, kde-format
 msgid "Gap Between Sets"
-msgstr "सेट्-मध्ये अन्तरम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
 #: AxesConfigWidget.ui:167
 #, kde-format
 msgid "Gap Between Bars"
-msgstr "शलाकानां मध्ये अन्तरम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
 #, kde-format
 msgid "Show Title"
-msgstr "शीर्षकं दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr "प्राथमिक X अक्ष"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr "प्राथमिक Y अक्ष"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr "गौण X अक्ष"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr "गौण वाई अक्ष"
+msgstr ""
 
 #: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
-msgstr "प्लगिन् अनुपलब्धम्"
+msgstr ""
 
 #: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
-msgstr "चार्ट् मध्ये पाठलेबल् प्रदर्शयितुं आवश्यकं प्लगिन् उपलब्धं नास्ति ।"
+msgstr ""
 
 #: ChartShape.cpp:303
 #, kde-format
@@ -186,31 +176,30 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
-"पाठलेबल् प्रदर्शयितुं आवश्यकं प्लगिन् चार्ट् Flake आकारस्य वर्तमानसंस्करणेन सह सङ्गतं नास्ति ।"
 
 #: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
-msgstr "प्लगिन् असङ्गतम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
-msgstr "शीर्षक"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
 #: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
-msgstr "उपशीर्षकम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
 #: ChartShape.cpp:382 TitlesConfigWidget.ui:126
 #, kde-format
 msgid "Footer"
-msgstr "पादलेखः"
+msgstr ""
 
 #: ChartShape.cpp:752
 #, kde-format
@@ -218,238 +207,236 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
-"अस्मिन् दस्तावेजे दूरस्थदस्तावेजस्य बाह्यलिङ्कः अस्ति\n"
-"%1"
 
 #: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
-msgstr "पुष्टिकरणम् आवश्यकम्"
+msgstr ""
 
 #: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
-msgstr "अवाहरन"
+msgstr ""
 
 #: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
-msgstr "क्षिपते"
+msgstr ""
 
 #: ChartShapeFactory.cpp:55
 #, kde-format
 msgid "Chart"
-msgstr "तालिका"
+msgstr ""
 
 #: ChartShapeFactory.cpp:58
 #, kde-format
 msgid "Business charts"
-msgstr "व्यावसायिक चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
 #: PlotAreaConfigWidget.cpp:230
 #, kde-format
 msgid "Bar Chart"
-msgstr "बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:78
 #, kde-format
 msgid "Normal bar chart"
-msgstr "सामान्य बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
-msgstr "स्टैक्ड बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
-msgstr "स्टैक्ड् बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:99
 #, kde-format
 msgid "Percent Bar Chart"
-msgstr "प्रतिशत बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:100
 #, kde-format
 msgid "Percent bar chart"
-msgstr "प्रतिशतं बार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:236
 #, kde-format
 msgid "Line Chart"
-msgstr "रेखाचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:111
 #, kde-format
 msgid "Normal line chart"
-msgstr "सामान्य रेखाचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
-msgstr "स्टैक्ड लाइन चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
-msgstr "स्तम्भित रेखाचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:132
 #, kde-format
 msgid "Percent Line Chart"
-msgstr "प्रतिशत रेखाचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:133
 #, kde-format
 msgid "Percent line chart"
-msgstr "प्रतिशत रेखाचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
-msgstr "क्षेत्रफलचित्रम्"
+msgstr ""
 
 #: ChartShapeFactory.cpp:144
 #, kde-format
 msgid "Normal area chart"
-msgstr "सामान्य क्षेत्र चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
-msgstr "स्टैक्ड एरिया चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
-msgstr "स्टैक्ड एरिया चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:165
 #, kde-format
 msgid "Percent Area Chart"
-msgstr "प्रतिशतं क्षेत्रफलं"
+msgstr ""
 
 #: ChartShapeFactory.cpp:166
 #, kde-format
 msgid "Percent area chart"
-msgstr "प्रतिशतं क्षेत्रफलं"
+msgstr ""
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:250
 #, kde-format
 msgid "Pie Chart"
-msgstr "पाई चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:177
 #, kde-format
 msgid "Pie chart"
-msgstr "पाई चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:251
 #, kde-format
 msgid "Ring Chart"
-msgstr "रिंग चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:188
 #, kde-format
 msgid "Ring chart"
-msgstr "रिंग चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
 #: PlotAreaConfigWidget.cpp:264
 #, kde-format
 msgid "Bubble Chart"
-msgstr "बबल चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:199
 #, kde-format
 msgid "Bubble chart"
-msgstr "बबल चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
 #: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
-msgstr "प्रकीर्णन चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:210
 #, kde-format
 msgid "Scatter chart"
-msgstr "प्रकीर्णन चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:220
 #, kde-format
 msgid "Radar Chart"
-msgstr "रडार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:221
 #, kde-format
 msgid "Radar chart"
-msgstr "रडार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:231
 #, kde-format
 msgid "Filled Radar Chart"
-msgstr "भरा रडार चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:232
 #, kde-format
 msgid "Filled radar chart"
-msgstr "पूरितः रडार चार्टः"
+msgstr ""
 
 #: ChartShapeFactory.cpp:242
 #, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr "मोमबत्ती छड़ी स्टॉक चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr "जापानी मोमबत्ती छड़ी स्टॉक चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
 msgid "OHLC Stock Chart"
-msgstr "ओएचएलसी स्टॉक चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr "Open High Low स्टॉक चार्ट बन्द करो"
+msgstr ""
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
 msgid "HLC Stock Chart"
-msgstr "एच् एल सी स्टॉक चार्ट"
+msgstr ""
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr "उच्च निम्न स्टॉक चार्ट बंद करें"
+msgstr ""
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
 #, kde-format
 msgid "January"
-msgstr "जनवरी"
+msgstr ""
 
 #: ChartShapeFactory.cpp:359 ChartShapeFactory.cpp:549
 #: ChartShapeFactory.cpp:632
 #, kde-format
 msgid "July"
-msgstr "जुलाईमाह"
+msgstr ""
 
 #: ChartShapeFactory.cpp:360 ChartShapeFactory.cpp:550
 #: ChartShapeFactory.cpp:633
 #, kde-format
 msgid "December"
-msgstr "दिसंबरं माह"
+msgstr ""
 
 #: ChartShapeFactory.cpp:363 ChartShapeFactory.cpp:364
 #: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:366
@@ -459,432 +446,432 @@ msgstr "दिसंबरं माह"
 #: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
 #, kde-format
 msgid "Column %1"
-msgstr "स्तम्भ %1"
+msgstr ""
 
 #: ChartShapeFactory.cpp:390
 #, kde-format
 msgid "Month"
-msgstr "माह"
+msgstr ""
 
 #: ChartShapeFactory.cpp:392
 #, kde-format
 msgid "Growth in %"
-msgstr "% मध्ये वृद्धिः ।"
+msgstr ""
 
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr "शेयर क"
+msgstr ""
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr "शेयर ब"
+msgstr ""
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr "शेयर ग"
+msgstr ""
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
 msgid "Open"
-msgstr "उद्घाटित"
+msgstr ""
 
 #: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "High"
-msgstr "उच्चैः"
+msgstr ""
 
 #: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Low"
-msgstr "न्यूनम्‌"
+msgstr ""
 
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Close"
-msgstr "पिधानं करोतु"
+msgstr ""
 
 #: ChartShapeFactory.cpp:581
 #, kde-format
 msgid "Growth"
-msgstr "वृद्धि"
+msgstr ""
 
 #: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
-msgstr "किमपि कुरु"
+msgstr ""
 
 #: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
-msgstr "अन्यत् किमपि कुरु"
+msgstr ""
 
 #: ChartTool.cpp:269
 #, kde-format
 msgid "Titles"
-msgstr "उपाधिः"
+msgstr ""
 
 #: ChartTool.cpp:284
 #, kde-format
 msgid "Legend"
-msgstr "आख्यान"
+msgstr ""
 
 #: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
-msgstr "भूखण्ड क्षेत्र"
+msgstr ""
 
 #: ChartTool.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr "आख्यायिका दर्शयतु"
+msgstr ""
 
 #: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr "आख्यायिका गोपयतु"
+msgstr ""
 
 #: ChartToolFactory.cpp:26
 #, kde-format
 msgid "Chart editing"
-msgstr "चार्ट सम्पादनम्"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:37
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr "अक्षं योजयतु"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr "अक्षं निष्कासयन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
-msgstr "अक्ष शीर्षकं दर्शयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
-msgstr "अक्ष शीर्षकं गोपयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "अक्षं दर्शयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr "अक्षं गोपयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "अक्ष लेबल्स् दर्शयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr "अक्ष लेबल् गोपयन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "अक्ष प्रमुख जालरेखा दर्शयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr "अक्ष प्रमुख जालरेखा गोपयन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "अक्ष लघु जालरेखा दर्शयतु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr "अक्ष लघु जालरेखा गोपयन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
-msgstr "लघुगणकीय स्केलिंग"
+msgstr ""
 
 #: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr "रेखीय स्केलिंग"
+msgstr ""
 
 #: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr "अक्ष चरण चौड़ाई सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr "अक्ष उपचरण चौड़ाई सेट् करें"
+msgstr ""
 
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr "Automatic Step Width सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr "Manual Step Width सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr "स्वचालित उपचरण चौड़ाई"
+msgstr ""
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr "मैनुअल उपचरण चौड़ाई"
+msgstr ""
 
 #: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "अक्ष लेबल फ़ॉन्ट् सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr "अक्षस्थानं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr "अक्ष लेबल् स्थितिं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr "पाठस्य आकारं दर्शयतु"
+msgstr ""
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr "पाठस्य आकारं गोपयन्तु"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr "सामान्य बार चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "स्टैक्ड बार चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr "प्रतिशत बार चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr "सामान्य रेखा चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr "स्टैक्ड लाइन चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr "प्रतिशत रेखाचित्रम्"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr "सामान्य क्षेत्र चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr "स्टैक्ड एरिया चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr "प्रतिशतं क्षेत्रफलं"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr "वृत्तचित्रम्"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
-msgstr "रिंग चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr "प्रकीर्णन चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr "रडार चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr "भरा रडार चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr "स्टॉक चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
-msgstr "बबल चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr "पृष्ठीय चार्ट"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr "गन्ट् चार्ट"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr "Dataset Chart Type सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr "Dataset Category दर्शयतु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr "Dataset Category गोपयन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr "Dataset Number दर्शयतु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr "Dataset Number गोपयन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr "Dataset Percent इति दर्शयतु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr "Dataset प्रतिशतं गोपयन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr "Dataset Symbol दर्शयतु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr "Dataset Symbol गोपयन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr "Dataset Brush Color सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr "Dataset Pen Color सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr "Dataset Marker गोपयन्तु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "Dataset Marker Symbol दर्शयतु"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr "Dataset Axis सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr "पट्टिकानां मध्ये अन्तरं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr "सेट् मध्ये अन्तरं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr "किंवदंती शीर्षकं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "लेजेण्ड् फॉन्ट सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Legend Font आकारं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr "आख्यायिका अभिमुखीकरणं सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr "क्षैतिज पट्टिकाः सेट् कुर्वन्तु"
+msgstr ""
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr "ऊर्ध्वाधरपट्टिकाः सेट् कुर्वन्तु"
+msgstr ""
 
 #: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
-msgstr "श्रृङ्खला %1"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, kde-format
 msgid "Chart Type"
-msgstr "चार्ट प्रकार"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
@@ -892,14 +879,14 @@ msgstr "चार्ट प्रकार"
 #: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
-msgstr "सामान्य"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
 #: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
 #: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
-msgstr "स्तम्भितम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
@@ -911,37 +898,37 @@ msgstr "स्तम्भितम्"
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
-msgstr "प्रतिशतं"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, kde-format
 msgid "Polar Chart"
-msgstr "ध्रुवीय चार्ट"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Filled"
-msgstr "पूरित"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
-msgstr "स्टॉक चार्ट"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
-msgstr "मोमबत्ती"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr "OpenHighLowClose इति"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
-msgstr "HighLowClose इति"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
@@ -949,7 +936,7 @@ msgstr "HighLowClose इति"
 #: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
-msgstr "न कश्चित्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
 #. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
@@ -957,12 +944,12 @@ msgstr "न कश्चित्"
 #: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:83
 #, kde-format
 msgid "Automatic"
-msgstr "स्वतः"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:245 widgets/RadarDataSetConfigWidget.cpp:85
 #, kde-format
 msgid "Select"
-msgstr "विचि"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -976,53 +963,53 @@ msgstr "विचि"
 #: widgets/RadarDataSetConfigWidget.cpp:189
 #, kde-format
 msgid "Auto"
-msgstr "ऑटो"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
 #: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
 #: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
-msgstr "दत्तांशसमूहः %1"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
 #, kde-format
 msgid "Select a data set"
-msgstr "एकं दत्तांशसमूहं चिनोतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr "Plot Type इत्यस्य उपयोगं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
 #, kde-format
 msgid "Attach To Axis"
-msgstr "Attach To Axis इति"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
 #: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
 #, kde-format
 msgid "Stroke"
-msgstr "प्रहार"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
 #: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
 #, kde-format
 msgid "Fill"
-msgstr "पूरण"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
 #: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
 #: widgets/RadarDataSetConfigWidget.ui:122
 #, kde-format
 msgid "Marker"
-msgstr "मार्करः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
@@ -1032,7 +1019,7 @@ msgstr "मार्करः"
 #: widgets/RingConfigWidget.ui:106
 #, kde-format
 msgid "Category"
-msgstr "कोटी"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
@@ -1040,13 +1027,13 @@ msgstr "कोटी"
 #: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
 #, kde-format
 msgid "Number"
-msgstr "संख्या"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
 #: DataSetConfigWidget.ui:287
 #, kde-format
 msgid "Error Bars"
-msgstr "त्रुटिपट्टिकाः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
@@ -1054,73 +1041,73 @@ msgstr "त्रुटिपट्टिकाः"
 #: dialogs/PieDataEditor.ui:33
 #, kde-format
 msgid "Insert"
-msgstr "युज्"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
 #: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "संवादः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
 #: dialogs/AxisScalingDialog.ui:19
 #, kde-format
 msgid "Logarithmic Scaling"
-msgstr "लघुगणकीय स्केलिंग"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr "चरणविस्तारः : १."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr "उपचरणविस्तारः : १."
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
 msgid "Bubble Data Editor"
-msgstr "बबल डाटा एडिटर"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
 #, kde-format
 msgid "Insert Column Before"
-msgstr "पूर्वं स्तम्भं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
 #, kde-format
 msgid "Insert Column After"
-msgstr "पश्चात् स्तम्भं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
 #, kde-format
 msgid "Insert Row Above"
-msgstr "उपरि पङ्क्तिं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
 #, kde-format
 msgid "Insert Row Below"
-msgstr "अधः पङ्क्तिं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
 #, kde-format
 msgid "Delete"
-msgstr "लुप्"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
 #, kde-format
 msgid "Bubbles Editor"
-msgstr "बुलबुले सम्पादक"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1128,7 +1115,7 @@ msgstr "बुलबुले सम्पादक"
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr "चयनितस्तम्भात् पूर्वं दत्तांशस्तम्भं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1152,21 +1139,21 @@ msgstr "चयनितस्तम्भात् पूर्वं दत्�
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr "चयनितपङ्क्तौ अधः दत्तांशपङ्क्तिं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr "चयनितपङ्क्तौ उपरि दत्तांशपङ्क्तिं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1174,20 +1161,20 @@ msgstr "चयनितपङ्क्तौ उपरि दत्तांश�
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr "चयनितस्तम्भस्य अनन्तरं दत्तांशस्तम्भं सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
 #, kde-format
 msgid "Delete selection"
-msgstr "चयनं विलोपयन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr "दत्तांशसमूहानां मैनुअल् नियन्त्रणम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1203,13 +1190,13 @@ msgstr "दत्तांशसमूहानां मैनुअल् न�
 #: TitlesConfigWidget.ui:153
 #, kde-format
 msgid "Manual"
-msgstr "शास्त्र"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
 #, kde-format
 msgid "Remove data set"
-msgstr "दत्तांशसमूहं निष्कासयन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1217,51 +1204,51 @@ msgstr "दत्तांशसमूहं निष्कासयन्त�
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr "चयनितदत्तांशसमूहस्य अनन्तरं दत्तांशसमूहं योजयन्तु"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
 #, kde-format
 msgid "Dataset Name"
-msgstr "दत्तांशसमूह नाम"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
 #, kde-format
 msgid "X-Values"
-msgstr "X-मूल्यानि"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:107
 #: dialogs/ScatterDataSetTableModel.cpp:107
 #, kde-format
 msgid "Y-Values"
-msgstr "य-मूल्यानि"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:109
 #, kde-format
 msgid "Bubble Size"
-msgstr "बुलबुला आकार"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:149
 #: dialogs/ScatterDataSetTableModel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr "लेबलः %1"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:151
 #: dialogs/ScatterDataSetTableModel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr "पूर्वनिर्धारितं लेबलम् : %1"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:156
 #: dialogs/ScatterDataSetTableModel.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr "X-Values कोष्ठक्षेत्रम्: %1"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1271,44 +1258,44 @@ msgstr "X-Values कोष्ठक्षेत्रम्: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr "पूर्वनिर्धारितमूल्यानि प्रयुक्तानि"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr "Y-Values कोष्ठक्षेत्रम्: %1"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr "बुलबुला आकारः कोष्ठक्षेत्रः : %1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
 #, kde-format
 msgid "Y Values:"
-msgstr "तथा मूल्यानि : १."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
 #, kde-format
 msgid "X Values:"
-msgstr "X मूल्यानि : १."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr "<b>एकं Data Set इति चिनोतु</b>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82
 #, kde-format
 msgid "Categories:"
-msgstr "श्रेणियाँ : १."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/CellRegionDialog.ui:96
@@ -1325,44 +1312,35 @@ msgid ""
 "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
 "style=\" font-weight:600;\">Name:</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /"
-"><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\"><p align=\"right\" style=\" margin-top:0px; "
-"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
-"text-indent:0px;\"> <span style=\" font-weight:600;\">नामः:</span></p></"
-"body></html>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
 #, kde-format
 msgid "Data Editor"
-msgstr "दत्तांश सम्पादक"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
 #, kde-format
 msgid "&Data sets in rows"
-msgstr "&दत्तांशः पङ्क्तौ सेट् करोति"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
 #, kde-format
 msgid "Data sets in &columns"
-msgstr "&columns इत्यत्र दत्तांशसमूहाः"
+msgstr ""
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
-msgstr "Font इति चिनोतु"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr "प्रारूपदोषपट्टिकाः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1382,84 +1360,73 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "weight:600;\"></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /"
-"><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-"weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-"
-"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-"indent:0px;\"> <span style=\" font-weight:600;\">त्रुटि श्रेणी</span> </p><p "
-"style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-"
-"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"weight:600;\"></p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:94
 #, kde-format
 msgid "Constant"
-msgstr "नियत"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:99
 #, kde-format
 msgid "Percentage"
-msgstr "प्रतिशतम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:104
 #, kde-format
 msgid "Error Margin"
-msgstr "त्रुटिमार्जिनम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:109
 #, kde-format
 msgid "Standard Deviation"
-msgstr "मानक विचलन"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:114
 #, kde-format
 msgid "Variance"
-msgstr "विचरणम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:119
 #, kde-format
 msgid "From Data table"
-msgstr "Data table तः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, valueLabel)
 #: dialogs/FormatErrorBarDialog.ui:144
 #, kde-format
 msgid "Positive "
-msgstr "सकारात्मकः "
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
 #: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
 #, kde-format
 msgid "Negative"
-msgstr "नकारात्मक"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
 #: dialogs/FormatErrorBarDialog.ui:207
 #, kde-format
 msgid "Same for both"
-msgstr "उभयोः कृते समानम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
 #, kde-format
 msgid "Value"
-msgstr "मूल्यम्‌"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
 #: dialogs/FormatErrorBarDialog.ui:233
 #, no-c-format, kde-format
 msgid " %"
-msgstr " % ."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/FormatErrorBarDialog.ui:303
@@ -1476,268 +1443,259 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">Error Indicator</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /"
-"><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-"weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-"
-"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-"indent:0px;\"> <span style=\" font-weight:600;\">त्रुटिसूचकः</span></p></body></"
-"html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
 #: dialogs/FormatErrorBarDialog.ui:325
 #, kde-format
 msgid "Positive"
-msgstr "सकारात्मकः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
 #: dialogs/FormatErrorBarDialog.ui:351
 #, kde-format
 msgid "Both"
-msgstr "उभौ"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
 #: dialogs/NewAxisDialog.ui:20
 #, kde-format
 msgid "New Axis"
-msgstr "नवीन अक्ष"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
 #: dialogs/NewAxisDialog.ui:46
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&X"
-msgstr "&X"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
 #: dialogs/NewAxisDialog.ui:56
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&Y"
-msgstr "&तथा"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/NewAxisDialog.ui:72
 #, kde-format
 msgid "Title:"
-msgstr "शीर्षक:"
+msgstr ""
 
 #: dialogs/PieDataEditor.cpp:58
 #, kde-format
 msgid "Pie Data Editor"
-msgstr "पाई डाटा सम्पादक"
+msgstr ""
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
 #, kde-format
 msgid "Del"
-msgstr "इति"
+msgstr ""
 
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
-msgstr "पङ्क्ति %1"
+msgstr ""
 
 #: dialogs/ScatterDataEditor.cpp:115
 #, kde-format
 msgid "Scatter Data Editor"
-msgstr "स्कैटर डाटा एडिटर"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
 #, kde-format
 msgid "Stock Data Editor"
-msgstr "स्टॉक डाटा एडिटर"
+msgstr ""
 
 #: dialogs/StockDataEditor.cpp:100
 #, kde-format
 msgid "Delete Row"
-msgstr "पङ्क्तिं विलोपयतु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
 #, kde-format
 msgid "Delete row"
-msgstr "पङ्क्तिं विलोपयतु"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:56
 #, kde-format
 msgid "Insert Above"
-msgstr "उपरि सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:57
 #, kde-format
 msgid "Insert Below"
-msgstr "अधः सम्मिलितं कुर्वन्तु"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:58
 #, kde-format
 msgid "Insert Before"
-msgstr "Insert Befo इति"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:59
 #, kde-format
 msgid "Insert After"
-msgstr "Insert After इति"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:60
 #, kde-format
 msgid "Delete Selection"
-msgstr "चयनं विलोपयन्तु"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
 msgid "New Row"
-msgstr "नवीन पङ्क्तिः"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
 #, kde-format
 msgid "New Column"
-msgstr "नव स्तम्भ"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
 #, kde-format
 msgid "Vertical"
-msgstr "ऊर्ध्वाधर"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:24
 #, kde-format
 msgid "Horizontal"
-msgstr "क्षैतिज"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: LegendConfigWidget.ui:38
 #, kde-format
 msgid "Center"
-msgstr "केंद्र"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:52
 #, kde-format
 msgid "Right"
-msgstr "दक्षिणः"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:57
 #, kde-format
 msgid "Top"
-msgstr "उपरितन"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:62
 #, kde-format
 msgid "Bottom"
-msgstr "अधः"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:67
 #, kde-format
 msgid "Left"
-msgstr "वामः"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
 #, kde-format
 msgid "Top-left"
-msgstr "उपरि-वामम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
 #, kde-format
 msgid "Top-right"
-msgstr "उपरि-दक्षिणम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
 #, kde-format
 msgid "Bottom-left"
-msgstr "अधो-वामम्"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
 #, kde-format
 msgid "Bottom-right"
-msgstr "अधः-दक्षिणम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
 #, kde-format
 msgid "Position"
-msgstr "स्थितिः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLegend)
 #: LegendConfigWidget.ui:107
 #, kde-format
 msgid "Show Legend"
-msgstr "आख्यायिका दर्शयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
 #, kde-format
 msgid "Orientation"
-msgstr "आभिमुख्य"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr "फॉन्ट्..."
+msgstr ""
 
 #: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
-msgstr "दत्तांशबिन्दु %1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
 #, kde-format
 msgid "E&xplode Factor"
-msgstr "E&xplode कारक"
+msgstr ""
 
 #: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
-msgstr "पृष्ठीय चार्ट"
+msgstr ""
 
 #: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Gantt Chart"
-msgstr "गन्ट् चार्ट"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
 #: PlotAreaConfigWidget.ui:61
 #, kde-format
 msgid "3D"
-msgstr "3D"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr "ऊर्ध्वाधर शलाका"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
 #, kde-format
 msgid "Horizontal Bars"
-msgstr "क्षैतिज बार"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, editData)
 #: PlotAreaConfigWidget.ui:82
 #, kde-format
 msgid "Edit Data..."
-msgstr "आँकडा सम्पादयतु..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
 #, kde-format
 msgid "Axes"
-msgstr "अक्षाः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -1746,91 +1704,91 @@ msgstr "अक्षाः"
 #: widgets/RingConfigWidget.ui:171
 #, kde-format
 msgid "Data Sets"
-msgstr "दत्तांशसमूहाः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
 #, kde-format
 msgid "Data Points"
-msgstr "दत्तांशबिन्दवः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr "रेन्ज रेखा"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr "लाभ चिह्न"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr "हानिचिह्न"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
 #, kde-format
 msgid "Positioning"
-msgstr "स्थितिकरणम्"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
 #, kde-format
 msgid "Resize"
-msgstr "आकारं परिवर्तयतु"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
 #, kde-format
 msgid "Categories"
-msgstr "श्रेणियाँ"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr "बट कैप"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr "गोल टोपी"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr "वर्गटोपी"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr "मित्रे सम्मिलितं भवति"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr "गोलसंयोगः"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr "बेवल join"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr "मिटर सीमा"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr "वास्तविकचयनस्य रेखाविस्तारं सेट् कुर्वन्तु"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
-msgstr "रेखायाः वर्णं परिवर्तयन्तु"
+msgstr ""

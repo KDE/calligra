@@ -1,4 +1,4 @@
-# Sanskrit translations for calligra package.
+# Hindi translations for calligra package.
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
@@ -8,122 +8,121 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"PO-Revision-Date: 2024-12-15 15:57+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
-"Language: sa\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>2);\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
 #, kde-format
 msgctxt "@title:menu"
 msgid "Shapes"
-msgstr "आकाराः"
+msgstr ""
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpview.rc:23
 #, kde-format
 msgid "Shapes"
-msgstr "आकाराः"
+msgstr ""
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:3
 #, kde-format
 msgid "Todo"
-msgstr "सर्वे"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:4
 #, kde-format
 msgid "Unchecked"
-msgstr "अनियंत्रितम्"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:5
 #, kde-format
 msgid "Checked"
-msgstr "जाँचितम्"
+msgstr ""
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:7
 #, kde-format
 msgid "Progress"
-msgstr "विकासः"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:8
 #, kde-format
 msgid "0 %"
-msgstr "० % ९."
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:9
 #, kde-format
 msgid "25 %"
-msgstr "२५ % २."
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:10
 #, kde-format
 msgid "50 %"
-msgstr "५० % ९."
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:11
 #, kde-format
 msgid "75 %"
-msgstr "७५ % ९."
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:12
 #, kde-format
 msgid "100 %"
-msgstr "१०० % २."
+msgstr ""
 
 #: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
 #, kde-format
 msgid "States"
-msgstr "राज्यानि"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/stateshape/StateShapeConfigWidget.ui:17
 #, kde-format
 msgid "State:"
-msgstr "राज्यम्‌:"
+msgstr ""
 
 #: plugins/stateshape/StateShapeFactory.cpp:30
 #, kde-format
 msgid "State Shape"
-msgstr "राज्याकारः"
+msgstr ""
 
 #: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
 msgid "A state shape"
-msgstr "एकः राज्याकारः"
+msgstr ""
 
 #: plugins/stateshape/StateTool.cpp:107
 #, kde-format
 msgid "State tool options"
-msgstr "उपकरणविकल्पान् वदतु"
+msgstr ""
 
 #: plugins/stateshape/StateToolFactory.cpp:32
 #, kde-format
 msgid "State editing"
-msgstr "राज्य सम्पादन"
+msgstr ""
 
 #: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
-msgstr "ब्रैण्डम्प"
+msgstr ""
 
 #: src/AboutData.h:35
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
-msgstr "ब्रैण्डम्पः : भवतः मस्तिष्कात् प्रत्यक्षतया सङ्गणकं प्रति।"
+msgstr ""
 
 #: src/AboutData.h:36
 #, kde-format
@@ -131,196 +130,194 @@ msgid ""
 "Unmaintained at the time of release of this version. The Calligra community "
 "welcomes interested persons to take over maintainership."
 msgstr ""
-"अस्य संस्करणस्य विमोचनसमये अनिर्वाहितम् । कलिग्रा समुदायः इच्छुकानाम् स्वागतं करोति यत् ते "
-"अनुरक्षणं स्वीकुर्वन्ति।"
 
 #: src/AboutData.h:38
 #, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
-msgstr "(ग) 2009, 2010, 2011, 2012, 2013 सिरिल बर्गर"
+msgstr ""
 
 #: src/AboutData.h:42
 #, kde-format
 msgid "Somsubhra Bairi"
-msgstr "सोमसुभ्रा बैरी"
+msgstr ""
 
 #: src/AboutData.h:43 src/AboutData.h:46
 #, kde-format
 msgid "Former maintainer"
-msgstr "पूर्व परिपालक"
+msgstr ""
 
 #: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
-msgstr "सिरिल बर्गर"
+msgstr ""
 
 #. i18n translator strings
 #: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "भवतः नामानि"
+msgstr ""
 
 #: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "भवतः ईमेलपत्राणि"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/forms/wdgsectionproperties.ui:17
 #, kde-format
 msgid "Layout:"
-msgstr "प्रारूपं:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
 #: src/forms/wdgsectionsbox.ui:50
 #, kde-format
 msgid "Create a new whiteboard"
-msgstr "नूतनं श्वेतफलकं रचयन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: src/forms/wdgsectionsbox.ui:78
 #, kde-format
 msgid "Duplicate whiteboard"
-msgstr "डुप्लिकेट् श्वेतफलकम्"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, bnDuplicate)
 #: src/forms/wdgsectionsbox.ui:81
 #, kde-format
 msgid "Duplicate the currently selected whiteboard"
-msgstr "वर्तमान चयनितस्य श्वेतफलकस्य द्वितीयकं कुर्वन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: src/forms/wdgsectionsbox.ui:106
 #, kde-format
 msgid "Move whiteboard down"
-msgstr "श्वेतफलकं अधः चालयन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: src/forms/wdgsectionsbox.ui:131
 #, kde-format
 msgid "Move whiteboard up"
-msgstr "श्वेतफलकं उपरि चालयन्तु"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: src/forms/wdgsectionsbox.ui:172
 #, kde-format
 msgid "Delete the whiteboard"
-msgstr "श्वेतफलकं विलोपयन्तु"
+msgstr ""
 
 #: src/import/DockerManager_p.h:62
 #, kde-format
 msgid "Tool Bars"
-msgstr "Tool Bars इति"
+msgstr ""
 
 #: src/import/ToolDocker.cpp:31
 #, kde-format
 msgid "Tool Options"
-msgstr "साधनविकल्पाः"
+msgstr ""
 
 #: src/import/ToolDocker.cpp:70
 #, kde-format
 msgid "Toggles showing a title bar"
-msgstr "शीर्षकपट्टिकां दर्शयन् टॉगलं करोति"
+msgstr ""
 
 #: src/import/ToolDocker.cpp:78
 #, kde-format
 msgid "Toggles organising the options in tabs or not"
-msgstr "विकल्पान् ट्याब्स् मध्ये व्यवस्थितं करोति वा न वा"
+msgstr ""
 
 #: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
-msgstr "स्तम्भ"
+msgstr ""
 
 #: src/layouts/FreeLayout.cpp:60
 #, kde-format
 msgid "Free"
-msgstr "निःशुल्कः"
+msgstr ""
 
 #: src/MainWindow.cpp:96
 #, kde-format
 msgid "Dockers"
-msgstr "गोदी"
+msgstr ""
 
 #: src/SectionGroup.cpp:86
 #, kde-format
 msgid "Untitled %1"
-msgstr "अनामिका %1"
+msgstr ""
 
 #: src/SectionPropertiesDock.cpp:33
 #, kde-format
 msgid "Dump properties"
-msgstr "डम्प गुणाः"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:44
 #, kde-format
 msgid "Whiteboards"
-msgstr "श्वेतफलकाः"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:57
 #, kde-format
 msgid "Minimal View"
-msgstr "न्यूनतम दृश्य"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:58
 #, kde-format
 msgid "Detailed View"
-msgstr "विस्तृत दृश्य"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:59
 #, kde-format
 msgid "Thumbnail View"
-msgstr "लघुचित्र दृश्य"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:70
 #, kde-format
 msgid "View mode"
-msgstr "दृश्यविधिः"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:82
 #, kde-format
 msgid "Add new whiteboard below current."
-msgstr "वर्तमानस्य अधः नूतनं श्वेतफलकं योजयन्तु।"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:83
 #, kde-format
 msgid "Add new whiteboard above current."
-msgstr "वर्तमानस्य उपरि नूतनं श्वेतफलकं योजयन्तु।"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:84
 #, kde-format
 msgid "Add new whiteboard as child of current."
-msgstr "वर्तमानस्य बालरूपेण नूतनं श्वेतफलकं योजयन्तु।"
+msgstr ""
 
 #: src/View.cpp:182
 #, kde-format
 msgid "D&elete"
-msgstr "लुप्"
+msgstr ""
 
 #: src/View.cpp:189
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
-msgstr "&डुप्लिकेट"
+msgstr ""
 
 #: src/View.cpp:194
 #, kde-format
 msgid "Group Shapes"
-msgstr "समूहाकाराः"
+msgstr ""
 
 #: src/View.cpp:199
 #, kde-format
 msgid "Ungroup Shapes"
-msgstr "Ungroup Shapes इति"
+msgstr ""
 
 #: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "समूहाकाराः"
+msgstr ""
 
 #: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "आकारान् विसमूहयन्तु"
+msgstr ""

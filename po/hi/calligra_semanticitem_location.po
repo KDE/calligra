@@ -1,5 +1,5 @@
 # POT_PART_NORMAL only
-# Sanskrit translations for calligra package.
+# Hindi translations for calligra package.
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
@@ -9,76 +9,75 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"PO-Revision-Date: 2024-12-15 15:57+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
-"Language: sa\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>2);\n"
 
 #: KoLocationSemanticItemFactory.cpp:33
 #, kde-format
 msgctxt "displayname of the semantic item type Location"
 msgid "Location"
-msgstr "स्थानीय"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfLocationEditWidget.ui:17
 #, kde-format
 msgid "&Name"
-msgstr "&नामः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
 #, kde-format
 msgid "Name"
-msgstr "नामः"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
 #: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
 #, kde-format
 msgid "The Earth"
-msgstr "पृथिवी"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
 #: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
 #, kde-format
 msgid "The Marble widget displays a virtual globe."
-msgstr "Marble विजेट् वर्चुअल् ग्लोब् प्रदर्शयति ।"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
 #: KoRdfLocationEditWidgetMarble.ui:40
 #, kde-format
 msgid "Navigation Control"
-msgstr "नेविगेशन नियन्त्रण"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
 #: KoRdfLocationEditWidgetMarble.ui:43
 #, kde-format
 msgid "Use this control to navigate."
-msgstr "मार्गदर्शनार्थं एतत् नियन्त्रणं उपयुज्यताम् ।"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: KoRdfLocationEditWidgetMarble.ui:50
 #, kde-format
 msgid "Latitude"
-msgstr "अक्षांशः"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: KoRdfLocationEditWidgetMarble.ui:60
 #, kde-format
 msgid "Longitude"
-msgstr "देशान्तर"
+msgstr ""
 
 #: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
-msgstr "स्थान सूचना"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfLocationViewWidget.ui:24
 #, kde-format
 msgid "&Name:"
-msgstr "&नामः:"
+msgstr ""
