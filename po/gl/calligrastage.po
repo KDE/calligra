@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2024-08-25 15:43+0200\n"
+"PO-Revision-Date: 2024-12-17 19:17+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -344,7 +344,7 @@ msgstr "Inserir presentación"
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
 msgid "Placeholder shape"
-msgstr "Forma do elemento substituto"
+msgstr "Forma do marcador de posición"
 
 #: part/KPrPlaceholderStrategy.cpp:34
 msgid "Double click to add a title"
