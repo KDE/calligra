@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-12-16 00:45+0100\n"
+"PO-Revision-Date: 2024-12-16 22:43+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1545,7 +1545,7 @@ msgstr "Editor de datos de sectores"
 #: dialogs/PieDataEditor.ui:52
 #, kde-format
 msgid "Del"
-msgstr "Eliminar"
+msgstr "Supr"
 
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
