@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -170,7 +172,7 @@ msgstr "ग्रन्थसूचीप्रविष्टीनां प�
 #: dialogs/ParagraphBulletsNumbers.ui:70
 #, kde-format
 msgid "Prefix:"
-msgstr "उपसर्गः : १."
+msgstr "उपसर्गः :"
 
 #. i18n: ectx: property (text), widget (QLabel, suffixLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -178,7 +180,7 @@ msgstr "उपसर्गः : १."
 #: dialogs/ParagraphBulletsNumbers.ui:86
 #, kde-format
 msgid "Suffix:"
-msgstr "प्रत्ययः : १."
+msgstr "प्रत्ययः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, numberedEntries)
 #: dialogs/BibliographyConfigureDialog.ui:70
@@ -214,7 +216,7 @@ msgstr "क्रमबद्धकुंजी योजयन्तु"
 #: dialogs/BibliographyConfigureDialog.ui:131
 #, kde-format
 msgid "Sort algorithm:"
-msgstr "क्रमाङ्कन एल्गोरिदम् : १."
+msgstr "क्रमाङ्कन एल्गोरिदम् :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
 #: dialogs/BibliographyConfigureDialog.ui:139
@@ -275,7 +277,7 @@ msgstr "ओडीएफ १.२"
 #: dialogs/ChangeConfigureDialog.ui:51
 #, kde-format
 msgid "DeltaXML (Experimental)"
-msgstr "DeltaXML (प्रयोगात्मक) २."
+msgstr "DeltaXML (प्रयोगात्मक)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ChangeConfigureDialog.ui:58
@@ -498,13 +500,13 @@ msgstr "नामः:"
 #: dialogs/CharacterGeneral.ui:52
 #, kde-format
 msgid "Next style:"
-msgstr "अग्रिमशैली : १."
+msgstr "अग्रिमशैली :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CharacterGeneral.ui:68
 #, kde-format
 msgid "Parent style:"
-msgstr "मातापितृशैली : १."
+msgstr "मातापितृशैली :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
 #: dialogs/CharacterGeneral.ui:84
@@ -551,32 +553,32 @@ msgstr "उपलिपिः"
 #: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
 #, kde-format
 msgid "Text color:"
-msgstr "पाठवर्णः : १."
+msgstr "पाठवर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
 #: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
 #: dialogs/ParagraphDecorations.ui:15
 #, kde-format
 msgid "Background color:"
-msgstr "पृष्ठभूमिवर्णः : १."
+msgstr "पृष्ठभूमिवर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:110
 #, kde-format
 msgid "Underlining:"
-msgstr "रेखांकनम् : १."
+msgstr "रेखांकनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:141
 #, kde-format
 msgid "Strikethrough:"
-msgstr "स्ट्राइकथ्रू : १."
+msgstr "स्ट्राइकथ्रू :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:172
 #, kde-format
 msgid "Capitalization:"
-msgstr "पूंजीकरणम् : १."
+msgstr "पूंजीकरणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:185
@@ -626,7 +628,7 @@ msgstr "ग्रन्थसूची प्रविष्टि विवर�
 #: dialogs/CitationInsertionDialog.ui:38
 #, kde-format
 msgid "Short Name:"
-msgstr "लघु नाम : १."
+msgstr "लघु नाम :"
 
 #. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
 #: dialogs/CitationInsertionDialog.ui:52
@@ -810,7 +812,7 @@ msgstr "वर्ष:"
 #: dialogs/CitationInsertionDialog.ui:203
 #, kde-format
 msgid "Publisher:"
-msgstr "प्रकाशक : १."
+msgstr "प्रकाशक :"
 
 #. i18n: ectx: property (text), widget (QLabel, addressLabel)
 #: dialogs/CitationInsertionDialog.ui:213
@@ -822,25 +824,25 @@ msgstr "पत्रसङ्केतः:"
 #: dialogs/CitationInsertionDialog.ui:223
 #, kde-format
 msgid "ISBN:"
-msgstr "ISBN: १."
+msgstr "ISBN:"
 
 #. i18n: ectx: property (text), widget (QLabel, chapterLabel)
 #: dialogs/CitationInsertionDialog.ui:233
 #, kde-format
 msgid "Chapter:"
-msgstr "अध्यायः १."
+msgstr "अध्यायः"
 
 #. i18n: ectx: property (text), widget (QLabel, issnLabel)
 #: dialogs/CitationInsertionDialog.ui:243
 #, kde-format
 msgid "ISSN:"
-msgstr "ISSN: १."
+msgstr "ISSN:"
 
 #. i18n: ectx: property (text), widget (QLabel, editorLabel)
 #: dialogs/CitationInsertionDialog.ui:253
 #, kde-format
 msgid "Editor:"
-msgstr "सम्पादकः : १."
+msgstr "सम्पादकः :"
 
 #. i18n: ectx: property (text), widget (QLabel, pagesLabel)
 #: dialogs/CitationInsertionDialog.ui:263
@@ -852,19 +854,19 @@ msgstr "पृष्ठ (पृष्ठ): ."
 #: dialogs/CitationInsertionDialog.ui:273
 #, kde-format
 msgid "Book title:"
-msgstr "पुस्तकस्य शीर्षकम् : १."
+msgstr "पुस्तकस्य शीर्षकम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, editionLabel)
 #: dialogs/CitationInsertionDialog.ui:283
 #, kde-format
 msgid "Edition:"
-msgstr "संस्करणम् : १."
+msgstr "संस्करणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, publicationLabel)
 #: dialogs/CitationInsertionDialog.ui:293
 #, kde-format
 msgid "Publication:"
-msgstr "प्रकाशन : १."
+msgstr "प्रकाशन :"
 
 #. i18n: ectx: property (text), widget (QLabel, volumeLabel)
 #: dialogs/CitationInsertionDialog.ui:303
@@ -876,7 +878,7 @@ msgstr "मात्रा:"
 #: dialogs/CitationInsertionDialog.ui:313
 #, kde-format
 msgid "Institution:"
-msgstr "संस्था : १."
+msgstr "संस्था :"
 
 #. i18n: ectx: property (text), widget (QLabel, organisationLabel)
 #: dialogs/CitationInsertionDialog.ui:323
@@ -888,7 +890,7 @@ msgstr "संघठनं:"
 #: dialogs/CitationInsertionDialog.ui:333
 #, kde-format
 msgid "Type of Report:"
-msgstr "प्रतिवेदनस्य प्रकारः : १."
+msgstr "प्रतिवेदनस्य प्रकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, schoolLabel)
 #: dialogs/CitationInsertionDialog.ui:343
@@ -900,7 +902,7 @@ msgstr "विश्वविद्यालयं:"
 #: dialogs/CitationInsertionDialog.ui:353
 #, kde-format
 msgid "Journal:"
-msgstr "पत्रिका : १."
+msgstr "पत्रिका :"
 
 #. i18n: ectx: property (text), widget (QLabel, monthLabel)
 #: dialogs/CitationInsertionDialog.ui:363
@@ -930,7 +932,7 @@ msgstr "टीका:"
 #: dialogs/CitationInsertionDialog.ui:403
 #, kde-format
 msgid "Annotation:"
-msgstr "टिप्पणी : १."
+msgstr "टिप्पणी :"
 
 #. i18n: ectx: property (text), widget (QLabel, urlLabel)
 #: dialogs/CitationInsertionDialog.ui:413
@@ -942,31 +944,31 @@ msgstr "URL: 1.1."
 #: dialogs/CitationInsertionDialog.ui:423
 #, kde-format
 msgid "User-defined 1:"
-msgstr "उपयोक्तृनिर्धारितः १ : १."
+msgstr "उपयोक्तृनिर्धारितः १ :"
 
 #. i18n: ectx: property (text), widget (QLabel, ud3Label)
 #: dialogs/CitationInsertionDialog.ui:433
 #, kde-format
 msgid "User-defined 3:"
-msgstr "उपयोक्तृनिर्धारितः ३ : १."
+msgstr "उपयोक्तृनिर्धारितः ३ :"
 
 #. i18n: ectx: property (text), widget (QLabel, ud2Label)
 #: dialogs/CitationInsertionDialog.ui:440
 #, kde-format
 msgid "User-defined 2:"
-msgstr "उपयोक्तृनिर्धारितः २ : १."
+msgstr "उपयोक्तृनिर्धारितः २ :"
 
 #. i18n: ectx: property (text), widget (QLabel, ud4Label)
 #: dialogs/CitationInsertionDialog.ui:453
 #, kde-format
 msgid "User-defined 4:"
-msgstr "उपयोक्तृनिर्धारितं ४ : १."
+msgstr "उपयोक्तृनिर्धारितं ४ :"
 
 #. i18n: ectx: property (text), widget (QLabel, ud5Label)
 #: dialogs/CitationInsertionDialog.ui:463
 #, kde-format
 msgid "User-defined 5:"
-msgstr "उपयोक्तृनिर्धारितं ५ : १."
+msgstr "उपयोक्तृनिर्धारितं ५ :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CitationInsertionDialog.ui:485
@@ -978,7 +980,7 @@ msgstr "वा"
 #: dialogs/CitationInsertionDialog.ui:509
 #, kde-format
 msgid "From the document:"
-msgstr "दस्तावेजात् : १."
+msgstr "दस्तावेजात् :"
 
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
@@ -1060,7 +1062,7 @@ msgstr "ग्रन्थसूची प्रविष्टियाँ"
 #: dialogs/InsertBibliographyDialog.ui:53
 #, kde-format
 msgid "Bibliography type:"
-msgstr "ग्रन्थसूची प्रकारः १."
+msgstr "ग्रन्थसूची प्रकारः"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:86
@@ -1168,7 +1170,7 @@ msgstr "पिधानं करोतु"
 #: dialogs/LanguageTab.ui:19
 #, kde-format
 msgid "Quick search:"
-msgstr "त्वरित अन्वेषणम् : १."
+msgstr "त्वरित अन्वेषणम् :"
 
 #: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:278
@@ -1374,7 +1376,7 @@ msgstr "दक्षिणः"
 #: dialogs/ListLevelWidget.ui:300
 #, kde-format
 msgid "Per level increase:"
-msgstr "प्रतिस्तरवृद्धिः : १."
+msgstr "प्रतिस्तरवृद्धिः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
@@ -1386,13 +1388,13 @@ msgstr "संख्या"
 #: dialogs/ListLevelWidget.ui:366
 #, kde-format
 msgid "Format:"
-msgstr "प्रारूपः : १."
+msgstr "प्रारूपः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ListLevelWidget.ui:429
 #, kde-format
 msgid "Display levels above:"
-msgstr "उपरि स्तराः प्रदर्शयन्तु : १."
+msgstr "उपरि स्तराः प्रदर्शयन्तु :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, synchro)
 #: dialogs/ListLevelWidget.ui:436
@@ -1474,31 +1476,31 @@ msgstr "अन्त्यटिप्पणी सेटिंग्स्"
 #: dialogs/NotesConfigurationDialog.ui:54
 #, kde-format
 msgid "Automatic Numbering:"
-msgstr "स्वचालितं संख्याकरणम् : १."
+msgstr "स्वचालितं संख्याकरणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, prefix)
 #: dialogs/NotesConfigurationDialog.ui:75
 #, kde-format
 msgid " Prefix:"
-msgstr " उपसर्गः : १."
+msgstr " उपसर्गः :"
 
 #. i18n: ectx: property (text), widget (QLabel, startAt)
 #: dialogs/NotesConfigurationDialog.ui:85
 #, kde-format
 msgid " Start at:"
-msgstr " अत्र आरभ्यताम् : १."
+msgstr " अत्र आरभ्यताम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, numStyle)
 #: dialogs/NotesConfigurationDialog.ui:95
 #, kde-format
 msgid " Format:"
-msgstr " प्रारूपः : १."
+msgstr " प्रारूपः :"
 
 #. i18n: ectx: property (text), widget (QLabel, suffix)
 #: dialogs/NotesConfigurationDialog.ui:111
 #, kde-format
 msgid " Suffix:"
-msgstr " प्रत्ययः : १."
+msgstr " प्रत्ययः :"
 
 #. i18n: ectx: property (text), widget (QLabel, beginAt)
 #: dialogs/NotesConfigurationDialog.ui:127
@@ -1570,19 +1572,19 @@ msgstr "अहं, द्वितीय, तृतीय, ..."
 #: dialogs/NotesConfigurationDialog.ui:290
 #, kde-format
 msgid "Continuation Notice:"
-msgstr "निरन्तरतासूचना : १."
+msgstr "निरन्तरतासूचना :"
 
 #. i18n: ectx: property (text), widget (QLabel, cont2)
 #: dialogs/NotesConfigurationDialog.ui:305
 #, kde-format
 msgid "Text saying it is a continuation:"
-msgstr "निरन्तरता इति पाठः- १."
+msgstr "निरन्तरता इति पाठः-"
 
 #. i18n: ectx: property (text), widget (QLabel, cont1)
 #: dialogs/NotesConfigurationDialog.ui:315
 #, kde-format
 msgid " Text saying it will continue:"
-msgstr " अग्रे भविष्यति इति पाठः- १."
+msgstr " अग्रे भविष्यति इति पाठः-"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:34
 #, kde-format
@@ -1635,14 +1637,14 @@ msgstr "सूचीप्रतिबिम्बं चिनोतु"
 #: dialogs/ParagraphBulletsNumbers.ui:31
 #, kde-format
 msgid "Start at:"
-msgstr "अत्र आरभ्यताम् : १."
+msgstr "अत्र आरभ्यताम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/ParagraphBulletsNumbers.ui:57 dialogs/ParagraphLayout.ui:15
 #, kde-format
 msgid "Alignment:"
-msgstr "संरेखणम् : १."
+msgstr "संरेखणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/ParagraphBulletsNumbers.ui:105
@@ -1654,7 +1656,7 @@ msgstr "गहनता:"
 #: dialogs/ParagraphBulletsNumbers.ui:128
 #, kde-format
 msgid "Display Levels:"
-msgstr "प्रदर्शनस्तराः : १."
+msgstr "प्रदर्शनस्तराः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: dialogs/ParagraphBulletsNumbers.ui:148
@@ -1694,7 +1696,7 @@ msgstr "इन्डेण्ट् अट्"
 #: dialogs/ParagraphBulletsNumbers.ui:211
 #, kde-format
 msgid "Custom character:"
-msgstr "कस्टम वर्णः : १."
+msgstr "कस्टम वर्णः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, restartNumbering)
 #: dialogs/ParagraphBulletsNumbers.ui:241
@@ -1760,13 +1762,13 @@ msgstr "ड्रॉप् कैप्स् सक्षमं कुर्व
 #: dialogs/ParagraphDropCaps.ui:22 dialogs/ParagraphDropCaps.ui:42
 #, kde-format
 msgid "Distance to paragraph:"
-msgstr "अनुच्छेदस्य दूरम् : १."
+msgstr "अनुच्छेदस्य दूरम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, linesLabel)
 #: dialogs/ParagraphDropCaps.ui:71
 #, kde-format
 msgid "Number of lines it covers:"
-msgstr "अस्मिन् आच्छादितानां रेखानां संख्या : १."
+msgstr "अस्मिन् आच्छादितानां रेखानां संख्या :"
 
 #: dialogs/ParagraphGeneral.cpp:40
 #, kde-format
@@ -1839,19 +1841,19 @@ msgstr "न्यूनतम"
 #: dialogs/ParagraphIndentSpacing.ui:22
 #, kde-format
 msgid "Left Indent:"
-msgstr "वाम इण्डेन्टः : १."
+msgstr "वाम इण्डेन्टः :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
 #, kde-format
 msgid "Right Indent:"
-msgstr "दक्षिणः इन्डेंटः : १."
+msgstr "दक्षिणः इन्डेंटः :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
 #, kde-format
 msgid "First Line Indent:"
-msgstr "प्रथमपङ्क्तिः इन्डेंटः : १."
+msgstr "प्रथमपङ्क्तिः इन्डेंटः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1863,7 +1865,7 @@ msgstr "पाठस्य आकारात् स्वयमेव अनु
 #: dialogs/ParagraphIndentSpacing.ui:75
 #, kde-format
 msgid "Line Spacing:"
-msgstr "रेखा अन्तरालः : १."
+msgstr "रेखा अन्तरालः :"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1881,13 +1883,13 @@ msgstr "Font Metrics इत्यस्य उपयोगं कुर्वन
 #: dialogs/ParagraphIndentSpacing.ui:136
 #, kde-format
 msgid "Paragraph Space Before:"
-msgstr "अनुच्छेद स्थानं पूर्वम् : १."
+msgstr "अनुच्छेद स्थानं पूर्वम् :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
 #, kde-format
 msgid "Paragraph Space After:"
-msgstr "अनुच्छेद स्थानं पश्चात् : १."
+msgstr "अनुच्छेद स्थानं पश्चात् :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
@@ -1899,7 +1901,7 @@ msgstr "प्रमाणय्"
 #: dialogs/ParagraphLayout.ui:50
 #, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "फ्रेमस्य पृष्ठस्य च अन्ते व्यवहारः : १."
+msgstr "फ्रेमस्य पृष्ठस्य च अन्ते व्यवहारः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
@@ -1954,7 +1956,7 @@ msgstr "असिद्धवर्णाः अथवा तादृशना�
 #: dialogs/SectionFormatDialog.ui:29
 #, kde-format
 msgid "Section name:"
-msgstr "खण्डनाम : १."
+msgstr "खण्डनाम :"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
 #: dialogs/SectionsSplitDialog.ui:6
@@ -1972,13 +1974,13 @@ msgstr "अनुच्छेदं सम्मिलितं कुर्व�
 #: dialogs/SectionsSplitDialog.ui:23
 #, kde-format
 msgid "before start of section:"
-msgstr "खण्डस्य आरम्भात् पूर्वं : १."
+msgstr "खण्डस्य आरम्भात् पूर्वं :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/SectionsSplitDialog.ui:37
 #, kde-format
 msgid "after end of section:"
-msgstr "खण्डस्य समाप्तेः अनन्तरं : १."
+msgstr "खण्डस्य समाप्तेः अनन्तरं :"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:32
@@ -2246,13 +2248,13 @@ msgstr "स्तम्भाः पङ्क्तयः च"
 #: dialogs/TableDialog.ui:32
 #, kde-format
 msgid "Number of columns:"
-msgstr "स्तम्भानां संख्या : १."
+msgstr "स्तम्भानां संख्या :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRows)
 #: dialogs/TableDialog.ui:55
 #, kde-format
 msgid "Number of rows:"
-msgstr "पङ्क्तयः संख्या : १."
+msgstr "पङ्क्तयः संख्या :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPhysical)
 #: dialogs/TableDialog.ui:97
@@ -2264,7 +2266,7 @@ msgstr "चौड़ाई रणनीति"
 #: dialogs/TableDialog.ui:112
 #, kde-format
 msgid "Fixed column width:"
-msgstr "नियतस्तम्भविस्तारः : १."
+msgstr "नियतस्तम्भविस्तारः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
 #: dialogs/TableDialog.ui:125

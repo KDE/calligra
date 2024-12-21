@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-19 21:41+0530\n"
+"PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -181,7 +181,7 @@ msgstr "पाठ"
 #: engine/FunctionDescription.cpp:39
 #, kde-format
 msgid "Whole number (like 1, 132, 2344)"
-msgstr "सम्पूर्ण संख्या (यथा १, १३२, २३४४) २."
+msgstr "सम्पूर्ण संख्या (यथा १, १३२, २३४४)"
 
 #: engine/FunctionDescription.cpp:41
 #, kde-format
@@ -372,7 +372,7 @@ msgstr "BITAND() फंक्शन् द्वयोः पूर्णाङ�
 #: functions/bitops.xml:20
 #, kde-format
 msgid "BITAND(value; value)"
-msgstr "BITAND(मूल्य; मूल्य) २."
+msgstr "BITAND(मूल्य; मूल्य)"
 
 #: functions/bitops.xml:21
 #, kde-format
@@ -437,7 +437,7 @@ msgstr "BITOR() फंक्शन् द्वयोः पूर्णाङ�
 #: functions/bitops.xml:76
 #, kde-format
 msgid "BITOR(value; value)"
-msgstr "BITOR(मूल्य; मूल्य) २."
+msgstr "BITOR(मूल्य; मूल्य)"
 
 #: functions/bitops.xml:77
 #, kde-format
@@ -559,7 +559,7 @@ msgstr ""
 #: functions/conversion.xml:49
 #, kde-format
 msgid "BOOL2INT(value)"
-msgstr "BOOL2INT(मूल्य) २."
+msgstr "BOOL2INT(मूल्य)"
 
 #: functions/conversion.xml:50
 #, kde-format
@@ -630,7 +630,7 @@ msgstr "CHARTOASCII() फंक्शन् दत्तस्य वर्ण�
 #: functions/conversion.xml:95
 #, kde-format
 msgid "CHARTOASCII(value)"
-msgstr "CHARTOASCII (मूल्य) ९."
+msgstr "CHARTOASCII (मूल्य)"
 
 #: functions/conversion.xml:96
 #, kde-format
@@ -656,7 +656,7 @@ msgstr "ASCIITOCHAR() फंक्शन् प्रत्येकस्य �
 #: functions/conversion.xml:110
 #, kde-format
 msgid "ASCIITOCHAR(value)"
-msgstr "ASCIITOCHAR(मूल्य) ९."
+msgstr "ASCIITOCHAR(मूल्य)"
 
 #: functions/conversion.xml:111
 #, kde-format
@@ -688,7 +688,7 @@ msgstr "POLR() फंक्शन् कार्टेशियन-भूमि
 #: functions/conversion.xml:129
 #, kde-format
 msgid "POLR(X;Y)"
-msgstr "POLR(X;Y) २."
+msgstr "POLR(X;Y)"
 
 #: functions/conversion.xml:130
 #, kde-format
@@ -712,7 +712,7 @@ msgstr ""
 #: functions/conversion.xml:151
 #, kde-format
 msgid "POLA(X;Y)"
-msgstr "पोला(X;Y) ९."
+msgstr "पोला(X;Y)"
 
 #: functions/conversion.xml:152
 #, kde-format
@@ -744,7 +744,7 @@ msgstr "त्रिज्या"
 #: functions/trig.xml:310 functions/trig.xml:324
 #, kde-format
 msgid "Angle (radians)"
-msgstr "कोण (त्रिज्या) २."
+msgstr "कोण (त्रिज्या)"
 
 #: functions/conversion.xml:173
 #, kde-format
@@ -756,7 +756,7 @@ msgstr "CARX() फंक्शन् ध्रुवीय-भूमिचिह
 #: functions/conversion.xml:174
 #, kde-format
 msgid "CARX(Radius;Angle)"
-msgstr "CARX(त्रिज्या;कोण) २."
+msgstr "CARX(त्रिज्या;कोण)"
 
 #: functions/conversion.xml:175
 #, kde-format
@@ -783,7 +783,7 @@ msgstr "DECSEX() फंक्शन् द्विगुणं मूल्य�
 #: functions/conversion.xml:192
 #, kde-format
 msgid "DECSEX(double)"
-msgstr "DECSEX(द्वयम्) २."
+msgstr "DECSEX(द्वयम्)"
 
 #: functions/conversion.xml:193
 #, kde-format
@@ -843,7 +843,7 @@ msgstr "CARY() फंक्शन् ध्रुवीय-भूमिचिह
 #: functions/conversion.xml:234
 #, kde-format
 msgid "CARY(Radius;Angle)"
-msgstr "CARY(त्रिज्या;कोण) २."
+msgstr "CARY(त्रिज्या;कोण)"
 
 #: functions/conversion.xml:235
 #, kde-format
@@ -917,7 +917,7 @@ msgstr "ARABIC() फंक्शन् रोमन-सङ्ख्यां स
 #: functions/conversion.xml:272
 #, kde-format
 msgid "ARABIC(Numeral)"
-msgstr "अरबी(संख्या) ९."
+msgstr "अरबी(संख्या)"
 
 #: functions/conversion.xml:273
 #, kde-format
@@ -1225,7 +1225,7 @@ msgstr "दिनाङ्कः"
 #: functions/datetime.xml:15 functions/datetime.xml:607
 #, kde-format
 msgid "Method (optional)"
-msgstr "विधि (वैकल्पिक) २."
+msgstr "विधि (वैकल्पिक)"
 
 #: functions/datetime.xml:19
 #, kde-format
@@ -1243,7 +1243,7 @@ msgstr ""
 #: functions/datetime.xml:20
 #, kde-format
 msgid "WEEKDAY(date; method)"
-msgstr "WEEKDAY(तिथि; विधि) २."
+msgstr "WEEKDAY(तिथि; विधि)"
 
 #: functions/datetime.xml:21
 #, kde-format
@@ -1305,7 +1305,7 @@ msgstr ""
 #: functions/datetime.xml:61
 #, kde-format
 msgid "TIMEVALUE(time)"
-msgstr "TIMEVALUE(समय) २."
+msgstr "TIMEVALUE(समय)"
 
 #: functions/datetime.xml:62
 #, kde-format
@@ -1324,7 +1324,7 @@ msgstr ""
 #: functions/datetime.xml:76
 #, kde-format
 msgid "DATEVALUE(date)"
-msgstr "DATEVALUE(तिथि) ९."
+msgstr "DATEVALUE(तिथि)"
 
 #: functions/datetime.xml:77
 #, kde-format
@@ -1348,7 +1348,7 @@ msgstr ""
 #: functions/datetime.xml:95
 #, kde-format
 msgid "EDATE(date; months)"
-msgstr "EDATE(तिथिः; मासाः) २."
+msgstr "EDATE(तिथिः; मासाः)"
 
 #: functions/datetime.xml:96
 #, kde-format
@@ -1372,7 +1372,7 @@ msgstr ""
 #: functions/datetime.xml:116
 #, kde-format
 msgid "EOMONTH(date; months)"
-msgstr "EOMONTH(तिथि; मासाः) २."
+msgstr "EOMONTH(तिथि; मासाः)"
 
 #: functions/datetime.xml:117
 #, kde-format
@@ -1401,7 +1401,7 @@ msgstr ""
 #: functions/datetime.xml:134
 #, kde-format
 msgid "YEAR(date)"
-msgstr "वर्ष(तिथि) ९."
+msgstr "वर्ष(तिथि)"
 
 #: functions/datetime.xml:135
 #, kde-format
@@ -1425,7 +1425,7 @@ msgstr ""
 #: functions/datetime.xml:151
 #, kde-format
 msgid "MONTH(date)"
-msgstr "मास(तिथि) ९."
+msgstr "मास(तिथि)"
 
 #: functions/datetime.xml:152
 #, kde-format
@@ -1449,7 +1449,7 @@ msgstr ""
 #: functions/datetime.xml:168
 #, kde-format
 msgid "DAY(date)"
-msgstr "DAY(तिथि) ९."
+msgstr "DAY(तिथि)"
 
 #: functions/datetime.xml:169
 #, kde-format
@@ -1473,7 +1473,7 @@ msgstr ""
 #: functions/datetime.xml:185
 #, kde-format
 msgid "HOUR(time)"
-msgstr "HOUR(समय) २."
+msgstr "HOUR(समय)"
 
 #: functions/datetime.xml:186
 #, kde-format
@@ -1497,7 +1497,7 @@ msgstr ""
 #: functions/datetime.xml:202
 #, kde-format
 msgid "MINUTE(time)"
-msgstr "MINUTE(समय) २."
+msgstr "MINUTE(समय)"
 
 #: functions/datetime.xml:203
 #, kde-format
@@ -1521,7 +1521,7 @@ msgstr ""
 #: functions/datetime.xml:219
 #, kde-format
 msgid "SECOND(time)"
-msgstr "द्वितीय(समय) ९."
+msgstr "द्वितीय(समय)"
 
 #: functions/datetime.xml:220
 #, kde-format
@@ -1585,7 +1585,7 @@ msgid ""
 "sunday, depending on your local settings)"
 msgstr ""
 "WEEKS(\"2002-19-02\"; \"2002-19-02\"; 1) 0 प्रत्यागच्छति, यतः सप्ताहस्य प्रथमदिने "
-"(सोमवासरे रविवासरे वा, भवतः स्थानीयानुसारं) आरभ्य, मध्ये सम्पूर्णसप्ताहः नास्ति सेटिंग्स्) २."
+"(सोमवासरे रविवासरे वा, भवतः स्थानीयानुसारं) आरभ्य, मध्ये सम्पूर्णसप्ताहः नास्ति सेटिंग्स्)"
 
 #: functions/datetime.xml:266
 #, kde-format
@@ -1667,7 +1667,7 @@ msgstr "DAYS() फंक्शन् द्वयोः तिथयोः म�
 #: functions/datetime.xml:309
 #, kde-format
 msgid "DAYS(date2; date1)"
-msgstr "DAYS(तिथि२; तिथि१) २."
+msgstr "DAYS(तिथि२; तिथि१)"
 
 #: functions/datetime.xml:310
 #, kde-format
@@ -1763,7 +1763,7 @@ msgstr "HOURS() फंक्शन् एकस्मिन् समयव्�
 #: functions/datetime.xml:392
 #, kde-format
 msgid "HOURS(time)"
-msgstr "HOURS(समयः) २."
+msgstr "HOURS(समयः)"
 
 #: functions/datetime.xml:393
 #, kde-format
@@ -1778,7 +1778,7 @@ msgstr "यदि दत्तं वर्षं लीप् अस्ति �
 #: functions/datetime.xml:406
 #, kde-format
 msgid "ISLEAPYEAR(year)"
-msgstr "ISLEAPYEAR(वर्ष) २."
+msgstr "ISLEAPYEAR(वर्ष)"
 
 #: functions/datetime.xml:407
 #, kde-format
@@ -1795,7 +1795,7 @@ msgstr "DAYSINMONTH() इति फंक्शन् दत्तवर्ष�
 #: functions/datetime.xml:424
 #, kde-format
 msgid "DAYSINMONTH(year;month)"
-msgstr "DAYSINMONTH(वर्ष;मास) २."
+msgstr "DAYSINMONTH(वर्ष;मास)"
 
 #: functions/datetime.xml:425
 #, kde-format
@@ -1810,7 +1810,7 @@ msgstr "DAYSINYEAR() इति फंक्शन् दत्तवर्षे
 #: functions/datetime.xml:438
 #, kde-format
 msgid "DAYSINYEAR(year)"
-msgstr "DAYSINYEAR(वर्ष) २."
+msgstr "DAYSINYEAR(वर्ष)"
 
 #: functions/datetime.xml:439
 #, kde-format
@@ -1826,7 +1826,7 @@ msgstr "WEEKSINYEAR() इति फंक्शन् दत्तवर्ष�
 #: functions/datetime.xml:452
 #, kde-format
 msgid "WEEKSINYEAR(year)"
-msgstr "सप्ताहवर्षवर्ष(वर्ष) २."
+msgstr "सप्ताहवर्षवर्ष(वर्ष)"
 
 #: functions/datetime.xml:453
 #, kde-format
@@ -1842,7 +1842,7 @@ msgstr "MINUTES() फंक्शन् एकस्मिन् समयव्
 #: functions/datetime.xml:466
 #, kde-format
 msgid "MINUTES(time)"
-msgstr "MINUTES(समय) ९."
+msgstr "MINUTES(समय)"
 
 #: functions/datetime.xml:467
 #, kde-format
@@ -1858,7 +1858,7 @@ msgstr "SECONDS() फंक्शन् एकस्मिन् समयव्
 #: functions/datetime.xml:480
 #, kde-format
 msgid "SECONDS(time)"
-msgstr "सेकण्ड्(समय) ९."
+msgstr "सेकण्ड्(समय)"
 
 #: functions/datetime.xml:481
 #, kde-format
@@ -1868,7 +1868,7 @@ msgstr "SECONDS(\"10:5:2\") 2 प्रेषयति"
 #: functions/datetime.xml:489
 #, kde-format
 msgid "Number of day in week (1..7)"
-msgstr "सप्ताहे दिवसस्य संख्या (१..७) २."
+msgstr "सप्ताहे दिवसस्य संख्या (१..७)"
 
 #: functions/datetime.xml:493
 #, kde-format
@@ -1883,7 +1883,7 @@ msgstr ""
 #: functions/datetime.xml:494
 #, kde-format
 msgid "DAYNAME(weekday)"
-msgstr "DAYNAME (सप्ताहस्य दिवसः) २."
+msgstr "DAYNAME (सप्ताहस्य दिवसः)"
 
 #: functions/datetime.xml:495
 #, kde-format
@@ -1893,7 +1893,7 @@ msgstr "DAYNAME(1) सोमवासरे (यदि सप्ताहः स
 #: functions/datetime.xml:504
 #, kde-format
 msgid "Number of month (1..12)"
-msgstr "मासस्य संख्या (१..१२) २."
+msgstr "मासस्य संख्या (१..१२)"
 
 #: functions/datetime.xml:508
 #, kde-format
@@ -1903,7 +1903,7 @@ msgstr "MONTHNAME() फंक्शन् मासस्य नाम (1...12) 
 #: functions/datetime.xml:509
 #, kde-format
 msgid "MONTHNAME(number)"
-msgstr "MONTHNAME(संख्या) ९."
+msgstr "MONTHNAME(संख्या)"
 
 #: functions/datetime.xml:510
 #, kde-format
@@ -2007,7 +2007,7 @@ msgstr ""
 #: functions/datetime.xml:579
 #, kde-format
 msgid "EASTERSUNDAY(year)"
-msgstr "ईस्टर रविवासरः(वर्षः) २."
+msgstr "ईस्टर रविवासरः(वर्षः)"
 
 #: functions/datetime.xml:580
 #, kde-format
@@ -2029,7 +2029,7 @@ msgstr ""
 #: functions/datetime.xml:593
 #, kde-format
 msgid "ISOWEEKNUM(date)"
-msgstr "ISOWEEKNUM(तिथि) ९."
+msgstr "ISOWEEKNUM(तिथि)"
 
 #: functions/datetime.xml:594
 #, kde-format
@@ -2046,7 +2046,7 @@ msgstr "WEEKNUM() फंक्शन् गैर-ISO सप्ताहसङ�
 #: functions/datetime.xml:612
 #, kde-format
 msgid "WEEKNUM(date; method)"
-msgstr "WEEKNUM(तिथि; विधि) २."
+msgstr "WEEKNUM(तिथि; विधि)"
 
 #: functions/datetime.xml:613
 #, kde-format
@@ -2233,7 +2233,7 @@ msgstr ""
 #: functions/datetime.xml:722
 #, kde-format
 msgid "DATE2UNIX(date)"
-msgstr "DATE2UNIX(तिथि) ९."
+msgstr "DATE2UNIX(तिथि)"
 
 #: functions/datetime.xml:723
 #, kde-format
@@ -2253,7 +2253,7 @@ msgstr "UNIX2DATE() फंक्शन् यूनिक्स समयं त
 #: functions/datetime.xml:737
 #, kde-format
 msgid "UNIX2DATE(unixtime)"
-msgstr "UNIX2DATE(एकसमय) २."
+msgstr "UNIX2DATE(एकसमय)"
 
 #: functions/datetime.xml:738
 #, kde-format
@@ -2312,7 +2312,7 @@ msgstr "BESSELI() फंक्शन् परिवर्तितं Bessel �
 #: functions/engineering.xml:42
 #, kde-format
 msgid "BESSELI(X;N)"
-msgstr "बेस्सेली(X;N) ९."
+msgstr "बेस्सेली(X;N)"
 
 #: functions/engineering.xml:43
 #, kde-format
@@ -2346,7 +2346,7 @@ msgstr ""
 #: functions/engineering.xml:84
 #, kde-format
 msgid "BESSELK(X;N)"
-msgstr "बेसेल्क (X;N) ९."
+msgstr "बेसेल्क (X;N)"
 
 #: functions/engineering.xml:85
 #, kde-format
@@ -2365,7 +2365,7 @@ msgstr ""
 #: functions/engineering.xml:105
 #, kde-format
 msgid "BESSELY(X;N)"
-msgstr "बेसेली(X;N) ९."
+msgstr "बेसेली(X;N)"
 
 #: functions/engineering.xml:106
 #, kde-format
@@ -2549,7 +2549,7 @@ msgstr "ERFC() फंक्शन् पूरकदोषफंक्शन् 
 #: functions/engineering.xml:181
 #, kde-format
 msgid "ERFC(Lower limit; Upper limit)"
-msgstr "ERFC(निम्नसीमा; उच्चसीमा) २."
+msgstr "ERFC(निम्नसीमा; उच्चसीमा)"
 
 #: functions/engineering.xml:182
 #, kde-format
@@ -2626,7 +2626,7 @@ msgstr "DEC2OCT() फंक्शन् अष्टसङ्ख्यारू�
 #: functions/engineering.xml:238
 #, kde-format
 msgid "DEC2OCT(value)"
-msgstr "DEC2OCT(मूल्य) २."
+msgstr "DEC2OCT(मूल्य)"
 
 #: functions/engineering.xml:239
 #, kde-format
@@ -2732,7 +2732,7 @@ msgstr "BIN2OCT() फंक्शन् अष्टसङ्ख्यारू�
 #: functions/engineering.xml:325
 #, kde-format
 msgid "BIN2OCT(value)"
-msgstr "BIN2OCT(मूल्य) २."
+msgstr "BIN2OCT(मूल्य)"
 
 #: functions/engineering.xml:326
 #, kde-format
@@ -2754,7 +2754,7 @@ msgstr "BIN2HEX() फंक्शन् षट्दशमलवसङ्ख्�
 #: functions/engineering.xml:344
 #, kde-format
 msgid "BIN2HEX(value)"
-msgstr "BIN2HEX(मूल्य) २."
+msgstr "BIN2HEX(मूल्य)"
 
 #: functions/engineering.xml:345
 #, kde-format
@@ -2798,7 +2798,7 @@ msgstr "HEX2OCT() फंक्शन् अष्टसङ्ख्यारू�
 #: functions/engineering.xml:374
 #, kde-format
 msgid "HEX2OCT(value)"
-msgstr "HEX2OCT(मूल्य) २."
+msgstr "HEX2OCT(मूल्य)"
 
 #: functions/engineering.xml:375
 #, kde-format
@@ -2820,7 +2820,7 @@ msgstr "HEX2BIN() फंक्शन् द्विचक्रीयसङ्�
 #: functions/engineering.xml:389
 #, kde-format
 msgid "HEX2BIN(value)"
-msgstr "HEX2BIN(मूल्य) २."
+msgstr "HEX2BIN(मूल्य)"
 
 #: functions/engineering.xml:390
 #, kde-format
@@ -2895,7 +2895,7 @@ msgstr "IMAGINARY(string) इत्यनेन परिसरस्य का�
 #: functions/engineering.xml:423
 #, kde-format
 msgid "IMAGINARY(string)"
-msgstr "IMAGINARY(स्ट्रिंग) ९."
+msgstr "IMAGINARY(स्ट्रिंग)"
 
 #: functions/engineering.xml:424
 #, kde-format
@@ -2915,7 +2915,7 @@ msgstr "IMREAL(string) परिसरस्य वास्तविकगु�
 #: functions/engineering.xml:438
 #, kde-format
 msgid "IMREAL(string)"
-msgstr "IMREAL(स्ट्रिंग) २."
+msgstr "IMREAL(स्ट्रिंग)"
 
 #: functions/engineering.xml:439
 #, kde-format
@@ -2935,7 +2935,7 @@ msgstr "IMCOS(string) जटिलसङ्ख्यायाः कोसाइ
 #: functions/engineering.xml:453
 #, kde-format
 msgid "IMCOS(string)"
-msgstr "IMCOS(स्ट्रिंग्) २."
+msgstr "IMCOS(स्ट्रिंग्)"
 
 #: functions/engineering.xml:454
 #, kde-format
@@ -2955,7 +2955,7 @@ msgstr "IMCOSH(string) जटिलसङ्ख्यायाः अतिप�
 #: functions/engineering.xml:468
 #, kde-format
 msgid "IMCOSH(string)"
-msgstr "IMCOSH(स्ट्रिंग) ९."
+msgstr "IMCOSH(स्ट्रिंग)"
 
 #: functions/engineering.xml:469
 #, kde-format
@@ -2975,7 +2975,7 @@ msgstr "IMCOT(string) जटिलसङ्ख्यायाः सहस्प
 #: functions/engineering.xml:483
 #, kde-format
 msgid "IMCOT(string)"
-msgstr "IMCOT(स्ट्रिंग) ९."
+msgstr "IMCOT(स्ट्रिंग)"
 
 #: functions/engineering.xml:484
 #, kde-format
@@ -2990,7 +2990,7 @@ msgstr "IMCSC(string) जटिलसङ्ख्यायाः cosecant प्
 #: functions/engineering.xml:497
 #, kde-format
 msgid "IMCSC(string)"
-msgstr "IMCSC(स्ट्रिंग) ९."
+msgstr "IMCSC(स्ट्रिंग)"
 
 #: functions/engineering.xml:498
 #, kde-format
@@ -3005,7 +3005,7 @@ msgstr "IMCSCH(string) जटिलसङ्ख्यायाः अतिप�
 #: functions/engineering.xml:511
 #, kde-format
 msgid "IMCSCH(string)"
-msgstr "IMCSCH(स्ट्रिंग) ९."
+msgstr "IMCSCH(स्ट्रिंग)"
 
 #: functions/engineering.xml:512
 #, kde-format
@@ -3020,7 +3020,7 @@ msgstr "IMSEC(string) जटिलसङ्ख्यायाः सेकण्
 #: functions/engineering.xml:525
 #, kde-format
 msgid "IMSEC(string)"
-msgstr "IMSEC(स्ट्रिंग) ९."
+msgstr "IMSEC(स्ट्रिंग)"
 
 #: functions/engineering.xml:526
 #, kde-format
@@ -3035,7 +3035,7 @@ msgstr "IMSECH(string) जटिलसङ्ख्यायाः अतिप�
 #: functions/engineering.xml:539
 #, kde-format
 msgid "IMSECH(string)"
-msgstr "IMSECH(स्ट्रिंग) ९."
+msgstr "IMSECH(स्ट्रिंग)"
 
 #: functions/engineering.xml:540
 #, kde-format
@@ -3050,7 +3050,7 @@ msgstr "IMSIN(string) फंक्शन् जटिलसङ्ख्याय
 #: functions/engineering.xml:553
 #, kde-format
 msgid "IMSIN(string)"
-msgstr "IMSIN(स्ट्रिंग) ९."
+msgstr "IMSIN(स्ट्रिंग)"
 
 #: functions/engineering.xml:554
 #, kde-format
@@ -3071,7 +3071,7 @@ msgstr "IMSIH(string) फंक्शन् जटिलसङ्ख्याय
 #: functions/engineering.xml:568
 #, kde-format
 msgid "IMSINH(string)"
-msgstr "IMSINH(स्ट्रिंग) ९."
+msgstr "IMSINH(स्ट्रिंग)"
 
 #: functions/engineering.xml:569
 #, kde-format
@@ -3091,7 +3091,7 @@ msgstr "IMTAN(string) फंक्शन् जटिलसङ्ख्याय
 #: functions/engineering.xml:583
 #, kde-format
 msgid "IMTAN(string)"
-msgstr "इमतान्(स्ट्रिंग) ९."
+msgstr "इमतान्(स्ट्रिंग)"
 
 #: functions/engineering.xml:584
 #, kde-format
@@ -3113,7 +3113,7 @@ msgstr "IMTANH(string) फंक्शन् जटिलसङ्ख्या�
 #: functions/engineering.xml:598
 #, kde-format
 msgid "IMTANH(string)"
-msgstr "इम्तन्ह(स्ट्रिंग) ९."
+msgstr "इम्तन्ह(स्ट्रिंग)"
 
 #: functions/engineering.xml:599
 #, kde-format
@@ -3133,7 +3133,7 @@ msgstr "IMEXP(string) जटिलसङ्ख्यायाः घातीय
 #: functions/engineering.xml:613
 #, kde-format
 msgid "IMEXP(string)"
-msgstr "IMEXP(स्ट्रिंग) ९."
+msgstr "IMEXP(स्ट्रिंग)"
 
 #: functions/engineering.xml:614
 #, kde-format
@@ -3153,7 +3153,7 @@ msgstr "IMLN(string) जटिलसङ्ख्यायाः प्राक�
 #: functions/engineering.xml:628
 #, kde-format
 msgid "IMLN(string)"
-msgstr "IMLN(स्ट्रिंग) ९."
+msgstr "IMLN(स्ट्रिंग)"
 
 #: functions/engineering.xml:629
 #, kde-format
@@ -3173,7 +3173,7 @@ msgstr "IMLOG2(string) जटिलसङ्ख्यायाः base-2 लघ�
 #: functions/engineering.xml:643
 #, kde-format
 msgid "IMLOG2(string)"
-msgstr "IMLOG2(स्ट्रिंग) ९."
+msgstr "IMLOG2(स्ट्रिंग)"
 
 #: functions/engineering.xml:644
 #, kde-format
@@ -3188,7 +3188,7 @@ msgstr "IMLOG10(string) जटिलसङ्ख्यायाः base-10 ल�
 #: functions/engineering.xml:657
 #, kde-format
 msgid "IMLOG10(string)"
-msgstr "IMLOG10(स्ट्रिंग) ९."
+msgstr "IMLOG10(स्ट्रिंग)"
 
 #: functions/engineering.xml:658
 #, kde-format
@@ -3203,7 +3203,7 @@ msgstr "IMSQRT(string) जटिलसङ्ख्यायाः वर्ग�
 #: functions/engineering.xml:671
 #, kde-format
 msgid "IMSQRT(string)"
-msgstr "IMSQRT (स्ट्रिंग) ९."
+msgstr "IMSQRT (स्ट्रिंग)"
 
 #: functions/engineering.xml:672
 #, kde-format
@@ -3228,7 +3228,7 @@ msgstr "IMPOWER(string) एकं शक्तिं प्रति उत्�
 #: functions/engineering.xml:690
 #, kde-format
 msgid "IMPOWER(string)"
-msgstr "IMPOWER(स्ट्रिंग) ९."
+msgstr "IMPOWER(स्ट्रिंग)"
 
 #: functions/engineering.xml:691
 #, kde-format
@@ -3427,7 +3427,7 @@ msgstr ""
 #: functions/engineering.xml:883
 #, kde-format
 msgid "DELTA(x; y)"
-msgstr "DELTA(x; y) २."
+msgstr "DELTA(x; y)"
 
 #: functions/engineering.xml:884
 #, kde-format
@@ -3456,7 +3456,7 @@ msgstr ""
 #: functions/engineering.xml:903
 #, kde-format
 msgid "GESTEP(x; y)"
-msgstr "गेस्टेप(x; y) ९."
+msgstr "गेस्टेप(x; y)"
 
 #: functions/engineering.xml:904
 #, kde-format
@@ -3945,7 +3945,7 @@ msgstr ""
 #: functions/financial.xml:389
 #, kde-format
 msgid "DOLLARDE(fractional dollar; fraction)"
-msgstr "DOLLARDE(अंशात्मक डॉलर; अंश) २."
+msgstr "DOLLARDE(अंशात्मक डॉलर; अंश)"
 
 #: functions/financial.xml:390
 #, kde-format
@@ -3970,12 +3970,12 @@ msgstr ""
 #: functions/financial.xml:409
 #, kde-format
 msgid "DOLLARFR(fractional dollar; fraction)"
-msgstr "DOLLARFR(अंशात्मक डॉलर; अंश) २."
+msgstr "DOLLARFR(अंशात्मक डॉलर; अंश)"
 
 #: functions/financial.xml:410
 #, kde-format
 msgid "DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)"
-msgstr "DOLLARFR(1.125; 16) 1.02 प्रेषयति । (१ + २/१६) ९."
+msgstr "DOLLARFR(1.125; 16) 1.02 प्रेषयति । (१ + २/१६)"
 
 #: functions/financial.xml:420 functions/financial.xml:559
 #: functions/financial.xml:634 functions/financial.xml:696
@@ -4080,7 +4080,7 @@ msgstr ""
 #: functions/financial.xml:488
 #, kde-format
 msgid "EFFECT(nominal;periods)"
-msgstr "EFFECT(नाममात्र;अवधि) २."
+msgstr "EFFECT(नाममात्र;अवधि)"
 
 #: functions/financial.xml:489
 #, kde-format
@@ -4099,7 +4099,7 @@ msgstr ""
 #: functions/financial.xml:508
 #, kde-format
 msgid "EFFECTIVE(nominal;periods)"
-msgstr "EFFECTIVE(नाममात्र;अवधि) २."
+msgstr "EFFECTIVE(नाममात्र;अवधि)"
 
 #: functions/financial.xml:517
 #, kde-format
@@ -4126,7 +4126,7 @@ msgstr ""
 #: functions/financial.xml:522
 #, kde-format
 msgid "EURO(currency)"
-msgstr "EURO(मुद्रा) २."
+msgstr "EURO(मुद्रा)"
 
 #: functions/financial.xml:523
 #, kde-format
@@ -4270,13 +4270,13 @@ msgstr "वर्तमान मूल्यानि"
 #: functions/financial.xml:650 functions/financial.xml:1037
 #, kde-format
 msgid "Future value (optional)"
-msgstr "भविष्यस्य मूल्यम् (वैकल्पिकम्) २."
+msgstr "भविष्यस्य मूल्यम् (वैकल्पिकम्)"
 
 #: functions/financial.xml:654 functions/financial.xml:854
 #: functions/financial.xml:1003 functions/financial.xml:1041
 #, kde-format
 msgid "Type (optional)"
-msgstr "प्रकारः (वैकल्पिकः) २."
+msgstr "प्रकारः (वैकल्पिकः)"
 
 #: functions/financial.xml:658
 #, kde-format
@@ -4510,7 +4510,7 @@ msgstr ""
 #: functions/financial.xml:828
 #, kde-format
 msgid "NOMINAL(effective;periods)"
-msgstr "NOMINAL(प्रभावी;अवधि) २."
+msgstr "NOMINAL(प्रभावी;अवधि)"
 
 #: functions/financial.xml:829
 #, kde-format
@@ -4525,7 +4525,7 @@ msgstr "वेतन"
 #: functions/financial.xml:850 functions/financial.xml:999
 #, kde-format
 msgid "Future value (FV - optional)"
-msgstr "भविष्यस्य मूल्यम् (FV - वैकल्पिकम्) २."
+msgstr "भविष्यस्य मूल्यम् (FV - वैकल्पिकम्)"
 
 #: functions/financial.xml:858
 #, kde-format
@@ -4550,7 +4550,7 @@ msgstr "NPER(0.06; 0; -10000; 20000 ;0) 11.906 प्रेषयति"
 #: functions/financial.xml:877
 #, kde-format
 msgid "Values (array)"
-msgstr "मूल्यानि (सरणिका) २."
+msgstr "मूल्यानि (सरणिका)"
 
 #: functions/financial.xml:881
 #, kde-format
@@ -4652,7 +4652,7 @@ msgstr ""
 #: functions/financial.xml:991
 #, kde-format
 msgid "Number of periods (NPer)"
-msgstr "अवधिसङ्ख्या (NPer) २."
+msgstr "अवधिसङ्ख्या (NPer)"
 
 #: functions/financial.xml:1007
 #, kde-format
@@ -5162,7 +5162,7 @@ msgstr ""
 #: functions/information.xml:16
 #, kde-format
 msgid "ERRORTYPE(value)"
-msgstr "ERRORTYPE(मूल्य) २."
+msgstr "ERRORTYPE(मूल्य)"
 
 #: functions/information.xml:17
 #, kde-format
@@ -5192,7 +5192,7 @@ msgstr "FORMULA() फंक्शन् कस्यचित् कोष्ठ
 #: functions/information.xml:31
 #, kde-format
 msgid "FORMULA(x)"
-msgstr "सूत्र(x) ९."
+msgstr "सूत्र(x)"
 
 #: functions/information.xml:32
 #, kde-format
@@ -5216,7 +5216,7 @@ msgstr ""
 #: functions/information.xml:45
 #, kde-format
 msgid "N(value)"
-msgstr "N(मूल्यम्) ९."
+msgstr "N(मूल्यम्)"
 
 #: functions/information.xml:46
 #, kde-format
@@ -5256,7 +5256,7 @@ msgstr ""
 #: functions/information.xml:60
 #, kde-format
 msgid "INFO(type)"
-msgstr "INFO(प्रकार) २."
+msgstr "INFO(प्रकार)"
 
 #: functions/information.xml:68 functions/information.xml:83
 #: functions/information.xml:98 functions/information.xml:114
@@ -5282,7 +5282,7 @@ msgstr ""
 #: functions/information.xml:73
 #, kde-format
 msgid "ISLOGICAL(x)"
-msgstr "ISLOGICAL(x) ९."
+msgstr "ISLOGICAL(x)"
 
 #: functions/information.xml:74
 #, kde-format
@@ -5306,7 +5306,7 @@ msgstr ""
 #: functions/information.xml:88
 #, kde-format
 msgid "ISBLANK(x)"
-msgstr "ISBLANK(x) ९."
+msgstr "ISBLANK(x)"
 
 #: functions/information.xml:89
 #, kde-format
@@ -5330,7 +5330,7 @@ msgstr ""
 #: functions/information.xml:103
 #, kde-format
 msgid "ISNUMBER(x)"
-msgstr "ISNUMBER(x) ९."
+msgstr "ISNUMBER(x)"
 
 #: functions/information.xml:104
 #, kde-format
@@ -5378,7 +5378,7 @@ msgstr ""
 #: functions/information.xml:135
 #, kde-format
 msgid "ISTIME(x)"
-msgstr "विशेष(x) ९."
+msgstr "विशेष(x)"
 
 #: functions/information.xml:136
 #, kde-format
@@ -5402,7 +5402,7 @@ msgstr ""
 #: functions/information.xml:150
 #, kde-format
 msgid "ISDATE(x)"
-msgstr "ISDATE(x) ९."
+msgstr "ISDATE(x)"
 
 #: functions/information.xml:151
 #, kde-format
@@ -5449,7 +5449,7 @@ msgstr ""
 #: functions/information.xml:180
 #, kde-format
 msgid "ISTEXT(x)"
-msgstr "ISTEXT(x) ९."
+msgstr "ISTEXT(x)"
 
 #: functions/information.xml:181
 #, kde-format
@@ -5473,7 +5473,7 @@ msgstr ""
 #: functions/information.xml:195
 #, kde-format
 msgid "ISNONTEXT(x)"
-msgstr "ISNONTEXT(x) ९."
+msgstr "ISNONTEXT(x)"
 
 #: functions/information.xml:196
 #, kde-format
@@ -5497,7 +5497,7 @@ msgstr ""
 #: functions/information.xml:211
 #, kde-format
 msgid "ISNOTTEXT(x)"
-msgstr "ISNOTTEXT(x) ९."
+msgstr "ISNOTTEXT(x)"
 
 #: functions/information.xml:212
 #, kde-format
@@ -5521,7 +5521,7 @@ msgstr ""
 #: functions/information.xml:227
 #, kde-format
 msgid "ISFORMULA(x)"
-msgstr "ISFORMULA(x) ९."
+msgstr "ISFORMULA(x)"
 
 #: functions/information.xml:239
 #, kde-format
@@ -5559,7 +5559,7 @@ msgstr ""
 #: functions/information.xml:255
 #, kde-format
 msgid "ISEVEN(x)"
-msgstr "आइसेवेन्(x) ९."
+msgstr "आइसेवेन्(x)"
 
 #: functions/information.xml:256
 #, kde-format
@@ -5613,7 +5613,7 @@ msgstr ""
 #: functions/information.xml:300
 #, kde-format
 msgid "ISNA(x)"
-msgstr "इस्ना(x) ९."
+msgstr "इस्ना(x)"
 
 #: functions/information.xml:310
 #, kde-format
@@ -5623,7 +5623,7 @@ msgstr "NA() फंक्शन् नित्यं त्रुटिमू�
 #: functions/information.xml:311
 #, kde-format
 msgid "NA()"
-msgstr "ना () ९."
+msgstr "ना ()"
 
 #: functions/information.xml:326
 #, kde-format
@@ -5640,7 +5640,7 @@ msgstr ""
 #: functions/information.xml:327
 #, kde-format
 msgid "TYPE(x)"
-msgstr "प्रकार(x) ९."
+msgstr "प्रकार(x)"
 
 #: functions/information.xml:328
 #, kde-format
@@ -5669,7 +5669,7 @@ msgstr ""
 #: functions/information.xml:339
 #, kde-format
 msgid "FILENAME()"
-msgstr "FILENAME() ९."
+msgstr "FILENAME()"
 
 #: functions/logic.xml:5
 #, kde-format
@@ -5858,7 +5858,7 @@ msgstr ""
 #: functions/logic.xml:191
 #, kde-format
 msgid "NOT(bool)"
-msgstr "न(bool) २."
+msgstr "न(bool)"
 
 #: functions/logic.xml:192
 #, kde-format
@@ -5943,7 +5943,7 @@ msgstr "X यावत् NA न भवति तावत् प्रेषय
 #: functions/logic.xml:250
 #, kde-format
 msgid "IFNA(AnyX;AnyAlternative)"
-msgstr "IFNA(AnyX;AnyAlternative) २."
+msgstr "IFNA(AnyX;AnyAlternative)"
 
 #: functions/logic.xml:251
 #, kde-format
@@ -5980,7 +5980,7 @@ msgstr ""
 #: functions/math.xml:20
 #, kde-format
 msgid "SUBTOTAL(function; value)"
-msgstr "SUBTOTAL(कार्य; मूल्य) २."
+msgstr "SUBTOTAL(कार्य; मूल्य)"
 
 #: functions/math.xml:21
 #, kde-format
@@ -6087,7 +6087,7 @@ msgstr ""
 #: functions/math.xml:105
 #, kde-format
 msgid "GCD(value; value)"
-msgstr "GCD(मूल्य; मूल्य) २."
+msgstr "GCD(मूल्य; मूल्य)"
 
 #: functions/math.xml:106
 #, kde-format
@@ -6119,7 +6119,7 @@ msgstr ""
 #: functions/math.xml:118
 #, kde-format
 msgid "EPS()"
-msgstr "ईपीएस () ९."
+msgstr "ईपीएस ()"
 
 #: functions/math.xml:119
 #, kde-format
@@ -6158,7 +6158,7 @@ msgstr "POWER(x;y) फंक्शन् x इत्यस्य मूल्य
 #: functions/math.xml:139
 #, kde-format
 msgid "POWER(value;value)"
-msgstr "POWER(मूल्य;मूल्य) २."
+msgstr "POWER(मूल्य;मूल्य)"
 
 #: functions/math.xml:140
 #, kde-format
@@ -6182,7 +6182,7 @@ msgstr ""
 #: functions/math.xml:159
 #, kde-format
 msgid "POW(value;value)"
-msgstr "POW(मूल्य;मूल्य) २."
+msgstr "POW(मूल्य;मूल्य)"
 
 #: functions/math.xml:160
 #, kde-format
@@ -6204,7 +6204,7 @@ msgstr "EVEN() फंक्शन् समीपस्थं समपूर्
 #: functions/math.xml:175
 #, kde-format
 msgid "EVEN(value)"
-msgstr "EVEN(मूल्यम्) ९."
+msgstr "EVEN(मूल्यम्)"
 
 #: functions/math.xml:176
 #, kde-format
@@ -6257,7 +6257,7 @@ msgstr ""
 #: functions/math.xml:213
 #, kde-format
 msgid "ODD(value)"
-msgstr "ओडीडी(मूल्य) २."
+msgstr "ओडीडी(मूल्य)"
 
 #: functions/math.xml:214
 #, kde-format
@@ -6282,7 +6282,7 @@ msgstr "GAMMA() फंक्शन् गामा फंक्शन् मू�
 #: functions/math.xml:230
 #, kde-format
 msgid "GAMMA(value)"
-msgstr "गाम्मा(मूल्य) ९."
+msgstr "गाम्मा(मूल्य)"
 
 #: functions/math.xml:231
 #, kde-format
@@ -6325,7 +6325,7 @@ msgstr ""
 #: functions/math.xml:265
 #, kde-format
 msgid "SIGN(value)"
-msgstr "SIGN(मूल्य) ९."
+msgstr "SIGN(मूल्य)"
 
 #: functions/math.xml:266
 #, kde-format
@@ -6350,7 +6350,7 @@ msgstr "एतत् फंक्शन् प्रत्येकं मूल
 #: functions/math.xml:281
 #, kde-format
 msgid "INV(value)"
-msgstr "INV(मूल्य) ९."
+msgstr "INV(मूल्य)"
 
 #: functions/math.xml:282
 #, kde-format
@@ -6431,7 +6431,7 @@ msgstr "एतत् फंक्शन् परिधिमध्ये सर
 #: functions/math.xml:332
 #, kde-format
 msgid "COUNTBLANK(range)"
-msgstr "COUNTBLANK(परिधि) २."
+msgstr "COUNTBLANK(परिधि)"
 
 #: functions/math.xml:333
 #, kde-format
@@ -6459,7 +6459,7 @@ msgstr ""
 #: functions/math.xml:353
 #, kde-format
 msgid "COUNTIF(range;criteria)"
-msgstr "COUNTIF(परिधि;मापदण्ड) २."
+msgstr "COUNTIF(परिधि;मापदण्ड)"
 
 #: functions/math.xml:354
 #, kde-format
@@ -6486,7 +6486,7 @@ msgstr "FACT() फंक्शन् पैरामीटर् इत्यस
 #: functions/math.xml:369
 #, kde-format
 msgid "FACT(number)"
-msgstr "FACT(संख्या) ९."
+msgstr "FACT(संख्या)"
 
 #: functions/math.xml:370
 #, kde-format
@@ -6508,7 +6508,7 @@ msgstr "FACTDOUBLE() फंक्शन् कस्यापि संख्य
 #: functions/math.xml:384
 #, kde-format
 msgid "FACTDOUBLE(number)"
-msgstr "FACTDOUBLE(संख्या) ९."
+msgstr "FACTDOUBLE(संख्या)"
 
 #: functions/math.xml:385
 #, kde-format
@@ -6538,7 +6538,7 @@ msgstr "SUM(मूल्य;मूल्य;...)"
 #: functions/math.xml:400
 #, kde-format
 msgid "SUM(12;5;7) equals 24"
-msgstr "सुम(१२;५;७) समः २४"
+msgstr "सुम(१२;५;७) समः"
 
 #: functions/math.xml:401
 #, kde-format
@@ -6562,7 +6562,7 @@ msgstr ""
 #: functions/math.xml:418
 #, kde-format
 msgid "SUMA(12;5; 7) equals 24"
-msgstr "सुमा(१२;५; ७) समः २४"
+msgstr "सुमा(१२;५; ७) समः"
 
 #: functions/math.xml:419
 #, kde-format
@@ -6941,7 +6941,7 @@ msgstr "LN() फंक्शन् x इत्यस्य प्राकृत
 #: functions/math.xml:689
 #, kde-format
 msgid "LN(x)"
-msgstr "LN(x) ९."
+msgstr "LN(x)"
 
 #: functions/math.xml:690
 #, kde-format
@@ -6981,7 +6981,7 @@ msgstr "ROOTN() फंक्शन् x इत्यस्य अऋणात्
 #: functions/math.xml:734
 #, kde-format
 msgid "ROOTN(x;n)"
-msgstr "मूलं(x;n) २."
+msgstr "मूलं(x;n)"
 
 #: functions/math.xml:735
 #, kde-format
@@ -7016,7 +7016,7 @@ msgstr "LOG() फंक्शन् x इत्यस्य base-10 लघुग
 #: functions/math.xml:764
 #, kde-format
 msgid "LOG(x)"
-msgstr "LOG(x) ९."
+msgstr "LOG(x)"
 
 #: functions/math.xml:765
 #, kde-format
@@ -7041,7 +7041,7 @@ msgstr "LOG10() फंक्शन् आर्गुमेण्ट् इत�
 #: functions/math.xml:783
 #, kde-format
 msgid "LOG10(x)"
-msgstr "लॉग१०(x) ९."
+msgstr "लॉग१०(x)"
 
 #: functions/math.xml:784
 #, kde-format
@@ -7085,7 +7085,7 @@ msgstr ""
 #: functions/math.xml:821
 #, kde-format
 msgid "EXP(x)"
-msgstr "EXP(x) ९."
+msgstr "EXP(x)"
 
 #: functions/math.xml:822
 #, kde-format
@@ -7124,12 +7124,12 @@ msgstr "CEIL(-12.5) -12 के बराबर"
 #: functions/math.xml:855 functions/math.xml:884
 #, kde-format
 msgid "Significance (optional)"
-msgstr "महत्त्वम् (वैकल्पिकम्) २."
+msgstr "महत्त्वम् (वैकल्पिकम्)"
 
 #: functions/math.xml:859 functions/math.xml:888
 #, kde-format
 msgid "Mode (optional)"
-msgstr "मोड (वैकल्पिक) २."
+msgstr "मोड (वैकल्पिक)"
 
 #: functions/math.xml:863
 #, kde-format
@@ -7210,7 +7210,7 @@ msgstr ""
 #: functions/math.xml:900
 #, kde-format
 msgid "FLOOR(x)"
-msgstr "तल(x) ९."
+msgstr "तल(x)"
 
 #: functions/math.xml:901
 #, kde-format
@@ -7261,7 +7261,7 @@ msgstr "INT() फंक्शन् मूल्यस्य पूर्णा�
 #: functions/math.xml:936
 #, kde-format
 msgid "INT(x)"
-msgstr "INT(x) ९."
+msgstr "INT(x)"
 
 #: functions/math.xml:937
 #, kde-format
@@ -7281,7 +7281,7 @@ msgstr "RAND() फंक्शन् 0 तः 1 पर्यन्तं छद�
 #: functions/math.xml:949
 #, kde-format
 msgid "RAND()"
-msgstr "रण्ड() ९."
+msgstr "रण्ड()"
 
 #: functions/math.xml:950
 #, kde-format
@@ -7303,12 +7303,12 @@ msgstr "RANDEXP() फंक्शन् घातीयरूपेण वित
 #: functions/math.xml:965
 #, kde-format
 msgid "RANDEXP(x)"
-msgstr "RANDEXP(x) ९."
+msgstr "RANDEXP(x)"
 
 #: functions/math.xml:966
 #, kde-format
 msgid "RANDEXP(0.88)"
-msgstr "रण्डेक्स(०.८८) २."
+msgstr "रण्डेक्स(०.८८)"
 
 #: functions/math.xml:983
 #, kde-format
@@ -7325,7 +7325,7 @@ msgstr "सीमांत विष(x) 1.1."
 #: functions/math.xml:985
 #, kde-format
 msgid "RANDPOISSON(4)"
-msgstr "RANDPOISSON(4) ९."
+msgstr "RANDPOISSON(4)"
 
 #: functions/math.xml:994 functions/math.xml:1014 functions/math.xml:1034
 #, kde-format
@@ -7335,7 +7335,7 @@ msgstr "एकं प्लवमानबिन्दुमूल्यं (0 �
 #: functions/math.xml:998
 #, kde-format
 msgid "Trials (greater 0)"
-msgstr "परीक्षणं (अधिकं ०) २."
+msgstr "परीक्षणं (अधिकं ०)"
 
 #: functions/math.xml:1002
 #, kde-format
@@ -7347,17 +7347,17 @@ msgstr "RANDBINOM() फंक्शन् द्विपदीयरूपे�
 #: functions/math.xml:1003
 #, kde-format
 msgid "RANDBINOM(x)"
-msgstr "रैण्डबिनम्(x) ९."
+msgstr "रैण्डबिनम्(x)"
 
 #: functions/math.xml:1004
 #, kde-format
 msgid "RANDBINOM(4)"
-msgstr "रण्डबिनम्(4) ९."
+msgstr "रण्डबिनम्(4)"
 
 #: functions/math.xml:1018
 #, kde-format
 msgid "Failures (greater 0)"
-msgstr "असफलताः (अधिकः ०) २."
+msgstr "असफलताः (अधिकः ०)"
 
 #: functions/math.xml:1022
 #, kde-format
@@ -7369,12 +7369,12 @@ msgstr "RANDNEGBINOM() फंक्शन् ऋणात्मकं द्व�
 #: functions/math.xml:1023
 #, kde-format
 msgid "RANDNEGBINOM(x)"
-msgstr "रण्डनेग्बिनोम(x) ९."
+msgstr "रण्डनेग्बिनोम(x)"
 
 #: functions/math.xml:1024
 #, kde-format
 msgid "RANDNEGBINOM(4)"
-msgstr "रण्डनेग्बिनम्(४) ९."
+msgstr "रण्डनेग्बिनम्(४)"
 
 #: functions/math.xml:1042
 #, kde-format
@@ -7391,7 +7391,7 @@ msgstr "RANDBERNOULLI (x) 1.1."
 #: functions/math.xml:1044
 #, kde-format
 msgid "RANDBERNOULLI(0.45)"
-msgstr "रेण्डबर्नौली(०.४५) २."
+msgstr "रेण्डबर्नौली(०.४५)"
 
 #: functions/math.xml:1053
 #, kde-format
@@ -7413,7 +7413,7 @@ msgstr "RANDNORM() फंक्शन् Normal(Gaussian)-वितरितं 
 #: functions/math.xml:1062
 #, kde-format
 msgid "RANDNORM(mu; sigma)"
-msgstr "RANDNORM(मु; सिग्मा) २."
+msgstr "RANDNORM(मु; सिग्मा)"
 
 #: functions/math.xml:1063
 #, kde-format
@@ -7466,7 +7466,7 @@ msgstr ""
 #: functions/math.xml:1099
 #, kde-format
 msgid "MROUND(value; multiple)"
-msgstr "MROUND(मूल्य; बहु) २."
+msgstr "MROUND(मूल्य; बहु)"
 
 #: functions/math.xml:1100
 #, kde-format
@@ -7619,7 +7619,7 @@ msgstr ""
 #: functions/math.xml:1186
 #, kde-format
 msgid "FIB(n)"
-msgstr "FIB(n) ९."
+msgstr "FIB(n)"
 
 #: functions/math.xml:1187
 #, kde-format
@@ -7668,7 +7668,7 @@ msgstr ""
 #: functions/math.xml:1220
 #, kde-format
 msgid "MDETERM(matrix)"
-msgstr "MDETERM(मैट्रिक्स) ९."
+msgstr "MDETERM(मैट्रिक्स)"
 
 #: functions/math.xml:1221
 #, kde-format
@@ -7740,12 +7740,12 @@ msgstr "व्यावर्तनीयमात्रिकाणां श�
 #: functions/math.xml:1258
 #, kde-format
 msgid "MINVERSE(matrix)"
-msgstr "MINVERSE(मैट्रिक्स) २."
+msgstr "MINVERSE(मैट्रिक्स)"
 
 #: functions/math.xml:1259
 #, kde-format
 msgid "MINVERSE(A1:C3)"
-msgstr "MINVERSE(A1:C3) २."
+msgstr "MINVERSE(A1:C3)"
 
 #: functions/math.xml:1269
 #, kde-format
@@ -7760,7 +7760,7 @@ msgstr "दत्तस्य आयामस्य एकतामात्र�
 #: functions/math.xml:1275
 #, kde-format
 msgid "MUNIT(dimension)"
-msgstr "MUNIT(आयामी) ९."
+msgstr "MUNIT(आयामी)"
 
 #: functions/math.xml:1276
 #, kde-format
@@ -7779,7 +7779,7 @@ msgstr ""
 #: functions/math.xml:1292
 #, kde-format
 msgid "TRANSPOSE(matrix)"
-msgstr "TRANSPOSE(मैट्रिक्स) ९."
+msgstr "TRANSPOSE(मैट्रिक्स)"
 
 #: functions/math.xml:1293
 #, kde-format
@@ -7809,7 +7809,7 @@ msgstr "निरपेक्ष संख्या (वैकल्पिक) 1
 #: functions/reference.xml:23 functions/reference.xml:160
 #, kde-format
 msgid "A1 style (optional)"
-msgstr "अ१ शैली (वैकल्पिकम्) २."
+msgstr "अ१ शैली (वैकल्पिकम्)"
 
 #: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
@@ -7892,7 +7892,7 @@ msgstr ""
 #: functions/reference.xml:53
 #, kde-format
 msgid "AREAS(reference)"
-msgstr "AREAS(सन्दर्भ) ९."
+msgstr "AREAS(सन्दर्भ)"
 
 #: functions/reference.xml:54
 #, kde-format
@@ -7913,7 +7913,7 @@ msgstr "सन्दर्भे स्थितिः, प्रारूपण
 #: functions/reference.xml:72
 #, kde-format
 msgid "CELL(type; reference)"
-msgstr "CELL(प्रकार; सन्दर्भ) २."
+msgstr "CELL(प्रकार; सन्दर्भ)"
 
 #: functions/reference.xml:73
 #, kde-format
@@ -7972,7 +7972,7 @@ msgstr ""
 #: functions/reference.xml:105
 #, kde-format
 msgid "COLUMN(reference)"
-msgstr "COLUMN(सन्दर्भ) ९."
+msgstr "COLUMN(सन्दर्भ)"
 
 #: functions/reference.xml:106
 #, kde-format
@@ -7992,7 +7992,7 @@ msgstr "COLUMNS फंक्शन् सन्दर्भे स्तम्�
 #: functions/reference.xml:122
 #, kde-format
 msgid "COLUMNS(reference)"
-msgstr "स्तम्भ(सन्दर्भ) २."
+msgstr "स्तम्भ(सन्दर्भ)"
 
 #: functions/reference.xml:123
 #, kde-format
@@ -8026,7 +8026,7 @@ msgstr ""
 #: functions/reference.xml:146
 #, kde-format
 msgid "INDEX(cell, row, column)"
-msgstr "INDEX(कोशिका, पङ्क्ति, स्तम्भ) २."
+msgstr "INDEX(कोशिका, पङ्क्ति, स्तम्भ)"
 
 #: functions/reference.xml:147
 #, kde-format
@@ -8083,7 +8083,7 @@ msgstr ""
 #: functions/reference.xml:180
 #, kde-format
 msgid "ROW(reference)"
-msgstr "ROW(सन्दर्भ) २."
+msgstr "ROW(सन्दर्भ)"
 
 #: functions/reference.xml:181
 #, kde-format
@@ -8103,7 +8103,7 @@ msgstr "ROWS फंक्शन् सन्दर्भे पङ्क्त�
 #: functions/reference.xml:197
 #, kde-format
 msgid "ROWS(reference)"
-msgstr "पङ्क्तयः(सन्दर्भः) २."
+msgstr "पङ्क्तयः(सन्दर्भः)"
 
 #: functions/reference.xml:198
 #, kde-format
@@ -8125,7 +8125,7 @@ msgstr "सन्दर्भस्य पत्रसङ्ख्यां अ�
 #: functions/reference.xml:214
 #, kde-format
 msgid "SHEET(reference)"
-msgstr "SHEET(सन्दर्भ) २."
+msgstr "SHEET(सन्दर्भ)"
 
 #: functions/reference.xml:215
 #, kde-format
@@ -8145,7 +8145,7 @@ msgstr "सन्दर्भे अथवा वर्तमानदस्त�
 #: functions/reference.xml:229
 #, kde-format
 msgid "SHEETS(reference)"
-msgstr "SHEETS(सन्दर्भ) २."
+msgstr "SHEETS(सन्दर्भ)"
 
 #: functions/reference.xml:236 functions/reference.xml:258
 #: functions/reference.xml:284
@@ -8200,7 +8200,7 @@ msgstr "दत्तांशस्रोतः"
 #: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Sorted (optional)"
-msgstr "क्रमबद्धम् (वैकल्पिकम्) २."
+msgstr "क्रमबद्धम् (वैकल्पिकम्)"
 
 #: functions/reference.xml:274
 #, kde-format
@@ -8272,12 +8272,12 @@ msgstr "पङ्क्तिप्रतिस्थापनम्"
 #: functions/reference.xml:322
 #, kde-format
 msgid "Column cell (optional)"
-msgstr "स्तम्भकोष्ठकः (वैकल्पिकः) २."
+msgstr "स्तम्भकोष्ठकः (वैकल्पिकः)"
 
 #: functions/reference.xml:326
 #, kde-format
 msgid "Column replacement (optional)"
-msgstr "स्तम्भप्रतिस्थापनम् (वैकल्पिकम्) २."
+msgstr "स्तम्भप्रतिस्थापनम् (वैकल्पिकम्)"
 
 #: functions/reference.xml:330
 #, kde-format
@@ -8318,7 +8318,7 @@ msgstr "क्षेत्रं अन्वेष्टुम्"
 #: functions/reference.xml:347
 #, kde-format
 msgid "Match type (optional)"
-msgstr "मेलप्रकारः (वैकल्पिकः) २."
+msgstr "मेलप्रकारः (वैकल्पिकः)"
 
 #: functions/reference.xml:351
 #, kde-format
@@ -8368,7 +8368,7 @@ msgstr "आफ्सेट्-परिधिस्य ऊर्ध्वता 
 #: functions/reference.xml:376
 #, kde-format
 msgid "Width of the offset range (optional)"
-msgstr "आफ्सेट् श्रेणीयाः विस्तारः (वैकल्पिकः) २."
+msgstr "आफ्सेट् श्रेणीयाः विस्तारः (वैकल्पिकः)"
 
 #: functions/reference.xml:380
 #, kde-format
@@ -8668,7 +8668,7 @@ msgstr ""
 #: functions/statistical.xml:188
 #, kde-format
 msgid "COMBIN(total;chosen)"
-msgstr "COMBIN(कुल;चयनित) २."
+msgstr "COMBIN(कुल;चयनित)"
 
 #: functions/statistical.xml:189
 #, kde-format
@@ -8697,7 +8697,7 @@ msgstr ""
 #: functions/statistical.xml:207
 #, kde-format
 msgid "COMBINA(total;chosen)"
-msgstr "COMBINA(कुल;चयनित) २."
+msgstr "COMBINA(कुल;चयनित)"
 
 #: functions/statistical.xml:208
 #, kde-format
@@ -8924,7 +8924,7 @@ msgstr ""
 #: functions/statistical.xml:382
 #, kde-format
 msgid "FISHER(number)"
-msgstr "FISHER(संख्या) ९."
+msgstr "FISHER(संख्या)"
 
 #: functions/statistical.xml:383
 #, kde-format
@@ -8948,7 +8948,7 @@ msgstr ""
 #: functions/statistical.xml:397
 #, kde-format
 msgid "FISHERINV(number)"
-msgstr "FISHERINV(संख्या) ९."
+msgstr "FISHERINV(संख्या)"
 
 #: functions/statistical.xml:398
 #, kde-format
@@ -9096,7 +9096,7 @@ msgstr "GAUSS() फंक्शन् मानकसामान्यसञ्
 #: functions/statistical.xml:488
 #, kde-format
 msgid "GAUSS(value)"
-msgstr "GAUSS(मूल्य) ९."
+msgstr "GAUSS(मूल्य)"
 
 #: functions/statistical.xml:489
 #, kde-format
@@ -9144,7 +9144,7 @@ msgstr "HARMEAN(मूल्य; मूल्य;...)"
 #: functions/statistical.xml:551
 #, kde-format
 msgid "HARMEAN(A1:A5)"
-msgstr "हरमियन(अ१:क५) २."
+msgstr "हरमियन(अ१:क५)"
 
 #: functions/statistical.xml:552
 #, kde-format
@@ -9229,7 +9229,7 @@ msgstr "KURT(मूल्य; मूल्य;...)"
 #: functions/statistical.xml:626
 #, kde-format
 msgid "KURT(A1:A5)"
-msgstr "कुर्ट(अ१:क५) २."
+msgstr "कुर्ट(अ१:क५)"
 
 #: functions/statistical.xml:627
 #, kde-format
@@ -9253,7 +9253,7 @@ msgstr "KURTP(मूल्य; मूल्य;...)"
 #: functions/statistical.xml:658
 #, kde-format
 msgid "KURTP(A1:A5)"
-msgstr "कुर्टप(अ१:क५) २."
+msgstr "कुर्टप(अ१:क५)"
 
 #: functions/statistical.xml:659
 #, kde-format
@@ -9263,7 +9263,7 @@ msgstr "KURTP(21; 33; 54; 23) -1.021 प्रत्यागच्छति"
 #: functions/statistical.xml:672
 #, kde-format
 msgid "Position (from the largest)"
-msgstr "पदम् (बृहत्तमात्) २."
+msgstr "पदम् (बृहत्तमात्)"
 
 #: functions/statistical.xml:676
 #, kde-format
@@ -9273,7 +9273,7 @@ msgstr "LARGE() फंक्शन् दत्तांशसमूहात्
 #: functions/statistical.xml:677
 #, kde-format
 msgid "LARGE(range; k)"
-msgstr "LARGE(परिधि; k) २."
+msgstr "LARGE(परिधि; k)"
 
 #: functions/statistical.xml:678
 #, kde-format
@@ -9320,7 +9320,7 @@ msgstr "LOGINV() फंक्शन् lognormal सञ्चितवितर�
 #: functions/statistical.xml:721
 #, kde-format
 msgid "LOGINV(p; mean; stdev)"
-msgstr "LOGINV(p; mean; stdev) २."
+msgstr "LOGINV(p; mean; stdev)"
 
 #: functions/statistical.xml:722
 #, kde-format
@@ -9413,7 +9413,7 @@ msgstr "MODE (संख्या; संख्या2; ...)"
 #: functions/statistical.xml:801
 #, kde-format
 msgid "MODE(range)"
-msgstr "MODE(परिधि) २."
+msgstr "MODE(परिधि)"
 
 #: functions/statistical.xml:802
 #, kde-format
@@ -9609,7 +9609,7 @@ msgstr ""
 #: functions/statistical.xml:941
 #, kde-format
 msgid "PERMUT(total;permutated)"
-msgstr "PERMUT(कुल;क्रमपरिवर्तित) २."
+msgstr "PERMUT(कुल;क्रमपरिवर्तित)"
 
 #: functions/statistical.xml:942
 #, kde-format
@@ -9636,7 +9636,7 @@ msgstr ""
 #: functions/statistical.xml:960
 #, kde-format
 msgid "PERMUTATIONA(total;chosen)"
-msgstr "PERMUTATIONA(कुल;चयनित) २."
+msgstr "PERMUTATIONA(कुल;चयनित)"
 
 #: functions/statistical.xml:961
 #, kde-format
@@ -9695,7 +9695,7 @@ msgstr "PHI() फंक्शन् मानकसामान्यवित�
 #: functions/statistical.xml:994
 #, kde-format
 msgid "PHI(value)"
-msgstr "PHI(मूल्य) ९."
+msgstr "PHI(मूल्य)"
 
 #: functions/statistical.xml:995
 #, kde-format
@@ -9705,7 +9705,7 @@ msgstr "PHI(0.25) 0.386668 के बराबर"
 #: functions/statistical.xml:1007
 #, kde-format
 msgid "Lambda parameter (the middle value)"
-msgstr "लम्ब्डा पैरामीटर् (मध्यममूल्यम्) २."
+msgstr "लम्ब्डा पैरामीटर् (मध्यममूल्यम्)"
 
 #: functions/statistical.xml:1015
 #, kde-format
@@ -9735,7 +9735,7 @@ msgstr "POISSON(60;50;1) 0.927840 के बराबर"
 #: functions/statistical.xml:1032
 #, kde-format
 msgid "Data (array)"
-msgstr "दत्तांश (सरणिका) २."
+msgstr "दत्तांश (सरणिका)"
 
 #: functions/statistical.xml:1036
 #, kde-format
@@ -9775,12 +9775,12 @@ msgstr "RANK (2;{1;2;3}) समः 2"
 #: functions/statistical.xml:1053
 #, kde-format
 msgid "known Y (array)"
-msgstr "ज्ञात Y (सरणिका) २."
+msgstr "ज्ञात Y (सरणिका)"
 
 #: functions/statistical.xml:1057
 #, kde-format
 msgid "known X (array)"
-msgstr "ज्ञातः X (सरणिका) २."
+msgstr "ज्ञातः X (सरणिका)"
 
 #: functions/statistical.xml:1061
 #, kde-format
@@ -9818,7 +9818,7 @@ msgstr "SKEW(संख्या; संख्या2; ...)"
 #: functions/statistical.xml:1089
 #, kde-format
 msgid "SKEW(range)"
-msgstr "SKEW(परिधि) ९."
+msgstr "SKEW(परिधि)"
 
 #: functions/statistical.xml:1090
 #, kde-format
@@ -9838,7 +9838,7 @@ msgstr "SKEWP (संख्या; संख्या2; ...)"
 #: functions/statistical.xml:1117
 #, kde-format
 msgid "SKEWP(range)"
-msgstr "SKEWP(परिधि) ९."
+msgstr "SKEWP(परिधि)"
 
 #: functions/statistical.xml:1118
 #, kde-format
@@ -9854,12 +9854,12 @@ msgstr "SLOPE() फंक्शन् रेखीयप्रतिगमनर
 #: functions/statistical.xml:1136
 #, kde-format
 msgid "SLOPE(y;x)"
-msgstr "SLOPE(y;x) ९."
+msgstr "SLOPE(y;x)"
 
 #: functions/statistical.xml:1148
 #, kde-format
 msgid "Position (from the smallest)"
-msgstr "स्थितिः (लघुतमात्) २."
+msgstr "स्थितिः (लघुतमात्)"
 
 #: functions/statistical.xml:1152
 #, kde-format
@@ -9869,7 +9869,7 @@ msgstr "SMALL() फंक्शन् दत्तांशसमूहात्
 #: functions/statistical.xml:1153
 #, kde-format
 msgid "SMALL(range; k)"
-msgstr "SMALL(परिधि; k) २."
+msgstr "SMALL(परिधि; k)"
 
 #: functions/statistical.xml:1154
 #, kde-format
@@ -10022,7 +10022,7 @@ msgstr "STEYX(y;x) 1.1."
 #: functions/statistical.xml:1783 functions/statistical.xml:1787
 #, kde-format
 msgid "Value (array)"
-msgstr "मूल्यम् (सरणिका) २."
+msgstr "मूल्यम् (सरणिका)"
 
 #: functions/statistical.xml:1346
 #, kde-format
@@ -10093,7 +10093,7 @@ msgstr "टी-वितरणार्थं स्वतन्त्रता�
 #: functions/statistical.xml:1400
 #, kde-format
 msgid "Mode (1 or 2)"
-msgstr "मोड (१ वा २) २."
+msgstr "मोड (१ वा"
 
 #: functions/statistical.xml:1404
 #, kde-format
@@ -10522,7 +10522,7 @@ msgstr "WEIBULL(2;1;1;1) 0.864665 के बराबर"
 #: functions/statistical.xml:1704
 #, kde-format
 msgid "x (array)"
-msgstr "x (सरणी) २."
+msgstr "x (सरणी)"
 
 #: functions/statistical.xml:1708
 #, kde-format
@@ -10649,7 +10649,7 @@ msgstr ""
 #: functions/statistical.xml:1828
 #, kde-format
 msgid "GAMMALN(Number)"
-msgstr "OLD(संख्या) ९."
+msgstr "OLD(संख्या)"
 
 #: functions/statistical.xml:1829
 #, kde-format
@@ -10894,7 +10894,7 @@ msgstr ""
 #: functions/text.xml:145
 #, kde-format
 msgid "T(value)"
-msgstr "T(मूल्यम्) ९."
+msgstr "T(मूल्यम्)"
 
 #: functions/text.xml:146
 #, kde-format
@@ -10914,7 +10914,7 @@ msgstr "TEXT() फंक्शन् एकं मूल्यं पाठर�
 #: functions/text.xml:160
 #, kde-format
 msgid "TEXT(value)"
-msgstr "TEXT(मूल्य) ९."
+msgstr "TEXT(मूल्य)"
 
 #: functions/text.xml:161
 #, kde-format
@@ -10943,7 +10943,7 @@ msgstr ""
 #: functions/text.xml:175
 #, kde-format
 msgid "PROPER(string)"
-msgstr "PROPER(स्ट्रिंग) ९."
+msgstr "PROPER(स्ट्रिंग)"
 
 #: functions/text.xml:176
 #, kde-format
@@ -10963,7 +10963,7 @@ msgstr "तुलनां कर्तुं स्ट्रिंग्"
 #: functions/text.xml:192
 #, kde-format
 msgid "Compare case-sensitive (true/false)"
-msgstr "केस-संवेदनशीलस्य तुलनां कुरुत (सत्य/असत्यम्) २."
+msgstr "केस-संवेदनशीलस्य तुलनां कुरुत (सत्य/असत्यम्)"
 
 #: functions/text.xml:196
 #, kde-format
@@ -11210,7 +11210,7 @@ msgstr "MID (पाठ;स्थिति;दीर्घता)"
 #: functions/text.xml:362
 #, kde-format
 msgid "MID(text;position)"
-msgstr "MID(पाठ;स्थिति) २."
+msgstr "MID(पाठ;स्थिति)"
 
 #: functions/text.xml:363
 #, kde-format
@@ -11259,7 +11259,7 @@ msgstr "LEN() फंक्शन् स्ट्रिंग् इत्यस�
 #: functions/text.xml:409
 #, kde-format
 msgid "LEN(text)"
-msgstr "केवलं (पाठः) २."
+msgstr "केवलं (पाठः)"
 
 #: functions/text.xml:410
 #, kde-format
@@ -11280,7 +11280,7 @@ msgstr "LENB() फंक्शन् बाइट्-स्थानानां
 #: functions/text.xml:425
 #, kde-format
 msgid "LENB(text)"
-msgstr "लेनब(पाठ) ९."
+msgstr "लेनब(पाठ)"
 
 #: functions/text.xml:437
 #, kde-format
@@ -11290,7 +11290,7 @@ msgstr "TRIM() फंक्शन् शब्दानां मध्ये �
 #: functions/text.xml:438
 #, kde-format
 msgid "TRIM(text)"
-msgstr "त्रिम्(पाठ) ९."
+msgstr "त्रिम्(पाठ)"
 
 #: functions/text.xml:439
 #, kde-format
@@ -11337,7 +11337,7 @@ msgstr ""
 #: functions/text.xml:486
 #, kde-format
 msgid "RIGHT(text;length)"
-msgstr "RIGHT(पाठ;दीर्घता) २."
+msgstr "RIGHT(पाठ;दीर्घता)"
 
 #: functions/text.xml:487
 #, kde-format
@@ -11385,7 +11385,7 @@ msgstr ""
 #: functions/text.xml:531
 #, kde-format
 msgid "LEFT(text;length)"
-msgstr "LEFT(पाठ;दीर्घता) २."
+msgstr "LEFT(पाठ;दीर्घता)"
 
 #: functions/text.xml:532
 #, kde-format
@@ -11471,7 +11471,7 @@ msgstr "पुनः परिणामितपाठे एन्क्रि�
 #: functions/text.xml:592
 #, kde-format
 msgid "ROT13(Text)"
-msgstr "ROT13(पाठ) ९."
+msgstr "ROT13(पाठ)"
 
 #: functions/text.xml:593
 #, kde-format
@@ -11493,7 +11493,7 @@ msgstr "TOGGLE() फंक्शन् लघुवर्णान् बृह�
 #: functions/text.xml:607
 #, kde-format
 msgid "TOGGLE(text)"
-msgstr "TOGGLE(पाठः) २."
+msgstr "TOGGLE(पाठः)"
 
 #: functions/text.xml:608
 #, kde-format
@@ -11519,7 +11519,7 @@ msgstr "CLEAN() फंक्शन् स्ट्रिंग् तः प्�
 #: functions/text.xml:625
 #, kde-format
 msgid "CLEAN(text)"
-msgstr "CLEAN(पाठ) ९."
+msgstr "CLEAN(पाठ)"
 
 #: functions/text.xml:626
 #, kde-format
@@ -11534,7 +11534,7 @@ msgstr "SLEEK() फंक्शन् स्ट्रिंग् तः सर�
 #: functions/text.xml:639
 #, kde-format
 msgid "SLEEK(text)"
-msgstr "SLEEK(पाठ) ९."
+msgstr "SLEEK(पाठ)"
 
 #: functions/text.xml:640
 #, kde-format
@@ -11549,7 +11549,7 @@ msgstr "UPPER() फंक्शन् एकं स्ट्रिंग् अ�
 #: functions/text.xml:654
 #, kde-format
 msgid "UPPER(text)"
-msgstr "UPPER(पाठ) ९."
+msgstr "UPPER(पाठ)"
 
 #: functions/text.xml:655
 #, kde-format
@@ -11569,7 +11569,7 @@ msgstr "LOWER() फंक्शन् एकं स्ट्रिंग् ल�
 #: functions/text.xml:671
 #, kde-format
 msgid "LOWER(text)"
-msgstr "LOWER(पाठः) २."
+msgstr "LOWER(पाठः)"
 
 #: functions/text.xml:672
 #, kde-format
@@ -11594,7 +11594,7 @@ msgstr "CHAR() फंक्शन् सङ्ख्याद्वारा न
 #: functions/text.xml:688
 #, kde-format
 msgid "CHAR(code)"
-msgstr "CHAR(कोड) ९."
+msgstr "CHAR(कोड)"
 
 #: functions/text.xml:689
 #, kde-format
@@ -11611,7 +11611,7 @@ msgstr "CODE() फंक्शन् पाठस्ट्रिंग् मध
 #: functions/text.xml:703
 #, kde-format
 msgid "CODE(text)"
-msgstr "CODE(पाठ) २."
+msgstr "CODE(पाठ)"
 
 #: functions/text.xml:704
 #, kde-format
@@ -11626,7 +11626,7 @@ msgstr "मूल्यं प्रतिनिधियति इति पा
 #: functions/text.xml:718
 #, kde-format
 msgid "VALUE(text)"
-msgstr "VALUE(पाठ) ९."
+msgstr "VALUE(पाठ)"
 
 #: functions/text.xml:719
 #, kde-format
@@ -11646,12 +11646,12 @@ msgstr "नियमित अभिव्यक्ति"
 #: functions/text.xml:735
 #, kde-format
 msgid "Default value (optional)"
-msgstr "पूर्वनिर्धारितमूल्यं (वैकल्पिकम्) २."
+msgstr "पूर्वनिर्धारितमूल्यं (वैकल्पिकम्)"
 
 #: functions/text.xml:739
 #, kde-format
 msgid "Back-reference (optional)"
-msgstr "पृष्ठ-सन्दर्भ (वैकल्पिक) २."
+msgstr "पृष्ठ-सन्दर्भ (वैकल्पिक)"
 
 #: functions/text.xml:743
 #, kde-format
@@ -11729,7 +11729,7 @@ msgstr "UNICODE() फंक्शन् पाठस्ट्रिंग् म
 #: functions/text.xml:783
 #, kde-format
 msgid "UNICODE(text)"
-msgstr "यूनिकोड(पाठ) २."
+msgstr "यूनिकोड(पाठ)"
 
 #: functions/text.xml:784
 #, kde-format
@@ -11746,7 +11746,7 @@ msgstr "UNICHAR() फंक्शन् यूनिकोड कोड बि�
 #: functions/text.xml:799
 #, kde-format
 msgid "UNICHAR(code)"
-msgstr "UNICHAR(कोड) ९."
+msgstr "UNICHAR(कोड)"
 
 #: functions/text.xml:800
 #, kde-format
@@ -11768,7 +11768,7 @@ msgstr "ASC() फंक्शन् पूर्ण-विस्तार-आर
 #: functions/text.xml:815
 #, kde-format
 msgid "ASC(text)"
-msgstr "एएससी(पाठ) ९."
+msgstr "एएससी(पाठ)"
 
 #: functions/text.xml:824
 #, kde-format
@@ -11785,7 +11785,7 @@ msgstr "JIS() फंक्शन् अर्धविस्तारयुक�
 #: functions/text.xml:829
 #, kde-format
 msgid "JIS(text)"
-msgstr "सः(पाठः) २."
+msgstr "सः(पाठः)"
 
 #: functions/text.xml:842
 #, kde-format
@@ -11818,7 +11818,7 @@ msgstr "COS() फंक्शन् x इत्यस्य कोसाइन�
 #: functions/trig.xml:15
 #, kde-format
 msgid "COS(Float)"
-msgstr "COS(Float) ९."
+msgstr "COS(Float)"
 
 #: functions/trig.xml:16
 #, kde-format
@@ -11838,7 +11838,7 @@ msgstr "ACOT() फंक्शन् कस्यापि सङ्ख्या
 #: functions/trig.xml:32
 #, kde-format
 msgid "ACOT(Float)"
-msgstr "ACOT(Float) ९."
+msgstr "ACOT(Float)"
 
 #: functions/trig.xml:33
 #, kde-format
@@ -11853,7 +11853,7 @@ msgstr "SIN() फंक्शन् x इत्यस्य साइन् प�
 #: functions/trig.xml:47
 #, kde-format
 msgid "SIN(Float)"
-msgstr "SIN(Float) ९."
+msgstr "SIN(Float)"
 
 #: functions/trig.xml:48
 #, kde-format
@@ -11874,7 +11874,7 @@ msgstr "TAN() फंक्शन् x इत्यस्य स्पर्श�
 #: functions/trig.xml:64
 #, kde-format
 msgid "TAN(Float)"
-msgstr "तन(प्लव) ९."
+msgstr "तन(प्लव)"
 
 #: functions/trig.xml:65
 #, kde-format
@@ -11898,7 +11898,7 @@ msgstr ""
 #: functions/trig.xml:80
 #, kde-format
 msgid "ACOS(Float)"
-msgstr "ACOS(Float) ९."
+msgstr "ACOS(Float)"
 
 #: functions/trig.xml:81
 #, kde-format
@@ -11922,7 +11922,7 @@ msgstr ""
 #: functions/trig.xml:96
 #, kde-format
 msgid "ASIN(Float)"
-msgstr "ASIN(Float) ९."
+msgstr "ASIN(Float)"
 
 #: functions/trig.xml:97
 #, kde-format
@@ -11946,7 +11946,7 @@ msgstr ""
 #: functions/trig.xml:112
 #, kde-format
 msgid "ATAN(Float)"
-msgstr "अतन्(फ्लोट) २."
+msgstr "अतन्(फ्लोट)"
 
 #: functions/trig.xml:113
 #, kde-format
@@ -11970,7 +11970,7 @@ msgstr ""
 #: functions/trig.xml:129
 #, kde-format
 msgid "COSH(Float)"
-msgstr "COSH(Float) ९."
+msgstr "COSH(Float)"
 
 #: functions/trig.xml:130
 #, kde-format
@@ -11994,7 +11994,7 @@ msgstr ""
 #: functions/trig.xml:145
 #, kde-format
 msgid "SINH(Float)"
-msgstr "जन्म(प्लव) ९."
+msgstr "जन्म(प्लव)"
 
 #: functions/trig.xml:146
 #, kde-format
@@ -12018,7 +12018,7 @@ msgstr ""
 #: functions/trig.xml:161
 #, kde-format
 msgid "TANH(Float)"
-msgstr "तन्ह(फ्लोट) ९."
+msgstr "तन्ह(फ्लोट)"
 
 #: functions/trig.xml:162
 #, kde-format
@@ -12044,7 +12044,7 @@ msgstr ""
 #: functions/trig.xml:177
 #, kde-format
 msgid "ACOSH(Float)"
-msgstr "ACOSH(Float) ९."
+msgstr "ACOSH(Float)"
 
 #: functions/trig.xml:178
 #, kde-format
@@ -12068,7 +12068,7 @@ msgstr ""
 #: functions/trig.xml:193
 #, kde-format
 msgid "ASINH(Float)"
-msgstr "ASINH(Float) ९."
+msgstr "ASINH(Float)"
 
 #: functions/trig.xml:194
 #, kde-format
@@ -12094,7 +12094,7 @@ msgstr ""
 #: functions/trig.xml:209
 #, kde-format
 msgid "ATANH(Float)"
-msgstr "अतन्ह(फ्लोट) ९."
+msgstr "अतन्ह(फ्लोट)"
 
 #: functions/trig.xml:210
 #, kde-format
@@ -12140,7 +12140,7 @@ msgstr "एतत् कार्यं रेडियनकोणं डिग
 #: functions/trig.xml:245
 #, kde-format
 msgid "DEGREES(Float)"
-msgstr "डिग्री(फ्लोट) ९."
+msgstr "डिग्री(फ्लोट)"
 
 #: functions/trig.xml:246
 #, kde-format
@@ -12155,7 +12155,7 @@ msgstr "डिग्री(१) ५७.२९ तुल्यम्"
 #: functions/trig.xml:256
 #, kde-format
 msgid "Angle (degrees)"
-msgstr "कोण (उपाधि) २."
+msgstr "कोण (उपाधि)"
 
 #: functions/trig.xml:260
 #, kde-format
@@ -12165,7 +12165,7 @@ msgstr "एतत् कार्यं डिग्रीकोणं रेड
 #: functions/trig.xml:261
 #, kde-format
 msgid "RADIANS(Float)"
-msgstr "RADIANS(Float) ९."
+msgstr "RADIANS(Float)"
 
 #: functions/trig.xml:262
 #, kde-format
@@ -12185,7 +12185,7 @@ msgstr "PI() फंक्शन् PI इत्यस्य मूल्यं �
 #: functions/trig.xml:273
 #, kde-format
 msgid "PI()"
-msgstr "पि() ९."
+msgstr "पि()"
 
 #: functions/trig.xml:274
 #, kde-format
@@ -12201,7 +12201,7 @@ msgstr "CSC() फंक्शन् x इत्यस्य सहसेके�
 #: functions/trig.xml:287
 #, kde-format
 msgid "CSC(Float)"
-msgstr "CSC(Float) ९."
+msgstr "CSC(Float)"
 
 #: functions/trig.xml:288
 #, kde-format
@@ -12219,7 +12219,7 @@ msgstr ""
 #: functions/trig.xml:301
 #, kde-format
 msgid "CSCH(Float)"
-msgstr "CSCH(फ्लोट) ९."
+msgstr "CSCH(फ्लोट)"
 
 #: functions/trig.xml:302
 #, kde-format
@@ -12235,7 +12235,7 @@ msgstr "SEC() फंक्शन् x इत्यस्य सेकण्ट�
 #: functions/trig.xml:315
 #, kde-format
 msgid "SEC(Float)"
-msgstr "SEC(फ्लोट) ९."
+msgstr "SEC(फ्लोट)"
 
 #: functions/trig.xml:316
 #, kde-format
@@ -12253,7 +12253,7 @@ msgstr ""
 #: functions/trig.xml:329
 #, kde-format
 msgid "SECH(Float)"
-msgstr "षट् (प्लव) २."
+msgstr "षट् (प्लव)"
 
 #: functions/trig.xml:330
 #, kde-format
@@ -12431,7 +12431,7 @@ msgstr "स्टीफन् निकोलस"
 #: part/AboutData.h:65
 #, kde-format
 msgid "Developer (functions)"
-msgstr "विकासकः (कार्य) २."
+msgstr "विकासकः (कार्य)"
 
 #: part/AboutData.h:65
 #, kde-format
@@ -12713,7 +12713,7 @@ msgstr "सञ्चिकाविकल्पाः"
 #: part/dialogs/FileOptionsWidget.ui:21
 #, kde-format
 msgid "Number of entries in Recent Files list:"
-msgstr "Recent Files सूचीयां प्रविष्टीनां संख्या : १."
+msgstr "Recent Files सूचीयां प्रविष्टीनां संख्या :"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
 #: part/dialogs/FileOptionsWidget.ui:28
@@ -12729,7 +12729,7 @@ msgstr ""
 #: part/dialogs/FileOptionsWidget.ui:41
 #, kde-format
 msgid "Autosave interval:"
-msgstr "स्वतः रक्षणान्तरम् : १."
+msgstr "स्वतः रक्षणान्तरम् :"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:48
@@ -12758,7 +12758,7 @@ msgstr " मि"
 #: part/dialogs/FileOptionsWidget.ui:67
 #, kde-format
 msgid "Create backup file:"
-msgstr "बैकअप सञ्चिकां रचयन्तु : १."
+msgstr "बैकअप सञ्चिकां रचयन्तु :"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
 #: part/dialogs/FileOptionsWidget.ui:74
@@ -12774,7 +12774,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
-msgstr "Enter नुदनस्य अनन्तरं कर्सरस्य गतिः : १."
+msgstr "Enter नुदनस्य अनन्तरं कर्सरस्य गतिः :"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
 #: part/dialogs/InterfaceOptionsWidget.ui:29
@@ -12818,7 +12818,7 @@ msgstr "पूर्वनिर्धारितं एककं चिनो�
 #: part/dialogs/InterfaceOptionsWidget.ui:70
 #, kde-format
 msgid "I&ndentation step:"
-msgstr "I&dentation चरणः : १."
+msgstr "I&dentation चरणः :"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
 #: part/dialogs/InterfaceOptionsWidget.ui:80
@@ -12834,7 +12834,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:87
 #, kde-format
 msgid "&Grid Color:"
-msgstr "&जालवर्णः : १."
+msgstr "&जालवर्णः :"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -13002,13 +13002,13 @@ msgstr "स्केलिंग्"
 #: part/dialogs/PageLayoutSheetPage.ui:275
 #, kde-format
 msgid "Fixed zoom:"
-msgstr "नियतं जूमः : १."
+msgstr "नियतं जूमः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, pageLimitsButton)
 #: part/dialogs/PageLayoutSheetPage.ui:305
 #, kde-format
 msgid "Page limits:"
-msgstr "पृष्ठसीमा : १."
+msgstr "पृष्ठसीमा :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroup)
@@ -13142,7 +13142,7 @@ msgstr "लेखकः"
 #: part/dialogs/PreferenceDialog.cpp:426
 #, kde-format
 msgid "&Completion mode:"
-msgstr "&समाप्तिविधिः : १."
+msgstr "&समाप्तिविधिः :"
 
 #: part/dialogs/PreferenceDialog.cpp:430
 #, kde-format
@@ -13191,7 +13191,7 @@ msgstr "SheetPropertiesBase इति"
 #: part/dialogs/SheetPropertiesWidget.ui:48
 #, kde-format
 msgid "Layout direction:"
-msgstr "विन्यासदिशा : १."
+msgstr "विन्यासदिशा :"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, directionComboBox)
 #: part/dialogs/SheetPropertiesWidget.ui:55
@@ -13388,7 +13388,7 @@ msgstr "सक्रियपत्रम्"
 #: part/dialogs/SheetSelectWidget.ui:57
 #, kde-format
 msgid "Selected Sheets:"
-msgstr "चयनितपत्राणि : १."
+msgstr "चयनितपत्राणि :"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:67
@@ -13937,7 +13937,7 @@ msgstr ""
 #: part/View.cpp:1856
 #, kde-format
 msgid "Enter name:"
-msgstr "नाम प्रविशतु : १."
+msgstr "नाम प्रविशतु :"
 
 #: part/View.cpp:1856
 #, kde-format
@@ -14468,7 +14468,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
-msgstr "भिन्नः (परिवर्तनं नास्ति) २."
+msgstr "भिन्नः (परिवर्तनं नास्ति)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:53
@@ -14897,22 +14897,22 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
 msgid "Postfix:"
-msgstr "उत्तरनिर्धारणम् : १."
+msgstr "उत्तरनिर्धारणम् :"
 
 #: ui/dialogs/LayoutPage_Float.cpp:182
 #, kde-format
 msgid "Prefix:"
-msgstr "उपसर्गः : १."
+msgstr "उपसर्गः :"
 
 #: ui/dialogs/LayoutPage_Float.cpp:186
 #, kde-format
 msgid "Precision:"
-msgstr "सटीकता : १."
+msgstr "सटीकता :"
 
 #: ui/dialogs/LayoutPage_Float.cpp:203
 #, kde-format
 msgid "Format:"
-msgstr "प्रारूपः : १."
+msgstr "प्रारूपः :"
 
 #: ui/dialogs/LayoutPage_Float.cpp:207
 #, kde-format
@@ -14983,7 +14983,7 @@ msgstr "नामः:"
 #: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
 msgid "Inherit style:"
-msgstr "शैली उत्तराधिकार : १."
+msgstr "शैली उत्तराधिकार :"
 
 #: ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
@@ -15008,7 +15008,7 @@ msgstr "पुनरावर्तनीयसन्दर्भाणां �
 #: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
 msgid "Background color:"
-msgstr "पृष्ठभूमिवर्णः : १."
+msgstr "पृष्ठभूमिवर्णः :"
 
 #: ui/dialogs/LayoutPage_Pattern.cpp:132
 #, kde-format

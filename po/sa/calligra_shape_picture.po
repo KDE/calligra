@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
@@ -35,7 +37,7 @@ msgstr "चित्रवर्णविधिं परिवर्तयन�
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Contour image (by image analysis)"
-msgstr "समोच्चप्रतिबिम्बम् (प्रतिबिम्बविश्लेषणेन) २."
+msgstr "समोच्चप्रतिबिम्बम् (प्रतिबिम्बविश्लेषणेन)"
 
 #: ClipCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -88,13 +90,13 @@ msgstr "पुनः सेट् करें"
 #: forms/wdgPictureTool.ui:148
 #, kde-format
 msgid "Contour (by image analysis)"
-msgstr "समोच्च (प्रतिबिम्बविश्लेषणद्वारा) २."
+msgstr "समोच्च (प्रतिबिम्बविश्लेषणद्वारा)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
 #, kde-format
 msgid "Color mode:"
-msgstr "वर्णविधिः : १."
+msgstr "वर्णविधिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: forms/wdgPictureTool.ui:193

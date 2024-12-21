@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2024-12-19 21:41+0530\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -837,7 +837,7 @@ msgstr "स्वतः"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
-msgstr "स्लाइड् संक्रमणम् : १."
+msgstr "स्लाइड् संक्रमणम् :"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
@@ -1018,7 +1018,7 @@ msgstr "अनेकाः निरीक्षकाः"
 #: part/ui/KPrConfigurePresenterView.ui:24
 #, kde-format
 msgid "Presentation monitor:"
-msgstr "प्रस्तुतिनिरीक्षकः : १."
+msgstr "प्रस्तुतिनिरीक्षकः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
@@ -1058,7 +1058,7 @@ msgstr "स्लाइड्स्"
 #: part/ui/KPrConfigureSlideShow.ui:27
 #, kde-format
 msgid "Presentation Slides:"
-msgstr "प्रस्तुति स्लाइड्स : १."
+msgstr "प्रस्तुति स्लाइड्स :"
 
 #. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
 #: part/ui/KPrConfigureSlideShow.ui:54

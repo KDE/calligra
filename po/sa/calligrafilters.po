@@ -4,19 +4,21 @@
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
@@ -32,7 +34,7 @@ msgstr "पृष्ठं %1"
 #: karbon/image/ImageExportOptionsWidget.ui:19
 #, kde-format
 msgid "Page:"
-msgstr "पृष्ठम् : १."
+msgstr "पृष्ठम् :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: karbon/image/ImageExportOptionsWidget.ui:34
@@ -46,7 +48,7 @@ msgstr "आकारः पिक्सेलरूपेण"
 #: karbon/image/ImageExportOptionsWidget.ui:78
 #, kde-format
 msgid "Image width:"
-msgstr "चित्रस्य विस्तारः : १."
+msgstr "चित्रस्य विस्तारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -54,7 +56,7 @@ msgstr "चित्रस्य विस्तारः : १."
 #: karbon/image/ImageExportOptionsWidget.ui:88
 #, kde-format
 msgid "Image height:"
-msgstr "चित्रस्य ऊर्ध्वता : १."
+msgstr "चित्रस्य ऊर्ध्वता :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: karbon/image/ImageExportOptionsWidget.ui:69
@@ -265,7 +267,7 @@ msgstr "रेखायाः अन्तः"
 #: sheets/csv/exportdialogui.ui:56
 #, kde-format
 msgid "End of Line:"
-msgstr "रेखायाः अन्तः : १."
+msgstr "रेखायाः अन्तः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -331,7 +333,7 @@ msgstr "कोशिका"
 #: sheets/csv/exportdialogui.ui:182
 #, kde-format
 msgid "Delimiter:"
-msgstr "परिसीमकः : १."
+msgstr "परिसीमकः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -543,7 +545,7 @@ msgstr "प्रलेख"
 #: sheets/latex/export/latexexportwidget.ui:44
 #, kde-format
 msgid "Document style:"
-msgstr "दस्तावेजशैली : १."
+msgstr "दस्तावेजशैली :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -561,7 +563,7 @@ msgstr "शब्दशैली"
 #: sheets/latex/export/latexexportwidget.ui:68
 #, kde-format
 msgid "Document type:"
-msgstr "दस्तावेजप्रकारः : १."
+msgstr "दस्तावेजप्रकारः :"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -613,7 +615,7 @@ msgstr "समावेशार्थं दस्तावेजम्"
 #: sheets/latex/export/latexexportwidget.ui:104
 #, kde-format
 msgid "Document class:"
-msgstr "दस्तावेजवर्गः : १."
+msgstr "दस्तावेजवर्गः :"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: sheets/latex/export/latexexportwidget.ui:124
@@ -637,7 +639,7 @@ msgstr "प्रारूप"
 #: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
-msgstr "पूर्वनिर्धारितः फ़ॉन्ट् आकारः : १."
+msgstr "पूर्वनिर्धारितः फ़ॉन्ट् आकारः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186
@@ -649,13 +651,13 @@ msgstr "चित्रम्"
 #: sheets/latex/export/latexexportwidget.ui:192
 #, kde-format
 msgid "Convert the pictures:"
-msgstr "चित्राणि परिवर्तयन्तु : १."
+msgstr "चित्राणि परिवर्तयन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: sheets/latex/export/latexexportwidget.ui:209
 #, kde-format
 msgid "Pictures directory:"
-msgstr "चित्रनिर्देशिका : १."
+msgstr "चित्रनिर्देशिका :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -669,7 +671,7 @@ msgstr "भाषा"
 #: sheets/latex/export/latexexportwidget.ui:244
 #, kde-format
 msgid "Encoding:"
-msgstr "एन्कोडिंग् : १."
+msgstr "एन्कोडिंग् :"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -693,13 +695,13 @@ msgstr "विषयवस्तु"
 #: sheets/latex/export/latexexportwidget.ui:329
 #, kde-format
 msgid "Export information about author:"
-msgstr "लेखकस्य विषये सूचना निर्यातयन्तु : १."
+msgstr "लेखकस्य विषये सूचना निर्यातयन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: sheets/latex/export/latexexportwidget.ui:349
 #, kde-format
 msgid "Add a table of content:"
-msgstr "सामग्रीसारणीं योजयन्तु : १."
+msgstr "सामग्रीसारणीं योजयन्तु :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:368

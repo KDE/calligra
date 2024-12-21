@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1073,13 +1075,13 @@ msgstr "लघुगणकीय स्केलिंग"
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr "चरणविस्तारः : १."
+msgstr "चरणविस्तारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr "उपचरणविस्तारः : १."
+msgstr "उपचरणविस्तारः :"
 
 #: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
@@ -1290,13 +1292,13 @@ msgstr "बुलबुला आकारः कोष्ठक्षेत्�
 #: dialogs/CellRegionDialog.ui:49
 #, kde-format
 msgid "Y Values:"
-msgstr "तथा मूल्यानि : १."
+msgstr "तथा मूल्यानि :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
 #, kde-format
 msgid "X Values:"
-msgstr "X मूल्यानि : १."
+msgstr "X मूल्यानि :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
@@ -1308,7 +1310,7 @@ msgstr "<b>एकं Data Set इति चिनोतु</b>"
 #: dialogs/CellRegionDialog.ui:82
 #, kde-format
 msgid "Categories:"
-msgstr "श्रेणियाँ : १."
+msgstr "श्रेणियाँ :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/CellRegionDialog.ui:96

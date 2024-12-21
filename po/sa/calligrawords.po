@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the calligra package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-12-13 19:55+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -181,13 +182,13 @@ msgstr "वामपरिच्छेदसीमा"
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr "पाठेन सह आकारसम्बन्धः अस्ति : १."
+msgstr "पाठेन सह आकारसम्बन्धः अस्ति :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr "पाठेन सह अन्तर्रेखा (वर्णवत् वर्तते) २."
+msgstr "पाठेन सह अन्तर्रेखा (वर्णवत् वर्तते)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
@@ -205,7 +206,7 @@ msgstr "प्लवमानः, परन्तु एकस्मिन् �
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr "प्लवमानः मुक्तः (पाठे लंगरितः न) २."
+msgstr "प्लवमानः मुक्तः (पाठे लंगरितः न)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
@@ -331,13 +332,13 @@ msgstr "नामः:"
 #: part/dialogs/KWDocumentColumns.ui:21
 #, kde-format
 msgid "Columns:"
-msgstr "स्तम्भाः : १."
+msgstr "स्तम्भाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: part/dialogs/KWDocumentColumns.ui:41
 #, kde-format
 msgid "Column spacing:"
-msgstr "स्तम्भान्तरम् : १."
+msgstr "स्तम्भान्तरम् :"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
@@ -353,13 +354,13 @@ msgstr "दस्तावेजे फ्रेमसेट् नास्त�
 #: part/dialogs/KWFrameConnectSelector.ui:67
 #, kde-format
 msgid "Name of frameset:"
-msgstr "फ्रेमसेट् इत्यस्य नाम : १."
+msgstr "फ्रेमसेट् इत्यस्य नाम :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:82
 #, kde-format
 msgid "Create a new frameset:"
-msgstr "नूतनं फ्रेमसेट् रचयन्तु : १."
+msgstr "नूतनं फ्रेमसेट् रचयन्तु :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:89
@@ -517,13 +518,13 @@ msgstr "अस्य आकारस्य उभयतः धावन्तु
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr "येषु पार्श्वेषु धावन्तु येषु तः विस्तृताः सन्ति : १."
+msgstr "येषु पार्श्वेषु धावन्तु येषु तः विस्तृताः सन्ति :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
 #, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr "आकारस्य पाठस्य च मध्ये अन्तरम् : १."
+msgstr "आकारस्य पाठस्य च मध्ये अन्तरम् :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
@@ -565,7 +566,7 @@ msgstr "नामेन सह नूतनं पृष्ठशैलीं �
 #: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr "अन्यत्र पाठः भविष्यति : १."
+msgstr "अन्यत्र पाठः भविष्यति :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:92
@@ -595,13 +596,13 @@ msgstr "आकारः पाठश्च पृथक् भवति वा�
 #: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
 msgid "Right by:"
-msgstr "सम्यक् द्वारा : १."
+msgstr "सम्यक् द्वारा :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
-msgstr "उपरि द्वारा : १."
+msgstr "उपरि द्वारा :"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:155
@@ -701,27 +702,27 @@ msgstr "वाक्यानि:"
 #: part/dockers/KWStatisticsWidget.cpp:131
 #, kde-format
 msgid "Syllables:"
-msgstr "अक्षराः : १."
+msgstr "अक्षराः :"
 
 #: part/dockers/KWStatisticsWidget.cpp:134
 #, kde-format
 msgid "Characters (spaces):"
-msgstr "वर्णाः (अवकाशाः) : १."
+msgstr "वर्णाः (अवकाशाः) :"
 
 #: part/dockers/KWStatisticsWidget.cpp:137
 #, kde-format
 msgid "Characters (no spaces):"
-msgstr "वर्णाः (न रिक्तस्थानानि) : १."
+msgstr "वर्णाः (न रिक्तस्थानानि) :"
 
 #: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
 msgid "Lines:"
-msgstr "पङ्क्तयः : १."
+msgstr "पङ्क्तयः :"
 
 #: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
 msgid "Readability:"
-msgstr "पठनीयता : १."
+msgstr "पठनीयता :"
 
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
@@ -731,7 +732,7 @@ msgstr "Flesch पठनसुलभता"
 #: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "East asian characters:"
-msgstr "पूर्व एशियाई पात्राणि : १."
+msgstr "पूर्व एशियाई पात्राणि :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17

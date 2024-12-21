@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-14 01:10+0530\n"
+"PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -42,12 +42,12 @@ msgstr "मुक्तहस्त मार्ग"
 #: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
 msgid "Angle snapping delta:"
-msgstr "कोण स्नैपिंग डेल्टा : १."
+msgstr "कोण स्नैपिंग डेल्टा :"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
-msgstr "कोणस्नैप सक्रियताम् : १."
+msgstr "कोणस्नैप सक्रियताम् :"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
@@ -63,7 +63,7 @@ msgstr "पंक्ति"
 #: basicflakes/tools/KoPencilTool.cpp:276
 #, kde-format
 msgid "Precision:"
-msgstr "सटीकता : १."
+msgstr "सटीकता :"
 
 #: basicflakes/tools/KoPencilTool.cpp:278
 #, kde-format
@@ -92,7 +92,7 @@ msgstr "अनुकूलनं कुर्वन्तु"
 #: basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
 msgid "Exactness:"
-msgstr "सटीकता : १."
+msgstr "सटीकता :"
 
 #: basicflakes/tools/KoPencilTool.cpp:334
 #: basicflakes/tools/KoPencilTool.cpp:335
@@ -713,12 +713,12 @@ msgstr " मि"
 #: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
 msgid "Autosave interval:"
-msgstr "स्वतः रक्षणान्तरम् : १."
+msgstr "स्वतः रक्षणान्तरम् :"
 
 #: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
-msgstr "बैकअप सञ्चिकां रचयन्तु : १."
+msgstr "बैकअप सञ्चिकां रचयन्तु :"
 
 #: main/config/KoConfigGridPage.cpp:57
 #, kde-format
@@ -740,39 +740,39 @@ msgstr "गृध्र:"
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
 msgid "Grid color:"
-msgstr "जालवर्णः : १."
+msgstr "जालवर्णः :"
 
 #: main/config/KoConfigGridPage.cpp:81
 #, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "क्षैतिज अन्तराल : १."
+msgstr "क्षैतिज अन्तराल :"
 
 #: main/config/KoConfigGridPage.cpp:82
 #, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "ऊर्ध्वाधरान्तरम् : १."
+msgstr "ऊर्ध्वाधरान्तरम् :"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
 msgid "Units:"
-msgstr "एककाः : १."
+msgstr "एककाः :"
 
 #: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
-msgstr "हन्डल त्रिज्या : १."
+msgstr "हन्डल त्रिज्या :"
 
 #: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
-msgstr "संवेदनशीलता ग्रहण : १."
+msgstr "संवेदनशीलता ग्रहण :"
 
 #: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
 msgid "Paste offset:"
-msgstr "पेस्ट ऑफसेट् : १."
+msgstr "पेस्ट ऑफसेट् :"
 
 #: main/config/KoConfigMiscPage.cpp:103
 #, kde-format
@@ -1406,7 +1406,7 @@ msgstr "गोदी"
 #: main/KoMainWindow.cpp:628
 #, kde-format
 msgid "(write protected)"
-msgstr "(रक्षितं लिखत) २."
+msgstr "(रक्षितं लिखत)"
 
 #: main/KoMainWindow.cpp:633
 #, kde-format
@@ -1668,7 +1668,7 @@ msgstr "समूहं योजयतु"
 #: main/KoTemplateCreateDia.cpp:416
 #, kde-format
 msgid "Enter group name:"
-msgstr "समूहनाम प्रविष्टं कुर्वन्तु : १."
+msgstr "समूहनाम प्रविष्टं कुर्वन्तु :"
 
 #: main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -1944,32 +1944,32 @@ msgstr "अमेरिकी टैब्लॉइड"
 #: odf/KoUnit.cpp:27
 #, kde-format
 msgid "Millimeters (mm)"
-msgstr "मिलीमीटर् (मि.मी.) २."
+msgstr "मिलीमीटर् (मि.मी.)"
 
 #: odf/KoUnit.cpp:29
 #, kde-format
 msgid "Centimeters (cm)"
-msgstr "सेन्टिमीटर् (से.मी.) २."
+msgstr "सेन्टिमीटर् (से.मी.)"
 
 #: odf/KoUnit.cpp:31
 #, kde-format
 msgid "Decimeters (dm)"
-msgstr "डेसीमीटर (dm) २."
+msgstr "डेसीमीटर (dm)"
 
 #: odf/KoUnit.cpp:33
 #, kde-format
 msgid "Inches (in)"
-msgstr "इञ्च् (इञ्च) २."
+msgstr "इञ्च् (इञ्च)"
 
 #: odf/KoUnit.cpp:35
 #, kde-format
 msgid "Pica (pi)"
-msgstr "पिका (पि) ९."
+msgstr "पिका (पि)"
 
 #: odf/KoUnit.cpp:37
 #, kde-format
 msgid "Cicero (cc)"
-msgstr "सिसेरो (cc) ९."
+msgstr "सिसेरो (cc)"
 
 #: odf/KoUnit.cpp:39
 #, kde-format
@@ -1979,7 +1979,7 @@ msgstr "बिन्दु (pt) 1 ."
 #: odf/KoUnit.cpp:41
 #, kde-format
 msgid "Pixels (px)"
-msgstr "पिक्सेल (px) २."
+msgstr "पिक्सेल (px)"
 
 #: odf/KoUnit.cpp:43
 #, kde-format
@@ -2613,7 +2613,7 @@ msgstr "एकः*"
 #: pigment/KoBasicHistogramProducers.cpp:417
 #, kde-format
 msgid "b*"
-msgstr "ख* ९."
+msgstr "ख*"
 
 #: pigment/colorspaces/KoRgbU16ColorSpace.cpp:25
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
@@ -2783,13 +2783,13 @@ msgstr "कठिन प्रकाश"
 #: pigment/KoCompositeOpRegistry.cpp:49
 #, kde-format
 msgid "Soft Light (SVG)"
-msgstr "मृदु प्रकाश (SVG) ९."
+msgstr "मृदु प्रकाश (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:123
 #: pigment/KoCompositeOpRegistry.cpp:48
 #, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr "मृदु प्रकाश (फोटोशॉप) ९."
+msgstr "मृदु प्रकाश (फोटोशॉप)"
 
 #: pigment/compositeops/KoCompositeOps.h:124
 #: pigment/KoCompositeOpRegistry.cpp:50
@@ -3140,7 +3140,7 @@ msgstr "L*a*b* हिस्टोग्राम"
 #: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
 msgid "L*"
-msgstr "ल* ९."
+msgstr "ल*"
 
 #: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
@@ -3160,7 +3160,7 @@ msgstr "XYZ"
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "L*a*b*"
-msgstr "ल*अ*ख* ९."
+msgstr "ल*अ*ख*"
 
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
@@ -3175,7 +3175,7 @@ msgstr "ग्रेस्केल"
 #: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
-msgstr "ग्रेस्केल (पारदर्शिता विना) २."
+msgstr "ग्रेस्केल (पारदर्शिता विना)"
 
 #: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
@@ -4125,7 +4125,7 @@ msgstr "नामः:"
 #: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:24
 #, kde-format
 msgid "Initials:"
-msgstr "आद्याक्षराणि : १."
+msgstr "आद्याक्षराणि :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:34
@@ -4149,25 +4149,25 @@ msgstr "गोष्ठी:"
 #: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:61
 #, kde-format
 msgid "Email:"
-msgstr "ईमेलः १."
+msgstr "ईमेलः"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
 #: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:68
 #, kde-format
 msgid "Telephone (home):"
-msgstr "दूरभाषः (गृहम्): १."
+msgstr "दूरभाषः (गृहम्):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
 #: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:75
 #, kde-format
 msgid "Telephone (work):"
-msgstr "दूरभाष (कार्य) : १."
+msgstr "दूरभाष (कार्य) :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
 #: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:82
 #, kde-format
 msgid "Fax:"
-msgstr "फैक्सः : १."
+msgstr "फैक्सः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
 #: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:89
@@ -4179,7 +4179,7 @@ msgstr "मार्गं:"
 #: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:96
 #, kde-format
 msgid "Postal code:"
-msgstr "डाकसङ्केतः : १."
+msgstr "डाकसङ्केतः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
 #: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:103
@@ -4298,7 +4298,7 @@ msgstr "स्थानं"
 #: widgets/KoCsvImportDialog.ui:195
 #, kde-format
 msgid "Text&quote:"
-msgstr "पाठ&उद्धरण: १."
+msgstr "पाठ&उद्धरण:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.ui:212
@@ -4316,13 +4316,13 @@ msgstr "' ."
 #: widgets/KoCsvImportDialog.ui:246
 #, kde-format
 msgid "Decimal symbol:"
-msgstr "दशमलवचिह्नम् : १."
+msgstr "दशमलवचिह्नम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label4)
 #: widgets/KoCsvImportDialog.ui:275
 #, kde-format
 msgid "Thousands separator:"
-msgstr "सहस्राणि विभाजकः : १."
+msgstr "सहस्राणि विभाजकः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
 #: widgets/KoCsvImportDialog.ui:320
@@ -4334,7 +4334,7 @@ msgstr "द्वितीयकपरिसीमकानाम् अवह�
 #: widgets/KoCsvImportDialog.ui:327
 #, kde-format
 msgid "&Format:"
-msgstr "&स्वरूपः : १."
+msgstr "&स्वरूपः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
 #: widgets/KoCsvImportDialog.ui:341
@@ -4352,13 +4352,13 @@ msgstr "अद्यतन"
 #: widgets/KoCsvImportDialog.ui:414
 #, kde-format
 msgid "Import columns:"
-msgstr "आयातस्तम्भाः : १."
+msgstr "आयातस्तम्भाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: widgets/KoCsvImportDialog.ui:433
 #, kde-format
 msgid "Import lines:"
-msgstr "आयातपङ्क्तयः : १."
+msgstr "आयातपङ्क्तयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
@@ -4428,7 +4428,7 @@ msgstr "&गुप्तीकरण"
 #: widgets/koDocumentInfoAboutWidget.ui:64
 #, kde-format
 msgid "Keywords:"
-msgstr "कीवर्ड्स : १."
+msgstr "कीवर्ड्स :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:111
@@ -4440,19 +4440,19 @@ msgstr "विषयः:"
 #: widgets/koDocumentInfoAboutWidget.ui:124
 #, kde-format
 msgid "Last printed:"
-msgstr "अन्तिम मुद्रितम् : १."
+msgstr "अन्तिम मुद्रितम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:158
 #, kde-format
 msgid "Total editing time:"
-msgstr "कुल सम्पादनसमयः : १."
+msgstr "कुल सम्पादनसमयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:178
 #, kde-format
 msgid "Encryption:"
-msgstr "एन्क्रिप्शन : १."
+msgstr "एन्क्रिप्शन :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:188
@@ -4465,25 +4465,25 @@ msgstr "शीर्षक:"
 #: widgets/koDocumentInfoAboutWidget.ui:201
 #, kde-format
 msgid "Revision number:"
-msgstr "पुनरीक्षणसङ्ख्या : १."
+msgstr "पुनरीक्षणसङ्ख्या :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:211
 #, kde-format
 msgid "Modified:"
-msgstr "परिवर्तितः : १."
+msgstr "परिवर्तितः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:231
 #, kde-format
 msgid "Comments:"
-msgstr "टिप्पणियाँ : १."
+msgstr "टिप्पणियाँ :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:251
 #, kde-format
 msgid "Created:"
-msgstr "निर्मितः : १."
+msgstr "निर्मितः :"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
 #: widgets/koDocumentInfoAboutWidget.ui:261
@@ -4685,7 +4685,7 @@ msgstr "Add Color To Palette इति"
 #: widgets/KoEditColorSetDialog.cpp:146
 #, kde-format
 msgid "Color name:"
-msgstr "वर्णनाम : १."
+msgstr "वर्णनाम :"
 
 #: widgets/KoEditColorSetDialog.cpp:174
 #, kde-format
@@ -4796,12 +4796,12 @@ msgstr "परिहरन"
 #: widgets/KoGradientEditWidget.cpp:169
 #, kde-format
 msgid "Overall opacity:"
-msgstr "समग्ररूपेण अस्पष्टता : १."
+msgstr "समग्ररूपेण अस्पष्टता :"
 
 #: widgets/KoGradientEditWidget.cpp:174
 #, kde-format
 msgid "Color stop:"
-msgstr "वर्णविरामः : १."
+msgstr "वर्णविरामः :"
 
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
@@ -4851,18 +4851,18 @@ msgstr "दस्तावेजार्थं आवेदनं कुर्�
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Left Edge Margin:"
-msgstr "वामधारमार्जिनः : १."
+msgstr "वामधारमार्जिनः :"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, kde-format
 msgid "Right Edge Margin:"
-msgstr "दक्षिण एज मार्जिन : १."
+msgstr "दक्षिण एज मार्जिन :"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
 #, kde-format
 msgid "Binding Edge Margin:"
-msgstr "बाइंडिंग एज मार्जिन : १."
+msgstr "बाइंडिंग एज मार्जिन :"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
@@ -4873,7 +4873,7 @@ msgstr "पृष्ठ एज मार्जिन:"
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
 msgid "Facing Pages:"
-msgstr "सम्मुखी पृष्ठानि : १."
+msgstr "सम्मुखी पृष्ठानि :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, facingPages)
 #: widgets/KoPageLayoutWidget.cpp:287 widgets/KoPageLayoutWidget.ui:160
@@ -4884,7 +4884,7 @@ msgstr "पृष्ठानि सम्मुखीकृत्य"
 #: widgets/KoPageLayoutWidget.cpp:289
 #, kde-format
 msgid "Page Layout:"
-msgstr "पृष्ठविन्यासः १."
+msgstr "पृष्ठविन्यासः"
 
 #: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
@@ -4901,7 +4901,7 @@ msgstr "इंकाईं:"
 #: widgets/KoPageLayoutWidget.ui:45
 #, kde-format
 msgid "Follow style:"
-msgstr "शैलीं अनुसरणं कुर्वन्तु : १."
+msgstr "शैलीं अनुसरणं कुर्वन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoPageLayoutWidget.ui:61
@@ -4943,7 +4943,7 @@ msgstr "भूप्रदेश"
 #: widgets/KoPageLayoutWidget.ui:143
 #, kde-format
 msgid "Facing pages:"
-msgstr "सम्मुखी पृष्ठानि : १."
+msgstr "सम्मुखी पृष्ठानि :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, singleSided)
 #: widgets/KoPageLayoutWidget.ui:153
@@ -4955,7 +4955,7 @@ msgstr "एकपक्षीयः"
 #: widgets/KoPageLayoutWidget.ui:167
 #, kde-format
 msgid "Text direction:"
-msgstr "पाठनिर्देशः : १."
+msgstr "पाठनिर्देशः :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
 #: widgets/KoPageLayoutWidget.ui:184
@@ -4979,13 +4979,13 @@ msgstr "दक्षिणतः वामतः"
 #: widgets/KoPageLayoutWidget.ui:202
 #, kde-format
 msgid "Top Margin:"
-msgstr "शीर्ष मार्जिन : १."
+msgstr "शीर्ष मार्जिन :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
 #, kde-format
 msgid "Bottom Margin:"
-msgstr "तलमार्जिनम् : १."
+msgstr "तलमार्जिनम् :"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5074,7 +5074,7 @@ msgstr "छायायाः वर्णं परिवर्तयन्त�
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr "धुन्धला : १."
+msgstr "धुन्धला :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84
@@ -5132,7 +5132,7 @@ msgstr "मिटर सीमा"
 #: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
 msgid "Thickness:"
-msgstr "स्थूलता : १."
+msgstr "स्थूलता :"
 
 #: widgets/KoStrokeConfigWidget.cpp:212
 #, kde-format
@@ -5258,7 +5258,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr "%1 (%2) २."
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
