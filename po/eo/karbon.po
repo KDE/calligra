@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-30 07:49+0200\n"
+"PO-Revision-Date: 2024-12-28 17:41+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -118,7 +118,7 @@ msgstr "Efektoj"
 #: data/karbon.rc:177
 #, kde-format
 msgid "Add Shape"
-msgstr ""
+msgstr "Aldoni Formon"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -321,12 +321,12 @@ msgstr "Prizorganto"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Portado al Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format
