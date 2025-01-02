@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-09-14 11:22+0200\n"
+"PO-Revision-Date: 2024-12-31 23:54+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -900,7 +900,7 @@ msgstr "Reakiri dosierojn"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Forĵeti Ĉion"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -919,6 +919,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Se vi elektas Nuligi, ĉiuj restaŭreblaj dosieroj estos konservitaj.\n"
+"Se vi premas OK, elektitaj dosieroj estos restaŭritaj, la neelektitaj "
+"dosieroj forĵetitaj."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1584,7 +1587,7 @@ msgstr "<tr><td><b>Alirita:</b></td><td>%1</td></tr>"
 #: text/styles/KoStyleManager.cpp:100
 #, kde-format
 msgid "Default"
-msgstr "Defaŭlto"
+msgstr "Defaŭlte"
 
 #: main/KoShapeCollectionMenu.cpp:358
 #, kde-format
@@ -1599,7 +1602,7 @@ msgstr "Sagoj"
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Amuza"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -4585,13 +4588,13 @@ msgstr "Ĉi tiu dokumento ne subtenas ĉifradon"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Ne metita"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -5110,7 +5113,7 @@ msgstr "Distanco:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Proprecoj de Formo"
 
 #: widgets/KoShapePropertyWidget.cpp:57
 #, kde-format
