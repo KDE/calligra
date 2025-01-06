@@ -2222,7 +2222,6 @@ msgstr "Legg til nytt lysark eller nytt lag"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
-#| msgid "Slide"
 msgid "Slides"
 msgstr "Lysark"
 
