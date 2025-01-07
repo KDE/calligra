@@ -1,7 +1,7 @@
 # translation of kspread.po to galician
 # translation of kspread.po to
 #
-# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2024, 2025 Adrián Chaves (Gallaecio)
 # Xabier García Feal <xabigf@gmx.net>, 2004.
 # Xabi G. Feal <xabigf@gmx.net>, 2006, 2007.
 # mvillarino <mvillarino@users.sourceforge.net>, 2006, 2009.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-29 10:03+0100\n"
+"PO-Revision-Date: 2025-01-06 12:51+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -9248,8 +9248,8 @@ msgid ""
 msgstr ""
 "Os valores no segundo parámetro determinan os límites do intervalo.\n"
 "               Os intervalos inclúen os límites superiores.\n"
-"               A saída dada é un vector columna e ten un ou máis elementos "
-"que o segundo parámetro;\n"
+"               A matriz devolta é un vector columna e ten un ou máis "
+"elementos que o segundo parámetro;\n"
 "               o último elemento representa o número de elementos maiores "
 "que o último valor no segundo parámetro.\n"
 "               Se o segundo parámetro está baleiro hanse contar todos os "
@@ -10852,8 +10852,8 @@ msgid ""
 msgstr ""
 "Realiza unha proba da hipótese nula, de que a mostra é unha mostra real "
 "dunha variábel aleatoria normalmente distribuída con media e desviación "
-"estándar. Unha saída con valor 1 indica que se rexeita a hipótese nula, p."
-"ex. a mostra non pertence a unha poboación distribuída baixo a función "
+"estándar. Un valor de devolución de 1 indica que se rexeita a hipótese nula, "
+"p.ex. a mostra non pertence a unha poboación distribuída baixo a función "
 "normal. Cando se omita sigma hanse estimar a partir da mostra usando STDEV."
 
 #: functions/statistical.xml:1719
