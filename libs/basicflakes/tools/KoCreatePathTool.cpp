@@ -444,7 +444,7 @@ QList<QPointer<QWidget>> KoCreatePathTool::createOptionWidgets()
     angleEdit->setValue(d->angleSnappingDelta);
     angleEdit->setRange(1, 360);
     angleEdit->setSingleStep(1);
-    angleEdit->setSuffix(QChar(Qt::Key_degree));
+    angleEdit->setSuffix(QStringLiteral("°"));
     layout->addWidget(angleEdit, 0, 1);
     layout->addWidget(new QLabel(i18n("Activate angle snap:"), angleWidget), 1, 0);
     QCheckBox *angleSnap = new QCheckBox(angleWidget);

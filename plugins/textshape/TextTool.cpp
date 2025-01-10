@@ -2360,7 +2360,7 @@ void TextTool::nonbreakingSpace()
 {
     if (!m_allowActions || !m_textEditor.data())
         return;
-    m_textEditor.data()->insertText(QString(QChar(Qt::Key_nobreakspace)));
+    m_textEditor.data()->insertText(QString(QChar(QChar::Nbsp)));
 }
 
 void TextTool::nonbreakingHyphen()
@@ -2374,7 +2374,7 @@ void TextTool::softHyphen()
 {
     if (!m_allowActions || !m_textEditor.data())
         return;
-    m_textEditor.data()->insertText(QString(QChar(Qt::Key_hyphen)));
+    m_textEditor.data()->insertText(QString(QChar(QChar::SoftHyphen)));
 }
 
 void TextTool::lineBreak()
