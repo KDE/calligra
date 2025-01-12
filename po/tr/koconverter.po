@@ -5,13 +5,13 @@
 # Anıl Özbek <ozbekanil@gmail.com>, 2012.
 # Görkem Çetin <gorkem@kde.org>, 2002.
 # obsoleteman <tulliana@gmail.com>, 2008.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-08-27 14:22+0300\n"
+"PO-Revision-Date: 2025-01-11 17:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -99,12 +99,12 @@ msgstr "Baskı yönü. Bu, dikey veya yatay olabilir."
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr "Kağıt boyutu. A4, Resmi, Mektup, …"
+msgstr "Kâğıt boyutu. A4, Resmi, Mektup, …"
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr "Kağıt kenar boyutu. Öntanımlı olarak bu 0,2’dir."
+msgstr "Kâğıt kenar boyutu. Öntanımlı olarak bu 0,2’dir."
 
 #: calligraconverter.cpp:215
 #, kde-format
