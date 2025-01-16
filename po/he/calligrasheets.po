@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-10 07:43+0200\n"
+"PO-Revision-Date: 2025-01-14 08:34+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -10941,19 +10941,19 @@ msgid "FIND(find_text;within_text;start_num)"
 msgstr "FIND(התחל_במספר;בטקסט;טקסט_לחיפוש)"
 
 #: functions/text.xml:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"Cal\";\"Calligra\") returns 1"
-msgstr "(\"FIND(\"KOf\";\"KOffice מחזירה 1"
+msgstr "FIND(\"Cal\";\"Calligra\") מחזירה 1"
 
 #: functions/text.xml:306
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"i\";\"Calligra\") returns 5"
-msgstr "(\"FIND(\"i\";\"KOffice מחזירה 5"
+msgstr "FIND(\"i\";\"Calligra\") מחזירה 5"
 
 #: functions/text.xml:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"a\";\"Sheets in Calligra\";4) returns 12"
-msgstr "(FIND(\"K\";\"KSpread in KOffice\";4 מחזירה 12"
+msgstr "FIND(\"a\";\"Sheets in Calligra\";4) מחזירה 12"
 
 #: functions/text.xml:328
 #, fuzzy, kde-format
@@ -11123,11 +11123,11 @@ msgid "CONCATENATE(value;value;...)"
 msgstr "CONCATENATE(ערך;ערך;...)"
 
 #: functions/text.xml:469
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "CONCATENATE(\"Sheets\";\"Calligra\";\"KDE\") returns \"SheetsCalligraKDE\""
 msgstr ""
-"(\"CONCATENATE(\"KSpread\";\"KOffice\";\"KDE מחזירה \"KSpreadKOfficeKDE\""
+"CONCATENATE(\"Sheets\";\"Calligra\";\"KDE\") מחזירה „SheetsCalligraKDE”"
 
 #: functions/text.xml:481 functions/text.xml:526
 #, kde-format
@@ -11285,14 +11285,14 @@ msgid "ROT13(Text)"
 msgstr "ROT13(טקסט)"
 
 #: functions/text.xml:593
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(\"KSpread\") returns \"XFcernq\""
-msgstr "(\"ROT(\"KSpread מחזירה \"XFcernq\""
+msgstr "ROT13(\"KSpread\") מחזירה „XFcernq”"
 
 #: functions/text.xml:594
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(\"XFcernq\") returns \"KSpread\""
-msgstr "(\"ROT(\"XFcernq מחזירה \"KSpread\""
+msgstr "ROT13(\"XFcernq\") מחזירה „KSpread”"
 
 #: functions/text.xml:606
 #, kde-format
@@ -11491,9 +11491,9 @@ msgstr ""
 "חוזרת, מניחים שהיא 0 (כך שהפונקציה תחזיר את כל החלק המתאים לביטוי)."
 
 #: functions/text.xml:746
-#, fuzzy, kde-format
+#, kde-format
 msgid "REGEXP(text; regexp; default; backref)"
-msgstr "REGEXP(התייחסות לאחור, ברירת מחדל ;ביטוי רגולרי ;טקסט)"
+msgstr "REGEXP(התייחסות לאחור; ברירת מחדל ;ביטוי רגולרי ;טקסט)"
 
 #: functions/text.xml:747
 #, kde-format
@@ -11516,7 +11516,7 @@ msgid "Replaces all matches of a regular expression with the replacement text"
 msgstr "החלפת כל ההתאמות של ביטוי רגולרי בטקסט המחליף."
 
 #: functions/text.xml:769
-#, fuzzy, kde-format
+#, kde-format
 msgid "REGEXPRE(text; regexp; replacement)"
 msgstr "REGEXPRE(החלפה ;ביטוי רגולרי ;טקסט)"
 
@@ -11530,21 +11530,22 @@ msgstr ""
 "num\""
 
 #: functions/text.xml:782
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The UNICODE() function returns a unicode code point for the first character "
 "in a text string."
-msgstr "הפונקציה ()CODE מחזירה קוד מספרי עבור התו הראשון במחרוזת טקסט."
+msgstr ""
+"הפונקציה UNICODE()‎ מחזירה נקודת קוד יוניקוד עבור התו הראשון במחרוזת טקסט."
 
 #: functions/text.xml:783
-#, fuzzy, kde-format
+#, kde-format
 msgid "UNICODE(text)"
-msgstr "CODE(טקסט)"
+msgstr "UNICODE(טקסט)"
 
 #: functions/text.xml:784
-#, fuzzy, kde-format
+#, kde-format
 msgid "UNICODE(\"KDE\") returns 75"
-msgstr "(\"CODE(\"KDE מחזירה 75"
+msgstr "UNICODE(\"KDE\") מחזירה 75"
 
 #: functions/text.xml:798
 #, fuzzy, kde-format
@@ -11554,19 +11555,19 @@ msgid ""
 msgstr "הפונקציה ()CHAR מחזירה את התו המצויין על ידי הקוד המספרי הנתון."
 
 #: functions/text.xml:799
-#, fuzzy, kde-format
+#, kde-format
 msgid "UNICHAR(code)"
-msgstr "CHAR(קוד)"
+msgstr "UNICHAR(קוד)"
 
 #: functions/text.xml:800
-#, fuzzy, kde-format
+#, kde-format
 msgid "UNICHAR(65) returns \"A\""
-msgstr "(CHAR(65 מחזירה \"A\""
+msgstr "UNICHAR(65) מחזירה „A”"
 
 #: functions/text.xml:810
-#, fuzzy, kde-format
+#, kde-format
 msgid "Full width characters"
-msgstr "מספר תווים"
+msgstr "תווי רוחב מלא"
 
 #: functions/text.xml:814
 #, fuzzy, kde-format
@@ -11576,26 +11577,26 @@ msgid ""
 msgstr "הפונקציה ()CHAR מחזירה את התו המצויין על ידי הקוד המספרי הנתון."
 
 #: functions/text.xml:815
-#, fuzzy, kde-format
+#, kde-format
 msgid "ASC(text)"
-msgstr "CODE(טקסט)"
+msgstr "ASC(טקסט)"
 
 #: functions/text.xml:824
-#, fuzzy, kde-format
+#, kde-format
 msgid "Half-width characters"
-msgstr "מספר תווים"
+msgstr "תווים חצויי רוחב"
 
 #: functions/text.xml:828
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The JIS() function returns the full-width characters corresponding to the "
 "half-width argument."
-msgstr "הפונקציה ()CHAR מחזירה את התו המצויין על ידי הקוד המספרי הנתון."
+msgstr "הפונקציה JIS()‎ מחזירה את הרוחב המלא שתואם לארגומנט מחצית הרוחב."
 
 #: functions/text.xml:829
-#, fuzzy, kde-format
+#, kde-format
 msgid "JIS(text)"
-msgstr "TRIM(טקסט)"
+msgstr "JIS(טקסט)"
 
 #: functions/text.xml:842
 #, fuzzy, kde-format
@@ -12021,7 +12022,7 @@ msgstr "CSC(PI()/2)‎ שווה ל־1"
 msgid ""
 "The CSCH() function returns the hyperbolic cosecant of x, where x is given "
 "in radians."
-msgstr "הפונקציה ()COS מחזירה את הקוסינוס של x, כאשר x נתון ברדיאנים."
+msgstr "הפונקציה ()CSCH מחזירה את הסינוס של x, כאשר x נתון ברדיאנים."
 
 #: functions/trig.xml:301
 #, fuzzy, kde-format
@@ -12029,9 +12030,9 @@ msgid "CSCH(Float)"
 msgstr "COSH(Float)"
 
 #: functions/trig.xml:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "(COS(PI()/2 שווה ל־0"
+msgstr "CSCH(PI()/2) שווה ל־0.434537208…"
 
 #: functions/trig.xml:314
 #, fuzzy, kde-format
@@ -12103,8 +12104,7 @@ msgid "Torben Weis"
 msgstr ""
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
 msgstr "מתחזק לשעבר"
 
@@ -12627,8 +12627,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
 msgstr "&צבע הרשת:"
 
@@ -14037,10 +14036,9 @@ msgid "Merge Cells"
 msgstr "מיזוג תאים"
 
 #: ui/commands/MergeCommand.cpp:88
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
-msgstr "פצל תאים"
+msgstr "פיצול תאים"
 
 #: ui/commands/MergeCommand.cpp:94
 #, kde-format
