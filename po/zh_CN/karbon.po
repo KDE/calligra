@@ -116,7 +116,7 @@ msgstr "效果"
 #: data/karbon.rc:177
 #, kde-format
 msgid "Add Shape"
-msgstr ""
+msgstr "添加形状"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -317,12 +317,12 @@ msgstr "维护者"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "移植到 Qt6"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

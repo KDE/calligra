@@ -20,14 +20,14 @@ msgstr ""
 #: WebShapeFactory.cpp:30
 #, kde-format
 msgid "Web Shape"
-msgstr ""
+msgstr "网络形状"
 
 #: WebShapeFactory.cpp:32
 #, kde-format
 msgid "A web shape"
-msgstr ""
+msgstr "一个网络形状"
 
 #: WebToolFactory.cpp:31
 #, kde-format
 msgid "Web shape editing"
-msgstr ""
+msgstr "网络形状编辑"

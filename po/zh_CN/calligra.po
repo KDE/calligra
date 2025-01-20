@@ -720,18 +720,18 @@ msgstr "创建备份文件："
 #, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr ""
+msgstr "显示网格"
 
 #: main/config/KoConfigGridPage.cpp:59
 #, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr ""
+msgstr "吸附到网格"
 
 #: main/config/KoConfigGridPage.cpp:63
 #, kde-format
 msgid "Grid:"
-msgstr ""
+msgstr "网格："
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -742,13 +742,13 @@ msgstr "网格颜色："
 #, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "水平间距："
 
 #: main/config/KoConfigGridPage.cpp:82
 #, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr ""
+msgstr "垂直间距："
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -774,7 +774,7 @@ msgstr "粘贴偏移："
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr ""
+msgstr "在光标处粘贴"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -884,7 +884,7 @@ msgstr "恢复文件"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "全部丢弃"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -903,6 +903,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"确定：已勾选的文件将被恢复，已勾选的文件将被丢弃。 \n"
+"取消：所有可恢复的文件都将保留。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1561,17 +1563,17 @@ msgstr "默认"
 #: main/KoShapeCollectionMenu.cpp:358
 #, kde-format
 msgid "Geometrics"
-msgstr ""
+msgstr "几何图形"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "箭头符号"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "滑稽"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1738,7 +1740,7 @@ msgstr "日期：%1"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr ""
+msgstr "添加形状"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2195,7 +2197,7 @@ msgstr "添加新幻灯片或图层"
 #: pageapp/KoPADocumentStructureDocker.cpp:99
 #, kde-format
 msgid "Slides"
-msgstr ""
+msgstr "幻灯片"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -4535,13 +4537,13 @@ msgstr "此文档不支持加密"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "未设置"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr "，"
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4790,7 +4792,7 @@ msgstr "仅图标"
 #: widgets/KoModeBox.cpp:505
 #, kde-format
 msgid "Sidebar side"
-msgstr ""
+msgstr "侧边栏一侧"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -4815,24 +4817,24 @@ msgstr "应用到文档"
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Left Edge Margin:"
-msgstr ""
+msgstr "左边距："
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, kde-format
 msgid "Right Edge Margin:"
-msgstr ""
+msgstr "右边距:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
 #, kde-format
 msgid "Binding Edge Margin:"
-msgstr ""
+msgstr "装订边距："
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
 #, kde-format
 msgid "Page Edge Margin:"
-msgstr ""
+msgstr "页边距："
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4943,13 +4945,13 @@ msgstr "从右到左"
 #: widgets/KoPageLayoutWidget.ui:202
 #, kde-format
 msgid "Top Margin:"
-msgstr ""
+msgstr "上边距："
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
 #, kde-format
 msgid "Bottom Margin:"
-msgstr ""
+msgstr "下边距："
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5050,13 +5052,13 @@ msgstr "距离："
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "形状属性"
 
 #: widgets/KoShapePropertyWidget.cpp:57
 #, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr ""
+msgstr "没有可用的属性"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5234,25 +5236,25 @@ msgstr "图标大小"
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr ""
+msgstr "布局"
 
 #: widgets/KoToolBoxDocker.cpp:140
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr ""
+msgstr "自动(&A)"
 
 #: widgets/KoToolBoxDocker.cpp:147
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr ""
+msgstr "从左到右(&L)"
 
 #: widgets/KoToolBoxDocker.cpp:154
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr ""
+msgstr "从右到左(&R)"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

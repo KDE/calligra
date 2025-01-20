@@ -1737,13 +1737,13 @@ msgstr "浏览..."
 #, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr ""
+msgstr "重置背景颜色"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
 #, kde-format
 msgid "Reset background color"
-msgstr ""
+msgstr "重置背景颜色"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1754,7 +1754,7 @@ msgstr "整个单词"
 #: dialogs/ParagraphDropCaps.ui:15
 #, kde-format
 msgid "Enable drop caps"
-msgstr ""
+msgstr "启用首字下沉"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1840,19 +1840,19 @@ msgstr "至少"
 #: dialogs/ParagraphIndentSpacing.ui:22
 #, kde-format
 msgid "Left Indent:"
-msgstr ""
+msgstr "左缩进："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
 #, kde-format
 msgid "Right Indent:"
-msgstr ""
+msgstr "右缩进："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
 #, kde-format
 msgid "First Line Indent:"
-msgstr ""
+msgstr "首行缩进："
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1864,7 +1864,7 @@ msgstr "自动依文本大小推断"
 #: dialogs/ParagraphIndentSpacing.ui:75
 #, kde-format
 msgid "Line Spacing:"
-msgstr ""
+msgstr "行间距："
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1876,19 +1876,19 @@ msgstr " %"
 #: dialogs/ParagraphIndentSpacing.ui:129
 #, kde-format
 msgid "Use Font Metrics"
-msgstr ""
+msgstr "使用字体度量标准"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
 #, kde-format
 msgid "Paragraph Space Before:"
-msgstr ""
+msgstr "段首空格："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
 #, kde-format
 msgid "Paragraph Space After:"
-msgstr ""
+msgstr "段尾空格："
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
@@ -1900,7 +1900,7 @@ msgstr "两端对齐"
 #: dialogs/ParagraphLayout.ui:50
 #, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr ""
+msgstr "边框/页面末段行为："
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57

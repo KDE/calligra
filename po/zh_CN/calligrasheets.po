@@ -11806,12 +11806,12 @@ msgstr "Copyright 1998-%1, The Calligra Sheets Team"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
 #, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr ""
+msgstr "维护者/移植到 Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -11826,7 +11826,7 @@ msgstr "Torben Weis"
 #: part/AboutData.h:42
 #, kde-format
 msgid "Former Maintainer"
-msgstr ""
+msgstr "前任维护人员"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -12351,7 +12351,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:87
 #, kde-format
 msgid "&Grid Color:"
-msgstr ""
+msgstr "网格颜色(&G)："
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -12364,7 +12364,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:104
 #, kde-format
 msgid "Page Out&line Color:"
-msgstr ""
+msgstr "页面轮廓颜色(&L)："
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114

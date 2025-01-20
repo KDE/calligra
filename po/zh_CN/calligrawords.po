@@ -588,7 +588,7 @@ msgstr "轮廓"
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, kde-format
 msgid "Shape and text are separated left by:"
-msgstr ""
+msgstr "形状与文本的分隔方式："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1081,12 +1081,12 @@ msgstr "版权所有 1998-%1，Words团队"
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
 #, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr ""
+msgstr "共同维护者/移植到 Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
