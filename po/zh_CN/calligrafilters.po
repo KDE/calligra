@@ -240,14 +240,14 @@ msgstr "<工作表名称>"
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr ""
+msgstr "导出为 CVS"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr ""
+msgstr "导出"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -264,7 +264,7 @@ msgstr "行尾"
 #: sheets/csv/exportdialogui.ui:56
 #, kde-format
 msgid "End of Line:"
-msgstr ""
+msgstr "行尾："
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -330,7 +330,7 @@ msgstr "单元格"
 #: sheets/csv/exportdialogui.ui:182
 #, kde-format
 msgid "Delimiter:"
-msgstr ""
+msgstr "分隔符："
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -540,7 +540,7 @@ msgstr "文档"
 #: sheets/latex/export/latexexportwidget.ui:44
 #, kde-format
 msgid "Document style:"
-msgstr ""
+msgstr "文档风格："
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -558,7 +558,7 @@ msgstr "Words 风格"
 #: sheets/latex/export/latexexportwidget.ui:68
 #, kde-format
 msgid "Document type:"
-msgstr ""
+msgstr "文档类型："
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -666,7 +666,7 @@ msgstr "语言"
 #: sheets/latex/export/latexexportwidget.ui:244
 #, kde-format
 msgid "Encoding:"
-msgstr ""
+msgstr "编码："
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289

@@ -154,12 +154,12 @@ msgstr "版权所有 1998-%1，Stage 团队"
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
 #, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr ""
+msgstr "维护者/移植到 Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format

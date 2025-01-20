@@ -1,7 +1,7 @@
 # translation of koffice.po to galician
 # translation of koffice.po to
 #
-# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2024, 2025 Adrián Chaves (Gallaecio)
 # mvillarino <mvillarino@users.sourceforge.net>, 2006, 2009.
 # Xabi G. Feal <xabigf@gmx.net>, 2006, 2007.
 # Miguel Branco <mgl.branco@gmail.com>, 2007.
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-12-16 22:47+0100\n"
+"PO-Revision-Date: 2025-01-19 12:33+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -124,7 +124,7 @@ msgstr "Converter en ruta"
 #: flake/commands/KoPathBreakAtPointCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "Desfacer o subcamiño en puntos"
+msgstr "Romper o subcamiño en puntos"
 
 #: flake/commands/KoPathCombineCommand.cpp:47
 msgctxt "(qtundo-format)"

@@ -119,19 +119,19 @@ msgstr "杂类"
 #: FormulaToolWidget.ui:17
 #, kde-format
 msgid "Elements:"
-msgstr ""
+msgstr "元素："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
 #, kde-format
 msgid "Symbols:"
-msgstr ""
+msgstr "符号："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
 #, kde-format
 msgid "Actions:"
-msgstr ""
+msgstr "动作："
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
