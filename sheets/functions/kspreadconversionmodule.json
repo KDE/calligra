@@ -25,6 +25,7 @@
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
                 "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_CN]": "KSpread 团队",
                 "Name[zh_TW]": "KSpread 團隊"
             }
         ],
@@ -51,6 +52,7 @@
         "Description[tr]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[uk]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[x-test]": "xxARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRINGxx",
+        "Description[zh_CN]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "Description[zh_TW]": "ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING",
         "EnabledByDefault": true,
         "Icon": "funct",
@@ -78,6 +80,7 @@
         "Name[tr]": "Dönüştürme İşlevleri",
         "Name[uk]": "Функції перетворення",
         "Name[x-test]": "xxConversion Functionsxx",
+        "Name[zh_CN]": "转换函数",
         "Name[zh_TW]": "轉換函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",

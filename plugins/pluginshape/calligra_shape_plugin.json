@@ -22,6 +22,7 @@
         "Name[tr]": "Eklenti Şekli",
         "Name[uk]": "Форма додатка",
         "Name[x-test]": "xxPlugin Shapexx",
+        "Name[zh_CN]": "插件形状",
         "Name[zh_TW]": "外掛程式元件 ",
         "ServiceTypes": [
             "Calligra/Shape"

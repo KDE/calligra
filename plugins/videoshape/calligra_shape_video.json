@@ -22,6 +22,7 @@
         "Name[tr]": "Video Şekli",
         "Name[uk]": "Форма-відео",
         "Name[x-test]": "xxVideo Shapexx",
+        "Name[zh_CN]": "视频形状",
         "Name[zh_TW]": "影片元件",
         "ServiceTypes": [
             "Calligra/Shape"

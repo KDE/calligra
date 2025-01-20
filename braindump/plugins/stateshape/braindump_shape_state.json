@@ -23,6 +23,7 @@
         "Name[tr]": "Şekil Durumu",
         "Name[uk]": "Форма стану",
         "Name[x-test]": "xxState Shapexx",
+        "Name[zh_CN]": "状态形状",
         "Name[zh_TW]": "狀態元件",
         "ServiceTypes": [
             "Calligra/Shape"

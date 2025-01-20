@@ -23,6 +23,7 @@
         "Name[tr]": "Sunum Değişkenleri",
         "Name[uk]": "Змінні презентації",
         "Name[x-test]": "xxPresentation Variablesxx",
+        "Name[zh_CN]": "幻灯片变量",
         "Name[zh_TW]": "簡報變數",
         "ServiceTypes": [
             "Calligra/Text-InlineObject"

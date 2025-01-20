@@ -22,6 +22,7 @@
         "Name[tr]": "Karbon Araçları",
         "Name[uk]": "Засоби Karbon",
         "Name[x-test]": "xxKarbon Toolsxx",
+        "Name[zh_CN]": "Karbon 工具",
         "Name[zh_TW]": "Karbon 工具",
         "ServiceTypes": [
             "Calligra/Tool"

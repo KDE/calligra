@@ -27,6 +27,7 @@
                 "Name[tr]": "Raphael Langerhorst",
                 "Name[uk]": "Raphael Langerhorst",
                 "Name[x-test]": "xxRaphael Langerhorstxx",
+                "Name[zh_CN]": "Raphael Langerhorst",
                 "Name[zh_TW]": "Raphael Langerhorst"
             }
         ],
@@ -53,6 +54,7 @@
         "Description[tr]": "Bir hücre erimine bir takvim ekler.",
         "Description[uk]": "Вставляє календар у діапазон комірок.",
         "Description[x-test]": "xxInserts a calendar into a cell range.xx",
+        "Description[zh_CN]": "在单元格范围中插入日历。",
         "Description[zh_TW]": "將行事曆插入一塊儲存格範圍。",
         "EnabledByDefault": true,
         "Icon": "x-office-calendar",
@@ -81,6 +83,7 @@
         "Name[tr]": "Takvim Aracı",
         "Name[uk]": "Інструмент календаря",
         "Name[x-test]": "xxCalendar Toolxx",
+        "Name[zh_CN]": "日历工具",
         "Name[zh_TW]": "行事曆工具",
         "ServiceTypes": [
             "CalligraSheets/Plugin",

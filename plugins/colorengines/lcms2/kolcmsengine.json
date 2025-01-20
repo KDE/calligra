@@ -20,6 +20,7 @@
         "Name[tr]": "Pigment için LCMS Renk Yönetimi İşletkesi",
         "Name[uk]": "Рушій керування кольорами LCMS для Pigment",
         "Name[x-test]": "xxLCMS Color Management Engine for Pigmentxx",
+        "Name[zh_CN]": "用于印刷的 LCMS 色彩管理引擎",
         "Name[zh_TW]": "Pigment 的 LCMS 色彩管理引擎",
         "ServiceTypes": [
             "Calligra/ColorSpace"

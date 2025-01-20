@@ -22,6 +22,7 @@
         "Name[tr]": "Canlandırma Aracı",
         "Name[uk]": "Засіб для анімації",
         "Name[x-test]": "xxAnimation Toolxx",
+        "Name[zh_CN]": "动画工具",
         "Name[zh_TW]": "動畫工具",
         "ServiceTypes": [
             "CalligraStage/Tool"

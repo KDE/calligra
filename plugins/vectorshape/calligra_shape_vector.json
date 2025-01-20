@@ -21,6 +21,7 @@
         "Name[tr]": "Durağan Vektör Şekli",
         "Name[uk]": "Статична векторна форма",
         "Name[x-test]": "xxStatic Vector Shapexx",
+        "Name[zh_CN]": "静态矢量形状",
         "Name[zh_TW]": "靜態向量元件",
         "ServiceTypes": [
             "Calligra/Flake"

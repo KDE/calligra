@@ -21,6 +21,7 @@
         "Description[tr]": "Belge ve RDF veritabanı arasında kişi ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map contact items between document and RDF databasexx",
+        "Description[zh_CN]": "映射文档和 RDF 数据库之间联系项的插件",
         "Description[zh_TW]": "讓文件與 RDF 資料庫聯絡人項目對應的外掛程式",
         "Name": "RDF Contact Plugin",
         "Name[ca@valencia]": "Connector de contacte RDF",
@@ -43,6 +44,7 @@
         "Name[tr]": "RDF Kişi Eklentisi",
         "Name[uk]": "Додаток контактів RDF",
         "Name[x-test]": "xxRDF Contact Pluginxx",
+        "Name[zh_CN]": "RDF 联系人插件",
         "Name[zh_TW]": "RDF 聯絡人外掛程式",
         "ServiceTypes": [
             "Calligra/SemanticItem"

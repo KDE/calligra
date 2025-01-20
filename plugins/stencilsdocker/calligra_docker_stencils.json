@@ -21,6 +21,7 @@
         "Name[tr]": "Calligra Stensil Docker Eklentisi",
         "Name[uk]": "Додаток панелі шаблонів для Calligra",
         "Name[x-test]": "xxCalligra Stencils Docker pluginxx",
+        "Name[zh_CN]": "Calligra 模板坞插件",
         "Name[zh_TW]": "Calligra Stencils Docker 外掛程式",
         "ServiceTypes": [
             "Calligra/Dock"
