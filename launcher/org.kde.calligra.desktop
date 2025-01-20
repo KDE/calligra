@@ -71,6 +71,7 @@ Comment[sv]=Kontorssvit
 Comment[tr]=Ofis Paketi
 Comment[uk]=Офісний комплект
 Comment[x-test]=xxOffice Suitexx
+Comment[zh_CN]=办公套件
 Icon=org.kde.calligra.words
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;WordProcessor;

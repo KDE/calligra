@@ -22,6 +22,7 @@
         "Name[tr]": "Tablolar Çözücü Eklentisi",
         "Name[uk]": "Додаток розв’язання задач для Sheets",
         "Name[x-test]": "xxSheets Solver Pluginxx",
+        "Name[zh_CN]": "Sheets 的求解插件",
         "Name[zh_TW]": "Sheets Solver 外掛程式",
         "ServiceTypes": [
             "Sheets/ViewPlugin"

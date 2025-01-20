@@ -22,6 +22,7 @@
         "Name[tr]": "Çizelge Şekli",
         "Name[uk]": "Форма діаграми",
         "Name[x-test]": "xxChart Shapexx",
+        "Name[zh_CN]": "图表形状",
         "Name[zh_TW]": "圖表元件",
         "ServiceTypes": [
             "Calligra/Shape"

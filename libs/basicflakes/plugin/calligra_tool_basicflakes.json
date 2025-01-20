@@ -22,6 +22,7 @@
         "Name[tr]": "Temel Tanecikler",
         "Name[uk]": "Основні модулі",
         "Name[x-test]": "xxBasic Flakesxx",
+        "Name[zh_CN]": "基本雪花",
         "Name[zh_TW]": "基本 Flake",
         "ServiceTypes": [
             "Calligra/Tool"

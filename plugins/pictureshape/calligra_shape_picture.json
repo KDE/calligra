@@ -22,6 +22,7 @@
         "Name[tr]": "Resim Şekli",
         "Name[uk]": "Форма-зображення",
         "Name[x-test]": "xxPicture Shapexx",
+        "Name[zh_CN]": "图片形状",
         "Name[zh_TW]": "圖片元件",
         "ServiceTypes": [
             "Calligra/Shape"

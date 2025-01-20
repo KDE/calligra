@@ -35,6 +35,7 @@
         "Name[tr]": "Calligra Hesap Tablosu Bileşeni",
         "Name[uk]": "Компонент електронних таблиць Calligra",
         "Name[x-test]": "xxCalligra Spreadsheet Componentxx",
+        "Name[zh_CN]": "Calligra Spreadsheet 组件",
         "Name[zh_TW]": "Calligra 工作表組件",
         "ServiceTypes": [
             "Calligra/Part"

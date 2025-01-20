@@ -22,6 +22,7 @@
         "Name[tr]": "Quickstates Eklentisi",
         "Name[uk]": "Додаток станів",
         "Name[x-test]": "xxQuickstates Pluginxx",
+        "Name[zh_CN]": "快速状态插件",
         "Name[zh_TW]": "Quickstates 外掛程式",
         "ServiceTypes": [
             "Braindump/Extensions"

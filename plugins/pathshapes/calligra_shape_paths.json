@@ -24,6 +24,7 @@
         "Name[tr]": "Yol Şekilleri",
         "Name[uk]": "Форми контурів",
         "Name[x-test]": "xxPath Shapesxx",
+        "Name[zh_CN]": "路径形状",
         "Name[zh_TW]": "路徑元件",
         "ServiceTypes": [
             "Calligra/Shape"

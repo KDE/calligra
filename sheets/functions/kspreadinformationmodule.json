@@ -26,6 +26,7 @@
                 "Name[tr]": "KSpread Takımı",
                 "Name[uk]": "Команда KSpread",
                 "Name[x-test]": "xxThe KSpread Teamxx",
+                "Name[zh_CN]": "KSpread 团队",
                 "Name[zh_TW]": "KSpread 團隊"
             }
         ],
@@ -53,6 +54,7 @@
         "Description[tr]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "Description[uk]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "Description[x-test]": "xxERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPExx",
+        "Description[zh_CN]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "Description[zh_TW]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "EnabledByDefault": true,
         "Icon": "funct",
@@ -81,6 +83,7 @@
         "Name[tr]": "Bilgi İşlevleri",
         "Name[uk]": "Інформаційні функції",
         "Name[x-test]": "xxInformation Functionsxx",
+        "Name[zh_CN]": "信息函数",
         "Name[zh_TW]": "資訊函數",
         "ServiceTypes": [
             "CalligraSheets/Plugin",

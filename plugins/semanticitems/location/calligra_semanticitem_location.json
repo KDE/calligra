@@ -21,6 +21,7 @@
         "Description[tr]": "Belge ve RDF veritabanı arasında konum ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами місць у документі та у базі даних RDF",
         "Description[x-test]": "xxA plugin to map location items between document and RDF databasexx",
+        "Description[zh_CN]": "映射文档和 RDF 数据库之间的位置项的插件",
         "Description[zh_TW]": "讓文件與 RDF 資料庫位置項目對應的外掛程式",
         "Name": "RDF Location Plugin",
         "Name[ca@valencia]": "Connector d'ubicació RDF",
@@ -44,6 +45,7 @@
         "Name[tr]": "RDF Konum Eklentisi",
         "Name[uk]": "Додаток місць RDF",
         "Name[x-test]": "xxRDF Location Pluginxx",
+        "Name[zh_CN]": "RDF 位置插件",
         "Name[zh_TW]": "RDF 位置外掛程式",
         "ServiceTypes": [
             "Calligra/SemanticItem"

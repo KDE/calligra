@@ -23,6 +23,7 @@
         "Name[tr]": "Calligra Dockers Eklentisi",
         "Name[uk]": "Додаток панелей для Calligra",
         "Name[x-test]": "xxCalligra Dockers pluginxx",
+        "Name[zh_CN]": "Calligra 停靠插件",
         "Name[zh_TW]": "Calligra Dockers 外掛程式",
         "ServiceTypes": [
             "Calligra/Dock"

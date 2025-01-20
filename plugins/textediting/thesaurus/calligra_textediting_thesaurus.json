@@ -24,6 +24,7 @@
         "Description[tr]": "İlgili sözcükleri göster",
         "Description[uk]": "Показати пов’язані слова",
         "Description[x-test]": "xxShow Related Wordsxx",
+        "Description[zh_CN]": "显示相关单词",
         "Description[zh_TW]": "顯示相關單字",
         "Icon": "",
         "Name": "Thesaurus Tool",
@@ -48,6 +49,7 @@
         "Name[tr]": "Eşanlamlılar Sözlüğü Aracı",
         "Name[uk]": "Засіб синонімів",
         "Name[x-test]": "xxThesaurus Toolxx",
+        "Name[zh_CN]": "词典工具",
         "Name[zh_TW]": "同義字工具",
         "ServiceTypes": [
             "Calligra/Text-EditingPlugin"
