@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-01-14 08:34+0200\n"
+"PO-Revision-Date: 2025-01-23 10:30+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -392,7 +392,7 @@ msgstr ""
 #: functions/bitops.xml:35
 #, kde-format
 msgid "Amount to left shift by"
-msgstr ""
+msgstr "כמות להזחה שמאלה"
 
 #: functions/bitops.xml:39
 #, fuzzy, kde-format
@@ -408,12 +408,12 @@ msgstr ""
 #: functions/bitops.xml:40
 #, kde-format
 msgid "BITLSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITLSHIFT(ערך;‎ גודל הזחה)"
 
 #: functions/bitops.xml:53
 #, kde-format
 msgid "Amount to right shift by"
-msgstr ""
+msgstr "כמות להזחה ימינה"
 
 #: functions/bitops.xml:57
 #, fuzzy, kde-format
@@ -429,7 +429,7 @@ msgstr ""
 #: functions/bitops.xml:58
 #, kde-format
 msgid "BITRSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITRSHIFT(ערך;‎ גודל הזחה)"
 
 #: functions/bitops.xml:75
 #, fuzzy, kde-format

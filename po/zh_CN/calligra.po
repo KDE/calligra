@@ -704,7 +704,7 @@ msgstr "不自动保存"
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr " 分钟"
+msgstr " min"
 
 #: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format

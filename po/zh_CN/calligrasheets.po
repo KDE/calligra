@@ -12277,7 +12277,7 @@ msgstr "不自动保存"
 #: part/dialogs/FileOptionsWidget.ui:54
 #, kde-format
 msgid " min"
-msgstr " 分钟"
+msgstr " min"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/FileOptionsWidget.ui:67
