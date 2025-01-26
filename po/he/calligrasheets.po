@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-01-23 10:30+0200\n"
+"PO-Revision-Date: 2025-01-25 12:59+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2551,7 +2551,7 @@ msgstr "הערך להמרה"
 #: functions/engineering.xml:339
 #, kde-format
 msgid "The minimum length of the output"
-msgstr ""
+msgstr "אורך הפלט המזערי"
 
 #: functions/engineering.xml:199
 #, fuzzy, kde-format
