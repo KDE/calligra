@@ -9464,7 +9464,7 @@ msgid ""
 "regression line with the y axis."
 msgstr ""
 "A función INTERCEPT() calcula a intersección da liña de regresión linear co "
-"eixo y."
+"eixe y."
 
 #: functions/statistical.xml:596
 #, kde-format
@@ -10456,7 +10456,7 @@ msgid ""
 msgstr ""
 "Para que a liña de regresión teña que pasar pola orixe (X=0, Y=0), pase 0 ou "
 "FALSE como valor para o cuarto parámetro. Se lle pasa TRUE ou 1 (o valor "
-"predeterminado) a liña pode pasar polo eixo vertical nun valor de Y distinto "
+"predeterminado) a liña pode pasar polo eixe vertical nun valor de Y distinto "
 "de 0."
 
 #: functions/statistical.xml:1434
