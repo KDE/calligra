@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-01-25 12:59+0200\n"
+"PO-Revision-Date: 2025-01-31 11:47+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -10343,7 +10343,7 @@ msgstr "ערך (מערך)"
 #: functions/statistical.xml:1708
 #, kde-format
 msgid "mean"
-msgstr "ממוצא"
+msgstr "ממוצע"
 
 #: functions/statistical.xml:1712
 #, fuzzy, kde-format
