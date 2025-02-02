@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-07-14 14:46+0300\n"
+"PO-Revision-Date: 2025-02-01 09:35+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -262,12 +262,12 @@ msgstr "תרשים עמודות רגיל"
 #: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
-msgstr "תרשים עמודות בערימה"
+msgstr "תרשים עמודות בערמה"
 
 #: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
-msgstr "תרשים עמודות בערימה"
+msgstr "תרשים עמודות בערמה"
 
 #: ChartShapeFactory.cpp:99
 #, kde-format
@@ -293,12 +293,12 @@ msgstr "תרשים קווים רגיל"
 #: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
-msgstr "תרשים קווים בערימה"
+msgstr "תרשים קווים בערמה"
 
 #: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
-msgstr "תרשים קווים בערימה"
+msgstr "תרשים קווים בערמה"
 
 #: ChartShapeFactory.cpp:132
 #, kde-format
@@ -324,12 +324,12 @@ msgstr "תרשים שטח רגיל"
 #: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
-msgstr "תרשים שטח בערימה"
+msgstr "תרשים שטח בערמה"
 
 #: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
-msgstr "תרשים שטח בערימה"
+msgstr "תרשים שטח בערמה"
 
 #: ChartShapeFactory.cpp:165
 #, kde-format
@@ -686,7 +686,7 @@ msgstr "תרשים עמודות רגיל"
 #: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "תרשים עמודות בערימה"
+msgstr "תרשים עמודות בערמה"
 
 #: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
@@ -701,7 +701,7 @@ msgstr "תרשים קווים רגיל"
 #: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr "תרשים קווים בערימה"
+msgstr "תרשים קווים בערמה"
 
 #: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
@@ -716,7 +716,7 @@ msgstr "תרשים שטח רגיל"
 #: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr "תרשים שטח בערימה"
+msgstr "תרשים שטח בערמה"
 
 #: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
