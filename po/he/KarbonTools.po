@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-11 23:58+0300\n"
+"PO-Revision-Date: 2025-02-01 09:28+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -185,7 +185,7 @@ msgstr "הוספת אפקט מסנן"
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
-msgstr "הוספת אפקט לערימת האפקטים הנוכחית"
+msgstr "הוספת אפקט לערמת האפקטים הנוכחית"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
@@ -257,7 +257,7 @@ msgstr "הסרת אפקט מסנן"
 #: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr "הגדרת ערימת מסננים"
+msgstr "הגדרת ערמת מסננים"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
