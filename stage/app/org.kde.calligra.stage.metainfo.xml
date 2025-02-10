@@ -326,7 +326,7 @@
   <provides>
     <binary>calligrastage</binary>
   </provides>
-  <launchable type="desktop-id">org.kde.calligra.karbon.desktop</launchable>
+  <launchable type="desktop-id">org.kde.calligra.stage.desktop</launchable>
   <developer id="org.kde">
     <name>The KDE Community</name>
     <url>https://kde.org</url>
