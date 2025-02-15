@@ -55,7 +55,7 @@ msgstr "Adrián Chaves (Gallaecio)"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "adrian@chaves.io"
+msgstr "adrian@chaves.gal"
 
 #: Main.qml:48
 #, kde-format

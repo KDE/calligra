@@ -28,7 +28,7 @@ msgstr "Adrián Chaves Fernández (Gallaecio)"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "adrian@chaves.io"
+msgstr "adrian@chaves.gal"
 
 #: FormulaCommand.cpp:59
 msgctxt "(qtundo-format)"
