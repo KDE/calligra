@@ -32,7 +32,7 @@ msgstr "Miguel Branco, Adrián Chaves (Gallaecio)"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "mgl.branco@gmail.com, adrian@chaves.io"
+msgstr "mgl.branco@gmail.com, adrian@chaves.gal"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
 #, kde-format
