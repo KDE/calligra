@@ -106,10 +106,12 @@ public:
     explicit Value(qsizetype i);
 #endif
 
+#if QT_POINTER_SIZE != 4
     /**
      * Creates an integer value.
      */
     explicit Value(int i);
+#endif
 
     /**
      * Creates a floating-point value.
