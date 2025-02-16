@@ -26,7 +26,7 @@ msgstr ""
 #: connectionTool/ConnectionPointWidget.ui:48
 #, kde-format
 msgid "Edit Mode"
-msgstr "Mode d'edició"
+msgstr "Mode edició"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEscape)
 #: connectionTool/ConnectionPointWidget.ui:55
