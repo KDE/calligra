@@ -276,6 +276,7 @@ Value::Value(int64_t i)
     d->format = fmt_Number;
 }
 
+#if QT_POINTER_SIZE != 4
 // create an integer value
 Value::Value(int i)
     : d(Private::null())
@@ -284,6 +285,7 @@ Value::Value(int i)
     d->i = static_cast<int64_t>(i);
     d->format = fmt_Number;
 }
+#endif
 
 #ifndef Q_OS_WIN
 // create an integer value
