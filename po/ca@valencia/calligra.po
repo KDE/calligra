@@ -1010,7 +1010,8 @@ msgstr ""
 #: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
-msgstr "Error mentre s'escrivia «%1». Potser la partició és plena?"
+msgstr ""
+"S'ha produït un error mentre s'escrivia «%1». Potser la partició és plena?"
 
 #: main/KoDocument.cpp:1217
 #, kde-format
