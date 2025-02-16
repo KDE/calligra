@@ -51,3 +51,4 @@ Exec=khelpcenter help:/calligra
 NoDisplay=true
 X-DocPath=calligra/index.html
 Categories=Qt;KDE;Office;
+X-AppStream-Ignore=true
