@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-07 00:40+0000\n"
+"POT-Creation-Date: 2025-02-17 02:29+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -282,61 +282,61 @@ msgstr "의존성"
 
 # https://support.office.com/ko-kr/article/-div-0-%EC%98%A4%EB%A5%98%EB%A5%BC-%EC%88%98%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-3a5a18a9-8d80-4ebb-a908-39e759a009a5
 # #! 형식의 오류는 한국어로 번역하지 않음.
-#: engine/Value.cpp:655
+#: engine/Value.cpp:657
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:663
+#: engine/Value.cpp:665
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:671
+#: engine/Value.cpp:673
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:679
+#: engine/Value.cpp:681
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:687
+#: engine/Value.cpp:689
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:695
+#: engine/Value.cpp:697
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:703
+#: engine/Value.cpp:705
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:711
+#: engine/Value.cpp:713
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:719
+#: engine/Value.cpp:721
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:727
+#: engine/Value.cpp:729
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
