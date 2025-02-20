@@ -11,9 +11,6 @@ add_compile_options("-DCALLIGRA_YEAR=${CALLIGRA_YEAR}")
 
 project(calligra VERSION ${RELEASE_SERVICE_VERSION})
 
-if (POLICY CMP0022)
-    cmake_policy(SET CMP0022 OLD)
-endif ()
 if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
