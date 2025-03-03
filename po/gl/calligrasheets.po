@@ -14186,12 +14186,12 @@ msgstr "Amosar a barra de estado"
 #: part/View.cpp:374
 #, kde-format
 msgid "Tab Bar"
-msgstr "Barra de lapelas"
+msgstr "Barra de separadores"
 
 #: part/View.cpp:375
 #, kde-format
 msgid "Show the tab bar"
-msgstr "Amosar a barra de lapelas"
+msgstr "Amosar a barra de separadores"
 
 #: part/View.cpp:380
 #, kde-format
