@@ -5,13 +5,13 @@
 # Görkem Çetin <gorkem@kde.org>, 2003.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2024-09-03 17:31+0300\n"
+"PO-Revision-Date: 2025-03-04 12:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -4191,7 +4191,7 @@ msgid ""
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
 "EFFECT() işlevi, bir basit faizin belli zamanlarda yinelenerek alacağı "
-"değeri hesaplar. Örneğin, %​8 değerinde aylik tekrar hesaplanan bir faiz, "
+"değeri hesaplar. Örneğin, %​8 değerinde aylık yeniden hesaplanan bir faiz, "
 "yıllık EFFECT(.08; 12) veya ​%​8,3 olacaktır."
 
 #: functions/financial.xml:488
@@ -8866,10 +8866,11 @@ msgid ""
 "Both parameters should be positive and the first parameter should not be "
 "less than the second. Otherwise the function returns an error."
 msgstr ""
-"COMBINA() işlevi, takrara yol açan olası birleşimlerin(kombinasyon) sayısını "
-"hesaplar. İlk değer, toplam eleman sayısıdır. İkinci değer ise tekrara yol "
-"açan seçilecek eleman sayısıdır. Her iki değer de artı olmalı ve ilk değer, "
-"ikincisinden küçük olmamalıdır. Aksi durumlarda işlev hata döner."
+"COMBINA() işlevi, yinelemeye yol açan olası birleşimlerin(kombinasyon) "
+"sayısını hesaplar. İlk değer, toplam eleman sayısıdır. İkinci değer ise "
+"yinelemeye yol açan seçilecek eleman sayısıdır. Her iki değer de artı olmalı "
+"ve ilk değer, ikincisinden küçük olmamalıdır. Aksi durumlarda işlev hata "
+"döner."
 
 #: functions/statistical.xml:207
 #, kde-format
@@ -10360,7 +10361,7 @@ msgid ""
 "again if no extrapolation is required. "
 msgstr ""
 "En uygun satırı, 3. parametre olarak belirlenen farklı bir X değerini tahmin "
-"edilmiş olabilir. Ama verilen X-aralığı hiç tahmin gerekmiyorsa tekrar "
+"edilmiş olabilir. Ama verilen X erimi hiç tahmin gerekmiyorsa yeniden "
 "verilmelidir. "
 
 #: functions/statistical.xml:1433

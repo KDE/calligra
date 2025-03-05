@@ -400,15 +400,13 @@ msgstr "Hilfreiche Fehlerbehebung und Ratschläge"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Thomas Diehl, Jannick Kuhr, Burkhard Lück, Justus Seifert"
+msgstr "Deutsches KDE-Übersetzungsteam"
 
 #: ui/KarbonAboutData.h:47
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
-"thd@kde.org, opensource@kuhr.org, lueck@hube-lueck.de, justus."
-"seifert@googlemail.com"
+msgstr "kde-i18n-de@kde.org"
 
 #: ui/KarbonDocumentMergeCommand.cpp:113 ui/KarbonView.cpp:434
 msgctxt "(qtundo-format)"

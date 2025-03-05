@@ -13206,15 +13206,14 @@ msgstr "Implementierte, überarbeitete und testete diverse Funktionen"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
-"thd@kde.org, te@profzone.ch, opensource@kuhr.org, holger-kde@holgis.net"
+msgstr "kde-i18n-de@kde.org"
 
 #. i18n translator strings
 #: part/AboutData.h:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Thomas Diehl, Tobias Erbsland, Jannick Kuhr, Holger Schröder"
+msgstr "Deutsches KDE-Übersetzungsteam"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
