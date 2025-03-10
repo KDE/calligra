@@ -15794,34 +15794,3 @@ msgstr "Selecciona múltiples cel·les"
 #, kde-format
 msgid "Link %1 activated"
 msgstr "L'enllaç %1 és activat"
-
-#~ msgid "Colors"
-#~ msgstr "Colors"
-
-#~ msgid "&Grid:"
-#~ msgstr "&Quadrícula:"
-
-#~ msgid "Custom..."
-#~ msgstr "A mida..."
-
-#~ msgid ""
-#~ "Processing is not possible, because some cells are locked as elements of "
-#~ "a matrix."
-#~ msgstr ""
-#~ "No és possible processar perquè algunes cel·les estan bloquejades com a "
-#~ "elements d'una matriu."
-
-#~ msgid "Processing is not possible, because some cells are protected."
-#~ msgstr "No és possible processar perquè algunes cel·les estan protegides."
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Aquest enllaç apunta al programa o script «%1».\n"
-#~ "Els programes maliciosos poden malmetre el vostre ordinador. Esteu segur "
-#~ "que voleu engegar aquest programa?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Obro l'enllaç?"

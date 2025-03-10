@@ -1892,6 +1892,3 @@ msgstr "Text principal"
 #, kde-format
 msgid "Other text"
 msgstr "Altres textos"
-
-#~ msgid "Left by:"
-#~ msgstr "A l'esquerra per:"
