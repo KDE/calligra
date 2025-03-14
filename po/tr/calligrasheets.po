@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-03-04 12:39+0300\n"
+"PO-Revision-Date: 2025-03-13 23:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2355,7 +2355,7 @@ msgstr "İşlevin sıralaması"
 #: functions/engineering.xml:41
 #, kde-format
 msgid "The BESSELI() function returns the modified Bessel function In(x)."
-msgstr "BESSELI() işlevi, değiştirilmiş Bessel işlevi In(x)'i döndürür."
+msgstr "BESSELI() işlevi, değiştirilmiş Bessel işlevi In(x)’i döndürür."
 
 #: functions/engineering.xml:42
 #, kde-format
@@ -4632,7 +4632,7 @@ msgid ""
 msgstr ""
 "NOMINAL() işlevi, yıllık olarak hesaplanmış verimli bir faiz oranı için "
 "nominal (belirli) faiz oranını hesaplar. Örneğin; aylık birleşik bir hesapta "
-"%​8 kazanmak için, NOMINAL(.08; 12) veya %​​7,72 getiriye gereksiniminiz vardır."
+"%​8 kazanmak için NOMINAL(.08; 12) veya %​​7,72 getiriye gereksiniminiz vardır."
 
 #: functions/financial.xml:828
 #, kde-format
@@ -4682,7 +4682,7 @@ msgstr "Değerler (diziliş)"
 #: functions/financial.xml:881
 #, kde-format
 msgid "The net present value (NPV) for a series of periodic cash flows."
-msgstr "Periyodik bir nakit akış serisi için, net mevcut değer (NPV)."
+msgstr "Periyodik bir nakit akış serisi için net mevcut değer (NPV)."
 
 #: functions/financial.xml:885
 #, kde-format
@@ -4722,7 +4722,7 @@ msgid ""
 "The ODDLPRICE function calculates the value of the security per 100 currency "
 "units of face value. The security has an irregular last interest date."
 msgstr ""
-"ODDLPRICE işlevi, görünen değerin her 100 para birimi için, yatırım aracının "
+"ODDLPRICE işlevi, görünen değerin her 100 para birimi için yatırım aracının "
 "değerini hesaplar. Yatırım aracı düzensiz son faiz tarihine sahiptir."
 
 #: functions/financial.xml:933
@@ -6260,7 +6260,7 @@ msgid ""
 msgstr ""
 "EPS() makinenin epsilon döndürür. Bu ise 1 ile en yakın (daha büyük) kayan "
 "nokta değeri arasındaki farktır. Bilgisayarlar sonlu sayıdaki hanelerle "
-"çalıştıkları için, yuvarlama hatası (önemsiz olsa da) tüm işlemlerde "
+"çalıştıkları için yuvarlama hatası (önemsiz olsa da) tüm işlemlerde "
 "olacaktır."
 
 #: functions/math.xml:118
@@ -8384,11 +8384,10 @@ msgid ""
 "be sorted. The search will end, if the 'lookup value' is lower than the "
 "value, currently compared to."
 msgstr ""
-"\"Arama değeri\" için \"veri kaynağı\"nın ilk satırına bakar. Eğer bir "
-"eşleşme varsa, 'satır' ve sütundaki değer, değerin bulunduğu, döndürürlür. "
-"Eğer 'sıralı' seçeneği true ise, ilk satır sıralı olarak varsayılır. Eğer "
-"'arama değeri' karşılaştırılmakta olan değerden küçük ise arama "
-"sonlandırılır."
+"“Arama değeri” için “veri kaynağı”nın ilk satırına bakar. Eğer bir eşleşme "
+"varsa “satır” ve sütundaki değer, değerin bulunduğu, döndürülür. Eğer "
+"“sıralı” seçeneği true ise ilk satır sıralı olarak varsayılır. Eğer “arama "
+"değeri” karşılaştırılmakta olan değerden küçük ise arama sonlandırılır."
 
 #: functions/reference.xml:276
 #, kde-format
@@ -8413,11 +8412,11 @@ msgid ""
 "to be sorted. The search will end, if the 'lookup value' is lower than the "
 "value, currently compared to."
 msgstr ""
-"\"Arama değeri\" için \"veri kaynağı\"nın ilk sütununa bakar. Eğer bir "
-"eşleşme varsa içinde aranan değerin bulunduğu 'sütun' ve satırdaki değer "
-"döndürülür. Eğer 'sıralı' seçeneği true ise, ilk sütun sıralı olarak "
-"varsayılır. Eğer 'arama değeri' karşılaştırılmakta olan değerden küçük ise "
-"arama sonlandırırlır."
+"“Arama değeri” için “veri kaynağı”nın ilk sütununa bakar. Eğer bir eşleşme "
+"varsa içinde aranan değerin bulunduğu “sütun” ve satırdaki değer döndürülür. "
+"Eğer “sıralı” seçeneği true ise ilk sütun sıralı olarak varsayılır. Eğer "
+"“arama değeri” karşılaştırılmakta olan değerden küçük ise arama "
+"sonlandırılır."
 
 #: functions/reference.xml:302
 #, kde-format
@@ -9863,9 +9862,9 @@ msgid ""
 msgstr ""
 "PERCENTILE() işlevi, Veri içindeki veri değerlerinin x. örnek yüzdesini "
 "döndürür. Bir yüzde, veri dizisinin en küçük değerinden (alfa=0) en büyük "
-"değerine giden (alfa=1) bir veri dizisi için ölçek döndürür. Alfa = %​25 "
-"için, yüzde ilk dördünü ifade eder; alfa = %​50 ORTANCA’dır. Boş hücreler "
-"sıfır olarak varsayılacak ve metin içeren hücreler yok sayılacaktır."
+"değerine giden (alfa=1) bir veri dizisi için ölçek döndürür. Alfa = %​25 için "
+"yüzde ilk dördünü ifade eder; alfa = %​50 ORTANCA’dır. Boş hücreler sıfır "
+"olarak varsayılacak ve metin içeren hücreler yok sayılacaktır."
 
 #: functions/statistical.xml:979
 #, kde-format
@@ -10349,7 +10348,7 @@ msgid ""
 "cell-range of the corresponding X-values. "
 msgstr ""
 "TREND() işlevi, bilinen X- ve Y-değer çiftlerinin doğrusal regresyonunu "
-"temel alarak Y-değerlerinin bir serisini hesaplar. Girdi parametreleri için, "
+"temel alarak Y-değerlerinin bir serisini hesaplar. Girdi parametreleri için "
 "kullanıcı öncelikle Y-değerlerini kapsayan hücre-aralığı seçmek zorundadır, "
 "daha sonra uygun X-değerlerinin hücre değerlerini seçer. "
 
@@ -10385,7 +10384,7 @@ msgid ""
 "rows, rather than columns."
 msgstr ""
 "Not olarak, bu işlevin sonucu Y-değerlerinin hesaplanmış bir satırı olduğu "
-"için, X- ve Y-değerleri sütun yerine satırsa veriyi çizmeyi "
+"için X- ve Y-değerleri sütun yerine satırsa veriyi çizmeyi "
 "kolaylaştıracaktır."
 
 #: functions/statistical.xml:1435
@@ -10532,9 +10531,9 @@ msgstr ""
 "çünkü bir kişi hem kısa hem de uzun olamaz: her kişi yalnızca bir grup ya da "
 "diğer grup için veri sağlayabilir. Bu gibi durumlarda, her veri kümesindeki "
 "değerlerin farklı kaynaklardan alındığı durumlarda eşleştirilmemiş bir t-"
-"testi uygundur (type = 2 veya type = 3). Eşleştirilmemiş t-testleri için, "
-"iki veri aralığının eşit boyutta olması gerekmez; Eşleştirilmiş t-testleri "
-"için, iki aralığın aynı sayıda hücre içermesi gereklidir."
+"testi uygundur (type = 2 veya type = 3). Eşleştirilmemiş t-testleri için iki "
+"veri aralığının eşit boyutta olması gerekmez; Eşleştirilmiş t-testleri için "
+"iki aralığın aynı sayıda hücre içermesi gereklidir."
 
 #: functions/statistical.xml:1488
 #, kde-format
@@ -11427,7 +11426,7 @@ msgid ""
 "The MID() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index."
 msgstr ""
-"MID() işlevi, 'uzunluk' değerindeki kadar bir metni 'konum' değerinden "
+"MID() işlevi, “uzunluk” değerindeki kadar bir metni “konum” değerinden "
 "başlayarak, sonuç olarak döndürür."
 
 #: functions/text.xml:361
@@ -11466,8 +11465,8 @@ msgid ""
 "The MIDB() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index using byte positions."
 msgstr ""
-"MIDB() işlevi, bayt konumlarını kullanarak dizinin 'konum' indisinden "
-"başlayarak 'uzunluk' karakterini içeren bir alt dizi döndürür."
+"MIDB() işlevi, bayt konumlarını kullanarak dizinin “konum” indisinden "
+"başlayarak “uzunluk” karakterini içeren bir alt dizi döndürür."
 
 #: functions/text.xml:390
 #, kde-format
@@ -11594,8 +11593,8 @@ msgid ""
 "returned if 'length' exceeds the length of the string."
 msgstr ""
 "RIGHTB() işlevi, bayt konumlarını kullanarak karakter dizisinin en sağ "
-"karakterinden 'uzunluk' kadar bir diziyi içeren alt karakter dizisini döner. "
-"Eğer 'uzunluk' verilen karakter dizisinin uzunluğuna ulaşırsa bütün karakter "
+"karakterinden “uzunluk” kadar bir diziyi içeren alt karakter dizisini döner. "
+"Eğer “uzunluk” verilen karakter dizisinin uzunluğuna ulaşırsa bütün karakter "
 "dizisini döner."
 
 #: functions/text.xml:510
