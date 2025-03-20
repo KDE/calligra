@@ -6092,7 +6092,7 @@ all changes will be overwritten on the next script run
 <para
 >Unitats de temperatura suportades: C (Celsius), F (Fahrenheit), K (Kelvin).</para>
 <para
->Unitats de volum implementades: l (litre), tsp (cullera de te), tbs (cullera de taula), oz (unça líquida), copa, pt (pinta), qt (quart), gal (galó), barril, m3 (metre cúbic), mi3 (milla cúbica), Nmi3 (milla cúbica nàutica), in3 (polzada cúbica), ft3 (peu cúbic), yd3 (iarda cúbica) GRT o regton (tona grossa registrada).</para>
+>Unitats de volum implementades: l (litre), tsp (cullera de te), tbs (cullera de taula), oz (unça líquida), tassa, pt (pinta), qt (quart), gal (galó), barril, m3 (metre cúbic), mi3 (milla cúbica), Nmi3 (milla cúbica nàutica), in3 (polzada cúbica), ft3 (peu cúbic), yd3 (iarda cúbica) GRT o regton (tona grossa registrada).</para>
 <para
 >Unitats d'àrea suportades: m2 (metre quadrat), mi2 (milla quadrada), Nmi2 (milla nàutica quadrada), in2 (polzada quadrada), ft2 (peu quadrat), yd2 (iarda quadrada), acre, ha (hectàrea).</para>
 <para
