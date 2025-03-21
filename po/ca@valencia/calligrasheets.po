@@ -1,26 +1,27 @@
 # Translation of calligrasheets.po to Catalan (Valencian)
-# Copyright (C) 2000-2024 This_file_is_part_of_KDE
+# Copyright (C) 2000-2025 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
+# Josep M. Ferrer <txemaq@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2024-10-12 20:52+0200\n"
+"PO-Revision-Date: 2025-03-19 10:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -2531,9 +2532,9 @@ msgid ""
 "(cubic foot), yd3 (cubic yard), GRT or regton (gross register ton)."
 msgstr ""
 "Unitats de volum admeses: l (litre), tsp (cullera de te), tbs (cullera de "
-"taula), oz (unça líquida), copa, pt (pinta), qt (quart), gal (galó), barril, "
-"m3 (metre cúbic), mi3 (milla cúbica), Nmi3 (milla cúbica nàutica), in3 "
-"(polzada cúbica), ft3 (peu cúbic), yd3 (iarda cúbica) GRT o regton (tona "
+"taula), oz (unça líquida), tassa, pt (pinta), qt (quart), gal (galó), "
+"barril, m3 (metre cúbic), mi3 (milla cúbica), Nmi3 (milla cúbica nàutica), "
+"in3 (polzada cúbica), ft3 (peu cúbic), yd3 (iarda cúbica) GRT o regton (tona "
 "grossa registrada)."
 
 #: functions/engineering.xml:139
