@@ -7,6 +7,7 @@
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
+#include <QElapsedTimer>
 #include <QLoggingCategory>
 #include <QString>
 #include <QTest>
