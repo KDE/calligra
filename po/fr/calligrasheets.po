@@ -12,7 +12,7 @@
 # Daniel Durand <durand.d@9online.fr>, 2007, 2008.
 # Durand Daniel <daniel@durand-amd.net>, 2010.
 # Durand Daniel <durand.d@9online.fr>, 2010.
-# SPDX-FileCopyrightText: 2012, 2013, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2013, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Vincent PINON <vpinon@kde.org>, 2013, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2024-08-31 19:33+0200\n"
+"PO-Revision-Date: 2025-04-23 18:17+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n:
@@ -2508,8 +2508,8 @@ msgid ""
 "Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi "
 "(nautical mile), ang (Angstrom), parsec, lightyear."
 msgstr ""
-"Unités de distance gérées : m (mètre), in (inch=pouce), ft (feet=pied), mi "
-"(mile), Nm (mile nautique), ang (Angstrom), parsec, année lumière."
+"Unités de distance gérées : m (mètre), in (pouce), ft (pied), mi (mile), Nm "
+"(mile nautique), Ang (Angstrom), parsec, année lumière."
 
 #: functions/engineering.xml:132
 #, kde-format
@@ -2562,10 +2562,10 @@ msgid ""
 "meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 "
 "(cubic foot), yd3 (cubic yard), GRT or regton (gross register ton)."
 msgstr ""
-"Unités de volume gérées parmi l (litre), tsp (cuiller à café), tbs (cuiller "
-"à soupe), oz (once de liquide), cup, pt (pinte), qt (quart), gal (gallon), "
-"baril (baril), m3 (mètre cube), mi3 (mile cubique), Nm3 (mile nautique "
-"cubique), in3 (pouce cube), ft3 (pied cube), yd3 (yard cube)."
+"Unités de volume gérées : l (Litre), tsp (Cuiller à café), tbs (Cuiller à "
+"soupe), oz (Once de liquide), cup, pt (Pinte), qt (Quart), gal (Gallon), "
+"baril (Baril), m3 (Mètre cube), mi3 (Mile cubique), Nm3 (Mile nautique "
+"cubique), in3 (Pouce cube), ft3 (Pied cube), yd3 (Yard cube)."
 
 #: functions/engineering.xml:139
 #, kde-format
@@ -11757,7 +11757,7 @@ msgstr "MID (texte ; position)"
 #: functions/text.xml:363
 #, kde-format
 msgid "MID(\"Calligra\";2;3) returns \"all\""
-msgstr "La fonction MID (« Calligra » ; 2 ; 3) renvoie « all »"
+msgstr "La fonction MID (« Poutre » ; 1 ; 5) renvoie « outre »"
 
 #: functions/text.xml:364
 #, kde-format
@@ -11888,7 +11888,7 @@ msgstr "RIGHT (texte ; longueur)"
 #: functions/text.xml:487
 #, kde-format
 msgid "RIGHT(\"hello\";2) returns \"lo\""
-msgstr "La fonction RIGHT (« HELLO » ; 2) renvoie « lo »"
+msgstr "La fonction RIGHT (« Bonjour » ; 3) renvoie « Bon »"
 
 #: functions/text.xml:488
 #, kde-format
@@ -12618,9 +12618,9 @@ msgid ""
 "the value whose hyperbolic cosine is x. If x is less than 1.0, acosh() "
 "returns not-a-number (NaN) and errno is set."
 msgstr ""
-"La fonction ACOSH () calcule le cosinus hyperbolique inverse de x, qui est "
-"la valeur dont le cosinus hyperbolique est x. Si x est plus petit que 1, "
-"ACOS () renvoie l'erreur « NaN » (Not-a-Number)."
+"La fonction ACOSH () calcule le cosinus hyperbolique inverse de x, soit la "
+"valeur dont le cosinus hyperbolique est x. Si x est plus petit que 1, ACOS "
+"() renvoie l'erreur « NaN » (Not-a-Number)."
 
 #: functions/trig.xml:177
 #, kde-format
