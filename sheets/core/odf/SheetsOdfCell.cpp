@@ -1147,9 +1147,8 @@ QString Odf::decodeFormula(const QString &expression_, const Localization *local
             if (data->isDigit()) {
                 *out++ = *data++;
             } else if (*data == QChar('.', 0)) {
-                const QChar *decimalChar = decimal.constData();
-                while (!decimalChar->isNull()) {
-                    *out++ = *decimalChar++;
+                for (const QChar &decimalChar: decimal) {
+                    *out++ = decimalChar;
                 }
                 ++data;
             } else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
