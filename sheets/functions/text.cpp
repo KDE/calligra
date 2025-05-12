@@ -603,8 +603,7 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     // use globbing feature of QRegExp
-    auto regex = QRegularExpression::fromWildcard(find_text);
-    regex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+    auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
     int pos = within_text.indexOf(regex, start_num - 1);
     if (pos < 0)
         return Value::errorNA();
