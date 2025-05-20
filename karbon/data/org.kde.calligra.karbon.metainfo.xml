@@ -44,6 +44,7 @@
   <name xml:lang="uk">Karbon</name>
   <name xml:lang="x-test">xxKarbonxx</name>
   <name xml:lang="zh-CN">Karbon</name>
+  <name xml:lang="zh-TW">Karbon</name>
   <summary>Scalable Graphics</summary>
   <summary xml:lang="bs">Grafika koja se može skalirati</summary>
   <summary xml:lang="ca">Gràfics escalables</summary>
@@ -79,6 +80,7 @@
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
   <summary xml:lang="x-test">xxScalable Graphicsxx</summary>
   <summary xml:lang="zh-CN">矢量图形绘制工具</summary>
+  <summary xml:lang="zh-TW">可縮放圖形</summary>
   <description>
     <p>
       Karbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible.
@@ -115,6 +117,7 @@
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
     <p xml:lang="zh-CN">Karbon 是一款矢量绘图程序，具有易用、高度可定制和可扩展的用户界面。它既适合初次接触矢量图形的新手小试牛刀，也适合经验丰富的画师绘制精美的作品。</p>
+    <p xml:lang="zh-TW">Karbon 是一個向量繪圖應用程式，提供容易使用且極度可自訂又可擴展的使用者介面。Karbon 對於向量圖形初學者與專家皆適合。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -150,6 +153,7 @@
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">程序功能：</p>
+    <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>
         Loading support for ODG, SVG, WPG, WMF, EPS/PS
@@ -186,6 +190,7 @@
       <li xml:lang="uk">Підтримка завантаження даних ODG, SVG, WPG, WMF, EPS/PS.</li>
       <li xml:lang="x-test">xxLoading support for ODG, SVG, WPG, WMF, EPS/PSxx</li>
       <li xml:lang="zh-CN">支持加载 ODG、SVG、WPG、WMF、EPS/PS 等图像格式</li>
+      <li xml:lang="zh-TW">支援載入 ODG、SVG、WPG、WMF、EPS/PS</li>
       <li>
         Writing support for ODG, SVG, PNG, PDF, WMF
       </li>
@@ -221,6 +226,7 @@
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
       <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
       <li xml:lang="zh-CN">写入支持 ODG，SVG，PNG，PDF，WMF</li>
+      <li xml:lang="zh-TW">支援寫入 ODG、SVG、PNG、PDF、WMF</li>
       <li>
         Customizable user interface with freely placeable toolbars and dockers
       </li>
@@ -255,6 +261,7 @@
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
       <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
       <li xml:lang="zh-CN">可自定义的用户界面，工具栏和面板可以自由放置</li>
+      <li xml:lang="zh-TW">可自訂的使用者介面，工具列與面板皆可自由放置</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
@@ -586,6 +593,7 @@
       <caption xml:lang="uk">Головне вікно Karbon</caption>
       <caption xml:lang="x-test">xxMain window of Karbonxx</caption>
       <caption xml:lang="zh-CN">Karbon 主窗口</caption>
+      <caption xml:lang="zh-TW">Karbon 的主視窗</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
