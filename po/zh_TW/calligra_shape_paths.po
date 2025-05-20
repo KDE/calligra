@@ -6,20 +6,20 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2011.
 # Jeff Huang <s8321414@gmail.com>, 2016.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: PathShapes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-22 00:39+0000\n"
-"PO-Revision-Date: 2024-01-05 19:49+0900\n"
+"PO-Revision-Date: 2025-05-19 22:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
@@ -147,7 +147,7 @@ msgstr "十字"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:276
 #, kde-format
 msgid "Arrow"
-msgstr "箭號"
+msgstr "箭頭"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:179
 #: enhancedpath/EnhancedPathShapeFactory.cpp:212
@@ -155,7 +155,7 @@ msgstr "箭號"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:278
 #, kde-format
 msgid "An arrow"
-msgstr "箭號"
+msgstr "一個箭頭"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:321
 #: enhancedpath/EnhancedPathShapeFactory.cpp:323
@@ -166,12 +166,12 @@ msgstr "笑臉"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:401
 #, kde-format
 msgid "Circular Arrow"
-msgstr "圓箭號"
+msgstr "圓形箭頭"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:403
 #, kde-format
 msgid "A circular-arrow"
-msgstr "圓箭號"
+msgstr "圓形箭頭"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
