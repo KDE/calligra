@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-03-26 18:54+0900\n"
+"PO-Revision-Date: 2025-05-19 22:49+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -36,14 +36,14 @@ msgid "Your emails"
 msgstr "franklin@goodhorse.idv.tw, mail@kisaragi-hiu.com"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Draw path"
-msgstr "中斷子路徑"
+msgstr "繪製路徑"
 
 #: basicflakes/plugin/KoPencilToolFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Freehand path"
-msgstr "手繪路徑工具"
+msgstr "手繪路徑"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:442
 #, kde-format
@@ -190,7 +190,6 @@ msgid "Change segments to lines"
 msgstr "改變線段為直線"
 
 #: flake/commands/KoPathShapeMarkerCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "設定標記"
@@ -219,10 +218,6 @@ msgid "Create shape"
 msgstr "建立物件"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete shape"
-#| msgid_plural "Delete shapes"
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "刪除物件"
@@ -275,10 +270,9 @@ msgid "Reorder shapes"
 msgstr "重新排序物件"
 
 #: flake/commands/KoShapeRunAroundCommand.cpp:77
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr "改變頁面佈局"
+msgstr "變更物件環繞方式"
 
 #: flake/commands/KoShapeShadowCommand.cpp:55
 #: flake/commands/KoShapeShadowCommand.cpp:72
@@ -300,10 +294,9 @@ msgstr "變更物件尺寸"
 #: flake/commands/KoShapeStrokeCommand.cpp:59
 #: flake/commands/KoShapeStrokeCommand.cpp:76
 #: flake/commands/KoShapeStrokeCommand.cpp:87
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
-msgstr "設定標記"
+msgstr "設定描邊"
 
 #: flake/commands/KoShapeTransparencyCommand.cpp:33
 #: flake/commands/KoShapeTransparencyCommand.cpp:44
@@ -1469,9 +1462,9 @@ msgid "Import Document"
 msgstr "匯入文件"
 
 #: main/KoMainWindow.cpp:1372
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export as PDF"
-msgstr "匯出為 PDF 檔..."
+msgstr "匯出為 PDF 檔"
 
 #: main/KoMainWindow.cpp:1414
 #, kde-format
@@ -1514,9 +1507,9 @@ msgstr "隱藏 %1 工具列"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Existing Document"
-msgstr "開啟此文件"
+msgstr "開啟現存文件"
 
 #: main/KoOpenPane.cpp:167
 #, kde-format
@@ -1534,9 +1527,9 @@ msgid "Stop"
 msgstr "停止"
 
 #: main/KoPrintingDialog.cpp:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Printing"
-msgstr "列印完成"
+msgstr "列印中"
 
 #: main/KoPrintingDialog_p.h:140
 #, kde-format
@@ -1577,20 +1570,19 @@ msgid "Default"
 msgstr "預設"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "幾何平均"
+msgstr "幾何"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "箭頭"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "好玩"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1608,7 +1600,7 @@ msgid "Create Template"
 msgstr "建立樣本"
 
 #: main/KoTemplateCreateDia.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "名稱："
@@ -1754,16 +1746,15 @@ msgid "Date: %1"
 msgstr "日期：%1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "物件"
+msgstr "新增物件"
 
 #: main/KoView.cpp:358
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Author Profile"
-msgstr "使用工具：%1"
+msgstr "目前作者檔案"
 
 #: main/KoView.cpp:372 main/KoView.cpp:427
 #, kde-format
@@ -1772,9 +1763,9 @@ msgid "Anonymous"
 msgstr "匿名"
 
 #: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default Author Profile"
-msgstr "使用工具：%1"
+msgstr "預設作者檔案"
 
 #: odf/KoDocumentInfo.cpp:56
 #, kde-format
@@ -2026,19 +2017,11 @@ msgid "Hide master shapes"
 msgstr "隱藏主物件"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "刪除投影片"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:28
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete page"
-#| msgid_plural "Delete pages"
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
 msgstr "刪除頁面"
@@ -2165,19 +2148,16 @@ msgid "Shape"
 msgstr "物件"
 
 #: pageapp/KoPADocumentModel.cpp:268
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
 msgstr "重新命名投影片"
 
 #: pageapp/KoPADocumentModel.cpp:270
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
-msgstr "重新命名此頁"
+msgstr "重新命名頁面"
 
 #: pageapp/KoPADocumentModel.cpp:273
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
 msgstr "重新命名層次"
@@ -2199,12 +2179,9 @@ msgid "Locked"
 msgstr "鎖定"
 
 #: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
-msgstr "重新排序物件"
+msgstr "重新設定物件上層"
 
 #: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
@@ -2227,8 +2204,7 @@ msgid "Add a new slide or layer"
 msgstr "新增投影片或層次"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
 msgstr "投影片"
 
@@ -2390,16 +2366,14 @@ msgid "Show/hide the view's rulers"
 msgstr "顯示/隱藏檢視的尺規"
 
 #: pageapp/KoPAView.cpp:379
-#, fuzzy, kde-format
-#| msgid "Show Master Pages"
+#, kde-format
 msgid "Show Page Margins"
-msgstr "顯示主頁面"
+msgstr "顯示頁面邊距"
 
 #: pageapp/KoPAView.cpp:381
-#, fuzzy, kde-format
-#| msgid "Show/hide the view's rulers"
+#, kde-format
 msgid "Show/hide the page margins"
-msgstr "顯示/隱藏檢視的尺規"
+msgstr "顯示/隱藏頁面邊距"
 
 #: pageapp/KoPAView.cpp:385
 #, kde-format
@@ -2478,9 +2452,9 @@ msgstr "改變頁面佈局"
 
 #. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set image ..."
-msgstr "設定背景影像..."
+msgstr "設定影像..."
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
@@ -2504,56 +2478,54 @@ msgid "Slide Design"
 msgstr "投影片設計"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master page"
-msgstr "變更背景影像"
+msgstr "使用主頁面的背景"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use background of master slide"
-msgstr "設定背景影像..."
+msgstr "使用主投影片的背景"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display shapes of master page"
-msgstr "顯示主要元件"
+msgstr "顯示主頁面的物件"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display shapes of master slide"
-msgstr "顯示主要元件"
+msgstr "顯示主投影片的物件"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
-msgstr "變更背景影像"
+msgstr "變更頁面背景影像"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
-msgstr "變更背景影像"
+msgstr "變更投影片背景影像"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Master Slide %1/%2"
-msgstr "主投影片"
+msgstr "主投影片 %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide %1/%2"
-msgstr "投影片 %1"
+msgstr "投影片 %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Master Page %1/%2"
-msgstr "主頁面"
+msgstr "主頁面 %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1/%2"
-msgstr "頁面"
+msgstr "頁面 %1/%2"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:35
 #, kde-format
@@ -2691,7 +2663,7 @@ msgstr "Alpha 變暗"
 #: pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgid "Behind"
-msgstr ""
+msgstr "下置"
 
 #: pigment/compositeops/KoCompositeOpDissolve.h:42
 #: pigment/KoCompositeOpRegistry.cpp:74
@@ -2707,10 +2679,9 @@ msgstr "擦除"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
 #: pigment/KoCompositeOpRegistry.cpp:61
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Greater"
-msgstr "建立時間："
+msgstr "更不透明"
 
 #: pigment/compositeops/KoCompositeOpOver.h:48
 #: pigment/compositeops/KoOptimizedCompositeOpOver128.h:244
@@ -2800,15 +2771,15 @@ msgstr "柔光 (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:123
 #: pigment/KoCompositeOpRegistry.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr "柔光"
+msgstr "柔光 (Photoshop)"
 
 #: pigment/compositeops/KoCompositeOps.h:124
 #: pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
 msgid "Gamma Light"
-msgstr "Gamma 光"
+msgstr "Gamma 變亮"
 
 #: pigment/compositeops/KoCompositeOps.h:125
 #: pigment/KoCompositeOpRegistry.cpp:46
@@ -2849,13 +2820,13 @@ msgstr "變深"
 #: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
-msgstr "Gamma 暗"
+msgstr "Gamma 變暗"
 
 #: pigment/compositeops/KoCompositeOps.h:134
 #: pigment/KoCompositeOpRegistry.cpp:28
 #, kde-format
 msgid "Addition"
-msgstr "加"
+msgstr "相加"
 
 #: pigment/compositeops/KoCompositeOps.h:136
 #, kde-format
@@ -2866,7 +2837,7 @@ msgstr "反相減"
 #: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Divide"
-msgstr "除"
+msgstr "除去"
 
 #: pigment/compositeops/KoCompositeOps.h:140
 #: pigment/KoCompositeOpRegistry.cpp:57
@@ -2893,9 +2864,9 @@ msgid "Equivalence"
 msgstr "等值"
 
 #: pigment/compositeops/KoCompositeOps.h:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Additive-Subtractive"
-msgstr "Additive-Substractive"
+msgstr "減去平方根"
 
 #: pigment/compositeops/KoCompositeOps.h:175
 #: pigment/KoCompositeOpRegistry.cpp:75
@@ -2917,14 +2888,14 @@ msgstr "複製藍"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tangent Normalmap"
-msgstr "組合角度："
+msgstr "切線空間法線貼圖"
 
 #: pigment/compositeops/KoCompositeOps.h:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Combine Normal Maps"
-msgstr "組合路徑"
+msgstr "合併法線貼圖"
 
 #: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:81
@@ -2976,15 +2947,15 @@ msgstr "遞減明亮度"
 
 #: pigment/compositeops/KoCompositeOps.h:189
 #: pigment/KoCompositeOpRegistry.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Darker Color"
-msgstr "背景顏色"
+msgstr "較暗色彩"
 
 #: pigment/compositeops/KoCompositeOps.h:190
 #: pigment/KoCompositeOpRegistry.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lighter Color"
-msgstr "線條顏色"
+msgstr "較亮色彩"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:90
@@ -3216,9 +3187,9 @@ msgid "32 Bits Float"
 msgstr "32 位元浮點數"
 
 #: pigment/KoColorModelStandardIds.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "64 Bits Float"
-msgstr "16 位元浮點數"
+msgstr "64 位元浮點數"
 
 #: pigment/KoCompositeOp.cpp:23 pigment/KoCompositeOpRegistry.cpp:24
 #, kde-format
@@ -3266,9 +3237,9 @@ msgid "Burn"
 msgstr "燃燒"
 
 #: pigment/KoCompositeOpRegistry.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Additive Subtractive"
-msgstr "Additive Substractive"
+msgstr "減去平方根"
 
 #: pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
@@ -3281,9 +3252,9 @@ msgid "Bumpmap"
 msgstr "凹凸"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Combine Normal Map"
-msgstr "組合角度："
+msgstr "合併法線貼圖"
 
 #: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
@@ -3386,7 +3357,7 @@ msgstr "SPARQL"
 
 #. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
 #: rdf/KoDocumentRdfEditWidget.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -3453,7 +3424,7 @@ msgstr ""
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\"># 在此輸入您的 SPARQL 查詢<br /># 結果會"
-"顯示在下方。</p>\n"
+"顯示在下方。</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "family:'Verdana'; font-size:13pt;\"></p>\n"
@@ -3468,7 +3439,7 @@ msgstr ""
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
-"org/opendocument/meta/package/common#&gt; </span></p>\n"
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
@@ -3702,9 +3673,9 @@ msgid "Do you want to save the password?"
 msgstr "您確定要儲存密碼嗎？"
 
 #: store/KoNetAccess.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "File '%1' is not readable"
-msgstr "資料庫檔案 \"%1\" 無法讀取。"
+msgstr "檔案「%1」無法讀取"
 
 #: store/KoNetAccess.cpp:370
 #, kde-format
@@ -3729,10 +3700,9 @@ msgid "Change List"
 msgstr "變更列表"
 
 #: text/commands/ChangeStylesMacroCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
-msgstr "改變檔案類型"
+msgstr "改變樣式"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:263
 #, kde-format
@@ -3763,13 +3733,11 @@ msgid "Delete Row"
 msgstr "刪除列"
 
 #: text/commands/InsertNoteCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
 msgstr "插入註腳"
 
 #: text/commands/InsertNoteCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Endnote"
 msgstr "插入尾註"
@@ -3800,22 +3768,19 @@ msgid "Change List Numbering"
 msgstr "變更列表編號"
 
 #: text/commands/NewSectionCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Section"
-msgstr "群組選擇"
+msgstr "新區塊"
 
 #: text/commands/ParagraphFormattingCommand.cpp:82
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr "設定段落樣式"
+msgstr "直接設定段落樣式"
 
 #: text/commands/RenameSectionCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Section"
-msgstr "重新命名元件"
+msgstr "重新命名區塊"
 
 #: text/commands/ResizeTableCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -3830,12 +3795,12 @@ msgstr "調整列高"
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "分割區塊開頭"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "分割區塊結尾"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -3901,10 +3866,10 @@ msgid "Replace %1 with %2?"
 msgstr "要用 %2 取代 %1 嗎？"
 
 #: text/KoSectionModel.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "new numbered section name"
 msgid "New section %1"
-msgstr "群組選擇"
+msgstr "新區塊 %1"
 
 #: text/KoText.cpp:19
 #, kde-format
@@ -3931,16 +3896,14 @@ msgid "New Paragraph"
 msgstr "新段落"
 
 #: text/KoTextEditor.cpp:474
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
-msgstr "加入書籤"
+msgstr "新增書籤"
 
 #: text/KoTextEditor.cpp:489
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr "新增引用"
+msgstr "新增註記"
 
 #: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
@@ -3974,10 +3937,9 @@ msgid "Split Cells"
 msgstr "分割儲存格"
 
 #: text/KoTextEditor.cpp:1114
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
-msgstr "配合頁面寬度"
+msgstr "調整表格寬度"
 
 #: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
@@ -3986,13 +3948,11 @@ msgstr "變更邊框格式"
 
 #: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
 #: text/KoTextEditor.cpp:1197
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "插入目次"
 
 #: text/KoTextEditor.cpp:1236
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "變更目次"
@@ -4397,9 +4357,9 @@ msgid "&Try"
 msgstr "嘗試(&T)"
 
 #: widgets/KoDialog.cpp:459
-#, fuzzy, kde-format
+#, kde-format
 msgid "modified"
-msgstr "修改時間："
+msgstr "已修改"
 
 #: widgets/KoDialog.cpp:468
 #, kde-format
@@ -4533,9 +4493,9 @@ msgid "General"
 msgstr "一般"
 
 #: widgets/KoDocumentInfoDlg.cpp:126
-#, fuzzy, kde-format
+#, kde-format
 msgid "Last saved by"
-msgstr "最後一頁"
+msgstr "上次修改者"
 
 #: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
@@ -4586,13 +4546,13 @@ msgstr "此文件未支援加密"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "未設定"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr "、"
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4625,17 +4585,11 @@ msgid "Save Document"
 msgstr "儲存文件"
 
 #: widgets/KoDocumentInfoDlg.cpp:356
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
-msgstr ""
-"<qt>文件開啟後被變更了。要完成文件的解密，必須要儲存它。 <p>您要現在儲存文件"
-"嗎？</qt>"
+msgstr "<qt>要完成文件的解密，必須要儲存它。 <p>您要現在儲存文件嗎？</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
@@ -4768,12 +4722,12 @@ msgstr "變更填充圖樣"
 #: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Target:"
-msgstr ""
+msgstr "目標："
 
 #: widgets/KoGradientEditWidget.cpp:151
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "填充"
 
 #: widgets/KoGradientEditWidget.cpp:157
 #, kde-format
@@ -4785,18 +4739,18 @@ msgstr "線性"
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
-msgstr ""
+msgstr "放射"
 
 #: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "圓錐"
 
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Repeat:"
-msgstr ""
+msgstr "重複："
 
 #: widgets/KoGradientEditWidget.cpp:164
 #, kde-format
@@ -4807,17 +4761,17 @@ msgstr "無"
 #: widgets/KoGradientEditWidget.cpp:165
 #, kde-format
 msgid "Reflect"
-msgstr ""
+msgstr "反射"
 
 #: widgets/KoGradientEditWidget.cpp:166
 #, kde-format
 msgid "Repeat"
-msgstr ""
+msgstr "重複"
 
 #: widgets/KoGradientEditWidget.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overall opacity:"
-msgstr "不透明度："
+msgstr "總體不透明度："
 
 #: widgets/KoGradientEditWidget.cpp:174
 #, kde-format
@@ -4827,12 +4781,12 @@ msgstr "顏色中止點"
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
-msgstr ""
+msgstr "階段顏色。"
 
 #: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr ""
+msgstr "加入預定義漸層(&A)"
 
 #: widgets/KoModeBox.cpp:501
 #, kde-format
@@ -4845,10 +4799,9 @@ msgid "Icon only"
 msgstr "僅圖示"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "單頁"
+msgstr "側邊欄位置"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -4871,30 +4824,26 @@ msgid "Apply to document"
 msgstr "套用到文件"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Edge:"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "左邊緣："
+msgstr "左測邊距："
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Edge:"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "右邊緣："
+msgstr "右測邊距："
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "裝訂邊緣："
+msgstr "裝訂邊緣邊距："
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "頁面邊緣："
+msgstr "頁面邊緣邊距："
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5003,17 +4952,15 @@ msgstr "右到左"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Margins"
+#, kde-format
 msgid "Top Margin:"
-msgstr "邊界"
+msgstr "頂部邊距："
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "底端："
+msgstr "底部邊距："
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5070,6 +5017,8 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
+"<qt>您正嘗試取消刪除的標籤已經在標籤列表當中了。<br>請為它輸入一個新的獨特名"
+"字。</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
@@ -5112,14 +5061,13 @@ msgstr "距離："
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "物件屬性"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "沒有可用的圖片。"
+msgstr "沒有可用的屬性"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5191,6 +5139,14 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>在此輸入搜尋文字會將資源加入目前標籤檢視或從其中移除。<para>要依名稱不分"
+"大小寫的部分來過濾：<br><icode>部分名稱</icode> 或 <icode>!部分名稱</icode>。"
+"</para><para>包含或排除其他標籤集：<br><icode>[標籤名稱]</icode> 或 <icode>!"
+"[標籤名稱]</icode>。</para><para>區分大小寫且符合完整名稱：<br><icode>\"完全"
+"一致\"</icode> 或 <icode>!\"完全一致\"</icode>。</para>過濾結果不能為 "
+"<interface>所有預設檔</interface> 檢視進行儲存。<br>在這個檢視當中，按下 "
+"<interface>Enter</interface> 或清空過濾輸入欄會復原所有項目。<br>如果要將過濾"
+"的資源儲存到命名的集合當中，請建立或切換到另一個標籤。</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5205,11 +5161,18 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>在此輸入搜尋文字會將資源加入目前標籤檢視或從其中移除。<para>要依名稱不分"
+"大小寫的部分來過濾：<br><icode>部分名稱</icode> 或 <icode>!部分名稱</icode>。"
+"</para><para>包含或排除其他標籤集：<br><icode>[標籤名稱]</icode> 或 <icode>!"
+"[標籤名稱]</icode>。</para><para>區分大小寫且符合完整名稱：<br><icode>\"完全"
+"一致\"</icode> 或 <icode>!\"完全一致\"</icode>。</para>按下 "
+"<interface>Enter</interface> 或點擊 <interface>儲存</interface> 按鈕會儲存變"
+"更。</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
-msgstr ""
+msgstr "在此輸入資源過濾器"
 
 #: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
@@ -5217,13 +5180,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "<qt>Save the currently filtered set as the new members of the current tag.</"
 "qt>"
-msgstr ""
+msgstr "<qt>將目前過濾後的集合儲存為目前標籤的成員。</qt>"
 
 #: widgets/KoTagToolButton.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr ""
+msgstr "<qt>顯示標籤盒選項。</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format
@@ -5238,7 +5201,7 @@ msgstr "刪除此標籤"
 #: widgets/KoTagToolButton.cpp:86
 #, kde-format
 msgid "Clear undelete list"
-msgstr ""
+msgstr "清除取消刪除列表"
 
 #: widgets/KoTagToolButton.cpp:114
 #, kde-format
@@ -5254,7 +5217,7 @@ msgstr "預設"
 #: widgets/KoToolBox.cpp:315
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: widgets/KoToolBoxButton.cpp:53
 #, kde-format
@@ -5266,7 +5229,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
@@ -5279,32 +5242,28 @@ msgid "Icon Size"
 msgstr "圖示大小"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "頁面配置"
+msgstr "排列方向"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "自動"
+msgstr "自動(&A)"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "左到右"
+msgstr "左到右(&L)"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "右到左"
+msgstr "右到左(&R)"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

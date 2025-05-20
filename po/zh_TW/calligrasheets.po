@@ -10,19 +10,20 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
 # pan93412 <pan93412@gmail.com>, 2019.
+# SPDX-FileCopyrightText: 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2019-01-19 19:46+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2025-05-19 22:37+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 18.12.1\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n:
@@ -2525,12 +2526,10 @@ msgid "The minimum length of the output"
 msgstr "輸出的最小長度"
 
 #: functions/engineering.xml:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The DEC2BIN() function returns a decimal value formatted as a binary number."
-msgstr "DEC2BIN() 傳回二進位數字格式的值。"
+msgstr "DEC2BIN() 會將十進制數字轉為二進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:200
 #, kde-format
@@ -2548,14 +2547,11 @@ msgid "DEC2BIN(55) returns \"110111\""
 msgstr "DEC2BIN(55) 傳回 \"110111\""
 
 #: functions/engineering.xml:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The DEC2HEX() function returns a decimal value formatted as a hexadecimal "
 "number."
-msgstr "DEC2HEX() 傳回十六進位數字格式的值。"
+msgstr "DEC2HEX() 會將十進制數字轉為十六進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:219
 #, kde-format
@@ -2573,12 +2569,10 @@ msgid "DEC2HEX(55) returns \"37\""
 msgstr "DEC2HEX(55) 傳回 \"37\""
 
 #: functions/engineering.xml:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The DEC2OCT() function returns a decimal value formatted as an octal number."
-msgstr "DEC2OCT() 傳回八進位數字格式的值。"
+msgstr "DEC2OCT() 會將十進制數字轉為八進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:238
 #, kde-format
@@ -2596,12 +2590,10 @@ msgid "DEC2OCT(55) returns \"67\""
 msgstr "DEC2OCT(55) 傳回 \"67\""
 
 #: functions/engineering.xml:256
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The OCT2BIN() function returns an octal value formatted as a binary number."
-msgstr "OCT2BIN() 傳回二進位數字格式的值。"
+msgstr "OCT2BIN() 會將八進制數字轉為二進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:257
 #, kde-format
@@ -2619,12 +2611,10 @@ msgid "OCT2BIN(\"55\") returns \"101101\""
 msgstr "OCT2BIN(\"55\") 傳回 \"101101\""
 
 #: functions/engineering.xml:271
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The OCT2DEC() function returns an octal value formatted as a decimal number."
-msgstr "OCT2DEC() 傳回十進位數字格式的值。"
+msgstr "OCT2DEC() 會將八進制數字轉為十進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:272
 #, kde-format
@@ -2642,14 +2632,11 @@ msgid "OCT2DEC(\"55\") returns 45 "
 msgstr "OCT2DEC(\"55\") 傳回 45 "
 
 #: functions/engineering.xml:290
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The OCT2HEX() function returns an octal value formatted as a hexadecimal "
 "number."
-msgstr "OCT2HEX() 傳回十六進位數字格式的值。"
+msgstr "OCT2HEX() 會將八進制數字轉為十六進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:291
 #, kde-format
@@ -2667,12 +2654,10 @@ msgid "OCT2HEX(\"55\") returns \"2D\""
 msgstr "OCT2HEX(\"55\") 傳回 \"2d\""
 
 #: functions/engineering.xml:305
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The BIN2DEC() function returns a binary value formatted as a decimal number."
-msgstr "BIN2DEC() 傳回十進位數字格式的值。"
+msgstr "BIN2DEC() 會將二進制數字轉為十進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:306
 #, kde-format
@@ -2690,12 +2675,10 @@ msgid "BIN2DEC(\"11111\") returns 31 "
 msgstr "BIN2DEC(\"11111\") 傳回 31 "
 
 #: functions/engineering.xml:324
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The BIN2OCT() function returns a binary value formatted as an octal number."
-msgstr "BIN2OCT() 傳回八進位數字格式的值。"
+msgstr "BIN2OCT() 會將二進制數字轉為八進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:325
 #, kde-format
@@ -2713,14 +2696,11 @@ msgid "BIN2OCT(\"11111\") returns \"37\" "
 msgstr "BIN2OCT(\"11111\") 傳回 \"37\" "
 
 #: functions/engineering.xml:343
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The BIN2HEX() function returns a binary value formatted as a hexadecimal "
 "number."
-msgstr "BIN2HEX() 傳回十六進位數字格式的值。"
+msgstr "BIN2HEX() 會將二進制數字轉為十六進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:344
 #, kde-format
@@ -2738,13 +2718,11 @@ msgid "BIN2HEX(\"11111\") returns \"1f\""
 msgstr "BIN2HEX(\"11111\") 傳回 \"1f\""
 
 #: functions/engineering.xml:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The HEX2DEC() function returns a hexadecimal value formatted as a decimal "
 "number."
-msgstr "HEX2DEC() 傳回十進位數字格式的值。"
+msgstr "HEX2DEC() 會將十六進制數字轉為十進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:359
 #, kde-format
@@ -2762,13 +2740,11 @@ msgid "HEX2DEC(\"37\") returns 55 "
 msgstr "HEX2DEC(\"37\") 傳回 55 "
 
 #: functions/engineering.xml:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The HEX2OCT() function returns a hexadecimal value formatted as an octal "
 "number."
-msgstr "HEX2OCT() 傳回八進位數字格式的值。"
+msgstr "HEX2OCT() 會將十六進制數字轉為八進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:374
 #, kde-format
@@ -2786,13 +2762,11 @@ msgid "HEX2OCT(\"37\") returns \"67\" "
 msgstr "HEX2OCT(\"37\") 傳回 \"67\" "
 
 #: functions/engineering.xml:388
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The HEX2BIN() function returns a hexadecimal value formatted as a binary "
 "number."
-msgstr "HEX2BIN() 傳回二進位數字格式的值。"
+msgstr "HEX2BIN() 會將十六進制數字轉為二進位數字格式並回傳結果。"
 
 #: functions/engineering.xml:389
 #, kde-format
@@ -4081,13 +4055,7 @@ msgid "Currency"
 msgstr "貨幣"
 
 #: functions/financial.xml:521
-#, fuzzy, kde-format
-#| msgid ""
-#| "The EURO() function converts one Euro to a given national currency in the "
-#| "European monetary union. Currency is one of the following: ATS (Austria), "
-#| "BEF (Belgium), DEM (Germany), ESP (Spain), EUR (Euro), FIM (Finland), FRF "
-#| "(France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG "
-#| "(Netherlands), or PTE (Portugal)."
+#, kde-format
 msgid ""
 "The EURO() function converts one Euro to a given national currency in the "
 "European monetary union. Currency is one of the following: ATS (Austria), "
@@ -4097,9 +4065,10 @@ msgid ""
 "(Netherlands), PTE (Portugal), SIT (Slovenia), or SKK (Slovakia)."
 msgstr ""
 "EURO() 函數會把歐元轉換成所給的歐洲貨幣聯盟的國家貨幣。貨幣為下列之一："
-"ATS（奧地利），BEF（比利時），DEM（德國），ESP（西班牙），FIM（芬蘭），"
-"FRF（法國），GRD（希臘），IEP（愛爾蘭），ITL（義大利），LUF（盧森堡），"
-"NLG（荷蘭），PTE（葡萄牙）。"
+"ATS（奧地利），BEF（比利時），CYP（賽普勒斯），DEM（德國），EEK（愛沙尼亞），"
+"ESP（西班牙），EUR（歐元），FIM（芬蘭），FRF（法國），GRD（希臘），IEP（愛爾"
+"蘭），ITL（義大利），LTL（立陶宛），LUF（盧森堡），LVL（拉脫維亞），MTL（馬爾"
+"他），NLG（荷蘭），PTE（葡萄牙），SIT（斯洛維尼亞），或 SKK（斯洛伐克）。"
 
 #: functions/financial.xml:522
 #, kde-format
@@ -6990,14 +6959,12 @@ msgid "EXP(-9) equals 0.00012341"
 msgstr "EXP(-9) 等於 0.00012341"
 
 #: functions/math.xml:836
-#, fuzzy, kde-format
-#| msgid ""
-#| "The CEIL() function rounds x up to the nearest integer, returning that "
-#| "value as a double."
+#, kde-format
 msgid ""
 "The CEIL() function rounds x up to the nearest integer which is greater than "
 "the input, returning that value as a double."
-msgstr "CEIL() 函數將 x 無條件進位為最接近的整數，傳回的值為 double 。"
+msgstr ""
+"CEIL() 函數將 x 無條件進位為最接近且大於輸入值的整數，傳回的值為 double 。"
 
 #: functions/math.xml:837
 #, kde-format
@@ -12234,7 +12201,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "zh-l10n@lists.linux.org.tw, pesder.liao@msa.hinet.net, franklin@goodhorse."
-"idv.tw"
+"idv.tw, mail@kisaragi-hiu.com"
 
 #. i18n translator strings
 #: part/AboutData.h:68
@@ -12242,7 +12209,8 @@ msgstr ""
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
-"TopTech Localization Team,Chao-Hsiung Liao, Frank Weng (a.k.a. Franklin)"
+"TopTech Localization Team,Chao-Hsiung Liao, Frank Weng (a.k.a. Franklin), "
+"Kisaragi Hiu"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12508,28 +12476,25 @@ msgstr "控制「檔案」＞「開啟最近的檔案」清單中最多顯示幾
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:41
-#, fuzzy, kde-format
-#| msgid "Autosave delay (minutes):"
+#, kde-format
 msgid "Autosave interval:"
-msgstr "自動儲存延遲（分鐘）："
+msgstr "自動儲存間隔："
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:48
-#, fuzzy, kde-format
-#| msgid ""
-#| "Here you can select the time between autosaves, or disable this feature "
-#| "altogether by choosing Do not save automatically (drag the slider to the "
-#| "far left)."
+#, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
 "altogether by choosing \"No autosave\" (by selecting the minimum value)."
-msgstr "您可以選擇自動儲存的間隔時間，或是關閉這個功能。"
+msgstr ""
+"您可以選擇自動儲存的間隔時間，或是選擇「不自動儲存」（最低數值）來關閉這個功"
+"能。"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:51
 #, kde-format
 msgid "No autosave"
-msgstr ""
+msgstr "不自動儲存"
 
 #. i18n: unit symbol for minutes, leading space as separator
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_autoSaveDelay)
@@ -12540,10 +12505,9 @@ msgstr " 分鐘"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/FileOptionsWidget.ui:67
-#, fuzzy, kde-format
-#| msgid "Create backup files"
+#, kde-format
 msgid "Create backup file:"
-msgstr "建立備份檔案"
+msgstr "建立備份檔："
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
 #: part/dialogs/FileOptionsWidget.ui:74
@@ -12570,10 +12534,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/InterfaceOptionsWidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Function shown in status bar:"
+#, kde-format
 msgid "Func&tion shown in status bar:"
-msgstr "狀態列顯示函數："
+msgstr "狀態列顯示函數(&T)："
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
 #: part/dialogs/InterfaceOptionsWidget.ui:46
@@ -12585,10 +12548,9 @@ msgstr "這個下拉式選單用於選擇狀態列總和函數計算的方式。
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/InterfaceOptionsWidget.ui:53
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "&Unit:"
-msgstr "單位："
+msgstr "單位(&U)："
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_unit)
 #: part/dialogs/InterfaceOptionsWidget.ui:63
@@ -12598,10 +12560,9 @@ msgstr "選擇您的工作表使用的預設單位。"
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Indentation step:"
+#, kde-format
 msgid "I&ndentation step:"
-msgstr "縮排步數："
+msgstr "縮排步數(&N)："
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
 #: part/dialogs/InterfaceOptionsWidget.ui:80
@@ -12613,10 +12574,9 @@ msgstr "讓您定義做「遞增縮排」及「遞減縮排」動作時縮排的
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "顏色："
+msgstr "格線顏色(&G)："
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -12627,10 +12587,9 @@ msgstr "點選這裡以改變格線的顏色。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "輪廓"
+msgstr "頁面框線色彩(&L)："
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -13030,10 +12989,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
-#, fuzzy, kde-format
-#| msgid "Show page &borders"
+#, kde-format
 msgid "Show page outline"
-msgstr "顯示頁面框線(&B)"
+msgstr "顯示頁面框線"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:140
@@ -13397,14 +13355,12 @@ msgid "Reset the print range in the current sheet"
 msgstr "重置目前工作表中的列印範圍"
 
 #: part/View.cpp:274
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgid "Page Outline"
-msgstr "輪廓"
+msgstr "頁面框線"
 
 #: part/View.cpp:275
-#, fuzzy, kde-format
-#| msgid "Show on the spreadsheet where the page borders will be"
+#, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "在工作表上顯示頁面框線位置"
 
@@ -13761,7 +13717,7 @@ msgstr "計數A："
 #: part/View.cpp:1963
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: part/ViewAdaptor.cpp:125
 msgctxt "(qtundo-format)"
@@ -13782,7 +13738,7 @@ msgstr "變更框線"
 #: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "無法找到動作 %1"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14075,11 +14031,9 @@ msgid "Resize Row"
 msgstr "重設列的大小"
 
 #: ui/commands/RowColumnManipulators.cpp:277
-#, fuzzy
-#| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
-msgstr "隱藏欄"
+msgstr "隱藏欄/列"
 
 #: ui/commands/RowColumnManipulators.cpp:279
 msgctxt "(qtundo-format)"
@@ -14092,11 +14046,9 @@ msgid "Hide Rows"
 msgstr "隱藏列"
 
 #: ui/commands/RowColumnManipulators.cpp:284
-#, fuzzy
-#| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
-msgstr "顯示欄"
+msgstr "顯示欄/列"
 
 #: ui/commands/RowColumnManipulators.cpp:286
 msgctxt "(qtundo-format)"
