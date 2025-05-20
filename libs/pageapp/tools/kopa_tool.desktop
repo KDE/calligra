@@ -35,6 +35,7 @@ Comment[tr]=Calligra Sayfa uygulaması için araç
 Comment[uk]=Інструмент для програм Calligra Page
 Comment[x-test]=xxTool for Calligra Page Applicationsxx
 Comment[zh_CN]=Calligra 页面应用工具
+Comment[zh_TW]=Calligra Page 應用程式的工具
 [PropertyDef::X-KoPageApp-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

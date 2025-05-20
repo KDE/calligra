@@ -36,7 +36,7 @@ Name[uk]=Додаток реакції на події у презентації
 Name[wa]=Tchôke-divins faitindje d' evenmint do prezintaedje
 Name[x-test]=xxPresentation Event Action Pluginxx
 Name[zh_CN]=演示事件操作插件
-Name[zh_TW]=展示事件動作外掛程式
+Name[zh_TW]=簡報事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/PresentationEventAction
 Comment=A plugin that contains a presentation event action
@@ -76,7 +76,7 @@ Comment[uk]=Додаток, що містить реакцію на подію �
 Comment[wa]=On tchôke-divins k' a ene accion d' envenmint do prezintaedje
 Comment[x-test]=xxA plugin that contains a presentation event actionxx
 Comment[zh_CN]=包含演示事件操作的插件
-Comment[zh_TW]=包含展示事件動作的外掛程式
+Comment[zh_TW]=包含簡報事件動作的外掛程式
 [PropertyDef::X-PresentationEventAction-MinVersion]
 Type=int
 [PropertyDef::X-PresentationEventAction-PluginVersion]

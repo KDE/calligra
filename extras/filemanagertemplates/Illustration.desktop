@@ -95,6 +95,7 @@ Comment[tr]=Yeni Karbon belgesi:
 Comment[uk]=Новий документ Karbon:
 Comment[x-test]=xxNew Karbon document:xx
 Comment[zh_CN]=新建 Karbon 文档：
+Comment[zh_TW]=新增 Karbon 文件:
 Type=Link
 URL=.source/Illustration.odg
 Icon=application-vnd.oasis.opendocument.graphics
