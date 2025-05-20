@@ -38,5 +38,6 @@ Comment[tr]=Karbon için Docker
 Comment[uk]=Бічна панель Karbon
 Comment[x-test]=xxDocker for Karbonxx
 Comment[zh_CN]=Karbon 停靠栏
+Comment[zh_TW]=Karbon 的面板
 [PropertyDef::X-KDE-PluginInfo-Name]
 Type=QString

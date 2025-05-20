@@ -34,6 +34,7 @@ Name[tr]=Anlamsal öge tanımlaması
 Name[uk]=Визначення семантичного запису
 Name[x-test]=xxSemantic item definitionxx
 Name[zh_CN]=语义项定义
+Name[zh_TW]=語義項目定義
 Comment=Definition of a semantic item object
 Comment[bs]=Definicija objekta semantike
 Comment[ca]=Definició d'objecte d'element semàntic
@@ -69,6 +70,7 @@ Comment[tr]=Bir anlamsal öge nesnesinin tanımı
 Comment[uk]=Визначення об’єкта семантичного запису
 Comment[x-test]=xxDefinition of a semantic item objectxx
 Comment[zh_CN]=语义项对象的定义
+Comment[zh_TW]=語義項目物件的定義
 
 Type=ServiceType
 X-KDE-ServiceType=Calligra/SemanticItem
