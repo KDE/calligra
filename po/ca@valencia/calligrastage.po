@@ -437,7 +437,7 @@ msgstr "Final de la presentació"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
-msgstr "inicia en fer clic del ratolí"
+msgstr "inicia quan es clique amb el ratolí"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
@@ -780,7 +780,7 @@ msgstr "Transicions de diapositives"
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
-msgstr "Accions de clic en una forma"
+msgstr "Accions de clic damunt d'una forma"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
@@ -800,7 +800,7 @@ msgstr "Inici: "
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr "en fer clic del ratolí"
+msgstr "quan es clique amb el ratolí"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
 #, kde-format

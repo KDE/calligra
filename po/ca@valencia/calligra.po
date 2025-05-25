@@ -576,7 +576,7 @@ msgstr ""
 #: flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr "Premeu B per a trencar el traç al punt seleccionat."
+msgstr "Premeu «B» per a trencar el traç al punt seleccionat."
 
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
@@ -887,7 +887,7 @@ msgstr "S'ha trobat massa plantilles per a: %1"
 #: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "S'ha produït un error en carregar la plantilla %1."
+msgstr "S'ha produït un error mentre es carregava la plantilla %1."
 
 #: main/KoApplication.cpp:530
 #, kde-format
@@ -2617,7 +2617,7 @@ msgstr "L*a*b (enter/canal RGB de 18 bits. sense gestionar)"
 #: pigment/KoCompositeOpRegistry.cpp:102
 #, kde-format
 msgid "Lightness"
-msgstr "Lluminositat"
+msgstr "Claredat"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:35
 #: pigment/KoBasicHistogramProducers.cpp:416
@@ -3071,13 +3071,13 @@ msgstr "Disminuïx la saturació HSL"
 #: pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgid "Increase Lightness"
-msgstr "Augmenta la brillantor"
+msgstr "Augmenta la claredat"
 
 #: pigment/compositeops/KoCompositeOps.h:209
 #: pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
 msgid "Decrease Lightness"
-msgstr "Disminuïx la brillantor"
+msgstr "Disminuïx la claredat"
 
 #: pigment/compositeops/KoCompositeOps.h:211
 #: pigment/KoCompositeOpRegistry.cpp:108
@@ -5029,7 +5029,7 @@ msgstr "Suprimix el recurs"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
-msgstr "Trieu el fitxer que s'ha d'afegir"
+msgstr "Tria el fitxer que s'ha d'afegir"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:105
 #: widgets/KoTagToolButton.cpp:52
@@ -5226,7 +5226,7 @@ msgstr ""
 "[Nom_etiqueta]</icode>.</para><para>Inclusió o exclusió distingint entre "
 "majúscules i minúscules i coincidència exacta de nom:<br><icode>"
 "\"Coincidencia_Exacta\"</icode> o <icode>!\"Coincidencia_Exacta\"</icode>.</"
-"para>Prement <interface>Retorn</interface> o fent clic en el botó "
+"para>Prement <interface>Retorn</interface> o clicant damunt del botó "
 "<interface>Guarda</interface> es guardaran tots els canvis.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65

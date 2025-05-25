@@ -1288,7 +1288,7 @@ msgid ""
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
 "Inserix enllaços a adreces d'interés. Per a crear-les,\n"
-"cliqueu «Adreces d'interés» en la secció Enllaços i Adreces d'interés"
+"cliqueu damunt «Adreces d'interés» en la secció Enllaços i Adreces d'interés"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:132
@@ -2135,7 +2135,7 @@ msgstr "Contingut"
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr "Establir el color de vora…"
+msgstr "Establir el color de la vora…"
 
 #: dialogs/SimpleTableWidget.cpp:173
 #, kde-format
@@ -2565,7 +2565,7 @@ msgstr "L'adreça d'interés no pot estar buida"
 #: ReferencesTool.cpp:371
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr "Nom duplicat. Cliqueu «Gestiona les adreces d'interés»"
+msgstr "Nom duplicat. Cliqueu damunt «Gestiona les adreces d'interés»"
 
 #: ReferencesTool.cpp:372
 #, kde-format
@@ -2985,27 +2985,27 @@ msgstr "S'està donant format"
 #: TextTool.cpp:590
 #, kde-format
 msgid "Ctrl+click to go to link "
-msgstr "«Ctrl+fer clic» per a anar fins a l'enllaç "
+msgstr "«Ctrl+clicar» per a anar fins a l'enllaç "
 
 #: TextTool.cpp:597
 #, kde-format
 msgid "Ctrl+click to go to the note "
-msgstr "«Ctrl+fer clic» per a anar fins a la nota "
+msgstr "«Ctrl+clicar» per a anar fins a la nota "
 
 #: TextTool.cpp:603
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
-msgstr "«Ctrl+fer clic» per a anar fins a la referència de la nota"
+msgstr "«Ctrl+clicar» per a anar fins a la referència de la nota"
 
 #: TextTool.cpp:699
 #, kde-format
 msgid "follows along"
-msgstr "seguix la llargada"
+msgstr "seguix la llargària"
 
 #: TextTool.cpp:729
 #, kde-format
 msgid "Press shift to not resize this"
-msgstr "Premeu majúscules per a no redimensionar este"
+msgstr "Premeu «Majús» per a no redimensionar este"
 
 #: TextTool.cpp:930
 msgctxt "(qtundo-format)"

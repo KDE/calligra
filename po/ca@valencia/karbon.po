@@ -419,7 +419,7 @@ msgstr "Inserix gràfics"
 #: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
-msgstr "Escolliu la gràfica que s'ha d'afegir"
+msgstr "Trieu la gràfica que s'ha d'afegir"
 
 #: ui/KarbonView.cpp:405
 #, kde-format

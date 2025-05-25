@@ -122,7 +122,7 @@ msgstr "Escala de grisos (enter de 16 bits per canal)"
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:20
 #, kde-format
 msgid "Lightness"
-msgstr "Lluminositat"
+msgstr "Claredat"
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:34
 #: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:22

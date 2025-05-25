@@ -374,7 +374,7 @@ msgstr "Crea un conjunt nou de marcs:"
 #: part/dialogs/KWFrameConnectSelector.ui:89
 #, kde-format
 msgid "Select existing frameset to connect to:"
-msgstr "Trieu un conjunt de marcs existent per a connectar-hi:"
+msgstr "Tria un conjunt de marcs existent per a connectar-hi:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, framesList)
 #: part/dialogs/KWFrameConnectSelector.ui:122
@@ -502,19 +502,19 @@ msgstr "Salta davall esta forma"
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
 #, kde-format
 msgid "Run on left side of this shape"
-msgstr "Corre damunt la banda esquerra d'esta forma"
+msgstr "Corre damunt de la banda esquerra d'esta forma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
 #, kde-format
 msgid "Run on right side of this shape"
-msgstr "Corre damunt la banda dreta d'esta forma"
+msgstr "Corre damunt de la banda dreta d'esta forma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
 #, kde-format
 msgid "Run on longest side of this shape"
-msgstr "Corre damunt la banda més llarga d'esta forma"
+msgstr "Corre damunt de la banda més llarga d'esta forma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
@@ -526,7 +526,7 @@ msgstr "Corre a ambdues bandes d'esta forma"
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr "Corre damunt les bandes més amples que:"
+msgstr "Corre damunt de les bandes més amples que:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
