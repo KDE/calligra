@@ -133,7 +133,7 @@ msgstr "Arrossegueu per a editar la connexió."
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
-msgstr "Doble clic en la connexió o premeu suprimir per a eliminar-la."
+msgstr "Doble clic damunt de la connexió o premeu suprimir per a eliminar-la."
 
 #: connectionTool/ConnectionTool.cpp:772
 #, kde-format
@@ -146,8 +146,8 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
-"Arrossegueu per a moure el punt de connexió. Doble clic en la connexió o "
-"premeu suprimir per a eliminar-la."
+"Arrossegueu per a moure el punt de connexió. Doble clic damunt de la "
+"connexió o premeu suprimir per a eliminar-la."
 
 #: connectionTool/ConnectionTool.cpp:788
 #, kde-format

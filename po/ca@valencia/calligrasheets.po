@@ -2340,7 +2340,7 @@ msgstr "Base"
 #: functions/engineering.xml:19
 #, kde-format
 msgid "MinLength"
-msgstr "LongitudMínima"
+msgstr "LlargàriaMínima"
 
 #: functions/engineering.xml:23
 #, kde-format
@@ -2653,7 +2653,7 @@ msgstr "El valor que s'ha de convertir"
 #: functions/engineering.xml:339
 #, kde-format
 msgid "The minimum length of the output"
-msgstr "La llargada mínima de l'eixida"
+msgstr "La llargària mínima de l'eixida"
 
 #: functions/engineering.xml:199
 #, kde-format
@@ -6350,8 +6350,8 @@ msgid ""
 "Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 "
 "or EPS() by using the equation (1+x)-1"
 msgstr ""
-"Escolliu un nombre x entre 0 i EPS(). Observeu que 1+x s'arredonix a 0 o "
-"EPS() utilitzant l'equació (1+x)-1"
+"Trieu un nombre x entre 0 i EPS(). Observeu que 1+x s'arredonix a 0 o EPS() "
+"utilitzant l'equació (1+x)-1"
 
 #: functions/math.xml:138
 #, kde-format
@@ -6803,8 +6803,8 @@ msgid ""
 msgstr ""
 "La funció SUMIF() calcula la suma de tots els valors donats com a paràmetres "
 "que coincidisquen amb el criteri. La suma de l'interval és opcional. Si no "
-"s'hi posa, se sumen els valors de comprovació de l'interval. La llargada de "
-"la comprovació de l'interval ha de ser igual o inferior que la llargada de "
+"s'hi posa, se sumen els valors de comprovació de l'interval. La llargària de "
+"la comprovació de l'interval ha de ser igual o inferior que la llargària de "
 "la suma de l'interval."
 
 #: functions/math.xml:442
@@ -10600,7 +10600,7 @@ msgstr ""
 "velocitat a la qual poden córrer 30 persones altes i l'altre que conté la "
 "velocitat a la qual poden córrer 30 persones baixes, un prova t podrà "
 "determinar la probabilitat que qualsevol diferència entre els dos grups es "
-"deu a les seues alçades."
+"deu a les seues alçàries."
 
 #: functions/statistical.xml:1486
 #, kde-format
@@ -11410,7 +11410,7 @@ msgstr "Posició de byte dels caràcters que s'han de substituir"
 #: functions/text.xml:268
 #, kde-format
 msgid "The byte length of characters to replace"
-msgstr "Llargada de byte dels caràcters que s'han de substituir"
+msgstr "Llargària de byte dels caràcters que s'han de substituir"
 
 #: functions/text.xml:276
 #, kde-format
@@ -11424,7 +11424,7 @@ msgstr ""
 #: functions/text.xml:277
 #, kde-format
 msgid "REPLACEB(text;BytePosition;ByteLength Len;new_text)"
-msgstr "REPLACEB(text;PosicióByte;LongitudByte;nou_text)"
+msgstr "REPLACEB(text;PosicióByte;LlargàriaByte;nou_text)"
 
 #: functions/text.xml:297
 #, kde-format
@@ -11584,7 +11584,7 @@ msgstr ""
 #: functions/text.xml:390
 #, kde-format
 msgid "MIDB(text;BytePosition Start;ByteLength)"
-msgstr "MIDB(text;inici PosicióByte;LongitudByte)"
+msgstr "MIDB(text;inici PosicióByte;LlargàriaByte)"
 
 #: functions/text.xml:391
 #, kde-format
@@ -11713,7 +11713,7 @@ msgstr ""
 #: functions/text.xml:510
 #, kde-format
 msgid "RIGHTB(text;ByteLength)"
-msgstr "RIGHTB(text;LongitudByte)"
+msgstr "RIGHTB(text;LlargàriaByte)"
 
 #: functions/text.xml:530
 #, kde-format
@@ -11723,9 +11723,9 @@ msgid ""
 "the length of the string. It is an error for the number of characters to be "
 "less than 0."
 msgstr ""
-"La funció LEFT() retorna una subcadena que conté la «llargada» dels "
+"La funció LEFT() retorna una subcadena que conté la «llargària» dels "
 "caràcters de més a l'esquerra de la cadena. Es retorna la cadena sencera si "
-"la «llargada» excedix la llargada de la cadena. És un error quan el nombre "
+"la «llargària» excedix la llargària de la cadena. És un error quan el nombre "
 "de caràcters és inferior a zero."
 
 #: functions/text.xml:531
@@ -11756,15 +11756,15 @@ msgid ""
 "if 'length' exceeds the length of the string. It is an error for the number "
 "of characters to be less than 0."
 msgstr ""
-"La funció LEFTB() retorna una subcadena que conté la «llargada» dels "
+"La funció LEFTB() retorna una subcadena que conté la «llargària» dels "
 "caràcters de més a l'esquerra de la cadena utilitzant posicions de byte. Es "
-"retorna la cadena sencera si la «llargada» excedix la llargada de la cadena. "
-"És un error quan el nombre de caràcters és inferior a zero."
+"retorna la cadena sencera si la «llargària» excedix la llargària de la "
+"cadena. És un error quan el nombre de caràcters és inferior a zero."
 
 #: functions/text.xml:555
 #, kde-format
 msgid "LEFTB(text;ByteLength)"
-msgstr "LEFTB(text;LongitudByte)"
+msgstr "LEFTB(text;LlargàriaByte)"
 
 #: functions/text.xml:571
 #, kde-format
@@ -13596,7 +13596,7 @@ msgid ""
 "added from right to left."
 msgstr ""
 "El valor predeterminat és que la primera columna del full siga a l'esquerra. "
-"Si escolliu de dreta a esquerra, la primera columna estarà a la dreta i la "
+"Si trieu de dreta a esquerra, la primera columna estarà a la dreta i la "
 "resta s'afegiran de dreta a esquerra."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showCommentIndicatorCheckBox)
@@ -14897,7 +14897,7 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Trieu l'estil de les lletres per a les cel·les seleccionades. Quan "
+"Tria l'estil de les lletres per a les cel·les seleccionades. Quan "
 "seleccioneu diferents cel·les amb diferents estils, l'estil mostrat està "
 "configurat com a Divers (sense canvi) i, si el deixeu així, es deixarà la "
 "configuració de l'estil actual per a cada cel·la. Si canvieu a Roman, per "
@@ -14934,7 +14934,7 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
-"Trieu l'estil de la lletra per a les cel·les seleccionades. Quan seleccioneu "
+"Tria l'estil de la lletra per a les cel·les seleccionades. Quan seleccioneu "
 "diferents cel·les amb diferents estils de lletra, l'estil mostrat està "
 "configurat com a Divers (sense canvi) i, si el deixeu així, es deixarà la "
 "configuració de l'estil actual per a cada cel·la. Si canvieu a Negreta, per "
@@ -14997,9 +14997,9 @@ msgid ""
 "bring you the standard KDE Select Color dialog where you will be able to "
 "choose the new color."
 msgstr ""
-"Trieu el color per al text de la cel·la actual. Si cliqueu en la barra de "
-"color, s'obrirà el diàleg estàndard de selecció de color de KDE on podreu "
-"escollir el color nou."
+"Tria el color per al text de la cel·la actual. Si cliqueu damunt de la barra "
+"de color, s'obrirà el diàleg estàndard «Seleccioneu un color» de KDE on "
+"podreu escollir el color nou."
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:139
@@ -15026,8 +15026,8 @@ msgid ""
 "This box lists all your available font families. Click on one family to set "
 "it in the current cell."
 msgstr ""
-"Este quadro llista totes les famílies de lletres disponibles. Cliqueu en una "
-"família per a establir-la en la cel·la actual."
+"Este quadro llista totes les famílies de lletres disponibles. Cliqueu damunt "
+"d'una família per a establir-la en la cel·la actual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
@@ -15042,8 +15042,7 @@ msgstr "Vista prèvia"
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-"Podeu veure una vista prèvia de la lletra que escolliu per a la cel·la "
-"actual."
+"Podeu veure una vista prèvia de la lletra que trieu per a la cel·la actual."
 
 #: ui/dialogs/LayoutDialog.cpp:116
 #, kde-format
@@ -15115,7 +15114,7 @@ msgid ""
 "-> Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
-"La notació numèrica utilitza la notació que vàreu escollir globalment a "
+"La notació numèrica utilitza la notació que vau escollir globalment a "
 "«Configuració del sistema -> Aparença i comportament usual -> Configuració "
 "regional -> País/regió i idioma -> pestanya Nombres». De manera "
 "predeterminada, els nombres s'alineen a la dreta."
@@ -15299,7 +15298,7 @@ msgid ""
 "before clicking the OK button to validate it."
 msgstr ""
 "Mostrarà una vista prèvia de la vostra elecció, de manera que sabreu què fa "
-"abans de clicar el botó «D'acord» per a validar-lo."
+"abans de clicar damunt del botó «D'acord» per a validar-lo."
 
 #: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
@@ -15510,9 +15509,9 @@ msgid ""
 "Your text will appear oriented in the angle you set here. Positive values "
 "will move it counter-clockwise and negative values will move it clockwise."
 msgstr ""
-"El vostre text eixirà orientat en l'angle que escolliu ací. Els valors "
-"positius el mouran en el sentit contrari a les agulles del rellotge i el "
-"negatiu en el sentit de les agulles del rellotge."
+"El vostre text eixirà orientat en l'angle que trieu ací. Els valors positius "
+"el mouran en el sentit contrari a les agulles del rellotge i el negatiu en "
+"el sentit de les agulles del rellotge."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:88
@@ -15744,7 +15743,7 @@ msgstr "Mostra el full"
 #: ui/dialogs/ShowDialog.cpp:45
 #, kde-format
 msgid "Select hidden sheets to show:"
-msgstr "Escolliu els fulls ocults per a mostrar:"
+msgstr "Trieu els fulls ocults per a mostrar:"
 
 #: ui/ExternalEditor.cpp:55
 #, kde-format

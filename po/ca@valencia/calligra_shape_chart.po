@@ -1313,7 +1313,7 @@ msgstr "Valors de X:"
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr "<b>Escolliu un conjunt de dades</b>"
+msgstr "<b>Trieu un conjunt de dades</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82

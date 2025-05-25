@@ -78,7 +78,7 @@ msgid ""
 "data would be overwritten."
 msgstr ""
 "L'àrea on s'inserix el calendari no està buida. Segur que voleu continuar, "
-"sobreescrivint les dades existents? Si escolliu No, l'àrea que es requerirà "
+"sobreescrivint les dades existents? Si trieu «No», l'àrea que es requerirà "
 "per al calendari se seleccionarà de manera que podreu veure quines dades se "
 "sobreescriurien."
 
