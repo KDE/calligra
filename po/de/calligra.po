@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
 # Thomas Diehl <thd@kde.org>, 2002, 2003.
 # Stephan Johach <hunsum@gmx.de>, 2005.
 # Oliver Dörr <digikam-de@doerr-privat.de>, 2006.
@@ -11,14 +12,15 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2021-04-18 12:06+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2024-09-04 10:02+0200\n"
+"Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -726,24 +728,21 @@ msgid "Create backup file:"
 msgstr "Sicherungsdatei erstellen:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Gitter anzeigen:"
+msgstr "Gitter anzeigen"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "An Gitter ausrichten:"
+msgstr "An Gitter ausrichten"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Gitter"
+msgstr "Gitter:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -785,11 +784,10 @@ msgid "Paste offset:"
 msgstr "Versatz beim Einfügen:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Am Cursor einfügen:"
+msgstr "Am Cursor einfügen"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -907,10 +905,9 @@ msgid "Recover Files"
 msgstr "Dateien wiederherstellen"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Disc Bullet"
+#, kde-format
 msgid "Discard All"
-msgstr "Rundes Zeichen"
+msgstr "Alle verwerfen"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -1614,11 +1611,9 @@ msgid "Geometrics"
 msgstr "Geometrisches Mittel"
 
 #: main/KoShapeCollectionMenu.cpp:369
-#, fuzzy, kde-format
-#| msgctxt "Mouse Cursor Shape"
-#| msgid "Arrow"
+#, kde-format
 msgid "Arrows"
-msgstr "Pfeil"
+msgstr "Pfeile"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
@@ -1787,11 +1782,10 @@ msgid "Date: %1"
 msgstr "Datum: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Objekt"
+msgstr "Objekt hinzufügen"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -3675,8 +3669,7 @@ msgstr ""
 "vergeben, kann dieses möglicherweise nicht geprüft werden."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Warnung"
@@ -3692,8 +3685,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Warnung"
@@ -4666,18 +4658,13 @@ msgid "Save Document"
 msgstr "Dokument speichern"
 
 #: widgets/KoDocumentInfoDlg.cpp:356
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Das Dokument ist geändert worden, seit es geöffnet wurde. Um die "
-"Entschlüsselung abzuschießen, muss es gespeichert werden.<p>Möchten Sie das "
-"Dokument jetzt speichern?</qt>"
+"<qt>Um die Entschlüsselung abzuschießen, muss es gespeichert werden."
+"<p>Möchten Sie das Dokument jetzt speichern?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
@@ -5052,17 +5039,15 @@ msgstr "Rechts nach Links"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Oberer Rand"
+msgstr "Oberer Rand:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Unterer Rand"
+msgstr "Unterer Rand:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5164,7 +5149,7 @@ msgstr "Abstand:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Objekteigenschaften"
 
 #: widgets/KoShapePropertyWidget.cpp:57
 #, fuzzy, kde-format
@@ -5359,32 +5344,28 @@ msgid "Icon Size"
 msgstr "Symbolgröße"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Layout"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatisch"
+msgstr "&Automatisch"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Links nach Rechts"
+msgstr "&Links nach Rechts"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Rechts nach Links"
+msgstr "&Rechts nach Links"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format
@@ -5439,10 +5420,9 @@ msgid "Zoom to All"
 msgstr "Alles anzeigen"
 
 #: widgetutils/KoFileDialog.cpp:394
-#, fuzzy, kde-format
-#| msgid "All Presets"
+#, kde-format
 msgid "All files"
-msgstr "Alle Voreinstellungen"
+msgstr "Alle Dateien"
 
 #: widgetutils/KoFileDialog.cpp:397
 #, kde-format
