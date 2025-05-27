@@ -51,12 +51,12 @@ Controls.ApplicationWindow {
                 },
                 {
                     name: i18n("Calligra Stage"),
-                    icon: "calligrasheets",
+                    icon: "calligrastage",
                     desktopId: "calligrastage"
                 },
                 {
                     name: i18n("Calligra Sheets"),
-                    icon: "calligrastage",
+                    icon: "calligrasheets",
                     desktopId: "calligrasheets"
                 },
                 {
