@@ -54,7 +54,7 @@
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar Calligra Sheets...</guimenuitem
+>Configurar Calligra Sheets…</guimenuitem
 ></menuchoice
 >). </para
 ></note>
@@ -124,7 +124,7 @@
 >En este momento es posible que esté pensando que &sheets; no hace más de lo que usted mismo podría hacer con un lápiz, un papel y una calculadora. Y podría estar en lo cierto, pero recuerde que este es un ejemplo muy simple de una hoja de cálculo, que hace cálculos sencillos con solo unos pocos números. Para cantidades de valores o de datos razonablemente grandes, usar una hoja de cálculo para realizar los cálculos es mucho más rápido y mucho más preciso que hacerlos a mano.</para>
 <para
 >También, una hoja de cálculo le permite jugar al juego de <quote
->¿Qué pasa si ...?</quote
+>¿Qué pasa si …?</quote
 >. Ya que cada fórmula se recalcula automáticamente cuando cambie cualquiera de los valores a los que se refiere, puede ver rápidamente lo que ocurre si altera cualquiera de los datos. Usando nuestro ejemplo, puede ver el efecto de reducir el gasto en comida en diciembre simplemente introduciendo un nuevo valor en la celda C2. Si tuviera una hoja de cálculo que modelara el efecto invernadero de forma adecuada quizás vea el efecto de una reducción de un 50 por ciento en la cantidad de metano.</para>
 </sect1>
 
@@ -156,7 +156,7 @@
 ><guimenu
 >Ir</guimenu
 ><guimenuitem
->Ir a celda...</guimenuitem
+>Ir a celda…</guimenuitem
 ></menuchoice
 ></para
 ></listitem>
@@ -187,7 +187,7 @@
 ><guimenu
 >Ir</guimenu
 ><guimenuitem
->Ir a celda...</guimenuitem
+>Ir a celda…</guimenuitem
 ></menuchoice
 >.</para>
 <para
@@ -396,7 +396,7 @@
 ><guimenu
 >Editar</guimenu
 ><guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 ></menuchoice
 > hace aparecer el cuadro de diálogo <guilabel
 >Pegado especial</guilabel
@@ -416,7 +416,7 @@
 
 <para
 ><guimenuitem
->Pegar con inserción...</guimenuitem
+>Pegar con inserción…</guimenuitem
 > inserta la(s) celda(s) copiada(s) en la hoja, moviendo las celda que podrías ser sobreescritas un número adecuado de filas o columnas abajo o a la derecha. También se puede usar para insertar fila(s) o columna(s) completa(s) copiada(s) en la hoja de cálculo.</para>
 </sect2>
 
@@ -460,7 +460,7 @@
 > del ratón.</para>
 <para
 >Si selecciona una celda o celdas y elige <guimenuitem
->Borrar celdas... </guimenuitem
+>Borrar celdas… </guimenuitem
 > desde el menú emergente del botón <mousebutton
 >derecho</mousebutton
 > del ratón, puede elegir entonces si otras celdas de la hoja de trabajo se moverán arriba o a la izquierda para rellenar el espacio dejado por la(s) celda(s) que ha elegido para borrar.</para>
@@ -474,7 +474,7 @@
 > del ratón.</para>
 <para
 >Puede insertar celdas nuevas en la hoja de trabajo seleccionando el área que donde quiera que aparezcan y seleccionando luego la opción <guimenuitem
-> Insertar celdas...</guimenuitem
+> Insertar celdas…</guimenuitem
 > desde el menú emergente del botón <mousebutton
 >derecho</mousebutton
 > del ratón. Entonces se le preguntará si la(s) celda(s) exitente(s) en el área seleccionada se deben mover abajo o a la derecha para hacer sitio para las celdas nuevas.</para>
@@ -527,7 +527,7 @@
 >&sheets; también incluye un gran número de funciones predefinidas para aplicaciones que necesiten cálculos estadísticos, trigonométricos y financieros. Su uso se examinará con mayor profundidad en una <link linkend="formulas"
 >sección posterior</link
 > de este manual, pero si está interesado en este tema seleccione <guimenuitem
->Función...</guimenuitem
+>Función…</guimenuitem
 > desde el menú <guimenu
 >Insertar</guimenu
 > y eche un vistazo al cuadro de diálogo <guilabel
@@ -598,7 +598,7 @@
 </para>
 <para
 >Puede que queramos que los datos se ordenen de forma que los nombres estén en orden alfabético. Para hacer esto, seleccione el área que contiene los datos (A2:C7 en este caso) y elija <guimenuitem
->Ordenar...</guimenuitem
+>Ordenar…</guimenuitem
 > en el menú <guimenu
 >Datos</guimenu
 >. Esto abrirá el cuadro de diálogo <guilabel
@@ -670,7 +670,7 @@ selected area. For more complex sorting select <menuchoice
 >Detalles 
 >
 ></guilabel
-> del diálogo le permite realizar la ordenación utilizando el orden de los elementos en una lista personalizada tal como Enero, Febrero... en lugar de alfanuméricamente. El formato de la celda se desplaza junto con el contenido de la celda, si selecciona <guilabel
+> del diálogo le permite realizar la ordenación utilizando el orden de los elementos en una lista personalizada tal como Enero, Febrero… en lugar de alfanuméricamente. El formato de la celda se desplaza junto con el contenido de la celda, si selecciona <guilabel
 >Copiar formato de la celda (bordes, colores, estilo de texto)</guilabel
 >. </para>
 </sect1>
@@ -782,7 +782,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenu
 >Archivo</guimenu
 ><guimenuitem
->Guardar como... </guimenuitem
+>Guardar como… </guimenuitem
 ></menuchoice
 >. Esto hará aparecer el cuadro de diálogo común de &kde; <guilabel
 >Guardar documento como</guilabel
@@ -872,7 +872,7 @@ selected area. For more complex sorting select <menuchoice
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Imprimir...</guimenuitem
+>Imprimir…</guimenuitem
 ></menuchoice
 >, que le trae el cuadro de diálogo común de <guilabel
 >Impresión</guilabel
@@ -901,7 +901,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenu
 >Archivo</guimenu
 ><guimenuitem
->Presentación preliminar...</guimenuitem
+>Presentación preliminar…</guimenuitem
 ></menuchoice
 >.</para>
 
@@ -917,7 +917,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenu
 >Formato</guimenu
 ><guimenuitem
->Disposición de página...</guimenuitem
+>Disposición de página…</guimenuitem
 ></menuchoice
 >, para cambiar la orientación de las páginas impresas, el tamaño del papel (esto lo debería ajustar para su impresora) y el tamaño de los bordes de página.</para>
 <para

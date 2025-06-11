@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
 # Thomas Diehl <thd@kde.org>, 2002, 2003.
 # Tobias Erbsland <te@solnet.ch>, 2003.
 # Stephan Johach <hunsum@gmx.de>, 2005.
@@ -14,15 +15,15 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2023-05-23 00:26+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2024-09-04 09:48+0200\n"
+"Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -13031,13 +13032,12 @@ msgstr "Copyright © 1998–%1, Das Calligra-Sheets-Team"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Betreuer"
+msgstr "Betreuer, Portierung auf Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -13050,10 +13050,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Betreuer"
+msgstr "Ehemaliger Betreuer"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -13588,10 +13587,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "Farbe:"
+msgstr "&Gitterfarbe:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -13604,10 +13602,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "&Seitenumriss:"
+msgstr "&Seitenumrissfarbe:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -15387,16 +15384,14 @@ msgid "Cell Format"
 msgstr "Zellenformat"
 
 #: ui/dialogs/LayoutDialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Zellenformat"
+msgstr "Zellenformat festlegen"
 
 #: ui/dialogs/LayoutDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Allgemein"
+msgstr "Allgemein"
 
 #: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
@@ -15404,16 +15399,14 @@ msgid "Border"
 msgstr "Umrandung"
 
 #: ui/dialogs/LayoutDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "&Hintergrund"
+msgstr "Hintergrund"
 
 #: ui/dialogs/LayoutDialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "&Zellenschutz"
+msgstr "Zellenschutz"
 
 #: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
@@ -15585,20 +15578,12 @@ msgstr ""
 "Standard-Format an."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Datum & Zeit"
+msgstr "Datum und Zeit"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15607,10 +15592,11 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Um ein Datum einzugeben, sollten Sie eines der in den Systemeinstellungen "
-"unter Allgemeines Erscheinungsbild und Verhalten -> Regionales -> Land/"
-"Region & Sprache -> Zeit & Datum eingestellten Formate verwenden. Es werden "
-"hier zwei Formate eingestellt: das Datumsformat und Kurzformat für Datum.\n"
+"Um Datum und Zeit einzugeben, sollten Sie eines der in den "
+"Systemeinstellungen unter Allgemeines Erscheinungsbild und Verhalten -> "
+"Regionales -> Land/Region & Sprache -> Zeit & Datum eingestellten Formate "
+"verwenden. Es werden hier zwei Formate eingestellt: das Datumsformat und "
+"Kurzformat für Datum.\n"
 "Genau wie Sie Zahlen nach unten ziehen können, können sie auch Daten nach "
 "unten ziehen. Die nächsten Zellen enthalten dann die folgenden Daten."
 

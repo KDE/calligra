@@ -185,7 +185,7 @@ Be sure to comment it out again when you are done -->
 > <guimenu
 >Archivo</guimenu
 > <guimenuitem
->Abrir...</guimenuitem
+>Abrir…</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
@@ -242,7 +242,7 @@ Be sure to comment it out again when you are done -->
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Guardar como...</guimenuitem
+>Guardar como…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -276,7 +276,7 @@ Be sure to comment it out again when you are done -->
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Importar...</guimenuitem
+>Importar…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -291,7 +291,7 @@ Be sure to comment it out again when you are done -->
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -306,7 +306,7 @@ Be sure to comment it out again when you are done -->
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Correo...</guimenuitem
+>Correo…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -323,7 +323,7 @@ Be sure to comment it out again when you are done -->
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Exportar como HTML...</guimenuitem
+>Exportar como HTML…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -385,7 +385,7 @@ often.</para>
 > <guimenu
 >Archivo</guimenu
 > <guimenuitem
->Imprimir...</guimenuitem
+>Imprimir…</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
@@ -402,7 +402,7 @@ often.</para>
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Presentación preliminar...</guimenuitem
+>Presentación preliminar…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -685,7 +685,7 @@ often.</para>
 > <guimenu
 >Editar</guimenu
 > <guimenuitem
->Buscar...</guimenuitem
+>Buscar…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -748,7 +748,7 @@ often.</para>
 > <guimenu
 >Editar</guimenu
 ><guimenuitem
->Reemplazar...</guimenuitem
+>Reemplazar…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1237,7 +1237,7 @@ before or after the currently selected page.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Importar una presentación...</guimenuitem
+>Importar una presentación…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1256,7 +1256,7 @@ before or after the currently selected page.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Insertar imágenes como diapositivas...</guimenuitem
+>Insertar imágenes como diapositivas…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1429,7 +1429,7 @@ section.</para>
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Escanear imagen...</guimenuitem
+>Escanear imagen…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1457,7 +1457,7 @@ section.</para>
 ><guimenu
 >Formato</guimenu
 > <guimenuitem
->Tipo de letra...</guimenuitem
+>Tipo de letra…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1491,7 +1491,7 @@ section.</para>
 > <guimenu
 >Formato</guimenu
 > <guimenuitem
->Párrafo...</guimenuitem
+>Párrafo…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -1809,7 +1809,7 @@ without leaving the dialog.</para>
 ><guimenu
 >Formato</guimenu
 > <guimenuitem
->Distribución de página...</guimenuitem
+>Distribución de página…</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
@@ -2495,7 +2495,7 @@ it would be autocorrected to <userinput
 ><guimenu
 >Presentación</guimenu
 > <guimenuitem
->Configurar presentación...</guimenuitem
+>Configurar presentación…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -2615,7 +2615,7 @@ transition <emphasis
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar atajos de teclado...</guimenuitem
+>Configurar atajos de teclado…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -2673,7 +2673,7 @@ transition <emphasis
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar barras de herramientas...</guimenuitem
+>Configurar barras de herramientas…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -2719,7 +2719,7 @@ transition <emphasis
 ><action
 >Selecciona el tema de colores para la ventana de &stage;.</action
 > Puede seleccionar uno de los esquemas de color predefinidos o seleccionar <guimenuitem
->Configuración...</guimenuitem
+>Configuración…</guimenuitem
 > para abrir el <ulink url="help:/kcontrol/colors"
 >módulo de selección de colores de &systemsettings;</ulink
 >. </para
@@ -2732,7 +2732,7 @@ transition <emphasis
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar Stage...</guimenuitem
+>Configurar Stage…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>

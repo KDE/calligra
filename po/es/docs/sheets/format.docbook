@@ -80,7 +80,7 @@
 >Formato de celda</title>
 <para
 >Para cambiar el formato y la apariencia de las celdas, filas o columnas seleccionadas, use la opción <guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 > desde el menú <guimenu
 >Formato</guimenu
 >, o bien desde el menú emergente del botón <mousebutton
@@ -769,7 +769,7 @@ better-->
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Proteger hoja...</guimenuitem
+>Proteger hoja…</guimenuitem
 ></menuchoice
 > y proporcionar una contraseña. También puede ocultar la fórmula de la celda para proteger la manera en que calcula la fórmula. Para que esto funcione, también es necesaria la activación de la protección de la hoja. Puede ocultar el contenido de la celda con <guilabel
 >Ocultar todo</guilabel
@@ -853,7 +853,7 @@ better-->
 >Puede hacer que la apariencia de una celda cambie de acuerdo al valor que contiene, útil quizás si está usando &sheets; para seguir la pista de sus gastos de alojamiento y quiere resaltar cualquier elemento mayor que, digamos, mil euros.</para>
 <para
 >Para hacer esto, seleccione la(s) celda(s) y luego seleccione <guimenuitem
->Estilos condicionales...</guimenuitem
+>Estilos condicionales…</guimenuitem
 > desde el menú <guimenu
 >Formato</guimenu
 >. Esto le llevará al cuadro de diálogo <guilabel
@@ -882,9 +882,9 @@ better-->
 > le permite modificar el tamaño de la(s) celda(s) seleccionada(s). Tenga en cuenta que al cambiar la altura de solo una celda se cambiará la altura de todas las celdas de esa fila, al igual que un cambio en la ancho afectará a toda la columna.</para>
 <para
 >También puede seleccionar la(s) fila(s) o columna(s) a modificar y luego seleccionar <guimenuitem
->Redimensionar fila...</guimenuitem
+>Redimensionar fila…</guimenuitem
 > o <guimenuitem
->Redimensionar columna...</guimenuitem
+>Redimensionar columna…</guimenuitem
 > desde el menú emergente del botón <mousebutton
 >derecho</mousebutton
 > del ratón o desde el menú <menuchoice
@@ -988,13 +988,13 @@ better-->
 ><guisubmenu
 >Fila </guisubmenu
 ><guimenuitem
->Mostrar filas...</guimenuitem
+>Mostrar filas…</guimenuitem
 ></menuchoice
 > o <menuchoice
 ><guisubmenu
 >Columna</guisubmenu
 ><guimenuitem
->Mostrar columnas... </guimenuitem
+>Mostrar columnas… </guimenuitem
 ></menuchoice
 > en el menú <guimenu
 >Formato</guimenu

@@ -1,17 +1,19 @@
+# SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
 # Jannick Kuhr <opensource@kuhr.org>, 2007, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets_solver\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2011-06-05 00:42+0200\n"
-"Last-Translator: Jannick Kuhr <opensource@kuhr.org>\n"
+"PO-Revision-Date: 2024-09-04 09:43+0200\n"
+"Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: Solver.cpp:64
 #, kde-format
@@ -19,11 +21,9 @@ msgid "Function Optimizer..."
 msgstr "Funktionsoptimierung ..."
 
 #: Solver.cpp:101
-#, fuzzy
-#| msgid "Optimization"
 msgctxt "(qtundo-format)"
 msgid "Optimize"
-msgstr "Optimierung"
+msgstr "Optimieren"
 
 #. i18n: ectx: Menu (tools)
 #: solver.rc:4
