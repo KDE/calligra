@@ -1,28 +1,27 @@
-# Translation of koconverter to Spanish
-# translation of koconverter.po to Spanish
-# Copyright (C) 2002, 2003, 2004, 2007, 2008 Free Software Foundation, Inc.
+# Spanish translations for koconverter.po package.
+# Copyright (C) 2002-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2004.
-# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2002, 2003, 2004.
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
-# Jaime Robles <jaime@kde.org>, 2007.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2015, 2016.
-# Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012.
-# Sofia Priego <spriego@darksylvania.net>, 2015, 2016.
+# SPDX-FileCopyrightText: 2004 Miguel Revilla Rodríguez <yo@miguelrevilla.com>
+# SPDX-FileCopyrightText: 2002, 2003, 2004 Juan Manuel Garcia Molina <juanma@superiodico.net>
+# SPDX-FileCopyrightText: 2007 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
+# SPDX-FileCopyrightText: 2008, 2015, 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2012 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:59+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:43+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"com>\n"
 "X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
@@ -104,7 +103,7 @@ msgstr "La orientación de la impresión. Puede ser «vertical» o «apaisada».
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr "El tamaño del papel. A4, Legal, Carta, ..."
+msgstr "El tamaño del papel. A4, Legal, Carta, …"
 
 #: calligraconverter.cpp:207
 #, kde-format
@@ -135,94 +134,3 @@ msgstr "No se ha encontrado el tipo MIME, intente usar la opción -mimetype"
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** Ha fallado la conversión. ***"
-
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Sofía Priego,Juan Manuel García Molina"
-
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "spriego@darksylvania.net,juanma@superiodico.net"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CalligraConverter"
-#~ msgstr "CalligraConverter"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligra Document Converter"
-#~ msgstr "Conversor de documentos de Calligra"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 2001-%1 Calligra developers"
-#~ msgstr "Copyright 2001-%1 Los desarrolladores de Calligra"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "David Faure"
-#~ msgstr "David Faure"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Nicolas Goutte"
-#~ msgstr "Nicolas Goutte"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dan Leinir Turthra Jensen"
-#~ msgstr "Dan Leinir Turthra Jensen"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Input file"
-#~ msgstr "Archivo de entrada"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Output file"
-#~ msgstr "Archivo de salida"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Make a backup of the destination file"
-#~ msgstr "Hacer una copia de respaldo del archivo de destino"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Batch mode: do not show dialogs"
-#~ msgstr "Modo de proceso por lotes: no muestra los cuadros de diálogo"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Interactive mode: show dialogs (default)"
-#~ msgstr "Modo interactivo: muestra los cuadros de diálogo (predeterminado)"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype of the output file"
-#~ msgstr "Tipo MIME del archivo de salida"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The print orientation. This could be either Portrait or Landscape."
-#~ msgstr "La orientación de la impresión. Puede ser «vertical» o «apaisada»."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The paper size. A4, Legal, Letter, ..."
-#~ msgstr "El tamaño del papel. A4, Legal, Carta, ..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The size of the paper margin. By default this is 0.2."
-#~ msgstr "El tamaño del margen del papel. Por omisión es 0,2."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Two arguments required"
-#~ msgstr "Se necesitan dos argumentos"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype for input file %1 not found!"
-#~ msgstr "No se ha encontrado el tipo MIME para el archivo de entrada %1."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype not found %1"
-#~ msgstr "No se ha encontrado el tipo MIME %1"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype not found, try using the -mimetype option"
-#~ msgstr "No se ha encontrado el tipo MIME, intente usar la opción -mimetype"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "*** The conversion failed! ***"
-#~ msgstr "*** La conversión ha fallado ***"
-
-#~ msgid "KOConverter"
-#~ msgstr "KOConverter"

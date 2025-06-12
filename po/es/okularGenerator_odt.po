@@ -1,16 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for okularGenerator_odt.po package.
+# Copyright (C) 2014-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Raul Gonzalez <raulgf83@gmail.com>, 2014.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: okularGenerator_odt\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:59+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:43+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -23,24 +24,3 @@ msgstr ""
 #, kde-format
 msgid "Language"
 msgstr "Lenguaje"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Language"
-#~ msgstr "Lenguaje"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Raúl González"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "raulgf83@gmail.com"
-
-#~ msgid "ODT/OTT Backend"
-#~ msgstr "Motor ODT/OTT"
-
-#~ msgid "ODT/OTT file renderer"
-#~ msgstr "Renderizador de archivos ODT/OTT"
-
-#~ msgid "© 2012 Sven Langkamp"
-#~ msgstr "© 2012 Sven Langkamp"

@@ -1,16 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_template.po package.
+# Copyright (C) 2014-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Raul Gonzalez <raulgf83@gmail.com>, 2014.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_shape_template\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:55+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:33+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -44,21 +45,3 @@ msgstr "Abrir"
 #, kde-format
 msgid "Template shape editing"
 msgstr "Edición de la forma plantilla"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Template shape"
-#~ msgstr "Forma plantilla"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Simple shape that is used as a template for developing other shapes."
-#~ msgstr ""
-#~ "Forma sencilla que se utiliza como plantilla para desarrollar otras "
-#~ "formas."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Open"
-#~ msgstr "Abrir"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Template shape editing"
-#~ msgstr "Edición de la forma plantilla"

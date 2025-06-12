@@ -1,18 +1,18 @@
-# Translation of SpellCheckPlugin to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_textediting_spellcheck.po package.
+# Copyright (C) 2007-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2010.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2007, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: SpellCheckPlugin\n"
+"Project-Id-Version: calligra_textediting_spellcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2016-11-22 21:57+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:36+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: SpellCheck.cpp:45
 #, kde-format
 msgid "Configure &Spell Checking..."
-msgstr "Configurar la verificación &ortográfica..."
+msgstr "Configurar la verificación &ortográfica…"
 
 #: SpellCheck.cpp:49
 #, kde-format
@@ -45,53 +45,3 @@ msgstr "Ortografía"
 #, kde-format
 msgid "Add to Dictionary"
 msgstr "Añadir al diccionario"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure &Spell Checking..."
-#~ msgstr "Configurar la verificación &ortográfica..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto Spell Check"
-#~ msgstr "Verificación ortográfica automática"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Check Spelling"
-#~ msgstr "Comprobar ortografía"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spelling"
-#~ msgstr "Ortografía"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add to Dictionary"
-#~ msgstr "Añadir al diccionario"
-
-#~ msgid "Ignore Word"
-#~ msgstr "Ignorar esta palabra"
-
-#~ msgid "Spell Check"
-#~ msgstr "Verificación ortográfica"
-
-#~ msgid "Spell Check Configuration"
-#~ msgstr "Configuración de la verificación ortográfica"
-
-#~ msgid "Default Language:"
-#~ msgstr "Idioma predeterminado:"
-
-#~ msgid "Options"
-#~ msgstr "Opciones"
-
-#~ msgid "Enable &background spellchecking"
-#~ msgstr "Habilitar la verificación ortográfica en &segundo plano"
-
-#~ msgid "Skip all &uppercase words"
-#~ msgstr "Omitir las palabras totalmente en mayúsc&ulas"
-
-#~ msgid "S&kip run-together words"
-#~ msgstr "&Omitir las palabras unidas"
-
-#~ msgid "&Add"
-#~ msgstr "&Añadir"
-
-#~ msgid "&Remove"
-#~ msgstr "Elimina&r"

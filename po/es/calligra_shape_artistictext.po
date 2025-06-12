@@ -1,18 +1,18 @@
-# translation of ArtisticTextShape.po to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_artistictext.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2009.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2013, 2014.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2015, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2015, 2016.
+# SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2013, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2015, 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: ArtisticTextShape\n"
+"Project-Id-Version: calligra_shape_artistictext\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:54+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:27+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -171,91 +171,3 @@ msgstr "Eliminar el intervalo de texto"
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
 msgstr "Reemplazar el intervalo de texto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "ArtisticTextShape"
-#~ msgstr "ArtisticTextShape"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A shape which shows a single text line"
-#~ msgstr "Una forma que muestra una sola línea de texto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Artistic Text"
-#~ msgstr "Texto artístico"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bold text"
-#~ msgstr "Texto en negrita"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Italic text"
-#~ msgstr "Texto en cursiva"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Superscript"
-#~ msgstr "Superíndice"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Subscript"
-#~ msgstr "Subíndice"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Anchor at Start"
-#~ msgstr "Anclar al inicio"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Anchor at Middle"
-#~ msgstr "Anclar al centro"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Anchor at End"
-#~ msgstr "Anclar al final"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Click to change cursor position."
-#~ msgstr "Haga clic para cambiar la posición del cursor."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Click to select text shape."
-#~ msgstr "Haga clic para seleccionar la forma texto."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Double click to put text on path."
-#~ msgstr "Haga doble clic para colocar el texto sobre la trayectoria."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Drag handle to change start offset."
-#~ msgstr "Arrastre el deslizador para cambiar la posición de inicio."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Press escape to finish editing."
-#~ msgstr "Pulse la tecla de escape para finalizar la edición."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Press return to finish editing."
-#~ msgstr "Pulse la tecla de retorno para finalizar la edición."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Properties"
-#~ msgstr "Propiedades del texto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text On Path"
-#~ msgstr "Texto sobre la trayectoria"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Artistic text editing"
-#~ msgstr "Edición de texto artístico"
-
-#~ msgid "Family:"
-#~ msgstr "Familia:"
-
-#~ msgid "Size:"
-#~ msgstr "Tamaño:"
-
-#~ msgid "Offset:"
-#~ msgstr "Desplazamiento:"
-
-#~ msgid "Artistic Text Tool"
-#~ msgstr "Herramienta de texto artístico"

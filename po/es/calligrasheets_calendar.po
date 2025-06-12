@@ -1,18 +1,18 @@
-# Translation of kspread_plugin_tool_calendar.po to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligrasheets_calendar.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez <cronopios@gmail.com>, 2009.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2013, 2014.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2013, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: kspread_plugin_tool_calendar\n"
+"Project-Id-Version: calligrasheets_calendar\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 22:01+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-06-11 16:39+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -123,83 +123,3 @@ msgstr "Fecha de finalización:"
 #, kde-format
 msgid "Start date:"
 msgstr "Fecha de inicio:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calendar Tool"
-#~ msgstr "Herramienta de calendario"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "Insertar"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start date:"
-#~ msgstr "Fecha inicial:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "End date:"
-#~ msgstr "Fecha final:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "End date is before start date! Please make sure that end date comes after "
-#~ "start date."
-#~ msgstr ""
-#~ "La fecha final es anterior a la fecha inicial. Asegúrese de que la fecha "
-#~ "final sea posterior a la fecha inicial."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Calendars should not be longer than 10 years. If you really need such "
-#~ "long periods you need to split them up."
-#~ msgstr ""
-#~ "Los calendarios no deben abarcar más de 10 años. Si realmente necesita "
-#~ "periodos tan largos, tendrá que dividirlos."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Start and end dates are equal! Only one day will be inserted, do you want "
-#~ "to continue?"
-#~ msgstr ""
-#~ "Las fechas inicial y final son iguales. Solo se insertará un día. ¿Desea "
-#~ "continuar?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Warning"
-#~ msgstr "Advertencia"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Creating a calendar for a longer period than a year can take up a lot of "
-#~ "space, do you want to continue?"
-#~ msgstr ""
-#~ "La creación de un calendario para un periodo superior a un año puede "
-#~ "ocupar mucho espacio. ¿Desea continuar?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "The area where the calendar is inserted is NOT empty, are you sure you "
-#~ "want to continue, overwriting existing data? If you choose No the area "
-#~ "that would be required for the desired calendar will be selected so you "
-#~ "can see what data would be overwritten."
-#~ msgstr ""
-#~ "El área en la que se va a insertar el calendario NO está vacía. ¿Está "
-#~ "seguro de que desea continuar, sobrescribiendo los datos que hay ahora? "
-#~ "Si elige «No», se seleccionará el área que se requeriría para el "
-#~ "calendario deseado, para que pueda ver qué datos se sobrescribirían."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calendar from %1 to %2"
-#~ msgstr "Calendario de %1 a %2"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "week"
-#~ msgstr "semana"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calendar"
-#~ msgstr "Calendario"
