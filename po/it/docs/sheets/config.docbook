@@ -129,7 +129,7 @@
 >sinistro</mousebutton
 >, trascinare la barra nella posizione desiderata. Quando trascini in questo modo la barra degli strumenti, puoi rilasciare il tasto del mouse quando è ancora ad una certa distanza dai bordi della finestra di &sheets;, otterrai così una barra fluttuante, che non è fissata a nessun particolare punto della finestra di &sheets;, e che può essere spostata anche fuori dalla finestra. Se vuoi riportare una barra fluttuante in una delle posizioni tradizionali, basta un clic del tasto <mousebutton
 >destro</mousebutton
-> sulla sua barra dei titoli per aprire il <guilabel
+> sulla sua barra del titolo per aprire il <guilabel
 >Menu della barra degli strumenti</guilabel
 > e scegliere una delle opzioni del sottomenu <guisubmenu
 >Orientazione</guisubmenu
