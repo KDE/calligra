@@ -74,7 +74,7 @@
 > <guimenu
 >Archivo</guimenu
 > <guimenuitem
->Abrir...</guimenuitem
+>Abrir…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -131,14 +131,14 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Guardar como...</guimenuitem
+>Guardar como…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
 ><para
 ><action
 >Guarda y modifica el nombre o el formato del documento actual. Si desea mantener el nombre y el formato del documento utilice <guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 ></action>
 </para
 ></listitem>
@@ -184,7 +184,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Importar...</guimenuitem
+>Importar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -217,7 +217,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -234,7 +234,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Correo...</guimenuitem
+>Correo…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -251,7 +251,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Crear plantilla desde documento...</guimenuitem
+>Crear plantilla desde documento…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -274,7 +274,7 @@
 > <guimenu
 >Archivo</guimenu
 > <guimenuitem
->Imprimir...</guimenuitem
+>Imprimir…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -291,7 +291,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Vista preliminar...</guimenuitem
+>Vista preliminar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -515,7 +515,7 @@
 ><guimenu
 >Editar</guimenu
 > <guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -599,7 +599,7 @@
 > <guimenu
 >Editar</guimenu
 > <guimenuitem
->Buscar...</guimenuitem
+>Buscar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -666,7 +666,7 @@
 > <guimenu
 >Editar</guimenu
 > <guimenuitem
->Reemplazar...</guimenuitem
+>Reemplazar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1007,7 +1007,7 @@ is shown in the upper right corner of the cell.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Función...</guimenuitem
+>Función…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1026,7 +1026,7 @@ is shown in the upper right corner of the cell.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Serie...</guimenuitem
+>Serie…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1045,7 +1045,7 @@ is shown in the upper right corner of the cell.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Enlace...</guimenuitem
+>Enlace…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1064,7 +1064,7 @@ is shown in the upper right corner of the cell.
 ><guimenu
 >Insertar</guimenu
 > <guimenuitem
->Carácter especial...</guimenuitem
+>Carácter especial…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1145,11 +1145,11 @@ to insert a picture.
 ><para
 ><action
 >Inserta datos <guilabel
->Desde base de datos...</guilabel
+>Desde base de datos…</guilabel
 >, <guilabel
->Desde archivo de texto...</guilabel
+>Desde archivo de texto…</guilabel
 > oo <guilabel
->Desde portapapeles...</guilabel
+>Desde portapapeles…</guilabel
 >.</action
 > Tiene más información en la sección <link linkend="insertdata"
 >Insertar datos externos</link
@@ -1179,7 +1179,7 @@ to insert a picture.
 > <guimenu
 >Formato</guimenu
 > <guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1226,7 +1226,7 @@ to insert a picture.
 > <guimenu
 >Formato</guimenu
 ><guimenuitem
->Gestor de estilos...</guimenuitem
+>Gestor de estilos…</guimenuitem
 > </menuchoice
 > </para
 ></listitem>
@@ -1238,7 +1238,7 @@ to insert a picture.
 ><guimenu
 >Formato</guimenu
 > <guimenuitem
->Crear estilo desde celda...</guimenuitem
+>Crear estilo desde celda…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1249,7 +1249,7 @@ to insert a picture.
 > <guimenu
 >Formato</guimenu
 ><guimenuitem
->Gestor de estilos...</guimenuitem
+>Gestor de estilos…</guimenuitem
 > </menuchoice
 > </para
 ></listitem>
@@ -1261,7 +1261,7 @@ to insert a picture.
 ><guimenu
 >Formato</guimenu
 > <guimenuitem
->Autoformato...</guimenuitem
+>Autoformato…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1380,7 +1380,7 @@ to insert a picture.
 ><guimenu
 >Formato</guimenu
 > <guimenuitem
->Disposición de página...</guimenuitem
+>Disposición de página…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1425,7 +1425,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Ordenar...</guimenuitem
+>Ordenar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1444,7 +1444,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Texto en columnas...</guimenuitem
+>Texto en columnas…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1467,7 +1467,7 @@ to insert a picture.
 > <guimenu
 >Datos</guimenu
 > <guimenuitem
->Áreas con nombre...</guimenuitem
+>Áreas con nombre…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1488,7 +1488,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Concentrar...</guimenuitem
+>Concentrar…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1507,7 +1507,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Subtotales...</guimenuitem
+>Subtotales…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1524,7 +1524,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Validez...</guimenuitem
+>Validez…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1562,7 +1562,7 @@ to insert a picture.
 ><guimenu
 >Datos</guimenu
 > <guimenuitem
->Tabla dinámica...</guimenuitem
+>Tabla dinámica…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1591,7 +1591,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Ortografía...</guimenuitem
+>Ortografía…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1608,7 +1608,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Listas personalizadas...</guimenuitem
+>Listas personalizadas…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1627,7 +1627,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Proteger hoja...</guimenuitem
+>Proteger hoja…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1644,7 +1644,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Proteger documento...</guimenuitem
+>Proteger documento…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1724,7 +1724,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Ejecutar un guion...</guimenuitem
+>Ejecutar un guion…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1766,7 +1766,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Administrador de scripts...</guimenuitem
+>Administrador de scripts…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1785,7 +1785,7 @@ to insert a picture.
 ><guimenu
 >Herramientas</guimenu
 > <guimenuitem
->Optimizador de funciones...</guimenuitem
+>Optimizador de funciones…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1901,7 +1901,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar los atajos de teclado...</guimenuitem
+>Configurar los atajos de teclado…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1920,7 +1920,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar barras de herramientas...</guimenuitem
+>Configurar barras de herramientas…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1947,7 +1947,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><action
 >Selecciona el tema de colores para la ventana de &sheets;.</action
 > Puede elegir uno de los esquemas de color predefinidos o seleccionar <guimenuitem
->Configuración...</guimenuitem
+>Configuración…</guimenuitem
 > para abrir el <ulink url="help:/kcontrol/colors"
 >módulo de selección de color de &systemsettings;</ulink
 >. </para
@@ -1983,7 +1983,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar notificaciones...</guimenuitem
+>Configurar notificaciones…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -2000,7 +2000,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar &sheets;...</guimenuitem
+>Configurar &sheets;…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -2042,7 +2042,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ></keycombo
 > </shortcut
 > <guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -2124,7 +2124,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Pegado especial...</guimenuitem>
+>Pegado especial…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2203,7 +2203,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Nombre del área...</guimenuitem>
+>Nombre del área…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2220,7 +2220,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Redimensionar fila...</guimenuitem>
+>Redimensionar fila…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2250,7 +2250,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Redimensionar columna...</guimenuitem>
+>Redimensionar columna…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2280,7 +2280,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Insertar celdas...</guimenuitem>
+>Insertar celdas…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2295,7 +2295,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Borrar celdas...</guimenuitem>
+>Borrar celdas…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2430,7 +2430,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Comentario...</guimenuitem>
+>Comentario…</guimenuitem>
 </menuchoice
 ></term>
 <listitem
@@ -2445,7 +2445,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <term
 ><menuchoice>
 <guimenuitem
->Lista de selección...</guimenuitem>
+>Lista de selección…</guimenuitem>
 </menuchoice
 ></term>
 <listitem

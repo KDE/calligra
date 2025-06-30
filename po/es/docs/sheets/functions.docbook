@@ -3127,7 +3127,7 @@ all changes will be overwritten on the next script run
 <title
 >DAYOFYEAR</title>
 <para
->La función DAYOFYEAR() devuelve el número del día en el año (1... 365).</para>
+>La función DAYOFYEAR() devuelve el número del día en el año (1… 365).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -4839,7 +4839,7 @@ all changes will be overwritten on the next script run
 <title
 >WEEKDAY</title>
 <para
->La función WEEKDAY() devuelve el día de la semana de la fecha dada. Si el método es 1 (por omisión) WEEKDAY() devuelve 1 para el domingo, 2 para el lunes, ... Si el método es 2, el lunes es 1, el martes es 2, ... y si el método es 3 WEEKDAY() devuelve 0 para el lunes, 1 para el martes, ...</para>
+>La función WEEKDAY() devuelve el día de la semana de la fecha dada. Si el método es 1 (por omisión) WEEKDAY() devuelve 1 para el domingo, 2 para el lunes, … Si el método es 2, el lunes es 1, el martes es 2, … y si el método es 3 WEEKDAY() devuelve 0 para el lunes, 1 para el martes, …</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7470,7 +7470,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->IMDIV(valor;valor;...)</para
+>IMDIV(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7862,7 +7862,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->IMPRODUCT(valor;valor;...)</para
+>IMPRODUCT(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8311,7 +8311,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->IMSUB(valor;valor;...)</para
+>IMSUB(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8398,7 +8398,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->IMSUM(valor;valor;...)</para
+>IMSUM(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -14837,7 +14837,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->AND(valor;valor;...)</para
+>AND(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -15157,7 +15157,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->NAND(valor;valor;...)</para
+>NAND(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -15244,7 +15244,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->NOR(valor;valor;...)</para
+>NOR(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -15394,7 +15394,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->OR(valor;valor;...)</para
+>OR(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -15524,7 +15524,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->XOR(valor;valor;...)</para
+>XOR(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -15873,7 +15873,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->CHOOSE(índice; parámetro1; parámetro2;...)</para
+>CHOOSE(índice; parámetro1; parámetro2;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -17186,7 +17186,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->COUNT(valor;valor;valor...)</para
+>COUNT(valor;valor;valor…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -17269,7 +17269,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->COUNTA(valor;valor;valor...)</para
+>COUNTA(valor;valor;valor…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -17567,7 +17567,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->DIV(valor;valor;...)</para
+>DIV(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -17973,7 +17973,7 @@ all changes will be overwritten on the next script run
 <title
 >FIB</title>
 <para
->La función FIB calcula el término n-ésimo de una sucesión de Fibonacci (1, 1, 2, 3, 5, 8, 13, 21...), en la que cada número, después de los dos primeros, es la suma de los dos números precedentes. FIB(0) es 0 por definición.</para>
+>La función FIB calcula el término n-ésimo de una sucesión de Fibonacci (1, 1, 2, 3, 5, 8, 13, 21…), en la que cada número, después de los dos primeros, es la suma de los dos números precedentes. FIB(0) es 0 por definición.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -18332,7 +18332,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->G_PRODUCT(valor;valor;...)</para
+>G_PRODUCT(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -18541,7 +18541,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->KPRODUCT(valor;valor;...)</para
+>KPRODUCT(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -19150,7 +19150,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MAX(valor;valor;...)</para
+>MAX(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 
@@ -19250,7 +19250,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MAXA(valor; valor; ...)</para
+>MAXA(valor; valor; …)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -19416,7 +19416,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MIN(valor;valor;...)</para
+>MIN(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -19515,7 +19515,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MINA(valor;valor;...)</para
+>MINA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -19926,7 +19926,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MULTINOMIAL(valor;valor;...)</para
+>MULTINOMIAL(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -19981,7 +19981,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MULTIPLY(valor;valor;...)</para
+>MULTIPLY(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -20544,7 +20544,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->RAND() es igual por ejemplo a 0.78309922...</para
+>RAND() es igual por ejemplo a 0.78309922…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -20696,7 +20696,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->RANDBETWEEN(12;78) puede ser igual por ejemplo a 61.0811...</para
+>RANDBETWEEN(12;78) puede ser igual por ejemplo a 61.0811…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -21909,7 +21909,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->SUM(valor;valor;...)</para
+>SUM(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -21992,7 +21992,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->SUM(valor;valor;...)</para
+>SUM(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22164,7 +22164,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->SUMSQ(valor;valor;...)</para
+>SUMSQ(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22388,7 +22388,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->AVEDEV(valor;valor;...)</para
+>AVEDEV(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22448,7 +22448,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->AVEDEV(A1:A5) ...</para
+>AVEDEV(A1:A5) …</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -22475,7 +22475,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->AVERAGE(valor;valor;...)</para
+>AVERAGE(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22562,7 +22562,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->AVERAGEA(valor;valor;...)</para
+>AVERAGEA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -23280,7 +23280,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->DEVSQ(valor; valor;...)</para
+>DEVSQ(valor; valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24033,7 +24033,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->GEOMEAN(valor; valor;...)</para
+>GEOMEAN(valor; valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24132,7 +24132,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->HARMEAN(valor; valor;...)</para
+>HARMEAN(valor; valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24424,7 +24424,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->KURT(valor; valor;...)</para
+>KURT(valor; valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24523,7 +24523,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->KURTP(valor; valor;...)</para
+>KURTP(valor; valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24885,7 +24885,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MEDIAN(valor;valor;...)</para
+>MEDIAN(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -24972,7 +24972,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->MODE(número; número2; ...)</para
+>MODE(número; número2; …)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -25917,7 +25917,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->SKEW(número; número2; ...)</para
+>SKEW(número; número2; …)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26002,7 +26002,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->SKEWP(número; número2; ...)</para
+>SKEWP(número; número2; …)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26269,7 +26269,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->STDEV(valor;valor;...)</para
+>STDEV(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26360,7 +26360,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->STDEVA(valor;valor;...)</para
+>STDEVA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26463,7 +26463,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->STDEVP(valor;valor;...)</para
+>STDEVP(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26515,7 +26515,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->STDEVP(6;7;8) es igual a 0.816497...</para
+>STDEVP(6;7;8) es igual a 0.816497…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26554,7 +26554,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->STDEVPA(valor;valor;...)</para
+>STDEVPA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26606,7 +26606,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->STDEVPA(6; 7; A1; 8) es igual a 0.816497..., si A1 está vacía</para
+>STDEVPA(6; 7; A1; 8) es igual a 0.816497…, si A1 está vacía</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26614,7 +26614,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->STDEVPA(6; 7; A1; 8) es igual a 2.69..., si A1 es TRUE</para
+>STDEVPA(6; 7; A1; 8) es igual a 2.69…, si A1 es TRUE</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -26622,7 +26622,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->STDEVPA(6; 7; A1; 8) es igual a 3.11..., si A1 es FALSE</para
+>STDEVPA(6; 7; A1; 8) es igual a 3.11…, si A1 es FALSE</para
 ></listitem>
 </varlistentry>
 
@@ -27250,7 +27250,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->VAR(valor;valor;...)</para
+>VAR(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27310,7 +27310,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VAR(15;80;3) es igual a 1716.333...</para
+>VAR(15;80;3) es igual a 1716.333…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27369,7 +27369,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->VARA(valor;valor;...)</para
+>VARA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27429,7 +27429,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARA(15;80;3) es igual a 1716.333...</para
+>VARA(15;80;3) es igual a 1716.333…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27484,7 +27484,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->VARIANCE(valor;valor;...)</para
+>VARIANCE(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27544,7 +27544,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARIANCE(15;80;3) es igual a 1716.333...</para
+>VARIANCE(15;80;3) es igual a 1716.333…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27603,7 +27603,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->VARP(valor;valor;...)</para
+>VARP(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27655,7 +27655,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARP(12;5;7) es igual a 8.666...</para
+>VARP(12;5;7) es igual a 8.666…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27663,7 +27663,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARP(15;80;3) es igual a 1144.22...</para
+>VARP(15;80;3) es igual a 1144.22…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27671,7 +27671,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARP(6;7;8) es igual a 0.6666667...</para
+>VARP(6;7;8) es igual a 0.6666667…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27718,7 +27718,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->VARPA(valor;valor;...)</para
+>VARPA(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27770,7 +27770,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARPA(12;5;7) es igual a 8.666...</para
+>VARPA(12;5;7) es igual a 8.666…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27778,7 +27778,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARPA(15;80;3) es igual a 1144.22...</para
+>VARPA(15;80;3) es igual a 1144.22…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -27786,7 +27786,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->VARPA(6;7;8) es igual a 0.6666667...</para
+>VARPA(6;7;8) es igual a 0.6666667…</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28383,7 +28383,7 @@ all changes will be overwritten on the next script run
 >Sintaxis</term>
 <listitem
 ><para
->CONCATENATE(valor;valor;...)</para
+>CONCATENATE(valor;valor;…)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -31980,7 +31980,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->CSCH(PI()/2) es igual a 0.434537208...</para
+>CSCH(PI()/2) es igual a 0.434537208…</para
 ></listitem>
 </varlistentry>
 </variablelist>
@@ -32098,7 +32098,7 @@ all changes will be overwritten on the next script run
 >Ejemplos</term>
 <listitem
 ><para
->PI() es igual a 3.141592654...</para
+>PI() es igual a 3.141592654…</para
 ></listitem>
 </varlistentry>
 </variablelist>

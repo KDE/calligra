@@ -42,7 +42,7 @@
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar los atajos de teclado...</guimenuitem
+>Configurar los atajos de teclado…</guimenuitem
 ></menuchoice
 >. Esto lanzará un cuadro de diálogo como el que se muestra a continuación. </para>
 <mediaobject>
@@ -123,7 +123,7 @@
 
 <para
 >Seleccionar <guimenuitem
->Configurar barras de herramientas...</guimenuitem
+>Configurar barras de herramientas…</guimenuitem
 > del menú <guimenu
 >Preferencias</guimenu
 > le mostrará un cuadro de diálogo que le permitirá añadir botones o eliminarlos de las barras de herramientas de &sheets;.</para>

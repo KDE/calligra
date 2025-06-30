@@ -49,9 +49,9 @@
 <title
 >Series</title>
 <para
->Al construir una hoja de cálculo, a menudo es necesario incluir una serie de valores, como por ejemplo 10, 11, 12,... en una fila o columna. Hay varias formas de hacer esto en  &sheets;.</para>
+>Al construir una hoja de cálculo, a menudo es necesario incluir una serie de valores, como por ejemplo 10, 11, 12,… en una fila o columna. Hay varias formas de hacer esto en  &sheets;.</para>
 <para
->Para una serie corta y sencilla como  5, 6, 7, 8, ..., el método de <quote
+>Para una serie corta y sencilla como  5, 6, 7, 8, …, el método de <quote
 >Arrastrar y copiar</quote
 > es el más simple. Introduzca el valor de comienzo en la celda de comienzo y el siguiente valor en en una celda adyacente. Luego seleccione ambas celdas y mueva el puntero del cursor para que esté sobre el cuadrado pequeño de la esquina inferior derecha; el cursor cambiará a una flecha diagonal de doble flecha. Luego mantenga pulsado el botón <mousebutton
 >izquierdo</mousebutton
@@ -61,12 +61,12 @@
 >4</userinput
 > en la celda A1 y <userinput
 >3.5</userinput
-> en A2, seleccione luego ambas celdas y arrátrelas y cópielas abajo. El tamaño del paso se calculará como el valor de A2 menos el valor de A1, -0.5 en este caso. Obtendrá la serie 4, 3.5, 3, 2.5, 2, ...</para>
+> en A2, seleccione luego ambas celdas y arrátrelas y cópielas abajo. El tamaño del paso se calculará como el valor de A2 menos el valor de A1, -0.5 en este caso. Obtendrá la serie 4, 3.5, 3, 2.5, 2, …</para>
 
 <para
 >El método <quote
 >arrastrar y copiar</quote
-> puede incluso tratar con series en las que el valor del paso no sea un valor constante, sino una serie por sí mismo. Así que si empieza con 1, 3, 4, 6, ... arrastrando y copiando se extenderá a 1, 3, 4, 6, 7, 9, 10, 12, ..., . El valor del paso en este ejemplo es la serie 2, 1, 2, 1, ...</para>
+> puede incluso tratar con series en las que el valor del paso no sea un valor constante, sino una serie por sí mismo. Así que si empieza con 1, 3, 4, 6, … arrastrando y copiando se extenderá a 1, 3, 4, 6, 7, 9, 10, 12, …, . El valor del paso en este ejemplo es la serie 2, 1, 2, 1, …</para>
 
  <!--FIXME does not work here -->
 <para
@@ -78,20 +78,20 @@
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Personalizar listas...</guimenuitem
+>Personalizar listas…</guimenuitem
 ></menuchoice
 >.</para>
 
 <para
 >Si selecciona una cela y elije <guimenuitem
->Series...</guimenuitem
+>Series…</guimenuitem
 > desde el menú <guimenu
 >Insertar</guimenu
 >, verá el cuadro de diálogo <guilabel
 >Series </guilabel
->. Esto es útil para crear series que son demasiado largas para ser convenientemente construidas usando el método de arrastrar y copiar, o para crear series geométricas como 1, 1.5, 2.25, 3.375, ... donde el valor del paso, 1.5 en este caso, se usa como multiplicador.</para>
+>. Esto es útil para crear series que son demasiado largas para ser convenientemente construidas usando el método de arrastrar y copiar, o para crear series geométricas como 1, 1.5, 2.25, 3.375, … donde el valor del paso, 1.5 en este caso, se usa como multiplicador.</para>
 <para
->Si el tipo de serie que quiere es demasiado complicada para cualesquiera de los métodos anteriores, considere usar una fórmula y arrastre y copie eso. Por ejemplo, para crear una serie con los valores 2, 4, 16, 256, ..., introduzca <userinput
+>Si el tipo de serie que quiere es demasiado complicada para cualesquiera de los métodos anteriores, considere usar una fórmula y arrastre y copie eso. Por ejemplo, para crear una serie con los valores 2, 4, 16, 256, …, introduzca <userinput
 >2</userinput
 > en A1, <userinput
 >=A1*A1</userinput
@@ -108,7 +108,7 @@
 >&sheets; incluye una amplia gama de <link linkend="functions"
 >funciones</link
 > matemáticas y de otros tipos, que se pueden usar en la celda de una fórmula. Es posible verlas y acceder a ellas seleccionando <guimenuitem
->Función...</guimenuitem
+>Función…</guimenuitem
 > desde el menú <guimenu
 >Insertar</guimenu
 >. Esto hará que aparezca el cuadro de diálogo <guilabel
@@ -346,13 +346,13 @@
 >Aritmética usando pegado especial</title>
 <para
 >A veces puede querer añadir un valor sencillo a un número de celdas, o restar un valor de ellas, o multiplicarlas o dividirlas todas por un valor. La opción <guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 > le permite hacer esto de forma rápida y sencilla.</para>
 <para
 >Primero, introduzca el valor del modificador en alguna celda sobrante de su hoja de cálculo y elija <guimenuitem
 >Copiar</guimenuitem
 >. Luego seleccione el área de celdas que quiera cambiar, elija <guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 > en el menú <guimenu
 >Editar</guimenu
 > o seleccione <guilabel
@@ -368,7 +368,7 @@
 > del cuadro de diálogo.</para>
 <para
 >También puede aplicar diferentes valores modificadores a distintas filas o columnas del área objetivo copiando un área que contenga los modificadores deseados antes de seleccionar el área objetivo y haciendo un <guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 >. Por ejemplo, si introduce <userinput
 >5</userinput
 > en la celda A1, <userinput
@@ -376,7 +376,7 @@
 > en la celda B1, selecciona ambas celdas y hace clic en <guimenuitem
 >Copiar</guimenuitem
 > y luego en <guimenuitem
->Pegado especial...</guimenuitem
+>Pegado especial…</guimenuitem
 > <guilabel
 > Adición</guilabel
 > en las celdas de la A10 a la D15, se añadirá 5 a A10:A15 y C10:C15, y 10 a B10:B15 y D10:D15.</para>
@@ -412,7 +412,7 @@
 > en la celda A1 y luego probar diferentes valores de A2 hasta que el resultado de A1 sea tan cercano como desee a <emphasis
 >4</emphasis
 > o, preferiblemente, usar la funcionalidad <guimenuitem
->Buscar objetivo...</guimenuitem
+>Buscar objetivo…</guimenuitem
 > de &sheets;, que ajusta automáticamente el valor de una celda para intentar hacer el valor de otra celda tan cercano como sea posible a un valor objetivo.</para>
 <para
 >Se invoca seleccionando <guimenuitem
@@ -453,7 +453,7 @@
 > utilizando los datos de la tabla actual. </para>
    <para
 >Esta funcionalidad se puede invocar seleccionando la opción <guimenuitem
->Tabla dinámica...</guimenuitem
+>Tabla dinámica…</guimenuitem
 > desde el menú <guimenu
 >Datos</guimenu
 >. A continuación se muestra un ejemplo de como generar una tabla dinámica. </para>
@@ -475,7 +475,7 @@
 > <guimenu
 >Datos</guimenu
 > <guimenuitem
->Tabla dinámica...</guimenuitem
+>Tabla dinámica…</guimenuitem
 > </menuchoice
 >. </para>
      <para
@@ -583,10 +583,10 @@
 >Hoja1</emphasis
 >, <emphasis
 >Hoja2</emphasis
->... Puede darles un nombre diferente haciendo clic <mousebutton
+>… Puede darles un nombre diferente haciendo clic <mousebutton
 >derecho</mousebutton
 > sobre la pestaña y seleccionando <guimenuitem
->Cambiar de nombre la hoja...</guimenuitem
+>Cambiar de nombre la hoja…</guimenuitem
 >.</para>
 <para
 >Para eliminar una hoja del documento, use la opción <guimenuitem
@@ -617,7 +617,7 @@
 >Puede haber construido un documento con varias hojas de trabajo que contengan varios datos similares para, digamos, los meses diferentes del año, y desea tener hojas de resumen que contengan los datos concentrados (&eg;, sumas o promedios) de los datos correspondientes de las otras hojas.</para>
 <para
 >Esta tarea se puede hacer bastante fácilmente usando el elemento del menú <guimenuitem
->Concentrar...</guimenuitem
+>Concentrar…</guimenuitem
 > del menú <guimenu
 >Datos</guimenu
 >.</para>
@@ -732,9 +732,9 @@
 >Insertando datos externos</title>
 <para
 >Puede insertar datos desde un archivo de texto o desde el portapapeles en una hoja de trabajo, seleccionando en primer lugar la celda en la que quiera que aparezca el elemento superior izquierdo de los datos insertados, luego seleccione <guimenuitem
->Desde archivo de texto...</guimenuitem
+>Desde archivo de texto…</guimenuitem
 > o <guimenuitem
->Desde el portapapeles...</guimenuitem
+>Desde el portapapeles…</guimenuitem
 > desde el submenú <menuchoice
 ><guimenu
 >Insertar</guimenu
@@ -755,7 +755,7 @@
 ><guisubmenu
 >Datos externos</guisubmenu
 ><guimenuitem
->Desde la base de datos...</guimenuitem
+>Desde la base de datos…</guimenuitem
 > </menuchoice
 >.</para>
 </sect1>
@@ -770,7 +770,7 @@
 ><guimenu
 >Insertar</guimenu
 ><guimenuitem
->Enlace...</guimenuitem
+>Enlace…</guimenuitem
 ></menuchoice
 >. Esto le mostrará el cuadro de diálogo <guilabel
 >Insertar enlace</guilabel
@@ -840,7 +840,7 @@
 ><guimenu
 >Datos</guimenu
 ><guimenuitem
->Validez...</guimenuitem
+>Validez…</guimenuitem
 ></menuchoice
 >. Esto hará que aparezca el cuadro de diálogo <guilabel
 >Validez</guilabel
@@ -884,7 +884,7 @@
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Proteger documento...</guimenuitem
+>Proteger documento…</guimenuitem
 ></menuchoice
 >. Debe aparecer un diálogo para pedirle la contraseña. El medidor de seguridad de la <guilabel
 >Contraseña:</guilabel
@@ -959,7 +959,7 @@
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Proteger hoja...</guimenuitem
+>Proteger hoja…</guimenuitem
 ></menuchoice
 >. Debe aparecer un diálogo para pedirle una contraseña. El medidor de seguridad de la <guilabel
 >Contraseña</guilabel
@@ -1021,7 +1021,7 @@
 ><guimenu
 >Formato</guimenu
 ><guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 ></menuchoice
 >. </para
 ></listitem>
@@ -1055,7 +1055,7 @@
 ><guimenu
 >Formato</guimenu
 ><guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 ></menuchoice
 >. </para
 ></listitem>
@@ -1083,7 +1083,7 @@
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Proteger hoja...</guimenuitem
+>Proteger hoja…</guimenuitem
 ></menuchoice
 >. </para
 ></listitem>
@@ -1123,7 +1123,7 @@
 ><guimenu
 >Formato</guimenu
 ><guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 ></menuchoice
 >. En el diálogo Formato de celda, haga clic en la pestaña <guilabel
 >Protección de celda</guilabel
@@ -1135,7 +1135,7 @@
 ><guimenu
 >Herramientas</guimenu
 ><guimenuitem
->Proteger hoja...</guimenuitem
+>Proteger hoja…</guimenuitem
 ></menuchoice
 > para mostrar el cuadro de diálogo <guilabel
 >Proteger hoja</guilabel
@@ -1197,7 +1197,7 @@
 ><guimenu
 >Formato</guimenu
 ><guimenuitem
->Formato de celda...</guimenuitem
+>Formato de celda…</guimenuitem
 ></menuchoice
 >. En la captura de pantalla de abajo, la propia celda no está protegida (<guilabel
 >Protegida</guilabel
@@ -1301,7 +1301,7 @@ Remove View</guimenuitem
 >Puede dar un nombre como <userinput
 >fulano</userinput
 > a una celda o área de una hoja seleccionando la celda o área y seleccionando luego <guimenuitem
-> Nombre del área...</guimenuitem
+> Nombre del área…</guimenuitem
 > desde el menú del botón <mousebutton
 >derecho</mousebutton
 > del ratón. Esto le mostrará el cuadro de diálogo <guilabel
@@ -1316,7 +1316,7 @@ Remove View</guimenuitem
 ><guimenu
 >Datos</guimenu
 ><guimenuitem
->Áreas con nombres... </guimenuitem
+>Áreas con nombres… </guimenuitem
 ></menuchoice
 > le ofrece una lista de los nombres existentes y le permite cambiar el foco de &sheets; a cualquiera de ellos o borrar un nombre. </para>
 <para
@@ -1340,7 +1340,7 @@ Remove View</guimenuitem
 >Una celda puede contener un comentario de texto que se puede ver cuando se esté trabajando en la hoja de cálculo pero que no se imprimirá ni se verá normalmente.</para>
 <para
 >Para añadir un comentario, seleccione la celda y elija <guimenuitem
->Comentario...</guimenuitem
+>Comentario…</guimenuitem
 > desde el menú del botón <mousebutton
 >derecho</mousebutton
 > del ratón o desde el menú <guimenu
