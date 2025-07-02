@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2025-05-19 22:46+0900\n"
+"PO-Revision-Date: 2025-07-01 20:22+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -592,28 +592,27 @@ msgstr "輪廓"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "元件與文字的區隔："
+msgstr "元件與文字的左側區隔："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
 msgid "Right by:"
-msgstr "右側："
+msgstr "右側區隔："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
-msgstr "上方："
+msgstr "上方區隔："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
-msgstr "下方："
+msgstr "下方區隔："
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -1559,19 +1558,19 @@ msgstr ""
 #: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "顯示欄位陰影"
 
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "切換欄位背景陰影"
 
 #: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
-msgstr ""
+msgstr "切換是否用對比較強烈的色彩繪製欄位（變數等等）背景。"
 
 #: part/KWView.cpp:331
 #, kde-format
@@ -1615,25 +1614,21 @@ msgstr ""
 #: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "顯示小節邊框"
 
 #: part/KWView.cpp:358
-#, fuzzy, kde-format
-#| msgid "Toggle the display of table borders"
+#, kde-format
 msgid "Toggle the display of section bounds"
-msgstr "切換是否顯示表格邊框"
+msgstr "切換是否顯示小節邊框"
 
 #: part/KWView.cpp:360
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
-#| "shows you any invisible table borders with a thin gray line."
+#, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"切換是否顯示表格邊框。<br /><br /> 當開啟此選項時，Words 會用一條細灰線顯示出"
-"未劃線的表格邊框。"
+"切換是否顯示小節邊框<br/><br/>當此選項開啟時，所有小節邊框都會用細的灰色水平"
+"括號標示出來。"
 
 #: part/KWView.cpp:362
 #, kde-format
@@ -1835,12 +1830,12 @@ msgstr "沒有相符項目"
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "搜尋已抵達底部，將從頂部繼續。"
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "搜尋已抵達頂部，將從底部繼續。"
 
 #: part/Words.cpp:41
 #, kde-format

@@ -3,20 +3,20 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
-# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-05-23 17:07+0900\n"
+"PO-Revision-Date: 2025-07-01 20:23+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -417,10 +417,9 @@ msgid "Japanese candle stick stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:253
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "OHLC Stock Chart"
-msgstr "股票圖"
+msgstr "OHLC 股票圖"
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
@@ -428,10 +427,9 @@ msgid "Open High Low Close stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:264
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "HLC Stock Chart"
-msgstr "股票圖"
+msgstr "HLC 股票圖"
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
@@ -674,12 +672,12 @@ msgstr "設定軸線標籤位置"
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr "顯示文字形狀"
+msgstr "顯示文字物件"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr "隱藏文字形狀"
+msgstr "隱藏文字物件"
 
 #: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
