@@ -1,17 +1,18 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_spreadsheet.po package.
+# Copyright (C) 2009-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2009, 2010.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2014.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2020.
-# Sofia Priego <spriego@darksylvania.net>, %Y.
+# SPDX-FileCopyrightText: 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2020 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2020, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: TableShape\n"
+"Project-Id-Version: calligra_shape_spreadsheet\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2020-10-28 12:31+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:33+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -153,132 +154,3 @@ msgstr "Ocultar columna"
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Anchura: %1 %2"
-
-#~ msgid "Number of columns"
-#~ msgstr "Número de columnas"
-
-#~ msgid "Rows:"
-#~ msgstr "Filas:"
-
-#~ msgid "Number of rows"
-#~ msgstr "Número de filas"
-
-#, fuzzy
-#~| msgid "Rename"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename"
-#~ msgstr "Cambiar de nombre"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Añadir"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Eliminar"
-
-#, fuzzy
-#~| msgid "Enter Name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Enter Name:"
-#~ msgstr "Introduzca el nombre:"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet"
-#~ msgstr "Hoja de cálculo"
-
-#, fuzzy
-#~| msgid "Spreadsheet Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet Shape"
-#~ msgstr "Forma de hoja de cálculo"
-
-#, fuzzy
-#~| msgid "Import OpenDocument Spreadsheet File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import OpenDocument Spreadsheet File"
-#~ msgstr "Importar un archivo de hoja de cálculo OpenDocument"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Importar"
-
-#, fuzzy
-#~| msgid "Export OpenDocument Spreadsheet File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export OpenDocument Spreadsheet File"
-#~ msgstr "Exportar como archivo de hoja de cálculo OpenDocument"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Exportar"
-
-#, fuzzy
-#~| msgid "Sheets"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheets"
-#~ msgstr "Hojas"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheet:"
-#~ msgstr "Hoja:"
-
-#, fuzzy
-#~| msgid "Selected Sheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Selected Sheet"
-#~ msgstr "Hoja seleccionada"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Columnas:"
-
-#, fuzzy
-#~| msgid "Number of columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number of columns"
-#~ msgstr "Número de columnas"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Filas:"
-
-#, fuzzy
-#~| msgid "Number of rows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number of rows"
-#~ msgstr "Número de filas"
-
-#, fuzzy
-#~| msgid "Table Options"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Table Options"
-#~ msgstr "Opciones de la tabla"
-
-#, fuzzy
-#~| msgid "Table editing"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Table editing"
-#~ msgstr "Edición de tablas"
-
-#~ msgid "Table"
-#~ msgstr "Tabla"
-
-#~ msgid "Table Shape"
-#~ msgstr "Forma de tabla"

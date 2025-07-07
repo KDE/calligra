@@ -1,17 +1,18 @@
-# Translation of thesaurus_tool to Spanish
-# translation of thesaurus_tool.po to Spanish
-# Copyright (C) 2002,2003, 2007, 2008 Free Software Foundation, Inc.
+# Spanish translations for calligra_textediting_thesaurus.po package.
+# Copyright (C) 2002-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2002,2003.
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2010.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008.
+# SPDX-FileCopyrightText: 2002, 2003 Juan Manuel Garcia Molina <juanma@superiodico.net>
+# SPDX-FileCopyrightText: 2007, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2008 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: thesaurus_tool\n"
+"Project-Id-Version: calligra_textediting_thesaurus\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2010-05-18 10:48+0200\n"
-"Last-Translator: Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>\n"
+"PO-Revision-Date: 2025-07-06 22:37+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +51,7 @@ msgstr "Adelante"
 #: Thesaurus.cpp:110
 #, kde-format
 msgid "Change Language..."
-msgstr "Cambiar el idioma..."
+msgstr "Cambiar el idioma…"
 
 #: Thesaurus.cpp:124
 #, kde-format
@@ -103,7 +104,7 @@ msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
 msgstr ""
-"No se encontró el archivo de sinónimos «%1». Utilice «Cambiar el idioma...» "
+"No se encontró el archivo de sinónimos «%1». Utilice «Cambiar el idioma…» "
 "para seleccionar un archivo de sinónimos."
 
 #: Thesaurus.cpp:428
@@ -129,17 +130,17 @@ msgstr "Antónimos - Palabras con significados opuestos"
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "Hipónimos - ...es un (tipo de) %1"
+msgstr "Hipónimos - …es un (tipo de) %1"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "Merónimos - %1 tiene un..."
+msgstr "Merónimos - %1 tiene un…"
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "Holónimos - ...tiene un %1"
+msgstr "Holónimos - …tiene un %1"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -195,231 +196,3 @@ msgstr ""
 #, kde-format
 msgid "No match for '%1'."
 msgstr "No hay coincidencia para «%1»."
-
-#~ msgctxt "@action:button Close thesaurus dialog"
-#~ msgid "&Close"
-#~ msgstr "&Cerrar"
-
-#, fuzzy
-#~| msgid "(No match)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "(No match)"
-#~ msgstr "(Sin coincidencias)"
-
-#, fuzzy
-#~| msgid "&Search for:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Search for:"
-#~ msgstr "Bu&scar:"
-
-#, fuzzy
-#~| msgid "S&earch"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "S&earch"
-#~ msgstr "&Buscar"
-
-#, fuzzy
-#~| msgctxt "@action:button Go back to the previous word in history"
-#~| msgid "Back"
-#~ msgctxt ""
-#~ "(qtundo-format) @action:button Go back to the previous word in history"
-#~ msgid "Back"
-#~ msgstr "Atrás"
-
-#, fuzzy
-#~| msgctxt "@action:button Go forward to the next word in history"
-#~| msgid "Forward"
-#~ msgctxt ""
-#~ "(qtundo-format) @action:button Go forward to the next word in history"
-#~ msgid "Forward"
-#~ msgstr "Adelante"
-
-#, fuzzy
-#~| msgid "Change Language..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Language..."
-#~ msgstr "Cambiar el idioma..."
-
-#, fuzzy
-#~| msgid "&Thesaurus"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Thesaurus"
-#~ msgstr "&Sinónimos"
-
-#, fuzzy
-#~| msgid "Synonyms"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Synonyms"
-#~ msgstr "Sinónimos"
-
-#, fuzzy
-#~| msgid "More General Words"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "More General Words"
-#~ msgstr "Palabras más generales"
-
-#, fuzzy
-#~| msgid "More Specific Words"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "More Specific Words"
-#~ msgstr "Palabras más específicas"
-
-#, fuzzy
-#~| msgid "&Wordnet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Wordnet"
-#~ msgstr "&Wordnet"
-
-#, fuzzy
-#~| msgid "&Replace with:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Replace with:"
-#~ msgstr "&Reemplazar con:"
-
-#, fuzzy
-#~| msgctxt "@action:button Close thesaurus dialog"
-#~| msgid "&Close"
-#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
-#~ msgid "&Close"
-#~ msgstr "&Cerrar"
-
-#, fuzzy
-#~| msgid "&Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Replace"
-#~ msgstr "&Reemplazar"
-
-#, fuzzy
-#~| msgid "Replace Word"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace Word"
-#~ msgstr "Reemplazar la palabra"
-
-#, fuzzy
-#~| msgid "Related Words - %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Related Words - %1"
-#~ msgstr "Palabras relacionadas - %1"
-
-#, fuzzy
-#~| msgid ""
-#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
-#~| "to select a thesaurus file."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
-#~ "select a thesaurus file."
-#~ msgstr ""
-#~ "No se encontró el archivo de sinónimos «%1». Utilice «Cambiar el "
-#~ "idioma...» para seleccionar un archivo de sinónimos."
-
-#, fuzzy
-#~| msgid "<b>Error:</b> Failed to execute grep."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "<b>Error:</b> Failed to execute grep."
-#~ msgstr "<b>Error:</b> Fallo al ejecutar grep."
-
-#, fuzzy
-#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
-#~ msgstr "Sinónimos/Hiperónimos - Ordenados por frecuencia"
-
-#, fuzzy
-#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-#~ msgstr "Sinónimos - Ordenados por similitud del significado (solo verbos)"
-
-#, fuzzy
-#~| msgid "Antonyms - Words with Opposite Meanings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Antonyms - Words with Opposite Meanings"
-#~ msgstr "Antónimos - Palabras con significados opuestos"
-
-#, fuzzy
-#~| msgid "Hyponyms - ... is a (kind of) %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hyponyms - ... is a (kind of) %1"
-#~ msgstr "Hipónimos - ...es un (tipo de) %1"
-
-#, fuzzy
-#~| msgid "Meronyms - %1 has a ..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Meronyms - %1 has a ..."
-#~ msgstr "Merónimos - %1 tiene un..."
-
-#, fuzzy
-#~| msgid "Holonyms - ... has a %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Holonyms - ... has a %1"
-#~ msgstr "Holónimos - ...tiene un %1"
-
-#, fuzzy
-#~| msgid "Attributes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Attributes"
-#~ msgstr "Atributos"
-
-#, fuzzy
-#~| msgid "Cause To (for some verbs only)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cause To (for some verbs only)"
-#~ msgstr "Provoca (solo para algunos verbos)"
-
-#, fuzzy
-#~| msgid "Verb Entailment (for some verbs only)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Verb Entailment (for some verbs only)"
-#~ msgstr "Implicación de verbo (solo para algunos verbos)"
-
-#, fuzzy
-#~| msgid "Familiarity & Polysemy Count"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Familiarity & Polysemy Count"
-#~ msgstr "Grado de polisemia y familiaridad"
-
-#, fuzzy
-#~| msgid "Verb Frames (examples of use)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Verb Frames (examples of use)"
-#~ msgstr "Marcos de verbo (ejemplos de uso)"
-
-#, fuzzy
-#~| msgid "List of Compound Words"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "List of Compound Words"
-#~ msgstr "Lista de palabras compuestas"
-
-#, fuzzy
-#~| msgid "Overview of Senses"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Overview of Senses"
-#~ msgstr "Vista general de sentidos"
-
-#, fuzzy
-#~| msgid ""
-#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
-#~| "installed on your computer if you want to use it, and 'wn' has to be in "
-#~| "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
-#~| "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports "
-#~| "the English language."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
-#~ "installed on your computer if you want to use it, and 'wn' has to be in "
-#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
-#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
-#~ "English language."
-#~ msgstr ""
-#~ "<b>Error:</b> Fallo al ejecutar el programa WordNet «wn». WordNet tiene "
-#~ "que estar instalado en su equipo si quiere usarlo, y «wn» tiene que estar "
-#~ "en su PATH. Puede obtener WordNet en <a href=\"http:/wordnet.princeton."
-#~ "edu/\">htt/wordnet.princeton.edu/</a>. Tenga en cuenta que WordNet solo "
-#~ "admite el idioma inglés."
-
-#, fuzzy
-#~| msgid "No match for '%1'."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "No match for '%1'."
-#~ msgstr "No hay coincidencia para «%1»."

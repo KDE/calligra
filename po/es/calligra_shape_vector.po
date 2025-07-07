@@ -1,17 +1,18 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_vector.po package.
+# Copyright (C) 2010-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2010.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2014.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2012, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_shape_vector\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:56+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:35+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -44,28 +45,3 @@ msgstr "Abrir imagen vectorial (EMF/WMF/SVM)"
 #, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
 msgstr "Herramienta de imagen vectorial (EMF/WMF/SVM/SVG)"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vector image"
-#~ msgstr "Imagen vectorial"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
-#~ msgstr "Una forma que muestra una imagen vectorial (EMF/WMF/SVM)"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Open Vector Image (EMF/WMF/SVM)"
-#~ msgstr "Abrir imagen vectorial (EMF/WMF/SVM)"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
-#~ msgstr "Herramienta de imagen vectorial (EMF/WMF/SVM/SVG)"
-
-#~ msgid "Open EMF/WMF Shape"
-#~ msgstr "Abrir forma EMF/WMF"
-
-#~ msgid "EMF/WMF Vector Shape tool"
-#~ msgstr "Herramienta de forma vectorial EMF/WMF"
-
-#~ msgid "Vector image selection tool"
-#~ msgstr "Herramienta de selección de la imagen vectorial"

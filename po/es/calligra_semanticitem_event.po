@@ -1,14 +1,16 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_semanticitem_event.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Raul Gonzalez <raulgf83@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2013 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_semanticitem_event\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2013-11-06 19:54+0100\n"
-"Last-Translator: Raul Gonzalez <raulgf83@gmail.com>\n"
+"PO-Revision-Date: 2025-07-06 22:29+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +102,7 @@ msgstr "Calendario de eventos"
 #: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
@@ -110,113 +112,4 @@ msgstr "Importar evento al calendario"
 #: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
-msgstr "Exportar evento a archivo iCal..."
-
-#, fuzzy
-#~| msgid "&Summary:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Summary:"
-#~ msgstr "Re&sumen:"
-
-#, fuzzy
-#~| msgid "&Location:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Location:"
-#~ msgstr "&Ubicación:"
-
-#, fuzzy
-#~| msgid "&Start:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Start:"
-#~ msgstr "&Inicio:"
-
-#, fuzzy
-#~| msgid "&End:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&End:"
-#~ msgstr "&Fin:"
-
-#, fuzzy
-#~| msgid "Time and Date"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time and Date"
-#~ msgstr "Hora y fecha"
-
-#, fuzzy
-#~| msgid "Timezone"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Timezone"
-#~ msgstr "Zona horaria"
-
-#, fuzzy
-#~| msgctxt "displayname of the semantic item type Event"
-#~| msgid "Event"
-#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
-#~ msgid "Event"
-#~ msgstr "Evento"
-
-#, fuzzy
-#~| msgid "Area"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Area"
-#~ msgstr "Área"
-
-#, fuzzy
-#~| msgid "Region"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Region"
-#~ msgstr "Región"
-
-#, fuzzy
-#~| msgid "Select a calendar for saving:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a calendar for saving:"
-#~ msgstr "Seleccione un calendario para el guardado:"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not add entry\n"
-#~| "%1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Could not add entry\n"
-#~ "%1"
-#~ msgstr ""
-#~ "No se pudo añadir la entrada\n"
-#~ "%1"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not save iCal file\n"
-#~| "%1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Could not save iCal file\n"
-#~ "%1"
-#~ msgstr ""
-#~ "No se pudo guardar el archivo iCal\n"
-#~ "%1"
-
-#, fuzzy
-#~| msgid "Calendar Event"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calendar Event"
-#~ msgstr "Calendario de eventos"
-
-#, fuzzy
-#~| msgid "Edit..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit..."
-#~ msgstr "Editar..."
-
-#, fuzzy
-#~| msgid "Import event to Calendar"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import event to Calendar"
-#~ msgstr "Importar evento al calendario"
-
-#, fuzzy
-#~| msgid "Export event to iCal file..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export event to iCal file..."
-#~ msgstr "Exportar evento a archivo iCal..."
+msgstr "Exportar evento a archivo iCal…"

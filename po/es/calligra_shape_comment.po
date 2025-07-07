@@ -1,16 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_comment.po package.
+# Copyright (C) 2010-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2010.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_shape_comment\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:54+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:31+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -47,30 +48,3 @@ msgstr "Complemento incompatible"
 #, kde-format
 msgid "Comment"
 msgstr "Comentario"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Missing"
-#~ msgstr "Falta un complemento"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The plugin needed for displaying comments is not present."
-#~ msgstr "El complemento necesario para mostrar comentarios no está presente."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "The plugin needed for displaying the comment is not compatible with the "
-#~ "current version of the comment shape."
-#~ msgstr ""
-#~ "El complemento necesario para mostrar el comentario no es compatible con "
-#~ "la versión actual de la forma del comentario."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Incompatible"
-#~ msgstr "Complemento incompatible"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Comment"
-#~ msgstr "Comentario"
-
-#~ msgid "Comment Tool"
-#~ msgstr "Herramienta de comentarios"

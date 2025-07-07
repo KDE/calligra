@@ -1,17 +1,17 @@
-# Translation of ChangecasePlugin to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_textediting_changecase.po package.
+# Copyright (C) 2007-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2007 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: ChangecasePlugin\n"
+"Project-Id-Version: calligra_textediting_changecase\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:40+0000\n"
-"PO-Revision-Date: 2016-11-22 21:57+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:36+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -53,35 +53,4 @@ msgstr "cONMUTAR mAYÚSCULAS/mINÚSCULAS"
 #: ChangecaseFactory.cpp:16
 #, kde-format
 msgid "Change Case..."
-msgstr "Cambiar mayúsculas/minúsculas..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change case"
-#~ msgstr "Cambiar mayúsculas/minúsculas"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sentence case"
-#~ msgstr "Caja de la frase"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "lowercase"
-#~ msgstr "minúsculas"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "UPPER CASE"
-#~ msgstr "MAYÚSCULAS"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Initial Caps"
-#~ msgstr "Iniciales En Mayúsculas"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "tOGGLE cASE"
-#~ msgstr "cONMUTAR mAYÚSCULAS/mINÚSCULAS"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Case..."
-#~ msgstr "Cambiar mayúsculas/minúsculas..."
-
-#~ msgid "Changecase"
-#~ msgstr "Cambio de mayúsculas/minúsculas"
+msgstr "Cambiar mayúsculas/minúsculas…"
