@@ -1,19 +1,17 @@
-# translation of PictureShape.po to Spanish
-# Translation of PictureShape.po to Spanish
-# Translation of PictureShape to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_picture.po package.
+# Copyright (C) 2007-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2009.
-# Enrique Matias Sanchez (Quique) <cronopios@gmail.com>, 2009.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2014.
+# SPDX-FileCopyrightText: 2007, 2009 Enrique Matias Sanchez (Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2012, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: PictureShape\n"
+"Project-Id-Version: calligra_shape_picture\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2014-05-24 20:22+0200\n"
-"Last-Translator: Raul Gonzalez <raulgf83@gmail.com>\n"
+"PO-Revision-Date: 2025-07-06 22:12+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +49,7 @@ msgstr "Eliminar contorno de la imagen"
 #: forms/wdgPictureTool.ui:20
 #, kde-format
 msgid "Replace image..."
-msgstr "Sustituir imagen..."
+msgstr "Sustituir imagen…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
 #: forms/wdgPictureTool.ui:32
@@ -141,111 +139,3 @@ msgstr "Marca de agua"
 #, kde-format
 msgid "Picture editing"
 msgstr "Edición de imágenes"
-
-#, fuzzy
-#~| msgid "Replace image..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace image..."
-#~ msgstr "Sustituir imagen..."
-
-#, fuzzy
-#~| msgid "Keep proportions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Keep proportions"
-#~ msgstr "Mantener proporciones"
-
-#, fuzzy
-#~| msgid "Left:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Left:"
-#~ msgstr "Izquierda:"
-
-#, fuzzy
-#~| msgid "Right:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Right:"
-#~ msgstr "Derecha:"
-
-#, fuzzy
-#~| msgid "Bottom:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bottom:"
-#~ msgstr "Abajo:"
-
-#, fuzzy
-#~| msgid "Top:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Top:"
-#~ msgstr "Arriba:"
-
-#, fuzzy
-#~| msgid "Reset"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset"
-#~ msgstr "Reiniciar"
-
-#, fuzzy
-#~| msgid "Contour (by image analysis)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Contour (by image analysis)"
-#~ msgstr "Contornear (analizando la imagen)"
-
-#, fuzzy
-#~| msgid "Color mode:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Color mode:"
-#~ msgstr "Modo de color:"
-
-#, fuzzy
-#~| msgid "Crop"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Crop"
-#~ msgstr "Recortar"
-
-#, fuzzy
-#~| msgid "Image"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Image"
-#~ msgstr "Imagen"
-
-#, fuzzy
-#~| msgid "Image shape that can display jpg, png etc."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Image shape that can display jpg, png etc."
-#~ msgstr "Forma de imagen que puede mostrar jpg, png, etc."
-
-#, fuzzy
-#~| msgid "Standard"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Standard"
-#~ msgstr "Estándar"
-
-#, fuzzy
-#~| msgid "Greyscale"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Greyscale"
-#~ msgstr "Escala de grises"
-
-#, fuzzy
-#~| msgid "Monochrome"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Monochrome"
-#~ msgstr "Monocromo"
-
-#, fuzzy
-#~| msgid "Watermark"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Watermark"
-#~ msgstr "Marca de agua"
-
-#, fuzzy
-#~| msgid "Picture editing"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Picture editing"
-#~ msgstr "Edición de imágenes"
-
-#~ msgid "Open"
-#~ msgstr "Abrir"
-
-#~ msgid "Picture Tool"
-#~ msgstr "Herramienta de imágenes"

@@ -1,12 +1,14 @@
-# Translation of calligra_shape_webshape to Spanish
+# Spanish translations for calligra_shape_webshape.po package.
+# Copyright (C) 2024-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# SPDX-FileCopyrightText: 2024 Sofía Priego <spriego@darksylvania.net>
+# SPDX-FileCopyrightText: 2024, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_webshape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-27 00:39+0000\n"
-"PO-Revision-Date: 2024-08-27 23:54+0100\n"
+"PO-Revision-Date: 2025-07-06 22:16+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"

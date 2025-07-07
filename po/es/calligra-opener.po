@@ -1,17 +1,18 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra-opener.po package.
+# Copyright (C) 2011-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
-# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2013.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2015.
-# Sofia Priego <spriego@darksylvania.net>, 2015.
+# SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2013 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2015 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2015, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra-opener\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2015-11-01 02:20+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:06+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -89,90 +90,3 @@ msgstr "Lista los nombres de todas las aplicaciones de Calligra disponibles"
 #, kde-format
 msgid "Files to open"
 msgstr "Archivos a abrir"
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Raúl González,Cristina Yenyxe González García"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "raulgf83@gmail.com,the.blue.valkyrie@gmail.com"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid "Mimetype for <filename>%1</filename> not found!"
-#~ msgctxt "(qtundo-format) @info"
-#~ msgid "Mimetype for <filename>%1</filename> not found!"
-#~ msgstr "¡No se encontró el tipo MIME de <filename>%1</filename>!"
-
-#, fuzzy
-#~| msgctxt "@action:button"
-#~| msgid "Open with <application>%1</application>"
-#~ msgctxt "(qtundo-format) @action:button"
-#~ msgid "Open with <application>%1</application>"
-#~ msgstr "Abrir con <application>%1</application>"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "Could not find Calligra application suitable for opening <filename>%1</"
-#~| "filename>.<nl/>Do you want to open the file using default application "
-#~| "<application>%2</application>?"
-#~ msgctxt "(qtundo-format) @info"
-#~ msgid ""
-#~ "Could not find Calligra application suitable for opening <filename>%1</"
-#~ "filename>.<nl/>Do you want to open the file using default application "
-#~ "<application>%2</application>?"
-#~ msgstr ""
-#~ "No se encontró ninguna aplicación de Calligra adecuada para abrir "
-#~ "<filename>%1</filename>.<nl/>¿Desea abrir el archivo utilizando la "
-#~ "aplicación predeterminada <application>%2</application>?"
-
-#, fuzzy
-#~| msgctxt "@title:window"
-#~| msgid "Calligra Application Not Found"
-#~ msgctxt "(qtundo-format) @title:window"
-#~ msgid "Calligra Application Not Found"
-#~ msgstr "Aplicación de Calligra no encontrada"
-
-#, fuzzy
-#~| msgid "Calligra Opener"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligra Opener"
-#~ msgstr "Abridor de Calligra"
-
-#, fuzzy
-#~| msgid "Calligra Document Opener"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligra Document Opener"
-#~ msgstr "Abridor de documentos de Calligra"
-
-#, fuzzy
-#~| msgid "Copyright 2010-%1 Calligra developers"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 2010-%1 Calligra developers"
-#~ msgstr "Copyright 2010-%1 Los desarrolladores de Calligra"
-
-#, fuzzy
-#~| msgid "Jarosław Staniek"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Jarosław Staniek"
-#~ msgstr "Jarosław Staniek"
-
-#, fuzzy
-#~| msgid "Lists names of all available Calligra applications"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lists names of all available Calligra applications"
-#~ msgstr "Lista los nombres de todas las aplicaciones de Calligra disponibles"
-
-#, fuzzy
-#~| msgid "Files to open"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Files to open"
-#~ msgstr "Archivos a abrir"

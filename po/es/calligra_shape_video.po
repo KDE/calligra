@@ -1,17 +1,18 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_video.po package.
+# Copyright (C) 2010-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2010.
-# Raul Gonzalez <raulgf83@gmail.com>, 2012, 2014.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
+# SPDX-FileCopyrightText: 2012, 2014 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_shape_video\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2016-11-22 21:56+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:15+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +30,7 @@ msgstr "Cambiar vídeo"
 #: forms/VideoToolWidget.ui:33
 #, kde-format
 msgid "Replace video..."
-msgstr "Sustituir vídeo..."
+msgstr "Sustituir vídeo…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40
@@ -81,50 +82,3 @@ msgstr "Vídeo, empotrado o a pantalla completa"
 #, kde-format
 msgid "Video handling"
 msgstr "Control del vídeo"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace video..."
-#~ msgstr "Sustituir vídeo..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play Video"
-#~ msgstr "Reproducir vídeo"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play"
-#~ msgstr "Reproducir"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pause"
-#~ msgstr "Pausar"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stop"
-#~ msgstr "Detener"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unmute"
-#~ msgstr "Activar el sonido"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mute"
-#~ msgstr "Silenciar"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Save as part of document"
-#~ msgstr "Guardar como parte del documento"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video"
-#~ msgstr "Vídeo"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video, embedded or fullscreen"
-#~ msgstr "Vídeo, empotrado o a pantalla completa"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video handling"
-#~ msgstr "Control del vídeo"
-
-#~ msgid "Video tool"
-#~ msgstr "Herramienta de vídeo"

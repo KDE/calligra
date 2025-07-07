@@ -1,16 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_shape_threed.po package.
+# Copyright (C) 2012-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Raul Gonzalez <raulgf83@gmail.com>, 2012, 2013.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2012, 2013 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_shape_threed\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:55+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:14+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -28,11 +29,3 @@ msgstr "Escena 3D"
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr "Forma que muestra una escena 3D sencilla."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "3D Scene"
-#~ msgstr "Escena 3D"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shape that displays a simple 3D scene."
-#~ msgstr "Forma que muestra una escena 3D sencilla."

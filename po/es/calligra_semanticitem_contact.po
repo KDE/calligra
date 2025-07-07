@@ -1,16 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for calligra_semanticitem_contact.po package.
+# Copyright (C) 2013-2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
 #
-# Raul Gonzalez <raulgf83@gmail.com>, 2013.
-# Eloy <ecuadra@eloihr.net>, 2016.
-# Sofia Priego <spriego@darksylvania.net>, 2016.
+# SPDX-FileCopyrightText: 2013 Raul Gonzalez <raulgf83@gmail.com>
+# SPDX-FileCopyrightText: 2016 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2016, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: calligra_semanticitem_contact\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2016-11-22 21:52+0100\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2025-07-06 22:08+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +63,7 @@ msgstr "Información de contacto"
 #: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
@@ -72,44 +73,4 @@ msgstr "Importar contacto"
 #: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
-msgstr "Exportar como vcard..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Name:"
-#~ msgstr "&Nombre:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Nick:"
-#~ msgstr "A&podo:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Phone Number:"
-#~ msgstr "Número de &teléfono:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Home Page:"
-#~ msgstr "Página de &inicio:"
-
-#~ msgctxt "(qtundo-format) displayname of the semantic item type Contact"
-#~ msgid "Contact"
-#~ msgstr "Contacto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select an address book for saving:"
-#~ msgstr "Seleccione una libreta de direcciones para el guardado:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Contact Information"
-#~ msgstr "Información de contacto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit..."
-#~ msgstr "Editar..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import contact"
-#~ msgstr "Importar contacto"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export as vcard..."
-#~ msgstr "Exportar como vcard..."
+msgstr "Exportar como vcard…"
