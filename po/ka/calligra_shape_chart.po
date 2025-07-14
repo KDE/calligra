@@ -1259,7 +1259,7 @@ msgstr "ჭდე: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr "ნაგულისხმები ჭდე: %1"
+msgstr "ნაგულისხმევი ჭდე: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:156
 #: dialogs/ScatterDataSetTableModel.cpp:151
@@ -1276,7 +1276,7 @@ msgstr "უჯრედის შუალედი X-მნიშვნელ�
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr "გამოყენებული ნაგულისხმები მნიშვნელობები"
+msgstr "გამოყენებული ნაგულისხმევი მნიშვნელობები"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158

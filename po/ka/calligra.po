@@ -1578,7 +1578,7 @@ msgstr "<tr><td><b>წვდომა:</b></td><td>%1</td></tr>"
 #: text/styles/KoStyleManager.cpp:100
 #, kde-format
 msgid "Default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: main/KoShapeCollectionMenu.cpp:358
 #, kde-format
@@ -1654,7 +1654,7 @@ msgstr "&მონიშნეთ..."
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
-msgstr "ახალი შაბლონის ნაგულისხმებად გამოყენება"
+msgstr "ახალი შაბლონის ნაგულისხმევად გამოყენება"
 
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
@@ -1776,7 +1776,7 @@ msgstr "ანონიმურად"
 #: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
-msgstr "ნაგულისხმები ავტორის პროფილი"
+msgstr "ნაგულისხმევი ავტორის პროფილი"
 
 #: odf/KoDocumentInfo.cpp:56
 #, kde-format
@@ -5261,7 +5261,7 @@ msgstr "წაშლის გაუქმება"
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: widgets/KoToolBox.cpp:315
 #, kde-format
