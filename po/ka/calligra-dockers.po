@@ -55,7 +55,7 @@ msgstr "მიბმის მორგება"
 #~ msgstr "მოხაზულობების კოლექციის წაშლა"
 
 #~ msgid "Default"
-#~ msgstr "ნაგულისხმები"
+#~ msgstr "ნაგულისხმევი"
 
 #~ msgid "Geometrics"
 #~ msgstr "გეომეტრია"

@@ -463,7 +463,7 @@ msgstr ""
 #: sheets/html/exportwidget.ui:92
 #, kde-format
 msgid "Use &default style"
-msgstr "&ნაგულისხმები სტილის გამოყენება"
+msgstr "&ნაგულისხმევი სტილის გამოყენება"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:102
@@ -644,7 +644,7 @@ msgstr "მონახაზი"
 #: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
-msgstr "ფონტის ნაგულისხმები ზომა:"
+msgstr "ფონტის ნაგულისხმევი ზომა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186

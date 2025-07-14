@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-01-25 10:23+0100\n"
+"PO-Revision-Date: 2025-07-13 15:21+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -145,12 +145,12 @@ msgstr "Mota"
 #: dialogs/BibliographyConfigureDialog.cpp:90
 #, kde-format
 msgid "Ascending"
-msgstr "Gorakorra"
+msgstr "Goranzkoa"
 
 #: dialogs/BibliographyConfigureDialog.cpp:91
 #, kde-format
 msgid "Descending"
-msgstr "Beherakorra"
+msgstr "Beheranzkoa"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
 #. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)

@@ -11247,7 +11247,7 @@ msgstr "რეგულარულ გამოსახულება"
 #: functions/text.xml:735
 #, kde-format
 msgid "Default value (optional)"
-msgstr "ნაგულისხმები მნიშვნელობა (არასავალდებულო)"
+msgstr "ნაგულისხმევი მნიშვნელობა (არასავალდებულო)"
 
 #: functions/text.xml:739
 #, kde-format
