@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-05-30 11:57+0300\n"
+"PO-Revision-Date: 2025-07-17 22:02+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -10556,9 +10556,9 @@ msgid "New text which will be replacement"
 msgstr "הטקסט החדש שיהווה את ההחלפה"
 
 #: functions/text.xml:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Which occurrence to replace"
-msgstr "המופע של ההחלפה"
+msgstr "איזה מופע להחליף"
 
 #: functions/text.xml:70
 #, kde-format
@@ -10711,9 +10711,9 @@ msgid "T(value)"
 msgstr "T(ערך)"
 
 #: functions/text.xml:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "T(\"Calligra\") returns \"Calligra\""
-msgstr "(RIGHT(\"hello\";2 מחזירה \"lo\""
+msgstr "‏T(\"Calligra\") מחזירה \"Calligra\""
 
 #: functions/text.xml:147
 #, kde-format
@@ -10795,19 +10795,19 @@ msgid "COMPARE(string1; string2; true|false)"
 msgstr "COMPARE(מחרוזת2 ;מחרוזת1; true|false)"
 
 #: functions/text.xml:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"Calligra\"; \"Calligra\"; true) returns 0"
-msgstr "(COMPARE(\"KOffice\"; \"KOffice\"; true מחזירה 0"
+msgstr "‏COMPARE(\"Calligra\"; \"Calligra\"; true) מחזירה 0"
 
 #: functions/text.xml:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
-msgstr "(COMPARE(\"koffice\"; \"KOffice\"; true מחזירה 1"
+msgstr "‏COMPARE(\"calligra\"; \"Calligra\"; true) מחזירה 1"
 
 #: functions/text.xml:200
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"kspread\"; \"Calligra\"; false) returns 1"
-msgstr "(COMPARE(\"kspread\"; \"KOffice\"; false מחזירה 1"
+msgstr "‏COMPARE(\"kspread\"; \"Calligra\"; false) מחזירה 1"
 
 #: functions/text.xml:217
 #, kde-format
@@ -10824,9 +10824,9 @@ msgid "EXACT(string1;string2)"
 msgstr "EXACT(מחרוזת2;מחרוזת1)"
 
 #: functions/text.xml:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "EXACT(\"Calligra\";\"Calligra\") returns True"
-msgstr "(\"EXACT(\"KOffice\";\"KOffice מחזירה True"
+msgstr "‏EXACT(\"Calligra\";\"Calligra\") מחזירה True/חיובי"
 
 #: functions/text.xml:220
 #, fuzzy, kde-format
@@ -11257,9 +11257,9 @@ msgid "REPT(\"KSpread\";3) returns \"KSpreadKSpreadKSpread\""
 msgstr "(REPT(\"KSpread\";3 מחזירה \"KSpreadKSpreadKSpread\""
 
 #: functions/text.xml:578
-#, fuzzy, kde-format
+#, kde-format
 msgid "REPT(\"KSpread\";0) returns \"\""
-msgstr "(\"LEFT(\"KSpread מחזירה \"K\""
+msgstr "‏REPT(\"KSpread\";0) מחזירה \"\""
 
 #: functions/text.xml:590
 #, fuzzy, kde-format
