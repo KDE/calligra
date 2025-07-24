@@ -2,7 +2,7 @@
 # Copyright (C) 2000-2025 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-03-19 10:35+0100\n"
+"PO-Revision-Date: 2025-07-23 21:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -1607,10 +1607,10 @@ msgid ""
 "returns the maximal possible number of weeks between those days. If the mode "
 "is 1, it only returns the number of whole weeks in between."
 msgstr ""
-"La funció WEEKS() retorna la diferència en setmanes entre dues dates en "
-"setmanes. El tercer paràmetre indica el mode de càlcul: si el mode és 0, "
-"WEEKS() retorna el màxim nombre de setmanes entre els dies. Si el mode és 1, "
-"només retorna el nombre de setmanes senceres entremig."
+"La funció WEEKS() retorna la diferència en setmanes entre dues dates. El "
+"tercer paràmetre indica el mode de càlcul: si el mode és 0, WEEKS() retorna "
+"el nombre màxim de setmanes entre els dies. Si el mode és 1, només retorna "
+"el nombre de setmanes senceres entremig."
 
 #: functions/datetime.xml:244
 #, kde-format
@@ -10479,10 +10479,10 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
-"La línia de regressió es pot forçar que intersequi amb l'origen (X=0, Y=0) "
+"La línia de regressió es pot forçar que interseque amb l'origen (X=0, Y=0) "
 "definit el 4t paràmetre, permetDesplaçament, a FALS o 0. Definit este "
 "paràmetre a CERT o 1 (predeterminat) es permet que la línia de millor "
-"ajustament intersequi l'eix vertical amb un valor no zero d'Y. "
+"ajustament interseque l'eix vertical amb un valor no zero d'Y. "
 
 # skip-rule: t-sc-plot
 #: functions/statistical.xml:1434
@@ -15102,10 +15102,10 @@ msgid ""
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
-"Este és el format predeterminat i Sheets detecta automàticament el tipus de "
-"dades real depenent de les dades de la cel·la actual. De manera "
-"predeterminada, Sheets posa els nombres a la dreta, les dates i les hores "
-"centrades i a l'esquerra tota la resta."
+"Este és el format predeterminat i Sheets de Calligra detecta automàticament "
+"el tipus de dades real depenent de les dades de la cel·la actual. De manera "
+"predeterminada, Sheets de Calligra posa els nombres a la dreta, les dates i "
+"les hores centrades i a l'esquerra tota la resta."
 
 #: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
@@ -15240,8 +15240,8 @@ msgstr ""
 "regió i idioma -> Data i hora». En el diàleg del format de cel·la, podeu "
 "establir com es mostrarà l'hora, escollint entre les opcions disponibles. El "
 "format predeterminat és l'establit a Configuració del sistema. Quan el "
-"nombre de la cel·la no siga una hora, Sheets el mostrarà com a 00:00 en el "
-"format global que teniu a Configuració del sistema."
+"nombre de la cel·la no siga una hora, Sheets de Calligra el mostrarà com a "
+"00:00 en el format global que teniu a Configuració del sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
