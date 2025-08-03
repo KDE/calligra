@@ -19,6 +19,7 @@
   <name xml:lang="lv">Calligra</name>
   <name xml:lang="nl">Calligra</name>
   <name xml:lang="pl">Calligra</name>
+  <name xml:lang="pt-BR">Calligra</name>
   <name xml:lang="sa">कलिग्रा</name>
   <name xml:lang="sk">Calligra</name>
   <name xml:lang="sl">Calligra</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="lv">Viss vienā biroja programmatūra</summary>
   <summary xml:lang="nl">Alles-in-een kantooroplossing</summary>
   <summary xml:lang="pl">Rozwiązanie biurowe wszystko-w-jednym</summary>
+  <summary xml:lang="pt-BR">Solução de escritório tudo em um</summary>
   <summary xml:lang="sa">सर्व-एक-कार्यालय-समाधान</summary>
   <summary xml:lang="sl">Pisarniška rešitev vse v enem</summary>
   <summary xml:lang="sv">Allt i ett kontorslösning</summary>
@@ -69,6 +71,7 @@
     <p xml:lang="lv">„Calligra“ ir biroja un grafikas programmatūra. Tā satur programmas teksta, izklājlapu, prezentācijas un vektorgrafikas apstrādei.</p>
     <p xml:lang="nl">Calligra is een suite voor kantoor en grafische zaken. Het bevat toepassingen voor tekstbewerking, rekenbladen, presentatie en vectorgrafiek.</p>
     <p xml:lang="pl">Calligra jest pakietem biurowym i graficznym. Zawiera aplikacje do przetwarzania tekstu, arkuszy kalkulacyjnych, prezentacji oraz grafiki wektorowej.</p>
+    <p xml:lang="pt-BR">O Calligra é uma suíte de escritório e gráfica. Contém aplicativos para processamento de texto, planilhas, apresentações e gráficos vetoriais.</p>
     <p xml:lang="sa">कैलिग्रा इति कार्यालयं ग्राफिक्स्-सुइट् च अस्ति । अस्मिन् शब्दसंसाधनस्य, स्प्रेड्शीट्, प्रस्तुतीकरणस्य, सदिशचित्रस्य च अनुप्रयोगाः सन्ति ।</p>
     <p xml:lang="sl">Calligra je pisarniški in grafični paket. Vsebuje aplikacije za obdelavo besedil, preglednic, predstavitev in vektorsko grafiko.</p>
     <p xml:lang="sv">Calligra är en kontors- och grafiksvit. Den innehåller program för ordbehandling, kalkylblad, presentation och vektorgrafik.</p>
@@ -96,6 +99,7 @@
     <p xml:lang="lv">„Words“ ir intuitīva teksta apstrādes un datorizdevniecības programma. Ar to varat patīkami un ērti veidot informatīvus un pievilcīgus dokumentus.</p>
     <p xml:lang="nl">Words is een intuïtieve toepassing voor tekstverwerken en weergeven op het bureaublad. Hiermee kunt u informatieve en attractieve documenten met plezier en gemak maken.</p>
     <p xml:lang="pl">Słowa jest intuicyjnym edytorem tekstu i biurkowym programem do publikowania. Dzięki niemu można tworzyć informacyjne i atrakcyjne dokumenty z łatwością użycia.</p>
+    <p xml:lang="pt-BR">O Words é um aplicativo intuitivo de processamento de texto e editoração eletrônica. Com ele, você pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="sa">शब्दाः एकः सहजः शब्दसंसाधकः डेस्कटॉप् प्रकाशक-अनुप्रयोगः च अस्ति । तेन सह भवान् सुखेन सहजतया च सूचनाप्रदं आकर्षकं च दस्तावेजं निर्मातुम् अर्हति ।</p>
     <p xml:lang="sk">Words je intuitívny textový procesor a aplikácia na desktopové publikovanie. Môžete pomocou neho vytvoriť informatívne a atraktívne dokumenty s radosťou a jednoduchosťou.</p>
     <p xml:lang="sl">Words je intuitiven urejevalnik besedil in aplikacija za namizne izdajatelje. Z njim lahko z užitkom in preprosto ustvarjate informativne in privlačne dokumente.</p>
@@ -122,6 +126,7 @@
     <p xml:lang="lv">„Calligra Sheets“ ir iespējām bagāts aprēķinu un izklājlapu rīks. Izmantojiet „Sheets“, lai ātri izveidotu un aprēķinātu dažādas ar uzņēmējdarbību saistītas izklājlapas, piemēram, ienākumus, izdevumus, darbinieku darba stundas u.c. vajadzībām.</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
     <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
+    <p xml:lang="pt-BR">O Calligra Sheets é uma ferramenta completa de cálculo e planilhas. Use-a para criar e calcular rapidamente diversas planilhas relacionadas à sua empresa, como receitas e despesas, horas de trabalho dos funcionários, etc.</p>
     <p xml:lang="sa">Calligra Sheets इति पूर्णविशेषतायुक्तं गणना-स्प्रेड्शीट्-उपकरणम् अस्ति । तस्य उपयोगं शीघ्रं विविधव्यापारसम्बद्धानि स्प्रेडशीट्-निर्माणार्थं गणनायाश्च कुर्वन्तु, यथा आयव्ययः, कर्मचारीकार्यसमयः इत्यादयः ।</p>
     <p xml:lang="sk">Calligra Sheets je plnohodnotný tabuľkový a výpočtový nástroj. Použite ho na rýchle vytvorenie a výpočet rôznych obchodných tabuliek, ako príjmy a výdavky, pracovné hodiny zamestnancov, atď.</p>
     <p xml:lang="sl">Calligra Sheets je popolnoma opremljeno orodje za izračune in preglednice. Uporabite gaza hitro ustvarjanje in izračun različnih preglednic, povezanih s poslovanjem, nprkot so prihodki in odhodki, delovni čas zaposlenih itd.</p>
@@ -152,6 +157,7 @@
     <p xml:lang="lv">„Calligra Stage“ ir viegli lietojama un vienlaicīgi daudzfunkcionāla prezentāciju programma. Ar to varat viegli veidot prezentācijas ar plašu un dažādu elementu klāstu — no grafikas līdz tekstam un no diagrammām līdz attēliem. „Calligra Stage“ varat paplašināt ar spraudņu sistēmu, kas atvieglo jaunu efektu, satura elementu vai pat prezentāciju pārvaldīšanas veidu pievienošanu. Tā kā „Stage“ ir integrēta „Calligra“ programmatūrā, tad tā satur visus jaudīgos un pielāgojamos „Calligra“ satura elementus.</p>
     <p xml:lang="nl">Calligra Stage is een gemakkelijk te gebruiken maar toch flexibele toepassing voor presentaties. U kunt gemakkelijk presentaties maken met een rijke variatie van elementen, van grafische tot tekst, van grafieken tot afbeeldingen. Calligra Stage is uit te breiden met een systeem van plug-ins, zodat het gemakkelijk is om nieuwe effecten toe te voegen, nieuwe soorten inhoud of zelfs nieuwe manieren van het beheren van uw presentatie. Vanwege de integratie met Calligra, is alle kracht en flexibiliteit van de inhoudselementen van Calligra beschikbaar in Stage.</p>
     <p xml:lang="pl">Scena Calligra jest łatwym w użyciu, a zarazem elastycznym programem do prezentowania. Można łatwo tworzyć prezentację zawierające bogatą różnorodność elementów, od grafiki do tekstu, od wykresów do obrazów. Scena Calligra jest rozszerzalna przez system wtyczek, tak że można łatwo dodać nowe efekty, nowe elementy lub nawet nowe sposoby na zarządzanie prezentacją. Ze względów na powiązanie z Calligrą, cała moc i elastyczność elementów Calligry jest dostępna również dla Sceny.</p>
+    <p xml:lang="pt-BR">O Calligra Stage é um aplicativo de apresentação fácil de usar, porém flexível. Você pode criar facilmente apresentações com uma rica variedade de elementos, de gráficos a texto, de tabelas a imagens. O Calligra Stage é extensível por meio de um sistema de plugins, facilitando a adição de novos efeitos, novos elementos de conteúdo ou até mesmo novas maneiras de gerenciar sua apresentação. Graças à integração com o Calligra, todo o poder e a flexibilidade dos elementos de conteúdo do Calligra estão disponíveis no Stage.</p>
     <p xml:lang="sa">Calligra Stage एकः सुलभः तथापि अद्यापि लचीला प्रस्तुतिः अनुप्रयोगः अस्ति। चित्रलेखात् पाठपर्यन्तं, चार्टतः चित्रपर्यन्तं समृद्धविविधतत्त्वानि युक्तानि प्रस्तुतिः भवान् सहजतया निर्मातुम् अर्हति । Calligra Stage प्लगिन्-प्रणाल्याः माध्यमेन विस्तारणीयः अस्ति, अतः नूतनाः प्रभावाः, नूतनाः सामग्री-तत्त्वानि वा भवतः प्रस्तुति-प्रबन्धनस्य नूतनानि मार्गाणि अपि योजयितुं सुलभम् अस्ति । Calligra इत्यनेन सह एकीकरणस्य कारणात् Calligra सामग्रीतत्त्वानां सर्वा शक्तिः लचीलता च Stage कृते उपलभ्यते ।</p>
     <p xml:lang="sk">Calligra Stage je jednoducho použiteľná a flexibilná aplikácia na prezentácie. Môžete jednoducho vytvárať prezentácie obsahujúce bohatý výber prvkov, od grafických po textové, od grafov po obrázky. Calligra Stage je rozšíriteľná cez systém pluginov, takže je jednoduché pridať nové efekty, nové obsahové prvky alebo dokonca nové spôsoby správy vašej prezentácie. Vďaka integrácii so systémom Calligra je k dispozícii celá sila a flexibilita obsahových prvkov Calligra.</p>
     <p xml:lang="sl">Calligra Stage je enostavna za uporabo in prilagodljiva aplikacija za predstavitve  Z lahkoto lahko ustvarite predstavitve, ki vsebujejo bogato paletoelementov, od grafik do besedila, od grafikonov do slik. Calligra Stage jerazširljiv prek sistema vtičnikov, tako da je preprosto dodajanje novih učinkov, novihelementov vsebine ali celo nove načine upravljanja predstavitev v Stageu.</p>
@@ -180,6 +186,7 @@
     <p xml:lang="lv">„Karbon“ ir vektoru zīmēšanas programma ar viegli lietojamu, pielāgojamu un paplašināmu lietotāja saskarni. Tas „Karbon“ padara par lielisku programmu lietotājiem, kuri tikai sāk izpētīt vektoru grafiku pasauli, kā arī māksliniekiem, kuri vēlas radīt elpu aizraujošu mākslu.</p>
     <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
     <p xml:lang="pl">Karbon jest programem do rysowania wektorowego z układem sterowania, który jest łatwy w użyciu, wysoce dostosowywalny i rozszerzalny. To czyni Karbon wspaniałym programem dla użytkowników zaczynających poznawanie świata grafiki wektorowej, a artystów zachęca do tworzenie sztuki wektorowej zapierającej dech w piersiach.</p>
+    <p xml:lang="pt-BR">O Karbon é um aplicativo de desenho vetorial com uma interface de usuário fácil de usar, altamente personalizável e extensível. Isso torna o Karbon um ótimo aplicativo para usuários que estão começando a explorar o mundo dos gráficos vetoriais, bem como para artistas que desejam criar artes vetoriais de tirar o fôlego.</p>
     <p xml:lang="sa">कार्बोन् एकः सदिशचित्रण-अनुप्रयोगः अस्ति यस्य उपयोक्तृ-अन्तरफलकं भवति यस्य उपयोगः सुलभः, अत्यन्तं अनुकूलनीयः, विस्तारयोग्यः च अस्ति । तत् कार्बोन् सदिशचित्रस्य जगतः अन्वेषणं आरभमाणानां उपयोक्तृणां कृते अपि च श्वासप्रश्वासयोः कृते सदिशकलां निर्मातुम् इच्छन्तीनां कलाकारानां कृते उत्तमं अनुप्रयोगं करोति।</p>
     <p xml:lang="sk">Karbon je vektorová kresliaca aplikácia s používateľským rozhraním jednoduchým na používanie, veľmi prispôsobiteľná a rozšíriteľná. Toto robí z Karbonu výbornú aplikáciu pre používateľov, ktorí začínajú objavovať sveet vektorovej grafiky, ako aj pre umelcov, ktorí chcú vytvárať dych vyrážajúce vektorové umenie.</p>
     <p xml:lang="sl">Karbon je aplikacija za vektorsko risanje z uporabniškim vmesnikom, ki je preprosta za uporabo, zelo prilagodljiva in razširljiva. Zaradi tega je Karbon odlična aplikacija za uporabnike, ki začenjajo raziskovati svet vektorske grafike kotkot tudi za umetnike, ki želijo ustvariti osupljivo vektorsko umetnost.</p>
@@ -209,6 +216,7 @@
       <caption xml:lang="lv">„Calligra Words“ pamata logs ar tekstu galvenajā teksta laukā</caption>
       <caption xml:lang="nl">Hoofdvenster van Calligra Words die willekeurige tekst in de hoofdbewerker toont</caption>
       <caption xml:lang="pl">Główne okno Słów Calligry, pokazujące losowy tekst w głównym edytorze</caption>
+      <caption xml:lang="pt-BR">Janela principal do Calligra Words mostrando texto aleatório no editor principal</caption>
       <caption xml:lang="sa">मुख्यसम्पादके यादृच्छिकपाठं दर्शयति Calligra Words मुख्यविण्डो</caption>
       <caption xml:lang="sl">Glavno okno Calligra Words, ki prikazuje naključno besedilo v glavnem urejevalniku</caption>
       <caption xml:lang="sv">Calligra Words huvudfönster som visar slumpmässig text i huvudeditorn</caption>
@@ -234,6 +242,7 @@
       <caption xml:lang="lv">„Calligra Sheets“ pamata logs</caption>
       <caption xml:lang="nl">Hoofdvenster van Calligra Sheets</caption>
       <caption xml:lang="pl">Główne okno Arkuszy Calligry</caption>
+      <caption xml:lang="pt-BR">Janela principal do Calligra Sheets</caption>
       <caption xml:lang="sa">Calligra Sheets मुख्यविण्डो</caption>
       <caption xml:lang="sl">Glavno okno Calligra Sheets</caption>
       <caption xml:lang="sv">Calligra Sheets huvudfönster</caption>
@@ -260,6 +269,7 @@
       <caption xml:lang="lv">„Calligra Stage“ pamata logs</caption>
       <caption xml:lang="nl">Hoofdvenster van Calligra Stage</caption>
       <caption xml:lang="pl">Główne okno Sceny Calligry</caption>
+      <caption xml:lang="pt-BR">Janela principal do Calligra Stage</caption>
       <caption xml:lang="sa">Calligra Stage मुख्यविण्डो</caption>
       <caption xml:lang="sl">Glavno okno Calligra Stage</caption>
       <caption xml:lang="sv">Calligra Stage huvudfönster</caption>
@@ -286,6 +296,7 @@
       <caption xml:lang="lv">„Karbon“ pamata logs</caption>
       <caption xml:lang="nl">Hoofdvenster van Karbon</caption>
       <caption xml:lang="pl">Główne okno Karbona</caption>
+      <caption xml:lang="pt-BR">Janela principal do Karbon</caption>
       <caption xml:lang="sa">कार्बोनस्य मुख्य खिडकी</caption>
       <caption xml:lang="sl">Glavno okno Karbon</caption>
       <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
