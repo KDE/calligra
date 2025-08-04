@@ -129,7 +129,7 @@ msgstr ""
 #: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
-msgstr "أدخل كلمة المرور"
+msgstr "أدخل كلمة السر"
 
 #: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format

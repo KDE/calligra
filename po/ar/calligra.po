@@ -5,13 +5,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-09-07 19:52+0400\n"
+"PO-Revision-Date: 2025-08-03 15:24+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1006,7 +1006,7 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
-"كلمة المرور لهذا المستند المشفر مجهولة. تم مغادرة الحفظ التلقائي! يرجى حفظ "
+"كلمة السر لهذا المستند المشفر مجهولة. تم مغادرة الحفظ التلقائي! يرجى حفظ "
 "عملك يدويا."
 
 #: main/KoDocument.cpp:712
@@ -1233,7 +1233,7 @@ msgstr "هذا المستند يحتوي عدة إصدارات. اذهب إلى 
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
-msgstr "بدون عنوان"
+msgstr "بلا عنوان"
 
 #: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
 #, kde-format
@@ -2456,7 +2456,7 @@ msgstr "طابق إلى الشبكة"
 #: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Master Pages"
-msgstr "اعرض الصفحات الرئيسية"
+msgstr "اعرض الصفحات الرئيسة"
 
 #: pageapp/KoPAView.cpp:373
 #, kde-format
@@ -3683,7 +3683,7 @@ msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
-"هذا المستند يحتوي على وسيلة تشفير مجهولة. بعض الأجزاء قد لا يمكن قراءتها."
+"هذا المستند يحتوي على وسيلة تعمية مجهولة. بعض الأجزاء قد لا يمكن قراءتها."
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
@@ -3698,7 +3698,7 @@ msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
-"هذا المستند يحتوي بيانات تشفير غير كاملة. بعض الأجزاء قد لا يمكن قراءتها."
+"هذا المستند يحتوي بيانات تعمية غير كاملة. بعض الأجزاء قد لا يمكن قراءتها."
 
 #: store/KoEncryptedStore.cpp:349
 #, kde-format
@@ -3722,17 +3722,17 @@ msgstr ""
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
-msgstr "يرجي إدخال كلمة المرور لفتح هذا الملف."
+msgstr "يرجي إدخال كلمة السر لفتح هذا الملف."
 
 #: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
-msgstr "يرجى إدخال كلمة المرور لتشفير المستند معها."
+msgstr "يرجى إدخال كلمة السر لتعمية المستند معها."
 
 #: store/KoEncryptedStore.cpp:783
 #, kde-format
 msgid "Do you want to save the password?"
-msgstr "هل ترغب بحفظ كلمة المرور؟"
+msgstr "هل ترغب بحفظ كلمة السر؟"
 
 #: store/KoNetAccess.cpp:89
 #, fuzzy, kde-format
@@ -4498,7 +4498,7 @@ msgstr "مراسي"
 #: widgets/KoDocumentInfoDlg.cpp:316
 #, kde-format
 msgid "&Encrypt"
-msgstr "&شفّر"
+msgstr "&عمِّ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:64
@@ -4528,7 +4528,7 @@ msgstr "وقت التحرير الكلي:"
 #: widgets/koDocumentInfoAboutWidget.ui:178
 #, kde-format
 msgid "Encryption:"
-msgstr "التشفير:"
+msgstr "التّعمية:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:188
@@ -4597,37 +4597,37 @@ msgstr "استخدم ';' (مثال: Office;KDE;KOffice)"
 #: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
-msgstr "هذا المستند سيتم فك تشفيره"
+msgstr "هذا المستند سيتم فك تعميته"
 
 #: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "Do not decrypt"
-msgstr "لا تفك التشفير"
+msgstr "لا تفك التعمية"
 
 #: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "This document is encrypted"
-msgstr "هذا المستند تم تشفيره"
+msgstr "هذا المستند معمى"
 
 #: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
-msgstr "فكّ التشفير"
+msgstr "&فكّ التعمية"
 
 #: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
-msgstr "هذا المستند سيتم تشفيره"
+msgstr "هذا المستند سيعمى"
 
 #: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "Do not encrypt"
-msgstr "لا تقم بالتشفير"
+msgstr "لا تعمِ"
 
 #: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgid "This document is not encrypted"
-msgstr "هذا المستند ليس مشفراً"
+msgstr "هذا المستند ليس معمًا"
 
 #: widgets/KoDocumentInfoDlg.cpp:225
 #, fuzzy, kde-format
@@ -4652,18 +4652,18 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
-"<qt>فك تشفير الملف سيزيل منه حماية كلمة المرور.<p>هل لازلت تريد فك تشفير "
-"الملف؟</qt>"
+"<qt>فك تعمية الملف سيزيل منه حماية كلمة السر.<p>هل لازلت تريد فك تعمية الملف؟"
+"</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
-msgstr "أكد فك التشفير"
+msgstr "أكد فك التعمية"
 
 #: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
 msgid "Decrypt"
-msgstr "فكّ تشفير"
+msgstr "فكّ تعمية"
 
 #: widgets/KoDocumentInfoDlg.cpp:349
 #, kde-format
@@ -4671,7 +4671,7 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
-"<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال فك التشفير، يرجى حفظ المستند.</qt>"
+"<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال فك التعمية، يرجى حفظ المستند.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
 #: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
@@ -4700,7 +4700,7 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 "<qt>المستند محفوظ حالياً على أنه %1. يحتاج المستند أن يتم تغييره  إلى "
-"<b>OASIS OpenDocument</b> ليتم تشفيره.<p>هل تريد تغيير  الملف إلى OASIS "
+"<b>OASIS OpenDocument</b> حتى يعمى.<p>هل تريد تغيير  الملف إلى OASIS "
 "OpenDocument؟</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:378
@@ -4718,7 +4718,7 @@ msgstr "غيّر"
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
-msgstr "<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال التشفير، يرجي حفظ الملف.</qt>"
+msgstr "<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال التعمية، يرجي حفظ الملف.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
@@ -4727,7 +4727,7 @@ msgid ""
 "encryption the document needs to be saved.<p>Do you want to save the "
 "document now?</qt>"
 msgstr ""
-"<qt>لقد تغير المستند منذ فتحه. لإكمال التشفير يحتاج المستند أن يحفظ.<p>هل "
+"<qt>لقد تغير المستند منذ فتحه. لإكمال التعمية يحتاج المستند أن يحفظ.<p>هل "
 "تريد حفظ المستند الآن؟</qt>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, add)
