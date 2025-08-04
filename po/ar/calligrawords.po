@@ -6,13 +6,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 19:31+0400\n"
+"PO-Revision-Date: 2025-08-03 12:37+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -778,7 +778,7 @@ msgstr "المحارف بدون فراغات"
 #: part/dockers/StatisticsPreferencesPopup.ui:52
 #, kde-format
 msgid "Characters without spaces"
-msgstr "المحارف بدون فراغات"
+msgstr "المحارف دون فراغات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59

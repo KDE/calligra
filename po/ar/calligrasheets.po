@@ -6,13 +6,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2024-09-07 19:38+0400\n"
+"PO-Revision-Date: 2025-08-03 15:07+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -3842,7 +3842,7 @@ msgstr "الدالة CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) تعادل -3562
 #: functions/financial.xml:273
 #, kde-format
 msgid "Calculates the cumulative principal payment."
-msgstr "تحسب الدفعة الرئيسية المتراكمة."
+msgstr "تحسب الدفعة الرئيسة المتراكمة."
 
 #: functions/financial.xml:274
 #, fuzzy, kde-format
@@ -5156,7 +5156,7 @@ msgid ""
 "discount) bond. For example: if the interest rate is 10%, a $1000 bond that "
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
-"الدالة ZERO_COUPON() تحسب قيمة السهم بدون عائد (خصم خالص). على سبيل المثال: "
+"الدالة ZERO_COUPON() تحسب قيمة السهم دون عائد (خصم خالص). على سبيل المثال: "
 "إذا كان معدل الفائدة 10%، فإن سهم $1000 الذي يستحق في 20 سنة يساوي "
 "ZERO_COUPON(1000;.1;20) أو $148.64."
 
@@ -11430,7 +11430,7 @@ msgstr ""
 msgid ""
 "By applying the encryption function again to the resulting text, you can "
 "decrypt the text."
-msgstr "بتطبيق دالة التشفير مرة أخرى على النص الناتج، يمكنك فك تشفير النص."
+msgstr "بتطبيق دالة تعمية مرة أخرى على النص الناتج، يمكنك فك تعمية النص."
 
 #: functions/text.xml:592
 #, fuzzy, kde-format
@@ -12454,7 +12454,7 @@ msgstr "ا&ملأ"
 #: part/calligrasheets.rc:35
 #, kde-format
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #. i18n: ectx: Menu (Delete)
 #: part/calligrasheets.rc:44 part/View.cpp:432
@@ -13453,7 +13453,7 @@ msgstr "انقل الورقة المنتقاة لأسفل"
 #: part/dialogs/SheetSelectWidget.ui:232
 #, kde-format
 msgid "Clear Selection"
-msgstr "امسح الانتقاء"
+msgstr "امحُ الانتقاء"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveBottom)
 #: part/dialogs/SheetSelectWidget.ui:245
@@ -13855,12 +13855,12 @@ msgstr "أدخل كلمة مرور."
 #: part/View.cpp:1537
 #, kde-format
 msgid "Enter the password."
-msgstr "أدخل كلمة المرور."
+msgstr "أدخل كلمة السر."
 
 #: part/View.cpp:1545
 #, kde-format
 msgid "Password is incorrect."
-msgstr "كلمة المرور غير صحيحة."
+msgstr "كلمة السر غير صحيحة."
 
 #: part/View.cpp:1561
 #, kde-format
