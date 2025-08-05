@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-08-03 15:24+0400\n"
+"PO-Revision-Date: 2025-08-04 18:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1006,18 +1006,18 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
-"كلمة السر لهذا المستند المشفر مجهولة. تم مغادرة الحفظ التلقائي! يرجى حفظ "
-"عملك يدويا."
+"كلمة السر لهذا المستند المشفر مجهولة. تم مغادرة الحفظ الآليّ! يرجى حفظ عملك "
+"يدويا."
 
 #: main/KoDocument.cpp:712
 #, kde-format
 msgid "Autosaving..."
-msgstr "يجري الحفظ التلقائي..."
+msgstr "يجري الحفظ الآليّ..."
 
 #: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr "خطأ أثناء الحفظ التلقائي! القسم مليء؟"
+msgstr "خطأ أثناء الحفظ الآليّ! القسم مليء؟"
 
 #: main/KoDocument.cpp:812
 #, kde-format
@@ -1055,7 +1055,7 @@ msgid ""
 "An autosaved file exists for this document.\n"
 "Do you want to open it instead?"
 msgstr ""
-"توجد نسخة محفوظة آليا لهذا الملف\n"
+"توجد نسخة محفوظة آليّا لهذا الملف\n"
 "هل تريد أن تفتح هذه النسخة كبديل ؟"
 
 #: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
@@ -1696,7 +1696,7 @@ msgstr "ا&نتقِ..."
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
-msgstr "استخدم القالب الجديد كافتراضي"
+msgstr "استخدم القالب الجديد كمبدئي"
 
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
@@ -2638,7 +2638,7 @@ msgstr "للصفحة"
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:35
 #, kde-format
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:102
 #: pigment/compositeops/KoCompositeOps.h:135
@@ -4571,7 +4571,7 @@ msgstr "المسار:"
 #: widgets/koDocumentInfoAboutWidget.ui:280
 #, kde-format
 msgid "&Reset"
-msgstr "اسـ&تعادة"
+msgstr "&صفّر"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
@@ -4670,8 +4670,7 @@ msgstr "فكّ تعمية"
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
-msgstr ""
-"<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال فك التعمية، يرجى حفظ المستند.</qt>"
+msgstr "<qt>تعذر حفظ مستندك آليّا.<p>لإكمال فك التعمية، يرجى حفظ المستند.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
 #: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
@@ -4718,7 +4717,7 @@ msgstr "غيّر"
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
-msgstr "<qt>تعذر حفظ مستندك تلقائيا.<p>لإكمال التعمية، يرجي حفظ الملف.</qt>"
+msgstr "<qt>تعذر حفظ مستندك آليّا.<p>لإكمال التعمية، يرجي حفظ الملف.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:399
 #, kde-format
@@ -5040,7 +5039,7 @@ msgstr "اتجاه النص:"
 #: widgets/KoPageLayoutWidget.ui:184
 #, kde-format
 msgid "Automatic"
-msgstr "تلقائي"
+msgstr "آليّ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
 #: widgets/KoPageLayoutWidget.ui:189
@@ -5333,13 +5332,13 @@ msgstr "حجم الأيقونة"
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #: widgets/KoToolBoxDocker.cpp:140
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "&تلقائي"
+msgstr "&آليّ"
 
 #: widgets/KoToolBoxDocker.cpp:147
 #, kde-format

@@ -492,7 +492,7 @@ msgstr ""
 #: sheets/html/exportwidget.ui:125
 #, kde-format
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:131

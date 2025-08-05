@@ -170,7 +170,7 @@ msgstr "zayed.alsaidi@gmail.com"
 #: src/forms/wdgsectionproperties.ui:17
 #, kde-format
 msgid "Layout:"
-msgstr "التّخطيط:"
+msgstr "التخطيط:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
 #: src/forms/wdgsectionsbox.ui:50

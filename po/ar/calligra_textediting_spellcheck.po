@@ -27,7 +27,7 @@ msgstr "اضبط ال&تدقيق الإملائي..."
 #: SpellCheck.cpp:49
 #, kde-format
 msgid "Auto Spell Check"
-msgstr "تدقيق إملائي آلي"
+msgstr "تدقيق إملائي آليّ"
 
 #: SpellCheckFactory.cpp:16
 #, kde-format
