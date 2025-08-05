@@ -993,7 +993,7 @@ msgstr "الموضع"
 #: dialogs/FontDecorations.ui:295
 #, kde-format
 msgid "Automatic hyphenation"
-msgstr "الوصلة الآلية"
+msgstr "الوصلة الآليّة"
 
 #: dialogs/FontDia.cpp:34
 #, kde-format

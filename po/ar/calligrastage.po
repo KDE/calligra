@@ -328,7 +328,7 @@ msgstr ""
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #: part/KPrPart.cpp:69
 #, kde-format
