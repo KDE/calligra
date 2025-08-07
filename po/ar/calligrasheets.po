@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-08-04 15:15+0400\n"
+"PO-Revision-Date: 2025-08-06 14:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -532,7 +532,7 @@ msgid ""
 msgstr ""
 "الدالة INT2BOOL() ترجع قيمة منطقية لعدد صحيح معطى. هذه الوسيلة موجهة "
 "لاستخدام عدد صحيح في الوسائل التي تتطلب قيمة منطقية. هي فقط تقبل 0 أو 1. إذا "
-"تم إدخال أي قيمة أخرى، ترجع خاطئ."
+"أُدخلت أي قيمة أخرى، ترجع خاطئ."
 
 #: functions/conversion.xml:32
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-08-04 18:44+0400\n"
+"PO-Revision-Date: 2025-08-06 14:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1006,8 +1006,7 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
-"كلمة السر لهذا المستند المشفر مجهولة. تم مغادرة الحفظ الآليّ! يرجى حفظ عملك "
-"يدويا."
+"كلمة السر لهذا المستند المعمى مجهولة. أجهض الحفظ الآليّ! يرجى حفظ عملك يدويا."
 
 #: main/KoDocument.cpp:712
 #, kde-format
@@ -1597,7 +1596,7 @@ msgstr "اغلق"
 #: main/KoPrintingDialog_p.h:160
 #, kde-format
 msgid "Stopped"
-msgstr "تم الإيقاف"
+msgstr "موقوف"
 
 #: main/KoRecentDocumentsPane.cpp:66
 #, kde-format
@@ -3668,8 +3667,7 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
-"هذا المستند يحتوي على checksum مجهول. عندما تعطي كلمة مرور قد لا يتم التعرف "
-"عليها."
+"هذا المستند يحتوي على مجموع تحقق مجهول. عندما تعطي كلمة سر قد لا يتعرف عليها."
 
 #: store/KoEncryptedStore.cpp:245
 #, kde-format
@@ -4559,7 +4557,7 @@ msgstr "التعليقات:"
 #: widgets/koDocumentInfoAboutWidget.ui:251
 #, kde-format
 msgid "Created:"
-msgstr "تم إنشاؤه:"
+msgstr "أُنشئ:"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
 #: widgets/koDocumentInfoAboutWidget.ui:261
@@ -4597,7 +4595,7 @@ msgstr "استخدم ';' (مثال: Office;KDE;KOffice)"
 #: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document will be decrypted"
-msgstr "هذا المستند سيتم فك تعميته"
+msgstr "هذا المستند سيُفك تعميته"
 
 #: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
@@ -4698,9 +4696,9 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
-"<qt>المستند محفوظ حالياً على أنه %1. يحتاج المستند أن يتم تغييره  إلى "
-"<b>OASIS OpenDocument</b> حتى يعمى.<p>هل تريد تغيير  الملف إلى OASIS "
-"OpenDocument؟</qt>"
+"<qt>المستند محفوظ حالياً على أنه %1. يحتاج المستند أن يغير  إلى <b>OASIS "
+"OpenDocument</b> حتى يعمى.<p>هل تريد تغيير  الملف إلى OASIS OpenDocument؟</"
+"qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
