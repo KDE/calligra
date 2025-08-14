@@ -186,30 +186,10 @@
             ]
         },
         {
-            "name": "cppunit",
-            "buildsystem": "autotools",
-            "config-opts": [
-                "--disable-static"
-            ],
-            "builddir": true,
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz",
-                    "sha256": "89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 9543,
-                        "stable-only": true,
-                        "url-template": "https://dev-www.libreoffice.org/src/cppunit-$version.tar.gz"
-                    }
-                }
-            ]
-        },
-        {
             "name": "librevenge",
             "buildsystem": "autotools",
             "config-opts": [
+                "--disable-tests",
                 "--disable-werror"
             ],
             "builddir": true,
@@ -248,6 +228,9 @@
         {
             "name": "libvisio",
             "buildsystem": "autotools",
+            "config-opts": [
+                "--disable-tests"
+            ],
             "builddir": true,
             "sources": [
                 {
