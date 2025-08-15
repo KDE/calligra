@@ -1720,7 +1720,7 @@ msgstr "هذا الاسم مستخدم مسبقا."
 #: main/KoTemplateCreateDia.cpp:445
 #, kde-format
 msgid "Do you really want to remove that group?"
-msgstr "هل ترغب بالفعل بإزالة هذه المجموعة ؟"
+msgstr "هل ترغب فعلًا بإزالة هذه المجموعة ؟"
 
 #: main/KoTemplateCreateDia.cpp:446
 #, kde-format
@@ -1730,7 +1730,7 @@ msgstr "أزل المجموعة"
 #: main/KoTemplateCreateDia.cpp:448
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "هل ترغب بالفعل بإزالة هذا القالب ؟"
+msgstr "هل ترغب فعلًا بإزالة هذا القالب ؟"
 
 #: main/KoTemplateCreateDia.cpp:449
 #, kde-format
