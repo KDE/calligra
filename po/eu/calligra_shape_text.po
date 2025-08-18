@@ -1,7 +1,7 @@
 # Translation for calligra_shape_text.po to Euskara/Basque (eu).
 # Copyright (C) 2023-2025 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2025 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2025 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>.
 #
 # Translators:
 # Iñigo Salvador Azurmendi <xalba@ni.eus>, 2023, 2025.
