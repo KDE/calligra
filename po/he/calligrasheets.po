@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-08-28 20:06+0300\n"
+"PO-Revision-Date: 2025-08-30 20:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -14863,7 +14863,7 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:51
 #, kde-format
 msgid "&Do not print text"
-msgstr "אל תדפיס &טקסט"
+msgstr "לא להדפיס &טקסט"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/ProtectionWidget.ui:61
@@ -14883,7 +14883,7 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:72
 #, kde-format
 msgid "Hide &all"
-msgstr "הסתר ה&כל"
+msgstr "הסתרה של ה&כול"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:97
@@ -14916,17 +14916,17 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:133
 #, kde-format
 msgid "&Hide formula"
-msgstr "הסתר &נוסחה"
+msgstr "הסתרת &נוסחה"
 
 #: ui/dialogs/ShowDialog.cpp:35
 #, kde-format
 msgid "Show Sheet"
-msgstr "הצג גיליון"
+msgstr "הצגת גיליון"
 
 #: ui/dialogs/ShowDialog.cpp:45
 #, kde-format
 msgid "Select hidden sheets to show:"
-msgstr "בחר גיליונות מוסתרים שיש להציג:"
+msgstr "נא לבחור גיליונות מוסתרים להצגה:"
 
 #: ui/ExternalEditor.cpp:55
 #, kde-format
@@ -14951,7 +14951,7 @@ msgstr "התעלמות מהשינויים"
 #: ui/FilterPopup.cpp:54
 #, kde-format
 msgid "All"
-msgstr "הכל"
+msgstr "הכול"
 
 #: ui/FilterPopup.cpp:57
 #, kde-format
