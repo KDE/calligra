@@ -922,7 +922,7 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
-"Si seleccioneu «Cancel·la», es mantindran tots els fitxers recuperables.\n"
+"Si trieu «Cancel·la», es mantindran tots els fitxers recuperables.\n"
 "Si premeu «D'acord», es recuperaran els fitxers seleccionats, els fitxers no "
 "seleccionats seran rebutjats."
 
@@ -1315,7 +1315,7 @@ msgstr "Falta el filtre d'importació"
 #: main/KoFilterManager_p.cpp:30
 #, kde-format
 msgid "Choose Filter"
-msgstr "Seleccioneu un filtre"
+msgstr "Trieu un filtre"
 
 #: main/KoFindText.cpp:47
 #, kde-format
@@ -1663,7 +1663,7 @@ msgstr "Personalitzada:"
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
-msgstr "&Selecciona…"
+msgstr "&Tria…"
 
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
@@ -2133,7 +2133,7 @@ msgstr "Autoria"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
 #, kde-format
 msgid "Select a master slide design:"
-msgstr "Seleccioneu un disseny mestre de diapositiva:"
+msgstr "Trieu un disseny mestre de diapositiva:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
 #, kde-format
@@ -2143,7 +2143,7 @@ msgstr "Diapositiva mestra"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
 msgid "Select a master page design:"
-msgstr "Seleccioneu un disseny mestre de pàgina:"
+msgstr "Trieu un disseny mestre de pàgina:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
@@ -2278,7 +2278,7 @@ msgstr "Visualització detallada"
 #: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format
 msgid "Thumbnail View"
-msgstr "Visualització de miniatures"
+msgstr "Vista de miniatures"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:154
 #, kde-format
@@ -3296,7 +3296,7 @@ msgstr "Degradat SVG"
 #: rdf/InsertSemanticObjectReferenceAction.cpp:40
 #, kde-format
 msgid "Select the object you want to reference"
-msgstr "Seleccioneu l'objecte que voleu referenciar"
+msgstr "Trieu l'objecte que voleu referenciar"
 
 #: rdf/KoDocumentRdf.cpp:594
 #, kde-format
@@ -3866,7 +3866,7 @@ msgstr "Creeu un índex de primera referència."
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
 msgid "Select the index you want to reference"
-msgstr "Seleccioneu l'índex que voleu referenciar"
+msgstr "Trieu l'índex que voleu referenciar"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
@@ -5069,7 +5069,7 @@ msgid ""
 "enter a new, unique name for it.</qt>"
 msgstr ""
 "<qt>L'etiqueta que esteu intentant recuperar ja existix en la llista "
-"d'etiquetes.<br>Introduïu un nom nou i únic per a ella.</qt>"
+"d'etiquetes.<br>Introduïu un nom nou i únic per ella.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format

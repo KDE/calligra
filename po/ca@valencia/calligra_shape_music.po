@@ -194,7 +194,7 @@ msgstr "Elimina la barra"
 #: actions/SelectionAction.cpp:32
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: actions/SetClefAction.cpp:40
 #, kde-format

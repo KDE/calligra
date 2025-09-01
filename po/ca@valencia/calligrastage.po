@@ -1104,7 +1104,7 @@ msgstr "Selecciona-ho tot"
 #: part/ui/KPrHtmlExport.ui:65
 #, kde-format
 msgid "Select template (.css) :"
-msgstr "Selecciona la plantilla (.css):"
+msgstr "Tria la plantilla (.css):"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
 #: part/ui/KPrHtmlExport.ui:78

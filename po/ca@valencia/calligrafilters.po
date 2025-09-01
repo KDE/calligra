@@ -304,7 +304,7 @@ msgstr "Fulls"
 #: sheets/csv/exportdialogui.ui:109
 #, kde-format
 msgid "Select sheets to export:"
-msgstr "Seleccioneu els fulls que s'han d'exportar:"
+msgstr "Trieu els fulls que s'han d'exportar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
 #: sheets/csv/exportdialogui.ui:125
@@ -416,7 +416,7 @@ msgstr "Exporta el full a HTML"
 #: sheets/html/exportwidget.ui:17
 #, kde-format
 msgid "Sheet Selection"
-msgstr "Seleccioneu un full"
+msgstr "Trieu un full"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
@@ -429,7 +429,7 @@ msgstr "Cliqueu ací per a seleccionar tots els fulls de la llista."
 #: sheets/html/exportwidget.ui:35
 #, kde-format
 msgid "Select &All"
-msgstr "Selecciona-ho &tot"
+msgstr "Tria-ho &tot"
 
 #. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
 #: sheets/html/exportwidget.ui:45
@@ -465,8 +465,8 @@ msgstr "Estil"
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
 msgstr ""
-"Seleccioneu esta opció per a utilitzar les lletres i els colors "
-"predeterminats per a la pàgina HTML."
+"Trieu esta opció per a utilitzar les lletres i els colors predeterminats per "
+"a la pàgina HTML."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:92
@@ -481,8 +481,8 @@ msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
 "can select or type on in the field below."
 msgstr ""
-"Seleccioneu esta opció per a especificar estils de full per a la pàgina "
-"HTML. Podeu seleccionar o teclejar en el camp de davall."
+"Trieu esta opció per a especificar estils de full per a la pàgina HTML. "
+"Podeu seleccionar o teclejar en el camp de davall."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:105
@@ -653,7 +653,7 @@ msgstr "Esborrany"
 #: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
-msgstr "Mida de la lletra per defecte:"
+msgstr "Mida de la lletra predeterminada:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186

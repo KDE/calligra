@@ -30,7 +30,7 @@ msgstr "Contacte"
 #: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
-msgstr "Seleccioneu una llibreta d'adreces per a guardar:"
+msgstr "Trieu una llibreta d'adreces per a guardar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: KoRdfFoaFEditWidget.ui:26

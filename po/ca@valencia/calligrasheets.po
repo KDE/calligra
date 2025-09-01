@@ -13195,8 +13195,7 @@ msgstr "&Unitat:"
 #: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr ""
-"Seleccioneu la unitat predeterminada que s'utilitzarà en els vostres fulls."
+msgstr "Trieu la unitat predeterminada que s'utilitzarà en els vostres fulls."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:70
@@ -13849,7 +13848,7 @@ msgstr "Fulls seleccionats"
 #: part/dialogs/SheetSelectWidget.ui:154
 #, kde-format
 msgid "Select all sheets"
-msgstr "Selecciona tots els fulls"
+msgstr "Tria tots els fulls"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveTop)
 #: part/dialogs/SheetSelectWidget.ui:167
@@ -13861,7 +13860,7 @@ msgstr "Mou els fulls seleccionats a dalt de tot"
 #: part/dialogs/SheetSelectWidget.ui:180
 #, kde-format
 msgid "Select sheets"
-msgstr "Selecciona els fulls"
+msgstr "Tria els fulls"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, ButtonMoveUp)
 #: part/dialogs/SheetSelectWidget.ui:193
@@ -14998,8 +14997,8 @@ msgid ""
 "choose the new color."
 msgstr ""
 "Tria el color per al text de la cel·la actual. Si cliqueu damunt de la barra "
-"de color, s'obrirà el diàleg estàndard «Seleccioneu un color» de KDE on "
-"podreu escollir el color nou."
+"de color, s'obrirà el diàleg de selecció estàndard «Trieu un color» de KDE "
+"on podreu escollir el color nou."
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:139
@@ -15017,7 +15016,7 @@ msgstr "Barrat"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr "Seleccioneu la mida de la lletra."
+msgstr "Trieu la mida de la lletra."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -15791,12 +15790,12 @@ msgstr "Activa %1"
 #: ui/RegionSelector.cpp:144
 #, kde-format
 msgid "Select Single Cell"
-msgstr "Selecciona una única cel·la"
+msgstr "Tria una única cel·la"
 
 #: ui/RegionSelector.cpp:146
 #, kde-format
 msgid "Select Multiple Cells"
-msgstr "Selecciona múltiples cel·les"
+msgstr "Tria múltiples cel·les"
 
 #: ui/strategy/HyperlinkStrategy.cpp:67
 #, kde-format
