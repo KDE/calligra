@@ -648,7 +648,7 @@ msgstr "Ja hi ha una adreça d'interés amb el nom «%1»."
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
 msgid "Select Bookmark"
-msgstr "Selecciona l'adreça d'interés"
+msgstr "Tria l'adreça d'interés"
 
 #: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format

@@ -600,7 +600,7 @@ msgstr "Posició:"
 #: dialogs/CitationInsertionDialog.cpp:24
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:442
 #, kde-format
@@ -1041,7 +1041,7 @@ msgstr "Separació de paraules automàtica"
 #: dialogs/FontDia.cpp:34
 #, kde-format
 msgid "Select Font"
-msgstr "Seleccioneu la lletra"
+msgstr "Trieu la lletra"
 
 #: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
@@ -1645,7 +1645,7 @@ msgstr "Res"
 #: dialogs/ParagraphBulletsNumbers.cpp:347
 #, kde-format
 msgid "Select a list image"
-msgstr "Selecciona una imatge de llista"
+msgstr "Tria una imatge de llista"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
@@ -2161,7 +2161,7 @@ msgstr "Estil nou"
 #: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
-msgstr "Ja hi ha un altre estil amb el nom «%1». Seleccioneu-ne un altre."
+msgstr "Ja hi ha un altre estil amb el nom «%1». Trieu-ne un altre."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:52 TextTool.cpp:2253
@@ -2897,7 +2897,7 @@ msgstr "Dividix les cel·les"
 #: TextTool.cpp:451
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
-msgstr "Seleccioneu un estil de vora i dibuixa este estil en una taula"
+msgstr "Trieu un estil de vora i dibuixa este estil en una taula"
 
 #: TextTool.cpp:455
 #, kde-format
@@ -2919,7 +2919,7 @@ msgid ""
 "cursor is located will be changed.</p>"
 msgstr ""
 "<p>Canvia els marges, flux de text, vores, pics, numeració, etc., del "
-"paràgraf.</p><p>Selecciona text en múltiples paràgrafs per tal de canviar el "
+"paràgraf.</p><p>Tria text en múltiples paràgrafs per tal de canviar el "
 "format de tots els paràgrafs seleccionats.</p><p>Si no hi ha cap text "
 "seleccionat, es canviarà el paràgraf on hi ha el cursor.</p>"
 

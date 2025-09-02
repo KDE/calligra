@@ -214,7 +214,7 @@ msgstr " dies"
 #: FixedDateFormat.ui:53
 #, kde-format
 msgid "Select the way the date should be displayed:"
-msgstr "Selecciona la manera en què s'ha de mostrar la data:"
+msgstr "Tria la manera en què s'ha de mostrar la data:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, custom)
 #: FixedDateFormat.ui:60

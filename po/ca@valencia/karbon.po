@@ -625,7 +625,7 @@ msgstr "Mida de la lletra de la paleta:"
 #: ui/widgets/KarbonPaletteBarWidget.cpp:51
 #, kde-format
 msgid "Select palette"
-msgstr "Seleccioneu la paleta"
+msgstr "Trieu la paleta"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format

@@ -40,7 +40,7 @@ msgstr "Regió"
 #: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
-msgstr "Seleccioneu un calendari per a guardar:"
+msgstr "Trieu un calendari per a guardar:"
 
 #: KoRdfCalendarEvent.cpp:384
 #, kde-format

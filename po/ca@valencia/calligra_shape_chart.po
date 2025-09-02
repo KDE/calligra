@@ -1000,7 +1000,7 @@ msgstr "Conjunt de dades %1"
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
 #, kde-format
 msgid "Select a data set"
-msgstr "Seleccioneu un conjunt de dades"
+msgstr "Trieu un conjunt de dades"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
@@ -1368,7 +1368,7 @@ msgstr "Conjunts de dades en &columnes"
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
-msgstr "Seleccioneu la lletra"
+msgstr "Trieu la lletra"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
