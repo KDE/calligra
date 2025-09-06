@@ -12,14 +12,14 @@ MISSING FEATURES / TODO:
 - Current "align objects" aligns in relation with the page, is there a
   way to align the h or v centers of several objects ?
 - use libkformula (or better, make a KPart out of it)
-- seperate the general configuration and page/slide specific config dialog
+- separate the general configuration and page/slide specific config dialog
   and make 2 out of them (currently it's one, which is confusing)
 - use GM in all dialogs
 - Rewrite autoforms (using XML)
 - Possibility to print 1, 2 or 4 slides / page
 - Menu item for copy page (to do it without copy+paste)
 - Extend Contents to Height => Fit contents to height (also shrink spacings!)
-  Maybe don´t only change spacings but also fontsizes
+  Maybe donï¿½t only change spacings but also fontsizes
 - Make option for txt obj to be abe to set a few colors and automatically use
   them in this order for the paragraphs (like always one in black and one in blue and
   again and again)
@@ -59,10 +59,10 @@ Done:
         -> pie
         -> text object
         -> ellipse
-        -> group objet
-        -> polygone object
+        -> group object
+        -> polygon object
         -> polyline object (all attributes)
--> save/load  page background
+-> save/load page background
 -> save/load object background
 -> save/load page effect (hide/show effect)
 -> save/load page sound effect
@@ -76,7 +76,7 @@ Done:
 -> save/load page background image
 -> save/load animation group
 -> save/load sticky object
--> save/load closed element (defined as polygone into oo spec draw:polygone)
+-> save/load closed element (defined as polygon into oo spec draw:polygon)
 -> save/load picture effect
 	-> bright
 	-> contrast
@@ -103,7 +103,7 @@ Bugs:
 -> fix some arrow style  
 
 In Progress:
--> save/load backgroud of master page (save works not perfect)
+-> save/load background of master page (save works not perfect)
 -> save/load picture effect
 -> save/load protect object
 -> save/load embedded object

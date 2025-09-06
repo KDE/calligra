@@ -5,7 +5,7 @@ The strategy is responsible for doing the page effect. For each effect we have o
 program start and is shared by all page effects that use these strategy. The strategy need to repaint always the
 full screen. Qt will make sure only to update the parts that where requested for update in KPrPageEffectStrategy::next().
 
-For evey subType and direction of en effect a strategy is needed.
+For every subType and direction of en effect a strategy is needed.
 
 Factory:
 The factory is derived from KPrPageEffectFactory. All  you need to do is to add the strategies the factory supports.
@@ -25,7 +25,7 @@ of the sub types are defined in dockers/KPrPageEffectDocker.cpp.
 It would really be better to have the specific page effects provide these user visible strings as that
 is more maintainable and would not make it necessary to change stage when adding a new page effect plugin.
 
-Sub types don't have to corrospond to the ones used in smil. They are used for the representation in the UI.
+Sub types don't have to correspond to the ones used in smil. They are used for the representation in the UI.
 E.g. the barWipe effect has in smil::subType leftToReight and topToBottom. It also supports the reverse for these
 sub types are mapped like the following:
 smil:subType  smil:direction  KPrPageEffect::SubType
