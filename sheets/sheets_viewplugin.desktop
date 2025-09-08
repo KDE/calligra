@@ -37,7 +37,6 @@ Comment[sl]=Funkcija grafičnega vmesnika za Sheets
 Comment[sv]=Grafisk gränssnittsfunktion för Sheets
 Comment[tr]=Tablolar’ın grafik kullanıcı arayüzü
 Comment[uk]=Функціональність графічного інтерфейсу для Sheets
-Comment[x-test]=xxGUI functionality for Sheetsxx
 Comment[zh_TW]=Sheets 的 GUI 功能
 [PropertyDef::X-Sheets-Version]
 Type=int

@@ -36,7 +36,6 @@ Name[sl]=Vtičnik Calligra Docker
 Name[sv]=Calligra-dockningsinsticksprogram
 Name[tr]=Calligra Docker Eklentisi
 Name[uk]=Додаток панелі для Calligra
-Name[x-test]=xxCalligra Docker Pluginxx
 Name[zh_CN]=Calligra 停靠插件
 Name[zh_TW]=Calligra 嵌入外掛程式
 Type=ServiceType
@@ -81,7 +80,6 @@ Comment[ta]=எசாருகள் என்பது'டாக்விட்
 Comment[tr]=Sözde “dockwidget” içeren bir eklenti
 Comment[uk]=Додаток, що містить так званий «віджет панелі»
 Comment[wa]=On tchôke-divins k' a çk on lome ene "ahesse panea d' usteyes"
-Comment[x-test]=xxA plugin that contains a so called 'dockwidget'xx
 Comment[zh_CN]=一个包含所谓“停靠部件”的插件
 Comment[zh_TW]=包含「嵌入元件」的外掛程式
 [PropertyDef::X-Flake-MinVersion]
