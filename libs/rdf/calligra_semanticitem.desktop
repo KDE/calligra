@@ -32,7 +32,6 @@ Name[sl]=Definicija semantičnega elementa
 Name[sv]=Definition av semantiskt objekt
 Name[tr]=Anlamsal öge tanımlaması
 Name[uk]=Визначення семантичного запису
-Name[x-test]=xxSemantic item definitionxx
 Name[zh_CN]=语义项定义
 Name[zh_TW]=語義項目定義
 Comment=Definition of a semantic item object
@@ -68,7 +67,6 @@ Comment[sl]=Definicija predmeta semantičnega elementa
 Comment[sv]=Definition av ett semantiskt objekt
 Comment[tr]=Bir anlamsal öge nesnesinin tanımı
 Comment[uk]=Визначення об’єкта семантичного запису
-Comment[x-test]=xxDefinition of a semantic item objectxx
 Comment[zh_CN]=语义项对象的定义
 Comment[zh_TW]=語義項目物件的定義
 

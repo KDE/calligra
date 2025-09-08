@@ -36,7 +36,6 @@ Comment[sl]=Orodje za Calligra Stage
 Comment[sv]=Verktyg för Calligra Stage
 Comment[tr]=Calligra Sahne Araç
 Comment[uk]=Інструмент для Calligra Stage
-Comment[x-test]=xxTool for Calligra Stagexx
 Comment[zh_TW]=Calligra Stage 用的工具
 [PropertyDef::X-KPresenter-Version]
 Type=int
