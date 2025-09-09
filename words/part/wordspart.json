@@ -38,7 +38,6 @@
         "Name[sv]": "Calligra-ordbehandlingskomponent",
         "Name[tr]": "Calligra Sözcük İşleme Bileşeni",
         "Name[uk]": "Компонент текстового редактора Calligra",
-        "Name[x-test]": "xxCalligra Word Processing Componentxx",
         "Name[zh_CN]": "Calligra 文字处理组件",
         "Name[zh_TW]": "Calligra 文書處理組件",
         "ServiceTypes": [

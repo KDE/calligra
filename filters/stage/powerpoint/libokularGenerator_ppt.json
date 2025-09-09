@@ -35,7 +35,6 @@
                 "Name[sv]": "Sven Langkamp",
                 "Name[tr]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
-                "Name[x-test]": "xxSven Langkampxx",
                 "Name[zh_CN]": "Sven Langkamp",
                 "Name[zh_TW]": "Sven Langkamp"
             },
@@ -74,7 +73,6 @@
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
-                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau",
                 "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
@@ -111,7 +109,6 @@
         "Copyright[sv]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[tr]": "Telif hakkı 2010–2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016",
-        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[zh_TW]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "PPT file renderer",
@@ -145,7 +142,6 @@
         "Description[sv]": "PPT-filåtergivning",
         "Description[tr]": "PPT dosyası sunucu",
         "Description[uk]": "Засіб показу вмісту файлів PPT",
-        "Description[x-test]": "xxPPT file rendererxx",
         "Description[zh_CN]": "PPT 文件渲染器",
         "Description[zh_TW]": "PPT 檔案繪製器",
         "License": "GPL",
@@ -184,7 +180,6 @@
         "Name[sv]": "PPT-gränssnitt",
         "Name[tr]": "PPT Arka Ucu",
         "Name[uk]": "Модуль обробки PPT",
-        "Name[x-test]": "xxPPT Backendxx",
         "Name[zh_CN]": "PPT 后端",
         "Name[zh_TW]": "PPT 後端",
         "ServiceTypes": [

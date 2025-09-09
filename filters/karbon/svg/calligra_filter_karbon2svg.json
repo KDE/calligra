@@ -26,7 +26,6 @@
         "Name[sv]": "Karbon SVG-exportfilter",
         "Name[tr]": "Karbon SVG Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту SVG для Karbon",
-        "Name[x-test]": "xxKarbon SVG Export Filterxx",
         "Name[zh_TW]": "Karbon SVG 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

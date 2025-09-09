@@ -22,7 +22,6 @@
         "Name[sv]": "Karbon-insticksprogram Virvla och kläm",
         "Name[tr]": "Karbon Çimdikleyip Döndür Eklentisi",
         "Name[uk]": "Додаток вихору для Karbon",
-        "Name[x-test]": "xxKarbon Whirl Pinch pluginxx",
         "Name[zh_TW]": "Karbon 《漩渦擠壓》外掛程式",
         "ServiceTypes": [
             "Karbon/ViewPlugin"

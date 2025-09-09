@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon 1.x-importfilter",
         "Name[tr]": "Karbon 1.x İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Karbon 1.x",
-        "Name[x-test]": "xxKarbon 1.x Import Filterxx",
         "Name[zh_TW]": "Karbon 1.x 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

@@ -22,7 +22,6 @@
         "Description[sv]": "Sideffekter: Irissuddning",
         "Description[tr]": "İris Sil Sayfa Efektleri",
         "Description[uk]": "Ефект витирання сторінки веселкою",
-        "Description[x-test]": "xxIris Wipe Page Effectsxx",
         "Description[zh_TW]": "彩虹掃描頁面效果",
         "Name": "Iris Wipe",
         "Name[ca@valencia]": "Esborrat d'iris",
@@ -46,7 +45,6 @@
         "Name[sv]": "Irissuddning",
         "Name[tr]": "İris Sil",
         "Name[uk]": "Витирання веселкою",
-        "Name[x-test]": "xxIris Wipexx",
         "Name[zh_TW]": "彩虹掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

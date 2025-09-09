@@ -22,7 +22,6 @@
         "Description[sv]": "Sideffekter: Matrissuddning",
         "Description[tr]": "Matrix Sil Sayfa Efektleri",
         "Description[uk]": "Ефект матричного витирання сторінки",
-        "Description[x-test]": "xxMatrix wipe Page Effectsxx",
         "Description[zh_TW]": "矩陣掃描頁面效果",
         "Name": "Matrix wipe",
         "Name[ca@valencia]": "Esborrat de matriu",
@@ -47,7 +46,6 @@
         "Name[sv]": "Matrissuddning",
         "Name[tr]": "Matrix Sil",
         "Name[uk]": "Матричне витирання",
-        "Name[x-test]": "xxMatrix wipexx",
         "Name[zh_TW]": "矩陣掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

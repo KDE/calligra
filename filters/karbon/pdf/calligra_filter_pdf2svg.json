@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon PDF-importfilter",
         "Name[tr]": "Karbon PDF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування PDF до Karbon",
-        "Name[x-test]": "xxKarbon PDF Import Filterxx",
         "Name[zh_TW]": "Karbon PDF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

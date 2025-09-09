@@ -24,7 +24,6 @@
         "Name[sv]": "KSpread dBASE-importfilter",
         "Name[tr]": "KSpread dBASE İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування dBASE для KSpread",
-        "Name[x-test]": "xxKSpread dBASE Import Filterxx",
         "Name[zh_TW]": "KSpread dBASE 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

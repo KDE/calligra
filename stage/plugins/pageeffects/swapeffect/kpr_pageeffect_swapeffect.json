@@ -23,7 +23,6 @@
         "Description[sv]": "Sideffekt: Växling",
         "Description[tr]": "Sayfa Takası Efekti",
         "Description[uk]": "Ефект перегортання сторінки",
-        "Description[x-test]": "xxSwap Page Effectxx",
         "Description[zh_TW]": "變換頁面效果",
         "Name": "Swap Effect",
         "Name[ca@valencia]": "Efecte d'agranat",
@@ -47,7 +46,6 @@
         "Name[sv]": "Växlingseffekt",
         "Name[tr]": "Takas Efekti",
         "Name[uk]": "Ефект перегортання",
-        "Name[x-test]": "xxSwap Effectxx",
         "Name[zh_TW]": "變換效果",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
