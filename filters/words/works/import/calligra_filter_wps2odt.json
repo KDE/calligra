@@ -25,7 +25,6 @@
         "Name[sv]": "Flow Visio-importfilter",
         "Name[tr]": "Flow Visio İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Visio для Flow",
-        "Name[x-test]": "xxFlow Visio Import Filterxx",
         "Name[zh_TW]": "Flow Visio 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

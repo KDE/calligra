@@ -22,7 +22,6 @@
         "Description[sv]": "Sideffekt: Rymdrotation",
         "Description[tr]": "Uzay Döndür Sayfa Efekti",
         "Description[uk]": "Ефект обертання сторінки у просторі",
-        "Description[x-test]": "xxSpace Rotation Page Effectxx",
         "Description[zh_TW]": "空間旋轉頁面效果",
         "Name": "Space Rotation",
         "Name[ca@valencia]": "Gir de l'espai",
@@ -47,7 +46,6 @@
         "Name[sv]": "Rymdrotation",
         "Name[tr]": "Uzay Dönüşü",
         "Name[uk]": "Обертання у просторі",
-        "Name[x-test]": "xxSpace Rotationxx",
         "Name[zh_TW]": "空間旋轉",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

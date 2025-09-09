@@ -35,7 +35,6 @@
                 "Name[sv]": "Sven Langkamp",
                 "Name[tr]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
-                "Name[x-test]": "xxSven Langkampxx",
                 "Name[zh_CN]": "Sven Langkamp",
                 "Name[zh_TW]": "Sven Langkamp"
             },
@@ -74,7 +73,6 @@
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
-                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau",
                 "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
@@ -111,7 +109,6 @@
         "Copyright[sv]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[tr]": "Telif hakkı 2012–2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016",
-        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[zh_TW]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "DOCX file renderer",
@@ -145,7 +142,6 @@
         "Description[sv]": "DOCX-filåtergivning",
         "Description[tr]": "DOCX dosyası sunucu",
         "Description[uk]": "Засіб показу вмісту файлів DOCX",
-        "Description[x-test]": "xxDOCX file rendererxx",
         "Description[zh_CN]": "DOCX 文件渲染器",
         "Description[zh_TW]": "DOCX 檔案繪製器",
         "License": "GPL",
@@ -185,7 +181,6 @@
         "Name[sv]": "DOCX-gränssnitt",
         "Name[tr]": "DOCX Arka Ucu",
         "Name[uk]": "Модуль обробки DOCX",
-        "Name[x-test]": "xxDOCX Backendxx",
         "Name[zh_CN]": "DOCX 后端",
         "Name[zh_TW]": "DOCX 後端",
         "ServiceTypes": [

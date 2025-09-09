@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon XFig-importfilter",
         "Name[tr]": "Karbon XFig İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування XFig до Karbon",
-        "Name[x-test]": "xxKarbon XFig Import Filterxx",
         "Name[zh_TW]": "Karbon XFig 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

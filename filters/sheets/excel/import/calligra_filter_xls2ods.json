@@ -24,7 +24,6 @@
         "Name[sv]": "KSpread Microsoft Excel-importfilter",
         "Name[tr]": "KSpread Microsoft Excel İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Microsoft Excel для KSpread",
-        "Name[x-test]": "xxKSpread Microsoft Excel Import Filterxx",
         "Name[zh_TW]": "KSpread Microsoft Excel 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

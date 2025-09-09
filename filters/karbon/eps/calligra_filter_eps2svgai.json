@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon EPS-importfilter",
         "Name[tr]": "Karbon EPS İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту EPS для Karbon",
-        "Name[x-test]": "xxKarbon EPS Import Filterxx",
         "Name[zh_TW]": "Karbon EPS 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

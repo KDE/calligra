@@ -25,7 +25,6 @@
         "Name[sv]": "HTML-importfilter för KSpread",
         "Name[tr]": "KSpread için HTML İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних HTML для KSpread",
-        "Name[x-test]": "xxHTML Import Filter for KSpreadxx",
         "Name[zh_TW]": "KSpread 的 HTML 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

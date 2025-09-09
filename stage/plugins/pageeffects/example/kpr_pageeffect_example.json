@@ -23,7 +23,6 @@
         "Description[sv]": "Sideffekt: Exploderande sida",
         "Description[tr]": "Patlayan Sayfa Sayfa Efekti",
         "Description[uk]": "Ефект вибуху сторінки",
-        "Description[x-test]": "xxExploding Page Page Effectxx",
         "Description[zh_TW]": "爆炸頁面效果",
         "Name": "Exploding Page",
         "Name[ca@valencia]": "Explosió de pàgina",
@@ -48,7 +47,6 @@
         "Name[sv]": "Exploderande sida",
         "Name[tr]": "Patlayan Sayfa",
         "Name[uk]": "Вибух сторінки",
-        "Name[x-test]": "xxExploding Pagexx",
         "Name[zh_TW]": "爆炸頁面",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

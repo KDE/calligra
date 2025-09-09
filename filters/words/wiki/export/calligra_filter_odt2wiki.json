@@ -24,7 +24,6 @@
         "Name[sv]": "Words Wiki-exportfilter",
         "Name[tr]": "Sözcükler Viki Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту вікі для Words",
-        "Name[x-test]": "xxWords Wiki Export Filterxx",
         "Name[zh_TW]": "Words Wiki 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

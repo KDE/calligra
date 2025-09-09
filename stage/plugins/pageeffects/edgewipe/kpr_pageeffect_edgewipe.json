@@ -22,7 +22,6 @@
         "Description[sv]": "Sideffekter: Kantsuddning",
         "Description[tr]": "Kenar Sil Sayfa Efektleri",
         "Description[uk]": "Ефект витирання сторінки з країв",
-        "Description[x-test]": "xxEdge Wipe Page Effectsxx",
         "Description[zh_TW]": "邊緣掃描頁面效果",
         "Name": "Edge wipe",
         "Name[ca@valencia]": "Esborrat de vora",
@@ -47,7 +46,6 @@
         "Name[sv]": "Kantsuddning",
         "Name[tr]": "Kenar Sil",
         "Name[uk]": "Витирання з країв",
-        "Name[x-test]": "xxEdge wipexx",
         "Name[zh_TW]": "邊緣掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

@@ -22,7 +22,6 @@
         "Description[sv]": "Ett insticksprogram för att avbilda kalenderhändelseobjekt mellan dokument och en RDF-databas",
         "Description[tr]": "Belge ve RDF veritabanı arasında takvim etkinliği ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF",
-        "Description[x-test]": "xxA plugin to map calendar event items between document and RDF databasexx",
         "Description[zh_CN]": "在文档和 RDF 数据库之间映射日历事件项的插件",
         "Description[zh_TW]": "讓文件與 RDF 資料庫行事曆事件項目對應的外掛程式",
         "Name": "RDF Calendar Event Plugin",
@@ -48,7 +47,6 @@
         "Name[sv]": "Insticksprogram för RDF-kalenderhändelser",
         "Name[tr]": "RDF Takvim Etkinliği Eklentisi",
         "Name[uk]": "Додаток подій календаря RDF",
-        "Name[x-test]": "xxRDF Calendar Event Pluginxx",
         "Name[zh_CN]": "RDF 日历事件插件",
         "Name[zh_TW]": "RDF 行事曆事件外掛程式",
         "ServiceTypes": [

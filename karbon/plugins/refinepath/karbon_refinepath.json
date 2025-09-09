@@ -22,7 +22,6 @@
         "Name[sv]": "Karbon-insticksprogram Förfina kontur",
         "Name[tr]": "Karbon Yolu Rafine Et Eklentisi",
         "Name[uk]": "Додаток покращення контурів для Karbon",
-        "Name[x-test]": "xxKarbon Refine Path pluginxx",
         "Name[zh_TW]": "Karbon 《微調路徑》外掛程式",
         "ServiceTypes": [
             "Karbon/ViewPlugin"

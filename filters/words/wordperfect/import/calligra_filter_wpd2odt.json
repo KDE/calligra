@@ -24,7 +24,6 @@
         "Name[sv]": "Words WordPerfect-importfilter",
         "Name[tr]": "Sözcükler WordPerfect İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних WordPerfect для Words",
-        "Name[x-test]": "xxWords WordPerfect Import Filterxx",
         "Name[zh_TW]": "Words WordPerfect 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

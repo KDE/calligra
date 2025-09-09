@@ -26,7 +26,6 @@
         "Name[sv]": "KSpread LATEX-exportfilter",
         "Name[tr]": "KSpread LaTeX Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту LATEX для KSpread",
-        "Name[x-test]": "xxKSpread LATEX Export Filterxx",
         "Name[zh_TW]": "KSpread LATEX 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

@@ -24,7 +24,6 @@
         "Name[sv]": "Words ASCII-exportfilter",
         "Name[tr]": "Sözcükler ASCII Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних ASCII для Words",
-        "Name[x-test]": "xxWords ASCII Export Filterxx",
         "Name[zh_TW]": "Words ASCII 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon WPG-importfilter",
         "Name[tr]": "Karbon WPG İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування WPG до Karbon",
-        "Name[x-test]": "xxKarbon WPG Import Filterxx",
         "Name[zh_TW]": "Karbon WPG 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

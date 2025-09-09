@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon WMF-importfilter",
         "Name[tr]": "Karbon WMF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування WMF до Karbon",
-        "Name[x-test]": "xxKarbon WMF Import Filterxx",
         "Name[zh_TW]": "Karbon WMF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

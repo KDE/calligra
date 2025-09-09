@@ -25,7 +25,6 @@
         "Name[sv]": "Karbon XAML-importfilter",
         "Name[tr]": "Karbon XAML İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування XAML до Karbon",
-        "Name[x-test]": "xxKarbon XAML Import Filterxx",
         "Name[zh_TW]": "Karbon XAML 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
