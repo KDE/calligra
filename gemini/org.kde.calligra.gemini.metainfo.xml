@@ -35,7 +35,6 @@
   <name xml:lang="sv">Gemini</name>
   <name xml:lang="tr">Gemini</name>
   <name xml:lang="uk">Gemini</name>
-  <name xml:lang="x-test">xxGeminixx</name>
   <name xml:lang="zh-CN">Gemini</name>
   <name xml:lang="zh-TW">Gemini</name>
   <summary>Office Suite</summary>
@@ -69,7 +68,6 @@
   <summary xml:lang="sv">Kontorssvit</summary>
   <summary xml:lang="tr">Ofis Takımı</summary>
   <summary xml:lang="uk">Офісний комплект</summary>
-  <summary xml:lang="x-test">xxOffice Suitexx</summary>
   <summary xml:lang="zh-CN">办公套件</summary>
   <summary xml:lang="zh-TW">辦公軟體</summary>
   <description>
@@ -94,7 +92,6 @@
     <p xml:lang="sv">KDE:s kontorssvit för surfplattor med tangentbord. Surfplattor med tangentbord, som både kan fungera som en pekplatta och som en klassisk bärbar dator med uppvikningsbar skärm, håller snabbt på att bli mycket populära, och efter succén med Krita Gemini, insåg gruppen bakom det att det fanns många orsaker att applicera samma koncept för andra program, i synnerhet de övriga i Calligra-sviten. Särskilt ordbehandlingskomponenten Words och presentationsverktyget Stage ansågs mogna för denna behandling.</p>
     <p xml:lang="tr">İkisi bir arada aygıtlar için KDE Ofis Paketi. Hem yalnızca dokunmatik bir tablet hem de klasik bir kapaklı dizüstü bilgisayar işlevi görebilen ikisi bir arada aygıtlar hızla çok popülerleşiyor ve Krita Gemini’nin başarısından sonra, arkasındaki takım, aynı konsepti başka bir bilgisayar için uygulamak için birçok neden olduğunu fark etti. Özellikle, sözcük işlemcisi bileşeni Sözcükler’in ve sunum aracı Sahne’nin bu iş için çok uygun olduğunu gördük.</p>
     <p xml:lang="uk">Комплект офісних програм KDE для пристроїв «два в одному». Пристрої «два в одному», які можуть працювати у двох режимах — сенсорного планшета і класичного ноутбука, — швидко набувають популярності. Після успіху Krita Gemini, команда її розробників зауважила, що варто було б застосувати ту саму концепцію до інших програм, особливо інших програм із комплекту Calligra. Зокрема це стосується програми для редагування текстів Words та засобу роботи з презентаціями Stage.</p>
-    <p xml:lang="x-test">xxThe KDE Office suite for 2-in-1 devices. 2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.xx</p>
     <p xml:lang="zh-CN">适用于二合一设备的 KDE 办公套件。二合一设备是一种兼具传统笔记本与触控平板功能的设备，它正变得越来越普及。在 Krita 推出针对二合一设备优化的 Krita Gemini 之后，其开发团队意识到许多其他程序，特别是 Calligra 套件中的文字处理工具 Words 和演示文稿工具 Stage 也可以从针对触控操作的优化中得益。</p>
     <p>With that realisation was born the desire to create Calligra Gemini, an application encasing word processor and presentation components which would function both as a traditional desktop application with a mouse and keyboard, and transform into a touch friendly application on the go, changing the experience to one suitable for all-touch devices without the inconvenience of having to switch to a different application.</p>
     <p xml:lang="ca">Amb aquesta idea, va néixer el desig de crear el Calligra Gemini, una aplicació que agrupa els components de procés de textos i presentacions que poden funcionar tant com una aplicació tradicional d'escriptori amb un ratolí i un teclat, i transformar-se en una aplicació tàctil per ella mateixa, canviant l'experiència a una adequada a tots els dispositius tàctils, sense els inconvenients d'haver de canviar a una aplicació diferent.</p>
@@ -124,7 +121,6 @@
     <p xml:lang="sv">Med denna insikt föddes önskan att skapa Calligra Gemini, ett program som innesluter ordbehandlings- och presentationskomponenterna och som både skulle fungera som ett traditionellt skrivbordsprogram med mus och tangentbord och omvandlas till ett pekvänligt program i farten, för att därmed ändra erfarenheten till en lämplig för alla pekenheter utan besväret med att behöva byta till ett annat program.</p>
     <p xml:lang="tr">Bu farkındalıkla birlikte, hem fare hem de klavye ile geleneksel bir masaüstü uygulaması olarak işlev görecek ve hareket halindeyken dokunmatik dostu bir uygulamaya dönüşerek, sözcük işlemcisi ve sunum bileşenlerini kapsayan bir uygulama olan Calligra Gemini’yi yaratma arzusu doğdu. Böylece başka bir uygulamaya geçme zorunluluğu olmadan, tek bir uygulama ile tüm deneyiminizi sürdürebilirsiniz.</p>
     <p xml:lang="uk">Ідея щодо перетворення стандартних програм призвела до бажання створити Calligra Gemini, програму, яка б містила компоненти текстового редактора та засобу роботи з презентаціями і могла б працювати одразу у режимі традиційної комп'ютерної програми, у якій для керування використовується миша і клавіатура, та у режимі програми, зручної для керування за допомогою сенсорного пристрою, змінюючи режим роботи відповідно до режиму роботи пристрою. При цьому користувач може продовжувати роботу у тій самій програмі без незручного перемикання між різними програмами.</p>
-    <p xml:lang="x-test">xxWith that realisation was born the desire to create Calligra Gemini, an application encasing word processor and presentation components which would function both as a traditional desktop application with a mouse and keyboard, and transform into a touch friendly application on the go, changing the experience to one suitable for all-touch devices without the inconvenience of having to switch to a different application.xx</p>
     <p xml:lang="zh-CN">在上述指导思想下，开发团队构思了 Calligra Gemini，一款同时包含文字处理与演示文稿功能的办公软件。它能够在鼠标键盘模式与触控模式之间随意切换，还避免用户需要在不同任务切换不同程序所带来的不便。</p>
     <p xml:lang="zh-TW">在有了該認知之後，我們有了 Calligra Gemini 的目標，提供文書處理與簡報工具的應用程式，並同時支援利用鍵盤滑鼠的傳統桌面應用程式使用方式，以及對觸控友善的互動模式，讓二合一裝置變成僅觸控模式時能夠直接利用同一個應用程式的不同體驗，而不用切換到另一個應用程式。</p>
     <p>The Gemini applications combine the power of Calligra's main applications (in Calligra Gemini's case the main office desktop applications, at the moment Words and Stage), with pleasant and explicitly touch optimised experiences based around the same document types.</p>
@@ -155,7 +151,6 @@
     <p xml:lang="sv">Gemini-programmen kombinerar Calligras kraftfulla huvudprogram (i fallet med Calligra Gemini, de viktigaste kontorsprogrammen för skrivbordet, för närvarande Words och Stage), med behaglig och explicit pekskärmsoptimerad upplevelse baserad på samma dokumenttyper.</p>
     <p xml:lang="tr">Gemini uygulamaları, Calligra’nın ana uygulamalarının gücünü (şimdilik Sözcükler ve Sahne), aynı belge türleri üzerine temellenmiş kullanımı kolay ve dokunma için eniyilenmiş bir arayüzle kombine eder.</p>
     <p xml:lang="uk">У програмах Gemini поєднується потужність основних програм Calligra для звичайних комп'ютерів (у випадку Calligra Gemini, це основні офісні програми, зокрема Words і Stage) та зручність користування на пристроях із сенсорним керуванням. При цьому тип документів лишається тим самим для обох режимів роботи.</p>
-    <p xml:lang="x-test">xxThe Gemini applications combine the power of Calligra's main applications (in Calligra Gemini's case the main office desktop applications, at the moment Words and Stage), with pleasant and explicitly touch optimised experiences based around the same document types.xx</p>
     <p xml:lang="zh-CN">Gemini 整合了 Calligra 主程序的强大功能 (目前主要包括 Words 和 Stage 的功能)，界面美观且针对触控进行了优化，方便进行文字处理和制作演示文稿。</p>
     <p xml:lang="zh-TW">Gemini 各應用程式合併了 Calligra 的主應用程式（Calligra Gemini 的情況是主要的桌面辦公室應用程式，目前包含 Words 和 Stage），並提供好用且為觸控設計過的體驗。</p>
     <p>Calligra itself is a large suite of applications, split into three main categories: Office applications, Graphics Applications and Project Management. Please visit the Calligra website to see full descriptions of the many tools.</p>
@@ -186,7 +181,6 @@
     <p xml:lang="sv">Själva Calligra är en stor programsvit, delad i tre huvudkategorier: Kontorsprogram, grafikprogram och projekthantering. Besök gärna Calligras webbsida för att se fullständiga beskrivningar av de många verktygen.</p>
     <p xml:lang="tr">Calligra’nın kendisi, üç ana kategoriye ayrılmış büyük bir uygulama takımıdır: Ofis uygulamaları, grafik uygulamaları ve proje yönetimi. Bu birçok araç üzerine daha çok bilgi almak için Calligra web sayfasını ziyaret edin.</p>
     <p xml:lang="uk">Calligra є великим комплектом програм, поділених на три основі категорії: офісні програми, графічні програми та програми для керування проєктами. Будь ласка, відвідайте сайт Calligra, щоб ознайомитися із повним описом багатьох інструментів.</p>
-    <p xml:lang="x-test">xxCalligra itself is a large suite of applications, split into three main categories: Office applications, Graphics Applications and Project Management. Please visit the Calligra website to see full descriptions of the many tools.xx</p>
     <p xml:lang="zh-CN">Calligra 本身是一款应用程序套件，包括三类程序：办公应用程序，图形应用程序和项目管理程序。如需查看这些程序的完整介绍，请移步 Calligra 项目网站。</p>
     <p xml:lang="zh-TW">Calligra 本身是一個不小的應用程式套組，包含三大分類：辦公室應用程式、圖形應用程式以及專案管理。請造訪 Calligra 網站來查看各工具的完整說明。</p>
     <ul>
@@ -218,7 +212,6 @@
       <li xml:lang="sv">Vanliga funktioner</li>
       <li xml:lang="tr">Ortak Özellikler</li>
       <li xml:lang="uk">Загальні можливості</li>
-      <li xml:lang="x-test">xxCommon Featuresxx</li>
       <li xml:lang="zh-CN">共通功能</li>
       <li xml:lang="zh-TW">通用功能</li>
     </ul>
@@ -250,7 +243,6 @@
     <p xml:lang="sv">Programmen i Calligra-sviten delar några gemensamma användargränssnittskoncept som ger dem ett modernt utseende bättre lämpat för dagens breda skärmar. Ett av dem är att det mesta formateringen görs med paneler placerade vid fönstrets sidor istället för längst upp. Det ger mer utrymme tillgängligt för själva dokumentinnehållet och undviker att dialogrutor öppnas ovanpå det. Om användaren så önskar, går det att ändra placering av panelerna omkring dokumentområdet, eller till och med riva loss dem och låta dem flyta fritt. Placeringen sparas och återanvänds nästa gång Calligra startas.</p>
     <p xml:lang="tr">Calligra Paketi’ndeki uygulamalar, ona günümüzün geniş ekranlarına daha uygun çağdaş bir görünüm kazandıran bazı ortak kullanıcı arabirimi kavramlarını paylaşır. Bunlardan biri, çoğu biçimlendirmenin, pencerelerin üstüne değil yanlarına yerleştirilen rıhtımlar kullanılarak yapılmasıdır. Bu, gerçek belge içerikleri için daha fazla alan sağlar ve bunun üzerinde pencerelerin açılmasını önler. Kullanıcı seçerse rıhtımların belge alanı etrafındaki yerleşimini yeniden düzenleyebilir veya hatta ayırarak serbestçe yüzmelerine izin verebilir. Düzenleme kaydedilir ve Calligra’nın bir sonraki açılışında yeniden kullanılır.</p>
     <p xml:lang="uk">У програмах комплекту Calligra використовуються типові концепції інтерфейсу користувача, що надає програмам вигляду, зручного у користуванні на сучасних широкоформатних дисплеях. Однією з цих концепцій є використання для форматування даних бічних панелей, які розташовано праворуч і ліворуч від області редагування, а не над нею. Це збільшує область самого документа і зменшує кількість додаткових контекстних вікон, які могли б перекривати вміст документа. Якщо потрібно, розташування бічних панелей можна змінити. Можна навіть відірвати їх від основного вікна програми і змусити довільно розташовуватися поза ним. Програми зберігають компонування бічних панелей і відновлюють його під час наступного сеансу роботи Calligra.</p>
-    <p xml:lang="x-test">xxThe applications in the Calligra Suite shares some common UI concepts that gives it a modern look better suited for the wide screens of today. One of them is that most formatting is done using dockers which are placed at the side of the windows instead of on the top. This makes more space available for the actual document contents and avoids opening dialogs on top of it. If the user chooses, s/he can rearrange the placement of the dockers around the document area or even tear loose them and let them float freely. The arrangement is saved and reused the next time Calligra is opened.xx</p>
     <p xml:lang="zh-CN">Calligra 套件中的应用程序具有一些通用的 UI 概念，使其有更适合当今宽屏的现代外观。 其中之一是大多数格式化操作都是使用停靠栏工作完成的，这些停靠栏工具在窗口的侧面而不是顶部。 这为实际文档内容提供了更多可用空间，并避免在其上打开对话框。用户也可以选择重新排列文件区域周围的停靠栏位置，甚至将它们分离出来自由浮动。 下次 Calligra 打开时会使用之前保存下来的排版。</p>
     <ul>
       <li>Embeddable Objects</li>
@@ -281,7 +273,6 @@
       <li xml:lang="sv">Inbäddningsbara objekt</li>
       <li xml:lang="tr">Gömülebilir Nesneler</li>
       <li xml:lang="uk">Вмонтовані об'єкти</li>
-      <li xml:lang="x-test">xxEmbeddable Objectsxx</li>
       <li xml:lang="zh-CN">可嵌入的对象</li>
       <li xml:lang="zh-TW">可嵌入的物件</li>
     </ul>
@@ -313,7 +304,6 @@
     <p xml:lang="sv">Det finns många objekt och former som kan infogas i ett dokument, såsom geometriska former, notblad och många andra fantastiska alternativ. Alla dessa former är tillgängliga i alla program, vilket gör det mycket enklare att implementera objekten.</p>
     <p xml:lang="tr">Geometrik şekiller, müzik notaları ve daha pek çok şaşırtıcı seçenek gibi belgenize ekleyebileceğiniz birçok nesne ve şekil vardır. Bu şekillerin tümü, tüm uygulamalarda vardır, bu da bu nesnelerin uygulanmasını çok daha kolay hale getirir.</p>
     <p xml:lang="uk">Передбачено можливість вставляння до ваших документів багатьох об'єктів та форм, зокрема геометричних форм, нотних записів, та ще багато чудових можливостей. Усі ці форми доступні у всіх програмах комплекту, що значно спрощує програмну реалізацію відповідних об'єктів.</p>
-    <p xml:lang="x-test">xxThere are many objects and shapes that you can insert into your document, such as geometric shapes, sheet music score, and many more amazing options. All of these shapes are available in all applications, which makes implementing these objects much easier.xx</p>
     <p xml:lang="zh-CN">这里有许多可以插入到文档中的对象和形状, 例如几何图形、乐谱，以及更多令人惊叹的选项。这些形状在所有应用程序中都可使用，这使得这些对象的应用变得更加容易。</p>
     <ul>
       <li>Standard file format</li>
@@ -346,7 +336,6 @@
       <li xml:lang="sv">Standardfilformat</li>
       <li xml:lang="tr">Standart belge biçimi</li>
       <li xml:lang="uk">Стандартизований формат файлів</li>
-      <li xml:lang="x-test">xxStandard file formatxx</li>
       <li xml:lang="zh-CN">标准文件格式</li>
       <li xml:lang="zh-TW">標準檔案格式</li>
     </ul>
@@ -378,7 +367,6 @@
     <p xml:lang="sv">Calligra använder Open Document Format (ODF) som huvudfilformat, vilket gör det kompatibelt med de flesta kontorsprogram, inklusive OpenOffice.org,LibreOffice och Microsoft Office. Det kan också importera Microsoft Office egna filformat med stor noggrannhet, i många fall den bästa som går att finna.</p>
     <p xml:lang="tr">Calligra, ana belge biçimi olarak Açık Belge Biçimi’ni (ODF) kullanır ve bu onu diğer birçok ofis uygulamasıyla (LibreOffice, Microsoft Office vb.) uyumlu yapar. Ayrıca, Microsoft Office’in yerel belge biçimlerini yüksek bir kesinlikle içe aktarır; çoğu zaman bu, bulabileceğinizin en iyisidir.</p>
     <p xml:lang="uk">У Calligra основним форматом файлів є Open Document Format (ODF). Це робить комплект програмного забезпечення сумісним із більшістю інших офісних програм, зокрема OpenOffice.org, LibreOffice та Microsoft Office. Також передбачено можливості імпортування даних у типових форматах Microsoft Office із достатньою точністю, у багатьох випадках найкращою точністю серед доступних.</p>
-    <p xml:lang="x-test">xxCalligra uses the Open Document Format (ODF) as its main file format which makes it compatible with most other office applications including OpenOffice.org, LibreOffice and Microsoft Office. It can also import the native file formats of Microsoft Office with great accuracy, in many cases the best you can find.xx</p>
     <p xml:lang="zh-CN">Calligra 使用开放文档格式 (ODF) 作为其主要文件格式，与大多数其他办公应用程序兼容，包括 OpenOffice.org，LibreOffice 和 Microsoft Office。 它还可以非常准确地导入 Microsoft Office 的原生格式，在许多情况下，这是您可以找到最好的方式。</p>
   </description>
   <url type="homepage">https://www.calligra.org/gemini/</url>
@@ -414,7 +402,6 @@
       <caption xml:lang="sv">En presentation inläst direkt från DropBox, i redigeringsläge</caption>
       <caption xml:lang="tr">Düzenle kipinde, DropBox’tan doğrudan yüklenen bir sunum</caption>
       <caption xml:lang="uk">Презентація, завантажена безпосередньо з DropBox, у режимі редагування</caption>
-      <caption xml:lang="x-test">xxA presentation loaded directly from DropBox, in Edit modexx</caption>
       <caption xml:lang="zh-CN">在编辑模式下直接从 DropBox 加载的演示文稿</caption>
       <caption xml:lang="zh-TW">一個直接從 DropBox 載入的簡報，處於編輯模式</caption>
       <image>https://cdn.kde.org/screenshots/calligra/presentation-loaded-from-dropbox.png</image>
@@ -448,7 +435,6 @@
       <caption xml:lang="sv">Ett textdokument i användargränssnitt med traditionell skrivbordsstil (skapandeläge)</caption>
       <caption xml:lang="tr">Oluştur kipinde, geleneksel masaüstü tarzı arabirimde bir metin belgesi</caption>
       <caption xml:lang="uk">Текстовий документ у традиційному інтерфейсі стільниці (режим створення)</caption>
-      <caption xml:lang="x-test">xxA text document in the traditional desktop style UI (Create mode)xx</caption>
       <caption xml:lang="zh-CN">传统桌面样式 UI 的文本文档 (新建模式)</caption>
       <caption xml:lang="zh-TW">利用傳統桌面風格介面的一個文字文件（建立模式）</caption>
       <image>https://cdn.kde.org/screenshots/calligra/words-desktop-mode.png</image>
@@ -482,7 +468,6 @@
       <caption xml:lang="sv">Ett textdokument i skapandeläge med visad anteckningspanel</caption>
       <caption xml:lang="tr">Oluştur kipinde, notlar paneli görünür bir metin belgesi</caption>
       <caption xml:lang="uk">Текстовий документ у режимі створення із показаною панеллю нотаток</caption>
-      <caption xml:lang="x-test">xxA text document in Create mode with the notes panel shownxx</caption>
       <caption xml:lang="zh-CN">新建模式下的文本文档，显示了备注面板</caption>
       <caption xml:lang="zh-TW">一個在建立模式下的文字文件，同時顯示筆記面板</caption>
       <image>https://cdn.kde.org/screenshots/calligra/words-touch-mode-with-notes-panel.png</image>

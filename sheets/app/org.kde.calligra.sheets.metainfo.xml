@@ -34,7 +34,6 @@
   <name xml:lang="sv">Calligra Sheets</name>
   <name xml:lang="tr">Calligra Tablolar</name>
   <name xml:lang="uk">Calligra Sheets</name>
-  <name xml:lang="x-test">xxCalligra Sheetsxx</name>
   <name xml:lang="zh-CN">Calligra Sheets</name>
   <name xml:lang="zh-TW">Calligra Sheets</name>
   <summary>Spreadsheet</summary>
@@ -71,7 +70,6 @@
   <summary xml:lang="sv">Kalkylark</summary>
   <summary xml:lang="tr">Hesap Tablosu</summary>
   <summary xml:lang="uk">Електронні таблиці</summary>
-  <summary xml:lang="x-test">xxSpreadsheetxx</summary>
   <summary xml:lang="zh-CN">电子表格处理软件</summary>
   <summary xml:lang="zh-TW">工作表</summary>
   <description>
@@ -110,7 +108,6 @@
     <p xml:lang="sv">Calligra Sheets är ett fullfjädrat beräknings- och kalkylarksverktyg. Använd det för att snabbt skapa och beräkna diverse affärsrelaterade kalkylark, såsom inkomster och utgifter, anställdas arbetstimmar, etc.</p>
     <p xml:lang="tr">Calligra Tablolar, tam özellikli bir hesap tablosu uygulamasıdır. Bu uygulamayı, çeşitli iş ile ilgili birçok hesap tablosunu; örneğin gelir/gider, çalışan mesai saatleri gibi, yaratmak için kullanabilirsiniz.</p>
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
-    <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p xml:lang="zh-CN">Calligra Sheets 是一款全功能的电子表格和计算统计程序。您可以使用它来快速创建电子表格并对数据进行各种计算处理，例如用度、工时等。</p>
     <p xml:lang="zh-TW">Calligra Sheets 是一個功能完善的計算與工作表工具。您可以使用它來快速建立並計算各種商業用工作表，像是收入與支出、員工工作時間等等。</p>
     <p>Features:</p>
@@ -147,7 +144,6 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
-    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>
     <ul>
@@ -184,7 +180,6 @@
       <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
       <li xml:lang="tr">Notlar tutmak veya düşünce haritaları oluşturmak için şekilleri kullanın</li>
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
-      <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li xml:lang="zh-CN">插入各种图形来进行标记或制作思维导图</li>
       <li xml:lang="zh-TW">用元件來做備註或是製作心智圖</li>
       <li>Large range of pre-defined templates</li>
@@ -219,7 +214,6 @@
       <li xml:lang="sv">Stort antal fördefinierade mallar</li>
       <li xml:lang="tr">Birçok amaç için önceden tanımlanmış şablonlar</li>
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
-      <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li xml:lang="zh-CN">种类丰富的预制模板</li>
       <li xml:lang="zh-TW">種類廣泛的樣本</li>
       <li>Powerful and comprehensive formula list</li>
@@ -254,7 +248,6 @@
       <li xml:lang="sv">Kraftfull och omfattande formellista</li>
       <li xml:lang="tr">Güçlü ve anlaşılabilir formüller listesi</li>
       <li xml:lang="uk">Потужний і повний список функцій.</li>
-      <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
       <li xml:lang="zh-CN">强大的和全面的公式列表</li>
       <li xml:lang="zh-TW">強大且完整的公式列表</li>
       <li>Work in a familiar environment</li>
@@ -289,7 +282,6 @@
       <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
       <li xml:lang="tr">Tanıdık bir çevrede çalışın</li>
       <li xml:lang="uk">Робота у знайомому середовищі.</li>
-      <li xml:lang="x-test">xxWork in a familiar environmentxx</li>
       <li xml:lang="zh-CN">与现有同类软件操作类似易上手</li>
       <li xml:lang="zh-TW">在習慣的環境下操作</li>
     </ul>
