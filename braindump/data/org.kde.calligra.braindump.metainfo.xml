@@ -43,7 +43,6 @@
   <name xml:lang="sv">Braindump</name>
   <name xml:lang="tr">Braindump</name>
   <name xml:lang="uk">Braindump</name>
-  <name xml:lang="x-test">xxBraindumpxx</name>
   <name xml:lang="zh-CN">Braindump</name>
   <name xml:lang="zh-TW">Braindump</name>
   <summary>Notes and ideas gathering</summary>
@@ -78,7 +77,6 @@
   <summary xml:lang="sv">Anteckningar och idéinsamling</summary>
   <summary xml:lang="tr">Notları ve fikirleri toplama</summary>
   <summary xml:lang="uk">Програма для впорядковування нотаток та ідей</summary>
-  <summary xml:lang="x-test">xxNotes and ideas gatheringxx</summary>
   <summary xml:lang="zh-CN">笔记和思路速记工具</summary>
   <summary xml:lang="zh-TW">筆記與想法收集</summary>
   <description>
@@ -115,7 +113,6 @@
     <p xml:lang="sv">Braindump är ett verktyg för att hämta och organisera innehållet i din hjärna (idéer, ritningar, bilder, texter …) på datorn. Det fungerar genom att låta dig skapa och redigera skrivtavlor, som är oändliga ytor där du kan lägga till texter, bilder, diagram, ritningar, etc.</p>
     <p xml:lang="tr">Braindump, aklınızdaki içerikleri (fikirler, çizimler, görseller, metinler…) bilgisayarına dökmenize ve organize etmenize yardımcı olan bir araçtır. Metin, görsel, çizelge, çizimler, vb. ekleyebileceğiniz sonsuz tuval olan beyaz tahtalar oluşturup düzenlemenize izin vererek çalışır.</p>
     <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>
-    <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
     <p xml:lang="zh-CN">Braindump 是一款用于快速记录和组织思路和信息的工具。您可以创建和编辑白板，在无限大小的画布中随意添加文字、图像、图表、绘图等。</p>
     <p xml:lang="zh-TW">Braindump 是一個用來將頭腦中的資訊（想法、繪圖、圖片、文字等等）記錄到電腦上並進行管理的工具。它提供建立與編輯數位白板的功能，讓您在無限畫布上可以加入文字、圖片、圖表、繪圖等等。</p>
   </description>
@@ -145,7 +142,6 @@
       <caption xml:lang="sv">Huvudfönster i Braindump som visar en musikpartition och många andra former</caption>
       <caption xml:lang="tr">Braindump’ın bir müzik partisyonu ve birçok başka şekli gösteren ana penceresi</caption>
       <caption xml:lang="uk">Головне вікно Braindump із показаною музичною партитурою та багатьма іншими формами</caption>
-      <caption xml:lang="x-test">xxMain window of Braindump showing a music partition and many other shapesxx</caption>
       <caption xml:lang="zh-CN">Braindump 主窗口展示了一个音乐分区以及许多其他图形</caption>
       <caption xml:lang="zh-TW">Braindump 主視窗，顯示音樂區域與其他多種物件</caption>
     </screenshot>
