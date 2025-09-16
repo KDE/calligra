@@ -5350,7 +5350,7 @@ msgstr "Seleccionar elemento"
 #: widgets/KoZoomMode.cpp:11
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: widgets/KoZoomMode.cpp:12
 msgid "Fit Page Width"

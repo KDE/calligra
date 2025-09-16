@@ -13300,7 +13300,7 @@ msgstr ""
 #: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
