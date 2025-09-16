@@ -1206,7 +1206,7 @@ msgstr "El tiempo de espera para la obtención se ha agotado"
 #: dialogs/LinkInsertionDialog.cpp:267
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr "Obtención del título: %1% completado"
+msgstr "Obtención del título: %1 % completado"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
