@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-07-06 22:38+0100\n"
+"PO-Revision-Date: 2025-09-20 16:28+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n:
@@ -3826,8 +3826,8 @@ msgid ""
 msgstr ""
 "La función COMPOUND() devuelve el valor de una inversión, dados el "
 "principal, tasa de interés nominal, frecuencia de composición y tiempo. Por "
-"ejemplo: 5000 € a un 12% de interés compuesto trimestral durante 5 años será "
-"COMPOUND(5000;0.12;4;5) o 9030.56 €."
+"ejemplo: 5000 € a un 12 % de interés compuesto trimestral durante 5 años "
+"será COMPOUND(5000;0.12;4;5) o 9030,56 €."
 
 #: functions/financial.xml:150
 #, kde-format
@@ -3848,8 +3848,8 @@ msgid ""
 msgstr ""
 "La función CONTINUOUS() calcula el rendimiento de un interés compuesto "
 "continuo, dado el principal, la tasa nominal y el tiempo en años. Por "
-"ejemplo: 1000 € devengando un 10% durante 1 año se vuelve "
-"CONTINUOUS(1000;.1;1) o $1105.17."
+"ejemplo: 1000 € devengando un 10 % durante 1 año se vuelve "
+"CONTINUOUS(1000;.1;1) o 1105,17 €."
 
 #: functions/financial.xml:172
 #, kde-format
@@ -4226,8 +4226,8 @@ msgid ""
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
 "La función EFFECT() calcula el rendimiento efectivo para una tasa de interés "
-"nominal (tasa anual). Por ejemplo, un interés del 8% compuesto mensualmente "
-"proporciona un rendimiento efectivo de EFFECT(.08; 12) o 8.3%."
+"nominal (tasa anual). Por ejemplo, un interés del 8 % compuesto mensualmente "
+"proporciona un rendimiento efectivo de EFFECT(.08; 12) o 8,3 %."
 
 #: functions/financial.xml:488
 #, kde-format
@@ -4337,8 +4337,8 @@ msgid ""
 msgstr ""
 "La función FV() devuelve el valor futuro de una inversión, dado el "
 "rendimiento y el tiempo transcurrido. Si tiene 1000 € es una cuenta bancaria "
-"produciendo un interés del 8%, tras dos años tendrá FV(1000;0.08;2) o "
-"1166.40 €."
+"produciendo un interés del 8 %, tras dos años tendrá FV(1000;0.08;2) o "
+"1166,40 €."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4367,8 +4367,8 @@ msgid ""
 msgstr ""
 "La función FV_ANNUITY() devuelve el valor futuro de un flujo de pagos dados "
 "el importe del pago, la tasa de interés y el número de periodos. Por "
-"ejemplo: si recibe 500 € por año durante 20 años, y los invierte al 8%, el "
-"total al cabo de 20 años será FV_annuity(500;0.08;20) o 22,880.98 €. Esta "
+"ejemplo: si recibe 500 € por año durante 20 años, y los invierte al 8 %, el "
+"total al cabo de 20 años será FV_annuity(500;0.08;20) o 22,880,98 €. Esta "
 "función supone que los pagos se hacen al final de cada periodo."
 
 #: functions/financial.xml:594
@@ -4596,9 +4596,9 @@ msgid ""
 msgstr ""
 "La función LEVEL_COUPON() calcula el valor de un bono con una corriente de "
 "pagos de cupones que son iguales durante la vida del bono. Por ejemplo: si "
-"la tasa de interés es del 10%, un bono de 1000 € con cupones semestrales a "
-"una tasa del 13% que vece en 4 años vale LEVEL_COUPON(1000;.13;2;4;.1) o "
-"1096.95 €."
+"la tasa de interés es del 10 %, un bono de 1000 € con cupones semestrales a "
+"una tasa del 13 % que vece en 4 años vale LEVEL_COUPON(1000;.13;2;4;.1) o "
+"1096,95 €."
 
 #: functions/financial.xml:752
 #, kde-format
@@ -4657,7 +4657,7 @@ msgstr "MIRR(valores; inversión; reinversión)"
 #: functions/financial.xml:810
 #, no-c-format, kde-format
 msgid "MIRR({100;200;-50;300;-200}, 5%, 6%) equals 34.2823387842%"
-msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) es igual a 34.2823387842%"
+msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) es igual a 34,2823387842 %"
 
 #: functions/financial.xml:819
 #, kde-format
@@ -4674,8 +4674,8 @@ msgid ""
 msgstr ""
 "La función NOMINAL() calcula el tipo de interés nominal (declarado) para un "
 "tipo de interés efectivo (anualizado) compuesto en ciertos intervalos. Por "
-"ejemplo: para ganar un 8% en una cuenta compuesta mensualmente, necesita un "
-"retorno de NOMINAL(.08;12) o 7.72%."
+"ejemplo: para ganar un 8 % en una cuenta compuesta mensualmente, necesita un "
+"retorno de NOMINAL(.08;12) o 7,72 %."
 
 #: functions/financial.xml:828
 #, kde-format
@@ -4750,7 +4750,7 @@ msgstr "NPV(Tasa; Valores)"
 #: functions/financial.xml:887
 #, no-c-format, kde-format
 msgid "NPV(100%;4;5;7) = 4.125"
-msgstr "NPV(100%;4;5;7) = 4.125"
+msgstr "NPV(100%;4;5;7) = 4,125"
 
 #: functions/financial.xml:908 functions/financial.xml:951
 #, kde-format
@@ -4787,7 +4787,7 @@ msgid ""
 "returns 90.991042345"
 msgstr ""
 "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2) "
-"devuelve 90.991042345"
+"devuelve 90,991042345"
 
 #: functions/financial.xml:959 functions/financial.xml:1373
 #: functions/financial.xml:1449 functions/financial.xml:1487
@@ -4820,7 +4820,7 @@ msgid ""
 "returns 4.997775351"
 msgstr ""
 "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2) "
-"devuelve 4.997775351"
+"devuelve 4,997775351"
 
 #: functions/financial.xml:991
 #, kde-format
@@ -4931,7 +4931,7 @@ msgid ""
 "103.819218241"
 msgstr ""
 "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%) devuelve "
-"103.819218241"
+"103,819218241"
 
 #: functions/financial.xml:1106 functions/financial.xml:1162
 #, kde-format
@@ -4950,7 +4950,7 @@ msgstr ""
 "La función PV() devuelve el valor actual de una inversión -- el valor de hoy "
 "de una suma de dinero en el futuro, dada la tasa de interés o inflación. Por "
 "ejemplo, si necesita 1166.40 € para su nueva computadora y quiere comprarla "
-"en dos años mientras obtiene un 8% de interés, necesita empezar con "
+"en dos años mientras obtiene un 8 % de interés, necesita empezar con "
 "PV(1166.4,0.08;2) o 1000 €."
 
 #: functions/financial.xml:1119
@@ -4974,7 +4974,7 @@ msgid ""
 msgstr ""
 "La función PV_ANNUITY() devuelve el valor actual de una anualidad o flujo de "
 "pagos. Por ejemplo: un boleto de lotería de «un millón de euros» que pague "
-"50000 € al año durante 20 años, con una tasa de interés del 5%, en realidad "
+"50000 € al año durante 20 años, con una tasa de interés del 5 %, en realidad "
 "vale PV_ANNUITY(50000;0.05;20) o 623111 €. Esta función supone que los pagos "
 "se hacen al final de cada periodo."
 
@@ -5260,7 +5260,7 @@ msgid ""
 msgstr ""
 "XNPV(5%;B1:B4;C1:C4) suponiendo que B1:B4 contiene -20000, 4000, 12000, 8000 "
 "mientras C1:C4 contiene «=DATE(2000;1;1)», «=DATE(2000;6;1)», "
-"«=DATE(2000;12;30)», «=DATE(2001;3;1)» devuelve 2907.83187"
+"«=DATE(2000;12;30)», «=DATE(2001;3;1)» devuelve 2907,83187"
 
 #: functions/financial.xml:1461
 #, kde-format
@@ -5305,7 +5305,7 @@ msgid ""
 "returns 0.050000000"
 msgstr ""
 "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
-"devuelve 0.050000000"
+"devuelve 0,050000000"
 
 #: functions/financial.xml:1520
 #, no-c-format, kde-format
@@ -5315,8 +5315,8 @@ msgid ""
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
 "La función ZERO_COUPON() calcula el valor de un bono sin cupón (descuento "
-"puro). Por ejemplo: si la tasa de interés es del 10%, un bono de 1000 € que "
-"vence en 20 años tiene un valor de ZERO_COUPON(1000;.1;20) o 148.64 €."
+"puro). Por ejemplo: si la tasa de interés es del 10 %, un bono de 1000 € que "
+"vence en 20 años tiene un valor de ZERO_COUPON(1000;.1;20) o 148,64 €."
 
 #: functions/financial.xml:1521
 #, kde-format
@@ -7222,7 +7222,7 @@ msgstr "LOGn(12;2) es igual a 3.5849625"
 #: functions/math.xml:733
 #, kde-format
 msgid "The ROOTN() function returns the non-negative nth root of x."
-msgstr "La función ROOTN() devuelve la n-ésima raíz no negativa de x."
+msgstr "La función ROOTN() devuelve la enésima raíz no negativa de x."
 
 #: functions/math.xml:734
 #, kde-format
@@ -7865,7 +7865,7 @@ msgstr "ROUNDDOWN(-1.252) es igual a -1"
 #: functions/math.xml:1181
 #, kde-format
 msgid "Nth term"
-msgstr "Término n-ésimo"
+msgstr "Término enésimo"
 
 #: functions/math.xml:1185
 #, kde-format
@@ -7874,7 +7874,7 @@ msgid ""
 "8, 13, 21...), in which each number, after the first two, is the sum of the "
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
-"La función FIB calcula el término n-ésimo de una sucesión de Fibonacci (1, "
+"La función FIB calcula el término enésimo de una sucesión de Fibonacci (1, "
 "1, 2, 3, 5, 8, 13, 21…), en la que cada número, después de los dos primeros, "
 "es la suma de los dos números precedentes. FIB(0) es 0 por definición."
 
@@ -9425,7 +9425,7 @@ msgid ""
 "This is equal to the Nth root of the product of the terms."
 msgstr ""
 "La función GEOMEAN() devuelve la media geométrica de los argumentos "
-"indicados. Esto es igual a la n-ésima raíz del productos de los términos."
+"indicados. Esto es igual a la enésima raíz del productos de los términos."
 
 #: functions/statistical.xml:518
 #, kde-format
@@ -10001,10 +10001,10 @@ msgid ""
 "MEDIAN. Blank cells will be considered as a zero, and cells with text will "
 "be ignored."
 msgstr ""
-"La función PERCENTILE() devuelve la n-ésima muestra percentil de los valores "
+"La función PERCENTILE() devuelve la enésima muestra percentil de los valores "
 "de los datos en Datos. Un percentil devuelve el valor de escala para una "
 "serie de datos que va del menor (alfa=0) al mayor (alfa=1) de una serie de "
-"datos. Para alfa=25%, el percentil corresponde al primer cuartil; alfa=50% "
+"datos. Para alfa=25 %, el percentil corresponde al primer cuartil; alfa=50 % "
 "es la mediana. Las celdas en blancos se consideran cero, y las celdas con "
 "texto son ignoradas."
 
@@ -15141,7 +15141,7 @@ msgid ""
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
 "Cuando tenga un número en la celda actual y cambie del formato de celda "
-"Genérico a Porcentaje, el número de la celda se multiplicará por 100%.\n"
+"Genérico a Porcentaje, el número de la celda se multiplicará por 100 %.\n"
 "Por ejemplo, si introduce 12 y define el formato de celda como porcentaje, "
 "el número será 1,200 %. Si vuelve a establecer el formato genérico en la "
 "celda, volverá a ser 12.\n"

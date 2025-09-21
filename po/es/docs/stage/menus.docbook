@@ -1116,9 +1116,9 @@ and choose a <guilabel
 > que escala la diapositiva al nivel de zum adecuado para que se vea completamente en la ventana abierta, y <guimenuitem
 >Ajustar a la anchura de la página</guimenuitem
 > que escala la diapositiva al nivel de zum adecuado para que ocupe todo el ancho de la ventana, aunque en este caso es posible que tenga que desplazarse verticalmente. También hay muchas otras opciones de escala, desde <guimenuitem
->33%</guimenuitem
+>33 %</guimenuitem
 > a <guimenuitem
->500%</guimenuitem
+>500 %</guimenuitem
 >.</para>
 </listitem>
 </varlistentry>
