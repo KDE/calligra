@@ -104,6 +104,7 @@
     <p xml:lang="tr">Calligra Sözcükler, sezgisel bir sözcük işlemcisi ve masaüstü yayım uygulamasıdır. Bununla, zevkle ve kolaylıkla bilgilendirici ve alımlı belgeler oluşturabilirsiniz.</p>
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
     <p xml:lang="zh-CN">Calligra Word 是一款直观易用的文字处理和桌面出版应用程序。您可以用它轻松创建内容丰富和版式美观的文档。</p>
+    <p xml:lang="zh-TW">Words 是一個符合直覺的文書處理軟體與桌面出版應用程式。利用 Words，您可以輕易開心地建立富含資訊且吸引人的文件。</p>
     <!-- Sheet -->
     <p>
       Calligra Sheets is a fully-featured calculation and spreadsheet tool.
@@ -160,6 +161,7 @@
     <p xml:lang="tr">Calligra Sahne, kullanımı kolay; ancak yine de esnek bir sunum uygulamasıdır. Grafiklerden metne, çizelgelerden resimlere kadar zengin çeşitlilikte öğeler içeren sunumları kolayca oluşturabilirsiniz. Calligra Sahne, bir eklenti sistemi aracılığıyla genişletilebilir, bu nedenle yeni efektler, yeni içerik ögeleri veya hatta sunumunuzu yönetmenin yeni yollarını eklemek kolaydır. Calligra ile tümleşim sayesinde, Calligra içerik ögelerinin tüm gücü ve esnekliği Sahne’ye sunulur.</p>
     <p xml:lang="uk">Calligra Stage — проста, але потужна програма для роботи з презентаціями. За її допомогою ви без проблем зможете створити презентацію з багатим набором елементів, від графіки до тексту, від діаграм до зображень. Можливості Calligra Stage можна розширити за допомогою системи додатків: ви можете додати нові ефекти, нові елементи вмісту і навіть нові способи керування презентацією. Через тісну інтеграцію з рештою програм Calligra ви можете скористатися усіма потужними та гнучкими елементами решти програм Calligra безпосередньо у Stage.</p>
     <p xml:lang="zh-CN">Calligra Stage 是一款易学易用却又不失强大的演示文稿制作与展示程序。您可以使用它方便地制作样式美观，包含文字、图形、图像、图表在内的演示文稿。Calligra Stage 可以通过插件进行扩展，可以方便地添加更多特效、视觉元素和演示文稿管理手段。Calligra Stage 是 Callibra 办公套件的组成部分。所有其他 Calligra 组件的功能和内容都可在 Calligra Stage 中使用。</p>
+    <p xml:lang="zh-TW">Calligra Stage 是一個容易使用但仍然有彈性的簡報應用程式。它讓您可以輕易的建立包含各式各樣元素的簡報，像是圖形、文字、圖表與影像。Calligra Stage 可透過外掛程式系統進行擴展，可以輕易添加效果、新的內容元素，或甚至是管理簡報的新方法。由於它與 Calligra 整合，所有 Calligra 內容元素的功能和彈性都可以從 Stage 使用。</p>
     <!-- Karbon -->
     <p>
       Karbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible.
@@ -188,6 +190,7 @@
     <p xml:lang="tr">Karbon, kullanımı kolay, son derece özelleştirilebilir ve genişletilebilir bir kullanıcı arayüzüne sahip bir vektör çizim uygulamasıdır. Bu, Karbon’u vektör grafikleri dünyasını keşfetmeye başlayan kullanıcılar ve nefes kesici vektör sanatı yaratmak isteyen sanatçılar için harika bir uygulama haline getirir.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="zh-CN">Karbon 是一款矢量绘图程序，具有易用、高度可定制和可扩展的用户界面。它既适合初次接触矢量图形的新手小试牛刀，也适合经验丰富的画师绘制精美的作品。</p>
+    <p xml:lang="zh-TW">Karbon 是一個向量繪圖應用程式，提供容易使用且極度可自訂又可擴展的使用者介面。Karbon 對於向量圖形初學者與專家皆適合。</p>
   </description>
   <url type="homepage">https://www.calligra.org/words/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrawords</url>
@@ -216,6 +219,7 @@
       <caption xml:lang="tr">Ana düzenleyicide rastgele bir metin parçası gösteren Calligra Sözcükler ana penceresi</caption>
       <caption xml:lang="uk">Головне вікно Calligra Words із випадковим текстом у основному редакторі</caption>
       <caption xml:lang="zh-CN">Calligra Words 主窗口在主编辑器中显示随机文本</caption>
+      <caption xml:lang="zh-TW">Calligra Words 主視窗，在主編輯器當中顯示一些隨機文字</caption>
     </screenshot>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligrasheets/calligrasheets.png</image>
