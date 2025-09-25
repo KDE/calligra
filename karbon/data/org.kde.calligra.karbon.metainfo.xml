@@ -444,6 +444,7 @@
       <li xml:lang="tr">Yıldızlar, daire/elips, dikdörtgen, görüntü gibi temel şekiller dahil olmak üzere önceden tanımlanmış birçok şekil içerir</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
       <li xml:lang="zh-CN">包含大量预制形状，如星形、圆形、椭圆形、矩形、图像等</li>
+      <li xml:lang="zh-TW">包含許多預先定義的形狀物件，包含星星、圓形/橢圓、矩形、影像等基礎物件</li>
       <li>
         Artistic text shape with support for following path outlines (i.e. text on path)
       </li>
@@ -475,6 +476,7 @@
       <li xml:lang="tr">Aşağıdaki yol ana hatlarını destekleyen sanatsal metin şekli (örn. yol üzerindeki metin)</li>
       <li xml:lang="uk">Форма художнього тексту для розташування тексту вздовж контуру.</li>
       <li xml:lang="zh-CN">艺术字形状支持文本跟随路径</li>
+      <li xml:lang="zh-TW">藝術文字物件，支援跟隨路徑輪廓（亦即文字路徑）</li>
       <li>
         Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects
       </li>
@@ -506,6 +508,7 @@
       <li xml:lang="tr">Boole küme işlemleri, yol düzleştirme, yuvarlama ve iyileştirme gibi karmaşık yol işlemleri ve efektleri ile burma/kıstırma efektleri</li>
       <li xml:lang="uk">Складні дії над контурами та ефекти, зокрема набір булівських операцій, спрощення контуру, заокруглення та покращення, ефекти вихору та втягування</li>
       <li xml:lang="zh-CN">复杂路径操作和特效，例如布尔运算、路径扁平化、简化和优化，以及旋转和揉捏特效等</li>
+      <li xml:lang="zh-TW">複雜路徑操作、布林集操作等效果、路徑扁平化、圓滑化與改善，以及漩渦/擠壓效果</li>
       <li>
         Extensible by writing plugins for new tools, shapes and dockers
       </li>
@@ -538,6 +541,7 @@
       <li xml:lang="tr">Yeni araçlar, şekiller ve rıhtımlar için eklentiler yazarak genişletilebilir</li>
       <li xml:lang="uk">Можливість розширення додатками нових інструментів, форм та панелей.</li>
       <li xml:lang="zh-CN">可通过自行编写插件制作新工具、形状和面板</li>
+      <li xml:lang="zh-TW">可藉由撰寫外掛程式提供新工具、物件與工具面板，進行擴展</li>
     </ul>
   </description>
   <url type="homepage">https://calligra.org/karbon/</url>
