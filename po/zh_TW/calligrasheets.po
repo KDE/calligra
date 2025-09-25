@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-05-19 22:37+0900\n"
+"PO-Revision-Date: 2025-09-25 02:01+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n:
@@ -6992,13 +6992,7 @@ msgid "Mode (optional)"
 msgstr "Mode (選擇性的)"
 
 #: functions/math.xml:863
-#, fuzzy, kde-format
-#| msgid ""
-#| "The CEILING() function rounds x up (away from zero) to the nearest "
-#| "multiple of Significance. The default value for Significance is 1 (or -1 "
-#| "if the value is negative), which means rounding up to the nearest "
-#| "integer. If the Mode parameter is non-zero, the function rounds away from "
-#| "zero, instead of up towards the positive infinity."
+#, kde-format
 msgid ""
 "The CEILING() function rounds x up (away from zero) to the nearest multiple "
 "of Significance which is greater than the input. The default value for "
@@ -7006,9 +7000,9 @@ msgid ""
 "to the nearest integer. If the Mode parameter is non-zero, the function "
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
-"CEILING() 函式會將 x 的值做無條件進入到 Significance 的倍數。預設的 "
-"Significance 的值為 1（若 x 為負值則預設值為 -1），表示會無條件進入到整數。"
-"若 Mode 為非 0 的值，則此函式會直接捨去，而不進位。"
+"CEILING() 函式會將 x 的值做無條件進位到 Significance 比 x 大的下一個倍數。預"
+"設的 Significance 的值為 1（若 x 為負值則預設值為 -1），表示會無條件進入到整"
+"數。若 Mode 為非 0 的值，則此函式會直接捨去，而不進位。"
 
 #: functions/math.xml:864
 #, kde-format
@@ -7043,19 +7037,7 @@ msgid ""
 msgstr "將 x 無條件捨去為最接近 Significance 的倍數。"
 
 #: functions/math.xml:899
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FLOOR() function rounds x down (towards zero) to the nearest multiple "
-#| "of Significance.\n"
-#| "                The default value for Significance is 1, if x is "
-#| "positive. It is -1, if the value is negative,\n"
-#| "                which means rounding up to the nearest integer.\n"
-#| "                If mode is given and not equal to zero, the amount of x "
-#| "is rounded toward zero to a multiple\n"
-#| "                of significance and then the sign applied. Otherwise, it "
-#| "rounds toward negative infinity.\n"
-#| "                    If any of the two parameters x or Significance is "
-#| "zero, the result is zero."
+#, kde-format
 msgid ""
 "The FLOOR() function rounds x down (towards zero) to the nearest multiple of "
 "Significance which is smaller than the input.\n"
@@ -7069,10 +7051,10 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
-"FLOOR() 函式會將 x 的值做無條件捨去到 Significance 的倍數。預設的 "
-"Significance 的值為 1（若 x 為負值則預設值為 -1），表示會無條件捨去到整數。如"
-"果有指定模式，而且不為 0，則 x 會被捨去到 significance 的倍數，並套上符號。否"
-"則會往負無限大捨去。如果 x 或 Significance 任一為 0，則傳回值為 0。"
+"FLOOR() 函式會將 x 的值做無條件捨去到 Significance 比 x 小的下一個倍數。預設"
+"的 Significance 的值為 1（若 x 為負值則預設值為 -1），表示會無條件捨去到整"
+"數。如果有指定模式，而且不為 0，則 x 會被捨去到 significance 的倍數，並套上符"
+"號。否則會往負無限大捨去。如果 x 或 Significance 任一為 0，則傳回值為 0。"
 
 #: functions/math.xml:900
 #, kde-format
@@ -8515,13 +8497,7 @@ msgid "COMBIN(5;5) returns 1"
 msgstr "COMBIN(5;5) 傳回 1"
 
 #: functions/statistical.xml:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "The COMBINA() function calculates the count of possible combinations. The "
-#| "first parameter is the total count of elements. The second parameter is "
-#| "the count of elements to choose. Both parameters should be positive and "
-#| "the first parameter should not be less than the second. Otherwise the "
-#| "function returns an error."
+#, kde-format
 msgid ""
 "The COMBINA() function calculates the count of possible combinations "
 "allowing repetition. The first parameter is the total count of elements. The "
@@ -8529,27 +8505,24 @@ msgid ""
 "Both parameters should be positive and the first parameter should not be "
 "less than the second. Otherwise the function returns an error."
 msgstr ""
-"COMBINA() 函數計算可能的組合的次數。第一個參數是元素的總數。第二個參數是要選"
-"擇的元素數。兩個參數都應該是正數且第一個參數不應該小於第二個。否則函數會傳回"
-"錯誤。"
+"COMBINA() 函數計算可能的組合的次數，允許重複。第一個參數是元素的總數。第二個"
+"參數是要選擇的元素數，允許重複。兩個參數都應該是正數且第一個參數不應該小於第"
+"二個。否則函數會傳回錯誤。"
 
 #: functions/statistical.xml:207
-#, fuzzy, kde-format
-#| msgid "COMBIN(total;chosen)"
+#, kde-format
 msgid "COMBINA(total;chosen)"
-msgstr "COMBIN(total;chosen)"
+msgstr "COMBINA(total;chosen)"
 
 #: functions/statistical.xml:208
-#, fuzzy, kde-format
-#| msgid "COMBIN(12;5) returns 792"
+#, kde-format
 msgid "COMBINA(12;5) returns 4368"
-msgstr "COMBIN(12;5) 傳回 792"
+msgstr "COMBINA(12;5) 傳回 4368"
 
 #: functions/statistical.xml:209
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr "COMBIN(5;5) 傳回 1"
+msgstr "COMBINA(5;5) 傳回 126"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -9577,10 +9550,9 @@ msgid "If not 0, Data is ranked in ascending order."
 msgstr "若非 0，則以遞增排序。"
 
 #: functions/statistical.xml:1044
-#, fuzzy, kde-format
-#| msgid "RSQ(Value; Data; Order)"
+#, kde-format
 msgid "RANK(Value; Data; Order)"
-msgstr "RSQ(Value; Data; Order)"
+msgstr "RANK(Value; Data; Order)"
 
 #: functions/statistical.xml:1045
 #, kde-format
@@ -9822,10 +9794,9 @@ msgid ""
 msgstr "STEYX() 函數計算方程式中預測 Y 值與每個 X 的標準差。"
 
 #: functions/statistical.xml:1322
-#, fuzzy, kde-format
-#| msgid "SLOPE(y;x)"
+#, kde-format
 msgid "STEYX(y;x)"
-msgstr "SLOPE(y;x)"
+msgstr "STEYX(y;x)"
 
 #: functions/statistical.xml:1338 functions/statistical.xml:1342
 #: functions/statistical.xml:1356 functions/statistical.xml:1360
@@ -9993,12 +9964,12 @@ msgid ""
 msgstr ""
 
 #: functions/statistical.xml:1437
-#, fuzzy, kde-format
-#| msgid "TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])"
+#, kde-format
 msgid ""
 "TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
 "FALSE]]])"
-msgstr "TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])"
+msgstr ""
+"TREND(已知 Y 範圍; [已知 X 範圍; [新的 X 範圍; [允許偏移量=TRUE/FALSE]]])"
 
 #: functions/statistical.xml:1448
 #, kde-format
@@ -10233,18 +10204,14 @@ msgid "VARP(6;7;8) equals 0.6666667..."
 msgstr "VARP(6;7;8) 等於 0.6666667..."
 
 #: functions/statistical.xml:1660
-#, fuzzy, kde-format
-#| msgid ""
-#| "The VARPA() function calculates the variance based on an entire "
-#| "population. Text and boolean values that evaluate to FALSE are counted as "
-#| "0, boolean value that evaluate to TRUE are counted as 1."
+#, kde-format
 msgid ""
 "The VARPA() function calculates the variance based on an entire population. "
 "Text and boolean values that evaluate to FALSE are counted as 0, boolean "
 "value that evaluate to TRUE are counted as 1. Empty cells are not counted."
 msgstr ""
 "VARPA() 函數計算基於整個母群體的變異數。文字與布林值為 FALSE 時會記為 0 ，布"
-"林值為 TRUE 時記為 1 。"
+"林值為 TRUE 時記為 1。不會算空白的儲存格。"
 
 #: functions/statistical.xml:1661
 #, kde-format
@@ -12010,27 +11977,24 @@ msgid "Calligra Sheets"
 msgstr "Calligra Sheets"
 
 #: part/AboutData.h:28
-#, fuzzy, kde-format
-#| msgid "Calligra Spreadsheet Application"
+#, kde-format
 msgid "Spreadsheet Application"
-msgstr "Calligra 試算表應用程式"
+msgstr "試算表應用程式"
 
 #: part/AboutData.h:30
-#, fuzzy, kde-format
-#| msgid "(c) 1998-2011, The Calligra Sheets Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "(c) 1998-2011, Calligra Sheets 開發團隊"
+msgstr "Copyright 1998-%1, Calligra Sheets 開發團隊"
 
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "維護者"
+msgstr "維護者/移植到 Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12043,10 +12007,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "維護者"
+msgstr "前任維護者"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -14295,7 +14258,7 @@ msgstr "刪除線"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "選擇字型大小。"
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -14325,16 +14288,14 @@ msgid "Cell Format"
 msgstr "儲存格格式"
 
 #: ui/dialogs/LayoutDialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "儲存格格式"
+msgstr "設定儲存格格式"
 
 #: ui/dialogs/LayoutDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "一般(&G)"
+msgstr "一般"
 
 #: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
@@ -14342,16 +14303,14 @@ msgid "Border"
 msgstr "框線"
 
 #: ui/dialogs/LayoutDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "背景(&G)"
+msgstr "背景"
 
 #: ui/dialogs/LayoutDialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "儲存格保護(&C)"
+msgstr "儲存格保護"
 
 #: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
@@ -14502,20 +14461,12 @@ msgstr ""
 "的格式來顯示 00:00。"
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "日期與時間"
+msgstr "日期時間"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -14524,9 +14475,9 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"要輸入日期，您必須以 KDE 系統設定裡的「通用外觀與行為」中的「地域」─「國家/地"
+"要輸入日期時間，您必須以系統設定裡的「通用外觀與行為」中的「地域」─「國家/地"
 "區與語言」─「時間與日期」分頁裡定義的方式來輸入，包括日期格式與短日期格式。\n"
-"您也可以拖放日期，則下個儲存格也會有日期。"
+"您也可以拖放日期，則下個儲存格也會有日期時間。"
 
 #: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
