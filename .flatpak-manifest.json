@@ -189,7 +189,7 @@
             "name": "librevenge",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
+                "--without-docs",
                 "--disable-tests",
                 "--disable-werror"
             ],
@@ -212,8 +212,8 @@
             "name": "libodfgen",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
-                "--disable-tests"
+                "--without-docs",
+                "--disable-test"
             ],
             "builddir": true,
             "sources": [
@@ -234,7 +234,7 @@
             "name": "libvisio",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
+                "--without-docs",
                 "--disable-tests"
             ],
             "builddir": true,
@@ -256,8 +256,7 @@
             "name": "libwpd",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
-                "--disable-tests"
+                "--without-docs"
             ],
             "builddir": true,
             "sources": [
@@ -278,8 +277,7 @@
             "name": "libwpg",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
-                "--disable-tests"
+                "--without-docs"
             ],
             "builddir": true,
             "sources": [
@@ -300,8 +298,7 @@
             "name": "libwps",
             "buildsystem": "autotools",
             "config-opts": [
-                "--disable-docs",
-                "--disable-tests"
+                "--without-docs"
             ],
             "builddir": true,
             "sources": [
