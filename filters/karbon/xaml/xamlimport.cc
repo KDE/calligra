@@ -302,10 +302,11 @@ XAMLImport::parseColor(VColor &color, const QString &s)
     } else {
         QString rgbColor = s.trimmed();
         QColor c;
-        if (rgbColor.startsWith('#'))
-            c.setNamedColor(rgbColor);
-        else
+        if (rgbColor.startsWith('#')) {
+            c = QColor::fromString(rgbColor);
+        } else {
             c = parseColor(rgbColor);
+        }
         color.set(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0);
     }
 }

@@ -43,12 +43,14 @@ QString OoUtils::expandWhitespace(const KoXmlElement& tag)
     return result.fill(QChar(32), howmany);
 }
 
-bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QColor * color)
+bool OoUtils::parseBorder(const QString &tag, double *width, int *style, QColor *color)
 {
-    //string like "0.088cm solid #800000"
+    // string like "0.088cm solid #800000"
 
-    if (tag.isEmpty() || tag == "none" || tag == "hidden") // in fact no border
+    if (tag.isEmpty() || tag == "none" || tag == "hidden") {
+        // in fact no border
         return false;
+    }
 
     QString _width = tag.section(' ', 0, 0);
     QString _style = tag.section(' ', 1, 1);
@@ -56,23 +58,27 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
 
     *width = KoUnit::parseValue(_width, 1.0);
 
-    if (_style == "dashed")
+    if (_style == "dashed") {
         *style = 1;
-    else if (_style == "dotted")
+    } else if (_style == "dotted") {
         *style = 2;
-    else if (_style == "dot-dash")   // not in xsl/fo, but in OASIS (in other places)
+    } else if (_style == "dot-dash") {
+        // not in xsl/fo, but in OASIS (in other places)
         *style = 3;
-    else if (_style == "dot-dot-dash")   // not in xsl/fo, but in OASIS (in other places)
+    } else if (_style == "dot-dot-dash") {
+        // not in xsl/fo, but in OASIS (in other places)
         *style = 4;
-    else if (_style == "double")
+    } else if (_style == "double") {
         *style = 5;
-    else
+    } else {
         *style = 0;
+    }
 
-    if (_color.isEmpty())
+    if (_color.isEmpty()) {
         *color = QColor();
-    else
-        color->setNamedColor(_color);
+    } else {
+        *color  = QColor::fromString(_color);
+    }
 
     return true;
 }

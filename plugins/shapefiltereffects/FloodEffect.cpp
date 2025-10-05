@@ -12,6 +12,8 @@
 #include <KLocalizedString>
 #include <QPainter>
 
+using namespace Qt::StringLiterals;
+
 FloodEffect::FloodEffect()
     : KoFilterEffect(FloodEffectId, i18n("Flood fill"))
     , m_color(Qt::black)
@@ -39,8 +41,9 @@ QImage FloodEffect::processImage(const QImage &image, const KoFilterEffectRender
 
 bool FloodEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     m_color = Qt::black;
 
@@ -48,31 +51,35 @@ bool FloodEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingC
         QString colorStr = element.attribute("flood-color").trimmed();
         if (colorStr.startsWith(QLatin1String("rgb("))) {
             QStringList channels = colorStr.mid(4, colorStr.length() - 5).split(',');
-            float r = channels[0].toDouble();
-            if (channels[0].contains('%'))
+            auto r = channels[0].toDouble();
+            if (channels[0].contains(u'%')) {
                 r /= 100.0;
-            else
+            } else {
                 r /= 255.0;
-            float g = channels[1].toDouble();
-            if (channels[1].contains('%'))
+            }
+            double g = channels[1].toDouble();
+            if (channels[1].contains(u'%')) {
                 g /= 100.0;
-            else
+            } else {
                 g /= 255.0;
-            float b = channels[2].toDouble();
-            if (channels[2].contains('%'))
+            }
+            double b = channels[2].toDouble();
+            if (channels[2].contains(u'%')) {
                 b /= 100.0;
-            else
+            } else {
                 b /= 255.0;
-            m_color.setRgbF(r, g, b);
+            }
+            m_color.setRgbF(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b));
 
         } else {
-            m_color.setNamedColor(colorStr);
+            m_color = QColor::fromString(colorStr);
         }
         // TODO: add support for currentColor
     }
 
-    if (element.hasAttribute("flood-opacity"))
-        m_color.setAlphaF(element.attribute("flood-opacity").toDouble());
+    if (element.hasAttribute("flood-opacity")) {
+        m_color.setAlphaF(static_cast<float>(element.attribute("flood-opacity").toDouble()));
+    }
 
     return true;
 }
@@ -84,8 +91,9 @@ void FloodEffect::save(KoXmlWriter &writer)
     saveCommonAttributes(writer);
 
     writer.addAttribute("flood-color", m_color.name());
-    if (m_color.alpha() < 255)
+    if (m_color.alpha() < 255) {
         writer.addAttribute("flood-opacity", QString("%1").arg(m_color.alphaF()));
+    }
 
     writer.endElement();
 }

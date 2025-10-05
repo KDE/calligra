@@ -602,14 +602,12 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
 
         color = QColor(r.toInt(), g.toInt(), b.toInt());
     } else {
-        QString rgbColor = s.trimmed();
-        QColor c;
-        if (rgbColor.startsWith('#'))
-            c.setNamedColor(rgbColor);
-        else {
-            c = QColor(rgbColor);
+        const QString rgbColor = s.trimmed();
+        if (rgbColor.startsWith('#')) {
+            color = QColor::fromString(rgbColor);
+        } else {
+            color = QColor(rgbColor);
         }
-        color = c;
     }
 }
 

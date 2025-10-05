@@ -204,9 +204,9 @@ public:
     {
         _angle = a;
     }
-    void setBrushColor(QString bc)
+    void setBrushColor(QAnyStringView bc)
     {
-        _brushColor.setNamedColor(bc);
+        _brushColor = QColor::fromString(bc);
     }
     void setBrushStyle(int bs)
     {
@@ -230,9 +230,9 @@ public:
     {
         _penStyle = ps;
     }
-    void setPenColor(QString pc)
+    void setPenColor(QAnyStringView pc)
     {
-        _penColor.setNamedColor(pc);
+        _penColor = QColor::fromString(pc);
     }
 
     /* font */

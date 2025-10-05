@@ -83,9 +83,9 @@ public:
     {
         _style = s;
     }
-    void setColor(QString color)
+    void setColor(QAnyStringView color)
     {
-        _color.setNamedColor(color);
+        _color = QColor::fromString(color);
     }
 
     /**

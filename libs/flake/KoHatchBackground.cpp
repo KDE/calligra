@@ -23,6 +23,8 @@
 #include <QPainterPath>
 #include <QString>
 
+using namespace Qt::StringLiterals;
+
 class KoHatchBackgroundPrivate : public KoColorBackgroundPrivate
 {
 public:
@@ -192,19 +194,19 @@ bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &sh
             if (fillHatchSolid) {
                 QString fillColor = styleStack.property(KoXmlNS::draw, "fill-color");
                 if (!fillColor.isEmpty()) {
-                    d->color.setNamedColor(fillColor);
+                    d->color = QColor::fromString(fillColor);
                 } else {
                     d->color = QColor();
                 }
             } else {
                 d->color = QColor();
             }
-            d->lineColor.setNamedColor(draw->attributeNS(KoXmlNS::draw, "color", QString("#000000")));
+            d->lineColor = QColor::fromString(draw->attributeNS(KoXmlNS::draw, "color", QString("#000000")));
 
             QString style = draw->attributeNS(KoXmlNS::draw, "style", QString());
-            if (style == "double") {
+            if (style == "double"_L1) {
                 d->style = Double;
-            } else if (style == "triple") {
+            } else if (style == "triple"_L1) {
                 d->style = Triple;
             } else {
                 d->style = Single;

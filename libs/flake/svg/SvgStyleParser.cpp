@@ -290,7 +290,7 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
         color = d->context.currentGC()->currentColor;
     } else {
         // QColor understands #RRGGBB and svg color names
-        color.setNamedColor(s.trimmed());
+        color = QColor::fromString(s.trimmed());
     }
 
     return true;
