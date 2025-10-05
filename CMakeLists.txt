@@ -618,7 +618,7 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler "22.02.0" COMPONENTS Qt6)
+macro_optional_find_package(Poppler "25.02.0" COMPONENTS Qt6)
 set_package_properties(Poppler PROPERTIES
     PURPOSE "Required by the Karbon PDF import filter and CSTester PDF feature"
     TYPE RECOMMENDED

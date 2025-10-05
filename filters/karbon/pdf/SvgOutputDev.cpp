@@ -386,23 +386,29 @@ void SvgOutputDev::drawString(GfxState *state, const GooString *s)
 {
     int render = state->getRender();
     // check for invisible text -- this is used by Acrobat Capture
-    if (render == 3)
+    if (render == 3) {
         return;
+    }
 
     // ignore empty strings
-    if (s->getLength() == 0)
-        return;
-
-#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 04, 0)
-    GfxFont *font = state->getFont();
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(25, 10, 0)
+    if (s->getLength() == 0) {
 #else
-    std::shared_ptr<GfxFont> font = state->getFont();
+    if (s->size() == 0) {
 #endif
+        return;
+    }
+
+    std::shared_ptr<GfxFont> font = state->getFont();
 
     QString str;
 
     const char *p = s->c_str();
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(25, 10, 0)
     int len = s->getLength();
+#else
+    int len = s->size();
+#endif
     CharCode code;
     const Unicode *u = nullptr;
     int uLen;
