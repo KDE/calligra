@@ -169,7 +169,7 @@
        </Parameter>
        <Help>
            <Text>The CONTINUOUS() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17.</Text>
-           <Syntax>CONTINOUS(principal;interest;years)</Syntax>
+           <Syntax>CONTINUOUS(principal;interest;years)</Syntax>
            <Example>CONTINUOUS(1000;0.1;1) equals 1105.17</Example>
        </Help>
    </Function>
