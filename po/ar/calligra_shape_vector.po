@@ -1,0 +1,44 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2025-10-05 13:16+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: ChangeVectorDataCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "غيّر بيانات المتجهة"
+
+#: VectorShapeFactory.cpp:26
+#, kde-format
+msgid "Vector image"
+msgstr "صورة متجهة"
+
+#: VectorShapeFactory.cpp:28
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "شكل يعرض صورة متجهة (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:63
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "صورة متجهة مفتوحة (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:19
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "أداة الصور المتجهة (EMF/WMF/SVM/SVG)"

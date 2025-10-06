@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2025-08-03 14:25+0400\n"
+"PO-Revision-Date: 2025-10-05 12:14+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21,76 +21,76 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "زايد السعيدي"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "zayed.alsaidi@gmail.com"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
-msgstr ""
+msgstr "ابدأ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
-msgstr ""
+msgstr "النهاية"
 
 #: AxesConfigWidget.cpp:80
 #, kde-format
 msgid "Near-axis"
-msgstr ""
+msgstr "قرب المحور"
 
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "الجانب الآخر"
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
-msgstr ""
+msgstr "عنوان المحور"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
 #, kde-format
 msgid "Show Axis"
-msgstr ""
+msgstr "أظهِر المحور"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
 #, kde-format
 msgid "Scale"
-msgstr ""
+msgstr "قياس"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
 #, kde-format
 msgid "Show Labels"
-msgstr ""
+msgstr "أظهِر لصائق"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr ""
+msgstr "الخط"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
 #, kde-format
 msgid "Show Major Grid"
-msgstr ""
+msgstr "أظهِر الشبكة الرئيسية"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
 #, kde-format
 msgid "Show Minor Grid"
-msgstr ""
+msgstr "أظهِر الشبكة الثانوية"
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -107,6 +107,16 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">خصائص الأشرطة</span></p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
 #. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
@@ -115,19 +125,19 @@ msgstr ""
 #: widgets/RingConfigWidget.ui:147
 #, no-c-format, kde-format
 msgid "%"
-msgstr ""
+msgstr "٪"
 
 #. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
 #: AxesConfigWidget.ui:154
 #, kde-format
 msgid "Gap Between Sets"
-msgstr ""
+msgstr "الفجوة بين المجموعات"
 
 #. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
 #: AxesConfigWidget.ui:167
 #, kde-format
 msgid "Gap Between Bars"
-msgstr ""
+msgstr "الفجوة بين الأشرطة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
@@ -139,38 +149,38 @@ msgstr "أظهر العنوان"
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr ""
+msgstr "المحور س الرئيسي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr ""
+msgstr "المحور ص الرئيسي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr ""
+msgstr "المحور س الثانوي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr ""
+msgstr "المحور ص الثانوي"
 
 #: ChartShape.cpp:299
 #, kde-format
 msgid "Plugin Missing"
-msgstr ""
+msgstr "الامتداد مفقود"
 
 #: ChartShape.cpp:299
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
-msgstr ""
+msgstr "الامتداد اللازم لعرض لصائق نصية في رسم بياني غير متوفر."
 
 #: ChartShape.cpp:303
 #, kde-format
@@ -178,24 +188,26 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
+"الامتداد اللازم لعرض لصائق نصية غير متوافق مع الإصدار الحالي من شكل الرقاقة "
+"للرسم البياني."
 
 #: ChartShape.cpp:304
 #, kde-format
 msgid "Plugin Incompatible"
-msgstr ""
+msgstr "الامتداد غير متوافق"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showTitle)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: ChartShape.cpp:322 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
 #, kde-format
 msgid "Title"
-msgstr ""
+msgstr "عنوان"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
 #: ChartShape.cpp:352 TitlesConfigWidget.ui:85
 #, kde-format
 msgid "Subtitle"
-msgstr ""
+msgstr "عنوان فرعي"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFooter)
 #: ChartShape.cpp:382 TitlesConfigWidget.ui:126
@@ -209,31 +221,33 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"يحتوي هذا المستند على رابط خارجي لمستند بعيد\n"
+"%1"
 
 #: ChartShape.cpp:753
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "يتطلب تأكيدًا"
 
 #: ChartShape.cpp:754
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "نزّل"
 
 #: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "تخطَّ"
 
 #: ChartShapeFactory.cpp:55
 #, kde-format
 msgid "Chart"
-msgstr ""
+msgstr "رسم بياني"
 
 #: ChartShapeFactory.cpp:58
 #, kde-format
 msgid "Business charts"
-msgstr ""
+msgstr "رسوم بيانية للأعمال"
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
 #: PlotAreaConfigWidget.cpp:230
@@ -244,27 +258,27 @@ msgstr "شريط بياني"
 #: ChartShapeFactory.cpp:78
 #, kde-format
 msgid "Normal bar chart"
-msgstr ""
+msgstr "رسم بياني شريطي عادي"
 
 #: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "رسم بياني شريطي مكدس"
 
 #: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
-msgstr ""
+msgstr "رسم بياني شريطي مكدس"
 
 #: ChartShapeFactory.cpp:99
 #, kde-format
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "رسم بياني شريطي مئوي"
 
 #: ChartShapeFactory.cpp:100
 #, kde-format
 msgid "Percent bar chart"
-msgstr ""
+msgstr "رسم بياني شريطي مئوي"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:236
@@ -275,58 +289,58 @@ msgstr "رسم خطي"
 #: ChartShapeFactory.cpp:111
 #, kde-format
 msgid "Normal line chart"
-msgstr ""
+msgstr "رسم بياني خطي عادي"
 
 #: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "رسم بياني خطي مكدس"
 
 #: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
-msgstr ""
+msgstr "رسم بياني خطي مكدس"
 
 #: ChartShapeFactory.cpp:132
 #, kde-format
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "رسم بياني خطي مئوي"
 
 #: ChartShapeFactory.cpp:133
 #, kde-format
 msgid "Percent line chart"
-msgstr ""
+msgstr "رسم بياني خطي مئوي"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة"
 
 #: ChartShapeFactory.cpp:144
 #, kde-format
 msgid "Normal area chart"
-msgstr ""
+msgstr "رسم بياني للمساحة عادي"
 
 #: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مكدس"
 
 #: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مكدس"
 
 #: ChartShapeFactory.cpp:165
 #, kde-format
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مئوي"
 
 #: ChartShapeFactory.cpp:166
 #, kde-format
 msgid "Percent area chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مئوي"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:250
@@ -337,108 +351,108 @@ msgstr "رسم دائري"
 #: ChartShapeFactory.cpp:177
 #, kde-format
 msgid "Pie chart"
-msgstr ""
+msgstr "رسم بياني دائري"
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:251
 #, kde-format
 msgid "Ring Chart"
-msgstr ""
+msgstr "رسم بياني حلقي"
 
 #: ChartShapeFactory.cpp:188
 #, kde-format
 msgid "Ring chart"
-msgstr ""
+msgstr "رسم بياني حلقي"
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
 #: PlotAreaConfigWidget.cpp:264
 #, kde-format
 msgid "Bubble Chart"
-msgstr ""
+msgstr "رسم بياني فقاعي"
 
 #: ChartShapeFactory.cpp:199
 #, kde-format
 msgid "Bubble chart"
-msgstr ""
+msgstr "رسم بياني فقاعي"
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
 #: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
-msgstr ""
+msgstr "رسم بياني مبعثر"
 
 #: ChartShapeFactory.cpp:210
 #, kde-format
 msgid "Scatter chart"
-msgstr ""
+msgstr "رسم بياني مبعثر"
 
 #: ChartShapeFactory.cpp:220
 #, kde-format
 msgid "Radar Chart"
-msgstr ""
+msgstr "رسم بياني راداري"
 
 #: ChartShapeFactory.cpp:221
 #, kde-format
 msgid "Radar chart"
-msgstr ""
+msgstr "رسم بياني راداري"
 
 #: ChartShapeFactory.cpp:231
 #, kde-format
 msgid "Filled Radar Chart"
-msgstr ""
+msgstr "رسم بياني راداري مملوء"
 
 #: ChartShapeFactory.cpp:232
 #, kde-format
 msgid "Filled radar chart"
-msgstr ""
+msgstr "رسم بياني راداري مملوء"
 
 #: ChartShapeFactory.cpp:242
 #, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr ""
+msgstr "رسم بياني شمعة الأسهم"
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr ""
+msgstr "رسم بياني شمعة الأسهم اليابانية"
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
 msgid "OHLC Stock Chart"
-msgstr ""
+msgstr "رسم بياني OHLC للأسهم"
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr ""
+msgstr "رسم بياني للأسهم: الافتتاح الأعلى الأدنى الإغلاق"
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
 msgid "HLC Stock Chart"
-msgstr ""
+msgstr "رسم بياني HLC للأسهم"
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr ""
+msgstr "رسم بياني للأسهم: الأعلى الأدنى الإغلاق"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
 #, kde-format
 msgid "January"
-msgstr ""
+msgstr "يناير"
 
 #: ChartShapeFactory.cpp:359 ChartShapeFactory.cpp:549
 #: ChartShapeFactory.cpp:632
 #, kde-format
 msgid "July"
-msgstr ""
+msgstr "يوليو"
 
 #: ChartShapeFactory.cpp:360 ChartShapeFactory.cpp:550
 #: ChartShapeFactory.cpp:633
 #, kde-format
 msgid "December"
-msgstr ""
+msgstr "ديسمبر"
 
 #: ChartShapeFactory.cpp:363 ChartShapeFactory.cpp:364
 #: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:366
@@ -448,32 +462,32 @@ msgstr ""
 #: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
 #, kde-format
 msgid "Column %1"
-msgstr ""
+msgstr "العمود %1"
 
 #: ChartShapeFactory.cpp:390
 #, kde-format
 msgid "Month"
-msgstr ""
+msgstr "شهر"
 
 #: ChartShapeFactory.cpp:392
 #, kde-format
 msgid "Growth in %"
-msgstr ""
+msgstr "النمو بالنسبة المئوية"
 
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "سهم أ"
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "سهم ب"
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "سهم ج"
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
@@ -493,27 +507,27 @@ msgstr "منخفض"
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "إغلاق"
 
 #: ChartShapeFactory.cpp:581
 #, kde-format
 msgid "Growth"
-msgstr ""
+msgstr "نمو"
 
 #: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
-msgstr ""
+msgstr "افعل شيئًا"
 
 #: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
-msgstr ""
+msgstr "افعل شيئًا آخر"
 
 #: ChartTool.cpp:269
 #, kde-format
 msgid "Titles"
-msgstr ""
+msgstr "عناوين"
 
 #: ChartTool.cpp:284
 #, kde-format
@@ -523,357 +537,357 @@ msgstr "دليل المصطلحات"
 #: ChartTool.cpp:297
 #, kde-format
 msgid "Plot Area"
-msgstr ""
+msgstr "منطقة الرسم"
 
 #: ChartTool.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr ""
+msgstr "أظهِر دليل"
 
 #: ChartTool.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr ""
+msgstr "أخفِ دليل"
 
 #: ChartToolFactory.cpp:26
 #, kde-format
 msgid "Chart editing"
-msgstr ""
+msgstr "تحرير الرسم البياني"
 
 #: commands/AddRemoveAxisCommand.cpp:37
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr ""
+msgstr "أضف محورًا"
 
 #: commands/AddRemoveAxisCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr ""
+msgstr "أزل محورًا"
 
 #: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
-msgstr ""
+msgstr "أظهِر عنوان المحور"
 
 #: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
-msgstr ""
+msgstr "أخفِ عنوان المحور"
 
 #: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr ""
+msgstr "أظهِر المحور"
 
 #: commands/AxisCommand.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr ""
+msgstr "أخفِ المحور"
 
 #: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr ""
+msgstr "أظهِر لصائق المحور"
 
 #: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr ""
+msgstr "أخفِ لصائق المحور"
 
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr ""
+msgstr "أظهِر خطوط الشبكة الرئيسية للمحور"
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr ""
+msgstr "أخفِ خطوط الشبكة الرئيسية للمحور"
 
 #: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr ""
+msgstr "أظهِر خطوط الشبكة الثانوية للمحور"
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr ""
+msgstr "أخفِ خطوط الشبكة الثانوية للمحور"
 
 #: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "قياس لوغاريتمي"
 
 #: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr ""
+msgstr "قياس خطي"
 
 #: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr ""
+msgstr "اضبط عرض خطوة المحور"
 
 #: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr ""
+msgstr "اضبط عرض الخطوة الفرعية للمحور"
 
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr ""
+msgstr "اضبط عرض الخطوة آليًا"
 
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr ""
+msgstr "اضبط عرض الخطوة يدويًا"
 
 #: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr ""
+msgstr "عرض الخطوة الفرعية آليًا"
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr ""
+msgstr "عرض الخطوة الفرعية يدويًا"
 
 #: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr ""
+msgstr "اضبط خط لصيقة المحور"
 
 #: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr ""
+msgstr "اضبط موضع المحور"
 
 #: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr ""
+msgstr "اضبط موضع لصائق المحور"
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr ""
+msgstr "أظهِر شكل النص"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr ""
+msgstr "أخفِ شكل النص"
 
 #: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr ""
+msgstr "رسم بياني شريطي عادي"
 
 #: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "رسم بياني شريطي مكدس"
 
 #: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "رسم بياني شريطي مئوي"
 
 #: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr ""
+msgstr "رسم بياني خطي عادي"
 
 #: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "رسم بياني خطي مكدس"
 
 #: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "رسم بياني خطي مئوي"
 
 #: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة عادي"
 
 #: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مكدس"
 
 #: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "رسم بياني للمساحة مئوي"
 
 #: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr ""
+msgstr "رسم بياني دائري"
 
 #: commands/ChartTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
-msgstr ""
+msgstr "رسم بياني حلقي"
 
 #: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr ""
+msgstr "رسم بياني مبعثر"
 
 #: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr ""
+msgstr "رسم بياني راداري"
 
 #: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr ""
+msgstr "رسم بياني راداري مملوء"
 
 #: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr ""
+msgstr "رسم بياني للأسهم"
 
 #: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
-msgstr ""
+msgstr "رسم بياني فقاعي"
 
 #: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr ""
+msgstr "رسم بياني سطحي"
 
 #: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr ""
+msgstr "رسم بياني جانت"
 
 #: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr ""
+msgstr "اضبط نوع الرسم البياني لمجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr ""
+msgstr "أظهِر فئة مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr ""
+msgstr "أخفِ فئة مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr ""
+msgstr "أظهِر رقم مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr ""
+msgstr "أخفِ رقم مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr ""
+msgstr "أظهِر نسبة مجموعة البيانات المئوية"
 
 #: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr ""
+msgstr "أخفِ نسبة مجموعة البيانات المئوية"
 
 #: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr ""
+msgstr "أظهِر وسم مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr ""
+msgstr "أخفِ وسم مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr ""
+msgstr "اضبط لون فرشاة مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr ""
+msgstr "اضبط لون قلم مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr ""
+msgstr "أخفِ علامة مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr ""
+msgstr "أظهِر وسم علامة مجموعة البيانات"
 
 #: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr ""
+msgstr "اضبط محور مجموعة البيانات"
 
 #: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr ""
+msgstr "اضبط الفجوة بين الأشرطة"
 
 #: commands/GapCommand.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr ""
+msgstr "اضبط الفجوة بين المجموعات"
 
 #: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr ""
+msgstr "اضبط عنوان دليل"
 
 #: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr ""
+msgstr "اضبط خط دليل"
 
 #: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr ""
+msgstr "اضبط حجم خط دليل"
 
 #: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr ""
+msgstr "اضبط توجيه دليل"
 
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "اضبط الأشرطة أفقيًا"
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "اضبط الأشرطة عموديًا"
 
 #: DataSet.cpp:272
 #, kde-format
 msgid "Series %1"
-msgstr ""
+msgstr "تسلسل %1"
 
 #: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
 #, kde-format
 msgid "Chart Type"
-msgstr ""
+msgstr "نوع الرسم البياني"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
@@ -881,14 +895,14 @@ msgstr ""
 #: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
-msgstr ""
+msgstr "عادي"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
 #: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
 #: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
-msgstr ""
+msgstr "مكدس"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
@@ -900,37 +914,37 @@ msgstr ""
 #: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
 #, kde-format
 msgid "Percent"
-msgstr ""
+msgstr "مئوية"
 
 #: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
 #, kde-format
 msgid "Polar Chart"
-msgstr ""
+msgstr "رسم بياني قطبي"
 
 #: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
 msgid "Filled"
-msgstr ""
+msgstr "مملوء"
 
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
-msgstr ""
+msgstr "رسم بياني للأسهم"
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
-msgstr ""
+msgstr "شمعة"
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr ""
+msgstr "الافتتاح-الأعلى-الأدنى-الإغلاق"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
-msgstr ""
+msgstr "الأعلى-الأدنى-الإغلاق"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
@@ -938,7 +952,7 @@ msgstr ""
 #: widgets/RadarDataSetConfigWidget.cpp:180
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "لا شيء"
 
 #. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
 #. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
@@ -946,12 +960,12 @@ msgstr ""
 #: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:83
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "آلي"
 
 #: DataSetConfigWidget.cpp:245 widgets/RadarDataSetConfigWidget.cpp:85
 #, kde-format
 msgid "Select"
-msgstr ""
+msgstr "اختر"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -972,46 +986,46 @@ msgstr "آليّ"
 #: widgets/RadarDataSetConfigWidget.cpp:295
 #, kde-format
 msgid "Data Set %1"
-msgstr ""
+msgstr "مجموعة البيانات %1"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
 #, kde-format
 msgid "Select a data set"
-msgstr ""
+msgstr "اختر مجموعة بيانات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr ""
+msgstr "استخدم نوع الرسم"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
 #, kde-format
 msgid "Attach To Axis"
-msgstr ""
+msgstr "أرفق بالمحور"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
 #: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
 #, kde-format
 msgid "Stroke"
-msgstr ""
+msgstr "تخطيط"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
 #: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "ملء"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
 #: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
 #: widgets/RadarDataSetConfigWidget.ui:122
 #, kde-format
 msgid "Marker"
-msgstr ""
+msgstr "علامة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
@@ -1021,7 +1035,7 @@ msgstr ""
 #: widgets/RingConfigWidget.ui:106
 #, kde-format
 msgid "Category"
-msgstr ""
+msgstr "فئة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
@@ -1029,13 +1043,13 @@ msgstr ""
 #: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
 #, kde-format
 msgid "Number"
-msgstr ""
+msgstr "رقم"
 
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
 #: DataSetConfigWidget.ui:287
 #, kde-format
 msgid "Error Bars"
-msgstr ""
+msgstr "أشرطة الخطأ"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
@@ -1043,73 +1057,73 @@ msgstr ""
 #: dialogs/PieDataEditor.ui:33
 #, kde-format
 msgid "Insert"
-msgstr ""
+msgstr "أدرج"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
 #: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr ""
+msgstr "حوار"
 
 #. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
 #: dialogs/AxisScalingDialog.ui:19
 #, kde-format
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "قياس لوغاريتمي"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr ""
+msgstr "عرض الخطوة:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr ""
+msgstr "عرض الخطوة الفرعية:"
 
 #: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
 msgid "Bubble Data Editor"
-msgstr ""
+msgstr "محرر بيانات الفقاعات"
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
 #, kde-format
 msgid "Insert Column Before"
-msgstr ""
+msgstr "أدرج عمودًا قبل"
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
 #, kde-format
 msgid "Insert Column After"
-msgstr ""
+msgstr "أدرج عمودًا بعد"
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
 #, kde-format
 msgid "Insert Row Above"
-msgstr ""
+msgstr "أدرج صفًا فوق"
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
 #, kde-format
 msgid "Insert Row Below"
-msgstr ""
+msgstr "أدرج صفًا تحت"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
 #, kde-format
 msgid "Delete"
-msgstr ""
+msgstr "احذف"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
 #, kde-format
 msgid "Bubbles Editor"
-msgstr ""
+msgstr "محرر الفقاعات"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1117,7 +1131,7 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr ""
+msgstr "أدرج عمود بيانات قبل العمود المحدد"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1141,21 +1155,21 @@ msgstr ""
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr ""
+msgstr "أدرج صف بيانات تحت الصف المحدد"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr ""
+msgstr "أدرج صف بيانات فوق الصف المحدد"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1163,7 +1177,7 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr ""
+msgstr "أدرج عمود بيانات بعد العمود المحدد"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
@@ -1176,7 +1190,7 @@ msgstr "امحُ المحدد"
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "تحكم يدوي في مجموعات البيانات"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1192,13 +1206,13 @@ msgstr ""
 #: TitlesConfigWidget.ui:153
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "يدوي"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
 #, kde-format
 msgid "Remove data set"
-msgstr ""
+msgstr "أزل مجموعة البيانات"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1206,51 +1220,51 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr ""
+msgstr "أضف مجموعة بيانات بعد مجموعة البيانات المحددة"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
 #, kde-format
 msgid "Dataset Name"
-msgstr ""
+msgstr "اسم مجموعة البيانات"
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
 #, kde-format
 msgid "X-Values"
-msgstr ""
+msgstr "قيم س"
 
 #: dialogs/BubbleDataSetTableModel.cpp:107
 #: dialogs/ScatterDataSetTableModel.cpp:107
 #, kde-format
 msgid "Y-Values"
-msgstr ""
+msgstr "قيم ص"
 
 #: dialogs/BubbleDataSetTableModel.cpp:109
 #, kde-format
 msgid "Bubble Size"
-msgstr ""
+msgstr "حجم الفقاعة"
 
 #: dialogs/BubbleDataSetTableModel.cpp:149
 #: dialogs/ScatterDataSetTableModel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr ""
+msgstr "لصيقة: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:151
 #: dialogs/ScatterDataSetTableModel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr ""
+msgstr "لصيقة مبدئية: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:156
 #: dialogs/ScatterDataSetTableModel.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "منطقة خلية قيم س: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1260,38 +1274,38 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "القيم المبدئية مستخدمة"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "منطقة خلية قيم ص: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "منطقة خلية حجم الفقاعة: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
 #, kde-format
 msgid "Y Values:"
-msgstr ""
+msgstr "قيم ص:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
 #, kde-format
 msgid "X Values:"
-msgstr ""
+msgstr "قيم س:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr ""
+msgstr "<b>اختر مجموعة بيانات</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82
@@ -1314,24 +1328,34 @@ msgid ""
 "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
 "style=\" font-weight:600;\">Name:</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">اسم:</span></p></body></html>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
 #, kde-format
 msgid "Data Editor"
-msgstr ""
+msgstr "محرر البيانات"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
 #, kde-format
 msgid "&Data sets in rows"
-msgstr ""
+msgstr "مجموعات البيانات في &الصفوف"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
 #, kde-format
 msgid "Data sets in &columns"
-msgstr ""
+msgstr "مجموعات البيانات في &الأعمدة"
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1342,7 +1366,7 @@ msgstr "اختر خط"
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr ""
+msgstr "هيِّئ أشرطة الخطأ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1362,6 +1386,19 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "weight:600;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">فئة الخطأ</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:94
@@ -1379,13 +1416,13 @@ msgstr "النسبة"
 #: dialogs/FormatErrorBarDialog.ui:104
 #, kde-format
 msgid "Error Margin"
-msgstr ""
+msgstr "هامش الخطأ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:109
 #, kde-format
 msgid "Standard Deviation"
-msgstr ""
+msgstr "انحراف معياري"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:114
@@ -1397,38 +1434,38 @@ msgstr "تباين"
 #: dialogs/FormatErrorBarDialog.ui:119
 #, kde-format
 msgid "From Data table"
-msgstr ""
+msgstr "من جدول البيانات"
 
 #. i18n: ectx: property (text), widget (QLabel, valueLabel)
 #: dialogs/FormatErrorBarDialog.ui:144
 #, kde-format
 msgid "Positive "
-msgstr ""
+msgstr "إيجابي"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
 #: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
 #, kde-format
 msgid "Negative"
-msgstr ""
+msgstr "سلبي"
 
 #. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
 #: dialogs/FormatErrorBarDialog.ui:207
 #, kde-format
 msgid "Same for both"
-msgstr ""
+msgstr "نفس القيمة لكليهما"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
 #, kde-format
 msgid "Value"
-msgstr ""
+msgstr "قيمة"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
 #: dialogs/FormatErrorBarDialog.ui:233
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr " ٪"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/FormatErrorBarDialog.ui:303
@@ -1445,49 +1482,59 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">Error Indicator</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">دليل الخطأ</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
 #: dialogs/FormatErrorBarDialog.ui:325
 #, kde-format
 msgid "Positive"
-msgstr ""
+msgstr "إيجابي"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
 #: dialogs/FormatErrorBarDialog.ui:351
 #, kde-format
 msgid "Both"
-msgstr ""
+msgstr "كلاهما"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
 #: dialogs/NewAxisDialog.ui:20
 #, kde-format
 msgid "New Axis"
-msgstr ""
+msgstr "محور جديد"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
 #: dialogs/NewAxisDialog.ui:46
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&X"
-msgstr ""
+msgstr "&س"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
 #: dialogs/NewAxisDialog.ui:56
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&Y"
-msgstr ""
+msgstr "&ص"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/NewAxisDialog.ui:72
 #, kde-format
 msgid "Title:"
-msgstr ""
+msgstr "عنوان:"
 
 #: dialogs/PieDataEditor.cpp:58
 #, kde-format
 msgid "Pie Data Editor"
-msgstr ""
+msgstr "محرر بيانات المخطط الدائري"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
@@ -1498,54 +1545,54 @@ msgstr "Del"
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
-msgstr ""
+msgstr "صف %1"
 
 #: dialogs/ScatterDataEditor.cpp:115
 #, kde-format
 msgid "Scatter Data Editor"
-msgstr ""
+msgstr "محرر البيانات المبعثرة"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
 #, kde-format
 msgid "Stock Data Editor"
-msgstr ""
+msgstr "محرر بيانات الأسهم"
 
 #: dialogs/StockDataEditor.cpp:100
 #, kde-format
 msgid "Delete Row"
-msgstr ""
+msgstr "احذف الصف"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
 #, kde-format
 msgid "Delete row"
-msgstr ""
+msgstr "احذف الصف"
 
 #: dialogs/TableEditorDialog.cpp:56
 #, kde-format
 msgid "Insert Above"
-msgstr ""
+msgstr "أدرج فوق"
 
 #: dialogs/TableEditorDialog.cpp:57
 #, kde-format
 msgid "Insert Below"
-msgstr ""
+msgstr "أدرج تحت"
 
 #: dialogs/TableEditorDialog.cpp:58
 #, kde-format
 msgid "Insert Before"
-msgstr ""
+msgstr "أدرج قبل"
 
 #: dialogs/TableEditorDialog.cpp:59
 #, kde-format
 msgid "Insert After"
-msgstr ""
+msgstr "أدرج بعد"
 
 #: dialogs/TableEditorDialog.cpp:60
 #, kde-format
 msgid "Delete Selection"
-msgstr ""
+msgstr "احذف المحدد"
 
 #: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
@@ -1555,118 +1602,118 @@ msgstr "صف جديد"
 #: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
 #, kde-format
 msgid "New Column"
-msgstr ""
+msgstr "عمود جديد"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
 #, kde-format
 msgid "Vertical"
-msgstr ""
+msgstr "عمودي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:24
 #, kde-format
 msgid "Horizontal"
-msgstr ""
+msgstr "أفقي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: LegendConfigWidget.ui:38
 #, kde-format
 msgid "Center"
-msgstr ""
+msgstr "وسط"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:52
 #, kde-format
 msgid "Right"
-msgstr ""
+msgstr "يمين"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:57
 #, kde-format
 msgid "Top"
-msgstr ""
+msgstr "أعلى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:62
 #, kde-format
 msgid "Bottom"
-msgstr ""
+msgstr "أسفل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:67
 #, kde-format
 msgid "Left"
-msgstr ""
+msgstr "يسار"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
 #, kde-format
 msgid "Top-left"
-msgstr ""
+msgstr "أعلى-يسار"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
 #, kde-format
 msgid "Top-right"
-msgstr ""
+msgstr "أعلى-يمين"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
 #, kde-format
 msgid "Bottom-left"
-msgstr ""
+msgstr "أسفل-يسار"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
 #, kde-format
 msgid "Bottom-right"
-msgstr ""
+msgstr "أسفل-يمين"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
 #, kde-format
 msgid "Position"
-msgstr ""
+msgstr "موضع"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLegend)
 #: LegendConfigWidget.ui:107
 #, kde-format
 msgid "Show Legend"
-msgstr ""
+msgstr "أظهِر دليل"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
 #, kde-format
 msgid "Orientation"
-msgstr ""
+msgstr "توجيه"
 
 #. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr ""
+msgstr "خطوط..."
 
 #: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
-msgstr ""
+msgstr "نقطة البيانات %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
 #, kde-format
 msgid "E&xplode Factor"
-msgstr ""
+msgstr "عامِل الا&نفجار"
 
 #: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
-msgstr ""
+msgstr "رسم بياني سطحي"
 
 #: PlotAreaConfigWidget.cpp:277
 #, kde-format
 msgid "Gantt Chart"
-msgstr ""
+msgstr "رسم بياني جانت"
 
 #. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
 #: PlotAreaConfigWidget.ui:61
@@ -1678,7 +1725,7 @@ msgstr "ثلاثيّات الأبعاد"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "أشرطة عمودية"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
@@ -1690,14 +1737,14 @@ msgstr "أشرطة عمودية"
 #: PlotAreaConfigWidget.ui:82
 #, kde-format
 msgid "Edit Data..."
-msgstr ""
+msgstr "حرر البيانات..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
 #, kde-format
 msgid "Axes"
-msgstr ""
+msgstr "محاور"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -1706,43 +1753,43 @@ msgstr ""
 #: widgets/RingConfigWidget.ui:171
 #, kde-format
 msgid "Data Sets"
-msgstr ""
+msgstr "مجموعات البيانات"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
 #, kde-format
 msgid "Data Points"
-msgstr ""
+msgstr "نقاط البيانات"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "خط المدى"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "علامة الكسب"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "علامة الخسارة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
 #, kde-format
 msgid "Positioning"
-msgstr ""
+msgstr "تحديد الموضع"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
 #, kde-format
 msgid "Resize"
-msgstr ""
+msgstr "غيّر الحجم"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
@@ -1753,44 +1800,44 @@ msgstr "الفئات"
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "غطاء الطرف المربع"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "غطاء الطرف الدائري"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "غطاء مربع"
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "وصلة مائلة"
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "وصلة مستديرة"
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "وصلة مخروطية"
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "حد المقياس"
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "اضبط عرض خط التحديد الحالي"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "غيّر لون الخط"

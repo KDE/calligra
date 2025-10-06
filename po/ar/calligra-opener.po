@@ -1,0 +1,89 @@
+# POT_PART_NORMAL only
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-04-29 00:39+0000\n"
+"PO-Revision-Date: 2025-10-05 13:04+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "زايد السعيدي"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "zayed.alsaidi@gmail.com"
+
+#: main.cpp:62
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "نوع الوسيط المتعدد لـ <filename>%1</filename> لم يعثر عليه!"
+
+#: main.cpp:118
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "افتح بـ <application>%1</application>"
+
+#: main.cpp:122
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"لا نستطع إيجاد تطبيق كاليغرا مناسب لفتح <filename>%1</filename>.<nl/>هل تريد "
+"فتح الملف باستخدام التطبيق المبدئي <application>%2</application>؟"
+
+#: main.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "لم يعثر على تطبيق كاليغرا"
+
+#: main.cpp:156
+#, kde-format
+msgid "Calligra Opener"
+msgstr "فاتح كاليغرا"
+
+#: main.cpp:158
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "فاتح مستند كاليغرا"
+
+#: main.cpp:160
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "حقوق النشر 2010-%1 مطورو كاليغرا"
+
+#: main.cpp:161
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "ياروسواف ستانيك"
+
+#: main.cpp:168
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "يسرد أسماء جميع تطبيقات كاليغرا المتاحة"
+
+#: main.cpp:169
+#, kde-format
+msgid "Files to open"
+msgstr "ملفات للفتح"

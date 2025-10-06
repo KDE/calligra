@@ -1,14 +1,14 @@
 # POT_PART_NORMAL only
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:43+0400\n"
+"PO-Revision-Date: 2025-10-05 11:35+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -41,25 +41,25 @@ msgstr "الاسم"
 #: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
 #, kde-format
 msgid "The Earth"
-msgstr ""
+msgstr "الأرض"
 
 #. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
 #: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
 #, kde-format
 msgid "The Marble widget displays a virtual globe."
-msgstr ""
+msgstr "ودجة ماربل - لعرض الكرة الأرضية."
 
 #. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
 #: KoRdfLocationEditWidgetMarble.ui:40
 #, kde-format
 msgid "Navigation Control"
-msgstr ""
+msgstr "التحكم بالتّنقّل"
 
 #. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
 #: KoRdfLocationEditWidgetMarble.ui:43
 #, kde-format
 msgid "Use this control to navigate."
-msgstr ""
+msgstr "استخدم هذا التحكم لتتنقل"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: KoRdfLocationEditWidgetMarble.ui:50
@@ -76,7 +76,7 @@ msgstr "خطّ الطول"
 #: KoRdfLocationTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Location Information"
-msgstr ""
+msgstr "معلومات الموقع"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfLocationViewWidget.ui:24

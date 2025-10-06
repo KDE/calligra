@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2024-09-06 22:50+0400\n"
+"PO-Revision-Date: 2025-10-05 13:09+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -63,7 +63,7 @@ msgstr "اكتم"
 #: SelectVideoWidget.cpp:27
 #, kde-format
 msgid "Save as part of document"
-msgstr ""
+msgstr "احفظ كجزء من المستند"
 
 #: VideoShapeFactory.cpp:24
 #, kde-format
@@ -73,9 +73,9 @@ msgstr "فيديو"
 #: VideoShapeFactory.cpp:26
 #, kde-format
 msgid "Video, embedded or fullscreen"
-msgstr ""
+msgstr "فيديو، مضمن أو ملء الشاشة"
 
 #: VideoToolFactory.cpp:18
 #, kde-format
 msgid "Video handling"
-msgstr ""
+msgstr "التعامل مع الفيديو"

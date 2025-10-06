@@ -2,13 +2,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: PictureShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 19:27+0400\n"
+"PO-Revision-Date: 2025-10-05 13:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -32,23 +32,23 @@ msgstr "قصّر الصورة"
 #: ChangeImageCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Change image color mode"
-msgstr ""
+msgstr "غير وضع لون الصورة"
 
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Contour image (by image analysis)"
-msgstr ""
+msgstr "صورة محيطية (عن طريق تحليل الصورة)"
 
 #: ClipCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove image contour"
-msgstr ""
+msgstr "أزل محيط الصورة"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
 #: forms/wdgPictureTool.ui:20
 #, kde-format
 msgid "Replace image..."
-msgstr ""
+msgstr "استبدل الصورة..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
 #: forms/wdgPictureTool.ui:32
@@ -90,7 +90,7 @@ msgstr "صفّر"
 #: forms/wdgPictureTool.ui:148
 #, kde-format
 msgid "Contour (by image analysis)"
-msgstr ""
+msgstr "المحيط (عن طريق تحليل الصورة)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
@@ -112,7 +112,7 @@ msgstr "صورة"
 #: PictureShapeFactory.cpp:33
 #, kde-format
 msgid "Image shape that can display jpg, png etc."
-msgstr ""
+msgstr "شكل الصورة الذي يمكنه عرض jpg و png وما إلى ذلك."
 
 #: PictureTool.cpp:94
 #, kde-format

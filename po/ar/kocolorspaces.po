@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2025-08-04 14:43+0400\n"
+"PO-Revision-Date: 2025-10-05 12:53+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -75,17 +75,17 @@ msgstr "ألفا"
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.h:77
 #, kde-format
 msgid "CMYK (32 bits floating/channel)"
-msgstr ""
+msgstr "CMYK (32 بت عائم/قناة)"
 
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:72
 #, kde-format
 msgid "CMYK (16-bit integer/channel)"
-msgstr ""
+msgstr "CMYK (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.h:70
 #, kde-format
 msgid "CMYK (8-bit integer/channel)"
-msgstr ""
+msgstr "CMYK (8-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:25
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:28
@@ -98,22 +98,22 @@ msgstr "رصاصيّ"
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
 #, kde-format
 msgid "Grayscale/Alpha (16-bit float/channel)"
-msgstr ""
+msgstr "تدرج رمادي/ألفا (16-بت عائم/قناة)"
 
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
 #, kde-format
 msgid "Grayscale/Alpha (32-bit float/channel)"
-msgstr ""
+msgstr "تدرج رمادي/ألفا (32-بت عائم/قناة)"
 
 #: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
 #, kde-format
 msgid "Grayscale (16-bit integer/channel)"
-msgstr ""
+msgstr "تدرج رمادي (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.h:68
 #, kde-format
 msgid "Grayscale (8-bit integer/channel)"
-msgstr ""
+msgstr "تدرج رمادي (8-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:25
 #: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:21
@@ -127,7 +127,7 @@ msgstr "الخفة"
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:21
 #, kde-format
 msgid "a*"
-msgstr ""
+msgstr "a*"
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:36
 #: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:23
@@ -139,17 +139,17 @@ msgstr "b*"
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
 #, kde-format
 msgid "L*a*b* (32-bit float/channel)"
-msgstr ""
+msgstr "L*a*b* (32-بت عائم/قناة)"
 
 #: lcms2/colorspaces/lab_u16/LabColorSpace.h:77
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel)"
-msgstr ""
+msgstr "L*a*b* (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:73
 #, kde-format
 msgid "L*a*b* (8-bit integer/channel)"
-msgstr ""
+msgstr "L*a*b* (8-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
@@ -178,22 +178,22 @@ msgstr "أزرق"
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
 #, kde-format
 msgid "RGBA (16-bit floating/channel)"
-msgstr ""
+msgstr "RGBA (16-بت عائم/قناة)"
 
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
 #, kde-format
 msgid "RGBA (32-bit floating/channel)"
-msgstr ""
+msgstr "RGBA (32-بت عائم/قناة)"
 
 #: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
 #, kde-format
 msgid "RGB (16-bit integer/channel)"
-msgstr ""
+msgstr "RGB (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.h:76
 #, kde-format
 msgid "RGB (8-bit integer/channel)"
-msgstr ""
+msgstr "RGB (8-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:21
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:25
@@ -226,46 +226,46 @@ msgstr "زيتا"
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71
 #, kde-format
 msgid "XYZ (32-bit float/channel)"
-msgstr ""
+msgstr "XYZ (32-بت عائم/قناة)"
 
 #: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
 #, kde-format
 msgid "XYZ (16-bit integer/channel)"
-msgstr ""
+msgstr "XYZ (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:66
 #, kde-format
 msgid "XYZ (8-bit integer/channel)"
-msgstr ""
+msgstr "XYZ (8-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:33
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:27
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:28
 #, kde-format
 msgid "Cb"
-msgstr ""
+msgstr "Cb"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:41
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:34
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:35
 #, kde-format
 msgid "Cr"
-msgstr ""
+msgstr "Cr"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:71
 #, kde-format
 msgid "YCBCR (32-bit float/channel)"
-msgstr ""
+msgstr "YCBCR (32-بت عائم/قناة)"
 
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (16-bit integer/channel)"
-msgstr ""
+msgstr "YCBCR (16-بت صحيح/قناة)"
 
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (8-bit integer/channel)"
-msgstr ""
+msgstr "YCBCR (8-بت صحيح/قناة)"
 
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
@@ -330,100 +330,100 @@ msgstr "القيمة"
 #: lcms2/IccColorSpaceEngine.cpp:86
 #, kde-format
 msgid "ICC Engine"
-msgstr ""
+msgstr "محرك ICC"
 
 #: lcms2/LcmsEnginePlugin.cpp:116 lcms2/LcmsEnginePlugin.cpp:121
 #: lcms2/LcmsEnginePlugin.cpp:126
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr "L*a*b* مدرج"
+msgstr "مدرج تكرار ي L*a*b*"
 
 #: lcms2/LcmsEnginePlugin.cpp:143
 #, kde-format
 msgid "RGB8 Histogram"
-msgstr ""
+msgstr "مدرج تكراري RGB8"
 
 #: lcms2/LcmsEnginePlugin.cpp:148
 #, kde-format
 msgid "RGB16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري RGB16"
 
 #: lcms2/LcmsEnginePlugin.cpp:154
 #, kde-format
 msgid "RGBF16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري RGBF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:160
 #, kde-format
 msgid "RGBF32 Histogram"
-msgstr ""
+msgstr "مدرج تكراري RGBF32"
 
 #: lcms2/LcmsEnginePlugin.cpp:180
 #, kde-format
 msgid "GRAY/Alpha8 Histogram"
-msgstr ""
+msgstr "مدرج تكراري تدرج رمادي/ألفا8"
 
 #: lcms2/LcmsEnginePlugin.cpp:185
 #, kde-format
 msgid "GRAY/Alpha16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري تدرج رمادي/ألفا16"
 
 #: lcms2/LcmsEnginePlugin.cpp:190
 #, kde-format
 msgid "GRAYF16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري GRAYF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:196
 #, kde-format
 msgid "GRAY/Alpha 32 float Histogram"
-msgstr ""
+msgstr "مدرج تكراري تدرج رمادي/ألفا 32 عائم"
 
 #: lcms2/LcmsEnginePlugin.cpp:207
 #, kde-format
 msgid "CMYK8 Histogram"
-msgstr ""
+msgstr "مدرج تكراري لـ CMYK8"
 
 #: lcms2/LcmsEnginePlugin.cpp:212
 #, kde-format
 msgid "CMYK16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري لـ CMYK16"
 
 #: lcms2/LcmsEnginePlugin.cpp:217
 #, kde-format
 msgid "CMYK F32 Histogram"
-msgstr ""
+msgstr "مدرج تكراري لـ CMYK F32"
 
 #: lcms2/LcmsEnginePlugin.cpp:234
 #, kde-format
 msgid "XYZ8 Histogram"
-msgstr ""
+msgstr "مدرج تكراري XYZ8"
 
 #: lcms2/LcmsEnginePlugin.cpp:239
 #, kde-format
 msgid "XYZ16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري XYZ16"
 
 #: lcms2/LcmsEnginePlugin.cpp:245
 #, kde-format
 msgid "XYZF16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري XYZF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:251
 #, kde-format
 msgid "XYZF32 Histogram"
-msgstr ""
+msgstr "مدرج تكراري XYZF32"
 
 #: lcms2/LcmsEnginePlugin.cpp:265
 #, kde-format
 msgid "YCBCR8 Histogram"
-msgstr ""
+msgstr "مدرج تكراري YCBCR8"
 
 #: lcms2/LcmsEnginePlugin.cpp:270
 #, kde-format
 msgid "YCBCR16 Histogram"
-msgstr ""
+msgstr "مدرج تكراري YCBCR16"
 
 #: lcms2/LcmsEnginePlugin.cpp:275
 #, kde-format
 msgid "YCBCRF32 Histogram"
-msgstr ""
+msgstr "مدرج تكراري YCBCRF32"

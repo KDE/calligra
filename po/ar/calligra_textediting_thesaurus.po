@@ -3,13 +3,13 @@
 # Usama Ahmed Ali <usama01@maktoob.com>, 2002.
 # Nuriddin Aminagha <nuriddin@eminaga.de>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 21:27+0400\n"
+"PO-Revision-Date: 2025-10-05 13:12+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28,7 +28,7 @@ msgstr "(لا تطابق)"
 #: Thesaurus.cpp:91
 #, kde-format
 msgid "&Search for:"
-msgstr "البحث عن:"
+msgstr "البحث &عن:"
 
 #: Thesaurus.cpp:94
 #, kde-format
@@ -95,54 +95,55 @@ msgstr "استبدل الكلمة"
 #: Thesaurus.cpp:292
 #, kde-format
 msgid "Related Words - %1"
-msgstr "كلمات ذت العلاقة - %1"
+msgstr "كلمات ذات علاقة - %1"
 
 #: Thesaurus.cpp:406
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
 "select a thesaurus file."
-msgstr "الـ ملفّ ليس موجود رجاء استخدام غيّر اللغة إلى تحديد a ملفّ."
+msgstr ""
+"ملف المكنز '%1' لم يُعثر عليه. رجاءً، استخدم 'غيّر اللغة...' لتحديد ملف مكنز."
 
 #: Thesaurus.cpp:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr "<b> خطأ</b> فشل إلى نفِّذ."
+msgstr "<b>خطأ:</b> فشل تنفيذ grep."
 
 #: Thesaurus.cpp:578
 #, kde-format
 msgid "Synonyms/Hypernyms - Ordered by Frequency"
-msgstr "المترادفات/Hypernyms_ مرتبة حسب التردد"
+msgstr "المرادفات/Hypernyms - مرتبة حسب التردد"
 
 #: Thesaurus.cpp:579
 #, kde-format
 msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
-msgstr "المرادفات_ مرتبة حسب تشابه المعنى (الأفعال فقط)"
+msgstr "المرادفات - مرتبة حسب تشابه المعنى (الأفعال فقط)"
 
 #: Thesaurus.cpp:580
 #, kde-format
 msgid "Antonyms - Words with Opposite Meanings"
-msgstr "Antonyms_ كلمات ذات معنى معاكس"
+msgstr "المتضادات - كلمات ذات معنى معاكس"
 
 #: Thesaurus.cpp:581
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "هو a من 1"
+msgstr "الأسماء الأدنى - ... هو نوع (من) %1"
 
 #: Thesaurus.cpp:582
-#, fuzzy, kde-format
+#, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "a."
+msgstr "الأسماء الجزئية - %1 لديه ..."
 
 #: Thesaurus.cpp:584
-#, fuzzy, kde-format
+#, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "a 1"
+msgstr "الأسماء الكلية - ... لديه %1"
 
 #: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
-msgstr "خواص"
+msgstr "الخواص"
 
 #: Thesaurus.cpp:586
 #, kde-format
@@ -155,14 +156,14 @@ msgid "Verb Entailment (for some verbs only)"
 msgstr "مستلزمات الفعل ( صالحة لبعض الأفعال فقط)"
 
 #: Thesaurus.cpp:588
-#, fuzzy, kde-format
+#, kde-format
 msgid "Familiarity & Polysemy Count"
-msgstr "الألفة العدد"
+msgstr "الألفة وعدد المعاني المتعددة"
 
 #: Thesaurus.cpp:590
 #, kde-format
 msgid "Verb Frames (examples of use)"
-msgstr "إطار الفعل (أمثلة لإستخدام الفعل)"
+msgstr "أطر الفعل (أمثلة لاستخدامه)"
 
 #: Thesaurus.cpp:591
 #, kde-format
@@ -170,12 +171,12 @@ msgid "List of Compound Words"
 msgstr "لائحة الكلمات المركبة"
 
 #: Thesaurus.cpp:592
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overview of Senses"
-msgstr "الرؤية العامة من الأحاسيس"
+msgstr "نظرة عامة على المعاني"
 
 #: Thesaurus.cpp:621
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
 "installed on your computer if you want to use it, and 'wn' has to be in your "
@@ -183,11 +184,10 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
-"<b>خطاء:</b> لم ينجح في تطبيق برنامج  WordNet 'wn'. يجب ان يكون WordNet "
-"متوفرا في جهازك لكي تستطيع إستخدامه, كما أن 'wn' يجب أن يكون مدرجا في PATH. "
-"يمكنك الحصول على WordNet من <a href=\"http://www.cogsci.princeton.edu/~wn/"
-"\">http://www.cogsci.princeton.edu/~wn/</a>. ترجى ملاحظة أن WordNet يدعم "
-"اللغة الإنجليزية فقط."
+"<b>خطأ:</b> فشل تنفيذ برنامج WordNet 'wn'. يجب عليك تثبيت WordNet على حاسوبك "
+"إن أردت استخدامه، ويجب أن يكون 'wn' في مسارك. يمكنك الحصول على WordNet من <a "
+"href=\"http://wordnet.princeton.edu/\">http://wordnet.princeton.edu/</a>. "
+"لاحظ أن WordNet يدعم اللغة الإنجليزية فقط."
 
 #: Thesaurus.cpp:633
 #, kde-format

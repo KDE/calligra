@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-24 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:39+0400\n"
+"PO-Revision-Date: 2025-10-05 12:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21,22 +21,22 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "زايد السعيدي"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "zayed.alsaidi@gmail.com"
 
 #: FormulaCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Add text to formula"
-msgstr ""
+msgstr "أضف نصًّا إلى الصيغة"
 
 #: FormulaCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Change rows"
-msgstr ""
+msgstr "غيّر الصفوف"
 
 #: FormulaEditor.cpp:71
 msgctxt "(qtundo-format)"
@@ -46,50 +46,50 @@ msgstr "أضف نصًّا"
 #: FormulaEditor.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Insert row"
-msgstr ""
+msgstr "أدرج صفًّا"
 
 #: FormulaEditor.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Remove row"
-msgstr ""
+msgstr "أزل الصف"
 
 #: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Insert column"
-msgstr ""
+msgstr "أدرج عمودًا"
 
 #: FormulaEditor.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Remove column"
-msgstr ""
+msgstr "أزل العمود"
 
 #: FormulaEditor.cpp:148
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
-msgstr ""
+msgstr "أدرج عناصر الصيغة."
 
 #: FormulaEditor.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
-msgstr ""
+msgstr "أزل عناصر الصيغة"
 
 #: FormulaToolEditWidget.cpp:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Edit"
-msgstr ""
+msgstr "حرّر"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FormulaToolEditWidget.ui:17
 #, kde-format
 msgid "Font:"
-msgstr ""
+msgstr "الخط:"
 
 #: FormulaToolWidget.cpp:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Insert"
-msgstr ""
+msgstr "إدراج"
 
 #: FormulaToolWidget.cpp:70
 #, kde-format
@@ -99,40 +99,40 @@ msgstr "أسهم"
 #: FormulaToolWidget.cpp:72
 #, kde-format
 msgid "Greek"
-msgstr ""
+msgstr "يوناني"
 
 #: FormulaToolWidget.cpp:74
 #, kde-format
 msgid "Relations"
-msgstr ""
+msgstr "علاقات"
 
 #: FormulaToolWidget.cpp:78
 #, kde-format
 msgid "Operators"
-msgstr ""
+msgstr "عوامل"
 
 #: FormulaToolWidget.cpp:81
 #, kde-format
 msgid "Miscellaneous"
-msgstr ""
+msgstr "متفرقات"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
 #, kde-format
 msgid "Elements:"
-msgstr ""
+msgstr "العناصر:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
 #, kde-format
 msgid "Symbols:"
-msgstr ""
+msgstr "الرموز:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
 #, kde-format
 msgid "Actions:"
-msgstr ""
+msgstr "الإجراءات:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -153,153 +153,155 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"يحتوي هذا المستند على وصلة خارجية إلى مستند بعيد\n"
+"%1"
 
 #: KoFormulaShape.cpp:201
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "يلزم تأكيد"
 
 #: KoFormulaShape.cpp:202
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "نزّل"
 
 #: KoFormulaShape.cpp:203
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "تجاوز"
 
 #: KoFormulaShapeFactory.cpp:20
 #, kde-format
 msgid "Formula"
-msgstr ""
+msgstr "صيغة"
 
 #: KoFormulaShapeFactory.cpp:22
 #, kde-format
 msgid "A formula"
-msgstr ""
+msgstr "صيغة"
 
 #: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
-msgstr ""
+msgstr "أدرج عنصرًا مسيّجًا"
 
 #: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
-msgstr ""
+msgstr "أدرج عنصرًا مغلفًا"
 
 #: KoFormulaTool.cpp:407
 #, kde-format
 msgid "Insert root"
-msgstr ""
+msgstr "أدرج جذرًا"
 
 #: KoFormulaTool.cpp:408
 #, kde-format
 msgid "Insert square root"
-msgstr ""
+msgstr "أدرج جذرًا تربيعيًّا"
 
 #: KoFormulaTool.cpp:410
 #, kde-format
 msgid "Insert fraction"
-msgstr ""
+msgstr "أدرج كسرًا"
 
 #: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
-msgstr ""
+msgstr "أدرج كسرًا مشطوفًا"
 
 #: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert 3x3 table"
-msgstr ""
+msgstr "أدرج جدول 3×3"
 
 #: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
-msgstr ""
+msgstr "أدرج متجهًا ثنائيَّ الأبعاد"
 
 #: KoFormulaTool.cpp:427
 #, kde-format
 msgid "Insert subscript"
-msgstr ""
+msgstr "أدرج رمزًا سفليًّا"
 
 #: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
-msgstr ""
+msgstr "أدرج رمزًا علويًّا"
 
 #: KoFormulaTool.cpp:429
 #, kde-format
 msgid "Insert sub- and superscript"
-msgstr ""
+msgstr "أدرج رمزًا علويًّا وسفليًّا"
 
 #: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
-msgstr ""
+msgstr "أدرج رمزًا فوقيًّا"
 
 #: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
-msgstr ""
+msgstr "أدرج رمزًا تحتانيًّا"
 
 #: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
-msgstr ""
+msgstr "أدرج رمزًا تحتانيًّا وفوقيًّا"
 
 #: KoFormulaTool.cpp:446
 #, kde-format
 msgid "Insert row"
-msgstr ""
+msgstr "أدرج صفًّا"
 
 #: KoFormulaTool.cpp:453
 #, kde-format
 msgid "Insert column"
-msgstr ""
+msgstr "أدرج عمودًا"
 
 #: KoFormulaTool.cpp:460
 #, kde-format
 msgid "Remove row"
-msgstr ""
+msgstr "أزل الصف"
 
 #: KoFormulaTool.cpp:467
 #, kde-format
 msgid "Remove column"
-msgstr ""
+msgstr "أزل العمود"
 
 #: KoFormulaToolFactory.cpp:17
 #, kde-format
 msgid "Formula editing"
-msgstr ""
+msgstr "تحرير الصيغ"
 
 #: KoM2MMLForumulaTool.cpp:98
 #, kde-format
 msgid "Mode: "
-msgstr ""
+msgstr "الوضع: "
 
 #: KoM2MMLForumulaTool.cpp:101
 #, kde-format
 msgid "LaTeX"
-msgstr ""
+msgstr "لاتخ"
 
 #: KoM2MMLForumulaTool.cpp:103
 #, kde-format
 msgid "Matlab"
-msgstr ""
+msgstr "ماتلاب"
 
 #: KoM2MMLForumulaTool.cpp:175
 #, kde-format
 msgid "Parse error."
-msgstr ""
+msgstr "خطأ في التحليل."
 
 #: KoM2MMLForumulaTool.cpp:204
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
-msgstr ""
+msgstr "حرّر الصيغة بتكوين لاتخ/ماتلاب"
 
 #: KoM2MMLForumulaTool.cpp:206
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
-msgstr ""
+msgstr "حرّر الصيغة بتكوين لاتخ"

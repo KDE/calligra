@@ -1,14 +1,14 @@
 # POT_PART_NORMAL only
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-09-06 22:43+0400\n"
+"PO-Revision-Date: 2025-10-05 13:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28,7 +28,7 @@ msgstr "الحدث"
 #: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
-msgstr ""
+msgstr "منطقة"
 
 #: KoRdfCalendarEvent.cpp:153
 #, kde-format
@@ -38,7 +38,7 @@ msgstr "المنطقة"
 #: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
-msgstr ""
+msgstr "اختر تقويمًا للحفظ:"
 
 #: KoRdfCalendarEvent.cpp:384
 #, kde-format
@@ -46,6 +46,8 @@ msgid ""
 "Could not add entry\n"
 "%1"
 msgstr ""
+"تعذّر إضافة مدخل\n"
+"%1"
 
 #: KoRdfCalendarEvent.cpp:407
 #, kde-format
@@ -53,12 +55,14 @@ msgid ""
 "Could not save iCal file\n"
 "%1"
 msgstr ""
+"تعذّر حفظ ملفّ iCal\n"
+"%1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: KoRdfCalendarEventEditWidget.ui:20
 #, kde-format
 msgid "&Summary:"
-msgstr ""
+msgstr "مل&خّص:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfCalendarEventEditWidget.ui:30
@@ -70,19 +74,19 @@ msgstr "الم&كان:"
 #: KoRdfCalendarEventEditWidget.ui:43
 #, kde-format
 msgid "&Start:"
-msgstr ""
+msgstr "الب&داية:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: KoRdfCalendarEventEditWidget.ui:56
 #, kde-format
 msgid "&End:"
-msgstr ""
+msgstr "ال&نهاية:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tadtab)
 #: KoRdfCalendarEventEditWidget.ui:80
 #, kde-format
 msgid "Time and Date"
-msgstr ""
+msgstr "الوقت والتاريخ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tztab)
 #: KoRdfCalendarEventEditWidget.ui:93
@@ -93,19 +97,19 @@ msgstr "المنطقة الزمنية"
 #: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
-msgstr ""
+msgstr "حدث تقويم"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "عدّل..."
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
-msgstr ""
+msgstr "استورد الحدث إلى التقويم"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
-msgstr ""
+msgstr "صدّر الحدث إلى ملفّ iCal..."

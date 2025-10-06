@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 20:43+0400\n"
+"PO-Revision-Date: 2025-10-05 12:26+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28,7 +28,7 @@ msgstr "وضع التّحرير"
 #: connectionTool/ConnectionPointWidget.ui:55
 #, kde-format
 msgid "Escape Direction"
-msgstr ""
+msgstr "اتّجاه الإفلات"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:115
@@ -49,92 +49,92 @@ msgstr "٪"
 #: connectionTool/ConnectionTool.cpp:65
 #, kde-format
 msgid "Edit connection points"
-msgstr ""
+msgstr "حرّر نقاط الاتّصال"
 
 #: connectionTool/ConnectionTool.cpp:72
 #, kde-format
 msgid "Align to left edge"
-msgstr ""
+msgstr "حاذِ إلى الحافّة اليسرى"
 
 #: connectionTool/ConnectionTool.cpp:75
 #, kde-format
 msgid "Align to horizontal center"
-msgstr ""
+msgstr "حاذِ إلى المركز الأفقي"
 
 #: connectionTool/ConnectionTool.cpp:78
 #, kde-format
 msgid "Align to right edge"
-msgstr ""
+msgstr "حاذِ إلى الحافّة اليمنى"
 
 #: connectionTool/ConnectionTool.cpp:81
 #, kde-format
 msgid "Align to top edge"
-msgstr ""
+msgstr "حاذِ إلى الحافّة العليا"
 
 #: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
-msgstr ""
+msgstr "حاذِ إلى المركز الرّأسي"
 
 #: connectionTool/ConnectionTool.cpp:87
 #, kde-format
 msgid "Align to bottom edge"
-msgstr ""
+msgstr "حاذِ إلى الحافّة السّفلى"
 
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "أفلت في كلّ الاتّجاهات"
 
 #: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "أفلت في الاتّجاهات الأفقية"
 
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "أفلت في الاتّجاهات الرّأسية"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "أفلت في الاتّجاه الأيسر"
 
 #: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "أفلت في الاتّجاه الأيمن"
 
 #: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "أفلت في الاتّجاه العلوي"
 
 #: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "أفلت في الاتّجاه السّفلي"
 
 #: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
-msgstr ""
+msgstr "أنشئ اتّصالًا"
 
 #: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
-msgstr ""
+msgstr "اسحب لتعديل الاتّصال."
 
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
-msgstr ""
+msgstr "انقر نقرًا مزدوجًا على الاتّصال أو اضغط على حذف لإزالته."
 
 #: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
-msgstr ""
+msgstr "انقر لتعديل نقاط الاتّصال."
 
 #: connectionTool/ConnectionTool.cpp:786
 #, kde-format
@@ -142,21 +142,23 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
+"اسحب لتحريك نقطة الاتّصال. انقر نقرًا مزدوجًا على الاتّصال أو اضغط على حذف "
+"لإزالته."
 
 #: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
-msgstr ""
+msgstr "انقر نقرًا مزدوجًا على نقطة الاتّصال أو اضغط على حذف لإزالتها."
 
 #: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
-msgstr ""
+msgstr "انقر نقرًا مزدوجًا لإضافة نقطة اتّصال."
 
 #: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
-msgstr ""
+msgstr "اسحب لإنشاء اتّصال جديد."
 
 #: connectionTool/ConnectionTool.cpp:821
 #, kde-format
@@ -171,12 +173,12 @@ msgstr "السّطر"
 #: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
-msgstr ""
+msgstr "نقطة الاتّصال"
 
 #: connectionTool/ConnectionToolFactory.cpp:18
 #, kde-format
 msgid "Connect shapes"
-msgstr ""
+msgstr "وصّل الأشكال"
 
 #: defaulttool/DefaultTool.cpp:220
 #, kde-format
@@ -241,44 +243,44 @@ msgstr "فك التجميع"
 #: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
-msgstr ""
+msgstr "انقر واسحب لتحريك خط الدّليل."
 
 #: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
-msgstr ""
+msgstr "النقر باليسار يدوّر حول المركز، والنقر باليمين يدوّر حول الموضع المميّز."
 
 #: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr ""
+msgstr "انقر واسحب لقطع التّحديد."
 
 #: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "انقر واسحب لتغيير حجم التّحديد."
 
 #: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "انقر واسحب لتحريك التّحديد."
 
 #: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
-msgstr ""
+msgstr "انقر واسحب لتغيير حجم التّحديد. انقر بالوسط لضبط الموضع المميّز."
 
 #: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr ""
+msgstr "جمّع الأشكال"
 
 #: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr ""
+msgstr "فك تجميع الأشكال"
 
 #: defaulttool/DefaultTool.cpp:1169
 #, kde-format
@@ -303,7 +305,7 @@ msgstr "ظل"
 #: defaulttool/DefaultToolFactory.cpp:17
 #, kde-format
 msgid "Shape handling"
-msgstr ""
+msgstr "معالجة الشّكل"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:97
 #: defaulttool/ShapeRotateStrategy.cpp:140
@@ -330,7 +332,7 @@ msgstr "حجّم"
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
-msgstr ""
+msgstr "صفّر التّحويلات"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
 #: defaulttool/DefaultToolTransformWidget.ui:25
@@ -360,13 +362,13 @@ msgstr "قطع ص"
 #: defaulttool/DefaultToolTransformWidget.ui:122
 #, kde-format
 msgid "Scale X"
-msgstr ""
+msgstr "حجّم س"
 
 #. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
 #: defaulttool/DefaultToolTransformWidget.ui:154
 #, kde-format
 msgid "Scale Y"
-msgstr ""
+msgstr "حجّم ص"
 
 #. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
 #: defaulttool/DefaultToolTransformWidget.ui:161
@@ -378,7 +380,7 @@ msgstr "أبق التناسب"
 #: defaulttool/DefaultToolTransformWidget.ui:174
 #, kde-format
 msgid "Reset Transformations"
-msgstr ""
+msgstr "صفّر التّحويلات"
 
 #: defaulttool/DefaultToolWidget.cpp:217
 #: defaulttool/ShapeResizeStrategy.cpp:332
@@ -401,17 +403,17 @@ msgstr "ص:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr ""
+msgstr "اضغط على Alt لتثبيت موضع س- أو ص-."
 
 #: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "اضغط على Ctrl لتغيير الحجم من المركز."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "اضغط على Alt للتّدوير بخطوات 45 درجة."
 
 #: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
@@ -421,27 +423,27 @@ msgstr "اقطع"
 #: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
-msgstr ""
+msgstr "انقر نقرًا مزدوجًا لإضافة خط دليل."
 
 #: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
-msgstr ""
+msgstr "انقر واسحب لتحريك خط الدّليل. انقر نقرًا مزدوجًا لإزالة خط الدّليل."
 
 #: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
-msgstr ""
+msgstr "محرّر الأدِلّة"
 
 #: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
-msgstr ""
+msgstr "مُدرج الأدلّة"
 
 #: guidestool/GuidesToolFactory.cpp:14
 #, kde-format
 msgid "Edit guidelines"
-msgstr ""
+msgstr "عدّل خطوط الدّليل"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: guidestool/GuidesToolOptionWidget.cpp:18
@@ -485,31 +487,31 @@ msgstr "أزل"
 #: guidestool/InsertGuidesToolOptionWidget.ui:38
 #, kde-format
 msgid "Insert this number of horizontal equally spaced guides."
-msgstr ""
+msgstr "أدرج هذا العدد من الأدلّة الأفقية المتباعدة بالتّساوي."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:51
 #, kde-format
 msgid "Insert guides at the horizontal edges."
-msgstr ""
+msgstr "أدرج أدلّة عند الحوافّ الأفقية."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:78
 #, kde-format
 msgid "Insert this number of vertical equally spaced guides."
-msgstr ""
+msgstr "أدرج هذا العدد من الأدلّة العمودية المتباعدة بالتّساوي."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:91
 #, kde-format
 msgid "Insert guides at the vertical edges."
-msgstr ""
+msgstr "أدرج أدلّة عند الحوافّ العمودية."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:105
 #, kde-format
 msgid "Erase previous guides"
-msgstr ""
+msgstr "امسح الأدلّة السّابقة"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_createButton)
 #: guidestool/InsertGuidesToolOptionWidget.ui:112

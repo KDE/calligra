@@ -2,13 +2,13 @@
 # Copyright (C) 2004, 2007 Free Software Foundation, Inc.
 # Ahmad M. Zawawi <azawawi@emirates.net.ae>, 2004.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-05 11:13+0400\n"
+"PO-Revision-Date: 2025-10-05 13:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -30,19 +30,19 @@ msgid "Your emails"
 msgstr "ibrahim@arabeyes.org"
 
 #: calligraconverter.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "CalligraConverter"
-msgstr "محول مستندات كي أوفيس"
+msgstr "محوّل كاليغرا"
 
 #: calligraconverter.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calligra Document Converter"
-msgstr "محول مستندات كي أوفيس"
+msgstr "محوّل مستندات كاليغرا"
 
 #: calligraconverter.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr "c مكتب ك"
+msgstr "حقوق النشر 2001-%1 مطوّرو كاليغرا"
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -70,39 +70,39 @@ msgid "Output file"
 msgstr "ملف الاخراج"
 
 #: calligraconverter.cpp:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Make a backup of the destination file"
-msgstr "Make a احتياطي من مقصد ملفّ"
+msgstr "أنشئ نسخة احتياطية من ملف الوجهة"
 
 #: calligraconverter.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Batch mode: do not show dialogs"
-msgstr "الدّفعة نمط ليس إظهار"
+msgstr "نمط الدفعة: لا تعرض مربّعات الحوار"
 
 #: calligraconverter.cpp:197
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr "تفاعلي نمط إظهار افتراضي"
+msgstr "النمط التفاعلي: اعرض مربّعات الحوار (مبدئي)"
 
 #: calligraconverter.cpp:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mimetype of the output file"
-msgstr "نوع Mime من مخرجات ملفّ"
+msgstr "Mimetype لملف الإخراج"
 
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "اتّجاه الطباعة. قد يكون عموديًا أو أفقيًا."
 
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "حجم الورق. A4، قانوني، رسالة، ..."
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "حجم هامش الورق. هذا مبدئيًا 0.2."
 
 #: calligraconverter.cpp:215
 #, kde-format
@@ -110,24 +110,24 @@ msgid "Two arguments required"
 msgstr "مطلوب وسيطين"
 
 #: calligraconverter.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr "نوع Mime لـ دَخْل ملفّ ليس موجود!"
+msgstr "لم يعثر على Mimetype لملف الإدخال %1!"
 
 #: calligraconverter.cpp:252
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mimetype not found %1"
-msgstr "نوع Mime ليس موجود 1"
+msgstr "لم يعثر على Mimetype %1"
 
 #: calligraconverter.cpp:258
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "نوع Mime ليس موجود خيار"
+msgstr "لم يعثر على Mimetype، حاول استعمال خيار -mimetype"
 
 #: calligraconverter.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgid "*** The conversion failed! ***"
-msgstr "الـ تحويل failed"
+msgstr "*** فشل التحويل! ***"
 
 #, fuzzy
 #~| msgctxt "NAME OF TRANSLATORS"
