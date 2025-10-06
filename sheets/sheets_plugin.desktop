@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraSheets/Plugin
 Comment=Plugin for Calligra Sheets
+Comment[ar]=مكون إضافي لكاليغرا شيتس
 Comment[bs]=Plugin za Calligra Tablice
 Comment[ca]=Connector per al Sheets del Calligra
 Comment[ca@valencia]=Connector per a Sheets de Calligra

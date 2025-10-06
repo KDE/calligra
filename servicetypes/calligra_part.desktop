@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Part
 Comment=Calligra Component
+Comment[ar]=عنصر كاليغرا
 Comment[bg]=Компонент на Calligra
 Comment[bs]=Calligra Komponenta
 Comment[ca]=Component del Calligra

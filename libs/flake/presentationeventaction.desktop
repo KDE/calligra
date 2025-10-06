@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Presentation Event Action Plugin
+Name[ar]=ملحق إجراء حدث العرض التقديمي
 Name[bs]=Plugin za prezentaciju događaja
 Name[ca]=Connector d'acció de presentació d'esdeveniments
 Name[ca@valencia]=Connector d'acció de presentació d'esdeveniments
@@ -39,6 +40,7 @@ Name[zh_TW]=簡報事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/PresentationEventAction
 Comment=A plugin that contains a presentation event action
+Comment[ar]=ملحق يحتوي على إجراء حدث عرض تقديمي
 Comment[bs]=Plugin koji sadrzi prezentaciju događaja
 Comment[ca]=Un connector que conté una acció de presentació d'esdeveniment
 Comment[ca@valencia]=Un connector que conté una acció de presentació d'esdeveniment

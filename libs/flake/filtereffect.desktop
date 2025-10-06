@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Filter effect definition
+Name[ar]=تعريف تأثير المرشح
 Name[bs]=Definicija filter efekta
 Name[ca]=Definició d'efecte de filtre
 Name[ca@valencia]=Definició d'efecte de filtre
@@ -41,6 +42,7 @@ Name[zh_TW]=過濾器效果定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/FilterEffect
 Comment=Definition of a flake filter effect
+Comment[ar]=تعريف تأثير مرشح رقاقة
 Comment[bs]=Definicija pahuljice filter efekta
 Comment[ca]=Definició d'un efecte de filtre de floc
 Comment[ca@valencia]=Definició d'un efecte de filtre de floc

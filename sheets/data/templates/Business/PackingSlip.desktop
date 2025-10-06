@@ -2,6 +2,7 @@
 Type=Link
 URL=.source/PackingSlip.kst
 Name=Packing Slip
+Name[ar]=قسيمة تعبئة
 Name[bg]=Каса
 Name[bs]=Odrezak
 Name[ca]=Qüestions d'empaquetatge

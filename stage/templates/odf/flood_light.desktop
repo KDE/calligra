@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=flood_light
 Name=Flood Light
+Name[ar]=ضوء غامر
 Name[bs]=Poplavno svjetlo
 Name[ca]=Inundació lleugera
 Name[ca@valencia]=Inundació lleugera
@@ -36,6 +37,7 @@ Name[uk]=Заповнення світлом
 Name[wa]=Loumire d' enaiwaedje
 Name[zh_TW]=Flood Light
 Comment=Flood Light
+Comment[ar]=ضوء غامر
 Comment[bs]=Poplavno svjetlo
 Comment[ca]=Inundació lleugera
 Comment[ca@valencia]=Inundació lleugera

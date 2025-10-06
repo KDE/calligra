@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Semantic item definition
+Name[ar]=تعريف عنصر دلالي
 Name[bs]=Definicija semantičkog objekta
 Name[ca]=Definició d'element semàntic
 Name[ca@valencia]=Definició d'element semàntic
@@ -35,6 +36,7 @@ Name[uk]=Визначення семантичного запису
 Name[zh_CN]=语义项定义
 Name[zh_TW]=語義項目定義
 Comment=Definition of a semantic item object
+Comment[ar]=تعريف كائن عنصر دلالي
 Comment[bs]=Definicija objekta semantike
 Comment[ca]=Definició d'objecte d'element semàntic
 Comment[ca@valencia]=Definició d'objecte d'element semàntic

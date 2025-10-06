@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/PageEffect
 Comment=Page effect plugin for Calligra Stage
+Comment[ar]=مكون إضافي لتأثير الصفحة لكاليغرا ستيج
 Comment[bg]=Приставка за ефекти в страниците на Calligra Stage
 Comment[bs]=Plugin za efekte stranice za Calligra Scenu
 Comment[ca]=Connector d'efectes de pàgina per al Calligra Stage

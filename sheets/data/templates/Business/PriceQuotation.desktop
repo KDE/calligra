@@ -2,6 +2,7 @@
 Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
+Name[ar]=عرض سعر
 Name[bg]=Ценова листа
 Name[bs]=Navođenje Cijene
 Name[ca]=Cita de preus

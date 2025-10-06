@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/Dock
 Comment=Docker for Karbon
+Comment[ar]=عارضة لكاربون
 Comment[bs]=Doker za Karbon
 Comment[ca]=Acoblador per al Karbon
 Comment[ca@valencia]=Acoblador per a Karbon
