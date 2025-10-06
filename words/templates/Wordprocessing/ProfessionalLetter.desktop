@@ -2,6 +2,7 @@
 Type=Link
 URL=.source/ProfessionalLetter.odt
 Name=Professional Letter
+Name[ar]=رسالة احترافية
 Name[bg]=Професионално писмо
 Name[br]=Lizher vicherel
 Name[bs]=Profesionalno pismo
@@ -57,6 +58,7 @@ Name[wa]=Lete professionele
 Name[zh_CN]=专业信函
 Name[zh_TW]=職業信
 Comment=Creates a blank document with wide margins for professional looking documents
+Comment[ar]=ينشئ مستندًا فارغًا بهوامش عريضة لمستندات ذات مظهر احترافي
 Comment[bg]=Създаване на празен документ с широки полета за професионално изглеждащи документи
 Comment[bs]=Kreira prazan dokument sa širokim marginama  za profesionalan izgled dokumenta
 Comment[ca]=Crea un document buit amb marges amples per a documents d'aspecte professional

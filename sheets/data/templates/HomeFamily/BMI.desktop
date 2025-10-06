@@ -2,6 +2,7 @@
 Type=Link
 URL=.source/BMI.kst
 Name=BMI Calculator
+Name[ar]=حاسبة مؤشر كتلة الجسم
 Name[bg]=Калкулатор за маса
 Name[br]=Jederez BMI
 Name[bs]=BMI Kalkulator
@@ -57,6 +58,7 @@ Name[xh]=Umatshini wokubala we BMI
 Name[zh_CN]=BMI 计算器
 Name[zh_TW]=BMI 計算機
 Comment=Simple Body Mass Index Calculator
+Comment[ar]=حاسبة مؤشر كتلة الجسم بسيطة
 Comment[bg]=Калкулатор за изчисление на индекса на теглото на тяло
 Comment[bs]=Jednostavan kalkulator indeksa tjelesne mase
 Comment[ca]=Calculadora senzilla per a índexs de massa corporal

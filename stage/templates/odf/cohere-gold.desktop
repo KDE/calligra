@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=cohere-gold
 Name=Cohere
+Name[ar]=تلاحم
 Name[bs]=Cohere
 Name[ca]=Cohere
 Name[ca@valencia]=Cohere
@@ -31,6 +32,7 @@ Name[tr]=Yapışık
 Name[uk]=Cohere
 Name[zh_TW]=Cohere
 Comment=Cohere designed presentation template
+Comment[ar]=قالب عرض تقديمي مصمم بتلاحم
 Comment[bs]=Cohere dizajnirani predložak prezentacije
 Comment[ca]=Plantilles de presentacions dissenyades pel Cohere
 Comment[ca@valencia]=Plantilles de presentacions dissenyades pel Cohere

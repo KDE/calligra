@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Words
+Name[ar]=كاليغرا وردز
 Name[bg]=Calligra Words
 Name[bs]=Calligra riječi
 Name[ca]=Words del Calligra
@@ -99,6 +100,7 @@ GenericName[wa]=Aspougneu d' documints
 GenericName[zh_CN]=文字处理与排版软件
 GenericName[zh_TW]=文書處理器
 Comment=Write documents
+Comment[ar]=اكتب مستندات
 Comment[bg]=Писане на документи
 Comment[bs]=Pisanje dokumenata
 Comment[ca]=Escriviu documents

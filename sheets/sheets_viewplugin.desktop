@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Sheets/ViewPlugin
 Comment=GUI functionality for Sheets
+Comment[ar]=وظائف واجهة المستخدم الرسومية لشيتس
 Comment[bs]=GUI funkcionalnost za Sheets
 Comment[ca]=Funcionalitat d'IGU per al Sheets
 Comment[ca@valencia]=Funcionalitat de la IGU per a Sheets

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Inline Text Object Plugin
+Name[ar]=ملحق كائن نص مضمن
 Name[bs]=Plugin za inline tekst objekte
 Name[ca]=Connector d'objecte de text a la línia
 Name[ca@valencia]=Connector d'objecte de text a la línia
@@ -44,6 +45,7 @@ Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-InlineObject
 Comment=Definition of a text object
+Comment[ar]=تعريف كائن نص
 Comment[bs]=Definicija tekstualnog objekta
 Comment[ca]=Definició d'objecte de text
 Comment[ca@valencia]=Definició d'objecte de text

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Flake Plugin
+Name[ar]=ملحق رقاقة
 Name[bs]=Dodatak za pahuljicu
 Name[ca]=Connector Flake
 Name[ca@valencia]=Connector Flake
@@ -48,6 +49,7 @@ Name[zh_TW]=Flake 外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Flake
 Comment=A plugin that contains a set of a shape and a tool
+Comment[ar]=ملحق يحتوي على مجموعة من شكل وأداة
 Comment[bs]=Dodatak koji sadrži kolekciju oblika i alata
 Comment[ca]=Un connector que conté un conjunt d'una forma i una eina
 Comment[ca@valencia]=Un connector que conté un conjunt d'una forma i una eina
